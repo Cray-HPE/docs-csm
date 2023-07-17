@@ -285,6 +285,11 @@ worker. We believe this has something to do with `conntrack`.
 
   ```bash
   kubectl -n services exec deployment/cray-ipxe -- file /shared_tftp/ipxe.efi
+  ```
+
+  Expected output:
+
+  ```text
   /shared_tftp/ipxe.efi: MS-DOS executable PE32+ executable (DLL) (EFI application) x86-64, for MS Windows
   ```
 
@@ -293,6 +298,11 @@ worker. We believe this has something to do with `conntrack`.
 
     ```bash
     kubectl -n services exec deployment/cray-ipxe -- file /shared_tftp/ipxe.efi
+    ```
+
+    Expected output:
+
+    ```text
     /shared_tftp/ipxe.efi: pxelinux loader (version 3.70 or newer)
     ```
 
@@ -300,6 +310,11 @@ worker. We believe this has something to do with `conntrack`.
 
   ```bash
   kubectl -n services rollout restart deployment cray-ipxe
+  ```
+
+  Expected output 
+
+  ```text
   deployment.apps/cray-ipxe restarted
   ```
 
