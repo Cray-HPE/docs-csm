@@ -131,7 +131,7 @@ Set variables for all of the image artifact files, if needed. For example, `IMS_
 1. (`ncn-mw#`) Create a new IMS image record for the image.
 
     ```bash
-    cray ims images create --name "${IMS_ROOTFS_FILENAME}" --format toml
+    cray ims images create --name "${IMS_ROOTFS_FILENAME}" --arch <architecture> --format toml
     ```
 
     Example output:
@@ -140,6 +140,7 @@ Set variables for all of the image artifact files, if needed. For example, `IMS_
     created = "2018-12-04T17:25:52.482514+00:00"
     id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
     name = "sles_15_image.squashfs"
+    arch = "x86_64"
     ```
 
 1. (`ncn-mw#`) Create an environment variable for the ID of the new IMS image record.
@@ -208,7 +209,7 @@ identified by a `type` value:
     > Note that the following command makes use of several variables that have been set during
     > this procedure. The command must be run from the Bash shell in order for them to be properly evaluated.
 
-    ```console
+    ```bash
     cat <<EOF> manifest.json
     {
       "created": "`date '+%Y-%m-%d %H:%M:%S'`",
@@ -274,6 +275,7 @@ identified by a `type` value:
     created = "2018-12-04T17:25:52.482514+00:00"
     id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
     name = "sles_15_image.squashfs"
+    arch = "x86_64"
 
     [link]
     type = "s3"

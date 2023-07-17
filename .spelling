@@ -420,6 +420,7 @@ XL675d
 XtraDB
 Yum
 Zypper
+aarch64
 airgapped
 analog
 analyze
@@ -428,6 +429,7 @@ analyzer
 analyzers
 analyzes
 analyzing
+arm64
 artifact
 artifact's
 artifacts
@@ -438,6 +440,7 @@ base-64
 base-64-encoded
 behavior
 behaviors
+binfmt_misc
 blackhole
 bootscript
 buses
@@ -453,6 +456,7 @@ ceph
 cfgsh
 channeled
 checkmark
+chrooted
 cleanup
 cmm0
 color
@@ -605,6 +609,7 @@ prebuilt
 preempted
 preemptively
 provisioners
+qemu-user-static
 redis
 re-architecting
 ReadOnly
@@ -766,6 +771,7 @@ xname
 xnames
 zeroization
 zeroize
+zypper
 
 # Network Terms - Starting to organize a little bit here but it's not done
 0.5m
