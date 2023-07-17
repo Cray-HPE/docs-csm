@@ -40,7 +40,7 @@ tasks:
             set +e
             CPS_PM_NODE=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" -X GET https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=${TARGET_XNAME} | jq -r '.[].params' | grep -c "cps.pm-node=1")
             if [[ ${CPS_PM_NODE} -eq 1 ]]; then
-              kubectl label nodes ${TARGET_NCN} "cps-pm-node=True"
+              kubectl label nodes ${TARGET_NCN} --overwrite "cps-pm-node=True"
             fi
   - name: wait-for-cfs-after-rebuild
     templateRef:
