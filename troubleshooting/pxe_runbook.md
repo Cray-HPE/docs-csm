@@ -284,6 +284,11 @@ worker. We believe this has something to do with `conntrack`.
 
   ```bash
   sat status --fields xname,arch --filter xname=x9000c1s0b0n0
+  ```
+
+  Sample output:
+
+  ```text
   +---------------+------+
   | xname         | Arch |
   +---------------+------+
@@ -296,6 +301,11 @@ worker. We believe this has something to do with `conntrack`.
 
     ```bash
     kubectl -n services exec deployment/cray-ipxe-x86-64 -- file /shared_tftp/ipxe.efi
+    ```
+
+    Expected output:
+
+    ```text
     /shared_tftp/ipxe.efi: MS-DOS executable PE32+ executable (DLL) (EFI application) x86-64, for MS Windows
     ```
 
@@ -303,6 +313,11 @@ worker. We believe this has something to do with `conntrack`.
 
     ```bash
     kubectl -n services exec deployment/cray-ipxe-aarch64 -- file /shared_tftp/ipxe.arm64.efi
+    ```
+
+    Expected output:
+
+    ```text
     /shared_tftp/ipxe.arm64.efi: MS-DOS executable PE32+ executable (DLL) (EFI application) Aarch64, for MS Windows
     ```
 
@@ -311,6 +326,11 @@ worker. We believe this has something to do with `conntrack`.
 
     ```bash
     kubectl -n services exec deployment/cray-ipxe-x86-64 -- file /shared_tftp/ipxe.efi
+    ```
+
+    Expected output:
+
+    ```text
     /shared_tftp/ipxe.efi: pxelinux loader (version 3.70 or newer)
     ```
 
@@ -319,6 +339,11 @@ worker. We believe this has something to do with `conntrack`.
 
     ```bash
     kubectl -n services rollout restart deployment cray-ipxe-x86-64
+    ```
+
+    Expected output:
+
+    ```text
     deployment.apps/cray-ipxe-x86-64 restarted
     ```
 
@@ -326,6 +351,11 @@ worker. We believe this has something to do with `conntrack`.
 
     ```bash
     kubectl -n services rollout restart deployment cray-ipxe-aarch64
+    ```
+
+    Expected output:
+
+    ```text
     deployment.apps/cray-ipxe-aarch64 restarted
     ```
 
