@@ -92,7 +92,14 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
         export SW_ADMIN_PASSWORD
         ```
 
-    1. Run the NCN and Kubernetes health checks.
+    1. Run the combined health check script.
+
+        This script runs a variety of health checks including:
+
+        - Kubernetes health checks
+        - NCN health checks
+        - [Hardware Management Service CT tests](#21-hms-ct-test-execution)
+        - [Software Management Services health checks](#3-software-management-services-sms-health-checks).
 
         ```bash
         /opt/cray/tests/install/ncn/automated/ncn-k8s-combined-healthcheck
@@ -151,31 +158,11 @@ Note: Do not run multiple instances of the HMS tests concurrently as they may in
 
 ### 2.1 HMS CT test execution
 
-These tests may be executed on any one worker or master NCN (but **not** `ncn-m001` if it is still the PIT node).
+The HMS CT tests are run automatically by the test script run in [1.1 NCN health checks](#11-ncn-health-checks).
+If any failures occur, investigate the cause of each and take remediation steps if needed.
 
-(`ncn-mw#`) Run the HMS CT tests.
-
-```bash
-/opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh
-```
-
-The return code of the script is zero if all HMS CT tests run and pass, non-zero if not.
-On CT test errors or failures, the script will print the path to the CT test log file for the administrator to inspect.
-If one or more failures occur, investigate the cause of each and take remediation steps if needed.
-See the [Interpreting HMS Health Check Results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
-
-After remediating a test failure for a particular service, just the tests for that individual service
-can be re-run by supplying the name of the service to the `run_hms_ct_tests.sh` script with the `-t` option:
-
-```bash
-/opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh -t <service>
-```
-
-To list the HMS services that can be tested, use the `-l` option:
-
-```bash
-/opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh -l
-```
+See [Interpreting HMS Health Check Results](../troubleshooting/interpreting_hms_health_check_results.md) for more information
+on the tests and how to interpret their results.
 
 ### 2.2 Hardware State Manager discovery validation
 
@@ -362,8 +349,8 @@ If it was determined that the mismatch can not be ignored, then proceed onto the
 
 Known issues that may prevent hardware from getting discovered by Hardware State Manager:
 
-- All management network switches including Spine switches, CDU switches, and those with river cabinets, require SNMP to be enabled for discovery to work.
-  For configuring SNMP, see [Configure SNMP](./network/management_network/configure_snmp.md)
+- All management network switches including Spine switches, CDU switches, and those with River cabinets, require SNMP to be enabled for discovery to work.
+  For configuring SNMP, see [Configure SNMP](network/management_network/configure_snmp.md).
 - [HMS Discovery job not creating Redfish Endpoints in Hardware State Manager](../troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints.md)
 
 ### 2.3 Hardware checks (optional)
@@ -386,22 +373,11 @@ See the [Flags Set For Nodes In HSM](../troubleshooting/known_issues/flags_set_f
 
 ## 3 Software Management Services (SMS) health checks
 
-This test requires that the Cray CLI is configured on nodes where the test is executed.
-See [Cray command line interface](#0-cray-command-line-interface).
+The SMS health checks are run automatically by the test script run in [1.1 NCN health checks](#11-ncn-health-checks).
+If any failures occur, investigate the cause of each and take remediation steps if needed.
 
-(`ncn-mw#`) To validate all SMS services, run the following:
-
-```bash
-/usr/local/bin/cmsdev test -q all
-```
-
-Successful output ends with a line similar to the following:
-
-```text
-SUCCESS: All 6 service tests passed: bos, cfs, conman, ims, tftp, vcs
-```
-
-For more details, including known issues and other command line options, see [Software Management Services health checks](../troubleshooting/known_issues/sms_health_check.md).
+See [Software Management Services health checks](../troubleshooting/known_issues/sms_health_check.md) for more information
+on the tests and how to interpret their results.
 
 ## 4. Gateway health and SSH access checks
 

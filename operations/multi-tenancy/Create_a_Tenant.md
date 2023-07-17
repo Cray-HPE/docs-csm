@@ -24,7 +24,7 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
 - An example of a tenant custom resource (CR):
 
     ```yaml
-    apiVersion: tapms.hpe.com/v1alpha1
+    apiVersion: tapms.hpe.com/v1alpha2
     kind: Tenant
     metadata:
       name: vcluster-blue
@@ -72,14 +72,14 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
     Example output:
 
     ```yaml
-    apiVersion: tapms.hpe.com/v1alpha1
+    apiVersion: tapms.hpe.com/v1alpha2
     kind: Tenant
     metadata:
       annotations:
         kopf.zalando.org/last-handled-configuration: |
           {"spec":{"childnamespaces":["slurm","user"],"state":"Deployed","tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x3000c0s19b1n0","x3000c0s19b3n0"]},{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"application","xnames":["x3000c0s32b0n0"]}]}}
         kubectl.kubernetes.io/last-applied-configuration: |
-          {"apiVersion":"tapms.hpe.com/v1alpha1","kind":"Tenant","metadata":{"annotations":{"kopf.zalando.org/last-handled-configuration":"{\"spec\":{\"childnamespaces\":[\"user\",\"slurm\"],\"state\":\"Deployed\",\"tenantname\":\"vcluster-test1\",\"tenantresources\":[{\"enforceexclusivehsmgroups\":true,\"hsmgrouplabel\":\"test1\",\"type\":\"compute\",\"xnames\":[\"x3000c0s19b1n0\",\"x3000c0s19b3n0\"]}]}}\n"},"finalizers":["tapms.hpe.com/finalizer"],"generation":3,"name":"vcluster-blue","namespace":"tenants"},"spec":{"childnamespaces":["slurm","user"],"state":"Deployed","tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x3000c0s19b1n0","x3000c0s19b3n0"]},{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"application","xnames":["x3000c0s32b0n0"]}]}}
+          {"apiVersion":"tapms.hpe.com/v1alpha2","kind":"Tenant","metadata":{"annotations":{"kopf.zalando.org/last-handled-configuration":"{\"spec\":{\"childnamespaces\":[\"user\",\"slurm\"],\"state\":\"Deployed\",\"tenantname\":\"vcluster-test1\",\"tenantresources\":[{\"enforceexclusivehsmgroups\":true,\"hsmgrouplabel\":\"test1\",\"type\":\"compute\",\"xnames\":[\"x3000c0s19b1n0\",\"x3000c0s19b3n0\"]}]}}\n"},"finalizers":["tapms.hpe.com/finalizer"],"generation":3,"name":"vcluster-blue","namespace":"tenants"},"spec":{"childnamespaces":["slurm","user"],"state":"Deployed","tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x3000c0s19b1n0","x3000c0s19b3n0"]},{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"application","xnames":["x3000c0s32b0n0"]}]}}
       creationTimestamp: "2023-05-11T14:36:12Z"
       finalizers:
       - tapms.hpe.com/finalizer
@@ -179,7 +179,7 @@ metadata:
   namespace: vcluster-blue-slurm
 spec:
   tapmsTenantName: vcluster-blue
-  tapmsTenantVersion: v1alpha1
+  tapmsTenantVersion: v1alpha2
   slurmctld:
     image: cray/cray-slurmctld:1.2.5
     ip: 10.253.124.100

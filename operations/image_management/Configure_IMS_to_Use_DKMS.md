@@ -27,7 +27,7 @@ configuration, so documentation on how to do that is outside the scope of the IM
 **NOTE: Since the IMS job is running inside a VM, there will be a performance impact on the runtime of the job
 but this is required to provide a secure environment.
 
-## Steps to configure jobs to run under Kata
+## Steps to configure all jobs to run under Kata with DKMS enabled
 
 The following steps will enable DKMS operation for all IMS jobs including those controlled by the Configuration
 Management Service (CFS). It will remain in this configuration until manually reverted back to disabling the
@@ -43,7 +43,6 @@ DKMS operation.
 
     ```text
     NAME        HANDLER     AGE
-    kata-clh    kata-clh    64d
     kata-qemu   kata-qemu   64d
     ```
 
@@ -151,3 +150,141 @@ access change the `ims-config` setting back to `False` and restart the `cray-ims
 
     Then wait until the new pod is in the `2/2 Running` status. Now new IMS jobs will be started running
     directly on the Kubernetes node and without the enhanced kernel access.
+
+## Setting a recipe to run with DKMS enabled
+
+There is a data field for each recipe stored with IMS that can set if that particular recipe requires
+DKMS to be enabled to built successfully. If this is set to 'True' it will override the global DKMS
+setting described above.
+
+To set the `dkms_required` field for a particular recipe:
+
+1. (`ncn-mw#`) Set a variable with the IMS Recipe ID in the environment:
+
+    ```bash
+    IMS_RECIPE_ID=2233c82a-5081-4f67-bec4-4b59a60017a6
+    ```
+
+1. (`ncn-mw#`) Look at the current recipe record:
+
+    ``` bash
+    cray ims recipes describe $IMS_RECIPE_ID
+    ```
+
+    Expected output:
+
+    ```json
+    {
+        "arch": "x86_64",
+        "created": "2023-06-20T08:01:22.819146+00:00",
+        "id": "c66f130c-c7c6-46b4-bb58-3fc17f08929f",
+        "link": {
+            "etag": "",
+            "path": "s3://ims/recipes/c66f130c-c7c6-46b4-bb58-3fc17f08929f/myrecipe20June2023.tgz",
+            "type": "s3"
+        },
+        "linux_distribution": "sles15",
+        "name": "myrecipe20June2023",
+        "recipe_type": "kiwi-ng",
+        "require_dkms": false,
+        "template_dictionary": []
+    }
+    ```
+
+1. (`ncn-mw#`) Change the value of `require_dkms` for the recipe:
+
+    ```bash
+    cray ims recipes update --require-dkms true $IMS_RECIPE_ID
+    ```
+
+    Expected output:
+
+    ```json
+    {
+        "arch": "x86_64",
+        "created": "2023-06-20T08:01:22.819146+00:00",
+        "id": "c66f130c-c7c6-46b4-bb58-3fc17f08929f",
+        "link": {
+            "etag": "",
+            "path": "s3://ims/recipes/c66f130c-c7c6-46b4-bb58-3fc17f08929f/myrecipe20June2023.tgz",
+            "type": "s3"
+        },
+        "linux_distribution": "sles15",
+        "name": "myrecipe20June2023",
+        "recipe_type": "kiwi-ng",
+        "require_dkms": true,
+        "template_dictionary": []
+    }
+    ```
+
+## Run a particular IMS Job using DKMS
+
+The call to create a new Job in IMS has a `require-dkms` field that will override the global and
+recipe setting. If a value is passed in directly it will always take precedence when the job is
+created.
+
+1. (`ncn-mw#`) Use the `require-dkms` option when creating a recipe build job:
+
+    ```bash
+    cray ims jobs create \
+        --job-type create \
+        --image-root-archive-name cray-sles15-barebones \
+        --artifact-id $IMS_RECIPE_ID \
+        --public-key-id $IMS_PUBLIC_KEY_ID \
+        --enable-debug False \
+        --require-dkms True
+    ```
+
+    Example output:
+
+    ```toml
+    status = "creating"
+    enable_debug = false
+    kernel_file_name = "vmlinuz"
+    artifact_id = "2233c82a-5081-4f67-bec4-4b59a60017a6"
+    build_env_size = 10
+    job_type = "create"
+    kubernetes_service = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service"
+    kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create"
+    id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
+    image_root_archive_name = "cray-sles15-barebones"
+    initrd_file_name = "initrd"
+    arch = "x86_64"
+    require_dkms = true
+    created = "2018-11-21T18:22:53.409405+00:00"
+    public_key_id = "a252ff6f-c087-4093-a305-122b41824a3e"
+    kubernetes_configmap = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap"
+    ```
+
+1. (`ncn-mw#`) Use the `require-dkms` option when creating an image customization job:
+
+    ```bash
+    cray ims jobs create \
+        --job-type customize \
+        --image-root-archive-name cray-sles15-barebones \
+        --artifact-id $IMS_IMAGE_ID \
+        --public-key-id $IMS_PUBLIC_KEY_ID \
+        --enable-debug False \
+        --require-dkms True
+    ```
+
+    Example output:
+
+    ```toml
+    status = "creating"
+    enable_debug = false
+    kernel_file_name = "vmlinuz"
+    artifact_id = "2233c82a-5081-4f67-bec4-4b59a60017a6"
+    build_env_size = 10
+    job_type = "customize"
+    kubernetes_service = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service"
+    kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create"
+    id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
+    image_root_archive_name = "cray-sles15-barebones"
+    initrd_file_name = "initrd"
+    arch = "x86_64"
+    require_dkms = true
+    created = "2018-11-21T18:22:53.409405+00:00"
+    public_key_id = "a252ff6f-c087-4093-a305-122b41824a3e"
+    kubernetes_configmap = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap"
+    ```

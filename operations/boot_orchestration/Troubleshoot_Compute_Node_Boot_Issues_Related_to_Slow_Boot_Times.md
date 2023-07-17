@@ -1,15 +1,18 @@
 # Troubleshoot Compute Node Boot Issues Related to Slow Boot Times
 
-> **`NOTE`** This section is for BOS V1 only. BOS V2 does not use CAPMC, nor does it have BOA. However, the steps
-> outlined below allow for similar debugging of slow steps within CFS-initiated sessions.
+> **`NOTE`** This section is for Boot Orchestration Service (BOS) v1 only. BOS v2 does not use
+> [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc),
+> nor does it have the Boot Orchestration Agent (BOA). However, the steps
+> outlined below allow for similar debugging of slow steps within
+> [Configuration Framework Service \(CFS\)](../../glossary.md#configuration-framework-service-cfs)-initiated sessions.
 
-Inspect BOS, the Boot Orchestration Agent \(BOA\) job logs, and the Configuration Framework Service \(CFS\) job logs to
+Inspect BOS, BOA, and CFS job logs in order to
 obtain information that is critical for boot troubleshooting. Use this procedure to determine why compute nodes are
 booting slower than expected.
 
 ## Prerequisites
 
-- A boot session has been created with the Boot Orchestration Service \(BOS\).
+- A boot session has been created with BOS.
 - The Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Procedure

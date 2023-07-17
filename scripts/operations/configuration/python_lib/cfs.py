@@ -69,18 +69,26 @@ def list_components() -> List[JsonObject]:
     return api_requests.get_retry_validate_return_json(**request_kwargs)
 
 
-def update_component_desired_config(comp_id: str, config_name: str) -> JsonObject:
+def update_component(comp_id: str, **update_data: JsonObject) -> JsonObject:
     """
-    Updates the specified component to use the specified configuration.
-    Returns the updated component.
+    Updates the specified component using the specified update data.
+    Returns the API response (the updated component)
     """
     # Even though it does not follow convention for patch operations,
     # the status code when successful is 200
     request_kwargs = {"url": f"{CFS_V2_COMPS_URL}/{comp_id}",
                       "add_api_token": True,
                       "expected_status_codes": {200},
-                      "json": { "desiredConfig": config_name }}
+                      "json": update_data}
     return api_requests.patch_retry_validate_return_json(**request_kwargs)
+
+
+def update_component_desired_config(comp_id: str, config_name: str) -> JsonObject:
+    """
+    Updates the specified component to use the specified configuration.
+    Returns the updated component.
+    """
+    return update_component(comp_id, desiredConfig=config_name)
 
 
 # CFS configuration functions
@@ -124,6 +132,21 @@ def get_configuration(config_name: str, expected_to_exist: bool = True) -> Union
     except JSONDecodeError as exc:
         log_error_raise_exception("Response from CFS has unexpected format", exc)
     return json_object
+
+
+def delete_configuration(config_name: str, expected_to_exist: bool = True) -> None:
+    """
+    Deletes the specified configuration. Throws an exception if it is not found,
+    unless expected_to_exist is set to False.
+    """
+    request_kwargs = {"url": f"{CFS_V2_CONFIGS_URL}/{config_name}",
+                      "add_api_token": True,
+                      "expected_status_codes": {204}}
+
+    if not expected_to_exist:
+        request_kwargs["expected_status_codes"].add(404)
+
+    api_requests.delete_retry_validate(**request_kwargs)
 
 
 def list_configurations() -> List[JsonObject]:

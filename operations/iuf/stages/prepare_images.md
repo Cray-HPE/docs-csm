@@ -1,29 +1,35 @@
 # `prepare-images`
 
-The `prepare-images` stage configures NCN management node images and builds and configures compute node, application node, and GPU images. It also creates new BOS session templates corresponding to the new node and image content.
-The `prepare-images` stage does not reboot nodes to the new images; however, that is done by the `management-nodes-rollout` and `managed-nodes-rollout` stages.
+The `prepare-images` stage configures NCN management node images and builds and configures compute node, application
+node, and GPU images. It also creates new BOS session templates corresponding to the new node and image content.
+The `prepare-images` stage does not reboot nodes to the new images; however, that is done by
+the `management-nodes-rollout` and `managed-nodes-rollout` stages.
 
-The product content used to create the images is defined in `sat bootprep` input files. The `sat bootprep` input files used can be specified by `-bc`, `-bm`, and/or `-bpcd` as described below. Variables within the `sat bootprep`
+The product content used to create the images is defined in `sat bootprep` input files. The `sat bootprep` input files
+used can be specified by `-bc`, `-bm`, and/or `-bpcd` as described below. Variables within the `sat bootprep`
 files can be substituted with values found in the recipe variables (`-rv`) and/or site variables (`-sv`) files.
 
 `prepare-images` details are explained in the following sections:
 
 - [Impact](#impact)
 - [Input](#input)
+  - [ARM images](#arm-images)
 - [Artifacts created](#input)
 - [Execution details](#execution-details)
 - [Example](#example)
 
 ## Impact
 
-The `prepare-images` stage does not change the running state of the system as it does not deploy the newly created images; that is done by the `management-nodes-rollout` and `managed-nodes-rollout` stages.
+The `prepare-images` stage does not change the running state of the system as it does not deploy the newly created
+images; that is done by the `management-nodes-rollout` and `managed-nodes-rollout` stages.
 
 ## Input
 
-The following arguments are most often used with the `prepare-images` stage. See `iuf -h` and `iuf run -h` for additional arguments.
+The following arguments are most often used with the `prepare-images` stage. See `iuf -h` and `iuf run -h` for
+additional arguments.
 
 | Input                                         | `iuf` Argument                   | Description                                                                                           |
-| --------------------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------- |
+|-----------------------------------------------|----------------------------------|-------------------------------------------------------------------------------------------------------|
 | Activity                                      | `-a ACTIVITY`                    | Activity created for the install or upgrade operations                                                |
 | Managed `sat bootprep` configuration files    | `-bc BOOTPREP_CONFIG_MANAGED`    | The `sat bootprep` configuration file used for managed nodes                                          |
 | Management `sat bootprep` configuration files | `-bm BOOTPREP_CONFIG_MANAGEMENT` | The `sat bootprep` configuration file used for management nodes                                       |
@@ -32,12 +38,18 @@ The following arguments are most often used with the `prepare-images` stage. See
 | Site variables                                | `-sv SITE_VARS`                  | Path to YAML file containing site defaults and any overrides                                          |
 | Recipe variables product mask                 | `-mrp MASK_RECIPE_PRODS`         | Mask the recipe variables file entries for the products specified, use product catalog values instead |
 
+### ARM images
+
+If it is necessary to build `aarch64` images, then see [ARM images](../IUF.md#arm-images).
+
 ## Artifacts created
 
-The artifacts created by the `prepare-images` stage can found by examining the output from `iuf run` or by examining a Kubernetes ConfigMap associated with the IUF activity specified when executing the `prepare-images` stage.
-The following examples show how to find the management node and managed node artifacts from the ConfigMap.
+The artifacts created by the `prepare-images` stage can found by examining the output from `iuf run` or by examining a
+Kubernetes ConfigMap associated with the IUF activity specified when executing the `prepare-images` stage. The following
+examples show how to find the management node and managed node artifacts from the ConfigMap.
 
-(`ncn-m001#`) Examine the activity ConfigMap to identify the management node images and CFS configurations created by `prepare-images`.
+(`ncn-m001#`) Examine the activity ConfigMap to identify the management node images and CFS configurations created
+by `prepare-images`.
 
 ```bash
 kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' | jq '.operation_outputs.stage_params["prepare-images"]["prepare-management-images"]["sat-bootprep-run"].script_stdout' | xargs -0 echo -e
@@ -74,7 +86,8 @@ kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activi
 }"
 ```
 
-(`ncn-m001#`) Examine the activity ConfigMap to identify the managed node images, CFS configurations, and BOS session templates created by `prepare-images`.
+(`ncn-m001#`) Examine the activity ConfigMap to identify the managed node images, CFS configurations, and BOS session
+templates created by `prepare-images`.
 
 ```bash
 kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' | jq '.operation_outputs.stage_params["prepare-images"]["prepare-managed-images"]["sat-bootprep-run"].script_stdout' | xargs -0 echo -e
@@ -145,15 +158,19 @@ kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activi
 
 ## Execution details
 
-The code executed by this stage utilizes `sat bootprep` to build and customize images. See the `prepare-images` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding files in `/usr/share/doc/csm/workflows/iuf/operations/`
+The code executed by this stage utilizes `sat bootprep` to build and customize images. See the `prepare-images` entry
+in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding files
+in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.
 
-See the [HPE Cray EX System Admin Toolkit (SAT) Guide](https://cray-hpe.github.io/docs-sat/) documentation for details on `sat bootprep`.
+See the [HPE Cray EX System Admin Toolkit (SAT) Guide](https://cray-hpe.github.io/docs-sat/) documentation for details
+on `sat bootprep`.
 
 ## Example
 
-(`ncn-m001#`) Execute the `prepare-images` stage for activity `admin-230127` using the `/etc/cray/upgrade/csm/admin/site_vars.yaml` file and the managed and management `sat bootprep` configuration files and the `product_vars.yaml` configuration file
-found in the `/etc/cray/upgrade/csm/admin` directory.
+(`ncn-m001#`) Execute the `prepare-images` stage for activity `admin-230127` using
+the `/etc/cray/upgrade/csm/admin/site_vars.yaml` file and the managed and management `sat bootprep` configuration files
+and the `product_vars.yaml` configuration file found in the `/etc/cray/upgrade/csm/admin` directory.
 
 ```bash
 iuf -a admin-230127 run -sv /etc/cray/upgrade/csm/admin/site_vars.yaml -bpcd /etc/cray/upgrade/csm/admin -r prepare-images

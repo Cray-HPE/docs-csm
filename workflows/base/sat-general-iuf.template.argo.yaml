@@ -1,0 +1,158 @@
+#
+# MIT License
+#
+# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: sat-general-template
+  labels:
+    version: "4.0.1"
+spec:
+  entrypoint: sat-wrapper
+  templates:
+    ### Templates ###
+    ## sat-wrapper ##
+    - name: sat-wrapper
+      nodeSelector:
+        kubernetes.io/hostname: ncn-m001
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "false"
+      inputs:
+        parameters:
+          - name: auth_token
+          - name: media_dir
+            description: >
+              The path to the IUF media directory that will be mounted in the sat container.
+              This is required to allow the sat commands to access any necessary files, e.g.
+              sat bootprep input files. This will be mounted at the same path within the sat
+              container.
+          - name: script_stdout_file
+            default: "/tmp/script_stdout_file"
+          - name: script_content
+            description: >
+              The script that will be executed after the sat CLI is configured. The stdout
+              of this script will be captured and returned as an output parameter from this
+              template.
+      outputs:
+        parameters:
+          - name: script_stdout
+            valueFrom:
+              path: "{{inputs.parameters.script_stdout_file}}"
+      script:
+        image: artifactory.algol60.net/sat-docker/stable/cray-sat:csm-latest
+        command: [sh]
+        source: |
+          #!/bin/sh
+          ts="$(mktemp)"
+          cat <<'SAT_GENERAL_EOF' > "${ts}"
+          function setup() {
+            set -e
+
+            # This reads from /usr/local/share/ca-certificates and updates /etc/ssl/certs/ca-certificates.crt
+            update-ca-certificates 2>/dev/null
+
+            sat init
+
+            # Write the auth token parameter to the file
+            JSON_FMT='{"access_token":"%s"}\n'
+            printf "$JSON_FMT" "{{inputs.parameters.auth_token}}" > /root/.config/sat/token.json
+            echo -n $(tr -d "\n\r" < /root/.config/sat/token.json) > /root/.config/sat/token.json
+
+            # Set up the SAT config to use the token file
+            sed -i -e 's|.*token_file.*|token_file = "/root/.config/sat/token.json"|' /root/.config/sat/sat.toml
+
+            # TODO: Fix sat bootprep code to load kube config from cluster
+            # To workaround this issue for now, construct kubeconfig file in the pod
+            secret=`kubectl -n argo get serviceaccount/default -o jsonpath='{.secrets[0].name}'`
+            token=`kubectl -n argo get secret $secret -o jsonpath='{.data.token}'| base64 -d`
+            mkdir -p mykubeconfig
+            cat << EOF > mykubeconfig/admin.conf
+            apiVersion: v1
+            kind: Config
+            current-context: default
+            contexts:
+              - context:
+                  cluster: kubernetes
+                  user: default
+                  namespace: default
+                name: default
+            clusters:
+              - cluster:
+                  server: https://kubeapi-vip.local:6442
+                  insecure-skip-tls-verify: true
+                name: kubernetes
+            users:
+            - name: default
+              user:
+                token: ${token}
+          EOF
+            export KUBECONFIG=mykubeconfig/admin.conf
+            chmod 600 mykubeconfig/admin.conf
+
+            # TODO: This is required to build images in IMS with sat bootprep. Find a way to pass
+            # an IMS public key id into the argo workflow. Perhaps from the IUF CLI.
+            ssh-keygen -f ~/.ssh/id_rsa -N ''
+            set +e
+          }
+
+          function execute_script_content() {
+            {{inputs.parameters.script_content}}
+          }
+
+          function main() {
+            setup
+            execute_script_content | tee {{inputs.parameters.script_stdout_file}}
+            local script_return_code="${PIPESTATUS[0]}"
+            if [[ "$script_return_code" -ne 0 ]]; then
+              echo "Script content exited with return code ${script_return_code}" 1>&2
+              exit $script_return_code
+            fi
+          }
+
+          main
+          SAT_GENERAL_EOF
+
+          bash ${ts}
+        env:
+          - name: REQUESTS_CA_BUNDLE
+            # This is the file updated by running update-ca-certificates in Alpine Linux
+            value: /etc/ssl/certs/ca-certificates.crt
+        volumeMounts:
+          # Mount cluster certs to location read by update-ca-certificates
+          - name: certs
+            mountPath: /usr/local/share/ca-certificates
+          # Mounting the media dir at the same path allows file paths to be used as-is in the container
+          - name: media-dir
+            mountPath: "{{inputs.parameters.media_dir}}"
+      volumes:
+        - name: certs
+          configMap:
+            name: cray-configmap-ca-public-key
+        - name: media-dir
+          hostPath:
+            path: "{{inputs.parameters.media_dir}}"

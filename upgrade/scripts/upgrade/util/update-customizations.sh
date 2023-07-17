@@ -150,6 +150,7 @@ if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-opera
   yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.alertmanager.alertmanagerSpec.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].alertmanager.alertmanagerSpec.externalAuthority }}/\"" -i $c
   yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.thanos.thanosSpec.externalAuthority = "thanos.cmn.{{ network.dns.external }}"' -i $c
   yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.thanos.thanosSpec.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].thanos.thanosSpec.externalAuthority }}/\"" -i $c
+  yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.thanos.s3_endpoint =  "{{network.dns.internal_s3 }}"' -i $c
 fi
 
 # When upgrading to CSM 1.5 or later, ensure that we remove obsolete cray-service.sqlCluster entries (CASMPET-6584).

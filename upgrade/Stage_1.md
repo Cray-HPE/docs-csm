@@ -58,7 +58,7 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
     > This step can be skipped if user localization is not required.
 
     After an upgrade, it is possible that all expected Keycloak users were not localized.
-    See [Verification procedure](../operations/security_and_authentication/Keycloak_User_Localization.md#Verification-procedure)
+    See [Verification procedure](../operations/security_and_authentication/Keycloak_User_Localization.md#verification-procedure)
     to confirm that Keycloak localization has completed as expected.
 
 ## Take Etcd Manual Backup

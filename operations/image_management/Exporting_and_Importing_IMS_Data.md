@@ -68,7 +68,9 @@ either using an automated script, or manually one at a time.
          },
          "linux_distribution": "sles15",
          "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4",
-         "recipe_type": "kiwi-ng"
+         "recipe_type": "kiwi-ng",
+         "arch": "x86_64",
+         "require_dkms": false
        }
    ```
 
@@ -79,6 +81,8 @@ either using an automated script, or manually one at a time.
    - Recipe Linux Distribution
    - Recipe Name
    - Recipe Link Path
+   - Recipe Architecture
+   - Recipe Requires DKMS
 
 1. (`ncn-mw#`) For each recipe to be export, use the `cray artifacts` CLI to download the recipe archive from Ceph S3.
 
@@ -107,7 +111,8 @@ either using an automated script, or manually one at a time.
            "path": "s3://boot-images/0f1acea4-2bf1-4931-ac19-ce3c484af540/manifest.json",
            "type": "s3"
          },
-         "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4"
+         "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4",
+         "arch": "x86_64"
        }
    ```
 
@@ -116,6 +121,7 @@ either using an automated script, or manually one at a time.
    - Image ID
    - Image Name
    - Image Link Path
+   - Image Architecture
 
 1. (`ncn-mw#`) For each image to be exported, use the `cray artifacts` CLI to download the image artifacts from Ceph S3.
 
@@ -240,7 +246,13 @@ Using the recipe information previously noted, for each recipe to be restored, p
    > Be sure to modify the example command to specify the appropriate recipe type and Linux distribution for the recipe being imported.
 
    ```bash
-   cray ims recipes create --name <name> --recipe-type <type> --linux-distribution <linux-distribution> --format json
+   cray ims recipes create \
+       --name <name> \
+       --recipe-type <type> \
+       --linux-distribution <linux-distribution> \
+       --arch <architecture> \
+       --require-dkms <dkms required> \
+       --format json
    ```
 
    Example output:
@@ -252,7 +264,9 @@ Using the recipe information previously noted, for each recipe to be restored, p
      "link": null,
      "id": "e5b9a5f9-cd75-4cb2-870a-48c42c009d4b",
      "created": "2021-05-05T15:16:08.621668+00:00",
-     "recipe_type": "kiwi-ng"
+     "recipe_type": "kiwi-ng",
+     "arch": "x86_64",
+     "require_dkms": false
    }
    ```
 
@@ -347,7 +361,7 @@ Using the image information previously noted, for each image to be restored, per
    > Be sure to modify the example command to specify the desired name for the image.
 
    ```bash
-   cray ims images create --name <name> --format json
+   cray ims images create --name <name> --arch <architecture> --format json
    ```
 
    Example output:
@@ -358,6 +372,7 @@ Using the image information previously noted, for each image to be restored, per
      "link": null,
      "id": "b5ac5d8a-0fac-470f-88a5-26c1276961e7",
      "created": "2021-05-05T15:16:08.621668+00:00",
+     "arch": "x86_64"
    }
    ```
 
