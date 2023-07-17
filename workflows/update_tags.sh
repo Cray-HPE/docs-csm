@@ -40,7 +40,7 @@ if [[ $(nslookup $REGISTRY | grep SERVFAIL) ]]; then
 fi
 
 if [[ ! $(curl -s https://${REGISTRY}) ]]; then
-  echo "ERROR: Is this a CSM environment? Check that ${REGISTRY} is not accessible over https before continuing."
+  echo "ERROR: Is this a CSM environment? Check that ${REGISTRY} is accessible over https before continuing."
   exit 1
 fi
 
