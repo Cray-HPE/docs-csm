@@ -34,7 +34,7 @@ if [[ "$(basename $(pwd))" != "workflows" ]]; then
   exit 1
 fi
 
-if [[ $(nslookup $REGISTRY | grep SERVFAIL) ]]; then
+if [[ $(nslookup $REGISTRY >> /dev/null; echo $?) != 0 ]]; then
   echo "INFO: Skipping update_tags.sh script given docs were installed outside of a CSM environment."
   exit 0
 fi
