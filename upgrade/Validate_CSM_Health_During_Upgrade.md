@@ -26,7 +26,18 @@
 
 1. Validate CSM health.
 
-    See [Validate CSM Health](../operations/validate_csm_health.md).
+    Run the combined health check script, which runs a variety of health checks that should pass at this stage of the upgrade:
+
+    - Kubernetes health checks
+    - NCN health checks
+
+    ```bash
+    /opt/cray/tests/install/ncn/automated/ncn-k8s-combined-healthcheck-post-service-upgrade
+    ```
+
+    Review the output and follow the instructions provided to resolve any test failures. With the exception of
+    [Known issues with NCN health checks](../troubleshooting/known_issues/issues_with_ncn_health_checks.md),
+    all health checks are expected to pass.
 
 1. (`ncn-m002#`) Stop typescripts.
 
