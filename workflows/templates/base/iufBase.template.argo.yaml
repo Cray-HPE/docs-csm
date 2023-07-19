@@ -26,7 +26,7 @@ kind: WorkflowTemplate
 metadata:
   name: iuf-base-template
   labels:
-    version: "4.0.1"
+    version: "4.0.2"
 spec:
   entrypoint: shell-script
   templates:
@@ -65,7 +65,7 @@ spec:
          factor: "2"
          maxDuration: "1m"
       script:
-        image: artifactory.algol60.net/csm-docker/stable/iuf:csm-latest
+        image: artifactory.algol60.net/csm-docker/stable/iuf:v0.1.11
         command: [sh]
         source: |
           #!/host_usr_bin/bash
