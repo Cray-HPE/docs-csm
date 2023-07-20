@@ -54,5 +54,5 @@ cat INSTALLED_FILES | xargs -i sh -c 'test -L {} && exit || test -f $RPM_BUILD_R
 %defattr(-,root,root)
 
 %post
-%{buildroot}/usr/share/doc/csm/workflows/update_tags.sh
+/usr/share/doc/csm/workflows/update_tags.sh
 
