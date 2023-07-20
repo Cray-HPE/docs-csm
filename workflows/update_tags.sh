@@ -29,7 +29,7 @@ REGISTRY="registry.local"
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd $SCRIPT_DIR
 
-if [[ $(basename "$(pwd)") != "workflows" ]]; then
+if [[ "$(basename ${SCRIPT_DIR})" != "workflows" ]]; then
   echo "ERROR: This script must be located in the workflows directory to run."
   exit 1
 fi
