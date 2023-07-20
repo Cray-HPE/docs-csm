@@ -17,7 +17,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
 
 ## Procedure
 
-1. Locate the desired recipe to download from S3.
+1. (`ncn-mw#`) Locate the desired recipe to download from S3.
 
     There may be multiple records returned. Ensure that the correct record is selected in the returned data.
 
@@ -32,6 +32,8 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     id = "76ef564d-47d5-415a-bcef-d6022a416c3c"
     name = "cray-sles15-barebones"
     created = "2020-02-05T19:24:22.621448+00:00"
+    arch = "x86_64"
+    require_dkms = false
 
     [results.link]
     path = "s3://ims/recipes/76ef564d-47d5-415a-bcef-d6022a416c3c/cray-sles15-barebones.tgz"
@@ -39,7 +41,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     type = "s3"
     ```
 
-1. Create variables for the S3 `bucket` and `key` values from the S3 `path` in the returned data of the previous step.
+1. (`ncn-mw#`) Create variables for the S3 `bucket` and `key` values from the S3 `path` in the returned data of the previous step.
 
     ```bash
     S3_ARTIFACT_BUCKET=ims
@@ -47,7 +49,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     ARTIFACT_FILENAME=cray-sles15-barebones.tgz
     ```
 
-1. Download the recipe archive.
+1. (`ncn-mw#`) Download the recipe archive.
 
     Use the variables created in the previous step when running the following command.
 
@@ -55,7 +57,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     cray artifacts get $S3_ARTIFACT_BUCKET $S3_ARTIFACT_KEY $ARTIFACT_FILENAME
     ```
 
-1. Expand the recipe with `tar`.
+1. (`ncn-mw#`) Expand the recipe with `tar`.
 
     ```bash
     mkdir image-recipe
@@ -74,7 +76,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
       root, see the [Kiwi-NG documentation](https://doc.opensuse.org/projects/kiwi/doc/).
     * Recipes built by IMS are required to reference repositories that are hosted on the NCN by the Nexus service.
 
-1. Locate the directory containing the Kiwi-NG image description files.
+1. (`ncn-mw#`) Locate the directory containing the Kiwi-NG image description files.
 
     This step should be done after the recipe has been changed.
 
@@ -82,24 +84,25 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     cd image-recipe
     ```
 
-1. Set an environment variable for the name of the file that will contain the archive of the image recipe.
+1. (`ncn-mw#`) Set an environment variable for the name of the file that will contain the archive of the image recipe.
 
     ```bash
     ARTIFACT_FILE=my_recipe.tgz
     ```
 
-1. Create a `tgz` archive of the image recipe.
+1. (`ncn-mw#`) Create a `tgz` archive of the image recipe.
 
     ```bash
     tar cvfz ../$ARTIFACT_FILE .
     cd ..
     ```
 
-1. Create a new IMS recipe record.
+1. (`ncn-mw#`) Create a new IMS recipe record.
 
     ```bash
     cray ims recipes create --name "My Recipe" \
-            --recipe-type kiwi-ng --linux-distribution sles15
+            --recipe-type kiwi-ng --linux-distribution sles15 \
+            --arch x86_64 --reqire-dkms False
     ```
 
     Example output:
@@ -110,15 +113,17 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     linux_distribution = "sles15"
     name = "my_recipe.tgz"
     recipe_type = "kiwi-ng"
+    arch = "x86_64"
+    require_dkms = false
     ```
 
-1. Create a variable for the `id` value in the returned data.
+1. (`ncn-mw#`) Create a variable for the `id` value in the returned data.
 
     ```bash
     IMS_RECIPE_ID=2233c82a-5081-4f67-bec4-4b59a60017a6
     ```
 
-1. Upload the customized recipe to S3.
+1. (`ncn-mw#`) Upload the customized recipe to S3.
 
     It is suggested as a best practice that the S3 object name start with `recipes/` and contain the IMS recipe ID,
     in order to remove ambiguity.
@@ -127,7 +132,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     cray artifacts create ims recipes/$IMS_RECIPE_ID/$ARTIFACT_FILE $ARTIFACT_FILE
     ```
 
-1. Update the IMS recipe record with the S3 path to the recipe archive.
+1. (`ncn-mw#`) Update the IMS recipe record with the S3 path to the recipe archive.
 
     ```bash
     cray ims recipes update $IMS_RECIPE_ID --link-type s3 \
@@ -142,6 +147,8 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     linux_distribution = "sles15"
     name = "my_recipe.tgz"
     created = "2020-02-05T19:24:22.621448+00:00"
+    arch = "x86_64"
+    require_dkms = false
 
     [link]
     path = "s3://ims/recipes/2233c82a-5081-4f67-bec4-4b59a60017a6/my_recipe.tgz"
@@ -224,13 +231,14 @@ the following procedures must all be completed.
 
 ### Add Template Key/Value Pairs to IMS Recipe Record
 
-1. Create a new IMS recipe record with `template_dictionary` key/value pairs.
+1. (`ncn-mw#`) Create a new IMS recipe record with `template_dictionary` key/value pairs.
 
     ```bash
     cray ims recipes create --name "My Recipe" \
             --recipe-type kiwi-ng --linux-distribution sles15 \
             --template-dictionary-key CSM_RELEASE_VERSION \
-            --template-dictionary-value 1.2.5
+            --template-dictionary-value 1.2.5 \
+            --arch x86_64
     ```
 
     Example output:
@@ -241,6 +249,8 @@ the following procedures must all be completed.
     linux_distribution = "sles15"
     name = "my_recipe.tgz"
     recipe_type = "kiwi-ng"
+    arch = "x86_64"
+    require_dkms = false
     
     [[template_dictionary]]
     key = "CSM_RELEASE_VERSION"
@@ -252,13 +262,13 @@ the following procedures must all be completed.
     Additional key/value pairs can be added by providing a list of comma-separated keys/values to the
     `--template-dictionary-key` and `--template-dictionary-value` parameters.
 
-1. Create a variable for the `id` value in the returned data.
+1. (`ncn-mw#`) Create a variable for the `id` value in the returned data.
 
     ```bash
     IMS_RECIPE_ID=2233c82a-5081-4f67-bec4-4b59a60017a6
     ```
 
-1. Upload the customized recipe to S3.
+1. (`ncn-mw#`) Upload the customized recipe to S3.
 
    It is suggested as a best practice that the S3 object name start with `recipes/` and contain the IMS recipe ID,
    in order to remove ambiguity.
@@ -267,7 +277,7 @@ the following procedures must all be completed.
    cray artifacts create ims recipes/$IMS_RECIPE_ID/$ARTIFACT_FILENAME $ARTIFACT_FILENAME
    ```
 
-1. Update the IMS recipe record with the S3 path to the recipe archive.
+1. (`ncn-mw#`) Update the IMS recipe record with the S3 path to the recipe archive.
 
    ```bash
    cray ims recipes update $IMS_RECIPE_ID --link-type s3 \
@@ -282,6 +292,8 @@ the following procedures must all be completed.
    linux_distribution = "sles15"
    name = "my_recipe.tgz"
    created = "2020-02-05T19:24:22.621448+00:00"
+   arch = "x86_64"
+   require_dkms = false
 
    [[template_dictionary]]
    key = "CSM_RELEASE_VERSION"

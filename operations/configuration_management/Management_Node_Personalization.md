@@ -26,7 +26,7 @@ or new commit made).
 This procedures causes CFS to re-run personalization on management nodes by clearing the
 configuration state and error count on the management node components. This causes the CFS Batcher
 to reconfigure these components.
-See [Configuration Management with the CFS Batcher](./Configuration_Management_with_the_CFS_Batcher.md)
+See [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md)
 for more information on the CFS Batcher.
 
 This procedure has a scripted option and a manual option. Use the scripted option if possible.
@@ -118,7 +118,7 @@ commit made).
 This procedures causes CFS to re-run personalization on a management node by clearing the
 configuration state and error count on the management node component. This causes the CFS Batcher
 to reconfigure these components.
-See [Configuration Management with the CFS Batcher](./Configuration_Management_with_the_CFS_Batcher.md)
+See [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md)
 for more information on the CFS Batcher.
 
 ### Prerequisites to re-run node personalization on a specific management node

@@ -5,6 +5,10 @@ inside the running container as `root` (in the container). With this an administ
 to remember that any change made inside a UAI is transitory. These changes only last as long as the UAI is running. To make a permanent change, either the UAI image has to be
 changed or external customizations must be applied.
 
+* [Summary](#summary)
+* [Example](#example)
+* [Next topic](#next-topic)
+
 ## Summary
 
 The high-level steps of the procedure are the following:
@@ -18,15 +22,15 @@ The high-level steps of the procedure are the following:
 
 Here is an example session showing a `ps` command inside the container of a UAI by an administrator.
 
-1. List the UAIs.
+1. (`ncn-mw#`) List the UAIs.
 
     ```console
-    cray uas admin uais list
+    cray uas admin uais list --format toml
     ```
 
     Example output:
 
-    ```text
+    ```toml
     [[results]]
     uai_age = "1d4h"
     uai_connect_string = "ssh broker@10.103.13.162"
@@ -50,7 +54,7 @@ Here is an example session showing a `ps` command inside the container of a UAI 
     username = "vers"
     ```
 
-1. Find the pod name.
+1. (`ncn-mw#`) Find the pod name.
 
     ```console
     kubectl get po -n user | grep uai-vers-4ebe1966
@@ -62,16 +66,16 @@ Here is an example session showing a `ps` command inside the container of a UAI 
     uai-vers-4ebe1966-77b7c9c84f-xgqm4     1/1     Running   0          77s
     ```
 
-1. Open an interactive shell in the pod.
+1. (`ncn-mw#`) Open an interactive shell in the pod.
 
     ```console
     kubectl exec -it -n user uai-vers-4ebe1966-77b7c9c84f-xgqm4 -c uai-vers-4ebe1966 -- /bin/sh
     ```
 
-1. Run the `ps` command inside the container of a UAI.
+1. (`uai#`) Run the `ps` command inside the container of a UAI.
 
     ```console
-    sh-4.ps -afe
+    ps -afe
     ```
 
     Example output:
@@ -87,6 +91,6 @@ Here is an example session showing a `ps` command inside the container of a UAI 
     sh-4.4#
     ```
 
-## Next Topic
+## Next topic
 
-[Next Topic: Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
+[Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)

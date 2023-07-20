@@ -1,20 +1,31 @@
 # `cubs_tool` Usage
 
+* [Introduction](#introduction)
+* [Glossary](#glossary)
+* [Usage](#usage)
+* [Use cases](#use-cases)
+* [Troubleshooting](#troubleshooting)
+
 ## Introduction
 
-`cubs_tool` is a python script developed as a second tier Ceph upgrade watching tool.  This was to better integrate the Ceph upgrade process with the upgrade workflow tooling.
+`cubs_tool` is a python script developed as a second tier Ceph upgrade watching tool, in order to better integrate the Ceph upgrade process with the upgrade workflow tooling.
 
 ## Glossary
 
-* **`in family`** - is referring to an upgrade staying within the same major version of Ceph.  E.g, Any upgrade within the same CSM release will contain the same Major version of Ceph, but could have minor version bumps or patched containers.
-  
+* `in family` - is referring to an upgrade staying within the same major version of Ceph.
+  Any upgrade within the same CSM release will contain the same major version of Ceph, but could have minor version bumps or patched containers.
+
 ## Usage
 
-***IMPORTANT:*** The `cubs_tool.py` utility at this time will only work on `ncn-s00[1-3]`.  Please ensure you are only attempting to run this tool from one of those servers.  
+***IMPORTANT:*** The `cubs_tool.py` utility at this time will only work on `ncn-s00[1-3]`.  Only run this tool from one of those servers.
+
+(`ncn-s#`) Run the following command to see the tool usage.
 
 ```bash
 ./cubs_tool.py --help
 ```
+
+Example output:
 
 ```text
 usage: cubs_tool.py [-h] [--report] [--version VERSION] [--registry REGISTRY]
@@ -33,9 +44,9 @@ optional arguments:
   --quiet               Toggle to enable/disable visual output
 ```
 
-## Use Cases
+## Use cases
 
-1. Version and status report
+* (`ncn-s#`) Version and status report
 
    ```bash
    ./cubs_tool.py --report
@@ -94,7 +105,7 @@ optional arguments:
    +----------+-------------+-----------------------+---------+---------+-------------------------------------------------------------------------------------------------------------------------------------+
    ```
 
-1. Upgrade check
+* (`ncn-s#`) Upgrade check.
 
    ```bash
     ./cubs_tool.py --version 16.2.10 --registry localhost
@@ -106,13 +117,13 @@ optional arguments:
    Upgrade Available!!  The specified version v16.2.10 has been found in the registry
    ```
 
-1. Upgrade
+* (`ncn-s#`) Upgrade.
 
    ```bash
    ./cubs_tool.py --version 16.2.10 --registry localhost --upgrade
    ```
 
-1. In-family Upgrade
+* (`ncn-s#`) In-family upgrade.
 
    ```bash
    ./cubs_tool.py --version 16.2.10 --registry localhost --upgrade
@@ -120,7 +131,7 @@ optional arguments:
 
 ## Troubleshooting
 
-1. Upgrade is taking to long or is not reporting the status correctly
-   1. There is a scenario where the upgrade could get wedged.  This typically occurs when there is an issue with pulling an image.
-      1. Utilize `ceph orch upgrade status` to get the true status of the upgrade.
-         1. If it is showing `"in_progress": false` then the upgrade has either completed or failed. This can be confirmed by checking the output of a `cubs_tool.py --report` and verifying the image sha and version are correct.
+If the upgrade is taking too long or is not reporting the status correctly, then it may be an issue with pulling an image.
+Utilize `ceph orch upgrade status` to get the true status of the upgrade.
+If it is showing `"in_progress": false`, then the upgrade has either completed or failed.
+This can be confirmed by checking the output of a `cubs_tool.py --report` and verifying the image SHA and version are correct.

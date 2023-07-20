@@ -248,7 +248,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 1. (`pit#`) This was done in a previous step, but if the user is resuming/starting here then the first master needs to be
     redefined.
 
-    > ***NOTE*** This requires that the [set reusable environment variables](./pre-installation.md#15-set-reusable-environment-variables) step
+    > ***NOTE*** This requires that the [set reusable environment variables](pre-installation.md#15-set-reusable-environment-variables) step
     > was completed, `PITDATA` should be defined in the users environment before continuing.
 
     ```bash

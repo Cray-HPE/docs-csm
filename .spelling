@@ -32,6 +32,10 @@ StatefulSets
 
 
 1.0.x
+1.2.x
+1.3.x
+1.4.x
+1.5.x
 1.6.x
 100GBASE-CR2
 100GBASE-CR4
@@ -420,6 +424,7 @@ XL675d
 XtraDB
 Yum
 Zypper
+aarch64
 airgapped
 analog
 analyze
@@ -428,6 +433,7 @@ analyzer
 analyzers
 analyzes
 analyzing
+arm64
 artifact
 artifact's
 artifacts
@@ -438,6 +444,7 @@ base-64
 base-64-encoded
 behavior
 behaviors
+binfmt_misc
 blackhole
 bootscript
 buses
@@ -453,6 +460,7 @@ ceph
 cfgsh
 channeled
 checkmark
+chrooted
 cleanup
 cmm0
 color
@@ -605,6 +613,7 @@ prebuilt
 preempted
 preemptively
 provisioners
+qemu-user-static
 redis
 re-architecting
 ReadOnly
@@ -730,13 +739,12 @@ uppercase
 uptimes
 v1
 v1.0
-v1.2.
+v1.2
 v1.3
 v1.3.0
 v1.3.x
 v1.30.16
 v1.4
-v1.4.
 v1.4.0
 v1.4.1
 v1.4.2
@@ -766,6 +774,7 @@ xname
 xnames
 zeroization
 zeroize
+zypper
 
 # Network Terms - Starting to organize a little bit here but it's not done
 0.5m

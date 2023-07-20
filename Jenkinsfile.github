@@ -25,18 +25,18 @@
  */
 @Library('csm-shared-library') _
 
-def sleImage = 'artifactory.algol60.net/csm-docker/stable/csm-docker-sle'
 def major
 def minor
 def patch
 def isStable = env.TAG_NAME != null ? true : false
-if ( isStable ) {
+if (isStable) {
     (major, minor, patch) = env.TAG_NAME.tokenize('.')
-    major = major.replaceAll("^v","")
+    major = major.replaceAll("^v", "")
 }
 pipeline {
+
     agent {
-        label "metal-gcp-builder"
+        label 'metal-gcp-builder'
     }
 
     options {
@@ -48,108 +48,64 @@ pipeline {
 
     environment {
         NAME = getRepoName()
-        VERSION = sh(returnStdout: true, script: "git describe --tags | tr -s '-' '~' | tr -d '^v'").trim()
-        TAG_POINTS_AT_HEAD = sh(returnStdout: true, script: "git tag --points-at HEAD | tr -d '^v'").trim()
+        BUILD_DIR = "${env.WORKSPACE}/dist/rpmbuild/"
+        SPEC_FILE = "${env.NAME}.spec"
+        VERSION = sh(returnStdout: true, script: "git describe --tags | tr -s '-' '~' | sed 's/^v//'").trim()
+        TAG_POINTS_AT_HEAD = sh(returnStdout: true, script: "git tag --points-at HEAD | sed 's/^v//'").trim()
         ADDITIONAL_VERSIONS = "${env.VERSION == env.TAG_POINTS_AT_HEAD ? 'latest' : ''}"
         SLACK_CHANNEL_ALERTS = "csm-release-alerts"
     }
 
     stages {
 
-        stage('Build & Publish') {
-
-            matrix {
-
-                agent {
-                    docker {
-                        label 'docker'
-                        reuseNode true
-                        image "${sleImage}:${sleVersion}"
-                        args "-v /home/jenkins/.ssh:/home/jenkins/.ssh"
+        stage('Prepare: RPMs') {
+            steps {
+                withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
+                    sh "echo ${env.BRANCH_NAME}"
+                    sh "env"
+                    sh "make prepare"
+                    dir("${env.BUILD_DIR}/SPECS/") {
+                        runLibraryScript("addRpmMetaData.sh", "${env.SPEC_FILE}")
                     }
                 }
+            }
+        }
 
-                axes {
-                    axis {
-                        name 'sleVersion'
-                        values 15.3, 15.4
-                    }
+        stage('Build: RPMs') {
+            steps {
+                withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
+                    sh "make rpm"
                 }
+            }
+        }
 
-                environment{
-                    BUILD_DIR = "${env.WORKSPACE}/dist/rpmbuild/${sleVersion}"
-                    SPEC_FILE = "${env.NAME}-${sleVersion}.spec"
-                }
-
-                stages {
-
-                    stage('Prepare: RPMs') {
-                        steps {
-                            withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
-                                sh "cp ${env.NAME}.spec ${env.SPEC_FILE}"
-                                sh "echo ${env.BRANCH_NAME}"
-                                sh "env"
-                                sh "make prepare"
-                                dir("${env.BUILD_DIR}/SPECS/") {
-                                    runLibraryScript("addRpmMetaData.sh", "${env.SPEC_FILE}")
-                                }
-                            }
-                        }
+        stage('Publish: RPMs') {
+            steps {
+                script {
+                    if (isStable) {
+                        RELEASE_FOLDER = "/${major}.${minor}"
+                    } else {
+                        RELEASE_FOLDER = ""
                     }
-
-                    stage('Build: RPMs') {
-                        steps {
-                            withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
-                                sh "make rpm"
-                            }
-                        }
-                    }
-
-                    stage('Publish: RPMs') {
-                        steps {
-                            script {
-                                if( isStable ){
-                                    RELEASE_FOLDER = "/${major}.${minor}"
-                                } else {
-                                    RELEASE_FOLDER = ""
-                                }
-                                ADDITIONAL_VERSIONS = ("${env.ADDITIONAL_VERSIONS}" == "null") ? [] : ["${env.ADDITIONAL_VERSIONS}"]
-                                def sles_version_parts = "${sleVersion}".tokenize('.')
-                                def sles_major = "${sles_version_parts[0]}"
-                                def sles_minor = "${sles_version_parts[1]}"
-                                publishCsmRpms(
-                                        additionalVersions: ADDITIONAL_VERSIONS,
-                                        arch: "noarch",
-                                        component: env.NAME + RELEASE_FOLDER,
-                                        isStable: isStable,
-                                        os: "sle-${sles_major}sp${sles_minor}",
-                                        pattern: "dist/rpmbuild/${sleVersion}/RPMS/noarch/*.rpm",
-                                )
-                                publishCsmRpms(
-                                        additionalVersions: ADDITIONAL_VERSIONS,
-                                        arch: "src",
-                                        component: env.NAME + RELEASE_FOLDER,
-                                        isStable: isStable,
-                                        os: "sle-${sles_major}sp${sles_minor}",
-                                        pattern: "dist/rpmbuild/${sleVersion}/SRPMS/*.rpm",
-                                )
-                            }
-                        }
-                    }
+                    ADDITIONAL_VERSIONS = ("${env.ADDITIONAL_VERSIONS}" == "null") ? [] : ["${env.ADDITIONAL_VERSIONS}"]
+                    publishCsmRpms(
+                            additionalVersions: ADDITIONAL_VERSIONS,
+                            arch: "noarch",
+                            component: env.NAME + RELEASE_FOLDER,
+                            isStable: isStable,
+                            os: "noos",
+                            pattern: "dist/rpmbuild/RPMS/noarch/*.rpm",
+                    )
+                    publishCsmRpms(
+                            additionalVersions: ADDITIONAL_VERSIONS,
+                            arch: "src",
+                            component: env.NAME + RELEASE_FOLDER,
+                            isStable: isStable,
+                            os: "noos",
+                            pattern: "dist/rpmbuild/SRPMS/*.rpm",
+                    )
                 }
             }
         }
     }
-    post {
-        failure {
-            script {
-                slackSend(channel: env.SLACK_CHANNEL_ALERTS, color: "danger", message: "<${env.BUILD_URL}|DOCS-CSM ${env.VERSION}> - :x: Build did not complete successfully")
-            }
-        }
-        aborted {
-            script {
-                slackSend(channel: env.SLACK_CHANNEL_ALERTS, color: "warning", message: "<${env.BUILD_URL}|DOCS-CSM ${env.VERSION}> - :warning: Job was aborted")
-            }
-        }
-    }
-  }
+}

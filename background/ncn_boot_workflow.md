@@ -1,12 +1,8 @@
 # NCN Boot Workflow
 
-Non-compute nodes can boot from two sources:
+This document provides information on non-compute node (NCN) boot devices and boot ordering.
 
-* Network/PXE
-* Disk
-
-## Topics
-
+* [Boot sources](#boot-sources)
 * [Determine the current boot order](#determine-the-current-boot-order)
 * [Reasons to change the boot order after CSM install](#reasons-to-change-the-boot-order-after-csm-install)
 * [Determine if NCNs booted via disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
@@ -17,6 +13,13 @@ Non-compute nodes can boot from two sources:
 * [Example boot orders](#example-boot-orders)
 * [Reverting changes](#reverting-changes)
 * [Locating USB device](#locating-usb-device)
+
+## Boot sources
+
+Non-compute nodes (NCNs) can boot from two sources:
+
+* Network/PXE
+* Disk
 
 ## Determine the current boot order
 
@@ -48,7 +51,7 @@ PXE. The method to use will vary depending on the system environment.
 
     If it starts with `kernel`, then the node network booted. If it starts with `BOOT_IMAGE=(`, then it disk booted.
 
-1. Check output from `efibootmgr`.
+1. (`ncn#` or `pit#`) Check output from `efibootmgr`.
 
     ```bash
     efibootmgr
@@ -120,7 +123,7 @@ done
 * `efibootmgr` speaks directly to the node's UEFI; it can only be ignored by new BIOS activity
 
 > **NOTE:** `cloud-init` will set boot order when it runs, but this does not always work with certain hardware vendors. An administrator can invoke the `cloud-init` script at
-> `/srv/cray/scripts/metal/set-efi-bbs.sh` on any NCN. Find the script [here, on GitHub](https://github.com/Cray-HPE/node-image-build/blob/lts/csm-1.0/boxes/ncn-common/files/scripts/metal/set-efi-bbs.sh).
+> `/srv/cray/scripts/metal/set-efi-bbs.sh` on any NCN.
 
 ## Setting boot order
 
@@ -130,7 +133,7 @@ Setting the boot order with `efibootmgr` will ensure that the desired network in
 
 The commands are the same for all hardware vendors, except where noted.
 
-1. Create a list of the desired IPv4 boot devices.
+1. (`ncn#` or `pit#`) Create a list of the desired IPv4 boot devices.
 
     Follow the section corresponding to the hardware manufacturer of the system:
 
@@ -152,25 +155,25 @@ The commands are the same for all hardware vendors, except where noted.
         efibootmgr | grep -i 'ipv4' | grep -iv 'baseboard' | tee /tmp/bbs1
         ```
 
-1. Create a list of the Cray disk boot devices.
+1. (`ncn#` or `pit#`) Create a list of the Cray disk boot devices.
 
     ```bash
     efibootmgr | grep -i cray | tee /tmp/bbs2
     ```
 
-1. Set the boot order to first PXE boot, with disk boot as the fallback option.
+1. (`ncn#` or `pit#`) Set the boot order to first PXE boot, with disk boot as the fallback option.
 
     ```bash
     efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
     ```
 
-1. Set all of the desired boot options to be active.
+1. (`ncn#` or `pit#`) Set all of the desired boot options to be active.
 
     ```bash
     cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
     ```
 
-1. Set next boot entry.
+1. (`ncn#` or `pit#`) Set next boot entry.
 
     ```bash
     efibootmgr -n <desired_next_boot_device>
@@ -303,14 +306,14 @@ Reset the BIOS. Refer to vendor documentation for resetting the BIOS or attempt 
     ipmitool chassis bootdev none options=clear-cmos
     ```
 
-1. Set next boot with `ipmitool`.
+1. (`ncn#` or `pit#`) Set next boot with `ipmitool`.
 
     ```bash
     ipmitool chassis bootdev pxe options=persistent
     ipmitool chassis bootdev pxe options=efiboot
     ```
 
-1. Boot to BIOS for checkout of boot devices.
+1. (`ncn#` or `pit#`) Boot to BIOS for checkout of boot devices.
 
     ```bash
     ipmitool chassis bootdev bios options=efiboot

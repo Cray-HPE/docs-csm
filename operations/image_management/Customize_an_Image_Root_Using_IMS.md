@@ -29,10 +29,10 @@ to boot a node\) to the artifact repository.
 
 ## Procedure
 
-1. Check for an existing IMS public key.
+1. (`ncn-mw#`) Check for an existing IMS public key.
 
     > **`NOTE`** If it is known that a public key associated with the user account being used was not previously uploaded to the IMS service, then skip this
-    > step and proceed to [upload the SSH public key to the IMS service](#upload-ssh-public-key-to-ims).
+    > step and proceed to `Upload the SSH public key to the IMS service`.
 
     The following query may return multiple public key records. The correct one will have a name value including the current username in use.
 
@@ -50,13 +50,13 @@ to boot a node\) to the artifact repository.
     created = "2018-11-21T17:19:07.830000+00:00"
     ```
 
-    * If a public key associated with the username in use is not returned, then proceed to [upload the SSH public key to the IMS service](#upload-ssh-public-key-to-ims).
-    * Otherwise, if a public key associated with the username does exist, then note the value of its `id` field and proceed to [record the IMS public key ID](#record-ims-public-key-id).
+    * If a public key associated with the username in use is not returned, then proceed to `Upload the SSH public key to the IMS service`.
+    * Otherwise, if a public key associated with the username does exist, then note the value of its `id` field and proceed to `Record the IMS public key ID`.
 
-1. Upload the SSH public key to the IMS service.
+1. (`ncn-mw#`) Upload the SSH public key to the IMS service.
 
     > If an IMS public key record has already been created for the account being used, then note the value of its `id` field and proceed
-    > to [record the IMS public key ID](#record-ims-public-key-id).
+    > to `Record the IMS public key ID`.
 
     The IMS debug/configuration shell relies on passwordless SSH. This SSH public key needs to be uploaded to IMS to enable interaction with the image customization environment later
     in this procedure.
@@ -76,9 +76,9 @@ to boot a node\) to the artifact repository.
     created = "2018-11-21T17:19:07.830000+00:00"
     ```
 
-    Note the value of the `id` field and proceed to [record the IMS public key ID](#record-ims-public-key-id).
+    Note the value of the `id` field and proceed to `Record the IMS public key ID`.
 
-1. Record the IMS public key ID.
+1. (`ncn-mw#`) Record the IMS public key ID.
 
     Create a variable for the IMS public key `id` value noted previously.
 
@@ -88,11 +88,11 @@ to boot a node\) to the artifact repository.
 
 1. Determine if the image root being used is in IMS and ready to be customized.
 
-    * If the image to be customized is already known to IMS, then proceed to [Locate an IMS Image to Customize](#locate).
+    * If the image to be customized is already known to IMS, then proceed to `Locate the IMS image record for the image that is being customized`.
     * If the image to be customized was created outside of IMS and is not yet known to IMS, then proceed to [Import External Image to IMS](Import_External_Image_to_IMS.md).
     * To build an image from an existing IMS recipe, proceed to [Build an Image Using IMS REST Service](Build_an_Image_Using_IMS_REST_Service.md).
 
-1. Locate the IMS image record for the image that is being customized.
+1. (`ncn-mw#`) Locate the IMS image record for the image that is being customized.
 
     ```bash
     cray ims images list
@@ -112,7 +112,7 @@ to boot a node\) to the artifact repository.
     etag = ""
     ```
 
-1. Record the IMS image ID.
+1. (`ncn-mw#`) Record the IMS image ID.
 
     Create a variable for the `id` field value for the image that is being customized.
 
@@ -120,7 +120,7 @@ to boot a node\) to the artifact repository.
     IMS_IMAGE_ID=4e78488d-4d92-4675-9d83-97adfc17cb19
     ```
 
-1. Create an IMS job record in order to start the image customization job.
+1. (`ncn-mw#`) Create an IMS job record in order to start the image customization job.
 
     After customizing the image, IMS will automatically upload any build artifacts \(root file system, kernel, and `initrd`\) to S3, and associate the S3 artifacts with IMS.
     Unfortunately, IMS is not able to dynamically determine the names of the Linux kernel and `initrd` to look for, because the file name for these vary depending upon Linux
@@ -129,10 +129,12 @@ to boot a node\) to the artifact repository.
     Use the following table to help determine the default kernel and `initrd` file names to specify when submitting the job to customize an image. These are just default names.
     Consult with the site administrator to determine if these names have been changed for a given image or recipe.
 
-    | Recipe                | Recipe Name                                   | Kernel File Name | `initrd` File Name |
-    |-----------------------|-----------------------------------------------|------------------|--------------------|
-    | SLES 15 SP3 Barebones | `cray-sles15sp3-barebones`                    | `vmlinuz`        | `initrd`           |
-    | COS                   | `cray-shasta-compute-sles15sp3.x86_64-1.4.66` | `vmlinuz`        | `initrd`           |
+    | Recipe                        | Recipe Name                             | Kernel File Name | `initrd` File Name |
+    |---------------------------    |-----------------------------------------|------------------|--------------------|
+    | SLES 15 SP5 Barebones x86     | `cray-sles15sp5-barebones`              | `vmlinuz`        | `initrd`           |
+    | SLES 15 SP5 Barebones aarch64 | `cray-sles15sp5-barebones`              | `Image`          | `initrd`           |
+    | COS x86                       | `cray-shasta-compute-sles15sp5.x86_646` | `vmlinuz`        | `initrd`           |
+    | COS aarch64                   | `cray-shasta-compute-sles15sp5.aarch64` | `Image`          | `initrd`           |
 
     > Under normal circumstances, IMS customization jobs will download and mount the `rootfs` for the specified IMS image under the `/mnt/image/image-root` directory within the SSH
     > shell. After SSHing into the job container, `cd` or `chroot` into the `/mnt/image/image-root` directory in order to interact with the image root being customized.
@@ -142,6 +144,10 @@ to boot a node\) to the artifact repository.
     > A jailed environment lets users SSH into the SSH container and be immediately within the image root for the image being customized. Users do not need to `cd` or `chroot` into
     > the image root. Using a jailed environment has some advantages, such as making the IMS SSH job shell look more like a compute node. This allows applications like the CFS to
     > perform actions on both IMS job pods \(pre-boot\) and compute nodes \(post-boot\).
+    >
+    > If kernel modules need to be installed or modified using DKMS, then use the `--require-dkms` option to enable it.
+    > This will grant access to security levels and additional kernel details needed for DKMS to work. See
+    > [Configure IMS to Use DKMS](Configure_IMS_to_Use_DKMS.md) for more information.
     >
     > Before running the following command, replace the `MY_CUSTOMIZED_IMAGE` value with the name of the image root being used.
 
@@ -172,6 +178,8 @@ to boot a node\) to the artifact repository.
     initrd_file_name = "initrd"
     created = "2018-11-21T18:22:53.409405+00:00"
     kubernetes_namespace = "ims"
+    arch = "x86_64"
+    require_dkms = false
     public_key_id = "a252ff6f-c087-4093-a305-122b41824a3e"
     kubernetes_configmap = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap"
     [[ssh_containers]]
@@ -187,7 +195,7 @@ to boot a node\) to the artifact repository.
     port = 22
     ```
 
-1. Create variables for the IMS job ID and Kubernetes job ID.
+1. (`ncn-mw#`) Create variables for the IMS job ID and Kubernetes job ID.
 
     The values for these variables are taken from the output of the command in the previous step.
     Set `IMS_JOB_ID` to the value of the `id` field. Set the `IMS_KUBERNETES_JOB` to the value of
@@ -198,7 +206,7 @@ to boot a node\) to the artifact repository.
     IMS_KUBERNETES_JOB=cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-customize
     ```
 
-1. Create variables for the SSH connection values in the returned data.
+1. (`ncn-mw#`) Create variables for the SSH connection values in the returned data.
 
     The IMS customization job enables customization of the image root via an SSH shell accessible by one or more dynamic host names. The user needs to know if they will SSH from
     inside or outside the Kubernetes cluster to determine which host name to use. Typically, customers access the system from outside the Kubernetes cluster using the Customer
@@ -231,7 +239,7 @@ to boot a node\) to the artifact repository.
     IMS_SSH_PORT=22
     ```
 
-1. Describe the image create job.
+1. (`ncn-mw#`) Describe the image create job.
 
     ```bash
     kubectl -n ims describe job $IMS_KUBERNETES_JOB
@@ -251,7 +259,7 @@ to boot a node\) to the artifact repository.
     Normal SuccessfulCreate 4m job-controller Created pod: cray-ims-cfa864b3-4e08-49b1-9c57-04573228fd3f-customize-xh2jf
     ```
 
-1. Record the name of the Kubernetes pod from the previous command.
+1. (`ncn-mw#`) Record the name of the Kubernetes pod from the previous command.
 
     The name is located in the `Events` section of the output.
 
@@ -259,7 +267,7 @@ to boot a node\) to the artifact repository.
     POD=cray-ims-cfa864b3-4e08-49b1-9c57-04573228fd3f-customize-xh2jf
     ```
 
-1. Verify that the status of the IMS job is `waiting_on_user`.
+1. (`ncn-mw#`) Verify that the status of the IMS job is `waiting_on_user`.
 
     ```bash
     cray ims jobs describe $IMS_JOB_ID
@@ -281,6 +289,8 @@ to boot a node\) to the artifact repository.
     initrd_file_name = "initrd"
     created = "2018-11-21T18:22:53.409405+00:00"
     kubernetes_namespace = "ims"
+    arch = "x86_64"
+    require_dkms = false
     public_key_id = "a252ff6f-c087-4093-a305-122b41824a3e"
     kubernetes_configmap = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap"
     [[ssh_containers]]
@@ -296,7 +306,7 @@ to boot a node\) to the artifact repository.
     port = 22
     ```
 
-1. Customize the image in the image customization environment.
+1. (`ncn-mw#`) Customize the image in the image customization environment.
 
     > Once in the image root using `chroot` \(or if using a \`jailed\` environment\) during image customization, the image will only have access to whatever configuration the image
     > already contains. In order to talk to services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. A base level of
@@ -397,7 +407,7 @@ to boot a node\) to the artifact repository.
         ansible-playbook -i ./inventory.ini sample_playbook.yml
         ```
 
-1. Follow the `buildenv-sidecar` to ensure that any artifacts are properly uploaded to S3 and associated with IMS.
+1. (`ncn-mw#`) Follow the `buildenv-sidecar` to ensure that any artifacts are properly uploaded to S3 and associated with IMS.
 
     ```bash
     kubectl -n ims logs -f $POD -c buildenv-sidecar
@@ -470,6 +480,8 @@ to boot a node\) to the artifact repository.
             "image_root_archive_name": "sles15_barebones_image",
             "initrd_file_name": "initrd",
             "job_type": "create",
+            "arch": "x86_64"
+            "require_dkms": true
             "kernel_file_name": "vmlinuz",
             "kubernetes_configmap": "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap",
             "kubernetes_job": "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create",
@@ -486,7 +498,7 @@ to boot a node\) to the artifact repository.
     The IMS customization workflow automatically copies the NCN Certificate Authority's public certificate to `/etc/cray/ca/certificate_authority.crt` within the image root
     being customized. This can be used to enable secure communications between the NCN and the client node.
 
-1. Look up the ID of the newly created image.
+1. (`ncn-mw#`) Look up the ID of the newly created image.
 
     ```bash
     cray ims jobs describe $IMS_JOB_ID
@@ -506,6 +518,8 @@ to boot a node\) to the artifact repository.
     id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
     image_root_archive_name = "my_customized_image"
     initrd_file_name = "initrd"
+    arch = "x86_64"
+    require_dkms = true
     resultant_image_id = "d88521c3-b339-43bc-afda-afdfda126388"
     created = "2018-11-21T18:22:53.409405+00:00"
     kubernetes_namespace = "ims"
@@ -513,7 +527,7 @@ to boot a node\) to the artifact repository.
     kubernetes_configmap = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap"
     ```
 
-1. Record the IMS image ID of the created image.
+1. (`ncn-mw#`) Record the IMS image ID of the created image.
 
     Set `IMS_RESULTANT_IMAGE_ID` to the value of the `resultant_image_id` field in the output of the previous command.
 
@@ -521,7 +535,7 @@ to boot a node\) to the artifact repository.
     IMS_RESULTANT_IMAGE_ID=d88521c3-b339-43bc-afda-afdfda126388
     ```
 
-1. Verify that the new IMS image record exists.
+1. (`ncn-mw#`) Verify that the new IMS image record exists.
 
     ```bash
     cray ims images describe $IMS_RESULTANT_IMAGE_ID
@@ -540,7 +554,7 @@ to boot a node\) to the artifact repository.
     etag = "28f3d78c8cceca2083d7d3090d96bbb7"
     ```
 
-1. Clean up the image customization environment.
+1. (`ncn-mw#`) Clean up the image customization environment.
 
     Delete the IMS job record.
 
@@ -549,5 +563,9 @@ to boot a node\) to the artifact repository.
     ```
 
     Deleting the job record also deletes the underlying Kubernetes job, service, and ConfigMap that were created when the job record was submitted.
+
+    Jobs left in a 'Running' state continue to consume Kubernetes resources until the job is completed, or deleted. If there
+    are enough 'Running' IMS jobs on the system it may not be possible to schedule more pods on worker nodes due to
+    insuffient resouces errors.
 
 The image root has been modified, compressed, and uploaded to S3, along with its associated `initrd` and kernel files. The image customization environment has also been cleaned up.

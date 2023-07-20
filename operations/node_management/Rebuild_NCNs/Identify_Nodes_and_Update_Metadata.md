@@ -2,7 +2,7 @@
 
 Use the following procedure to inspect and modify the Boot Script Service \(BSS\) boot parameters JSON file.
 
-This section applies to all node types. The commands in this section assume the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) have been set.
+This section applies to all node types. The commands in this section assume the variables from [the prerequisites section](Rebuild_NCNs.md#prerequisites) have been set.
 
 ## Procedure
 

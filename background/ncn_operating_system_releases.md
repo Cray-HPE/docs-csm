@@ -1,16 +1,16 @@
 # NCN Operating System Releases
 
-The NCNs define their products per image layer:
+The management non-compute nodes (NCNs) define their products per image layer:
 
-* Management node SquashFS images are always `SLE_HPC` (SuSE High Performance Computing)
-* Utility Storage nodes Ceph Images are always `SLE_HPC` (SuSE High Performance Computing) _with_ `SES` (SuSE Enterprise Storage)
+* Kubernetes NCN images are always `SLE_HPC` (SuSE High Performance Computing)
+* Ceph Storage NCN images are always `SLE_HPC` (SuSE High Performance Computing) _with_ `SES` (SuSE Enterprise Storage)
 
 The `sles-release` RPM is _uninstalled_ for NCNs, and instead, the `sle_HPC-release` RPM is installed. These
 both provide the same files, but differ for `os-release` and `/etc/product.d/baseproduct`.
 
 The `ses-release` RPM is installed on top of the `sle_HPC-release` RPM in the Ceph images.
 
-The following example shows the two product files for a utility storage node booted from the Ceph image.
+(`ncn-s#`) The following example shows the two product files for a utility storage node booted from the Ceph image.
 This node is capable of high performance computing and serving enterprise storage.
 
 ```bash
@@ -29,7 +29,7 @@ grep '<summary' /etc/products.d/*.prod
 /etc/products.d/SLE_HPC.prod:  <summary>SUSE Linux Enterprise High Performance Computing 15 SP3</summary>
 ```
 
-Kubernetes nodes will report SLE HPC only, which is reflected in the `kubectl` output.
+(`ncn-mw#`) Kubernetes nodes will report SLE HPC only, which is reflected in the `kubectl` output.
 
 ```bash
 kubectl get nodes -o wide

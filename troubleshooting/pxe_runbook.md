@@ -5,13 +5,14 @@ This guide runs through the most common issues and shows what is needed in order
 
 1. [NCNs on install](#1-ncns-on-install)
 2. [`ncn-m001` on reboot or NCN boot](#2-ncn-m001-on-reboot-or-ncn-boot)
-    2.1. [Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)](#21-verify-dhcp-packets-can-be-forwarded-from-the-workers-to-the-mtl-network-vlan1)
-    2.2. [Verify BGP](#22-verify-bgp)
-    2.3. [Verify route to TFTP](#23-verify-route-to-tftp)
-    2.4. [Test TFTP traffic (Aruba Only)](#23-verify-route-to-tftp)
-    2.5. [Check DHCP lease is getting allocated](#25-check-dhcp-lease-is-getting-allocated)
-    2.6. [Verify the DHCP traffic on the Workers](#26-verify-the-dhcp-traffic-on-the-workers)
-    2.7. [Verify the switches are forwarding DHCP traffic.](#27-verify-the-switches-are-forwarding-dhcp-traffic)
+    1. [Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)](#21-verify-dhcp-packets-can-be-forwarded-from-the-workers-to-the-mtl-network-vlan1)
+    2. [Verify BGP](#22-verify-bgp)
+    3. [Verify route to TFTP](#23-verify-route-to-tftp)
+    4. [Test TFTP traffic (Aruba Only)](#23-verify-route-to-tftp)
+    5. [Check DHCP lease is getting allocated](#25-check-dhcp-lease-is-getting-allocated)
+    6. [Verify the DHCP traffic on the Workers](#26-verify-the-dhcp-traffic-on-the-workers)
+    7. [Verify the switches are forwarding DHCP traffic.](#27-verify-the-switches-are-forwarding-dhcp-traffic)
+    8. [Verify the iPXE binary is valid](#28-verify-the-ipxe-binary-is-valid)
 3. [Computes/UANs/Application Nodes](#3-compute-nodesuansapplication-nodes)
 
 ## 1. NCNs on install
@@ -276,6 +277,88 @@ worker. We believe this has something to do with `conntrack`.
   * On a Dell switch, do a reboot in order to restore DHCP traffic.
 * The underlying cause of IP-Helper breaking is not yet known.
 
+## 2.8. Verify the iPXE binary is valid
+
+* If the node obtains an IP address and downloads the iPXE binary successfully but still fails to boot, the iPXE binary may be invalid.
+* Determine the hardware architecture of the node.
+
+  ```bash
+  sat status --fields xname,arch --filter xname=x9000c1s0b0n0
+  ```
+
+  Sample output:
+
+  ```text
+  +---------------+------+
+  | xname         | Arch |
+  +---------------+------+
+  | x9000c1s0b0n0 | X86  |
+  +---------------+------+
+  ```
+
+* Verify the iPXE binary.
+  * Verify the iPXE binary for an X86 node.
+
+    ```bash
+    kubectl -n services exec deployment/cray-ipxe-x86-64 -- file /shared_tftp/ipxe.efi
+    ```
+
+    Expected output:
+
+    ```text
+    /shared_tftp/ipxe.efi: MS-DOS executable PE32+ executable (DLL) (EFI application) x86-64, for MS Windows
+    ```
+
+  * Verify the iPXE binary for an ARM node.
+
+    ```bash
+    kubectl -n services exec deployment/cray-ipxe-aarch64 -- file /shared_tftp/ipxe.arm64.efi
+    ```
+
+    Expected output:
+
+    ```text
+    /shared_tftp/ipxe.arm64.efi: MS-DOS executable PE32+ executable (DLL) (EFI application) Aarch64, for MS Windows
+    ```
+
+* If the output does not indicate an MS-DOS executable, the iPXE binary may be invalid and should be rebuilt.
+  * Example of an invalid iPXE binary.
+
+    ```bash
+    kubectl -n services exec deployment/cray-ipxe-x86-64 -- file /shared_tftp/ipxe.efi
+    ```
+
+    Expected output:
+
+    ```text
+    /shared_tftp/ipxe.efi: pxelinux loader (version 3.70 or newer)
+    ```
+
+* Rebuild the iPXE binary if required, it will take several minutes for the new binary to be built.
+  * Rebuild the binary for an X86 node.
+
+    ```bash
+    kubectl -n services rollout restart deployment cray-ipxe-x86-64
+    ```
+
+    Expected output:
+
+    ```text
+    deployment.apps/cray-ipxe-x86-64 restarted
+    ```
+
+  * Rebuild the binary for an ARM node.
+
+    ```bash
+    kubectl -n services rollout restart deployment cray-ipxe-aarch64
+    ```
+
+    Expected output:
+
+    ```text
+    deployment.apps/cray-ipxe-aarch64 restarted
+    ```
+
 ## 3. Compute Nodes/UANs/Application Nodes
 
 * The following are required for compute node PXE booting.
@@ -285,6 +368,7 @@ worker. We believe this has something to do with `conntrack`.
   * [Check DHCP lease is getting allocated](#25-check-dhcp-lease-is-getting-allocated)
   * [Verify the DHCP traffic on the Workers](#26-verify-the-dhcp-traffic-on-the-workers)
   * [Verify the switches are forwarding DHCP traffic](#27-verify-the-switches-are-forwarding-dhcp-traffic)
+  * [Verify the iPXE binary is valid](#28-verify-the-ipxe-binary-is-valid)
 * Verify the IP-Helpers on the VLAN the computes nodes are booting over. This is typically `VLAN 2` or `VLAN 2xxx` (MTN Computes).
 * If the compute nodes make it past PXE and go into the PXE shell you can verify DNS and connectivity.
 

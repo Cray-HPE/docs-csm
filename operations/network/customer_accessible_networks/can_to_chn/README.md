@@ -19,8 +19,8 @@ This feature has additional requirements which include.
 
 ## Procedure
 
-- [Configure the system to enable the Customer High-speed Network (CHN)](./network/chn_enable.md)
-- [Apply the CHN configuration change to the system](./network/network_upgrade_1.2_to_1.3.md)
+- [Configure the system to enable the Customer High-speed Network (CHN)](network/chn_enable.md)
+- [Apply the CHN configuration change to the system](network/network_upgrade_1.2_to_1.3.md)
 
 ## Additional Customer Accessible Documentation
 

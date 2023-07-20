@@ -39,7 +39,7 @@ Mentioned in this workflow:
     Modify the recipe by editing the files and subdirectories in the image-recipe directory. Edit the `config.xml` file to modify the name of the recipe, the set of RPM packages being installed or the RPM
     repositories being referenced. The recipe should be uploaded to S3 in a `.tgz` archive via CLI.
 
-1. **Administrator registers the recipe with IMS**
+1. (`ncn-mw#`) **Administrator registers the recipe with IMS**
 
     Registering the recipe creates a recipe record for your custom recipe in IMS.
 
@@ -47,7 +47,7 @@ Mentioned in this workflow:
     cray ims recipes list
     ```
 
-1. **Administrator uploads public key**
+1. (`ncn-mw#`) **Administrator uploads public key**
 
     A public key is uploaded to allow them to access SSH shells that IMS provides.
 
@@ -55,17 +55,17 @@ Mentioned in this workflow:
     cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub
     ```
 
-1. **Administrator starts the creation job**
+1. (`ncn-mw#`) **Administrator starts the creation job**
 
     Create a new IMS image by providing request body parameter, job\_type="create". The following steps 6-10 happen automatically as a part of the image creation process.
 
     ```bash
     cray ims jobs create \
-    --job-type create \
-    --image-root-archive-name cray-sles15-barebones \
-    --artifact-id $IMS_RECIPE_ID \
-    --public-key-id $IMS_PUBLIC_KEY_ID \
-    --enable-debug False
+        --job-type create \
+        --image-root-archive-name cray-sles15-barebones \
+        --artifact-id $IMS_RECIPE_ID \
+        --public-key-id $IMS_PUBLIC_KEY_ID \
+        --enable-debug False
     ```
 
 1. **IMS to Ceph S3**
@@ -116,7 +116,7 @@ Mentioned in this workflow:
 
 **Workflow Overview:** The following sequence of steps occurs during this workflow.
 
-1. The administrator identifies an existing image to be customized.
+1. (`ncn-mw#`) The administrator identifies an existing image to be customized.
 
     Retrieve a list of `ImageRecords` indicating images that have been registered with IMS. IMS uses the `ImageRecord` to read the image's `manifest.yaml` to find the image's root file system \(`rootfs`\) artifact.
     Note the id of the image that you want to customize.
@@ -125,7 +125,7 @@ Mentioned in this workflow:
     cray ims images list
     ```
 
-1. The administrator uploads a public key.
+1. (`ncn-mw#`) The administrator uploads a public key.
 
     A public key is uploaded to allow them to access SSH shells that IMS provides.
 
@@ -133,7 +133,7 @@ Mentioned in this workflow:
     cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub
     ```
 
-1. The administrator starts the image customization job.
+1. (`ncn-mw#`) The administrator starts the image customization job.
 
     Create a new IMS image by providing the `--job-type customize` argument to the `cray ims jobs create` command. The following steps \(4-8\) happen automatically as a part of the image customization process.
 

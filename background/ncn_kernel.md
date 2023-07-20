@@ -1,9 +1,9 @@
-# Kernel
+# NCN Kernel
 
-This page provides information on the Linux kernel in the NCN.
+This page provides information on the Linux kernel in the non-compute nodes (NCNs).
 
 * [Locks](#locks)
-* [Module Blacklisting](#module-blacklisting)
+* [Module blacklisting](#module-blacklisting)
 * [Parameters](#parameters)
   * [`biosdevname`](#biosdevname)
   * [`ifname`](#ifname)
@@ -69,9 +69,9 @@ To remove the lock, run `zypper removelock kernel-default`.
 
 To add set the lock, run `zypper addlock kernel-default`.
 
-## Module Blacklisting
+## Module blacklisting
 
-Certain kernel modules are blacklisted from loading on the non-compute node.
+The following kernel modules are blacklisted from loading on the NCNs:
 
 * `rpcrdma` due to conflicts with slingshot.
 
@@ -141,7 +141,7 @@ a name.
 > in runtime.
 
 For more information, see [dracut command line's network parameter definition][13] and the
-[NCN Networking page](./ncn_networking.md).
+[NCN Networking page](ncn_networking.md).
 
 ### `ip`
 
