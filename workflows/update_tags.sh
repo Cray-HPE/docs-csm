@@ -62,7 +62,7 @@ function update_tags_in_file() {
   THIS_IMAGE=$1
   LATEST_TAG=$2
   THIS_FILE=$3
-  echo "Updating tag of ${THIS_IMAGE} in ${THIS_FILE} to ${LATEST_TAG}."
+  echo "Updating tag of ${THIS_IMAGE} in ${SCRIPT_DIR}/${THIS_FILE} to ${LATEST_TAG}."
   sed -i -e "s|${THIS_IMAGE}:.*|${THIS_IMAGE}:${LATEST_TAG}|g" $THIS_FILE
 }
 
