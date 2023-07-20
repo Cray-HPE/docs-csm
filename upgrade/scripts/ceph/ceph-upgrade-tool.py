@@ -116,6 +116,7 @@ def upgrade_ceph(registry='registry.local', conf_file="") -> bool:
         raise Exception(f'{error}') from error
     # run upgrade
     upgrade_cmd = {"prefix":"orch upgrade start", "image":upgrade_image}
+    print(f'\nSTARTING CEPH UPGRADE. Using image {upgrade_image}.')
     ceph_api.run_ceph_cmd(upgrade_cmd)
     ceph_api.disconnect()
     return True
@@ -354,7 +355,7 @@ def main():
     if upgrading:
         success, error = monitor_upgrade()
         if success:
-            print('Ceph upgraded succeeded.')
+            print('Ceph upgrade succeeded.')
         else:
             print(f'Error: Ceph upgrade failed. {error}')
             sys.exit(1)
