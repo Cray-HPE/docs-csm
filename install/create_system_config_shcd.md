@@ -39,7 +39,7 @@ Run the following steps before starting any of the system configuration procedur
 ### 2. Generate topology files
 
 The following steps use the new, automated method for generating files. The previous step for
-[validate SHCD](#31-validate-shcd) generated "paddle" files; these are necessary for generating
+[validate SHCD](#1-validate-shcd) generated "paddle" files; these are necessary for generating
 the rest of the seed files.
 
 > **NOTE**: The paddle files are temporarily not used due to bugs in the seed file generation software.
@@ -157,7 +157,6 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
    ```bash
    cd $HOME && /root/bin/set-sqfs-links.sh
    ```
-
 
 ## Next topic
 

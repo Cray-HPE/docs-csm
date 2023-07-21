@@ -1,6 +1,6 @@
 # Create system configuration using cluster discovery service
 
-This stage walks the user through creating the configuration payload for the system using Cluster Discovery Service (CDS) to generate seedfiles and paddlefile.
+This stage walks the user through creating the configuration payload for the system using Cluster Discovery Service (CDS) to generate seed files and paddle file.
 
 Run the following steps before starting any of the system configuration procedures.
 
@@ -25,7 +25,7 @@ Run the following steps before starting any of the system configuration procedur
 ## Topics
 
 1. [Customize `system_config.yaml`](#1-customize-system_configyaml)
-1. [Set the management network](#2-set-the-management-network)
+1. [Configure the management network](#2-configure-the-management-network)
 1. [Configure auto-discovery](#3-configure-auto-discovery)
     1. [Configure `dnsmasq`](#31-configure-dnsmasq)
     1. [Verify and reset the BMCs](#32-verify-and-reset-the-bmcs)
@@ -139,12 +139,11 @@ Run the following steps before starting any of the system configuration procedur
 
      > **NOTE**: The `iprange` for single VLAN or `mtliprange`, `nmniprange`, and `hmniprange` for HMN configured network are available in the `system_config.yaml` file in the `prep` directory.
 
-
 ### 3.2 Verify and reset the BMCs
 
 The following steps will verify if IPs are assigned to the BMC nodes and reset the nodes:
 
-1. (`pit#`) If you want to dynamically discover the fabric switches, PDUs, and CMCs, ensure they are set to `dhcp` mode. 
+1. (`pit#`) If you want to dynamically discover the fabric switches, PDUs, and CMCs, ensure they are set to `dhcp` mode.
 
 1. (`pit#`) List the BMC nodes.
 
@@ -166,7 +165,7 @@ The following steps will verify if IPs are assigned to the BMC nodes and reset t
 
 ### 3.3 Verify the discover status
 
-> **NOTE**: If the fabric switches, PDUs, and CMCs were not configured to `dhcp` mode in the step [Verify and reset the BMCs](#22-verify-and-reset-the-bmcs), manually create the `fabricswlist`, `pdulist`, and `cmclist` files in the working directory.
+> **NOTE**: If the fabric switches, PDUs, and CMCs were not configured to `dhcp` mode in the step [Verify and reset the BMCs](#32-verify-and-reset-the-bmcs), manually create the `fabricswlist`, `pdulist`, and `cmclist` files in the working directory.
 
 The following steps verify the status and lists the IPs of nodes, fabric switches, PDUs, and CMCs:
 
@@ -262,7 +261,6 @@ The following steps verify the status and lists the IPs of nodes, fabric switche
    canu validate shcd --shcd SHCD.xlsx --architecture V1 --tabs 40G_10G,NMN,HMN --corners I12,Q38,I13,Q21,J20,U38 --json --out cabling.json
    ```
 
-
 1. (`pit#`) Store the SHCD data in the CVT database.
 
    ```bash
@@ -315,7 +313,8 @@ The following steps verify the status and lists the IPs of nodes, fabric switche
    "${CVT_PATH}"/create_paddle_file.py --architecture <arch_type>
    ```
 
-   Where, the variable `<arch_type>` describes the type of architecture (FULL, V1, or TDS). See [Generate configuration files](../operations/network/management_network/generate_switch_configs.md#generate-configuration-files) for the characteristics of the architecture.
+   Where, the variable `<arch_type>` describes the type of architecture (FULL, V1, or TDS).
+   See [Generate configuration files](../operations/network/management_network/generate_switch_configs.md#generate-configuration-files) for the characteristics of the architecture.
 
 1. Copy the generated paddle file and seed files to the `prep` directory.
 
@@ -379,7 +378,7 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 
 1. (`pit#`) Setup links to the boot artifacts extracted from the CSM tarball.
 
-   > **NOTE**:
+   > **NOTE**
    >
    > - This will also set all the BMCs to DHCP.
    > - Changing into the `$HOME` directory ensures the proper operation of the script.
@@ -387,21 +386,6 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
    ```bash
    cd $HOME && /root/bin/set-sqfs-links.sh
    ```
-
-1. (`pit#`) Verify that the LiveCD is ready by running the preflight tests.
-
-   ```bash
-   csi pit validate --livecd-preflight
-   ```
-
-   If any tests fail, they need to be investigated. After actions have been taken to rectify the tests
-   (for example, editing configuration or CSI inputs), then restart from the beginning of the
-   [Initialize the LiveCD](#36-initialize-the-livecd) procedure.
-
-1. Save the `prep` directory for re-use.
-
-   This needs to be copied off the system and either stored in a secure location or in a secured Git repository.
-   There are secrets in this directory that should not be accidentally exposed.
 
 ## Next topic
 
