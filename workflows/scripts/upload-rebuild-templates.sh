@@ -26,6 +26,9 @@ set -euo pipefail
 basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 function main() {
+    cat << EOO
+    $($basedir/../update_tags.sh)
+EOO
     upload_worker_rebuild_template
     upload_worker_rebuild_hooks
     upload_storage_rebuild_template
