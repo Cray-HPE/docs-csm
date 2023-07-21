@@ -52,3 +52,7 @@ cat INSTALLED_FILES | xargs -i sh -c 'test -L {} && exit || test -f $RPM_BUILD_R
 %docdir /usr/share/doc/csm
 %license LICENSE
 %defattr(-,root,root)
+
+%post
+/usr/share/doc/csm/workflows/update_tags.sh
+
