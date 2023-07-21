@@ -39,6 +39,11 @@ if [[ $(nslookup $REGISTRY >> /dev/null; echo $?) != 0 ]]; then
   exit 0
 fi
 
+if [[ -f /etc/pit-release ]]; then
+  echo "INFO: Skipping update_tags.sh script given docs were installed on PIT."
+  exit 0
+fi
+
 if [[ ! $(curl -s https://${REGISTRY}) ]]; then
   echo "ERROR: Is this a CSM environment? Check that ${REGISTRY} is accessible over https before continuing."
   exit 1
