@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document guides an administrator through the patch update to Cray Systems Management (CSM) `v1.3.5` from `v1.3.0`, `v1.3.1`, `v1.3.2`, `v1.3.3` ot `v1.3.4`.
+This document guides an administrator through the patch update to Cray Systems Management (CSM) `v1.3.5` from `v1.3.0`, `v1.3.1`, `v1.3.2`, `v1.3.3` or `v1.3.4`.
 If upgrading from CSM `v1.2.2` directly to `v1.3.5`, follow the procedures described in [Upgrade CSM](../README.md) instead.
 
 ## Bug Fixes and Improvements
@@ -145,7 +145,9 @@ cd "$CSM_DISTDIR"
 
 ## Upgrade Ceph and stop local Docker registries
 
-These steps will upgrade Ceph to `v16.2.13`. Then the Ceph monitoring daemons' images will be pushed to Nexus and the monitoring daemons will be redeployed so that they use these images in Nexus. Once this is complete, all Ceph daemons should be using images in Nexus and not images hosted in the local Docker registry on storage nodes. The third step stops the local Docker registry on all storage nodes.
+These steps will upgrade Ceph to `v16.2.13`. Then the Ceph monitoring daemons' images will be pushed to Nexus and the monitoring daemons will be redeployed so that they use these images in Nexus.
+Once this is complete, all Ceph daemons should be using images in Nexus and not images hosted in the local Docker registry on storage nodes.
+The third step stops the local Docker registry on all storage nodes.
 
 1. (`ncn-m001#`) Run Ceph upgrade to `v16.2.13`.
 

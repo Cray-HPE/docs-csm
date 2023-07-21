@@ -167,8 +167,8 @@ if [[ $(hostname) != @("ncn-s001"|"ncn-s002"|"ncn-s003") ]]; then
   exit 1
 fi
 
-nexus_username=$(kubectl get secret -n nexus nexus-admin-credential --template={{.data.username}} | base64 --decode)
-nexus_password=$(kubectl get secret -n nexus nexus-admin-credential --template={{.data.password}} | base64 --decode)
+nexus_username="$(kubectl get secret -n nexus nexus-admin-credential --template={{.data.username}} | base64 --decode)"
+nexus_password="$(kubectl get secret -n nexus nexus-admin-credential --template={{.data.password}} | base64 --decode)"
 ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 if [[ -z ${nexus_username} ]] || [[ -z ${nexus_password} ]]; then
