@@ -1,8 +1,14 @@
 # Troubleshooting Guide
 
-There are many things that can prevent the conman service from successfully connecting to a
+There are many things that can prevent the ConMan service from successfully connecting to a
 single node console or can cause problems with the entire deployment. This is a guide on
 how to look at all aspects of the service to determine what the current problem is.
+
+* [Prerequisites](#prerequisites)
+* [Check the states of the console pods](#check-the-states-of-the-console-pods)
+* [Find the `cray-console-node` pod for a specific node](#find-the-cray-console-node-pod-for-a-specific-node)
+* [Investigate service problem](#investigate-service-problem)
+* [Investigate Postgres deployment](#investigate-postgres-deployment)
 
 ## Prerequisites
 
@@ -14,7 +20,7 @@ so set up an environment variable to refer to that pod:
 OP_POD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}')
 ```
 
-## Check state of console pods
+## Check the states of the console pods
 
 There are a number of pods that work together to provide the console services. If any of the pods are
 not working correctly, it will impact the ability to connect to specific consoles and monitor the console
@@ -49,7 +55,7 @@ logs.
     All pods should be in the `Completed` or `Running` state. If pods are in any other state, then
     use the usual Kubernetes techniques to find out what is wrong with those pods.
 
-## Is the node assigned to a specific `cray-console-node` pod?
+## Find the `cray-console-node` pod for a specific node
 
 The first thing to check is if the specific node is assigned to a `cray-console-node` pod that should
 be monitoring the node for log traffic and providing a means to interact with the console.
@@ -132,7 +138,7 @@ issue. All three services need to work together to provide console connections.
 1. Restart the entire set of services.
 
     To restart everything from scratch, follow the directions in
-    [Complete Reset of the Console Services](Troubleshoot_ConMan_Reset_Console_Services.md).
+    [Complete Reset of the Console Services](Complete_Reset_of_the_Console_Services.md).
 
 ## Investigate Postgres deployment
 
@@ -148,78 +154,78 @@ assigned to them.
 current state information and will rebuild itself automatically once it is functional again. There is no
 need to save or restore data from this database.
 
-1. Check on the current running state of the `cray-console-data-postgres` database.
+Check on the current running state of the `cray-console-data-postgres` database.
 
-    1. (`ncn-mw#`) Find the `cray-console-data-postgres` pods and note one that is in `Running` state.
+1. (`ncn-mw#`) Find the `cray-console-data-postgres` pods and note one that is in `Running` state.
 
-        ```bash
-        kubectl -n services get pods | grep cray-console-data-postres
-        ```
+    ```bash
+    kubectl -n services get pods | grep cray-console-data-postres
+    ```
 
-        Example output:
+    Example output:
 
-        ```text
-        cray-console-data-postgres-0    3/3     Running  0  26d
-        cray-console-data-postgres-1    3/3     Running  0  26d
-        cray-console-data-postgres-2    3/3     Running  0  26d
-        ```
+    ```text
+    cray-console-data-postgres-0    3/3     Running  0  26d
+    cray-console-data-postgres-1    3/3     Running  0  26d
+    cray-console-data-postgres-2    3/3     Running  0  26d
+    ```
 
-    1. (`ncn-mw#`) Log into one of the healthy pods.
+1. (`ncn-mw#`) Log into one of the healthy pods.
 
-        ```bash
-        DATA_PG_POD=cray-console-data-postgres-1
-        kubectl -n services exec -it $DATA_PG_POD -c postgres -- sh
-        ```
+    ```bash
+    DATA_PG_POD=cray-console-data-postgres-1
+    kubectl -n services exec -it $DATA_PG_POD -c postgres -- sh
+    ```
 
-    1. (`pod#`) Check the status of the database.
+1. (`pod#`) Check the status of the database.
 
-        ```bash
-        patronictl list
-        ```
+    ```bash
+    patronictl list
+    ```
 
-        Expected result for a healthy database:
+    Expected result for a healthy database:
 
-        ```text
-        + Cluster: cray-console-data-postgres (7244964360609890381) ---+----+-----------+
-        |            Member            |    Host    |  Role  |  State  | TL | Lag in MB |
-        +------------------------------+------------+--------+---------+----+-----------+
-        | cray-console-data-postgres-0 | 10.43.0.8  | Leader | running |  1 |           |
-        | cray-console-data-postgres-1 | 10.37.0.45 |        | running |  1 |         0 |
-        | cray-console-data-postgres-2 | 10.32.0.52 |        | running |  1 |         0 |
-        +------------------------------+------------+--------+---------+----+-----------+
-        ```
+    ```text
+    + Cluster: cray-console-data-postgres (7244964360609890381) ---+----+-----------+
+    |            Member            |    Host    |  Role  |  State  | TL | Lag in MB |
+    +------------------------------+------------+--------+---------+----+-----------+
+    | cray-console-data-postgres-0 | 10.43.0.8  | Leader | running |  1 |           |
+    | cray-console-data-postgres-1 | 10.37.0.45 |        | running |  1 |         0 |
+    | cray-console-data-postgres-2 | 10.32.0.52 |        | running |  1 |         0 |
+    +------------------------------+------------+--------+---------+----+-----------+
+    ```
 
-        Example output if replication is broken:
+    Example output if replication is broken:
 
-        ```text
-        + Cluster: cray-console-data-postgres (7244964360609890381) ----+----+-----------+
-        |            Member            |    Host    |  Role  |  State   | TL | Lag in MB |
-        +------------------------------+------------+--------+----------+----+-----------+
-        | cray-console-data-postgres-0 | 10.43.0.8  |        | starting |    |   unknown |
-        | cray-console-data-postgres-1 | 10.37.0.45 | Leader | running  | 47 |         0 |
-        | cray-console-data-postgres-2 | 10.32.0.52 |        | running  | 14 |       608 |
-        +------------------------------+------------+--------+---------+----+-----------+
-        ```
+    ```text
+    + Cluster: cray-console-data-postgres (7244964360609890381) ----+----+-----------+
+    |            Member            |    Host    |  Role  |  State   | TL | Lag in MB |
+    +------------------------------+------------+--------+----------+----+-----------+
+    | cray-console-data-postgres-0 | 10.43.0.8  |        | starting |    |   unknown |
+    | cray-console-data-postgres-1 | 10.37.0.45 | Leader | running  | 47 |         0 |
+    | cray-console-data-postgres-2 | 10.32.0.52 |        | running  | 14 |       608 |
+    +------------------------------+------------+--------+---------+----+-----------+
+    ```
 
-        Example output if the leader is missing:
+    Example output if the leader is missing:
 
-        ```text
-        + Cluster: cray-console-data-postgres (7244964360609890381) --------+----+-----------+
-        |            Member            |    Host    |  Role  |  State       | TL | Lag in MB |
-        +------------------------------+------------+--------+--------------+----+-----------+
-        | cray-console-data-postgres-0 | 10.43.0.8  |        | running      |    |   unknown |
-        | cray-console-data-postgres-1 | 10.37.0.45 |        | start failed |    |   unknown |
-        | cray-console-data-postgres-2 | 10.32.0.52 |        | start failed |    |   unknown |
-        +------------------------------+------------+--------+--------------+----+-----------+
-        ```
+    ```text
+    + Cluster: cray-console-data-postgres (7244964360609890381) --------+----+-----------+
+    |            Member            |    Host    |  Role  |  State       | TL | Lag in MB |
+    +------------------------------+------------+--------+--------------+----+-----------+
+    | cray-console-data-postgres-0 | 10.43.0.8  |        | running      |    |   unknown |
+    | cray-console-data-postgres-1 | 10.37.0.45 |        | start failed |    |   unknown |
+    | cray-console-data-postgres-2 | 10.32.0.52 |        | start failed |    |   unknown |
+    +------------------------------+------------+--------+--------------+----+-----------+
+    ```
 
-        If any of the replicas are showing a problem, look at the following troubleshooting
-        pages to attempt to fix the Postgres instance:
+If any of the replicas are showing a problem, look at the following troubleshooting
+pages to attempt to fix the Postgres instance:
 
-        * [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md)
-        * [Recover from Postgres WAL Event](../kubernetes/Recover_from_Postgres_WAL_Event.md)
+* [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md)
+* [Recover from Postgres WAL Event](../kubernetes/Recover_from_Postgres_WAL_Event.md)
 
-        If the database can not be made healthy through these procedures, the easiest way to
-        resolve this is to perform a complete reset of the console services including
-        reinstalling the `cray-console-data` service. See
-        [Complete Reset of the Console Services](Troubleshoot_ConMan_Reset_Console_Services.md)
+If the database can not be made healthy through these procedures, the easiest way to
+resolve this is to perform a complete reset of the console services including
+reinstalling the `cray-console-data` service. See
+[Complete Reset of the Console Services](Complete_Reset_of_the_Console_Services.md).
