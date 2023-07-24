@@ -65,7 +65,7 @@ spec:
          factor: "2"
          maxDuration: "1m"
       script:
-        image: artifactory.algol60.net/csm-docker/stable/iuf:v0.1.11
+        image: artifactory.algol60.net/csm-docker/stable/iuf:v0.1.12
         command: [sh]
         source: |
           #!/usr/bin/bash
