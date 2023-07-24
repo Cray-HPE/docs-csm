@@ -138,7 +138,7 @@ then applies that configuration to the management nodes.
     For example:
 
     ```bash
-    CSM_RELEASE="1.5.0"
+    CSM_RELEASE="1.6.0"
     ```
 
 1. (`ncn-m001#`) Run the `apply_csm_configuration.sh` script.
