@@ -26,7 +26,7 @@ The user performing this procedure needs to have access permission to the `cray-
     cray-console-operator-6cf89ff566-kfnjr
     ```
 
-1. (`ncn-mw#`) Set the `XNAME` variable to the component name (xname) of the node whose console you wish to open.
+1. (`ncn-mw#`) Set the `XNAME` variable to the component name (xname) of the node whose console is to be opened.
 
     ```bash
     XNAME=x123456789s0c0n0
@@ -46,7 +46,7 @@ The user performing this procedure needs to have access permission to the `cray-
     cray-console-node-1
     ```
 
-1. (`ncn-mw#`) Connect to the node's console using ConMan on the `cray-console-node` pod you found.
+1. (`ncn-mw#`) Connect to the node's console using ConMan on the `cray-console-node` pod which was found.
 
     ```bash
     kubectl exec -it -n services $NODEPOD -c cray-console-node -- conman -j $XNAME

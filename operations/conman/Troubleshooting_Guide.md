@@ -6,13 +6,12 @@ how to look at all aspects of the service to determine what the current problem 
 
 ## Prerequisites
 
-The user performing these procedures needs to have access permission to the `cray-console-operator`
-and `cray-console-node` pods. There will be a lot of interaction with the `cray-console-operator` pod
+(`ncn-mw#`) The user performing these procedures needs to have access permission to the `cray-console-operator`
+and `cray-console-node` pods. There will be a lot of interaction with the `cray-console-operator` pod,
 so set up an environment variable to refer to that pod:
 
 ```bash
-OP_POD=$(kubectl get pods -n services \
-        -o wide|grep cray-console-operator|awk '{print $1}')
+OP_POD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}')
 ```
 
 ## Check state of console pods
@@ -42,12 +41,12 @@ logs.
 
     There should be one `cray-console-operator` pod.
 
-    There should be multiple `cray-console-node` pods. A standard deployment will start with 2
+    There should be multiple `cray-console-node` pods. A standard deployment will start with two
     pods and scale up from there depending on the size of the system and the configuration.
 
     There should be one `cray-console-data` pod and three `cray-console-data-postgres` pods.
 
-    All pods should be in the `Completed` or `Running` state. If pods are in any other state
+    All pods should be in the `Completed` or `Running` state. If pods are in any other state, then
     use the usual Kubernetes techniques to find out what is wrong with those pods.
 
 ## Is the node assigned to a specific `cray-console-node` pod?
@@ -55,10 +54,10 @@ logs.
 The first thing to check is if the specific node is assigned to a `cray-console-node` pod that should
 be monitoring the node for log traffic and providing a means to interact with the console.
 
-1. (`ncn-mw#`) Set the `xname` of the node you are interested in
+1. (`ncn-mw#`) Set the component name (xname) of the node whose console is being checked.
 
     ```bash
-    XNAME="xName of the node - ie x3000c0s19b2n0"
+    XNAME="xName of the node - e.g. x3000c0s19b2n0"
     ```
 
 1. (`ncn-mw#`) Find which `cray-console-node` pod the node is assigned to.
@@ -76,10 +75,9 @@ be monitoring the node for log traffic and providing a means to interact with th
     cray-console-node-0
     ```
 
-    If this is the case, proceed to [Investigate specific node connection](Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md).
+    If this is the case, proceed to [Troubleshoot ConMan Failing to Connect to a Console](Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md).
 
-    If the node is not assigned to a `cray-console-node` pod, you will see a result with an
-    invalid pod name like:
+    If the node is not assigned to a `cray-console-node` pod, then the result will have an invalid pod name. For example:
 
     ```text
     cray-console-node-
@@ -90,51 +88,51 @@ be monitoring the node for log traffic and providing a means to interact with th
 
 ## Investigate service problem
 
-When the entire service is having problems we must track down which component is causing the
+When the entire service is having problems, the next step is to determine which component is causing the
 issue. All three services need to work together to provide console connections.
 
-1. Underlying database.
+1. Check the underlying database.
 
     Sometimes the `cray-console-data` pods can report healthy, but the actual Postgres instance
-    can be unhealthy. See [Investigate `cray-console-data-postgres`](#investigate-postgres-deployment) for
+    can be unhealthy. See [Investigate Postgres deployment](#investigate-postgres-deployment) for
     information on how to investigate further.
 
-1. (`ncn-mw#`) Restart the `cray-console-operator` node.
+1. (`ncn-mw#`) Restart the `cray-console-operator` pod.
 
     There are rare cases where the `cray-console-operator` pod may be reporting as `Running`
     to Kubernetes, but actually be unhealthy. In this case a restart of the pod will resolve
     the issue and start the communication between the services again.
 
-    ```bash
-    kubectl -n services delete pod $OP_POD
-    ```
+    1. Restart the pod.
 
-    Wait for the new `cray-console-operator` pod to reach a `Running` state.
+        ```bash
+        kubectl -n services delete pod $OP_POD
+        ```
 
-    ```bash
-    kubectl -n services get pods | grep cray-console-operator
-    ```
+    1. Wait for the new `cray-console-operator` pod to reach a `Running` state.
 
-    Example output when ready to proceed:
+        ```bash
+        kubectl -n services get pods | grep cray-console-operator
+        ```
 
-    ```text
-    cray-console-operator-6d4d5b84d9-66svs       2/2     Running     0    60s
-    ```
+        Example output when ready to proceed:
 
-    Now there is a different pod name, so the `OP_POD` variable needs to be set again.
+        ```text
+        cray-console-operator-6d4d5b84d9-66svs       2/2     Running     0    60s
+        ```
 
-    ```bash
-    OP_POD=$(kubectl get pods -n services \
-            -o wide|grep cray-console-operator|awk '{print $1}')
-    ```
+    1. Now there is a different pod name, so the `OP_POD` variable needs to be set again.
 
-    Give the system several minutes to restart and update, then see if the issue
-    is resolved.
+        ```bash
+        OP_POD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}')
+        ```
+
+    1. Wait several minutes, then see if the issue is resolved.
 
 1. Restart the entire set of services.
 
     To restart everything from scratch, follow the directions in
-    [Reset Console Services](./Troubleshoot_ConMan_Reset_Console_Services.md)
+    [Complete Reset of the Console Services](Troubleshoot_ConMan_Reset_Console_Services.md).
 
 ## Investigate Postgres deployment
 
@@ -142,7 +140,7 @@ Sometimes the database that is holding the current status information for the co
 problems that keep it from saving and reporting data. Depending on when this happens, the other
 services may be different states of managing node consoles. The `cray-console-node` pods will continue
 to monitor the nodes that have been assigned to them, but if the pod restarts or new nodes are added
-to the system they will not be able to get new nodes assigned to the currently running pods. This may
+to the system, they will not be able to get new nodes assigned to the currently running pods. This may
 lead to some `cray-console-node` pods continuing to monitor nodes, but other pods not having any nodes
 assigned to them.
 
@@ -166,20 +164,14 @@ need to save or restore data from this database.
         cray-console-data-postgres-2    3/3     Running  0  26d
         ```
 
-    1. (`ncn-mw#`) Exec into one of the healthy pods.
+    1. (`ncn-mw#`) Log into one of the healthy pods.
 
         ```bash
-        export DATA_PG_POD=cray-console-data-postgres-1
+        DATA_PG_POD=cray-console-data-postgres-1
         kubectl -n services exec -it $DATA_PG_POD -c postgres -- sh
         ```
 
-        Expected command line:
-
-        ```text
-        #
-        ```
-
-    1. Check the status of the database.
+    1. (`pod#`) Check the status of the database.
 
         ```bash
         patronictl list
@@ -222,11 +214,12 @@ need to save or restore data from this database.
         ```
 
         If any of the replicas are showing a problem, look at the following troubleshooting
-        pages to attempt to fix the postgres instance:
-        [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md)
-        [Recover from Postgres WAL Event](../kubernetes/Recover_from_Postgres_WAL_Event.md)
+        pages to attempt to fix the Postgres instance:
+
+        * [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md)
+        * [Recover from Postgres WAL Event](../kubernetes/Recover_from_Postgres_WAL_Event.md)
 
         If the database can not be made healthy through these procedures, the easiest way to
         resolve this is to perform a complete reset of the console services including
-        reinstalling the `cray-console-data` service. Complete instructions for that are found:
-        [Reset Console Services](Troubleshoot_ConMan_Reset_Console_Services.md)
+        reinstalling the `cray-console-data` service. See
+        [Complete Reset of the Console Services](Troubleshoot_ConMan_Reset_Console_Services.md)
