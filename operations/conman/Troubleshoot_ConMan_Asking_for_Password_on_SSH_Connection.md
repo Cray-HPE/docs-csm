@@ -1,6 +1,9 @@
 # Troubleshoot ConMan Asking for Password on SSH Connection
 
-If ConMan starts to ask for a password when there is an SSH connection to the node on liquid-cooled hardware, that usually indicates there is a problem with the SSH key that was established on the node BMC. The key may have been replaced or overwritten on the hardware.
+If ConMan starts to ask for a password when there is an SSH connection to the
+node on liquid-cooled hardware, that usually indicates there is a problem with
+the SSH key that was established on the node BMC. The key may have been
+replaced or overwritten on the hardware.
 
 Use this procedure to renew or reinstall the SSH key on the BMCs.
 
@@ -93,5 +96,8 @@ the consoles. Proceed to resetting the SSH keys to resolve the issue.
     deployment.apps/cray-console-operator scaled
     ```
 
-    It may take some time to regenerate the keys and get them deployed to the BMCs, but in a while the console connections using SSH should be reestablished. Note that it may be worthwhile to determine how the SSH key was modified and establish site procedures to coordinate SSH key use; otherwise they may be overwritten again at a later time.
-
+    It may take some time to regenerate the keys and get them deployed to the BMCs,
+    but after a while the console connections using SSH should be reestablished. Note
+    that it may be worthwhile to determine how the SSH key was modified and
+    establish site procedures to coordinate SSH key use; otherwise they may be
+    overwritten again at a later time.
