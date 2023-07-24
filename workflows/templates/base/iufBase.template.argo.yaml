@@ -65,11 +65,10 @@ spec:
          factor: "2"
          maxDuration: "1m"
       script:
-        image: artifactory.algol60.net/csm-docker/stable/iuf:v0.1.11
+        image: artifactory.algol60.net/csm-docker/stable/iuf:v0.1.12
         command: [sh]
         source: |
-          #!/host_usr_bin/bash
-          export PATH=$PATH:/host_usr_bin
+          #!/usr/bin/bash
           ts=$(echo $RANDOM | md5sum | head -c 20; echo)
           cat <<'EOF2' > "/tmp/${ts}.sh"
           set -e
@@ -146,8 +145,6 @@ spec:
         volumeMounts:
           # mount csi from host to docker
           # csi is go compiled so it can be used from host to container
-          - name: host-usr-bin
-            mountPath: /host_usr_bin
           - name: ca-bundle
             mountPath: /var/lib/ca-certificates
           - name: iuf

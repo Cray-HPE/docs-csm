@@ -83,7 +83,7 @@ spec:
                   TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                       jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
                   
-                  /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
+                  csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
                   bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
                   -H "Authorization: Bearer ${TOKEN}" \
                   "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$TARGET_XNAME" \
@@ -266,7 +266,7 @@ spec:
                   echo "waiting for k8s: $TARGET_NCN ..."
                   MAX_RETRY=120
                   n=0
-                  until /host_usr_bin/csi automate ncn kubernetes --action is-member --ncn $TARGET_NCN --kubeconfig mykubeconfig/admin.conf
+                  until csi automate ncn kubernetes --action is-member --ncn $TARGET_NCN --kubeconfig mykubeconfig/admin.conf
                   do
                       n=$((n+1))
                       if [[ $n -ge $MAX_RETRY ]]; then
