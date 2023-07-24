@@ -44,13 +44,13 @@ spec:
           maxDuration: "1m"
       script:
         # use portainer/kubectl-shell that has:
-        #  - kubectl, jq, culr 
+        #  - kubectl, jq, curl and csi 
         image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
         command: [sh]
         source: |
           #!/bin/sh
           ts=$(echo $RANDOM | md5sum | head -c 20; echo)
-          cat <<'EOF2' > "/tmp/${ts}.sh"
+          cat <<'EOF2' > "${ts}.sh"
           set -e
           
           # construct kubeconfig file in the pod
@@ -88,18 +88,13 @@ spec:
 
           {{inputs.parameters.scriptContent}}
           EOF2
-          chmod +x /tmp/${ts}.sh
+          chmod +x ${ts}.sh
           DRY_RUN={{inputs.parameters.dryRun}}
           if [[ "$DRY_RUN" == "true" ]];then
             echo "====================="
             echo "=======DRY RUN======="
             echo "====================="
-            cat /tmp/${ts}.sh
+            cat ${ts}.sh
           else
-            bash -e /tmp/${ts}.sh
+            bash -e ${ts}.sh
           fi
-        volumeMounts:
-          # mount csi from host to docker
-          # csi is go compiled so it can be used from host to container
-          - name: host-usr-bin
-            mountPath: /host_usr_bin
