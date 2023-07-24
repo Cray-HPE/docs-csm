@@ -1,4 +1,4 @@
-# Troubleshooting Guide
+# Console Services Troubleshooting Guide
 
 There are many things that can prevent the ConMan service from successfully connecting to a
 single node console or can cause problems with the entire deployment. This is a guide on
