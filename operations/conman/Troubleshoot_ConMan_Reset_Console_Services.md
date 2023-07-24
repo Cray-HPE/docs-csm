@@ -25,33 +25,33 @@ The existing console log files will be retained, but there will be a gap in the 
     cray-console-operator-6cf89ff566-kfnjr
     ```
 
-1. (`ncn-mw#`) Suspend the `cray-console-operator` and clear the current data.
+1. Suspend the `cray-console-operator` and clear the current data.
 
-    1. Exec into the `cray-console-operator` pod.
+    1. (`ncn-mw#`) Exec into the `cray-console-operator` pod.
 
         ```bash
         kubectl -n services exec -it $OP_POD -c cray-console-operator -- sh
         ```
 
-    1. Source the helper function file.
+    1. (`pod#`) Source the helper function file.
 
         ```bash
         source /app/bashrc
         ```
 
-    1. Suspend the current updates.
+    1. (`pod#`) Suspend the current updates.
 
         ```bash
         suspend
         ```
 
-    1. Clear the current status data in the database.
+    1. (`pod#`) Clear the current status data in the database.
 
         ```bash
         clearData
         ```
 
-    1. Exit from the `cray-console-operator` pod.
+    1. (`pod#`) Exit from the `cray-console-operator` pod.
 
         ```bash
         exit
@@ -232,7 +232,7 @@ The existing console log files will be retained, but there will be a gap in the 
     ```
 
     NOTE: the name of the current `cray-console-operator` pod will change when the new
-    pod starts up. Re-fetch the value of $OP_POD if needed after this step.
+    pod starts up. Re-fetch the value of `$OP_POD` if needed after this step.
 
 1. (`ncn-mw#`) Wait for the full set of console pods to transition to `Running`.
 

@@ -17,7 +17,7 @@ the BMC username and password are also required.
 
 ## Check if a key is incorrect on a node
 
-1. (`ncn-mw#`) Get the SSH public key being used by conman
+1. (`ncn-mw#`) Get the SSH public key being used by ConMan.
 
     ```bash
     kubectl -n services exec -it cray-console-node-0 -c cray-console-node -- /bin/bash -c "cat /var/log/console/conman.key.pub"
@@ -29,7 +29,7 @@ the BMC username and password are also required.
     ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDWwcRCONVFO+uCXc5o3qdHC0wrSIiaXWTEbBQHTsn8UsQP0orR/uYnKziJJSh4iD+OUVMFpn0Jt/XbokKsIVxuRS5rcKN0V0VBQ8BoRTXi9Tb6V3uF4WnZJKruf36bX1v18Cmn3WSkey9hlYaDZykokv4DW9VYEixHe0vN+4bZSbFmZzASbaQmU/twpw6wqGv4XgCVgq/YUQUEYRmGD5g41tXGfEZyRZShK8tzRuPa5Or2k64n1X2zhtoulHtF8bzdwvfPqnuj3oLDZX6g8I2iJ1X0AKYU6JGB0Nj4h0CJ0tgK5JCFZtTiYDnb/75SBRqM115KCLlpGbUD/fLWpr4H
     ```
 
-1. (`ncn-mw#`) Check the public key on the BMC
+1. (`ncn-mw#`) Check the public key on the BMC.
 
     ```bash
     curl -sk -u BMC_USER:BMC_PASS https://x9000c1s6b0/redfish/v1/Managers/BMC/NetworkProtocol | jq .Oem.SSHConsole
@@ -51,7 +51,7 @@ the BMC username and password are also required.
     }
     ```
 
-If the key on the BMC does not match the key used by conman, the conman sessions will not have permission to access
+If the key on the BMC does not match the key used by ConMan, then the ConMan sessions will not have permission to access
 the consoles. Proceed to resetting the SSH keys to resolve the issue.
 
 ## Procedure to Reset SSH keys
