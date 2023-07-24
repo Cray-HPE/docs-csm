@@ -396,10 +396,12 @@ troubleshooting node boot issues.
 - [Log in to a Node Using ConMan](conman/Log_in_to_a_Node_Using_ConMan.md)
 - [Establish a Serial Connection to NCNs](conman/Establish_a_Serial_Connection_to_NCNs.md)
 - [Disable ConMan After System Software Installation](conman/Disable_ConMan_After_System_Software_Installation.md)
+- [Console Services Troubleshooting Guide](conman/Console_Services_Troubleshooting_Guide.md)
 - [Troubleshoot ConMan Blocking Access to a Node BMC](conman/Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md)
 - [Troubleshoot ConMan Failing to Connect to a Console](conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
 - [Troubleshoot ConMan Asking for Password on SSH Connection](conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
 - [Troubleshoot Console Node Pod Stuck in Terminating State](conman/Troubleshoot_ConMan_Node_Pod_Stuck_Terminating.md)
+- [Complete Reset of the Console Services](conman/Complete_Reset_of_the_Console_Services.md)
 
 ## Utility storage
 

@@ -12,7 +12,7 @@ This procedure requires administrative privileges.
 
 1. Log on to a Kubernetes master or worker node.
 
-1. Scale the `cray-console-operator` pods to 0 replicas.
+1. (`ncn-mw#`) Scale the `cray-console-operator` pods to 0 replicas.
 
     ```bash
     kubectl -n services scale --replicas=0 deployment/cray-console-operator
@@ -24,7 +24,7 @@ This procedure requires administrative privileges.
     deployment.apps/cray-console-operator scaled
     ```
 
-1. Verify the `cray-console-operator` service is no longer running.
+1. (`ncn-mw#`) Verify the `cray-console-operator` service is no longer running.
 
     The following command will give no output when the service is no longer running.
 
@@ -32,7 +32,7 @@ This procedure requires administrative privileges.
     kubectl -n services get pods | grep console-operator
     ```
 
-1. Scale the `cray-console-node` pods to 0 replicas.
+1. (`ncn-mw#`) Scale the `cray-console-node` pods to 0 replicas.
 
     ```bash
     kubectl -n services scale --replicas=0 statefulset/cray-console-node
@@ -44,7 +44,7 @@ This procedure requires administrative privileges.
     statefulset.apps/cray-console-node scaled
     ```
 
-1. Verify the `cray-console-node` service is no longer running.
+1. (`ncn-mw#`) Verify the `cray-console-node` service is no longer running.
 
     The following command will give no output when the service is no longer running.
 
@@ -54,7 +54,7 @@ This procedure requires administrative privileges.
 
 ## Re-enable Procedure
 
-1. Scale the `cray-console-operator` service back to 1 replica. It will scale the `cray-console-node` pods after it starts operation.
+1. (`ncn-mw#`) Scale the `cray-console-operator` service back to 1 replica. It will scale the `cray-console-node` pods after it starts operation.
 
     ```bash
     kubectl -n services scale --replicas=1 deployment/cray-console-operator
@@ -66,7 +66,7 @@ This procedure requires administrative privileges.
     deployment.apps/cray-console-operator scaled
     ```
 
-1. Verify services are running again.
+1. (`ncn-mw#`) Verify services are running again.
 
     ```bash
     kubectl -n services get pods | grep -e console-operator -e console-node
