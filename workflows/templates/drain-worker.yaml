@@ -51,7 +51,7 @@ spec:
                   kubectl get node {{inputs.parameters.targetNcn}} || res=$?
                   # only delete a ncn that exists in cluster
                   if [[ $res -eq 0 ]]; then
-                    /host_usr_bin/csi automate ncn kubernetes --action delete-ncn --ncn {{inputs.parameters.targetNcn}} --kubeconfig mykubeconfig/admin.conf
+                    csi automate ncn kubernetes --action delete-ncn --ncn {{inputs.parameters.targetNcn}} --kubeconfig mykubeconfig/admin.conf
                   fi
         - name: wait-for-postgres-operator
           dependencies:
@@ -96,11 +96,11 @@ spec:
 
                   CPS_PM_NODE=$( kubectl get node ${TARGET_NCN} -o json | jq -r '.metadata.labels."cps-pm-node"')
                   if [ "$CPS_PM_NODE" = "True" ]; then
-                    /host_usr_bin/csi handoff bss-update-param --set cps.pm-node=1 --limit $TARGET_XNAME
+                    csi handoff bss-update-param --set cps.pm-node=1 --limit $TARGET_XNAME
                   fi
                   echo "INFO setting metal.no-wipe=0 in BSS"
-                  /host_usr_bin/csi handoff bss-update-param --delete metal.no-wipe --limit $TARGET_XNAME
-                  /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
+                  csi handoff bss-update-param --delete metal.no-wipe --limit $TARGET_XNAME
+                  csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
         - name: set-bss-image-and-cfs-config
           dependencies:
           - update-bss
