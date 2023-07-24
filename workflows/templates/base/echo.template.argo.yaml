@@ -26,7 +26,7 @@ kind: WorkflowTemplate
 metadata:
   name: echo-template
   labels:
-    version: "4.0.1"
+    version: "4.0.2"
 spec:
   entrypoint: echo-message
   templates:
