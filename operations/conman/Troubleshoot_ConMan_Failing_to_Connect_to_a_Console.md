@@ -120,20 +120,20 @@ This procedure requires administrative privileges.
         ```
 
         ```bash
-        export IPMI_PASSWORD='your IMPI Password'
+        export IPMI_PASSWORD='Actual IMPI Password'
         ipmitool -H <BMC_XNAME> -U "${USERNAME}" -P "${IPMI_USERNAME}" -E -I lanplus sol deactivate
         ```
 
     1. Retry ConMan to verify that the connection has been reestablished.
 
-1. Insure HPE iLO nodes have IPMI enabled.
+1. Ensure that HPE iLO nodes have IPMI enabled.
 
-    If the node is an HPE iLO node, they sometimes ship with IPMI disabled. If that is the case,
-    the console services will not be able to interact with them. To check the state of the BMC
+    HPE iLO nodes sometimes ship with IPMI disabled. If that is the case,
+    the console services will not be able to interact with them. To check the state of the BMC,
     follow the directions in
-    [Enable IPMI access on HPE iLO BMCs](../node_management/Enable_ipmi_access_on_HPE_iLO_BMCs.md)
+    [Enable IPMI Access on HPE iLO BMCs](../node_management/Enable_ipmi_access_on_HPE_iLO_BMCs.md).
 
-1. (`ncn-mw#`) Insure River nodes have IPMI enabled.
+1. (`ncn-mw#`) Ensure that River nodes have IPMI enabled.
 
     If the error `Error activating SOL payload: Invalid data field in request` is seen, check the
     setting of the `sol payload` on this node.
@@ -182,43 +182,36 @@ This procedure requires administrative privileges.
         nobody@cray-console-node-0:/>
         ```
 
-    1. Find the `conmand` process id.
+    1. (`pod#`) Find the `conmand` process ID.
 
         ```bash
-        ps -ax | grep conmand
+        ps -ax | grep conmand | grep -v grep
         ```
 
         Example output:
 
         ```text
            97 ?        Sl    45:36 conmand -F -v -c /etc/conman.conf
-        81501 pts/2    S+     0:00 grep conmand
-        nobody@cray-console-node-0:/>
         ```
 
-    1. Kill the process for the `conmand -F -v...` process.
+    1. Kill the `conmand` process.
 
         ```bash
         kill PROCESS_ID
         ```
 
-    1. Wait for the process to restart.
+    1. (`pod#`) Wait for the process to restart.
 
         ```bash
-        ps -ax | grep conmand
+        ps -ax | grep conmand | grep -v grep
         ```
 
-        Output when the process has not restarted yet:
-
-        ```text
-          81517 pts/2    S+     0:00 grep conmand
-        ```
-
-        When the `conmand -F -v...` process is present proceed to the next step:
+        This command gives no output until the `conmand` process has restarted.
+        Do not proceed to the next step until the process has restarted.
+        At that point, the output will resemble the following:
 
         ```text
         81518 ?        Sl     0:00 conmand -F -v -c /etc/conman.conf
-        81522 pts/2    S+     0:00 grep conmand
         ```
 
-    1. Try the connection to the problematic node again.
+1. Try the connection to the problematic node again.
