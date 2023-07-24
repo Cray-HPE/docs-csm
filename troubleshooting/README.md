@@ -67,9 +67,11 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 ## ConMan
 
+* [Console Services Troubleshooting Guide](../operations/conman/Console_Services_Troubleshooting_Guide.md)
 * [ConMan Blocking Access to a Node BMC](../operations/conman/Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md)
 * [ConMan Failing to Connect to a Console](../operations/conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
 * [ConMan Asking for Password on SSH Connection](../operations/conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
+* [Console Node Pod Stuck in Terminating State](../operations/conman/Troubleshoot_ConMan_Node_Pod_Stuck_Terminating.md)
 
 ## Customer Management Network (CMN)
 
