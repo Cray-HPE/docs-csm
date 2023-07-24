@@ -47,7 +47,7 @@ spec:
         image: artifactory.algol60.net/csm-docker/stable/iuf:csm-latest
         command: [sh]
         source: |
-          #!/host_usr_bin/bash
+          #!/usr/bin/bash
           IS_ERROR={{inputs.parameters.isError}}
           if [[ "${IS_ERROR}" == "true" ]];then
             echo "ERROR {{inputs.parameters.message}}"
@@ -57,10 +57,6 @@ spec:
             exit 0
           fi
         volumeMounts:
-          # mount csi from host to docker
-          # csi is go compiled so it can be used from host to container
-          - name: host-usr-bin
-            mountPath: /host_usr_bin
           - name: ca-bundle
             mountPath: /var/lib/ca-certificates
           - name: iuf
