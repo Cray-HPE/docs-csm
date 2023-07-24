@@ -44,7 +44,7 @@ spec:
         annotations:
           sidecar.istio.io/inject: "false"
       script:
-        image: artifactory.algol60.net/csm-docker/stable/iuf:csm-latest
+        image: artifactory.algol60.net/csm-docker/stable/iuf:v0.1.12
         command: [sh]
         source: |
           #!/usr/bin/bash
