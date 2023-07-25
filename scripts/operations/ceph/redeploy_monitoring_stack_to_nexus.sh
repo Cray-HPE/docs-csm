@@ -23,9 +23,9 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-# This script moves the Ceph monitoring daemons running the a local image
-# to an image in Nexus. This pushes the local images to Nexus, sets the 
-# Ceph configuration, and then redeploys the monitoring stack. Once this 
+# This script moves the Ceph monitoring daemons running a local image
+# to an image in Nexus. This pushes the local images to Nexus, sets the
+# Ceph configuration, and then redeploys the monitoring stack. Once this
 # script has completed, all Ceph monitoring daemons should be using an image
 # in Nexus.
 
