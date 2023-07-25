@@ -269,6 +269,32 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
 Ceph can begin to exhibit latency over time unless OSDs are restarted and some OSD memory settings are changed. It is recommended to run the `/usr/share/doc/csm/scripts/repair-ceph-latency.sh` script at [Known Issue: Ceph OSD latency](../troubleshooting/known_issues/ceph_osd_latency.md).
 
+### 2.5 Upgrade Ceph and stop local Docker registries
+
+These steps will upgrade Ceph from `v16.2.9` to `v16.2.13`. Then the Ceph monitoring daemons' images will be pushed to Nexus and the monitoring daemons will be redeployed so that they use these images in Nexus.
+Once this is complete, all Ceph daemons should be using images in Nexus and not images hosted in the local Docker registry on storage nodes.
+The third step stops the local Docker registry on all storage nodes.
+
+1. (`ncn-m001#`) Run Ceph upgrade to `v16.2.13`.
+
+   ```bash
+   /usr/share/doc/csm/upgrade/scripts/ceph/ceph-upgrade-tool.py --version "v16.2.13"
+   ```
+
+1. (`ncn-m001#`) Redeploy Ceph monitoring daemons so they are using images in Nexus.
+
+   ```bash
+   scp /usr/share/doc/csm/scripts/operations/ceph/redeploy_monitoring_stack_to_nexus.sh ncn-s001:/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh
+   ssh ncn-s001 "/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh"
+   ```
+
+1. (`ncn-m001#`) Stop the local Docker registries on all storage nodes.
+
+   ```bash
+   scp /usr/share/doc/csm/scripts/operations/ceph/disable_local_registry.sh ncn-s001:/srv/cray/scripts/common/disable_local_registry.sh
+   ssh ncn-s001 "/srv/cray/scripts/common/disable_local_registry.sh"
+   ```
+
 ## 3. Validate deployment
 
 1. (`pit#`) Ensure that the working directory is the `prep` directory.
