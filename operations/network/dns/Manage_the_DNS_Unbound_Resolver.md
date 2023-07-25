@@ -9,6 +9,7 @@ This instance is accessible only within the HPE Cray EX system.
 - [Restart Unbound](#restart-unbound)
 - [Clear bad data in the Unbound ConfigMap](#clear-bad-data-in-the-unbound-configmap)
 - [Change the site DNS server](#change-the-site-dns-server)
+- [Increase the number of Unbound pods](#increase-the-number-of-unbound-pods)
 
 ## Check the status of the `cray-dns-unbound` pods
 
@@ -236,3 +237,6 @@ Use the following procedure to change the site DNS server that Unbound forwards 
       kubectl delete secret -n loftsman site-init
       kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
       ```
+## Increase the number of Unbound Pods
+
+On large systems it may be necessary to increase the number of Unbound Pods due to the increased DNS query load. See [Scale `cray-dns-unbound` service](../../CSM_product_management/Post_Install_Customizations.md#scale-cray-dns-unbound-service) for more information.
