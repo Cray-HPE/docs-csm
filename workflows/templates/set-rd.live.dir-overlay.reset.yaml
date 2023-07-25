@@ -52,7 +52,7 @@ spec:
                       https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
                     TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                       jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-                    /host_usr_bin/csi handoff bss-update-param --delete rd.live.overlay.reset --limit "${TARGET_XNAME}"
+                    csi handoff bss-update-param --delete rd.live.overlay.reset --limit "${TARGET_XNAME}"
     - name: set-rd-live-overlay-reset
       inputs:
         parameters:
@@ -77,5 +77,5 @@ spec:
                       https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
                     TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                       jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-                    /host_usr_bin/csi handoff bss-update-param --delete rd.live.overlay.reset --limit "${TARGET_XNAME}"
-                    /host_usr_bin/csi handoff bss-update-param --set rd.live.overlay.reset=1 --limit "${TARGET_XNAME}"
+                    csi handoff bss-update-param --delete rd.live.overlay.reset --limit "${TARGET_XNAME}"
+                    csi handoff bss-update-param --set rd.live.overlay.reset=1 --limit "${TARGET_XNAME}"
