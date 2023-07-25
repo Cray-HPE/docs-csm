@@ -5,7 +5,7 @@ This page contains general Nexus troubleshooting topics.
 - [`lookup registry.local: no such host`](#lookup-registrylocal-no-such-host)
 - [`Error initiating layer upload` ... `in registry.local`](#error-initiating-layer-upload--in-registrylocal)
 - [`error: not ready: https://packages.local`](#error-not-ready-httpspackageslocal)
-- [Unable to log in with Keycloak accounts](#unable-to-login-with-keycloak-accounts)
+- [Unable to log in with Keycloak accounts](#unable-to-log-in-with-keycloak-accounts)
 
 ## `lookup registry.local: no such host`
 
