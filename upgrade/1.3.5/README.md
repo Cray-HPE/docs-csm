@@ -20,6 +20,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.5`, follow the procedures descr
 1. [Upgrade CANU](#upgrade-canu)
 1. [Upgrade services](#upgrade-services)
 1. [Upgrade Ceph and stop local Docker registries](#upgrade-ceph-and-stop-local-docker-registries)
+1. [Update test suite packages](#update-test-suite-packages)
 1. [Verification](#verification)
 1. [Complete upgrade](#complete-upgrade)
 
