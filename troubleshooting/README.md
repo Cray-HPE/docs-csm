@@ -46,6 +46,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [HSM Discovery Status `StoreFailed` Error](known_issues/HSM_Discovery_StoreFailed_Error.md)
 * [Software Management Services health check](known_issues/sms_health_check.md)
 * [QLogic driver crash on storage nodes](known_issues/qlogic_driver_crash.md)
+* [Nexus Fails Authentication with Keycloak Users](known_issues/Nexus_Fail_Authentication_with_Keycloak_Users.md)
 
 ## Booting
 

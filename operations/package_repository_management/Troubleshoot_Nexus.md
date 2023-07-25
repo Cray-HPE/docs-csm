@@ -5,7 +5,7 @@ This page contains general Nexus troubleshooting topics.
 - [`lookup registry.local: no such host`](#lookup-registrylocal-no-such-host)
 - [`Error initiating layer upload` ... `in registry.local`](#error-initiating-layer-upload--in-registrylocal)
 - [`error: not ready: https://packages.local`](#error-not-ready-httpspackageslocal)
-- [Unable to login with Keycloak accounts](#unable-to-login-with-keycloak-accounts)
+- [Unable to log in with Keycloak accounts](#unable-to-login-with-keycloak-accounts)
 
 ## `lookup registry.local: no such host`
 
@@ -80,7 +80,7 @@ deployment and additional diagnosis is required. In this case, the current
 Nexus deployment probably needs to be uninstalled and the `nexus-data` PVC
 removed before attempting to deploy again.
 
-## Unable to login with Keycloak accounts
+## Unable to log in with Keycloak accounts
 
 First ensure the Keycloak account that is attempting to log in has proper Nexus permissions.
 See [Manage Repositories with Nexus](Manage_Repositories_with_Nexus.md) for information
@@ -88,5 +88,5 @@ on what Keycloak permissions they need.
 
 If the account has all the proper permissions and still fails to log in to Nexus, then
 the Keycloak integration configuration may have failed setup.
-See [Nexus Fails Authentication with Keycloak Users](../../troubleshooting/known_issues/nexus_fail_authentication_with_keycloak_user.md)
+See [Nexus Fails Authentication with Keycloak Users](../../troubleshooting/known_issues/Nexus_Fail_Authentication_with_Keycloak_Users.md)
 for steps to fix the configuration.
