@@ -7,6 +7,7 @@ If upgrading from CSM `v1.3.4` directly to `v1.4.2`, follow the procedures descr
 
 ## Bug Fixes and Improvements
 
+* Upgrades Ceph to `v16.2.13` and stops the local Docker registries on storage nodes
 * Updates to the `bos` API specification
 * Refactoring of the `hms-rts` chart for deployment of multiple back ends
 * Allow the power control service `pcs` to be able to report power status of `RTS` management switches
@@ -152,7 +153,7 @@ with IUF. If this step is skipped, IUF will fail when updating or upgrading prod
 
 ## Upgrade Ceph and stop local Docker registries
 
-**Note:** This step may not be necessary if it was already completed by the CSM v1.3.5 patch.
+**Note:** This step may not be necessary if it was already completed by the CSM `v1.3.5` patch.
 If it was already run, the following steps can be re-executed to verify that Ceph daemons are using images
 in Nexus and the local Docker registries have been stopped.
 

@@ -529,7 +529,7 @@ procedure. Otherwise, if performing an upgrade of only CSM, proceed to the next 
 
 ## Stage 0.5 - Upgrade Ceph and stop local Docker registries
 
-**Note:** This step may not be necessary if it was already completed by the CSM v1.3.5 patch.
+**Note:** This step may not be necessary if it was already completed by the CSM `v1.3.5` patch.
 If it was already run, the following steps can be re-executed to verify that Ceph daemons are using images
 in Nexus and the local Docker registries have been stopped.
 
