@@ -18,6 +18,7 @@ Different values may be be needed for systems as they scale.
   * [Prometheus pod is `OOMKilled` or CPU throttled](#prometheus-pod-is-oomkilled-or-cpu-throttled)
   * [Postgres pods are `OOMKilled` or CPU throttled](#postgres-pods-are-oomkilled-or-cpu-throttled)
   * [Scale `cray-bss` service](#scale-cray-bss-service)
+  * [Scale `cray-dns-unbound` service](#scale-cray-dns-unbound-service)
   * [Postgres PVC resize](#postgres-pvc-resize)
   * [Prometheus PVC resize](#prometheus-pvc-resize)
   * [`cray-hms-hmcollector` pods are `OOMKilled`](#cray-hms-hmcollector-pods-are-oomkilled)
@@ -124,6 +125,7 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
 * [Prometheus pod is `OOMKilled` or CPU throttled](#prometheus-pod-is-oomkilled-or-cpu-throttled)
 * [Postgres pods are `OOMKilled` or CPU throttled](#postgres-pods-are-oomkilled-or-cpu-throttled)
 * [Scale `cray-bss` service](#scale-cray-bss-service)
+* [Scale `cray-dns-unbound` service](#scale-cray-dns-unbound-service)
 * [Postgres PVC resize](#postgres-pvc-resize)
 * [Prometheus PVC resize](#prometheus-pvc-resize)
 * [`cray-hms-hmcollector` pods are `OOMKilled`](#cray-hms-hmcollector-pods-are-oomkilled)
@@ -372,6 +374,70 @@ Follow the [Redeploying a Chart](Redeploying_a_Chart.md) procedure **with the fo
 
         ```bash
         kubectl get deployment cray-bss -n services -o json | jq -r '.spec.replicas'
+        ```
+
+        In this example, `5` will be the returned value.
+
+* **Make sure to perform the entire linked procedure, including the step to save the updated customizations.**
+
+### Scale `cray-dns-unbound` service
+
+Scale the replica count associated with the `cray-dns-unbound` service in the `services` namespace.
+Trial and error may be needed to determine what is best for a given system at scale.
+
+Follow the [Redeploying a Chart](Redeploying_a_Chart.md) procedure **with the following specifications**:
+
+* Chart name: `cray-dns-unbound`
+* Base manifest name: `core-services`
+* (`ncn-mw#`) When reaching the step to update the customizations, perform the following steps:
+
+    **Only follow these steps as part of the previously linked chart redeploy procedure.**
+
+    1. Edit the customizations by adding or updating `spec.kubernetes.services.cray-hms-bss.cray-service.replicaCount`.
+
+        ```bash
+        yq write -i customizations.yaml 'spec.kubernetes.services.cray-dns-unbound.cray-service.replicaCount' '5'
+        ```
+
+    1. Check that the customization file has been updated.
+
+        ```bash
+        yq read customizations.yaml 'spec.kubernetes.services.cray-dns-unbound.cray-service.replicaCount'
+        ```
+
+        Example output:
+
+        ```text
+        5
+        ```
+
+* (`ncn-mw#`) When reaching the step to validate the redeployed chart, perform the following steps:
+
+    **Only follow these steps as part of the previously linked chart redeploy procedure.**
+
+    Verify the `cray-dns-unbound` pods scale.
+
+    1. Watch the `cray-dns-unbound` pods scale to the desired number (in this example, 5), with each pod reaching a `3/3` ready state.
+
+        ```bash
+        watch "kubectl get pods -l app.kubernetes.io/instance=cray-dns-unbound -n services"
+        ```
+
+        Example output:
+
+        ```text
+        NAME                                READY   STATUS    RESTARTS   AGE
+        cray-dns-unbound-58b5cfdb4d-6vwrx   3/3     Running   0          88s
+        cray-dns-unbound-58b5cfdb4d-6wrpr   3/3     Running   0          87s
+        cray-dns-unbound-58b5cfdb4d-7ndhg   3/3     Running   0          70m
+        cray-dns-unbound-58b5cfdb4d-n498k   3/3     Running   0          70m
+        cray-dns-unbound-58b5cfdb4d-w2tq9   3/3     Running   0          70m
+        ```
+
+    1. Verify that the replicas change is present in the Kubernetes `cray-dns-unbound` deployment.
+
+        ```bash
+        kubectl get deployment cray-dns-unbound -n services -o json | jq -r '.spec.replicas'
         ```
 
         In this example, `5` will be the returned value.
