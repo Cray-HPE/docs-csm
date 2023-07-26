@@ -1,4 +1,4 @@
-# Create system configuration using SHCD
+# Create System Configuration Using SHCD
 
 This stage walks the user through creating the configuration payload for the system.
 

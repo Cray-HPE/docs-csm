@@ -1,4 +1,4 @@
-# Create system configuration using cluster discovery service
+# Create System Configuration Using Cluster Discovery Service
 
 This stage walks the user through creating the configuration payload for the system using Cluster Discovery Service (CDS) to generate seed files and paddle file.
 
@@ -44,14 +44,15 @@ Run the following steps before starting any of the system configuration procedur
 
    ```bash
    cd "${PITDATA}/prep"
+   ```
 
 1. (`pit#`) Create or copy `system_config.yaml`.
 
    - If one does not exist from a prior installation, then create an empty one:
 
-      ```bash
-      csi config init empty
-      ```
+     ```bash
+     csi config init empty
+     ```
 
    - Otherwise, copy the existing `system_config.yaml` file into the working directory.
 
@@ -99,7 +100,7 @@ Run the following steps before starting any of the system configuration procedur
      | ---       |  ---         |
      | ipaddr    | IP address   |
      | netmask   | netmask value |
-     | slave0, slave1 | Network Interface |
+     | slave0, slave1 | network interface |
      | vlanid    | VLAN ID number |
 
      > **NOTE**: The IP address value, netmask value, network interface, and VLAN ID are available in the `system_config.yaml` file in the `prep` directory.
@@ -118,7 +119,7 @@ Run the following steps before starting any of the system configuration procedur
 
      Where, `leasetime` is an optional variable.
 
-     Example Script:
+     Example command:
 
      ```bash
      "${CVT_PATH}"/cds/discover_enable.py --iprange 10.x.x.x,10.x.x.x,255.x.x.x,24h --interface bond0
@@ -131,7 +132,7 @@ Run the following steps before starting any of the system configuration procedur
      --nmnrange <admin_node_nmn_ip>,<start_ip>,<end_ip> --hmnrange <admin_node_hmn_ip>,<start_ip>,<end_ip>
      ```
 
-     Example Script:
+     Example command:
 
      ```bash
      "${CVT_PATH}"/cds/discover_enable.py --mtlrange 10.x.x.x,10.x.x.x,10.x.x.x  --nmnrange 10.x.x.x,10.x.x.x,10.x.x.x  --hmnrange 10.x.x.x,10..x.x.x,10.x.x.x
@@ -229,9 +230,9 @@ The following steps verify the status and lists the IPs of nodes, fabric switche
 
 1. (`pit#`) Collect the management network inventory.
 
-   1. Manually, create a `mgmtswlist` file in the working directory listing the IPs of management switches.
+   1. Manually, create a `mgmtswlist` file in the working directory listing the IP addresses of management switches.
 
-   2. (`pit#`) Collect the mangement network inventory data.
+   2. (`pit#`) Collect the management network inventory data.
 
       ```bash
       "${CVT_PATH}"/management_inventory.py --switchfile mgmtswlist --password password --username username
@@ -253,9 +254,11 @@ The following steps verify the status and lists the IPs of nodes, fabric switche
 
 1. Copy the SHCD files to the present working directory.
 
-1. (`pit#`) Create a JSON file using the CANU tool, see [Validate the SHCD](../operations/network/management_network/validate_shcd.md#validate-the-shcd).
+1. (`pit#`) Create a JSON file using the CANU tool.
 
-   Example script:
+   See [Validate the SHCD](../operations/network/management_network/validate_shcd.md#validate-the-shcd).
+
+   Example command:
 
    ```bash
    canu validate shcd --shcd SHCD.xlsx --architecture V1 --tabs 40G_10G,NMN,HMN --corners I12,Q38,I13,Q21,J20,U38 --json --out cabling.json
@@ -271,11 +274,11 @@ The following steps verify the status and lists the IPs of nodes, fabric switche
 
 1. (`pit#`) Classify the servers.
 
+   > In the following command, replace '<N>' with the number of worker NCNs in the system.
+
    ```bash
    "${CVT_PATH}"/scripts/server_classification.py --no_of_workers <N>
    ```
-
-   Where, the variable `<N>` describes the number of worker nodes.
 
 #### 3.4.4 Compare the SHCD data with CVT inventory data
 
@@ -291,7 +294,7 @@ The following steps verify the status and lists the IPs of nodes, fabric switche
    "${CVT_PATH}"/shcd_compare.py --shcd_id <SnapshotID_SHCD> --cvt_id <SnapshotID_CVT>
    ```
 
-   Example script:
+   Example command:
 
    ```bash
    "${CVT_PATH}"/shcd_compare.py --shcd_id 4ea86f99-47ca-4cd9-b142-ea572d0566bf --cvt_id 326a6edd-adce-4d1f-9f30-ae9539284733
