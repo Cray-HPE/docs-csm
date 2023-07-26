@@ -18,6 +18,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
   - [CSM-only system upgrade](#csm-only-system-upgrade)
 - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
 - [Stage 0.5 - Regenerate Postgres backups](#stage-05---regenerate-postgres-backups)
+- [Stage 0.6 - Enable `Smartmon` Metrics on Storage NCNs](#stage-06---enable-smartmon-metrics-on-storage-ncns)
 - [Stop typescript](#stop-typescript)
 - [Stage completed](#stage-completed)
 
@@ -395,6 +396,16 @@ The current Postgres opt-in backups need to be re-generated to fix a known issue
 
    ```text
    Postgres backup(s) have been successfully regenerated.
+   ```
+
+## Stage 0.6 - Enable `Smartmon` Metrics on Storage NCNs
+
+This step will install the `smart-mon` rpm on storage nodes, and reconfigure the `node-exporter` to provide `smartmon` metrics.
+
+1. (`ncn-m001#`) Execute the following script.
+
+   ```bash
+   /usr/share/doc/csm/scripts/operations/ceph/enable-smart-mon-storage-nodes.sh
    ```
 
 ## Stop typescript

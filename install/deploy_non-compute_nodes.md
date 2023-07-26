@@ -29,6 +29,7 @@ the number of storage and worker nodes.
     1. [Configure `kubectl` on the PIT](#23-configure-kubectl-on-the-pit)
     1. [Run Ceph Latency Repair Script](#24-run-ceph-latency-repair-script)
     1. [Check LVM on Kubernetes NCNs](#25-check-lvm-on-kubernetes-ncns)
+    1. [Enable `Smartmon` Metrics on Storage NCNs](#26-enable-smartmon-metrics-on-storage-ncns)
 1. [Cleanup](#3-cleanup)
 1. [Validate deployment](#4-validate-deployment)
 1. [Next topic](#next-topic)
@@ -324,6 +325,16 @@ If the check fails, stop and:
     ```
 
 If the check fails after doing the rebuild, contact support.
+
+### 2.6 Enable `Smartmon` Metrics on Storage NCNs
+
+This step will install the `smart-mon` rpm on storage nodes, and reconfigure the `node-exporter` to provide `smartmon` metrics.
+
+1. (`ncn-m001#`) Execute the following script.
+
+   ```bash
+   /usr/share/doc/csm/scripts/operations/ceph/enable-smart-mon-storage-nodes.sh
+   ```
 
 ## 3. Cleanup
 
