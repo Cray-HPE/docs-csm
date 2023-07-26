@@ -20,6 +20,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
     - [Option 3: Upgrade of CSM on CSM-only system](#option-3-upgrade-of-csm-on-csm-only-system)
   - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
   - [Stage 0.5 - Upgrade Ceph and stop local Docker registries](#stage-05---upgrade-ceph-and-stop-local-docker-registries)
+  - [Stage 0.6 - Enable `Smartmon` Metrics on Storage NCNs](#stage-06---enable-smartmon-metrics-on-storage-ncns)
   - [Stop typescript](#stop-typescript)
   - [Stage completed](#stage-completed)
 
@@ -555,6 +556,16 @@ The third step stops the local Docker registry on all storage nodes.
    ```bash
    scp /usr/share/doc/csm/scripts/operations/ceph/disable_local_registry.sh ncn-s001:/srv/cray/scripts/common/disable_local_registry.sh
    ssh ncn-s001 "/srv/cray/scripts/common/disable_local_registry.sh"
+   ```
+
+## Stage 0.6 - Enable `Smartmon` Metrics on Storage NCNs
+
+This step will install the `smart-mon` rpm on storage nodes, and reconfigure the `node-exporter` to provide `smartmon` metrics.
+
+1. (`ncn-m001#`) Execute the following script.
+
+   ```bash
+   /usr/share/doc/csm/scripts/operations/ceph/enable-smart-mon-storage-nodes.sh
    ```
 
 ## Overwrite default boot timeout
