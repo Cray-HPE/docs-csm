@@ -19,6 +19,8 @@ Stage 0 has several critical procedures which prepare the environment and verify
     - [Option 2: Upgrade of CSM on system with additional products](#option-2-upgrade-of-csm-on-system-with-additional-products)
     - [Option 3: Upgrade of CSM on CSM-only system](#option-3-upgrade-of-csm-on-csm-only-system)
   - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
+  - [Stage 0.5 - Upgrade Ceph and stop local Docker registries](#stage-05---upgrade-ceph-and-stop-local-docker-registries)
+  - [Stage 0.6 - Enable `Smartmon` Metrics on Storage NCNs](#stage-06---enable-smartmon-metrics-on-storage-ncns)
   - [Stop typescript](#stop-typescript)
   - [Stage completed](#stage-completed)
 
@@ -525,6 +527,46 @@ the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Wor
 If performing an upgrade of CSM and additional HPE Cray EX software products using the IUF,
 return to the [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
 procedure. Otherwise, if performing an upgrade of only CSM, proceed to the next step.
+
+## Stage 0.5 - Upgrade Ceph and stop local Docker registries
+
+**Note:** This step may not be necessary if it was already completed by the CSM `v1.3.5` patch.
+If it was already run, the following steps can be re-executed to verify that Ceph daemons are using images
+in Nexus and the local Docker registries have been stopped.
+
+These steps will upgrade Ceph to `v16.2.13`. Then the Ceph monitoring daemons' images will be pushed to Nexus and the monitoring daemons will be redeployed so that they use these images in Nexus.
+Once this is complete, all Ceph daemons should be using images in Nexus and not images hosted in the local Docker registry on storage nodes.
+The third step stops the local Docker registry on all storage nodes.
+
+1. (`ncn-m001#`) Run Ceph upgrade to `v16.2.13`.
+
+   ```bash
+   /usr/share/doc/csm/upgrade/scripts/ceph/ceph-upgrade-tool.py --version "v16.2.13"
+   ```
+
+1. (`ncn-m001#`) Redeploy Ceph monitoring daemons so they are using images in Nexus.
+
+   ```bash
+   scp /usr/share/doc/csm/scripts/operations/ceph/redeploy_monitoring_stack_to_nexus.sh ncn-s001:/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh
+   ssh ncn-s001 "/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh"
+   ```
+
+1. (`ncn-m001#`) Stop the local Docker registries on all storage nodes.
+
+   ```bash
+   scp /usr/share/doc/csm/scripts/operations/ceph/disable_local_registry.sh ncn-s001:/srv/cray/scripts/common/disable_local_registry.sh
+   ssh ncn-s001 "/srv/cray/scripts/common/disable_local_registry.sh"
+   ```
+
+## Stage 0.6 - Enable `Smartmon` Metrics on Storage NCNs
+
+This step will install the `smart-mon` rpm on storage nodes, and reconfigure the `node-exporter` to provide `smartmon` metrics.
+
+1. (`ncn-m001#`) Execute the following script.
+
+   ```bash
+   /usr/share/doc/csm/scripts/operations/ceph/enable-smart-mon-storage-nodes.sh
+   ```
 
 ## Overwrite default boot timeout
 

@@ -60,6 +60,18 @@ the steps below it provide detailed instructions which must be executed in the o
    [Stage 0.4 - Backup workload manager data](../../../upgrade/Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data)
    instructions
 
+1. CSM Stage 0.5
+
+   Follow the CSM
+   [Stage 0.5 - Upgrade Ceph and stop local Docker registries](../../../upgrade/Stage_0_Prerequisites.md#stage-05---upgrade-ceph-and-stop-local-docker-registries)
+   instructions
+
+1. CSM Stage 0.6
+
+   Follow the CSM
+   [Stage 0.6 - Upgrade Ceph and stop local Docker registries](../../../upgrade/Stage_0_Prerequisites.md#stage-06---enable-smartmon-metrics-on-storage-ncns)
+   instructions
+
 1. Backup
 
    Follow the IUF [Backup](backup.md) instructions

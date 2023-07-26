@@ -28,6 +28,8 @@ the number of storage and worker nodes.
     1. [Deploy Kubernetes NCNs](#22-deploy-kubernetes-ncns)
     1. [Configure `kubectl` on the PIT](#23-configure-kubectl-on-the-pit)
     1. [Run Ceph Latency Repair Script](#24-run-ceph-latency-repair-script)
+    1. [Upgrade Ceph and stop local Docker registries](#25-upgrade-ceph-and-stop-local-docker-registries)
+    1. [Enable `Smartmon` Metrics on Storage NCNs](#26-enable-smartmon-metrics-on-storage-ncns)
 1. [Validate deployment](#3-validate-deployment)
 1. [Next topic](#next-topic)
 
@@ -268,6 +270,42 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 ### 2.4 Run Ceph Latency Repair Script
 
 Ceph can begin to exhibit latency over time unless OSDs are restarted and some OSD memory settings are changed. It is recommended to run the `/usr/share/doc/csm/scripts/repair-ceph-latency.sh` script at [Known Issue: Ceph OSD latency](../troubleshooting/known_issues/ceph_osd_latency.md).
+
+### 2.5 Upgrade Ceph and stop local Docker registries
+
+These steps will upgrade Ceph from `v16.2.9` to `v16.2.13`. Then the Ceph monitoring daemons' images will be pushed to Nexus and the monitoring daemons will be redeployed so that they use these images in Nexus.
+Once this is complete, all Ceph daemons should be using images in Nexus and not images hosted in the local Docker registry on storage nodes.
+The third step stops the local Docker registry on all storage nodes.
+
+1. (`ncn-m001#`) Run Ceph upgrade to `v16.2.13`.
+
+   ```bash
+   /usr/share/doc/csm/upgrade/scripts/ceph/ceph-upgrade-tool.py --version "v16.2.13"
+   ```
+
+1. (`ncn-m001#`) Redeploy Ceph monitoring daemons so they are using images in Nexus.
+
+   ```bash
+   scp /usr/share/doc/csm/scripts/operations/ceph/redeploy_monitoring_stack_to_nexus.sh ncn-s001:/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh
+   ssh ncn-s001 "/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh"
+   ```
+
+1. (`ncn-m001#`) Stop the local Docker registries on all storage nodes.
+
+   ```bash
+   scp /usr/share/doc/csm/scripts/operations/ceph/disable_local_registry.sh ncn-s001:/srv/cray/scripts/common/disable_local_registry.sh
+   ssh ncn-s001 "/srv/cray/scripts/common/disable_local_registry.sh"
+   ```
+
+### 2.6 Enable `Smartmon` Metrics on Storage NCNs
+
+This step will install the `smart-mon` rpm on storage nodes, and reconfigure the `node-exporter` to provide `smartmon` metrics.
+
+1. (`ncn-m001#`) Execute the following script.
+
+   ```bash
+   /usr/share/doc/csm/scripts/operations/ceph/enable-smart-mon-storage-nodes.sh
+   ```
 
 ## 3. Validate deployment
 
