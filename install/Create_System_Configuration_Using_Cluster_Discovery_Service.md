@@ -210,7 +210,7 @@ The following steps verify the status and lists the IPs of nodes, fabric switche
 
 #### 3.4.1 Dynamic Data Collection
 
-1. (`pit#`) Copy the SSH key to setup passwordless-SSH for the localhost.
+1. (`pit#`) Copy the SSH key to setup passwordless-SSH for the local host.
 
    ```bash
    ssh-copy-id localhost

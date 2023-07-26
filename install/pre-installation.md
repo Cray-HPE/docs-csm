@@ -562,7 +562,7 @@ successfully.
 
    If any tests fail, they need to be investigated. After actions have been taken to rectify the tests
    (for example, editing configuration or CSI inputs), then restart from the beginning of the
-   [Initialize the LiveCD](create_system_config_shcd.md#6-initialize-the-livecd) procedure.
+   [Initialize the LiveCD](Create_System_Configuration_Using_SHCD.md#6-initialize-the-livecd) procedure.
 
 1. Save the `prep` directory for re-use.
 
