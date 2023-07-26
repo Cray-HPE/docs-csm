@@ -23,7 +23,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-local smartmon_url
+smartmon_url=''
 ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 function get_smartmon_url() {
@@ -84,6 +84,7 @@ get_smartmon_url
 echo "Using ${smartmon_url} to install rpm on storage nodes..." 
 
 for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
+  echo "Installing smart-mon rpm on ${storage_node}..." 
   ssh ${storage_node} ${ssh_options} "zypper in ${smartmon_url} && systemctl enable smart && systemctl restart smart"
 done
 

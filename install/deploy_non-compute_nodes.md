@@ -29,7 +29,7 @@ the number of storage and worker nodes.
     1. [Configure `kubectl` on the PIT](#23-configure-kubectl-on-the-pit)
     1. [Run Ceph Latency Repair Script](#24-run-ceph-latency-repair-script)
     1. [Upgrade Ceph and stop local Docker registries](#25-upgrade-ceph-and-stop-local-docker-registries)
-    1. [Enable Smartmon Metrics on Storage NCNs](#26-enable-smartmon-metrics-on-storage-ncns)
+    1. [Enable `Smartmon` Metrics on Storage NCNs](#26-enable-smartmon-metrics-on-storage-ncns)
 1. [Validate deployment](#3-validate-deployment)
 1. [Next topic](#next-topic)
 
@@ -297,11 +297,12 @@ The third step stops the local Docker registry on all storage nodes.
    ssh ncn-s001 "/srv/cray/scripts/common/disable_local_registry.sh"
    ```
 
-### 2.6 Enable Smartmon Metrics on Storage NCNs
+### 2.6 Enable `Smartmon` Metrics on Storage NCNs
 
 This step will install the `smart-mon` rpm on storage nodes, and reconfigure the `node-exporter` to provide `smartmon` metrics.
 
 1. (`ncn-m001#`) Execute the following script.
+
    ```bash
    /usr/share/doc/csm/scripts/operations/ceph/enable-smart-mon-storage-nodes.sh
    ```

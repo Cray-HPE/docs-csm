@@ -53,6 +53,7 @@ If upgrading from CSM `v1.3.4` directly to `v1.4.2`, follow the procedures descr
 1. [Upgrade services](#upgrade-services)
 1. [Upload NCN images](#upload-ncn-images)
 1. [Upgrade Ceph and stop local Docker registries](#upgrade-ceph-and-stop-local-docker-registries)
+1. [Enable `Smartmon` Metrics on Storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
 1. [Update test suite packages](#update-test-suite-packages)
 1. [Verification](#verification)
 1. [Complete upgrade](#complete-upgrade)
@@ -180,6 +181,16 @@ The third step stops the local Docker registry on all storage nodes.
    ```bash
    scp /usr/share/doc/csm/scripts/operations/ceph/disable_local_registry.sh ncn-s001:/srv/cray/scripts/common/disable_local_registry.sh
    ssh ncn-s001 "/srv/cray/scripts/common/disable_local_registry.sh"
+   ```
+
+## Enable `Smartmon` Metrics on Storage NCNs
+
+This step will install the `smart-mon` rpm on storage nodes, and reconfigure the `node-exporter` to provide `smartmon` metrics.
+
+1. (`ncn-m001#`) Execute the following script.
+
+   ```bash
+   /usr/share/doc/csm/scripts/operations/ceph/enable-smart-mon-storage-nodes.sh
    ```
 
 ## Update test suite packages
