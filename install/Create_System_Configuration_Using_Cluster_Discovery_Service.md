@@ -274,7 +274,7 @@ The following steps verify the status and lists the IPs of nodes, fabric switche
 
 1. (`pit#`) Classify the servers.
 
-   > In the following command, replace '<N>' with the number of worker NCNs in the system.
+   > In the following command, replace `<N>` with the number of worker NCNs in the system.
 
    ```bash
    "${CVT_PATH}"/scripts/server_classification.py --no_of_workers <N>
