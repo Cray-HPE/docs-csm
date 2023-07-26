@@ -7,6 +7,7 @@ If upgrading from CSM `v1.3.4` directly to `v1.4.2`, follow the procedures descr
 
 ## Bug Fixes and Improvements
 
+* Enables `smartmon` metrics on storage NCNs
 * Upgrades Ceph to `v16.2.13` and stops the local Docker registries on storage nodes
 * Updates to the `bos` API specification
 * Refactoring of the `hms-rts` chart for deployment of multiple back ends
