@@ -55,7 +55,7 @@ spec:
                     csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp4" \
                       | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
                     pdsh -S -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url"
-          - name: upload-ceph-images-to-nexus
+          - name: upgrade-ceph-stop-docker-registries
             templateRef:
               name: ssh-template
               template: shell-script
@@ -65,17 +65,30 @@ spec:
                   value: "{{inputs.parameters.dryRun}}"
                 - name: scriptContent
                   value: |
-                    echo "This will upload Ceph images to nexus. It will restart ceph daemons so that they are using the image in nexus and not the local image."
-                    success=0
+                    echo "This will upgrade Ceph to v16.2.13 if Ceph is not already running that version. \
+                    It will then make sure Ceph monitoring daemons are running on the image in Nexus and will redeploy \
+                    them if they are running on a local image. Lastly, it will stop all local Docker registries running on storage nodes."
+
+                    export TERM=linux
+                    # setting PYTHONUNBUFFERED forces python to print output
+                    export PYTHONUNBUFFERED=1
+                    /usr/share/doc/csm/upgrade/scripts/ceph/ceph-upgrade-tool.py --version "v16.2.13"
+
                     for node in "ncn-s001" "ncn-s002" "ncn-s003"; do
-                      scp /usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh ${node}:/srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
-                      if [[ $(ssh ${node} "chmod +x /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh; /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh") ]]; then
-                        success=1
-                        break
+                      success=0
+                      scp /usr/share/doc/csm/scripts/operations/ceph/redeploy_monitoring_stack_to_nexus.sh ${node}:/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh
+                      ssh ${node} "/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh"
+                      if [[ $? -eq 0 ]]; then
+                        scp /usr/share/doc/csm/scripts/operations/ceph/disable_local_registry.sh ${node}:/srv/cray/scripts/common/disable_local_registry.sh
+                        ssh ${node} "/srv/cray/scripts/common/disable_local_registry.sh"
+                        if [[ $? -eq 0 ]]; then
+                          success=1
+                          break
+                        fi
                       fi
                     done
                     if [[ $success -eq 0 ]]; then
-                      echo "ERROR was not able to successfully run '/usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh' on ncn-s00[1/2/3]."
+                      echo "ERROR was not able to upgrade Ceph, redeploy the monitoring stack and stop the local docker registries."
                       exit 1
                     fi
           - name: add-admin-label-to-ncn-s002
