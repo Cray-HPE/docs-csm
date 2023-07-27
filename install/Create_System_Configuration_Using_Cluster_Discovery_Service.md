@@ -128,23 +128,26 @@ Run the following steps before starting any of the system configuration procedur
    - Configure Dnsmasq for HMN configured network (VLAN 1, 2, and 4):
 
      ```bash
-     "${CVT_PATH}"/cds/discover_enable.py --mtlrange <admin_node_mtl_ip>,<start_ip>,<end_ip> 
-     --nmnrange <admin_node_nmn_ip>,<start_ip>,<end_ip> --hmnrange <admin_node_hmn_ip>,<start_ip>,<end_ip>
+     "${CVT_PATH}"/cds/discover_enable.py --mtlrange <admin_node_mtl_ip>,<start_ip>,<end_ip> \
+                                          --nmnrange <admin_node_nmn_ip>,<start_ip>,<end_ip> \
+                                          --hmnrange <admin_node_hmn_ip>,<start_ip>,<end_ip>
      ```
 
      Example command:
 
      ```bash
-     "${CVT_PATH}"/cds/discover_enable.py --mtlrange 10.x.x.x,10.x.x.x,10.x.x.x  --nmnrange 10.x.x.x,10.x.x.x,10.x.x.x  --hmnrange 10.x.x.x,10..x.x.x,10.x.x.x
+     "${CVT_PATH}"/cds/discover_enable.py --mtlrange 10.x.x.x,10.x.x.x,10.x.x.x \
+                                          --nmnrange 10.x.x.x,10.x.x.x,10.x.x.x \
+                                          --hmnrange 10.x.x.x,10..x.x.x,10.x.x.x
      ```
 
      > **NOTE**: The `iprange` for single VLAN or `mtliprange`, `nmniprange`, and `hmniprange` for HMN configured network are available in the `system_config.yaml` file in the `prep` directory.
 
 ### 3.2 Verify and reset the BMCs
 
-The following steps will verify if IPs are assigned to the BMC nodes and reset the nodes:
+The following steps will verify if IP addresses are assigned to the BMC nodes and reset the nodes:
 
-1. (`pit#`) If you want to dynamically discover the fabric switches, PDUs, and CMCs, ensure they are set to `dhcp` mode.
+1. (`pit#`) If the fabric switches, PDUs, and CMCs are to be dynamically discovered, then ensure that they are set to DHCP mode.
 
 1. (`pit#`) List the BMC nodes.
 
@@ -166,11 +169,11 @@ The following steps will verify if IPs are assigned to the BMC nodes and reset t
 
 ### 3.3 Verify the discover status
 
-> **NOTE**: If the fabric switches, PDUs, and CMCs were not configured to `dhcp` mode in the step [Verify and reset the BMCs](#32-verify-and-reset-the-bmcs), manually create the `fabricswlist`, `pdulist`, and `cmclist` files in the working directory.
+> **NOTE**: If the fabric switches, PDUs, and CMCs were not configured to DHCP mode in the step [Verify and reset the BMCs](#32-verify-and-reset-the-bmcs), manually create the `fabricswlist`, `pdulist`, and `cmclist` files in the working directory.
 
-The following steps verify the status and lists the IPs of nodes, fabric switches, PDUs, and CMCs:
+The following steps verify the status and lists the IP addresses of nodes, fabric switches, PDUs, and CMCs:
 
-1. (`pit#`) Verify the status and list the IPs of the nodes.
+1. (`pit#`) Verify the status and list the IP addresses of the nodes.
 
    ```bash
    "${CVT_PATH}"/cds/discover_status.py nodes --out
@@ -188,19 +191,19 @@ The following steps verify the status and lists the IPs of nodes, fabric switche
 
       ![Bond0 Network Interface](../img/install/create_bond0.png)
 
-1. (`pit#`) Verify the status and list the IPs of the fabric switches.
+1. (`pit#`) Verify the status and list the IP addresses of the fabric switches.
 
    ```bash
    "${CVT_PATH}"/cds/discover_status.py fabric --username fabric_username --password fabric_password --out
    ```
 
-1. (`pit#`) Verify the status and list the IPs of the PDUs.
+1. (`pit#`) Verify the status and list the IP addresses of the PDUs.
 
    ```bash
    "${CVT_PATH}"/cds/discover_status.py pdu --username pdu_username --password pdu_password --out
    ```
 
-1. (`pit#`) Verify the status and list the IPs of the CMCs.
+1. (`pit#`) Verify the status and list the IP addresses of the CMCs.
 
    ```bash
    "${CVT_PATH}"/cds/discover_status.py cmc --username cmc_username --password cmc_password --out
