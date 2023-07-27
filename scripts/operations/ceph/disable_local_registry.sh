@@ -29,15 +29,15 @@
 # upgrade and by running redeploy_monitoring_stack_to_nexus.sh.
 
 function validate_all_daemons_are_running_nexus_image() {
-    for node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
-        for each in $(ssh ${node} ${ssh_options} "podman ps --format {{.Image}}" ); do
-            if [[ -z $(echo $each | grep "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io") && -z $(echo $each | grep "localhost/registry") ]]; then
-                echo "$each is still being used. Not all Ceph daemons are using an image in Nexus."
-                echo "The local registry should not be disabled until no Ceph daemons are using images from the local registry. Exiting."
-                exit 1
-            fi
-        done
+  for node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
+    for each in $(ssh ${node} ${ssh_options} "podman ps --format {{.Image}}" ); do
+      if [[ -z $(echo $each | grep "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io") && -z $(echo $each | grep "localhost/registry") ]]; then
+        echo "$each is still being used. Not all Ceph daemons are using an image in Nexus."
+        echo "The local registry should not be disabled until no Ceph daemons are using images from the local registry. Exiting."
+        exit 1
+      fi
     done
+  done
 }
 
 function disable_local_registries() {
@@ -47,16 +47,16 @@ function disable_local_registries() {
   for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
     #shellcheck disable=SC2029
     if ssh ${storage_node} ${ssh_options} "systemctl disable registry.container.service ${systemctl_force}"; then
-       if ! ssh ${storage_node} ${ssh_options} "systemctl is-enabled registry.container.service"; then
-         echo "Docker registry service on ${storage_node} has been disabled"
-       fi
+      if ! ssh ${storage_node} ${ssh_options} "systemctl is-enabled registry.container.service"; then
+        echo "Docker registry service on ${storage_node} has been disabled"
+      fi
     fi
   done
 }
 
 function fix_registries_conf() {
   HEREFILE=$(mktemp)
-  cat > "${HEREFILE}" <<'EOF'
+  cat > "${HEREFILE}" << 'EOF'
 # For more information on this configuration file, see containers-registries.conf(5).
 #
 # Registries to search for images that are not fully-qualified.
@@ -113,7 +113,7 @@ insecure = true
 
 EOF
 
-  for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
+  for storage_node in $(ceph orch host ls -f json | jq -r '.[].hostname'); do
     scp ${ssh_options} "${HEREFILE}" "${storage_node}:/etc/containers/registries.conf"
   done
 } #end fix_registries_conf()

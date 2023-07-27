@@ -69,14 +69,14 @@ function redeploy_failed_monitoring_daemons() {
   until [[ $should_recheck == 0 ]]; do
     should_recheck=0
     for daemon in "prometheus" "node-exporter" "alertmanager" "grafana"; do
-        # using grep to get the info below. jq cannot be used 
-        # becasue some ceph 'event' values are incorrectly formatted and jq fails to filter json
-        daemons_not_running=$(ceph orch ps --daemon_type $daemon | grep -v 'running' | tail -n+2 | awk '{print $1}')
-        for each in $daemons_not_running; do
-            should_recheck=1
-            echo "${each} is not 'running'. Redeploying ${each}."
-            ceph orch daemon redeploy $each
-        done
+      # using grep to get the info below. jq cannot be used 
+      # becasue some ceph 'event' values are incorrectly formatted and jq fails to filter json
+      daemons_not_running=$(ceph orch ps --daemon_type $daemon | grep -v 'running' | tail -n+2 | awk '{print $1}')
+      for each in $daemons_not_running; do
+        should_recheck=1
+        echo "${each} is not 'running'. Redeploying ${each}."
+        ceph orch daemon redeploy $each
+      done
     done
     if [[ $count -eq 10 ]]; then
       echo "ERROR Failed to redeploy Ceph monitoring stack. Please manually check \
@@ -84,11 +84,11 @@ that storage nodes are able to pull monitoring images from Nexus and that the 'C
 is set so that daemons are using container images in Nexus."
       exit 1
     else
-      count=$(( count + 1 ))
+      count=$((count + 1))
     fi
     if [[ $should_recheck -eq 1 ]]; then
-        echo "Sleeping 60 seconds to allow daemons to redeploy."
-        sleep 60
+      echo "Sleeping 60 seconds to allow daemons to redeploy."
+      sleep 60
     fi
   done
 } # end of redeploy_failed_monitoring_daemons()
@@ -137,26 +137,26 @@ function upload_ceph_container_images() {
 }
 
 function upload_image() {
-    # get local image and nexus image location
-    name=$1
-    prefix=$2
-    to_configure=$3
-    local_image=$(ceph --name client.ro orch ps --format json | jq --arg DAEMON "$name" '.[] | select(.daemon_type == $DAEMON) | .container_image_name' | tr -d '"' | sort -u | tail -1)
-    # if sha in image then remove and use version
-    if [[ $local_image == *"@sha"* ]]; then
-        without_sha=${local_image%"@sha"*}
-        version=$(ceph --name client.ro orch ps --format json | jq --arg DAEMON "$name" '.[] | select(.daemon_type == $DAEMON) | .version' | tr -d '"' | sort -u)
-        if [[ $version != "v"* ]]; then version="v""$version"; fi
-        local_image="$without_sha"":""$version"
-    fi
-    nexus_location="${prefix}""$(echo "$local_image" | rev | cut -d "/" -f1 | rev)"
+  # get local image and nexus image location
+  name=$1
+  prefix=$2
+  to_configure=$3
+  local_image=$(ceph --name client.ro orch ps --format json | jq --arg DAEMON "$name" '.[] | select(.daemon_type == $DAEMON) | .container_image_name' | tr -d '"' | sort -u | tail -1)
+  # if sha in image then remove and use version
+  if [[ $local_image == *"@sha"* ]]; then
+    without_sha=${local_image%"@sha"*}
+    version=$(ceph --name client.ro orch ps --format json | jq --arg DAEMON "$name" '.[] | select(.daemon_type == $DAEMON) | .version' | tr -d '"' | sort -u)
+    if [[ $version != "v"* ]]; then version="v""$version"; fi
+    local_image="$without_sha"":""$version"
+  fi
+  nexus_location="${prefix}""$(echo "$local_image" | rev | cut -d "/" -f1 | rev)"
 
-    # push images to nexus, point to nexus and run upgrade
-    echo -e "\nPushing image: $local_image to $nexus_location"
-    podman pull "$local_image"
-    podman tag "$local_image" "$nexus_location"
-    podman push --creds "$nexus_username":"$nexus_password" "$nexus_location"
-    ceph config set mgr $to_configure $nexus_location
+  # push images to nexus, point to nexus and run upgrade
+  echo -e "\nPushing image: $local_image to $nexus_location"
+  podman pull "$local_image"
+  podman tag "$local_image" "$nexus_location"
+  podman push --creds "$nexus_username":"$nexus_password" "$nexus_location"
+  ceph config set mgr $to_configure $nexus_location
 } # end of upload_image()
 
 ### END OF FUNCTIONS ###
@@ -178,8 +178,8 @@ fi
 
 check_monitoring_daemons_using_nexus_image "true"
 if [[ $? -eq 0 ]]; then
-    echo "Ceph monitoring daemons are already using images in Nexus."
-    exit 0
+  echo "Ceph monitoring daemons are already using images in Nexus."
+  exit 0
 fi
 
 upload_ceph_container_images
