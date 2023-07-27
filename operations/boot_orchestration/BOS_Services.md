@@ -23,11 +23,11 @@ The API is the point of contact for the user and all other services, including B
 
 ## Boot Orchestration Agent \(BOA\)
 
-BOA is a feature of BOS v1 only. It is a Kubernetes job that is responsible for tracking all of the components in a BOS session and taking actions against them.
+BOA was a feature of BOS v1 only. It was a Kubernetes job that was responsible for tracking all of the components in a BOS session and taking actions against them.
 
 ## BOS operators
 
-The BOS operators are a v2 feature only.
+The BOS operators were introduced in BOS v2.
 Rather than relying on a single actor to handle all components and actions, the actions are broken up against several operators that monitor for components that require a specific action and handle only those components.
 
 * [`actual-state-cleanup`](#actual-state-cleanup)
@@ -86,6 +86,6 @@ This operator monitors all components that are enabled in BOS and sets their `ph
 
 ## BOS state reporter
 
-The `bos-state-reporter` is a v2 feature only. It runs on all components managed by BOS and periodically reports back the actual state of the component it runs on.
+The `bos-state-reporter` was introduced in BOS v2. It runs on all components managed by BOS and periodically reports back the actual state of the component it runs on.
 This is installed as a package at image customization time.
 See [Options](Options.md) for more information on setting `component_actual_state_ttl` option, which controls how long this data is valid if it is not updated.

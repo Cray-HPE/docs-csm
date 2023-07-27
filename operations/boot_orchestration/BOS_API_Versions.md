@@ -1,7 +1,7 @@
 # Boot Orchestration
 
-The Boot Orchestration Service \(BOS\) currently supports two API versions, v1 and v2, that have different APIs and underlying mechanisms for performing operations on nodes.
-The following is a summary of the changes, and the upgrade path, for users wishing to compare the two.
+The Boot Orchestration Service \(BOS\) currently supports API version v2.
+The following is a summary of the changes BOS v2 made from v1, and the upgrade path from v1 to v2.
 
 ## BOS v2 improvements
 
@@ -32,14 +32,14 @@ BOS v1 versions of the session templates will also remain with `_v1_deprecated` 
 
 ## Mechanical differences
 
-When a session is created in BOS v1, BOS starts a Kubernetes job called the Boot Orchestration Agent \(BOA\), which manages all of the nodes.
-BOA moves through one phase at a time, ensuring that all nodes have completed the phase before moving on to the next. This means that all nodes proceed in lock step.
+When a session was created in BOS v1, BOS started a Kubernetes job called the Boot Orchestration Agent \(BOA\), which managed all of the nodes.
+BOA moved through one phase at a time, ensuring that all nodes had completed the phase before moving on to the next. This meant that all nodes proceeded in lock step.
 
 BOS v2 does away with BOA, replacing it with long-running operators that are each responsible for moving nodes through a particular phase transition.
 These operators monitor nodes individually, not as a group, allowing each node to proceed at its own pace, improving retry handling and speeding up the overall booting process.
 
 ## The CLI
 
-If no version is specified, the BOS CLI defaults to the `v2` endpoints. `cray bos <command>` defaults to `cray bos v2 <command>`. This is a change from the previous release.
+If no version is specified, the BOS CLI defaults to the `v2` endpoints. `cray bos <command>` defaults to `cray bos v2 <command>`.
 To avoid compatibility issues when the CLI's default version changes, scripts using the CLI should always explicitly specify a version.
 The behavior of defaulting to a version when the version parameter is omitted is a convenience to users and is not intended for scripts.

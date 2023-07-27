@@ -511,12 +511,12 @@ Follow the [Added Hardware](../network/management_network/added_hardware.md) pro
       configuration to include any new compute nodes added to the system.
    * **If PBS Pro is the installed workload manager**: *Coming soon*
 
-1. (`ncn#`) Use the Boot Orchestration Service \(BOS\) to power on and boot the nodes.
+1. (`ncn-mw#`) Use the Boot Orchestration Service \(BOS\) to power on and boot the nodes.
 
     Use the appropriate BOS template for the node type.
 
     ```bash
-    cray bos v1 session create --template-uuid cle-VERSION \
+    cray bos v2 sessions create --template-name cle-VERSION \
         --operation reboot --limit x3000c0s27b0n0,x3000c0s27b0n1,x3000c0s27b0n2,x3000c0s27b00n3
     ```
 

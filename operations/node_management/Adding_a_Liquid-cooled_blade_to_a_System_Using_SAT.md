@@ -89,7 +89,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
       If it is unclear which session template is in use, proceed to the next substep.
 
       ```bash
-      cray bos v1 sessiontemplate list
+      cray bos v2 sessiontemplates list
       ```
 
    1. Find the node xnames with `sat status`. In this example, the target blade is in slot `x9000c3s0`.
@@ -126,7 +126,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    1. Find the required `templateName` value with BOS.
 
       ```bash
-      cray bos v1 session describe BOS_SESSION | grep templateName
+      cray bos v2 sessions describe BOS_SESSION | grep templateName
       ```
 
       Example output:
@@ -138,7 +138,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    1. Determine the list of xnames associated with the desired session template.
 
       ```bash
-      cray bos v1 sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
+      cray bos v2 sessiontemplates describe SESSION_TEMPLATE_NAME | grep node_list
       ```
 
       Example output:

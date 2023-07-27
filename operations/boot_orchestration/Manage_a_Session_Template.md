@@ -13,34 +13,21 @@ and the CLI will print the underlying call to the API in the output.
 
 ## Session template framework
 
-When creating a new BOS session template, it can be helpful to start with a framework and then edit it as needed. Use the following command to retrieve the BOS session template framework:
+When creating a new BOS session template, it can be helpful to start with a framework and then edit it as needed.
 
-(`ncn-mw#`) v2 command:
+(`ncn-mw#`) Use the following command to retrieve the BOS session template framework:
 
 ```bash
 cray bos v2 sessiontemplatetemplate list --format json
 ```
 
-(`ncn-mw#`) v1 command:
-
-```bash
-cray bos v1 sessiontemplatetemplate list --format json
-```
-
 ## Create a session template
 
-The following command takes a JSON input file that contains the information required to create a new BOS session template. It reads it in and creates a BOS session template using the BOS API.
-
-(`ncn-mw#`) v2 command:
+(`ncn-mw#`) The following command takes a JSON input file that contains the information required to create a new BOS session template.
+It reads it in and creates a BOS session template using the BOS API.
 
 ```bash
 cray bos v2 sessiontemplates create --file <INPUT_FILE> --name <NEW_TEMPLATE_NAME>
-```
-
-(`ncn-mw#`) v1 command:
-
-```bash
-cray bos v1 sessiontemplate create --file <INPUT_FILE> --name <NEW_TEMPLATE_NAME>
 ```
 
 The following is an example of an input file:
@@ -69,16 +56,10 @@ The following is an example of an input file:
 
 ## List all session templates
 
-(`ncn-mw#`) List all session templates (BOS v2 command):
+(`ncn-mw#`) List all session templates:
 
 ```bash
 cray bos v2 sessiontemplates list --format json
-```
-
-(`ncn-mw#`) List all session templates (BOS v1 command):
-
-```bash
-cray bos v1 sessiontemplate list --format json
 ```
 
 Example output:
@@ -113,16 +94,10 @@ Example output:
 
 ## View a session template
 
-(`ncn-mw#`) v2 command:
+(`ncn-mw#`) View a session template:
 
 ```bash
 cray bos v2 sessiontemplates describe <SESSION_TEMPLATE_NAME> --format json
-```
-
-(`ncn-mw#`) v1 command:
-
-```bash
-cray bos v1 sessiontemplate describe <SESSION_TEMPLATE_NAME> --format json
 ```
 
 Example output:
@@ -153,16 +128,8 @@ Example output:
 
 ## Delete a session template
 
-Remove an existing session template with the following commands:
-
-(`ncn-mw#`) v2 command:
+(`ncn-mw#`) Remove an existing session template with the following command:
 
 ```bash
 cray bos v2 sessiontemplates delete <SESSION_TEMPLATE_NAME>
-```
-
-(`ncn-mw#`) v1 command:
-
-```bash
-cray bos v1 sessiontemplate delete <SESSION_TEMPLATE_NAME>
 ```

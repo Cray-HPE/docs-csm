@@ -40,7 +40,7 @@ features are listed first).
 ### Deprecated in CSM 1.3
 
 * [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) v1
-  * BOS v1 will be removed in CSM 1.6.
+  * BOS v1 is removed in CSM 1.6.
   * The [Cray CLI](../../glossary.md#cray-cli-cray) changed in CSM 1.4 so that it defaults to BOS v2 when no version is explicitly specified in BOS commands.
 
 ### Deprecated in CSM 1.2
@@ -48,8 +48,8 @@ features are listed first).
 * [Hardware Management Notification Fanout Daemon (HMNFD)](../../glossary.md#hardware-management-notification-fanout-daemon-hmnfd) v1 REST API
   * The v1 HMNFD APIs are targeted for removal in the CSM 1.5 release.
 * [Compute Rolling Upgrade Service (CRUS)](../../glossary.md#compute-rolling-upgrade-service-crus)
-  * CRUS will be removed in CSM 1.5.
-  * Enhanced [BOS](../../glossary.md#boot-orchestration-service-bos) functionality will replace CRUS. This includes the ability to stage changes to nodes that can be acted upon later when the node reboots.
+  * CRUS was removed in CSM 1.5.
+  * Enhanced [BOS](../../glossary.md#boot-orchestration-service-bos) functionality replaces CRUS. This includes the ability to stage changes to nodes that can be acted upon later when the node reboots.
     It also includes the ability to reboot nodes without specifying any boot artifacts, provided that the artifacts had been previously staged.
 * The `--template-body` option for the [BOS](../../glossary.md#boot-orchestration-service-bos) Cray CLI.
 

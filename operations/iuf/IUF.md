@@ -59,7 +59,7 @@ The following IUF topics are discussed in the sections below.
 - While IUF enables non-interactive deployment of product software, it does not automatically configure the software beyond merging new VCS release branch content to customer working branches. For example, if a product requires
   manual configuration, the administrator must stop IUF execution after the `update-vcs-config` stage, perform the manual configuration steps, and then resume with the next IUF stage (`update-cfs-config`).
 - IUF leverages `sat bootprep` for CFS configuration and image creation. It is intended to be used with the configuration files provided in the HPC CSM Software Recipe and requires the administrator to verify and customize
-  those configurations to their specific needs. Note that `sat` capabilities used by IUF rely on BOS V2.
+  those configurations to their specific needs.
 - IUF will fail and provide feedback to the administrator in the event of an error, but it cannot automatically resolve issues.
 - IUF does not handle many aspects of installs and upgrades of CSM itself and cannot be used until a base level of CSM functionality is present.
 - The `management-nodes-rollout` stage does not automatically upgrade `ncn-m001`. This node must be upgraded using non-IUF methods described in the IUF documentation.
