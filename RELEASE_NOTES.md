@@ -5,7 +5,6 @@
 ## New
 
 * v1 of Power Control Service (PCS) is active.
-* Cray CLI will default to version 2 (v2) for BOS, if a version is not specified.
 
 ### Monitoring
 
