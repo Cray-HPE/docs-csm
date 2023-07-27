@@ -29,8 +29,8 @@
 # upgrade and by running redeploy_monitoring_stack_to_nexus.sh.
 
 function validate_all_daemons_are_running_nexus_image() {
-  for node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
-    for each in $(ssh ${node} ${ssh_options} "podman ps --format {{.Image}}" ); do
+  for node in $(ceph orch host ls -f json | jq -r '.[].hostname'); do
+    for each in $(ssh ${node} ${ssh_options} "podman ps --format {{.Image}}"); do
       if [[ -z $(echo $each | grep "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io") && -z $(echo $each | grep "localhost/registry") ]]; then
         echo "$each is still being used. Not all Ceph daemons are using an image in Nexus."
         echo "The local registry should not be disabled until no Ceph daemons are using images from the local registry. Exiting."
@@ -44,7 +44,7 @@ function disable_local_registries() {
   echo "Disabling local docker registries"
   systemctl_force="--now"
 
-  for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
+  for storage_node in $(ceph orch host ls -f json | jq -r '.[].hostname'); do
     #shellcheck disable=SC2029
     if ssh ${storage_node} ${ssh_options} "systemctl disable registry.container.service ${systemctl_force}"; then
       if ! ssh ${storage_node} ${ssh_options} "systemctl is-enabled registry.container.service"; then

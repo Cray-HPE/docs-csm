@@ -50,9 +50,9 @@ function verify_monitoring_stack() {
     redeploy_failed_monitoring_daemons
     check_monitoring_daemons_using_nexus_image "false"
     if [[ $? -eq 0 ]]; then
-        monitoring_stack_redeployed="true"
+      monitoring_stack_redeployed="true"
     fi
-    mon_count=$(( mon_count + 1 ))
+    mon_count=$((mon_count + 1))
     if [[ $mon_count -eq 10 ]] && [[ $monitoring_stack_redeployed != "true" ]]; then
       echo "ERROR Redeploying monitoring stack onto images in Nexus. Manually investigate Ceph to see why monitoring stack cannot redeploy."
       echo "Run 'ceph health detail'."
@@ -69,7 +69,7 @@ function redeploy_failed_monitoring_daemons() {
   until [[ $should_recheck == 0 ]]; do
     should_recheck=0
     for daemon in "prometheus" "node-exporter" "alertmanager" "grafana"; do
-      # using grep to get the info below. jq cannot be used 
+      # using grep to get the info below. jq cannot be used
       # becasue some ceph 'event' values are incorrectly formatted and jq fails to filter json
       daemons_not_running=$(ceph orch ps --daemon_type $daemon | grep -v 'running' | tail -n+2 | awk '{print $1}')
       for each in $daemons_not_running; do
@@ -99,8 +99,8 @@ function check_monitoring_daemons_using_nexus_image() {
   echo "Checking that monitoring daemons are using the image in Nexus."
   all_using_nexus_image="true"
   for daemon in "prometheus" "node-exporter" "alertmanager" "grafana"; do
-    for node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
-      for each in $(ssh ${node} ${ssh_options} "podman ps --filter name=$daemon --format='{{.Image}},{{.ID}}'" ); do
+    for node in $(ceph orch host ls -f json | jq -r '.[].hostname'); do
+      for each in $(ssh ${node} ${ssh_options} "podman ps --filter name=$daemon --format='{{.Image}},{{.ID}}'"); do
         image=$(echo $each | awk -F, '{print $1}')
         container_id=$(echo $each | awk -F, '{print $2}')
         if [[ -z $(echo $image | grep "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io") ]]; then
