@@ -8235,9 +8235,9 @@ Information on the status of a session.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |start_time|string|false|none|When the session was created.|
-|end_time|string|false|none|When the session completed.|
+|end_time|string¦null|false|none|When the session completed.<br>A null value means the session has not ended.|
 |status|string|false|none|The status of a session.|
-|error|string|false|none|Error which prevented the session from running|
+|error|string¦null|false|none|Error which prevented the session from running.<br>A null value means the session has not encountered an error.|
 
 #### Enumerated Values
 
@@ -8442,7 +8442,7 @@ Detailed information on the timing of a session.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |start_time|string|false|none|When the session was created.|
-|end_time|string|false|none|When the session completed.|
+|end_time|string¦null|false|none|When the session completed.<br>A null value means the session has not ended.|
 |duration|string|false|none|The current duration of the on-going session or final duration of the completed session.|
 
 <h2 id="tocS_V2SessionExtendedStatus">V2SessionExtendedStatus</h2>
