@@ -40,24 +40,24 @@ UANs require CPS and DVS to boot from images. These services are configured in d
 check that DVS and CPS are both healthy, and DVS is running on all worker nodes. Run the following commands to check DVS and CPS:
 
 ```bash
-ncn-m001#  kubectl get nodes -l cps-pm-node=True -o custom-columns=":metadata.name" --no-headers
+ncn-m001# kubectl get nodes -l cps-pm-node=True -o custom-columns=":metadata.name" --no-headers
 ```
 
 Example output:
 
-```
+```text
 ncn-w001
 ncn-w002
 ```
 
 ```bash
-ncn-m001#  for node in `kubectl get nodes -l cps-pm-node=True -o custom-columns=":metadata.name" --no-headers`; do
+ncn-m001# for node in `kubectl get nodes -l cps-pm-node=True -o custom-columns=":metadata.name" --no-headers`; do
 ssh $node "lsmod | grep '^dvs '"
 ```
 
 Example output:
 
-```
+```text
 done
 ncn-w001
 ncn-w002
@@ -74,13 +74,13 @@ Similarly, running `systemctl status cfs-state-reporter` will show a status of S
 
 1. Verify the `spire-agent` service is enabled and running.
 
-   ```
+   ```bash
    uan# systemctl status spire-agent
    ```
 
    Example output:
 
-   ```
+   ```text
    ● spire-agent.service - SPIRE Agent
       Loaded: loaded (/usr/lib/systemd/system/spire-agent.service; enabled; vendor preset: enabled)
       Active: active (running) since Wed 2021-02-24 14:27:33 CST; 19h ago
@@ -92,13 +92,13 @@ Similarly, running `systemctl status cfs-state-reporter` will show a status of S
 
 1. Verify `cfs-state-reporter` is healthy and returns SUCCESS.
 
-   ```
+   ```bash
    uan# systemctl status cfs-state-reporter
    ```
 
    Example output:
 
-   ```
+   ```text
    ● cfs-state-reporter.service - cfs-state-reporter reports configuration level of the system
       Loaded: loaded (/usr/lib/systemd/system/cfs-state-reporter.service; enabled; vendor preset: enabled)
       Active: inactive (dead) since Wed 2021-02-24 14:29:51 CST; 19h ago

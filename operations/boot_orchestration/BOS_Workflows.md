@@ -3,11 +3,11 @@
 The following workflows present a high-level overview of common Boot Orchestration Service \(BOS\) operations.
 These workflows depict how services interact with each other when booting, configuring, or shutting down nodes. They also help provide a quicker and deeper understanding of how the system functions.
 
-- [Terminology](#terminology)
-- [Workflows](#workflows)
-  - [Boot and configure nodes](#boot-and-configure-nodes)
-  - [Reconfigure nodes](#reconfigure-nodes)
-  - [Power off nodes](#power-off-nodes)
+* [Terminology](#terminology)
+* [Workflows](#workflows)
+  * [Boot and configure nodes](#boot-and-configure-nodes)
+  * [Reconfigure nodes](#reconfigure-nodes)
+  * [Power off nodes](#power-off-nodes)
 
 ## Terminology
 
@@ -30,16 +30,16 @@ CAPMC interfaces directly with the Redfish APIs to the controller infrastructure
 
 The set of allowed operations for a session are:
 
-- Boot – Boot nodes that are powered off.
-- Configure – Reconfigure the nodes using the Configuration Framework Service \(CFS\).
-- Reboot – Gracefully power down nodes that are on and then power them back up.
-- Shutdown – Gracefully power down nodes that are on.
+* Boot – Boot nodes that are powered off.
+* Configure – Reconfigure the nodes using the Configuration Framework Service \(CFS\).
+* Reboot – Gracefully power down nodes that are on and then power them back up.
+* Shutdown – Gracefully power down nodes that are on.
 
 The following workflows are included in this document:
 
-- [Boot and configure nodes](#boot-and-configure-nodes)
-- [Reconfigure nodes](#reconfigure-nodes)
-- [Power off nodes](#power-off-nodes)
+* [Boot and configure nodes](#boot-and-configure-nodes)
+* [Reconfigure nodes](#reconfigure-nodes)
+* [Power off nodes](#power-off-nodes)
 
 <a name="boot-and-configure"></a>
 
