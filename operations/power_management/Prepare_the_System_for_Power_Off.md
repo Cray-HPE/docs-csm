@@ -25,7 +25,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
    See the "SAT Authentication" section in the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
 
-1. Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
+1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
 
    There will be separate session templates for UANs and computes nodes.
 
@@ -56,24 +56,24 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     1. Find the `bos_session` value via the Configuration Framework Service (CFS).
 
        ```bash
-       cray cfs components describe XNAME | grep bos_session
+       cray cfs components describe XNAME --format toml | grep bos_session
        ```
 
        Example output:
 
-       ```text
+       ```toml
        bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
        ```
 
-    1. Find the required `templateUuid` value with BOS.
+    1. Find the required `templateName` value with BOS.
 
        ```bash
-       cray bos v2 sessions describe BOS_SESSION | grep templateName
+       cray bos v2 sessions describe BOS_SESSION --format toml | grep templateName
        ```
 
        Example output:
 
-       ```text
+       ```toml
        templateName = "compute-nid1-4-sessiontemplate"
        ```
 
@@ -83,23 +83,23 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
        cray bos v2 sessiontemplates describe SESSION_TEMPLATE_NAME | egrep "node_list|node_roles_groups|node_groups"
        ```
 
-       Example output(s):
+       Example outputs:
 
-       ```text
+       ```toml
        node_list = [ "x3000c0s19b1n0", "x3000c0s19b2n0", "x3000c0s19b3n0", "x3000c0s19b4n0",]
        ```
 
-       ```text
+       ```toml
        node_roles_groups = [ "Compute",]
        ```
 
-1. Use sat to capture state of the system before the shutdown.
+1. (`ncn-mw#`) Use SAT to capture state of the system before the shutdown.
 
     ```bash
     sat bootsys shutdown --stage capture-state
     ```
 
-1. Optional system health checks.
+1. (`ncn-mw#`) Optional system health checks.
 
     1. Use the System Diagnostic Utility (SDU) to capture current state of system before the shutdown.
 
@@ -247,7 +247,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         lfs df
         ```
 
-1. Check for running sessions.
+1. (`ncn-mw#`) Check for running sessions.
 
     ```bash
     sat bootsys shutdown --stage session-checks 2>&1 | tee sat.session-checks
@@ -271,9 +271,9 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     If active sessions are running, either wait for them to complete or cancel the session. See the following step.
 
-1. Cancel the running BOS sessions.
+1. (`ncn-mw#`) Cancel the running BOS sessions.
 
-    1. Identify the BOS Sessions to delete.
+    1. Identify the BOS sessions to delete.
 
         ```bash
         cray bos v2 sessions list --format json
@@ -307,6 +307,6 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     scontrol update NodeName=ALL State=DRAIN Reason="Shutdown"
     ```
 
-## Next Step
+## Next step
 
 Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
