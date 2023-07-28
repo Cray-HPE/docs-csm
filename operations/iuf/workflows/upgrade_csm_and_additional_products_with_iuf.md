@@ -69,7 +69,7 @@ the steps below it provide detailed instructions which must be executed in the o
 1. CSM Stage 0.6
 
    Follow the CSM
-   [Stage 0.6 - Upgrade Ceph and stop local Docker registries](../../../upgrade/Stage_0_Prerequisites.md#stage-06---enable-smartmon-metrics-on-storage-ncns)
+   [Stage 0.6 - Enable `Smartmon` Metrics on Storage NCNs](../../../upgrade/Stage_0_Prerequisites.md#stage-06---enable-smartmon-metrics-on-storage-ncns)
    instructions
 
 1. Backup
