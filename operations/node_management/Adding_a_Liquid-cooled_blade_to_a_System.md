@@ -1,22 +1,24 @@
 # Adding a Liquid-cooled Blade to a System
 
-This procedure will add a liquid-cooled blades from an HPE Cray EX system.
+This procedure will add a liquid-cooled blades to an HPE Cray EX system.
 
 ## Prerequisites
 
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
-* Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
+* The [Cray command line interface \(CLI\) tool](../../glossary.md#cray-cli-cray)) is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
+* Knowledge of whether [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is operating over the
+  [Node Management Network (NMN)](../../glossary.md#node-management-network-nmn) or the [High Speed Network (HSN)](../../glossary.md#high-speed-network-hsn).
 * Blade is being added to an existing liquid-cooled cabinet in the system.
-* The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.
-* The System Layout Service (SLS) must have the desired HSN configuration.
+* The [Slingshot](../../glossary.md#slingshot) fabric must be configured with the desired topology for desired state of the blades in the system.
+* The [System Layout Service (SLS)](../../glossary.md#system-layout-service-sls) must have the desired HSN configuration.
 * Check the status of the high-speed network (HSN) and record link status before the procedure.
 * Review the following command examples.
-  The commands can be used to capture the required values from the HSM `ethernetInterfaces` table and write the values to a file.
-  The file then can be used to automate subsequent commands in this procedure, for example:
+
+    The following commands can be used to capture the required values from the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) `ethernetInterfaces` table and
+    write the values to a file, which can then be used to automate subsequent commands in this procedure.
 
     ```bash
-    ncn# mkdir blade_swap_scripts; cd blade_swap_scripts
-    ncn# cat blade_query.sh
+    ncn-mw# mkdir blade_swap_scripts; cd blade_swap_scripts
+    ncn-mw# cat blade_query.sh
     ```
 
     Example output:
@@ -33,8 +35,8 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     ```
 
     ```bash
-    ncn# ./blade_query.sh x1000c0s1 x1000c0s1.json
-    ncn# cat x1000c0s1.json
+    ncn-mw# ./blade_query.sh x1000c0s1 x1000c0s1.json
+    ncn-mw# cat x1000c0s1.json
     ```
 
     Example output:
@@ -49,13 +51,13 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     To delete an`ethernetInterfaces` entry using `curl`:
 
     ```bash
-    ncn# for ID in $(cat x1000c0s1.json | jq -r '.ID'); do cray hsm inventory ethernetInterfaces delete $ID; done
+    ncn-mw# for ID in $(cat x1000c0s1.json | jq -r '.ID'); do cray hsm inventory ethernetInterfaces delete $ID; done
     ```
 
     To insert an `ethernetInterfaces` entry using `curl`:
 
     ```bash
-    ncn# while read  PAYLOAD ; do
+    ncn-mw# while read  PAYLOAD ; do
             curl -H "Authorization: Bearer $TOKEN" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' \
                 -H 'Content-Type: application/json' \
                 --data-raw "$(echo $PAYLOAD | jq -c '{ComponentID: .xname,Description: .Desc,MACAddress: .MAC,IPAddress: .IP}')"
@@ -88,10 +90,12 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     hms-discovery    */3 * * * *     True         0       117s             15d
     ```
 
-1. Determine if the destination chassis slot is populated. This example is checking slot 0 in chassis 3 of cabinet `x1005`.
+1. Determine if the destination chassis slot is populated.
+
+    This example is checking slot 0 in chassis 3 of cabinet `x1005`.
 
     ```bash
-    ncn# cray hsm state components describe x1005c3s0 --format toml
+    ncn-mw# cray hsm state components describe x1005c3s0 --format toml
     ```
 
     Example output:
@@ -115,7 +119,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     **Skip this step if the chassis slot is unpopulated**.
 
     ```bash
-    ncn# cray capmc get_xname_status create --xnames x1005c3s0 --format toml
+    ncn-mw# cray capmc get_xname_status create --xnames x1005c3s0 --format toml
     ```
 
     Example output:
@@ -129,7 +133,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     If the slot is powered on, then power the chassis slot off.
 
     ```bash
-    ncn# cray capmc xname_off create --xnames x1005c3s0 --recursive true
+    ncn-mw# cray capmc xname_off create --xnames x1005c3s0 --recursive true
     ```
 
 1. Install the the blade into the system into the desired location.
@@ -137,7 +141,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 1. Obtain an authentication token to access the API gateway.
 
     ```bash
-    ncn# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+    ncn-mw# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
                             -d client_id=admin-client \
                             -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
                             https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
@@ -224,10 +228,11 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
 1. Rediscover the `ChassisBMC` (the example shows cabinet 1005, chassis 3).
 
-   Rediscovering the `ChassisBMC` will update HSM to become aware of the newly populated slot and allow CAPMC to perform power actions on the slot.
+   Rediscovering the `ChassisBMC` will update HSM to become aware of the newly populated slot and allow
+   [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) to perform power actions on the slot.
 
     ```bash
-    ncn# cray hsm inventory discover create --xnames x1005c3b0
+    ncn-mw# cray hsm inventory discover create --xnames x1005c3b0
     ```
 
 1. Verify that discovery of the `ChassisBMC` has completed.
@@ -235,7 +240,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     That is, verify that `LastDiscoveryStatus` = `DiscoverOK`.
 
     ```bash
-    ncn# cray hsm inventory redfishEndpoints describe x1005c3b0 --format json
+    ncn-mw# cray hsm inventory redfishEndpoints describe x1005c3b0 --format json
     ```
 
     Example output:
@@ -288,7 +293,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     The example enables slot 0, chassis 3, in cabinet 1005.
 
     ```bash
-    ncn# cray hsm state components enabled update --enabled true x1005c3s0
+    ncn-mw# cray hsm state components enabled update --enabled true x1005c3s0
     ```
 
 1. Power on the chassis slot.
@@ -296,10 +301,11 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     The example powers on slot 0, chassis 3, in cabinet 1005.
 
     ```bash
-    ncn# cray capmc xname_on create --xnames x1005c3s0 --recursive true
+    ncn-mw# cray capmc xname_on create --xnames x1005c3s0 --recursive true
     ```
 
-1. Wait at least three minutes for the blade to power on and the node controllers (BMCs) to be discovered.
+1. Wait at least three minutes for the blade to power on and the [node controllers](../../glossary.md#node-controller-nc)
+   ([BMCs](../../glossary.md#baseboard-management-controller-bmc)) to be discovered.
 
 #### Verify that discovery has completed
 
@@ -308,7 +314,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     Run this command for each BMC in the blade (`x1005c3s0b0` and `x1005c3s0b1` in this example):
 
     ```bash
-    ncn# cray hsm inventory redfishEndpoints describe x1005c3s0b0 --format json
+    ncn-mw# cray hsm inventory redfishEndpoints describe x1005c3s0b0 --format json
     ```
 
     Example output:
@@ -345,13 +351,13 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
         1. Verify that the node BMC is pingable:
 
             ```bash
-            ncn# ping x1005c3s0b0
+            ncn-mw# ping x1005c3s0b0
             ```
 
         1. If the BMC is not pingable, then verify that the chassis slot has power.
 
             ```bash
-            ncn# cray capmc get_xname_status create --xnames x1005c3s0
+            ncn-mw# cray capmc get_xname_status create --xnames x1005c3s0
             ```
 
     * If the Redfish endpoint is in `HTTPsGetFailed`:
@@ -359,13 +365,13 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
         1. Verify that the node BMC is pingable:
 
             ```bash
-            ncn# ping x1005c3s0b0
+            ncn-mw# ping x1005c3s0b0
             ```
 
         1. If the BMC is pingable, then verify that the node BMC is configured with the expected credentials.
 
             ```bash
-            ncn# curl -k -u root:password https://x1005c3s0b0/redfish/v1/Managers
+            ncn-mw# curl -k -u root:password https://x1005c3s0b0/redfish/v1/Managers
             ```
 
 1. Clear out the existing Redfish event subscriptions from the BMCs on the blade.
@@ -373,13 +379,13 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     1. Set the environment variable `SLOT` corresponding to the blades location:
 
         ```bash
-        ncn# SLOT="x1005c3s0"
+        ncn-mw# SLOT="x1005c3s0"
         ```
 
     1. Clear the Redfish event subscriptions:
 
         ```bash
-        ncn# for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep $SLOT); do
+        ncn-mw# for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep $SLOT); do
             PASSWD=$(cray scsd bmc creds list --targets $BMC --format json | jq .Targets[].Password -r)
             SUBS=$(curl -sk -u root:$PASSWD https://${BMC}/redfish/v1/EventService/Subscriptions | jq -r '.Members[]."@odata.id"')
             for SUB in $SUBS; do
@@ -410,19 +416,19 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     For a blade with four nodes per blade:
 
     ```bash
-    ncn# cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+    ncn-mw# cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
     For a blade with two nodes per blade:
 
     ```bash
-    ncn# cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b1n0
+    ncn-mw# cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b1n0
     ```
 
 1. Verify that the nodes are enabled in the HSM.
 
     ```bash
-    ncn# cray hsm state components query create --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1 --format toml
+    ncn-mw# cray hsm state components query create --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1 --format toml
     ```
 
     Partial example output:
@@ -443,72 +449,69 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
 #### Power on and boot the nodes
 
-Use boot orchestration to power on and boot the nodes. Specify the appropriate BOS template for the node type.
+Use boot orchestration to power on and boot the nodes. Specify the appropriate [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) template for the node type.
 
-1. Determine how the BOS Session template references compute hosts.
+1. Determine how the BOS session template references compute hosts.
 
     Typically, they are referenced by their `Compute` role.
-    However, if they are referenced by component name (xname), then these new nodes should added to the BOS Session template.
+    However, if they are referenced by component name (xname), then these new nodes should added to the BOS session template.
 
     ```bash
-    ncn# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-    ncn# cray bos sessiontemplate describe $BOS_TEMPLATE --format json|jq '.boot_sets[] | select(.node_list)'
+    ncn-mw# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+    ncn-mw# cray bos sessiontemplate describe $BOS_TEMPLATE --format json|jq '.boot_sets[] | select(.node_list)'
     ```
 
     * If this query returns empty, then skip to booting the nodes.
-    * If this query returns with data, then one or more boot sets within the BOS Session template
+    * If this query returns with data, then one or more boot sets within the BOS session template
       reference nodes explicitly by xname. Consider adding the new nodes to this list (sub-step 1) or adding them on the command line (sub-step 2).
 
-    1. Adding new nodes to the list.
+    1. Add new nodes to the list.
 
-       1. Dump the current Session template.
+       1. Dump the current session template.
 
           ```bash
-          ncn# cray bos sessiontemplate describe $BOS_TEMPLATE --format json > tmp.txt
+          ncn-mw# cray bos sessiontemplate describe $BOS_TEMPLATE --format json > tmp.txt
           ```
 
        1. Edit the `tmp.txt` file, adding the new nodes to the `node_list`.
 
-          ```bash
-          ncn# vi tmp.txt
-          ```
-
-    1. Create the Session template.
+    1. Create the session template.
 
        1. Set the name of the template.
 
-          The name of the Session template is determined by the name provided to the `--name` option on the command line.
-          Use the current value of `$BOS_TEMPLATE` if wanting to overwrite the existing Session template.
+          The name of the session template is determined by the name provided to the `--name` option on the command line.
+          Use the current value of `$BOS_TEMPLATE` if wanting to overwrite the existing session template.
           If wanting to use the current value, then skip this sub-step.
           Otherwise, provide a different name for `BOS_TEMPLATE` which will be used the `--name` option.
           The name specified in `tmp.txt` is overridden by the value provided to the `--name` option.
 
           ```bash
-          ncn# BOS_TEMPLATE="New-Session-Template-Name"
+          ncn-mw# BOS_TEMPLATE="New-Session-Template-Name"
           ```
 
-       1. Create the Session template.
+       1. Create the session template.
 
           ```bash
-          ncn# cray bos sessiontemplate create --file tmp.txt --name $BOS_TEMPLATE
+          ncn-mw# cray bos sessiontemplate create --file tmp.txt --name $BOS_TEMPLATE
           ```
 
-       1. Verify that the Session template contains the additional nodes and the proper name.
+       1. Verify that the session template contains the additional nodes and the proper name.
 
            ```bash
-           ncn# cray bos sessiontemplate describe $BOS_TEMPLATE --format json
+           ncn-mw# cray bos sessiontemplate describe $BOS_TEMPLATE --format json
            ```
 
     1. Boot the nodes.
 
        ```bash
-       ncn# cray bos session create --template-uuid $BOS_TEMPLATE \
+       ncn-mw# cray bos session create --template-uuid $BOS_TEMPLATE \
                 --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
        ```
 
-#### Check Firmware
+#### Check firmware
 
-1. Verify that the correct firmware versions are present for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
+1. Use [Firmware Action Service (FAS)](../../glossary.md#firmware-action-service-fas) to verify that the correct firmware versions are present for node BIOS,
+   node controller (nC), [NIC Mezzanine Card (NMC)](../../glossary.md#nic-mezzanine-card-nmc), GPUs, and so on.
 
     1. Review [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) to perform a dry run using FAS to verify firmware versions.
 
@@ -537,9 +540,10 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     services   cray-cps-wait-for-etcd-jb95m 0/1  Completed
     ```
 
-1. SSH to each worker node running CPS/DVS, and run ensure that there are no recurring `"DVS: merge_one"` error messages as shown.
+1. SSH to each worker node running [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps)/DVS, and
+   ensure that there are no recurring `"DVS: merge_one"` error messages as shown.
 
-    The error messages indicate that DVS is detecting an IP address change for one of the client nodes.
+    If found, these error messages indicate that DVS is detecting an IP address change for one of the client nodes.
 
     ```bash
     ncn-w# dmesg -T | grep "DVS: merge_one"
@@ -584,7 +588,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     1. Verify that each node hostname resolves to one IP address.
 
         ```bash
-        ncn# nslookup x1005c3s0b0n0
+        ncn-mw# nslookup x1005c3s0b0n0
         ```
 
         Example output with one IP address resolving:
@@ -600,7 +604,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     1. Reload the KEA configuration.
 
         ```bash
-        ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
+        ncn-mw# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
                 -d '{ "command": "config-reload",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea |jq
         ```
 
@@ -628,7 +632,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     If there are no DHCP leases, then there is a configuration error.
 
     ```bash
-    ncn# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
+    ncn-mw# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
             -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
     ```
 
@@ -651,7 +655,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     1. Show the `EthernetInterfaces` for the duplicate IP address:
 
        ```bash
-       ncn# cray hsm inventory ethernetInterfaces list --ip-address 10.100.0.105 --format json | jq
+       ncn-mw# cray hsm inventory ethernetInterfaces list --ip-address 10.100.0.105 --format json | jq
        ```
 
        Example output for an IP address that is associated with two MAC addresses:
@@ -682,13 +686,13 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     1. Delete the older entry.
 
        ```bash
-       ncn# cray hsm inventory ethernetInterfaces delete 0040a68350a4
+       ncn-mw# cray hsm inventory ethernetInterfaces delete 0040a68350a4
        ```
 
 1. Check DNS.
 
     ```bash
-    ncn# nslookup 10.100.0.105
+    ncn-mw# nslookup 10.100.0.105
     ```
 
     Example output:
@@ -703,5 +707,5 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
 1. Check SSH.
 
     ```bash
-    ncn# ssh x1005c3s0b0n0
+    ncn-mw# ssh x1005c3s0b0n0
     ```

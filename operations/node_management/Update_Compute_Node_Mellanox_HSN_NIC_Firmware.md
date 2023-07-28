@@ -7,7 +7,7 @@ required to perform the firmware and configuration updates.
 
 See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) for information about automated firmware updates using Redfish.
 
-## Time Required
+## Time required
 
 2-5 minutes for a firmware update and 1-3 minutes for a configuration update.
 

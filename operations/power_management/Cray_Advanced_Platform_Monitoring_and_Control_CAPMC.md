@@ -11,10 +11,6 @@ Administrators can use the `cray` CLI for power operations from any system that
 has HTTPS access to the
 [System Management Services](../network/Access_to_System_Management_Services.md).
 
-Third party software can access the API directly. Refer to the
-[CAPMC API](https://github.com/Cray-HPE/hms-capmc/blob/v1.31.0/api/swagger.yaml)
-documentation for detailed information about API options and features.
-
 The `cray capmc` command (see `--help`) can be used to control power to
 specific components by specifying the component NID, xname, or group.
 
