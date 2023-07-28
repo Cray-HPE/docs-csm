@@ -145,7 +145,7 @@ Run the following steps before starting any of the system configuration procedur
 
 ### 3.2 Verify and reset the BMCs
 
-The following steps will verify if IP addresses are assigned to the BMC nodes and reset the nodes:
+The following steps will verify if IP addresses are assigned to the BMC nodes and then reset the nodes:
 
 1. (`pit#`) If the fabric switches, PDUs, and CMCs are to be dynamically discovered, then ensure that they are set to DHCP mode.
 
