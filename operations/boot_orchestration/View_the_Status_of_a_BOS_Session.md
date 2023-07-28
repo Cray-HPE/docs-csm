@@ -162,7 +162,7 @@ Example output:
 status_link = "/v1/session/f4eebe51-a217-46d0-8733-b9499a092042/status"
 complete = false
 start_time = "2020-07-22 13:39:07.706774"
-templateUuid = "cle-1.3.0"
+templateName = "cle-1.3.0"
 error_count = 4
 boa_job_name = "boa-f4eebe51-a217-46d0-8733-b9499a092042"
 in_progress = false

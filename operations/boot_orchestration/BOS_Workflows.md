@@ -18,17 +18,21 @@ These workflows depict how services interact with each other when booting, confi
 The following are mentioned in the workflows:
 
 * Boot Orchestration Service \(BOS\) is responsible for booting, configuring, and shutting down collections of nodes. The Boot Orchestration Service has the following components:
-  * A BOS session template is a collection of one or more boot sets. A boot set defines a collection of nodes and the information about the boot artifacts and parameters. Session templates also include information on what CFS configuration should be applied.
+  * A BOS session template is a collection of one or more boot sets. A boot set defines a collection of nodes and the information about the boot artifacts and parameters.
+    Session templates also include information on which [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) configuration should be applied.
   * BOS sessions provide a way to apply a template across a group of nodes and monitor the progress of those nodes as they move toward their desired state.
   * BOS operators interact with other services to perform actions on nodes, moving them toward their desired state. BOS operators are used only for BOS v2 operations.
   * Boot Orchestration Agent \(BOA\) is automatically launched to execute the session.
-  A BOA executes the given operation, and if the operation is a boot or a reboot, it also configures the nodes post-boot \(if configure is enabled\). BOA is used only for BOS v1 operations.
-* Cray Advanced Platform and Monitoring Control \(CAPMC\) service provides system-level power control for nodes in the system.
-CAPMC interfaces directly with the Redfish APIs to the controller infrastructure to effect power and environmental changes on the system.
-* Hardware State Manager \(HSM\) tracks the state of each node and its group and role associations.
-* Boot Script Service \(BSS\) stores per-node information about the iPXE boot script. Nodes consult BSS for boot artifacts \(kernel, `initrd`, image root\) and boot parameters when nodes boot or reboot.
-* The Simple Storage Service \(Ceph S3\) is an artifact repository that stores boot artifacts.
-* Configuration Framework Service \(CFS\) configures nodes using the configuration framework. Launches and aggregates the status from one or more Ansible instances against nodes \(node personalization\) or images \(image customization\).
+    A BOA executes the given operation; if the operation is a boot or a reboot, it also configures the nodes post-boot \(if enabled\).
+    BOA is used only for BOS v1 operations.
+* [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) service provides system-level power control for nodes in the system.
+  CAPMC interfaces directly with the Redfish APIs to the controller infrastructure to effect power and environmental changes on the system.
+* [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) tracks the state of each node and its group and role associations.
+* [Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss) stores per-node information about the iPXE boot script.
+  When booting or rebooting, nodes consult BSS for boot artifacts \(kernel, `initrd`, image root\) and boot parameters.
+* [Simple Storage Service (S3)](../../glossary.md#simple-storage-service-s3) is an artifact repository that stores boot artifacts.
+* CFS configures nodes using the configuration framework. Launches and aggregates the status from one or more Ansible instances against nodes
+  \(node personalization\) or images \(image customization\).
 
 ## BOS v2 workflows
 

@@ -12,8 +12,8 @@ has HTTPS access to the
 [System Management Services](../../network/Access_to_System_Management_Services.md).
 
 Third party software can access the API directly. Refer to the
-[PCS API](https://github.com/Cray-HPE/hms-power-control/blob/v1.4.0/api/swagger.yaml)
-documentation for detailed information about API options and features.
+[PCS API documentation](../../../api/power-control.md)
+for detailed information about API options and features.
 
 The `cray power` command (see `--help`) can be used to control power to
 specific components by specifying the component xname.
@@ -138,5 +138,5 @@ The `managementState` can be used to determine if the component's management end
 the last hardware scan and can be used to monitor system hardware readiness and availability.
 
 See the `/power-status` section in the
-[PCS API](https://github.com/Cray-HPE/hms-power-control/blob/v1.4.0/api/swagger.yaml) documentation for
-detailed information about the API options and features.
+[PCS API documentation](../../../api/power-control.md)
+for detailed information about the API options and features.

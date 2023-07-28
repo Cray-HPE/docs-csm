@@ -21,7 +21,9 @@ There are some different API responses in BOS v2 as well:
 
 - Listing sessions in BOS v2 results in full session records rather than just a list of the current session names.
 - The session status endpoint has also changed significantly. See [View the Status of a BOS Session](View_the_Status_of_a_BOS_Session.md) for more information on the session status endpoint.
-- BOS v2 leverages the Power Control Service (PCS).
+- BOS v2 leverages the [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs).
+
+For more information on the BOS API, see [BOS API](../../api/bos.md).
 
 ## Upgrading from v1 to v2
 
@@ -42,4 +44,4 @@ These operators monitor nodes individually, not as a group, allowing each node t
 
 If no version is specified, the BOS CLI defaults to the `v2` endpoints. `cray bos <command>` defaults to `cray bos v2 <command>`. This is a change from the previous release.
 To avoid compatibility issues when the CLI's default version changes, scripts using the CLI should always explicitly specify a version.
-The behavior of defaulting to a version when the version parameter is omitted is a convenience to users and is not intended for scripts.
+The behavior of defaulting to a version when the version parameter is omitted is a convenience intended for interactive use and is not intended for scripts.

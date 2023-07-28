@@ -1,18 +1,20 @@
 # Adding a Liquid-cooled Blade to a System
 
-This procedure will add a liquid-cooled blades from an HPE Cray EX system.
+This procedure will add a liquid-cooled blades to an HPE Cray EX system.
 
 ## Prerequisites
 
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
-* Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
+* The [Cray command line interface \(CLI\) tool](../../glossary.md#cray-cli-cray)) is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
+* Knowledge of whether [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is operating over the
+  [Node Management Network (NMN)](../../glossary.md#node-management-network-nmn) or the [High Speed Network (HSN)](../../glossary.md#high-speed-network-hsn).
 * Blade is being added to an existing liquid-cooled cabinet in the system.
-* The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.
-* The System Layout Service (SLS) must have the desired HSN configuration.
+* The [Slingshot](../../glossary.md#slingshot) fabric must be configured with the desired topology for desired state of the blades in the system.
+* The [System Layout Service (SLS)](../../glossary.md#system-layout-service-sls) must have the desired HSN configuration.
 * Check the status of the high-speed network (HSN) and record link status before the procedure.
-* (`ncn#`) Review the following command examples.
-  The commands can be used to capture the required values from the HSM `ethernetInterfaces` table and write the values to a file.
-  The file then can be used to automate subsequent commands in this procedure, for example:
+* (`ncn-mw#`) Review the following command examples.
+
+    The following commands can be used to capture the required values from the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) `ethernetInterfaces` table and
+    write the values to a file, which can then be used to automate subsequent commands in this procedure.
 
     ```bash
     mkdir blade_swap_scripts; cd blade_swap_scripts
@@ -88,7 +90,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     hms-discovery    */3 * * * *     True         0       117s             15d
     ```
 
-1. (`ncn#`) Determine if the destination chassis slot is populated.
+1. (`ncn-mw#`) Determine if the destination chassis slot is populated.
 
     This example is checking slot 0 in chassis 3 of cabinet `x1005`.
 
@@ -112,7 +114,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     If the state of the slot is `On` or `Off`, then the chassis slot is populated.
     If the state of the slot is `Empty`, then the chassis slot is not populated.
 
-1. (`ncn#`) Verify that the chassis slot is powered off.
+1. (`ncn-mw#`) Verify that the chassis slot is powered off.
 
     **Skip this step if the chassis slot is unpopulated**.
 
@@ -136,7 +138,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
 1. Install the blade into the system into the desired location.
 
-1. (`ncn#`) Obtain an authentication token to access the API gateway.
+1. (`ncn-mw#`) Obtain an authentication token to access the API gateway.
 
     ```bash
     export TOKEN=$(curl -s -S -d grant_type=client_credentials \
@@ -230,15 +232,16 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
 #### Re-enable `hms-discovery` cron job
 
-1. (`ncn#`) Rediscover the `ChassisBMC` (the example shows cabinet 1005, chassis 3).
+1. (`ncn-mw#`) Rediscover the `ChassisBMC` (the example shows cabinet 1005, chassis 3).
 
-   Rediscovering the `ChassisBMC` will update HSM to become aware of the newly populated slot and allow CAPMC to perform power actions on the slot.
+   Rediscovering the `ChassisBMC` will update HSM to become aware of the newly populated slot and allow
+   [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) to perform power actions on the slot.
 
     ```bash
     cray hsm inventory discover create --xnames x1005c3b0
     ```
 
-1. (`ncn#`) Verify that discovery of the `ChassisBMC` has completed.
+1. (`ncn-mw#`) Verify that discovery of the `ChassisBMC` has completed.
 
     That is, verify that `LastDiscoveryStatus` = `DiscoverOK`.
 
@@ -291,7 +294,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
 #### Enable and power on the chassis slot
 
-1. (`ncn#`) Enable the chassis slot.
+1. (`ncn-mw#`) Enable the chassis slot.
 
     The example enables slot 0, chassis 3, in cabinet 1005.
 
@@ -299,7 +302,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     cray hsm state components enabled update --enabled true x1005c3s0
     ```
 
-1. (`ncn#`) Power on the chassis slot.
+1. (`ncn-mw#`) Power on the chassis slot.
 
     The example powers on slot 0, chassis 3, in cabinet 1005.
 
@@ -307,11 +310,12 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     cray capmc xname_on create --xnames x1005c3s0 --recursive true
     ```
 
-1. Wait at least three minutes for the blade to power on and the node controllers (BMCs) to be discovered.
+1. Wait at least three minutes for the blade to power on and the [node controllers](../../glossary.md#node-controller-nc)
+   ([BMCs](../../glossary.md#baseboard-management-controller-bmc)) to be discovered.
 
 #### Verify that discovery has completed
 
-1. (`ncn#`) Verify that the two node BMCs in the blade have been discovered by the HSM.
+1. (`ncn-mw#`) Verify that the two node BMCs in the blade have been discovered by the HSM.
 
     Run this command for each BMC in the blade (`x1005c3s0b0` and `x1005c3s0b1` in this example):
 
@@ -350,13 +354,13 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
     * If the Redfish endpoint does not exist for a BMC, then verify the following:
 
-        1. (`ncn#`) Verify that the node BMC is pingable:
+        1. (`ncn-mw#`) Verify that the node BMC is pingable:
 
             ```bash
             ping x1005c3s0b0
             ```
 
-        1. (`ncn#`) If the BMC is not pingable, then verify that the chassis slot has power.
+        1. (`ncn-mw#`) If the BMC is not pingable, then verify that the chassis slot has power.
 
             ```bash
             cray capmc get_xname_status create --xnames x1005c3s0
@@ -364,19 +368,19 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
     * If the Redfish endpoint is in `HTTPsGetFailed`:
 
-        1. (`ncn#`) Verify that the node BMC is pingable:
+        1. (`ncn-mw#`) Verify that the node BMC is pingable:
 
             ```bash
             ping x1005c3s0b0
             ```
 
-        1. (`ncn#`) If the BMC is pingable, then verify that the node BMC is configured with the expected credentials.
+        1. (`ncn-mw#`) If the BMC is pingable, then verify that the node BMC is configured with the expected credentials.
 
             ```bash
             curl -k -u root:password https://x1005c3s0b0/redfish/v1/Managers
             ```
 
-1. (`ncn#`) Clear out the existing Redfish event subscriptions from the BMCs on the blade.
+1. (`ncn-mw#`) Clear out the existing Redfish event subscriptions from the BMCs on the blade.
 
     1. Set the environment variable `SLOT` to the blade's location.
 
@@ -402,7 +406,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
         Successfully deleted https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
         ```
 
-1. (`ncn#`) Enable the nodes in the HSM database.
+1. (`ncn-mw#`) Enable the nodes in the HSM database.
 
     For a blade with four nodes per blade:
 
@@ -440,12 +444,12 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
 #### Power on and boot the nodes
 
-Use boot orchestration to power on and boot the nodes. Specify the appropriate BOS template for the node type.
+Use boot orchestration to power on and boot the nodes. Specify the appropriate [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) template for the node type.
 
-1. (`ncn#`) Determine how the BOS Session template references compute hosts.
+1. (`ncn-mw#`) Determine how the BOS session template references compute hosts.
 
     Typically, they are referenced by their `Compute` role.
-    However, if they are referenced by component name (xname), then these new nodes should added to the BOS Session template.
+    However, if they are referenced by component name (xname), then these new nodes should added to the BOS session template.
 
     ```bash
     BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
@@ -453,12 +457,12 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
     ```
 
     * If this query returns empty, then skip to booting the nodes.
-    * If this query returns with data, then one or more boot sets within the BOS Session template
+    * If this query returns with data, then one or more boot sets within the BOS session template
       reference nodes explicitly by xname. Consider adding the new nodes to this list (sub-step 1) or adding them on the command line (sub-step 2).
 
-    1. (`ncn#`) Add new nodes to the list.
+    1. (`ncn-mw#`) Add new nodes to the list.
 
-       1. Dump the current Session template.
+       1. Dump the current session template.
 
           ```bash
           cray bos v1 sessiontemplate describe $BOS_TEMPLATE --format json > tmp.txt
@@ -466,12 +470,12 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
 
        1. Edit the `tmp.txt` file, adding the new nodes to the `node_list`.
 
-    1. (`ncn#`) Create the Session template.
+    1. (`ncn-mw#`) Create the session template.
 
        1. Set the name of the template.
 
-          The name of the Session template is determined by the name provided to the `--name` option on the command line.
-          Use the current value of `$BOS_TEMPLATE` if wanting to overwrite the existing Session template.
+          The name of the session template is determined by the name provided to the `--name` option on the command line.
+          Use the current value of `$BOS_TEMPLATE` if wanting to overwrite the existing session template.
           If wanting to use the current value, then skip this sub-step.
           Otherwise, provide a different name for `BOS_TEMPLATE` which will be used the `--name` option.
           The name specified in `tmp.txt` is overridden by the value provided to the `--name` option.
@@ -480,28 +484,29 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
           BOS_TEMPLATE="New-Session-Template-Name"
           ```
 
-       1. Create the Session template.
+       1. Create the session template.
 
           ```bash
           cray bos v1 sessiontemplate create --file tmp.txt --name $BOS_TEMPLATE
           ```
 
-       1. Verify that the Session template contains the additional nodes and the proper name.
+       1. Verify that the session template contains the additional nodes and the proper name.
 
            ```bash
            cray bos v1 sessiontemplate describe $BOS_TEMPLATE --format json
            ```
 
-    1. (`ncn#`) Boot the nodes.
+    1. (`ncn-mw#`) Boot the nodes.
 
        ```bash
        cray bos v1 session create --template-uuid $BOS_TEMPLATE \
             --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
        ```
 
-#### Check Firmware
+#### Check firmware
 
-1. Verify that the correct firmware versions are present for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
+1. Use [Firmware Action Service (FAS)](../../glossary.md#firmware-action-service-fas) to verify that the correct firmware versions are present for node BIOS,
+   node controller (nC), [NIC Mezzanine Card (NMC)](../../glossary.md#nic-mezzanine-card-nmc), GPUs, and so on.
 
     1. Review [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) to perform a dry run using FAS to verify firmware versions.
 
@@ -530,9 +535,10 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     services   cray-cps-wait-for-etcd-jb95m 0/1  Completed
     ```
 
-1. (`ncn-w#`) SSH to each worker node running CPS/DVS, and run ensure that there are no recurring `"DVS: merge_one"` error messages as shown.
+1. (`ncn-w#`) SSH to each worker node running [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps)/DVS, and
+   ensure that there are no recurring `"DVS: merge_one"` error messages as shown.
 
-    The error messages indicate that DVS is detecting an IP address change for one of the client nodes.
+    If found, these error messages indicate that DVS is detecting an IP address change for one of the client nodes.
 
     ```bash
     dmesg -T | grep "DVS: merge_one"
@@ -656,7 +662,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
 
 #### Check for duplicate IP address entries
 
-1. (`ncn#`) Check for duplicate IP address entries in the Hardware State Management Database (HSM).
+1. (`ncn-mw#`) Check for duplicate IP address entries in the Hardware State Management Database (HSM).
 
     Duplicate entries will cause DNS operations to fail.
 
@@ -701,7 +707,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
         address 10.100.0.105: There's already a reservation for this address"}]
         ```
 
-1. (`ncn#`) Check for active DHCP leases.
+1. (`ncn-mw#`) Check for active DHCP leases.
 
     If there are no DHCP leases, then there is a configuration error.
 
@@ -724,7 +730,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     ]
     ```
 
-1. (`ncn#`) If there are duplicate entries in the HSM as a result of this procedure (`10.100.0.105` in this example), then delete the duplicate entry.
+1. (`ncn-mw#`) If there are duplicate entries in the HSM as a result of this procedure (`10.100.0.105` in this example), then delete the duplicate entry.
 
     1. Show the `EthernetInterfaces` for the duplicate IP address:
 
@@ -763,7 +769,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
        cray hsm inventory ethernetInterfaces delete 0040a68350a4
        ```
 
-1. (`ncn#`) Check DNS.
+1. (`ncn-mw#`) Check DNS.
 
     ```bash
     nslookup 10.100.0.105
@@ -778,7 +784,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     105.0.100.10.in-addr.arpa        name = x1005c3s0b0n0.local.
     ```
 
-1. (`ncn#`) Check SSH.
+1. (`ncn-mw#`) Check SSH.
 
     ```bash
     ssh x1005c3s0b0n0
