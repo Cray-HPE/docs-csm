@@ -1,9 +1,9 @@
-#  Upgrade Ceph and enable `Smartmon` metrics on storage NCNs
+# Upgrade Ceph and enable `Smartmon` metrics on storage NCNs
 
 This procedure upgrades the Ceph version on storage nodes from `v16.2.9` to `v16.2.13`.
 The `v16.2.13` image is in Nexus and after Ceph has been upgraded, all Ceph daemons, except for the
 monitoring stack, will be using the image in Nexus. The next step uploads the Ceph monitoring container images
-to Nexus and redeploys the Ceph monitoring stack so that they use those images. Then the local Docker
+to Nexus and redeploys the Ceph monitoring stack so that they use the images in Nexus. Then the local Docker
 registries on storage nodes will be stopped. Finally, `Smartmon` metrics will be enabled on Storage nodes.
 
 ## Steps
