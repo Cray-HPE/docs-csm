@@ -42,10 +42,11 @@ shown here with numbered topics.
     1. [Validate CSM health before final NCN deployment](#3-validate-csm-health-before-final-ncn-deployment)
     1. [Deploy final NCN](#4-deploy-final-ncn)
     1. [Configure administrative access](#5-configure-administrative-access)
-    1. [Validate CSM health](#6-validate-csm-health)
-    1. [Configure Prometheus alert notifications](#7-configure-prometheus-alert-notifications)
-    1. [Prepare compute nodes](#8-prepare-compute-nodes)
-    1. [Troubleshooting installation problems](#9-troubleshooting-installation-problems)
+    1. [Upgrade Ceph and enable `Smartmon` metrics on storage NCNs](#6-upgrade-ceph-and-enable-smartmon-metrics-on-storage-ncns)
+    1. [Validate CSM health](#7-validate-csm-health)
+    1. [Configure Prometheus alert notifications](#8-configure-prometheus-alert-notifications)
+    1. [Prepare compute nodes](#9-prepare-compute-nodes)
+    1. [Troubleshooting installation problems](#10-troubleshooting-installation-problems)
 1. [Post-Installation](#post-installation)
     1. [Kubernetes encryption](#1-kubernetes-encryption)
     1. [Export Nexus data](#2-export-nexus-data)
@@ -197,7 +198,13 @@ of configuration by CFS in NCN personalization, and configuring the node BMCs (n
 
 See [Configure Administrative Access](../configure_administrative_access.md).
 
-### 6. Validate CSM health
+### 6. Upgrade Ceph and enable `Smartmon` metrics on storage NCNs
+
+Now that all management nodes have joined the Kubernetes cluster, Ceph should be upgraded and `Smartmon` metrics should be enabled on Storage NCNs.
+
+See [Upgrade Ceph and enable `Smartmon` metrics on storage nodes](../upgrade_ceph_enable_smartmon.md).
+
+### 7. Validate CSM health
 
 Now that all management nodes have joined the Kubernetes cluster, CSM services have been installed, and administrative access has been enabled, the health of the
 management nodes and all CSM services should be validated. There are no exceptions to running the tests--all can be run now.
@@ -207,7 +214,7 @@ management node has rebooted because of a crash, as part of doing a full system 
 
 See [Validate CSM Health](../../operations/validate_csm_health.md).
 
-### 7. Configure Prometheus alert notifications
+### 8. Configure Prometheus alert notifications
 
 Now that CSM has been installed and health has been validated, if the system management health monitoring tools (specifically Prometheus) are found to be useful, then
 email notifications can be configured for specific alerts defined in Prometheus.
@@ -217,7 +224,7 @@ Prometheus upstream documentation can be leveraged for an [Alert Notification Te
 See [Configure Prometheus Email Alert Notifications](../../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
 for an example configuration of an email alert notification for the Postgres replication alerts that are defined on the system.
 
-### 8. Prepare compute nodes
+### 9. Prepare compute nodes
 
 Some compute node types have special preparation steps, but most compute nodes are ready to be used now.
 
@@ -228,7 +235,7 @@ These compute node types require preparation:
 
 See [Prepare Compute Nodes](../prepare_compute_nodes.md).
 
-### 9. Troubleshooting installation problems
+### 10. Troubleshooting installation problems
 
 The installation of the CSM product requires knowledge of the various nodes and switches for the HPE Cray EX system.
 The procedures in this section should be referenced during the CSM install for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
