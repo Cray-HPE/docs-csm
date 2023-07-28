@@ -30,7 +30,7 @@ Run the following steps before starting any of the system configuration procedur
 
 1. (`pit#`) Download the SHCD to the `prep` directory.
 
-    This will need to be retrieved from the administrator's Cray deliverable.
+    The SHCD is contained in the administrator's Cray deliverable.
 
 1. Validate the SHCD.
 
@@ -65,7 +65,7 @@ this step may be skipped.
       - [Create `cabinets.yaml`](create_cabinets_yaml.md)
       - [Create `hmn_connections.json`](create_hmn_connections_json.md)
 
-1. (`pit#`) Confirm that the following files exist.
+1. (`pit#`) Confirm that the topology files exist.
 
    ```bash
    ls -l "${PITDATA}"/prep/{application_node_config.yaml,cabinets.yaml,hmn_connections.json,ncn_metadata.csv,switch_metadata.csv}
@@ -111,13 +111,13 @@ this step may be skipped.
 
 ### 4. Run CSI
 
-1. (`pit#`) Generate the initial configuration for CSI.
+(`pit#`) Generate the initial configuration for CSI.
 
-   This will validate whether the inputs for CSI are correct.
+This will validate whether the inputs for CSI are correct.
 
-   ```bash
-   csi config init
-   ```
+```bash
+csi config init
+```
 
 ### 5. Prepare Site Init
 
