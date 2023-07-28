@@ -13,9 +13,9 @@ This page covers the appropriate contents for a BOS session template in order to
   - [`<api_gateway>`](#api_gateway)
   - [`<timeout>`](#timeout)
   - [`<etag>`](#etag)
-  - [`interface[,<interface>][,<interface>]...`](#interfaceinterfaceinterface)
+  - [`<interface>[,<interface>][,<interface>]...`](#interfaceinterfaceinterface)
   - [`<ramroot>`](#ramroot)
-  - [Example `rootfs_provider_passthrough`](#example-rootfsproviderpassthrough)
+  - [Example `rootfs_provider_passthrough`](#example-rootfs_provider_passthrough)
 - [`root=` kernel parameter](#root-kernel-parameter)
 - [Example session template input file](#example-session-template-input-file)
 - [Creating a BOS session using the new template](#creating-a-bos-session-using-the-new-template)
@@ -36,7 +36,7 @@ The Content Projection Service \(CPS\) is an optional provider for `rootfs` on c
 The `rootfs_provider_passthrough` boot set parameter is customized according to the following format:
 
 ```text
-rootfs_provider_passthrough=<transport>:<api_gateway>:<timeout>:interface[,<interface>[,<interface>]...]:<ramroot>
+rootfs_provider_passthrough=<transport>:<api_gateway>:<timeout>:<interface>[,<interface>[,<interface>]...]:<ramroot>
 ```
 
 The following values need to be set in the boot set of the session template in order to make CPS the `rootfs` provider:
@@ -68,7 +68,7 @@ Can be left as an empty string to use the default value of 300 seconds.
 
 Lists the syntax in use. BOS fills in the S3 path and `etag` values, so the user does not need to fill in any data.
 
-### `interface[,<interface>][,<interface>]...`
+### `<interface>[,<interface>][,<interface>]...`
 
 A comma-separated list of interfaces to support. A minimum of one interface must be specified.
 

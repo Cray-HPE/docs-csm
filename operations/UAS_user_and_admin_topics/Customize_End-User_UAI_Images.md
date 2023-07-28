@@ -12,8 +12,8 @@ Some of the steps are specific to that activity, others would be common to or si
 ## Prerequisites
 
 * The administrator must be logged into a [Non-Compute Node (NCN)](../../glossary.md#non-compute-node-ncn) or a host that has administrative access to the HPE Cray EX System API Gateway
-* The administrator must have the HPE Cray EX System CLI (`cray` command) installed on the above host
-* The [HPE Cray EX System CLI]((../../glossary.md#cray-cli-cray)) must be configured (initialized - `cray init` command) to reach the HPE Cray EX System API Gateway
+* The administrator must have the [HPE Cray EX System CLI](../../glossary.md#cray-cli-cray) (`cray` command) installed on the above host
+* The HPE Cray EX System CLI must be configured (initialized - `cray init` command) to reach the HPE Cray EX System API Gateway
 * The administrator must be logged in as an administrator to the HPE Cray EX System CLI (`cray auth login` command)
 
 See [Configure the Cray CLI](../configure_cray_cli.md).
