@@ -20,7 +20,7 @@ The following are mentioned in the workflows:
 * Boot Orchestration Service \(BOS\) is responsible for booting, configuring, and shutting down collections of nodes. The Boot Orchestration Service has the following components:
   * A BOS session template is a collection of one or more boot sets. A boot set defines a collection of nodes and the information about the boot artifacts and parameters. Session templates also include information on what CFS configuration should be applied.
   * BOS sessions provide a way to apply a template across a group of nodes and monitor the progress of those nodes as they move toward their desired state.
-  * BOS Operators interact with other services to perform actions on nodes, moving them toward their desired state. BOS operators are used only for BOS v2 operations.
+  * BOS operators interact with other services to perform actions on nodes, moving them toward their desired state. BOS operators are used only for BOS v2 operations.
   * Boot Orchestration Agent \(BOA\) is automatically launched to execute the session.
   A BOA executes the given operation, and if the operation is a boot or a reboot, it also configures the nodes post-boot \(if configure is enabled\). BOA is used only for BOS v1 operations.
 * Cray Advanced Platform and Monitoring Control \(CAPMC\) service provides system-level power control for nodes in the system.
