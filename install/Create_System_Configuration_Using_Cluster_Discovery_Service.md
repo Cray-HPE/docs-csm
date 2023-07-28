@@ -98,10 +98,10 @@ Run the following steps before starting any of the system configuration procedur
 
      | Variable  | Description  |
      | ---       |  ---         |
-     | ipaddr    | IP address   |
-     | netmask   | netmask value |
-     | slave0, slave1 | network interface |
-     | vlanid    | VLAN ID number |
+     | `ipaddr`   | IP address   |
+     | `netmask`  | netmask value |
+     | `slave0`, `slave1` | network interfaces |
+     | `vlanid`    | VLAN ID number |
 
      > **NOTE**: The IP address value, netmask value, network interface, and VLAN ID are available in the `system_config.yaml` file in the `prep` directory.
 
@@ -113,11 +113,11 @@ Run the following steps before starting any of the system configuration procedur
 
    - Configure Dnsmasq for single VLAN:
 
+     > The `<leasetime>` parameter is optional.
+
      ```bash
      "${CVT_PATH}"/cds/discover_enable.py --iprange <dhcp_ip_start>,<dhcp_ip_end>,<subnet>,<leasetime> --interface bond0
      ```
-
-     Where, `leasetime` is an optional variable.
 
      Example command:
 
@@ -179,7 +179,7 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
    "${CVT_PATH}"/cds/discover_status.py nodes --out
    ```
 
-   1. (`pit#`) Create a `bond0` network interface on all the listed nodes.
+   1. Create a `bond0` network interface on all the listed nodes.
 
       ```bash
       pdsh -w^nodelist -x localhost "sh "${CVT_PATH}"/scripts/create_bond0.sh"
@@ -235,7 +235,7 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 
    1. Manually, create a `mgmtswlist` file in the working directory listing the IP addresses of management switches.
 
-   2. (`pit#`) Collect the management network inventory data.
+   1. Collect the management network inventory data.
 
       ```bash
       "${CVT_PATH}"/management_inventory.py --switchfile mgmtswlist --password password --username username
@@ -275,13 +275,13 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 
 #### 3.4.3 Server classification
 
-1. (`pit#`) Classify the servers.
+(`pit#`) Classify the servers.
 
-   > In the following command, replace `<N>` with the number of worker NCNs in the system.
+> In the following command, replace `<N>` with the number of worker NCNs in the system.
 
-   ```bash
-   "${CVT_PATH}"/scripts/server_classification.py --no_of_workers <N>
-   ```
+```bash
+"${CVT_PATH}"/scripts/server_classification.py --no_of_workers <N>
+```
 
 #### 3.4.4 Compare the SHCD data with CVT inventory data
 
@@ -315,36 +315,36 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 
 1. (`pit#`) Generate paddle file: `cvt-ccj.json`.
 
+   > In the following command, replace `<arch_type>` with the type of architecture (`Full`, `V1`, or `Tds`).
+   > See [Generate configuration files](../operations/network/management_network/generate_switch_configs.md#generate-configuration-files) for the characteristics of the architecture.
+
    ```bash
    "${CVT_PATH}"/create_paddle_file.py --architecture <arch_type>
    ```
 
-   Where, the variable `<arch_type>` describes the type of architecture (FULL, V1, or TDS).
-   See [Generate configuration files](../operations/network/management_network/generate_switch_configs.md#generate-configuration-files) for the characteristics of the architecture.
-
 1. Copy the generated paddle file and seed files to the `prep` directory.
 
    ```bash
-   cp -r ${PITDATA}/prep/cds/cvt-ccj.json ${PITDATA}/prep/cds/seedfiles/* ${PITDATA}/prep/
+   cp -rv ${PITDATA}/prep/cds/cvt-ccj.json ${PITDATA}/prep/cds/seedfiles/* ${PITDATA}/prep/
    ```
 
 1. Create `cabinets.yaml` file in the `prep` directory, see [Create `cabinets.yaml`](create_cabinets_yaml.md).
 
 ## 5. Stop discovery
 
-1. (`pit#`) Clean and reset the modified files to their original default state.
+(`pit#`) Clean and reset the modified files to their original default state.
 
-   ```bash
-   "${CVT_PATH}"/cds/discover_stop.py -u bmc_username -p bmc_password
-   ```
+```bash
+"${CVT_PATH}"/cds/discover_stop.py -u bmc_username -p bmc_password
+```
+
+## 6. Run CSI
 
 1. (`pit#`) Change into the `prep` directory.
 
    ```bash
    cd "${PITDATA}/prep"
    ```
-
-## 6. Run CSI
 
 1. (`pit#`) Generate the initial configuration for CSI.
 
