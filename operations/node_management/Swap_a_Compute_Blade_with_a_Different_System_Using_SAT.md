@@ -35,11 +35,11 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 1. Using the work load manager (WLM), drain running jobs from the affected nodes on the blade. Refer to the vendor documentation for the WLM for more information.
 
-1. Determine which Boot Orchestration Service \(BOS\) templates to use to shut down nodes on the target blade.
+1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down nodes on the target blade.
 
    There will be separate session templates for UANs and computes nodes.
 
-   1. (`ncn#`) List all the session templates.
+   1. List all the session templates.
 
       If it is unclear which session template is in use, proceed to the next substep.
 
@@ -47,7 +47,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
       cray bos v2 sessiontemplates list
       ```
 
-   1. (`ncn#`) Find the node xnames with `sat status`.
+   1. Find the node xnames with `sat status`.
 
       In this example, the target blade is in slot `x9000c3s0`.
 
@@ -68,7 +68,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
       +---------------+------+----------+-------+------+---------+------+-------+-------------+----------+
       ```
 
-   1. (`ncn#`) Find the `bos_session` value for each node via the Configuration Framework Service (CFS).
+   1. Find the `bos_session` value for each node via the Configuration Framework Service (CFS).
 
       ```bash
       cray cfs components describe x9000c3s0b1n0 --format toml | grep bos_session
@@ -80,7 +80,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
       bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
       ```
 
-   1. (`ncn#`) Find the required `templateName` value with BOS.
+   1. Find the required `templateName` value with BOS.
 
       ```bash
       cray bos v2 sessions describe BOS_SESSION --format toml | grep templateName
@@ -92,7 +92,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
       templateName = "compute-nid1-4-sessiontemplate"
       ```
 
-   1. (`ncn#`) Determine the list of xnames associated with the desired boot session template.
+   1. Determine the list of xnames associated with the desired boot session template.
 
       ```bash
       cray bos v2 sessiontemplates describe SESSION_TEMPLATE_NAME --format toml | grep node_list
@@ -104,7 +104,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
       node_list = [ "x9000c3s0b1n0", "x9000c3s0b2n0", "x9000c3s0b3n0", "x9000c3s0b4n0",]
       ```
 
-1. (`ncn#`) Shut down the nodes on the target blade.
+1. (`ncn-mw#`) Shut down the nodes on the target blade.
 
    Use the `sat bootsys` command to shut down the nodes on the target blade. Specify the appropriate component
    name (xname) for the slot, and a comma-separated list of the BOS session templates determined in the previous step.
@@ -116,7 +116,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 ### Source: Use SAT to remove the blade from hardware management
 
-1. (`ncn#`) Power off the slot and delete blade information from HSM.
+1. (`ncn-mw#`) Power off the slot and delete blade information from HSM.
 
    Use the `sat swap` command to power off the slot and delete the blade's Ethernet interfaces and Redfish endpoints from HSM.
 
@@ -155,7 +155,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
    Refer to the vendor documentation for the WLM for more information.
 
-1. (`ncn#`) Shut down the nodes on the target blade.
+1. (`ncn-mw#`) Shut down the nodes on the target blade.
 
    Use the `sat bootsys` command to shut down the nodes on the target blade. Specify the appropriate component
    name (xname) for the slot and a comma-separated list of the appropriate BOS session templates for the nodes on the blade.
@@ -169,7 +169,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 ### Destination: Use SAT to remove the blade from hardware management
 
-1. (`ncn#`) Power off the slot and delete blade information from HSM.
+1. (`ncn-mw#`) Power off the slot and delete blade information from HSM.
 
    Use the `sat swap` command to power off the slot and delete the blade's Ethernet interfaces and Redfish endpoints from HSM.
 
@@ -194,7 +194,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 ### Destination: Use SAT to add the blade to hardware management
 
-1. (`ncn#`) Begin discovery for the blade.
+1. (`ncn-mw#`) Begin discovery for the blade.
 
    Use the `sat swap` command to map the nodes' Ethernet interface MAC addresses to the appropriate IP addresses and component names (xnames), and begin discovery for the blade.
 
@@ -206,7 +206,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 ### Destination: Power on and boot the nodes
 
-1. (`ncn#`) Power on and boot the nodes.
+1. (`ncn-mw#`) Power on and boot the nodes.
 
    Use `sat bootsys` to power on and boot the nodes. Specify the appropriate BOS template for the node type.
 
@@ -221,7 +221,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
    Verify that the correct firmware versions are present for the node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
 
-1. (`ncn#`) If necessary, update the firmware.
+1. (`ncn-mw#`) If necessary, update the firmware.
 
    Review the [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) and [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) procedure.
 
@@ -305,7 +305,7 @@ one on `ncn-w002` and one on another worker node.
 
 ### Destination: Check DNS
 
-1. (`ncn#`) Check for duplicate IP address entries in the State Management Database (SMD).
+1. (`ncn-mw#`) Check for duplicate IP address entries in the State Management Database (SMD).
 
    Duplicate entries will cause DNS operations to fail.
 
@@ -347,7 +347,7 @@ one on `ncn-w002` and one on another worker node.
    failed to add new host using the HW address '00:40:a6:83:50:a4 and DUID '(null)' to the IPv4 subnet id '0' for the address 10.100.0.105: There's already a reservation for this address"}]
    ```
 
-1. (`ncn#`) Check Kea for active DHCP leases.
+1. (`ncn-mw#`) Check Kea for active DHCP leases.
 
    Use the following example `curl` command to check for active DHCP leases. If there are zero DHCP leases, then there is a configuration error.
 
@@ -372,7 +372,7 @@ one on `ncn-w002` and one on another worker node.
    ]
    ```
 
-1. (`ncn#`) Delete the duplicate entries, if there are any.
+1. (`ncn-mw#`) Delete the duplicate entries, if there are any.
 
    If there are duplicate entries in the HSM as a result of this procedure, then delete the duplicate entries (`10.100.0.105` in this example).
 
@@ -421,7 +421,7 @@ one on `ncn-w002` and one on another worker node.
       cray hsm inventory ethernetInterfaces delete 0040a68350a4
       ```
 
-1. (`ncn#`) Check DNS using `dnslookup`.
+1. (`ncn-mw#`) Check DNS using `dnslookup`.
 
    ```bash
    nslookup 10.252.1.29
@@ -466,7 +466,7 @@ one on `ncn-w002` and one on another worker node.
    Address: 10.252.1.29
    ```
 
-1. (`ncn#`) Verify the ability to connect using SSH.
+1. (`ncn-mw#`) Verify the ability to connect using SSH.
 
    ```bash
    ssh x3000c0s14b0n0
@@ -484,7 +484,7 @@ one on `ncn-w002` and one on another worker node.
 
 ## Bring up the blade in the source system
 
-1. To minimize cross-contamination of cooling systems, drain the coolant from the blade removed from destination system and fill with fresh coolant .
+1. To minimize cross-contamination of cooling systems, drain the coolant from the blade removed from destination system and fill with fresh coolant.
 
    Review the *HPE Cray EX Coolant Service Procedures H-6199*. If using the hand pump, review procedures in the *HPE Cray EX Hand Pump User Guide H-6200* ([HPE Support](https://internal.support.hpe.com/)).
 

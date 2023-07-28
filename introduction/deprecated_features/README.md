@@ -7,6 +7,7 @@ been made, that information will be available on this page. For any deprecated f
 version for their planned removal, customers are still strongly encouraged to make plans to migrate away from the deprecated feature.
 
 * [Removals](#removals)
+  * [Removals in CSM 1.4](#removals-in-csm-14)
   * [Removals in CSM 1.5](#removals-in-csm-15)
   * [Removals in CSM 1.6](#removals-in-csm-16)
 * [Deprecations](#deprecations)

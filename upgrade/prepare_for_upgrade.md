@@ -116,7 +116,7 @@ When resuming a procedure after a break, always be sure that a typescript is run
 
 ## Running sessions
 
-BOS, CFS, CRUS, FAS, and NMD sessions should not be started or underway during the CSM upgrade process.
+BOS, CFS, FAS, and NMD sessions should not be started or underway during the CSM upgrade process.
 
 1. (`ncn-m001#`) Ensure that these services do not have any sessions in progress.
 
@@ -134,8 +134,6 @@ BOS, CFS, CRUS, FAS, and NMD sessions should not be started or underway during t
    Found no active BOS sessions.
    Checking for active CFS sessions.
    Found no active CFS sessions.
-   Checking for active CRUS upgrades.
-   Found no active CRUS upgrades.
    Checking for active FAS actions.
    Found no active FAS actions.
    Checking for active NMD dumps.
