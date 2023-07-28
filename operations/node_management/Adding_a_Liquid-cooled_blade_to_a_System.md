@@ -4,7 +4,7 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
 
 ## Prerequisites
 
-* The [Cray command line interface \(CLI\) tool]((../../glossary.md#cray-cli-cray)) is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
+* The [Cray command line interface \(CLI\) tool](../../glossary.md#cray-cli-cray)) is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 * Knowledge of whether [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is operating over the
   [Node Management Network (NMN)](../../glossary.md#node-management-network-nmn) or the [High Speed Network (HSN)](../../glossary.md#high-speed-network-hsn).
 * Blade is being added to an existing liquid-cooled cabinet in the system.

@@ -1,21 +1,21 @@
 # Create a Session Template to Boot Compute Nodes with CPS
 
 When [compute nodes](../../glossary.md#compute-node-cn) are booted, the [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and
-[Data Virtualization Service (DVS)](#data-virtualization-service-dvs) project the root file system \(`rootfs`\) over the network to the compute nodes by default.
+[Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) project the root file system \(`rootfs`\) over the network to the compute nodes by default.
 
 Another option when compute nodes are booted is to download their `rootfs` into RAM.
 
 This page covers the appropriate contents for a BOS session template in order to use CPS and DVS.
 
 - [Boot set S3 parameters](#boot-set-s3-parameters)
-- [Boot set `rootfs_provider` parameters](#boot-set-rootfsprovider-parameters)
+- [Boot set `rootfs_provider` parameters](#boot-set-rootfs_provider-parameters)
   - [`<transport>`](#transport)
-  - [`<api_gateway>`](#apigateway)
+  - [`<api_gateway>`](#api_gateway)
   - [`<timeout>`](#timeout)
   - [`<etag>`](#etag)
   - [`interface[,<interface>][,<interface>]...`](#interfaceinterfaceinterface)
   - [`<ramroot>`](#ramroot)
- - [Example `rootfs_provider_passthrough`](#example-rootfsproviderpassthrough)
+  - [Example `rootfs_provider_passthrough`](#example-rootfsproviderpassthrough)
 - [`root=` kernel parameter](#root-kernel-parameter)
 - [Example session template input file](#example-session-template-input-file)
 - [Creating a BOS session using the new template](#creating-a-bos-session-using-the-new-template)
@@ -48,15 +48,15 @@ The variables used in this parameter represent the following:
 
 ### `<transport>`
 
-File system network transport \(For example, NFS and DVS\).
+File system network transport. For example, `nfs` or `dvs`.
 
-Can be left as an empty string to use the default value dvs.
+Can be left as an empty string to use the default value `dvs`.
 
 ### `<api_gateway>`
 
 Name or address of the Kubernetes API gateway.
 
-Can be left as an empty string to use the default value api-gw-service-nmn.local.
+Can be left as an empty string to use the default value `api-gw-service-nmn.local`.
 
 ### `<timeout>`
 
