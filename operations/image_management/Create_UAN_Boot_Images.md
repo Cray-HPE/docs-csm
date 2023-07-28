@@ -688,9 +688,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         {
            "boot_sets": {
              "uan": {
-               "boot_ordinal": 2,
                "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=nmn0:dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 ifmap=net2:nmn0,lan0:hsn0,lan1:hsn1 spire_join_token=${SPIRE_JOIN_TOKEN}",
-               "network": "nmn",
                "node_list": [
                   [ #... List of Application Nodes from cray hsm state command ...]
                ],
@@ -715,15 +713,9 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     The following command uses the JSON session template file to save a session template in BOS. This step allows administrators to boot UANs by referring to the session template name.
 
     ```bash
-    cray bos v1 sessiontemplate create \
-            --name uan-sessiontemplate-PRODUCT_VERSION \
-            --file uan-sessiontemplate-PRODUCT_VERSION.json
-    ```
-
-    Example output:
-
-    ```text
-    /sessionTemplate/uan-sessiontemplate-PRODUCT_VERSION
+    cray bos v2 sessiontemplates create \
+            --file uan-sessiontemplate-PRODUCT_VERSION.json \
+            uan-sessiontemplate-PRODUCT_VERSION
     ```
 
 Perform [Boot UANs](../boot_orchestration/Boot_UANs.md) to boot the UANs with the new image and BOS session template.

@@ -88,7 +88,7 @@ Build and customize image recipes with the Image Management Service (IMS).
 
 ## Boot orchestration
 
-Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down collections of nodes.
+Use the Boot Orchestration Service \(BOS\) to boot, reboot, and shut down collections of nodes.
 
 - [Boot Orchestration Service (BOS)](boot_orchestration/Boot_Orchestration.md)
   - [BOS Cheat Sheet](boot_orchestration/Cheatsheet.md)
@@ -107,19 +107,13 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down col
   - [View the Status of a BOS Session](boot_orchestration/View_the_Status_of_a_BOS_Session.md)
   - [Limit the Scope of a BOS Session](boot_orchestration/Limit_the_Scope_of_a_BOS_Session.md)
   - [Stage Changes with BOS](boot_orchestration/Stage_Changes_with_BOS.md)
-  - [Configure the BOS Timeout When Booting Compute Nodes](boot_orchestration/Configure_the_BOS_Timeout_When_Booting_Nodes.md)
   - [Kernel Boot Parameters](boot_orchestration/Kernel_Boot_Parameters.md)
-  - [Check the Progress of BOS Session Operations](boot_orchestration/Check_the_Progress_of_BOS_Session_Operations.md)
-  - [Clean Up Logs After a BOA Kubernetes Job](boot_orchestration/Clean_Up_Logs_After_a_BOA_Kubernetes_Job.md)
-  - [Clean Up After a BOS/BOA Job is Completed or Cancelled](boot_orchestration/Clean_Up_After_a_BOS-BOA_Job_is_Completed_or_Cancelled.md)
   - [Troubleshoot UAN Boot Issues](boot_orchestration/Troubleshoot_UAN_Boot_Issues.md)
-  - [Troubleshoot Booting Nodes with Hardware Issues](boot_orchestration/Troubleshoot_Booting_Nodes_with_Hardware_Issues.md)
 - [BOS Options](boot_orchestration/Options.md)
 - [Exporting and Importing BOS Data](boot_orchestration/Exporting_and_Importing_BOS_Data.md)
 - [Rolling Upgrades using BOS](boot_orchestration/Rolling_Upgrades.md)
 - [BOS API](../api/bos.md)
 - [Boot Script Service (BSS) API](../api/bss.md)
-- [BOS Limitations for Gigabyte BMC Hardware](boot_orchestration/Limitations_for_Gigabyte_BMC_Hardware.md)
 - [Compute Node Boot Sequence](boot_orchestration/Compute_Node_Boot_Sequence.md)
   - [Healthy Compute Node Boot Process](boot_orchestration/Healthy_Compute_Node_Boot_Process.md)
   - [Node Boot Root Cause Analysis](boot_orchestration/Node_Boot_Root_Cause_Analysis.md)
@@ -135,7 +129,6 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down col
     - [Troubleshoot Compute Node Boot Issues Related to Trivial File Transfer Protocol (TFTP)](boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Trivial_File_Transfer_Protocol_TFTP.md)
     - [Troubleshoot Compute Node Boot Issues Using Kubernetes](boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Using_Kubernetes.md)
     - [Log File Locations and Ports Used in Compute Node Boot Troubleshooting](boot_orchestration/Log_File_Locations_and_Ports_Used_in_Compute_Node_Boot_Troubleshooting.md)
-    - [Troubleshoot Compute Node Boot Issues Related to Slow Boot Times](boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
   - [Customize iPXE Binary Names](boot_orchestration/Customize_iPXE_Binary_Names.md)
   - [Edit the iPXE Embedded Boot Script](boot_orchestration/Edit_the_iPXE_Embedded_Boot_Script.md)
   - [Redeploy the iPXE and TFTP Services](boot_orchestration/Redeploy_the_IPXE_and_TFTP_Services.md)

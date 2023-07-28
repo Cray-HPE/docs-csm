@@ -42,7 +42,7 @@ This procedure is applicable for the following types of standard rack nodes:
 
     ```bash
     BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-    cray bos v1 session create --template-uuid $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
+    cray bos v2 sessions create --template-name $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
     ```
 
 ### Step 3: Remove Data from SLS and HSM

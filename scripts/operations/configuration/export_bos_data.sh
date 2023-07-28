@@ -35,45 +35,40 @@
 #
 ################################################################################
 
-err_exit()
-{
-    echo "ERROR: $*" >&2
-    exit 1
+err_exit() {
+  echo "ERROR: $*" >&2
+  exit 1
 }
 
-usage()
-{
-    echo "Usage: export_bos_data.sh [directory_to_create_archive_in]"
-    echo
-    err_exit "$@"
+usage() {
+  echo "Usage: export_bos_data.sh [directory_to_create_archive_in]"
+  echo
+  err_exit "$@"
 }
 
-run_cmd()
-{
-    "$@" || err_exit "Command failed with return code $?: $*"
+run_cmd() {
+  "$@" || err_exit "Command failed with return code $?: $*"
 }
 
-bos_cli()
-{
-    # Expands to: run_cmd cray bos <args to bos_cli> --format json
-    # e.g. bos_cli v1 session list
-    #      bos_cli v2 sessiontemplates  list
-    run_cmd cray bos "$@" --format json
+bos_cli() {
+  # Expands to: run_cmd cray bos <args to bos_cli> --format json
+  # e.g. bos_cli v2 sessions list
+  #      bos_cli v2 sessiontemplates  list
+  run_cmd cray bos "$@" --format json
 }
 
-bos_list()
-{
-    # Wrapper for bos_cli for list actions
-    bos_cli "$@" list
+bos_list() {
+  # Wrapper for bos_cli for list actions
+  bos_cli "$@" list
 }
 
 if [[ $# -eq 0 ]]; then
-    OUTPUT_DIRECTORY=$(pwd)
+  OUTPUT_DIRECTORY=$(pwd)
 else
-    [[ -n $1 ]] || usage "Directory name is optional, but if specified it may not be blank"
-    [[ -e $1 ]] || usage "Target directory does not exist: '$1'"
-    [[ -d $1 ]] || usage "Target exists but is not a directory: '$1'"
-    OUTPUT_DIRECTORY=$1
+  [[ -n $1 ]] || usage "Directory name is optional, but if specified it may not be blank"
+  [[ -e $1 ]] || usage "Target directory does not exist: '$1'"
+  [[ -d $1 ]] || usage "Target exists but is not a directory: '$1'"
+  OUTPUT_DIRECTORY=$1
 fi
 
 ARCHIVE_PREFIX="bos-export-$(date +%Y%m%d%H%M%S)"
@@ -82,34 +77,14 @@ ARCHIVE_DIR=$(run_cmd mktemp -p "${OUTPUT_DIRECTORY}" -d "${ARCHIVE_PREFIX}-XXX"
 # Export all BOS data. Some of it (like sessions and components) are not intended to be
 # restored from this backup, but retaining the historical data may be useful in some situations.
 
-V1_DIR="${ARCHIVE_DIR}/v1"
-run_cmd mkdir -p "${V1_DIR}"
-
-# For BOS v1 the only thing to list is sessions. Every other thing that could be listed can be
-# listed using the v2 CLI.
-
-echo "Exporting BOS v1 sessions..."
-V1_SESSION_LIST_JSON="${V1_DIR}/session.json"
-bos_list v1 session  > "${V1_SESSION_LIST_JSON}"
-
-# For v1 sessions, we will also describe each, since in BOS v1, just listing them
-# does not show information about them.
-
-V1_SESSION_DIR="${V1_DIR}/session"
-run_cmd mkdir -p "${V1_SESSION_DIR}"
-
-for SESSION_ID in $(jq -r '.[] | .' "${V1_SESSION_LIST_JSON}") ; do
-    bos_cli v1 session describe "${SESSION_ID}" > "${V1_SESSION_DIR}/${SESSION_ID}.json"
-done
-
 # For v2, listing is all we need for all of the types.
 
 V2_DIR="${ARCHIVE_DIR}/v2"
 run_cmd mkdir -p "${V2_DIR}"
 
-for OBJECT in components options sessions sessiontemplates version ; do
-    echo "Exporting BOS v2 ${OBJECT}..."
-    bos_list v2 "${OBJECT}" > "${V2_DIR}/${OBJECT}.json"
+for OBJECT in components options sessions sessiontemplates version; do
+  echo "Exporting BOS v2 ${OBJECT}..."
+  bos_list v2 "${OBJECT}" > "${V2_DIR}/${OBJECT}.json"
 done
 
 # Compress the results

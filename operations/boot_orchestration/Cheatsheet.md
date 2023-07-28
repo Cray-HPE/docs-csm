@@ -4,9 +4,7 @@ This page is a quick reference for common BOS CLI commands.
 
 To find the API versions of any commands listed, add `-vvv` to the end of the CLI command, and the CLI will print the underlying call to the API in the output.
 
-## BOS v2 commands
-
-### Full system commands (v2)
+## Full system commands
 
 (`ncn-mw#`) Boot all nodes in a template:
 
@@ -32,7 +30,7 @@ cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Sh
 cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Reboot --staged True
 ```
 
-### Single node commands (v2)
+## Single node commands
 
 (`ncn-mw#`) Boot a single node:
 
@@ -62,46 +60,4 @@ cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Re
 
 ```bash
 watch "cray bos v2 components describe <node's xname>"
-```
-
-## BOS v1 commands
-
-### Full system commands (v1)
-
-(`ncn-mw#`) Boot all nodes in a template:
-
-```bash
-cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Boot
-```
-
-(`ncn-mw#`) Reboot all nodes in a template:
-
-```bash
-cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Reboot
-```
-
-(`ncn-mw#`) Shutdown all nodes in a template:
-
-```bash
-cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Shutdown
-```
-
-### Single node commands (v1)
-
-(`ncn-mw#`) Boot a single node:
-
-```bash
-cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Boot --limit <node's xname>
-```
-
-(`ncn-mw#`) Reboot a single node:
-
-```bash
-cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Reboot --limit <node's xname>
-```
-
-(`ncn-mw#`) Shutdown a single node:
-
-```bash
-cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Shutdown --limit <node's xname>
 ```

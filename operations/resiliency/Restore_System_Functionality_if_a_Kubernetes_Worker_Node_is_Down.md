@@ -107,10 +107,6 @@ error state. Once any remaining testing or validation work is complete, these po
     loftsman    shipper-1594328454-khsfc                               0/1     Error   0          3d21h   10.36.0.190   ncn-w003   <none>           <none>
     loftsman    shipper-1594329426-75shp                               0/1     Error   0          3d21h   10.36.0.195   ncn-w003   <none>           <none>
     loftsman    shipper-1594329510-q8bsj                               0/1     Error   0          3d21h   10.36.0.164   ncn-w003   <none>           <none>
-    services    boa-8b1687b2-2c5b-4c92-8cd7-a44965fef41a-mbfsj         0/2     Error   0          6d      10.42.0.152   ncn-w002   <none>           <none>
-    services    boa-8b1687b2-2c5b-4c92-8cd7-a44965fef41a-q7cr4         0/2     Error   0          6d      10.42.0.154   ncn-w002   <none>           <none>
-    services    boa-cf973765-92e7-4c5e-b52a-e904088976b8-cplj6         0/2     Error   0          5d23h   10.42.0.158   ncn-w002   <none>           <none>
-    services    boa-f6f86426-58bf-4c6f-b3cd-e25010aa9ff6-s7zph         0/2     Error   0          4d2h    10.36.0.191   ncn-w003   <none>           <none>
     services    cfs-0336105c-e697-4d9d-a129-badde6da3218-vn6n4         0/3     Error   0          6d20h   10.42.0.98    ncn-w002   <none>           <none>
     ```
 

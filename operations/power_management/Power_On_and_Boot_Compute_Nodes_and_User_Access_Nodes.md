@@ -104,7 +104,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     Identify the BOS session template names (such as `"cos-2.0.x"`, `slurm`, or `uan-slurm`), and choose the appropriate compute and UAN node templates for the power on and boot.
 
     ```bash
-    cray bos v1 sessiontemplate list
+    cray bos v2 sessiontemplates list
     ```
 
     Example output:
@@ -124,7 +124,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 1. (`ncn-m001#`) To display more information about a session template, for example `cos-2.0.0`, use the `describe` option.
 
     ```bash
-    cray bos v1 sessiontemplate describe cos-2.0.x
+    cray bos v2 sessiontemplates describe cos-2.0.x
     ```
 
 1. (`ncn-m001#`) Use `sat bootsys boot` to power on and boot UANs and compute nodes.
@@ -144,20 +144,10 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     Started boot operation on BOS session templates: cos-2.0.x, uan.
     Waiting up to 900 seconds for sessions to complete.
 
-    Waiting for BOA k8s job with id boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea to complete. Session template: uan.
-    To monitor the progress of this job, run the following command in a separate window:
-        'kubectl -n services logs -c boa -f --selector job-name=boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea'
-
-    Waiting for BOA k8s job with id boa-79584ffe-104c-4766-b584-06c5a3a60996 to complete. Session template: cos-2.0.0.
-    To monitor the progress of this job, run the following command in a separate window:
-        'kubectl -n services logs -c boa -f --selector job-name=boa-79584ffe-104c-4766-b584-06c5a3a60996'
-
     [...]
 
     All BOS sessions completed.
     ```
-
-    Note the returned job ID for each session, for example: `"boa-79584ffe-104c-4766-b584-06c5a3a60996"`.
 
     **Note:** In certain cases, the command may display an error similar to the following:
 
@@ -166,33 +156,6 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     ```
 
     This is a non-fatal error and does not affect the `bos-operations` stage of `sat bootsys`.
-
-    **Note:** In certain cases, the command may fail before reaching the displayed timeout
-    and show warnings similar to the following:
-
-    ```text
-    WARNING: The 'kubectl wait' command failed instead of timing out. stderr: error: condition not met for jobs/boa-79584ffe-104c-4766-b584-06c5a3a60996
-    ```
-
-    The BOS operation can still proceed even with these warnings. However, the warnings
-    may result in the `bos-operations` stage of the `sat bootsys` command exiting before the BOS
-    operation is complete. Because of this, it is important to view the logs in order to monitor the
-    boot and to verify that the nodes reached the expected state. Both of these recommendations are shown
-    in the remaining steps.
-
-1. (`ncn-m001#`) Use the job ID strings to monitor the progress of the boot job.
-
-    **Tip:** The commands needed to monitor the progress of the job are provided in the output of the `sat bootsys boot` command.
-
-    ```bash
-    kubectl -n services logs -c boa -f --selector job-name=boa-79584ffe-104c-4766-b584-06c5a3a60996
-    ```
-
-1. (`ncn-m001#`) In another shell window, use a similar command to monitor the UAN session.
-
-    ```bash
-    kubectl -n services logs -c boa -f --selector job-name=boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea
-    ```
 
 1. Wait for compute nodes and UANs to boot and check the Configuration Framework Service \(CFS\) log for errors.
 
