@@ -24,7 +24,7 @@
 #
 
 set -e
-basedir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+basedir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" & >/dev/null && pwd)
 . ${basedir}/../common/upgrade-state.sh
 trap 'err_report' ERR
 
@@ -82,22 +82,6 @@ else
   echo "====> ${state_name} has been completed"
 fi
 
-state_name="PRE_STRIMZI_UPGRADE"
-#shellcheck disable=SC2046
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
-  echo "====> ${state_name} ..."
-  {
-    pushd /usr/share/doc/csm/upgrade/scripts/strimzi
-    ./kafka-prereq.sh
-    popd +0
-  } >> ${LOG_FILE} 2>&1
-  #shellcheck disable=SC2046
-  record_state ${state_name} $(hostname)
-else
-  echo "====> ${state_name} has been completed"
-fi
-
 state_name="PRE_CSM_SERVICES_UPGRADE_BUCKETS"
 #shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
@@ -137,20 +121,6 @@ if [[ $state_recorded == "0" ]]; then
   echo "====> ${state_name} ..."
   {
     /usr/share/doc/csm/upgrade/scripts/k8s/enable-psp.sh
-  } >> ${LOG_FILE} 2>&1
-  #shellcheck disable=SC2046
-  record_state ${state_name} $(hostname)
-else
-  echo "====> ${state_name} has been completed"
-fi
-
-state_name="POST_STRIMZI_UPGRADE"
-#shellcheck disable=SC2046
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
-  echo "====> ${state_name} ..."
-  {
-    /usr/share/doc/csm/upgrade/scripts/strimzi/kafka-restart.sh
   } >> ${LOG_FILE} 2>&1
   #shellcheck disable=SC2046
   record_state ${state_name} $(hostname)
