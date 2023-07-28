@@ -499,7 +499,7 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate [
     1. (`ncn-mw#`) Boot the nodes.
 
        ```bash
-       cray bos v1 session create --template-uuid $BOS_TEMPLATE \
+       cray bos v1 session create --template-name $BOS_TEMPLATE \
             --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
        ```
 
