@@ -93,7 +93,7 @@ The following workflows are included in this document:
     operation as Boot and specifies the session template ID.
 
     ```bash
-    ncn-mw# cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation Boot
+    ncn-mw# cray bos session create --template-name SESSIONTEMPLATE_NAME --operation Boot
     ```
 
 1. Launch BOA.
@@ -164,7 +164,7 @@ The following workflows are included in this document:
     operation as Configure and specifies the session template ID.
 
     ```bash
-    ncn-mw# cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation Configure
+    ncn-mw# cray bos session create --template-name SESSIONTEMPLATE_NAME --operation Configure
     ```
 
 1. Launch BOA.
@@ -211,7 +211,7 @@ The following workflows are included in this document:
     session with operation as Shutdown and specifies the session template ID.
 
     ```bash
-    ncn-mw# cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation Shutdown
+    ncn-mw# cray bos session create --template-name SESSIONTEMPLATE_NAME --operation Shutdown
     ```
 
 1. Launch BOA.

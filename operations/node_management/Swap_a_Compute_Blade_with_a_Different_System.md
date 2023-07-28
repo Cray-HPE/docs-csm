@@ -86,7 +86,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
    ```bash
    ncn-mw# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-   ncn-mw# cray bos session create --template-uuid $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
+   ncn-mw# cray bos session create --template-name $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
    ```
 
 ### Source: Disable the Redfish endpoints for the nodes

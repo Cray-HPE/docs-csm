@@ -124,5 +124,5 @@ See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) for info
 1. Use the Boot Orchestration Service \(BOS\) to reboot all the affected nodes.
 
     ```bash
-    ncn-m001# cray bos session create --template-uuid SESSION_TEMPLATE --operation reboot
+    ncn-m001# cray bos session create --template-name SESSION_TEMPLATE --operation reboot
     ```
