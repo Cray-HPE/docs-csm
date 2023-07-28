@@ -388,7 +388,7 @@ The following workflows are included in this section:
     (`ncn-mw#`)
 
     ```bash
-    cray bos v1 session create --template-uuid SESSIONTEMPLATE_NAME --operation Boot
+    cray bos v1 session create --template-name SESSIONTEMPLATE_NAME --operation Boot
     ```
 
 1. **Launch BOA**
@@ -464,7 +464,7 @@ The following workflows are included in this section:
     (`ncn-mw#`)
 
     ```bash
-    cray bos v1 session create --template-uuid SESSIONTEMPLATE_NAME --operation Configure
+    cray bos v1 session create --template-name SESSIONTEMPLATE_NAME --operation Configure
     ```
 
 1. **Launch BOA**
@@ -516,7 +516,7 @@ The following workflows are included in this section:
     (`ncn-mw#`)
 
     ```bash
-    cray bos v1 session create --template-uuid SESSIONTEMPLATE_NAME --operation Shutdown
+    cray bos v1 session create --template-name SESSIONTEMPLATE_NAME --operation Shutdown
     ```
 
 1. **Launch BOA**
