@@ -11,8 +11,8 @@ Some of the steps are specific to that activity, others would be common to or si
 
 ## Prerequisites
 
-* The administrator must be logged into an NCN or a host that has administrative access to the HPE Cray EX System API Gateway
-* The administrator must have the HPE Cray EX System CLI (`cray` command) installed on the above host
+* The administrator must be logged into a [Non-Compute Node (NCN)](../../glossary.md#non-compute-node-ncn) or a host that has administrative access to the HPE Cray EX System API Gateway
+* The administrator must have the [HPE Cray EX System CLI](../../glossary.md#cray-cli-cray) (`cray` command) installed on the above host
 * The HPE Cray EX System CLI must be configured (initialized - `cray init` command) to reach the HPE Cray EX System API Gateway
 * The administrator must be logged in as an administrator to the HPE Cray EX System CLI (`cray auth login` command)
 
@@ -30,9 +30,9 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
     UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
     ```
 
-1. (`ncn-mw#`) Query BOS for a `sessiontemplate` ID.
+1. (`ncn-mw#`) Query the [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) for a session template ID.
 
-    Identify the `sessiontemplate` name to use. A full list may be found with the following command:
+    Identify the session template name to use. A full list may be found with the following command:
 
     ```bash
     cray bos v1 sessiontemplate list --format yaml
@@ -43,26 +43,27 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
     ```yaml
     - boot_sets:
         compute:
-        boot_ordinal: 2
-        etag: d54782b3853a2d8713a597d80286b93e
-        kernel_parameters: ip=dhcp quiet spire_join_token=${SPIRE_JOIN_TOKEN}
-        network: nmn
-        node_roles_groups:
-        - Compute
-        path: s3://boot-images/0c0d4081-2e8b-433f-b6f7-e1ef0b907be3/manifest.json
-        rootfs_provider: cpss3
-        rootfs_provider_passthrough: dvs:api-gw-service-nmn.local:300:nmn0
-        type: s3
-    cfs:
+          boot_ordinal: 2
+          etag: d54782b3853a2d8713a597d80286b93e
+          kernel_parameters: ip=dhcp quiet spire_join_token=${SPIRE_JOIN_TOKEN}
+          network: nmn
+          node_roles_groups:
+          - Compute
+          path: s3://boot-images/0c0d4081-2e8b-433f-b6f7-e1ef0b907be3/manifest.json
+          rootfs_provider: cpss3
+          rootfs_provider_passthrough: dvs:api-gw-service-nmn.local:300:nmn0
+          type: s3
+      cfs:
         configuration: wlm-config-0.1.0
-    enable_cfs: true
-    name: wlm-sessiontemplate-0.1.0
+      enable_cfs: true
+      name: wlm-sessiontemplate-0.1.0
     ```
 
-    Alternatively, collect the `sessiontemplate` name used during the Cray Operating System (COS) install. Refer to the "Boot COS" procedure in the COS product stream documentation.
+    Alternatively, collect the session template name used during the [Cray Operating System (COS)](../../glossary.md#cray-operating-system-cos) install.
+    Refer to the "Boot COS" procedure in the COS product stream documentation.
     Near the end of that procedure, the step to create a BOS session to boot the compute nodes should contain the name.
 
-1. (`ncn-mw#`) Record the `sessiontemplate` name.
+1. (`ncn-mw#`) Record the session template name.
 
     ```bash
     ST_NAME=wlm-sessiontemplate-0.1.0
@@ -70,7 +71,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
 
 1. (`ncn-mw#`) Download a compute node SquashFS.
 
-    Use the `sessiontemplate` name to download a compute node SquashFS from a BOS `sessiontemplate` name:
+    Use the session template name to download a compute node SquashFS from a BOS session template name:
 
     ```bash
     ST_ID=$(cray bos v1 sessiontemplate describe $ST_NAME --format json | jq -r '.boot_sets.compute.path' | awk -F/ '{print $4}')
@@ -210,7 +211,3 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
 
     rm -fv ./usr/bin/uai-ssh.sh && rmdir -v ./usr/bin ./usr
     ```
-
-[Top: User Access Service (UAS)](README.md)
-
-[Next Topic: Legacy Mode User-Driven UAI Management](Legacy_Mode_User-Driven_UAI_Management.md)

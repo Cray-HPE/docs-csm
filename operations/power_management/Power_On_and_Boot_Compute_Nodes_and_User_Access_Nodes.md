@@ -104,10 +104,10 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     Identify the BOS session template names (such as `"cos-2.0.x"`, `slurm`, or `uan-slurm`), and choose the appropriate compute and UAN node templates for the power on and boot.
 
     ```bash
-    cray bos v1 sessiontemplate list
+    cray bos v1 sessiontemplate list --format toml
     ```
 
-    Example output:
+    Example output excerpts:
 
     ```text
     [[results]]

@@ -42,4 +42,4 @@ These operators monitor nodes individually, not as a group, allowing each node t
 If no version is specified, the BOS CLI defaults to the `v1` endpoints. `cray bos <command>` defaults to `cray bos v1 <command>`.
 However, this will not always be the case and the default version will be switched to `v2` in the future.
 To avoid compatibility issues when the CLI's default version changes, scripts using the CLI should always explicitly specify a version.
-The behavior of defaulting to a version when the version parameter is omitted is a convenience to users and is not intended for scripts.
+The behavior of defaulting to a version when the version parameter is omitted is a convenience intended for interactive use and is not intended for scripts.
