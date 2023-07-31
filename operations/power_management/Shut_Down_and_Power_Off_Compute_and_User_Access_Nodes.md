@@ -10,15 +10,15 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
 
 ## Procedure
 
-1. List detailed information about the available boot orchestration service \(BOS\) session template names.
+1. (`ncn-mw#`) List detailed information about the available boot orchestration service \(BOS\) session template names.
 
    Identify the BOS session template names such as `cos-2.0.x`, `uan-slurm`, and choose the appropriate compute and UAN node templates for the shutdown.
 
    ```bash
-   cray bos v1 sessiontemplate list
+   cray bos v1 sessiontemplate list --format toml
    ```
 
-   Example output:
+   Example output excerpts:
 
    ```text
    [[results]]
@@ -36,13 +36,13 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
    description = "Template for booting UANs with Slurm"
    ```
 
-1. To display more information about a session template, for example `cos-2.0.x`, use the `describe` option.
+1. (`ncn-mw#`) To display more information about a session template, for example `cos-2.0.x`, use the `describe` option.
 
    ```bash
    cray bos v1 sessiontemplate describe cos-2.0.x
    ```
 
-1. Use `sat bootsys shutdown` to shut down and power off UANs and compute nodes.
+1. (`ncn-mw#`) Use `sat bootsys shutdown` to shut down and power off UANs and compute nodes.
 
    **Attention:** Specify the required session templates for `COS_SESSION_TEMPLATE` and `UAN_SESSION_TEMPLATE` in the example.
 
@@ -123,13 +123,13 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
 
    The BOS shutdown session may or may not power off compute nodes depending on the session template being used.
 
-1. In another shell window, use a similar command to monitor the UAN session.
+1. (`ncn-mw#`) In another shell window, use a similar command to monitor the UAN session.
 
    ```bash
    kubectl -n services logs -c boa -f --selector job-name=boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea
    ```
 
-1. Check the status of both UAN and compute nodes to verify that they are `Off`.
+1. (`ncn-mw#`) Check the status of both UAN and compute nodes to verify that they are `Off`.
 
    There may be a delay in nodes reaching the `Off` state in the hardware state manager \(HSM\).
 

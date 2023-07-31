@@ -17,14 +17,14 @@ When a Boot Orchestration Service \(BOS\) session is created, it will return a j
 (`ncn-mw#`) For example:
 
 ```bash
-cray bos v1 session create --template-uuid SESSIONTEMPLATE_NAME --operation Boot --format toml
+cray bos v1 session create --template-name SESSIONTEMPLATE_NAME --operation Boot --format toml
 ```
 
 Example output:
 
 ```toml
 operation = "Boot"
-templateUuid = "TEMPLATE_UUID"
+templateName = "SESSIONTEMPLATE_NAME"
 [[links]]
 href = "foo-c7faa704-3f98-4c91-bdfb-e377a184ab4f"
 jobId = "boa-a939bd32-9d27-433f-afc2-735e77ec8e58"

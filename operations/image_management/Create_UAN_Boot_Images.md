@@ -1,21 +1,33 @@
 # Create UAN Boot Images
 
-Update configuration management Git repository to match the installed version of the UAN product. Then use that updated configuration to create UAN boot images and a BOS
-session template.
+Update configuration management Git repository to match the installed version of the [User Access Node (UAN)](../../glossary.md#user-access-node-uan) product.
+Then use that updated configuration to create UAN boot images and a [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) session template.
 
 This is the overall workflow for preparing UAN images for booting UANs:
 
 1. Clone the UAN configuration Git repository and create a branch based on the branch imported by the UAN installation.
 1. Update the configuration content and push the changes to the newly created branch.
-1. Create a Configuration Framework Service \(CFS\) configuration for the UANs, specifying the Git configuration and the UAN image to apply the configuration to. More Cray
-   products can also be added to the CFS configuration so that the UANs can install multiple Cray products into the UAN image at the same time.
+1. Create a [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) configuration for the UANs, specifying the Git configuration and the
+   UAN image to apply the configuration to. More Cray products can also be added to the CFS configuration so that the UANs can install multiple Cray products into the UAN image
+   at the same time.
 1. Configure the UAN image using CFS and generate a newly configured version of the UAN image.
-1. Create a Boot Orchestration Service \(BOS\) boot session template for the UANs. This template maps the configured image, the CFS configuration to be applied post-boot, and
+1. Create a BOS boot session template for the UANs. This template maps the configured image, the CFS configuration to be applied post-boot, and
    the nodes which will receive the image and configuration.
 
 Once the UAN BOS session template is created, then the UANs will be ready to be booted by a BOS session.
 
-Replace `PRODUCT_VERSION` and `CRAY_EX_HOSTNAME` in the example commands in this procedure with the current UAN product version installed \(see [Obtain UAN artifact IDs and other information](#get-uan-info)\) and the hostname of the HPE Cray EX system, respectively.
+Replace `PRODUCT_VERSION` and `CRAY_EX_HOSTNAME` in the example commands in this procedure with the current UAN product version installed
+\(see [1. Get UAN information](#1-get-uan-information)\) and the hostname of the HPE Cray EX system, respectively.
+
+- [Prerequisites](#prerequisites)
+- [Limitations](#limitations)
+- [Procedure](#procedure)
+  1. [Get UAN information](#1-get-uan-information)
+  1. [UAN image pre-boot configuration](#2-uan-image-pre-boot-configuration)
+  1. [Configure UAN images](#3-configure-uan-images)
+  1. [Customize UAN image using CFS](#4-customize-uan-image-using-cfs)
+  1. [Identify UAN xnames](#5-identify-uan-xnames)
+  1. [Prepare UAN boot session templates](#6-prepare-uan-boot-session-templates)
 
 ## Prerequisites
 
@@ -28,36 +40,38 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
 
 ## Procedure
 
-### UAN image pre-boot configuration
+### 1. Get UAN information
 
-#### Get UAN Info
+(`ncn-mw#`) Obtain UAN artifact IDs and other information.
 
-1. (`ncn-mw#`) Obtain UAN artifact IDs and other information.
+Upon successful installation of the UAN product, the UAN configuration, image recipes, and prebuilt boot images are cataloged in the `cray-product-catalog` Kubernetes
+ConfigMap. This information is required for this procedure.
 
-    Upon successful installation of the UAN product, the UAN configuration, image recipes, and prebuilt boot images are cataloged in the `cray-product-catalog` Kubernetes
-    ConfigMap. This information is required for this procedure.
+Take note of the Gitea, Git, and [Image Management Service (IMS)](../../glossary.md#image-management-service-ims) values (highlighted in the example output below).
 
-    ```bash
-    kubectl get cm -n services cray-product-catalog -o json | jq -r .data.uan
-    ```
+```bash
+kubectl get cm -n services cray-product-catalog -o json | jq -r .data.uan
+```
 
-    Example output:
+Example output:
 
-    ```yaml
-    PRODUCT_VERSION:
-      configuration:
-        clone_url: https://vcs.CRAY_EX_HOSTNAME/vcs/cray/uan-config-management.git # <--- Gitea clone url
-        commit: 6658ea9e75f5f0f73f78941202664e9631a63726                   # <--- Git commit id
-        import_branch: cray/uan/PRODUCT_VERSION                           # <--- Git branch with configuration
-        import_date: 2021-02-02 19:14:18.399670
-        ssh_url: git@vcs.CRAY_EX_HOSTNAME:cray/uan-config-management.git
-      images:
-        cray-shasta-uan-cos-sles15sp1.x86_64-0.1.17:                       # <--- IMS image name
-          id: c880251d-b275-463f-8279-e6033f61578b                         # <--- IMS image id
-      recipes:
-        cray-shasta-uan-cos-sles15sp1.x86_64-0.1.17:                       # <--- IMS recipe name
-          id: cbd5cdf6-eac3-47e6-ace4-aa1aecb1359a                         # <--- IMS recipe id
-    ```
+```yaml
+PRODUCT_VERSION:
+  configuration:
+    clone_url: https://vcs.CRAY_EX_HOSTNAME/vcs/cray/uan-config-management.git # <--- Gitea clone url
+    commit: 6658ea9e75f5f0f73f78941202664e9631a63726                   # <--- Git commit id
+    import_branch: cray/uan/PRODUCT_VERSION                           # <--- Git branch with configuration
+    import_date: 2021-02-02 19:14:18.399670
+    ssh_url: git@vcs.CRAY_EX_HOSTNAME:cray/uan-config-management.git
+  images:
+    cray-shasta-uan-cos-sles15sp1.x86_64-0.1.17:                       # <--- IMS image name
+      id: c880251d-b275-463f-8279-e6033f61578b                         # <--- IMS image id
+  recipes:
+    cray-shasta-uan-cos-sles15sp1.x86_64-0.1.17:                       # <--- IMS recipe name
+      id: cbd5cdf6-eac3-47e6-ace4-aa1aecb1359a                         # <--- IMS recipe id
+```
+
+### 2. UAN image pre-boot configuration
 
 1. (`ncn-mw#`) Generate the password hash for the `root` user.
 
@@ -74,18 +88,44 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     kubectl get secrets -n vault cray-vault-unseal-keys -o jsonpath='{.data.vault-root}' | base64 -d; echo
     ```
 
-1. (`ncn-mw#`) Write the password hash obtained from the `openssl` command to the HashiCorp Vault.
+1. Write the password hash obtained from the `openssl` command to the HashiCorp Vault.
 
-    - The `vault login` command will request a token. That token value is the output of the previous step.
-    - The `vault read secret/uan` command verifies that the hash was stored correctly. This password hash will be written to the UAN for the `root` user by CFS.
+    1. (`ncn-mw#`) Open a shell in the Vault pod.
 
-    ```bash
-    kubectl exec -itn vault cray-vault-0 -- sh
-    export VAULT_ADDR=http://cray-vault:8200
-    vault login
-    vault write secret/uan root_password='HASH'
-    vault read secret/uan
-    ```
+        ```bash
+        kubectl exec -itn vault cray-vault-0 -- sh
+        ```
+
+    1. (`pod#`) Authenticate with Vault.
+
+        > The `vault login` command will request the `root` token found in the earlier step.
+
+        ```bash
+        export VAULT_ADDR=http://cray-vault:8200
+        vault login
+        ```
+
+    1. (`pod#`) Write the password hash to Vault.
+
+        This password hash will be written to the UAN for the `root` user by CFS.
+
+        > Replace `HASH` in the example below with the password hash obtained from the earlier step.
+
+        ```bash
+        vault write secret/uan root_password='HASH'
+        ```
+
+    1. (`pod#`) Read back the password hash to verify that it was stored correctly.
+
+        ```bash
+        vault read secret/uan
+        ```
+
+    1. (`pod#`) Exit from the Vault pod.
+
+        ```bash
+        exit
+        ```
 
 1. (`ncn-mw#`) Obtain the password for the `crayvcs` user from the Kubernetes secret for use in the next command.
 
@@ -95,7 +135,8 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
 
 1. (`ncn-mw#`) Clone the UAN configuration management repository.
 
-    The repository is in the VCS/Gitea service and the location is reported in the `cray-product-catalog` Kubernetes ConfigMap in the `configuration.clone_url` key.
+    The repository is in the [Version Control Service (VCS)](../../glossary.md#version-control-service-vcs)/Gitea service, and its location is reported in the
+    `cray-product-catalog` Kubernetes ConfigMap in the `configuration.clone_url` key.
     The `CRAY_EX_HOSTNAME` from the `clone_url` is replaced with `api-gw-service-nmn.local` in the command that clones the repository.
 
     ```bash
@@ -116,7 +157,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
 
 1. (`ncn-mw#`) Configure a `root` user in the UAN image.
 
-    Add the encrypted password of the `root` user from `/etc/shadow` on an NCN worker to the file `group_vars/Application/passwd.yml`.
+    Add the encrypted password of the `root` user from `/etc/shadow` on an [Non-Compute Node (NCN)](../../glossary.md#non-compute-node-ncn) worker to the file `group_vars/Application/passwd.yml`.
 
     > Skip this step if the `root` user is already configured in the image.
 
@@ -126,9 +167,9 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     root_passwd: $6$LmQ/PlWlKixK$VL4ueaZ8YoKOV6yYMA9iH0gCl8F4C/3yC.jMIGfOK6F61h6d.iZ6/QB0NLyex1J7AtOsYvqeycmLj2fQcLjfE1
     ```
 
-1. (`ncn-mw#`) Apply any site-specific customizations and modifications to the Ansible configuration for the UAN nodes and commit the changes.
+1. (`ncn-mw#`) Apply any site-specific customizations and modifications to the Ansible configuration for the UANs and commit the changes.
 
-    The default Ansible play to configure UAN nodes is `site.yml` in the base of the `uan-config-management` repository. The roles that are executed in this play allow for
+    The default Ansible play to configure UANs is `site.yml` in the base of the `uan-config-management` repository. The roles that are executed in this play allow for
     nondefault configuration as required for the system.
 
     Consult the individual Ansible role `README.md` files in the `uan-config-management` repository `roles` directory to configure individual role variables. Roles prefixed with
@@ -149,9 +190,9 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     git commit -m "Add vars.yml customizations"
     ```
 
-1. (`ncn-mw#`) Verify that the System Layout Service \(SLS\) and the `uan_interfaces` configuration role refer to the Mountain Node Management Network by the same name.
+1. (`ncn-mw#`) Verify that the [System Layout Service (SLS)](../../glossary.md#system-layout-service-sls) and the `uan_interfaces` configuration role refer to the Mountain Node Management Network by the same name.
 
-    > Skip this step if there are no Mountain cabinets in the HPE Cray EX system.
+    > Skip this step if there are no [Mountain cabinets](../../glossary.md#mountain-cabinet) in the HPE Cray EX system.
 
     1. Edit the `roles/uan_interfaces/tasks/main.yml` file.
 
@@ -197,16 +238,16 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
 
     `ecece54b1eb65d484444c4a5ca0b244b329f4667` is an example commit that could be returned.
 
-    Navigate back to the parent directory:
+1. (`ncn-mw#`) Navigate back to the parent directory.
 
     ```bash
     cd ..
     ```
 
-    The configuration parameters have been stored in a branch in the UAN Git repository. The next phase of the process is initiating the Configuration Framework Service \(CFS\)
-    to customize the image.
+The configuration parameters have been stored in a branch in the UAN Git repository. The next phase of the process is initiating the
+Configuration Framework Service \(CFS\) to customize the image.
 
-### Configure UAN images
+### 3. Configure UAN images
 
 1. Create a JSON input file for generating a CFS configuration for the UAN.
 
@@ -298,7 +339,8 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
 
     1. Download the `rootfs` image specified in the UAN product catalog.
 
-        Replace `IMAGE_ID` in the following export command with the IMS image ID recorded in [Obtain UAN artifact IDs and other information](#get-uan-info).
+        Replace `IMAGE_ID` in the following export command with the IMS image ID recorded earlier in
+        [1. Get UAN information](#1-get-uan-information).
 
         ```bash
         UAN_IMAGE_ID=IMAGE_ID
@@ -404,7 +446,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     1. Create a new IMS image registration and save the `id` field in an environment variable.
 
         ```bash
-        cray ims images create --name UAN-1.4.0-day-zero
+        cray ims images create --name UAN-1.4.0-day-zero --format toml
         ```
 
         Example output:
@@ -426,7 +468,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         1. Upload the image.
 
             ```bash
-            cray artifacts create boot-images ${NEW_IMAGE_ID}/rootfs UAN-1.4.0-day-zero.squashfs
+            cray artifacts create boot-images ${NEW_IMAGE_ID}/rootfs UAN-1.4.0-day-zero.squashfs --format toml
             ```
 
             Example output:
@@ -439,7 +481,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         1. Upload the `initrd`.
 
             ```bash
-            cray artifacts create boot-images ${NEW_IMAGE_ID}/initrd initrd
+            cray artifacts create boot-images ${NEW_IMAGE_ID}/initrd initrd --format toml
             ```
 
             Example output:
@@ -452,7 +494,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         1. Upload the kernel.
 
             ```bash
-            cray artifacts create boot-images ${NEW_IMAGE_ID}/kernel vmlinuz
+            cray artifacts create boot-images ${NEW_IMAGE_ID}/kernel vmlinuz --format toml
             ```
 
             Example output:
@@ -467,7 +509,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         1. Display S3 values for uploaded image.
 
             ```bash
-            cray artifacts describe boot-images ${NEW_IMAGE_ID}/rootfs
+            cray artifacts describe boot-images ${NEW_IMAGE_ID}/rootfs --format toml
             ```
 
             Example output:
@@ -516,10 +558,10 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
 
     1. Print out all the IMS details about the current UAN image.
 
-        Use the IMS image ID from [Obtain UAN artifact IDs and other information](#get-uan-info).
+        Use the IMS image ID from [1. Get UAN information](#1-get-uan-information).
 
         ```bash
-        cray ims images describe c880251d-b275-463f-8279-e6033f61578b
+        cray ims images describe c880251d-b275-463f-8279-e6033f61578b --format toml
         ```
 
         Example output:
@@ -607,7 +649,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         ```bash
         cray ims images update ${NEW_IMAGE_ID} \
                 --link-type s3 --link-path s3://boot-images/${NEW_IMAGE_ID}/manifest.json \
-                --link-etag 6d04c3a4546888ee740d7149eaecea68
+                --link-etag 6d04c3a4546888ee740d7149eaecea68 --format toml
         ```
 
         Example output:
@@ -623,17 +665,17 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         type = "s3"
         ```
 
+### 4. Customize UAN image using CFS
+
 1. (`ncn-mw#`) Create a CFS session to perform preboot image customization of the UAN image.
 
     ```bash
     cray cfs sessions create --name uan-config-PRODUCT_VERSION \
         --configuration-name uan-config-PRODUCT_VERSION \
         --target-definition image \
-        --target-group Application $NEW_IMAGE_ID \
+        --target-group Application $NEW_IMAGE_ID
         --format json
     ```
-
-#### Wait for CFS Session
 
 1. (`ncn-mw#`) Wait for the CFS configuration session for the image customization to complete.
 
@@ -645,24 +687,24 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     cray cfs sessions describe uan-config-PRODUCT_VERSION --format json | jq
     ```
 
-### Prepare UAN boot session templates
+### 5. Identify UAN xnames
 
-#### Get XNAMES
+(`ncn-mw#`) Retrieve the [component names (xnames)](../../glossary.md#xname) of the UANs from the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm).
 
-1. (`ncn-mw#`) Retrieve the component names (xnames) of the UAN nodes from the Hardware State Manager \(HSM\).
+```bash
+cray hsm state components list --role Application --subrole UAN --format json | jq -r .Components[].ID
+```
 
-    ```bash
-    cray hsm state components list --role Application --subrole UAN --format json | jq -r .Components[].ID
-    ```
+Example output:
 
-    Example output:
+```text
+x3000c0s19b0n0
+x3000c0s24b0n0
+x3000c0s20b0n0
+x3000c0s22b0n0
+```
 
-    ```text
-    x3000c0s19b0n0
-    x3000c0s24b0n0
-    x3000c0s20b0n0
-    x3000c0s22b0n0
-    ```
+### 6. Prepare UAN boot session templates
 
 1. Determine the correct value for the `ifmap` option in the `kernel_parameters` string for the type of UAN.
 
@@ -678,34 +720,33 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     1. Populate the template with the following information:
 
         - The value of the `ifmap` option for the `kernel_parameters` string that was determined in the previous step.
-        - The component names (xnames) of application nodes from [Retrieve the UAN xnames](#get-xnames).
-        - The customized image ID from [Wait for the CFS configuration session](#wait-for-cfs-session).
-        - The CFS configuration session name from [Wait for the CFS configuration session](#wait-for-cfs-session).
+        - For the `node_list` in the boot set, use the xnames of the UANs found in [5. Identify UAN xnames](#5-identify-uan-xnames).
+        - The `path` field in the boot set should contain the customized image IMS ID (`result_id`) from [4. Customize UAN image using CFS](#4-customize-uan-image-using-cfs).
+        - The `cfs`.`configuration` field should be set to the name of the CFS configuration used in [4. Customize UAN image using CFS](#4-customize-uan-image-using-cfs).
 
     1. Verify that the session template matches the format and structure in the following example:
 
         ```json
         {
-           "boot_sets": {
-             "uan": {
-               "boot_ordinal": 2,
-               "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=nmn0:dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 ifmap=net2:nmn0,lan0:hsn0,lan1:hsn1 spire_join_token=${SPIRE_JOIN_TOKEN}",
-               "network": "nmn",
-               "node_list": [
-                  [ #... List of Application Nodes from cray hsm state command ...]
-               ],
-               "path": "s3://boot-images/IMS_IMAGE_ID/manifest.json",  # <-- result_id from CFS image customization session
-               "rootfs_provider": "cpss3",
-               "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-               "type": "s3"
-             }
-           },
-           "cfs": {
-               "configuration": "uan-config-PRODUCT_VERSION"
-           },
-           "enable_cfs": true,
-           "name": "uan-sessiontemplate-PRODUCT_VERSION"
-         }
+          "boot_sets": {
+            "uan": {
+              "boot_ordinal": 2,
+              "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=nmn0:dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 ifmap=net2:nmn0,lan0:hsn0,lan1:hsn1 spire_join_token=${SPIRE_JOIN_TOKEN}",
+              "network": "nmn",
+              "node_list": [
+                "#... List of Application Nodes from cray hsm state command ..."
+              ],
+              "path": "s3://boot-images/IMS_IMAGE_ID/manifest.json",
+              "rootfs_provider": "cpss3",
+              "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
+              "type": "s3"
+            }
+          },
+          "cfs": {
+            "configuration": "uan-config-PRODUCT_VERSION"
+          },
+          "enable_cfs": true
+        }
         ```
 
     1. Save the template with a descriptive name, such as `uan-sessiontemplate-PRODUCT_VERSION.json`.
