@@ -18,9 +18,9 @@ The following values are not supported in COS v1.4:
 The limit applies only when a high number of cores are active. On an `N`-core processor, the limit is in effect when the active core count is `N`, `N-1`, `N-2`, or `N-3`.
 For example, on a 12-core processor, the limit is in effect when 12, 11, 10, or 9 cores are active.
 
-## Set or Change the Turbo Boost Limit Parameter
+## Set or change the turbo boost limit parameter
 
-Modify the Boot Orchestration Service \(BOS\) template for the node\(s\). This example below disables turbo boost. The default setting is 999 \(no limit\).
+Modify the Boot Orchestration Service \(BOS\) template for the nodes. This example below disables turbo boost. The default setting is 999 \(no limit\).
 
 ```json
 {
