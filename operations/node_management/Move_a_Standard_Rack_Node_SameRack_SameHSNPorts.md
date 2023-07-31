@@ -401,6 +401,6 @@ This procedure works with both application and compute nodes. This example moves
     Specify the appropriate BOS template for the node type.
 
     ```bash
-    cray bos v1 session create --template-uuid cle-VERSION \
+    cray bos v1 session create --template-name cle-VERSION \
         --operation reboot --limit x3000c0s27b1n0,x3000c0s27b2n0,x3000c0s27b3n0,x3000c0s27b4n0
     ```
