@@ -7,6 +7,7 @@ been made, that information will be available on this page. For any deprecated f
 version for their planned removal, customers are still strongly encouraged to make plans to migrate away from the deprecated feature.
 
 * [Removals](#removals)
+  * [Removals in CSM 1.4](#removals-in-csm-14)
   * [Removals in CSM 1.5](#removals-in-csm-15)
   * [Removals in CSM 1.6](#removals-in-csm-16)
 * [Deprecations](#deprecations)
@@ -19,6 +20,10 @@ version for their planned removal, customers are still strongly encouraged to ma
 
 Any features that are being removed in the current or upcoming CSM releases are listed in this section, grouped by the CSM release when they are being removed,
 in chronological order.
+
+### Removals in CSM 1.4
+
+* [SLS](../../glossary.md#system-layout-service-sls) support for downloading and uploading credentials in the `dumpstate` and `loadstate` REST APIs
 
 ### Removals in CSM 1.5
 

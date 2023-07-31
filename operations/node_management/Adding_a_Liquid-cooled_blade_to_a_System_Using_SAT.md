@@ -24,7 +24,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
 
 ## Use SAT to add the blade to hardware management
 
-1. Begin discovery for the blade.
+1. (`ncn-mw#`) Begin discovery for the blade.
 
    Use the `sat swap` command to map the nodes' Ethernet interface MAC addresses to the appropriate IP addresses and component names (xnames), and begin discovery for the blade.
 
@@ -47,7 +47,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    sat swap blade --action enable <SLOT_XNAME>
    ```
 
-1. (`ncn#`) Clear out the existing Redfish event subscriptions from the BMCs on the blade.
+1. (`ncn-mw#`) Clear out the existing Redfish event subscriptions from the BMCs on the blade.
 
     1. Set the environment variable `SLOT` to the blade's location.
 
@@ -80,7 +80,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
 
 ## Power on and boot the nodes
 
-1. Determine which Boot Orchestration Service \(BOS\) templates to use to shut down nodes on the target blade.
+1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down nodes on the target blade.
 
    There will be separate session templates for UANs and computes nodes.
 
@@ -114,7 +114,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    1. Find the `bos_session` value for each node via the Configuration Framework Service (CFS).
 
       ```bash
-      cray cfs components describe x9000c3s0b1n0 | grep bos_session
+      cray cfs components describe x9000c3s0b1n0 --format toml | grep bos_session
       ```
 
       Example output:
@@ -126,7 +126,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    1. Find the required `templateName` value with BOS.
 
       ```bash
-      cray bos v1 session describe BOS_SESSION | grep templateName
+      cray bos v1 session describe BOS_SESSION --format toml | grep templateName
       ```
 
       Example output:
@@ -138,7 +138,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    1. Determine the list of xnames associated with the desired session template.
 
       ```bash
-      cray bos v1 sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
+      cray bos v1 sessiontemplate describe SESSION_TEMPLATE_NAME --format toml | grep node_list
       ```
 
       Example output:
@@ -147,7 +147,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
       node_list = [ "x9000c3s0b1n0", "x9000c3s0b2n0", "x9000c3s0b3n0", "x9000c3s0b4n0",]
       ```
 
-1. Power on and boot the nodes.
+1. (`ncn-mw#`) Power on and boot the nodes.
 
    Use `sat bootsys` to power on and boot the nodes. Specify the appropriate component name (xname) for the slot, and
    a comma-separated list of the BOS session templates determined in the previous step.
@@ -163,15 +163,16 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
 
    Verify that the correct firmware versions are present for the node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
 
-    1. Review [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) to perform a dry run using FAS to verify firmware versions.
+   1. Review [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) to perform a dry run using FAS to verify firmware versions.
 
-    1. If necessary, update firmware with FAS. See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) for more information.
+   1. If necessary, update firmware with FAS. See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) for more information.
 
 ## Check DVS
 
-There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and their waiter, and at least one `cray-cps-cm-pm` pod. Usually there are two `cray-cps-cm-pm` pods: one on `ncn-w002` and one on another worker node.
+There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and their waiter, and at least one `cray-cps-cm-pm` pod.
+Usually there are two `cray-cps-cm-pm` pods: one on `ncn-w002` and one on another worker node.
 
-1. Check the `cray-cps` pods on worker nodes and verify they are `Running`.
+1. (`ncn-mw#`) Check the `cray-cps` pods on worker nodes and verify they are `Running`.
 
    ```bash
    kubectl get pods -Ao wide | grep cps
@@ -189,7 +190,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
    services   cray-cps-wait-for-etcd-jb95m 0/1  Completed
    ```
 
-1. SSH to each worker node running CPS/DVS and run `dmesg -T`.
+1. (`ncn-w#`) SSH to each worker node running CPS/DVS and run `dmesg -T`.
 
    Ensure that there are no recurring `"DVS: merge_one"` error messages shown. These error messages indicate that DVS is detecting an IP address change for one of the client nodes.
 
@@ -207,7 +208,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
    [Tue Jul 21 13:09:54 2020] DVS: merge_one#358:   Ignoring.
    ```
 
-1. SSH to the node and check each DVS mount.
+1. (`nid#`) SSH to the client node and check each DVS mount.
 
    ```bash
    mount | grep dvs | head -1
@@ -221,17 +222,15 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
 
 ## Check the HSN for the affected nodes
 
-1. Determine the pod name for the Slingshot fabric manager pod and check the status of the fabric.
+1. (`ncn-mw#`) Determine the pod name for the Slingshot fabric manager pod and check the status of the fabric.
 
    ```bash
-   kubectl exec -it -n services \
-     $(kubectl get pods --all-namespaces |grep slingshot | awk '{print $2}') \
-     -- fmn_status
+   kubectl exec -it -n services $(kubectl get pods --all-namespaces |grep slingshot | awk '{print $2}') -- fmn_status
    ```
 
 ## Check for duplicate IP address entries
 
-1. Check for duplicate IP address entries in the Hardware State Management Database (HSM). Duplicate entries will cause DNS operations to fail.
+1. (`ncn-mw#`) Check for duplicate IP address entries in the Hardware State Management Database (HSM). Duplicate entries will cause DNS operations to fail.
 
    1. Verify that each node hostname resolves to a single IP address.
 
@@ -273,7 +272,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
       [{'result': 1, 'text': "Config reload failed: configuration error using file '/usr/local/kea/cray-dhcp-kea-dhcp4.conf': failed to add new host using the HW address '00:40:a6:83:50:a4 and DUID '(null)' to the IPv4 subnet id '0' for the address 10.100.0.105: There's already a reservation for this address"}]
       ```
 
-1. Delete the duplicate entries, if there are any.
+1. (`ncn-mw#`) Delete the duplicate entries, if there are any.
 
    If there are duplicate entries in the HSM as a result of this procedure, then delete the duplicate entries (`10.100.0.105` in this example).
 
@@ -322,7 +321,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
       cray hsm inventory ethernetInterfaces delete 0040a68350a4
       ```
 
-1. Use the following example `curl` command to check for active DHCP leases.
+1. (`ncn-mw#`) Use the following example `curl` command to check for active DHCP leases.
 
    If there are zero DHCP leases, then there is a configuration error.
 
@@ -345,7 +344,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
    ]
    ```
 
-1. Check DNS using `nslookup`.
+1. (`ncn-mw#`) Check DNS using `nslookup`.
 
    ```bash
    nslookup 10.100.0.105
@@ -360,7 +359,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
    105.0.100.10.in-addr.arpa        name = x1005c3s0b0n0.local.
    ```
 
-1. Verify the ability to connect using SSH.
+1. (`ncn-mw#`) Verify the ability to connect using SSH.
 
    ```bash
    ssh x9000c3s0b0n1

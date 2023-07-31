@@ -289,7 +289,7 @@ As noted below, make sure the S3 path for the manifest matches the S3 path shown
 (`ncn-mw#`) Create a BOS session to reboot the chosen node using the BOS session template that was just created.
 
 ```bash
-cray bos v1 session create --template-uuid shasta-csm-bare-bones-image --operation reboot --limit "${XNAME}" --format toml
+cray bos v1 session create --template-name shasta-csm-bare-bones-image --operation reboot --limit "${XNAME}" --format toml
 ```
 
 Expected output looks similar to the following:
@@ -297,7 +297,7 @@ Expected output looks similar to the following:
 ```toml
 limit = "x3000c0s17b2n0"
 operation = "reboot"
-templateUuid = "shasta-csm-bare-bones-image"
+templateName = "shasta-csm-bare-bones-image"
 [[links]]
 href = "/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
 jobId = "boa-8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
