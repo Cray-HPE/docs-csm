@@ -20,7 +20,7 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 
 ## Procedure
 
-### Step 1: Prepare the source system blade for removal
+### 1. Prepare the source system blade for removal
 
 1. Use the workload manager (WLM) to drain running jobs from the affected nodes on the blade.
 
@@ -32,38 +32,38 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
     template for the node type in the following command.
 
     ```bash
-    ncn# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-    ncn# cray bos session create --template-uuid $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
+    ncn-mw# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+    ncn-mw# cray bos session create --template-name $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
     ```
 
-### Step 2: Disable the Redfish endpoints for the nodes
+### 2. Disable the Redfish endpoints for the nodes
 
 1. Temporarily disable the Redfish endpoints for `NodeBMCs` present in the blade.
 
     ```bash
-    ncn# cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b0
-    ncn# cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b1
+    ncn-mw# cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b0
+    ncn-mw# cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b1
     ```
 
-### Step 3: Clear out the existing Redfish event subscriptions from the BMCs on the blade
+### 3. Clear Redfish event subscriptions from BMCs on the blade
 
-1. Set the environment variable `SLOT` corresponding to the blades location:
+1. Set the environment variable `SLOT` to the blade's location.
 
      ```bash
-     ncn# SLOT="x9000c3s0"
+     ncn-mw# SLOT="x9000c3s0"
      ```
 
-1. Clear the Redfish event subscriptions:
+1. Clear the Redfish event subscriptions.
 
     ```bash
-    ncn# for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep $SLOT); do
-        PASSWD=$(cray scsd bmc creds list --targets $BMC --format json | jq .Targets[].Password -r)
-        SUBS=$(curl -sk -u root:$PASSWD https://${BMC}/redfish/v1/EventService/Subscriptions | jq -r '.Members[]."@odata.id"')
-        for SUB in $SUBS; do
-            echo "Deleting event subscription: https://${BMC}${SUB}" 
-            curl -i -sk -u root:$PASSWD -X DELETE https://${BMC}${SUB}
-        done
-    done
+    ncn-mw# for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep $SLOT); do
+                PASSWD=$(cray scsd bmc creds list --targets $BMC --format json | jq .Targets[].Password -r)
+                SUBS=$(curl -sk -u root:$PASSWD https://${BMC}/redfish/v1/EventService/Subscriptions | jq -r '.Members[]."@odata.id"')
+                for SUB in $SUBS; do
+                    echo "Deleting event subscription: https://${BMC}${SUB}" 
+                    curl -i -sk -u root:$PASSWD -X DELETE https://${BMC}${SUB}
+                done
+            done
     ```
 
     Each event subscription deleted that was deleted will have output like the following:
@@ -82,23 +82,23 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
     server: Cray Embedded Software Redfish Service
     ```
 
-### Step 4: Clear the node controller settings
+### 4. Clear the node controller settings
 
 1. Remove the system-specific settings from each node controller on the blade.
 
    ```bash
-   ncn# curl -k -u root:PASSWORD -X POST -H \
+   ncn-mw# curl -k -u root:PASSWORD -X POST -H \
           'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \
           https://x9000c3s0b0/redfish/v1/Managers/BMC/Actions/Manager.Reset
 
-   ncn# curl -k -u root:PASSWORD -X POST -H \
+   ncn-mw# curl -k -u root:PASSWORD -X POST -H \
           'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \
           https://x9000c3s0b1/redfish/v1/Managers/BMC/Actions/Manager.Reset
    ```
 
    Use Ctrl-C to return to the prompt if command does not return.
 
-### Step 5: Power off the chassis slot
+### 5. Power off the chassis slot
 
 1. Suspend the `hms-discovery` cron job.
 
@@ -124,20 +124,20 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
     This examples powers off slot 0, chassis 3, in cabinet 9000.
 
     ```bash
-    ncn# cray capmc xname_off create --xnames x9000c3s0 --recursive true
+    ncn-mw# cray capmc xname_off create --xnames x9000c3s0 --recursive true
     ```
 
-### Step 6: Disable the chassis slot
+### 6. Disable the chassis slot
 
 1. Disable the chassis slot.
 
     Disabling the slot prevents `hms-discovery` from automatically powering on the slot. This example disables slot 0, chassis 3, in cabinet 9000.
 
     ```bash
-    ncn# cray hsm state components enabled update --enabled false x9000c3s0
+    ncn-mw# cray hsm state components enabled update --enabled false x9000c3s0
     ```
 
-### Step 7: Record MAC and IP addresses for nodes
+### 7. Record MAC and IP addresses for nodes
 
 **IMPORTANT**: Record the NMN MAC and IP addresses for each node in the blade (labeled `Node Maintenance Network`). To prevent disruption in DVS when over operating the NMN, these addresses must
 be maintained in the HSM when the blade is swapped and discovered.
@@ -149,7 +149,7 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
     The prerequisites show an example of how to gather HSM values and store them to a file.
 
     ```bash
-    ncn# cray hsm inventory ethernetInterfaces list --component-id x9000c3s0b0n0 --format json
+    ncn-mw# cray hsm inventory ethernetInterfaces list --component-id x9000c3s0b0n0 --format json
     ```
 
     Example output:
@@ -182,18 +182,18 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
 
 1. Repeat the command to record the `ComponentID`, MAC addresses, and IP addresses for the `Node Maintenance Network` for the other nodes in the blade.
 
-### Step 8: Cleanup Hardware State Manager
+### 8. Cleanup Hardware State Manager
 
 1. Set an environment variable that corresponds to the chassis slot of the blade.
 
     ```bash
-    ncn# CHASSIS_SLOT=x9000c3s0
+    ncn-mw# CHASSIS_SLOT=x9000c3s0
     ```
 
 1. Delete the Redfish endpoints for each node.
 
     ```bash
-    ncn# for xname in $(cray hsm inventory redfishEndpoints list --format json |
+    ncn-mw# for xname in $(cray hsm inventory redfishEndpoints list --format json |
                           jq -r --arg CHASSIS_SLOT "${CHASSIS_SLOT}" \
                             '.RedfishEndpoints[] | select(.ID | startswith($CHASSIS_SLOT)) | .ID')
          do
@@ -205,7 +205,7 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
 1. Remove entries from the state components.
 
     ```bash
-    ncn# for xname in $(cray hsm state components list --format json |
+    ncn-mw# for xname in $(cray hsm state components list --format json |
                           jq -r --arg CHASSIS_SLOT "${CHASSIS_SLOT}" \
                             '.Components[] | select((.ID | startswith($CHASSIS_SLOT)) and (.ID != $CHASSIS_SLOT)) | .ID' )
          do
@@ -219,7 +219,7 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
     *Do not delete the MAC and IP addresses for the node BMC*.
 
     ```bash
-    ncn# for mac in $(cray hsm inventory ethernetInterfaces list --type Node --format json |
+    ncn-mw# for mac in $(cray hsm inventory ethernetInterfaces list --type Node --format json |
                         jq -r --arg CHASSIS_SLOT "${CHASSIS_SLOT}" \
                           '.[] | select(.ComponentID | startswith($CHASSIS_SLOT)) | .ID')
          do
@@ -234,7 +234,7 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
     ncn-mw# kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
     ```
 
-### Step 9: Remove the blade
+### 9. Remove the blade
 
 1. Remove the blade from the source location.
 
@@ -246,7 +246,7 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
 
 1. Install the blade from the source system in a storage rack or leave it on the cart.
 
-### Step 10: Rediscover the Chassis BMC of the chassis the blade was removed from
+### 10. Rediscover the Chassis BMC of the chassis the blade was removed from
 
 1. Determine the name of the Chassis BMC.
 
@@ -267,7 +267,7 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
     ncn-mw# cray hsm inventory discover create --xnames $CHASSIS_BMC
     ```
 
-### Step 11: Re-enable the `hms-discovery` cronjob
+### 11. Re-enable the `hms-discovery` cronjob
 
 1. Un-suspend the `hms-discovery` cron job if no more liquid-cooled blades are planned to be removed from the system.
 

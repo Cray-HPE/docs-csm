@@ -35,13 +35,13 @@ An authentication token is required to access the API gateway and to use the `sa
       If it is unclear what session template is in use, then proceed to the next substep.
 
       ```bash
-      ncn# cray bos sessiontemplate list
+      ncn-mw# cray bos sessiontemplate list
       ```
 
    1. Find the xname with `sat status`.
 
       ```bash
-      ncn# sat status --filter role!=management --filter enabled=true \
+      ncn-mw# sat status --filter role!=management --filter enabled=true \
                --fields xname,aliases,role,subrole,"desired config"
       ```
 
@@ -62,7 +62,7 @@ An authentication token is required to access the API gateway and to use the `sa
    1. Find the `bos_session` value via the Configuration Framework Service (CFS).
 
       ```bash
-      ncn# cray cfs components describe XNAME --format toml | grep bos_session
+      ncn-mw# cray cfs components describe XNAME --format toml | grep bos_session
       ```
 
       Example output:
@@ -71,10 +71,10 @@ An authentication token is required to access the API gateway and to use the `sa
       bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
       ```
 
-   1. Find the required `templateUuid` value with BOS.
+   1. Find the required `templateName` value with BOS.
 
       ```bash
-      ncn# cray bos session describe BOS_SESSION --format toml | grep templateName
+      ncn-mw# cray bos session describe BOS_SESSION --format toml | grep templateName
       ```
 
       Example output:
@@ -86,19 +86,23 @@ An authentication token is required to access the API gateway and to use the `sa
    1. Determine the list of xnames or role groups or HSM groups associated with the desired boot session template.
 
       ```bash
-      ncn# cray bos sessiontemplate describe SESSION_TEMPLATE_NAME --format toml | egrep "node_list|node_roles_groups|node_groups"
+      ncn-mw# cray bos sessiontemplate describe SESSION_TEMPLATE_NAME --format toml | egrep "node_list|node_roles_groups|node_groups"
       ```
 
-      Example output:
+      Example outputs:
+
+      ```toml
+      node_list = [ "x3000c0s19b1n0", "x3000c0s19b2n0", "x3000c0s19b3n0", "x3000c0s19b4n0",]
+      ```
 
       ```toml
       node_roles_groups = [ "Compute",]
       ```
 
-1. Use sat to capture state of the system before the shutdown.
+1. Use SAT to capture state of the system before the shutdown.
 
    ```bash
-   ncn# sat bootsys shutdown --stage capture-state
+   ncn-mw# sat bootsys shutdown --stage capture-state
    ```
 
 1. Optional system health checks.
@@ -110,7 +114,7 @@ An authentication token is required to access the API gateway and to use the `sa
    1. Use the System Diagnostic Utility (SDU) to capture current state of system before the shutdown.
 
       ```bash
-      ncnm# sdu --scenario triage --start_time '-4 hours' \
+      ncn-m# sdu --scenario triage --start_time '-4 hours' \
                --reason "saving state before powerdown"
       ```
 
@@ -124,19 +128,19 @@ An authentication token is required to access the API gateway and to use the `sa
    1. Capture the state of all nodes.
 
       ```bash
-      ncn# sat status | tee sat.status
+      ncn-mw# sat status | tee sat.status
       ```
 
    1. Capture the list of disabled nodes.
 
       ```bash
-      ncn# sat status --filter Enabled=false | tee sat.status.disabled
+      ncn-mw# sat status --filter Enabled=false | tee sat.status.disabled
       ```
 
    1. Capture the list of nodes that are `off`.
 
       ```bash
-      ncn# sat status --filter State=Off | tee sat.status.off
+      ncn-mw# sat status --filter State=Off | tee sat.status.off
       ```
 
    1. Capture the state of nodes in the workload manager.
@@ -144,19 +148,19 @@ An authentication token is required to access the API gateway and to use the `sa
       For example, if the system uses Slurm:
 
       ```bash
-      ncn# ssh uan01 sinfo | tee uan01.sinfo
+      ncn-mw# ssh uan01 sinfo | tee uan01.sinfo
       ```
 
    1. Capture the list of down nodes in the workload manager and the reason.
 
       ```bash
-      ncn# ssh nid000001-nmn sinfo --list-reasons | tee sinfo.reasons
+      ncn-mw# ssh nid000001-nmn sinfo --list-reasons | tee sinfo.reasons
       ```
 
    1. Check Ceph status.
 
       ```bash
-      ncn# ceph -s | tee ceph.status
+      ncn-mw# ceph -s | tee ceph.status
       ```
 
    1. Check Kubernetes pod status for all pods.
@@ -193,7 +197,7 @@ An authentication token is required to access the API gateway and to use the `sa
       the next step.
 
          ```bash
-         ncn# grep sw- /etc/hosts
+         ncn-mw# grep sw- /etc/hosts
          ```
 
          Example output:
@@ -210,7 +214,7 @@ An authentication token is required to access the API gateway and to use the `sa
       1. Ping all switches using the proper list of hostnames in the index of the for loop.
 
          ```bash
-         ncn# for switch in sw-leaf-00{1,2} sw-leaf-bmc-00{1-2} sw-spine-00{1,2} sw-cdu-00{1,2}l; do
+         ncn-mw# for switch in sw-leaf-00{1,2} sw-leaf-bmc-00{1-2} sw-spine-00{1,2} sw-cdu-00{1,2}l; do
                  while true; do
                       ping -c 1 $switch > /dev/null && break
                       echo "switch $switch is not yet up"
@@ -223,7 +227,7 @@ An authentication token is required to access the API gateway and to use the `sa
    1. Check Lustre server health.
 
        ```bash
-       ncn# ssh admin@cls01234n00.us.cray.com
+       ncn-mw# ssh admin@cls01234n00.us.cray.com
        admin@cls01234n00# cscli csinfo
        admin@cls01234n00# cscli show_nodes
        admin@cls01234n00# cscli fs_info
@@ -239,7 +243,7 @@ An authentication token is required to access the API gateway and to use the `sa
 1. Check for running sessions.
 
    ```bash
-   ncn# sat bootsys shutdown --stage session-checks | tee sat.session-checks
+   ncn-mw# sat bootsys shutdown --stage session-checks | tee sat.session-checks
    ```
 
    Example output:
@@ -357,13 +361,13 @@ An authentication token is required to access the API gateway and to use the `sa
       string. Use the following command to delete the BOS database entry.
 
       ```bash
-      ncn# cray bos session delete <session ID>
+      ncn-mw# cray bos session delete <session ID>
       ```
 
       Example:
 
       ```bash
-      ncn# cray bos session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
+      ncn-mw# cray bos session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
       ```
 
 1. Coordinate with the site to prevent new sessions from starting in the services listed.
@@ -372,6 +376,6 @@ An authentication token is required to access the API gateway and to use the `sa
 
 1. Follow the vendor workload manager documentation to drain processes running on compute nodes. For Slurm, see the `scontrol` man page. For PBS Professional, see the `pbsnodes` man page.
 
-## Next Step
+## Next step
 
 Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.

@@ -7,7 +7,7 @@ required to perform the firmware and configuration updates.
 
 See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) for information about automated firmware updates using Redfish.
 
-## Time Required
+## Time required
 
 2-5 minutes for a firmware update and 1-3 minutes for a configuration update.
 
@@ -124,5 +124,5 @@ See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) for info
 1. Use the Boot Orchestration Service \(BOS\) to reboot all the affected nodes.
 
     ```bash
-    ncn-m001# cray bos session create --template-uuid SESSION_TEMPLATE --operation reboot
+    ncn-m001# cray bos session create --template-name SESSION_TEMPLATE --operation reboot
     ```

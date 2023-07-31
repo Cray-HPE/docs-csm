@@ -21,10 +21,10 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     Identify the BOS session template names (such as `"cos-2.0.x"`, `slurm`, or `uan-slurm`), and choose the appropriate compute and UAN node templates for the power on and boot.
 
     ```bash
-    ncn-m001# cray bos sessiontemplate list
+    ncn-mw# cray bos v1 sessiontemplate list --format toml
     ```
 
-    Example output:
+    Example output excerpts:
 
     ```text
     [[results]]
@@ -41,7 +41,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 1. To display more information about a session template, for example `cos-2.0.0`, use the `describe` option.
 
     ```bash
-    ncn-m001# cray bos sessiontemplate describe cos-2.0.x
+    ncn-mw# cray bos sessiontemplate describe cos-2.0.x
     ```
 
 1. Use `sat bootsys boot` to power on and boot UANs and compute nodes.
@@ -51,7 +51,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     Use `--loglevel debug` command line option to provide more information as the system boots.
 
     ```bash
-    ncn-m001# sat bootsys boot --stage bos-operations \
+    ncn-mw# sat bootsys boot --stage bos-operations \
                 --bos-templates COS_SESSION_TEMPLATE,UAN_SESSION_TEMPLATE
     ```
 
@@ -81,13 +81,13 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     **Tip:** The commands needed to monitor the progress of the job are provided in the output of the `sat bootsys boot` command.
 
     ```bash
-    ncn-m001# kubectl -n services logs -c boa -f --selector job-name=boa-caa15959-2402-4190-9243-150d568942f6
+    ncn-mw# kubectl -n services logs -c boa -f --selector job-name=boa-caa15959-2402-4190-9243-150d568942f6
     ```
 
 1. In another shell window, use a similar command to monitor the UAN session.
 
     ```bash
-    ncn-m001# kubectl -n services logs -c boa -f --selector job-name=boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea
+    ncn-mw# kubectl -n services logs -c boa -f --selector job-name=boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea
     ```
 
 1. Wait for compute nodes and UANs to boot and check the Configuration Framework Service \(CFS\) log for errors.
@@ -95,7 +95,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 1. Verify that nodes have booted and indicate `Ready`.
 
     ```bash
-    ncn-m001# sat status
+    ncn-mw# sat status
     ```
 
     Example output:

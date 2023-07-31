@@ -188,7 +188,7 @@ As noted below, make sure the S3 path for the manifest matches the S3 path shown
 To list the compute nodes managed by HSM:
 
 ```bash
-ncn# cray hsm state components list --role Compute --enabled true
+ncn-mw# cray hsm state components list --role Compute --enabled true --format toml
 ```
 
 Example output:
@@ -224,7 +224,7 @@ Class = "River"
 Choose a node from those listed and set `XNAME` to its component name (xname). In this example, `x3000c0s17b2n0`:
 
 ```bash
-ncn# export XNAME=x3000c0s17b2n0
+ncn-mw# export XNAME=x3000c0s17b2n0
 ```
 
 <a name="csm-boot-steps-reboot"></a>
@@ -234,15 +234,15 @@ ncn# export XNAME=x3000c0s17b2n0
 Create a BOS session to reboot the chosen node using the BOS session template that was created:
 
 ```bash
-ncn# cray bos session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit $XNAME
+ncn-mw# cray bos session create --template-name shasta-1.4-csm-bare-bones-image --operation reboot --limit $XNAME --format toml
 ```
 
 Expected output looks similar to the following:
 
-```text
+```toml
 limit = "x3000c0s17b2n0"
 operation = "reboot"
-templateUuid = "shasta-1.4-csm-bare-bones-image"
+templateName = "shasta-1.4-csm-bare-bones-image"
 [[links]]
 href = "/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
 jobId = "boa-8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"

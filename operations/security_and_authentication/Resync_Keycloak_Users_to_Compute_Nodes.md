@@ -89,8 +89,8 @@ The COS product must be installed.
         ncn-mw# git push origin integration
         ```
 
-    1. Do a reboot of the compute nodes with the Boot Orchestration Service \(BOS\).
+    1. Eeboot the compute nodes with the Boot Orchestration Service \(BOS\).
 
         ```bash
-        ncn-mw# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
+        ncn-mw# cray bos session create --template-name BOS_TEMPLATE --operation reboot
         ```
