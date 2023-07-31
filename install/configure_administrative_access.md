@@ -163,7 +163,4 @@ then applies that configuration to the management nodes.
 
 ## 8. Proceed to next topic
 
-After completing the operational procedures above which configure administrative access, the next
-step is to validate the health of management nodes and CSM services.
-
-See [Validate CSM Health](README.md#6-validate-csm-health).
+Return to the previous page and continue to the next step.
