@@ -25,28 +25,37 @@
 # This is necessary since a new docs-csm version could land before or after a CSM update.
 
 set -e
-REGISTRY="registry.local"
+REGISTRY_NAME="registry.local"
+REGISTRY_PROTOCOL="https"
+PODMAN_TLS=""
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd $SCRIPT_DIR
 
+
+# Ensure the script is running from within the workflows directory so it finds argo yaml files."
 if [[ "$(basename ${SCRIPT_DIR})" != "workflows" ]]; then
   echo "ERROR: This script must be located in the workflows directory to run."
   exit 1
 fi
 
-if [[ $(nslookup $REGISTRY >> /dev/null; echo $?) != 0 ]]; then
+# Change registry URL target for PIT
+if [[ -f /etc/pit-release ]]; then
+  echo "INFO: Running on PIT. Updating registry URL to $REGISTRY_NAME."
+  REGISTRY_NAME="pit.nmn:5000"
+  REGISTRY_PROTOCOL="http"
+  PODMAN_TLS="--tls-verify=false"
+fi
+
+# Check that the registry name for tag lookup resolves.
+if [[ $(nslookup $REGISTRY_NAME >> /dev/null; echo $?) != 0 ]]; then
   echo "INFO: Skipping update_tags.sh script given docs were installed outside of a CSM environment."
   exit 0
 fi
 
-if [[ -f /etc/pit-release ]]; then
-  echo "INFO: Skipping update_tags.sh script given docs were installed on PIT."
+if [[ ! $(curl -s ${REGISTRY_PROTOCOL}://${REGISTRY_NAME}) ]]; then
+  echo "WARNING: Unable to update workflow image tags. ${REGISTRY_NAME} is not accessible."
+  echo "This is expected if installed outside of CSM or before the registry is populated."
   exit 0
-fi
-
-if [[ ! $(curl -s https://${REGISTRY}) ]]; then
-  echo "ERROR: Is this a CSM environment? Check that ${REGISTRY} is accessible over https before continuing."
-  exit 1
 fi
 
 function get_list_of_images_to_update() {
@@ -55,8 +64,8 @@ function get_list_of_images_to_update() {
 
 function get_latest_tag_for_image() {
   THIS_IMAGE=$1
-  THIS_PREFIX=$([[ $(echo $THIS_IMAGE | grep -e "^${REGISTRY}/") ]] && echo "" || echo "${REGISTRY}/")
-  podman search $THIS_PREFIX$THIS_IMAGE --list-tags --format=json | jq -r '.[0].Tags | sort_by(.) | last'
+  THIS_PREFIX=$([[ $(echo $THIS_IMAGE | grep -e "^${REGISTRY_NAME}/") ]] && echo "" || echo "${REGISTRY_NAME}/")
+  podman search $PODMAN_TLS $THIS_PREFIX$THIS_IMAGE --list-tags --format=json | jq -r '.[0].Tags | sort_by(.) | last'
 }
 
 function get_filenames_referring_to_image() {
