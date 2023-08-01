@@ -85,7 +85,7 @@ echo "Using ${smartmon_url} to install rpm on storage nodes..."
 
 for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
   echo "Installing smart-mon rpm on ${storage_node}..." 
-  ssh ${storage_node} ${ssh_options} "zypper in --auto-agree-with-licenses ${smartmon_url} && systemctl enable smart && systemctl restart smart"
+  ssh ${storage_node} ${ssh_options} "zypper in -y --auto-agree-with-licenses ${smartmon_url} && systemctl enable smart && systemctl restart smart"
 done
 
 echo "Reconfiguring node-exporter to publish smartmon data"
