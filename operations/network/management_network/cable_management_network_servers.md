@@ -44,7 +44,7 @@ ports on the nodes and how to cable the nodes to the management network switches
 
 | Device | Port | Linux Device | Destination | Name | VLAN | LAG |
 |:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
-| OCP | 1 |  `mgmt1`  | primary      |  N/A  |  HMN, NMN, CAN  |  MLAG-LACP  |
+| OCP | 1 |  `mgmt0`  | primary      |  N/A  |  HMN, NMN, CAN  |  MLAG-LACP  |
 | OCP | 2 |  `mgmt1`  | secondary    |  N/A  |  HMN, NMN, CAN  |  MLAG-LACP  |
 | ILO | 1 |  None   | HMN `leaf-bmc` |  N/A  |  HMN            |  N/A        |
 
@@ -69,10 +69,10 @@ The table below describes the cabling of dual card configurations. Also read not
 
 | Device | Port | Linux Device | Destination | Name | VLAN | LAG |
 |:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
-| OCP         | 1 | `mgmt1`  | primary      |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
-| OCP         | 2 | `sun1`   | N/A          |  N/A |  N/A            |  N/A       |
+| OCP         | 1 | `mgmt0`  | primary      |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| OCP         | 2 |    N/A   | N/A          |  N/A |  N/A            |  N/A       |
 | PCIe Slot 1 | 1 | `mgmt1`  | secondary    |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
-| PCIe Slot 1 | 2 | `sun1`   | N/A          |  N/A |  N/A  |  N/A    |
+| PCIe Slot 1 | 2 |    N/A   | N/A          |  N/A |  N/A  |  N/A    |
 | ILO         | 1 | None   | HMN `leaf-bmc` |  N/A |  HMN  |  N/A    |
 
 NOTES:
@@ -100,7 +100,7 @@ SHCD Example
 
 | Device | Port | Linux Device | Destination | Name | VLAN | LAG |
 |:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
-| OCP        | 1 |  `mgmt1` | primary      |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| OCP        | 1 |  `mgmt0` | primary      |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
 | OCP        | 2 |  `sun1`  | primary      |  N/A |  SUN            |  MLAG-LACP |
 | PCIe Slot 1 | 1 |  `mgmt1` | secondary    |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
 | PCIe Slot 1 | 2 |  `sun1`  | secondary    |  N/A |  SUN            |  MLAG-LACP |
@@ -226,7 +226,7 @@ SHCD Example
 
 ![Diagram of Gigabyte Worker Node Cabling](../../../img/network/Gigaintel_Worker.png)
 
-> **`NOTE`**: Cabling of `ncn-w001` has changed in Shasta v1.4. Please see `ncn-m001` note below.
+> **`NOTE`**: Cabling of `ncn-w001` has changed in Shasta 1.4. Please see `ncn-m001` note below.
 
 ### Master Node Cabling
 
