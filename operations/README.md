@@ -633,7 +633,6 @@ while older systems have Dell and Mellanox switches. Switch IP addresses are gen
 - [Update Management Network Firmware](network/management_network/firmware/update_management_network_firmware.md)
 - [BICAN switch configuration](network/management_network/bican_switch_configuration.md)
 - [Bonded UAN Configuration](network/management_network/bonded_uan.md)
-- [Load Saved Switch Configuration](network/management_network/load_saved_switch_config.md)
 
 ### Customer accessible networks (CMN/CAN/CHN)
 
