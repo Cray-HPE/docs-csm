@@ -54,7 +54,7 @@ function redeploy_all_daemons() {
 function check_current_running_version() {
   daemon_to_check=$1
   for each_version in $(ceph orch ps --daemon_type=$daemon_to_check --format json | jq '.[].version' | tr -d '"'); do
-    if [[ "v$each_version" !=  "${version_dict[$daemon_to_check]}" ]] && [[ "$each_version" !=  "${version_dict[$daemon_to_check]}" ]]; then
+    if [[ "v$each_version" != "${version_dict["$daemon_to_check"]}" ]] && [[ "$each_version" != "${version_dict["$daemon_to_check"]}" ]]; then
       return 1
     fi
   done
@@ -93,8 +93,8 @@ function upgrade_all_daemons() {
     exit 0
   else
     echo "Error: failed upgrading monitoring daemons. Daemons are not running desired versions."
-    echo "Desired versions are Prometheus:${version_dict[prometheus]}, Ceph-Grafana:${version_dict[grafana]}, \
-Node-exporter:${version_dict[node-exporter]}, Alertmanager:${version_dict[alertmanager]}"
+    echo "Desired versions are Prometheus:${version_dict['prometheus']}, Ceph-Grafana:${version_dict['grafana']}, \
+Node-exporter:${version_dict['node-exporter']}, Alertmanager:${version_dict['alertmanager']}"
     exit 1
   fi
 }
@@ -106,16 +106,16 @@ function main() {
   fi
 
   declare -A version_dict=(
-    [grafana]="${GRAFANA_VERS}"
-    [prometheus]="${PROMETHEUS_VERS}"
-    [node-exporter]="${NODE_EXPORTER_VERS}"
-    [alertmanager]="${ALERTMANAGER_VERS}"
+    ['grafana']="${GRAFANA_VERS}"
+    ['prometheus']="${PROMETHEUS_VERS}"
+    ['node-exporter']="${NODE_EXPORTER_VERS}"
+    ['alertmanager']="${ALERTMANAGER_VERS}"
   )
 
-  grafana_image="registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph-grafana:${version_dict[grafana]}"
-  prometheus_image="registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/prometheus/prometheus:${version_dict[prometheus]}"
-  node_exporter_image="registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/prometheus/node-exporter:${version_dict[node-exporter]}"
-  alertmanager_image="registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/prometheus/alertmanager:${version_dict[alertmanager]}"
+  grafana_image="registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph-grafana:${version_dict['grafana']}"
+  prometheus_image="registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/prometheus/prometheus:${version_dict['prometheus']}"
+  node_exporter_image="registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/prometheus/node-exporter:${version_dict['node-exporter']}"
+  alertmanager_image="registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/prometheus/alertmanager:${version_dict['alertmanager']}"
 
   ceph config set mgr mgr/cephadm/container_image_grafana ${grafana_image}
   ceph config set mgr mgr/cephadm/container_image_prometheus ${prometheus_image}
