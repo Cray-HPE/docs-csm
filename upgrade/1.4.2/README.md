@@ -56,6 +56,7 @@ If upgrading from CSM `v1.3.4` directly to `v1.4.2`, follow the procedures descr
 1. [Enable `Smartmon` Metrics on Storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
 1. [Update test suite packages](#update-test-suite-packages)
 1. [Verification](#verification)
+1. [Take Etcd Manual Backup](#take-etcd-manual-backup)
 1. [Complete upgrade](#complete-upgrade)
 
 ## Preparation
@@ -237,6 +238,16 @@ pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zyppe
 
    ```bash
    kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.4.2".configuration.import_date'
+   ```
+
+## Take Etcd Manual Backup
+
+1. (`ncn-m001#`) Execute the following script to take a manual backup of the Etcd clusters.
+   These clusters are automatically backed up every 24 hours, but taking a manual backup
+   at this stage in the upgrade enables restoring from backup later in this process if needed.
+
+   ```bash
+   /usr/share/doc/csm/scripts/operations/etcd/take-etcd-manual-backups.sh post_patch
    ```
 
 ## Complete upgrade
