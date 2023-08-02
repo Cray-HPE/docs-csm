@@ -52,10 +52,10 @@ In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must 
     Expected output looks similar to the following:
 
     ```text
-    10.252.0.2
-    10.252.0.3
-    10.252.0.4
-    10.252.0.5
+    10.254.0.2
+    10.254.0.3
+    10.254.0.4
+    10.254.0.5
     4 IP addresses saved to <stdout>
     ```
 
