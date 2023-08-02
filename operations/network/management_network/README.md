@@ -122,7 +122,7 @@ For architecture and naming convention information, see
 
 ## Changes
 
-These sections list enhancements, fixes, and known issues for this version of the Shasta management network.
+These sections list enhancements, fixes, and known issues for this version of the CSM management network.
 
 * [Enhancements](#enhancements-and-features)
 * [Issues and workarounds](#issues-and-workarounds)
