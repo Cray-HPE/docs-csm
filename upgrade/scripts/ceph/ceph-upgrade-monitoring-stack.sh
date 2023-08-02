@@ -54,7 +54,7 @@ function redeploy_all_daemons() {
 function check_current_running_version() {
   daemon_to_check=$1
   for each_version in $(ceph orch ps --daemon_type=$daemon_to_check --format json | jq '.[].version' | tr -d '"'); do
-    if [[ "v$each_version" != "${version_dict["$daemon_to_check"]}" ]] && [[ "$each_version" != "${version_dict["$daemon_to_check"]}" ]]; then
+    if [[ "v$each_version" != "${version_dict[$daemon_to_check]}" ]] && [[ $each_version != "${version_dict[$daemon_to_check]}" ]]; then
       return 1
     fi
   done
