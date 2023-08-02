@@ -1,7 +1,5 @@
 # Component Status
 
-> **`NOTE`** This section is for Boot Orchestration Service \(BOS\) v2 only.
-
 For each component, BOS tracks information on what actions are expected to be happening (the `phase`) and what actions have recently happened (the `last_action`).
 This information is then aggregated into an overall `status`.
 
@@ -15,7 +13,7 @@ This information is then aggregated into an overall `status`.
 A component's phase is the high level part of the boot process that the component is currently on.
 This value is automatically monitored and set by the `status` operator based on the components desired and current state in BOS, the components power state as reported by HSM, and the component's configuration status as reported by CFS.
 Session status is also aggregated by phase in order to show a high level view of where components are at in the boot process.
-For more on session status see [BOS v2 session status](View_the_Status_of_a_BOS_Session.md#bos-v2-session-status).
+For more on session status see [BOS session status](View_the_Status_of_a_BOS_Session.md#bos-session-status).
 
 The possible values for this field are:
 

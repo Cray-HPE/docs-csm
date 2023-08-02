@@ -1,7 +1,5 @@
 # BOS Components
 
-> **`NOTE`** This section is for Boot Orchestration Service (BOS) v2 only.
-
 BOS v2 provides a components endpoint where BOS tracks the status of individual components.
 This includes information on the desired state and some information on the current state, status, and any session the component is part of.
 

@@ -26,7 +26,7 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
 
    Refer to the vendor documentation for the WLM for more information.
 
-1. Determine which Boot Orchestration Service \(BOS\) templates to use to shut down nodes on the target blade.
+1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down nodes on the target blade.
 
    There will be separate session templates for UANs and computes nodes.
 
@@ -35,7 +35,7 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
       If it is unclear which session template is in use, proceed to the next substep.
 
       ```bash
-      cray bos v1 sessiontemplate list
+      cray bos v2 sessiontemplates list
       ```
 
    1. Find the node xnames with `sat status`. In this example, the target blade is in slot `x9000c3s0`.
@@ -60,7 +60,7 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
    1. Find the `bos_session` value for each node via the Configuration Framework Service (CFS).
 
       ```bash
-      cray cfs components describe x9000c3s0b1n0 | grep bos_session
+      cray cfs components describe x9000c3s0b1n0 --format toml | grep bos_session
       ```
 
       Example output:
@@ -72,7 +72,7 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
    1. Find the required `templateName` value with BOS.
 
       ```bash
-      cray bos v1 session describe BOS_SESSION | grep templateName
+      cray bos v2 sessions describe BOS_SESSION --format toml | grep templateName
       ```
 
       Example output:
@@ -84,7 +84,7 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
    1. Determine the list of xnames associated with the desired boot session template.
 
       ```bash
-      cray bos v1 sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
+      cray bos v2 sessiontemplates describe SESSION_TEMPLATE_NAME --format toml | grep node_list
       ```
 
       Example output:
@@ -93,7 +93,7 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
       node_list = [ "x9000c3s0b1n0", "x9000c3s0b2n0", "x9000c3s0b3n0", "x9000c3s0b4n0",]
       ```
 
-1. Shut down the nodes on the target blade.
+1. (`ncn-mw#`) Shut down the nodes on the target blade.
 
    Use the `sat bootsys` command to shut down the nodes on the target blade.
    Specify the appropriate component name (xname) for the slot, and a comma-separated list of the BOS session templates determined in the previous step.
@@ -105,7 +105,7 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
 
 ## Use SAT to remove the blade from hardware management
 
-1. (`ncn#`) Clear out the existing Redfish event subscriptions from the BMCs on the blade.
+1. (`ncn-mw#`) Clear out the existing Redfish event subscriptions from the BMCs on the blade.
 
     1. Set the environment variable `SLOT` to the blade's location.
 
@@ -136,7 +136,7 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
         Successfully deleted https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
         ```
 
-1. Power off the slot and delete blade information from HSM.
+1. (`ncn-mw#`) Power off the slot and delete blade information from HSM.
 
    Use the `sat swap` command to power off the slot and delete the blade's Ethernet interfaces and Redfish endpoints from HSM.
 

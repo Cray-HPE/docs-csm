@@ -10,15 +10,15 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
 
 ## Procedure
 
-1. List detailed information about the available boot orchestration service \(BOS\) session template names.
+1. (`ncn-mw#`) List detailed information about the available boot orchestration service \(BOS\) session template names.
 
    Identify the BOS session template names such as `cos-2.0.x`, `uan-slurm`, and choose the appropriate compute and UAN node templates for the shutdown.
 
    ```bash
-   cray bos v1 sessiontemplate list
+   cray bos v2 sessiontemplates list --format toml
    ```
 
-   Example output:
+   Example output excerpts:
 
    ```text
    [[results]]
@@ -36,13 +36,13 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
    description = "Template for booting UANs with Slurm"
    ```
 
-1. To display more information about a session template, for example `cos-2.0.x`, use the `describe` option.
+1. (`ncn-mw#`) To display more information about a session template, for example `cos-2.0.x`, use the `describe` option.
 
    ```bash
-   cray bos v1 sessiontemplate describe cos-2.0.x
+   cray bos v2 sessiontemplates describe cos-2.0.x
    ```
 
-1. Use `sat bootsys shutdown` to shut down and power off UANs and compute nodes.
+1. (`ncn-mw#`) Use `sat bootsys shutdown` to shut down and power off UANs and compute nodes.
 
    **Attention:** Specify the required session templates for `COS_SESSION_TEMPLATE` and `UAN_SESSION_TEMPLATE` in the example.
 
@@ -59,14 +59,6 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
    Started boot operation on BOS session templates: cos-2.0.x, uan.
    Waiting up to 600 seconds for sessions to complete.
 
-   Waiting for BOA k8s job with id boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea to complete. Session template: uan.
-   To monitor the progress of this job, run the following command in a separate window:
-       'kubectl -n services logs -c boa -f --selector job-name=boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea'
-
-   Waiting for BOA k8s job with id boa-79584ffe-104c-4766-b584-06c5a3a60996 to complete. Session template: cos-2.0.0.
-   To monitor the progress of this job, run the following command in a separate window:
-       'kubectl -n services logs -c boa -f --selector job-name=boa-79584ffe-104c-4766-b584-06c5a3a60996'
-
    [...]
 
    All BOS sessions completed.
@@ -80,56 +72,7 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
 
    This is a non-fatal error and does not affect the `bos-operations` stage of `sat bootsys`.
 
-   **Note:** In certain cases, the command may fail before reaching the displayed timeout
-   and show warnings similar to the following:
-
-   ```text
-   WARNING: The 'kubectl wait' command failed instead of timing out. stderr: error: condition not met for jobs/boa-79584ffe-104c-4766- b584-06c5a3a60996
-   ```
-
-    The BOS operation can still proceed even with these warnings. However, the warnings
-    may result in the `bos-operations` stage of the `sat bootsys` command exiting before the BOS
-    operation is complete. Because of this, it is important to view the logs in order to monitor the
-    boot and to verify that the nodes reached the expected state. Both of these recommendations are shown
-    in the remaining steps.
-
-1. Use the Job ID strings from the previous command to monitor the shutdown progress of the compute nodes.
-
-   For example, use the `cos-2.0.0` session `boa-79584ffe-104c-4766- b584-06c5a3a60996`.
-
-   The command to run is displayed in the output of the `sat bootsys shutdown` command.
-
-   ```bash
-   kubectl logs -n services -c boa -f \
-                --selector job-name=boa-79584ffe-104c-4766-b584-06c5a3a60996
-   ```
-
-   Example output:
-
-   ```text
-   2020-08-21 17:27:02,358 - DEBUG   - cray.boa - BOA starting
-   2020-08-21 17:27:02,358 - DEBUG   - cray.boa - Boot Agent Image:  created.
-   2020-08-21 17:27:02,358 - INFO    - cray.boa - Boot Session: boa-79584ffe-104c-4766-b584-06c5a3a60996
-   2020-08-21 17:27:02,371 - INFO    - cray.boa.connection - Reattempting GET request for 'http://cray-cfs-api/apis/cfs/sessions'
-   2020-08-21 17:27:02,373 - INFO    - cray.boa.connection - Reattempting GET request for 'http://cray-cfs-api/apis/cfs/sessions'
-   2020-08-21 17:27:02,395 - INFO    - cray.boa.connection - Reattempting GET request for 'http://cray-cfs-api/apis/cfs/sessions'
-   2020-08-21 17:27:02,437 - INFO    - cray.boa.connection - Reattempting GET request for 'http://cray-cfs-api/apis/cfs/sessions'
-   2020-08-21 17:27:02,519 - INFO    - cray.boa.connection - Reattempting GET request for 'http://cray-cfs-api/apis/cfs/sessions'
-   2020-08-21 17:27:02,681 - INFO    - cray.boa.connection - Reattempting GET request for 'http://cray-cfs-api/apis/cfs/sessions'
-   2020-08-21 17:27:03,003 - INFO    - cray.boa.connection - Reattempting GET request for 'http://cray-cfs-api/apis/cfs/sessions'
-   2020-08-21 17:27:03,645 - INFO    - cray.boa.connection - Reattempting GET request for 'http://cray-cfs-api/apis/cfs/sessions'
-
-   ```
-
-   The BOS shutdown session may or may not power off compute nodes depending on the session template being used.
-
-1. In another shell window, use a similar command to monitor the UAN session.
-
-   ```bash
-   kubectl -n services logs -c boa -f --selector job-name=boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea
-   ```
-
-1. Check the status of both UAN and compute nodes to verify that they are `Off`.
+1. (`ncn-mw#`) Check the status of both UAN and compute nodes to verify that they are `Off`.
 
    There may be a delay in nodes reaching the `Off` state in the hardware state manager \(HSM\).
 
