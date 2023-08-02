@@ -100,7 +100,7 @@ SHCD Example
 * If the customer does not support `10/25Gb` speeds (or connection type) and requires RJ45 copper or `1Gb`, then a new
   and separate card will be installed on `ncn-m001` and that card will provide site connectivity.
 * Another possibility (non-HPE hardware mainly) is that a built-in `1Gb` port will be used if available (similar to
-  Shasta v1.3 PoR on Gigabyte hardware).
+  CSM v1.3 PoR on Gigabyte hardware).
 
 ### HPE Storage Node Cabling
 
@@ -238,7 +238,7 @@ SHCD Example
 
 ![Diagram of Gigabyte Worker Node Cabling](../../../img/network/Gigaintel_Worker.png)
 
-> **`NOTE`**: Cabling of `ncn-w001` has changed in Shasta 1.4. Please see `ncn-m001` note below.
+> **`NOTE`**: Cabling of `ncn-w001` has changed in CSM 1.4. Please see `ncn-m001` note below.
 
 ### Master Node Cabling
 
@@ -260,7 +260,7 @@ SHCD Example
 ![Diagram of Gigabyte Master Node Cabling](../../../img/network/Gigaintel_Master.png)
 
 > **`NOTE`**: Master 1 (`ncn-m001`) is required to have a site connection for installation and non-CAN system access. In
-> Shasta versions <=1.3 this connection was on `ncn-w001`. This can have several
+> CSM versions <=1.3 this connection was on `ncn-w001`. This can have several
 > configurations depending on customer requirements/equipment:
 
 * The default configuration for Gigabyte systems uses the built-in `1Gb` `lan0` port for site connection on `ncn-m001`.
