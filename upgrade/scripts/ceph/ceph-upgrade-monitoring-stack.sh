@@ -95,6 +95,7 @@ function upgrade_all_daemons() {
         echo "Error: failed upgrading monitoring daemons. Daemons are not running desired versions."
         echo "Desired versions are Prometheus:${version_dict[prometheus]}, Ceph-Grafana:${version_dict[grafana]}, \
 Node-exporter:${version_dict[node-exporter]}, Alertmanager:${version_dict[alertmanager]}"
+        exit 1
     fi
 }
 
