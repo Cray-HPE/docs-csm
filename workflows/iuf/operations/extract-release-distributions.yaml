@@ -69,7 +69,7 @@ spec:
               - start-operation
             inline:
               script:
-                image: artifactory.algol60.net/csm-docker/stable/iuf:csm-latest
+                image: artifactory.algol60.net/csm-docker/stable/iuf:v0.1.11
                 command: [sh]
                 source: |
                   #!/bin/sh
