@@ -1,8 +1,6 @@
 # BOS Options
 
-> **`NOTE`** This section is for Boot Orchestration Service \(BOS\) v2 only.
-
-BOS provides a global service options endpoint for modifying the base configuration of the service itself. These options are available only for the BOS v2 API and only affect v2 functionality.
+BOS v2 provides a global service options endpoint for modifying the base configuration of the service itself.
 
 * [Viewing the current option values](#viewing-the-current-option-values)
 * [Updating the option values](#updating-the-option-values)

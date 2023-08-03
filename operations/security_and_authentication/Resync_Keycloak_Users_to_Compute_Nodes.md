@@ -70,5 +70,5 @@ The Slurm or PBS product must be installed.
     Or, reboot the compute nodes with the Boot Orchestration Service \(BOS\).
 
     ```bash
-    cray bos v1 session create --template-uuid BOS_TEMPLATE --operation reboot
+    cray bos v2 sessions create --template-name BOS_TEMPLATE --operation reboot
     ```

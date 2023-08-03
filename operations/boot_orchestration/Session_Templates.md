@@ -13,7 +13,7 @@ Session templates can be created via the API by providing JSON data or via the C
     * [Node roles groups](#node-roles-groups)
   * [`rootfs` providers](#rootfs-providers)
     * [`root` kernel parameter example](#root-kernel-parameter-example)
-  * [Overriding configuration (BOS v2 only)](#overriding-configuration-bos-v2-only)
+  * [Overriding configuration](#overriding-configuration)
 
 ## Session template structure
 
@@ -68,7 +68,7 @@ The following is an example BOS session template:
 
 BOS session templates contain one or more boot sets, which each contain information on the kernel parameters that nodes should boot with,
 as well as information on the nodes the boot set should apply to.
-Optionally, with BOS v2, configuration information can also be overwritten on a per boot set basis.
+Optionally, configuration information can also be overwritten on a per boot set basis.
 
 ### Boot artifacts
 
@@ -191,7 +191,6 @@ Regarding the interface to use for contacting DVS, the possible values are:
 
 The DVS configuration files determine which interface to use (NMN or HSN). However, the CPS `dracut` ensures the that requested interfaces are up.
 
-### Overriding configuration (BOS v2 only)
+### Overriding configuration
 
 It is also possible to specify CFS configuration in the boot set. If specified, this will override whatever value is set in the base session template.
-This feature is not supported for BOS v1.

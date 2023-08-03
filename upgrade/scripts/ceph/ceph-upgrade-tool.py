@@ -171,8 +171,9 @@ def _verify_upgrade_version(starting_version: str, upgrade_version: str) -> bool
         print(f'Ceph version is already {starting_version}. Nothing to upgrade.')
         return False
     if not version.parse(starting_version) < version.parse(upgrade_version):
-        raise ValueError(f'Cannot upgrade Ceph. The upgrade version:{upgrade_version} \
-        is not greater than the current Ceph version running:{starting_version}.')
+        print(f'Cannot upgrade Ceph. The upgrade version:{upgrade_version} \
+is not greater than the current Ceph version running:{starting_version}.')
+        return False
     return True
 
 def _check_image_pull(image: str) -> None:

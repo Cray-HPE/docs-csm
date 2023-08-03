@@ -24,7 +24,7 @@ This top level procedure outlines the process for adding additional liquid-coole
     1. Apply switch configurations.
     1. Update CEC VLAN (if required).
 
-    For more information on CANU, see the [CANU `v1.6.5` documentation](https://github.com/Cray-HPE/canu/blob/1.6.5/readme.md).
+    For more information on CANU, see the [CANU documentation](https://cray-hpe.github.io/canu).
 
     **DISCLAIMER:** This procedure is for standard Mountain cabinet network configurations and does not account for any site customizations that have been made to the management network.
     Site administrators and support teams are responsible for knowing the customizations in effect in Shasta/CSM and configuring CANU to respect them when generating new network configurations.

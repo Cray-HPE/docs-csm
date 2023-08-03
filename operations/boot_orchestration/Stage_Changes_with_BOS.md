@@ -3,8 +3,6 @@
 In v2 of the Boot Orchestration Service (BOS), it is possible to stage changes when creating a session.
 These changes will not immediately take effect, and will instead be applied when the `applystaged` endpoint is called.
 
-This is a BOS v2 feature only. For suggestions on working around this in v1, see [Stage changes without BOS](#stage-changes-without-bos).
-
 * [Creating a staged session](#creating-a-staged-session)
 * [Applying a staged state](#applying-a-staged-state)
 * [Stage changes without BOS](#stage-changes-without-bos)

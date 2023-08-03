@@ -1,7 +1,5 @@
 # Rolling Upgrades using BOS
 
-> **`NOTE`** This section is for Boot Orchestration Service (BOS) v2 only.
-
 <!-- -->
 > **`NOTE`** This feature is the replacement for the Compute Rolling Upgrade Service (CRUS). CRUS was deprecated in CSM 1.2.0 and removed in CSM 1.5.0.
 > See [Deprecated Features](../../introduction/deprecated_features/README.md).
