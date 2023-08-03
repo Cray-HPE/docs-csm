@@ -167,17 +167,6 @@ def test_from_node_type_to_node_type_over_network(from_node_type, from_node, fro
 
     to_node = to_node.with_domain_suffix(network_suffix)
 
-    if network == "nmn" and to_node.is_mellanox_switch():
-        print("""\nTesting SSH access:
-        From node type {}, using {}
-        Over network {} ({})
-        To node type {}
-        Expected to work: {}""".format(
-            from_node_type, from_node.get_full_domain_name(), network, network_suffix, to_node_type, expected))
-
-        print("\t\t^^^^ SKIPPED: Please see CASMNET-787 ^^^^")
-        return 0
-
     print("""\nTesting SSH access:
         From node type {}, using {}
         Over network {} ({})
@@ -218,5 +207,5 @@ def test_from_node_type_to_node_type_over_network(from_node_type, from_node, fro
 def get_ssh_host_for_node_type(node_type, excluded_hostnames):
     target_list = SSH_TARGETS.__dict__[node_type]
     for i in target_list:
-        if not i.hostname in excluded_hostnames and i.is_ready():
+        if not i.hostname in excluded_hostnames and i.is_ready(node_type):
             return i
