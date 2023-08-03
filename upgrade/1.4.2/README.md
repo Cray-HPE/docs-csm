@@ -7,43 +7,23 @@ If upgrading from CSM `v1.3.4` directly to `v1.4.2`, follow the procedures descr
 
 ## Bug Fixes and Improvements
 
-* Enables `smartmon` metrics on storage NCNs
-* Upgrades Ceph to `v16.2.13` and stops the local Docker registries on storage nodes
-* Updates to the `bos` API specification
-* Refactoring of the `hms-rts` chart for deployment of multiple back ends
-* Allow the power control service `pcs` to be able to report power status of `RTS` management switches
-* Support adding types of `MgmtHLSwitch` and `CDUMgmtSwitch` to vault to be able to set their SNMP credentials
-* Support for discovering `RTS` switches and updating their data in hardware state manager
-* Generation of API docs from swagger files in the `Cray-HPE` codebase
-* CVE fixes against the `metacontroller:v4.4.0` container image
-* Fix in `bos v2` to filter out any nodes disabled in hardware state manager at `bos` session creation
-* Fix for accidental removal of `crus` from the `cray-cli`
-* Fix for error in `cray fas loader` due to a python library change  
-* Fix permissions issue with the `goss-servers.service` that caused extraneous messages to print to the console
-* Add troubleshooting documentation instructing users to redeploy daemons that are stuck in error state during `upload_ceph_images_to_nexus`
-* Fix for upgrade of the `cray-dns-unbound` helm chart leading to deletion of `DNS` records
-* Add `SNMP` set up for all switches to the install and upgrade instructions
-* Fix for `grok-exporter` not running on the `ncn-m001` node
-* CVE fixes against the `cray-sat:3.21.4` container image
-* CVE fixes against the `cilium:v1.12.4` container image
-* Fix for `hsm_discovery_status_test` error
-* Fix for `bos v2` setting the wrong status at scale
-* Fix for `goss-platform-ca-in-bundle` test time out
-* Fix trace back in `bos` log with `bos` shutdown failure
-* Update to `bos v1 session create` API specification to fix missing required parameters
-* Fix issue with missing data in `bos v1 list sessions`
-* Fix for return of expected object when describing a `bos v1` session
-* Fix for incorrect response from `bos v2 sessiontemplatetemplate` endpoint
-* Support for `python 3.11` in `bos` server
-* CVE fixes against the `argoexec` container image
-* Fix errors in `prerequisites.sh` for upgrading `nls`
-* Fix for wiping of `DNS` records from the `configmap` when restarting `kea`
-* Fix network policy in `cray-drydock` for communications between `mqtt` and `spire`
-* Fix failure in image pull during upgrade
-* Fix to ensure the `bos` API specification is accurate for get or list `sessiontemplates` endpoints
-* CVE fixes against the `cfs-ara:1.0.2` container image
-* Fix timeout deploying `cray-dns-unbound` during the install of `csm` services
-* Fix for allowing underscores in `bos sessiontemplate` names
+* Reinstated the `arp-cache` tuning settings that were lost in the upgrade to `CSM 1.4` that caused system performance issues
+* Added capability for `SMART` data to be collected from storage nodes and passed to `prometheus`
+* Changed configuration of `apparmor` for `node-exporter` in the `prometheus` chart to stop flood of messages to `dmesg` log
+* Fixed a bug with a `csm-config` change which caused a failure in the `prepare-images` stage of `iuf` because of a `cfs ansible` layer that was not running
+* Added support for the `include_disabled_nodes` option for `bos` within the `cray-cli`
+* Changed procedure for the update of the `cray-cli`, `csm-testing`, and `goss-server` `rpm` packages such that they are updated on all management nodes
+* Upgraded version of `ceph` to `16.2.13`
+* Addressed a regular expression `DoS` `CVE` in `cfs-ara`
+* Addressed an improper certificate validation `CVE` in `cfs` and `cfs-operator`
+* Optimized main `csm goss` test run in the `csm` validation procedure by adding `cms` and `hms` tests to it
+* Added a test to validate the `nexus` and `keycloak` integration is configured properly
+* Updated the version of `cray-cli` used in the `iuf` container image to the latest version
+* Fixed edge case bugs in the `ceph` service status script which is leveraged in `ceph` health checks
+* Fixed test failures for duplicate `DNS` entries
+* Removed the `-P` option for non-standard client port number from `cray-dhcp-kea` to eliminate failures it caused in some environments
+* Replaced `latest` tag for `iuf-container` images with a dynamic `look-up` which pulls in the correct `iuf` version tag
+* Updated patch instructions to run `etcd back-ups` after the upgrade has completed to avoid health check failures on `back-ups` that have been around for greater than 24 hours
 
 ## Steps
 
