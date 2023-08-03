@@ -70,9 +70,9 @@ to rebuild the second node until it is safe. The `-cmrp` parameter selects the p
 worker node rebuild should coordinate rebuilding at one time. For example, if there are 15 worker nodes and `-cmrp 33`
 is specified, then 5 worker nodes will be rebuilt at once and with as much parallelization as possible given the state
 of the system. **Note** that the system admin's discretion should be used when deciding the value of `-cmrp`.
-The largest number of Managment Worker nodes that has been tested rebuilding in parallel is 5 nodes.
+The largest number of management worker nodes that has been tested rebuilding in parallel is 5 nodes.
 
-Management Master and Storage nodes only need to upgraded when performing a CSM upgrade. If not performing a CSM upgrade,
+Management master and storage nodes only need to upgraded when performing a CSM upgrade. If not performing a CSM upgrade,
 then NCN master nodes should not be upgraded with a new image and should only be configured with the new CFS configuration
 created during the [update-cfs-config](../stages/update_cfs_config.md) stage.
 
@@ -221,7 +221,7 @@ or [Upgrade CSM and additional products with IUF](../workflows/upgrade_csm_and_a
 
       1. Set the path to the artifacts in S3.
 
-        **NOTE** This uses the `IMS_RESULTANT_IMAGE_ID` variable set in an earlier step.
+          **NOTE** This uses the `IMS_RESULTANT_IMAGE_ID` variable set in an earlier step.
 
           ```bash
           S3_ARTIFACT_PATH="boot-images/${IMS_RESULTANT_IMAGE_ID}"
