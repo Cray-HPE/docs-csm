@@ -10,12 +10,12 @@ If upgrading from CSM `v1.3.4` directly to `v1.4.2`, follow the procedures descr
 * Reinstated the `arp-cache` tuning settings that were lost in the upgrade to `CSM 1.4` that caused system performance issues
 * Added capability for `SMART` data to be collected from storage nodes and passed to `prometheus`
 * Changed configuration of `apparmor` for `node-exporter` in the `prometheus` chart to stop flood of messages to `dmesg` log
-* Fixed a bug with a `csm-config` change which caused a failure in the `prepare-images` stage of `iuf` because of a `cfs` ansible layer that was not running
+* Fixed a bug with a `csm-config` change which caused a failure in the `prepare-images` stage of `iuf` because of a `cfs ansible` layer that was not running
 * Added support for the `include_disabled_nodes` option for `bos` within the `cray-cli`
 * Changed procedure for the update of the `cray-cli`, `csm-testing`, and `goss-server` `rpm` packages such that they are updated on all management nodes
 * Upgraded version of `ceph` to `16.2.13`
 * Addressed a regular expression `DoS` `CVE` in `cfs-ara`
-* Addressed an improper certificate validaton `CVE` in `cfs` and `cfs-operator`
+* Addressed an improper certificate validation `CVE` in `cfs` and `cfs-operator`
 * Optimized main `csm goss` test run in the `csm` validation procedure by adding `cms` and `hms` tests to it
 * Added a test to validate the `nexus` and `keycloak` integration is configured properly
 * Updated the version of `cray-cli` used in the `iuf` container image to the latest version
