@@ -53,6 +53,8 @@ It starts by rebuilding one worker node. Once that node has been removed from th
 If it is safe, it will proceed to rebuild the next node, partially in parallel with the first worker node rebuild. If it is unsafe to rebuild in parallel because the system could get into a bad state, then it waits to rebuild the second node until it is safe.
 The `-cmrp` parameter selects the percentage of worker nodes that the worker node rebuild should coordinate rebuilding at one time.
 For example, if there are 15 worker nodes and `-cmrp 33` is specified, then 5 worker nodes will be rebuilt at once and with as much parallelization as possible given the state of the system.
+**Note** that the system admin's discretion should be used when deciding the value of `-cmrp`.
+The largest number of management worker nodes that has been tested rebuilding in parallel is 5 nodes.
 
 `-limit-management-rollout Management_Master` only needs to be specified when performing a CSM upgrade. This will upgrade `ncn-m002` and `ncn-m003` serially with a new image and configuration. This should be done before NCN worker
 nodes are upgraded. If not performing a CSM upgrade, then NCN master nodes should not be upgraded with a new image and should only be configured with the new CFS configuration created during the
