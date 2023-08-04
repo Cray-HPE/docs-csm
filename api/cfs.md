@@ -2629,7 +2629,10 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
         "playbook": "site.yml",
         "commit": "string",
-        "branch": "string"
+        "branch": "string",
+        "specialParameters": {
+          "imsRequireDkms": true
+        }
       }
     ],
     "additional_inventory": {
@@ -2737,7 +2740,10 @@ Retrieve the given configuration
       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "playbook": "site.yml",
       "commit": "string",
-      "branch": "string"
+      "branch": "string",
+      "specialParameters": {
+        "imsRequireDkms": true
+      }
     }
   ],
   "additional_inventory": {
@@ -2838,7 +2844,10 @@ Add a configuration to CFS or replace an existing configuration.
       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "playbook": "site.yml",
       "commit": "string",
-      "branch": "string"
+      "branch": "string",
+      "specialParameters": {
+        "imsRequireDkms": true
+      }
     }
   ],
   "additional_inventory": {
@@ -2872,7 +2881,10 @@ Add a configuration to CFS or replace an existing configuration.
       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "playbook": "site.yml",
       "commit": "string",
-      "branch": "string"
+      "branch": "string",
+      "specialParameters": {
+        "imsRequireDkms": true
+      }
     }
   ],
   "additional_inventory": {
@@ -2979,7 +2991,10 @@ Updates the commits for all layers that specify a branch
       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "playbook": "site.yml",
       "commit": "string",
-      "branch": "string"
+      "branch": "string",
+      "specialParameters": {
+        "imsRequireDkms": true
+      }
     }
   ],
   "additional_inventory": {
@@ -3479,7 +3494,10 @@ An inventory reference to include in a set of configurations.
   "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
   "playbook": "site.yml",
   "commit": "string",
-  "branch": "string"
+  "branch": "string",
+  "specialParameters": {
+    "imsRequireDkms": true
+  }
 }
 
 ```
@@ -3495,6 +3513,8 @@ A single desired configuration state for a component.
 |playbook|string|false|none|The Ansible playbook to run.|
 |commit|string|false|none|The commit hash of the configuration repository when the state is set.|
 |branch|string|false|none|The configuration branch to use.  This will automatically set commit to master on the branch<br>when the configuration is added.|
+|specialParameters|object|false|none|Optional parameters that do not affect the configuration content or are only used in<br>special circumstances.|
+|» imsRequireDkms|boolean|false|none|If true, any image customization sessions that use this configuration will enable DKMS in IMS.|
 
 <h2 id="tocS_Configuration">Configuration</h2>
 <!-- backwards compatibility -->
@@ -3514,7 +3534,10 @@ A single desired configuration state for a component.
       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "playbook": "site.yml",
       "commit": "string",
-      "branch": "string"
+      "branch": "string",
+      "specialParameters": {
+        "imsRequireDkms": true
+      }
     }
   ],
   "additional_inventory": {
@@ -3558,7 +3581,10 @@ A collection of ConfigurationLayers.
         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
         "playbook": "site.yml",
         "commit": "string",
-        "branch": "string"
+        "branch": "string",
+        "specialParameters": {
+          "imsRequireDkms": true
+        }
       }
     ],
     "additional_inventory": {
