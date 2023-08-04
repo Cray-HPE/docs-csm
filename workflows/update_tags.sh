@@ -49,7 +49,7 @@ function update_registry_url_to_pit() {
 [[ ! $(curl -s ${THIS_REGISTRY_PROTOCOL}://${THIS_REGISTRY_NAME}) ]] && update_registry_url_to_pit
 
 if [[ ! $(curl -s ${THIS_REGISTRY_PROTOCOL}://${THIS_REGISTRY_NAME}) ]]; then
-  echo "WARNING: Unable to update workflow image tag references. ${THIS_REGISTRY_NAME} is not accessible."
+  echo "WARNING: Unable to update workflow image tag references. The registry is not accessible."
   echo "This is expected if installed outside of CSM or before the registry is populated."
   echo "If you believe this should have succeeded, try rerunning this script once the registry is up."
   echo "e.g. \$ ${SCRIPT_DIR}/update_tags.sh."
@@ -78,7 +78,7 @@ function update_tags_in_file() {
   sed -i -e "s|${THIS_IMAGE}:.*|${THIS_IMAGE}:${LATEST_TAG}|g" $THIS_FILE
 }
 
-# For each image found, lookup the latest tag and update the references in every file.
+# Look up the latest tag for each image found and update the references in every file.
 for THIS_IMAGE in $(get_list_of_images_to_update); do
   LATEST_TAG=$(get_latest_tag_for_image $THIS_IMAGE)
   for FILE in $(get_filenames_referring_to_image); do
