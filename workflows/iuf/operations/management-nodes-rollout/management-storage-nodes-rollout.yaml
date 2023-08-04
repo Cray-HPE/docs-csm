@@ -128,7 +128,7 @@ spec:
                     
                     export TERM=linux
                     echo "DEBUG Starting upgrade of $rebuild_set using image: $image and cfs-configuration: $configuration"
-                    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh $rebuild_set --image-id $image --desired-cfs-conf $configuration --labels "{activity:{{workflow.labels.activity}},session:{{workflow.labels.session}}}"
+                    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh $rebuild_set --upgrade --image-id $image --desired-cfs-conf $configuration --labels "{activity:{{workflow.labels.activity}},session:{{workflow.labels.session}}}"
           - name: end-operation
             dependencies:
               - storage-node-upgrade
