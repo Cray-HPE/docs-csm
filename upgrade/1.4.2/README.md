@@ -3,7 +3,7 @@
 ## Introduction
 
 This document guides an administrator through the patch update to Cray Systems Management `v1.4.2` from `v1.4.0` or `1.4.1`.
-If upgrading from CSM `v1.3.4` directly to `v1.4.2`, follow the procedures described in [Upgrade CSM](../README.md) instead.
+If upgrading from CSM `v1.3.x` directly to `v1.4.2`, follow the procedures described in [Upgrade CSM](../README.md) instead.
 
 ## Bug Fixes and Improvements
 
