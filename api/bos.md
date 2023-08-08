@@ -3353,7 +3353,7 @@ List all Session Templates.
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -3525,7 +3525,7 @@ of the Session Template.
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -3628,7 +3628,7 @@ of the Session Template.
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -3875,7 +3875,7 @@ Create a new Session Template.
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -4107,7 +4107,7 @@ Update an existing Session Template.
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -4273,7 +4273,7 @@ Delete a Session Template.
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -4546,7 +4546,7 @@ on the Boot Sets defined in the Session Template.
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -4664,7 +4664,7 @@ List all Sessions, including those in progress and those complete.
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 #### Enumerated Values
 
@@ -4792,7 +4792,7 @@ all filters will be deleted.  By default only completed Sessions will be deleted
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 #### Enumerated Values
 
@@ -4907,7 +4907,7 @@ Get Session details by Session ID.
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -5048,7 +5048,7 @@ Update the state for a given Session in the BOS database
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -5165,7 +5165,7 @@ Delete Session by Session ID.
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -5272,7 +5272,7 @@ Get Session extended status information by ID
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -5391,7 +5391,7 @@ Saves the current Session to database.  For use at Session completion.
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -5521,7 +5521,7 @@ for selecting groups of Components.
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -5731,7 +5731,7 @@ Update the state for a collection of Components in the BOS database
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -5945,7 +5945,7 @@ Update the state for a collection of Components in the BOS database
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -6099,7 +6099,7 @@ Retrieve the current and desired state of a single Component
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -6307,7 +6307,7 @@ Update the state for a given Component in the BOS database
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -6514,7 +6514,7 @@ Update the state for a given Component in the BOS database
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -6667,7 +6667,7 @@ Delete the given Component
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -6791,7 +6791,7 @@ be returned in the response.
 
 Requests with a non-empty tenant name will restict the context of the operation to Session Templates owned by that tenant.
 
-Requests with an empty tenant name, or that omit this paarameter, will have no such context restrictions.
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -7412,6 +7412,32 @@ targeted to start being enforced in an upcoming BOS version.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|string|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+
+<h2 id="tocS_EmptyString">EmptyString</h2>
+<!-- backwards compatibility -->
+<a id="schemaemptystring"></a>
+<a id="schema_EmptyString"></a>
+<a id="tocSemptystring"></a>
+<a id="tocsemptystring"></a>
+
+```json
+""
+
+```
+
+An empty string value.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|An empty string value.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|*anonymous*||
 
 <h2 id="tocS_EnableCfs">EnableCfs</h2>
 <!-- backwards compatibility -->
@@ -9091,13 +9117,15 @@ xor
 ```
 
 Name of the tenant that owns this resource. Only used in environments
-with multi-tenancy enabled.
+with multi-tenancy enabled. An empty string or null value means the resource
+is not owned by a tenant. The absence of this field from a resource indicates
+the same.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|read-only|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled.|
+|*anonymous*|string¦null|false|read-only|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same.|
 
 <h2 id="tocS_V2CfsParameters">V2CfsParameters</h2>
 <!-- backwards compatibility -->
@@ -9212,7 +9240,7 @@ group of Components.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |name|string|false|read-only|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|tenant|[V2TenantName](#schemav2tenantname)|false|none|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled.|
+|tenant|[V2TenantName](#schemav2tenantname)|false|none|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same.|
 |description|[SessionTemplateDescription](#schemasessiontemplatedescription)|false|none|An optional description for the Session Template.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |enable_cfs|[EnableCfs](#schemaenablecfs)|false|none|Whether to enable the Configuration Framework Service (CFS).|
 |cfs|[V2CfsParameters](#schemav2cfsparameters)|false|none|This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a Boot Set.|
@@ -9528,7 +9556,7 @@ A Session object
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |name|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
-|tenant|[V2TenantName](#schemav2tenantname)|false|none|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled.|
+|tenant|[V2TenantName](#schemav2tenantname)|false|none|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same.|
 |operation|[V2SessionOperation](#schemav2sessionoperation)|false|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
 |template_name|[SessionTemplateName](#schemasessiontemplatename)|false|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
 |limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
@@ -9879,7 +9907,24 @@ may be set which can be triggered at a later time against this Component.
 |---|---|---|---|---|
 |boot_artifacts|[V2BootArtifacts](#schemav2bootartifacts)|false|none|A collection of boot artifacts.|
 |configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|session|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+|session|any|false|none|none|
+
+oneOf
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+
+xor
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[EmptyString](#schemaemptystring)|false|none|An empty string value.|
+
+continued
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
 |last_updated|[V2ComponentLastUpdated](#schemav2componentlastupdated)|false|none|The date/time when the state was last updated in RFC 3339 format.|
 
 <h2 id="tocS_V2ComponentLastAction">V2ComponentLastAction</h2>
@@ -10038,7 +10083,24 @@ the Session responsible for the Component's current state.
 |status|[V2ComponentStatus](#schemav2componentstatus)|false|none|Status information for the Component|
 |enabled|boolean|false|none|A flag indicating if actions should be taken for this Component.|
 |error|string|false|none|A description of the most recent error to impact the Component.|
-|session|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+|session|any|false|none|none|
+
+oneOf
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+
+xor
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[EmptyString](#schemaemptystring)|false|none|An empty string value.|
+
+continued
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
 |retry_policy|integer|false|none|The maximum number attempts per action when actions fail.<br>Defaults to the global default_retry_policy if not set|
 
 <h2 id="tocS_V2ComponentArray">V2ComponentArray</h2>
