@@ -764,7 +764,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   {
     do_patch=0
     error=0
-    sourcefile="${artdir}/rpm/cloud-init"
+    sourcefile="${CSM_ARTI_DIR}/rpm/cloud-init"
 
     # If this is a re-run and our source JSON was already created we don't need to recreate it.
     if [ ! -f "${sourcefile}.json" ]; then
@@ -776,9 +776,11 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
         # In this case, there is nothing to do because the CSM version we are upgrading to is too old.
         echo "No $(basename "$sourcefile").yaml file found at: ${sourcefile}.yaml. Skipping package & repo meta-data injection."
 
+        # Do not error out, if the file is missing then the feature is considered to be disabled/unused by the tarball's contents.
+        error=0
       else
 
-        # `csi handoff bss-update-cloud-init --user-data` only takes JSON, convert the human-friendlier YAML to JSON and nest it under the expected key.
+        # csi handoff bss-update-cloud-init --user-data` only takes JSON, convert the human-friendlier YAML to JSON and nest it under the expected key.
         yq4 '{"user-data": .}' "${sourcefile}.yaml" --output-format json > "${sourcefile}.json"
 
         # Set `do_patch` to 1 so that the operations in this stage run.
