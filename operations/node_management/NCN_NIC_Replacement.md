@@ -55,13 +55,22 @@ ones that need to be updated. Take note of the MAC addresses being replaced they
     sed 's/sun0:14:02:ec:d9:7b:c9/sun0:14:02:ec:dd:04:48/' | \
     sed 's/sun1:94:40:c9:5f:b6:5c/sun1:5c:ed:8c:0c:0d:3f/')
     ncn-m001:~ # echo $NEW_PARAMS
-    biosdevname=1 ifname=mgmt1:5c:ed:8c:0c:0d:3e ifname=mgmt0:14:02:ec:dd:04:48 ifname=sun1:5c:ed:8c:0c:0d:3f ifname=sun0:14:02:ec:dd:04:49 pcie_ports=native transparent_hugepage=never console=tty0 console=ttyS0,115200 iommu=pt metal.server=s3://boot-images/ceph/0.3.59/rootfs metal.no-wipe=1 ds=nocloud-net;s=http://10.92.100.81:8888/ rootfallback=LABEL=BOOTRAID initrd=initrd.img.xz root=live:LABEL=SQFSRAID rd.live.ram=0 rd.writable.fsimg=0 rd.skipfsck rd.live.overlay=LABEL=ROOTRAID rd.live.overlay.thin=1 rd.live.overlay.overlayfs=1 rd.luks rd.luks.crypttab=0 rd.lvm.conf=0 rd.lvm=1 rd.auto=1 rd.md=1 rd.dm=0 rd.neednet=0 rd.md.waitclean=1 rd.multipath=0 rd.md.conf=1 rd.bootif=0 hostname=ncn-s004 rd.net.timeout.carrier=120 rd.net.timeout.ifup=120 rd.net.timeout.iflink=120 rd.net.timeout.ipv6auto=0 rd.net.timeout.ipv6dad=0 append nosplash quiet crashkernel=360M log_buf_len=1 rd.retry=10 rd.shell ip=mgmt0:dhcp rd.peerdns=0 rd.net.dhcp.retry=5 psi=1 rd.live.squashimg=rootfs
+    biosdevname=1 ifname=mgmt1:5c:ed:8c:0c:0d:3e ifname=mgmt0:14:02:ec:dd:04:48 ifname=sun1:5c:ed:8c:0c:0d:3f
+    ifname=sun0:14:02:ec:dd:04:49 pcie_ports=native transparent_hugepage=never console=tty0
+    console=ttyS0,115200 iommu=pt metal.server=s3://boot-images/ceph/0.3.59/rootfs metal.no-wipe=1
+    ds=nocloud-net;s=http://10.92.100.81:8888/ rootfallback=LABEL=BOOTRAID initrd=initrd.img.xz
+    root=live:LABEL=SQFSRAID rd.live.ram=0 rd.writable.fsimg=0 rd.skipfsck rd.live.overlay=LABEL=ROOTRAID
+    rd.live.overlay.thin=1 rd.live.overlay.overlayfs=1 rd.luks rd.luks.crypttab=0 rd.lvm.conf=0 rd.lvm=1
+    rd.auto=1 rd.md=1 rd.dm=0 rd.neednet=0 rd.md.waitclean=1 rd.multipath=0 rd.md.conf=1 rd.bootif=0
+    hostname=ncn-s004 rd.net.timeout.carrier=120 rd.net.timeout.ifup=120 rd.net.timeout.iflink=120
+    rd.net.timeout.ipv6auto=0 rd.net.timeout.ipv6dad=0 append nosplash quiet crashkernel=360M log_buf_len=1
+    rd.retry=10 rd.shell ip=mgmt0:dhcp rd.peerdns=0 rd.net.dhcp.retry=5 psi=1 rd.live.squashimg=rootfs
     ncn-m001:~ # cray bss bootparameters update --hosts $NCN_XNAME --params "${NEW_PARAMS}"
     ```
 
 ### Clean Up HSM
 
-1. Delete the old MAC addresses from HSM's ethernet interfaces table.
+1. Delete the old MAC addresses from HSM's Ethernet interfaces table.
 
     ```screen
     ncn-m001:~ # cray hsm inventory ethernetInterfaces delete 1402ecd97bc8
