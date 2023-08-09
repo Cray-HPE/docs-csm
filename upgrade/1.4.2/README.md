@@ -195,8 +195,7 @@ This step will create an imperative CFS session that can be used to configure bo
    cray cfs configurations update ncn_nodes --file /tmp/ncn_nodes.yml.json
    # Cleanup temporary file
    rm /tmp/ncn_nodes.yml.json
-   ```   
-
+   ```
 
 2. (`ncn-m001#`) Imperatively launch CFS against NCN nodes
 
