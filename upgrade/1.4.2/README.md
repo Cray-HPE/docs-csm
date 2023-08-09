@@ -214,7 +214,7 @@ This step will create an imperative CFS session that can be used to configure bo
 
 The playbook in question will run to completion with a message indicating success.
 
-   ```
+   ```text
    All playbooks completed successfully
    ```
 
