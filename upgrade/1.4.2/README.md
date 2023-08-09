@@ -34,6 +34,7 @@ If upgrading from CSM `v1.3.x` directly to `v1.4.2`, follow the procedures descr
 1. [Upload NCN images](#upload-ncn-images)
 1. [Upgrade Ceph and stop local Docker registries](#upgrade-ceph-and-stop-local-docker-registries)
 1. [Enable `Smartmon` Metrics on Storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
+1. [Configure NCN nodes without restart](#configure-ncn-nodes-without-restart)
 1. [Update test suite packages](#update-test-suite-packages)
 1. [Verification](#verification)
 1. [Take Etcd Manual Backup](#take-etcd-manual-backup)
@@ -201,14 +202,14 @@ This step will create an imperative CFS session that can be used to configure bo
 
    ```bash
    cray cfs sessions create --name ncnnodes --configuration-name ncn_nodes
-   kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq " .status.session.job" | tr -d '"'` -c ansible
+   kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq -r " .status.session.job"` -c ansible
    ```
 
 3. (`ncn-m001#`) Wait for CFS to complete configuration
 
    ```bash
    cray cfs sessions describe ncnnodes
-   kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq " .status.session.job" | tr -d '"'` -c ansible
+   kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq -r " .status.session.job"` -c ansible
    ```
 
 ## Update test suite packages
