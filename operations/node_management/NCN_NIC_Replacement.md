@@ -26,7 +26,7 @@ already known, continue to [Edit BSS Boot Parameters](#edit-bss-boot-parameters)
 For more information about which MAC address belongs to each named interface, see
 [NCN networking for more information](../../background/ncn_networking.md)
 
-1. Follow the [Collect NCN MAC Addresses](Add_Remove_Replace_NCNs/Collect_NCN_MAC_Addresses.md) procedure.
+Follow the [Collect NCN MAC Addresses](Add_Remove_Replace_NCNs/Collect_NCN_MAC_Addresses.md) procedure.
 
 ### Edit BSS Boot Parameters
 
@@ -54,7 +54,7 @@ ones that need to be updated. Take note of the MAC addresses being replaced they
 2. Update BSS with the new MAC addresses identified in
 [Collect the New MAC Addresses](#collect-the-new-mac-addresses).
 
-    (`ncn-m#`) Prepare the new boot parameters
+    (`ncn-m#`) Prepare the new boot parameters:
 
     ```screen
     PARAMS=$(cray bss bootparameters list --hosts $NCN_XNAME | jq .[].params)
@@ -65,7 +65,7 @@ ones that need to be updated. Take note of the MAC addresses being replaced they
                  sed 's/sun1:94:40:c9:5f:b6:5c/sun1:5c:ed:8c:0c:0d:3f/')
     ```
 
-    Example resulting boot paramters
+    Example resulting boot parameters:
 
     ```screen
     biosdevname=1 ifname=mgmt1:5c:ed:8c:0c:0d:3e ifname=mgmt0:14:02:ec:dd:04:48 ifname=sun1:5c:ed:8c:0c:0d:3f
@@ -80,7 +80,7 @@ ones that need to be updated. Take note of the MAC addresses being replaced they
     rd.retry=10 rd.shell ip=mgmt0:dhcp rd.peerdns=0 rd.net.dhcp.retry=5 psi=1 rd.live.squashimg=rootfs
     ```
 
-    (`ncn-m#`) Update BSS
+    (`ncn-m#`) Update BSS:
 
     ```screen
     cray bss bootparameters update --hosts $NCN_XNAME --params "${NEW_PARAMS}"
@@ -104,7 +104,7 @@ ones that need to be updated. Take note of the MAC addresses being replaced they
     cray hsm inventory discover create --xnames $NCN_BMC
     ```
 
-    Output
+    Example output:
 
     ```screen
     [
@@ -150,4 +150,4 @@ ones that need to be updated. Take note of the MAC addresses being replaced they
 
 ### Rebuild the NCN
 
-1. Follow the procedure found here, [Rebuild NCNs](Rebuild_NCNs/Rebuild_NCNs.md), to rebuild the NCN.
+Refer to the [Rebuild NCNs](Rebuild_NCNs/Rebuild_NCNs.md) procedure.
