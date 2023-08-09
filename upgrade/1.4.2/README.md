@@ -211,7 +211,6 @@ This step will create an imperative CFS session that can be used to configure bo
    kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq " .status.session.job" | tr -d '"'` -c ansible
    ```
 
-
 ## Update test suite packages
 
 Update the `csm-testing` and `goss-servers` RPMs on the NCNs.
