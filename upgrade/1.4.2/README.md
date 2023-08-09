@@ -34,7 +34,7 @@ If upgrading from CSM `v1.3.x` directly to `v1.4.2`, follow the procedures descr
 1. [Upload NCN images](#upload-ncn-images)
 1. [Upgrade Ceph and stop local Docker registries](#upgrade-ceph-and-stop-local-docker-registries)
 1. [Enable `Smartmon` Metrics on Storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
-1. [Configure NCN nodes without restart](#configure-ncn-nodes-without-restart)
+1. [Configure NCNs without restart](#configure-ncn-nodes-without-restart)
 1. [Update test suite packages](#update-test-suite-packages)
 1. [Verification](#verification)
 1. [Take Etcd Manual Backup](#take-etcd-manual-backup)
@@ -175,9 +175,9 @@ This step will install the `smart-mon` rpm on storage nodes, and reconfigure the
    /usr/share/doc/csm/scripts/operations/ceph/enable-smart-mon-storage-nodes.sh
    ```
 
-## Configure NCN nodes without restart
+## Configure NCNs without restart
 
-This step will create an imperative CFS session that can be used to configure booted NCN nodes with updated `sysctl` values.
+This step will create an imperative CFS session that can be used to configure booted NCN with updated `sysctl` values.
 
 1. (`ncn-m001#`) Create a new CFS configuration entry for the release.
 
