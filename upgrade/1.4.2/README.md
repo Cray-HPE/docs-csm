@@ -198,14 +198,14 @@ This step will create an imperative CFS session that can be used to configure bo
    rm /tmp/ncn_nodes.yml.json
    ```
 
-2. (`ncn-m001#`) Imperatively launch CFS against NCN nodes
+1. (`ncn-m001#`) Imperatively launch CFS against NCNs.
 
    ```bash
    cray cfs sessions create --name ncnnodes --configuration-name ncn_nodes
    kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq -r " .status.session.job"` -c ansible
    ```
 
-3. (`ncn-m001#`) Wait for CFS to complete configuration
+1. (`ncn-m001#`) Wait for CFS to complete configuration.
 
    ```bash
    cray cfs sessions describe ncnnodes
