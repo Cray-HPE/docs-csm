@@ -74,7 +74,7 @@ spec:
                       ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
                       for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
                         scp /usr/share/doc/csm/upgrade/scripts/ceph/ceph-upgrade-monitoring-stack.sh ${storage_node}:/srv/cray/scripts/common/ceph-upgrade-monitoring-stack.sh
-                        ssh ${storage_node} ${ssh_options} "/srv/cray/scripts/common/ceph-upgrade-monitoring-stack.sh"
+                        ssh ${storage_node} ${ssh_options} "chmod +x /srv/cray/scripts/common/ceph-upgrade-monitoring-stack.sh; /srv/cray/scripts/common/ceph-upgrade-monitoring-stack.sh"
                         break
                       done
                     else
