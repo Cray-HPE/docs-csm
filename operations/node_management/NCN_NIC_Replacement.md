@@ -54,7 +54,7 @@ ones that need to be updated. Take note of the MAC addresses being replaced they
 2. Update BSS with the new MAC addresses identified in
 [Collect the New MAC Addresses](#collect-the-new-mac-addresses).
 
-    (`ncn-m#`) Prepare the new boot paramters
+    (`ncn-m#`) Prepare the new boot parameters
 
     ```screen
     PARAMS=$(cray bss bootparameters list --hosts $NCN_XNAME | jq .[].params)
