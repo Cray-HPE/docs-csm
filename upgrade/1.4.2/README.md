@@ -177,9 +177,9 @@ This step will install the `smart-mon` rpm on storage nodes, and reconfigure the
 
 ## Configure NCN nodes without restart
 
-This step will create an imperative CFS session that can be used to configure booted NCN nodes with updated sysctl values.
+This step will create an imperative CFS session that can be used to configure booted NCN nodes with updated `sysctl` values.
 
-1. (`ncn-m001#`) Create a new CFS Configuration Entry for the release
+1. (`ncn-m001#`) Create a new CFS configuration entry for the release.
 
    ```bash
    COMMIT=`kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' 2>/dev/null | yq r -j - 2>/dev/null | jq --arg version "$CSM_RELEASE_VERSION" '. [$version].configuration.commit' | tr -d '"'`
