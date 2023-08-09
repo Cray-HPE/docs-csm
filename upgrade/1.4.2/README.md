@@ -212,7 +212,7 @@ This step will create an imperative CFS session that can be used to configure bo
    kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq -r " .status.session.job"` -c ansible
    ```
 
-The playbook in question will run to completion with a message indicating success.
+   The playbook in question will run to completion with a message indicating success.
 
    ```text
    All playbooks completed successfully
