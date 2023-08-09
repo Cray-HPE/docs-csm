@@ -205,7 +205,7 @@ This step will create an imperative CFS session that can be used to configure bo
    kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq -r " .status.session.job"` -c ansible
    ```
 
-3. (`ncn-m001#`) Wait for CFS to complete configuration
+1. (`ncn-m001#`) Wait for CFS to complete configuration.
 
    ```bash
    cray cfs sessions describe ncnnodes
