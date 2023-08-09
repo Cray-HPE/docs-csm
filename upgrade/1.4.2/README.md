@@ -178,20 +178,10 @@ This step will install the `smart-mon` rpm on storage nodes, and reconfigure the
 
 This step will create an imperative CFS session that can be used to configure booted NCN nodes with updated sysctl values.
 
-1. (`ncn-m001#`) Create a new CFS Configuration Entry for the 1.4.2 release
+1. (`ncn-m001#`) Create a new CFS Configuration Entry for the release
 
 ```bash
-VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
-VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
-git config --global credential.helper store
-echo "https://${VCS_USER}:${VCS_PASSWORD}@api-gw-service-nmn.local" > ~/.git-credentials
-git config --global user.name “Root User”
-git config --global user.email root@m001localhost
-cd /tmp
-git clone https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git
-cd /tmp/csm-config-management
-git checkout cray/csm/1.15.13
-COMMIT=`git rev-parse HEAD`
+COMMIT=`kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' 2>/dev/null | yq r -j - 2>/dev/null | jq --arg version "$CSM_RELEASE_VERSION" '. [$version].configuration.commit' | tr -d '"'`
 echo '{
   "layers": [
     {
@@ -201,11 +191,10 @@ echo '{
       "playbook": "ncn_sysctl.yml"
     }
   ]
-}' > /tmp/ncn_sysctl.yml.json
-sed -i "s/COMMIT/$COMMIT/g" /tmp/ncn_sysctl.yml.json
+}' | sed -e "s/COMMIT/$COMMIT/g" > /tmp/ncn_sysctl.yml.json
 cray cfs configurations update ncn_sysctl --file /tmp/ncn_sysctl.yml.json
-# Cleanup temporary files
-rm -r /tmp/csm-config-management /tmp/ncn_sysctl.yml.json
+# Cleanup temporary file
+rm /tmp/ncn_sysctl.yml.json
 ```   
 
 2. (`ncn-m001#`) Launch CFS to configure NCN sysctl values
