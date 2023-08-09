@@ -180,36 +180,36 @@ This step will create an imperative CFS session that can be used to configure bo
 
 1. (`ncn-m001#`) Create a new CFS Configuration Entry for the release
 
-```bash
-COMMIT=`kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' 2>/dev/null | yq r -j - 2>/dev/null | jq --arg version "$CSM_RELEASE_VERSION" '. [$version].configuration.commit' | tr -d '"'`
-echo '{
-  "layers": [
-    {
-      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
-      "commit": "COMMIT",
-      "name": "ncn_nodes",
-      "playbook": "ncn_nodes.yml"
-    }
-  ]
-}' | sed -e "s/COMMIT/$COMMIT/g" > /tmp/ncn_nodes.yml.json
-cray cfs configurations update ncn_nodes --file /tmp/ncn_nodes.yml.json
-# Cleanup temporary file
-rm /tmp/ncn_nodes.yml.json
-```   
+   ```bash
+   COMMIT=`kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' 2>/dev/null | yq r -j - 2>/dev/null | jq --arg version "$CSM_RELEASE_VERSION" '. [$version].configuration.commit' | tr -d '"'`
+   echo '{
+     "layers": [
+       {
+         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+         "commit": "COMMIT",
+         "name": "ncn_nodes",
+         "playbook": "ncn_nodes.yml"
+       }
+     ]
+   }' | sed -e "s/COMMIT/$COMMIT/g" > /tmp/ncn_nodes.yml.json
+   cray cfs configurations update ncn_nodes --file /tmp/ncn_nodes.yml.json
+   # Cleanup temporary file
+   rm /tmp/ncn_nodes.yml.json
+   ```   
 
 2. (`ncn-m001#`) Imperatively launch CFS against NCN nodes
 
-```bash
-cray cfs sessions create --name ncnnodes --configuration-name ncn_nodes
-kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq " .status.session.job" | tr -d '"'` -c ansible
-```
+   ```bash
+   cray cfs sessions create --name ncnnodes --configuration-name ncn_nodes
+   kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq " .status.session.job" | tr -d '"'` -c ansible
+   ```
 
 3. (`ncn-m001#`) Wait for CFS to complete configuration
 
-```bash
-cray cfs sessions describe ncnnodes
-kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq " .status.session.job" | tr -d '"'` -c ansible
-```
+   ```bash
+   cray cfs sessions describe ncnnodes
+   kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq " .status.session.job" | tr -d '"'` -c ansible
+   ```
 
 
 ## Update test suite packages
