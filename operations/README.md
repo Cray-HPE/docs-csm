@@ -608,6 +608,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
 - [Enable IPMI access on HPE iLO BMCs](node_management/Enable_ipmi_access_on_HPE_iLO_BMCs.md)
 - [Update the HPE Node BIOS Time](node_management/Update_the_HPE_Node_BIOS_Time.md)
 - [Switch PXE Boot from Onboard NIC to PCIe](node_management/Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md)
+- [NCN NIC Replacement](node_management/NCN_NIC_Replacement.md)
 
 ## Network
 
