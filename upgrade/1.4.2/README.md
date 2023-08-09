@@ -34,6 +34,7 @@ If upgrading from CSM `v1.3.x` directly to `v1.4.2`, follow the procedures descr
 1. [Upload NCN images](#upload-ncn-images)
 1. [Upgrade Ceph and stop local Docker registries](#upgrade-ceph-and-stop-local-docker-registries)
 1. [Enable `Smartmon` Metrics on Storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
+1. [Configure NCNs without restart](#configure-ncn-nodes-without-restart)
 1. [Update test suite packages](#update-test-suite-packages)
 1. [Verification](#verification)
 1. [Take Etcd Manual Backup](#take-etcd-manual-backup)
@@ -172,6 +173,49 @@ This step will install the `smart-mon` rpm on storage nodes, and reconfigure the
 
    ```bash
    /usr/share/doc/csm/scripts/operations/ceph/enable-smart-mon-storage-nodes.sh
+   ```
+
+## Configure NCNs without restart
+
+This step will create an imperative CFS session that can be used to configure booted NCN with updated `sysctl` values.
+
+1. (`ncn-m001#`) Create a new CFS configuration entry for the release.
+
+   ```bash
+   COMMIT=`kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' 2>/dev/null | yq r -j - 2>/dev/null | jq --arg version "$CSM_RELEASE_VERSION" '. [$version].configuration.commit' | tr -d '"'`
+   echo '{
+     "layers": [
+       {
+         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+         "commit": "COMMIT",
+         "name": "ncn_nodes",
+         "playbook": "ncn_nodes.yml"
+       }
+     ]
+   }' | sed -e "s/COMMIT/$COMMIT/g" > /tmp/ncn_nodes.yml.json
+   cray cfs configurations update ncn_nodes --file /tmp/ncn_nodes.yml.json
+   # Cleanup temporary file
+   rm /tmp/ncn_nodes.yml.json
+   ```
+
+1. (`ncn-m001#`) Imperatively launch CFS against management NCNs.
+
+   ```bash
+   cray cfs sessions create --name ncnnodes --configuration-name ncn_nodes
+   kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq -r " .status.session.job"` -c ansible
+   ```
+
+1. (`ncn-m001#`) Wait for CFS to complete configuration.
+
+   ```bash
+   cray cfs sessions describe ncnnodes
+   kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq -r " .status.session.job"` -c ansible
+   ```
+
+   The playbook in question will run to completion with a message indicating success.
+
+   ```text
+   All playbooks completed successfully
    ```
 
 ## Update test suite packages
