@@ -176,7 +176,7 @@ This step will install the `smart-mon` rpm on storage nodes, and reconfigure the
 
 ## Configure NCN nodes without restart
 
-This step will create an imperative CFS session that can be used to configure booted NCN nodes with updated sysctl values.
+This step will create an imperative CFS session that can be used to configure booted NCN nodes with updated `sysctl` values.
 
 1. (`ncn-m001#`) Create a new CFS Configuration Entry for the release
 
