@@ -187,26 +187,28 @@ echo '{
     {
       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
       "commit": "COMMIT",
-      "name": "ncn_sysctl",
-      "playbook": "ncn_sysctl.yml"
+      "name": "ncn_nodes",
+      "playbook": "ncn_nodes.yml"
     }
   ]
-}' | sed -e "s/COMMIT/$COMMIT/g" > /tmp/ncn_sysctl.yml.json
-cray cfs configurations update ncn_sysctl --file /tmp/ncn_sysctl.yml.json
+}' | sed -e "s/COMMIT/$COMMIT/g" > /tmp/ncn_nodes.yml.json
+cray cfs configurations update ncn_nodes --file /tmp/ncn_nodes.yml.json
 # Cleanup temporary file
-rm /tmp/ncn_sysctl.yml.json
+rm /tmp/ncn_nodes.yml.json
 ```   
 
-2. (`ncn-m001#`) Launch CFS to configure NCN sysctl values
+2. (`ncn-m001#`) Imperatively launch CFS against NCN nodes
 
 ```bash
-cray cfs sessions create --name ncn_sysctl --configuration-name ncnsysctl
+cray cfs sessions create --name ncnnodes --configuration-name ncn_nodes
+kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq " .status.session.job" | tr -d '"'` -c ansible
 ```
 
 3. (`ncn-m001#`) Wait for CFS to complete configuration
 
 ```bash
-watch `cray cfs sessions describe ncnsysctl`
+cray cfs sessions describe ncnnodes
+kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq " .status.session.job" | tr -d '"'` -c ansible
 ```
 
 
