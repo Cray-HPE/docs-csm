@@ -179,30 +179,14 @@ This step will install the `smart-mon` rpm on storage nodes, and reconfigure the
 
 This step will create an imperative CFS session that can be used to configure booted NCN with updated `sysctl` values.
 
-1. (`ncn-m001#`) Create a new CFS configuration entry for the release.
+1. (`ncn-m001#`) Run `configure_ncns.sh` to create a CFS configuration and session.
+
+    **IMPORTANT**: This script will overwrite any CFS configuration called ncn_nodes.  Change the `CONFIG_NAME` variable in the script to change this behavior.
+     
+     **IMPORTANT**: This script will not start a new CFS session if one of the same name already exists.  If an old session exists, delete it first or change the  `SESSION_NAME` variable in the script to use a different session name.
 
    ```bash
-   COMMIT=`kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' 2>/dev/null | yq r -j - 2>/dev/null | jq --arg version "$CSM_RELEASE_VERSION" '. [$version].configuration.commit' | tr -d '"'`
-   echo '{
-     "layers": [
-       {
-         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
-         "commit": "COMMIT",
-         "name": "ncn_nodes",
-         "playbook": "ncn_nodes.yml"
-       }
-     ]
-   }' | sed -e "s/COMMIT/$COMMIT/g" > /tmp/ncn_nodes.yml.json
-   cray cfs configurations update ncn_nodes --file /tmp/ncn_nodes.yml.json
-   # Cleanup temporary file
-   rm /tmp/ncn_nodes.yml.json
-   ```
-
-1. (`ncn-m001#`) Imperatively launch CFS against management NCNs.
-
-   ```bash
-   cray cfs sessions create --name ncnnodes --configuration-name ncn_nodes
-   kubectl logs -f -n services jobs/`cray cfs sessions describe ncnnodes --format json | jq -r " .status.session.job"` -c ansible
+   /usr/share/doc/csm/upgrade/scripts/cfs/configure_ncns.sh
    ```
 
 1. (`ncn-m001#`) Wait for CFS to complete configuration.
