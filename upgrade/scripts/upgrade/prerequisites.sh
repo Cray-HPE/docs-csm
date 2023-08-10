@@ -775,7 +775,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
       else
 
         # csi handoff bss-update-cloud-init --user-data` only takes JSON, convert the human-friendlier YAML to JSON and nest it under the expected key.
-        yq4 '{"user-data": .}' "${sourcefile}.yaml" --output-format json > "${sourcefile}.json"
+        yq4 eval '{"user-data": .}' "${sourcefile}.yaml" -j > "${sourcefile}.json"
 
         # Set `do_patch` to 1 so that the operations in this stage run.
         do_patch=1
