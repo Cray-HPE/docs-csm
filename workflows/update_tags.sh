@@ -28,7 +28,7 @@ set -e
 THIS_REGISTRY_NAME="registry.local"
 THIS_REGISTRY_PROTOCOL="https"
 THIS_PODMAN_TLS=""
-SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 cd $SCRIPT_DIR
 
 
