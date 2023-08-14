@@ -31,7 +31,6 @@ THIS_PODMAN_TLS=""
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 cd $SCRIPT_DIR
 
-
 # Ensure the script is running from within the workflows directory so it finds argo yaml files."
 if [[ "$(basename ${SCRIPT_DIR})" != "workflows" ]]; then
   echo "ERROR: This script must be located in the workflows directory to run."
