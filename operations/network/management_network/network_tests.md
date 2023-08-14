@@ -17,7 +17,6 @@ See also:
 
 * SSH access to the switches
 * SLS file or SLS API access
-* CANU has to be on version `1.1.4` or later; run `canu --version` to verify
 
 ## Examples
 

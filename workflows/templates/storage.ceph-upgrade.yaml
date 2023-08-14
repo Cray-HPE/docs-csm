@@ -34,7 +34,7 @@ spec:
           - name: dryRun
       dag:
         tasks:
-          - name: main
+          - name: upgrade-ceph-version
             templateRef:
               name: ssh-template
               template: shell-script
@@ -46,8 +46,8 @@ spec:
                   value: |
                     ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
                     for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
-                      if [[ -z $(ssh ${storage_node} ${ssh_options} 'cat /etc/os-release' | grep 'VERSION="15-SP4"') ]]; then
-                        echo "Not all storage nodes have been upgraded and are running SP4."
+                      if [[ -z $(ssh ${storage_node} ${ssh_options} 'cat /etc/os-release' | grep 'VERSION="15-SP5"') ]]; then
+                        echo "Not all storage nodes have been upgraded and are running SP5."
                         echo "Waiting to upgrade Ceph until all storage nodes have been upgraded."
                         exit 0
                       fi
@@ -56,3 +56,27 @@ spec:
                     # setting PYTHONUNBUFFERED forces python to print output
                     export PYTHONUNBUFFERED=1
                     /usr/share/doc/csm/upgrade/scripts/ceph/ceph-upgrade-tool.py --version '17.2.6'
+          - name: upgrade-ceph-monitoring-stack
+            dependencies:
+              - upgrade-ceph-version
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    ceph_version=$(ceph version --format json | jq '.version' | awk '{print $3}')
+                    if [[ $ceph_version == '17.2.6' ]]; then
+                      echo "Upgrading the Ceph monitoring stack."
+                      ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+                      for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
+                        scp /usr/share/doc/csm/upgrade/scripts/ceph/ceph-upgrade-monitoring-stack.sh ${storage_node}:/srv/cray/scripts/common/ceph-upgrade-monitoring-stack.sh
+                        ssh ${storage_node} ${ssh_options} "chmod +x /srv/cray/scripts/common/ceph-upgrade-monitoring-stack.sh; /srv/cray/scripts/common/ceph-upgrade-monitoring-stack.sh"
+                        break
+                      done
+                    else
+                      echo "Ceph is not running version '17.2.6' yet. Waiting to upgrade the Ceph monitoring stack until Ceph has been upgraded."
+                    fi

@@ -5,7 +5,6 @@
 ## New
 
 * v1 of Power Control Service (PCS) is active.
-* Cray CLI will default to version 2 (v2) for BOS, if a version is not specified.
 
 ### Monitoring
 
@@ -32,13 +31,11 @@
 
 ## Deprecations
 
-* [CAPMC](glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
-
 For a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
 
 ## Removals
 
-* [CRUS](glossary.md#compute-rolling-upgrade-service-crus)
+* [BOS](glossary.md#boot-orchestration-service-bos) v1
 
 For a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals).
 

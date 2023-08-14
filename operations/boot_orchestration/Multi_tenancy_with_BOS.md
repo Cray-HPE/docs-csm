@@ -4,9 +4,6 @@ BOS v2 supports multi-tenancy, allowing multiple tenants to coexist on a system 
 resources. For more information on multi-tenancy see the [Multi-Tenancy Overview](../multi-tenancy/Overview.md) For
 systems without tenants, this functionality can be ignored.
 
-This is a BOS v2 feature only. The BOS v1 API will return an error if any calls are made while authenticated to a
-specific tenant.
-
 ## Tenant administrators
 
 Tenant administrators should be able to view their components, session templates and sessions normally. They will not be able to

@@ -440,9 +440,9 @@ def import_ims_recipe(recipe, recipes_path):
             # result in them being assigned default values (which is what would have happened to
             # these recipes had they existed on the system when it was updated to CSM 1.5).
             if 'arch' in recipe:
-                command.extend(['--arch'], recipe['arch'])
+                command.extend(['--arch', recipe['arch']])
             if 'require_dkms' in recipe:
-                command.extend(['--require-dkms'], recipe['require_dkms'])
+                command.extend(['--require-dkms', recipe['require_dkms']])
             LOGGER.debug(' '.join(command))
             new_recipe = json.loads(subprocess.check_output(command))
             LOGGER.debug(new_recipe)

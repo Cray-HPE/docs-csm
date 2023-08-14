@@ -44,6 +44,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [HPE nodes not properly transitioning power state](known_issues/hpe_systems_not_transitioning_power_state.md)
 * [Software Management Services health check](known_issues/sms_health_check.md)
 * [QLogic driver crash on storage nodes](known_issues/qlogic_driver_crash.md)
+* [Nexus Fails Authentication with Keycloak Users](known_issues/Nexus_Fail_Authentication_with_Keycloak_Users.md)
 
 ## Booting
 
@@ -59,7 +60,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Issues Related to Trivial File Transfer Protocol (TFTP)](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Trivial_File_Transfer_Protocol_TFTP.md)
 * [Troubleshooting Using Kubernetes](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Using_Kubernetes.md)
 * [Log File Locations and Ports Used](../operations/boot_orchestration/Log_File_Locations_and_Ports_Used_in_Compute_Node_Boot_Troubleshooting.md)
-* [Issues Related to Slow Boot Times](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
 
 ## Configuration management
 

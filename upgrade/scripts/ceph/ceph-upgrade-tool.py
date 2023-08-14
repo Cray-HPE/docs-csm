@@ -91,7 +91,7 @@ class API:
 """
 Block of Ceph upgrade functions.
 """
-def upgrade_ceph(registry='registry.local', conf_file="") -> bool:
+def upgrade_ceph(retry=False, registry='registry.local', conf_file="") -> bool:
     """
     Upgrade Ceph. This function validates the image format, the upgrade version supplied,
     and that is possible to pull the image being upgraded to. It then executes the upgrade.
@@ -104,8 +104,12 @@ def upgrade_ceph(registry='registry.local', conf_file="") -> bool:
     # prepare for upgrade
     try:
         upgrade_version = _validate_version_format(upgrade_version)
-        starting_version = ceph_api.get_ceph_version()
-        should_upgrade = _verify_upgrade_version(starting_version, upgrade_version)
+        if not retry:
+            starting_version = ceph_api.get_ceph_version()
+            should_upgrade = _verify_upgrade_version(starting_version, upgrade_version)
+        else:
+            # automatically run an upgrade if this is a retry
+            should_upgrade = True
         if not should_upgrade:
             ceph_api.disconnect()
             return False
@@ -167,8 +171,9 @@ def _verify_upgrade_version(starting_version: str, upgrade_version: str) -> bool
         print(f'Ceph version is already {starting_version}. Nothing to upgrade.')
         return False
     if not version.parse(starting_version) < version.parse(upgrade_version):
-        raise ValueError(f'Cannot upgrade Ceph. The upgrade version:{upgrade_version} \
-        is not greater than the current Ceph version running:{starting_version}.')
+        print(f'Cannot upgrade Ceph. The upgrade version:{upgrade_version} \
+is not greater than the current Ceph version running:{starting_version}.')
+        return False
     return True
 
 def _check_image_pull(image: str) -> None:
@@ -179,6 +184,22 @@ def _check_image_pull(image: str) -> None:
     output, error = p.communicate()
     if p.returncode != 0:
         raise ImagePullException(f"Error: failed to pull image from podman. Check that {image} is in nexus.")
+
+def retry_upgrade(registry='registry.local', conf_file="") -> None:
+    """
+    Retries a failed upgrade. This will stop the current upgrade then reattempt upgrading.
+    """
+    if conf_file == "":
+        ceph_api = API()
+    else:
+        ceph_api = API(conf_file)
+    stop_upgrade_cmd = {"prefix":"orch upgrade stop"}
+    print(f'\nStopping the current failed Ceph upgrade. Will reattempt an upgrade after ths.')
+    ceph_api.run_ceph_cmd(stop_upgrade_cmd)
+    ceph_api.disconnect()
+    time.sleep(20)
+    # start a new ceph upgrade
+    upgrade_ceph(retry=True)
 
 """
 Block of monitoring functions for the Ceph upgrade.
@@ -358,7 +379,14 @@ def main():
             print('Ceph upgrade succeeded.')
         else:
             print(f'Error: Ceph upgrade failed. {error}')
-            sys.exit(1)
+            print('Attempting to retry the upgrade...')
+            retry_upgrade()
+            success, error = monitor_upgrade()
+            if success:
+                print('Ceph upgrade succeeded.')
+            else:
+                print(f'Error: Ceph upgrade failed. {error}')
+                sys.exit(1)
 
 if __name__ == '__main__':
     main()
