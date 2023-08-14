@@ -46,8 +46,8 @@ spec:
                   value: |
                     ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
                     for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
-                      if [[ -z $(ssh ${storage_node} ${ssh_options} 'cat /etc/os-release' | grep 'VERSION="15-SP4"') ]]; then
-                        echo "Not all storage nodes have been upgraded and are running SP4."
+                      if [[ -z $(ssh ${storage_node} ${ssh_options} 'cat /etc/os-release' | grep 'VERSION="15-SP5"') ]]; then
+                        echo "Not all storage nodes have been upgraded and are running SP5."
                         echo "Waiting to upgrade Ceph until all storage nodes have been upgraded."
                         exit 0
                       fi
