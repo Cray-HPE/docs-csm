@@ -167,8 +167,6 @@ Refer to that table and any corresponding product documents before continuing to
 
 1. Follow the steps documented in [Stage 3.5 - `coredns` anti-affinity](../../../upgrade/Stage_3.md#stage-35---coredns-anti-affinity)
 
-1. Follow the steps documented in [Stage 3.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_3.md#stage-36---complete-kubernetes-upgrade).
-
 Once this step has completed:
 
 - All management NCNs have been upgraded to the image and CFS configuration created in the previous steps of this workflow
