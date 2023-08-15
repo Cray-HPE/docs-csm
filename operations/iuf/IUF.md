@@ -818,7 +818,7 @@ For more information on the Install and Upgrade Observability Framework, refer t
 
 ## Deleting Products installed with IUF
 
-Products installed using IUF, update the cray-product-catalog configmap. A sample update for "cos" product is show below:
+Products installed using IUF, update the `cray-product-catalog` configmap. A sample update for `cos` product is show below:
 
 ```yaml
 
@@ -894,7 +894,7 @@ prodmgr delete cos 1.25.31 --container-registry-hostname arti.hpc.amslabs.hpecor
 The `prodmgr` is installed as an `rpm` and has a well documented
 `help`. The `product-deletion-utility` is a `container` which
 interacts with various repos to complete the deletion of
-artifcats and subsequent cleanup of the configmap entry.
+artifacts and subsequent cleanup of the `configmap` entry.
 
 Both the `rpm` and `container` image are installed as a part of
 `csm` installation.
