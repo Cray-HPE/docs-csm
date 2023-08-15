@@ -815,3 +815,73 @@ The framework also includes a unified consistent method to automatically track T
 The Install and Upgrade Observability Framework is automatically deployed and configured in the CSM environment.
 
 For more information on the Install and Upgrade Observability Framework, refer to [Install and Upgrade Observability Framework](../observability/Observability.md).
+
+## Deleting Products installed with IUF
+
+Products installed using IUF, update the cray-product-catalog configmap. A sample update for "cos" product is show below:
+
+```yaml
+  cos: |
+    2.5.101:
+      component_versions:
+        docker:
+        - name: arti.hpc.amslabs.hpecorp.net/cray-product-catalog-update
+          version: 1.3.2
+        - name: cray/cray-nmdv2
+          version: 2.10.10
+        helm:
+        - name: cos-sle15sp4-artifacts
+          version: 2.1.18
+        - name: cos-config-service
+          version: 1.0.3
+        manifests:
+        - config-data/argo/loftsman/cos/2.5.101/manifests/cos-services.yaml
+        repositories:
+        - name: cos-2.5.101-sle-15sp4
+          type: hosted
+        - members:
+          - cos-2.5.101-sle-15sp4
+          name: cos-2.5-sle-15sp4
+          type: group
+      configuration:
+        clone_url: https://vcs.cmn.mug.hpc.amslabs.hpecorp.net/vcs/cray/cos-config-management.git
+        commit: fe2edd67af6613550a20118a6f4d8295aeb9d59f
+        import_branch: cray/cos/2.5.101
+        import_date: 2023-08-07 10:47:48.472277
+        ssh_url: git@vcs.cmn.mug.hpc.amslabs.hpecorp.net:cray/cos-config-management.git
+      images: {}
+      recipes:
+        cray-shasta-compute-sles15sp4.noarch-2.5.30:
+          id: a519dc00-8c2e-48cd-8344-7bfe4d05ff3a
+``` 
+As multiple versions of a product get installed, the versions which are still not in use also continue to remain in the cray-product-catalog. This leads to situation where the cray-product-catalog which is stored as a configmap runs out of space (1 MiB is the maximum size for a configmap in kubernetes). 
+
+To help the administrator, clean the cray-product-catalog of unused product version entries which were installed using IUF, the `prodmgr` CLI provides a new option `delete`. This option when used with the `product` and `version` helps cleanup the following installed by the product version (if they are not used by other product versions or other products):
+
+- `Docker Images` 
+- `Helm Charts` 
+- `Loftsman Manifests`
+- `s3 artifacts`
+- `ims images`
+- `ims receipes`
+- `hosted repos`
+
+Finally, the product entry is also deleted from the cray-product-catalog configmap.
+
+An example of launching the `prodmgr` for cleaning a `cos` version `1.25.31` is shown below:
+
+```code
+prodmgr delete cos 1.25.31 --container-registry-hostname arti.hpc.amslabs.hpecorp.net/csm-docker/stable --deletion-image-name product-deletion-utility --deletion-image-version 1.0.0
+```
+The `prodmgr` is installed as an `rpm` and has a well documented `help`. The `product-deletion-utility` is a `container` which interacts with various repos to complete the deletion of artifcats and subsequent cleanup of the configmap entry. 
+Both the `rpm` and `container` image are installed as a part of csm installation.
+
+Further information about `prodmgr` and `product-deletion-utility` can be had from:
+
+- https://github.com/Cray-HPE/prodmgr/blob/main/README.md
+- https://github.com/Cray-HPE/product-deletion-utility/blob/integration/README.md
+
+### Deletion Logs
+
+The `logs` for the progress of deletion is generated in the `/etc/cray/upgrade/csm/iuf/deletion` directory or the `$CWD` from where the `prodmgr` is run. The filename is generated as: `delete-<product>-<version>-<timestamp>`. This can be used to analyze the components deleted as part of the deletion run.
+
