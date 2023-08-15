@@ -856,22 +856,23 @@ Products installed using IUF, update the cray-product-catalog configmap. A sampl
           id: a519dc00-8c2e-48cd-8344-7bfe4d05ff3a
 
 ```
+
 As multiple versions of a product get installed, the versions which are
 still not in use also continue to remain in the cray-product-catalog.
 This leads to situation where the cray-product-catalog which is stored
 as a configmap runs out of space (1 MiB is the maximum size for a
-`configmap` in kubernetes). 
+`configmap` in kubernetes).
 
 To help the administrator, clean the cray-product-catalog
 of unused product version entries which were installed
 using IUF, the `prodmgr` CLI provides a new option
 `delete`. This option when used with the `product` and
-`version` helps cleanup the following installed by 
+`version` helps cleanup the following installed by
 the product version (if they are not used by other
 product versions or other products):
 
-- `Docker Images` 
-- `Helm Charts` 
+- `Docker Images`
+- `Helm Charts`
 - `Loftsman Manifests`
 - `s3 artifacts`
 - `ims images`
@@ -889,6 +890,7 @@ An example of launching the `prodmgr` for cleaning a `cos` version
 prodmgr delete cos 1.25.31 --container-registry-hostname arti.hpc.amslabs.hpecorp.net/csm-docker/stable --deletion-image-name product-deletion-utility --deletion-image-version 1.0.0
 
 ```
+
 The `prodmgr` is installed as an `rpm` and has a well documented
 `help`. The `product-deletion-utility` is a `container` which
 interacts with various repos to complete the deletion of
@@ -905,8 +907,7 @@ can be had from:
 
 ### Deletion Logs
 
-The `logs` for the progress of deletion is generated in the 
-`/etc/cray/upgrade/csm/iuf/deletion` directory or the `$CWD` from 
+The `logs` for the progress of deletion is generated in the
+`/etc/cray/upgrade/csm/iuf/deletion` directory or the `$CWD` from
 where the `prodmgr` is run. The filename is generated as: `delete-<product>-<version>-<timestamp>`. This can be used to analyze
 the components deleted as part of the deletion run.
-
