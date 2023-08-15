@@ -818,7 +818,7 @@ For more information on the Install and Upgrade Observability Framework, refer t
 
 ## Deleting Products installed with IUF
 
-Products installed using IUF, update the `cray-product-catalog` `configmap`. A sample update for `cos` product is show below:
+Products installed using IUF, update the cray-product-catalog ConfigMap. A sample update for `cos` product is show below:
 
 ```yaml
 
@@ -860,10 +860,10 @@ Products installed using IUF, update the `cray-product-catalog` `configmap`. A s
 As multiple versions of a product get installed, the versions which are
 still not in use also continue to remain in the cray-product-catalog.
 This leads to situation where the cray-product-catalog which is stored
-as a `configmap` runs out of space (1 MiB is the maximum size for a
-`configmap` in `kubernetes`).
+as a ConfigMap runs out of space (1 MiB is the maximum size for a
+ConfigMap in Kubernetes).
 
-To help the administrator, clean the `cray-product-catalog`
+To help the CSM administrator, clean the cray-product-catalog
 of unused product version entries which were installed
 using IUF, the `prodmgr` CLI provides a new option
 `delete`. This option when used with the `product` and
@@ -879,8 +879,8 @@ product versions or other products):
 - `ims receipes`
 - `hosted repos`
 
-Finally, the product entry is also deleted from the `cray-product-catalog`
-`configmap`.
+Finally, the product entry is also deleted from the cray-product-catalog
+ConfigMap.
 
 An example of launching the `prodmgr` for cleaning a `cos` version
 `1.25.31` is shown below:
@@ -894,10 +894,10 @@ prodmgr delete cos 1.25.31 --container-registry-hostname arti.hpc.amslabs.hpecor
 The `prodmgr` is installed as an `rpm` and has a well documented
 `help`. The `product-deletion-utility` is a `container` which
 interacts with various repos to complete the deletion of
-artifacts and subsequent cleanup of the `configmap` entry.
+artifacts and subsequent cleanup of the ConfigMap entry.
 
 Both the `rpm` and `container` image are installed as a part of
-`csm` installation.
+CSM installation.
 
 Further information about `prodmgr` and `product-deletion-utility`
 can be had from:
