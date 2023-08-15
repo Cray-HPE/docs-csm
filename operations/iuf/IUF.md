@@ -853,10 +853,15 @@ Products installed using IUF, update the cray-product-catalog configmap. A sampl
       recipes:
         cray-shasta-compute-sles15sp4.noarch-2.5.30:
           id: a519dc00-8c2e-48cd-8344-7bfe4d05ff3a
-``` 
-As multiple versions of a product get installed, the versions which are still not in use also continue to remain in the cray-product-catalog. This leads to situation where the cray-product-catalog which is stored as a configmap runs out of space (1 MiB is the maximum size for a configmap in kubernetes). 
+```
+As multiple versions of a product get installed, the versions which are
+still not in use also continue to remain in the cray-product-catalog.
+This leads to situation where the cray-product-catalog which is stored
+as a configmap runs out of space (1 MiB is the maximum size for a
+`configmap` in kubernetes). 
 
-To help the administrator, clean the cray-product-catalog of unused product version entries which were installed using IUF, the `prodmgr` CLI provides a new option `delete`. This option when used with the `product` and `version` helps cleanup the following installed by the product version (if they are not used by other product versions or other products):
+To help the administrator, clean the cray-product-catalog of unused product
+version entries which were installed using IUF, the `prodmgr` CLI provides a new option `delete`. This option when used with the `product` and `version` helps cleanup the following installed by the product version (if they are not used by other product versions or other products):
 
 - `Docker Images` 
 - `Helm Charts` 
@@ -883,5 +888,8 @@ Further information about `prodmgr` and `product-deletion-utility` can be had fr
 
 ### Deletion Logs
 
-The `logs` for the progress of deletion is generated in the `/etc/cray/upgrade/csm/iuf/deletion` directory or the `$CWD` from where the `prodmgr` is run. The filename is generated as: `delete-<product>-<version>-<timestamp>`. This can be used to analyze the components deleted as part of the deletion run.
+The `logs` for the progress of deletion is generated in the 
+`/etc/cray/upgrade/csm/iuf/deletion` directory or the `$CWD` from 
+where the `prodmgr` is run. The filename is generated as: `delete-<product>-<version>-<timestamp>`. This can be used to analyze
+the components deleted as part of the deletion run.
 
