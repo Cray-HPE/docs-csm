@@ -24,7 +24,7 @@ Once this step has completed:
 
 ## 2. Upgrade Kubernetes
 
-1. Follow the steps documented in [Stage 3.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_3.md#stage-36---complete-kubernetes-upgrade).
+Follow the steps documented in [Stage 3.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_3.md#stage-36---complete-kubernetes-upgrade).
 
 ## 3. Next steps
 
