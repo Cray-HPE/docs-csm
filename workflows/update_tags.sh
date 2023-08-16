@@ -28,9 +28,8 @@ set -e
 THIS_REGISTRY_NAME="registry.local"
 THIS_REGISTRY_PROTOCOL="https"
 THIS_PODMAN_TLS=""
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 cd $SCRIPT_DIR
-
 
 # Ensure the script is running from within the workflows directory so it finds argo yaml files."
 if [[ "$(basename ${SCRIPT_DIR})" != "workflows" ]]; then
@@ -63,7 +62,15 @@ function get_list_of_images_to_update() {
 function get_latest_tag_for_image() {
   THIS_IMAGE=$1
   THIS_PREFIX=$([[ $(echo $THIS_IMAGE | grep -e "^${THIS_REGISTRY_NAME}/") ]] && echo "" || echo "${THIS_REGISTRY_NAME}/")
-  podman search $THIS_PODMAN_TLS $THIS_PREFIX$THIS_IMAGE --list-tags --format=json | jq -r '.[0].Tags | sort_by(.) | last'
+  podman search $THIS_PODMAN_TLS $THIS_PREFIX$THIS_IMAGE --list-tags --format=json | jq -r '
+    def opt(f):
+      . as $in | try f catch $in;
+    def semver_cmp:
+          sub("\\+.*$"; "")
+            | capture("^(?<v>[^-]+)(?:-(?<p>.*))?$") | [.v, .p // empty]
+            | map(split(".") | map(opt(tonumber)))
+            | .[1] |= (. // {});
+    .[0].Tags | sort_by(.|semver_cmp) | last'
 }
 
 function get_filenames_referring_to_image() {
