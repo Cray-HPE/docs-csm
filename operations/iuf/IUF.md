@@ -821,7 +821,6 @@ For more information on the Install and Upgrade Observability Framework, refer t
 Products installed using IUF, update the cray-product-catalog ConfigMap. A sample update for `cos` product is show below:
 
 ```yaml
-
   cos: |
     2.5.101:
       component_versions:
@@ -854,7 +853,6 @@ Products installed using IUF, update the cray-product-catalog ConfigMap. A sampl
       recipes:
         cray-shasta-compute-sles15sp4.noarch-2.5.30:
           id: a519dc00-8c2e-48cd-8344-7bfe4d05ff3a
-
 ```
 
 As multiple versions of a product get installed, the versions which are
@@ -885,10 +883,8 @@ ConfigMap.
 An example of launching the `prodmgr` for cleaning a `cos` version
 `1.25.31` is shown below:
 
-```code
-
+```bash
 prodmgr delete cos 1.25.31 --container-registry-hostname arti.hpc.amslabs.hpecorp.net/csm-docker/stable --deletion-image-name product-deletion-utility --deletion-image-version 1.0.0
-
 ```
 
 The `prodmgr` is installed as an `rpm` and has a well documented
@@ -899,11 +895,11 @@ artifacts and subsequent cleanup of the ConfigMap entry.
 Both the `rpm` and `container` image are installed as a part of
 CSM installation.
 
-Further information about `prodmgr` and `product-deletion-utility`
-can be had from:
+For more information about `prodmgr` and `product-deletion-utility`
+refer to the following:
 
-- <https://github.com/Cray-HPE/prodmgr/blob/main/README.md>
-- <https://github.com/Cray-HPE/product-deletion-utility/blob/integration/README.md>
+- [`prodmgr`](https://github.com/Cray-HPE/prodmgr/blob/main/README.md)
+- [`product-deletion-utility`](https://github.com/Cray-HPE/product-deletion-utility/blob/integration/README.md)
 
 ### Deletion Logs
 

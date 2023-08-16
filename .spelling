@@ -954,11 +954,10 @@ etag
 etags
 
 - operations/iuf/IUF.md
+cray-product-catalog
 sessionid
 SESSIONID
 unexecuted
-cray-product-catalog
-prodmgr
 
 - operations/iuf/examples/iuf_restart.md
 unexecuted
