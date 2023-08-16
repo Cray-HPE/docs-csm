@@ -18,7 +18,7 @@ This procedure is applicable for the following types of standard rack nodes:
 
 ## Procedure
 
-### Step 1: Retrieve an API token
+### 1. Retrieve an API token
 
 1. (`ncn-mw#`) Retrieve an API token.
 
@@ -29,31 +29,31 @@ This procedure is applicable for the following types of standard rack nodes:
                 https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-### Step 2: Power down node
+### 2. Power down node
 
 1. Use the workload manager (WLM) to drain running jobs from the affected nodes on the blade.
 
     Refer to the vendor documentation for the WLM for more information.
 
-1. (`ncn#`) Use Boot Orchestration Services (BOS) to shut down the affected nodes in the source blade.
+1. (`ncn-mw#`) Use Boot Orchestration Services (BOS) to shut down the affected nodes in the source blade.
 
     In this example, `x9000c3s0` is the source blade. Specify the appropriate component name (xname) and BOS
     template for the node type in the following command.
 
     ```bash
     BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-    cray bos v1 session create --template-uuid $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
+    cray bos v1 session create --template-name $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
     ```
 
-### Step 3: Remove Data from SLS and HSM
+### 3. Remove data from SLS and HSM
 
-1. (`ncn#`) Set `NODE_XNAME` environment variable with the nodes xname:
+1. (`ncn-mw#`) Set `NODE_XNAME` environment variable with the nodes xname:
 
     ```bash
     NODE_XNAME=x3000c0s19b0n0
     ```
 
-1. (`ncn#`) Verify the node to be removed is powered off:
+1. (`ncn-mw#`) Verify the node to be removed is powered off:
 
     ```bash
     cray capmc get_xname_status create --xnames "${NODE_XNAME}" --format toml
@@ -67,7 +67,7 @@ This procedure is applicable for the following types of standard rack nodes:
     off = [ "x3000c0s19b0n0",]
     ```
 
-1. (`ncn#`) **If the node being removed is an UAN**, then remove the IP address reservation for the node in the `CAN` or `CHN` networks.
+1. (`ncn-mw#`) **If the node being removed is an UAN**, then remove the IP address reservation for the node in the `CAN` or `CHN` networks.
 
     **Node** If the the UAN is being replaced within the same rack slot, then this step can be skipped.
 
@@ -119,7 +119,7 @@ This procedure is applicable for the following types of standard rack nodes:
         Called:  PUT https://api-gw-service-nmn.local/apis/sls/v1/networks/CAN with params None
                 ```
 
-1. (`ncn#`) Remove node data:
+1. (`ncn-mw#`) Remove node data:
 
     ```bash
     /usr/share/doc/csm/scripts/operations/node_management/remove_standard_rack_node.sh "${NODE_XNAME}"
@@ -351,17 +351,17 @@ This procedure is applicable for the following types of standard rack nodes:
 
 1. **Repeat for each** node being removed on the blade.
 
-### Step 4: Remove Gigabyte CMC
+### 4. Remove Gigabyte CMC
 
 **If removing an a Gigabyte dense compute node** remove the Gigabyte CMC data. **Otherwise, for other node types this step can be skipped**.
 
-1. (`ncn#`) Set `CMC_XNAME` environment variable with the xname of the CMC.
+1. (`ncn-mw#`) Set `CMC_XNAME` environment variable with the xname of the CMC.
 
     ```bash
     CMC_XNAME=x3000c0s17b999
     ```
 
-1. (`ncn#`) Remove the Gigabyte CMC data.
+1. (`ncn-mw#`) Remove the Gigabyte CMC data.
 
     ```bash
     /usr/share/doc/csm/scripts/operations/node_management/remove_gigabyte_cmc.sh "${CMC_XNAME}"
@@ -510,6 +510,6 @@ This procedure is applicable for the following types of standard rack nodes:
     message = "deleted 1 entry"
     ```
 
-### Step 5: Remove the blade
+### 5. Remove the blade
 
 The node can now be physically removed from the system.

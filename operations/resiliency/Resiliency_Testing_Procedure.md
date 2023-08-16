@@ -339,7 +339,7 @@ a healthy state.
    1. Use BOS to reboot the designated compute nodes.
 
       ```bash
-      cray bos v1 session create --template-uuid boot-nids-1-4 --operation reboot
+      cray bos v1 session create --template-name boot-nids-1-4 --operation reboot
       ```
 
       Issuing this reboot command will output a Boot Orchestration Agent (BOA) `jobId`, which can be used to find the new BOA pod that has been created for the boot. Then, the logs can be tailed to watch the compute boot proceed.

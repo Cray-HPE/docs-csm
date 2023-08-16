@@ -516,7 +516,7 @@ Follow the [Added Hardware](../network/management_network/added_hardware.md) pro
     Use the appropriate BOS template for the node type.
 
     ```bash
-    cray bos v1 session create --template-uuid cle-VERSION \
+    cray bos v1 session create --template-name cle-VERSION \
         --operation reboot --limit x3000c0s27b0n0,x3000c0s27b0n1,x3000c0s27b0n2,x3000c0s27b00n3
     ```
 

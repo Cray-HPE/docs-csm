@@ -1,101 +1,108 @@
 # BOS Commands Cheat Sheet
 
-This page is a quick reference for common BOS CLI commands.
+This page is a quick reference for common BOS commands in the [Cray CLI](../../glossary.md#cray-cli-cray).
 
 To find the API versions of any commands listed, add `-vvv` to the end of the CLI command, and the CLI will print the underlying call to the API in the output.
+
+* [BOS v2 commands](#bos-v2-commands)
+  * [Full system commands (v2)](#full-system-commands-v2)
+  * [Single node commands (v2)](#single-node-commands-v2)
+* [BOS v1 commands](#bos-v1-commands)
+  * [Full system commands (v1)](#full-system-commands-v1)
+  * [Single node commands (v1)](#single-node-commands-v1)
 
 ## BOS v2 commands
 
 ### Full system commands (v2)
 
-(`ncn-mw#`) Boot all nodes in a template:
+* (`ncn-mw#`) Boot all nodes in a template:
 
-```bash
-cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Boot
-```
+    ```bash
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Boot
+    ```
 
-(`ncn-mw#`) Reboot all nodes in a template:
+* (`ncn-mw#`) Reboot all nodes in a template:
 
-```bash
-cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Reboot
-```
+    ```bash
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Reboot
+    ```
 
-(`ncn-mw#`) Shutdown all nodes in a template:
+* (`ncn-mw#`) Shutdown all nodes in a template:
 
-```bash
-cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Shutdown
-```
+    ```bash
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Shutdown
+    ```
 
-(`ncn-mw#`) Stage a reboot for all nodes in a template:
+* (`ncn-mw#`) Stage a reboot for all nodes in a template:
 
-```bash
-cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Reboot --staged True
-```
+    ```bash
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Reboot --staged True
+    ```
 
 ### Single node commands (v2)
 
-(`ncn-mw#`) Boot a single node:
+* (`ncn-mw#`) Boot a single node:
 
-```bash
-cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Boot --limit <node's xname>
-```
+    ```bash
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Boot --limit <node's xname>
+    ```
 
-(`ncn-mw#`) Reboot a single node:
+* (`ncn-mw#`) Reboot a single node:
 
-```bash
-cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Reboot --limit <node's xname>
-```
+    ```bash
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Reboot --limit <node's xname>
+    ```
 
-(`ncn-mw#`) Shutdown a single node:
+* (`ncn-mw#`) Shutdown a single node:
 
-```bash
-cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Shutdown --limit <node's xname>
-```
+    ```bash
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Shutdown --limit <node's xname>
+    ```
 
-(`ncn-mw#`) Stage a reboot for a single node:
+* (`ncn-mw#`) Stage a reboot for a single node:
 
-```bash
-cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Reboot --staged True --limit <node's xname>
-```
+    ```bash
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Reboot --staged True --limit <node's xname>
+    ```
 
 ## BOS v1 commands
 
 ### Full system commands (v1)
 
-(`ncn-mw#`) Boot all nodes in a template:
+* (`ncn-mw#`) Boot all nodes in a template:
 
-```bash
-cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Boot
-```
+    ```bash
+    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Boot
+    ```
 
-(`ncn-mw#`) Reboot all nodes in a template:
+* (`ncn-mw#`) Reboot all nodes in a template:
 
-```bash
-cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Reboot
-```
+    ```bash
+    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Reboot
+    ```
 
-(`ncn-mw#`) Shutdown all nodes in a template:
+* (`ncn-mw#`) Shutdown all nodes in a template:
 
-```bash
-cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Shutdown
-```
+    ```bash
+    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Shutdown
+    ```
 
 ### Single node commands (v1)
 
-(`ncn-mw#`) Boot a single node:
+* (`ncn-mw#`) Boot a single node:
 
-```bash
-cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Boot --limit <node's xname>
-```
+    ```bash
+    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Boot --limit <node's xname>
+    ```
 
-(`ncn-mw#`) Reboot a single node:
+* (`ncn-mw#`) Reboot a single node:
 
-```bash
-cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Reboot --limit <node's xname>
-```
+    ```bash
+    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Reboot --limit <node's xname>
+    ```
 
-(`ncn-mw#`) Shutdown a single node:
+* (`ncn-mw#`) Shutdown a single node:
 
-```bash
-cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Shutdown --limit <node's xname>
-```
+    ```bash
+    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Shutdown --limit <node's xname>
+    ```
