@@ -87,24 +87,16 @@
    **IMPORTANT:** `radosgw` by default is deployed to the first three storage nodes. This includes `haproxy` and `keepalived`.
    This is automated as part of the install, but the configuration may need to be regenerated if not running on the first three storage nodes or all nodes.
 
-1. Deploy Rados Gateway containers to the new nodes.
-
-   - If running Rados Gateway on all nodes is the desired configuration, then run:
-
-      ```bash
-      ncn-s00(1/2/3)# ceph orch apply rgw site1 zone1 --placement="*" --port=8080
-      ```
-
-   - If deploying to select nodes, then instead run:
+1. `ncn-s00[1/2/3]#` Deploy Rados Gateway containers to the new nodes. The placement should be all nodes that Rados Gateway should be running on, not only the new node.
 
      ```bash
-     ncn-s00(1/2/3)# ceph orch apply rgw site1 zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
+     ceph orch apply rgw site1 zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
      ```
 
-1. Verify that Rados Gateway is running on the desired nodes.
+1. `ncn-s00[1/2/3]#` Verify that Rados Gateway is running on the desired nodes.
 
     ```bash
-    ncn-s00(1/2/3)# ceph orch ps --daemon_type rgw
+    ceph orch ps --daemon_type rgw
     ```
 
     Example output:
