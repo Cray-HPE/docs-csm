@@ -99,7 +99,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
+                  value: "{{$.DryRun}}"
           {{- range $index,$value := .TargetNcns}}
           - name: before-each-{{$value}}
             templateRef:
@@ -136,7 +136,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
+                  value: "{{$.DryRun}}"
                 - name: targetNcn
                   value: {{$value}}
           - name: set-overlay-reset-{{$value}}
@@ -153,7 +153,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
+                  value: "{{$.DryRun}}"
                 - name: targetNcn
                   value: {{$value}}
           - name: backup-ceph-data-{{$value}}
@@ -170,7 +170,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
+                  value: "{{$.DryRun}}"
                 - name: targetNcn
                   value: {{$value}}
           - name: before-shutdown-{{$value}}
@@ -185,7 +185,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
+                  value: "{{$.DryRun}}"
                 - name: targetNcn
                   value: {{$value}}
           - name: reboot-{{$value}}
@@ -197,7 +197,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
+                  value: "{{$.DryRun}}"
                 - name: targetNcn
                   value: {{$value}}
           - name: unset-rd-live-overlay-{{$value}}
@@ -209,7 +209,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
+                  value: "{{$.DryRun}}"
                 - name: targetNcn
                   value: {{$value}}
           - name: add-{{$value}}-to-ceph
@@ -221,7 +221,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
+                  value: "{{$.DryRun}}"
                 - name: targetNcn
                   value: "{{$value}}"
                 - name: workflowType
@@ -246,7 +246,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
+                  value: "{{$.DryRun}}"
                 - name: targetNcn
                   value: "{{$value}}"
           - name: create-s3-buckets-{{$value}}
@@ -258,7 +258,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
+                  value: "{{$.DryRun}}"
                 - name: targetNcn
                   value: {{$value}}
           - name: run-storage-goss-tests-{{$value}}
@@ -270,7 +270,19 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
+                  value: "{{$.DryRun}}"
+                - name: targetNcn
+                  value: "{{$value}}"
+          - name: wait-for-cfs-{{$value}}
+            dependencies:
+              - ensure-running-services-{{$value}}
+            templateRef:
+              name: storage-wait-for-cfs
+              template: main
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
                 - name: targetNcn
                   value: "{{$value}}"
           {{- end }}
