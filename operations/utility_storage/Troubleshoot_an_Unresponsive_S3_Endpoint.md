@@ -4,9 +4,10 @@ The following section includes various issues causing an unresponsive radosgw S3
 
 ## Issue 1: Rados-Gateway/s3 endpoint is Not Accessible
 
+Check the response code from rgw-vip.
+
 ```bash
-response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://rgw-vip)|echo "Curl Response Code: $response"
-Curl Response Code: 200
+curl --write-out '%{http_code}' --silent --output /dev/null http://rgw-vip
 ```
 
 Expected Responses: 2xx, 3xx
@@ -16,22 +17,18 @@ Expected Responses: 2xx, 3xx
 1. Check the individual endpoints.
 
    ```bash
-   num_storage_nodes=$(craysys metadata get num_storage_nodes);for node_num in $(seq 1 "$num_storage_nodes"); do nodename=$(printf "ncn-s%03d" "$node_num");  response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://$nodename:8080); echo "Curl Response Code for ncn-s00$endpoint: $response"; done
+   num_storage_nodes=$(craysys metadata get num_storage_nodes);for node_num in $(seq 1 "$num_storage_nodes"); do nodename=$(printf "ncn-s%03d" "$node_num"); echo "Curl Response Code for ncn-s00$node_num: $(curl --write-out '%{http_code}' --silent --output /dev/null http://$nodename:8080)"; done
+   ```
 
-   Curl Response Code for ncn-s003: 200
-   Curl Response Code for ncn-s003: 200
+   Expected output if indiviaul endpoints are healthy:
+
+   ```bash
+   Curl Response Code for ncn-s001: 200
+   Curl Response Code for ncn-s002: 200
    Curl Response Code for ncn-s003: 200
    ```
 
    **Troubleshooting:** If an error occurs with the above script, then `echo $num_storage_nodes`. If it is not an integer that matches the known configuration of the number of Utility Storage nodes, then run `cloud-init init` to refresh the `cloud-init` cache. Alternatively, manually set that number if the number of Utility Storage nodes is known.
-
-1. Check the `HAProxy` endpoint.
-
-   ```bash
-   response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://rgw-vip)|echo "Curl Response Code: $response"
-
-   Curl Response Code: 200
-   ```
 
 1. Verify `HAProxy` and `KeepAlived` status.
 
@@ -66,6 +63,41 @@ Expected Responses: 2xx, 3xx
    ```
 
    `active` should be returned in the output.
+
+1. Check `haproxy.cfg` has correct values for RGW backend. Do this for each storage node.
+
+   ```bash
+   cat /etc/haproxy/haproxy.cfg | grep -v 'default' | grep -A 15 'backend rgw-backend'
+   ```
+
+   Expected output:
+
+   ```bash
+   backend rgw-backend
+   option forwardfor
+   balance static-rr
+   option httpchk GET /
+       server server-ncn-s001-rgw0 10.252.1.4:8080 check weight 100
+       server server-ncn-s002-rgw0 10.252.1.5:8080 check weight 100
+       server server-ncn-s003-rgw0 10.252.1.6:8080 check weight 100
+   ...
+   ```
+
+   If the output is not as expected and does not contain all nodes running RGW, then follow steps below.
+
+   1. `(ncn-s00[1/2/3]#)` Redeploy RGW and specifiy hostnames for the placement.
+
+      ```bash
+        ceph orch apply rgw site1 zone1 --placement="<num-daemons> ncn-s001 ncn-s002 ncn-s003 ... ncn-s00X" --port=8080
+      ```
+
+   1. Regenerate `haproxy.cfg` on all storage nodes and restart Haproxy.
+
+      ```bash
+      pdsh -w $(grep -oP 'ncn-s\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg; systemctl enable haproxy.service; systemctl restart haproxy.service'
+      ```
+
+   After these steps, verify the correct values are in `/etc/haproxy/haproxy.cfg` for the `rgw backend`.
 
 ## Issue 2: Ceph Reports `HEALTH_OK` but S3 Operations Not Functioning
 
