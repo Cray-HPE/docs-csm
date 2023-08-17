@@ -1,16 +1,16 @@
-# Troubleshoot an Unresponsive Rados-Gateway (radosgw) S3 Endpoint
+# Troubleshoot an Unresponsive Rados-Gateway (`radosgw`) S3 Endpoint
 
-The following section includes various issues causing an unresponsive radosgw S3 endpoint and how to resolve them.
+The following section includes various issues causing an unresponsive `radosgw` S3 endpoint and how to resolve them.
 
-## Issue 1: Rados-Gateway/s3 endpoint is Not Accessible
+## Issue 1: Rados-Gateway/`s3` endpoint is Not Accessible
 
-Check the response code from rgw-vip.
+Check the response code from `rgw-vip`.
 
 ```bash
 curl --write-out '%{http_code}' --silent --output /dev/null http://rgw-vip
 ```
 
-Expected Responses: 2xx, 3xx
+Expected Responses: `2xx`, `3xx`
 
 ### Procedure
 
@@ -20,7 +20,7 @@ Expected Responses: 2xx, 3xx
    num_storage_nodes=$(craysys metadata get num_storage_nodes);for node_num in $(seq 1 "$num_storage_nodes"); do nodename=$(printf "ncn-s%03d" "$node_num"); echo "Curl Response Code for ncn-s00$node_num: $(curl --write-out '%{http_code}' --silent --output /dev/null http://$nodename:8080)"; done
    ```
 
-   Expected output if indiviaul endpoints are healthy:
+   Expected output if individaul endpoints are healthy:
 
    ```bash
    Curl Response Code for ncn-s001: 200
@@ -28,13 +28,15 @@ Expected Responses: 2xx, 3xx
    Curl Response Code for ncn-s003: 200
    ```
 
-   **Troubleshooting:** If an error occurs with the above script, then `echo $num_storage_nodes`. If it is not an integer that matches the known configuration of the number of Utility Storage nodes, then run `cloud-init init` to refresh the `cloud-init` cache. Alternatively, manually set that number if the number of Utility Storage nodes is known.
+   **Troubleshooting:** If an error occurs with the above script, then `echo $num_storage_nodes`.
+   If it is not an integer that matches the known configuration of the number of Utility Storage nodes, then run `cloud-init init` to refresh the `cloud-init` cache.
+   Alternatively, manually set that number if the number of Utility Storage nodes is known.
 
 1. Verify `HAProxy` and `KeepAlived` status.
 
    `KeepAlived:`
 
-   1. Check KeepAlived on each node running ceph-radosgw. By default, this will be all Utility Storage nodes, but may differ based on your configuration.
+   1. Check `KeepAlived` on each node running `ceph-radosgw`. By default, this will be all Utility Storage nodes, but may differ based on your configuration.
 
    ```bash
    systemctl is-active keepalived.service
@@ -42,7 +44,7 @@ Expected Responses: 2xx, 3xx
 
    `active` should be returned in the output.
 
-   1. Check for the KeepAlived instance hosting the VIP (Virtual IP). This command will have to be run on each node until you find the expected output.
+   1. Check for the `KeepAlived` instance hosting the VIP (Virtual IP). This command will have to be run on each node until you find the expected output.
 
     ```bash
     journalctl -u keepalived.service --no-pager |grep -i gratuitous
@@ -50,7 +52,7 @@ Expected Responses: 2xx, 3xx
 
     Example output:
 
-    ```
+    ```bash
     Aug 25 19:33:12 ncn-s001 Keepalived_vrrp[12439]: Registering gratuitous ARP shared channel
     Aug 25 19:43:08 ncn-s001 Keepalived_vrrp[12439]: Sending gratuitous ARP on bond0.nmn0 for 10.252.1.3
     Aug 25 19:43:08 ncn-s001 Keepalived_vrrp[12439]: (VI_0) Sending/queueing gratuitous ARPs on bond0.nmn0 for 10.252.1.3
@@ -85,7 +87,7 @@ Expected Responses: 2xx, 3xx
 
    If the output is not as expected and does not contain all nodes running RGW, then follow steps below.
 
-   1. `(ncn-s00[1/2/3]#)` Redeploy RGW and specifiy hostnames for the placement.
+   1. `(ncn-s00[1/2/3]#)` Redeploy RGW and specify hostnames for the placement.
 
       ```bash
         ceph orch apply rgw site1 zone1 --placement="<num-daemons> ncn-s001 ncn-s002 ncn-s003 ... ncn-s00X" --port=8080
@@ -118,7 +120,7 @@ The `rgw.local` endpoint needs to be responsive in order to interact directly wi
 
 This procedure requires admin privileges.
 
-### Procedure
+### Procedure for restarting Ceph OSDs
 
 1. View the OSD status.
 
@@ -128,7 +130,7 @@ This procedure requires admin privileges.
 
     Example output:
 
-    ```
+    ```bash
     ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
     -1       20.95312 root default
     -7        6.98438     host ncn-s001
@@ -152,4 +154,3 @@ This procedure requires admin privileges.
     ```
 
     Wait for Ceph health to return to OK before moving between nodes.
-
