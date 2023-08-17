@@ -20,7 +20,7 @@ Expected Responses: `2xx`, `3xx`
    num_storage_nodes=$(craysys metadata get num_storage_nodes);for node_num in $(seq 1 "$num_storage_nodes"); do nodename=$(printf "ncn-s%03d" "$node_num"); echo "Curl Response Code for ncn-s00$node_num: $(curl --write-out '%{http_code}' --silent --output /dev/null http://$nodename:8080)"; done
    ```
 
-   Expected output if individaul endpoints are healthy:
+   Expected output if individual endpoints are healthy:
 
    ```bash
    Curl Response Code for ncn-s001: 200
