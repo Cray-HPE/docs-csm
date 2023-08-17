@@ -797,14 +797,19 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
       # Loop through one at a time. If `--limit` isn't provided, we will error out on the 'Global' key.
       for ncn_xname in "${NCN_XNAMES[@]}"; do
 
-        # Purge the old user-data.repos list for each NCN to make way for new definitions.
-        if ! csi handoff bss-update-cloud-init --limit "$ncn_xname" --delete 'user-data.repos' > /dev/null 2>&1; then
-          echo "${ncn_xname}: No defined repos to delete."
+        # Purge the old user-data.zypper list for each NCN to make way for new definitions.
+        if ! csi handoff bss-update-cloud-init --limit "$ncn_xname" --delete 'user-data.zypper' > /dev/null 2>&1; then
+          echo "${ncn_xname}: No defined zypper meta to delete."
         fi
 
-        # Verify that user-data.repos is now null.
-        if [ ! "$(cray bss bootparameters list --format json --hosts x3000c0s3b0n0 | jq '.[]."cloud-init"."user-data".repos')" = 'null' ]; then
-          echo >&2 "${ncn_xname}: user-data.repos key is still defined!"
+        # Purge any weird user-data.repos keys that may exist from previous upgrades. These keys are harmless but will look confusing.
+        if ! csi handoff bss-update-cloud-init --limit "$ncn_xname" --delete 'user-data.repos' > /dev/null 2>&1; then
+          :
+        fi
+
+        # Verify that user-data.zypper is now null.
+        if [ ! "$(cray bss bootparameters list --format json --hosts x3000c0s3b0n0 | jq '.[]."cloud-init"."user-data".zypper')" = 'null' ]; then
+          echo >&2 "${ncn_xname}: user-data.zypper key is still defined!"
           error=1
         fi
 
@@ -819,7 +824,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
           error=1
         fi
 
-        # Set the new values for user-data.repos and user-data.packages.
+        # Set the new values for user-data.zypper and user-data.packages.
         if ! csi handoff bss-update-cloud-init --limit "$ncn_xname" --user-data "${sourcefile}.json" > /dev/null 2>&1; then
           echo >&2 "${ncn_xname}: Failed to apply new cloud-init data!"
           error=1
@@ -830,7 +835,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 
     # If error was ever set we need to exit so the admin can investigate. We don't exit early so that all the errors can be seen at once.
     if [ "$error" -ne 0 ]; then
-      echo >&2 "Errors were encountered during cloud-init patching for repos and package manifests."
+      echo >&2 "Errors were encountered during cloud-init patching for zypper repos and package manifests."
       exit 1
     fi
 
