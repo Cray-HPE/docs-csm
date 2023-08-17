@@ -1227,7 +1227,7 @@ Additional valid values may be added via configuration file. See the results of 
 |arch|X86|
 |arch|ARM|
 |arch|Other|
-|arch|Unknown|
+|arch|UNKNOWN|
 |class|River|
 |class|Mountain|
 |class|Hill|
@@ -3756,7 +3756,7 @@ Additional valid values may be added via configuration file. See the results of 
 |arch|X86|
 |arch|ARM|
 |arch|Other|
-|arch|Unknown|
+|arch|UNKNOWN|
 |class|River|
 |class|Mountain|
 |class|Hill|
@@ -12760,7 +12760,7 @@ Additional valid values may be added via configuration file. See the results of 
 |arch|X86|
 |arch|ARM|
 |arch|Other|
-|arch|Unknown|
+|arch|UNKNOWN|
 |class|River|
 |class|Mountain|
 |class|Hill|
