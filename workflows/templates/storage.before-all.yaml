@@ -52,7 +52,7 @@ spec:
                       ssh-keyscan -H "${ncn_ip},${host_ncn}" > /dev/null 2>&1 >> "${known_hosts}"
                     done
                     source /srv/cray/scripts/metal/metal-lib.sh
-                    csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp4" \
+                    csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-noos" \
                       | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
                     pdsh -S -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url"
           - name: upgrade-ceph-stop-docker-registries
