@@ -9,13 +9,13 @@
 
 ### Exporting BSS Boot Parameters
 
-1. (`ncn-mw#`) Run the following command to create a json file with the boot parameters:
+1. (`ncn-mw#`) Run the following command to create a `json` file with the boot parameters:
 
    ```bash
    cray bss bootparameters list --format json > cray-bss-boot-parameters-dump.json
    ```
 
-1. (`ncn-mw#`) Run the following command to create a json file with the boot parameters for only the Compute Nodes:
+1. (`ncn-mw#`) Run the following command to create a `json` file with the boot parameters for only the Compute Nodes:
 
    ```bash
    xnames=`cray hsm state components list --type Node --role Compute --format json | jq -r '.[] | map(.ID) | join(",")'`
@@ -39,14 +39,13 @@
    /usr/share/doc/csm/scripts/operations/boot_script_service/bss-restore-bootparameters.sh cray-bss-compute-parameters-dump.json
    ```
 
+### Update `ids` and `etags` after IMS import
 
-### Update ids and etags after IMS import
-
-   - **After** running an IMS
-     [Automated import procedure](../image_management/Exporting_and_Importing_IMS_Data.md#automated-import-procedure),
-     run the folling script to update the BSS boot parameters.
-     The IMS import script should have generated a file containing the IMS ID and S3 etag mappings -- it is displayed near
-     the end of the script output.
+- **After** running an IMS
+[Automated import procedure](../image_management/Exporting_and_Importing_IMS_Data.md#automated-import-procedure),
+run the following script to update the BSS boot parameters.
+The IMS import script should have generated a file containing the IMS ID and S3 `etag` mappings -- it is displayed near
+the end of the script output.
 
 1. (`ncn-mw#`)  Set up token:
 
@@ -56,7 +55,6 @@
 
 1. (`ncn-mw#`)  Run this script
 (`/root/ims-import-export-data/ims-id-maps-post-import-12f86451ce7c49d79e345bee42cc8586.json` is the file from the IMS import procedure):
-
 
    ```bash
    /usr/share/doc/csm/scripts/operations/boot_script_service/bss-update-ids-egags.py /root/ims-import-export-data/ims-id-maps-post-import-12f86451ce7c49d79e345bee42cc8586.json
