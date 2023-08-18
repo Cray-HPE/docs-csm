@@ -58,6 +58,6 @@
 (`/root/ims-import-export-data/ims-id-maps-post-import-12f86451ce7c49d79e345bee42cc8586.json` is the file from the IMS import procedure):
 
 
-    ```bash
+   ```bash
    /usr/share/doc/csm/scripts/operations/boot_script_service/bss-update-ids-egags.py /root/ims-import-export-data/ims-id-maps-post-import-12f86451ce7c49d79e345bee42cc8586.json
-    ```
+   ```
