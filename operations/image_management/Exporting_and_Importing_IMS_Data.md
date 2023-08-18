@@ -36,13 +36,13 @@ either using an automated script, or manually one at a time.
    ```text
    INFO:__main__:Exporting IMS data to /root/ims-import-export-data
    INFO:__main__:Exporting recipes
-   
+
    ... lines omitted ...
-   
+
    INFO:__main__:Exporting images
-   
+
    ... lines omitted ...
-   
+
    INFO:__main__:IMS data exported to /root/ims-import-export-data
    INFO:__main__:DONE!!
    ```
@@ -158,7 +158,7 @@ either using an automated script, or manually one at a time.
               "type": "s3"
             }
           },
-          { 
+          {
             "md5": "2e8fadafab28081d6018ecfd479206d8",
             "type": "application/vnd.cray.image.initrd",
             "link": {
@@ -204,7 +204,7 @@ INFO:__main__:Importing IMS data from /root/ims-import-export-data
 INFO:__main__:Importing recipes
 
 ... lines omitted ...
-   
+
 INFO:__main__:Importing images
 
 ... lines omitted ...
@@ -220,7 +220,8 @@ Make a note of the filename containing the IMS ID and S3 etag mappings -- it is 
 It is important to retain this mapping file for later reference. In particular, its contents will
 be needed in order to update data in other services, such as BOS and BSS. Save this file in a safe location.
 See [Automated BOS data import](../boot_orchestration/Exporting_and_Importing_BOS_Data.md#automated-bos-data-import)
-for more information on when and how this file is used during BOS data imports.
+for more information on when and how this file is used during BOS data imports and
+[Automated BOS data import](../boot_orchestration/Exporting_and_Importing_BSS_Data.md#restore-bss-boot-parameters)
 
 ### Manual recipe import procedure
 
@@ -514,7 +515,7 @@ Using the image information previously noted, for each image to be restored, per
            "type": "s3"
          }
        },
-       { 
+       {
          "md5": "2e8fadafab28081d6018ecfd479206d8",
          "type": "application/vnd.cray.image.initrd",
          "link": {
