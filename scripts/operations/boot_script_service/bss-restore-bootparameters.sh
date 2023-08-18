@@ -1,5 +1,4 @@
 #! /bin/bash
-#!/usr/bin/env python3
 #  MIT License
 #
 #  (C) Copyright [2023] Hewlett Packard Enterprise Development LP
