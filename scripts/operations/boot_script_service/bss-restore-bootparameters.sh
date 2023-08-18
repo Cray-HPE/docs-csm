@@ -34,15 +34,18 @@ fi
 # Get a token if we don't already have one.
 if [ -z "$TOKEN" ]; then
   TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client \
-  -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) \
+  -d client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 fi
 
 bss-restore()
 {
-  local host=$1
-  local DATA=$(jq -c '.[] | select(.hosts[0] == "'$host'")' <$BACKUP_FILE)
-  local ncn=$(jq -r '."cloud-init"."user-data".hostname' <<<"$DATA" | grep -v null)
+  local host
+  host=$1
+  local DATA
+  DATA=$(jq -c '.[] | select(.hosts[0] == "'$host'")' <$BACKUP_FILE)
+  local ncn
+  ncn=$(jq -r '."cloud-init"."user-data".hostname' <<<"$DATA" | grep -v null)
   if [ "$DATA" ]; then
     echo "Restoring $ncn${ncn:+/}$host..."
     RESULT=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" -X POST -d "$DATA" $BSS_URL)
