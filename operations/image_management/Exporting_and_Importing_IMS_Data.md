@@ -220,8 +220,9 @@ Make a note of the filename containing the IMS ID and S3 etag mappings -- it is 
 It is important to retain this mapping file for later reference. In particular, its contents will
 be needed in order to update data in other services, such as BOS and BSS. Save this file in a safe location.
 See [Automated BOS data import](../boot_orchestration/Exporting_and_Importing_BOS_Data.md#automated-bos-data-import)
-for more information on when and how this file is used during BOS data imports and
-[Automated BOS data import](../boot_orchestration/Exporting_and_Importing_BSS_Data.md#restore-bss-boot-parameters)
+and
+[Restore BSS boot parameters](../boot_orchestration/Exporting_and_Importing_BSS_Data.md#restore-bss-boot-parameters)
+for more information on when and how this file is used during BOS and BSS data imports.
 
 ### Manual recipe import procedure
 
