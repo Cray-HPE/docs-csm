@@ -1,4 +1,4 @@
-# Runbook - DHCP Troubleshooting
+# DHCP Troubleshooting
 
 - [Get an API token](#get-an-api-token)
 - [1 Confirm the status of the `cray-dhcp-kea` services](#1-confirm-the-status-of-the-cray-dhcp-kea-services)
