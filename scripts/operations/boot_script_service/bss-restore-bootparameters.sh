@@ -59,7 +59,7 @@ bss-restore()
   fi
 }
 
-test $# = 0 && set -- $(jq -r '.[] | select(."cloud-init"."meta-data" != null) | .hosts[0]' <$BACKUP_FILE)
+test $# = 0 && set -- "$(jq -r '.[] | select(."cloud-init"."meta-data" != null) | .hosts[0]' <$BACKUP_FILE)"
 
 for i in "$@"; do
   bss-restore $i
