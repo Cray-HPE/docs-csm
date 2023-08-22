@@ -200,6 +200,9 @@ See [Configure Administrative Access](../configure_administrative_access.md).
 
 ### 6. Upgrade Ceph and enable `Smartmon` metrics on storage NCNs
 
+> **IMPORTANT** If performing a fresh install of CSM 1.4.0 or 1.4.1, then skip this step.
+> This step should only be done during installs of CSM 1.4 patch version 1.4.2 or later.
+
 Now that all management nodes have joined the Kubernetes cluster, Ceph should be upgraded and `Smartmon` metrics should be enabled on Storage NCNs.
 
 See [Upgrade Ceph and enable `Smartmon` metrics on storage nodes](../upgrade_ceph_enable_smartmon.md).
