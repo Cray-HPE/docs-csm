@@ -223,7 +223,7 @@ function createWorkflowPayload() {
 "switchPassword": "${SW_ADMIN_PASSWORD}",
 "imageId": "${imageId}",
 "bootTimeoutInSeconds": ${rebootTimeout},
-"desiredCfsConfig": "${desiredCfsConfig}"$(if [[ -n "${labels}" ]]; then echo ", \"labels\": \"${labels}\""; fi)
+"desiredCfsConfig": "${desiredCfsConfig}"$(if [[ -n "${labels}" ]]; then echo ", \"labels\": ${labels}"; fi)
 }
 EOF
     fi
@@ -238,7 +238,7 @@ EOF
 "workflowType": "${workflowType}",
 "imageId": "${imageId}",
 "bootTimeoutInSeconds": ${rebootTimeout},
-"desiredCfsConfig": "${desiredCfsConfig}"$(if [[ -n "${labels}" ]]; then echo ", \"labels\": \"${labels}\""; fi)
+"desiredCfsConfig": "${desiredCfsConfig}"$(if [[ -n "${labels}" ]]; then echo ", \"labels\": ${labels}"; fi)
 }
 EOF
     fi
