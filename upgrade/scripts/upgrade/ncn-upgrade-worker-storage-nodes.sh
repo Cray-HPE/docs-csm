@@ -370,7 +370,7 @@ while true; do
     phase=$(jq -r ".[] | select(.name==\"${workflow}\") | .status.phase" < "${res_file}")
     # skip null because workflow hasn't started yet
     if [[ ${phase} == "null" ]]; then
-      continue;
+      continue
     fi
 
     if [[ ${phase} == "Succeeded" ]]; then
