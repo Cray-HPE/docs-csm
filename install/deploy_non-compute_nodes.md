@@ -230,11 +230,11 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
         ```text
         NAME       STATUS   ROLES                  AGE     VERSION    INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION                 CONTAINER-RUNTIME
-        ncn-m002   Ready    control-plane,master   7m39s   v1.22.13   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP4   5.14.21-150400.24.66-default   containerd://1.5.16
-        ncn-m003   Ready    control-plane,master   7m16s   v1.22.13   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP4   5.14.21-150400.24.66-default   containerd://1.5.16
-        ncn-w001   Ready    <none>                 7m16s   v1.22.13   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP4   5.14.21-150400.24.66-default   containerd://1.5.16
-        ncn-w002   Ready    <none>                 7m18s   v1.22.13   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP4   5.14.21-150400.24.66-default   containerd://1.5.16
-        ncn-w003   Ready    <none>                 7m16s   v1.22.13   10.252.1.9    <none>        SUSE Linux Enterprise High Performance Computing 15 SP4   5.14.21-150400.24.66-default   containerd://1.5.16
+        ncn-m002   Ready    control-plane,master   7m39s   v1.22.13   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP5   5.14.21-150500.55.12-default   containerd://1.5.16
+        ncn-m003   Ready    control-plane,master   7m16s   v1.22.13   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP5   5.14.21-150500.55.12-default   containerd://1.5.16
+        ncn-w001   Ready    <none>                 7m16s   v1.22.13   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP5   5.14.21-150500.55.12-default   containerd://1.5.16
+        ncn-w002   Ready    <none>                 7m18s   v1.22.13   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP5   5.14.21-150500.55.12-default   containerd://1.5.16
+        ncn-w003   Ready    <none>                 7m16s   v1.22.13   10.252.1.9    <none>        SUSE Linux Enterprise High Performance Computing 15 SP5   5.14.21-150500.55.12-default   containerd://1.5.16
         ```
 
 1. (`pit#`) Stop watching the consoles.
