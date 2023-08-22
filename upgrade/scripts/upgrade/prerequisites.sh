@@ -780,13 +780,17 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
         # Set `do_patch` to 1 so that the operations in this stage run.
         do_patch=1
       fi
+    else
+      do_patch=1
     fi
 
     # Patch cloud-init user-data for each NCN only if we have our ${sourcefile}.json.
     if [ "$do_patch" -eq 1 ]; then
 
       # Get a list of NCNs.
-      IFS=$',' read -r -d '' -a NCN_XNAMES < <(cray hsm state components list --role Management --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
+      if IFS=$',' read -rd '' -a NCN_XNAMES; then
+        :
+      fi <<< "$(cray hsm state components list --role Management --type Node --format json | jq -r '.Components | map(.ID) | join(",")')"
 
       # If no NCNs are found we should exit, otherwise if forces its way forward then NCNs will be missing critical packages.
       if [ "${#NCN_XNAMES[@]}" -eq '0' ]; then
