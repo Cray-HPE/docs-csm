@@ -7,7 +7,7 @@ The following covers redeploying the Spire service and restoring the data.
 - The system is fully installed and has transitioned off of the LiveCD.
 - All activities required for site maintenance are complete.
 - A backup or export of the data already exists.
-- The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../../update_product_stream/index.md#check-for-latest-documentation).
+- The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 - The Cray CLI has been configured on the node where the procedure is being performed. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Service recovery for Spire
