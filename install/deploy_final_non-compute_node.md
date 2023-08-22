@@ -315,13 +315,13 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
     Expected output looks similar to the following:
 
     ```text
-    NAME       STATUS   ROLES                  AGE   VERSION
-    ncn-m001   Ready    control-plane,master   27s   v1.20.13
-    ncn-m002   Ready    control-plane,master   4h    v1.20.13
-    ncn-m003   Ready    control-plane,master   4h    v1.20.13
-    ncn-w001   Ready    <none>                 4h    v1.20.13
-    ncn-w002   Ready    <none>                 4h    v1.20.13
-    ncn-w003   Ready    <none>                 4h    v1.20.13
+    NAME       STATUS   ROLES                  AGE     VERSION
+    ncn-m001   Ready    control-plane,master   3m31s   v1.22.13
+    ncn-m002   Ready    control-plane,master   115m    v1.22.13
+    ncn-m003   Ready    control-plane,master   114m    v1.22.13
+    ncn-w001   Ready    <none>                 114m    v1.22.13
+    ncn-w002   Ready    <none>                 114m    v1.22.13
+    ncn-w003   Ready    <none>                 112m    v1.22.13
     ```
 
 1. (`ncn-m001#`) Restore and verify the site link.
