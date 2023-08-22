@@ -140,7 +140,7 @@ tasks:
             
             # wait for boot
             counter=0
-            source /etc/cray/upgrade/csm/myenv
+            source /etc/cray/upgrade/csm/myenv || true
             if [[ -z $REBOOT_TIMEOUT_IN_SECONDS ]];then
                 REBOOT_TIMEOUT_IN_SECONDS=600
             fi
