@@ -79,7 +79,7 @@ while [[ $# -gt 0 ]]; do
       retry=false
       shift # past argument
       ;;
-    -f|--force)
+    -f | --force)
       force=true
       shift # past argument
       ;;
@@ -166,7 +166,7 @@ if $retry && $force; then
 fi
 
 if [[ $nodeType == "storage" ]]; then
-  if $upgrade; then 
+  if $upgrade; then
     workflowType="upgrade"
   elif $rebuild; then
     echo "Error: --rebuild flag was used for storage rebuild. This rebuild must be done manually. Follow instructions at /operations/node_management/Rebuild_NCNs/Rebuild_NCNs.md"
@@ -209,10 +209,9 @@ function uploadWorkflowTemplates() {
 }
 
 function createWorkflowPayload() {
-  if [[ ${nodeType} == "worker" ]]
-  then    
+  if [[ ${nodeType} == "worker" ]]; then
     # ask for switch password if it's not set
-    if [[ -z "${SW_ADMIN_PASSWORD}" ]]; then
+    if [[ -z ${SW_ADMIN_PASSWORD} ]]; then
       read -r -s -p "Switch password:" SW_ADMIN_PASSWORD
     fi
     echo
@@ -223,12 +222,11 @@ function createWorkflowPayload() {
 "switchPassword": "${SW_ADMIN_PASSWORD}",
 "imageId": "${imageId}",
 "bootTimeoutInSeconds": ${rebootTimeout},
-"desiredCfsConfig": "${desiredCfsConfig}"$(if [[ -n "${labels}" ]]; then echo ", \"labels\": \"${labels}\""; fi)
+"desiredCfsConfig": "${desiredCfsConfig}"$(if [[ -n ${labels} ]]; then echo ", \"labels\": ${labels}"; fi)
 }
 EOF
   fi
-  if [[ ${nodeType} == "storage" ]]
-  then    
+  if [[ ${nodeType} == "storage" ]]; then
     echo
     cat << EOF
 {
@@ -238,18 +236,17 @@ EOF
 "workflowType": "${workflowType}",
 "imageId": "${imageId}",
 "bootTimeoutInSeconds": ${rebootTimeout},
-"desiredCfsConfig": "${desiredCfsConfig}"$(if [[ -n "${labels}" ]]; then echo ", \"labels\": \"${labels}\""; fi)
+"desiredCfsConfig": "${desiredCfsConfig}"$(if [[ -n ${labels} ]]; then echo ", \"labels\": ${labels}"; fi)
 }
 EOF
   fi
 }
 
-
 function getToken() {
   # shellcheck disable=SC2155,SC2046
   curl -k -s -S -d grant_type=client_credentials \
     -d client_id=admin-client \
-    -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+    -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) \
     "${baseUrl}"/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token'
 }
 
@@ -288,9 +285,9 @@ function createRebuildWorkflow() {
     exit 1
   fi
   local workflow
-  workflow=$(grep -o 'ncn-lifecycle-rebuild-[a-z0-9]*' < "${res_file}" )
+  workflow=$(grep -o 'ncn-lifecycle-rebuild-[a-z0-9]*' < "${res_file}")
   echo "${workflow}"
-  rm -f "${res_file}" > /dev/null 2>&1  || true
+  rm -f "${res_file}" > /dev/null 2>&1 || true
 }
 
 function deleteRebuildWorkflow() {
@@ -299,10 +296,10 @@ function deleteRebuildWorkflow() {
   if [[ ${http_code} -ne 200 ]]; then
     echo "Request Failed, Response code: ${http_code}"
     cat "${res_file}"
-    rm -f "${res_file}" > /dev/null 2>&1 || true 
+    rm -f "${res_file}" > /dev/null 2>&1 || true
     exit 1
   fi
-  rm -f "${res_file}" > /dev/null 2>&1 || true 
+  rm -f "${res_file}" > /dev/null 2>&1 || true
 }
 
 function retryRebuildWorkflow() {
@@ -312,7 +309,7 @@ function retryRebuildWorkflow() {
     echo "Request Failed, Response code: ${http_code}"
     cat "${res_file}"
   fi
-  rm -f "${res_file}" > /dev/null 2>&1 || true 
+  rm -f "${res_file}" > /dev/null 2>&1 || true
 }
 
 printCmdArgs
@@ -349,10 +346,10 @@ if [ "${numOfUnsucceededWorkflows}" -eq 0 ]; then
   echo "NOTICE - Create workflow: ${workflow}. Please see the workflow ${workflow} in the Argo UI to see detailed logs"
 fi
 
-if [[ -z "${workflow}" ]]; then
+if [[ -z ${workflow} ]]; then
   echo
   echo "ERROR - No workflow to pull, something is wrong"
-else 
+else
   echo
   echo "DEBUG - Poll status of: ${workflow}"
 fi
@@ -364,7 +361,7 @@ while true; do
   labelSelector="node-type=${nodeType}"
   res_file="$(mktemp)"
   # Retry the curl command if it fails
-  while ! http_status=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XGET -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector}") ; do
+  while ! http_status=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XGET -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector}"); do
     echo "WARNING: curl call to ${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector} failed. Retrying after 10 seconds"
     sleep 10
   done
@@ -372,22 +369,22 @@ while true; do
   if [ "${http_status}" -eq 200 ]; then
     phase=$(jq -r ".[] | select(.name==\"${workflow}\") | .status.phase" < "${res_file}")
     # skip null because workflow hasn't started yet
-    if [[ "${phase}" == "null" ]]; then
+    if [[ ${phase} == "null" ]]; then
       continue;
     fi
 
-    if [[ "${phase}" == "Succeeded" ]]; then
+    if [[ ${phase} == "Succeeded" ]]; then
       ok_report
-      break;
+      break
     fi
 
-    if [[ "${phase}" == "Failed" ]]; then
+    if [[ ${phase} == "Failed" ]]; then
       echo "WARNING - Workflow in Failed state, Retry ..."
       retryRebuildWorkflow "$workflow"
       continue
     fi
 
-    if [[ "${phase}" == "Error" ]]; then
+    if [[ ${phase} == "Error" ]]; then
       echo "WARNING - Workflow in Error state, Retry ..."
       retryRebuildWorkflow "$workflow"
       continue
