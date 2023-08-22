@@ -181,7 +181,7 @@ The Compute Rolling Upgrade Service (CRUS) upgrades sets of [compute nodes](#com
 set of nodes to be out of service at once. CRUS manages the workload management status of nodes, handling each of the steps
 required to upgrade compute nodes.
 
-For more information, see [Compute Rolling Upgrades](operations/index.md#compute-rolling-upgrades).
+For more information, see [Compute Rolling Upgrades](operations/README.md#compute-rolling-upgrades).
 
 > **`NOTE`** CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0.
 > See the following links for more information:
