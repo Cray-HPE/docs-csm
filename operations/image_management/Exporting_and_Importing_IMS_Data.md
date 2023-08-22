@@ -221,7 +221,7 @@ It is important to retain this mapping file for later reference. In particular, 
 be needed in order to update data in other services, such as BOS and BSS. Save this file in a safe location.
 See [Automated BOS data import](../boot_orchestration/Exporting_and_Importing_BOS_Data.md#automated-bos-data-import)
 and
-[Restore BSS boot parameters](../boot_orchestration/Exporting_and_Importing_BSS_Data.md#restore-bss-boot-parameters)
+[Update BSS after IMS import](../boot_orchestration/Exporting_and_Importing_BSS_Data.md#update-bss-after-ims-import)
 for more information on when and how this file is used during BOS and BSS data imports.
 
 ### Manual recipe import procedure
