@@ -780,6 +780,8 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
         # Set `do_patch` to 1 so that the operations in this stage run.
         do_patch=1
       fi
+    else
+      do_patch=1
     fi
 
     # Patch cloud-init user-data for each NCN only if we have our ${sourcefile}.json.
