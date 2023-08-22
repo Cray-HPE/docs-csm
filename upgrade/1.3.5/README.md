@@ -35,7 +35,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.5`, follow the procedures descr
 
 1. Download and extract the CSM `v1.3.5` release to `ncn-m001`.
 
-   See [Download and Extract CSM Product Release](../../update_product_stream/index.md#download-and-extract).
+   See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract).
 
 1. Set `CSM_DISTDIR` to the directory of the extracted files.
 
@@ -55,7 +55,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.5`, follow the procedures descr
 
 1. Download and install/upgrade the **latest** documentation on `ncn-m001`.
 
-   See [Check for Latest Documentation](../../update_product_stream/index.md#check-for-latest-documentation).
+   See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 ## Update `customizations.yaml`
 
