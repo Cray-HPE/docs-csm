@@ -1,5 +1,8 @@
 # Upgrade Ceph and enable `Smartmon` metrics on storage NCNs
 
+> **IMPORTANT** If performing a fresh install of CSM 1.4.0 or 1.4.1, then skip this procedure.
+> This procedure should only be done during installs of CSM 1.4 patch version 1.4.2 or later.
+
 This procedure upgrades the Ceph version on storage nodes from `v16.2.9` to `v16.2.13`.
 The `v16.2.13` image is in Nexus and after Ceph has been upgraded, all Ceph daemons, except for the
 monitoring stack, will be using the image in Nexus. The next step uploads the Ceph monitoring container images
