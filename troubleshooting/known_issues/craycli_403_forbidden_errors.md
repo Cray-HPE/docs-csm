@@ -44,7 +44,7 @@ To recover from this situation, the following can be done.
 1. If you see an error showing that there is a duplicate group, complete the next step.
 1. Go to the Groups page in the Keycloak admin console and delete the groups.
 1. If you see an error saying there was a `KeyError: 'gidNumber'` or `KeyError: 'cn'`, complete the next steps.
-    1. Get the groups missing some attributes (ncn-m#):
+    1. Get the groups missing some attributes (`ncn-m#`):
 
        ```bash
        IP=$(kubectl get service/keycloak -n services -o json | jq -r '.spec.clusterIP')
