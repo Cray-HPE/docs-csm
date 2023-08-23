@@ -1,8 +1,8 @@
-# Exporting and Importing BSS Data
+# Exporting and Importing BSS Date
 
 - [Prerequisites](#prerequisites)
 - [Export BSS boot parameters](#export-bss-boot-parameters)
-- [Import BSS boot parameters](#import-bss-boot-parameters)
+- [Restore BSS boot parameters](#restore-bss-boot-parameters)
 - [Update BSS after IMS import](#update-bss-after-ims-import)
 
 ## Prerequisites
