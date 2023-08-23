@@ -309,6 +309,9 @@ function verify_and_unsquash() {
         fi
         echo -e "\nvalidated squashfs path, unsquashing: $squash"
         unsquashfs -n -no -d "$(dirname "$squash")"/squashfs-root "$squash" 2>/dev/null || true
+
+	    # remove any character device files
+	    find "$(dirname "$squash")"/squashfs-root/ -type c -exec rm -f {} \;
     done
 }
 
