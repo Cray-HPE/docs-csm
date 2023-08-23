@@ -181,7 +181,7 @@ spec:
   tapmsTenantName: vcluster-blue
   tapmsTenantVersion: v1alpha2
   slurmctld:
-    image: cray/cray-slurmctld:1.2.5
+    image: cray/cray-slurmctld:1.4.0
     ip: 10.253.124.100
     host: mycluster-slurmctld
     backupIP: 10.253.124.101
@@ -192,7 +192,7 @@ spec:
       periodSeconds: 30
       timeoutSeconds: 5
   slurmdbd:
-    image: cray/cray-slurmdbd:1.2.5
+    image: cray/cray-slurmdbd:1.4.0
     ip: 10.253.124.102
     host: mycluster-slurmdbd
     backupIP: 10.253.124.103
@@ -203,17 +203,34 @@ spec:
       periodSeconds: 30
       timeoutSeconds: 5
   munge:
-    image: cray/munge-munge:1.2.0
+    image: cray/munge-munge:1.3.0
   sssd:
-    image: cray/cray-sssd:1.1.0
+    image: cray/cray-sssd:1.2.0
+    sssdConf: |
+      [sssd]
+      config_file_version = 2
+      services = nss
+      domains = files
+      [nss]
+      [domain/files]
+      id_provider = files
   config:
-    image: cray/cray-slurm-config:1.1.2
+    image: cray/cray-slurm-config:1.1.7
     hsmGroup: blue
   pxc:
     enabled: true
+    initImage:
+      repository: cray/cray-pxc-operator
+      tag: 1.0.1
     image:
       repository: cray/cray-pxc
-      tag: 0.1.0
+      tag: 1.0.1
+    configuration: |
+      [mysqld]
+      innodb_log_file_size=4G
+      innodb_lock_wait_timeout=900
+      wsrep_trx_fragment_size=1G
+      wsrep_trx_fragment_unit=bytes
     data:
       storageClassName: k8s-block-replicated
       accessModes:
@@ -233,7 +250,7 @@ spec:
     backup:
       image:
         repository: cray/cray-pxc-backup
-        tag: 0.1.0
+        tag: 1.0.1
       data:
         storageClassName: k8s-block-replicated
         accessModes:
@@ -252,7 +269,7 @@ spec:
     haproxy:
       image:
         repository: cray/cray-pxc-haproxy
-        tag: 0.1.0
+        tag: 1.0.1
       resources:
         requests:
           cpu: 100m
@@ -261,6 +278,7 @@ spec:
           cpu: 200m
           memory: 512Mi
 ```
+**Note:** Container versions must be customized to the versions installed on the system
 
 ## Apply the `slurm` operator CR
 
@@ -275,9 +293,21 @@ updated to use the tenant-specific configuration. To do this, create a `group_va
 file in the `slurm-config-management` VCS repository with the following content:
 
 ```yaml
-munge_vault_path: slurm/<namespace>/<name>/munge
+munge_vault_path: secret/slurm/<namespace>/<name>/munge
 slurm_conf_url: https://rgw-vip.local/wlm/<namespace>/<name>/
 ```
 
 Where `<namespace>` and `<name>` match the namespace and name of the Slurm tenant resource created above. This
 will configure nodes in that tenant with the Munge key and Slurm configuration files created for that tenant.
+
+Slurmctld can be configured to run in configless mode. This is achieved by setting `SlurmctldParameters` value in the `slurm.conf` file.
+
+```yaml
+SlurmctldParameters=enable_configless
+```
+
+Once configless mode is enabled, launch slurmd with the --conf-server option to get new setting from slurmctld
+
+```bash
+slurmd --conf-server <other options>
+```
