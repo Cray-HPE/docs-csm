@@ -38,8 +38,7 @@ if [ -z "$TOKEN" ]; then
     https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 fi
 
-bss-restore()
-{
+bss-restore() {
   local host
   host=$1
   local DATA
