@@ -242,6 +242,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
   - [Delete CFS Sessions](configuration_management/Delete_CFS_Sessions.md)
   - [Automatic Session Deletion with `sessionTTL`](configuration_management/Automatic_Session_Deletion_with_sessionTTL.md)
   - [Track the Status of a Session](configuration_management/Track_the_Status_of_a_Session.md)
+  - [Ansible Log Collection](configuration_management/Ansible_Log_Collection.md)
   - [View Configuration Session Logs](configuration_management/View_Configuration_Session_Logs.md)
   - [Troubleshoot Ansible Play Failures in CFS Sessions](configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
   - [Troubleshoot CFS Session Failing to Complete](configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)

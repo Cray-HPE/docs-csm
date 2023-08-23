@@ -9,6 +9,8 @@ creating multiple groups within the inventory and the image(s) that should be in
 that are not specified will not be included, even if they appear in other CFS inventory types, such as dynamic inventory. For more information on what it means to provide the inventory, see
 [Specifying Hosts and Groups](Specifying_Hosts_and_Groups.md).
 
+Image customization sessions can also optionally specify `--target-image-map`, which allows users to specify the name of the resulting image rather than having CFS generate the name automatically.
+
 Users can expect that staging the image and generating an inventory will be a longer process than creating a session with other target definitions \(for example, inventories\). Tearing down the
 configuration session will also require additional time while IMS packages up the image build artifacts and uploads them to the artifact repository.
 
