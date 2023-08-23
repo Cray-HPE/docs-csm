@@ -254,7 +254,7 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
       ```bash
       "${CVT_PATH}"/management_inventory.py  --username <username> --switchfile mgmtswlist
       ```
-   
+
       > A prompt to enter the password will appear, enter the correct fabric password.
 
 1. (`pit#`) Collect the PDU inventory data.
@@ -353,6 +353,7 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 ```bash
 "${CVT_PATH}"/cds/discover_stop.py -u <bmc_username>
 ```
+
 > A prompt to enter the password will appear, enter the correct BMC password.
 
 ## 6. Run CSI

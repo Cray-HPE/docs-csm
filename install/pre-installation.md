@@ -515,7 +515,8 @@ These variables will need to be set for many procedures within the CSM installat
 
 Create the system configuration using one of the following options:
 
-- [Create System Configuration Using Cluster Discovery Service](Create_System_Configuration_Using_Cluster_Discovery_Service.md): This is a dynamic discovery process, the system and its connections are dynamically discovered and compared with the SHCD to create the system configuration files. This method is highly recommended for the new installations.
+- [Create System Configuration Using Cluster Discovery Service](Create_System_Configuration_Using_Cluster_Discovery_Service.md): This is a dynamic discovery process, the system and its connections are dynamically discovered and compared 
+with the SHCD to create the system configuration files. This method is highly recommended for the new installations.
 
 - [Create System Configuration Using SHCD](Create_System_Configuration_Using_SHCD.md): This method relies on the SHCD data to create the system configuration files.
 
