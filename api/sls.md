@@ -129,6 +129,8 @@ Base URLs:
 
 Endpoints which request information about hardware
 
+Refer link [Retrieve an Authentication Token](Retrieve_an_Authentication_Token.md) to get Authentication Token before using the code samples.
+
 ## get__hardware
 
 > Code samples
@@ -141,6 +143,7 @@ Accept: application/json
 ```
 
 ```shell
+
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/sls/v1/hardware \
   -H 'Accept: application/json'
