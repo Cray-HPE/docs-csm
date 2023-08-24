@@ -329,18 +329,18 @@ def main() -> None:
         print("Taking a snapshot of system CFS data before clearing it")
         snapshot_cfs_data()
 
-        for config_name in current_cfs_data.configurations:
+        for config_name in list(current_cfs_data.configurations):
             print(f"Deleting configuration '{config_name}'")
             cfs.delete_configuration(config_name)
             del current_cfs_data.configurations[config_name]
 
-        for comp_name, comp_data in current_cfs_data.components.items():
+        for comp_name, comp_data in list(current_cfs_data.components.items()):
             if "tags" in comp_data and comp_data["tags"]:
                 print(f"Clearing error count, desired configuration, state, and tags for component '{comp_name}'")
-                updated_comp = cfs.update_componnent(comp_name, errorCount=0, state=[], desiredConfig="", tags={})
+                updated_comp = cfs.update_component(comp_name, errorCount=0, state=[], desiredConfig="", tags={})
             else:
                 print(f"Clearing error count, desired configuration, and state for component '{comp_name}'")
-                updated_comp = cfs.update_componnent(comp_name, errorCount=0, state=[], desiredConfig="", tags={})
+                updated_comp = cfs.update_component(comp_name, errorCount=0, state=[], desiredConfig="", tags={})
             current_cfs_data.components[comp_name] = updated_comp
 
     # Determine the necessary updates
