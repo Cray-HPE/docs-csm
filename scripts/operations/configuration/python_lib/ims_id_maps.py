@@ -41,7 +41,10 @@ class ImsIdEtagMaps(NamedTuple):
     image_ids: StringMap
     recipe_ids: StringMap
 
-class ImsIdMapFileFormatError(Exception):
+class ImsIdMapFormatError(Exception):
+    pass
+
+class ImsIdMapFileFormatError(ImsIdMapFormatError):
     pass
 
 def apply_string_replacements(target_string: str, *replacements: StringMap) -> str:
@@ -120,35 +123,33 @@ def update_session_template(session_template: BosSessionTemplate,
 
     return new_session_template
 
-def load_ims_id_map(input_file_stream: IO) -> ImsIdEtagMaps:
+def load_ims_id_map_from_dict(id_mapping_dict: dict) -> ImsIdEtagMaps:
     """
-    Loads the specified file as JSON and extracts the IMS image and recipe ID maps from it,
+    Extracts the IMS image and recipe ID maps from the dict,
     as well as the S3 etag map.
     Returns a named tuple containing 3 dictionaries:
     1) A mapping from old S3 etags to new S3 etags
     2) A mapping from old IMS image IDs to new IMS image IDs
     3) A mapping from old IMS recipe IDs to new IMS recipe IDs
-    Raises ImsIdMapFileFormatError on error.
+    Raises ImsIdMapFormatError on error.
     """
-    map_file_name = input_file_stream.name
-    ims_id_map_file_contents = json.load(input_file_stream)
     try:
-        etag_map = ims_id_map_file_contents["etag_map"]
+        etag_map = id_mapping_dict["etag_map"]
     except KeyError as exc:
-        raise ImsIdMapFileFormatError(
+        raise ImsIdMapFormatError(
             f"No 'etag_map' field found in IMS ID map file '{map_file_name}'") from exc
     except TypeError as exc:
-        raise ImsIdMapFileFormatError(
+        raise ImsIdMapFormatError(
             f"Data in IMS ID map file '{map_file_name}' is of unexpected type: {exc}") from exc
 
     if not isinstance(etag_map, dict):
-        raise ImsIdMapFileFormatError("Data in 'etag_map' field of IMS ID map file "
+        raise ImsIdMapFormatError("Data in 'etag_map' field of IMS ID map file "
             f"'{map_file_name}' is of unexpected type: {type(etag_map)}")
 
     try:
-        id_maps = ims_id_map_file_contents["id_maps"]
+        id_maps = id_mapping_dict["id_maps"]
     except KeyError as exc:
-        raise ImsIdMapFileFormatError(
+        raise ImsIdMapFormatError(
             f"No 'id_maps' field found in IMS ID map file '{map_file_name}'") from exc
 
     def get_id_map(key: str) -> StringMap:
@@ -158,15 +159,25 @@ def load_ims_id_map(input_file_stream: IO) -> ImsIdEtagMaps:
         try:
             key_map = id_maps[key]
         except KeyError as exc:
-            raise ImsIdMapFileFormatError(f"No '{key}' field found in 'id_maps' field of IMS ID "
+            raise ImsIdMapFormatError(f"No '{key}' field found in 'id_maps' field of IMS ID "
                 f"map file '{map_file_name}'") from exc
         except TypeError as exc:
-            raise ImsIdMapFileFormatError("Data in 'id_maps' field of IMS ID map file "
+            raise ImsIdMapFormatError("Data in 'id_maps' field of IMS ID map file "
                 f"'{map_file_name}' is of unexpected type:  {exc}") from exc
         if isinstance(key_map, dict):
             return key_map
-        raise ImsIdMapFileFormatError(f"Data in ['id_maps']['{key}'] field of IMS ID map file "
+        raise ImsIdMapFormatError(f"Data in ['id_maps']['{key}'] field of IMS ID map file "
             f"'{map_file_name}' is of unexpected type: {type(key_map)}")
 
     return ImsIdEtagMaps(etags=etag_map, image_ids=get_id_map("images"),
                          recipe_ids=get_id_map("recipes"))
+
+def load_ims_id_map(input_file_stream: IO) -> ImsIdEtagMaps:
+    """
+    Loads the specified file as JSON and extracts the IMS image and recipe ID maps from it,
+    as well as the S3 etag map, using load_ims_id_map_from_dict.
+    Raises ImsIdMapFileFormatError on error.
+    """
+    map_file_name = input_file_stream.name
+    ims_id_map_file_contents = json.load(input_file_stream)
+    return load_ims_id_map_from_dict(ims_id_map_file_contents)
