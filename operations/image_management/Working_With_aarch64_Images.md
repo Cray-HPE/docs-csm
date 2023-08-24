@@ -23,7 +23,7 @@ customization jobs are running as the 'root' user, this would open a fairly sign
 if these Kubernetes pods were running directly on the worker nodes like normal pods.
 
 In order to keep the system secure, the emulation pods are being run inside Kata VM's with a different
-running kernel than the worker node so it isn't possible through a kernel bug to get access to the
+running kernel than the worker node so it is not possible through a kernel bug to get access to the
 running worker kernel. Each IMS job pod is run inside its own Kata VM so there is no possibility of
 breaking out from one job into another.
 

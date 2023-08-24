@@ -238,14 +238,14 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
     ssh ncn-m002 \
         "mkdir -pv /metal/bootstrap
          rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${PITDATA}'/prep /metal/bootstrap/
-         rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${CSM_PATH}'/pre-install-toolkit*.iso /metal/bootstrap/"
+         rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${CSM_PATH}'/images/pre-install-toolkit*.iso /metal/bootstrap/"
     ```
 
 1. (`pit#`) Upload install files to S3 in the cluster.
 
     ```bash
     PITBackupDateTime=$(date +%Y-%m-%d_%H-%M-%S)
-    tar -czvf "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" "${PITDATA}/prep" "${PITDATA}/configs" "${CSM_PATH}/pre-install-toolkit"*.iso &&
+    tar -czvf "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" "${PITDATA}/prep" "${PITDATA}/configs" "${CSM_PATH}/images/pre-install-toolkit"*.iso &&
     cray artifacts create config-data \
         "PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" \
         "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" &&
@@ -315,13 +315,13 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
     Expected output looks similar to the following:
 
     ```text
-    NAME       STATUS   ROLES                  AGE   VERSION
-    ncn-m001   Ready    control-plane,master   27s   v1.20.13
-    ncn-m002   Ready    control-plane,master   4h    v1.20.13
-    ncn-m003   Ready    control-plane,master   4h    v1.20.13
-    ncn-w001   Ready    <none>                 4h    v1.20.13
-    ncn-w002   Ready    <none>                 4h    v1.20.13
-    ncn-w003   Ready    <none>                 4h    v1.20.13
+    NAME       STATUS   ROLES                  AGE     VERSION
+    ncn-m001   Ready    control-plane,master   3m31s   v1.22.13
+    ncn-m002   Ready    control-plane,master   115m    v1.22.13
+    ncn-m003   Ready    control-plane,master   114m    v1.22.13
+    ncn-w001   Ready    <none>                 114m    v1.22.13
+    ncn-w002   Ready    <none>                 114m    v1.22.13
+    ncn-w003   Ready    <none>                 112m    v1.22.13
     ```
 
 1. (`ncn-m001#`) Restore and verify the site link.
