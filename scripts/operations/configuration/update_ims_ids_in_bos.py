@@ -42,7 +42,9 @@ from python_lib.bos_session_templates import BosSessionTemplate, \
                                              get_session_template_version
 from python_lib.ims_id_maps import ImsIdEtagMaps, \
                                    ImsIdMapFileFormatError, \
+                                   ImsIdMapFormatError, \
                                    load_ims_id_map, \
+                                   load_ims_id_map_from_dict, \
                                    update_session_template
 
 class TemplateNameVersion(NamedTuple):
@@ -91,32 +93,14 @@ def update_session_template_in_bos(session_template: BosSessionTemplate, templat
     delete_session_template(template_name)
     return
 
-def main() -> None:
+def update_bos(ims_id_map: ImsIdEtagMaps) -> None:
     """
-    Parses the command line arguments, does the stuff.
-
-    Arguments:
-    <ims_id_map_file.json>
-
     Queries BOS for all session templates. Based on the specified IMS ID mapping file, any old IMS
     IDs found in a BOS session template are replaced with the new ones, and that session template
     is updated in BOS.
 
     Raises BosError if there is an error
     """
-    parser = argparse.ArgumentParser(description="Gets all session templates from BOS and updates "
-                "any IMS IDs within them, based on the specified IMS ID map file")
-    parser.add_argument("ims-id-map-file", type=argparse.FileType('r'),
-                        help="JSON file created during IMS import containing map from "
-                             "old to new IMS IDs")
-    parsed_args = parser.parse_args()
-
-    try:
-        ims_id_map = load_ims_id_map(parsed_args.ims_id_map_file)
-    except ImsIdMapFileFormatError as exc:
-        raise BosError(str(exc)) from exc
-    print(f"Loaded {len(ims_id_map)} IMS ID mappings from IMS ID map file")
-
     # Create this list first so that if there are any unexpected format errors in the BOS
     # templates, we catch them before we start updating BOS.
     template_name_version_list = [
@@ -126,6 +110,42 @@ def main() -> None:
     for tnv in template_name_version_list:
         update_session_template_in_bos(session_template=tnv.template, template_name=tnv.name,
                                        bos_version=tnv.bos_version, ims_id_map=ims_id_map)
+
+def update_bos_from_dict(id_mapping_dict: dict):
+    """
+    Parses ID map dict as ImsIdEtagsMap struct, then calls update_bos()
+    """
+    try:
+        ims_id_map = load_ims_id_map_from_dict(id_mapping_dict)
+    except ImsIdMapFormatError as exc:
+        raise BosError(str(exc)) from exc
+
+    update_bos(ims_id_map)
+
+def main() -> None:
+    """
+    Parses the command line arguments, does the stuff.
+
+    Arguments:
+    <ims_id_map_file.json>
+
+    """
+    parser = argparse.ArgumentParser(description="Gets all session templates from BOS and updates "
+                "any IMS IDs within them, based on the specified IMS ID map file")
+    parser.add_argument("ims_id_map_file", type=argparse.FileType('r'),
+                        help="JSON file created during IMS import containing map from "
+                             "old to new IMS IDs")
+    parsed_args = parser.parse_args()
+
+    try:
+        ims_id_map = load_ims_id_map(parsed_args.ims_id_map_file)
+    except ImsIdMapFileFormatError as exc:
+        raise BosError(str(exc)) from exc
+    print(f"Loaded from IMS ID map file: {len(ims_id_map.etags)} etag mappings, "
+          f"{len(ims_id_map.image_ids)} IMS image ID mappings, "
+          f"{len(ims_id_map.recipe_ids)} IMS recipe ID mappings")
+
+    update_bos(ims_id_map)
 
 if __name__ == '__main__':
     try:
