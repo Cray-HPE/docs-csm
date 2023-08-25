@@ -152,8 +152,10 @@ The following steps will verify if IP addresses are assigned to the BMC nodes an
 1. (`pit#`) List the BMC nodes.
 
    ```bash
-   "${CVT_PATH}"/cds/discover_start.py -u bmc_username -p bmc_password --list
+   "${CVT_PATH}"/cds/discover_start.py -u <bmc_username> --list
    ```
+
+   > A prompt to enter the password will appear, enter the correct BMC password.
 
 1. Verify that all the required nodes are listed.
 
@@ -164,8 +166,10 @@ The following steps will verify if IP addresses are assigned to the BMC nodes an
 1. (`pit#`) Reset the listed BMC nodes.
 
    ```bash
-   "${CVT_PATH}"/cds/discover_start.py -u bmc_username -p bmc_password --reset
+   "${CVT_PATH}"/cds/discover_start.py -u <bmc_username> --reset
    ```
+
+   > A prompt to enter the password will appear, enter the correct BMC password.
 
 ### 3.3 Verify the discover status
 
@@ -194,20 +198,28 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 1. (`pit#`) Verify the status and list the IP addresses of the fabric switches.
 
    ```bash
-   "${CVT_PATH}"/cds/discover_status.py fabric --username fabric_username --password fabric_password --out
+   "${CVT_PATH}"/cds/discover_status.py fabric --username <fabric_username> --out
    ```
+
+   > A prompt to enter the password will appear, enter the correct fabric switch password.
+
+   Example output:
+
+   ![Fabric switchlist example](../img/install/fabric_switch_list_output.png)
 
 1. (`pit#`) Verify the status and list the IP addresses of the PDUs.
 
    ```bash
-   "${CVT_PATH}"/cds/discover_status.py pdu --username pdu_username --password pdu_password --out
+   "${CVT_PATH}"/cds/discover_status.py pdu --out
    ```
 
 1. (`pit#`) Verify the status and list the IP addresses of the CMCs.
 
    ```bash
-   "${CVT_PATH}"/cds/discover_status.py cmc --username cmc_username --password cmc_password --out
+   "${CVT_PATH}"/cds/discover_status.py cmc --username <cmc_username> --out
    ```
+
+   > A prompt to enter the password will appear, enter the correct CMC password.
 
 ### 3.4 Collect and compare the inventory data
 
@@ -228,8 +240,10 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 1. (`pit#`) Collect the fabric inventory data.
 
    ```bash
-   "${CVT_PATH}"/fabric_inventory.py --switchfile ./cds/fabricswlist --username switch_username --password switch_password
+   "${CVT_PATH}"/fabric_inventory.py --switchfile ./cds/fabricswlist --username <switch_username>
    ```
+
+   > A prompt to enter the password will appear, enter the correct fabric password.
 
 1. (`pit#`) Collect the management network inventory.
 
@@ -238,8 +252,10 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
    1. Collect the management network inventory data.
 
       ```bash
-      "${CVT_PATH}"/management_inventory.py --switchfile mgmtswlist --password password --username username
+      "${CVT_PATH}"/management_inventory.py  --username <username> --switchfile mgmtswlist
       ```
+
+      > A prompt to enter the password will appear, enter the correct fabric password.
 
 1. (`pit#`) Collect the PDU inventory data.
 
@@ -335,8 +351,10 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 (`pit#`) Clean and reset the modified files to their original default state.
 
 ```bash
-"${CVT_PATH}"/cds/discover_stop.py -u bmc_username -p bmc_password
+"${CVT_PATH}"/cds/discover_stop.py -u <bmc_username>
 ```
+
+> A prompt to enter the password will appear, enter the correct BMC password.
 
 ## 6. Run CSI
 
