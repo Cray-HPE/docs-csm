@@ -169,6 +169,49 @@ function upgrade_csm_chart {
   loftsman ship --manifest-path "${TMP_MANIFEST_CUSTOMIZED}"
 }
 
+function do_upgrade_csm_chart {
+  # Usage: do_upgrade_csm_chart <chart name> <manifest_file>
+  #
+  # Wrapper function for upgrade_csm_chart which also manages the upgrade states, to reduce
+  # needlessly repeated code in the main body of the script, making it less readable.
+
+  if [[ $# -ne 2 ]]; then
+    echo "ERROR: $0 function requires exactly 2 arguments but received $#. Invalid argument(s): $*"
+    return 1
+  elif [[ -z $1 ]]; then
+    echo "ERROR: $0: chart name may not be blank"
+    return 1
+  elif [[ -z $2 ]]; then
+    echo "ERROR: $0: manifest file name may not be blank"
+    return 1
+  fi
+  local chart_name manifest_file manifest_file_prefix state_label
+  chart_name="$1"
+  manifest_file="$2"
+
+  # Strip off the file extension from the manifest file name
+  manifest_file_prefix=$(echo "${manifest_file}" | cut -d. -f1)
+  state_label="UPGRADE_${manifest_file_prefix}_CHART_${chart_name}"
+  # Convert lowercase to uppercase, and convert non-alphanumeric characters to underscores
+  state_name=$(echo "${state_label}" | tr '[:lower:]' '[:upper:]' | sed 's/[^A-Z0-9]/_/g')
+
+  # So if this function is called with chart kyverno-policy and manifest platform.yaml, the
+  # state name will be UPGRADE_PLATFORM_CHART_KYVERNO_POLICY
+
+  state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+  if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+
+      upgrade_csm_chart "${chart_name}" "${manifest_file}"
+
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+  else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+  fi
+}
+
 function is_vshasta_node {
   # This is the best check for an image specifically booted to vshasta
   [[ -f /etc/google_system ]] && return 0
@@ -502,100 +545,13 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-state_name="UPGRADE_CSM_CONFIG"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-
-    upgrade_csm_chart csm-config sysmgmt.yaml
-
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
-
-state_name="UPGRADE_DRYDOCK"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-
-    upgrade_csm_chart cray-drydock platform.yaml
-
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
-
-state_name="UPGRADE_KYVERNO"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-
-    upgrade_csm_chart cray-kyverno platform.yaml
-
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
-
-state_name="UPGRADE_KYVERNO_POLICY"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-
-    upgrade_csm_chart kyverno-policy platform.yaml
-
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
-
-state_name="UPGRADE_CRAY_KYVERNO_POLICIES_UPSTREAM"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-    upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
-
-state_name="UPGRADE_TFTP"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-
-    upgrade_csm_chart cray-tftp sysmgmt.yaml
-
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
-state_name="UPGRADE_TFTP_PVC"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-
-    upgrade_csm_chart cray-tftp-pvc sysmgmt.yaml
-
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
+do_upgrade_csm_chart csm-config sysmgmt.yaml
+do_upgrade_csm_chart cray-drydock platform.yaml
+do_upgrade_csm_chart cray-kyverno platform.yaml
+do_upgrade_csm_chart kyverno-policy platform.yaml
+do_upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
+do_upgrade_csm_chart cray-tftp sysmgmt.yaml
+do_upgrade_csm_chart cray-tftp-pvc sysmgmt.yaml
 
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
@@ -1087,19 +1043,7 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-state_name="UPGRADE_TRUSTEDCERTS_OPERATOR"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-
-    upgrade_csm_chart trustedcerts-operator platform.yaml
-
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
+do_upgrade_csm_chart trustedcerts-operator platform.yaml
 
 state_name="CREATE_CEPH_RO_KEY"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
