@@ -749,9 +749,9 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     if [ "$do_patch" -eq 1 ]; then
 
       # Get a list of NCNs.
-      if IFS=$',' read -rd '' -a NCN_XNAMES; then
+      if IFS=$'\n' read -rd '' -a NCN_XNAMES; then
         :
-      fi <<< "$(cray hsm state components list --role Management --type Node --format json | jq -r '.Components | map(.ID) | join(",")')"
+      fi <<< "$(cray hsm state components list --role Management --type Node --format json | jq -r '.Components | map(.ID) | join("\n")')"
 
       # If no NCNs are found we should exit, otherwise if forces its way forward then NCNs will be missing critical packages.
       if [ "${#NCN_XNAMES[@]}" -eq '0' ]; then
