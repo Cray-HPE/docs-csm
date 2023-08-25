@@ -553,6 +553,11 @@ do_upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
 do_upgrade_csm_chart cray-tftp sysmgmt.yaml
 do_upgrade_csm_chart cray-tftp-pvc sysmgmt.yaml
 
+# Upgrade CFS/IMS and csm-ssh-keys to address CASMTRIAGE-5939
+for chart_name in cfs-ara cfs-hwsync-agent cfs-trust cray-cfs-api cray-cfs-batcher cray-cfs-operator cray-ims csm-ssh-keys; do
+  do_upgrade_csm_chart "${chart_name}" sysmgmt.yaml
+done
+
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta} == "false" ]]; then
