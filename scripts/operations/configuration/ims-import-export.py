@@ -34,6 +34,7 @@ import uuid
 from os import path
 from urllib.parse import urlparse
 
+import update_ims_ids_in_bos
 import update_product_catalog_ims_ids
 
 LOGGER = logging.getLogger(__name__)
@@ -664,17 +665,16 @@ def import_ims_artifacts(args):
 
         # Record mappings of old IMS IDs and S3 etags to new ones
         id_map_file = path.join(os.getcwd(), f'ims-id-maps-post-import-{uuid.uuid4().hex}.json')
+        id_map_contents = {
+            'etag_map': etag_map,
+            'id_maps': {
+                "images": image_map,
+                "recipes": recipe_map
+            },
+            'timestamp': get_timestamp_string()
+        }
         with open(id_map_file, 'w') as outfile:
-            json.dump(
-                {
-                    'etag_map': etag_map,
-                    'id_maps': {
-                        "images": image_map,
-                        "recipes": recipe_map
-                    },
-                    'timestamp': get_timestamp_string()
-                },
-                outfile)
+            json.dump(id_map_contents, outfile)
         LOGGER.info(f'Recorded mapping from old to new IMS IDs and S3 etags in {id_map_file}')
         LOGGER.info(f'IMS data imported from {args.import_export_root}')
 
@@ -682,6 +682,11 @@ def import_ims_artifacts(args):
         if image_map or recipe_map:
             LOGGER.info('Updating IMS IDs in Cray Product Catalog')
             update_product_catalog_ims_ids.update_product_catalog(image_map, recipe_map)
+
+        # If any image IDs or etags changed, update BOS if needed
+        if image_map or etag_map:
+            LOGGER.info('Updating IMS IDs and etags in BOS')
+            update_ims_ids_in_bos.update_bos_from_dict(id_map_contents)
 
     except ImsImportExportBaseError as ims_exc:
         LOGGER.warning('Error importing IMS data', exc_info=ims_exc)
