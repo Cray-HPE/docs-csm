@@ -749,9 +749,9 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     if [ "$do_patch" -eq 1 ]; then
 
       # Get a list of NCNs.
-      if IFS=$',' read -rd '' -a NCN_XNAMES; then
+      if IFS=$'\n' read -rd '' -a NCN_XNAMES; then
         :
-      fi <<< "$(cray hsm state components list --role Management --type Node --format json | jq -r '.Components | map(.ID) | join(",")')"
+      fi <<< "$(cray hsm state components list --role Management --type Node --format json | jq -r '.Components | map(.ID) | join("\n")')"
 
       # If no NCNs are found we should exit, otherwise if forces its way forward then NCNs will be missing critical packages.
       if [ "${#NCN_XNAMES[@]}" -eq '0' ]; then
@@ -773,7 +773,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
         fi
 
         # Verify that user-data.zypper is now null.
-        if [ ! "$(cray bss bootparameters list --format json --hosts x3000c0s3b0n0 | jq '.[]."cloud-init"."user-data".zypper')" = 'null' ]; then
+        if [ ! "$(cray bss bootparameters list --format json --hosts "$ncn_xname" | jq '.[]."cloud-init"."user-data".zypper')" = 'null' ]; then
           echo >&2 "${ncn_xname}: user-data.zypper key is still defined!"
           error=1
         fi
@@ -784,7 +784,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
         fi
 
         # Verify that user-data.packages is now null.
-        if [ ! "$(cray bss bootparameters list --format json --hosts x3000c0s3b0n0 | jq '.[]."cloud-init"."user-data".packages')" = 'null' ]; then
+        if [ ! "$(cray bss bootparameters list --format json --hosts "$ncn_xname" | jq '.[]."cloud-init"."user-data".packages')" = 'null' ]; then
           echo >&2 "${ncn_xname}: user-data.packages key is still defined!"
           error=1
         fi
