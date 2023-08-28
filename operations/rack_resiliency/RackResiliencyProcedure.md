@@ -47,6 +47,7 @@ Capture snapshot of all k8s pod info “kubectl get pods -A -o wide” for readi
 - [Stage 8 - Run CSM health checks](#Stage-8---run-csm-health-checks)
 - [Stage 9 - Remove etcd member of the master node](#Stage-9---remove-etcd-member-of-the-master-node)
 - [Stage 10 - Graceful shutdown of the identified rack](#Stage-10---graceful-shutdown-of-the-identified-rack)
+- [Stage 11 - Run CSM health checks](#Stage-11---run-csm-health-checks)
 
 ### Stage 0 - Prerequisites
 
@@ -149,14 +150,24 @@ If all “OK” from the “Step-5” and “Step-6” “ above, go ahead with 
 
         Auto login (ssh to master/ worker node from PIT node) and initiate “init 0” on all the nodes.
 
+### Stage 11 - Run CSM health checks
+
+Refer section [CSM Health Checks](#ii-csm-health-checks) and run health checks just to make sure
+that the cluster is accessible and functional after identified rakc has been shutdown.
+
 ## IV. Power On Procedure
 ### Powering on the rack which has been shutdown
-#### steps
-1. Collect and validate CSM health checks 
+### Stage 1 - Power-on nodes
+From BMC power-On all the master/ worker nodes under the rack which has been shutdown. 
+   
+### Stage 2 - Collect and validate CSM health checks 
 Refer section [CSM Health Checks](#ii-csm-health-checks)
 
-2. If the health of the cluster is OK then add the etcd member back to the cluster.
+### Stage 3 - add master node etcd member back to the cluster
+Please note that this step is applicable only if the rack has a master node, otherwise, skip it.
 
+If the health of the cluster is OK then add the etcd member back to the cluster.
+   
 Add the etcd memeber back to the the cluster
 
         ncn-m001:~ # etcdctl --endpoints https://127.0.0.1:2379 --cert /etc/kubernetes/pki/etcd/peer.crt --key /etc/kubernetes/pki/etcd/peer.key --cacert         /etc/kubernetes/pki/etcd/ca.crt member add ncn-m003 --peer-urls=https://10.252.1.18:2380
@@ -194,8 +205,13 @@ Ex:
         a40df5e325796614, started, ncn-m001, https://10.252.1.16:2380, https://10.252.1.16:2379,https://127.0.0.1:2379, false
         ncn-m001:~ #
 
+### Stage 4 - Reschedule unbalanced critical pods
+
+Reschedule unbalanced etcd/ postgres pods by running “reschedule_pods.sh” script. Here it will redistribute etcd/ postgress pods under 
+all the names spaces across the zones (one pod instance per rack only).
+
 ### Replacing the rack which has been shutdown
-#### Steps
+#### <TODO>
 
 ## V. Known Issues
 
