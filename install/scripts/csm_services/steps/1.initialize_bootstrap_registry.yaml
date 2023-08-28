@@ -60,7 +60,15 @@ spec:
         command: |-
           podman load -i /var/lib/cray/container-images/metal-nexus/skopeo-stable-latest.tar
 
+          registries_d="$(mktemp -d)"
+          trap "rm -Rf ${registries_d}" EXIT
+          cat <<-EOF >"${registries_d}/enable-signatures.yaml"
+          default-docker:
+              use-sigstore-attachments: true
+          EOF
+
           podman run --rm --network host -v {{ getEnv "CSM_PATH" }}/docker:/images:ro \
+              -v "${registries_d}:/etc/containers/registries.d:ro" \
               quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 \
               /images localhost:5000
 
@@ -70,11 +78,13 @@ spec:
           # XXX reference dtr.dev.cray.com or quay.io/skopeo/stable:latest.
           if [ -d "{{ getEnv "CSM_PATH" }}/docker/dtr.dev.cray.com" ]; then
               podman run --rm --network host -v {{ getEnv "CSM_PATH" }}/docker/dtr.dev.cray.com:/images:ro \
+                  -v "${registries_d}:/etc/containers/registries.d:ro" \
                   quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 \
                   /images localhost:5000
           fi
           if [ -d "{{ getEnv "CSM_PATH" }}/docker/quay.io/skopeo/stable:latest" ]; then
               podman run --rm --network host -v {{ getEnv "CSM_PATH" }}/docker/quay.io:/image:ro \
+                  -v "${registries_d}:/etc/containers/registries.d:ro" \
                   quay.io/skopeo/stable copy --dest-tls-verify=false --dest-creds admin:admin123 \
                   dir:/image/skopeo/stable:latest docker://localhost:5000/skopeo/stable:latest
           fi
