@@ -297,8 +297,8 @@ while the service is running using the following commands:
 
 ```bash
 POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
-kubectl -n services exec ${POD} -- tar -cvf vcs.tar /var/lib/gitea/
-kubectl -n services cp ${POD}:vcs.tar ./vcs.tar
+kubectl -n services exec ${POD} -- tar -cvf /tmp/vcs.tar /var/lib/gitea/
+kubectl -n services cp ${POD}:/tmp/vcs.tar ./vcs.tar
 ```
 
 Be sure to save the resulting `tar` file to a safe location.
@@ -314,8 +314,8 @@ process can be run at any time while the service is running using the following 
 
 ```bash
 POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
-kubectl -n services cp ./vcs.tar ${POD}:vcs.tar
-kubectl -n services exec ${POD} -- tar -xvf vcs.tar
+kubectl -n services cp ./vcs.tar ${POD}:/tmp/vcs.tar
+kubectl -n services exec ${POD} -- tar -C / -xvf /tmp/vcs.tar
 kubectl -n services rollout restart deployment gitea-vcs
 ```
 
