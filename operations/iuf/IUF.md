@@ -815,3 +815,56 @@ The framework also includes a unified consistent method to automatically track T
 The Install and Upgrade Observability Framework is automatically deployed and configured in the CSM environment.
 
 For more information on the Install and Upgrade Observability Framework, refer to [Install and Upgrade Observability Framework](../observability/Observability.md).
+
+## Deleting Products installed with IUF
+
+To help the CSM administrator in clearing the cray-product-catalog
+of unused product version entries which were installed
+using IUF, the `prodmgr` CLI provides a new option
+`delete`. This option when used with the `product` and
+`version` helps cleanup the following installed by
+the product version (if they are not used by other
+product versions or other products):
+
+- `Docker Images`
+- `Helm Charts`
+- `Loftsman Manifests`
+- `s3 artifacts`
+- `ims images`
+- `ims receipes`
+- `hosted repos`
+
+Finally, the product entry is also deleted from the cray-product-catalog
+ConfigMap.
+
+An example of launching the `prodmgr` for cleaning a `cos` version
+`1.25.31` is shown below:
+
+```bash
+prodmgr delete cos 1.25.31 --container-registry-hostname arti.hpc.amslabs.hpecorp.net/csm-docker/stable --deletion-image-name product-deletion-utility --deletion-image-version 1.0.0
+```
+
+The `prodmgr` is installed as an `rpm` and has a well documented
+`help`. The `product-deletion-utility` is a `container` which
+interacts with various repos to complete the deletion of
+artifacts and subsequent cleanup of the ConfigMap entry.
+
+Both the `rpm` and `container` image are installed as a part of
+CSM installation.
+
+For more information about `prodmgr` and `product-deletion-utility`
+refer to the following:
+
+- [`prodmgr`](https://github.com/Cray-HPE/prodmgr/blob/main/README.md)
+- [`product-deletion-utility`](https://github.com/Cray-HPE/product-deletion-utility/blob/integration/README.md)
+
+### Cleanup of Nexus storage after deletion
+
+Note that the `product-deletion-utility` only marks the artifacts in the blob store for deletion but is not removed from the disk.
+For cleaning up the Nexus blob storage, refer to the operational procedure mentioned in [Nexus Space Cleanup](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/package_repository_management/Nexus_Space_Cleanup.md#cleanup-of-data-not-being-used).
+
+### Deletion Logs
+
+The `logs` for the progress of deletion is generated in the
+`/etc/cray/upgrade/csm/iuf/deletion` directory or the `$CWD` from
+where the `prodmgr` is run. The filename is generated as: `delete-<product>-<version>-<timestamp>`. This can be used to analyze the components deleted as part of the deletion run.
