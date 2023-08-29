@@ -530,6 +530,9 @@ procedure. Otherwise, if performing an upgrade of only CSM, proceed to the next 
 
 ## Stage 0.5 - Upgrade Ceph and stop local Docker registries
 
+> **IMPORTANT** If performing an upgrade to CSM 1.4.0 or 1.4.1, then skip this step.
+> This step should only be done during an upgrade to CSM 1.4 patch version 1.4.2 or later.
+
 **Note:** This step may not be necessary if it was already completed by the CSM `v1.3.5` patch.
 If it was already run, the following steps can be re-executed to verify that Ceph daemons are using images
 in Nexus and the local Docker registries have been stopped.
@@ -559,6 +562,9 @@ The third step stops the local Docker registry on all storage nodes.
    ```
 
 ## Stage 0.6 - Enable `Smartmon` Metrics on Storage NCNs
+
+> **IMPORTANT** If performing an upgrade to CSM 1.4.0 or 1.4.1, then skip this step.
+> This step should only be done during an upgrade to CSM 1.4 patch version 1.4.2 or later.
 
 This step will install the `smart-mon` rpm on storage nodes, and reconfigure the `node-exporter` to provide `smartmon` metrics.
 
