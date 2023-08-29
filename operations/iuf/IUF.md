@@ -861,7 +861,7 @@ refer to the following:
 ### Cleanup of Nexus storage after deletion
 
 Note that the `product-deletion-utility` only marks the artifacts in the blob store for deletion but is not removed from the disk.
-For cleaning up the Nexus blob storage, refer to the operational procedure mentioned in [Nexus Space Cleanup.](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/package_repository_management/Nexus_Space_Cleanup.md#cleanup-of-data-not-being-used)
+For cleaning up the Nexus blob storage, refer to the operational procedure mentioned in [Nexus Space Cleanup](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/package_repository_management/Nexus_Space_Cleanup.md#cleanup-of-data-not-being-used).
 
 ### Deletion Logs
 
