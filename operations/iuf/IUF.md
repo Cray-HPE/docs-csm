@@ -818,50 +818,7 @@ For more information on the Install and Upgrade Observability Framework, refer t
 
 ## Deleting Products installed with IUF
 
-Products installed using IUF, update the cray-product-catalog ConfigMap. A sample update for `cos` product is show below:
-
-```yaml
-  cos: |
-    2.5.101:
-      component_versions:
-        docker:
-        - name: arti.hpc.amslabs.hpecorp.net/cray-product-catalog-update
-          version: 1.3.2
-        - name: cray/cray-nmdv2
-          version: 2.10.10
-        helm:
-        - name: cos-sle15sp4-artifacts
-          version: 2.1.18
-        - name: cos-config-service
-          version: 1.0.3
-        manifests:
-        - config-data/argo/loftsman/cos/2.5.101/manifests/cos-services.yaml
-        repositories:
-        - name: cos-2.5.101-sle-15sp4
-          type: hosted
-        - members:
-          - cos-2.5.101-sle-15sp4
-          name: cos-2.5-sle-15sp4
-          type: group
-      configuration:
-        clone_url: https://vcs.cmn.mug.hpc.amslabs.hpecorp.net/vcs/cray/cos-config-management.git
-        commit: fe2edd67af6613550a20118a6f4d8295aeb9d59f
-        import_branch: cray/cos/2.5.101
-        import_date: 2023-08-07 10:47:48.472277
-        ssh_url: git@vcs.cmn.mug.hpc.amslabs.hpecorp.net:cray/cos-config-management.git
-      images: {}
-      recipes:
-        cray-shasta-compute-sles15sp4.noarch-2.5.30:
-          id: a519dc00-8c2e-48cd-8344-7bfe4d05ff3a
-```
-
-As multiple versions of a product get installed, the versions which are
-still not in use also continue to remain in the cray-product-catalog.
-This leads to situation where the cray-product-catalog which is stored
-as a ConfigMap runs out of space (1 MiB is the maximum size for a
-ConfigMap in Kubernetes).
-
-To help the CSM administrator, clean the cray-product-catalog
+To help the CSM administrator in clearing the cray-product-catalog
 of unused product version entries which were installed
 using IUF, the `prodmgr` CLI provides a new option
 `delete`. This option when used with the `product` and
@@ -901,9 +858,13 @@ refer to the following:
 - [`prodmgr`](https://github.com/Cray-HPE/prodmgr/blob/main/README.md)
 - [`product-deletion-utility`](https://github.com/Cray-HPE/product-deletion-utility/blob/integration/README.md)
 
+### Cleanup of Nexus storage after deletion
+
+Note that the `product-deletion-utility` only marks the artifacts in the blob store for deletion but is not removed from the disk.
+For cleaning up the Nexus blob storage, refer to the operational procedure mentioned in [Nexus Space Cleanup.](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/package_repository_management/Nexus_Space_Cleanup.md#cleanup-of-data-not-being-used)
+
 ### Deletion Logs
 
 The `logs` for the progress of deletion is generated in the
 `/etc/cray/upgrade/csm/iuf/deletion` directory or the `$CWD` from
-where the `prodmgr` is run. The filename is generated as: `delete-<product>-<version>-<timestamp>`. This can be used to analyze
-the components deleted as part of the deletion run.
+where the `prodmgr` is run. The filename is generated as: `delete-<product>-<version>-<timestamp>`. This can be used to analyze the components deleted as part of the deletion run.
