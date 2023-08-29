@@ -66,7 +66,7 @@ Apply k8s topology zone labels to physical racks with master and worker nodes in
 #### Steps
 
 1. Run “create_zones.sh” script: creates rack level zoning with commands “kubectl label nodes <master node> <worker nodes…>  kubernetes.io/zone=rack-N –overwrite”
-2. Run "get_zone_config.sh" script: to check the correctness of the zone config created.
+2. Run "show_zones.sh" script: to check the correctness of the zone config created.
     - shows zone config with commands “kubectl get nodes -l topology.kubernetes.io/zone=rack-N”
 
 **Note:** Here “N” is the rack number which is identified to be gracefully shutdown. These steps can be executed on any of the cluster nodes. Only worker/ master nodes within rack to be considered.
@@ -88,7 +88,7 @@ Run “cordon_nodes.sh <rack name>” script: Which cordons all the master and w
 
 ### Stage 4 - Reschedule unbalanced critical pods
 
-Reschedule unbalanced etcd/ postgres pods by running “reschedule_pods.sh” script. Here it will redistribute etcd/ postgress pods under all the names spaces across the zones (one pod instance per rack only).
+Reschedule unbalanced etcd/ postgres pods by running “redistribute_pods.sh” script. Here it will redistribute etcd/ postgress pods under all the names spaces across the zones (one pod instance per rack only).
 
 **Note:** Wait for some time for reschedule of the pods/ re-deployments etc.,
 
@@ -147,8 +147,9 @@ Ex:
 ### Stage 10 - Graceful shutdown of the identified rack
 
 If all “OK” from the “Step-5” and “Step-6” “ above, go ahead with graceful shutdown of all the nodes under identified rack.
-
-        Auto login (ssh to master/ worker node from PIT node) and initiate “init 0” on all the nodes.
+From any health node run "power_off_on.sh -r <rack_label_name> -s power_off" to power off all the ncn master/ worker nodes.
+                         OR
+Login (ssh to master/ worker node from PIT node) and initiate “init 0” on all the ncn master and worker nodes.
 
 ### Stage 11 - Run CSM health checks
 
@@ -157,9 +158,12 @@ that the cluster is accessible and functional after identified rakc has been shu
 
 ## IV. Power On Procedure
 ### Powering on the rack which has been shutdown
-### Stage 1 - Power-on nodes
-From BMC power-On all the master/ worker nodes under the rack which has been shutdown. 
-   
+### Stage 1 - Power-on ncn master/ worker nodes
+From any healthy node run "power_off_on.sh -r <rack_label_name> -s power_on" to power on all the ncn master/ worker nodes
+of a rack which has been shutdown.
+                            OR
+Directly from BMC power on all the ncn master/ worker nodes of a rack which has been shutdown.
+             
 ### Stage 2 - Collect and validate CSM health checks 
 Refer section [CSM Health Checks](#ii-csm-health-checks)
 
@@ -207,7 +211,7 @@ Ex:
 
 ### Stage 4 - Reschedule unbalanced critical pods
 
-Reschedule unbalanced etcd/ postgres pods by running “reschedule_pods.sh” script. Here it will redistribute etcd/ postgress pods under 
+Reschedule unbalanced etcd/ postgres pods by running “redistribute_pods.sh” script. Here it will redistribute etcd/ postgress pods under 
 all the names spaces across the zones (one pod instance per rack only).
 
 ### Replacing the rack which has been shutdown
