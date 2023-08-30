@@ -42,6 +42,7 @@ If upgrading from CSM `v1.3.x` directly to `v1.4.2`, follow the procedures descr
 1. [Update test suite packages](#update-test-suite-packages)
 1. [Verification](#verification)
 1. [Take Etcd manual backup](#take-etcd-manual-backup)
+1. [NCN node reboot](#ncn-node-reboot)
 1. [Complete upgrade](#complete-upgrade)
 
 ### Preparation
@@ -259,6 +260,10 @@ pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zyppe
 
 These clusters are automatically backed up every 24 hours, but taking a manual backup
 at this stage in the upgrade enables restoring from backup later in this process if needed.
+
+### NCN node reboot
+
+This is an optional step but strongly recommended. As each patch release includes updated container images that may contain CVE fixes, it is recommended to reboot each NCN node to refresh cached container images. For detailed instructions on how to gracefully reboot each NCN node, refer to relevant steps in [Stage 1 - Kubernetes Upgrade](../Stage_1.md).
 
 ### Complete upgrade
 
