@@ -119,7 +119,7 @@ spec:
                     limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
                     if [[ -z $(echo $limit_management_nodes | grep 'Management_Master') ]]; then
                       if [[ -z $(echo $limit_management_nodes | grep "$TARGET_NCN" ) ]]; then
-                         echo "NOTICE ${TARGET_NCN} was not included in --limit-management-nodes. Not rebuilding ${TARGET_NCN}."
+                         echo "NOTICE ${TARGET_NCN} was not included in --limit-management-rollout. Not rebuilding ${TARGET_NCN}."
                          exit 0
                       fi
                     fi
@@ -224,7 +224,7 @@ spec:
                     limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
                     if [[ -z $(echo $limit_management_nodes | grep 'Management_Master') ]]; then
                       if [[ -z $(echo $limit_management_nodes | grep "$TARGET_NCN" ) ]]; then
-                         echo "NOTICE ${TARGET_NCN} was not included in --limit-management-nodes. Not rebuilding ${TARGET_NCN}."
+                         echo "NOTICE ${TARGET_NCN} was not included in --limit-management-rollout. Not rebuilding ${TARGET_NCN}."
                          exit 0
                       fi
                     fi
