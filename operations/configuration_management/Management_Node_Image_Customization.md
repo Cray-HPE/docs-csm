@@ -243,7 +243,23 @@ layers provided by CSM.
     git clone "https://${VCS_USER}:${VCS_PASS}@api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
     ```
 
-    A Git commit hash from this repository is needed in the following step.
+    A Git commit hash from this repository is needed in the following step.<br>
+    After cloning repo, verify that the "yaml" files used in image customization are present.<br>
+    If not, check the other branches in cloned repo and switch to correct branch which has the required "yaml" files.<br>
+    Example code:
+    ```bash
+    # git branch -a
+      cray/csm/<version>
+      * main
+      ...
+    # git checkout cray/csm/<version>
+      Switched to branch 'cray/csm/<version>'
+      Your branch is up to date with 'origin/cray/csm/<version>'.
+      ...
+    # ls
+      initrd.yml ...
+    #   
+    ```
 
 1. (`ncn-mw#`) Create the CFS configuration to use for image customization.
 
