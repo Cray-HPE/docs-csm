@@ -228,6 +228,21 @@ The following procedure describes how to find the CFS configuration applied to t
    The value of the `Desired Config` column is the name of the CFS configuration currently applied
    to the nodes. There will typically be only one CFS configuration applied to all management nodes.
 
+   Kindly ensure the selected "desired config" from above has the "initrd.yaml" within it's layers by using command as below:
+   ```bash
+   # cray cfs configurations describe "<config name>"
+     lastUpdated = "<yyyy-mm-ddThh:mm:ssZ>"
+     name = "<config name>"
+     [[layers]]
+     ...
+     [[layers]]
+     cloneUrl = "https://<repo.git>"
+     commit = "<hash value>"
+     name = "<name>"
+     playbook = "ncn-initrd.yml"
+   #
+   ```
+
 #### Option 2: Create a new CFS configuration for management nodes
 
 Use this option to create a new CFS configuration for management nodes.
