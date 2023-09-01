@@ -160,7 +160,7 @@ def export_ims_recipe(recipe, recipes_dir, args):
 
     return_value = recipe
     LOGGER.info(f'Exporting IMS recipe id {recipe["id"]}')
-    if args.include_linked_artifacts and recipe['link']['type'] and recipe['link']['path']:
+    if args.include_linked_artifacts and recipe['link'] and recipe['link']['type'] and recipe['link']['path']:
         return_value.update(
             {
                 's3': _export_s3_recipe_artifact
@@ -258,7 +258,7 @@ def export_ims_image(image, recipes_dir, args):
 
     return_value = image
     LOGGER.info(f'Exporting IMS image id {image["id"]}')
-    if args.include_linked_artifacts and image['link']['type'] and image['link']['path']:
+    if args.include_linked_artifacts and image['link'] and image['link']['type'] and image['link']['path']:
         return_value.update(
             {
                 's3': _export_s3_image_artifacts
@@ -348,7 +348,7 @@ def artifact_exists(link, md5=''):
 
         return True
 
-    if link['type'] and link['path']:
+    if link and link['type'] and link['path']:
         return {
             's3': _check_s3_artifact
         }.get(link['type'])()
@@ -357,6 +357,10 @@ def artifact_exists(link, md5=''):
 
 
 def artifact_upload(link_type, link_path, artifact_path):
+    LOGGER.debug(
+        "Uploading S3 artifact; link_type=%s, link_path=%s, artifact_path=%s",
+        link_type, link_path, artifact_path
+    )
     def _upload_s3_artifact():
         s3url = S3Url(link_path)
 
@@ -405,71 +409,147 @@ def recipe_exists(recipe):
         LOGGER.info(f'IMS recipe {recipe["id"]} was not found in IMS.')
         return False
 
-    return artifact_exists(recipe['link'])
+    return True
+
+
+def patch_record(images_or_recipes, record_id, link_type, link_path, link_etag):
+    # patch record
+    command = [
+        'cray',
+        'ims',
+        images_or_recipes,
+        'update',
+        record_id,
+        '--format', 'json',
+        '--link-type', link_type,
+        '--link-path', link_path,
+        '--link-etag', link_etag
+    ]
+    LOGGER.debug(' '.join(command))
+    result = json.loads(subprocess.check_output(command))
+    LOGGER.debug(result)
+    return result
+
+
+def create_ims_recipe(recipe):
+    """
+    Creates a new recipe record in IMS.
+    Parses the JSON response object from the create request and returns it.
+    """
+    # create a new ims recipe record
+    command = [
+        'cray',
+        'ims',
+        'recipes',
+        'create',
+        '--format', 'json',
+        '--name', recipe['name'],
+        '--recipe-type', recipe['recipe_type'],
+        '--linux-distribution', recipe['linux_distribution']
+    ]
+    LOGGER.debug(' '.join(command))
+    new_recipe = json.loads(subprocess.check_output(command))
+    LOGGER.debug(new_recipe)
+    return new_recipe
 
 
 def import_ims_recipe(recipe, recipes_path):
+    """
+    Returns (new IMS recipe ID, new recipe S3 etag)
+    A None value for either one means that the value did not change
+    """
+    def _patch_recipe(recipe_id, **kwargs):
+        return patch_record("recipes", record_id=recipe_id, link_type=recipe['link']['type'], **kwargs)
+
+    def _recipe_artifact_upload(link_path):
+        s3url = S3Url(recipe['link']['path'])
+        recipe_path = path.join(recipes_path, recipe['id'])
+        artifact_path=path.join(recipe_path, s3url.filename)
+
+        # verify that we can find the recipe archive to upload
+        if not path.isfile(path.join(recipe_path, s3url.filename)):
+            raise (ImsImportExportRecoverableError(
+                f'Recipe archive not found for IMS recipe {recipe["id"]}. Cannot import recipe.'
+            ))
+
+        return artifact_upload(
+            link_type=recipe['link']['type'],
+            link_path=link_path,
+            artifact_path=artifact_path
+        )
+
+    # There are 4 possible situations:
+    # The recipe is both in IMS and S3
+    # The recipe is in IMS and not S3
+    # The recipe is not in IMS but is in S3
+    # The recipe is not in IMS and not in S3
+    # The latter two are treated the same way, because if the recipe is not in IMS,
+    # it will get a new ID when we add it into IMS, so we will have to upload it to S3
+    # under that new ID anyway.
+
     try:
-        # Check if the recipe is in IMS. If it is missing or doesn't match,
-        # then let's import a new one.
-        if not recipe_exists(recipe):
+        recipe_in_ims = recipe_exists(recipe)
 
-            s3url = S3Url(recipe['link']['path'])
-            recipe_path = path.join(recipes_path, recipe['id'])
+        if recipe_in_ims:
+            LOGGER.debug("Recipe %s exists in IMS", recipe["id"])
+            if artifact_exists(recipe['link']):
+                LOGGER.debug("Recipe artifact for %s exists in S3", recipe["id"])
+                return None, None
+            LOGGER.debug("Recipe artifact for %s does not exist in S3", recipe["id"])
 
-            # verify if we can find the recipe archive to upload
-            if not path.isfile(path.join(recipe_path, s3url.filename)):
-                raise (ImsImportExportRecoverableError(
-                    f'Recipe archive not found for IMS recipe {recipe["id"]}. Cannot import recipe.'
-                ))
+            # Just need to upload it to S3
+            success, new_recipe_link_etag = _recipe_artifact_upload(link_path=recipe['link']['path'])
 
-            # create a new ims recipe record
-            command = [
-                'cray',
-                'ims',
-                'recipes',
-                'create',
-                '--name', recipe['name'],
-                '--recipe-type', recipe['recipe_type'],
-                '--linux-distribution', recipe['linux_distribution'],
-                '--format', 'json'
-            ]
-            LOGGER.debug(' '.join(command))
-            new_recipe = json.loads(subprocess.check_output(command))
-            LOGGER.debug(new_recipe)
+            if not success:
+                raise ImsImportExportRecoverableError(f'S3 upload not successful for recipe {recipe["id"]}')
 
-            # upload recipe archive
-            new_recipe_link_path = \
-                f'{recipe["link"]["type"]}://{s3url.bucket}/recipes/{new_recipe["id"]}/{s3url.filename}'
-            success, new_recipe_link_etag = artifact_upload(
-                recipe['link']['type'],
-                new_recipe_link_path,
-                path.join(recipe_path, s3url.filename)
+            # Patch record
+            _patch_recipe(
+                recipe_id=recipe["id"],
+                link_path=recipe['link']['path'],
+                link_etag=new_recipe_link_etag
             )
 
-            # patch recipe record
-            command = [
-                'cray',
-                'ims',
-                'recipes',
-                'update',
-                new_recipe['id'],
-                '--link-type', recipe['link']['type'],
-                '--link-path', new_recipe_link_path,
-                '--link-etag', new_recipe_link_etag,
-                '--format', 'json'
-            ]
-            LOGGER.debug(' '.join(command))
-            result = json.loads(subprocess.check_output(command))
-            LOGGER.debug(result)
+            # IMS ID did not change, so we only return the new etag value
+            return None, new_recipe_link_etag
 
-            return new_recipe['id'], new_recipe_link_etag
+        LOGGER.debug("Recipe %s does not exist in IMS", recipe["id"])
 
-    except ImsImportExportRecoverableError:
-        # TODO
-        pass
+        # create a new ims recipe record
+        new_recipe = create_ims_recipe(recipe)
+
+        # upload recipe archive, if available
+        if not recipe['link']:
+            LOGGER.debug("Recipe %s has no link data, so it cannot be uploaded to S3", recipe['id'])
+            return new_recipe['id'], None
+        if not recipe['link']['type'] or not recipe['link']['path']:
+            LOGGER.debug(
+                "Recipe %s has missing type (%s) and/or path (%s), so it cannot be uploaded to S3",
+                recipe['id'], recipe['link']['type'], recipe['link']['path']
+            )
+            return new_recipe['id'], None
+
+        s3url = S3Url(recipe['link']['path'])
+        new_recipe_link_path = \
+            f'{recipe["link"]["type"]}://{s3url.bucket}/recipes/{new_recipe["id"]}/{s3url.filename}'
+        success, new_recipe_link_etag = _recipe_artifact_upload(link_path=new_recipe_link_path)
+
+        if not success:
+            raise ImsImportExportRecoverableError(f'S3 upload not successful for recipe {new_recipe["id"]}')
+
+        # patch recipe record
+        _patch_recipe(
+            recipe_id=new_recipe['id'],
+            link_path=new_recipe_link_path,
+            link_etag=new_recipe_link_etag
+        )
+
+        return new_recipe['id'], new_recipe_link_etag
+
+    except ImsImportExportRecoverableError as call_proc_exc:
+        LOGGER.error(f'An error was encountered while importing IMS recipe {recipe["id"]}.', exc_info=call_proc_exc)
     except subprocess.CalledProcessError as call_proc_exc:
-        LOGGER.warning(f'An error was encountered while importing IMS image {recipe["id"]}.', exc_info=call_proc_exc)
+        LOGGER.warning(f'An error was encountered while importing IMS recipe {recipe["id"]}.', exc_info=call_proc_exc)
 
     return None, None
 
@@ -477,12 +557,14 @@ def import_ims_recipe(recipe, recipes_path):
 def import_ims_recipes(args, etag_map):
     def _import_v1_0_recipes(recipes):
         for recipe in recipes:
-            old_recipe_etag = recipe['link']['etag']
+            old_recipe_etag = None
+            if recipe['link']:
+                old_recipe_etag = recipe['link']['etag']
             new_recipe_id, new_recipe_etag = import_ims_recipe(recipe, recipes_path)
             if new_recipe_id and new_recipe_id != recipe['id']:
                 imported_recipes[recipe['id']] = new_recipe_id
-                if old_recipe_etag and new_recipe_etag != old_recipe_etag:
-                    etag_map[old_recipe_etag] = new_recipe_etag
+            if old_recipe_etag and new_recipe_etag and new_recipe_etag != old_recipe_etag:
+                etag_map[old_recipe_etag] = new_recipe_etag
 
     imported_recipes = {}
     LOGGER.info(f'Importing recipes')
@@ -508,117 +590,179 @@ def image_exists(image):
         LOGGER.info(f'IMS image {image["id"]} was not found in IMS.')
         return False
 
-    # TODO Don't just check image manifest, check for linked artifacts too!
-    return artifact_exists(image['link'])
+    return True
+
+
+def create_ims_image(image):
+    """
+    Creates a new image record in IMS.
+    Parses the JSON response object from the create request and returns it.
+    """
+    # create a new ims image record
+    command = [
+        'cray',
+        'ims',
+        'images',
+        'create',
+        '--format', 'json',
+        '--name', image['name']
+    ]
+    LOGGER.debug(' '.join(command))
+    new_image = json.loads(subprocess.check_output(command))
+    LOGGER.debug(new_image)
+    return new_image
 
 
 def import_ims_image(image, images_path, etag_map):
-    def _upload_1_0_linked_artifacts(artifacts):
+    """
+    Returns (new IMS recipe ID, new recipe S3 etag)
+    A None value for either one means that the value did not change
+    """
+    def _patch_image(image_id, **kwargs):
+        return patch_record("images", record_id=image_id, link_type=image['link']['type'], **kwargs)
+
+    def _upload_1_0_linked_artifacts(artifacts, image_id):
         ret_value = []
         for artifact in artifacts:
-            artifact_etag = artifact['link']['etag']
             artifact_url = S3Url(artifact['link']['path'])
             artifact_file = path.join(images_path, image['id'], artifact_url.filename)
-            if path.isfile(artifact_file):
-                new_artifact_link_path = \
-                    f'{image["link"]["type"]}://{artifact_url.bucket}/{new_image["id"]}/{artifact_url.filename}'
+            if not path.isfile(artifact_file):
+                continue
+            artifact_etag = artifact['link']['etag']
+            new_artifact_link_path = \
+                f'{image["link"]["type"]}://{artifact_url.bucket}/{image_id}/{artifact_url.filename}'
 
-                _, new_artifact_link_etag = artifact_upload(image['link']['type'],
-                                                            new_artifact_link_path,
-                                                            artifact_file)
+            success, new_artifact_link_etag = artifact_upload(
+                link_type=image['link']['type'],
+                link_path=new_artifact_link_path,
+                artifact_path=artifact_file)
 
-                if artifact_etag and artifact_etag != new_artifact_link_etag:
-                    etag_map[artifact_etag] = new_artifact_link_etag
+            if not success:
+                raise ImsImportExportRecoverableError(f"S3 upload not successful for {new_artifact_link_path}")
 
-                ret_value.append({
-                    'md5': artifact['md5'],
-                    'type': artifact['type'],
-                    'link': {
-                        'etag': new_artifact_link_etag,
-                        'path': new_artifact_link_path,
-                        'type': artifact['link']['type']
-                    }
-                })
+            if artifact_etag and new_artifact_link_etag and artifact_etag != new_artifact_link_etag:
+                etag_map[artifact_etag] = new_artifact_link_etag
+
+            ret_value.append({
+                'md5': artifact['md5'],
+                'type': artifact['type'],
+                'link': {
+                    'etag': new_artifact_link_etag,
+                    'path': new_artifact_link_path,
+                    'type': artifact['link']['type']
+                }
+            })
         return ret_value
 
+    def _upload_artifacts_patch_image(image_id, new_manifest_link_path):
+        s3url = S3Url(image['link']['path'])
+        image_path = path.join(images_path, image['id'])
+
+        # verify that we can find the archive to upload
+        if not path.isfile(path.join(image_path, s3url.filename)):
+            raise (ImsImportExportRecoverableError(
+                f'Image manifest.json not found for IMS image {image["id"]}. Cannot import image.'
+            ))
+
+        manifest_archive_path = path.join(image_path, s3url.filename)
+
+        # Read manifest.json and upload linked artifacts
+        with open(manifest_archive_path) as manifest_fp:
+            manifest_json = json.load(manifest_fp)
+            artifact_manifest = {
+                '1.0': _upload_1_0_linked_artifacts
+            }.get(manifest_json['version'])(manifest_json['artifacts'], image_id)
+
+        # Generate new manifest.json file
+        tmp_manifest_fd, tmp_manifest_path = tempfile.mkstemp()
+        try:
+            # create a new image manifest.json file
+            with open(tmp_manifest_fd, 'w') as tmp:
+                # do stuff with temp file
+                json.dump({
+                    'version': manifest_json['version'],
+                    'created': manifest_json['created'],
+                    'artifacts': artifact_manifest
+                }, tmp)
+
+            # upload image manifest.json
+            success, new_image_manifest_json_link_etag = artifact_upload(
+                link_type=image['link']['type'],
+                link_path=new_manifest_link_path,
+                artifact_path=tmp_manifest_path
+            )
+        finally:
+            os.remove(tmp_manifest_path)
+
+        if not success:
+            raise ImsImportExportRecoverableError(f"S3 upload not successful for {new_manifest_link_path}")
+
+        _patch_image(
+            image_id=image_id,
+            link_path=new_manifest_link_path,
+            link_etag=new_image_manifest_json_link_etag
+        )
+        return new_image_manifest_json_link_etag
+
+    # There are 4 possible situations:
+    # The image is both in IMS and S3
+    # The image is in IMS and not S3
+    # The image is not in IMS but is in S3
+    # The image is not in IMS and not in S3
+    # The latter two are treated the same way, because if the image is not in IMS,
+    # it will get a new ID when we add it into IMS, so we will have to upload it to S3
+    # under that new ID anyway.
+
     try:
-        # Check if the image is in IMS. If it is missing or doesn't match,
-        # then let's import a new one.
-        if not image_exists(image):
+        image_in_ims = image_exists(image)
 
-            s3url = S3Url(image['link']['path'])
-            image_path = path.join(images_path, image['id'])
+        if image_in_ims:
+            LOGGER.debug("Image %s exists in IMS", image["id"])
+            # TODO Don't just check image manifest, check for linked artifacts too!
+            if artifact_exists(image['link']):
+                LOGGER.debug("Image artifact for %s exists in S3", image["id"])
+                return None, None
+            LOGGER.debug("Image artifact for %s does not exist in S3", image["id"])
 
-            # verify if we can find the recipe archive to upload
-            if not path.isfile(path.join(image_path, s3url.filename)):
-                raise (ImsImportExportRecoverableError(
-                    f'Image manifest.json not found for IMS image {image["id"]}. Cannot import image.'
-                ))
+            # Just need to upload it to S3
+            new_image_manifest_json_link_etag = _upload_artifacts_patch_image(
+                image_id=image["id"],
+                new_manifest_link_path=image['link']['path']
+            )
 
-            # create a new ims image record
-            command = [
-                'cray',
-                'ims',
-                'images',
-                'create',
-                '--name', image['name'],
-                '--format', 'json'
-            ]
-            LOGGER.debug(' '.join(command))
-            new_image = json.loads(subprocess.check_output(command))
-            LOGGER.debug(new_image)
+            # IMS ID did not change, so we only return the new etag value
+            return None, new_image_manifest_json_link_etag
 
-            # TODO Read manifest.json and upload linked artifacts
-            with open(path.join(image_path, s3url.filename)) as manifest_fp:
-                manifest_json = json.load(manifest_fp)
-                artifact_manifest = {
-                    '1.0': _upload_1_0_linked_artifacts
-                }.get(manifest_json['version'])(manifest_json['artifacts'])
+        LOGGER.debug("Image %s does not exist in IMS", image["id"])
 
-            # TODO Generate new manifest.json file
-            tmp_manifest_fd, tmp_manifest_path = tempfile.mkstemp()
-            try:
-                # create a new image manifest.json file
-                with open(tmp_manifest_fd, 'w') as tmp:
-                    # do stuff with temp file
-                    json.dump({
-                        'version': manifest_json['version'],
-                        'created': manifest_json['created'],
-                        'artifacts': artifact_manifest
-                    }, tmp)
+        # create a new ims image record
+        new_image = create_ims_image(image)
 
-                new_image_manifest_json_link_path = \
-                    f'{image["link"]["type"]}://{s3url.bucket}/{new_image["id"]}/{s3url.filename}'
+        # upload image archive, if available
+        if not image['link']:
+            LOGGER.debug("Image %s has no link data, so it cannot be uploaded to S3", image['id'])
+            return new_image['id'], None
+        if not image['link']['type'] or not image['link']['path']:
+            LOGGER.debug(
+                "Image %s has missing type (%s) and/or path (%s), so it cannot be uploaded to S3",
+                image['id'], image['link']['type'], image['link']['path']
+            )
+            return new_image['id'], None
 
-                # upload image manifest.json
-                success, new_image_manifest_json_link_etag = artifact_upload(
-                    image['link']['type'], new_image_manifest_json_link_path,
-                    tmp_manifest_path
-                )
+        s3url = S3Url(image['link']['path'])
+        new_image_manifest_json_link_path = \
+            f'{image["link"]["type"]}://{s3url.bucket}/{new_image["id"]}/{s3url.filename}'
 
-                # patch image record
-                command = [
-                    'cray',
-                    'ims',
-                    'images',
-                    'update',
-                    new_image['id'],
-                    '--link-type', image['link']['type'],
-                    '--link-path', new_image_manifest_json_link_path,
-                    '--link-etag', new_image_manifest_json_link_etag,
-                    '--format', 'json'
-                ]
-                LOGGER.debug(' '.join(command))
-                result = json.loads(subprocess.check_output(command))
-                LOGGER.debug(result)
+        new_image_manifest_json_link_etag = _upload_artifacts_patch_image(
+            image_id=new_image["id"],
+            new_manifest_link_path=new_image_manifest_json_link_path
+        )
 
-                return new_image['id'], new_image_manifest_json_link_etag
-            finally:
-                os.remove(tmp_manifest_path)
+        return new_image['id'], new_image_manifest_json_link_etag
 
-    except ImsImportExportRecoverableError:
+    except ImsImportExportRecoverableError as call_proc_exc:
         # TODO
-        pass
+        LOGGER.error(f'An error was encountered while importing IMS image {image["id"]}.', exc_info=call_proc_exc)
     except subprocess.CalledProcessError as call_proc_exc:
         LOGGER.warning(f'An error was encountered while importing IMS image {image["id"]}.', exc_info=call_proc_exc)
 
@@ -628,12 +772,14 @@ def import_ims_image(image, images_path, etag_map):
 def import_ims_images(args, etag_map):
     def _import_v1_0_images(images):
         for image in images:
-            old_image_etag = image['link']['etag']
+            old_image_etag = None
+            if image['link']:
+                old_image_etag = image['link']['etag']
             new_image_id, new_image_etag = import_ims_image(image, images_path, etag_map=etag_map)
             if new_image_id and new_image_id != image['id']:
                 imported_images[image['id']] = new_image_id
-                if old_image_etag and new_image_etag != old_image_etag:
-                    etag_map[old_image_etag] = new_image_etag
+            if old_image_etag and new_image_etag and new_image_etag != old_image_etag:
+                etag_map[old_image_etag] = new_image_etag
 
     imported_images = {}
     LOGGER.info(f'Importing images')
