@@ -37,7 +37,7 @@ jobs:
           password: ${{ secrets.ARTIFACTORY_ALGOL60_READONLY_TOKEN }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Get changed files
       id: changed-files
