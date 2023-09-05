@@ -129,8 +129,6 @@ Base URLs:
 
 Endpoints which request information about hardware
 
-Refer to the ['Retrieve an Authentication Token'](Retrieve_an_Authentication_Token.md) documentation for information regarding retrieving an authentication token.
-
 ## get__hardware
 
 > Code samples
