@@ -30,8 +30,6 @@ spec:
     - key: "node-role.kubernetes.io/master"
       operator: "Exists"
       effect: "NoSchedule"
-  nodeSelector:
-    kubernetes.io/hostname: ncn-m001
   entrypoint: main
   templates:
     - name: main
@@ -74,6 +72,8 @@ spec:
               parameters:
                 - name: dryRun
                   value: "{{$.DryRun}}"
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                   
                 - name: scriptContent
                   value: |
                     echo "NOTICE This workflow will rollout storage nodes according to --limit-management-rollout parameter."
@@ -103,6 +103,8 @@ spec:
               parameters:
                 - name: dryRun
                   value: "{{$.DryRun}}"
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                   
                 - name: scriptContent
                   value: |
                     echo "INFO This stage will start a new Argo workflow with a name containing 'ncn-lifecycle-rebuild'."

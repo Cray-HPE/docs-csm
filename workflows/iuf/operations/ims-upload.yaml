@@ -147,8 +147,6 @@ spec:
 ### Templates ###
 ## get-s3-secrets-template ##
   - name: get-s3-secrets-template
-    nodeSelector:
-      kubernetes.io/hostname: ncn-m001
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -207,8 +205,6 @@ spec:
         exit $rc
 ## ims-upload-content ##
   - name: ims-upload-content
-    nodeSelector:
-      kubernetes.io/hostname: ncn-m001
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -294,8 +290,6 @@ spec:
       parameters:
       - name: s3_credentials_secret_name
         value: "{{steps.get-s3-secrets.outputs.parameters.secret_name}}"
-    nodeSelector:
-      kubernetes.io/hostname: ncn-m001
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
