@@ -67,7 +67,7 @@ spec:
               - start-operation
             inline:
               script:
-                image: artifactory.algol60.net/csm-docker/stable/iuf:v0.1.12
+                image: arti.hpc.amslabs.hpecorp.net/csm-docker-remote/stable/iuf:v0.1.12
                 command: [sh]
                 source: |
                   #!/bin/sh
