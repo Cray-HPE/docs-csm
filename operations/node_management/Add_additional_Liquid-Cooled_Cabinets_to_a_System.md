@@ -11,7 +11,7 @@ This top level procedure outlines the process for adding additional liquid-coole
 
 ## Procedure
 
-1. Perform procedures in [Add Liquid-Cooled Cabinets to SLS](../system_layout_service/Add_Liquid-Cooled_Cabinets_To_SLS.md).
+1. Perform procedures in [Add Liquid-Cooled Cabinets to SLS](../system_layout_service/Add_Liquid-Cooled_Cabinets_To_SLS.md) (alternatively, [Add A Cabinet To SLS Using CANI](../cani/Add_A_Cabinet_To_SLS.md)).
 
 1. Perform procedures in [Updating Cabinet Routes on Management NCNs](Updating_Cabinet_Routes_on_Management_NCNs.md).
 
