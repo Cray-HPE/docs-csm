@@ -30,8 +30,6 @@ spec:
     - key: "node-role.kubernetes.io/master"
       operator: "Exists"
       effect: "NoSchedule"
-  nodeSelector:
-    kubernetes.io/hostname: ncn-m001
   entrypoint: main
   templates:
     - name: main
@@ -74,6 +72,8 @@ spec:
               parameters:
                 - name: dryRun
                   value: "{{$.DryRun}}"
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                  
                 - name: scriptContent
                   value: |
                     echo "NOTICE This workflow will rollout worker nodes according to --limit-management-rollout parameter."
@@ -103,6 +103,8 @@ spec:
               parameters:
                 - name: dryRun
                   value: "{{$.DryRun}}"
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                  
                 - name: scriptContent
                   value: |
                     limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
@@ -205,6 +207,8 @@ spec:
               parameters:
               - name: dryRun
                 value: "{{$.DryRun}}"
+              - name: mediaHost
+                value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                
               - name: scriptContent
                 value: |
                   sets="{{inputs.parameters.sets}}"
