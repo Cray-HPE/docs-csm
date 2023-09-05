@@ -35,6 +35,8 @@ spec:
         parameters:
           - name: scriptContent
           - name: dryRun
+          - name: mediaHost
+            value: "ncn-m001"          
       retryStrategy:
         limit: "2"
         retryPolicy: "Always"
@@ -54,14 +56,15 @@ spec:
           EOF2
           chmod +x ${ts}.sh
           DRY_RUN={{inputs.parameters.dryRun}}
+          HOST={{inputs.parameters.mediaHost}}          
           if [[ "$DRY_RUN" == "true" ]];then
             echo "====================="
             echo "=======DRY RUN======="
             echo "====================="
             cat ${ts}.sh
           else
-            scp -i /myssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${ts}.sh root@ncn-m001:/tmp/${ts}.sh
-            ssh -i /myssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@ncn-m001 "/tmp/${ts}.sh"
+            scp -i /myssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${ts}.sh root@$HOST:/tmp/${ts}.sh
+            ssh -i /myssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$HOST "/tmp/${ts}.sh"          
           fi
         volumeMounts:
           - name: ssh

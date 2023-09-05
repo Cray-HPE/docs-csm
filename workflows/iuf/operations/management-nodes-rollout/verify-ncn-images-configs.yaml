@@ -45,6 +45,8 @@ spec:
               parameters:
                 - name: dryRun
                   value: "{{inputs.parameters.dryRun}}"
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                         
                 - name: scriptContent
                   value: |
                     nodeType="{{inputs.parameters.nodeType}}"
