@@ -196,6 +196,18 @@ else
   echo "====> ${state_name} has been completed"
 fi
 
+state_name="ENSURE_TESTING_RPMS"
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+if [[ $state_recorded == "0" ]]; then
+  echo "====> ${state_name} ..."
+  {
+    /usr/share/doc/csm/scripts/ensure_testing_rpms.sh ${target_ncn}
+  } >> ${LOG_FILE} 2>&1
+  record_state "${state_name}" ${target_ncn}
+else
+  echo "====> ${state_name} has been completed"
+fi
+
 cat << EOF
 NOTE:
     If below test failed, try to fix it based on test output. Then run current script again
