@@ -92,10 +92,10 @@ The existing console log files will be retained, but there will be a gap in the 
         cat > cray-console-data.yaml << EOF
         apiVersion: manifests/v1beta1
         metadata:
-        name: cray-console-data-20230712194246
+          name: cray-console-data-20230712194246
         spec:
-        charts:
-            - name: cray-console-data
+          charts:
+          - name: cray-console-data
             namespace: services
             version: 2.0.0
         EOF
