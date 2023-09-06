@@ -20,7 +20,7 @@ hardware like hardware identifiers. Instead it stores a generalized abstraction
 of the system that other services may use. SLS thus does not need to change as
 hardware within the system is replaced. Interaction with SLS is required if
 the system setup changes – for example, if system cabling is altered or during 
-installation, expansion or reduction. SLS does not interact with the hardware.
+installation, expansion, or reduction. SLS does not interact with the hardware.
 
 Each object in SLS has the following basic properties:
 * Parent – Each object in SLS has a parent object except the system root (s0).
@@ -258,8 +258,8 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |»» *anonymous*|[hardware_mgmt_switch_connector](#schemahardware_mgmt_switch_connector)|false|none|none|
-|»»» NodeNics|[[xname](#schemaxname)]|true|none|An array of Xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.|
-|»»» VendorName|string|false|none|The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (berkley-style names), but may be any string.|
+|»»» NodeNics|[[xname](#schemaxname)]|true|none|An array of xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.|
+|»»» VendorName|string|false|none|The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (Berkeley-style names), but may be any string.|
 
 *xor*
 
@@ -276,8 +276,8 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |»» *anonymous*|[hardware_nic](#schemahardware_nic)|false|none|none|
-|»»» Networks|[[xname](#schemaxname)]|true|none|An array of network names that this nic is connected to|
-|»»» Peers|[[xname](#schemaxname)]|true|none|An array of xnames this nic is connected directly to.  These ideally connector xnames, not switches|
+|»»» Networks|[[xname](#schemaxname)]|true|none|An array of network names that this NIC is connected to|
+|»»» Peers|[[xname](#schemaxname)]|true|none|An array of xnames this NIC is connected directly to.  These ideally connector xnames, not switches|
 
 *xor*
 
@@ -326,6 +326,14 @@ Status Code **200**
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
+|»» *anonymous*|[hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node)|false|none|none|
+|»»» NodeType|string|true|none|The role type assigned to this node.|
+|»»» nid|integer|false|none|none|
+
+*xor*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
 |»» *anonymous*|[hardware_ip_and_creds_optional](#schemahardware_ip_and_creds_optional)|false|none|none|
 |»»» IP6addr|string|false|none|The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.|
 |»»» IP4addr|string|false|none|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
@@ -343,6 +351,7 @@ Status Code **200**
 |NodeType|System|
 |NodeType|Application|
 |NodeType|Storage|
+|NodeType|Management|
 |NodeType|Management|
 
 <aside class="success">
@@ -839,7 +848,7 @@ Search for nodes matching a set of criteria. Any of the properties of any entry 
 |type|query|[hwtype](#schemahwtype)|false|Matches all objects of the given type|
 |power_connector|query|[xname](#schemaxname)|false|Matches all objects with the given xname in their power_connector property|
 |object|query|[xname](#schemaxname)|false|Matches all objects with the given xname in their object property.|
-|node_nics|query|[xname](#schemaxname)|false|Matches all objects with the given xname in thier node_nics property|
+|node_nics|query|[xname](#schemaxname)|false|Matches all objects with the given xname in their node_nics property|
 |networks|query|string|false|Matches all objects with the given xname in their networks property|
 |peers|query|[xname](#schemaxname)|false|Matches all objects with the given xname in their peers property|
 
@@ -922,8 +931,8 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |»» *anonymous*|[hardware_mgmt_switch_connector](#schemahardware_mgmt_switch_connector)|false|none|none|
-|»»» NodeNics|[[xname](#schemaxname)]|true|none|An array of Xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.|
-|»»» VendorName|string|false|none|The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (berkley-style names), but may be any string.|
+|»»» NodeNics|[[xname](#schemaxname)]|true|none|An array of xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.|
+|»»» VendorName|string|false|none|The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (Berkeley-style names), but may be any string.|
 
 *xor*
 
@@ -940,8 +949,8 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |»» *anonymous*|[hardware_nic](#schemahardware_nic)|false|none|none|
-|»»» Networks|[[xname](#schemaxname)]|true|none|An array of network names that this nic is connected to|
-|»»» Peers|[[xname](#schemaxname)]|true|none|An array of xnames this nic is connected directly to.  These ideally connector xnames, not switches|
+|»»» Networks|[[xname](#schemaxname)]|true|none|An array of network names that this NIC is connected to|
+|»»» Peers|[[xname](#schemaxname)]|true|none|An array of xnames this NIC is connected directly to.  These ideally connector xnames, not switches|
 
 *xor*
 
@@ -990,6 +999,14 @@ Status Code **200**
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
+|»» *anonymous*|[hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node)|false|none|none|
+|»»» NodeType|string|true|none|The role type assigned to this node.|
+|»»» nid|integer|false|none|none|
+
+*xor*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
 |»» *anonymous*|[hardware_ip_and_creds_optional](#schemahardware_ip_and_creds_optional)|false|none|none|
 |»»» IP6addr|string|false|none|The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.|
 |»»» IP4addr|string|false|none|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
@@ -1007,6 +1024,7 @@ Status Code **200**
 |NodeType|System|
 |NodeType|Application|
 |NodeType|Storage|
+|NodeType|Management|
 |NodeType|Management|
 
 <aside class="success">
@@ -1537,16 +1555,16 @@ sls_dump:
 |»»»»» *anonymous*|body|[hardware_pwr_connector](#schemahardware_pwr_connector)|false|none|
 |»»»»»» PoweredBy|body|[xname](#schemaxname)|true|The xname of this piece of hardware|
 |»»»»» *anonymous*|body|[hardware_mgmt_switch_connector](#schemahardware_mgmt_switch_connector)|false|none|
-|»»»»»» NodeNics|body|[[xname](#schemaxname)]|true|An array of Xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.|
-|»»»»»» VendorName|body|string|false|The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (berkley-style names), but may be any string.|
+|»»»»»» NodeNics|body|[[xname](#schemaxname)]|true|An array of xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.|
+|»»»»»» VendorName|body|string|false|The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (Berkeley-style names), but may be any string.|
 |»»»»» *anonymous*|body|[hardware_bmc](#schemahardware_bmc)|false|none|
 |»»»»»» IP6addr|body|string|true|The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.|
 |»»»»»» IP4addr|body|string|true|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
 |»»»»»» Username|body|string|false|The username that should be used to access the device (or be assigned to the device)|
 |»»»»»» Password|body|string|false|The password that should be used to access the device (or be assigned to the device)|
 |»»»»» *anonymous*|body|[hardware_nic](#schemahardware_nic)|false|none|
-|»»»»»» Networks|body|[[xname](#schemaxname)]|true|An array of network names that this nic is connected to|
-|»»»»»» Peers|body|[[xname](#schemaxname)]|true|An array of xnames this nic is connected directly to.  These ideally connector xnames, not switches|
+|»»»»»» Networks|body|[[xname](#schemaxname)]|true|An array of network names that this NIC is connected to|
+|»»»»»» Peers|body|[[xname](#schemaxname)]|true|An array of xnames this NIC is connected directly to.  These ideally connector xnames, not switches|
 |»»»»» *anonymous*|body|[hardware_nic](#schemahardware_nic)|false|none|
 |»»»»» *anonymous*|body|[hardware_powered_device](#schemahardware_powered_device)|false|none|
 |»»»»»» PowerConnector|body|[[xname](#schemaxname)]|true|An array of xnames, where each xname has type==*_pwr_connector.  Empty for Mountain switch cards|
@@ -1558,6 +1576,9 @@ sls_dump:
 |»»»»»» Username|body|string|true|The username that should be used to access the device (or be assigned to the device)|
 |»»»»»» Password|body|string(password)|true|The password that should be used to access the device|
 |»»»»» *anonymous*|body|[hardware_comptype_node](#schemahardware_comptype_node)|false|none|
+|»»»»»» NodeType|body|string|true|The role type assigned to this node.|
+|»»»»»» nid|body|integer|false|none|
+|»»»»» *anonymous*|body|[hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node)|false|none|
 |»»»»»» NodeType|body|string|true|The role type assigned to this node.|
 |»»»»»» nid|body|integer|false|none|
 |»»»»» *anonymous*|body|[hardware_ip_and_creds_optional](#schemahardware_ip_and_creds_optional)|false|none|
@@ -1604,6 +1625,7 @@ sls_dump:
 |»»»»»» NodeType|System|
 |»»»»»» NodeType|Application|
 |»»»»»» NodeType|Storage|
+|»»»»»» NodeType|Management|
 |»»»»»» NodeType|Management|
 
 <h3 id="post__loadstate-responses">Responses</h3>
@@ -3215,8 +3237,8 @@ The human-readable time this object was last created or updated.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|NodeNics|[[xname](#schemaxname)]|true|none|An array of Xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.|
-|VendorName|string|false|none|The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (berkley-style names), but may be any string.|
+|NodeNics|[[xname](#schemaxname)]|true|none|An array of xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.|
+|VendorName|string|false|none|The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (Berkeley-style names), but may be any string.|
 
 <h2 id="tocS_hardware_comptype_rtr_bmc">hardware_comptype_rtr_bmc</h2>
 <!-- backwards compatibility -->
@@ -3285,8 +3307,8 @@ The human-readable time this object was last created or updated.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|Networks|[[xname](#schemaxname)]|true|none|An array of network names that this nic is connected to|
-|Peers|[[xname](#schemaxname)]|true|none|An array of xnames this nic is connected directly to.  These ideally connector xnames, not switches|
+|Networks|[[xname](#schemaxname)]|true|none|An array of network names that this NIC is connected to|
+|Peers|[[xname](#schemaxname)]|true|none|An array of xnames this NIC is connected directly to.  These ideally connector xnames, not switches|
 
 <h2 id="tocS_hardware_comptype_rtmod">hardware_comptype_rtmod</h2>
 <!-- backwards compatibility -->
@@ -3406,6 +3428,34 @@ The human-readable time this object was last created or updated.
 |NodeType|Storage|
 |NodeType|Management|
 
+<h2 id="tocS_hardware_comptype_virtual_node">hardware_comptype_virtual_node</h2>
+<!-- backwards compatibility -->
+<a id="schemahardware_comptype_virtual_node"></a>
+<a id="schema_hardware_comptype_virtual_node"></a>
+<a id="tocShardware_comptype_virtual_node"></a>
+<a id="tocshardware_comptype_virtual_node"></a>
+
+```json
+{
+  "NodeType": "Management",
+  "nid": "2"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|NodeType|string|true|none|The role type assigned to this node.|
+|nid|integer|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|NodeType|Management|
+
 <h2 id="tocS_hardware_comptype_nodecard">hardware_comptype_nodecard</h2>
 <!-- backwards compatibility -->
 <a id="schemahardware_comptype_nodecard"></a>
@@ -3510,6 +3560,12 @@ xor
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[hardware_comptype_node](#schemahardware_comptype_node)|false|none|none|
+
+xor
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node)|false|none|none|
 
 xor
 

@@ -1211,6 +1211,7 @@ Additional valid values may be added via configuration file. See the results of 
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
+|type|VirtualNode|
 |state|Unknown|
 |state|Empty|
 |state|Populated|
@@ -3740,6 +3741,7 @@ Additional valid values may be added via configuration file. See the results of 
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
+|type|VirtualNode|
 |state|Unknown|
 |state|Empty|
 |state|Populated|
@@ -4538,6 +4540,7 @@ Default is NestNodesOnly.
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
+|type|VirtualNode|
 
 > Example responses
 
@@ -5232,6 +5235,7 @@ Retrieve all HWInventoryByLocation entries. Note that all entries are displayed 
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
+|type|VirtualNode|
 
 > Example responses
 
@@ -5310,6 +5314,7 @@ Status Code **200**
 |Type|HSNLink|
 |Type|HSNConnector|
 |Type|INVALID|
+|Type|VirtualNode|
 |Status|Populated|
 |Status|Empty|
 |HWInventoryByLocationType|HWInvByLocCabinet|
@@ -5370,6 +5375,7 @@ Status Code **200**
 |Type|HSNLink|
 |Type|HSNConnector|
 |Type|INVALID|
+|Type|VirtualNode|
 |HWInventoryByFRUType|HWInvByFRUCabinet|
 |HWInventoryByFRUType|HWInvByFRUChassis|
 |HWInventoryByFRUType|HWInvByFRUComputeModule|
@@ -5547,6 +5553,7 @@ Create/Update hardware inventory entries
 |»» Type|HSNLink|
 |»» Type|HSNConnector|
 |»» Type|INVALID|
+|»» Type|VirtualNode|
 |»» Status|Populated|
 |»» Status|Empty|
 |»» HWInventoryByLocationType|HWInvByLocCabinet|
@@ -5607,6 +5614,7 @@ Create/Update hardware inventory entries
 |»»» Type|HSNLink|
 |»»» Type|HSNConnector|
 |»»» Type|INVALID|
+|»»» Type|VirtualNode|
 |»»» HWInventoryByFRUType|HWInvByFRUCabinet|
 |»»» HWInventoryByFRUType|HWInvByFRUChassis|
 |»»» HWInventoryByFRUType|HWInvByFRUComputeModule|
@@ -6270,6 +6278,7 @@ Retrieve all HWInventoryByFRU entries. Note that there is no organization of the
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
+|type|VirtualNode|
 
 > Example responses
 
@@ -6358,6 +6367,7 @@ Status Code **200**
 |Type|HSNLink|
 |Type|HSNConnector|
 |Type|INVALID|
+|Type|VirtualNode|
 |HWInventoryByFRUType|HWInvByFRUCabinet|
 |HWInventoryByFRUType|HWInvByFRUChassis|
 |HWInventoryByFRUType|HWInvByFRUComputeModule|
@@ -7487,6 +7497,7 @@ Retrieve all Redfish endpoint entries as a named array, optionally filtering it.
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
+|type|VirtualNode|
 
 > Example responses
 
@@ -8476,6 +8487,7 @@ Retrieve the full collection of ComponentEndpoints in the form of a ComponentEnd
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
+|type|VirtualNode|
 
 > Example responses
 
@@ -9676,6 +9688,7 @@ Status Code **200**
 |Type|HSNLink|
 |Type|HSNConnector|
 |Type|INVALID|
+|Type|VirtualNode|
 
 <aside class="success">
 This operation does not require authentication
@@ -12744,6 +12757,7 @@ Additional valid values may be added via configuration file. See the results of 
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
+|type|VirtualNode|
 |state|Unknown|
 |state|Empty|
 |state|Populated|
@@ -15229,6 +15243,7 @@ Additional valid values may be added via configuration file. See the results of 
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
+|type|VirtualNode|
 |state|Unknown|
 |state|Empty|
 |state|Populated|
@@ -24901,6 +24916,7 @@ This is the HMS component type category.  It has a particular xname format and r
 |*anonymous*|HSNLink|
 |*anonymous*|HSNConnector|
 |*anonymous*|INVALID|
+|*anonymous*|VirtualNode|
 
 <h2 id="tocS_NetType.1.0.0">NetType.1.0.0</h2>
 <!-- backwards compatibility -->
