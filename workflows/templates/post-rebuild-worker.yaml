@@ -47,7 +47,7 @@ spec:
                 value: "{{inputs.parameters.dryRun}}"
               - name: scriptContent
                 value: |
-                  TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                  TARGET_NCN="{{inputs.parameters.targetNcn}}" \
                   /usr/share/doc/csm/scripts/ensure_testing_rpms.sh ${TARGET_NCN}
         - name: goss
           dependencies:
