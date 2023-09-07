@@ -212,6 +212,16 @@ function do_upgrade_csm_chart {
   fi
 }
 
+# Undeploy the chart if it exists on the system.
+# Use this if a chart has been removed from a manifest and needs
+# to be removed from the system as part of an upgrade.
+function undeploy() {
+  # If the chart is missing (rc==1) just return success.
+  helm status "$@" || return 0
+  # Remove the chart.
+  helm uninstall "$@"
+}
+
 function is_vshasta_node {
   # This is the best check for an image specifically booted to vshasta
   [[ -f /etc/google_system ]] && return 0
@@ -553,8 +563,39 @@ do_upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
 do_upgrade_csm_chart cray-tftp sysmgmt.yaml
 do_upgrade_csm_chart cray-tftp-pvc sysmgmt.yaml
 
+# In order to upgrade cray-bos, we also need to do an early upgrade of some platform etcd charts,
+# and some associated namespace finagling. (This code is based on code from upgrade.sh in the CSM 1.5
+# tarball)
+
+#
+# cray-etcd-backup and cray-etcd-defrag moving from operators to services namespace,
+# uninstall prior to upgrade.
+#
+state_name="REMOVE_CRAY_ETCD_CHARTS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+
+    echo "Removing cray-etcd-backup and cray-etcd-defrag charts from the operators namespace."
+    echo "These charts will later be deployed in the services namespace."
+    undeploy -n operators cray-etcd-backup
+    undeploy -n operators cray-etcd-defrag
+
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+# Do early upgrades of cray-etcd-defrag cray-etcd-backup cray-etcd-migration-setup
+for chart_name in cray-etcd-defrag cray-etcd-backup cray-etcd-migration-setup; do
+  do_upgrade_csm_chart "${chart_name}" platform.yaml
+done
+
 # Upgrade CFS/IMS and csm-ssh-keys to address CASMTRIAGE-5939
-for chart_name in cfs-ara cfs-hwsync-agent cfs-trust cray-cfs-api cray-cfs-batcher cray-cfs-operator cray-ims csm-ssh-keys; do
+# And relatedly, upgrade cray-bos to address CASMTRIAGE-6009
+for chart_name in cfs-ara cfs-hwsync-agent cfs-trust cray-bos cray-cfs-api cray-cfs-batcher cray-cfs-operator cray-ims csm-ssh-keys; do
   do_upgrade_csm_chart "${chart_name}" sysmgmt.yaml
 done
 
