@@ -246,7 +246,7 @@ layers provided by CSM.
     A Git commit hash from this repository is needed in the following step. After cloning repo, verify that the "yaml" files used in image customization are present.
     If not, check the other branches in cloned repo and switch to correct branch which has the required "yaml" files.
    
-   ```bash
+    ```bash
     git branch -a
      cray/csm/<version>
      * main
