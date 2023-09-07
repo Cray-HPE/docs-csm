@@ -228,7 +228,7 @@ The following procedure describes how to find the CFS configuration applied to t
    The value of the `Desired Config` column is the name of the CFS configuration currently applied
    to the nodes. There will typically be only one CFS configuration applied to all management nodes.
 
-   Kindly ensure the selected "desired config" from above has the "initrd.yml" within it's layers by using command as below:
+   Kindly ensure the selected "desired config" from above has the ncn-initrd.yml within the layers by using command as below:
 
    ```bash
    cray cfs configurations describe "<config name>"
