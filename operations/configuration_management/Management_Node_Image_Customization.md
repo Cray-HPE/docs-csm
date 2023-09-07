@@ -248,17 +248,17 @@ layers provided by CSM.
     If not, check the other branches in cloned repo and switch to correct branch which has the required "yaml" files.<br>
     Example code:
     ```bash
-    # git branch -a
+    git branch -a
       cray/csm/<version>
       * main
       ...
-    # git checkout cray/csm/<version>
+    git checkout cray/csm/<version>
       Switched to branch 'cray/csm/<version>'
       Your branch is up to date with 'origin/cray/csm/<version>'.
       ...
-    # ls
+    ls
       initrd.yml ...
-    #   
+       
     ```
 
 1. (`ncn-mw#`) Create the CFS configuration to use for image customization.
