@@ -41,7 +41,7 @@ spec:
           indicates Nexus is not ready.)
         command: |-
           systemctl is-active --quiet nexus && echo Nexus is running
-          nexus_writable=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8081/service/rest/v1/status/writable)
+          nexus_writable=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/nexus/service/rest/v1/status/writable)
           echo "Nexus writable endpoint returns: $nexus_writable"
           [[ $nexus_writable -eq 200 ]] || exit 1
         
