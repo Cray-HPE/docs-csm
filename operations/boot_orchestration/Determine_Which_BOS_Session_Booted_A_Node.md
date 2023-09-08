@@ -1,4 +1,4 @@
-# Ascertain Which BOS Session Booted a Node
+# Determine Which BOS Session Booted a Node
 
 This guide is split into BOS Version 1 (V1) and BOS Version 2 (V2) sections
 because the procedures are different for the two different versions.
@@ -12,36 +12,35 @@ to describe the BOS Session, which identifies the BOS Session template used.
 
 ### Query the Node
 
-From a management node (master or worker), ssh to the node in question.
-(`ncn-mw#`) ssh <node's xname>
-('<node>#') cat /proc/cmdline
+(`ncn-mw#`) Query the node in question via ssh. The returned value will be the session ID.
 
-Find the bos_session_id value in the cmdline string. This is the ID of the BOS
-session that was used to boot the node.
+```bash
+BOS_SESSION_ID=$(ssh <node's xname> "cat /proc/cmdline" | awk -v RS=" " -F "=" '{if ($1 == "bos_session_id") { print $2; }}')
 
-Exit from the node.
-('<node>#') exit
+```
 
 ### Query BOS
-Ask BOS to describe this session.
-(`ncn-mw#`#) cray bos v1 session describe  <BOS session ID> --format json
+(`ncn-mw#`) Ask BOS to describe this session.
+
+'''bash
+cray bos v1 session describe ${BOS_SESSION_ID} --format json
+'''
 
 The templateName parameter is the BOS session template used to boot or reboot the node.
 
 ### Example
 
-From a management node (master or worker), ssh to the node in question.
-ncn-m001#: ssh x3000c0s28b4n0
-x3000c0s28b4n0#: cat /proc/cmdline
+(`ncn-mw#`) From a management node (master or worker), ssh to the node in question.
 
 ```bash
-kernel initrd=initrd console=ttyS0,115200 bad_page=panic crashkernel=512M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu.passthrough=on modprobe.blacklist=amdgpu numa_interleave_omit=headless oops=panic pageblock_order=14 rd.neednet=1 rd.retry=10 rd.shell systemd.unified_cgroup_hierarchy=1 console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 quiet spire_join_token=<redacted>2 root=craycps-s3:s3://boot-images/51a448dc-3ed1-4b02-b9cc-a0cc7be63763/rootfs:c414a8cbe0fd427102a18fc5ed0f7cb5-318:dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0 nmd_data=url=s3://boot-images/51a448dc-3ed1-4b02-b9cc-a0cc7be63763/rootfs,etag=c414a8cbe0fd427102a18fc5ed0f7cb5-318 bos_session_id=147b09de-59a8-4444-9bcb-9b54ac7d78cc xname=x3000c0s28b4n0 nid=12 bss_referral_token=<redacted> ds=nocloud-net;s=http://10.92.100.81:8888/
+BOS_SESSION_ID=$(ssh x3000c0s19b4n0 "cat /proc/cmdline" | awk -v RS=" " -F "=" '{if ($1 == "bos_session_id") { print $2; }}')
+
+echo $BOS_SESSION_ID
+4b6744ee-837f-4f60-9051-897aed6c7623
 ```
-The string of interest is bos_session_id=147b09de-59a8-4444-9bcb-9b54ac7d78cc.
 
-x3000c0s28b4n0# exit
-
-ncn-m001#: cray bos v1 session describe  147b09de-59a8-4444-9bcb-9b54ac7d78cc --format json
+```bash
+cray bos v1 session describe 4b6744ee-837f-4f60-9051-897aed6c7623 --format json
 {
   "complete": false,
   "error_count": 0,
@@ -53,6 +52,7 @@ ncn-m001#: cray bos v1 session describe  147b09de-59a8-4444-9bcb-9b54ac7d78cc --
   "stop_time": "2023-06-23 21:24:14.647779",
   "templateName": "knn-boot-x3000c0s28b4n0"
 }
+```
 The session template is "knn-boot-x3000c0s28b4n0".
 
 ## BOS Version 2 (V2)
