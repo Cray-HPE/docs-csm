@@ -263,7 +263,7 @@ at this stage in the upgrade enables restoring from backup later in this process
 
 ### NCN reboot
 
-This is an optional step but is strongly recommended. As each patch release includes updated container images that may contain CVE fixes, it is recommended to reboot each NCN to refresh cached container images. For detailed instructions on how to gracefully reboot each NCN, refer to relevant steps in [Stage 1 - Kubernetes Upgrade](../Stage_1.md).
+This is an optional step but is strongly recommended. As each patch release includes updated container images that may contain CVE fixes, it is recommended to reboot each NCN to refresh cached container images. For detailed instructions on how to gracefully reboot each NCN, refer to [Reboot NCNs](../../operations/node_management/Reboot_NCNs.md).
 
 ### Complete upgrade
 
