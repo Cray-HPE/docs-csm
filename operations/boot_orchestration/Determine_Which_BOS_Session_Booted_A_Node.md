@@ -20,6 +20,7 @@ BOS_SESSION_ID=$(ssh <node's xname> "cat /proc/cmdline" | awk -v RS=" " -F "=" '
 ```
 
 ### Query BOS
+
 (`ncn-mw#`) Ask BOS to describe this session.
 
 '''bash
@@ -28,7 +29,7 @@ cray bos v1 session describe ${BOS_SESSION_ID} --format json
 
 The templateName parameter is the BOS session template used to boot or reboot the node.
 
-### Example
+### BOS V1 Example
 
 (`ncn-mw#`) From a management node (master or worker), ssh to the node in question.
 
@@ -53,6 +54,7 @@ cray bos v1 session describe 4b6744ee-837f-4f60-9051-897aed6c7623 --format json
   "templateName": "knn-boot-x3000c0s28b4n0"
 }
 ```
+
 The session template is "knn-boot-x3000c0s28b4n0".
 
 ## BOS Version 2 (V2)
@@ -61,11 +63,13 @@ Ask BOS V2 to describe the component. The session that last acted upon the
 node is listed in this description.
 
 ### Instructions
+
 (`ncn-mw#`) cray bos v2 components describe <node's xname> --format json | jq .session
 
-(`ncn-mw#`) cray bos v2 sessions describe <BOS session ID> --format json
+(`ncn-mw#`) cray bos v2 sessions describe \<BOS session ID> --format json
 
-### Example
+### BOS V2 Example
+
 (`ncn-mw#`) cray bos v2 components describe x3000c0s17b0n0 --format json | jq .session
 "94e712ab-df76-40ee-8cfb-7ac487fd8a13"
 
