@@ -1,61 +1,61 @@
 # Determine Which BOS Session Booted a Node
 
-This guide is split into BOS Version 1 (V1) and BOS Version 2 (V2) sections
-because the procedures are different for the two different versions.
+This guide is split into two sections, BOS Version 1 (V1) and BOS
+Version 2 (V2), because the procedures are different for the two different versions.
 
 ## BOS Version 1 (V1)
 
 To determine which BOS Session booted or rebooted a node, query the node's
-kernel boot parameters. They contain a string 'bos_session_id' which identifies
+kernel boot parameters. They contain a `bos_session_id` parameter which identifies
 which BOS session booted or rebooted the node. Then, use this BOS Session ID
 to describe the BOS Session, which identifies the BOS Session template used.
 
 ### Query the Node
 
-(`ncn-mw#`) Query the node in question via ssh. The returned value will be the session ID.
+(`ncn-mw#`) Set an environment variable to the xname of the node in question. For example:
 
 ```bash
-BOS_SESSION_ID=$(ssh <node's xname> "cat /proc/cmdline" | awk -v RS=" " -F "=" '{if ($1 == "bos_session_id") { print $2; }}')
+export NODE_XNAME="x3000c0s19b4n0"
+```
 
+(`ncn-mw#`) Query the node in question via SSH.
+
+```bash
+BOS_SESSION_ID=$(ssh $NODE_XNAME "cat /proc/cmdline" | awk -v RS=" " -F "=" '{if ($1 == "bos_session_id") { print $2; }}')
+echo $BOS_SESSION_ID
+```
+
+The output will be the BOS session ID. For example:
+
+```text
+4b6744ee-837f-4f60-9051-897aed6c7623
 ```
 
 ### Query BOS
 
-(`ncn-mw#`) Ask BOS to describe this session.
-
-'''bash
-cray bos v1 session describe ${BOS_SESSION_ID} --format json
-'''
-
-The templateName parameter is the BOS session template used to boot or reboot the node.
-
-### BOS V1 Example
-
-(`ncn-mw#`) From a management node (master or worker), ssh to the node in question.
+(`ncn-mw#`)  Describe this session using the Cray CLI.
 
 ```bash
-BOS_SESSION_ID=$(ssh x3000c0s19b4n0 "cat /proc/cmdline" | awk -v RS=" " -F "=" '{if ($1 == "bos_session_id") { print $2; }}')
-
-echo $BOS_SESSION_ID
-4b6744ee-837f-4f60-9051-897aed6c7623
+cray bos v1 session describe ${BOS_SESSION_ID} --format json
 ```
 
-```bash
-cray bos v1 session describe 4b6744ee-837f-4f60-9051-897aed6c7623 --format json
+This will output information about the BOS session. For example:
+
+```json
 {
   "complete": false,
   "error_count": 0,
   "in_progress": false,
-  "job": "boa-147b09de-59a8-4444-9bcb-9b54ac7d78cc",
+  "job": "boa-4b6744ee-837f-4f60-9051-897aed6c7623",
   "operation": "reboot",
   "start_time": "2023-06-23T20:57:34.352623Z",
-  "status_link": "/v1/session/147b09de-59a8-4444-9bcb-9b54ac7d78cc/status",
+  "status_link": "/v1/session/4b6744ee-837f-4f60-9051-897aed6c7623/status",
   "stop_time": "2023-06-23 21:24:14.647779",
   "templateName": "knn-boot-x3000c0s28b4n0"
 }
 ```
 
-The session template is "knn-boot-x3000c0s28b4n0".
+The `templateName` parameter is the name of the BOS session template used to boot or reboot the node.
 
 ## BOS Version 2 (V2)
 
@@ -64,16 +64,34 @@ node is listed in this description.
 
 ### Instructions
 
-(`ncn-mw#`) cray bos v2 components describe <node's xname> --format json | jq .session
+(`ncn-mw#`) Set an environment variable to the xname of the node in question. For example:
 
-(`ncn-mw#`) cray bos v2 sessions describe \<BOS session ID> --format json
+```bash
+export NODE_XNAME="x3000c0s17b0n0"
+```
 
-### BOS V2 Example
+(`ncn-mw#`) Query the BOS component for that node:
 
-(`ncn-mw#`) cray bos v2 components describe x3000c0s17b0n0 --format json | jq .session
-"94e712ab-df76-40ee-8cfb-7ac487fd8a13"
+```bash
+BOS_SESSION_ID=$(cray bos v2 components describe $NODE_XNAME --format json | jq -r .session)
+echo $BOS_SESSION_ID
+```
 
-(`ncn-mw#`) cray bos v2 sessions describe 94e712ab-df76-40ee-8cfb-7ac487fd8a13 --format json
+The output will be the BOS session ID. For example:
+
+```text
+94e712ab-df76-40ee-8cfb-7ac487fd8a13
+```
+
+(`ncn-mw#`) Describe the BOS session using the Cray CLI:
+
+```bash
+cray bos v2 sessions describe $BOS_SESSION_ID --format json
+```
+
+This will output information about the BOS session. For example:
+
+```json
 {
   "components": "x3000c0s17b0n0",
   "limit": "x3000c0s17b0n0",
@@ -88,4 +106,6 @@ node is listed in this description.
   },
   "template_name": "gdr-tmpl"
 }
-The session template is "gdr-tmpl".
+```
+
+The `template_name` parameter is the name of the BOS session template used to boot or reboot the node.
