@@ -26,53 +26,49 @@
 # Common functions
 
 # Returns 0 if argument is a defined Bash function, 1 otherwise
-is_function()
-{
-    [[ $(LC_ALL=C type -t "$1") == function ]] && return 0 || return 1
+is_function() {
+  [[ $(LC_ALL=C type -t "$1") == function ]] && return 0 || return 1
 }
 
 # Print an error message to stderr
-err()
-{
-    echo "ERROR: $*" >&2
+err() {
+  echo "ERROR: $*" >&2
 }
 
 # Print a provided error message to stderr and exit the script with return code 1
-err_exit()
-{
-    err "$@"
-    exit 1
+err_exit() {
+  [[ $# -eq 0 ]] || err "$@"
+  exit 1
 }
 
 # Call script usage function (if defined), then exit in error with the provided message
-usage_err_exit()
-{
-    # If a usage function is defined, call it to print the usage message first
-    if is_function usage; then
-        usage
-    fi
-    err_exit "usage: $*"
+usage_err_exit() {
+  # If a usage function is defined, call it to print the usage message first
+  if is_function usage; then
+    usage
+  fi
+  err_exit "usage: $*"
 }
 
 # Calls mktemp to create a file or directory. If unsuccessful, the script exits in error.
 # Otherwise, some checks are made on what was created. If they pass, the path to the file or directory
 # is printed to stdout
-run_mktemp()
-{
-    local tmpfile
-    tmpfile=$(mktemp "$@") || err_exit "Command failed with rc $?: mktemp $*"
-    [[ -n ${tmpfile} ]] || err_exit "mktemp command passed but gave no output"
-    [[ -e ${tmpfile} ]] || err_exit "mktemp command passed but '${tmpfile}' does not exist"
-    if [[ $# -gt 0 && "$1" == "-d" ]]; then
-        [[ -d ${tmpfile} ]] || err_exit "mktemp -d command passed and '${tmpfile}' exists, but is not a directory"
-    else
-        [[ -f ${tmpfile} ]] || err_exit "mktemp command passed and '${tmpfile}' exists, but is not a regular file"
-    fi
-    echo "${tmpfile}"
-    return 0
+#
+# If calling with -d flag, that should be the first argument
+run_mktemp() {
+  local tmpfile
+  tmpfile=$(mktemp "$@") || err_exit "Command failed with rc $?: mktemp $*"
+  [[ -n ${tmpfile} ]] || err_exit "mktemp command passed but gave no output"
+  [[ -e ${tmpfile} ]] || err_exit "mktemp command passed but '${tmpfile}' does not exist"
+  if [[ $# -gt 0 && $1 == "-d" ]]; then
+    [[ -d ${tmpfile} ]] || err_exit "mktemp -d command passed and '${tmpfile}' exists, but is not a directory"
+  else
+    [[ -f ${tmpfile} ]] || err_exit "mktemp command passed and '${tmpfile}' exists, but is not a regular file"
+  fi
+  echo "${tmpfile}"
+  return 0
 }
 
-run_cmd()
-{
-    "$@" || err_exit "Command failed with rc $?: $*"
+run_cmd() {
+  "$@" || err_exit "Command failed with rc $?: $*"
 }
