@@ -226,8 +226,8 @@ wiping a different type of node than what a step specifies, then skip that step.
             Example output:
 
             ```text
-            /dev/mapper/metalvg0-CONTAIN on /var/lib/containers type xfs (rw,noatime,swalloc,attr2,largeio,inode64,allocsize=131072k,logbufs=8,logbsize=32k,noquota)
-            /dev/mapper/metalvg0-CONTAIN on /var/lib/containers/storage/overlay type xfs (rw,noatime,swalloc,attr2,largeio,inode64,allocsize=131072k,logbufs=8,logbsize=32k,noquota)
+            /dev/mapper/metalvg0-CONTAIN on /var/lib/containers type xfs (rw,attr2,logbufs=8,logbsize=32k,noquota)
+            /dev/mapper/metalvg0-CONTAIN on /var/lib/containers/storage/overlay type xfs (rw,attr2,logbufs=8,logbsize=32k,noquota)
             ```
 
         1. Unmount `/var/lib/containers/storage/overlay`.
