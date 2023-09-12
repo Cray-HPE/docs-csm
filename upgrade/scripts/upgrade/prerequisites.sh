@@ -502,6 +502,176 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Note for csm 1.5/k8s 1.22 only if ANY chart depends on /v1 cert-manager api
+# usage it *MUST* come after this or prerequisites will fail on an upgrade.
+# Helper functions for cert-manager upgrade
+has_cm_init() {
+  ns="${1?no namespace provided}"
+  helm list -n "${ns}" --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null 2>&1
+}
+
+has_craycm() {
+  ns="${1?no namespace provided}"
+  helm list -n "${ns}" --filter 'cray-certmanager$' | grep cray-certmanager > /dev/null 2>&1
+}
+
+state_name="UPGRADE_CERTMANAGER_0141_CHART"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    # The actions below only need to happen iff we are on 0.14.1 if we're
+    # already at 1.5.5+ the crd ownership changes makes this logic impossible to
+    # work due to helm hooks. Making this work on both isn't really worth the
+    # time so just constrain this block of logic to 0.14.1 where we know its
+    # needed.
+    gate="0.14.1"
+    found=$(helm list -n cert-manager --filter 'cray-certmanager$' | awk '/deployed/ {print $10}')
+
+    needs_upgrade=0
+
+    if [ "${found}" = "${gate}" ]; then
+      printf "note: found old cert-manager that needs upgrades %s\n" "${found}" >&2
+      ((needs_upgrade += 1))
+    else
+      printf "note: cert-manager helm chart version %s\n" "${found}" >&2
+
+      # We might be rerunning from a pre 1.5.x install and there is no
+      # cert-manager installed due to a prior removal
+      if [ "${found}" = "" ]; then
+        printf "note: no helm install appears to exist for cert-manager, likely this state is being run again\n" >&2
+        ((needs_upgrade += 1))
+      else
+        printf "note: no cert-manager upgrade steps needed, cert-manager 0.14.1 is not installed\n" >&2
+      fi
+    fi
+
+    # Only run if we need to and detected not 0.14.1 or ""
+    if [ "${needs_upgrade}" -gt 0 ]; then
+      cmns="cert-manager"
+      cminitns="cert-manager-init"
+
+      backup_secret="cm-restore-data"
+
+      # We need to backup before any helm uninstalls.
+      needs_backup=0
+
+      if has_craycm ${cmns}; then
+        ((needs_backup += 1))
+      fi
+
+      if has_cm_init ${cminitns}; then
+        ((needs_backup += 1))
+      fi
+
+      # Ok so the gist of this "backup" is we back up all the cert-manager data as
+      # guided by them. The secret we use for this is only kept around until this
+      # prereq state completes.
+      if [ "${needs_backup}" -gt 0 ]; then
+        # Note, check that the secret is present in case only one helm chart is
+        # removed and we error later, we don't want to backup stuff again at that
+        # point.
+        if ! kubectl get secret "${backup_secret?}" > /dev/null 2>&1; then
+          data=$(kubectl get --all-namespaces -o yaml clusterissuer,cert,issuer)
+          kubectl create secret generic "${backup_secret?}" --from-literal=data="${data?}"
+        fi
+      fi
+
+      # Only remove these charts if installed
+      if has_craycm ${cmns}; then
+        helm uninstall -n "${cmns}" cray-certmanager
+      fi
+
+      if has_cm_init ${cminitns}; then
+        helm uninstall -n "${cminitns}" cray-certmanager-init
+      fi
+
+      # Note: These should *never* fail as we depend on helm uninstall doing
+      # its job, but if it didn't exit early here as something is amiss.
+      cm=1
+      cminit=1
+
+      if ! helm list -n "${cmns}" --filter 'cray-certmanager$' | grep cray-certmanager > /dev/null 2>&1; then
+        cm=0
+      fi
+
+      if ! helm list -n "${cminitns}" --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null; then
+        cminit=0
+      fi
+
+      if [ "${cm}" = "1" ] || [ "${cminit}" = "1" ]; then
+        printf "fatal: helm uninstall did not remove expected charts, cert-manager %s cert-manager-init %s\n" "${cm}" "${cminit}" >&2
+        exit 1
+      fi
+
+      # Ensure the cert-manager namespace is deleted in a case of both helm charts
+      # removed but there might be detritous leftover in the namespace.
+      kubectl delete namespace "${cmns}" || :
+
+      tmp_manifest=/tmp/certmanager-tmp-manifest.yaml
+
+      cat > "${tmp_manifest}" << EOF
+apiVersion: manifests/v1beta1
+metadata:
+  name: cray-certmanager-images-tmp-manifest
+spec:
+  charts:
+EOF
+
+      # While kubectl get namespace cert-manager succeeds, backoff until it
+      # doesn't or after 5 minutes fail entirely as its likely not removing
+      # for whatever reason, humans get to figure out why or they can
+      # re-run...
+      start=$(date +%s)
+      lim=1
+      until ! kubectl get namespace "${cmns}" > /dev/null 2>&1; do
+        now=$(date +%s)
+        if [ "$((now - start))" -ge 300 ]; then
+          printf "fatal: namespace %s likely requires manual intervention after waiting for removal for at least 5 minutes, details:\n" "${cmns}" >&2
+          kubectl get namespace "${cmns}" -o yaml
+          exit 1
+        fi
+        lim="$((lim * 2))"
+        sleep ${lim}
+      done
+
+      platform="${CSM_MANIFESTS_DIR}/platform.yaml"
+      for chart in cray-drydock cray-certmanager cray-certmanager-issuers; do
+        printf "    -\n" >> "${tmp_manifest}"
+        yq r "${platform}" 'spec.charts.(name=='${chart}')' | sed 's/^/      /' >> "${tmp_manifest}"
+      done
+
+      # Note the ownership for the cert-manager namespace changes ownership
+      # from cray-certmanager-init to cray-drydock, so we need to ensure we
+      # update drydock to create our namespace appropriately before
+      # reinstalling cray-certmanager. Note, technically reinstalling
+      # cray-drydock is unnecessary at this stage but is here "just in case".
+      # cray-certmanager-issuers is also in this category in that it should be
+      # unnecessary as the upgrade will reinstall it anyway but this is just
+      # to be complete.
+      #
+      # This only needs to happen for this 0.14.1->1.55 upgrade. We should remove
+      # this on the next release doing this work each time is unnecessary.
+      loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path "${tmp_manifest}"
+
+      # If the restore secret exists, apply that data here and when done then
+      # remove the secret as its purpose is no longer necessary.
+      if kubectl get secret "${backup_secret?}" > /dev/null 2>&1; then
+        # Only delete the secret if there are no errors. Note that existing
+        # resources may already exist and the full apply failed yet worked.
+        if kubectl get secret "${backup_secret?}" -o jsonpath='{.data.data}' | base64 -d | kubectl apply -f -; then
+          kubectl delete secret "${backup_secret}"
+        else
+          printf "warn: kubectl apply of %s encountered errors, restore of cert-manager data may be incomplete or simply tried to restore existing data\n" "${backup_secret}" >&2
+        fi
+      fi
+    fi
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="UPGRADE_NLS_POSTGRES"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
@@ -869,174 +1039,6 @@ EOF
       | jq --arg value "${current_nexus_mobility_images}" '.data.images_to_cache |= . + $value' \
       | kubectl replace --force -f -
 
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
-
-# Helper functions for below
-has_cm_init() {
-  ns="${1?no namespace provided}"
-  helm list -n "${ns}" --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null 2>&1
-}
-
-has_craycm() {
-  ns="${1?no namespace provided}"
-  helm list -n "${ns}" --filter 'cray-certmanager$' | grep cray-certmanager > /dev/null 2>&1
-}
-
-state_name="UPGRADE_CERTMANAGER_0141_CHART"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-    # The actions below only need to happen iff we are on 0.14.1 if we're
-    # already at 1.5.5+ the crd ownership changes makes this logic impossible to
-    # work due to helm hooks. Making this work on both isn't really worth the
-    # time so just constrain this block of logic to 0.14.1 where we know its
-    # needed.
-    gate="0.14.1"
-    found=$(helm list -n cert-manager --filter 'cray-certmanager$' | awk '/deployed/ {print $10}')
-
-    needs_upgrade=0
-
-    if [ "${found}" = "${gate}" ]; then
-      printf "note: found old cert-manager that needs upgrades %s\n" "${found}" >&2
-      ((needs_upgrade += 1))
-    else
-      printf "note: cert-manager helm chart version %s\n" "${found}" >&2
-
-      # We might be rerunning from a pre 1.5.x install and there is no
-      # cert-manager installed due to a prior removal
-      if [ "${found}" = "" ]; then
-        printf "note: no helm install appears to exist for cert-manager, likely this state is being run again\n" >&2
-        ((needs_upgrade += 1))
-      else
-        printf "note: no cert-manager upgrade steps needed, cert-manager 0.14.1 is not installed\n" >&2
-      fi
-    fi
-
-    # Only run if we need to and detected not 0.14.1 or ""
-    if [ "${needs_upgrade}" -gt 0 ]; then
-      cmns="cert-manager"
-      cminitns="cert-manager-init"
-
-      backup_secret="cm-restore-data"
-
-      # We need to backup before any helm uninstalls.
-      needs_backup=0
-
-      if has_craycm ${cmns}; then
-        ((needs_backup += 1))
-      fi
-
-      if has_cm_init ${cminitns}; then
-        ((needs_backup += 1))
-      fi
-
-      # Ok so the gist of this "backup" is we back up all the cert-manager data as
-      # guided by them. The secret we use for this is only kept around until this
-      # prereq state completes.
-      if [ "${needs_backup}" -gt 0 ]; then
-        # Note, check that the secret is present in case only one helm chart is
-        # removed and we error later, we don't want to backup stuff again at that
-        # point.
-        if ! kubectl get secret "${backup_secret?}" > /dev/null 2>&1; then
-          data=$(kubectl get --all-namespaces -o yaml clusterissuer,cert,issuer)
-          kubectl create secret generic "${backup_secret?}" --from-literal=data="${data?}"
-        fi
-      fi
-
-      # Only remove these charts if installed
-      if has_craycm ${cmns}; then
-        helm uninstall -n "${cmns}" cray-certmanager
-      fi
-
-      if has_cm_init ${cminitns}; then
-        helm uninstall -n "${cminitns}" cray-certmanager-init
-      fi
-
-      # Note: These should *never* fail as we depend on helm uninstall doing
-      # its job, but if it didn't exit early here as something is amiss.
-      cm=1
-      cminit=1
-
-      if ! helm list -n "${cmns}" --filter 'cray-certmanager$' | grep cray-certmanager > /dev/null 2>&1; then
-        cm=0
-      fi
-
-      if ! helm list -n "${cminitns}" --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null; then
-        cminit=0
-      fi
-
-      if [ "${cm}" = "1" ] || [ "${cminit}" = "1" ]; then
-        printf "fatal: helm uninstall did not remove expected charts, cert-manager %s cert-manager-init %s\n" "${cm}" "${cminit}" >&2
-        exit 1
-      fi
-
-      # Ensure the cert-manager namespace is deleted in a case of both helm charts
-      # removed but there might be detritous leftover in the namespace.
-      kubectl delete namespace "${cmns}" || :
-
-      tmp_manifest=/tmp/certmanager-tmp-manifest.yaml
-
-      cat > "${tmp_manifest}" << EOF
-apiVersion: manifests/v1beta1
-metadata:
-  name: cray-certmanager-images-tmp-manifest
-spec:
-  charts:
-EOF
-
-      # While kubectl get namespace cert-manager succeeds, backoff until it
-      # doesn't or after 5 minutes fail entirely as its likely not removing
-      # for whatever reason, humans get to figure out why or they can
-      # re-run...
-      start=$(date +%s)
-      lim=1
-      until ! kubectl get namespace "${cmns}" > /dev/null 2>&1; do
-        now=$(date +%s)
-        if [ "$((now - start))" -ge 300 ]; then
-          printf "fatal: namespace %s likely requires manual intervention after waiting for removal for at least 5 minutes, details:\n" "${cmns}" >&2
-          kubectl get namespace "${cmns}" -o yaml
-          exit 1
-        fi
-        lim="$((lim * 2))"
-        sleep ${lim}
-      done
-
-      platform="${CSM_MANIFESTS_DIR}/platform.yaml"
-      for chart in cray-drydock cray-certmanager cray-certmanager-issuers; do
-        printf "    -\n" >> "${tmp_manifest}"
-        yq r "${platform}" 'spec.charts.(name=='${chart}')' | sed 's/^/      /' >> "${tmp_manifest}"
-      done
-
-      # Note the ownership for the cert-manager namespace changes ownership
-      # from cray-certmanager-init to cray-drydock, so we need to ensure we
-      # update drydock to create our namespace appropriately before
-      # reinstalling cray-certmanager. Note, technically reinstalling
-      # cray-drydock is unnecessary at this stage but is here "just in case".
-      # cray-certmanager-issuers is also in this category in that it should be
-      # unnecessary as the upgrade will reinstall it anyway but this is just
-      # to be complete.
-      #
-      # This only needs to happen for this 0.14.1->1.55 upgrade. We should remove
-      # this on the next release doing this work each time is unnecessary.
-      loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path "${tmp_manifest}"
-
-      # If the restore secret exists, apply that data here and when done then
-      # remove the secret as its purpose is no longer necessary.
-      if kubectl get secret "${backup_secret?}" > /dev/null 2>&1; then
-        # Only delete the secret if there are no errors. Note that existing
-        # resources may already exist and the full apply failed yet worked.
-        if kubectl get secret "${backup_secret?}" -o jsonpath='{.data.data}' | base64 -d | kubectl apply -f -; then
-          kubectl delete secret "${backup_secret}"
-        else
-          printf "warn: kubectl apply of %s encountered errors, restore of cert-manager data may be incomplete or simply tried to restore existing data\n" "${backup_secret}" >&2
-        fi
-      fi
-    fi
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
