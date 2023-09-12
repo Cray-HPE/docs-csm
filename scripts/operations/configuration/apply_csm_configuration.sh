@@ -239,7 +239,7 @@ if [[ ${CONFIG_CHANGE} == true ]]; then
     rm -r "${TEMP_DIR}" || err "WARNING: Unable to delete temporary directory '${TEMP_DIR}'"
   fi
 
-  CONFIG="{ \"layers\": [ { \"name\": \"csm-${VERSION}\", \"cloneUrl\": \"${CLONE_URL}\", \"commit\": \"${COMMIT}\", \"playbook\": \"site.yml\" } ] }"
+  CONFIG="{ \"layers\": [ { \"name\": \"csm-${VERSION}\", \"clone_url\": \"${CLONE_URL}\", \"commit\": \"${COMMIT}\", \"playbook\": \"site.yml\" } ] }"
 
   echo "Creating the configuration file ${CSM_CONFIG_FILE}"
   echo "${CONFIG}" | jq > "${CSM_CONFIG_FILE}" || err_exit "Unexpected error parsing JSON or writing to '${CSM_CONFIG_FILE}'"
@@ -247,7 +247,7 @@ if [[ ${CONFIG_CHANGE} == true ]]; then
   if [[ -n ${OLD_NCN_CONFIG_FILE} && -f ${OLD_NCN_CONFIG_FILE} ]]; then
     echo "Combining new CSM configuration '${CSM_CONFIG_FILE}' with contents of '${OLD_NCN_CONFIG_FILE}' to generate '${NCN_CONFIG_FILE}'"
     jq -n --slurpfile new "${CSM_CONFIG_FILE}" --slurpfile old "${OLD_NCN_CONFIG_FILE}" \
-      '{"layers": ($new[0].layers + ($old[0].layers | del(.[] | select(.cloneUrl == $new[0].layers[0].cloneUrl and .playbook == $new[0].layers[0].playbook))))}' \
+      '{"layers": ($new[0].layers + ($old[0].layers | del(.[] | select(.clone_url == $new[0].layers[0].clone_url and .playbook == $new[0].layers[0].playbook))))}' \
       > "${NCN_CONFIG_FILE}" || err_exit "Unexpected error combining JSON or writing to '${NCN_CONFIG_FILE}'"
   else
     echo "Creating new NCN configuration file ${NCN_CONFIG_FILE}"
@@ -258,23 +258,23 @@ if [[ ${CONFIG_CHANGE} == true ]]; then
 
   echo "Disabling configuration for all listed components"
   for xname in ${XNAME_LIST}; do
-    run_cmd cray cfs components update ${xname} --enabled false
+    run_cmd cray cfs v3 components update ${xname} --enabled false
   done
 
   # Before updating the configuration, make a backup of the existing configuration (if it exists)
   echo "Backing up existing ${CONFIG_NAME} configuration (if any) to ${BACKUP_NCN_CONFIG_FILE}"
   # Do not use run_cmd for this call because if it fails, that's okay -- it most likely means that the CFS configuration does not exist.
-  cray cfs configurations describe "${CONFIG_NAME}" --format json > "${BACKUP_NCN_CONFIG_FILE}" 2>&1
+  cray cfs v3 configurations describe "${CONFIG_NAME}" --format json > "${BACKUP_NCN_CONFIG_FILE}" 2>&1
 
   echo "Updating ${CONFIG_NAME} configuration"
-  run_cmd cray cfs configurations update "${CONFIG_NAME}" --file "${NCN_CONFIG_FILE}"
+  run_cmd cray cfs v3 configurations update "${CONFIG_NAME}" --file "${NCN_CONFIG_FILE}"
 
 else
 
   # In this case, we are using an existing configuration. We will take a snapshot of it, and unlike above, we will
   # fail if it does not exist
   echo "Taking snapshot of existing ${CONFIG_NAME} configuration to ${BACKUP_NCN_CONFIG_FILE}"
-  run_cmd cray cfs configurations describe "${CONFIG_NAME}" --format json > "${BACKUP_NCN_CONFIG_FILE}"
+  run_cmd cray cfs v3 configurations describe "${CONFIG_NAME}" --format json > "${BACKUP_NCN_CONFIG_FILE}"
 
 fi
 
@@ -294,19 +294,19 @@ fi
 if [[ -z ${NO_ENABLE} ]]; then
   echo "${CFS_COMP_UPDATE_MSG}, enabling components in CFS"
   for xname in ${XNAME_LIST}; do
-    run_cmd cray cfs components update ${xname} --enabled true ${CFS_COMP_UPDATE_ARGS} --desired-config "${CONFIG_NAME}"
+    run_cmd cray cfs v3 components update ${xname} --enabled true ${CFS_COMP_UPDATE_ARGS} --desired-config "${CONFIG_NAME}"
   done
 else
   echo "${CFS_COMP_UPDATE_MSG} components in CFS"
   for xname in ${XNAME_LIST}; do
-    run_cmd cray cfs components update ${xname} --enabled false ${CFS_COMP_UPDATE_ARGS} --desired-config "${CONFIG_NAME}"
+    run_cmd cray cfs v3 components update ${xname} --enabled false ${CFS_COMP_UPDATE_ARGS} --desired-config "${CONFIG_NAME}"
   done
   echo "All components updated successfully."
   exit 0
 fi
 
 while true; do
-  RESULT=$(cray cfs components list --status pending --ids ${XNAMES} --format json | jq length)
+  RESULT=$(cray cfs v3 components list --status pending --ids ${XNAMES} --format json | jq length)
   if [[ ${RESULT} -eq 0 ]]; then
     break
   fi
@@ -314,10 +314,10 @@ while true; do
   sleep 60
 done
 
-CONFIGURED=$(cray cfs components list --status configured --ids ${XNAMES} --format json | jq length)
-FAILED=$(cray cfs components list --status failed --ids ${XNAMES} --format json | jq length)
+CONFIGURED=$(cray cfs v3 components list --status configured --ids ${XNAMES} --format json | jq length)
+FAILED=$(cray cfs v3 components list --status failed --ids ${XNAMES} --format json | jq length)
 echo "Configuration complete. ${CONFIGURED} component(s) completed successfully.  ${FAILED} component(s) failed."
 if [[ ${FAILED} -ne 0 ]]; then
-  echo "The following components failed: $(cray cfs components list --status failed --ids ${XNAMES} --format json | jq -r '. | map(.id) | join(",")')"
+  echo "The following components failed: $(cray cfs v3 components list --status failed --ids ${XNAMES} --format json | jq -r '. | map(.id) | join(",")')"
   exit 1
 fi

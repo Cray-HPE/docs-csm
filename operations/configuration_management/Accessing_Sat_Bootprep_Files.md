@@ -12,9 +12,9 @@ The following procedure describes how to access the CFS configuration. This proc
     #!/bin/bash
     kubectl get secret -n services vcs-user-credentials -o jsonpath={.data.vcs_password} | base64 -d
     EOF
-    
+
     chmod u+x vcs-creds-helper.sh
-    
+
     export GIT_ASKPASS="$PWD/vcs-creds-helper.sh"
     ```
 

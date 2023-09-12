@@ -207,7 +207,7 @@ def get_comps_to_update(comps_to_import: NameObjectMap, current_comps: NameObjec
     # For these, we must then check if there is already a desired configuration set on the live
     # system.
     for comp_id in sorted(list(comps_to_import.keys() & current_comps.keys())):
-        imported_desired_config_name = comps_to_import[comp_id]["desiredConfig"]
+        imported_desired_config_name = comps_to_import[comp_id]["desired_config"]
         if not imported_desired_config_name:
             comps_no_desired_config.append(comp_id)
             continue
@@ -217,7 +217,7 @@ def get_comps_to_update(comps_to_import: NameObjectMap, current_comps: NameObjec
             print(f"Component {comp_id} will not be updated because its import data specifies"
                   f" a nonexistent desired configuration: '{imported_desired_config_name}'")
             continue
-        if current_comps[comp_id]["desiredConfig"]:
+        if current_comps[comp_id]["desired_config"]:
             comps_have_config_set.append(comp_id)
         else:
             comps_to_update.append(comp_id)
@@ -299,7 +299,7 @@ def update_components(comps_map: NameObjectMap, comp_ids_to_update: List[str]) -
         return
     print("")
     for comp_id in comp_ids_to_update:
-        desired_config_name = comps_map[comp_id]["desiredConfig"]
+        desired_config_name = comps_map[comp_id]["desired_config"]
         print(f"Updating component {comp_id} to desired configuration '{desired_config_name}'")
         cfs.update_component_desired_config(comp_id, desired_config_name)
 
@@ -337,10 +337,10 @@ def main() -> None:
         for comp_name, comp_data in list(current_cfs_data.components.items()):
             if "tags" in comp_data and comp_data["tags"]:
                 print(f"Clearing error count, desired configuration, state, and tags for component '{comp_name}'")
-                updated_comp = cfs.update_component(comp_name, errorCount=0, state=[], desiredConfig="", tags={})
+                updated_comp = cfs.update_component(comp_name, errorCount=0, state=[], desired_config="", tags={})
             else:
                 print(f"Clearing error count, desired configuration, and state for component '{comp_name}'")
-                updated_comp = cfs.update_component(comp_name, errorCount=0, state=[], desiredConfig="", tags={})
+                updated_comp = cfs.update_component(comp_name, errorCount=0, state=[], desired_config="", tags={})
             current_cfs_data.components[comp_name] = updated_comp
 
     # Determine the necessary updates

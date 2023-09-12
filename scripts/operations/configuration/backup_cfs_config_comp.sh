@@ -147,12 +147,12 @@ echo "Backing up CFS to the following directory: ${TARGET_DIRECTORY}"
 
 if [[ -n ${CFG_BACKUP} ]]; then
   echo "Backing up configurations to ${CFG_BACKUP}"
-  run_cmd cray cfs configurations list --format json > "${CFG_BACKUP}" || err_exit "Error writing to ${CFG_BACKUP}"
+  run_cmd cray cfs v3 configurations list --format json > "${CFG_BACKUP}" || err_exit "Error writing to ${CFG_BACKUP}"
 fi
 
 if [[ -n ${CMP_BACKUP} ]]; then
   echo "Backing up components to ${CMP_BACKUP}"
-  run_cmd cray cfs components list --format json > "${CMP_BACKUP}" || err_exit "Error writing to ${CMP_BACKUP}"
+  run_cmd cray cfs v3 components list --format json > "${CMP_BACKUP}" || err_exit "Error writing to ${CMP_BACKUP}"
 fi
 
 echo "SUCCESS"

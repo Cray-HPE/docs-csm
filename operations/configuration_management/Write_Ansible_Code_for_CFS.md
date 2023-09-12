@@ -29,7 +29,7 @@ It is also possible to target multiple groups within a section of a playbook, or
 The syntax for this is available in the external [Ansible documentation](https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html#common-patterns).
 Hosts can also be in more than one group at a time. In this case, Ansible will run all sections where the node is in the targeted host group.
 
-See the [Ansible Inventory](Ansible_Inventory.md) section for more information about groups that are made automatically available through CFS dynamic inventory.
+See the [CFS Session Inventory](CFS_Session_Inventory.md) section for more information about groups that are made automatically available through CFS dynamic inventory.
 
 ## Performance and scaling tips
 

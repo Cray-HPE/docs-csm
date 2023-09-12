@@ -188,7 +188,7 @@ fi
 
 # check that cfs config exists if desiredCfsConfig is not empty
 if [[ -n $desiredCfsConfig ]]; then
-  cray cfs configurations describe "$desiredCfsConfig" > /dev/null
+  cray cfs v3 configurations describe "$desiredCfsConfig" > /dev/null
   if [[ $? -ne 0 ]]; then
     # could not find the desired cfs configuration
     exit 1

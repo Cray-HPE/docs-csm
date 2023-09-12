@@ -72,7 +72,7 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
     In the following command, `pending` and `complete` are also valid statuses to filter on.
 
     ```bash
-    cray cfs sessions list --tags bos_session=$BOS_SESSION --status running --format json
+    cray cfs v3 sessions list --tags bos_session=$BOS_SESSION --status running --format json
     ```
 
 1. Verify that the Day Zero patch was applied correctly during [Create UAN Boot Images](../image_management/Create_UAN_Boot_Images.md).

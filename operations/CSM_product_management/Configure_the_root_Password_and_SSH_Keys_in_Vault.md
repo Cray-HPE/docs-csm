@@ -84,7 +84,7 @@ After the `root` password and SSH keys have been set in Vault, they will be appl
 nodes during node personalization. CFS automatically re-configures the management nodes via the CFS
 Batcher whenever the CFS configuration applied to the components changes, the nodes reboot, or the
 component state is cleared in CFS.
-See [Configuration Management with the CFS Batcher](../configuration_management/Configuration_Management_with_the_CFS_Batcher.md)
+See [Automatic Configuration Management](../configuration_management/Automatic_Configuration_Management.md)
 for more information about the CFS Batcher. Since the changes here are made in Vault, the CFS
 Batcher will not automatically apply the new `root` password and SSH Keys.
 

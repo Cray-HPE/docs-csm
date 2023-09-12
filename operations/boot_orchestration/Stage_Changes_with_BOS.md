@@ -62,7 +62,7 @@ For information on staging boot artifacts, see the section [Upload Node Boot Inf
    for all nodes receiving the staged configuration. Nodes will automatically re-enable configuration when they are rebooted and will be configured with any staged changes.
 
     ```bash
-    cray cfs components update <xname> --enabled false
+    cray cfs v3 components update <xname> --enabled false
     ```
 
 1. (`ncn-mw#`) Either set the new desired configuration or update the existing configuration.
@@ -70,7 +70,7 @@ For information on staging boot artifacts, see the section [Upload Node Boot Inf
     * If an entirely new configuration is being used or if no configuration was previously set for a component, then update the configuration name with the following:
 
         ```bash
-        cray cfs components update <xname> --configuration-name <configuration_name>
+        cray cfs v3 components update <xname> --configuration-name <configuration_name>
         ```
 
     * If all nodes that share a configuration are being staged with an update, updating the shared configuration will stage the change for all relevant nodes.
@@ -78,10 +78,10 @@ For information on staging boot artifacts, see the section [Upload Node Boot Inf
       to all enabled nodes that are using it.
 
         ```bash
-        cray cfs configurations update <configuration_name> --file <file_path>
+        cray cfs v3 configurations update <configuration_name> --file <file_path>
         ```
 
     Users also have the option of specifying branches rather than commits in configurations.
     If this feature is used, the configuration can also be updated by telling CFS to update the commits for all layers of a configuration that specify branches.
     Similar to when updating the configuration from a file, this will automatically start configuration on any enabled nodes that are using this configuration.
-    For information on using branches, see [Use branches in configuration layers](../configuration_management/Configuration_Layers.md#use-branches-in-configuration-layers).
+    For information on using branches, see [Using branches in configuration layers](../configuration_management/CFS_Configurations.md#using-branches-in-configuration-layers).
