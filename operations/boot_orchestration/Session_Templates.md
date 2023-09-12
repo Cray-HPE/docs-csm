@@ -14,6 +14,7 @@ Session templates can be created via the API by providing JSON data or via the C
   * [`rootfs` providers](#rootfs-providers)
     * [`root` kernel parameter example](#root-kernel-parameter-example)
   * [Overriding configuration (BOS v2 only)](#overriding-configuration-bos-v2-only)
+* [Deprecated fields](#deprecated-fields)
 
 ## Session template structure
 
@@ -195,3 +196,26 @@ The DVS configuration files determine which interface to use (NMN or HSN). Howev
 
 It is also possible to specify CFS configuration in the boot set. If specified, this will override whatever value is set in the base session template.
 This feature is not supported for BOS v1.
+
+## Deprecated fields
+
+The following fields do not exist in BOS v2 and are deprecated in BOS v1:
+
+* Session template fields
+  * `cfs_branch`
+  * `cfs_url`
+  * `partition`
+* Boot set fields
+  * `boot_ordinal`
+  * `network`
+  * `shutdown_ordinal`
+
+When upgrading to CSM 1.5, these fields are automatically removed from all BOS session
+templates that contain them.
+
+In CSM 1.5, when a BOS v1 session template is created that includes any of these fields,
+the fields are automatically removed during the creation.
+
+In both cases, the result of stripping the fields is a session template which has a valid
+format for both BOS v1 and BOS v2. This does not change the behavior of the session template,
+because these fields had no effect in BOS v1.

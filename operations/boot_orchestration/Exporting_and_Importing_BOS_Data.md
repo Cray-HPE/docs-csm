@@ -167,40 +167,15 @@ BOS session templates or BOS v2 options can also be manually exported and import
       BOS_TEMPLATE_FILE="${BOS_EXPORT_DIR}/${BOS_TEMPLATE_NAME}.json"
       ```
 
-   1. Determine the BOS version of the session template.
-
-      ```bash
-      /usr/share/doc/csm/scripts/operations/configuration/bos_session_template_version.py "${BOS_TEMPLATE_FILE}"
-      ```
-
-      Example output:
-
-      ```text
-      Template 'uan-sessiontemplate-2.0.27' is BOS version 2
-      ```
-
    1. Import the session template into BOS.
 
-      The command to do this varies depending on the BOS version found in the previous step.
+      ```bash
+      cray bos v2 sessiontemplates create \
+             --file <(jq 'del(.name)' "${BOS_TEMPLATE_FILE}") \
+             "${BOS_TEMPLATE_NAME}" --format json
+      ```
 
-      - BOS version 1
-
-         ```bash
-         cray bos v1 sessiontemplate create --file "${BOS_TEMPLATE_FILE}" \
-                                            --name "${BOS_TEMPLATE_NAME}"
-         ```
-
-         If successful, the command will output the name of the created session template.
-
-      - BOS version 2
-
-         ```bash
-         cray bos v2 sessiontemplates create \
-                --file <(jq 'del(.name)' "${BOS_TEMPLATE_FILE}") \
-                "${BOS_TEMPLATE_NAME}" --format json
-         ```
-
-         If successful, the command will output the entire session template in JSON.
+      If successful, the command will output the entire session template in JSON.
 
 1. (`ncn-mw#`) The CLI can also be used to change BOS v2 options to match the values that were exported.
 

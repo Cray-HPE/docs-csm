@@ -71,7 +71,7 @@ examples) to inform internal users and customers about our process.
    (`ncn-mw#`) To see a list of BOS templates that exist on the system:
 
    ```bash
-   cray bos v1 sessiontemplate list
+   cray bos v2 sessiontemplates list
    ```
 
    For more information regarding management of BOS session templates, refer to [Manage a Session Template](../boot_orchestration/Manage_a_Session_Template.md).
@@ -122,7 +122,7 @@ In order to keep watch on various items during and after the fault has been intr
    ```
 
    ```bash
-   watch -n 5 "date; cray bos v1 session list"
+   watch -n 5 "date; cray bos v2 sessions list"
    ```
 
 1. Monitor Ceph health, in a window, during and after a single NCN is taken down.
@@ -334,30 +334,15 @@ pre-designated set of compute nodes. The timing of this test is recommended to b
 of a master or worker NCN) and for them to have been rescheduled and in a healthy state on another NCN. Going too much earlier than 10 minutes runs the risk that there are still some critical pods that are settling out to reach
 a healthy state.
 
-1. (`ncn-mw#`) Reboot a pre-designated set of compute nodes and watch the reboot.
+1. (`ncn-mw#`) Reboot a pre-designated set of compute nodes.
 
    1. Use BOS to reboot the designated compute nodes.
 
       ```bash
-      cray bos v1 session create --template-name boot-nids-1-4 --operation reboot
+      cray bos v2 sessions create --template-name boot-nids-1-4 --operation reboot
       ```
 
-      Issuing this reboot command will output a Boot Orchestration Agent (BOA) `jobId`, which can be used to find the new BOA pod that has been created for the boot. Then, the logs can be tailed to watch the compute boot proceed.
-
-   1. Find the BOA job name using the returned BOA `jobID`.
-
-      ```bash
-      kubectl get pods -o wide -A | grep <boa-job-id>
-      ```
-
-   1. Watch the progress of the reboot of the compute nodes.
-
-      ```bash
-      kubectl logs -n services <boa-job-pod-name> -c boa -f
-      ```
-
-      Failures or a timeout being reached in either the boot or CFS (post-boot configuration) phase will need investigation. For more information around accessing logs for the BOS operations, see
-      [Check the Progress of BOS Session Operations](../boot_orchestration/Check_the_Progress_of_BOS_Session_Operations.md).
+   1. Wait until the BOS reboot session has completed.
 
 1. If the target node for shutdown was a worker NCN, verify that the UAI launched on that node still exists. It should be running on another worker NCN.
 
