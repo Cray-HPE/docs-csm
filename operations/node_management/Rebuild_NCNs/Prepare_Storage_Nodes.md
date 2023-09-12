@@ -113,7 +113,7 @@ Upload Ceph container images into Nexus.
 1. (`ncn-s#`) If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
 
     ```bash
-    ceph orch maintenance enter <storage node hostname being rebuilt>
+    ceph orch host maintenance enter <storage node hostname being rebuilt>
     ```
 
     Example output:
