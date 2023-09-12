@@ -29,7 +29,6 @@ NMN IP Adressess to scrape metrics from.
     - command: update
       path: spec.kubernetes.services.cray-sysmgmt-health.uanNodeExporter
       value:
-              uanNodeExporter:
                 enabled: true
                 endpoints:
                 - 10.252.1.18
