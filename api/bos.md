@@ -560,6 +560,8 @@ func main() {
 
 Create a new Session Template.
 
+The created template will be modified if necessary to follow the BOS v2 session template format.
+
 > Body parameter
 
 ```json
@@ -746,22 +748,19 @@ If this parameter is set to a non-empty string, the request will be rejected.
 [
   {
     "name": "cle-1.0.0",
+    "tenant": "string",
     "description": "string",
-    "cfs_url": "string",
-    "cfs_branch": "string",
     "enable_cfs": true,
     "cfs": {
-      "clone_url": "string",
-      "branch": "string",
-      "commit": "string",
-      "playbook": "string",
       "configuration": "compute-23.4.0"
     },
-    "partition": "string",
     "boot_sets": {
       "property1": {
         "name": "compute",
         "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+        "cfs": {
+          "configuration": "compute-23.4.0"
+        },
         "type": "s3",
         "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
         "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
@@ -776,15 +775,16 @@ If this parameter is set to a non-empty string, the request will be rejected.
         "node_groups": [
           "string"
         ],
+        "arch": "X86",
         "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-        "network": "string",
-        "boot_ordinal": 0,
-        "shutdown_ordinal": 0
+        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
       },
       "property2": {
         "name": "compute",
         "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+        "cfs": {
+          "configuration": "compute-23.4.0"
+        },
         "type": "s3",
         "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
         "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
@@ -799,11 +799,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
         "node_groups": [
           "string"
         ],
+        "arch": "X86",
         "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-        "network": "string",
-        "boot_ordinal": 0,
-        "shutdown_ordinal": 0
+        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
       }
     },
     "links": [
@@ -820,7 +818,7 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details array|[SessionTemplateArray](#schemasessiontemplatearray)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details array|[V2SessionTemplateArray](#schemav2sessiontemplatearray)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="success">
@@ -915,22 +913,19 @@ If this parameter is set to a non-empty string, the request will be rejected.
 ```json
 {
   "name": "cle-1.0.0",
+  "tenant": "string",
   "description": "string",
-  "cfs_url": "string",
-  "cfs_branch": "string",
   "enable_cfs": true,
   "cfs": {
-    "clone_url": "string",
-    "branch": "string",
-    "commit": "string",
-    "playbook": "string",
     "configuration": "compute-23.4.0"
   },
-  "partition": "string",
   "boot_sets": {
     "property1": {
       "name": "compute",
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "cfs": {
+        "configuration": "compute-23.4.0"
+      },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
       "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
@@ -945,15 +940,16 @@ If this parameter is set to a non-empty string, the request will be rejected.
       "node_groups": [
         "string"
       ],
+      "arch": "X86",
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     },
     "property2": {
       "name": "compute",
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "cfs": {
+        "configuration": "compute-23.4.0"
+      },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
       "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
@@ -968,11 +964,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
       "node_groups": [
         "string"
       ],
+      "arch": "X86",
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     }
   },
   "links": [
@@ -988,20 +982,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|Inline|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
-
-<h3 id="get_v1_sessiontemplate-responseschema">Response Schema</h3>
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|arch|X86|
-|arch|ARM|
-|arch|Other|
-|arch|Unknown|
 
 <aside class="success">
 This operation does not require authentication
@@ -1184,22 +1167,19 @@ Session Templates.
 ```json
 {
   "name": "cle-1.0.0",
+  "tenant": "string",
   "description": "string",
-  "cfs_url": "string",
-  "cfs_branch": "string",
   "enable_cfs": true,
   "cfs": {
-    "clone_url": "string",
-    "branch": "string",
-    "commit": "string",
-    "playbook": "string",
     "configuration": "compute-23.4.0"
   },
-  "partition": "string",
   "boot_sets": {
     "property1": {
       "name": "compute",
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "cfs": {
+        "configuration": "compute-23.4.0"
+      },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
       "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
@@ -1214,15 +1194,16 @@ Session Templates.
       "node_groups": [
         "string"
       ],
+      "arch": "X86",
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     },
     "property2": {
       "name": "compute",
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "cfs": {
+        "configuration": "compute-23.4.0"
+      },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
       "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
@@ -1237,11 +1218,9 @@ Session Templates.
       "node_groups": [
         "string"
       ],
+      "arch": "X86",
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     }
   },
   "links": [
@@ -1257,7 +1236,7 @@ Session Templates.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V1SessionTemplate](#schemav1sessiontemplate)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
 
 <aside class="success">
 This operation does not require authentication
@@ -3363,22 +3342,19 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 [
   {
     "name": "cle-1.0.0",
+    "tenant": "string",
     "description": "string",
-    "cfs_url": "string",
-    "cfs_branch": "string",
     "enable_cfs": true,
     "cfs": {
-      "clone_url": "string",
-      "branch": "string",
-      "commit": "string",
-      "playbook": "string",
       "configuration": "compute-23.4.0"
     },
-    "partition": "string",
     "boot_sets": {
       "property1": {
         "name": "compute",
         "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+        "cfs": {
+          "configuration": "compute-23.4.0"
+        },
         "type": "s3",
         "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
         "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
@@ -3393,15 +3369,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
         "node_groups": [
           "string"
         ],
+        "arch": "X86",
         "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-        "network": "string",
-        "boot_ordinal": 0,
-        "shutdown_ordinal": 0
+        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
       },
       "property2": {
         "name": "compute",
         "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+        "cfs": {
+          "configuration": "compute-23.4.0"
+        },
         "type": "s3",
         "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
         "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
@@ -3416,11 +3393,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
         "node_groups": [
           "string"
         ],
+        "arch": "X86",
         "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-        "network": "string",
-        "boot_ordinal": 0,
-        "shutdown_ordinal": 0
+        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
       }
     },
     "links": [
@@ -3437,7 +3412,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details array|[SessionTemplateArray](#schemasessiontemplatearray)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details array|[V2SessionTemplateArray](#schemav2sessiontemplatearray)|
 
 <aside class="success">
 This operation does not require authentication
@@ -3637,22 +3612,19 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 ```json
 {
   "name": "cle-1.0.0",
+  "tenant": "string",
   "description": "string",
-  "cfs_url": "string",
-  "cfs_branch": "string",
   "enable_cfs": true,
   "cfs": {
-    "clone_url": "string",
-    "branch": "string",
-    "commit": "string",
-    "playbook": "string",
     "configuration": "compute-23.4.0"
   },
-  "partition": "string",
   "boot_sets": {
     "property1": {
       "name": "compute",
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "cfs": {
+        "configuration": "compute-23.4.0"
+      },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
       "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
@@ -3667,15 +3639,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
       "node_groups": [
         "string"
       ],
+      "arch": "X86",
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     },
     "property2": {
       "name": "compute",
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "cfs": {
+        "configuration": "compute-23.4.0"
+      },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
       "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
@@ -3690,11 +3663,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
       "node_groups": [
         "string"
       ],
+      "arch": "X86",
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     }
   },
   "links": [
@@ -3710,19 +3681,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|Inline|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
-
-<h3 id="get_v2_sessiontemplate-responseschema">Response Schema</h3>
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|arch|X86|
-|arch|ARM|
-|arch|Other|
-|arch|Unknown|
 
 <aside class="success">
 This operation does not require authentication
@@ -9518,6 +9478,92 @@ filesystem provisioning.
 |arch|Other|
 |arch|Unknown|
 
+<h2 id="tocS_V2SessionTemplateArray">V2SessionTemplateArray</h2>
+<!-- backwards compatibility -->
+<a id="schemav2sessiontemplatearray"></a>
+<a id="schema_V2SessionTemplateArray"></a>
+<a id="tocSv2sessiontemplatearray"></a>
+<a id="tocsv2sessiontemplatearray"></a>
+
+```json
+[
+  {
+    "name": "cle-1.0.0",
+    "tenant": "string",
+    "description": "string",
+    "enable_cfs": true,
+    "cfs": {
+      "configuration": "compute-23.4.0"
+    },
+    "boot_sets": {
+      "property1": {
+        "name": "compute",
+        "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+        "cfs": {
+          "configuration": "compute-23.4.0"
+        },
+        "type": "s3",
+        "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "node_list": [
+          "x3000c0s19b1n0",
+          "x3000c0s19b2n0"
+        ],
+        "node_roles_groups": [
+          "Compute",
+          "Application"
+        ],
+        "node_groups": [
+          "string"
+        ],
+        "arch": "X86",
+        "rootfs_provider": "cpss3",
+        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      },
+      "property2": {
+        "name": "compute",
+        "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+        "cfs": {
+          "configuration": "compute-23.4.0"
+        },
+        "type": "s3",
+        "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "node_list": [
+          "x3000c0s19b1n0",
+          "x3000c0s19b2n0"
+        ],
+        "node_roles_groups": [
+          "Compute",
+          "Application"
+        ],
+        "node_groups": [
+          "string"
+        ],
+        "arch": "X86",
+        "rootfs_provider": "cpss3",
+        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      }
+    },
+    "links": [
+      {
+        "href": "string",
+        "rel": "string"
+      }
+    ]
+  }
+]
+
+```
+
+An array of Session Templates.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[V2SessionTemplate](#schemav2sessiontemplate)]|false|none|An array of Session Templates.|
+
 <h2 id="tocS_V2Session">V2Session</h2>
 <!-- backwards compatibility -->
 <a id="schemav2session"></a>
@@ -10374,102 +10420,4 @@ Options for the Boot Orchestration Service.
 |max_power_off_wait_time|integer|false|none|How long BOS will wait for a node to power off before forcefully powering off (in seconds)|
 |polling_frequency|integer|false|none|How frequently the BOS operators check Component state for needed actions. (in seconds)|
 |default_retry_policy|integer|false|none|The default maximum number attempts per node for failed actions.|
-
-<h2 id="tocS_SessionTemplateArray">SessionTemplateArray</h2>
-<!-- backwards compatibility -->
-<a id="schemasessiontemplatearray"></a>
-<a id="schema_SessionTemplateArray"></a>
-<a id="tocSsessiontemplatearray"></a>
-<a id="tocssessiontemplatearray"></a>
-
-```json
-[
-  {
-    "name": "cle-1.0.0",
-    "description": "string",
-    "cfs_url": "string",
-    "cfs_branch": "string",
-    "enable_cfs": true,
-    "cfs": {
-      "clone_url": "string",
-      "branch": "string",
-      "commit": "string",
-      "playbook": "string",
-      "configuration": "compute-23.4.0"
-    },
-    "partition": "string",
-    "boot_sets": {
-      "property1": {
-        "name": "compute",
-        "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
-        "type": "s3",
-        "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "node_list": [
-          "x3000c0s19b1n0",
-          "x3000c0s19b2n0"
-        ],
-        "node_roles_groups": [
-          "Compute",
-          "Application"
-        ],
-        "node_groups": [
-          "string"
-        ],
-        "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-        "network": "string",
-        "boot_ordinal": 0,
-        "shutdown_ordinal": 0
-      },
-      "property2": {
-        "name": "compute",
-        "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
-        "type": "s3",
-        "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "node_list": [
-          "x3000c0s19b1n0",
-          "x3000c0s19b2n0"
-        ],
-        "node_roles_groups": [
-          "Compute",
-          "Application"
-        ],
-        "node_groups": [
-          "string"
-        ],
-        "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-        "network": "string",
-        "boot_ordinal": 0,
-        "shutdown_ordinal": 0
-      }
-    },
-    "links": [
-      {
-        "href": "string",
-        "rel": "string"
-      }
-    ]
-  }
-]
-
-```
-
-An array of Session Templates.
-
-### Properties
-
-anyOf
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[V1SessionTemplate](#schemav1sessiontemplate)|false|none|A Session Template object represents a collection of resources and metadata.<br>A Session Template is used to create a Session which when combined with an<br>action (i.e. boot, configure, reboot, shutdown) will create a Kubernetes BOA job<br>to complete the required tasks for the operation.<br><br>## Link Relationships<br><br>* self : The Session Template object|
-
-or
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[V2SessionTemplate](#schemav2sessiontemplate)|false|none|A Session Template object represents a collection of resources and metadata.<br>A Session Template is used to create a Session which applies the data to<br>group of Components.<br><br>## Link Relationships<br><br>* self : The Session Template object|
 
