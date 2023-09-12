@@ -28,6 +28,13 @@ in chronological order.
 ### Removals in CSM 1.5
 
 * [Compute Rolling Upgrade Service (CRUS)](../../glossary.md#compute-rolling-upgrade-service-crus)
+* Deprecated [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos)
+  v1 session template and boot set fields are no longer stored in BOS.
+  * This applied to the following deprecated BOS v1 session template fields: `cfs_branch`, `cfs_url`, `partition`
+  * This applied to the following deprecated BOS v1 boot set fields: `boot_ordinal`, `network`, `shutdown_ordinal`
+  * When upgrading to CSM 1.5, these fields were automatically removed from all BOS session
+    templates that contain them.
+  * When creating BOS v1 session templates in CSM 1.5, these fields were automatically removed.
 
 ### Removals in CSM 1.6
 
