@@ -113,43 +113,43 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     1. Capture the state of all nodes.
 
         ```bash
-        sat status | tee sat.status.off
+        sat status | tee -a sat.status
         ```
 
     1. Capture the list of disabled nodes.
 
         ```bash
-        sat status --filter Enabled=false | tee sat.status.disabled
+        sat status --filter Enabled=false | tee -a sat.status.disabled
         ```
 
     1. Capture the list of nodes that are `off`.
 
         ```bash
-        sat status --filter State=Off | tee sat.status.off
+        sat status --filter State=Off | tee -a sat.status.off
         ```
 
     1. Capture the state of nodes in the workload manager. For example, if the system uses Slurm:
 
         ```bash
-        ssh uan01 sinfo | tee uan01.sinfo
+        ssh uan01 sinfo | tee -a uan01.sinfo
         ```
 
     1. Capture the list of down nodes in the workload manager and the reason.
 
         ```bash
-        ssh nid000001-nmn sinfo --list-reasons | tee sinfo.reasons
+        ssh uan01 sinfo --list-reasons | tee -a sinfo.reasons
         ```
 
     1. Check Ceph status.
 
         ```bash
-        ceph -s | tee ceph.status
+        ceph -s | tee -a ceph.status
         ```
 
     1. Check Kubernetes pod status for all pods.
 
         ```bash
-        kubectl get pods -o wide -A | tee k8s.pods
+        kubectl get pods -o wide -A | tee -a k8s.pods
         ```
 
         Additional Kubernetes status check examples:
@@ -179,7 +179,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
         ```bash
         kubectl exec -it -n services slingshot-fabric-manager-5dc448779c-d8n6q \
-                     -c slingshot-fabric-manager -- fmn_status --details | tee fabric.status
+                     -c slingshot-fabric-manager -- fmn_status --details | tee -a fabric.status
         ```
 
     1. Check management switches to verify they are reachable.
@@ -230,7 +230,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
            for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do
                echo -n "switch ${switch} is "
                ping -c 1 -W 10 $switch > /dev/null && echo "up" || echo "not up"
-           done | tee switches
+           done | tee -a switches
            ```
 
     1. Check Lustre server health.
@@ -250,7 +250,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 1. (`ncn-mw#`) Check for running sessions.
 
     ```bash
-    sat bootsys shutdown --stage session-checks 2>&1 | tee sat.session-checks
+    sat bootsys shutdown --stage session-checks 2>&1 | tee -a sat.session-checks
     ```
 
     Example output:
