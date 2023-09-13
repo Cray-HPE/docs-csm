@@ -85,12 +85,13 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
    ```bash
    ssh root@NCN_M001_HOSTNAME
    ```
-In case the node is not accessible directly, restart the network through console and try again.
+
+   In case the node is not accessible directly, restart the network through console and try again.
 
    ```bash
    systemctl restart network
    ```
-   
+
 ### Power on all other management NCNs
 
 1. (`ncn-m001#`) Power on and boot other management NCNs.
