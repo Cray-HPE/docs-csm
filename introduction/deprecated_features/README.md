@@ -28,6 +28,13 @@ in chronological order.
 ### Removals in CSM 1.5
 
 * [Compute Rolling Upgrade Service (CRUS)](../../glossary.md#compute-rolling-upgrade-service-crus)
+* Deprecated [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos)
+  v1 session template and boot set fields are no longer stored in BOS.
+  * When upgrading to CSM 1.5, these fields will automatically be removed from all BOS session
+    templates that contain them.
+  * When creating BOS v1 session templates, these fields are automatically removed.
+  * For more information, see
+    [Deprecated fields](../../operations/boot_orchestration/Session_Templates.md#deprecated-fields).
 
 ### Removals in CSM 1.6
 

@@ -39,6 +39,9 @@ cray bos v2 sessiontemplates create --file <INPUT_FILE> --name <NEW_TEMPLATE_NAM
 
 (`ncn-mw#`) v1 command:
 
+> In CSM 1.5, even when using BOS v1 to create a session template, some deprecated fields are automatically removed.
+> See [Deprecated fields](Session_Templates.md#deprecated-fields) for more information.
+
 ```bash
 cray bos v1 sessiontemplate create --file <INPUT_FILE> --name <NEW_TEMPLATE_NAME>
 ```
