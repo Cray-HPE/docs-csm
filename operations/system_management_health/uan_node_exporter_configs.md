@@ -8,7 +8,7 @@ namespace as part of the Cray System Management \(CSM\) release.
 In order to provide data to the Grafana SMART dashboards, the UAN NODE Exporter must be configured with a list of UAN 
 NMN IP Adressess to scrape metrics from.
 
-> **`NOTE`** All variables used within this page depend on the `/etc/environment` setup done in [Pre-installation](../../../install/pre-installation.md).
+> **`NOTE`** All variables used within this page depend on the `/etc/environment` setup done in [Pre-installation](../../install/pre-installation.md).
 
 1. (`uan#`) Obtain the list of UAN NMN IP Adressess.
     Login to UAN node
