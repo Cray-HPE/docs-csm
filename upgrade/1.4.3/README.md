@@ -122,7 +122,7 @@ products with IUF. If this step is skipped, IUF will fail when updating or upgra
 
 ### Upgrade Ceph and stop local Docker registries
 
-**Note:** This step may not be necessary if it was already completed by the CSM `v1.3.5` patch. If it was already run,
+**Note:** This step may not be necessary if it was already completed by the CSM `v1.3.5` patch or `v1.4.2` patch. If it was already run,
 the following steps can be re-executed to verify that Ceph daemons are using images in Nexus and the local Docker
 registries have been stopped.
 
