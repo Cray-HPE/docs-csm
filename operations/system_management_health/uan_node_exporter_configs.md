@@ -1,11 +1,11 @@
 # UAN NODE Exporter
 
-The Prometheus UAN NODE Exporter service,service monitor and endpoints are deployed to scrape SMARTMON data by the `cray-sysmgmt-health` chart to the `sysmgmt-health` 
+The Prometheus UAN NODE Exporter service,service monitor and endpoints are deployed to scrape SMARTMON data by the `cray-sysmgmt-health` chart to the `sysmgmt-health`
 namespace as part of the Cray System Management \(CSM\) release.
 
 ## Configuration
 
-In order to provide data to the Grafana SMART dashboards, the UAN NODE Exporter must be configured with a list of UAN 
+In order to provide data to the Grafana SMART dashboards, the UAN NODE Exporter must be configured with a list of UAN
 NMN IP Address to scrape metrics from.
 
 > **`NOTE`** All variables used within this page depend on the `/etc/environment` setup done in [Pre-installation](../../install/pre-installation.md).
@@ -13,15 +13,17 @@ NMN IP Address to scrape metrics from.
 1. (`uan#`) Obtain the list of UAN NMN IP Address.
     Login to UAN node
    (`uan#`)
+
     ```bash
     # hostname -i
     ```
 
    Expected output looks similar to the following:
 
-    ```
+    ```text
     ::1 127.0.0.1 10.252.1.13
     ```
+
 1. (`pit#`) Update `customizations.yaml` with the list of switches.
 
     ```bash
