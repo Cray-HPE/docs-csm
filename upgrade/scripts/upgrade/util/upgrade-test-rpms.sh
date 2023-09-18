@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -euo pipefail
 ncns=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',')
 
 echo "Installing updated versions of csm-testing goss-servers craycli rpms"
