@@ -83,6 +83,24 @@ export CSM_RELEASE=1.4.0
 export CSM_ARTI_DIR="/etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}"
 ```
 
+> **`NOTES:`**
+>
+> - If directory "/etc/cray/upgrade/csm/" is empty, create an empty directory at that path, download and extract CSM tarball to that directory.
+> - Update the value of "CSM_ARTI_DIR" with newly created directory name.
+> - The steps to obtain CSM tarball given at "[Update Product Stream](/update_product_stream/README.md)".
+> - Ensure directory "/etc/cray/upgrade/csm/" is "ceph" mount using command as below
+```bash
+mount | grep /etc/cray/upgrade/csm
+admin-tools@<hostname> on /etc/cray/upgrade/csm type ceph (rw,relatime,name=admin-tools,secret=<hidden>,ms_mode=prefer-crc,acl,mon_addr=<ip:port>/<ip:port>/<ip:port>)
+```
+> - If directory "/etc/cray/upgrade/csm/" is not ceph mount, check ceph mount directory specified in file "/etc/fstab". Sample example given below.
+```bash
+cat /etc/fstab
+...
+admin-tools@<hostname>=/ <ceph mount directory> ceph
+...
+```
+
 (`ncn-m#`) Rebuild the desired master node. Replace `ncn-m002` with the desired node to rebuild:
 
 ```bash
