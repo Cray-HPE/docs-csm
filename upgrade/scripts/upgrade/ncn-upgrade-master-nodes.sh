@@ -79,19 +79,6 @@ if [[ ${target_ncn} == "ncn-m001" ]]; then
   fi
 fi
 
-if helm ls -n operators | grep -q etcd-operator; then
-  old_clusters=$(kubectl get etcdclusters.etcd.database.coreos.com -A --output=custom-columns=name:.metadata.name --no-headers 2>&1)
-  if [ "$old_clusters" != "No resources found" ]; then
-    echo "Upgrade Failed!  The following etcd cluster(s) will not function with"
-    echo "Kubernetes 1.22 and must be converted to the bitnami etcd helm chart:"
-    echo ""
-    echo $old_clusters
-    exit 1
-  fi
-  echo "Uninstalling deprecated etcd-operator"
-  helm uninstall -n operators cray-etcd-operator
-fi
-
 {
   first_master_hostname=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global \
     | jq -r '.[] | ."cloud-init"."meta-data"."first-master-hostname"')
