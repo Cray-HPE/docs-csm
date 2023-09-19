@@ -116,6 +116,11 @@ elif [[ ! -x ${EXTRACT_CHART_MANIFEST} ]]; then
   exit 1
 fi
 
+if [[ -f ${PREREQS_DONE_FILE} ]]; then
+  echo "Deleting the existing file: ${PREREQS_DONE_FILE}"
+  rm ${PREREQS_DONE_FILE}
+fi
+
 TOKEN=$(curl -s -S -d grant_type=client_credentials \
   -d client_id=admin-client \
   -d client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
@@ -128,17 +133,6 @@ function upgrade_csm_chart {
   #
   # <manifest_file> is the name of the manifest file within the $CSM_MANIFESTS_DIR
   local manifest_folder TMP_CUST_YAML TMP_MANIFEST TMP_MANIFEST_CUSTOMIZED chart_name manifest_file
-
-  if [[ $# -ne 2 ]]; then
-    echo "ERROR: upgrade_csm_chart function requires exactly 2 arguments but received $#. Invalid argument(s): $*"
-    return 1
-  elif [[ -z $1 ]]; then
-    echo "ERROR: upgrade_csm_chart: chart name may not be blank"
-    return 1
-  elif [[ -z $2 ]]; then
-    echo "ERROR: upgrade_csm_chart: manifest file name may not be blank"
-    return 1
-  fi
 
   chart_name="$1"
   manifest_file="${CSM_MANIFESTS_DIR}/$2"
@@ -203,7 +197,10 @@ function do_upgrade_csm_chart {
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
-      upgrade_csm_chart "${chart_name}" "${manifest_file}"
+      if ! upgrade_csm_chart "${chart_name}" "${manifest_file}"; then
+        echo "ERROR: failed to upgrade ${chart_name} chart."
+        return 1
+      fi
 
     } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
@@ -1318,3 +1315,4 @@ rm -f /root/.ssh/config
 test -f /root/.ssh/config.bak && mv /root/.ssh/config.bak /root/.ssh/config
 
 ok_report
+touch ${PREREQS_DONE_FILE}

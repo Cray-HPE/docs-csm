@@ -24,12 +24,14 @@
 #
 
 CSM_REL_NAME=${CSM_REL_NAME-"csm-${CSM_RELEASE}"}
-mkdir -p "/etc/cray/upgrade/csm/${CSM_REL_NAME}"
+CSM_REL_DIR="/etc/cray/upgrade/csm/${CSM_REL_NAME}"
+mkdir -p ${CSM_REL_DIR}
+PREREQS_DONE_FILE="${CSM_REL_DIR}/prereqs.done"
 
 function record_state() {
   state_name=$1
   local target_ncn=$2
-  local state_dir="/etc/cray/upgrade/csm/${CSM_REL_NAME}/${target_ncn}"
+  local state_dir="${CSM_REL_DIR}/${target_ncn}"
 
   mkdir -p "${state_dir}"
 
@@ -51,7 +53,7 @@ function record_state() {
 function is_state_recorded() {
   state_name=$1
   local target_ncn=$2
-  local state_dir="/etc/cray/upgrade/csm/${CSM_REL_NAME}/${target_ncn}"
+  local state_dir="${CSM_REL_DIR}/${target_ncn}"
 
   mkdir -p "${state_dir}"
 
@@ -76,7 +78,7 @@ function move_state_file() {
   # this will not block another upgrade/rebuild/reboot
   # it also leaves a trace of what happened before
   local target_ncn=$1
-  local state_dir="/etc/cray/upgrade/csm/${CSM_REL_NAME}/${target_ncn}"
+  local state_dir="${CSM_REL_DIR}/${target_ncn}"
 
   mv "${state_dir}/state" "${state_dir}/state.bak"
 }
