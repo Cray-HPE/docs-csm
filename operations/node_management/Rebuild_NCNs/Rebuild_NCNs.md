@@ -103,7 +103,7 @@ admin-tools@<hostname>=/ <ceph mount directory> ceph
 ...
 ```
 
-> - Steps to download CSM tarball are at [Update Product Stream](/update_product_stream/README.md).
+> - Steps to download CSM tarball are at [Update Product Stream](../update_product_stream/README.md).
 > - This script should be run from `ncn-m001` when rebuilding `ncn-m002` or `ncn-m003`.
 
 (`ncn-m#`) Rebuild the desired master node. Replace `ncn-m002` with the desired node to rebuild:
