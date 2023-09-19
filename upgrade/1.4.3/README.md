@@ -212,7 +212,7 @@ version of CSM being installed. It then waits for the components to reach a conf
 (`ncn-m001#`) Update the `csm-testing` and `goss-servers` RPMs on the NCNs.
 
 ```bash
-pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zypper install -y csm-testing goss-servers craycli'
+/usr/share/doc/csm/upgrade/scripts/upgrade/util/upgrade-test-rpms.sh
 ```
 
 ### Verification
