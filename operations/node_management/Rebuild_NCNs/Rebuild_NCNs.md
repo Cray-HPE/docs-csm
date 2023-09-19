@@ -82,6 +82,7 @@ Master node rebuilds require that the environment variables `CSM_RELEASE` and `C
 export CSM_RELEASE=1.4.0
 export CSM_ARTI_DIR="/etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}"
 ```
+
 > **`NOTES:`**
 >
 > - If directory `/etc/cray/upgrade/csm/` is empty, create empty directory at same path. Download and extract CSM tarball to that directory.
