@@ -1919,6 +1919,7 @@ Retrieve all the configuration framework sessions on the system.
         ],
         "session": {
           "job": "cray-cfs-job-session-20190728032600",
+          "ims_job": "5037edd8-e9c5-437d-b54b-db4a8ad2cb15",
           "completion_time": "2019-07-28T03:26:00Z",
           "start_time": "2019-07-28T03:26:00Z",
           "status": "pending",
@@ -2027,7 +2028,7 @@ Create a new configuration session. A configuration session stages Ansible inven
   "ansible_limit": "host1",
   "ansible_config": "cfs-default-ansible-cfg",
   "ansible_verbosity": 0,
-  "ansible_passthrough": "string",
+  "ansible_passthrough": "",
   "target": {
     "definition": "spec",
     "groups": [
@@ -2107,6 +2108,7 @@ Create a new configuration session. A configuration session stages Ansible inven
     ],
     "session": {
       "job": "cray-cfs-job-session-20190728032600",
+      "ims_job": "5037edd8-e9c5-437d-b54b-db4a8ad2cb15",
       "completion_time": "2019-07-28T03:26:00Z",
       "start_time": "2019-07-28T03:26:00Z",
       "status": "pending",
@@ -2270,6 +2272,7 @@ Delete multiple configuration sessions.  If filters are provided, only sessions 
         ],
         "session": {
           "job": "cray-cfs-job-session-20190728032600",
+          "ims_job": "5037edd8-e9c5-437d-b54b-db4a8ad2cb15",
           "completion_time": "2019-07-28T03:26:00Z",
           "start_time": "2019-07-28T03:26:00Z",
           "status": "pending",
@@ -2413,6 +2416,7 @@ View details about a specific configuration session. This allows you to track th
     ],
     "session": {
       "job": "cray-cfs-job-session-20190728032600",
+      "ims_job": "5037edd8-e9c5-437d-b54b-db4a8ad2cb15",
       "completion_time": "2019-07-28T03:26:00Z",
       "start_time": "2019-07-28T03:26:00Z",
       "status": "pending",
@@ -2554,6 +2558,7 @@ Update the status of an existing configuration framework session
     ],
     "session": {
       "job": "cray-cfs-job-session-20190728032600",
+      "ims_job": "5037edd8-e9c5-437d-b54b-db4a8ad2cb15",
       "completion_time": "2019-07-28T03:26:00Z",
       "start_time": "2019-07-28T03:26:00Z",
       "status": "pending",
@@ -6185,6 +6190,7 @@ Status of session
 ```json
 {
   "job": "cray-cfs-job-session-20190728032600",
+  "ims_job": "5037edd8-e9c5-437d-b54b-db4a8ad2cb15",
   "completion_time": "2019-07-28T03:26:00Z",
   "start_time": "2019-07-28T03:26:00Z",
   "status": "pending",
@@ -6199,7 +6205,8 @@ Status of session
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|job|string|false|read-only|The name of the configuration execution environment associated with this session.|
+|job|string|false|none|The name of the configuration execution environment associated with this session.|
+|ims_job|string|false|none|The name os the IMS job associated with the session when running against an image.|
 |completion_time|string(date-time)|false|read-only|The date/time when the session completed execution in RFC 3339 format.|
 |start_time|string(date-time)|false|read-only|The date/time when the session started execution in RFC 3339 format.|
 |status|string|false|read-only|The execution status of the session.|
@@ -6271,6 +6278,7 @@ Status of artifacts, session, and targets. Lists details like session status, se
   ],
   "session": {
     "job": "cray-cfs-job-session-20190728032600",
+    "ims_job": "5037edd8-e9c5-437d-b54b-db4a8ad2cb15",
     "completion_time": "2019-07-28T03:26:00Z",
     "start_time": "2019-07-28T03:26:00Z",
     "status": "pending",
@@ -6415,6 +6423,7 @@ An execution session for the Configuration Framework.
     ],
     "session": {
       "job": "cray-cfs-job-session-20190728032600",
+      "ims_job": "5037edd8-e9c5-437d-b54b-db4a8ad2cb15",
       "completion_time": "2019-07-28T03:26:00Z",
       "start_time": "2019-07-28T03:26:00Z",
       "status": "pending",
@@ -6522,7 +6531,7 @@ The information required to create a Config Framework Session.
   "ansible_limit": "host1",
   "ansible_config": "cfs-default-ansible-cfg",
   "ansible_verbosity": 0,
-  "ansible_passthrough": "string",
+  "ansible_passthrough": "",
   "target": {
     "definition": "spec",
     "groups": [
@@ -6693,6 +6702,7 @@ An array of sessions.
         ],
         "session": {
           "job": "cray-cfs-job-session-20190728032600",
+          "ims_job": "5037edd8-e9c5-437d-b54b-db4a8ad2cb15",
           "completion_time": "2019-07-28T03:26:00Z",
           "start_time": "2019-07-28T03:26:00Z",
           "status": "pending",
@@ -6775,6 +6785,7 @@ A collection of session data.
         ],
         "session": {
           "job": "cray-cfs-job-session-20190728032600",
+          "ims_job": "5037edd8-e9c5-437d-b54b-db4a8ad2cb15",
           "completion_time": "2019-07-28T03:26:00Z",
           "start_time": "2019-07-28T03:26:00Z",
           "status": "pending",

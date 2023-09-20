@@ -3,7 +3,7 @@
 There are several problems that may occur while making or working with custom end-user UAI images.
 The following are some basic troubleshooting questions to ask:
 
-* Does `SESSION_NAME` match an actual entry in `cray bos v1 sessiontemplate list`?
+* Does `SESSION_NAME` match an actual entry in `cray bos v2 sessiontemplates list`?
 * Is the `SESSION_ID` set to an appropriate UUID format? Did the `awk` command not parse the UUID correctly?
 * Did the file `/etc/security/limits.d/99-slingshot-network.conf` get removed from the tarball correctly?
 * Does the `ENTRYPOINT` `/usr/bin/uai-ssh.sh` exist?

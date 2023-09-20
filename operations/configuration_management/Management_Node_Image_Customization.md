@@ -228,6 +228,22 @@ The following procedure describes how to find the CFS configuration applied to t
    The value of the `Desired Config` column is the name of the CFS configuration currently applied
    to the nodes. There will typically be only one CFS configuration applied to all management nodes.
 
+   Kindly ensure the selected "desired config" from above has the `ncn-initrd.yml` within the layers by using command as below:
+
+   ```bash
+   cray cfs configurations describe "<config name>"
+     lastUpdated = "<yyyy-mm-ddThh:mm:ssZ>"
+     name = "<config name>"
+     [[layers]]
+     ...
+     [[layers]]
+     cloneUrl = "https://<repo.git>"
+     commit = "<hash value>"
+     name = "<name>"
+     playbook = "ncn-initrd.yml"
+   
+   ```
+
 #### Option 2: Create a new CFS configuration for management nodes
 
 Use this option to create a new CFS configuration for management nodes.
@@ -243,7 +259,22 @@ layers provided by CSM.
     git clone "https://${VCS_USER}:${VCS_PASS}@api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
     ```
 
-    A Git commit hash from this repository is needed in the following step.
+    A Git commit hash from this repository is needed in the following step. After cloning repo, verify that the "yaml" files used in image customization are present.
+    If not, check the other branches in cloned repo and switch to correct branch which has the required "yaml" files.
+
+   ```bash
+    git branch -a
+    cray/csm/<version>
+    * main
+    ...
+    git checkout cray/csm/<version>
+    Switched to branch 'cray/csm/<version>'
+    Your branch is up to date with 'origin/cray/csm/<version>'.
+    ...
+    ls
+    initrd.yml ...
+       
+    ```
 
 1. (`ncn-mw#`) Create the CFS configuration to use for image customization.
 

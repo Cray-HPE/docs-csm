@@ -38,6 +38,9 @@ For a list of all deprecated CSM features, see [Deprecations](introduction/depre
 ## Removals
 
 * [CRUS](glossary.md#compute-rolling-upgrade-service-crus)
+* Deprecated [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos)
+  v1 session template and boot set fields are no longer stored in BOS. For more information, see
+  [Deprecated fields](operations/boot_orchestration/Session_Templates.md#deprecated-fields).
 
 For a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals).
 

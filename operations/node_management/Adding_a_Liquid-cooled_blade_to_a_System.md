@@ -4,7 +4,8 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
 
 ## Prerequisites
 
-* The [Cray command line interface \(CLI\) tool](../../glossary.md#cray-cli-cray)) is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
+* [Add a blade to a cabinet using CANI using CANI](../cani/Add_A_Blade_To_A_Cabinet_In_SLS.md).
+* The [Cray command line interface \(CLI\) tool](../../glossary.md#cray-cli-cray) is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 * Knowledge of whether [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is operating over the
   [Node Management Network (NMN)](../../glossary.md#node-management-network-nmn) or the [High Speed Network (HSN)](../../glossary.md#high-speed-network-hsn).
 * Blade is being added to an existing liquid-cooled cabinet in the system.
@@ -453,7 +454,7 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate [
 
     ```bash
     BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-    cray bos v1 sessiontemplate describe $BOS_TEMPLATE --format json|jq '.boot_sets[] | select(.node_list)'
+    cray bos v2 sessiontemplates describe $BOS_TEMPLATE --format json|jq '.boot_sets[] | select(.node_list)'
     ```
 
     * If this query returns empty, then skip to booting the nodes.
@@ -464,8 +465,11 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate [
 
        1. Dump the current session template.
 
+          > The `name` field cannot be present in the file, or else the subsequent command to create the
+          > Session template will fail. The `jq` command in the following example strips out this field.
+
           ```bash
-          cray bos v1 sessiontemplate describe $BOS_TEMPLATE --format json > tmp.txt
+          cray bos v2 sessiontemplates describe $BOS_TEMPLATE --format json | jq 'del(.name)' > tmp.txt
           ```
 
        1. Edit the `tmp.txt` file, adding the new nodes to the `node_list`.
@@ -487,19 +491,19 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate [
        1. Create the session template.
 
           ```bash
-          cray bos v1 sessiontemplate create --file tmp.txt --name $BOS_TEMPLATE
+          cray bos v2 sessiontemplates create --file tmp.txt $BOS_TEMPLATE
           ```
 
        1. Verify that the session template contains the additional nodes and the proper name.
 
            ```bash
-           cray bos v1 sessiontemplate describe $BOS_TEMPLATE --format json
+           cray bos v2 sessiontemplates describe $BOS_TEMPLATE --format json
            ```
 
     1. (`ncn-mw#`) Boot the nodes.
 
        ```bash
-       cray bos v1 session create --template-name $BOS_TEMPLATE \
+       cray bos v2 sessions create --template-name $BOS_TEMPLATE \
             --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
        ```
 

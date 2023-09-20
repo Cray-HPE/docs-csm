@@ -79,19 +79,6 @@ if [[ ${target_ncn} == "ncn-m001" ]]; then
   fi
 fi
 
-if helm ls -n operators | grep -q etcd-operator; then
-  old_clusters=$(kubectl get etcdclusters.etcd.database.coreos.com -A --output=custom-columns=name:.metadata.name --no-headers 2>&1)
-  if [ "$old_clusters" != "No resources found" ]; then
-    echo "Upgrade Failed!  The following etcd cluster(s) will not function with"
-    echo "Kubernetes 1.22 and must be converted to the bitnami etcd helm chart:"
-    echo ""
-    echo $old_clusters
-    exit 1
-  fi
-  echo "Uninstalling deprecated etcd-operator"
-  helm uninstall -n operators cray-etcd-operator
-fi
-
 {
   first_master_hostname=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global \
     | jq -r '.[] | ."cloud-init"."meta-data"."first-master-hostname"')
@@ -190,6 +177,18 @@ if [[ $state_recorded == "0" ]]; then
     record_state "${state_name}" ${target_ncn}
     scp /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
     ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
+  } >> ${LOG_FILE} 2>&1
+  record_state "${state_name}" ${target_ncn}
+else
+  echo "====> ${state_name} has been completed"
+fi
+
+state_name="ENSURE_TESTING_RPMS"
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+if [[ $state_recorded == "0" ]]; then
+  echo "====> ${state_name} ..."
+  {
+    /usr/share/doc/csm/scripts/ensure_testing_rpms.sh ${target_ncn}
   } >> ${LOG_FILE} 2>&1
   record_state "${state_name}" ${target_ncn}
 else

@@ -41,10 +41,10 @@ spec:
           indicates Nexus is not ready.)
         command: |-
           systemctl is-active --quiet nexus && echo Nexus is running
-          nexus_writable=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8081/service/rest/v1/status/writable)
+          nexus_writable=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8081/nexus/service/rest/v1/status/writable)
           echo "Nexus writable endpoint returns: $nexus_writable"
           [[ $nexus_writable -eq 200 ]] || exit 1
-        
+
         troubleshooting: |-
           # Restart nexus service
           `pit# systemctl start nexus`
@@ -52,7 +52,7 @@ spec:
         description: |-
           3.  Load the skopeo image installed by the cray-nexus RPM
           4.  Use `skopeo sync` to upload container images from the CSM release
-          
+
           > **`NOTE`** As the bootstrap Nexus uses the default configuration, the
           > above command uses the default admin credentials (`admin` user with
           > password `admin123`) in order to upload to the bootstrap registry, which

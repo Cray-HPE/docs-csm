@@ -35,7 +35,21 @@ spec:
           - name: targetNcn
       dag:
         tasks:
+          - name: storage-ensure-testing-rpms
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    /usr/share/doc/csm/scripts/ensure_testing_rpms.sh ${TARGET_NCN}
           - name: storage-goss-test-task
+            dependencies:
+              - storage-ensure-testing-rpms
             templateRef:
               name: ssh-template
               template: shell-script
