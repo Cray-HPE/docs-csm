@@ -233,7 +233,7 @@ Run the following script to apply anti-affinity to `coredns` pods:
 
 ## Stage 3.6 - Complete Kubernetes upgrade
 
-Complete the Kubernetes upgrade. This script will restart several pods on each master node to their new Docker containers.
+- Complete the Kubernetes upgrade. This script will restart several pods on each master node to their new Docker containers.
 
 ```bash
 /usr/share/doc/csm/upgrade/scripts/k8s/upgrade_control_plane.sh
@@ -241,9 +241,15 @@ Complete the Kubernetes upgrade. This script will restart several pods on each m
 
 > **`NOTE`**: `kubelet` has been upgraded already, ignore the warning to upgrade it.
 
-If the previous three steps were executed as part of the IUF [Deploy Product](../operations/iuf/workflows/deploy_product.md)
-procedure, return to the IUF [Deploy Product](../operations/iuf/workflows/deploy_product.md) procedure and
-complete the remaining steps. Otherwise, proceed to the following topic.
+- Uninstall the deprecated `etcd-operator`.
+
+```bash
+helm uninstall -n operators cray-etcd-operator
+```
+
+> If this step was executed as part of the IUF [Deploy Product](../operations/iuf/workflows/deploy_product.md)
+> procedure, return to the IUF [Deploy Product](../operations/iuf/workflows/deploy_product.md) procedure and
+> complete the remaining steps. Otherwise, proceed to the following topic.
 
 ### Stop typescript on `ncn-m002`
 
