@@ -39,6 +39,8 @@ spec:
               parameters:
                 - name: dryRun
                   value: 'false'
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"
                 - name: scriptContent
                   value: >
                     set -e

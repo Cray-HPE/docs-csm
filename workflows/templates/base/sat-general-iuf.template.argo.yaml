@@ -34,8 +34,6 @@ spec:
     ### Templates ###
     ## sat-wrapper ##
     - name: sat-wrapper
-      nodeSelector:
-        kubernetes.io/hostname: ncn-m001
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule

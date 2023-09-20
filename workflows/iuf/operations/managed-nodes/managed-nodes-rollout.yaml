@@ -138,8 +138,6 @@ spec:
         args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]      
 
     - name: build-sat-general-subcommand
-      nodeSelector:
-        kubernetes.io/hostname: ncn-m001
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule
