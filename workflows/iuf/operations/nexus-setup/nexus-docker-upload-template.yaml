@@ -154,8 +154,6 @@ spec:
 ### Templates ###
 ## nexus-get-prerequisites-template ##
   - name: nexus-get-prerequisites-template
-    nodeSelector:   
-      kubernetes.io/hostname: ncn-m001
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -263,8 +261,6 @@ spec:
           valueFrom:
             path: /results/records.yaml
             default: "{}"
-    nodeSelector:
-      kubernetes.io/hostname: ncn-m001
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -302,8 +298,6 @@ spec:
       parameters:
       - name: nexus_admin_credential_secret_name
         value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
-    nodeSelector:
-      kubernetes.io/hostname: ncn-m001
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
