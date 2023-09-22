@@ -88,7 +88,7 @@ The following covers redeploying the Spire service and restoring the data.
          for ncn in $(kubectl get nodes -o name | cut -d'/' -f2); do
              echo "Cleaning up NCN ${ncn}"
              ssh "${ncn}" systemctl stop spire-agent
-             ssh "${ncn}" rm -v /root/spire/data/svid.key /root/spire/agent_svid.der /root/spire/bundle.der
+             ssh "${ncn}" rm -v /var/lib/spire/data/svid.key /var/lib/spire/agent_svid.der /var/lib/spire/bundle.der
          done
          ```
 
@@ -144,7 +144,3 @@ The following covers redeploying the Spire service and restoring the data.
       /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
       for i in $(kubectl get nodes -o name | cut -d"/" -f2) $(ceph node ls | jq -r '.[] | keys[]' | sort -u); do ssh $i systemctl start spire-agent; done
       ```
-
-1. (`ncn-mw#`) Restore the critical data.
-
-   See [Restore Postgres for Spire](../kubernetes/Restore_Postgres.md#restore-postgres-for-spire).
