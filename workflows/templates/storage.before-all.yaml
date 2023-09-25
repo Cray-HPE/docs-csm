@@ -107,3 +107,31 @@ spec:
                     if [[ -z $label_exists ]]; then
                       ceph orch host label add ncn-s002 _admin
                     fi
+          - name: install-smartmon-on-storage-nodes
+            dependencies:
+              - upgrade-ceph-stop-docker-registries
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    # check if smartmon is already installed.
+                    smartmon_installed=true
+                    ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+                    for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
+                        n_inst=$(ssh ${storage_node} ${ssh_options} 'rpm -qa | grep -E "(smart-mon|smartmontools|libsmartcols)" | wc -l')
+                        if [[ $n_inst -lt 3 ]]; then
+                            smartmon_installed=false
+                            break
+                        fi
+                    done
+                    if $smartmon_installed; then
+                        echo "Smartmon packages are already installed on all storage nodes. Nothing to do."
+                    else
+                        echo "Installing smartmon on storage nodes."
+                        /usr/share/doc/csm/scripts/operations/ceph/enable-smart-mon-storage-nodes.sh
+                    fi
