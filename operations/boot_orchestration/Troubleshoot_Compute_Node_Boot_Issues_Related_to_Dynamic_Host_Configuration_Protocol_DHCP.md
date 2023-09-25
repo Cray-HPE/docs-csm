@@ -24,11 +24,23 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     Example output:
 
     ```
-    services cray-dhcp-kea-554698bb69-r9wwt          3/3 Running   0 13h
-    services cray-dhcp-kea-postgres-0                2/2 Running   0 10d
-    services cray-dhcp-kea-postgres-1                2/2 Running   0 3d18h
-    services cray-dhcp-kea-postgres-2                2/2 Running   0 10d
-    services cray-dhcp-kea-wait-for-postgres-3-7gqvg 0/3 Completed 0 10d
+    services cray-dhcp-kea-7d4c5c9fb5-hs5gg      3/3 Running   0 23h
+    services cray-dhcp-kea-7d4c5c9fb5-qtwtn      3/3 Running   0 23h
+    services cray-dhcp-kea-7d4c5c9fb5-t4mkw      3/3 Running   0 23h
+    services cray-dhcp-kea-helper-28256853-j8h6l 0/2 Completed 0 30m
+    services cray-dhcp-kea-helper-28256856-d5cl4 0/2 Completed 0 27m
+    services cray-dhcp-kea-helper-28256859-xj8tc 0/2 Completed 0 24m
+    services cray-dhcp-kea-helper-28256862-9pmx4 0/2 Completed 0 21m
+    services cray-dhcp-kea-helper-28256865-fljjs 0/2 Completed 0 18m
+    services cray-dhcp-kea-helper-28256868-9cl9q 0/2 Completed 0 15m
+    services cray-dhcp-kea-helper-28256871-sfhgs 0/2 Completed 0 12m
+    services cray-dhcp-kea-helper-28256874-7s8n2 0/2 Completed 0 9m30s
+    services cray-dhcp-kea-helper-28256877-jxhqt 0/2 Completed 0 6m30s
+    services cray-dhcp-kea-helper-28256880-pl48w 0/2 Completed 0 3m29s
+    services cray-dhcp-kea-init-24-nbhng         0/2 Completed 0 8d
+    services cray-dhcp-kea-postgres-0            3/3 Running   0 24h
+    services cray-dhcp-kea-postgres-1            3/3 Running   0 24h
+    services cray-dhcp-kea-postgres-2            3/3 Running   0 24h
     ```
 
 3.  Start a `tcpdump` session on the NCN.
