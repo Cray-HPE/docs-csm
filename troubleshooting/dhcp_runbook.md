@@ -7,7 +7,7 @@
    1. [Verify that `cray-dhcp-kea` configuration is valid](#13-verify-that-cray-dhcp-kea-configuration-is-valid)
    1. [Review `cray-dhcp-kea` running configuration](#14-review-cray-dhcp-kea-running-configuration)
    1. [Verify that `cray-dhcp-kea` has active DHCP leases](#15-verify-that-cray-dhcp-kea-has-active-dhcp-leases)
-   1. [Check the `cray-dhcp-kea-helper` job](#16-check-the-cray-dhcp-kea-healper-job)
+   1. [Check the `cray-dhcp-kea-helper` job](#16-check-the-cray-dhcp-kea-helper-job)
    1. [Check `cray-dhcp-kea` logs](#17-check-cray-dhcp-kea-logs)
 - [2 Troubleshooting DHCP for a specific node](#2-troubleshooting-dhcp-for-a-specific-node)
    1. [Check current DHCP leases](#21-check-current-dhcp-leases)
