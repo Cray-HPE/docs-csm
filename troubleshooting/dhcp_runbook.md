@@ -7,7 +7,7 @@
    1. [Verify that `cray-dhcp-kea` configuration is valid](#13-verify-that-cray-dhcp-kea-configuration-is-valid)
    1. [Review `cray-dhcp-kea` running configuration](#14-review-cray-dhcp-kea-running-configuration)
    1. [Verify that `cray-dhcp-kea` has active DHCP leases](#15-verify-that-cray-dhcp-kea-has-active-dhcp-leases)
-   1. [Check `dhcp-helper.py` output](#16-check-dhcp-helperpy-output)
+   1. [Check the `cray-dhcp-kea-helper` job](#16-check-the-cray-dhcp-kea-healper-job)
    1. [Check `cray-dhcp-kea` logs](#17-check-cray-dhcp-kea-logs)
 - [2 Troubleshooting DHCP for a specific node](#2-troubleshooting-dhcp-for-a-specific-node)
    1. [Check current DHCP leases](#21-check-current-dhcp-leases)
@@ -230,7 +230,7 @@ Verify that `cray-dhcp-kea` is managing DHCP leases.
    ```
 
    Example output:
-   
+
    ```text
    cray-dhcp-kea-helper-28256892-bl64f 0/2 Completed 0 29m
    cray-dhcp-kea-helper-28256895-6t674 0/2 Completed 0 26m

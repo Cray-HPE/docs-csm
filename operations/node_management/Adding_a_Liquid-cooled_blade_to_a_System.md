@@ -234,7 +234,7 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
         ```
 
     1. Repeat the preceding command for each node in the blade.
-    
+
     1. (`ncn-mw#`) Re-enable the `cray-dhcp-kea-helper` job.
 
         ```bash
