@@ -41,7 +41,7 @@ function get_smartmon_url() {
         :
   fi <<< "$(curl -sSfk https://packages.local/service/rest/v1/repositories | jq -r '.[] | .["name"]' | grep ^csm-noos | tr '\n' ' ')"
 
-  echo "Will look for smart-mon rpm in the following repos: ${repos[@]}"
+  echo "Will look for smart-mon rpm in the following repos: ${repos[*]}"
 
   # search through the csm-noos repos looking for our package
   for repo in "${repos[@]}"; do
@@ -95,8 +95,7 @@ function paginate() {
   done
 }
 
-get_smartmon_url
-if [[ $? -ne 0 ]]; then
+if ! get_smartmon_url; then
   exit 1
 fi
 
