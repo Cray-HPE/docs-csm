@@ -1303,15 +1303,15 @@ fi
 # Upgrade CFS/IMS and csm-ssh-keys to address CASMTRIAGE-5939
 # And relatedly, upgrade cray-bos to address CASMTRIAGE-6009
 CHARTS=(
-'cfs-ara'
-'cfs-hwsync-agent'
-'cfs-trust'
-'cray-bos'
-'cray-cfs-api'
-'cray-cfs-batcher'
-'cray-cfs-operator'
-'cray-ims'
-'csm-ssh-keys'
+  'cfs-ara'
+  'cfs-hwsync-agent'
+  'cfs-trust'
+  'cray-bos'
+  'cray-cfs-api'
+  'cray-cfs-batcher'
+  'cray-cfs-operator'
+  'cray-ims'
+  'csm-ssh-keys'
 )
 for chart_name in "${CHARTS[@]}"; do
   do_upgrade_csm_chart "${chart_name}" sysmgmt.yaml
