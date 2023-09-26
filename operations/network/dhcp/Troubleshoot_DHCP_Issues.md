@@ -38,6 +38,12 @@ Example output:
 
 ```text
 cray-dhcp-kea-api              ClusterIP     10.26.142.204  <none>         8000/TCP      5d23h
+cray-dhcp-kea-postgres         ClusterIP     10.19.97.142   <none>         5432/TCP      5d23h
+cray-dhcp-kea-postgres-0       ClusterIP     10.30.214.27   <none>         5432/TCP      5d23h
+cray-dhcp-kea-postgres-1       ClusterIP     10.27.232.156  <none>         5432/TCP      5d23h
+cray-dhcp-kea-postgres-2       ClusterIP     10.22.242.251  <none>         5432/TCP      5d23h
+cray-dhcp-kea-postgres-config  ClusterIP     None           <none>         <none>        5d23h
+cray-dhcp-kea-postgres-repl    ClusterIP     10.17.107.16   <none>         5432/TCP      5d23
 cray-dhcp-kea-tcp-hmn          LoadBalancer  10.24.79.120   10.94.100.222  67:32120/TCP  5d23h
 cray-dhcp-kea-tcp-nmn          LoadBalancer  10.19.139.179  10.92.100.222  67:31652/TCP  5d23h
 cray-dhcp-kea-udp-hmn          LoadBalancer  10.25.203.31   10.94.100.222  67:30840/UDP  5d23h
@@ -55,15 +61,31 @@ kubectl get pods -n services -o wide | grep kea
 Example output:
 
 ```text
-cray-dhcp-kea-788b4c899b-x6ltd 3/3 Running 0 36h 10.40.3.183 ncn-w002 <none> <none>
+cray-dhcp-kea-7d4c5c9fb5-hs5gg      3/3 Running   0 33m   10.33.0.22   ncn-w011 <none> <none>
+cray-dhcp-kea-7d4c5c9fb5-qtwtn      3/3 Running   0 33m   10.39.0.47   ncn-w006 <none> <none>
+cray-dhcp-kea-7d4c5c9fb5-t4mkw      3/3 Running   0 24h   10.40.0.13   ncn-w005 <none> <none>
+cray-dhcp-kea-helper-28256892-bl64f 0/2 Completed 0 29m   10.39.0.48   ncn-w006 <none> <none>
+cray-dhcp-kea-helper-28256895-6t674 0/2 Completed 0 26m   10.39.0.53   ncn-w006 <none> <none>
+cray-dhcp-kea-helper-28256898-8xzl2 0/2 Completed 0 23m   10.39.0.32   ncn-w006 <none> <none>
+cray-dhcp-kea-helper-28256901-4wzql 0/2 Completed 0 20m   10.39.0.41   ncn-w006 <none> <none>
+cray-dhcp-kea-helper-28256904-9h7hw 0/2 Completed 0 17m   10.39.0.48   ncn-w006 <none> <none>
+cray-dhcp-kea-helper-28256907-zstfk 0/2 Completed 0 14m   10.39.0.44   ncn-w006 <none> <none>
+cray-dhcp-kea-helper-28256910-566dd 0/2 Completed 0 11m   10.39.0.53   ncn-w006 <none> <none>
+cray-dhcp-kea-helper-28256913-n2q2x 0/2 Completed 0 8m19s 10.39.0.48   ncn-w006 <none> <none>
+cray-dhcp-kea-helper-28256916-j5w2n 0/2 Completed 0 5m19s 10.39.0.32   ncn-w006 <none> <none>
+cray-dhcp-kea-helper-28256919-xnhnw 0/2 Completed 0 2m19s 10.39.0.32   ncn-w006 <none> <none>
+cray-dhcp-kea-init-24-nbhng         0/2 Completed 0 8d    10.32.0.52   ncn-w001 <none> <none>
+cray-dhcp-kea-postgres-0            3/3 Running   0 24h   10.39.0.28   ncn-w006 <none> <none>
+cray-dhcp-kea-postgres-1            3/3 Running   0 24h   10.34.128.12 ncn-w004 <none> <none>
+cray-dhcp-kea-postgres-2            3/3 Running   0 24h   10.32.0.39   ncn-w001 <none> <none>
 ```
 
-The pods should be in a `Running` state. The output above will also indicate which worker node the `kea-dhcp` pod is currently running on.
+The pods should be in a `Running` state. The output above will also indicate which worker node the `kea-dhcp` pods are currently running on.
 
-(`ncn-mw#`) To restart the pods:
+(`ncn-mw#`) To restart the Kea pods.
 
 ```bash
-kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
+kubectl rollout restart deployment -n services cray-dhcp-kea
 ```
 
 Use the command mentioned above to verify the pods are running again after restarting the pods.
