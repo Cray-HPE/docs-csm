@@ -33,24 +33,32 @@ function get_smartmon_url() {
     echo "***"
     echo "WARNING: Unable to contact Nexus! This must be addressed before proceeding."
     echo "***"
-    return
+    return 1
   fi
 
   # get a list of repos that start with "csm-noos"
   if IFS=$'\n' read -rd '' -a repos; then
         :
-  fi <<< "$(curl -sSfk https://packages.local/service/rest/v1/repositories | jq -r '.[] | .["name"]' | grep ^csm-noos | tr '\n' ' ')" 
+  fi <<< "$(curl -sSfk https://packages.local/service/rest/v1/repositories | jq -r '.[] | .["name"]' | grep ^csm-noos | tr '\n' ' ')"
 
   echo "Will look for smart-mon rpm in the following repos: ${repos[@]}"
 
   # search through the csm-noos repos looking for our package
   for repo in "${repos[@]}"; do
     # Retrieve the packages from nexus
-    test -n "$smartmon_url" || smartmon_url=$(paginate "https://packages.local/service/rest/v1/components?repository=$repo" \
-      | jq -r '.items[] | .assets[] | .downloadUrl' | grep smart-mon | sort -V | tail -1)
+    if [[ -z "$smartmon_url" ]]; then
+      smartmon_url=$(paginate "https://packages.local/service/rest/v1/components?repository=$repo" \
+        | jq -r '.items[] | .assets[] | .downloadUrl' | grep smart-mon | sort -V | tail -1)
+      if [[ $? -ne 0 ]]; then
+        return 1
+      fi
+    fi
   done
 
-  test -z "$smartmon_url" && echo WARNING: unable to install smart-mon rpm
+  if [[ -z  "$smartmon_url" ]]; then
+    echo WARNING: unable to install smart-mon rpm
+    return 1
+  fi
 }
 
 function paginate() {
@@ -59,14 +67,20 @@ function paginate() {
 
   if test -z $url; then
     echo "ERROR: paginate() called without an argument"
-    exit 1
+    return 1
+  fi
+
+  # check if last char of url is a space
+  if [[ "${url: -1}" == " " ]]; then
+    # remove last character if it is a space
+    url=${url::-1}
   fi
 
   { token="$(curl -sSk "$url" | tee /dev/fd/3 | jq -r '.continuationToken // null')"; } 3>&1
 
   if test -z $token; then
     echo "ERROR on line $LINENO: unable to retreive continuation token, exiting"
-    exit 1
+    return 1
   fi
 
   until [[ $token == "null" ]]; do
@@ -76,12 +90,15 @@ function paginate() {
 
     if test -z $token; then
       echo "ERROR on line $LINENO: unable to retreive continuation token, exiting"
-      exit 1
+      return 1
     fi
   done
 }
 
 get_smartmon_url
+if [[ $? -ne 0 ]]; then
+  exit 1
+fi
 
 echo "Using ${smartmon_url} to install rpm on storage nodes..."
 if IFS=$'\n' read -rd '' -a ORCH_HOSTS; then
