@@ -1312,25 +1312,20 @@ if [[ ${state_recorded} == "0" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*csm-testing\*.rpm | sort -V | tail -1)"
-    rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*platform-utils\*.rpm | sort -V | tail -1)"
-    rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*goss-servers\*.rpm | sort -V | tail -1)"
-    rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*cmstools-crayctldeploy\*.rpm | sort -V | tail -1)"
+    rpm_list=(csm-testing hpe-csm-goss-package platform-utils goss-servers cray-cmstools-crayctldeploy)
+    url_list=()
+    for rpm_name in "${rpm_list[@]}"; do
+      rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*${rpm_name}\*.rpm | sort -V | tail -1)"
+      # CASMPET-6635 & CASMINST-6517
+      # Get the RPM versions from the primary node
+      rpm_version=$(rpm -q ${rpm_name})
+      url_list+=("https://packages.local/repository/csm-sle-15sp4/noarch/${rpm_version}.rpm")
+    done
     systemctl enable goss-servers
     systemctl restart goss-servers
 
-    # CASMPET-6635 & CASMINST-6517
-    # Get the RPM versions from the primary node
-    ct_version=$(rpm -q csm-testing)
-    ct_rpm_nexus_url="https://packages.local/repository/csm-sle-15sp4/noarch/${ct_version}.rpm"
-    pu_version=$(rpm -q platform-utils)
-    pu_rpm_nexus_url="https://packages.local/repository/csm-sle-15sp4/noarch/${pu_version}.rpm"
-    gs_version=$(rpm -q goss-servers)
-    gs_rpm_nexus_url="https://packages.local/repository/csm-sle-15sp4/noarch/${gs_version}.rpm"
-    cc_version=$(rpm -q cray-cmstools-crayctldeploy)
-    cc_rpm_nexus_url="https://packages.local/repository/csm-sle-15sp4/noarch/${cc_version}.rpm"
     # Install above RPMs and restart goss-servers on ncn-w001
-    ssh ncn-w001 "rpm --force -Uvh $ct_rpm_nexus_url $pu_rpm_nexus_url $gs_rpm_nexus_url $cc_rpm_nexus_url; systemctl enable goss-servers; systemctl restart goss-servers;"
+    ssh ncn-w001 "rpm --force -Uvh ${url_list[*]}; systemctl enable goss-servers; systemctl restart goss-servers;"
 
     # get all installed CSM version into a file
     kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm' | yq r - -d '*' -j | jq -r 'keys[]' > /tmp/csm_versions
