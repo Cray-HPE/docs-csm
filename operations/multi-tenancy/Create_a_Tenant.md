@@ -24,7 +24,7 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
 - An example of a tenant custom resource (CR):
 
     ```yaml
-    apiVersion: tapms.hpe.com/v1alpha2
+    apiVersion: tapms.hpe.com/v1alpha3
     kind: Tenant
     metadata:
       name: vcluster-blue
@@ -33,18 +33,33 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
       - slurm
       - user
       tenantname: vcluster-blue
+      tenantkms:
+        enablekms: true
+      tenanthooks:
+      - name: blocking-hook
+        url: http://10.19.12.61:6000/block
+        blockingcall: true
+        eventtypes:
+          - UPDATE
+          - DELETE
+        hookcredentials:
+          secretname: blocking-hook-cm
+          secretnamespace: services
+      - name: notify-hook
+        url: http://10.19.12.61:6000
+        blockingcall: false
+        eventtypes:
+          - UPDATE
+          - DELETE
+        hookcredentials:
+          secretname: notify-hook-cm
+          secretnamespace: services
       tenantresources:
       - enforceexclusivehsmgroups: true
         hsmgrouplabel: blue
         type: compute
         xnames:
-        - x3000c0s19b1n0
-        - x3000c0s19b3n0
-      - enforceexclusivehsmgroups: true
-        hsmgrouplabel: blue
-        type: application
-        xnames:
-        - x3000c0s32b0n0
+        - x1000c0s0b0n0
     ```
 
 ## Apply the TAPMS CR
@@ -72,57 +87,91 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
     Example output:
 
     ```yaml
-    apiVersion: tapms.hpe.com/v1alpha2
+    apiVersion: tapms.hpe.com/v1alpha3
     kind: Tenant
     metadata:
       annotations:
-        kopf.zalando.org/last-handled-configuration: |
-          {"spec":{"childnamespaces":["slurm","user"],"state":"Deployed","tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x3000c0s19b1n0","x3000c0s19b3n0"]},{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"application","xnames":["x3000c0s32b0n0"]}]}}
         kubectl.kubernetes.io/last-applied-configuration: |
-          {"apiVersion":"tapms.hpe.com/v1alpha2","kind":"Tenant","metadata":{"annotations":{"kopf.zalando.org/last-handled-configuration":"{\"spec\":{\"childnamespaces\":[\"user\",\"slurm\"],\"state\":\"Deployed\",\"tenantname\":\"vcluster-test1\",\"tenantresources\":[{\"enforceexclusivehsmgroups\":true,\"hsmgrouplabel\":\"test1\",\"type\":\"compute\",\"xnames\":[\"x3000c0s19b1n0\",\"x3000c0s19b3n0\"]}]}}\n"},"finalizers":["tapms.hpe.com/finalizer"],"generation":3,"name":"vcluster-blue","namespace":"tenants"},"spec":{"childnamespaces":["slurm","user"],"state":"Deployed","tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x3000c0s19b1n0","x3000c0s19b3n0"]},{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"application","xnames":["x3000c0s32b0n0"]}]}}
-      creationTimestamp: "2023-05-11T14:36:12Z"
+          {"apiVersion":"tapms.hpe.com/v1alpha3","kind":"Tenant","metadata":{"annotations":{},"name":"vcluster-blue","namespace":"tenants"},"spec":{"childnamespaces":["slurm","user"],"tenanthooks":[{"blockingcall":true,"eventtypes":["UPDATE","DELETE"],"hookcredentials":{"secretname":"blocking-hook-cm","secretnamespace":"services"},"name":"blocking-hook","url":"http://10.19.12.61:6000/block"},{"blockingcall":false,"eventtypes":["UPDATE","DELETE"],"hookcredentials":{"secretname":"notify-hook-cm","secretnamespace":"services"},"name":"notify-hook","url":"http://10.19.12.61:6000"}],"tenantkms":{"enablekms":true},"tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x1000c0s0b0n0"]}]}}
+      creationTimestamp: "2023-09-27T17:14:28Z"
       finalizers:
       - tapms.hpe.com/finalizer
-      generation: 2
+      generation: 8
       name: vcluster-blue
       namespace: tenants
-      resourceVersion: "134562804"
-      uid: f6ceb492-1e7b-4569-88be-f6b53bfb25fd
+      resourceVersion: "18509045"
+      uid: 04f26622-dccb-44a1-a928-7d4750c573e7
     spec:
       childnamespaces:
       - slurm
       - user
       state: Deployed
+      tenanthooks:
+      - blockingcall: true
+        eventtypes:
+        - UPDATE
+        - DELETE
+        hookcredentials:
+          secretname: blocking-hook-cm
+          secretnamespace: services
+        name: blocking-hook
+        url: http://10.19.12.61:6000/block
+      - blockingcall: false
+        eventtypes:
+        - UPDATE
+        - DELETE
+        hookcredentials:
+          secretname: notify-hook-cm
+          secretnamespace: services
+        name: notify-hook
+        url: http://10.19.12.61:6000
+      tenantkms:
+        enablekms: true
+        keyname: key1
+        keytype: rsa-3072
       tenantname: vcluster-blue
       tenantresources:
       - enforceexclusivehsmgroups: true
         hsmgrouplabel: blue
         type: compute
         xnames:
-        - x3000c0s19b1n0
-        - x3000c0s19b3n0
-      - enforceexclusivehsmgroups: true
-        hsmgrouplabel: blue
-        type: application
-        xnames:
-        - x3000c0s32b0n0
+        - x1000c0s0b0n0
     status:
       childnamespaces:
       - vcluster-blue-slurm
       - vcluster-blue-user
+      tenanthooks:
+      - blockingcall: true
+        eventtypes:
+        - UPDATE
+        - DELETE
+        hookcredentials:
+          secretname: blocking-hook-cm
+          secretnamespace: services
+        name: blocking-hook
+        url: http://10.19.12.61:6000/block
+      - blockingcall: false
+        eventtypes:
+        - UPDATE
+        - DELETE
+        hookcredentials:
+          secretname: notify-hook-cm
+          secretnamespace: services
+        name: notify-hook
+        url: http://10.19.12.61:6000
+      tenantkms:
+        keyname: key1
+        keytype: rsa-3072
+        publickey: '{"1":{"creation_time":"2023-09-27T17:14:50.475282593Z","name":"rsa-3072","public_key":"-----BEGIN
+          PUBLIC KEY-----\nMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAyYGFfQWlJPKNiz25SAJ+\nHdsW2iENcXd1Rst0hYk5JI7h9y1enLCaSr1TkCh0sRvYu03OZSr7+crNhb4SL7mK\nXFDnkX55qKu4KcIwyz0ZAtPJJ959HlnPuL0ELglV7PIQtMqejLpQqOTU7zM5/Jh+\n++nex5SEo5BmiQGB9UQfgAORhuRI5um0DlnE/W1hHdTvprj1HfPvI+XcBOffzbPe\nK3Os/dnxeSlJ2V45fEDmgR4pCIOdPmoTaXnE/ARlsfp5riA8w0butXT+5MddGNXb\nlMfBLtlTGYPBGApuWoeMqfdgsQv6gm5m7nBT7iaJHrnFkdZVpjJKoCN/4ZEtAjUS\nVF9KL9I/KEiwSh4k4OT7MGlxPIhu7XxBMVxXNMOAo4DTOk9kdUpbgcy+W1fkv5HW\nxYElVbToSokQLiMhURZ6eaqXUcOEDpSVxsvX0oqMkZBwzJcNC3KxEDVnTJQ8VMmp\n6nmDinp4noosUJC5QbiQ8oUyg+gLXbUQUYS0DZawZ1Y3AgMBAAE=\n-----END
+          PUBLIC KEY-----\n"}}'
+        transitname: cray-tenant-912e5990-8fdc-46ff-b86e-11550345e737
       tenantresources:
       - enforceexclusivehsmgroups: true
         hsmgrouplabel: blue
         type: compute
         xnames:
-        - x3000c0s19b1n0
-        - x3000c0s19b3n0
-      - enforceexclusivehsmgroups: true
-        hsmgrouplabel: blue
-        type: application
-        xnames:
-        - x3000c0s32b0n0
-      uuid: f6ceb492-1e7b-4569-88be-f6b53bfb25fd
+        - x1000c0s0b0n0
     ```
 
 - (`ncn-mw#`) The `cray` command can now be used to display the HSM group:
@@ -140,7 +189,7 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
     tags = [ "vcluster-blue",]
 
     [members]
-    ids = [ "x3000c0s19b1n0", "x3000c0s19b3n0", "x3000c0s32b0n0",]
+    ids = [ "x1000c0s0b0n0", "x1000c0s1b0n0",]
     ```
 
 - (`ncn-mw#`) The following command can now be used to display the namespace tree structure for the tenant:
@@ -179,7 +228,7 @@ metadata:
   namespace: vcluster-blue-slurm
 spec:
   tapmsTenantName: vcluster-blue
-  tapmsTenantVersion: v1alpha2
+  tapmsTenantVersion: v1alpha3
   slurmctld:
     image: cray/cray-slurmctld:1.4.0
     ip: 10.253.124.100
@@ -278,6 +327,7 @@ spec:
           cpu: 200m
           memory: 512Mi
 ```
+
 **Note:** Container versions must be customized to the versions installed on the system
 
 ## Apply the `slurm` operator CR
@@ -300,13 +350,13 @@ slurm_conf_url: https://rgw-vip.local/wlm/<namespace>/<name>/
 Where `<namespace>` and `<name>` match the namespace and name of the Slurm tenant resource created above. This
 will configure nodes in that tenant with the Munge key and Slurm configuration files created for that tenant.
 
-Slurmctld can be configured to run in configless mode. This is achieved by setting `SlurmctldParameters` value in the `slurm.conf` file.
+`Slurmctld` can be configured to run in `configless` mode. This is achieved by setting `SlurmctldParameters` value in the `slurm.conf` file.
 
 ```yaml
 SlurmctldParameters=enable_configless
 ```
 
-Once configless mode is enabled, launch slurmd with the --conf-server option to get new setting from slurmctld
+Once `configless` mode is enabled, launch `slurmd` with the `--conf-server` option to get new setting from `slurmctld`.
 
 ```bash
 slurmd --conf-server <other options>
