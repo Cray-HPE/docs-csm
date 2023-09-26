@@ -56,7 +56,7 @@ function get_smartmon_url() {
     fi
   done
 
-  if [[ -z  $smartmon_url ]]; then
+  if [[ -z $smartmon_url ]]; then
     echo WARNING: unable to install smart-mon rpm
     return 1
   fi
