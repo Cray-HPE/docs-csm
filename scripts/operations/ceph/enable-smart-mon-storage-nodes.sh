@@ -38,7 +38,7 @@ function get_smartmon_url() {
 
   # get a list of repos that start with "csm-noos"
   if IFS=$'\n' read -rd '' -a repos; then
-        :
+    :
   fi <<< "$(curl -sSfk https://packages.local/service/rest/v1/repositories | jq -r '.[] | .["name"]' | grep ^csm-noos | tr '\n' ' ')"
 
   echo "Will look for smart-mon rpm in the following repos: ${repos[*]}"
@@ -46,7 +46,7 @@ function get_smartmon_url() {
   # search through the csm-noos repos looking for our package
   for repo in "${repos[@]}"; do
     # Retrieve the packages from nexus
-    if [[ -z "$smartmon_url" ]]; then
+    if [[ -z $smartmon_url ]]; then
       if ! repo_items="$(paginate "https://packages.local/service/rest/v1/components?repository=$repo")"; then
         echo "ERROR on line $LINENO: unable to get items from $repo, exiting"
         return 1
@@ -56,7 +56,7 @@ function get_smartmon_url() {
     fi
   done
 
-  if [[ -z  "$smartmon_url" ]]; then
+  if [[ -z  $smartmon_url ]]; then
     echo WARNING: unable to install smart-mon rpm
     return 1
   fi
@@ -72,7 +72,7 @@ function paginate() {
   fi
 
   # check if last char of url is a space
-  if [[ "${url: -1}" == " " ]]; then
+  if [[ ${url: -1} == " " ]]; then
     # remove last character if it is a space
     url=${url::-1}
   fi
@@ -102,7 +102,7 @@ fi
 
 echo "Using ${smartmon_url} to install rpm on storage nodes..."
 if IFS=$'\n' read -rd '' -a ORCH_HOSTS; then
-        :
+  :
 fi <<< "$(ceph orch host ls -f json | jq -r '.[].hostname')"
 for storage_node in "${ORCH_HOSTS[@]}"; do
   echo "Installing smart-mon rpm on ${storage_node}..."
