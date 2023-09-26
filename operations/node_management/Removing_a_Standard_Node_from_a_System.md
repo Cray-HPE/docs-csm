@@ -162,7 +162,7 @@ This procedure is applicable for the following types of standard rack nodes:
     ==================================================
     Clearing subscriptions from NodeBMC x3000c0s19b0
     Retrieving BMC (x3000c0s19b0) credentials from SCSD
-    {'Targets': [{'Xname': 'x3000c0s19b0', 'Username': 'root', 'Password': 'initial0', 'StatusCode': 200, 'StatusMsg': 'OK'}]}
+    {'Targets': [{'Xname': 'x3000c0s19b0', 'Username': 'root', 'Password': 'XXXXXXXX', 'StatusCode': 200, 'StatusMsg': 'OK'}]}
     Retrieving Redfish Event subscriptions from the BMC: https://x3000c0s19b0/redfish/v1/EventService/Subscriptions
     No event subscriptions present!
 
