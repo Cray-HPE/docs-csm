@@ -67,13 +67,6 @@ Upload Ceph container images into Nexus.
     This procedure must be performed on a `ceph-mon`node. By default these will be
     any of the first three storage NCNs: `ncn-s001`, `ncn-s002`, or `ncn-s003`
 
-1. (`ncn-s#`) Copy `upload_ceph_images_to_nexus.sh` from `ncn-m001` and execute it.
-
-    ```bash
-    scp ncn-m001:/usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh && \
-    /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
-    ```
-
 1. (`ncn-s#`) Check the status of Ceph.
 
     Check the OSD status, weight, and location:
@@ -113,7 +106,7 @@ Upload Ceph container images into Nexus.
 1. (`ncn-s#`) If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
 
     ```bash
-    ceph orch maintenance enter <storage node hostname being rebuilt>
+    ceph orch host maintenance enter <storage node hostname being rebuilt>
     ```
 
     Example output:

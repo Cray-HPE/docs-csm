@@ -25,6 +25,8 @@
 
 #!/bin/bash
 
+ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+
 host=$(hostname)
 host_ip=$(host ${host} | awk '{ print $NF }')
 
@@ -78,10 +80,66 @@ for node in ncn-s001 ncn-s002 ncn-s003; do
   fi
 done
 
-# run preload images on host
-echo "Running pre-load-images on $host"
-if [[ ! $(/srv/cray/scripts/common/pre-load-images.sh) ]]; then
-  echo "ERROR  Unable to run pre-load-images.sh on $host."
+# run preload images on host only if Ceph version is not v16.2.13
+# if ceph is v16.2.13, then pull images from Nexus becuase
+# if ceph is v16.2.13, then local docker registry has been stopped
+version=""
+for node in ncn-s001 ncn-s002 ncn-s003; do
+  if [[ "$host" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]; then
+    version=$(ceph version | grep '16.2.13')
+    if [[ $? -eq 0 ]]; then break; fi
+  else
+    version=$(ssh $node ${ssh_options} 'ceph version | grep "16.2.13"')
+    if [[ $? -eq 0 ]]; then break; fi
+  fi
+done
+if [[ -z $version ]]; then
+  # run pre-load-images if patch Ceph is not 16.2.13
+  echo "Running pre-load-images on $host"
+  if [[ ! $(/srv/cray/scripts/common/pre-load-images.sh) ]]; then
+    echo "ERROR  Unable to run pre-load-images.sh on $host."
+  fi
+else
+  # pull images from nexus if Ceph is 16.2.13
+  containers=(
+'container_image_alertmanager'
+'container_image_grafana'
+'container_image_node_exporter'
+'container_image_prometheus'
+  )
+  for container in "${containers[@]}"; do
+    image=$(ceph --name client.ro config get mgr mgr/cephadm/${container})
+    podman pull $image
+  done
+  active_mgr=$(ceph --name client.ro mgr dump | jq -r .active_name)
+  active_mgr_version=$(ceph --name client.ro orch ps -f json | jq --arg MGR $active_mgr '.[] | select(.daemon_name | contains($MGR)) | .version' | tr -d '"')
+  podman pull "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v${active_mgr_version}"
+fi
+
+# exit maintenance mode if node is in maintenance mode
+maintenance=""
+maintenance=$(ceph --name client.ro orch host ls -f json | jq --arg host "$host" '.[] | select(.hostname==$host)' | grep -E 'maintenance|Maintenance')
+if [[ -n $maintenance ]]; then
+  success_exit_maint=0
+  if [[ "$host" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]; then
+    ceph orch host maintenance exit $host
+    if [[ $? -eq 0 ]]; then
+      success_exit_maint=1
+    fi
+  else
+    for node in ncn-s001 ncn-s002 ncn-s003; do
+      ssh $node ${ssh_options} "ceph orch host maintenance exit $host"
+      if [[ $? -eq 0 ]]; then
+        success_exit_maint=1
+        break
+      fi
+    done
+  fi
+  if [[ $success_exit_maint -eq 0 ]]; then
+      echo "ERROR failed to remove $host from maintenance mode."
+      echo "Try manually running 'ceph orch host maintenance exit $host' from ncn-s001, ncn-s002, or ncn-s003."
+      exit 1
+  fi
 fi
 
 sleep 30
@@ -110,6 +168,13 @@ do
     fi
   done
 done
+
+# reinstalling smartmon on storage nodes if Ceph version is 16.2.13
+if [[ -n $version ]]; then
+  echo "Reinstalling smartmon on storage nodes"
+  ssh ncn-m001 /usr/share/doc/csm/scripts/operations/ceph/enable-smart-mon-storage-nodes.sh
+  sleep 10
+fi
 
 # check if node-exporter needs to be restarted
 status=$(ceph --name client.ro orch ps $host --format json | jq '.[] | select(.daemon_type == "node-exporter") | .status_desc' | tr -d '"')
