@@ -476,10 +476,15 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
     1. Run the following commands in succession to remove the interfaces.
 
-       Deleting the `cray-dhcp-kea` pod prevents the interfaces from being re-created.
+       Stop the `cray-dhcp-kea-helper` job to prevent the interfaces from being re-created.
 
        ```bash
-       kubectl delete -n services pod $(kubectl get pods -n services | grep cray-dhcp-kea- | awk '{ print $2 }')
+       kubectl -n services patch cronjobs cray-dhcp-kea-helper -p '{"spec":{"suspend":true}}'
+       ```
+
+       Remove the interfaces from HSM.
+
+       ```bash
        for ETH in $(cat eth_interfaces); do cray hsm inventory ethernetInterfaces delete $ETH --format json ; done
        ```
 
@@ -534,10 +539,16 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 1. (`ncn-mw#`) Restart Kea.
 
     ```bash
-    kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
+    kubectl rollout restart deployment -n services cray-dhcp-kea
     ```
 
 1. Repeat the preceding step for each node in the blade.
+
+1. (`ncn-mw#`) Re-enable the `cray-dhcp-kea-helper` job.
+
+    ```bash
+    kubectl -n services patch cronjobs cray-dhcp-kea-helper -p '{"spec":{"suspend":false}}'
+    ```
 
 ### Enable and power on the chassis slot
 

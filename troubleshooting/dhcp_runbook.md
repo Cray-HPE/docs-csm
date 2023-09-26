@@ -2,12 +2,12 @@
 
 - [Get an API token](#get-an-api-token)
 - [1 Confirm the status of the `cray-dhcp-kea` services](#1-confirm-the-status-of-the-cray-dhcp-kea-services)
-   1. [Check `cray-dchp-kea` pods](#11-check-cray-dchp-kea-pods)
+   1. [Check `cray-dhcp-kea` pods](#11-check-cray-dhcp-kea-pods)
    1. [Check `cray-dhcp-kea` service endpoints](#12-check-cray-dhcp-kea-service-endpoints)
    1. [Verify that `cray-dhcp-kea` configuration is valid](#13-verify-that-cray-dhcp-kea-configuration-is-valid)
    1. [Review `cray-dhcp-kea` running configuration](#14-review-cray-dhcp-kea-running-configuration)
    1. [Verify that `cray-dhcp-kea` has active DHCP leases](#15-verify-that-cray-dhcp-kea-has-active-dhcp-leases)
-   1. [Check `dhcp-helper.py` output](#16-check-dhcp-helperpy-output)
+   1. [Check the `cray-dhcp-kea-helper` job](#16-check-the-cray-dhcp-kea-helper-job)
    1. [Check `cray-dhcp-kea` logs](#17-check-cray-dhcp-kea-logs)
 - [2 Troubleshooting DHCP for a specific node](#2-troubleshooting-dhcp-for-a-specific-node)
    1. [Check current DHCP leases](#21-check-current-dhcp-leases)
@@ -37,9 +37,9 @@ export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin
 
 Check if the Kea DHCP services are running properly.
 
-### 1.1 Check `cray-dchp-kea` pods
+### 1.1 Check `cray-dhcp-kea` pods
 
-1. (`ncn-mw#`) List the `cray-dchp-kea` pods.
+1. (`ncn-mw#`) List the `cray-dhcp-kea` pods.
 
    ```bash
    kubectl get pods -n services -o wide | grep kea
@@ -48,14 +48,30 @@ Check if the Kea DHCP services are running properly.
    Expected output looks similar to the following:
 
    ```text
-   cray-dhcp-kea-6f7ddf65dc-kckq6                                    3/3     Running            0          45h     10.37.0.47     ncn-w001   <none>           <none>
+   cray-dhcp-kea-7d4c5c9fb5-hs5gg      3/3 Running   0 33m   10.33.0.22   ncn-w011 <none> <none>
+   cray-dhcp-kea-7d4c5c9fb5-qtwtn      3/3 Running   0 33m   10.39.0.47   ncn-w006 <none> <none>
+   cray-dhcp-kea-7d4c5c9fb5-t4mkw      3/3 Running   0 24h   10.40.0.13   ncn-w005 <none> <none>
+   cray-dhcp-kea-helper-28256892-bl64f 0/2 Completed 0 29m   10.39.0.48   ncn-w006 <none> <none>
+   cray-dhcp-kea-helper-28256895-6t674 0/2 Completed 0 26m   10.39.0.53   ncn-w006 <none> <none>
+   cray-dhcp-kea-helper-28256898-8xzl2 0/2 Completed 0 23m   10.39.0.32   ncn-w006 <none> <none>
+   cray-dhcp-kea-helper-28256901-4wzql 0/2 Completed 0 20m   10.39.0.41   ncn-w006 <none> <none>
+   cray-dhcp-kea-helper-28256904-9h7hw 0/2 Completed 0 17m   10.39.0.48   ncn-w006 <none> <none>
+   cray-dhcp-kea-helper-28256907-zstfk 0/2 Completed 0 14m   10.39.0.44   ncn-w006 <none> <none>
+   cray-dhcp-kea-helper-28256910-566dd 0/2 Completed 0 11m   10.39.0.53   ncn-w006 <none> <none>
+   cray-dhcp-kea-helper-28256913-n2q2x 0/2 Completed 0 8m19s 10.39.0.48   ncn-w006 <none> <none>
+   cray-dhcp-kea-helper-28256916-j5w2n 0/2 Completed 0 5m19s 10.39.0.32   ncn-w006 <none> <none>
+   cray-dhcp-kea-helper-28256919-xnhnw 0/2 Completed 0 2m19s 10.39.0.32   ncn-w006 <none> <none>
+   cray-dhcp-kea-init-24-nbhng         0/2 Completed 0 8d    10.32.0.52   ncn-w001 <none> <none>
+   cray-dhcp-kea-postgres-0            3/3 Running   0 24h   10.39.0.28   ncn-w006 <none> <none>
+   cray-dhcp-kea-postgres-1            3/3 Running   0 24h   10.34.128.12 ncn-w004 <none> <none>
+   cray-dhcp-kea-postgres-2            3/3 Running   0 24h   10.32.0.39   ncn-w001 <none> <none>
    ```
 
 1. Verify that all pods listed are in `Running` state.
 
    If a `cray-dhcp-kea` pod is not in `Running` state, then perform Kubernetes troubleshooting.
 
-   This output will also show which worker node the `cray-kea-dhcp` pod is currently on. This information may be useful when debugging a Kubernetes problem.
+   This output will also show which worker nodes the `cray-kea-dhcp` pods are currently on. This information may be useful when debugging a Kubernetes problem.
 
 ### 1.2 Check `cray-dhcp-kea` service endpoints
 
@@ -68,11 +84,17 @@ Check if the Kea DHCP services are running properly.
    Expected output looks similar to the following:
 
    ```text
-   cray-dhcp-kea-api                             ClusterIP      10.31.247.201   <none>          8000/TCP                     3h36m
-   cray-dhcp-kea-tcp-hmn                         LoadBalancer   10.25.109.178   10.94.100.222   67:30833/TCP                 3h36m
-   cray-dhcp-kea-tcp-nmn                         LoadBalancer   10.21.240.208   10.92.100.222   67:31915/TCP                 3h36m
-   cray-dhcp-kea-udp-hmn                         LoadBalancer   10.20.37.60     10.94.100.222   67:30357/UDP                 3h36m
-   cray-dhcp-kea-udp-nmn                         LoadBalancer   10.24.246.19    10.92.100.222   67:32188/UDP                 3h36m
+   cray-dhcp-kea-api              ClusterIP     10.26.142.204  <none>         8000/TCP      5d23h
+   cray-dhcp-kea-postgres         ClusterIP     10.19.97.142   <none>         5432/TCP      5d23h
+   cray-dhcp-kea-postgres-0       ClusterIP     10.30.214.27   <none>         5432/TCP      5d23h
+   cray-dhcp-kea-postgres-1       ClusterIP     10.27.232.156  <none>         5432/TCP      5d23h
+   cray-dhcp-kea-postgres-2       ClusterIP     10.22.242.251  <none>         5432/TCP      5d23h
+   cray-dhcp-kea-postgres-config  ClusterIP     None           <none>         <none>        5d23h
+   cray-dhcp-kea-postgres-repl    ClusterIP     10.17.107.16   <none>         5432/TCP      5d23
+   cray-dhcp-kea-tcp-hmn          LoadBalancer  10.24.79.120   10.94.100.222  67:32120/TCP  5d23h
+   cray-dhcp-kea-tcp-nmn          LoadBalancer  10.19.139.179  10.92.100.222  67:31652/TCP  5d23h
+   cray-dhcp-kea-udp-hmn          LoadBalancer  10.25.203.31   10.94.100.222  67:30840/UDP  5d23h
+   cray-dhcp-kea-udp-nmn          LoadBalancer  10.19.187.168  10.92.100.222  67:31904/UDP  5d23h
    ```
 
 1. Verify that all `cray-dhcp-kea` services are listed as `Pending`.
@@ -199,17 +221,35 @@ Verify that `cray-dhcp-kea` is managing DHCP leases.
    If things are working normally, then the expectation is to have more than 0 leases found.
    If no leases are found, then that indicates the base configuration is being loaded or there is a network issue.
 
-### 1.6 Check `dhcp-helper.py` output
+### 1.6 Check the `cray-dhcp-kea-helper` job
 
-(`ncn-mw#`) Run `dhcp-helper.py`.
+- (`ncn-mw#`) Check the status of the most recent `cray-dhcp-kea-helper` job.
 
-```bash
-kubectl exec -n services $(kubectl get pods -A|grep kea| awk '{ print $2 }') -c cray-dhcp-kea -- /srv/kea/dhcp-helper.py
-```
+   ```bash
+   kubectl get pods -n services | grep cray-dhcp-kea-helper
+   ```
 
-If there are no errors, then `dhcp-helper.py` will not return any messages or logs.
+   Example output:
 
-If there is output from running the above command, then the output will include a description of any problems found.
+   ```text
+   cray-dhcp-kea-helper-28256892-bl64f 0/2 Completed 0 29m
+   cray-dhcp-kea-helper-28256895-6t674 0/2 Completed 0 26m
+   cray-dhcp-kea-helper-28256898-8xzl2 0/2 Completed 0 23m
+   cray-dhcp-kea-helper-28256901-4wzql 0/2 Completed 0 20m
+   cray-dhcp-kea-helper-28256904-9h7hw 0/2 Completed 0 17m
+   cray-dhcp-kea-helper-28256907-zstfk 0/2 Completed 0 14m
+   cray-dhcp-kea-helper-28256910-566dd 0/2 Completed 0 11m
+   cray-dhcp-kea-helper-28256913-n2q2x 0/2 Completed 0 8m19s
+   cray-dhcp-kea-helper-28256916-j5w2n 0/2 Completed 0 5m19s
+   cray-dhcp-kea-helper-28256919-xnhnw 0/2 Completed 0 2m19s
+   ```
+
+- (`ncn-mw#`) If the status of the most recent `cray-dhcp-kea-helper` job is `Error`, check the logs for a
+              description of any problems found.
+
+   ```bash
+   kubectl logs -n services $(kubectl get pods -A|grep kea-helper| awk '{ print $2 }' | tail -n 1)
+   ```
 
 ### 1.7 Check `cray-dhcp-kea` logs
 
