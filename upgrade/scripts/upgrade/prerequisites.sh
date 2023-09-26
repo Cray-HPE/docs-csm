@@ -760,12 +760,6 @@ for chart_name in cray-etcd-defrag cray-etcd-backup cray-etcd-migration-setup; d
   do_upgrade_csm_chart "${chart_name}" platform.yaml
 done
 
-# Upgrade CFS/IMS and csm-ssh-keys to address CASMTRIAGE-5939
-# And relatedly, upgrade cray-bos to address CASMTRIAGE-6009
-for chart_name in cfs-ara cfs-hwsync-agent cfs-trust cray-bos cray-cfs-api cray-cfs-batcher cray-cfs-operator cray-ims csm-ssh-keys; do
-  do_upgrade_csm_chart "${chart_name}" sysmgmt.yaml
-done
-
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta} == "false" ]]; then
@@ -1305,6 +1299,23 @@ if [[ ${state_recorded} == "0" ]]; then
 else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
+
+# Upgrade CFS/IMS and csm-ssh-keys to address CASMTRIAGE-5939
+# And relatedly, upgrade cray-bos to address CASMTRIAGE-6009
+CHARTS=(
+  'cfs-ara'
+  'cfs-hwsync-agent'
+  'cfs-trust'
+  'cray-bos'
+  'cray-cfs-api'
+  'cray-cfs-batcher'
+  'cray-cfs-operator'
+  'cray-ims'
+  'csm-ssh-keys'
+)
+for chart_name in "${CHARTS[@]}"; do
+  do_upgrade_csm_chart "${chart_name}" sysmgmt.yaml
+done
 
 state_name="PREFLIGHT_CHECK"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
