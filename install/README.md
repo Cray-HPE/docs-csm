@@ -120,13 +120,13 @@ See [Validate the LiveCD](pre-installation.md#5-validate-the-livecd).
 <!-- markdownlint-disable-next-line MD036 MD026 -->
 **IMPORTANT**
 
-The REDS hardware discovery process, PCS/RTS management switch availability monitoring, and the
+The HMS Discovery Kubernetes cronjob hardware discovery process, PCS/RTS management switch availability monitoring, and the
 Prometheus SNMP Exporter depend on SNMP. To ensure that these services function correctly, validate
 the SNMP settings in the system to ensure that the management network switches have SNMP enabled and
 that the SNMP credentials configured on the switches match the credentials stored in Vault and
 `customizations.yaml`.
 
-If SNMP is misconfigured, then REDS hardware discovery, PCS/RTS management switch availability monitoring,
+If SNMP is misconfigured, then hardware discovery by HMS Discovery Kubernetes cronjob, PCS/RTS management switch availability monitoring,
 and the Prometheus SNMP Exporter may fail to operate correctly. For more information, see
 [Configure SNMP](../operations/network/management_network/configure_snmp.md).
 

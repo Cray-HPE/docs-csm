@@ -10,7 +10,7 @@ new air-cooled `NodeBMCs` and Slingshot switch BMCs (`RouterBMCs`), and SNMP cre
 
 - [Limitation](#limitation)
 - [Procedure](#procedure)
-    1. [Update the default credentials used by REDS](#1-update-the-default-credentials-used-by-reds)
+    1. [Update the default credentials used by HMS Discovery](#1-update-the-default-credentials-used-by-hms-discovery-kubernetes-cronjob)
     1. [Restart the SNMP-backed RTS to pick up the SNMP credential changes](#2-restart-the-snmp-backed-rts-to-pick-up-the-snmp-credential-changes)
 
 ## Limitation
@@ -20,13 +20,13 @@ procedure needs to be the same as the one used in this procedure for air-cooled 
 
 ## Procedure
 
-The River Endpoint Discovery Service (REDS) sealed secret contains the default global credential used by REDS.
+The HMS Discovery Kubernetes cronjob sealed secret contains the default global credential used by REDS.
 
-### 1. Update the default credentials used by REDS
+### 1. Update the default credentials used by HMS Discovery Kubernetes cronjob
 
 Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure **with the following specifications**:
 
-- Chart name: `cray-hms-reds`
+- Chart name: `cray-hms-discovery`
 - Base manifest name: `core-services`
 - (`ncn-mw#`) When reaching the step to update the customizations, perform the following steps:
 
@@ -34,10 +34,10 @@ Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.m
 
     1. Run `git clone https://github.com/Cray-HPE/csm.git`.
 
-    1. Copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` from the cloned repository into the desired working directory.
+    1. Copy the directory `./csm/vendor/github.com/Cray-HPE/shasta-cfg/utils` from the cloned repository into the desired working directory.
 
         ```bash
-        cp -vr ./csm/vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils .
+        cp -vr ./csm/vendor/github.com/Cray-HPE/shasta-cfg/utils .
         ```
 
     1. Acquire sealed secret keys.
@@ -48,9 +48,9 @@ Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.m
         kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d > certs/sealed_secrets.key
         ```
 
-    1. Modify REDS sealed secret to use new global default credentials.
+    1. Modify HMS discovery sealed secret to use new global default credentials.
 
-        1. Inspect the original default Redfish credentials used by REDS and HMS discovery.
+        1. Inspect the original default Redfish credentials used by HMS discovery.
 
             ```bash
             ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults -r | base64 -d | jq
@@ -83,7 +83,7 @@ Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.m
             }
             ```
 
-        1. Update the default credentials in `customizations.yaml` for REDS and HMS discovery to use.
+        1. Update the default credentials in `customizations.yaml` for HMS discovery to use.
 
             1. Specify the desired default Redfish credentials.
 
@@ -151,10 +151,10 @@ Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.m
 
     **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-    1. Wait for the REDS Vault loader job to run to completion.
+    1. Wait for the HMS Discovery Vault loader job to run to completion.
 
         ```bash
-        kubectl -n services wait job cray-reds-vault-loader --for=condition=complete --timeout=5m
+        kubectl -n services wait job -l app=hms-discovery-vault-loader --for=condition=complete --timeout=5m
         ```
 
     1. Verify that the default Redfish credentials have updated in Vault.

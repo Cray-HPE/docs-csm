@@ -68,7 +68,7 @@ credentials being in Vault will fail until they are added.
 <!-- When updating this information, search the docs for the snmp-authentication-tag to find related content -->
 <!-- These comments can be removed once we adopt HTTP/lw-dita/Generated docs with re-usable snippets -->
 
-To ensure proper operation of the REDS hardware discovery process, PCS/RTS management switch availability monitoring,
+To ensure proper operation of the HMS Discovery hardware discovery process, PCS/RTS management switch availability monitoring,
 and the Prometheus SNMP Exporter, validate the following:
 
 - SNMP is enabled on the management network switches.
@@ -84,7 +84,7 @@ It is not uncommon for CSM upgrades to be paired with system maintenance such as
 or management network upgrades. If management network switches are reconfigured or new switches are added, and a
 custom CANU configuration with SNMP settings was not used, it is possible that an administrator may unknowingly push new switch
 configurations that omit SNMP. If in the process of fixing SNMP, an administrator then adds SNMP credentials to the switches
-that do not match what is stored in Vault and `customizations.yaml`, then the resulting REDS, PCS/RTS, and Prometheus errors can be
+that do not match what is stored in Vault and `customizations.yaml`, then the resulting HMS Discovery, PCS/RTS, and Prometheus errors can be
 difficult to diagnose and resolve.
 
 CANU custom configuration files should be stored in a version controlled repository so that they can be re-used for
@@ -94,7 +94,7 @@ For more information, see [Configure SNMP](../operations/network/management_netw
 contains the following relevant information:
 
 - Links to vendor-specific switch documentation, which provides more information about configuring SNMP on the management switches.
-- Other SNMP information related to REDS hardware discovery, PCS/RTS management switch availability monitoring, and the Prometheus SNMP Exporter
+- Other SNMP information related to HMS Discovery hardware discovery, PCS/RTS management switch availability monitoring, and the Prometheus SNMP Exporter
 - Links to related procedures with Vault, `customizations.yaml`, sealed secrets, and more.
 
 Return here after verifying that SNMP is properly configured on the management network switches.

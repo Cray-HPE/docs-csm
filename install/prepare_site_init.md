@@ -85,7 +85,7 @@ with system-specific customizations.
 
     > **`NOTE`**
     >
-    > - The `cray_reds_credentials` are used by the River Endpoint Discovery Service (REDS) for River components.
+    > - The `cray_reds_credentials` are used by the HMS Discovery Kubernetes cronjob for River components.
     > - The `cray_meds_credentials` are used by the Mountain Endpoint Discovery Service (MEDS) for the liquid-cooled components in an Olympus (Mountain) cabinet.
     > - The `cray_hms_rts_credentials` are used by the Redfish Translation Service (RTS) for any hardware components which are not managed by Redfish, such as a ServerTech PDU in a River Cabinet.
     >
@@ -102,13 +102,13 @@ with system-specific customizations.
     diff ${SITE_INIT}/customizations.yaml ${SITE_INIT}/customizations.yaml.prepassword
     ```
 
-1. (`pit#`) Validate that REDS/MEDS/RTS credentials are correct.
+1. (`pit#`) Validate that  HMS Discovery/MEDS/RTS credentials are correct.
 
     For all credentials, make sure that `Username` and `Password` values are correct.
 
-    - Validate REDS credentials:
+    - Validate River credentials:
 
-        > **`NOTE`** These credentials are used by the REDS and HMS discovery services, targeting River Redfish
+        > **`NOTE`** These credentials are used by the HMS discovery service, targeting River Redfish
         BMC endpoints and management switches
         >
         > - For `vault_redfish_defaults`, the only entry used is:

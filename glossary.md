@@ -56,7 +56,6 @@ Glossary of terms used in CSM documentation.
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
 * [Redfish Translation Service (RTS)](#redfish-translation-service-rts)
 * [River Cabinet](#river-cabinet)
-* [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
 * [Rosetta ASIC](#rosetta-asic)
 * [Service/IO Cabinet](#serviceio-cabinet)
 * [Simple Storage Service (S3)](#simple-storage-service-s3)
@@ -507,12 +506,6 @@ At least one 19 inch IEA management cabinet is required for every HPE Cray EX sy
 support the [management nodes](#management-nodes), system management network, utility
 storage, and other support equipment. This cabinet serves as the primary customer access
 point for managing the system.
-
-## River Endpoint Discovery Service (REDS)
-
-The River Endpoint Discovery Service (REDS) manages initial discovery, configuration, and geolocation of
-Redfish-enabled [BMCs](#baseboard-management-controller-bmc) in air-cooled [River cabinets](#river-cabinet). It periodically makes Redfish requests to determine if
-hardware is present or missing.
 
 ## Rosetta ASIC
 
