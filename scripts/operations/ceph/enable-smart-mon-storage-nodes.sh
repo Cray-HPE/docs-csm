@@ -37,12 +37,14 @@ function get_smartmon_url() {
   fi
 
   # get a list of repos that start with "csm-noos"
-  repos=$(curl -sSfk https://packages.local/service/rest/v1/repositories | jq -r '.[] | .["name"]' | grep ^csm-noos | tr '\n' ' ')
+  if IFS=$'\n' read -rd '' -a repos; then
+        :
+  fi <<< "$(curl -sSfk https://packages.local/service/rest/v1/repositories | jq -r '.[] | .["name"]' | grep ^csm-noos | tr '\n' ' ')" 
 
-  echo "Will look for smart-mon rpm in the following repos: $repos"
+  echo "Will look for smart-mon rpm in the following repos: ${repos[@]}"
 
   # search through the csm-noos repos looking for our package
-  for repo in $repos; do
+  for repo in "${repos[@]}"; do
     # Retrieve the packages from nexus
     test -n "$smartmon_url" || smartmon_url=$(paginate "https://packages.local/service/rest/v1/components?repository=$repo" \
       | jq -r '.items[] | .assets[] | .downloadUrl' | grep smart-mon | sort -V | tail -1)
@@ -82,8 +84,10 @@ function paginate() {
 get_smartmon_url
 
 echo "Using ${smartmon_url} to install rpm on storage nodes..."
-
-for storage_node in $(ceph orch host ls -f json | jq -r '.[].hostname'); do
+if IFS=$'\n' read -rd '' -a ORCH_HOSTS; then
+        :
+fi <<< "$(ceph orch host ls -f json | jq -r '.[].hostname')"
+for storage_node in "${ORCH_HOSTS[@]}"; do
   echo "Installing smart-mon rpm on ${storage_node}..."
   ssh ${storage_node} ${ssh_options} "zypper in -y --auto-agree-with-licenses ${smartmon_url} && systemctl enable smart && systemctl restart smart"
 done
