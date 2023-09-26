@@ -47,10 +47,11 @@ function get_smartmon_url() {
   for repo in "${repos[@]}"; do
     # Retrieve the packages from nexus
     if [[ -z "$smartmon_url" ]]; then
-      smartmon_url=$(paginate "https://packages.local/service/rest/v1/components?repository=$repo" \
-        | jq -r '.items[] | .assets[] | .downloadUrl' | grep smart-mon | sort -V | tail -1)
-      if [[ $? -ne 0 ]]; then
+      if ! repo_items="$(paginate "https://packages.local/service/rest/v1/components?repository=$repo")"; then
+        echo "ERROR on line $LINENO: unable to get items from $repo, exiting"
         return 1
+      else
+        smartmon_url="$(echo $repo_items | jq -r '.items[] | .assets[] | .downloadUrl' | grep smart-mon | sort -V | tail -1)"
       fi
     fi
   done
@@ -65,7 +66,7 @@ function paginate() {
   local url="$1"
   local token
 
-  if test -z $url; then
+  if [[ -z $url ]]; then
     echo "ERROR: paginate() called without an argument"
     return 1
   fi
@@ -78,7 +79,7 @@ function paginate() {
 
   { token="$(curl -sSk "$url" | tee /dev/fd/3 | jq -r '.continuationToken // null')"; } 3>&1
 
-  if test -z $token; then
+  if [[ -z $token ]]; then
     echo "ERROR on line $LINENO: unable to retreive continuation token, exiting"
     return 1
   fi
@@ -88,7 +89,7 @@ function paginate() {
       token="$(curl -sSk "$url&continuationToken=${token}" | tee /dev/fd/3 | jq -r '.continuationToken // null')"
     } 3>&1
 
-    if test -z $token; then
+    if [[ -z $token ]]; then
       echo "ERROR on line $LINENO: unable to retreive continuation token, exiting"
       return 1
     fi
