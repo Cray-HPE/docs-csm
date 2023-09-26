@@ -101,7 +101,13 @@ if [[ -z $version ]]; then
   fi
 else
   # pull images from nexus if Ceph is 16.2.13
-  for container in "container_image_prometheus" "container_image_node_exporter" "container_image_alertmanager" "container_image_grafana"; do
+  containers=(
+'container_image_alertmanager'
+'container_image_grafana'
+'container_image_node_exporter'
+'container_image_prometheus'
+  )
+  for container in "${containers[@]}"; do
     image=$(ceph --name client.ro config get mgr mgr/cephadm/${container})
     podman pull $image
   done
