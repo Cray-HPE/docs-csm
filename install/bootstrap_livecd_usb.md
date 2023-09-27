@@ -8,7 +8,7 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
 
 ## Topics
 
-1. [Download and expand the CSM Rrlease](#download-and-expand-the-csm-release)
+1. [Download and expand the CSM release](#download-and-expand-the-csm-release)
 1. [Create the bootable media](#create-the-bootable-media)
 1. [Configuration payload](#configuration-payload)
    1. [Before configuration payload workarounds](#before-configuration-payload-workarounds)
