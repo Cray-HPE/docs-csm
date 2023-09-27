@@ -42,6 +42,14 @@ cray hsm inventory hardware history list --format json > cray-smd-hardware-histo
 ls -la
 ```
 
+Create backup of roles, sub-roles, and cray-hms-base-config
+
+```bash
+kubectl -n services get configmap cray-hms-base-config -o yaml | sed '/resourceVersion:/d' | sed '/uid:/d' > cray-hms-base-config_$BACKUPDIR.yaml
+cray hsm state components list --format json > cray-smd-components-dump_$BACKUPDIR.json
+ls -la
+```
+
 ## SLS
 
 Create backup of SLS postgres database
@@ -82,7 +90,7 @@ ls -la
 Dump the state of SLS
 
 ```bash
-cray sls dumpstate list --format json > cray-sls-dump_$BACKUPDIR
+cray sls dumpstate list --format json > cray-sls-dump_$BACKUPDIR.json
 ls -la
 ```
 

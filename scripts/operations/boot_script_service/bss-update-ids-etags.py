@@ -31,10 +31,10 @@ import urllib3
 urllib3.disable_warnings()
 
 if len(sys.argv) < 2:
-  print("ERROR: Usage: subbss subfile.json")
+  print("ERROR: Usage: bss-update-ids-etags ims-post-import-file.json")
   sys.exit()
 
-  
+
 token = os.environ.get('TOKEN')
 if token is None or token == "":
   print("Error environment variable TOKEN was not set")
