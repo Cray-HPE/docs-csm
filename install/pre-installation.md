@@ -439,6 +439,15 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
               --no-gpg-checks update -y cray-site-init
        ```
 
+   1. Install `hpe-csm-goss-package` RPM.
+
+       > ***NOTE*** This package provides the necessary test driver for validating the pre-installation, installation, and more.
+
+       ```bash
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+              --no-gpg-checks install -y hpe-csm-goss-package
+       ```
+
    1. Install `csm-testing` RPM.
 
        > ***NOTE*** This package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.

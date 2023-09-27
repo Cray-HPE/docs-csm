@@ -115,10 +115,21 @@ cd "$CSM_DISTDIR"
 
 ### Update test suite packages
 
-(`ncn-m001#`) Update the `csm-testing` and `goss-servers` RPMs on the NCNs.
+(`ncn-m001#`) Update select RPMs on the NCNs.
+
+**NOTE:** The following message may be emitted after running the following `zypper` command. The message can be safely ignored.
+
+```text
+You may wish to restart these processes.
+See 'man zypper' for information about the meaning of values in the above table.
+No core libraries or services have been updated since the last system boot.
+Reboot is probably not necessary.
+```
 
 ```bash
-pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zypper install -y csm-testing goss-servers'
+pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
+    'zypper install -y hpe-csm-goss-package csm-testing goss-servers && systemctl enable goss-servers && systemctl start goss-servers' \
+    && echo PASSED || echo FAILED
 ```
 
 ### Verification
