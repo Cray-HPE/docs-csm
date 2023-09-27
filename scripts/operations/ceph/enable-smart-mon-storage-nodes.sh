@@ -23,6 +23,8 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
+set -euo pipefail
+
 smartmon_url=''
 ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
