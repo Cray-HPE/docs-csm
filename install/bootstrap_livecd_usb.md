@@ -835,12 +835,12 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    pit# /root/bin/pit-init.sh
    ```
 
-1. Install `csm-testing`.
+1. Install `csm-testing` and `hpe-csm-goss-package`.
 
    The following assumes the `CSM_PATH` environment variable is set to the absolute path of the unpacked CSM release.
 
    ```bash
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1) $(find ${CSM_PATH}/rpm/ -name "hpe-csm-goss-package*.rpm" | sort -V | tail -1)
    ```
 
 <a name="next-topic"></a>
