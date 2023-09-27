@@ -1217,6 +1217,29 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# CASMCMS-8816: Update virtiofsd on worker nodes as workaround for CASMTRIAGE-6084
+state_name="UPDATE_VIRTIOFSD"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+# This RPM was only added to the release tarballs partway through the CSM 1.5 development process.
+# Therefore, this step is only needed when upgrading to a build which includes this RPM.
+virtiofsd_rpm=$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name hpe-csm-virtiofsd-\*.rpm | sort -V | tail -1)
+if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" && -n ${virtiofsd_rpm} ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    virtiofsd_version=$(rpm -q "${virtiofsd_rpm}")
+    virtiofsd_url="https://packages.local/repository/csm-sle-15sp4/noarch/${virtiofsd_version}.rpm"
+
+    # Install RPM on all worker nodes
+    worker_nodes=$(kubectl get nodes | grep -E "^ncn-w[0-9]{3}[[:space:]]+Ready[[:space:]]" | awk '{ print $1 }' | tr '\n' ',')
+    # Run with -S so that if any of the RPM installs fail, the pdsh command fails
+    pdsh -S -w "${worker_nodes}" rpm --force -Uvh "${virtiofsd_url}"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="FINISH_NLS_UPGRADE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" ]]; then
