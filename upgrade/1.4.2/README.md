@@ -215,10 +215,12 @@ This step will create an imperative CFS session that can be used to configure bo
 
 ### Update test suite packages
 
-(`ncn-m001#`) Update the `csm-testing` and `goss-servers` RPMs on the NCNs.
+(`ncn-m001#`) Update select RPMs on the NCNs.
 
 ```bash
-pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zypper install -y csm-testing goss-servers craycli'
+pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
+    'zypper install -y hpe-csm-goss-package csm-testing goss-servers craycli && systemctl enable goss-servers && systemctl start goss-servers' \
+    && echo PASSED || echo FAILED
 ```
 
 ### Verification

@@ -209,7 +209,7 @@ version of CSM being installed. It then waits for the components to reach a conf
 
 ### Update test suite packages
 
-(`ncn-m001#`) Update the `csm-testing` and `goss-servers` RPMs on the NCNs.
+(`ncn-m001#`) Update select RPMs on the NCNs.
 
 ```bash
 /usr/share/doc/csm/upgrade/scripts/upgrade/util/upgrade-test-rpms.sh
