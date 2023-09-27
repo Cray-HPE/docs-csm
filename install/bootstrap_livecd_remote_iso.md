@@ -261,9 +261,11 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Install/upgrade the CSI and testing RPMs.
 
    ```bash
-   pit# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
-   pit# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1)
-   pit# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force \
+          $(find ./${CSM_RELEASE}/rpm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1) \
+          $(find ./${CSM_RELEASE}/rpm/ -name "hpe-csm-goss-package*.rpm" | sort -V | tail -1) \
+          $(find ./${CSM_RELEASE}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1) \
+          $(find ./${CSM_RELEASE}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1)
    ```
 
 1. Show the version of CSI installed.
