@@ -160,6 +160,12 @@ yq4 -i eval 'del(.spec.kubernetes.services.*.cray-service.sqlCluster)' "$c"
 # customization only contains cray-service.sqlcluster (CASMPET-6584).
 yq4 -i eval 'del(.spec.kubernetes.services.cray-spire)' "$c"
 
+# Handle REDS removal when upgrading to CSM 1.6
+# Remove REDS from customizations.yaml
+yq4 -i eval 'del(.spec.kubernetes.services.cray-hms-reds)' "$c"
+# Add customizations for cray-hms-discovery for it to get the River credential sealed secret:
+yq4 -i eval '.spec.kubernetes.services.cray-hms-discovery.sealedSecrets = ["{{ kubernetes.sealed_secrets.cray_reds_credentials | toYaml }}"]' "$c"
+
 if [[ $inplace == "yes" ]]; then
   cp "$c" "$customizations"
 else

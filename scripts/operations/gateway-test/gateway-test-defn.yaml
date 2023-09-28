@@ -135,13 +135,6 @@ ingress_api_services:
   namespace: services
   gateways: ["services-gateway","customer-admin-gateway"]
   project: CSM
-- name: cray-reds
-  path: apis/reds/v1/liveness
-  port: 443
-  expected-result: 204
-  namespace: services
-  gateways: ["services-gateway","customer-admin-gateway"]
-  project: CSM
 - name: cray-scsd
   path: apis/scsd/v1/health
   port: 443

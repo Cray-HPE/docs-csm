@@ -12,8 +12,6 @@ That data needs to be repopulated in order for the cluster to go back to a healt
     - [CPS](#cps)
     - [FAS](#fas)
     - [HMNFD](#hmnfd)
-    - [MEDS](#meds)
-    - [REDS](#reds)
 
 ## Applicable services
 
@@ -25,7 +23,6 @@ The following services need their data repopulated in the etcd cluster:
 - Firmware Action Service \(FAS\)
 - HMS Notification Fanout Daemon \(HMNFD\)
 - Mountain Endpoint Discovery Service \(MEDS\)
-- River Endpoint Discovery Service \(REDS\)
 
 ## Prerequisites
 
@@ -38,8 +35,6 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
 - [CPS](#cps)
 - [FAS](#fas)
 - [HMNFD](#hmnfd)
-- [MEDS](#meds)
-- [REDS](#reds)
 
 ### BOS
 
@@ -114,19 +109,3 @@ Resubscribe the compute nodes and any NCNs that use the ORCA daemon for their St
     ```bash
     pdsh -w ncn-w00[1-4]-can.local "systemctl restart cray-orca"
     ```
-
-### MEDS
-
-(`ncn-mw#`) Restart MEDS.
-
-```bash
-kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-meds'
-```
-
-### REDS
-
-(`ncn-mw#`) Restart REDS.
-
-```bash
-kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-reds'
-```

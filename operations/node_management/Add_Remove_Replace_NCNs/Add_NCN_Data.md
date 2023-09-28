@@ -436,30 +436,17 @@ The NCN MAC addresses need to be collected using the [Collect NCN MAC Addresses]
 
    > ***NOTE*** Wait five minutes for Kea and the HSM to sync. If `ping` continues to fail, then re-run the previous step to restart the BMC.
 
-1. (`ncn-mw#`) Restart the REDS deployment.
+1. (`ncn-mw#`) Ensure the HMS Discovery Kubernetes cronjob is enabled.
 
     ```bash
-    kubectl -n services rollout restart deployment cray-reds
+    kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
     ```
 
-    Expected output:
-
-    ```text
-    deployment.apps/cray-reds restarted
-    ```
-
-1. (`ncn-mw#`) Wait for REDS to restart.
+1. (`ncn-mw#`) Wait for a run of the HMS Discovery Kubernetes cronjob to complete.
 
     ```bash
-    kubectl -n services rollout status  deployment cray-reds
-    ```
-
-    Expected output:
-
-    ```text
-    Waiting for deployment "cray-reds" rollout to finish: 1 old replicas are pending termination...
-    Waiting for deployment "cray-reds" rollout to finish: 1 old replicas are pending termination...
-    deployment "cray-reds" successfully rolled out
+    DISCOVERY_JOB_NAME=$(kubectl -n services get jobs -l cronjob-name=hms-discovery --sort-by=.metadata.creationTimestamp -o custom-columns=":metadata.name" | tail -n 1)
+    kubectl wait -n services job "${DISCOVERY_JOB_NAME}"  --for=condition=complete --timeout=5m
     ```
 
 1. (`ncn-mw#`) **Skip if adding `ncn-m001`:** Wait for the NCN BMC to get discovered by HSM.
