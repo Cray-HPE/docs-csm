@@ -45,9 +45,8 @@ Capture snapshot of all k8s pod info “kubectl get pods -A -o wide” for readi
 - [Stage 6 - Drain of all the nodes under the identified rack](#Stage-6---drain-of-all-the-nodes-under-the-identified-rack)
 - [Stage 7 - Run pre rack resiliency checks for the correctness of the drain](#Stage-7---run-pre-rack-resiliency-checks-for-the-correctness-of-the-drain)
 - [Stage 8 - Run CSM health checks](#Stage-8---run-csm-health-checks)
-- [Stage 9 - Remove etcd member of the master node](#Stage-9---remove-etcd-member-of-the-master-node)
-- [Stage 10 - Graceful shutdown of the identified rack](#Stage-10---graceful-shutdown-of-the-identified-rack)
-- [Stage 11 - Run CSM health checks](#Stage-11---run-csm-health-checks)
+- [Stage 9 - Graceful shutdown of the identified rack](#Stage-9---graceful-shutdown-of-the-identified-rack)
+- [Stage 10 - Run CSM health checks](#Stage-10---run-csm-health-checks)
 
 ### Stage 0 - Prerequisites
 
@@ -110,48 +109,14 @@ After drain has been completed, check to see if all the pods have been evicted (
 
 Run CSM platform health checks and capture critical events/ info, if any, as mentioned in “Stage-0” for the readiness of shutting down a identified rack after draining of the worker nodes.
 
-### Stage 9 - Remove etcd member of the master node
-
-#### Steps
-1. Info cmd: Just to list and check current etcd members:
-   
-Ex:
-
-        ncn-m001:~ # etcdctl --endpoints https://127.0.0.1:2379 --cert /etc/kubernetes/pki/etcd/peer.crt --key /etc/kubernetes/pki/etcd/peer.key --cacert                  /etc/kubernetes/pki/etcd/ca.crt member list
-        46e7b792f3473890, started, ncn-m003, https://10.252.1.18:2380, https://10.252.1.18:2379,https://127.0.0.1:2379, false
-        80f975cd8e92aad9, started, ncn-m002, https://10.252.1.17:2380, https://10.252.1.17:2379,https://127.0.0.1:2379, false
-        a40df5e325796614, started, ncn-m001, https://10.252.1.16:2380, https://10.252.1.16:2379,https://127.0.0.1:2379, false
-         ncn-m001:~ #
-
-1. Stop etcd cluster:
-   
-Ex:
-
-        systemctl stop etcd
-
-4. remove the etcd member of the master node belong to the rack which is being shutdown:
-   
-Ex:
-
-        etcdctl --endpoints https://127.0.0.1:2379 --cert /etc/kubernetes/pki/etcd/peer.crt --key /etc/kubernetes/pki/etcd/peer.key --cacert         /etc/kubernetes/pki/etcd/ca.crt member remove 46e7b792f3473890
-
-6. check to see if the etcd member has been removed:
-   
-Ex:
-
-        ncn-m001:~ # etcdctl --endpoints https://127.0.0.1:2379 --cert /etc/kubernetes/pki/etcd/peer.crt --key /etc/kubernetes/pki/etcd/peer.key --cacert         /etc/kubernetes/pki/etcd/ca.crt member list
-        80f975cd8e92aad9, started, ncn-m002, https://10.252.1.17:2380, https://10.252.1.17:2379,https://127.0.0.1:2379, false
-        a40df5e325796614, started, ncn-m001, https://10.252.1.16:2380, https://10.252.1.16:2379,https://127.0.0.1:2379, false
-        ncn-m001:~ #
-
-### Stage 10 - Graceful shutdown of the identified rack
+### Stage 9 - Graceful shutdown of the identified rack
 
 If all “OK” from the “Step-5” and “Step-6” “ above, go ahead with graceful shutdown of all the nodes under identified rack.
 From any health node run "power_off_on.sh -r <rack_label_name> -s power_off" to power off all the ncn master/ worker nodes.
                          OR
 Login (ssh to master/ worker node from PIT node) and initiate “init 0” on all the ncn master and worker nodes.
 
-### Stage 11 - Run CSM health checks
+### Stage 10 - Run CSM health checks
 
 Refer section [CSM Health Checks](#ii-csm-health-checks) and run health checks just to make sure
 that the cluster is accessible and functional after identified rakc has been shutdown.
@@ -167,49 +132,7 @@ Directly from BMC power on all the ncn master/ worker nodes of a rack which has 
 ### Stage 2 - Collect and validate CSM health checks 
 Refer section [CSM Health Checks](#ii-csm-health-checks)
 
-### Stage 3 - add master node etcd member back to the cluster
-Please note that this step is applicable only if the rack has a master node, otherwise, skip it.
-
-If the health of the cluster is OK then add the etcd member back to the cluster.
-   
-Add the etcd memeber back to the the cluster
-
-        ncn-m001:~ # etcdctl --endpoints https://127.0.0.1:2379 --cert /etc/kubernetes/pki/etcd/peer.crt --key /etc/kubernetes/pki/etcd/peer.key --cacert         /etc/kubernetes/pki/etcd/ca.crt member add ncn-m003 --peer-urls=https://10.252.1.18:2380
-        Member 6a1f6b43348d0c05 added to cluster   b0d7e85bf7e326
-
-        ETCD_NAME="ncn-m003"
-        ETCD_INITIAL_CLUSTER="ncn-m003=https://10.252.1.18:2380,ncn-m002=https://10.252.1.17:2380,ncn-m001=https://10.252.1.16:2380"
-        ETCD_INITIAL_ADVERTISE_PEER_URLS="https://10.252.1.18:2380"
-        ETCD_INITIAL_CLUSTER_STATE="existing"
-
-Check that etcd member is added back with  "unstarted" state.
-
-        ncn-m001:~ #  etcdctl --endpoints https://127.0.0.1:2379 --cert /etc/kubernetes/pki/etcd/peer.crt --key /etc/kubernetes/pki/etcd/peer.key --cacert         /etc/kubernetes/pki/etcd/ca.crt member list
-        6a1f6b43348d0c05, unstarted, , https://10.252.1.18:2380, , false
-        80f975cd8e92aad9, started, ncn-m002, https://10.252.1.17:2380, https://10.252.1.17:2379,https://127.0.0.1:2379, false
-        a40df5e325796614, started, ncn-m001, https://10.252.1.16:2380, https://10.252.1.16:2379,https://127.0.0.1:2379, false
-        ncn-m001:~ #
-
-Remove etcd member data on master node
-
-        ncn-m003:~ # rm -rf /var/lib/etcd/member
-
-Set the etcd service to start as existing (ncn-m001):
-
-        ncn-m003:~ # sed -i 's/new/existing/' /etc/systemd/system/etcd.service /srv/cray/resources/common/etcd/etcd.service
-        ncn-m003:~ # systemctl daemon-reload
-
-start etcd on the unhealthy NCN (ncn-m001):
-        ncn-m003:~ # systemctl start etcd
-
-Ex:
-
-        ncn-m001:~ # etcdctl --endpoints https://127.0.0.1:2379 --cert /etc/kubernetes/pki/etcd/peer.crt --key /etc/kubernetes/pki/etcd/peer.key --cacert         /etc/kubernetes/pki/etcd/ca.crt member list
-        80f975cd8e92aad9, started, ncn-m002, https://10.252.1.17:2380, https://10.252.1.17:2379,https://127.0.0.1:2379, false
-        a40df5e325796614, started, ncn-m001, https://10.252.1.16:2380, https://10.252.1.16:2379,https://127.0.0.1:2379, false
-        ncn-m001:~ #
-
-### Stage 4 - Reschedule unbalanced critical pods
+### Stage 3 - Reschedule unbalanced critical pods
 
 Reschedule unbalanced etcd/ postgres pods by running “redistribute_pods.sh” script. Here it will redistribute etcd/ postgress pods under 
 all the names spaces across the zones (one pod instance per rack only).
