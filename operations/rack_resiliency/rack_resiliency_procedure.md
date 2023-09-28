@@ -132,7 +132,13 @@ Directly from BMC power on all the ncn master/ worker nodes of a rack which has 
 ### Stage 2 - Collect and validate CSM health checks 
 Refer section [CSM Health Checks](#ii-csm-health-checks)
 
-### Stage 3 - Reschedule unbalanced critical pods
+### Stage 3 - Uncordon the master/ worker nodes
+From any healthy node run "uncordon_nodes.sh -r <rack_label_name>" to uncordon the ncn master/ worker nodes
+which were cordoned before shutdown.
+
+Run "kubectl get nodes" and check to see if the nodes are in "Ready" state without "SchedulingDisabled" lable set.
+
+### Stage 4 - Reschedule unbalanced critical pods
 
 Reschedule unbalanced etcd/ postgres pods by running “redistribute_pods.sh” script. Here it will redistribute etcd/ postgress pods under 
 all the names spaces across the zones (one pod instance per rack only).
