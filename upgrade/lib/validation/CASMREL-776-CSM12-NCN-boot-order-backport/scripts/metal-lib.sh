@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2020-2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2020-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -49,9 +49,11 @@ install_grub2() {
     done
 
     # Install grub2.
-    local name=$(grep PRETTY_NAME /etc/*release* | cut -d '=' -f2 | tr -d '"')
     local index=0
+    local name
+    name=$(grep PRETTY_NAME /etc/*release* | cut -d '=' -f2 | tr -d '"')
     [ -z "$name" ] && name='CRAY Linux'
+    # shellcheck disable=SC2046
     for disk in $(mdadm --detail $(blkid -L $fslabel) | grep /dev/sd | awk '{print $NF}'); do
         # Add '--suse-enable-tpm' to grub2-install once we need TPM.
         grub2-install --no-rs-codes --suse-force-signed --root-directory $working_path --removable "$disk"
@@ -60,8 +62,9 @@ install_grub2() {
     done
 
     # Get the kernel command we used to boot.
-    local init_cmdline=$(cat /proc/cmdline)
     local disk_cmdline=''
+    local init_cmdline
+    init_cmdline=$(cat /proc/cmdline)
     for cmd in $init_cmdline; do
         # cleans up first argument when running this script on a disk-booted system
         if [[ $cmd =~ kernel$ ]]; then
@@ -137,6 +140,7 @@ function get_boot_artifacts {
     [ -z "$live_dir" ] && live_dir=LiveOS/
 
     # pull the loaded items from the mounted squashFS storage into the fallback bootloader
+    # shellcheck disable=SC2046
     base_dir="$(lsblk $(blkid -L $squashfs_storage) -o MOUNTPOINT -n)/$live_dir"
     [ -d $base_dir ] || echo >&2 'SQFSRAID was not mounted!' return 1
     cp -pv "${base_dir}kernel" "$working_path/boot/" || echo >&2 "Kernel file NOT found in $base_dir!" || artifact_error=1
@@ -147,6 +151,7 @@ function get_boot_artifacts {
 
 function configure_lldp() {
     local interfaces
+    # shellcheck disable=SC2010
     interfaces=`ls /sys/class/net/ | grep mgmt`
     for i in $interfaces; do
       echo "enabling and configuring LLDP for interface: $i"
@@ -281,10 +286,12 @@ function efi_fail_host {
 }
 
 function efi_trim {
+    # shellcheck disable=SC2046
     echo disabling undesired boot entries $(cat /tmp/rbbs*) && cat /tmp/rbbs* | sort | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -A
 }
 
 function efi_remove {
+    # shellcheck disable=SC2046
     echo removing undesired boot entries $(cat /tmp/sbbs*) && cat /tmp/sbbs* | sort | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
 }
 
@@ -292,6 +299,7 @@ function efi_enforce {
     # IMPORTANT: The ENTIRE list of entries needs to exist, otherwise iLO/HPE servers will undo any changes.
     # both /tmp/bbs* and /tmp/rbbs* are concatenated together; the ordinal order of the /tmp/bbsNUM files
     # will enforce NICs first.
+    # shellcheck disable=SC2046
     echo enforcing boot order $(cat /tmp/bbs*) && efibootmgr -o $efibootmgr_prefix$(cat /tmp/bbs* | sed 's/^Boot//g' | awk '{print $1} ' | tr -d '*' | tr -d '\n' | sed -r 's/(.{4})/\1,/g;s/,$//'),$(cat /tmp/rbbs* | sed 's/^Boot//g' | awk '{print $1} ' | tr -d '*' | tr -d '\n' | sed -r 's/(.{4})/\1,/g;s/,$//') | grep -i bootorder
     echo activating boot entries && cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -i efibootmgr -b {} -a
 }
@@ -436,6 +444,7 @@ function paginate() {
 }
 
 function install_csm_rpms() {
+    local hpe_goss_url goss_servers_url csm_testing_url platform_utils_url
 
     # Verify nexus is available.  It's expected to *not* be available during initial install of the NCNs.
     if ! curl -sSf https://packages.local/service/rest/v1/components?repository=csm-sle-15sp3 >& /dev/null; then
@@ -444,11 +453,13 @@ function install_csm_rpms() {
     fi
 
     # Retreive the packages from nexus
+    hpe_goss_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp2" \
+        | jq -r  '.items[] | .assets[] | .downloadUrl' | grep hpe-csm-goss-package | sort -V | tail -1)
     goss_servers_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp2" \
         | jq -r  '.items[] | .assets[] | .downloadUrl' | grep goss-servers | sort -V | tail -1)
     csm_testing_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp2" \
         | jq -r  '.items[] | .assets[] | .downloadUrl' | grep csm-testing | sort -V | tail -1)
     platform_utils_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp2" \
         | jq -r  '.items[] | .assets[] | .downloadUrl' | grep platform-utils | sort -V | tail -1)
-    zypper install -y $goss_servers_url $csm_testing_url $platform_utils_url && systemctl enable goss-servers && systemctl restart goss-servers
+    zypper install -y $hpe_goss_url $csm_testing_url $goss_servers_url $platform_utils_url && systemctl enable goss-servers && systemctl restart goss-servers
 }

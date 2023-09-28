@@ -8,21 +8,21 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
 
 ## Topics
 
-   1. [Download and Expand the CSM Release](#download-and-expand-the-csm-release)
-   1. [Create the Bootable Media](#create-the-bootable-media)
-   1. [Configuration Payload](#configuration-payload)
-      1. [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
-      1. [Generate Installation Files](#generate-installation-files)
-      1. [CSI Workarounds](#csi-workarounds)
-      1. [Prepare `site-init`](#prepare_site_init)
-   1. [Prepopulate LiveCD Daemons Configuration and NCN Artifacts](#prepopulate-livecd-daemons-configuration-and-ncn-artifacts)
-   1. [Boot the LiveCD](#boot-the-livecd)
-      1. [First Login](#first-login)
-   1. [Next Topic](#next-topic)
+1. [Download and expand the CSM release](#download-and-expand-the-csm-release)
+1. [Create the bootable media](#create-the-bootable-media)
+1. [Configuration payload](#configuration-payload)
+   1. [Before configuration payload workarounds](#before-configuration-payload-workarounds)
+   1. [Generate installation files](#generate-installation-files)
+   1. [CSI workarounds](#csi-workarounds)
+   1. [Prepare `site-init`](#prepare_site_init)
+1. [Prepopulate LiveCD daemons configuration and NCN artifacts](#prepopulate-livecd-daemons-configuration-and-ncn-artifacts)
+1. [Boot the LiveCD](#boot-the-livecd)
+   1. [First login](#first-login)
+1. [Next topic](#next-topic)
 
 <a name="download-and-expand-the-csm-release"></a>
 
-## 1. Download and Expand the CSM Release
+## 1. Download and expand the CSM release
 
 Fetch the base installation CSM tarball, extract it, and install the contained CSI tool.
 
@@ -153,7 +153,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 
 <a name="create-the-bootable-media"></a>
 
-## 2. Create the Bootable Media
+## 2. Create the bootable media
 
 Cray `site-init` will create the bootable LiveCD. Before creating the media, identify
 which device will be used for it.
@@ -233,7 +233,7 @@ on to the [configuration payload](#configuration-payload).
 
 <a name="configuration-payload"></a>
 
-## 3. Configuration Payload
+## 3. Configuration payload
 
 The `SHASTA-CFG` structure and other configuration files will be prepared, then `csi` will generate a system-unique configuration payload. This payload will be used
 for the rest of the CSM installation on the USB device.
@@ -245,13 +245,13 @@ for the rest of the CSM installation on the USB device.
 
 <a name="before-configuration-payload-workarounds"></a>
 
-### 3.1 Before Configuration Payload Workarounds
+### 3.1 Before configuration payload workarounds
 
 Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-configuration-payload` breakpoint.
 
 <a name="generate-installation-files"></a>
 
-### 3.1 Generate Installation Files
+### 3.2 Generate installation files
 
 Some files are needed for generating the configuration payload. See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if the
 information for this system has not yet been prepared.
@@ -457,19 +457,19 @@ information for this system has not yet been prepared.
 
 <a name="csi-workarounds"></a>
 
-#### 3.3 CSI Workarounds
+### 3.3 CSI workarounds
 
 Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.
 
 <a name="prepare_site_init"></a>
 
-#### 3.4 Prepare `site-init`
+### 3.4 Prepare `site-init`
 
 Follow the procedures to [Prepare `site-init`](prepare_site_init.md) directory for your system.
 
 <a name="prepopulate-livecd-daemons-configuration-and-ncn-artifacts"></a>
 
-## 4. Prepopulate LiveCD Daemons Configuration and NCN Artifacts
+## 4. Prepopulate LiveCD daemons configuration and NCN artifacts
 
 Now that the configuration is generated, the next step is to populate the LiveCD with the generated files.
 This will enable SSH, and other services when the LiveCD starts.
@@ -641,7 +641,7 @@ The typescript can be discarded, otherwise if issues arise then it should be sub
 
 <a name="first-login"></a>
 
-### 5.1 First Login
+### 5.1 First login
 
 On first login (over SSH or at local console) the LiveCD will prompt the administrator to change the password.
 
@@ -683,7 +683,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 <a name="configure-the-running-livecd"></a>
 
-## 6. Configure the Running LiveCD
+## 6. Configure the running LiveCD
 
 1. Mount the data partition
     > The data partition is set to `fsopt=noauto` to facilitate LiveCDs over virtual-ISO mount. USB installations need to mount this manually.
@@ -716,7 +716,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# rpm -Uvh --force csm-install-workarounds-latest.noarch.rpm
    ```
 
-1. Check the pit-release version.
+1. Check the `pit-release` version.
 
    ```bash
    pit# cat /etc/pit-release
@@ -730,11 +730,11 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    HASH=g1e67449
    ```
 
-1. First login workarounds
+1. Perform first login workarounds.
 
    Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `first-livecd-login` breakpoint.
 
-1. Start services
+1. Start services.
 
    ```bash
    pit# systemctl start nexus
@@ -759,10 +759,10 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    The following assumes the `CSM_PATH` environment variable is set to the absolute path of the unpacked CSM release.
 
    ```bash
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1) $(find ${CSM_PATH}/rpm/ -name "hpe-csm-goss-package*.rpm" | sort -V | tail -1)
    ```
 
-1. Verify the system:
+1. Verify the system.
 
    ```bash
    pit# csi pit validate --network
@@ -783,7 +783,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 <a name="next-topic"></a>
 
-## Next Topic
+## 7. Next topic
 
 After completing this procedure, the next step is to configure the management network switches.
 
