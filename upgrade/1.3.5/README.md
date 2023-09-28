@@ -26,7 +26,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.5`, follow the procedures descr
 
 ## Preparation
 
-1. Start a typescript on `ncn-m001` to capture the commands and output from this procedure.
+1. (`ncn-m001#`) Start a typescript to capture the commands and output from this procedure.
 
    ```bash
    script -af csm-update.$(date +%Y-%m-%d).txt
@@ -37,7 +37,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.5`, follow the procedures descr
 
    See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract).
 
-1. Set `CSM_DISTDIR` to the directory of the extracted files.
+1. (`ncn-m001#`) Set `CSM_DISTDIR` to the directory of the extracted files.
 
    **IMPORTANT**: If necessary, change this command to match the actual location of the extracted files.
 
@@ -46,7 +46,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.5`, follow the procedures descr
    echo "${CSM_DISTDIR}"
    ```
 
-1. Set `CSM_RELEASE_VERSION` to the CSM release version.
+1. (`ncn-m001#`) Set `CSM_RELEASE_VERSION` to the CSM release version.
 
    ```bash
    export CSM_RELEASE_VERSION="$(${CSM_DISTDIR}/lib/version.sh --version)"
@@ -59,26 +59,26 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.5`, follow the procedures descr
 
 ## Update `customizations.yaml`
 
-1. Retrieve `customizations.yaml` from the `site-init` secret:
+1. (`ncn-m001#`) Retrieve `customizations.yaml` from the `site-init` secret:
 
    ```bash
    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "customizations.yaml"
    ```
 
-1. Add customizations for the `cray-hms-hmcollector` Helm chart:
+1. (`ncn-m001#`) Add customizations for the `cray-hms-hmcollector` Helm chart:
 
    ```bash
    yq4 -i eval '.spec.kubernetes.services.cray-hms-hmcollector.hmcollector_external_hostname = "hmcollector.hmnlb.{{ network.dns.external }}"' "customizations.yaml"
    ```
 
-1. Update the `site-init` secret:
+1. (`ncn-m001#`) Update the `site-init` secret:
 
    ```bash
    kubectl delete secret -n loftsman site-init
    kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
-1. (Optional) Commit changes to `customizations.yaml`.
+1. (Optional) (`ncn-m001#`) Commit changes to `customizations.yaml`.
 
    `customizations.yaml` has been updated in this procedure. If using an external Git repository
    for managing customizations as recommended, then clone a local working tree and commit
@@ -97,7 +97,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.5`, follow the procedures descr
 
 ## Setup Nexus
 
-Run `lib/setup-nexus.sh` to configure Nexus and upload new CSM RPM
+(`ncn-m001#`) Run `lib/setup-nexus.sh` to configure Nexus and upload new CSM RPM
 repositories, container images, and Helm charts:
 
 ```bash
@@ -129,15 +129,15 @@ with status code `0`.
 CANU must be at version `1.7.1` or greater for this CSM patch release.
 New features were delivered in [CANU 1.7.0](https://github.com/Cray-HPE/canu/releases/tag/1.7.0) and a critical bug fixed in [CANU 1.7.1](https://github.com/Cray-HPE/canu/releases/tag/1.7.1).
 
-Update CANU.
+(`ncn-m001#`) Update CANU.
 
 ```bash
-pdsh -b -w $(grep -oP 'ncn-[mw]\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zypper install -y canu'
+pdsh -b -S -w $(grep -oP 'ncn-[mw]\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zypper install -y canu' && echo PASSED || echo FAILED
 ```
 
 ## Upgrade services
 
-Run `upgrade.sh` to deploy upgraded CSM applications and services:
+(`ncn-m001#`) Run `upgrade.sh` to deploy upgraded CSM applications and services:
 
 ```bash
 cd "$CSM_DISTDIR"
@@ -172,11 +172,11 @@ The third step stops the local Docker registry on all storage nodes.
 
 ## Update test suite packages
 
-Update the `csm-testing` and `goss-servers` RPMs on the NCNs.
+(`ncn-m001#`) Update select RPMs on the NCNs.
 
 **NOTE:** The following message may be emitted after running the following `zypper` command. The message can be safely ignored.
 
-```bash
+```text
 You may wish to restart these processes.
 See 'man zypper' for information about the meaning of values in the above table.
 No core libraries or services have been updated since the last system boot.
@@ -184,12 +184,14 @@ Reboot is probably not necessary.
 ```
 
 ```bash
-pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zypper install -y csm-testing goss-servers'
+pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
+    'zypper install -y hpe-csm-goss-package csm-testing goss-servers && systemctl enable goss-servers && systemctl start goss-servers' \
+    && echo PASSED || echo FAILED
 ```
 
 ## Verification
 
-1. Verify that the new CSM version is in the product catalog.
+1. (`ncn-m001#`) Verify that the new CSM version is in the product catalog.
 
    Verify that the new CSM version is listed in the output of the following command:
 
@@ -218,7 +220,7 @@ pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zyppe
    1.3.5
    ```
 
-1. Confirm that the product catalog has an accurate timestamp for the CSM upgrade.
+1. (`ncn-m001#`) Confirm that the product catalog has an accurate timestamp for the CSM upgrade.
 
    Confirm that the `import_date` reflects the timestamp of the upgrade.
 
@@ -228,7 +230,7 @@ pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zyppe
 
 ## Complete upgrade
 
-Remember to exit the typescript that was started at the beginning of the upgrade.
+(`ncn-m001#`) Remember to exit the typescript that was started at the beginning of the upgrade.
 
 ```bash
 exit

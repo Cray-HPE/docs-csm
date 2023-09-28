@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -471,6 +471,7 @@ function paginate() {
 function install_csm_rpms() {
     local repos="csm-sle-15sp2 csm-sle-15sp3"
     local canu_url
+    local hpe_goss_url
     local goss_servers_url
     local csm_testing_url
     local platform_utils_url
@@ -490,6 +491,8 @@ function install_csm_rpms() {
         # Retreive the packages from nexus
         test -n "$canu_url" || canu_url=$(paginate "https://packages.local/service/rest/v1/components?repository=$repo" \
             | jq -r  '.items[] | .assets[] | .downloadUrl' | grep canu | sort -V | tail -1)
+        test -n "$hpe_goss_url" || hpe_goss_url=$(paginate "https://packages.local/service/rest/v1/components?repository=$repo" \
+            | jq -r  '.items[] | .assets[] | .downloadUrl' | grep hpe-csm-goss-package | sort -V | tail -1)
         test -n "$goss_servers_url" || goss_servers_url=$(paginate "https://packages.local/service/rest/v1/components?repository=$repo" \
             | jq -r  '.items[] | .assets[] | .downloadUrl' | grep goss-servers | sort -V | tail -1)
         test -n "$csm_testing_url" || csm_testing_url=$(paginate "https://packages.local/service/rest/v1/components?repository=$repo" \
@@ -500,9 +503,10 @@ function install_csm_rpms() {
     done
 
     test -z "$canu_url" && echo WARNING: unable to install canu
+    test -z "$hpe_goss_url" && echo WARNING: unable to install hpe-goss-csm-package
     test -z "$goss_servers_url" && echo WARNING: unable to install goss-servers
     test -z "$csm_testing_url" && echo WARNING: unable to install csm-testing
     test -z "$platform_utils_url" && echo WARNING: unable to install platform-utils
 
-    zypper install -y $canu_url $goss_servers_url $csm_testing_url $platform_utils_url && systemctl enable goss-servers && systemctl restart goss-servers
+    zypper install -y $canu_url $hpe_goss_url $csm_testing_url $goss_servers_url $platform_utils_url && systemctl enable goss-servers && systemctl restart goss-servers
 }
