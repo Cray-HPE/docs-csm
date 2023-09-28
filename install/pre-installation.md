@@ -448,6 +448,15 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
               --no-gpg-checks install -y iuf-cli
        ```
 
+   1. Install `hpe-csm-goss-package` RPM.
+
+       > ***NOTE*** This package provides the necessary test driver for validating the pre-installation, installation, and more.
+
+       ```bash
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
+              --no-gpg-checks install -y hpe-csm-goss-package
+       ```
+
    1. Install `csm-testing` RPM.
 
        > ***NOTE*** This package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.
