@@ -5,7 +5,7 @@ Profiling execution times is the most common use-case because this can directly 
 The default Configuration Framework Service \(CFS\) `ansible.cfg` in the `cfs-default-ansible-cfg` ConfigMap does not enable this profiling by default, but does include information on the necessary Ansible callbacks.
 
  Alternatively, if editing the default `ansible.cfg` file is not desired, then a new Ansible configuration with profiling enabled can be created and used by CFS.
- See [Use a Custom `ansible.cfg` File](Use_a_Custom_ansible-cfg_File.md) for more information.
+ See [Configure Ansible](Configure_Ansible.md) for more information.
 
 ## Enabling execution time profiling
 

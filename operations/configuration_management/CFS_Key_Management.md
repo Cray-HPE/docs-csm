@@ -1,14 +1,17 @@
 # CFS Key Management and Permission Denied Errors
 
-Configuration Framework Service \(CFS\) manages its own keys separate from keys for communication between CFS and the components or images that it is configuring. These are separate from the keys used by users and should not need to be managed.
+The Configuration Framework Service \(CFS\) manages its own keys separate from keys for communication between CFS and the components or images that it is configuring.
+These are separate from the keys used by users and should not need to be managed.
 
-## Permission Denied Errors
+## Permission denied errors
 
 If Ansible is unable to connect with its target and fails with an `Unreachable - Permission denied` error, the first place to check is the `cfs-state-reporter` on the target node.
 
-Every booted node should be running a copy of `cfs-state-reporter`. This service is responsible for pulling down the public key. To check the status of this service, ssh to the node that CFS cannot communicate with, and run `systemctl status cfs-state-reporter`.
+Every booted node should be running a copy of `cfs-state-reporter`.
+This service is responsible for pulling down the public key.
+To check the status of this service, `ssh` to the node that CFS cannot communicate with, and run `systemctl status cfs-state-reporter`.
 
-```
+```bash
 systemctl status cfs-state-reporter
 ```
 
@@ -35,10 +38,25 @@ If `cfs-state-reporter` is complete but has failed, it can safely be restarted w
  Main PID: 14849 (code=exited, status=1/FAILURE)
 ```
 
-### `cfs-state-reporter` Still Running
+### `cfs-state-reporter` still running
 
-`cfs-state-reporter` may also still be in a running state. In this case it is likely waiting either to authenticate or to pull down the SSH key. The service can safely be restarted as with the failure case, but this is less likely to be successful.
+`cfs-state-reporter` may also still be in a running state.
+In this case it is likely waiting either to authenticate or to pull down the SSH key.
+The service can safely be restarted as with the failure case, but this is less likely to be successful.
 
-If the log messages indicate problems communicating with Spire, checking the health of the Spire service on the node is the next step. See [Troubleshoot Spire Failing to Start on NCNs](../spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md) for more information on troubleshooting Spire.
+If the log messages indicate problems communicating with Spire, checking the health of the Spire service on the node is the next step.
+See [Troubleshoot Spire Failing to Start on NCNs](../spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md) for more information on troubleshooting Spire.
 
-If there are errors indicating failure to communicate with the Boot Script Service (BSS) or the metadata service, check the health of BSS with `kubectl -n services logs deployment/cray-bss -c cray-bss` and the health of `cfs-trust` with `kubectl -n services logs deployment/cfs-trust -c cfs-trust`.
+(`ncn-mw#`) If there are errors indicating failure to communicate with the Boot Script Service (BSS) or the metadata service, then check the following things:
+
+* Check the health of BSS.
+
+   ```bash
+   kubectl -n services logs deployment/cray-bss -c cray-bss
+   ```
+
+* Check the health of `cfs-trust`.
+
+   ```bash
+   kubectl -n services logs deployment/cfs-trust -c cfs-trust
+   ```

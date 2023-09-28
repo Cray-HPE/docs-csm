@@ -40,7 +40,7 @@ For more information on complex host targets, see the [Ansible Hosts Documentati
 
 ## Using the `cray_cfs_image` variable
 
-`** NOTE **` This option is no longer recommended and should only be used in small playbooks and one-off cases
+> `** NOTE **` This option is no longer recommended and should only be used in small playbooks and one-off cases
  as it is more efficient for Ansible to determine this at the host level rather than checking the `cray_cfs_image` variable for multiple tasks.
  The preferred method is to use the aforementioned `cfs_image` host group.
 

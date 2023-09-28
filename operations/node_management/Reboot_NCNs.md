@@ -163,16 +163,16 @@ Execute the rolling NCN reboot procedure steps for the particular node type bein
    This can be run on any NCN where the Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
    ```bash
-   cray cfs components list --status failed --format json | jq .[].id -r | while read -r xname ; do
+   cray cfs v3 components list --status failed --format json | jq .[].id -r | while read -r xname ; do
        echo "${xname}"
-       cray cfs components update "${xname}" --enabled False --error-count 0
+       cray cfs v3 components update "${xname}" --enabled False --error-count 0
    done
    ```
 
    Alternatively, this can be done manually. To get a list of nodes in the failed state:
 
    ```bash
-   cray cfs components list --status failed --format json | jq .[].id
+   cray cfs v3 components list --status failed --format json | jq .[].id
    ```
 
    To reset the error count and disable a node:
@@ -180,7 +180,7 @@ Execute the rolling NCN reboot procedure steps for the particular node type bein
    **`NOTE`** Be sure to replace the `<xname>` in the following command with the component name (xname) of the NCN component to be reset and disabled.
 
    ```bash
-   cray cfs components update <xname> --enabled False --error-count 0
+   cray cfs v3 components update <xname> --enabled False --error-count 0
    ```
 
 ## NCN rolling reboot
@@ -262,7 +262,7 @@ Before rebooting NCNs:
        ssh NODE cat /etc/cray/xname
        ```
 
-    1. (`ncn#`) Check the Configuration Framework Service (CFS) `configurationStatus` for the rebooted node's `desiredConfig`.
+    1. (`ncn#`) Check the Configuration Framework Service (CFS) `configuration_status` for the rebooted node's `desired_config`.
 
        The following command will indicate if a CFS job is currently in progress for this node.
        Replace the `XNAME` value in the following command with the component name (xname) of the node that was rebooted.
@@ -270,7 +270,7 @@ Before rebooting NCNs:
        This can be run on any NCN where the Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
        ```bash
-       cray cfs components describe XNAME --format json | jq .configurationStatus
+       cray cfs v3 components describe XNAME --format json | jq .configuration_status
        ```
 
        Example output:
@@ -279,10 +279,10 @@ Before rebooting NCNs:
        "configured"
        ```
 
-       * If the `configurationStatus` is `pending`, then wait for the job to finish before continuing.
-       * If the `configurationStatus` is `failed`, then this means the failed CFS job `configurationStatus` should be addressed now for this node.
-       * If the `configurationStatus` is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, then this can be ignored.
-       * If the `configurationStatus` is `failed`, then see
+       * If the `configuration_status` is `pending`, then wait for the job to finish before continuing.
+       * If the `configuration_status` is `failed`, then this means the failed CFS job `configuration_status` should be addressed now for this node.
+       * If the `configuration_status` is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, then this can be ignored.
+       * If the `configuration_status` is `failed`, then see
          [Troubleshoot Failed CFS Sessions](../configuration_management/Troubleshoot_CFS_Session_Failed.md)
          for how to analyze the pod logs from `cray-cfs` in order to determine why the configuration may not have completed.
 
@@ -441,7 +441,7 @@ Before rebooting NCNs:
        ssh NODE cat /etc/cray/xname
        ```
 
-    1. (`ncn#`) Check the Configuration Framework Service (CFS) `configurationStatus` for the rebooted node's `desiredConfig`.
+    1. (`ncn#`) Check the Configuration Framework Service (CFS) `configuration_status` for the rebooted node's `desired_config`.
 
        The following command will indicate if a CFS job is currently in progress for this node.
        Replace the `XNAME` value in the following command with the component name (xname) of the node that was rebooted.
@@ -449,7 +449,7 @@ Before rebooting NCNs:
        This can be run on any NCN where the Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
        ```bash
-       cray cfs components describe XNAME --format json | jq .configurationStatus
+       cray cfs v3 components describe XNAME --format json | jq .configuration_status
        ```
 
        Example output:
@@ -458,10 +458,10 @@ Before rebooting NCNs:
        "configured"
        ```
 
-       * If the `configurationStatus` is `pending`, then wait for the job to finish before continuing.
-       * If the `configurationStatus` is `failed`, then this means the failed CFS job `configurationStatus` should be addressed now for this node.
-       * If the `configurationStatus` is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, then this can be ignored.
-       * If the `configurationStatus` is `failed`, then see
+       * If the `configuration_status` is `pending`, then wait for the job to finish before continuing.
+       * If the `configuration_status` is `failed`, then this means the failed CFS job `configuration_status` should be addressed now for this node.
+       * If the `configuration_status` is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, then this can be ignored.
+       * If the `configuration_status` is `failed`, then see
          [Troubleshoot Failed CFS Sessions](../configuration_management/Troubleshoot_CFS_Session_Failed.md)
          for how to analyze the pod logs from `cray-cfs` in order to determine why the configuration may not have completed.
 
@@ -566,7 +566,7 @@ Before rebooting NCNs:
        ssh NODE cat /etc/cray/xname
        ```
 
-    1. (`ncn#`) Check the Configuration Framework Service (CFS) `configurationStatus` for the rebooted node's `desiredConfig`.
+    1. (`ncn#`) Check the Configuration Framework Service (CFS) `configuration_status` for the rebooted node's `desired_config`.
 
        The following command will indicate if a CFS job is currently in progress for this node.
        Replace the `XNAME` value in the following command with the component name (xname) of the node that was rebooted.
@@ -574,7 +574,7 @@ Before rebooting NCNs:
        This can be run on any NCN where the Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
        ```bash
-       cray cfs components describe XNAME --format json | jq .configurationStatus
+       cray cfs v3 components describe XNAME --format json | jq .configuration_status
        ```
 
        Example output:
@@ -583,10 +583,10 @@ Before rebooting NCNs:
        "configured"
        ```
 
-       * If the `configurationStatus` is `pending`, then wait for the job to finish before continuing.
-       * If the `configurationStatus` is `failed`, then this means the failed CFS job `configurationStatus` should be addressed now for this node.
-       * If the `configurationStatus` is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, then this can be ignored.
-       * If the `configurationStatus` is `failed`, then see
+       * If the `configuration_status` is `pending`, then wait for the job to finish before continuing.
+       * If the `configuration_status` is `failed`, then this means the failed CFS job `configuration_status` should be addressed now for this node.
+       * If the `configuration_status` is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, then this can be ignored.
+       * If the `configuration_status` is `failed`, then see
          [Troubleshoot Failed CFS Sessions](../configuration_management/Troubleshoot_CFS_Session_Failed.md)
          for how to analyze the pod logs from `cray-cfs` in order to determine why the configuration may not have completed.
 
@@ -669,7 +669,7 @@ Before rebooting NCNs:
         ssh ncn-m001 cat /etc/cray/xname
         ```
 
-    1. (`ncn#`) Check the Configuration Framework Service (CFS) `configurationStatus` for the `desiredConfig` after rebooting `ncn-m001`.
+    1. (`ncn#`) Check the Configuration Framework Service (CFS) `configuration_status` for the `desired_config` after rebooting `ncn-m001`.
 
        The following command will indicate if a CFS job is currently in progress for `ncn-m001`.
        Replace the `XNAME` value in the following command with the component name (xname) of `ncn-m001`.
@@ -677,7 +677,7 @@ Before rebooting NCNs:
        This can be run on any NCN where the Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
        ```bash
-       cray cfs components describe XNAME --format json | jq .configurationStatus
+       cray cfs v3 components describe XNAME --format json | jq .configuration_status
        ```
 
        Example output:
@@ -686,10 +686,10 @@ Before rebooting NCNs:
        "configured"
        ```
 
-       * If the `configurationStatus` is `pending`, then wait for the job to finish before continuing.
-       * If the `configurationStatus` is `failed`, then this means the failed CFS job `configurationStatus` should be addressed now for this node.
-       * If the `configurationStatus` is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, then this can be ignored.
-       * If the `configurationStatus` is `failed`, then see
+       * If the `configuration_status` is `pending`, then wait for the job to finish before continuing.
+       * If the `configuration_status` is `failed`, then this means the failed CFS job `configuration_status` should be addressed now for this node.
+       * If the `configuration_status` is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, then this can be ignored.
+       * If the `configuration_status` is `failed`, then see
          [Troubleshoot Failed CFS Sessions](../configuration_management/Troubleshoot_CFS_Session_Failed.md)
          for how to analyze the pod logs from `cray-cfs` in order to determine why the configuration may not have completed.
 

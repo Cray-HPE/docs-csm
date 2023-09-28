@@ -71,7 +71,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    1. Find the `bos_session` value for each node via the Configuration Framework Service (CFS).
 
       ```bash
-      cray cfs components describe x9000c3s0b1n0 --format toml | grep bos_session
+      cray cfs v3 components describe x9000c3s0b1n0 --format toml | grep bos_session
       ```
 
       Example output:

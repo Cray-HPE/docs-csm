@@ -76,12 +76,12 @@ Refer to that table and any corresponding product documents before continuing to
 
         ```bash
         XNAME=x3000c0s13b0n0
-        cray cfs components describe "${XNAME}"
+        cray cfs v3 components describe "${XNAME}"
         ```
 
-        The desired value for `configurationStatus` is `configured`. If it is `pending`, then wait for the status to change to `configured`.
+        The desired value for `configuration_status` is `configured`. If it is `pending`, then wait for the status to change to `configured`.
 
-    1. (`ncn-m001#`) Upgrade the remainging NCN storage nodes once the first has upgraded sucessfully. This upgrades NCN storage nodes serially.
+    1. (`ncn-m001#`) Upgrade the remaining NCN storage nodes once the first has upgraded successfully. This upgrades NCN storage nodes serially.
     Adjust the number of storage nodes based on the cluster.
 
         ```bash
