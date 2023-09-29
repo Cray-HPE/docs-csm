@@ -1217,6 +1217,26 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# CASMCMS-8820: Change Kata config file on workers
+state_name="UPDATE_KATA_CONFIG"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+
+    # Get list of worker nodes
+    worker_nodes=$(kubectl get nodes | grep -E "^ncn-w[0-9]{3}[[:space:]]+Ready[[:space:]]" | awk '{ print $1 }' | tr '\n' ',')
+    # Edit config file and create directory if needed
+    # Run with -S so that if any of the commands fail, the pdsh command fails (note that the sed will not command if the edit has already been done
+    # on the file, and the mkdir command will not fail if the directory already exists -- in both cases, that is what we want)
+    pdsh -S -w "${worker_nodes}" 'sed -i "s%^#file_mem_backend .*$%file_mem_backend = \"/var/lib/kata\"%" /opt/kata/share/defaults/kata-containers/configuration-qemu.toml && mkdir -pv /var/lib/kata'
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 # CASMCMS-8816: Update virtiofsd on worker nodes as workaround for CASMTRIAGE-6084
 state_name="UPDATE_VIRTIOFSD"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
