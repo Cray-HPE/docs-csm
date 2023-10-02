@@ -316,7 +316,7 @@ In the event that the Spire Postgres cluster must be rebuilt and the data restor
     The following should return a token.
 
     ```bash
-    /usr/bin/heartbeat-spire-agent api fetch jwt -socketPath=/root/spire/agent.sock -audience test
+    /usr/bin/heartbeat-spire-agent api fetch jwt -socketPath=/var/lib/spire/agent.sock -audience test
     ```
 
 ## Restore Postgres for Keycloak
