@@ -22,11 +22,15 @@ This is achieved via the CFS Hardware Synchronization Agent and the CFS Batcher 
 
 CFS is comprised of a group of services and components interacting within the Cray System Management \(CSM\) service mesh, and provides a means for system administrators to configure nodes and boot images via Ansible. CFS includes the following components:
 
-* A REST API service.
+* `CFS-API`, a REST API service.
 * A command-line interface \(CLI\) to the API \(via the `cray cfs` command\).
-* Pre-packaged AEE\(s\) with values tuned for performant configuration for executing Ansible playbooks, and reporting plug-ins for communication with CFS.
-* The CFS Hardware Sync Agent, which pulls in node information from the system inventory to the CFS database to track the node configuration state.
-* The CFS Batcher, which manages the configuration state of system components \(nodes\).
+* A pre-packaged Ansible Execution Environment \(AEE\) with values tuned for performant configuration for executing Ansible playbooks, and reporting plug-ins for communication with CFS.
+* The `CFS-Hardware-Sync-Agent`, which pulls in node information from the system inventory to the CFS database to track the node configuration state.
+* The `CFS-Operator`, which manages the setup and teardown of Kubernetes jobs that run the AEE.
+* The `CFS-Batcher`, which manages the configuration state of system components \(nodes\).
+* `CFS-Trust`, which manages the keys and certificates CFS uses to access other system components \(nodes\).
+* `CFS-State-Reporter`, which runs on each of the system components \(nodes\) to alert the CFS API when a component is rebooted and requires configuration.
+* `CFS-ARA`, which collects the Ansible logs from the AEE pods.
 
 Although it is not a formal part of the service, CFS integrates with a Gitea instance \(VCS\) running in the CSM service mesh for management of the configuration content life-cycle.
 
@@ -34,12 +38,8 @@ Although it is not a formal part of the service, CFS integrates with a Gitea ins
 
 CFS remotely executes Ansible configuration content on nodes or boot images with the following workflow:
 
-1. Creating a configuration with one or more layers within a specific Git repository, and committing it to be executed by Ansible.
-2. Targeting a node, boot image, or group of nodes to apply the configuration.
-3. Creating a configuration session to apply and track the status of Ansible, applying each configuration layer to the targets specified in the session metadata.
+1. Users create a configuration with one or more layers that references Ansible playbooks stored in VCS.
+1. Users either specify a configuration and the components to apply it to by creating a CFS session, or by setting the desired configuration for the a component.
+1. CFS creates a Kubernetes job that runs the Ansible to apply each of the playbooks in the specified configuration.
 
-Additionally, configuration management of specific components \(nodes\) can also be achieved by doing the following:
-
-1. Creating a configuration with one or more layers within a specific Git repository, and committing it to be executed by Ansible.
-2. Setting the desired configuration state of a node to the prescribed layers.
-3. Enabling the CFS Batcher to automatically configure nodes by creating one or more configuration sessions to apply the configuration layer\(s\).
+For more information on the flow of CFS sessions see the [CFS Flow Diagrams](CFS_Flow_Diagrams.md).

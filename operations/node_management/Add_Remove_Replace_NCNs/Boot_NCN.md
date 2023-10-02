@@ -167,13 +167,13 @@ Run the following commands from a node that has `cray` CLI initialized. See [Con
     * Run the following command to list the available configurations.
 
         ```bash
-        cray cfs configurations list --format toml
+        cray cfs v3 configurations list --format toml
         ```
 
     * Determine the configuration applied another NCN of the same type. This example checks the configuration on `ncn-w002`.
 
         ```bash
-        cray cfs components describe "$(ssh ncn-w002 cat /etc/cray/xname)" --format toml
+        cray cfs v3 components describe "$(ssh ncn-w002 cat /etc/cray/xname)" --format toml
         ```
 
 1. (`ncn#`) Select the appropriate configuration based on the previous step to personalize the added NCN.
@@ -181,13 +181,13 @@ Run the following commands from a node that has `cray` CLI initialized. See [Con
     In this example, the `management-23.03` configuration is used.
 
     ```bash
-    cray cfs components update "${XNAME}" --desired-config management-23.03
+    cray cfs v3 components update "${XNAME}" --desired-config management-23.03
     ```
 
-1. (`ncn#`) Wait for `configurationStatus` to transition from `pending` to `configured`.
+1. (`ncn#`) Wait for `configuration_status` to transition from `pending` to `configured`.
 
     ```bash
-    watch "cray cfs components describe '${XNAME}' --format json | jq .configurationStatus"
+    watch "cray cfs v3 components describe '${XNAME}' --format json | jq .configuration_status"
     ```
 
     Example output excerpt:

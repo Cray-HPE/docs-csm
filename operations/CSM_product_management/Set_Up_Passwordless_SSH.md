@@ -138,8 +138,8 @@ on the HPE Customer Support Center. Similar configuration values for disabling t
 role will be required in these product-specific configuration repositories.
 
 Modifying Ansible plays in a configuration repository will require a new commit
-and subsequent update of the [configuration layer](../configuration_management/Configuration_Layers.md)
-associated with the product.
+and subsequent update of the configuration layer associated with the product. For more information on
+configuration layers, see [CFS Configurations](../configuration_management/CFS_Configurations.md).
 
 Proceed to [Apply configuration with CFS node personalization](#apply-configuration-with-cfs-node-personalization).
 
@@ -190,7 +190,7 @@ After the SSH keys have been set in the Kubernetes secret and ConfigMap, passwor
 configured on management nodes during node personalization. CFS automatically re-configures the
 management nodes via the CFS Batcher whenever the CFS configuration applied to the components
 changes, the nodes reboot, or the component state is cleared in CFS.
-See [Configuration Management with the CFS Batcher](../configuration_management/Configuration_Management_with_the_CFS_Batcher.md)
+See [Automatic Configuration Management](../configuration_management/Automatic_Configuration_Management.md)
 for more information about the CFS Batcher. Since the changes here are made in a Kubernetes secret
 and ConfigMap, the CFS Batcher will not automatically apply the new passwordless SSH configuration.
 

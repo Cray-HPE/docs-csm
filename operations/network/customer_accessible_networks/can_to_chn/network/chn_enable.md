@@ -143,7 +143,7 @@ Copying and storing all data in `${BACKUPDIR}` off-system in a version control r
 1. (`ncn-m001#`) Backup running system CFS configuration data.
 
    ```bash
-   cray cfs configurations list --format json > cfs-configurations.json
+   cray cfs v3 configurations list --format json > cfs-configurations.json
    ```
 
 1. (`ncn-m001#`) Backup running system BSS data.
@@ -160,7 +160,7 @@ Copying and storing all data in `${BACKUPDIR}` off-system in a version control r
 
    ```bash
    for xname in $(cray hsm state components list --role Application --subrole UAN --type Node --format json | jq -r .Components[].ID) ; do
-       cray cfs components update --enabled false --format json "${xname}"
+       cray cfs v3 components update --enabled false --format json "${xname}"
    done
    ```
 
@@ -286,7 +286,7 @@ Add CHN to `customizations.yaml`
    1. (`ncn#`) Identify CFS configuration in use by running the following for each of the the worker nodes identified above.
 
       ```bash
-      cray cfs components describe --format json x3000c0s4b0n0 | jq .desiredConfig
+      cray cfs v3 components describe --format json x3000c0s4b0n0 | jq .desired_config
       ```
 
       Example output:
@@ -301,7 +301,7 @@ Add CHN to `customizations.yaml`
 
    ```bash
    CFS_CONFIG_NAME="management-23.03"
-   cray cfs configurations describe "${CFS_CONFIG_NAME}" --format json | jq 'del(.lastUpdated) | del(.name)' > ncn-cfs-configuration.json
+   cray cfs v3 configurations describe "${CFS_CONFIG_NAME}" --format json | jq 'del(.last_updated) | del(.name)' > ncn-cfs-configuration.json
    ```
 
    The resulting output file should look similar to this in structure. However, installed products, versions, commit hashes, playbooks, and names will vary.
@@ -311,31 +311,31 @@ Add CHN to `customizations.yaml`
    {
      "layers": [
        {
-         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/slingshot-host-software-config-management.git",
+         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/slingshot-host-software-config-management.git",
          "commit": "f4e2bb7e912c39fc63e87a9284d026a5bebb6314",
          "name": "shs-1.7.3-45-1.0.26",
          "playbook": "shs_mellanox_install.yml"
        },
        {
-         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
          "commit": "92ce2c9988fa092ad05b40057c3ec81af7b0af97",
          "name": "csm-1.9.21",
          "playbook": "site.yml"
        },
        {
-         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/sat-config-management.git",
+         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/sat-config-management.git",
          "commit": "4e14a37b32b0a3b779b7e5f2e70998dde47edde1",
          "name": "sat-2.3.4",
          "playbook": "sat-ncn.yml"
        },
        {
-         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
+         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
          "commit": "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7",
          "name": "cos-integration-2.3.75",
          "playbook": "ncn.yml"
        },
        {
-         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
+         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
          "commit": "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7",
          "name": "cos-integration-2.3.75",
          "playbook": "ncn-final.yml"
@@ -352,7 +352,7 @@ Add CHN to `customizations.yaml`
 
    ```json
    {
-     "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+     "clone_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
      "commit": "92ce2c9988fa092ad05b40057c3ec81af7b0af97",
      "name": "csm-1.9.21",
      "playbook": "enable_chn.yml"
@@ -365,46 +365,46 @@ Add CHN to `customizations.yaml`
 1. (`ncn#`) Update the CFS configuration.
 
    ```bash
-   cray cfs configurations update "${CFS_CONFIG_NAME}" --file ncn-cfs-configuration.json --format toml
+   cray cfs v3 configurations update "${CFS_CONFIG_NAME}" --file ncn-cfs-configuration.json --format toml
    ```
 
    Example output:
 
    ```toml
-   lastUpdated = "2023-05-25T09:22:44Z"
+   last_updated = "2023-05-25T09:22:44Z"
    name = "management-23.03"
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/slingshot-host-software-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/slingshot-host-software-config-management.git"
    commit = "f4e2bb7e912c39fc63e87a9284d026a5bebb6314"
    name = "shs-1.7.3-45-1.0.26"
    playbook = "shs_mellanox_install.yml"
 
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
    commit = "92ce2c9988fa092ad05b40057c3ec81af7b0af97"
    name = "csm-1.9.21"
    playbook = "site.yml"
 
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/sat-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/sat-config-management.git"
    commit = "4e14a37b32b0a3b779b7e5f2e70998dde47edde1"
    name = "sat-2.3.4"
    playbook = "sat-ncn.yml"
 
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
    commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
    name = "cos-integration-2.3.75"
    playbook = "ncn.yml"
 
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
    commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
    name = "cos-integration-2.3.75"
    playbook = "ncn-final.yml"
 
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
    commit = "92ce2c9988fa092ad05b40057c3ec81af7b0af97"
    name = "csm-1.9.21"
    playbook = "enable_chn.yml"
@@ -415,23 +415,23 @@ Add CHN to `customizations.yaml`
    Updating the CFS configuration will cause CFS to schedule the nodes for configuration. Run the following command for all worker xnames to verify this has occurred.
 
    ```bash
-   cray cfs components describe --format toml x3000c0s4b0n0
+   cray cfs v3 components describe --format toml x3000c0s4b0n0
    ```
 
    Example output:
 
    ```toml
-   configurationStatus = "pending"
-   desiredConfig = "management-23.03"
+   configuration_status = "pending"
+   desired_config = "management-23.03"
    enabled = true
-   errorCount = 0
+   error_count = 0
    id = "x3000c0s4b0n0"
    state = []
    
    [tags]
    ```
 
-   `configurationStatus` should change from `pending` to `configured` once NCN personalization completes successfully.
+   `configuration_status` should change from `pending` to `configured` once NCN personalization completes successfully.
 
 For more information on management node personalization, see
 [Management Node Personalization](../../../../configuration_management/Management_Node_Personalization.md).
@@ -474,7 +474,7 @@ Administrators should enable CFS for UAN, ensure plays run successfully and then
 
    ```bash
    for xname in $(cray hsm state components list --role Application --subrole UAN --type Node --format json | jq -r .Components[].ID) ; do
-      cray cfs components update --enabled true --state "[]" --format json "${xname}"
+      cray cfs v3 components update --enabled true --state "[]" --format json "${xname}"
    done
    ```
 
@@ -560,7 +560,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
 
    ```bash
    for xname in $(cray hsm state components list --role Compute --type Node --format json | jq -r .Components[].ID) ; do
-      cray cfs components update --enabled true --state "[]" --format json "${xname}"
+      cray cfs v3 components update --enabled true --state "[]" --format json "${xname}"
    done
    ```
 
@@ -584,23 +584,23 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    1. (`ncn-m001#`) Identify the CFS configuration in use on the compute nodes.
 
       ```bash
-      cray cfs components describe --format toml x1000c5s1b0n1
+      cray cfs v3 components describe --format toml x1000c5s1b0n1
       ```
 
       Example output:
 
       ```toml
-      configurationStatus = "configured"
-      desiredConfig = "cos-config-full-2.3-integration"
+      configuration_status = "configured"
+      desired_config = "cos-config-full-2.3-integration"
       enabled = true
-      errorCount = 0
+      error_count = 0
       id = "x1000c5s1b0n1"
       ```
 
    1. (`ncn-m001#`) Extract the CFS configuration.
 
       ```bash
-      cray cfs configurations describe cos-config-full-2.3-integration --format json | jq 'del(.lastUpdated) | del(.name)' > "${UPDATEDIR}/cos-config-full-2.3-integration.json"
+      cray cfs v3 configurations describe cos-config-full-2.3-integration --format json | jq 'del(.last_updated) | del(.name)' > "${UPDATEDIR}/cos-config-full-2.3-integration.json"
       ```
 
 1. Identify the UAN CFS configuration.
@@ -622,33 +622,33 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    1. (`ncn-m001#`) Identify the CFS configuration currently in use for the UANs.
 
       ```bash
-      cray cfs components describe --format toml x3000c0s25b0n0
+      cray cfs v3 components describe --format toml x3000c0s25b0n0
       ```
 
       Example output:
 
       ```toml
-      configurationStatus = "configured"
-      desiredConfig = "chn-uan-cn"
+      configuration_status = "configured"
+      desired_config = "chn-uan-cn"
       enabled = true
-      errorCount = 0
+      error_count = 0
       id = "x3000c0s25b0n0"
       ```
 
    1. (`ncn-m001#`) Identify the UAN CFS configuration layer.
 
       ```bash
-      cray cfs configurations describe chn-uan-cn --format json
+      cray cfs v3 configurations describe chn-uan-cn --format json
       ```
 
       The resulting output should look similar to this. Installed products, versions, and commit hashes will vary.
 
       ```json
       {
-        "lastUpdated": "2022-05-27T20:15:10Z",
+        "last_updated": "2022-05-27T20:15:10Z",
         "layers": [
           {
-            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/uan-config-management.git",
+            "clone_url": "https://api-gw-service-nmn.local/vcs/cray/uan-config-management.git",
             "commit": "359611be2f6893ddd0020841b73a3d4924120bb1",
             "name": "chn-uan-cn",
             "playbook": "site.yml"
@@ -663,70 +663,70 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
 1. (`ncn-m001#`) Update the compute node CFS configuration.
 
    ```bash
-   cray cfs configurations update cos-config-full-2.3-integration --file "${UPDATEDIR}/cos-config-full-2.3-integration.json" --format toml
+   cray cfs v3 configurations update cos-config-full-2.3-integration --file "${UPDATEDIR}/cos-config-full-2.3-integration.json" --format toml
    ```
 
    Example output:
 
    ```toml
-   lastUpdated = "2022-05-27T20:47:18Z"
+   last_updated = "2022-05-27T20:47:18Z"
    name = "cos-config-full-2.3-integration"
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/   slingshot-host-software-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/   slingshot-host-software-config-management.git"
    commit = "dd428854a04a652f825a3abbbf5ae2ff9842dd55"
    name = "shs-integration"
    playbook = "shs_mellanox_install.yml"
 
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
    commit = "92ce2c9988fa092ad05b40057c3ec81af7b0af97"
    name = "csm-1.9.21"
    playbook = "site.yml"
 
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
    commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
    name = "cos-compute-integration-2.3.75"
    playbook = "cos-compute.yml"
 
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/sma-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/sma-config-management.git"
    commit = "2219ca094c0a2721f3bf52f5bd542d8c4794bfed"
    name = "sma-base-config"
    playbook = "sma-base-config.yml"
 
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/sma-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/sma-config-management.git"
    commit = "2219ca094c0a2721f3bf52f5bd542d8c4794bfed"
    name = "sma-ldms-ncn"
    playbook = "sma-ldms-ncn.yml"
 
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/slurm-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/slurm-config-management.git"
    commit = "0982661002a857d743ee5b772520e47c97f63acc"
    name = "slurm master"
    playbook = "site.yml"
 
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/pbs-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/pbs-config-management.git"
    commit = "874050c9820cc0752c6424ef35295289487acccc"
    name = "pbs master"
    playbook = "site.yml"
 
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/analytics-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/analytics-config-management.git"
    commit = "d4b26b74d08e668e61a1e5ee199e1a235e9efa3b"
    name = "analytics integration"
    playbook = "site.yml"
 
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
    commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
    name = "cos-compute-last-integration-2.3.75"
    playbook = "cos-compute-last.yml"
 
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/uan-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/uan-config-management.git"
    commit = "359611be2f6893ddd0020841b73a3d4924120bb1"
    name = "chn-uan-cn"
    playbook = "site.yml"
@@ -737,23 +737,23 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    Updating the CFS configuration will cause CFS to schedule the nodes for configuration. Run the following command to verify this has occurred.
 
    ```bash
-   cray cfs components describe --format toml x1000c5s1b0n1
+   cray cfs v3 components describe --format toml x1000c5s1b0n1
    ```
 
    Example output:
 
    ```toml
-   configurationStatus = "pending"
-   desiredConfig = "cos-config-full-2.3-integration"
+   configuration_status = "pending"
+   desired_config = "cos-config-full-2.3-integration"
    enabled = true
-   errorCount = 0
+   error_count = 0
    id = "x1000c5s1b0n1"
    state = []
 
    [tags]
    ```
 
-   `configurationStatus` should change from `pending` to `configured` once CFS configuration of the node is complete.
+   `configuration_status` should change from `pending` to `configured` once CFS configuration of the node is complete.
 
 For more information on managing node with CFS, see [Configuration Management](../../../../../README.md#configuration-management).
 

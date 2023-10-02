@@ -1,18 +1,18 @@
 # Create an Image Customization CFS Session
 
-A configuration session that is meant to customize image roots tracked by the Image Management Service \(IMS\) can be created using the `--target-definition` image option. This option will instruct
-the Configuration Framework Service \(CFS\) to prepare the image IDs specified and assign them to the groups specified in Ansible inventory. IMS will then provide SSH connection information to each
-image root that CFS will use to configure Ansible.
+A configuration session that is meant to customize image roots tracked by the Image Management Service \(IMS\) can be created using the `--target-definition image` option.
+This option will instruct the Configuration Framework Service \(CFS\) to prepare the image IDs specified and assign them to the groups specified in Ansible inventory.
+IMS will then provide SSH connection information to each image root that CFS will configure with Ansible.
 
-Along with the `--target-definition` option, users must also provide the `--target-group` option. This option can be provided multiple times, and allows users to specify the Ansible inventory by
-creating multiple groups within the inventory and the image(s) that should be in each group. It is important to note that users provide the entire inventory when using image customization, and groups
-that are not specified will not be included, even if they appear in other CFS inventory types, such as dynamic inventory. For more information on what it means to provide the inventory, see
-[Specifying Hosts and Groups](Specifying_Hosts_and_Groups.md).
+Along with the `--target-definition` option, users must also provide the `--target-group` option.
+This option can be provided multiple times, and allows users to specify the Ansible inventory by creating multiple groups within the inventory and the image(s) that should be in each group.
+It is important to note that users provide the entire inventory when using image customization, and groups that are not specified will not be included, even if they appear in other CFS inventory types, such as dynamic inventory.
+For more information on what it means to provide the inventory, see [Specifying Hosts and Groups](Specifying_Hosts_and_Groups.md).
 
 Image customization sessions can also optionally specify `--target-image-map`, which allows users to specify the name of the resulting image rather than having CFS generate the name automatically.
 
-Users can expect that staging the image and generating an inventory will be a longer process than creating a session with other target definitions \(for example, inventories\). Tearing down the
-configuration session will also require additional time while IMS packages up the image build artifacts and uploads them to the artifact repository.
+Users can expect that staging the image and generating an inventory will be a longer process than creating a session with dynamic inventories for node personalization.
+Tearing down the configuration session will also require additional time while IMS packages up the image build artifacts and uploads them to the artifact repository.
 
 - [Prerequisites](#prerequisites)
 - [1. Check if image is registered with IMS](#1-check-if-image-is-registered-with-ims)
@@ -51,7 +51,7 @@ It is also possible to provide a mapping of the source image ids to the resultin
 > **WARNING:** If a CFS session is created with an ID that is not known to IMS, then CFS will not fail and will instead wait for the image ID to become available in IMS.
 
 ```bash
-cray cfs sessions create --name example \
+cray cfs v3 sessions create --name example \
     --configuration-name configurations-example \
     --target-definition image --format json \
     --target-group Application <IMS_IMAGE_ID> \
@@ -65,21 +65,23 @@ Example output:
 {
   "ansible": {
     "config": "cfs-default-ansible-cfg",
-    "limit": null,
-    "passthrough": null,
+    "limit": "",
+    "passthrough": "",
     "verbosity": 0
   },
   "configuration": {
     "limit": "",
-    "name": "configurations-example"
+    "name": "example-config"
   },
+  "debug_on_failure": false,
+  "logs": "ara.cmn.site/hosts?label=example",
   "name": "example",
   "status": {
     "artifacts": [],
     "session": {
-      "completionTime": null,
+      "completion_time": null,
       "job": null,
-      "startTime": "2022-09-26T14:31:33",
+      "start_time": "2023-08-31T16:38:21",
       "status": "pending",
       "succeeded": "none"
     }
@@ -101,7 +103,7 @@ Example output:
         "name": "Application_UAN"
       }
     ],
-    "imageMap": {
+    "image_map": {
       "source_id": "<IMS_IMAGE_ID>",
       "result_name": "<RESULTING_IMAGE_NAME>"
     }
@@ -118,7 +120,7 @@ See [Track the Status of a Session](Track_the_Status_of_a_Session.md).
 (`ncn-mw#`) When an image customization CFS session is complete, use the CFS `describe` command to show the IMS image ID that results from the applied configuration:
 
 ```bash
-cray cfs sessions describe example --format json | jq .status.artifacts
+cray cfs v3 sessions describe example --format json | jq .status.artifacts
 ```
 
 Example output:
