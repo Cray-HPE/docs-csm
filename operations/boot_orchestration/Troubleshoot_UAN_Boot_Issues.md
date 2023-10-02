@@ -98,7 +98,7 @@ Similarly, running `systemctl status cfs-state-reporter` will show a status of `
    Main PID: 3581 (spire-agent)
       Tasks: 57
       CGroup: /system.slice/spire-agent.service
-            └─3581 /usr/bin/spire-agent run -expandEnv -config /root/spire/conf/spire-agent.conf
+            └─3581 /usr/bin/spire-agent run -expandEnv -config /var/lib/spire/conf/spire-agent.conf
    ```
 
 1. (`uan#`) Verify that `cfs-state-reporter` is healthy and returns `SUCCESS`.
