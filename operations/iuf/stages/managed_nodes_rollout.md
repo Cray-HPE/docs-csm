@@ -56,7 +56,7 @@ will report it as such. However, as can be seen in the output, all eight nodes f
 
 Debugging resources:
 To further debug why the configuration failed on the specified
-nodes see [Configuration Sessions](../../configuration_management/Configuration_Sessions.md)
+nodes see [CFS Sessions](../../configuration_management/CFS_Sessions.md).
 
 There are multiple resources to further debug why [nodes failed to boot](../../boot_orchestration/). Each document
 starts with Troubleshoot.

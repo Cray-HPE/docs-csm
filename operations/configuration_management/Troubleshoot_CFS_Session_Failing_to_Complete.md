@@ -24,7 +24,7 @@ An issue on even one of the nodes that a session is attempting to configure can 
     * When starting with a session name, run:
 
        ```bash
-       cray cfs sessions describe "$SESSION_NAME" --format json | jq .ansible.limit
+       cray cfs v3 sessions describe "$SESSION_NAME" --format json | jq .ansible.limit
        ```
 
 1. Check each node.

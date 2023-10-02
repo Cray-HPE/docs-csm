@@ -247,14 +247,14 @@ layers provided by CSM.
 
 1. (`ncn-mw#`) Create the CFS configuration to use for image customization.
 
-    See [Create a CFS Configuration](Create_a_CFS_Configuration.md).
+    For more information on creating CFS configurations, see [CFS Configurations](CFS_Configurations.md).
 
     The first layer in the CFS configuration should be similar to this:
 
     ```json
     {
       "name": "csm-ncn-workers",
-      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+      "clone_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
       "playbook": "ncn-worker_nodes.yml",
       "commit": "<git commit hash>"
     }
@@ -265,7 +265,7 @@ layers provided by CSM.
     ```json
     {
       "name": "csm-ncn-initrd",
-      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+      "clone_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
       "playbook": "ncn-initrd.yml",
       "commit": "<git commit hash>"
     }
@@ -325,7 +325,7 @@ layers provided by CSM.
     1. Create the session.
 
         ```bash
-        cray cfs sessions create \
+        cray cfs v3 sessions create \
             --name "${CFS_SESSION_NAME}" \
             --configuration-name "${CFS_CONFIG_NAME}" \
             --target-definition image --format json \
@@ -339,7 +339,7 @@ layers provided by CSM.
     1. Obtain the IMS resultant image ID.
 
         ```bash
-        IMS_RESULTANT_IMAGE_ID=$(cray cfs sessions describe "${CFS_SESSION_NAME}" --format json |
+        IMS_RESULTANT_IMAGE_ID=$(cray cfs v3 sessions describe "${CFS_SESSION_NAME}" --format json |
                                    jq -r '.status.artifacts[] | select(.type == "ims_customized_image") | .result_id')
         echo "${IMS_RESULTANT_IMAGE_ID}"
         ```

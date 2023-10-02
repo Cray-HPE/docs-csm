@@ -266,7 +266,7 @@ Configuration Framework Service \(CFS\) to customize the image.
       "layers": [
         {
           "name": "uan-integration-PRODUCT_VERSION",
-          "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/uan-config-management.git",
+          "clone_url": "https://api-gw-service-nmn.local/vcs/cray/uan-config-management.git",
           "playbook": "site.yml",
           "commit": "ecece54b1eb65d484444c4a5ca0b244b329f4667"
         }        
@@ -279,7 +279,7 @@ Configuration Framework Service \(CFS\) to customize the image.
     In the following example, the JSON file created in the previous step is named `uan-config-PRODUCT_VERSION.json`. Only the details for the UAN layer are shown.
 
     ```bash
-    cray cfs configurations update uan-config-PRODUCT_VERSION \
+    cray cfs v3 configurations update uan-config-PRODUCT_VERSION \
                       --file ./uan-config-PRODUCT_VERSION.json \
                       --format json
     ```
@@ -291,10 +291,10 @@ Configuration Framework Service \(CFS\) to customize the image.
 
     ```json
     {
-      "lastUpdated": "2021-07-28T03:26:00:37Z",
+      "last_updated": "2021-07-28T03:26:00:37Z",
       "layers": [
         {
-          "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/uan-config-management.git",
+          "clone_url": "https://api-gw-service-nmn.local/vcs/cray/uan-config-management.git",
           "commit": "ecece54b1eb65d484444c4a5ca0b244b329f4667",
           "name": "uan-integration-PRODUCT_VERSION",
           "playbook": "site.yml"
@@ -670,7 +670,7 @@ Configuration Framework Service \(CFS\) to customize the image.
 1. (`ncn-mw#`) Create a CFS session to perform preboot image customization of the UAN image.
 
     ```bash
-    cray cfs sessions create --name uan-config-PRODUCT_VERSION \
+    cray cfs v3 sessions create --name uan-config-PRODUCT_VERSION \
         --configuration-name uan-config-PRODUCT_VERSION \
         --target-definition image \
         --target-group Application $NEW_IMAGE_ID
@@ -684,7 +684,7 @@ Configuration Framework Service \(CFS\) to customize the image.
     The following command will produce output while the process is running. If the CFS session completes successfully, an IMS image ID will appear in the output.
 
     ```bash
-    cray cfs sessions describe uan-config-PRODUCT_VERSION --format json | jq
+    cray cfs v3 sessions describe uan-config-PRODUCT_VERSION --format json | jq
     ```
 
 ### 5. Identify UAN xnames

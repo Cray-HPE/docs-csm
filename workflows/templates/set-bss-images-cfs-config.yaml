@@ -119,7 +119,7 @@ spec:
                   DESIRED_CFS_CONFIG={{inputs.parameters.desiredCfsConfig}}
                   if [[ -n $DESIRED_CFS_CONFIG ]]; then
                     echo "INFO  Changing CFS configuration to $DESIRED_CFS_CONFIG"
-                    cray cfs components update ${TARGET_XNAME} --enabled false --desired-config "${DESIRED_CFS_CONFIG}"
+                    cray cfs v3 components update ${TARGET_XNAME} --enabled false --desired-config "${DESIRED_CFS_CONFIG}"
                   else
                     echo "INFO  No desired CFS configuration was specified so the CFS configuration after reboot will be the current CFS configuration."
                   fi

@@ -26,7 +26,7 @@ or new commit made).
 This procedures causes CFS to re-run personalization on management nodes by clearing the
 configuration state and error count on the management node components. This causes the CFS Batcher
 to reconfigure these components.
-See [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md)
+See [Automatic Configuration Management](Automatic_Configuration_Management.md)
 for more information on the CFS Batcher.
 
 This procedure has a scripted option and a manual option. Use the scripted option if possible.
@@ -55,10 +55,10 @@ The first step of this procedure checks whether all management nodes use the sam
 1. (`ncn-mw#`) Get the CFS configuration applied to all management NCNs.
 
     ```bash
-    CFS_CONFIG_NAME="$(cray cfs components list --format json \
+    CFS_CONFIG_NAME="$(cray cfs v3 components list --format json \
         --ids "$(cray hsm state components list --role=management --format json \
                  | jq -r '.Components | map(.ID) | join(",")')" \
-        | jq -r 'map(.desiredConfig) | unique | first')"
+        | jq -r .components | jq -r 'map(.desired_config) | unique | first')"
     echo "${CFS_CONFIG_NAME}" | xargs -n 1
     ```
 
@@ -103,7 +103,7 @@ node components at once. This causes CFS to reconfigure these components.
                 jq -r .Components[].ID)
     do
         echo "Clearing CFS state of ${xname}"
-        cray cfs components update --error-count 0 --state '[]' --format json "${xname}" && let COUNT+=1 || FAILED+=" ${xname}"
+        cray cfs v3 components update --error-count 0 --state '[]' --format json "${xname}" && let COUNT+=1 || FAILED+=" ${xname}"
     done ; \
     echo "Cleared CFS state on ${COUNT} nodes" ; \
     [[ -z ${FAILED} ]] && echo "No errors" || echo "ERROR: There were errors clearing the CFS state for the following nodes:${FAILED}"
@@ -118,7 +118,7 @@ commit made).
 This procedures causes CFS to re-run personalization on a management node by clearing the
 configuration state and error count on the management node component. This causes the CFS Batcher
 to reconfigure these components.
-See [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md)
+See [Automatic Configuration Management](Automatic_Configuration_Management.md)
 for more information on the CFS Batcher.
 
 ### Prerequisites to re-run node personalization on a specific management node
@@ -139,5 +139,5 @@ for more information on the CFS Batcher.
 1. (`ncn#`) Clear the state and error count of the node using CFS.
 
     ```bash
-    cray cfs components update --error-count 0 --state '[]' --format json "${XNAME}"
+    cray cfs v3 components update --error-count 0 --state '[]' --format json "${XNAME}"
     ```

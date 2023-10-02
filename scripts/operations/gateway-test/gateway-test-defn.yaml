@@ -66,7 +66,7 @@ ingress_api_services:
   gateways: ["services-gateway","customer-admin-gateway"]
   project: CSM
 - name: cray-cfs-api
-  path: apis/cfs/v2/sessions
+  path: apis/cfs/v3/sessions
   port: 443
   expected-result: 200
   namespace: services

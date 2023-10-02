@@ -58,11 +58,11 @@ spec:
                       echo "ERROR No CFS configuration was received for '${role_subrole}' from 'prepare-images' stage. Retry by running from 'prepare-images' stage"
                       exit 1
                     fi
-                    result=$(cray cfs configurations describe "$config" 2>&1)
+                    result=$(cray cfs v3 configurations describe "$config" 2>&1)
                     if [[ $? -ne 0 ]]; then
                       result=$(echo "$result" | sed -e 's/^/DEBUG /')
                       echo "ERROR Could not find the desired configuration $configuration in CFS for ${role_subrole} nodes"
-                      echo -e "DEBUG Command <cray cfs configurations describe $configuration> produced -\n\n$result"
+                      echo -e "DEBUG Command <cray cfs v3 configurations describe $configuration> produced -\n\n$result"
                       exit 1
                     else
                       echo "DEBUG Found CFS configuration:$config in CFS for ${role_subrole} nodes"

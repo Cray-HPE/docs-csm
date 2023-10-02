@@ -38,19 +38,25 @@ component status is `configuring`, and further querying information from CFS for
 (`ncn-mw#`) Verify the configuration status of a CFS component of the same name.
 
 ```bash
-cray cfs components describe x3000c0s1b0n0
-configurationStatus = "configured"
-desiredConfig = "management-1.4"
-enabled = false
-errorCount = 0
-id = "x3000c0s1b0n0"
-[[state]]
-cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
-commit = "ae77176a946cc06aabde32e53815dc4dea8039dd"
-lastUpdated = "2023-03-02T13:58:05Z"
-playbook = "site.yml"
-sessionName = "batcher-2df030b8-1bc5-4afb-ac29-df93815473f2"
+cray cfs v3 components describe x3000c0s1b0n0 --state-details true --format toml
 ```
 
-Here, `sessionName` corresponds to the CFS session that is acting on the CFS component(`x3000c0s1b0n0`), and not the BOS
+Example output:
+
+```toml
+configuration_status = "configured"
+desired_config = "management-1.4"
+enabled = false
+error_count = 0
+id = "x3000c0s1b0n0"
+logs = "ara.cmn.site/hosts?name=x3000c0s1b0n0"
+[[state]]
+clone_url = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
+commit = "ae77176a946cc06aabde32e53815dc4dea8039dd"
+last_updated = "2023-03-02T13:58:05Z"
+playbook = "site.yml"
+session_name = "batcher-2df030b8-1bc5-4afb-ac29-df93815473f2"
+```
+
+Here, `session_name` corresponds to the CFS session that is acting on the CFS component(`x3000c0s1b0n0`), and not the BOS
 session.

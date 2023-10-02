@@ -28,5 +28,5 @@ product as well.
 
 The "Branch Workflow" diagram is an example workflow that can be used to manage new product content being introduced during upgrades. However, CFS and VCS do not
 require any specific branching strategy. Users are free to manage the branches as they see fit with the exception of the pristine branches imported by individual HPE Cray
-products. CFS configuration layers \(see [Configuration Layers](Configuration_Layers.md)\) only require a Git commit ID, a Git repository clone URL, and the path to an
+products. CFS configuration layers \(see [CFS Configurations](CFS_Configurations.md)\) only require a Git commit ID, a Git repository clone URL, and the path to an
 Ansible playbook to run the configuration content in the repository.

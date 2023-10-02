@@ -56,7 +56,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     1. Find the `bos_session` value via the Configuration Framework Service (CFS).
 
        ```bash
-       cray cfs components describe XNAME --format toml | grep bos_session
+       cray cfs v3 components describe XNAME --format toml | grep bos_session
        ```
 
        Example output:

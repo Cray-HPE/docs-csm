@@ -44,7 +44,7 @@ spec:
         # Retry CFS command if needed
         COUNT=0
         while true; do
-            ENABLED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}" | jq -r '.enabled') && break
+            ENABLED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v3/components/${TARGET_XNAME}" | jq -r '.enabled') && break
             let COUNT+=1
             if [[ ${COUNT} -gt 12 ]]; then
                 echo "ERROR: Even after retries, command pipeline failed querying CFS component '${TARGET_XNAME}'"
@@ -68,7 +68,7 @@ spec:
     # Retry CFS command if needed
     COUNT=0
     while true; do
-        DESIRED_CONFIG=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}" | jq -r '.desiredConfig') && break
+        DESIRED_CONFIG=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v3/components/${TARGET_XNAME}" | jq -r '.desired_config') && break
         let COUNT+=1
         if [[ ${COUNT} -gt 12 ]]; then
             echo "ERROR: Even after retries, command pipeline failed querying CFS component '${TARGET_XNAME}'"
@@ -83,7 +83,7 @@ spec:
     echo "Desired configuration for CFS component '${TARGET_XNAME}' is '${DESIRED_CONFIG}'"
 
     while true; do
-      RESULT=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=pending" | jq length)
+      RESULT=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v3/components?ids=${TARGET_XNAME}&status=pending" | jq length)
       if [[ "$RESULT" -eq 0 ]]; then
         break
       fi
@@ -91,11 +91,11 @@ spec:
       sleep 30
     done
 
-    CONFIGURED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=configured" | jq length)
-    FAILED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=failed" | jq length)
+    CONFIGURED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v3/components?ids=${TARGET_XNAME}&status=configured" | jq length)
+    FAILED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v3/components?ids=${TARGET_XNAME}&status=failed" | jq length)
     echo "Configuration complete. $CONFIGURED component(s) completed successfully.  $FAILED component(s) failed."
     if [ "$FAILED" -ne "0" ]; then
-      echo "The following components failed: $(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=failed"  | jq -r '. | map(.id) | join(",")')"
+      echo "The following components failed: $(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v3/components?ids=${TARGET_XNAME}&status=failed"  | jq -r '. | map(.id) | join(",")')"
       exit 1
     fi
   templateRefName: kubectl-and-curl-template

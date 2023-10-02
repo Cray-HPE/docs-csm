@@ -240,11 +240,11 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     # Record CFS components and configurations, since these are modified during the upgrade process
     CFS_CONFIG_SNAPSHOT=${SNAPSHOT_DIR}/cfs_configurations.json
     echo "Backing up CFS configurations to ${CFS_CONFIG_SNAPSHOT}"
-    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/cfs/v2/configurations > "${CFS_CONFIG_SNAPSHOT}"
+    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/cfs/v3/configurations > "${CFS_CONFIG_SNAPSHOT}"
 
     CFS_COMP_SNAPSHOT=${SNAPSHOT_DIR}/cfs_components.json
     echo "Backing up CFS components to ${CFS_COMP_SNAPSHOT}"
-    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/cfs/v2/components > "${CFS_COMP_SNAPSHOT}"
+    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/cfs/v3/components > "${CFS_COMP_SNAPSHOT}"
 
     # Record state of Kubernetes pods. If a pod is later seen in an unexpected state, this can provide a reference to
     # determine whether or not the issue existed prior to the upgrade.
@@ -1146,12 +1146,12 @@ if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta} =
     echo "Disabling CFS configuration for all NCNs"
     for xname in ${XNAME_LIST}; do
       echo "Disabling CFS on ${xname}"
-      cray cfs components update "${xname}" --enabled false --format json
+      cray cfs v3 components update "${xname}" --enabled false --format json
 
       # Make sure it is actually disabled
       echo "Verifying that CFS is now disabled on ${xname}"
       set -o pipefail
-      cray cfs components describe "${xname}" --format json | jq '.enabled' | grep "^false$"
+      cray cfs v3 components describe "${xname}" --format json | jq '.enabled' | grep "^false$"
       set +o pipefail
     done
 

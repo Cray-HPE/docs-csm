@@ -62,9 +62,9 @@ For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_
 > **`NOTE`** One of the Argo steps (`wait-for-cfs`) will prevent the upgrade of a worker node from proceeding if the CFS component status for that worker is in an `Error` state, and this must be fixed in order for the upgrade to continue.
 The following steps can be used to reset the component state in CFS (replace `XNAME` below with the `XNAME` for the worker node:
 
-```text
-cray cfs components update --error-count 0 <XNAME>
-cray cfs components update --state '[]' <XNAME>
+```bash
+cray cfs v3 components update --error-count 0 <XNAME>
+cray cfs v3 components update --state '[]' <XNAME>
 ```
 
 ## Stage 3.2 - Worker node image upgrade

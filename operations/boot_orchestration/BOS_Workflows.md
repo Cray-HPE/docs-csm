@@ -47,20 +47,20 @@ The following workflows are included in this section:
 
 1. **Administrator creates a configuration**
 
-    (`ncn-mw#`) Add a configuration to CFS. See [Create a CFS Configuration](../configuration_management/Create_a_CFS_Configuration.md) for more information.
+    (`ncn-mw#`) Add a configuration to CFS. For more information on creating CFS configurations, see [CFS Configurations](../configuration_management/CFS_Configurations.md).
 
     ```bash
-    cray cfs configurations update sample-config --file configuration.json --format json
+    cray cfs v3 configurations update sample-config --file configuration.json --format json
     ```
 
     Example output:
 
     ```json
     {
-        "lastUpdated": "2020-09-22T19:56:32Z",
+        "last_updated": "2020-09-22T19:56:32Z",
         "layers": [
             {
-                "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/configmanagement.git",
+                "clone_url": "https://api-gw-service-nmn.local/vcs/cray/configmanagement.git",
                 "commit": "01b8083dd89c394675f3a6955914f344b90581e2",
                 "playbook": "site.yaml"
             }
@@ -147,22 +147,22 @@ The following workflows are included in this section:
 
 1. **Administrator creates a configuration**
 
-    Add a configuration to CFS. See [Create a CFS Configuration](../configuration_management/Create_a_CFS_Configuration.md) for more information.
+    Add a configuration to CFS. For more information on creating CFS configurations, see [CFS Configurations](../configuration_management/CFS_Configurations.md).
 
     (`ncn-mw#`)
 
     ```bash
-    cray cfs configurations update sample-config --file configuration.json --format json
+    cray cfs v3 configurations update sample-config --file configuration.json --format json
     ```
 
     Example output:
 
     ```json
     {
-        "lastUpdated": "2020-09-22T19:56:32Z",
+        "last_updated": "2020-09-22T19:56:32Z",
         "layers": [
             {
-                "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/configmanagement.git",
+                "clone_url": "https://api-gw-service-nmn.local/vcs/cray/configmanagement.git",
                 "commit": "01b8083dd89c394675f3a6955914f344b90581e2",
                 "playbook": "site.yaml"
             }
@@ -317,4 +317,3 @@ The following workflows are included in this section:
 1. **Session completion operator**
 
     When all nodes belonging to a session have been disabled, the session is marked complete, and its final status is saved to the database.
-  
