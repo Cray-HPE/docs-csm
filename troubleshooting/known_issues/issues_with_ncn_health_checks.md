@@ -64,7 +64,7 @@
         ```
 
   - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens are expired. If this happens, delete
-    `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the
+    `/var/lib/spire/agent_svid.der`, `/var/lib/spire/bundle.der`, and `/var/lib/spire/data/svid.key` off the NCN before deleting the
     `request-ncn-join-token` daemon set pod.
 
 - `cfs-state-reporter service ran successfully`
