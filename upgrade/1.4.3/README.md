@@ -12,7 +12,36 @@ in [Upgrade CSM](../README.md) instead.
 
 ## Bug fixes and improvements
 
-* TODO by Debbie
+* Security patch `CVE-2023-20593 Zenbleed` on `NCNs`
+* Vulnerabilities addressed for `cray-sat` container
+* Vulnerabilities addressed for `SAT` product
+* Improvements to `CSM` patch install procedure to update CFS configurations
+* Update to the `goss` package version
+* Added step to enable `goss-servers` after update
+* Update `goss` tests to use `goss` hostname variable rather than `HOSTNAME` environment variable
+* Update `IMS` importer to restore missing `S3` artifacts for existing images or recipes
+* Improvement to ensure the correct test `RPMs` are installed on the correct nodes
+* Updated `BOS V1` references to `BOS V2` in documentation
+* Updated test to not require users to export switch password
+* Fix to `HMS` query handling to prevent errors when queried with an empty node list
+* Fix to race condition in `wait-for-unbound.sh`
+* Updated documentation to remove `postgresql` restore step from `spire` recovery procedure
+* Updated `NCN` reboot procedure to recommend it be used to pick up `CVE` patched container images
+* Corrected link to `NCN` reboot procedure in patch upgrade instructions
+* Added ability to configure requests and limits for `postgres pooler`
+* Fixed issue with `CANU` returning `0` exit code despite errors
+* Updated `SLS` document with procedure to retrieve an authentication token
+* Remove passwords from documentation
+* Fix issue with state manager failing to discover `HPE` nodes with four `HSN NICs`
+* Fix issue with `FRU` tracking not creating a detected event after a removed event
+* Fix syntax error with guidance given in `check_bgp_neighbors_established.sh` script
+* Fixed an error when the media and `bootprep` directories provided to `IUF` are the same
+* Fixed storage `goss` test in case where `admin keyring` is not on `ncn-s004` and above
+* Fixes to storage node rebuild procedure
+* Update to instructions for upgrade of `ceph` for enabling `smartmon` on storage nodes
+* Addition of a procedure to enable `SMART` data collection on `UANs` that support it
+* Updated `hmcollector` `kafka` topics to handle new telemetry data
+* Updated `helm` example in documentation for reset of console services
 
 ## Steps
 
