@@ -38,7 +38,7 @@ in [Upgrade CSM](../README.md) instead.
 * Fixed an error when the media and `bootprep` directories provided to `IUF` are the same
 * Fixed storage `goss` test in case where `admin keyring` is not on `ncn-s004` and above
 * Fixes to storage node rebuild procedure
-* Update to instructions for upgrade of `ceph` for enablement of `smartmon` on storage nodes
+* Update to instructions for upgrade of `ceph` for enabling `smartmon` on storage nodes
 * Addition of a procedure to enable `SMART` data collection on `UANs` that support it
 * Updated `hmcollector` `kafka` topics to handle new telemetry data
 * Updated `helm` example in documentation for reset of console services
