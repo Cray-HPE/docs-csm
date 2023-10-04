@@ -27,7 +27,7 @@ cray bos v2 sessiontemplatetemplate list --format json
 It reads it in and creates a BOS session template using the BOS API.
 
 ```bash
-cray bos v2 sessiontemplates create --file <INPUT_FILE> --name <NEW_TEMPLATE_NAME>
+cray bos v2 sessiontemplates create --file <INPUT_FILE> <NEW_TEMPLATE_NAME>
 ```
 
 The following is an example of an input file:
@@ -88,8 +88,6 @@ Example output:
     }
   }
 ]
-
-[...]
 ```
 
 ## View a session template
