@@ -127,6 +127,31 @@ TOKEN=$(curl -s -S -d grant_type=client_credentials \
   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 export TOKEN
 
+# Takes as input the path to a CSM RPM in the expanded tarball. e.g.:
+# /etc/cray/upgrade/csm/csm-1.5.0-beta.64/tarball/csm-1.5.0-beta.64/rpm/cray/csm/noos/x86_64/hpe-csm-virtiofsd-1.7.0-hpe1.x86_64.rpm
+# /etc/cray/upgrade/csm/csm-1.5.0-beta.64/tarball/csm-1.5.0-beta.64/rpm/cray/csm/noos/noarch/csm-testing-1.16.59-1.noarch.rpm
+# /etc/cray/upgrade/csm/csm-1.5.0-beta.64/tarball/csm-1.5.0-beta.64/rpm/cray/csm/sle-15sp4/x86_64/loftsman-1.2.0-3.x86_64.rpm
+#
+# And outputs the corresponding Nexus URL of that RPM. e.g.:
+# https://packages.local/repository/csm-noos/x86_64/hpe-csm-virtiofsd-1.7.0-hpe1.x86_64.rpm
+# https://packages.local/repository/csm-noos/noarch/csm-testing-1.16.59-1.noarch.rpm
+# https://packages.local/repository/csm-sle-15sp4/x86_64/loftsman-1.2.0-3.x86_64.rpm
+#
+# Exits non-0 if the specified path does not start with / and end with /rpm/cray/csm/<os-string>/<arch>/<rpm-name>.rpm
+function csm_rpm_tarball_path_to_nexus_url {
+  if [[ $# -ne 1 ]]; then
+    echo "ERROR: $0: This function requires exactly 1 argument but received $#. Invalid arguments: $*" >&2
+    return 1
+  elif [[ -z $1 ]]; then
+    echo "ERROR: $0: Argument to this function may not be blank" >&2
+    return 1
+  elif [[ ! $1 =~ ^/.*/rpm/cray/csm/[^/[:space:]]+/[^/[:space:]]+/[^/[:space:]]+[.]rpm$ ]]; then
+    echo "ERROR: $0: RPM path not in expected format: '$1'" >&2
+    return 1
+  fi
+  echo "$1" | sed 's#^.*/rpm/cray/csm/\([^/[:space:]]\+\)/\([^/[:space:]]\+\)/\([^/[:space:]]\+[.]rpm\)$#https://packages.local/repository/csm-\1/\2/\3#'
+}
+
 # Several CSM charts are upgraded "early" during the execution of prerequisites.sh
 function upgrade_csm_chart {
   # Usage: upgrade_csm_chart <chart name> <manifest_file>
@@ -1247,8 +1272,7 @@ if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" && -n ${virtiof
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    virtiofsd_version=$(rpm -q "${virtiofsd_rpm}")
-    virtiofsd_url="https://packages.local/repository/csm-sle-15sp4/noarch/${virtiofsd_version}.rpm"
+    virtiofsd_url=$(csm_rpm_tarball_path_to_nexus_url "${virtiofsd_rpm}")
 
     # Install RPM on all worker nodes
     worker_nodes=$(kubectl get nodes | grep -E "^ncn-w[0-9]{3}[[:space:]]+Ready[[:space:]]" | awk '{ print $1 }' | tr '\n' ',')
@@ -1369,11 +1393,11 @@ if [[ ${state_recorded} == "0" ]]; then
     rpm_list=(csm-testing hpe-csm-goss-package platform-utils goss-servers cray-cmstools-crayctldeploy)
     url_list=()
     for rpm_name in "${rpm_list[@]}"; do
-      rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*${rpm_name}\*.rpm | sort -V | tail -1)"
+      rpm_path=$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*${rpm_name}\*.rpm | sort -V | tail -1)
+      rpm --force -Uvh "${rpm_path}"
       # CASMPET-6635 & CASMINST-6517
-      # Get the RPM versions from the primary node
-      rpm_version=$(rpm -q ${rpm_name})
-      url_list+=("https://packages.local/repository/csm-sle-15sp4/noarch/${rpm_version}.rpm")
+      rpm_url=$(csm_rpm_tarball_path_to_nexus_url "${rpm_path}")
+      url_list+=("${rpm_url}")
     done
     systemctl enable goss-servers
     systemctl restart goss-servers
