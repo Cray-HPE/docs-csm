@@ -43,15 +43,15 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
    export SW_ADMIN_PASSWORD
    ```
 
-1. (`ncn-m001#`) Perform the upgrade.
-
-   Run `csm-upgrade.sh` to deploy upgraded CSM applications and services.
-
 1. (`ncn-m001#`) Ensure that the `CSM_RELEASE` variable is set to the **target** CSM version of this upgrade.
 
    ```bash
    export CSM_RELEASE=1.5.0
    ```
+
+1. (`ncn-m001#`) Perform the upgrade.
+
+   Run `csm-upgrade.sh` to deploy upgraded CSM applications and services.
 
    ```bash
    /usr/share/doc/csm/upgrade/scripts/upgrade/csm-upgrade.sh
