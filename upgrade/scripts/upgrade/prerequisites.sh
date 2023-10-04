@@ -524,6 +524,56 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+do_upgrade_csm_chart csm-config sysmgmt.yaml
+
+# Wait for the csm-config-import Kubernetes job to complete before proceeding
+state_name="WAIT_FOR_CSM_CONFIG_IMPORT"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    job_name="csm-config-import-${CSM_RELEASE}"
+    i=1
+    max_checks=40
+    wait_time=15
+    # First, wait for the job to be created
+    created=no
+    while [[ ${i} -le ${max_checks} ]]; do
+      echo "Waiting for Kubernetes job ${job_name} to exist (${i}/${max_checks})"
+      sleep ${wait_time}
+      i=$((i + 1))
+      if kubectl get job -n services "${job_name}" 2>/dev/null; then
+        echo "Kubernetes job ${job_name} exists"
+        created=yes
+        break
+      fi
+    done
+    if [[ ${created} == no ]]; then
+      echo "ERROR: Kubernetes job ${job_name} does not exist after $((max_checks * wait_time)) seconds" >&2
+      exit 1
+    fi
+    # Now wait for the job to succeed
+    passed=no
+    while [[ ${i} -le ${max_checks} ]]; do
+      echo "Waiting for Kubernetes job ${job_name} to succeed (${i}/${max_checks})"
+      sleep ${wait_time}
+      i=$((i + 1))
+      if [[ $(kubectl get job -n services "${job_name}" -o jsonpath='{.status.succeeded}') == 1 ]]; then
+        echo "Kubernetes job ${job_name} succeeded"
+        passed=yes
+        break
+      fi
+    done
+    if [[ ${passed} == no ]]; then
+      echo "ERROR: Kubernetes job ${job_name} did not succeed after $((max_checks * wait_time)) seconds" >&2
+      exit 1
+    fi
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 # Note for csm 1.5/k8s 1.22 only if ANY chart depends on /v1 cert-manager api
 # usage it *MUST* come after this or prerequisites will fail on an upgrade.
 # Helper functions for cert-manager upgrade
@@ -737,7 +787,6 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-do_upgrade_csm_chart csm-config sysmgmt.yaml
 do_upgrade_csm_chart cray-drydock platform.yaml
 do_upgrade_csm_chart cray-kyverno platform.yaml
 do_upgrade_csm_chart kyverno-policy platform.yaml
