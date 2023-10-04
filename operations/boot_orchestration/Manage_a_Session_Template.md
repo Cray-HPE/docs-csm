@@ -34,7 +34,7 @@ The following command takes a JSON input file that contains the information requ
 (`ncn-mw#`) v2 command:
 
 ```bash
-cray bos v2 sessiontemplates create --file <INPUT_FILE> --name <NEW_TEMPLATE_NAME>
+cray bos v2 sessiontemplates create --file <INPUT_FILE> <NEW_TEMPLATE_NAME>
 ```
 
 (`ncn-mw#`) v1 command:
@@ -110,8 +110,6 @@ Example output:
     }
   }
 ]
-
-[...]
 ```
 
 ## View a session template
