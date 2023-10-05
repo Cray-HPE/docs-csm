@@ -9,7 +9,8 @@ This section updates the software running on managed compute and application (UA
   - [2.3 Application nodes](#23-application-nodes)
 - [3. Update managed host Slingshot NIC firmware](#3-update-managed-host-slingshot-nic-firmware)
 - [4. Execute the IUF `post-install-check` stage](#4-execute-the-iuf-post-install-check-stage)
-- [5. Next steps](#5-next-steps)
+- [5. Perform Slingshot switch firmware updates](#5-perform-slingshot-switch-firmware-updates)
+- [6. Next steps](#6-next-steps)
 
 ## 1. Update managed host firmware (FAS)
 
@@ -173,7 +174,15 @@ Once this step has completed:
 - Per-stage product hooks have executed for the `post-install-check` stage to verify product software is executing as
   expected
 
-## 5. Next steps
+## 5. Perform Slingshot switch firmware updates
+
+Instructions to perform Slingshot switch firmware updates are provided in the "Upgrade Slingshot Switch Firmware on HPE Cray EX" section of the _Slingshot Operations Guide for Customers_.
+
+Once this step has completed:
+
+- Slingshot switch firmware has been updated
+
+## 6. Next steps
 
 - If performing an initial install or an upgrade of non-CSM products only, return to the
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)

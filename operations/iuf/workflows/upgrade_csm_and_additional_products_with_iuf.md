@@ -64,16 +64,16 @@ the steps below it provide detailed instructions which must be executed in the o
 
    Follow the IUF [Backup](backup.md) instructions
 
-1. Management rollout
-
-   Follow the IUF [Management rollout](management_rollout.md) instructions
-
-1. CSM Stage 3 and CSM health validation
+1. CSM Stage 1 and CSM health validation
 
    Follow these CSM instructions in order:
 
-   1. [Stage 3 - CSM Service Upgrades](../../../upgrade/Stage_3.md)
+   1. [Stage 1 - CSM Service Upgrades](../../../upgrade/Stage_1.md)
    1. [Validate CSM Health During Upgrade](../../../upgrade/Validate_CSM_Health_During_Upgrade.md)
+
+1. Management rollout
+
+   Follow the IUF [Management rollout](management_rollout.md) instructions
 
 1. Deploy product
 
