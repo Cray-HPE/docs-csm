@@ -27,6 +27,7 @@
 
 host=$(hostname)
 host_ip=$(host ${host} | awk '{ print $NF }')
+ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 # update ssh keys for rebuilt node on host and on ncn-s001/2/3
 truncate --size=0 ~/.ssh/known_hosts 2>&1
