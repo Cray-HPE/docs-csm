@@ -84,6 +84,32 @@ if [[ ! $(/srv/cray/scripts/common/pre-load-images.sh) ]]; then
   echo "ERROR  Unable to run pre-load-images.sh on $host."
 fi
 
+# exit maintenance mode if node is in maintenance mode
+maintenance=""
+maintenance=$(ceph --name client.ro orch host ls -f json | jq --arg host "$host" '.[] | select(.hostname==$host)' | grep -E 'maintenance|Maintenance')
+if [[ -n $maintenance ]]; then
+  success_exit_maint=0
+  if [[ "$host" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]; then
+    ceph orch host maintenance exit $host
+    if [[ $? -eq 0 ]]; then
+      success_exit_maint=1
+    fi
+  else
+    for node in ncn-s001 ncn-s002 ncn-s003; do
+      ssh $node ${ssh_options} "ceph orch host maintenance exit $host"
+      if [[ $? -eq 0 ]]; then
+        success_exit_maint=1
+        break
+      fi
+    done
+  fi
+  if [[ $success_exit_maint -eq 0 ]]; then
+      echo "ERROR failed to remove $host from maintenance mode."
+      echo "Try manually running 'ceph orch host maintenance exit $host' from ncn-s001, ncn-s002, or ncn-s003."
+      exit 1
+  fi
+fi
+
 sleep 30
 (( ceph_mgr_failed_restarts=0 ))
 (( ceph_mgr_successful_restarts=0 ))
