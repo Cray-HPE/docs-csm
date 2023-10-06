@@ -21,7 +21,7 @@ This section applies to all node types. The commands in this section assume the 
     1. Set the BMC variable to the hostname of the BMC of the node being rebuilt.
 
         ```bash
-        BMC="${NODE}-mgmt"
+        BMC="${NODE}-mgmt"; echo $BMC
         ```
 
     1. Set and export the `root` password of the BMC.
