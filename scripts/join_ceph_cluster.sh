@@ -23,8 +23,6 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-#!/bin/bash
-
 host=$(hostname)
 host_ip=$(host ${host} | awk '{ print $NF }')
 ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
@@ -40,8 +38,8 @@ for node in ncn-s001 ncn-s002 ncn-s003; do
   fi
   # add new authorized_hosts entry for the node
   ssh-keyscan -H "${node},${ncn_ip}" >> ~/.ssh/known_hosts
-  
-  if [[ "$host" != "$node" ]]; then
+
+  if [[ $host != "$node" ]]; then
     ssh $node "if [[ ! -f ~/.ssh/known_hosts ]]; then > ~/.ssh/known_hosts; fi; ssh-keygen -R $host -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keygen -R $host_ip -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keyscan -H ${host},${host_ip} >> ~/.ssh/known_hosts"
   fi
 done
@@ -52,24 +50,20 @@ ssh-keyscan -H ncn-m001,${m001_ip} >> ~/.ssh/known_hosts
 ssh ncn-m001 "ssh-keygen -R $host -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keygen -R $host_ip -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keyscan -H ${host},${host_ip} >> ~/.ssh/known_hosts"
 
 # copy necessary ceph files to rebuilt node
-(( counter=0 ))
+((counter = 0))
 for node in ncn-s001 ncn-s002 ncn-s003; do
-  if [[ "$host" == "$node" ]]; then
-    (( counter+1 ))
-  elif [[ $(nc -z -w 10 $node 22) ]] || [[ $counter -lt 3 ]]
-  then
-    if [[ "$host" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]
-    then
+  if [[ $host == "$node" ]]; then
+    ((counter + 1))
+  elif [[ $(nc -z -w 10 $node 22) ]] || [[ $counter -lt 3 ]]; then
+    if [[ $host =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]; then
       scp $node:/etc/ceph/* /etc/ceph
     else
       scp $node:/etc/ceph/\{rgw.pem,ceph.conf,ceph_conf_min,ceph.client.ro.keyring\} /etc/ceph/
     fi
 
-    if [[ ! $(pdsh -w $node "ceph orch host rm $host; ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]
-    then
-      (( counter+1 ))
-      if [[ $counter -ge 3 ]]
-      then
+    if [[ ! $(pdsh -w $node "ceph orch host rm $host; ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]; then
+      ((counter + 1))
+      if [[ $counter -ge 3 ]]; then
         echo "Unable to access ceph monitor nodes"
         exit 1
       fi
@@ -90,7 +84,7 @@ maintenance=""
 maintenance=$(ceph --name client.ro orch host ls -f json | jq --arg host "$host" '.[] | select(.hostname==$host)' | grep -E 'maintenance|Maintenance')
 if [[ -n $maintenance ]]; then
   success_exit_maint=0
-  if [[ "$host" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]; then
+  if [[ $host =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]; then
     ceph orch host maintenance exit $host
     if [[ $? -eq 0 ]]; then
       success_exit_maint=1
@@ -105,32 +99,28 @@ if [[ -n $maintenance ]]; then
     done
   fi
   if [[ $success_exit_maint -eq 0 ]]; then
-      echo "ERROR failed to remove $host from maintenance mode."
-      echo "Try manually running 'ceph orch host maintenance exit $host' from ncn-s001, ncn-s002, or ncn-s003."
-      exit 1
+    echo "ERROR failed to remove $host from maintenance mode."
+    echo "Try manually running 'ceph orch host maintenance exit $host' from ncn-s001, ncn-s002, or ncn-s003."
+    exit 1
   fi
 fi
 
 sleep 30
-(( ceph_mgr_failed_restarts=0 ))
-(( ceph_mgr_successful_restarts=0 ))
-until [[ $(cephadm shell -- ceph-volume inventory --format json-pretty|jq '.[] | select(.available == true) | .path' | wc -l) == 0 ]]
-do
+((ceph_mgr_failed_restarts = 0))
+((ceph_mgr_successful_restarts = 0))
+until [[ $(cephadm shell -- ceph-volume inventory --format json-pretty | jq '.[] | select(.available == true) | .path' | wc -l) == 0 ]]; do
   for node in ncn-s001 ncn-s002 ncn-s003; do
-    if [[ $ceph_mgr_successful_restarts -gt 15 ]]
-    then
+    if [[ $ceph_mgr_successful_restarts -gt 15 ]]; then
       echo "Failed to bring in OSDs, manual troubleshooting required."
       exit 1
     fi
-    if pdsh -w $node ceph mgr fail
-    then
-      (( ceph_mgr_successful_restarts+1 ))
+    if pdsh -w $node ceph mgr fail; then
+      ((ceph_mgr_successful_restarts + 1))
       sleep 120
       break
     else
-      (( ceph_mgr_failed_restarts+1 ))
-      if [[ $ceph_mgr_failed_restarts -ge 3 ]]
-      then
+      ((ceph_mgr_failed_restarts + 1))
+      if [[ $ceph_mgr_failed_restarts -ge 3 ]]; then
         echo "Unable to access ceph monitor nodes."
         exit 1
       fi
@@ -147,8 +137,7 @@ if [[ $status != "running" ]]; then
   done
 fi
 
-for service in $(cephadm ls | jq -r '.[].systemd_unit')
-do
+for service in $(cephadm ls | jq -r '.[].systemd_unit'); do
   systemctl enable $service
 done
 echo "Completed adding $host to ceph cluster."
