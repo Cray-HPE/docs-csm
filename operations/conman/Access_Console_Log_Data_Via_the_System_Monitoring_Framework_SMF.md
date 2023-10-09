@@ -32,11 +32,11 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
 
 1. Navigate to the following URL in a web browser: `https://sma-kibana.cmn.SYSTEM_DOMAIN_NAME/app/kibana`
 
-    |If this appears|Do this|
-    |----------------|--------|
-    |**the Keycloak login page**|Supply valid credentials, then wait to be redirected to the Kibana dashboard before continuing to the next step.|
-    |**the error `Kibana did not load properly. Check the server output for more information.`**|Clear browser cookies for `https://sma-kibana.cmn.SYSTEM_DOMAIN_NAME`|
-    |**The Kibana dashboard \(see example below\)**|Proceed to next step|
+    | If this appears                                                                             | Do this                                                                                                          |
+    |---------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
+    | **the Keycloak login page**                                                                 | Supply valid credentials, then wait to be redirected to the Kibana dashboard before continuing to the next step. |
+    | **the error `Kibana did not load properly. Check the server output for more information.`** | Clear browser cookies for `https://sma-kibana.cmn.SYSTEM_DOMAIN_NAME`                                            |
+    | **The Kibana dashboard \(see example below\)**                                              | Proceed to next step                                                                                             |
 
     When the Kibana dashboard loads, the web UI displays the Discover page by default. Note that even without entering a search pattern, an index pattern shows entries ordered in time.
 

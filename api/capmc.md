@@ -165,12 +165,12 @@ The Hardware Management System no longer supports a "diag" state, as such the `s
 
 <h3 id="post__get_xname_status-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|object|true|A JSON object to get status for selected components.|
-|» filter|body|string|false|Optional, pipe concatenated (|) list of filter strings, e.g. "filter1|filter2|filter3". Valid status filters are `show_all`, `show_disabled`, `show_halt`, `show_off`, `show_on`, `show_ready`, and `show_standby`. Valid flag filters are `show_alert`, `show_resvd`, and `show_warn`. Status and flag filters may be intermixed freely. If omitted, the default is `show_all`.|
-|» source|body|any|false|A string indicating the source for node status. Valid sources are `HSM` (or its aliases `HMS`, `SM`, `SMD`, or `Software`) and `Redfish` (or its alias `Hardware`). The default, when unspecified, is to use Redfish via the appropriate controller as the source for all status. The Hardware Management System (HMS) returns the largest set of possible status. A Redfish hardware source can *only* report **off** and **on** status for components.  Source strings are normalized to all lower case so `HSM` or `hsm` are both valid.|
-|» xnames|body|[string]|false|User specified list of component IDs (xnames) to get the status of. An empty array indicates all components in the system. If invalid xnames are specified then an error will be returned.|
+| Name     | In   | Type     | Required | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+|----------|------|----------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| body     | body | object   | true     | A JSON object to get status for selected components.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| » filter | body | string   | false    | Optional, pipe concatenated (                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |) list of filter strings, e.g. "filter1|filter2|filter3". Valid status filters are `show_all`, `show_disabled`, `show_halt`, `show_off`, `show_on`, `show_ready`, and `show_standby`. Valid flag filters are `show_alert`, `show_resvd`, and `show_warn`. Status and flag filters may be intermixed freely. If omitted, the default is `show_all`.|
+| » source | body | any      | false    | A string indicating the source for node status. Valid sources are `HSM` (or its aliases `HMS`, `SM`, `SMD`, or `Software`) and `Redfish` (or its alias `Hardware`). The default, when unspecified, is to use Redfish via the appropriate controller as the source for all status. The Hardware Management System (HMS) returns the largest set of possible status. A Redfish hardware source can *only* report **off** and **on** status for components.  Source strings are normalized to all lower case so `HSM` or `hsm` are both valid. |
+| » xnames | body | [string] | false    | User specified list of component IDs (xnames) to get the status of. An empty array indicates all components in the system. If invalid xnames are specified then an error will be returned.                                                                                                                                                                                                                                                                                                                                                  |
 
 > Example responses
 
@@ -197,26 +197,26 @@ The Hardware Management System no longer supports a "diag" state, as such the `s
 
 <h3 id="post__get_xname_status-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|[OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|[Bad Request](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1)|[httpError400_BadRequest](#schemahttperror400_badrequest)|
-|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|[Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)|[httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|[Internal Server Error](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1)|[httpError500_InternalServerError](#schemahttperror500_internalservererror)|
+| Status | Meaning                                                                    | Description                                                                                     | Schema                                                                      |
+|--------|----------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | [OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success | Inline                                                                      |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | [Bad Request](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1)                 | [httpError400_BadRequest](#schemahttperror400_badrequest)                   |
+| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)    | [Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)          | [httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed)       |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | [Internal Server Error](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1)       | [httpError500_InternalServerError](#schemahttperror500_internalservererror) |
 
 <h3 id="post__get_xname_status-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» e|integer(int32)|true|none|Request status code, zero on success, non-zero on error.|
-|» err_msg|string|true|none|Message indicating any error encountered.|
-|» on|[string]|false|none|Optional, list of powered on components by xname.|
-|» off|[string]|false|none|Optional, list of powered off components by xname.|
-|» disabled|[string]|false|none|Optional, list of disabled components by xname. The component is physically installed, but ignored by system management software. The Hardware Management System does not treat disabled as a separate state and as such disabled does not indicate the anything about the hardware or software state of a node.|
-|» ready|[string]|false|none|Optional, list of booted components by xname. Operating system is fully booted and sending heartbeats.|
-|» standby|[string]|false|none|Optional, list of components in standby by xname. Components that were previously booted and but are no longer sending heartbeat.|
+| Name       | Type           | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                      |
+|------------|----------------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| » e        | integer(int32) | true     | none         | Request status code, zero on success, non-zero on error.                                                                                                                                                                                                                                                         |
+| » err_msg  | string         | true     | none         | Message indicating any error encountered.                                                                                                                                                                                                                                                                        |
+| » on       | [string]       | false    | none         | Optional, list of powered on components by xname.                                                                                                                                                                                                                                                                |
+| » off      | [string]       | false    | none         | Optional, list of powered off components by xname.                                                                                                                                                                                                                                                               |
+| » disabled | [string]       | false    | none         | Optional, list of disabled components by xname. The component is physically installed, but ignored by system management software. The Hardware Management System does not treat disabled as a separate state and as such disabled does not indicate the anything about the hardware or software state of a node. |
+| » ready    | [string]       | false    | none         | Optional, list of booted components by xname. Operating system is fully booted and sending heartbeats.                                                                                                                                                                                                           |
+| » standby  | [string]       | false    | none         | Optional, list of components in standby by xname. Components that were previously booted and but are no longer sending heartbeat.                                                                                                                                                                                |
 
 <aside class="success">
 This operation does not require authentication
@@ -310,12 +310,12 @@ An optional text message may be provided describing the reason for performing th
 
 <h3 id="post__xname_reinit-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|object|true|A JSON object to reinit selected components.|
-|» reason|body|string|false|Reason for doing a component reinit.|
-|» xnames|body|[string]|true|User specified list of component IDs (xnames) to reinit. An empty array is invalid. If invalid xnames are specified then an error will be returned.|
-|» force|body|boolean|false|Attempt to restart components disabling any checks for a graceful restart.|
+| Name     | In   | Type     | Required | Description                                                                                                                                         |
+|----------|------|----------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| body     | body | object   | true     | A JSON object to reinit selected components.                                                                                                        |
+| » reason | body | string   | false    | Reason for doing a component reinit.                                                                                                                |
+| » xnames | body | [string] | true     | User specified list of component IDs (xnames) to reinit. An empty array is invalid. If invalid xnames are specified then an error will be returned. |
+| » force  | body | boolean  | false    | Attempt to restart components disabling any checks for a graceful restart.                                                                          |
 
 > Example responses
 
@@ -342,25 +342,25 @@ An optional text message may be provided describing the reason for performing th
 
 <h3 id="post__xname_reinit-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|[OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|[Bad Request](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1)|[httpError400_BadRequest](#schemahttperror400_badrequest)|
-|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|[Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)|[httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|[Internal Server Error](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1)|[httpError500_InternalServerError](#schemahttperror500_internalservererror)|
+| Status | Meaning                                                                    | Description                                                                                     | Schema                                                                      |
+|--------|----------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | [OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success | Inline                                                                      |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | [Bad Request](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1)                 | [httpError400_BadRequest](#schemahttperror400_badrequest)                   |
+| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)    | [Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)          | [httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed)       |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | [Internal Server Error](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1)       | [httpError500_InternalServerError](#schemahttperror500_internalservererror) |
 
 <h3 id="post__xname_reinit-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» e|integer(int32)|true|none|Request status code, zero on success, non-zero on error.|
-|» err_msg|string|true|none|Message indicating any error encountered.|
-|» xnames|[object]|false|none|none|
-|»» e|integer(int32)|true|none|Non-zero status code for failed request.|
-|»» err_msg|string|true|none|Message indicating any error encountered.|
-|»» xname|string|true|none|Component ID failing power restart attempt.|
+| Name       | Type           | Required | Restrictions | Description                                              |
+|------------|----------------|----------|--------------|----------------------------------------------------------|
+| » e        | integer(int32) | true     | none         | Request status code, zero on success, non-zero on error. |
+| » err_msg  | string         | true     | none         | Message indicating any error encountered.                |
+| » xnames   | [object]       | false    | none         | none                                                     |
+| »» e       | integer(int32) | true     | none         | Non-zero status code for failed request.                 |
+| »» err_msg | string         | true     | none         | Message indicating any error encountered.                |
+| »» xname   | string         | true     | none         | Component ID failing power restart attempt.              |
 
 <aside class="success">
 This operation does not require authentication
@@ -455,15 +455,15 @@ An optional text message may be provided describing the reason for performing th
 
 <h3 id="post__xname_on-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|object|true|A JSON object to power on selected components.|
-|» reason|body|string|false|Reason for turning components on.|
-|» xnames|body|[string]|true|User specified list of component IDs (xnames) to power on. An empty array is invalid. If invalid xnames are specified then an error will be returned. Available wildcards: all, s0.|
-|» force|body|boolean|false|Attempt to power on components disabling any checks for a graceful power on.|
-|» recursive|body|boolean|false|Attempt to power on the component hierarchy rooted by each component ID (xname). Incompatible with the prereq option.|
-|» prereq|body|boolean|false|Attempt to power on the component IDs(xnames) and all of their ancestors. Incompatible with the recursive option.|
-|» continue|body|boolean|false|Continue powering on valid component IDs (xnames) ignoring any component ID validation errors. Normally, a failure in validation ceases any attempt to power on any components.|
+| Name        | In   | Type     | Required | Description                                                                                                                                                                         |
+|-------------|------|----------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| body        | body | object   | true     | A JSON object to power on selected components.                                                                                                                                      |
+| » reason    | body | string   | false    | Reason for turning components on.                                                                                                                                                   |
+| » xnames    | body | [string] | true     | User specified list of component IDs (xnames) to power on. An empty array is invalid. If invalid xnames are specified then an error will be returned. Available wildcards: all, s0. |
+| » force     | body | boolean  | false    | Attempt to power on components disabling any checks for a graceful power on.                                                                                                        |
+| » recursive | body | boolean  | false    | Attempt to power on the component hierarchy rooted by each component ID (xname). Incompatible with the prereq option.                                                               |
+| » prereq    | body | boolean  | false    | Attempt to power on the component IDs(xnames) and all of their ancestors. Incompatible with the recursive option.                                                                   |
+| » continue  | body | boolean  | false    | Continue powering on valid component IDs (xnames) ignoring any component ID validation errors. Normally, a failure in validation ceases any attempt to power on any components.     |
 
 > Example responses
 
@@ -490,25 +490,25 @@ An optional text message may be provided describing the reason for performing th
 
 <h3 id="post__xname_on-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|[OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|[Bad Request](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1)|[httpError400_BadRequest](#schemahttperror400_badrequest)|
-|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|[Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)|[httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|[Internal Server Error](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1)|[httpError500_InternalServerError](#schemahttperror500_internalservererror)|
+| Status | Meaning                                                                    | Description                                                                                     | Schema                                                                      |
+|--------|----------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | [OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success | Inline                                                                      |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | [Bad Request](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1)                 | [httpError400_BadRequest](#schemahttperror400_badrequest)                   |
+| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)    | [Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)          | [httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed)       |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | [Internal Server Error](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1)       | [httpError500_InternalServerError](#schemahttperror500_internalservererror) |
 
 <h3 id="post__xname_on-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» e|integer(int32)|true|none|Request status code, zero on success, non-zero on error.|
-|» err_msg|string|true|none|Message indicating any error encountered.|
-|» xnames|[object]|false|none|none|
-|»» e|integer(int32)|true|none|Non-zero status code for failed request.|
-|»» err_msg|string|true|none|Message indicating any error encountered.|
-|»» xname|string|true|none|Component ID failing power up attempt.|
+| Name       | Type           | Required | Restrictions | Description                                              |
+|------------|----------------|----------|--------------|----------------------------------------------------------|
+| » e        | integer(int32) | true     | none         | Request status code, zero on success, non-zero on error. |
+| » err_msg  | string         | true     | none         | Message indicating any error encountered.                |
+| » xnames   | [object]       | false    | none         | none                                                     |
+| »» e       | integer(int32) | true     | none         | Non-zero status code for failed request.                 |
+| »» err_msg | string         | true     | none         | Message indicating any error encountered.                |
+| »» xname   | string         | true     | none         | Component ID failing power up attempt.                   |
 
 <aside class="success">
 This operation does not require authentication
@@ -603,15 +603,15 @@ An optional text message may be provided describing the reason for performing th
 
 <h3 id="post__xname_off-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|object|true|A JSON object to power off selected components.|
-|» reason|body|string|false|Reason for turning components off.|
-|» xnames|body|[string]|true|User specified list of component IDs (xnames) to shutdown and power off. An empty array is invalid. If invalid xnames are specified then an error will be returned. Available wildcards: all, s0.|
-|» force|body|boolean|false|Attempt to power off components disabling any checks for a graceful power off.|
-|» recursive|body|boolean|false|Attempt to power off the component hierarchy rooted by each component ID (xname). Incompatible with the prereq option.|
-|» prereq|body|boolean|false|Attempt to power off the component and all of its ancestors by their component ID (xname). Incompatible with the recursive option.|
-|» continue|body|boolean|false|Continue powering on valid component IDs (xnames) ignoring any component ID validation errors. Normally, a failure in validation ceases any attempt to power on any components.|
+| Name        | In   | Type     | Required | Description                                                                                                                                                                                       |
+|-------------|------|----------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| body        | body | object   | true     | A JSON object to power off selected components.                                                                                                                                                   |
+| » reason    | body | string   | false    | Reason for turning components off.                                                                                                                                                                |
+| » xnames    | body | [string] | true     | User specified list of component IDs (xnames) to shutdown and power off. An empty array is invalid. If invalid xnames are specified then an error will be returned. Available wildcards: all, s0. |
+| » force     | body | boolean  | false    | Attempt to power off components disabling any checks for a graceful power off.                                                                                                                    |
+| » recursive | body | boolean  | false    | Attempt to power off the component hierarchy rooted by each component ID (xname). Incompatible with the prereq option.                                                                            |
+| » prereq    | body | boolean  | false    | Attempt to power off the component and all of its ancestors by their component ID (xname). Incompatible with the recursive option.                                                                |
+| » continue  | body | boolean  | false    | Continue powering on valid component IDs (xnames) ignoring any component ID validation errors. Normally, a failure in validation ceases any attempt to power on any components.                   |
 
 > Example responses
 
@@ -638,25 +638,25 @@ An optional text message may be provided describing the reason for performing th
 
 <h3 id="post__xname_off-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|[OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|[Bad Request](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1)|[httpError400_BadRequest](#schemahttperror400_badrequest)|
-|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|[Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)|[httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|[Internal Server Error](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1)|[httpError500_InternalServerError](#schemahttperror500_internalservererror)|
+| Status | Meaning                                                                    | Description                                                                                     | Schema                                                                      |
+|--------|----------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | [OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success | Inline                                                                      |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | [Bad Request](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1)                 | [httpError400_BadRequest](#schemahttperror400_badrequest)                   |
+| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)    | [Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)          | [httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed)       |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | [Internal Server Error](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1)       | [httpError500_InternalServerError](#schemahttperror500_internalservererror) |
 
 <h3 id="post__xname_off-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» e|integer(int32)|true|none|Request status code, zero on success, non-zero on error.|
-|» err_msg|string|true|none|Message indicating any error encountered.|
-|» xnames|[object]|false|none|none|
-|»» xname|string|true|none|Component ID failing power down attempt.|
-|»» e|integer(int32)|true|none|Non-zero status code for failed request.|
-|»» err_msg|string|true|none|Message indicating any error encountered.|
+| Name       | Type           | Required | Restrictions | Description                                              |
+|------------|----------------|----------|--------------|----------------------------------------------------------|
+| » e        | integer(int32) | true     | none         | Request status code, zero on success, non-zero on error. |
+| » err_msg  | string         | true     | none         | Message indicating any error encountered.                |
+| » xnames   | [object]       | false    | none         | none                                                     |
+| »» xname   | string         | true     | none         | Component ID failing power down attempt.                 |
+| »» e       | integer(int32) | true     | none         | Non-zero status code for failed request.                 |
+| »» err_msg | string         | true     | none         | Message indicating any error encountered.                |
 
 <aside class="success">
 This operation does not require authentication
@@ -745,10 +745,10 @@ The `get_power_cap` API returns the power capping control(s) and currently appli
 
 <h3 id="post__get_power_cap-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|object|true|A JSON object to get power capping controls of selected NIDs.|
-|» nids|body|[integer]|true|User specified list, or empty array for all NIDs. This list must not contain invalid or duplicate NID numbers. If invalid NID numbers are specified then an error will be returned. If empty, the default is all NIDs. The specified NIDs must be in the `ready` state per the `get_node_status` command.|
+| Name   | In   | Type      | Required | Description                                                                                                                                                                                                                                                                                               |
+|--------|------|-----------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| body   | body | object    | true     | A JSON object to get power capping controls of selected NIDs.                                                                                                                                                                                                                                             |
+| » nids | body | [integer] | true     | User specified list, or empty array for all NIDs. This list must not contain invalid or duplicate NID numbers. If invalid NID numbers are specified then an error will be returned. If empty, the default is all NIDs. The specified NIDs must be in the `ready` state per the `get_node_status` command. |
 
 > Example responses
 
@@ -795,26 +795,26 @@ The `get_power_cap` API returns the power capping control(s) and currently appli
 
 <h3 id="post__get_power_cap-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|[OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success|Inline|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|[Internal Server Error](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1)|[httpError500_InternalServerError](#schemahttperror500_internalservererror)|
+| Status | Meaning                                                                    | Description                                                                                     | Schema                                                                      |
+|--------|----------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | [OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success | Inline                                                                      |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | [Internal Server Error](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1)       | [httpError500_InternalServerError](#schemahttperror500_internalservererror) |
 
 <h3 id="post__get_power_cap-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» e|integer(int32)|true|none|Overall request status code, zero on total success, non-zero if one or more node specific operations fail.|
-|» err_msg|string|true|none|Message indicating any error encountered.|
-|» nids|[object]|true|none|Object array containing NID specific result data, each element represents a single NID.|
-|»» nid|integer(int32)|true|none|NID number owning the returned control objects.|
-|»» e|integer(int32)|false|none|Optional, error status, non-zero indicates operation failed on this node.|
-|»» err_msg|string|false|none|Optional, message indicating any error encountered.|
-|»» controls|[object]|false|none|Optional, array of node level control and status objects which have been queried, one element per control.|
-|»»» name|string|true|none|Unique control or status object identifier.|
-|»»» val|integer(int32)|true|none|Control object setting, or zero to indicate control is unconstrained, units are dependent upon control type.|
+| Name        | Type           | Required | Restrictions | Description                                                                                                  |
+|-------------|----------------|----------|--------------|--------------------------------------------------------------------------------------------------------------|
+| » e         | integer(int32) | true     | none         | Overall request status code, zero on total success, non-zero if one or more node specific operations fail.   |
+| » err_msg   | string         | true     | none         | Message indicating any error encountered.                                                                    |
+| » nids      | [object]       | true     | none         | Object array containing NID specific result data, each element represents a single NID.                      |
+| »» nid      | integer(int32) | true     | none         | NID number owning the returned control objects.                                                              |
+| »» e        | integer(int32) | false    | none         | Optional, error status, non-zero indicates operation failed on this node.                                    |
+| »» err_msg  | string         | false    | none         | Optional, message indicating any error encountered.                                                          |
+| »» controls | [object]       | false    | none         | Optional, array of node level control and status objects which have been queried, one element per control.   |
+| »»» name    | string         | true     | none         | Unique control or status object identifier.                                                                  |
+| »»» val     | integer(int32) | true     | none         | Control object setting, or zero to indicate control is unconstrained, units are dependent upon control type. |
 
 <aside class="success">
 This operation does not require authentication
@@ -900,10 +900,10 @@ The `get_power_cap_capabilities` API returns information about installed hardwar
 
 <h3 id="post__get_power_cap_capabilities-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|object|true|A JSON object to get power capping capabilities of selected NIDs.|
-|» nids|body|[integer]|true|User specified list, or empty array for all NIDs. This list must not contain invalid or duplicate NID numbers. If invalid NID numbers are specified, then an error will be returned.|
+| Name   | In   | Type      | Required | Description                                                                                                                                                                          |
+|--------|------|-----------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| body   | body | object    | true     | A JSON object to get power capping capabilities of selected NIDs.                                                                                                                    |
+| » nids | body | [integer] | true     | User specified list, or empty array for all NIDs. This list must not contain invalid or duplicate NID numbers. If invalid NID numbers are specified, then an error will be returned. |
 
 > Example responses
 
@@ -968,33 +968,33 @@ The `get_power_cap_capabilities` API returns information about installed hardwar
 
 <h3 id="post__get_power_cap_capabilities-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|[OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success|Inline|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|[Internal Server Error](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1)|[httpError500_InternalServerError](#schemahttperror500_internalservererror)|
+| Status | Meaning                                                                    | Description                                                                                     | Schema                                                                      |
+|--------|----------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | [OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success | Inline                                                                      |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | [Internal Server Error](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1)       | [httpError500_InternalServerError](#schemahttperror500_internalservererror) |
 
 <h3 id="post__get_power_cap_capabilities-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» e|integer(int32)|true|none|Request status code, zero on success.|
-|» err_msg|string|true|none|Message indicating any error encountered.|
-|» groups|[object]|true|none|Object array containing hardware specific information and NID membership, each element represent a unique hardware type.|
-|»» name|string|true|none|Opaque identifier which Cray System Management Software uses to uniquely identify a node type.|
-|»» desc|string|true|none|Text description of the opaque node type identifier.|
-|»» host_limit_max|integer(int32)|true|none|Estimated maximum power, specified in watts, which host CPU(s) and memory may consume.|
-|»» host_limit_min|integer(int32)|true|none|Estimated minimum power, specified in watts, which host CPU(s) and memory require to operate.|
-|»» static|integer(int32)|true|none|Static per node power overhead, specified in watts, which is unreported.|
-|»» supply|integer(int32)|true|none|Maximum capacity of each node level power supply for the given hardware type, specified in watts.|
-|»» powerup|integer(int32)|true|none|Typical power consumption of each node during hardware initialization, specified in watts.|
-|»» nids|[integer]|true|none|NID members belonging to the given hardware type.|
-|»» controls|[object]|true|none|Array of node level control objects which may be assigned or queried, one element per control.|
-|»»» name|string|true|none|Unique control object identifier.|
-|»»» desc|string|true|none|Message indicating any error encountered.|
-|»»» min|integer(int32)|true|none|Minimum value which may be assigned to the control object, units are dependent upon control type.|
-|»»» max|integer(int32)|true|none|Maximum value which may be assigned to the control object, units are dependent upon control type.|
+| Name              | Type           | Required | Restrictions | Description                                                                                                              |
+|-------------------|----------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------|
+| » e               | integer(int32) | true     | none         | Request status code, zero on success.                                                                                    |
+| » err_msg         | string         | true     | none         | Message indicating any error encountered.                                                                                |
+| » groups          | [object]       | true     | none         | Object array containing hardware specific information and NID membership, each element represent a unique hardware type. |
+| »» name           | string         | true     | none         | Opaque identifier which Cray System Management Software uses to uniquely identify a node type.                           |
+| »» desc           | string         | true     | none         | Text description of the opaque node type identifier.                                                                     |
+| »» host_limit_max | integer(int32) | true     | none         | Estimated maximum power, specified in watts, which host CPU(s) and memory may consume.                                   |
+| »» host_limit_min | integer(int32) | true     | none         | Estimated minimum power, specified in watts, which host CPU(s) and memory require to operate.                            |
+| »» static         | integer(int32) | true     | none         | Static per node power overhead, specified in watts, which is unreported.                                                 |
+| »» supply         | integer(int32) | true     | none         | Maximum capacity of each node level power supply for the given hardware type, specified in watts.                        |
+| »» powerup        | integer(int32) | true     | none         | Typical power consumption of each node during hardware initialization, specified in watts.                               |
+| »» nids           | [integer]      | true     | none         | NID members belonging to the given hardware type.                                                                        |
+| »» controls       | [object]       | true     | none         | Array of node level control objects which may be assigned or queried, one element per control.                           |
+| »»» name          | string         | true     | none         | Unique control object identifier.                                                                                        |
+| »»» desc          | string         | true     | none         | Message indicating any error encountered.                                                                                |
+| »»» min           | integer(int32) | true     | none         | Minimum value which may be assigned to the control object, units are dependent upon control type.                        |
+| »»» max           | integer(int32) | true     | none         | Maximum value which may be assigned to the control object, units are dependent upon control type.                        |
 
 <aside class="success">
 This operation does not require authentication
@@ -1098,14 +1098,14 @@ The `set_power_cap` API is used to establish an upper bound with respect to powe
 
 <h3 id="post__set_power_cap-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|object|true|A JSON object to set power capping parameters of selected NIDs.|
-|» nids|body|[object]|true|Object array containing NID specific input data, each element represents a single NID.|
-|»» nid|body|integer(int32)|true|NID to apply the specified power caps. The specified NID must be in the **ready** state per the `get_node_status` command.|
-|»» controls|body|[object]|true|Array of node level control objects to be adjusted, one element per control.|
-|»»» name|body|string|true|Specifies a node or accelerator as the type to apply a power cap to.|
-|»»» val|body|integer(int32)|true|Power cap value to assign to the selected component type. The value given must be within the range returned in the capabilities output. A Value of zero may be supplied to explicitly clear an existing power cap.|
+| Name        | In   | Type           | Required | Description                                                                                                                                                                                                        |
+|-------------|------|----------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| body        | body | object         | true     | A JSON object to set power capping parameters of selected NIDs.                                                                                                                                                    |
+| » nids      | body | [object]       | true     | Object array containing NID specific input data, each element represents a single NID.                                                                                                                             |
+| »» nid      | body | integer(int32) | true     | NID to apply the specified power caps. The specified NID must be in the **ready** state per the `get_node_status` command.                                                                                         |
+| »» controls | body | [object]       | true     | Array of node level control objects to be adjusted, one element per control.                                                                                                                                       |
+| »»» name    | body | string         | true     | Specifies a node or accelerator as the type to apply a power cap to.                                                                                                                                               |
+| »»» val     | body | integer(int32) | true     | Power cap value to assign to the selected component type. The value given must be within the range returned in the capabilities output. A Value of zero may be supplied to explicitly clear an existing power cap. |
 
 #### Detailed descriptions
 
@@ -1138,23 +1138,23 @@ The accelerator power cap value represents a subset of the total node level powe
 
 <h3 id="post__set_power_cap-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|[OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success|Inline|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|[Internal Server Error](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1)|[httpError500_InternalServerError](#schemahttperror500_internalservererror)|
+| Status | Meaning                                                                    | Description                                                                                     | Schema                                                                      |
+|--------|----------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | [OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success | Inline                                                                      |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | [Internal Server Error](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1)       | [httpError500_InternalServerError](#schemahttperror500_internalservererror) |
 
 <h3 id="post__set_power_cap-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» e|integer(int32)|true|none|Request status code, zero on success.|
-|» err_msg|string|true|none|Message indicating any error encountered.|
-|» nids|[object]|true|none|Object array containing NID specific error data, NIDs which experienced success are omitted.|
-|»» nid|integer(int32)|true|none|NID number owning the returned error data.|
-|»» e|integer(int32)|true|none|Error status, non-zero indicates operation failed on this node.|
-|»» err_msg|string|true|none|Message indicating any error encountered.|
+| Name       | Type           | Required | Restrictions | Description                                                                                  |
+|------------|----------------|----------|--------------|----------------------------------------------------------------------------------------------|
+| » e        | integer(int32) | true     | none         | Request status code, zero on success.                                                        |
+| » err_msg  | string         | true     | none         | Message indicating any error encountered.                                                    |
+| » nids     | [object]       | true     | none         | Object array containing NID specific error data, NIDs which experienced success are omitted. |
+| »» nid     | integer(int32) | true     | none         | NID number owning the returned error data.                                                   |
+| »» e       | integer(int32) | true     | none         | Error status, non-zero indicates operation failed on this node.                              |
+| »» err_msg | string         | true     | none         | Message indicating any error encountered.                                                    |
 
 <aside class="success">
 This operation does not require authentication
@@ -1244,20 +1244,20 @@ This is primarily intended as a diagnostic tool to investigate the functioning o
 
 <h3 id="get__health-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|[OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success|Inline|
-|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|[Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)|[httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed)|
+| Status | Meaning                                                                 | Description                                                                                     | Schema                                                                |
+|--------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                 | [OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success | Inline                                                                |
+| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | [Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)          | [httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed) |
 
 <h3 id="get__health-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» readiness|string|true|none|General state of the service - may be Ready, Service Degraded, or Not Ready.|
-|» vault|string|true|none|Description of the connection to the credentials vault.  If there is an error returned when attempting to access the vault that will be included here.|
-|» hsm|string|true|none|Status of the connection to the Hardware State Manager (HSM).  Any error reported by an attempt to access the HSM will be included in this description.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                             |
+|-------------|--------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| » readiness | string | true     | none         | General state of the service - may be Ready, Service Degraded, or Not Ready.                                                                            |
+| » vault     | string | true     | none         | Description of the connection to the credentials vault.  If there is an error returned when attempting to access the vault that will be included here.  |
+| » hsm       | string | true     | none         | Status of the connection to the Hardware State Manager (HSM).  Any error reported by an attempt to access the HSM will be included in this description. |
 
 <aside class="success">
 This operation does not require authentication
@@ -1339,10 +1339,10 @@ This is primarily an endpoint for the automated Kubernetes system.
 
 <h3 id="get__liveness-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
-|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|[Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)|[httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed)|
+| Status | Meaning                                                                 | Description                                                                                             | Schema                                                                |
+|--------|-------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)         | [No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success | None                                                                  |
+| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | [Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)                  | [httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1424,10 +1424,10 @@ This is primarily an endpoint for the automated Kubernetes system.
 
 <h3 id="get__readiness-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
-|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|[Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)|[httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed)|
+| Status | Meaning                                                                 | Description                                                                                             | Schema                                                                |
+|--------|-------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)         | [No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success | None                                                                  |
+| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | [Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)                  | [httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1454,10 +1454,10 @@ CAPMC Bad Request error payload
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|e|integer(int32)|false|none|Error status code.|
-|err_msg|string|false|none|Message indicating any error encountered.|
+| Name    | Type           | Required | Restrictions | Description                               |
+|---------|----------------|----------|--------------|-------------------------------------------|
+| e       | integer(int32) | false    | none         | Error status code.                        |
+| err_msg | string         | false    | none         | Message indicating any error encountered. |
 
 <h2 id="tocS_httpError405_MethodNotAllowed">httpError405_MethodNotAllowed</h2>
 <!-- backwards compatibility -->
@@ -1478,10 +1478,10 @@ CAPMC Method Not Allowed error payload
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|e|integer(int32)|false|none|Error status code.|
-|err_msg|string|false|none|Message indicating any error encountered.|
+| Name    | Type           | Required | Restrictions | Description                               |
+|---------|----------------|----------|--------------|-------------------------------------------|
+| e       | integer(int32) | false    | none         | Error status code.                        |
+| err_msg | string         | false    | none         | Message indicating any error encountered. |
 
 <h2 id="tocS_httpError500_InternalServerError">httpError500_InternalServerError</h2>
 <!-- backwards compatibility -->
@@ -1502,8 +1502,8 @@ CAPMC Internal Server Error error payload
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|e|integer(int32)|false|none|Error status code.|
-|err_msg|string|false|none|Message indicating any error encountered.|
+| Name    | Type           | Required | Restrictions | Description                               |
+|---------|----------------|----------|--------------|-------------------------------------------|
+| e       | integer(int32) | false    | none         | Error status code.                        |
+| err_msg | string         | false    | none         | Message indicating any error encountered. |
 

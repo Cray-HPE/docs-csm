@@ -49,21 +49,21 @@ Scenarios where this procedure is applicable:
 
    *Sample row from the `HMN` tab of an SHCD file:*
 
-   | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
-   |:---------------:|:-----------------:|:---------------------:|:-----:|:------------:|:----:|:-----------------:|:-----------------:|:----------------------:|:--------------------------:|:-----:|:----------------------:|
-   | `wn01`          | `x3000`           | `u04`                 | `-`   |              |      | `j3`              | `sw-smn01`        | `x3000`                | `u14`                      | `-`   | `j48`                  |
+   | Source (J20) | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20) | Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
+   |:------------:|:-----------------:|:---------------------:|:-----:|:------------:|:-----:|:-----------------:|:-----------------:|:----------------------:|:--------------------------:|:-----:|:----------------------:|
+   |    `wn01`    |      `x3000`      |         `u04`         |  `-`  |              |       |       `j3`        |    `sw-smn01`     |        `x3000`         |           `u14`            |  `-`  |         `j48`          |
 
    > The `Source` name for a worker NCN would be in the format `wn01`; master NCNs have format `mn01` and storage NCNs have format `sn01`.
 
    Node xname format: `xXcCsSbBnN`
 
-   |   |                | SHCD Column to Reference | Description
-   | - | -------------- | ------------------------ | -----------
-   | X | Cabinet number | Source Rack (K20)        | The Cabinet or rack number containing the Management NCN.
-   | C | Chassis number |                          | For air-cooled nodes within a standard rack, the chassis is `0`. If the air-cooled node is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
-   | S | Slot/Rack U    | Source Location (L20)    | The Slot of the node is determined by the bottom most rack U that node occupies.
-   | B | BMC number     |                          | For Management NCNs the BMC number is 0.
-   | N | Node number    |                          | For Management NCNs the Node number is 0.
+   |   |                | SHCD Column to Reference | Description                                                                                                                   |
+   |---|----------------|--------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+   | X | Cabinet number | Source Rack (K20)        | The Cabinet or rack number containing the Management NCN.                                                                     |
+   | C | Chassis number |                          | For air-cooled nodes within a standard rack, the chassis is `0`. If the air-cooled node is within an air-cooled chassis in an | EX2500 cabinet, then this should be `4`.
+   | S | Slot/Rack U    | Source Location (L20)    | The Slot of the node is determined by the bottom most rack U that node occupies.                                              |
+   | B | BMC number     |                          | For Management NCNs the BMC number is 0.                                                                                      |
+   | N | Node number    |                          | For Management NCNs the Node number is 0.                                                                                     |
 
     ```bash
     XNAME=x3000c0s4b0n0
@@ -83,18 +83,18 @@ Scenarios where this procedure is applicable:
 
    *Sample row from the HMN tab of an SHCD:*
 
-   | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
-   |:---------------:|:-----------------:|:---------------------:|:-----:|:------------:|:----:|:-----------------:|:-----------------:|:----------------------:|:--------------------------:|:-----:|:----------------------:|
-   | `wn01`          | `x3000`           | `u04`                 | `-`   |              |      | `j3`              | `sw-smn01`        | `x3000`                | `u14`                      | `-`   | `j48`                  |
+   | Source (J20) | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20) | Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
+   |:------------:|:-----------------:|:---------------------:|:-----:|:------------:|:-----:|:-----------------:|:-----------------:|:----------------------:|:--------------------------:|:-----:|:----------------------:|
+   |    `wn01`    |      `x3000`      |         `u04`         |  `-`  |              |       |       `j3`        |    `sw-smn01`     |        `x3000`         |           `u14`            |  `-`  |         `j48`          |
 
    `MgmtSwitchConnector` xname format: `xXcCwWjJ`
 
-   |   |                    | SHCD Column to Reference   | Description
-   | - | ------------------ | -------------------------- | ----
-   | X | Cabinet number     | Destination Rack (R20)     | The Cabinet or rack number containing the management NCN.
-   | C | Chassis number     | | For air-cooled management switches within standard racks, the chassis is `0`. If the air-cooled management switch is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
-   | W | Slot/Rack U        | Destination Location (S20) | The Slot/Rack U that the management switch occupies.
-   | J | Switch port number | Destination Port (U20)     | The switch port on the switch that the NCN BMC is cabled to.
+   |   |                    | SHCD Column to Reference   | Description                                                                                                                                       |
+   |---|--------------------|----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+   | X | Cabinet number     | Destination Rack (R20)     | The Cabinet or rack number containing the management NCN.                                                                                         |
+   | C | Chassis number     |                            | For air-cooled management switches within standard racks, the chassis is `0`. If the air-cooled management switch is within an air-cooled chassis |in an EX2500 cabinet, then this should be `4`.
+   | W | Slot/Rack U        | Destination Location (S20) | The Slot/Rack U that the management switch occupies.                                                                                              |
+   | J | Switch port number | Destination Port (U20)     | The switch port on the switch that the NCN BMC is cabled to.                                                                                      |
 
     ```bash
     MGMT_SWITCH_CONNECTOR=x3000c0w14j48
@@ -251,31 +251,31 @@ Depending on the hardware present in the NCN, not all of these interfaces may be
 
 *NCN with a single PCIe card (two cards with one port each for two ports total):*
 
-| Interface   | CLI Flag      | Required MAC Address     | Description
-|:----------- |:--------------| ------------------------ |:----------
-| `mgmt0`     | `--mac-mgmt0` | Required                 | First MAC address for the MGMT network bond (`bond0`).
-| `mgmt1`     | `--mac-mgmt1` | Required                 | Second MAC address for the MGMT network bond (`bond0`).
-| `hsn0`      | `--mac-hsn0`  | Required for Worker NCNs | MAC address of the first HSN NIC.
-| `hsn1`      | `--mac-hsn1`  | Optional for Worker NCNs | MAC address of the second HSN NIC.
-| `lan0`      | `--mac-lan0`  | Optional                 | MAC address for the first site-network.
-| `lan1`      | `--mac-lan1`  | Optional                 | MAC address for the second site-network.
-| `lan2`      | `--mac-lan2`  | Optional                 | MAC address for the third site-network.
-| `lan3`      | `--mac-lan3`  | Optional                 | MAC address for the forth site-network.
+| Interface | CLI Flag      | Required MAC Address     | Description                                             | 
+|:----------|:--------------|--------------------------|:--------------------------------------------------------| 
+| `mgmt0`   | `--mac-mgmt0` | Required                 | First MAC address for the MGMT network bond (`bond0`).  | 
+| `mgmt1`   | `--mac-mgmt1` | Required                 | Second MAC address for the MGMT network bond (`bond0`). | 
+| `hsn0`    | `--mac-hsn0`  | Required for Worker NCNs | MAC address of the first HSN NIC.                       | 
+| `hsn1`    | `--mac-hsn1`  | Optional for Worker NCNs | MAC address of the second HSN NIC.                      | 
+| `lan0`    | `--mac-lan0`  | Optional                 | MAC address for the first site-network.                 | 
+| `lan1`    | `--mac-lan1`  | Optional                 | MAC address for the second site-network.                | 
+| `lan2`    | `--mac-lan2`  | Optional                 | MAC address for the third site-network.                 | 
+| `lan3`    | `--mac-lan3`  | Optional                 | MAC address for the forth site-network.                 | 
 
 *NCN with a dual PCIe cards (two cards with two ports each for four ports total):*
 
-| Interface   | CLI Flag      | Required MAC Address     | Description
-|:----------- |:--------------| ------------------------ |:----------
-| `mgmt0`     | `--mac-mgmt0` | Required                 | First MAC address for the MGMT network bond (`bond0`).
-| `mgmt1`     | `--mac-mgmt1` | Required                 | Second MAC address for the MGMT network bond (`bond0`).
-| `sun0`      | `--mac-sun0`  | Required for Storage NCNs| First MAC address for the SUN network bond (`bond1`).
-| `sun1`      | `--mac-sun1`  | Required for Storage NCNs| Second MAC address for the SUN network bond (`bond1`).
-| `hsn0`      | `--mac-hsn0`  | Required for Worker NCNs | MAC address of the first High Speed Network NIC.
-| `hsn1`      | `--mac-hsn1`  | Optional for Worker NCNs | MAC address of the second High Speed Network NIC.
-| `lan0`      | `--mac-lan0`  | Optional                 | MAC address for the first site-network.
-| `lan1`      | `--mac-lan1`  | Optional                 | MAC address for the second site-network.
-| `lan2`      | `--mac-lan2`  | Optional                 | MAC address for the third site-network.
-| `lan3`      | `--mac-lan3`  | Optional                 | MAC address for the forth site-network.
+| Interface | CLI Flag      | Required MAC Address      | Description                                             | 
+|:----------|:--------------|---------------------------|:--------------------------------------------------------| 
+| `mgmt0`   | `--mac-mgmt0` | Required                  | First MAC address for the MGMT network bond (`bond0`).  | 
+| `mgmt1`   | `--mac-mgmt1` | Required                  | Second MAC address for the MGMT network bond (`bond0`). | 
+| `sun0`    | `--mac-sun0`  | Required for Storage NCNs | First MAC address for the SUN network bond (`bond1`).   | 
+| `sun1`    | `--mac-sun1`  | Required for Storage NCNs | Second MAC address for the SUN network bond (`bond1`).  | 
+| `hsn0`    | `--mac-hsn0`  | Required for Worker NCNs  | MAC address of the first High Speed Network NIC.        | 
+| `hsn1`    | `--mac-hsn1`  | Optional for Worker NCNs  | MAC address of the second High Speed Network NIC.       | 
+| `lan0`    | `--mac-lan0`  | Optional                  | MAC address for the first site-network.                 | 
+| `lan1`    | `--mac-lan1`  | Optional                  | MAC address for the second site-network.                | 
+| `lan2`    | `--mac-lan2`  | Optional                  | MAC address for the third site-network.                 | 
+| `lan3`    | `--mac-lan3`  | Optional                  | MAC address for the forth site-network.                 | 
 
 1. See [swapping/moving an NCN](#swappingmoving-an-ncn) or [adding a new NCN](#adding-a-new-ncn) depending on the current course of action.
 
@@ -309,13 +309,13 @@ can be retrieved from backup files generated by the [Remove NCN Data](Remove_NCN
 
 1. Using the example output from above, derive the following CLI flags for a worker NCN:
 
-    | Interface | MAC Address         | CLI Flag
-    |:--------- |:-------------------:|:--------
-    | `mgmt0`   | `a4:bf:01:65:6a:aa` | `--mac-mgmt0=a4:bf:01:65:6a:aa`
-    | `mgmt1`   | `a4:bf:01:65:6a:ab` | `--mac-mgmt1=a4:bf:01:65:6a:ab`
-    | `lan0`    | `b8:59:9f:d9:9d:e8` | `--mac-lan0=b8:59:9f:d9:9d:e8`
-    | `lan1`    | `b8:59:9f:d9:9d:e9` | `--mac-lan1=b8:59:9f:d9:9d:e9`
-    | `hsn0`    | `50:6b:4b:23:9f:7c` | `--mac-hsn0=50:6b:4b:23:9f:7c`
+    | Interface |     MAC Address     | CLI Flag                        |
+    |:----------|:-------------------:|:--------------------------------|
+    | `mgmt0`   | `a4:bf:01:65:6a:aa` | `--mac-mgmt0=a4:bf:01:65:6a:aa` |
+    | `mgmt1`   | `a4:bf:01:65:6a:ab` | `--mac-mgmt1=a4:bf:01:65:6a:ab` |
+    | `lan0`    | `b8:59:9f:d9:9d:e8` | `--mac-lan0=b8:59:9f:d9:9d:e8`  |
+    | `lan1`    | `b8:59:9f:d9:9d:e9` | `--mac-lan1=b8:59:9f:d9:9d:e9`  |
+    | `hsn0`    | `50:6b:4b:23:9f:7c` | `--mac-hsn0=50:6b:4b:23:9f:7c`  |
 
 #### Adding a new NCN
 

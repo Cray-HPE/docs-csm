@@ -185,23 +185,23 @@ Return list of versions currently running.
 
 <h3 id="get__-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Versions|Inline|
+| Status | Meaning                                                 | Description              | Schema |
+|--------|---------------------------------------------------------|--------------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | A collection of Versions | Inline |
 
 <h3 id="get__-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[Version](#schemaversion)]|false|none|[Version data]|
-|» major|string|false|none|none|
-|» minor|string|false|none|none|
-|» patch|string|false|none|none|
-|» links|[[Link](#schemalink)]|false|none|List of links to other resources|
-|»» href|string|false|none|none|
-|»» rel|string|false|none|none|
+| Name        | Type                        | Required | Restrictions | Description                      |
+|-------------|-----------------------------|----------|--------------|----------------------------------|
+| *anonymous* | [[Version](#schemaversion)] | false    | none         | [Version data]                   |
+| » major     | string                      | false    | none         | none                             |
+| » minor     | string                      | false    | none         | none                             |
+| » patch     | string                      | false    | none         | none                             |
+| » links     | [[Link](#schemalink)]       | false    | none         | List of links to other resources |
+| »» href     | string                      | false    | none         | none                             |
+| »» rel      | string                      | false    | none         | none                             |
 
 <aside class="success">
 This operation does not require authentication
@@ -290,9 +290,10 @@ Return the API version
 
 <h3 id="v1_get-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Get version details
+| Status | Meaning                                                 | Description         | Schema |
+|--------|---------------------------------------------------------|---------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Get version details |
+
 The versioning system uses [semver](https://semver.org/).
 ## Link Relationships
 * self : Link to itself
@@ -386,9 +387,10 @@ Return the API version
 
 <h3 id="v1_get_version-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Get version details
+| Status | Meaning                                                 | Description         | Schema |
+|--------|---------------------------------------------------------|---------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Get version details |        |
+
 The versioning system uses [semver](https://semver.org/).
 ## Link Relationships
 * self : Link to itself
@@ -477,11 +479,11 @@ Get BOS health details.
 
 <h3 id="v1_get_healthz-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Service Health information|[Healthz](#schemahealthz)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|Service Unavailable|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                                    | Description                | Schema                                  |
+|--------|----------------------------------------------------------------------------|----------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Service Health information | [Healthz](#schemahealthz)               |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Bad Request                | [ProblemDetails](#schemaproblemdetails) |
+| 503    | [Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)   | Service Unavailable        | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -632,10 +634,10 @@ The created template will be modified if necessary to follow the BOS v2 session 
 
 <h3 id="create_v1_sessiontemplate-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V1SessionTemplate](#schemav1sessiontemplate)|true|A JSON object for creating a Session Template|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                                          | Required | Description                                                            |
+|------------------|--------|-----------------------------------------------|----------|------------------------------------------------------------------------|
+| body             | body   | [V1SessionTemplate](#schemav1sessiontemplate) | true     | A JSON object for creating a Session Template                          |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname)               | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -652,11 +654,11 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="create_v1_sessiontemplate-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Session Template name|[SessionTemplateName](#schemasessiontemplatename)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.
-If no tenant was specified, then the request was bad for another reason.|[ProblemDetails](#schemaproblemdetails)|
+| Status                                                                   | Meaning                                                          | Description                                             | Schema                                            |
+|--------------------------------------------------------------------------|------------------------------------------------------------------|---------------------------------------------------------|---------------------------------------------------|
+| 201                                                                      | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)     | Session Template name                                   | [SessionTemplateName](#schemasessiontemplatename) |
+| 400                                                                      | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. |                                                   |
+| If no tenant was specified, then the request was bad for another reason. | [ProblemDetails](#schemaproblemdetails)                          |                                                         |
 
 <aside class="success">
 This operation does not require authentication
@@ -731,9 +733,9 @@ List all Session Templates.
 
 <h3 id="get_v1_sessiontemplates-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                            | Required | Description                                                            |
+|------------------|--------|---------------------------------|----------|------------------------------------------------------------------------|
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -816,10 +818,10 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="get_v1_sessiontemplates-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details array|[V2SessionTemplateArray](#schemav2sessiontemplatearray)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                             | Schema                                                  |
+|--------|------------------------------------------------------------------|---------------------------------------------------------|---------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | Session Template details array                          | [V2SessionTemplateArray](#schemav2sessiontemplatearray) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. | [ProblemDetails](#schemaproblemdetails)                 |
 
 <aside class="success">
 This operation does not require authentication
@@ -896,10 +898,10 @@ of the Session Template.
 
 <h3 id="get_v1_sessiontemplate-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name                | In     | Type                                              | Required | Description                                                            |
+|---------------------|--------|---------------------------------------------------|----------|------------------------------------------------------------------------|
+| session_template_id | path   | [SessionTemplateName](#schemasessiontemplatename) | true     | Session Template name                                                  |
+| Cray-Tenant-Name    | header | [TenantName](#schematenantname)                   | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -980,11 +982,11 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="get_v1_sessiontemplate-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                             | Schema                                        |
+|--------|------------------------------------------------------------------|---------------------------------------------------------|-----------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | Session Template details                                | [V2SessionTemplate](#schemav2sessiontemplate) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. | [ProblemDetails](#schemaproblemdetails)       |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.                             | [ProblemDetails](#schemaproblemdetails)       |
 
 <aside class="success">
 This operation does not require authentication
@@ -1059,10 +1061,10 @@ Delete a Session Template.
 
 <h3 id="delete_v1_sessiontemplate-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name                | In     | Type                                              | Required | Description                                                            |
+|---------------------|--------|---------------------------------------------------|----------|------------------------------------------------------------------------|
+| session_template_id | path   | [SessionTemplateName](#schemasessiontemplatename) | true     | Session Template name                                                  |
+| Cray-Tenant-Name    | header | [TenantName](#schematenantname)                   | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -1085,11 +1087,11 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="delete_v1_sessiontemplate-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                             | Schema                                  |
+|--------|------------------------------------------------------------------|---------------------------------------------------------|-----------------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)  | The resource was deleted.                               | None                                    |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. | [ProblemDetails](#schemaproblemdetails) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.                             | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1234,9 +1236,9 @@ Session Templates.
 
 <h3 id="get_v1_sessiontemplatetemplate-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
+| Status | Meaning                                                 | Description              | Schema                                        |
+|--------|---------------------------------------------------------|--------------------------|-----------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Session Template details | [V2SessionTemplate](#schemav2sessiontemplate) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1330,10 +1332,10 @@ on the Boot Sets defined in the Session Template.
 
 <h3 id="create_v1_session-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|any|true|A JSON object for creating a Session|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                            | Required | Description                                                            |
+|------------------|--------|---------------------------------|----------|------------------------------------------------------------------------|
+| body             | body   | any                             | true     | A JSON object for creating a Session                                   |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -1363,12 +1365,12 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="create_v1_session-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Session|[V1Session](#schemav1session)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.
-If no tenant was specified, then the request was bad for another reason.|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status                                                                   | Meaning                                                          | Description                                             | Schema                                  |
+|--------------------------------------------------------------------------|------------------------------------------------------------------|---------------------------------------------------------|-----------------------------------------|
+| 201                                                                      | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)     | Session                                                 | [V1Session](#schemav1session)           |
+| 400                                                                      | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. |                                         |
+| If no tenant was specified, then the request was bad for another reason. | [ProblemDetails](#schemaproblemdetails)                          |                                                         |                                         |
+| 404                                                                      | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.                             | [ProblemDetails](#schemaproblemdetails) | |
 
 <aside class="success">
 This operation does not require authentication
@@ -1443,9 +1445,9 @@ List IDs of all Sessions, including those in progress and those complete.
 
 <h3 id="get_v1_sessions-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                            | Required | Description                                                            |
+|------------------|--------|---------------------------------|----------|------------------------------------------------------------------------|
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -1464,18 +1466,18 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="get_v1_sessions-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Session IDs|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                             | Schema                                  |
+|--------|------------------------------------------------------------------|---------------------------------------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of Session IDs                             | Inline                                  |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. | [ProblemDetails](#schemaproblemdetails) |
 
 <h3 id="get_v1_sessions-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[V1SessionId](#schemav1sessionid)]|false|none|[Unique BOS v1 Session identifier.]|
+| Name        | Type                                | Required | Restrictions | Description                         |
+|-------------|-------------------------------------|----------|--------------|-------------------------------------|
+| *anonymous* | [[V1SessionId](#schemav1sessionid)] | false    | none         | [Unique BOS v1 Session identifier.] |
 
 <aside class="success">
 This operation does not require authentication
@@ -1550,10 +1552,10 @@ Get Session details by Session ID.
 
 <h3 id="get_v1_session-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_id|path|string|true|Session ID|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                            | Required | Description                                                            |
+|------------------|--------|---------------------------------|----------|------------------------------------------------------------------------|
+| session_id       | path   | string                          | true     | Session ID                                                             |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -1580,11 +1582,11 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="get_v1_session-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                             | Schema                                  |
+|--------|------------------------------------------------------------------|---------------------------------------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | Session details                                         | Inline                                  |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. | [ProblemDetails](#schemaproblemdetails) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.                             | [ProblemDetails](#schemaproblemdetails) |
 
 <h3 id="get_v1_session-responseschema">Response Schema</h3>
 
@@ -1661,10 +1663,10 @@ Delete Session by Session ID.
 
 <h3 id="delete_v1_session-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_id|path|string|true|Session ID|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                            | Required | Description                                                            |
+|------------------|--------|---------------------------------|----------|------------------------------------------------------------------------|
+| session_id       | path   | string                          | true     | Session ID                                                             |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -1687,11 +1689,11 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="delete_v1_session-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                             | Schema                                  |
+|--------|------------------------------------------------------------------|---------------------------------------------------------|-----------------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)  | The resource was deleted.                               | None                                    |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. | [ProblemDetails](#schemaproblemdetails) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.                             | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1766,10 +1768,10 @@ A list of the statuses for the different Boot Sets.
 
 <h3 id="get_v1_session_status-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_id|path|string|true|Session ID|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                            | Required | Description                                                            |
+|------------------|--------|---------------------------------|----------|------------------------------------------------------------------------|
+| session_id       | path   | string                          | true     | Session ID                                                             |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -1804,11 +1806,11 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="get_v1_session_status-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of Boot Set Statuses and metadata|[V1SessionStatus](#schemav1sessionstatus)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                             | Schema                                    |
+|--------|------------------------------------------------------------------|---------------------------------------------------------|-------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A list of Boot Set Statuses and metadata                | [V1SessionStatus](#schemav1sessionstatus) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. | [ProblemDetails](#schemaproblemdetails)   |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.                             | [ProblemDetails](#schemaproblemdetails)   |
 
 <aside class="success">
 This operation does not require authentication
@@ -1911,11 +1913,11 @@ Creates the initial Session status.
 
 <h3 id="create_v1_session_status-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V1SessionStatus](#schemav1sessionstatus)|true|A JSON object for creating the status for a Session|
-|session_id|path|string|true|Session ID|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                                      | Required | Description                                                            |
+|------------------|--------|-------------------------------------------|----------|------------------------------------------------------------------------|
+| body             | body   | [V1SessionStatus](#schemav1sessionstatus) | true     | A JSON object for creating the status for a Session                    |
+| session_id       | path   | string                                    | true     | Session ID                                                             |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname)           | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -1950,12 +1952,12 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="create_v1_session_status-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of Boot Set Statuses and metadata|[V1SessionStatus](#schemav1sessionstatus)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.
-If no tenant was specified, then the request was bad for another reason.|[ProblemDetails](#schemaproblemdetails)|
-|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|The resource to be created already exists|[ProblemDetails](#schemaproblemdetails)|
+| Status                                                                   | Meaning                                                          | Description                                             | Schema                                    |
+|--------------------------------------------------------------------------|------------------------------------------------------------------|---------------------------------------------------------|-------------------------------------------|
+| 200                                                                      | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A list of Boot Set Statuses and metadata                | [V1SessionStatus](#schemav1sessionstatus) |
+| 400                                                                      | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. |                                           |
+| If no tenant was specified, then the request was bad for another reason. | [ProblemDetails](#schemaproblemdetails)                          |                                                         |                                           |
+| 409                                                                      | [Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)    | The resource to be created already exists               | [ProblemDetails](#schemaproblemdetails)   |
 
 <aside class="success">
 This operation does not require authentication
@@ -2046,11 +2048,11 @@ Update the Session status. You can update the start or stop times.
 
 <h3 id="update_v1_session_status-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V1GenericMetadata](#schemav1genericmetadata)|true|A JSON object for updating the status for a Session|
-|session_id|path|string|true|Session ID|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                                          | Required | Description                                                            |
+|------------------|--------|-----------------------------------------------|----------|------------------------------------------------------------------------|
+| body             | body   | [V1GenericMetadata](#schemav1genericmetadata) | true     | A JSON object for updating the status for a Session                    |
+| session_id       | path   | string                                        | true     | Session ID                                                             |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname)               | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -2085,11 +2087,11 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="update_v1_session_status-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of Boot Set Statuses and metadata|[V1SessionStatus](#schemav1sessionstatus)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                             | Schema                                    |
+|--------|------------------------------------------------------------------|---------------------------------------------------------|-------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A list of Boot Set Statuses and metadata                | [V1SessionStatus](#schemav1sessionstatus) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. | [ProblemDetails](#schemaproblemdetails)   |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | Bad Request                                             | [ProblemDetails](#schemaproblemdetails)   |
 
 <aside class="success">
 This operation does not require authentication
@@ -2164,10 +2166,10 @@ Deletes an existing Session status
 
 <h3 id="delete_v1_session_status-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_id|path|string|true|Session ID|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                            | Required    | Description                                                            |
+|------------------|--------|---------------------------------|-------------|------------------------------------------------------------------------|
+| session_id       | path   | string                          | true        | Session ID                                                             |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false       | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. | |
 
 #### Detailed descriptions
 
@@ -2190,12 +2192,12 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="delete_v1_session_status-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.
-If no tenant was specified, then the request was bad for another reason.|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status                                                                   | Meaning                                                                   | Description                                             | Schema                                      |
+|--------------------------------------------------------------------------|---------------------------------------------------------------------------|---------------------------------------------------------|---------------------------------------------|
+| 204                                                                      | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)           | The resource was deleted.                               | None                                        |
+| 400                                                                      | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)          | Multi-tenancy is not supported for this BOS v1 request. |                                             | 
+| If no tenant was specified, then the request was bad for another reason. | [ProblemDetails](#schemaproblemdetails)                                   |                                                         |                                             |
+| 404                                                                      | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)            | The resource was not found.                             | [ProblemDetails](#schemaproblemdetails)     |
 
 <aside class="success">
 This operation does not require authentication
@@ -2270,11 +2272,11 @@ Get the status for a Boot Set.
 
 <h3 id="get_v1_session_status_by_bootset-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_id|path|string|true|Session ID|
-|boot_set_name|path|string|true|Boot Set name|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                            | Required | Description                                                            |
+|------------------|--------|---------------------------------|----------|------------------------------------------------------------------------|
+| session_id       | path   | string                          | true     | Session ID                                                             |
+| boot_set_name    | path   | string                          | true     | Boot Set name                                                          |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -2338,11 +2340,11 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="get_v1_session_status_by_bootset-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Metadata and a list of the Phase Statuses for the Boot Set|[V1BootSetStatus](#schemav1bootsetstatus)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                                | Schema                                    |
+|--------|------------------------------------------------------------------|------------------------------------------------------------|-------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | Metadata and a list of the Phase Statuses for the Boot Set | [V1BootSetStatus](#schemav1bootsetstatus) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request.    | [ProblemDetails](#schemaproblemdetails)   |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.                                | [ProblemDetails](#schemaproblemdetails)   |
 
 <aside class="success">
 This operation does not require authentication
@@ -2474,12 +2476,12 @@ Create a status for a Boot Set
 
 <h3 id="create_v1_boot_set_status-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V1BootSetStatus](#schemav1bootsetstatus)|true|A JSON object for creating a status for a Boot Set|
-|session_id|path|string|true|Session ID|
-|boot_set_name|path|string|true|Boot Set name|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                                      | Required | Description                                                            |
+|------------------|--------|-------------------------------------------|----------|------------------------------------------------------------------------|
+| body             | body   | [V1BootSetStatus](#schemav1bootsetstatus) | true     | A JSON object for creating a status for a Boot Set                     |
+| session_id       | path   | string                                    | true     | Session ID                                                             |
+| boot_set_name    | path   | string                                    | true     | Boot Set name                                                          |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname)           | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -2543,11 +2545,11 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="create_v1_boot_set_status-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|The created Boot Set status|[V1BootSetStatus](#schemav1bootsetstatus)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
-|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|The resource to be created already exists|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                             | Schema                                    |
+|--------|------------------------------------------------------------------|---------------------------------------------------------|-------------------------------------------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)     | The created Boot Set status                             | [V1BootSetStatus](#schemav1bootsetstatus) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. | [ProblemDetails](#schemaproblemdetails)   |
+| 409    | [Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)    | The resource to be created already exists               | [ProblemDetails](#schemaproblemdetails)   |
 
 <aside class="success">
 This operation does not require authentication
@@ -2647,12 +2649,12 @@ the Boot Set.
 
 <h3 id="update_v1_session_status_by_bootset-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V1UpdateRequestList](#schemav1updaterequestlist)|true|A JSON object for updating the status for a Session|
-|session_id|path|string|true|Session ID|
-|boot_set_name|path|string|true|Boot Set name|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                                              | Required | Description                                                            |
+|------------------|--------|---------------------------------------------------|----------|------------------------------------------------------------------------|
+| body             | body   | [V1UpdateRequestList](#schemav1updaterequestlist) | true     | A JSON object for updating the status for a Session                    |
+| session_id       | path   | string                                            | true     | Session ID                                                             |
+| boot_set_name    | path   | string                                            | true     | Boot Set name                                                          |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname)                   | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -2716,11 +2718,11 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="update_v1_session_status_by_bootset-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of Boot Set Statuses and metadata|[V1BootSetStatus](#schemav1bootsetstatus)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                             | Schema                                    |
+|--------|------------------------------------------------------------------|---------------------------------------------------------|-------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A list of Boot Set Statuses and metadata                | [V1BootSetStatus](#schemav1bootsetstatus) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. | [ProblemDetails](#schemaproblemdetails)   |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.                             | [ProblemDetails](#schemaproblemdetails)   |
 
 <aside class="success">
 This operation does not require authentication
@@ -2795,11 +2797,11 @@ Deletes an existing Boot Set status
 
 <h3 id="delete_v1_boot_set_status-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_id|path|string|true|Session ID|
-|boot_set_name|path|string|true|Boot Set name|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                            | Required | Description                                                            |
+|------------------|--------|---------------------------------|----------|------------------------------------------------------------------------|
+| session_id       | path   | string                          | true     | Session ID                                                             |
+| boot_set_name    | path   | string                          | true     | Boot Set name                                                          |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -2822,11 +2824,11 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="delete_v1_boot_set_status-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.
-If no tenant was specified, then the request was bad for another reason.|[ProblemDetails](#schemaproblemdetails)|
+| Status                                                                   | Meaning                                                          | Description                                             | Schema |
+|--------------------------------------------------------------------------|------------------------------------------------------------------|---------------------------------------------------------|--------|
+| 204                                                                      | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)  | The resource was deleted.                               | None   |
+| 400                                                                      | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. |        |
+| If no tenant was specified, then the request was bad for another reason. | [ProblemDetails](#schemaproblemdetails)                          |                                                         |        |
 
 <aside class="success">
 This operation does not require authentication
@@ -2901,12 +2903,12 @@ Get the status for a specific Boot Set and phase.
 
 <h3 id="get_v1_session_status_by_bootset_and_phase-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_id|path|string|true|Session ID|
-|boot_set_name|path|string|true|Boot Set name|
-|phase_name|path|string|true|The phase name|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                            | Required | Description                                                            |
+|------------------|--------|---------------------------------|----------|------------------------------------------------------------------------|
+| session_id       | path   | string                          | true     | Session ID                                                             |
+| boot_set_name    | path   | string                          | true     | Boot Set name                                                          |
+| phase_name       | path   | string                          | true     | The phase name                                                         |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -2951,11 +2953,11 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="get_v1_session_status_by_bootset_and_phase-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of the nodes in the Phase and Category|[V1PhaseStatus](#schemav1phasestatus)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                             | Schema                                  |
+|--------|------------------------------------------------------------------|---------------------------------------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A list of the nodes in the Phase and Category           | [V1PhaseStatus](#schemav1phasestatus)   |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. | [ProblemDetails](#schemaproblemdetails) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.                             | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -3030,13 +3032,13 @@ Get the status for a specific Boot Set, phase, and category.
 
 <h3 id="get_v1_session_status_by_bootset_and_phase_and_category-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_id|path|string|true|Session ID|
-|boot_set_name|path|string|true|Boot Set name|
-|phase_name|path|string|true|The phase name|
-|category_name|path|string|true|The category name|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+| Name             | In     | Type                            | Required | Description                                                            |
+|------------------|--------|---------------------------------|----------|------------------------------------------------------------------------|
+| session_id       | path   | string                          | true     | Session ID                                                             |
+| boot_set_name    | path   | string                          | true     | Boot Set name                                                          |
+| phase_name       | path   | string                          | true     | The phase name                                                         |
+| category_name    | path   | string                          | true     | The category name                                                      |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints. |
 
 #### Detailed descriptions
 
@@ -3059,11 +3061,11 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="get_v1_session_status_by_bootset_and_phase_and_category-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of the nodes in the Phase and Category|[V1PhaseCategoryStatus](#schemav1phasecategorystatus)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                             | Schema                                                |
+|--------|------------------------------------------------------------------|---------------------------------------------------------|-------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A list of the nodes in the Phase and Category           | [V1PhaseCategoryStatus](#schemav1phasecategorystatus) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Multi-tenancy is not supported for this BOS v1 request. | [ProblemDetails](#schemaproblemdetails)               |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.                             | [ProblemDetails](#schemaproblemdetails)               |
 
 <aside class="success">
 This operation does not require authentication
@@ -3154,9 +3156,10 @@ Return the API version
 
 <h3 id="get_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Get version details
+| Status | Meaning                                                 | Description         | Schema |
+|--------|---------------------------------------------------------|---------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Get version details |        |
+
 The versioning system uses [semver](https://semver.org/).
 ## Link Relationships
 * self : Link to itself
@@ -3243,11 +3246,11 @@ Get BOS health details.
 
 <h3 id="get_v2_healthz-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Service Health information|[Healthz](#schemahealthz)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|Service Unavailable|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                                    | Description                | Schema                                  |
+|--------|----------------------------------------------------------------------------|----------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Service Health information | [Healthz](#schemahealthz)               |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Bad Request                | [ProblemDetails](#schemaproblemdetails) |
+| 503    | [Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)   | Service Unavailable        | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -3322,9 +3325,9 @@ List all Session Templates.
 
 <h3 id="get_v2_sessiontemplates-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                            | Required | Description  |
+|------------------|--------|---------------------------------|----------|--------------|
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name. |
 
 #### Detailed descriptions
 
@@ -3410,9 +3413,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="get_v2_sessiontemplates-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details array|[V2SessionTemplateArray](#schemav2sessiontemplatearray)|
+| Status | Meaning                                                 | Description                    | Schema                                                  |
+|--------|---------------------------------------------------------|--------------------------------|---------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Session Template details array | [V2SessionTemplateArray](#schemav2sessiontemplatearray) |
 
 <aside class="success">
 This operation does not require authentication
@@ -3489,10 +3492,10 @@ of the Session Template.
 
 <h3 id="validate_v2_sessiontemplate-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name                | In     | Type                                              | Required | Description           |
+|---------------------|--------|---------------------------------------------------|----------|-----------------------|
+| session_template_id | path   | [SessionTemplateName](#schemasessiontemplatename) | true     | Session Template name |
+| Cray-Tenant-Name    | header | [TenantName](#schematenantname)                   | false    | Tenant name.          |
 
 #### Detailed descriptions
 
@@ -3512,10 +3515,10 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="validate_v2_sessiontemplate-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template validity details|[V2SessionTemplateValidation](#schemav2sessiontemplatevalidation)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                        | Description                       | Schema                                                            |
+|--------|----------------------------------------------------------------|-----------------------------------|-------------------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | Session Template validity details | [V2SessionTemplateValidation](#schemav2sessiontemplatevalidation) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | The resource was not found.       | [ProblemDetails](#schemaproblemdetails)                           |
 
 <aside class="success">
 This operation does not require authentication
@@ -3592,10 +3595,10 @@ of the Session Template.
 
 <h3 id="get_v2_sessiontemplate-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name                | In     | Type                                              | Required | Description           |
+|---------------------|--------|---------------------------------------------------|----------|-----------------------|
+| session_template_id | path   | [SessionTemplateName](#schemasessiontemplatename) | true     | Session Template name |
+| Cray-Tenant-Name    | header | [TenantName](#schematenantname)                   | false    | Tenant name.          |
 
 #### Detailed descriptions
 
@@ -3679,10 +3682,10 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="get_v2_sessiontemplate-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                        | Description                 | Schema                                        |
+|--------|----------------------------------------------------------------|-----------------------------|-----------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | Session Template details    | [V2SessionTemplate](#schemav2sessiontemplate) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | The resource was not found. | [ProblemDetails](#schemaproblemdetails)       |
 
 <aside class="success">
 This operation does not require authentication
@@ -3823,11 +3826,11 @@ Create a new Session Template.
 
 <h3 id="put_v2_sessiontemplate-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V2SessionTemplate](#schemav2sessiontemplate)|true|A JSON object for creating a Session Template|
-|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name                | In     | Type                                              | Required | Description                                   |
+|---------------------|--------|---------------------------------------------------|----------|-----------------------------------------------|
+| body                | body   | [V2SessionTemplate](#schemav2sessiontemplate)     | true     | A JSON object for creating a Session Template |
+| session_template_id | path   | [SessionTemplateName](#schemasessiontemplatename) | true     | Session Template name                         |
+| Cray-Tenant-Name    | header | [TenantName](#schematenantname)                   | false    | Tenant name.                                  |
 
 #### Detailed descriptions
 
@@ -3911,10 +3914,10 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="put_v2_sessiontemplate-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description              | Schema                                        |
+|--------|------------------------------------------------------------------|--------------------------|-----------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | Session Template details | [V2SessionTemplate](#schemav2sessiontemplate) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request              | [ProblemDetails](#schemaproblemdetails)       |
 
 <aside class="success">
 This operation does not require authentication
@@ -4055,11 +4058,11 @@ Update an existing Session Template.
 
 <h3 id="patch_v2_sessiontemplate-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V2SessionTemplate](#schemav2sessiontemplate)|true|A JSON object for updating a Session Template|
-|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name                | In     | Type                                              | Required | Description                                   |
+|---------------------|--------|---------------------------------------------------|----------|-----------------------------------------------|
+| body                | body   | [V2SessionTemplate](#schemav2sessiontemplate)     | true     | A JSON object for updating a Session Template |
+| session_template_id | path   | [SessionTemplateName](#schemasessiontemplatename) | true     | Session Template name                         |
+| Cray-Tenant-Name    | header | [TenantName](#schematenantname)                   | false    | Tenant name.                                  |
 
 #### Detailed descriptions
 
@@ -4143,11 +4146,11 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="patch_v2_sessiontemplate-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                 | Schema                                        |
+|--------|------------------------------------------------------------------|-----------------------------|-----------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | Session Template details    | [V2SessionTemplate](#schemav2sessiontemplate) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                 | [ProblemDetails](#schemaproblemdetails)       |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found. | [ProblemDetails](#schemaproblemdetails)       |
 
 <aside class="success">
 This operation does not require authentication
@@ -4222,10 +4225,10 @@ Delete a Session Template.
 
 <h3 id="delete_v2_sessiontemplate-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name                | In     | Type                                              | Required | Description           |
+|---------------------|--------|---------------------------------------------------|----------|-----------------------|
+| session_template_id | path   | [SessionTemplateName](#schemasessiontemplatename) | true     | Session Template name |
+| Cray-Tenant-Name    | header | [TenantName](#schematenantname)                   | false    | Tenant name.          |
 
 #### Detailed descriptions
 
@@ -4251,10 +4254,10 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="delete_v2_sessiontemplate-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                         | Description                 | Schema                                  |
+|--------|-----------------------------------------------------------------|-----------------------------|-----------------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5) | The resource was deleted.   | None                                    |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)  | The resource was not found. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -4399,9 +4402,9 @@ Session Templates.
 
 <h3 id="get_v2_sessiontemplatetemplate-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
+| Status | Meaning                                                 | Description              | Schema                                        |
+|--------|---------------------------------------------------------|--------------------------|-----------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Session Template details | [V2SessionTemplate](#schemav2sessiontemplate) |
 
 <aside class="success">
 This operation does not require authentication
@@ -4495,10 +4498,10 @@ on the Boot Sets defined in the Session Template.
 
 <h3 id="post_v2_session-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V2SessionCreate](#schemav2sessioncreate)|true|The information to create a Session|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                                      | Required | Description                         |
+|------------------|--------|-------------------------------------------|----------|-------------------------------------|
+| body             | body   | [V2SessionCreate](#schemav2sessioncreate) | true     | The information to create a Session |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname)           | false    | Tenant name.                        |
 
 #### Detailed descriptions
 
@@ -4533,10 +4536,10 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="post_v2_session-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Session details|[V2Session](#schemav2session)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description     | Schema                                  |
+|--------|------------------------------------------------------------------|-----------------|-----------------------------------------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)     | Session details | [V2Session](#schemav2session)           |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request     | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -4611,12 +4614,12 @@ List all Sessions, including those in progress and those complete.
 
 <h3 id="get_v2_sessions-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|min_age|query|[AgeString](#schemaagestring)|false|Only include Sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|[AgeString](#schemaagestring)|false|Only include Sessions younger than the given age.  Age is given in the format "1d" or "6h"|
-|status|query|[V2SessionStatusLabel](#schemav2sessionstatuslabel)|false|Only include Sessions with the given status.|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                                                | Required | Description                                                                                |
+|------------------|--------|-----------------------------------------------------|----------|--------------------------------------------------------------------------------------------|
+| min_age          | query  | [AgeString](#schemaagestring)                       | false    | Only include Sessions older than the given age.  Age is given in the format "1d" or "6h"   |
+| max_age          | query  | [AgeString](#schemaagestring)                       | false    | Only include Sessions younger than the given age.  Age is given in the format "1d" or "6h" |
+| status           | query  | [V2SessionStatusLabel](#schemav2sessionstatuslabel) | false    | Only include Sessions with the given status.                                               |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname)                     | false    | Tenant name.                                                                               |
 
 #### Detailed descriptions
 
@@ -4628,11 +4631,11 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 #### Enumerated Values
 
-|Parameter|Value|
-|---|---|
-|status|pending|
-|status|running|
-|status|complete|
+| Parameter | Value    |
+|-----------|----------|
+| status    | pending  |
+| status    | running  |
+| status    | complete |
 
 > Example responses
 
@@ -4661,9 +4664,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="get_v2_sessions-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details array|[V2SessionArray](#schemav2sessionarray)|
+| Status | Meaning                                                 | Description           | Schema                                  |
+|--------|---------------------------------------------------------|-----------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Session details array | [V2SessionArray](#schemav2sessionarray) |
 
 <aside class="success">
 This operation does not require authentication
@@ -4739,12 +4742,12 @@ all filters will be deleted.  By default only completed Sessions will be deleted
 
 <h3 id="delete_v2_sessions-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|min_age|query|[AgeString](#schemaagestring)|false|Only include Sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|[AgeString](#schemaagestring)|false|Only include Sessions younger than the given age.  Age is given in the format "1d" or "6h"|
-|status|query|[V2SessionStatusLabel](#schemav2sessionstatuslabel)|false|Only include Sessions with the given status.|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                                                | Required | Description                                                                                |
+|------------------|--------|-----------------------------------------------------|----------|--------------------------------------------------------------------------------------------|
+| min_age          | query  | [AgeString](#schemaagestring)                       | false    | Only include Sessions older than the given age.  Age is given in the format "1d" or "6h"   |
+| max_age          | query  | [AgeString](#schemaagestring)                       | false    | Only include Sessions younger than the given age.  Age is given in the format "1d" or "6h" |
+| status           | query  | [V2SessionStatusLabel](#schemav2sessionstatuslabel) | false    | Only include Sessions with the given status.                                               |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname)                     | false    | Tenant name.                                                                               |
 
 #### Detailed descriptions
 
@@ -4756,11 +4759,11 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 #### Enumerated Values
 
-|Parameter|Value|
-|---|---|
-|status|pending|
-|status|running|
-|status|complete|
+| Parameter | Value    |
+|-----------|----------|
+| status    | pending  |
+| status    | running  |
+| status    | complete |
 
 > Example responses
 
@@ -4778,10 +4781,10 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="delete_v2_sessions-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description               | Schema                                  |
+|--------|------------------------------------------------------------------|---------------------------|-----------------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)  | The resource was deleted. | None                                    |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request               | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -4856,10 +4859,10 @@ Get Session details by Session ID.
 
 <h3 id="get_v2_session-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_id|path|string|true|Session ID|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                            | Required | Description  |
+|------------------|--------|---------------------------------|----------|--------------|
+| session_id       | path   | string                          | true     | Session ID   |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name. |
 
 #### Detailed descriptions
 
@@ -4894,10 +4897,10 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="get_v2_session-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details|[V2Session](#schemav2session)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                        | Description                 | Schema                                  |
+|--------|----------------------------------------------------------------|-----------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | Session details             | [V2Session](#schemav2session)           |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | The resource was not found. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -4996,11 +4999,11 @@ Update the state for a given Session in the BOS database
 
 <h3 id="patch_v2_session-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V2Session](#schemav2session)|true|The state for a single Session|
-|session_id|path|string|true|Session ID|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                            | Required | Description                    |
+|------------------|--------|---------------------------------|----------|--------------------------------|
+| body             | body   | [V2Session](#schemav2session)   | true     | The state for a single Session |
+| session_id       | path   | string                          | true     | Session ID                     |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name.                   |
 
 #### Detailed descriptions
 
@@ -5035,11 +5038,11 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="patch_v2_session-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details|[V2Session](#schemav2session)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                 | Schema                                  |
+|--------|------------------------------------------------------------------|-----------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | Session details             | [V2Session](#schemav2session)           |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                 | [ProblemDetails](#schemaproblemdetails) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -5114,10 +5117,10 @@ Delete Session by Session ID.
 
 <h3 id="delete_v2_session-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_id|path|string|true|Session ID|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                            | Required | Description  |
+|------------------|--------|---------------------------------|----------|--------------|
+| session_id       | path   | string                          | true     | Session ID   |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name. |
 
 #### Detailed descriptions
 
@@ -5143,10 +5146,10 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="delete_v2_session-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                         | Description                 | Schema                                  |
+|--------|-----------------------------------------------------------------|-----------------------------|-----------------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5) | The resource was deleted.   | None                                    |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)  | The resource was not found. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -5221,10 +5224,10 @@ Get Session extended status information by ID
 
 <h3 id="get_v2_session_status-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_id|path|string|true|Session ID|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                            | Required | Description  |
+|------------------|--------|---------------------------------|----------|--------------|
+| session_id       | path   | string                          | true     | Session ID   |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name. |
 
 #### Detailed descriptions
 
@@ -5262,10 +5265,10 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="get_v2_session_status-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session status details|[V2SessionExtendedStatus](#schemav2sessionextendedstatus)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                        | Description                 | Schema                                                    |
+|--------|----------------------------------------------------------------|-----------------------------|-----------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | Session status details      | [V2SessionExtendedStatus](#schemav2sessionextendedstatus) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | The resource was not found. | [ProblemDetails](#schemaproblemdetails)                   |
 
 <aside class="success">
 This operation does not require authentication
@@ -5340,10 +5343,10 @@ Saves the current Session to database.  For use at Session completion.
 
 <h3 id="save_v2_session_status-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_id|path|string|true|Session ID|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                            | Required | Description  |
+|------------------|--------|---------------------------------|----------|--------------|
+| session_id       | path   | string                          | true     | Session ID   |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name. |
 
 #### Detailed descriptions
 
@@ -5378,10 +5381,10 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="save_v2_session_status-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details|[V2Session](#schemav2session)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                        | Description                 | Schema                                  |
+|--------|----------------------------------------------------------------|-----------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | Session details             | [V2Session](#schemav2session)           |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | The resource was not found. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -5461,15 +5464,15 @@ empty array is returned.
 
 <h3 id="get_v2_components-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|ids|query|[V2ComponentId](#schemav2componentid)|false|Retrieve the Components with the given ID|
-|session|query|string|false|Retrieve the Components with the given Session ID.|
-|staged_session|query|string|false|Retrieve the Components with the given staged Session ID.|
-|enabled|query|boolean|false|Retrieve the Components with the "enabled" state.|
-|phase|query|string|false|Retrieve the Components in the given phase.|
-|status|query|string|false|Retrieve the Components with the given status.|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                                  | Required | Description                                               |
+|------------------|--------|---------------------------------------|----------|-----------------------------------------------------------|
+| ids              | query  | [V2ComponentId](#schemav2componentid) | false    | Retrieve the Components with the given ID                 |
+| session          | query  | string                                | false    | Retrieve the Components with the given Session ID.        |
+| staged_session   | query  | string                                | false    | Retrieve the Components with the given staged Session ID. |
+| enabled          | query  | boolean                               | false    | Retrieve the Components with the "enabled" state.         |
+| phase            | query  | string                                | false    | Retrieve the Components in the given phase.               |
+| status           | query  | string                                | false    | Retrieve the Components with the given status.            |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname)       | false    | Tenant name.                                              |
 
 #### Detailed descriptions
 
@@ -5545,10 +5548,10 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="get_v2_components-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Component states|[V2ComponentArray](#schemav2componentarray)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                      | Schema                                      |
+|--------|------------------------------------------------------------------|----------------------------------|---------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of Component states | [V2ComponentArray](#schemav2componentarray) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                      | [ProblemDetails](#schemaproblemdetails)     |
 
 <aside class="success">
 This operation does not require authentication
@@ -5680,10 +5683,10 @@ Update the state for a collection of Components in the BOS database
 
 <h3 id="put_v2_components-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V2ComponentArray](#schemav2componentarray)|true|The state for an array of Components|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                                        | Required | Description                          |
+|------------------|--------|---------------------------------------------|----------|--------------------------------------|
+| body             | body   | [V2ComponentArray](#schemav2componentarray) | true     | The state for an array of Components |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname)             | false    | Tenant name.                         |
 
 #### Detailed descriptions
 
@@ -5755,10 +5758,10 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="put_v2_components-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Component states|[V2ComponentArray](#schemav2componentarray)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                      | Schema                                      |
+|--------|------------------------------------------------------------------|----------------------------------|---------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of Component states | [V2ComponentArray](#schemav2componentarray) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                      | [ProblemDetails](#schemaproblemdetails)     |
 
 <aside class="success">
 This operation does not require authentication
@@ -5894,10 +5897,10 @@ Update the state for a collection of Components in the BOS database
 
 <h3 id="patch_v2_components-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|any|true|The state for an array of Components|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                            | Required | Description                          |
+|------------------|--------|---------------------------------|----------|--------------------------------------|
+| body             | body   | any                             | true     | The state for an array of Components |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname) | false    | Tenant name.                         |
 
 #### Detailed descriptions
 
@@ -5969,11 +5972,11 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="patch_v2_components-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Component states|[V2ComponentArray](#schemav2componentarray)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                      | Schema                                      |
+|--------|------------------------------------------------------------------|----------------------------------|---------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of Component states | [V2ComponentArray](#schemav2componentarray) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                      | [ProblemDetails](#schemaproblemdetails)     |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.      | [ProblemDetails](#schemaproblemdetails)     |
 
 <aside class="success">
 This operation does not require authentication
@@ -6048,10 +6051,10 @@ Retrieve the current and desired state of a single Component
 
 <h3 id="get_v2_component-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|component_id|path|[V2ComponentId](#schemav2componentid)|true|Component ID. e.g. xname for hardware Components|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                                  | Required | Description                                      |
+|------------------|--------|---------------------------------------|----------|--------------------------------------------------|
+| component_id     | path   | [V2ComponentId](#schemav2componentid) | true     | Component ID. e.g. xname for hardware Components |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname)       | false    | Tenant name.                                     |
 
 #### Detailed descriptions
 
@@ -6121,11 +6124,11 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="get_v2_component-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single Component state|[V2Component](#schemav2component)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                 | Schema                                  |
+|--------|------------------------------------------------------------------|-----------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A single Component state    | [V2Component](#schemav2component)       |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                 | [ProblemDetails](#schemaproblemdetails) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -6255,11 +6258,11 @@ Update the state for a given Component in the BOS database
 
 <h3 id="put_v2_component-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V2Component](#schemav2component)|true|The state for a single Component|
-|component_id|path|[V2ComponentId](#schemav2componentid)|true|Component ID. e.g. xname for hardware Components|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                                  | Required | Description                                      |
+|------------------|--------|---------------------------------------|----------|--------------------------------------------------|
+| body             | body   | [V2Component](#schemav2component)     | true     | The state for a single Component                 |
+| component_id     | path   | [V2ComponentId](#schemav2componentid) | true     | Component ID. e.g. xname for hardware Components |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname)       | false    | Tenant name.                                     |
 
 #### Detailed descriptions
 
@@ -6329,10 +6332,10 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="put_v2_component-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single Component state|[V2Component](#schemav2component)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description              | Schema                                  |
+|--------|------------------------------------------------------------------|--------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A single Component state | [V2Component](#schemav2component)       |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request              | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -6462,11 +6465,11 @@ Update the state for a given Component in the BOS database
 
 <h3 id="patch_v2_component-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V2Component](#schemav2component)|true|The state for a single Component|
-|component_id|path|[V2ComponentId](#schemav2componentid)|true|Component ID. e.g. xname for hardware Components|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                                  | Required | Description                                      |
+|------------------|--------|---------------------------------------|----------|--------------------------------------------------|
+| body             | body   | [V2Component](#schemav2component)     | true     | The state for a single Component                 |
+| component_id     | path   | [V2ComponentId](#schemav2componentid) | true     | Component ID. e.g. xname for hardware Components |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname)       | false    | Tenant name.                                     |
 
 #### Detailed descriptions
 
@@ -6536,12 +6539,12 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="patch_v2_component-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single Component state|[V2Component](#schemav2component)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
-|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|The update was not allowed due to a conflict.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                   | Schema                                  |
+|--------|------------------------------------------------------------------|-----------------------------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A single Component state                      | [V2Component](#schemav2component)       |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                                   | [ProblemDetails](#schemaproblemdetails) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.                   | [ProblemDetails](#schemaproblemdetails) |
+| 409    | [Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)    | The update was not allowed due to a conflict. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -6616,10 +6619,10 @@ Delete the given Component
 
 <h3 id="delete_v2_component-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|component_id|path|[V2ComponentId](#schemav2componentid)|true|Component ID. e.g. xname for hardware Components|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                                  | Required | Description                                      |
+|------------------|--------|---------------------------------------|----------|--------------------------------------------------|
+| component_id     | path   | [V2ComponentId](#schemav2componentid) | true     | Component ID. e.g. xname for hardware Components |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname)       | false    | Tenant name.                                     |
 
 #### Detailed descriptions
 
@@ -6645,10 +6648,10 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="delete_v2_component-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                         | Description                 | Schema                                  |
+|--------|-----------------------------------------------------------------|-----------------------------|-----------------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5) | The resource was deleted.   | None                                    |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)  | The resource was not found. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -6740,10 +6743,10 @@ be returned in the response.
 
 <h3 id="post_v2_apply_staged-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V2ApplyStagedComponents](#schemav2applystagedcomponents)|true|A list of xnames that should have their staged Session applied.|
-|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
+| Name             | In     | Type                                                      | Required | Description                                                     |
+|------------------|--------|-----------------------------------------------------------|----------|-----------------------------------------------------------------|
+| body             | body   | [V2ApplyStagedComponents](#schemav2applystagedcomponents) | true     | A list of xnames that should have their staged Session applied. |
+| Cray-Tenant-Name | header | [TenantName](#schematenantname)                           | false    | Tenant name.                                                    |
 
 #### Detailed descriptions
 
@@ -6773,10 +6776,10 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 
 <h3 id="post_v2_apply_staged-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of xnames that should have their staged Session applied.|[V2ApplyStagedStatus](#schemav2applystagedstatus)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                                     | Schema                                            |
+|--------|------------------------------------------------------------------|-----------------------------------------------------------------|---------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A list of xnames that should have their staged Session applied. | [V2ApplyStagedStatus](#schemav2applystagedstatus) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                                                     | [ProblemDetails](#schemaproblemdetails)           |
 
 <aside class="success">
 This operation does not require authentication
@@ -6869,9 +6872,9 @@ Update one or more of the BOS service options.
 
 <h3 id="patch_v2_options-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V2Options](#schemav2options)|true|Service-wide options|
+| Name | In   | Type                          | Required | Description          |
+|------|------|-------------------------------|----------|----------------------|
+| body | body | [V2Options](#schemav2options) | true     | Service-wide options |
 
 > Example responses
 
@@ -6895,10 +6898,10 @@ Update one or more of the BOS service options.
 
 <h3 id="patch_v2_options-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of service-wide options|[V2Options](#schemav2options)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                          | Schema                                  |
+|--------|------------------------------------------------------------------|--------------------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of service-wide options | [V2Options](#schemav2options)           |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                          | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -6987,9 +6990,10 @@ Return the API version
 
 <h3 id="get_version_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Get version details
+| Status | Meaning                                                 | Description         | Schema |
+|--------|---------------------------------------------------------|---------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Get version details |        |
+
 The versioning system uses [semver](https://semver.org/).
 ## Link Relationships
 * self : Link to itself
@@ -7087,9 +7091,9 @@ Retrieve the list of BOS service options.
 
 <h3 id="get_v2_options-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of service-wide options|[V2Options](#schemav2options)|
+| Status | Meaning                                                 | Description                          | Schema                        |
+|--------|---------------------------------------------------------|--------------------------------------|-------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | A collection of service-wide options | [V2Options](#schemav2options) |
 
 <aside class="success">
 This operation does not require authentication
@@ -7113,9 +7117,9 @@ Age in minutes (e.g. "3m"), hours (e.g. "5h"), days (e.g. "10d"), or weeks (e.g.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string(^(0|0[mMhHdDwW]|[1-9][0-9]*[mMhHdDwW])$)|false|none|Age in minutes (e.g. "3m"), hours (e.g. "5h"), days (e.g. "10d"), or weeks (e.g. "2w").|
+| Name        | Type       | Required    | Restrictions             | Description |
+|-------------|------------|-------------|--------------------------|-------------|
+| *anonymous* | string(^(0 | 0[mMhHdDwW] | [1-9][0-9]*[mMhHdDwW])$) | false       |none|Age in minutes (e.g. "3m"), hours (e.g. "5h"), days (e.g. "10d"), or weeks (e.g. "2w").|
 
 <h2 id="tocS_BootInitrdPath">BootInitrdPath</h2>
 <!-- backwards compatibility -->
@@ -7138,9 +7142,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|A path to the initrd to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                             |
+|-------------|--------|----------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | A path to the initrd to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_BootKernelPath">BootKernelPath</h2>
 <!-- backwards compatibility -->
@@ -7163,9 +7167,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|A path to the kernel to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                             |
+|-------------|--------|----------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | A path to the kernel to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_BootManifestPath">BootManifestPath</h2>
 <!-- backwards compatibility -->
@@ -7189,9 +7193,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|A path identifying the metadata describing the components of the boot image.<br>This could be a URI, URL, etc, depending on the type of the Boot Set.<br><br>It is recommended that this should be 1-4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                               |
+|-------------|--------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | A path identifying the metadata describing the components of the boot image.<br>This could be a URI, URL, etc, depending on the type of the Boot Set.<br><br>It is recommended that this should be 1-4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_BootKernelParameters">BootKernelParameters</h2>
 <!-- backwards compatibility -->
@@ -7214,9 +7218,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                          |
+|-------------|--------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_BootSetEtag">BootSetEtag</h2>
 <!-- backwards compatibility -->
@@ -7239,9 +7243,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                  |
+|-------------|--------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_BootSetName">BootSetName</h2>
 <!-- backwards compatibility -->
@@ -7267,9 +7271,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|-------------|--------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_BootSetRootfsProvider">BootSetRootfsProvider</h2>
 <!-- backwards compatibility -->
@@ -7292,9 +7296,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The root file system provider.<br><br>It is recommended that this should be 1-511 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                       |
+|-------------|--------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | The root file system provider.<br><br>It is recommended that this should be 1-511 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_BootSetRootfsProviderPassthrough">BootSetRootfsProviderPassthrough</h2>
 <!-- backwards compatibility -->
@@ -7319,9 +7323,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                    |
+|-------------|--------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_BootSetType">BootSetType</h2>
 <!-- backwards compatibility -->
@@ -7344,9 +7348,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                            |
+|-------------|--------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_CfsConfiguration">CfsConfiguration</h2>
 <!-- backwards compatibility -->
@@ -7369,9 +7373,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                            |
+|-------------|--------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_EmptyString">EmptyString</h2>
 <!-- backwards compatibility -->
@@ -7389,15 +7393,15 @@ An empty string value.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|An empty string value.|
+| Name        | Type   | Required | Restrictions | Description            |
+|-------------|--------|----------|--------------|------------------------|
+| *anonymous* | string | false    | none         | An empty string value. |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|*anonymous*||
+| Property    | Value |
+|-------------|-------|
+| *anonymous* |       |
 
 <h2 id="tocS_EnableCfs">EnableCfs</h2>
 <!-- backwards compatibility -->
@@ -7415,9 +7419,9 @@ Whether to enable the Configuration Framework Service (CFS).
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|boolean|false|none|Whether to enable the Configuration Framework Service (CFS).|
+| Name        | Type    | Required | Restrictions | Description                                                  |
+|-------------|---------|----------|--------------|--------------------------------------------------------------|
+| *anonymous* | boolean | false    | none         | Whether to enable the Configuration Framework Service (CFS). |
 
 <h2 id="tocS_HardwareComponentName">HardwareComponentName</h2>
 <!-- backwards compatibility -->
@@ -7440,9 +7444,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|Hardware component name (xname).<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                         |
+|-------------|--------|----------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | Hardware component name (xname).<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_Healthz">Healthz</h2>
 <!-- backwards compatibility -->
@@ -7463,10 +7467,10 @@ Service health status
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|dbStatus|string|false|none|none|
-|apiStatus|string|false|none|none|
+| Name      | Type   | Required | Restrictions | Description |
+|-----------|--------|----------|--------------|-------------|
+| dbStatus  | string | false    | none         | none        |
+| apiStatus | string | false    | none         | none        |
 
 <h2 id="tocS_Link">Link</h2>
 <!-- backwards compatibility -->
@@ -7487,10 +7491,10 @@ Link to other resources
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|href|string|false|none|none|
-|rel|string|false|none|none|
+| Name | Type   | Required | Restrictions | Description |
+|------|--------|----------|--------------|-------------|
+| href | string | false    | none         | none        |
+| rel  | string | false    | none         | none        |
 
 <h2 id="tocS_LinkList">LinkList</h2>
 <!-- backwards compatibility -->
@@ -7513,9 +7517,9 @@ List of links to other resources
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[Link](#schemalink)]|false|none|List of links to other resources|
+| Name        | Type                  | Required | Restrictions | Description                      |
+|-------------|-----------------------|----------|--------------|----------------------------------|
+| *anonymous* | [[Link](#schemalink)] | false    | none         | List of links to other resources |
 
 <h2 id="tocS_LinkListReadOnly">LinkListReadOnly</h2>
 <!-- backwards compatibility -->
@@ -7538,9 +7542,9 @@ List of links to other resources
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[Link](#schemalink)]|false|read-only|List of links to other resources|
+| Name        | Type                  | Required | Restrictions | Description                      |
+|-------------|-----------------------|----------|--------------|----------------------------------|
+| *anonymous* | [[Link](#schemalink)] | false    | read-only    | List of links to other resources |
 
 <h2 id="tocS_NodeList">NodeList</h2>
 <!-- backwards compatibility -->
@@ -7566,9 +7570,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[HardwareComponentName](#schemahardwarecomponentname)]|false|none|A node list that is required to have at least one node.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type                                                    | Required | Restrictions | Description                                                                                                                                                                                                                                                                  |
+|-------------|---------------------------------------------------------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | [[HardwareComponentName](#schemahardwarecomponentname)] | false    | none         | A node list that is required to have at least one node.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_NodeListEmptyOk">NodeListEmptyOk</h2>
 <!-- backwards compatibility -->
@@ -7594,9 +7598,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[HardwareComponentName](#schemahardwarecomponentname)]|false|none|A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type                                                    | Required | Restrictions | Description                                                                                                                                                                                                                                                              |
+|-------------|---------------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | [[HardwareComponentName](#schemahardwarecomponentname)] | false    | none         | A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_NodeGroupList">NodeGroupList</h2>
 <!-- backwards compatibility -->
@@ -7671,13 +7675,13 @@ An error response for RFC 7807 problem details.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|type|string(uri)|false|none|Relative URI reference to the type of problem which includes human<br>readable documentation.|
-|title|string|false|none|Short, human-readable summary of the problem, should not change by<br>occurrence.|
-|status|integer|false|none|HTTP status code|
-|instance|string(uri)|false|none|A relative URI reference that identifies the specific occurrence of<br>the problem|
-|detail|string|false|none|A human-readable explanation specific to this occurrence of the<br>problem. Focus on helping correct the problem, rather than giving<br>debugging information.|
+| Name     | Type        | Required | Restrictions | Description                                                                                                                                                    |
+|----------|-------------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| type     | string(uri) | false    | none         | Relative URI reference to the type of problem which includes human<br>readable documentation.                                                                  |
+| title    | string      | false    | none         | Short, human-readable summary of the problem, should not change by<br>occurrence.                                                                              |
+| status   | integer     | false    | none         | HTTP status code                                                                                                                                               |
+| instance | string(uri) | false    | none         | A relative URI reference that identifies the specific occurrence of<br>the problem                                                                             |
+| detail   | string      | false    | none         | A human-readable explanation specific to this occurrence of the<br>problem. Focus on helping correct the problem, rather than giving<br>debugging information. |
 
 <h2 id="tocS_SessionLimit">SessionLimit</h2>
 <!-- backwards compatibility -->
@@ -7702,9 +7706,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                               |
+|-------------|--------|----------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_SessionTemplateDescription">SessionTemplateDescription</h2>
 <!-- backwards compatibility -->
@@ -7727,9 +7731,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|An optional description for the Session Template.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                           |
+|-------------|--------|----------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | An optional description for the Session Template.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_SessionTemplateName">SessionTemplateName</h2>
 <!-- backwards compatibility -->
@@ -7755,9 +7759,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                               |
+|-------------|--------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_TenantName">TenantName</h2>
 <!-- backwards compatibility -->
@@ -7780,9 +7784,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|Name of a tenant. Used for multi-tenancy. An empty string means no tenant.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                                                              |
+|-------------|--------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | Name of a tenant. Used for multi-tenancy. An empty string means no tenant.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_Version">Version</h2>
 <!-- backwards compatibility -->
@@ -7810,12 +7814,12 @@ Version data
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|major|string|false|none|none|
-|minor|string|false|none|none|
-|patch|string|false|none|none|
-|links|[LinkList](#schemalinklist)|false|none|List of links to other resources|
+| Name  | Type                        | Required | Restrictions | Description                      |
+|-------|-----------------------------|----------|--------------|----------------------------------|
+| major | string                      | false    | none         | none                             |
+| minor | string                      | false    | none         | none                             |
+| patch | string                      | false    | none         | none                             |
+| links | [LinkList](#schemalinklist) | false    | none         | List of links to other resources |
 
 <h2 id="tocS_V1CfsBranch">V1CfsBranch</h2>
 <!-- backwards compatibility -->
@@ -7842,9 +7846,9 @@ automatically removed from it before storing it in BOS.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The name of the branch containing the configuration that you want to<br>apply to the nodes. Mutually exclusive with commit. (DEPRECATED)<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|-------------|--------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | The name of the branch containing the configuration that you want to<br>apply to the nodes. Mutually exclusive with commit. (DEPRECATED)<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS. |
 
 <h2 id="tocS_V1CfsUrl">V1CfsUrl</h2>
 <!-- backwards compatibility -->
@@ -7870,9 +7874,9 @@ automatically removed from it before storing it in BOS.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The clone URL for the repository providing the configuration. (DEPRECATED)<br><br>It is recommended that this should be 1-4096 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                |
+|-------------|--------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | The clone URL for the repository providing the configuration. (DEPRECATED)<br><br>It is recommended that this should be 1-4096 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS. |
 
 <h2 id="tocS_V1CfsParameters">V1CfsParameters</h2>
 <!-- backwards compatibility -->
@@ -7897,13 +7901,13 @@ Framework Service when configuration is enabled.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|clone_url|[V1CfsUrl](#schemav1cfsurl)|false|none|The clone URL for the repository providing the configuration. (DEPRECATED)<br><br>It is recommended that this should be 1-4096 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
-|branch|[V1CfsBranch](#schemav1cfsbranch)|false|none|The name of the branch containing the configuration that you want to<br>apply to the nodes. Mutually exclusive with commit. (DEPRECATED)<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
-|commit|string|false|none|The commit ID of the configuration that you want to<br>apply to the nodes. Mutually exclusive with branch. (DEPRECATED)<br><br>git commit hashes are hexadecimal strings with a length of 40 characters (although<br>fewer characters may be sufficient to uniquely identify a commit in some cases).<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
-|playbook|string|false|none|The name of the playbook to run for configuration. The file path must be specified<br>relative to the base directory of the config repository. (DEPRECATED)<br><br>It is recommended that this should be 1-255 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
-|configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name          | Type                                        | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+|---------------|---------------------------------------------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| clone_url     | [V1CfsUrl](#schemav1cfsurl)                 | false    | none         | The clone URL for the repository providing the configuration. (DEPRECATED)<br><br>It is recommended that this should be 1-4096 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.                                                                                                                                                  |
+| branch        | [V1CfsBranch](#schemav1cfsbranch)           | false    | none         | The name of the branch containing the configuration that you want to<br>apply to the nodes. Mutually exclusive with commit. (DEPRECATED)<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.                                                                                    |
+| commit        | string                                      | false    | none         | The commit ID of the configuration that you want to<br>apply to the nodes. Mutually exclusive with branch. (DEPRECATED)<br><br>git commit hashes are hexadecimal strings with a length of 40 characters (although<br>fewer characters may be sufficient to uniquely identify a commit in some cases).<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS. |
+| playbook      | string                                      | false    | none         | The name of the playbook to run for configuration. The file path must be specified<br>relative to the base directory of the config repository. (DEPRECATED)<br><br>It is recommended that this should be 1-255 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.                                                                  |
+| configuration | [CfsConfiguration](#schemacfsconfiguration) | false    | none         | The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                                                                                                                                                      |
 
 <h2 id="tocS_V1CompleteMetadata">V1CompleteMetadata</h2>
 <!-- backwards compatibility -->
@@ -7921,9 +7925,9 @@ Is the object's status complete
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|boolean|false|none|Is the object's status complete|
+| Name        | Type    | Required | Restrictions | Description                     |
+|-------------|---------|----------|--------------|---------------------------------|
+| *anonymous* | boolean | false    | none         | Is the object's status complete |
 
 <h2 id="tocS_V1ErrorCountMetadata">V1ErrorCountMetadata</h2>
 <!-- backwards compatibility -->
@@ -7941,9 +7945,9 @@ How many errors were encountered
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|integer|false|none|How many errors were encountered|
+| Name        | Type    | Required | Restrictions | Description                      |
+|-------------|---------|----------|--------------|----------------------------------|
+| *anonymous* | integer | false    | none         | How many errors were encountered |
 
 <h2 id="tocS_V1InProgressMetadata">V1InProgressMetadata</h2>
 <!-- backwards compatibility -->
@@ -7961,9 +7965,9 @@ Is the object still doing something
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|boolean|false|none|Is the object still doing something|
+| Name        | Type    | Required | Restrictions | Description                         |
+|-------------|---------|----------|--------------|-------------------------------------|
+| *anonymous* | boolean | false    | none         | Is the object still doing something |
 
 <h2 id="tocS_V1StartTimeMetadata">V1StartTimeMetadata</h2>
 <!-- backwards compatibility -->
@@ -7981,9 +7985,9 @@ The start time
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The start time|
+| Name        | Type   | Required | Restrictions | Description    |
+|-------------|--------|----------|--------------|----------------|
+| *anonymous* | string | false    | none         | The start time |
 
 <h2 id="tocS_V1StopTimeMetadata">V1StopTimeMetadata</h2>
 <!-- backwards compatibility -->
@@ -8001,9 +8005,9 @@ The stop time. In some contexts, the value may be null before the operation fini
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string¦null|false|none|The stop time. In some contexts, the value may be null before the operation finishes.|
+| Name        | Type        | Required | Restrictions | Description                                                                           |
+|-------------|-------------|----------|--------------|---------------------------------------------------------------------------------------|
+| *anonymous* | string¦null | false    | none         | The stop time. In some contexts, the value may be null before the operation finishes. |
 
 <h2 id="tocS_V1GenericMetadata">V1GenericMetadata</h2>
 <!-- backwards compatibility -->
@@ -8027,13 +8031,13 @@ The status metadata
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|complete|[V1CompleteMetadata](#schemav1completemetadata)|false|none|Is the object's status complete|
-|error_count|[V1ErrorCountMetadata](#schemav1errorcountmetadata)|false|none|How many errors were encountered|
-|in_progress|[V1InProgressMetadata](#schemav1inprogressmetadata)|false|none|Is the object still doing something|
-|start_time|[V1StartTimeMetadata](#schemav1starttimemetadata)|false|none|The start time|
-|stop_time|[V1StopTimeMetadata](#schemav1stoptimemetadata)|false|none|The stop time. In some contexts, the value may be null before the operation finishes.|
+| Name        | Type                                                | Required | Restrictions | Description                                                                           |
+|-------------|-----------------------------------------------------|----------|--------------|---------------------------------------------------------------------------------------|
+| complete    | [V1CompleteMetadata](#schemav1completemetadata)     | false    | none         | Is the object's status complete                                                       |
+| error_count | [V1ErrorCountMetadata](#schemav1errorcountmetadata) | false    | none         | How many errors were encountered                                                      |
+| in_progress | [V1InProgressMetadata](#schemav1inprogressmetadata) | false    | none         | Is the object still doing something                                                   |
+| start_time  | [V1StartTimeMetadata](#schemav1starttimemetadata)   | false    | none         | The start time                                                                        |
+| stop_time   | [V1StopTimeMetadata](#schemav1stoptimemetadata)     | false    | none         | The stop time. In some contexts, the value may be null before the operation finishes. |
 
 <h2 id="tocS_V1PhaseCategoryName">V1PhaseCategoryName</h2>
 <!-- backwards compatibility -->
@@ -8052,9 +8056,9 @@ not_started, in_progress, succeeded, failed, or excluded
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
+| Name        | Type   | Required | Restrictions | Description                                                                            |
+|-------------|--------|----------|--------------|----------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded |
 
 <h2 id="tocS_V1PhaseCategoryStatus">V1PhaseCategoryStatus</h2>
 <!-- backwards compatibility -->
@@ -8082,10 +8086,10 @@ A list of the nodes in a given category within a Phase.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|[V1PhaseCategoryName](#schemav1phasecategoryname)|false|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
-|node_list|[NodeListEmptyOk](#schemanodelistemptyok)|false|none|A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name      | Type                                              | Required | Restrictions | Description                                                                                                                                                                                                                                                              |
+|-----------|---------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name      | [V1PhaseCategoryName](#schemav1phasecategoryname) | false    | none         | Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded                                                                                                                                                                                   |
+| node_list | [NodeListEmptyOk](#schemanodelistemptyok)         | false    | none         | A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_V1PhaseStatus">V1PhaseStatus</h2>
 <!-- backwards compatibility -->
@@ -8136,12 +8140,12 @@ what category those nodes fall into within the phase.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|false|none|Name of the Phase<br>boot, configure, or shutdown|
-|metadata|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
-|categories|[[V1PhaseCategoryStatus](#schemav1phasecategorystatus)]|false|none|[A list of the nodes in a given category within a Phase.<br><br>## Link Relationships<br><br>* self : The phase category status object<br>]|
-|errors|[V1NodeErrorsList](#schemav1nodeerrorslist)|false|none|Categorizing nodes into failures by the type of error they have.<br>This is an additive characterization. Nodes will be added to existing errors.<br>This does not overwrite previously existing errors.|
+| Name       | Type                                                    | Required | Restrictions | Description                                                                                                                                                                                              |
+|------------|---------------------------------------------------------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name       | string                                                  | false    | none         | Name of the Phase<br>boot, configure, or shutdown                                                                                                                                                        |
+| metadata   | [V1GenericMetadata](#schemav1genericmetadata)           | false    | none         | The status metadata                                                                                                                                                                                      |
+| categories | [[V1PhaseCategoryStatus](#schemav1phasecategorystatus)] | false    | none         | [A list of the nodes in a given category within a Phase.<br><br>## Link Relationships<br><br>* self : The phase category status object<br>]                                                              |
+| errors     | [V1NodeErrorsList](#schemav1nodeerrorslist)             | false    | none         | Categorizing nodes into failures by the type of error they have.<br>This is an additive characterization. Nodes will be added to existing errors.<br>This does not overwrite previously existing errors. |
 
 <h2 id="tocS_V1SessionId">V1SessionId</h2>
 <!-- backwards compatibility -->
@@ -8159,9 +8163,9 @@ Unique BOS v1 Session identifier.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string(uuid)|false|none|Unique BOS v1 Session identifier.|
+| Name        | Type         | Required | Restrictions | Description                       |
+|-------------|--------------|----------|--------------|-----------------------------------|
+| *anonymous* | string(uuid) | false    | none         | Unique BOS v1 Session identifier. |
 
 <h2 id="tocS_V1BootSetStatus">V1BootSetStatus</h2>
 <!-- backwards compatibility -->
@@ -8231,13 +8235,13 @@ The status for a Boot Set. It as a list of the phase statuses for the Boot Set.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|[BootSetName](#schemabootsetname)|false|none|The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|session|[V1SessionId](#schemav1sessionid)|false|none|Unique BOS v1 Session identifier.|
-|metadata|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
-|phases|[[V1PhaseStatus](#schemav1phasestatus)]|false|none|[The phase's status. It is a list of all of the nodes in the phase and<br>what category those nodes fall into within the phase.<br><br>## Link Relationships<br><br>* self : The phase status object<br>]|
-|links|[LinkList](#schemalinklist)|false|none|List of links to other resources|
+| Name     | Type                                          | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|----------|-----------------------------------------------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name     | [BootSetName](#schemabootsetname)             | false    | none         | The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version. |
+| session  | [V1SessionId](#schemav1sessionid)             | false    | none         | Unique BOS v1 Session identifier.                                                                                                                                                                                                                                                                                                                                                                                               |
+| metadata | [V1GenericMetadata](#schemav1genericmetadata) | false    | none         | The status metadata                                                                                                                                                                                                                                                                                                                                                                                                             |
+| phases   | [[V1PhaseStatus](#schemav1phasestatus)]       | false    | none         | [The phase's status. It is a list of all of the nodes in the phase and<br>what category those nodes fall into within the phase.<br><br>## Link Relationships<br><br>* self : The phase status object<br>]                                                                                                                                                                                                                       |
+| links    | [LinkList](#schemalinklist)                   | false    | none         | List of links to other resources                                                                                                                                                                                                                                                                                                                                                                                                |
 
 <h2 id="tocS_V1SessionStatus">V1SessionStatus</h2>
 <!-- backwards compatibility -->
@@ -8278,12 +8282,12 @@ The status for a Session. It is a list of all of the Boot Set Statuses in the Se
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|metadata|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
-|boot_sets|[[BootSetName](#schemabootsetname)]|false|none|The Boot Sets in the Session|
-|id|[V1SessionId](#schemav1sessionid)|false|none|Unique BOS v1 Session identifier.|
-|links|[LinkList](#schemalinklist)|false|none|List of links to other resources|
+| Name      | Type                                          | Required | Restrictions | Description                       |
+|-----------|-----------------------------------------------|----------|--------------|-----------------------------------|
+| metadata  | [V1GenericMetadata](#schemav1genericmetadata) | false    | none         | The status metadata               |
+| boot_sets | [[BootSetName](#schemabootsetname)]           | false    | none         | The Boot Sets in the Session      |
+| id        | [V1SessionId](#schemav1sessionid)             | false    | none         | Unique BOS v1 Session identifier. |
+| links     | [LinkList](#schemalinklist)                   | false    | none         | List of links to other resources  |
 
 <h2 id="tocS_V1BootSet">V1BootSet</h2>
 <!-- backwards compatibility -->
@@ -8328,21 +8332,21 @@ the same ordinal number will be addressed at the same time.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|[BootSetName](#schemabootsetname)|false|none|The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|path|[BootManifestPath](#schemabootmanifestpath)|true|none|A path identifying the metadata describing the components of the boot image.<br>This could be a URI, URL, etc, depending on the type of the Boot Set.<br><br>It is recommended that this should be 1-4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|type|[BootSetType](#schemabootsettype)|true|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|etag|[BootSetEtag](#schemabootsetetag)|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|kernel_parameters|[BootKernelParameters](#schemabootkernelparameters)|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_list|[NodeList](#schemanodelist)|false|none|A node list that is required to have at least one node.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_roles_groups|[NodeRoleList](#schemanoderolelist)|false|none|Node role list. Allows actions against nodes with associated roles.<br><br>It is recommended that this list should be 1-1023 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_groups|[NodeGroupList](#schemanodegrouplist)|false|none|Node group list. Allows actions against associated nodes by logical groupings.<br><br>It is recommended that this list should be 1-4095 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|rootfs_provider|[BootSetRootfsProvider](#schemabootsetrootfsprovider)|false|none|The root file system provider.<br><br>It is recommended that this should be 1-511 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|rootfs_provider_passthrough|[BootSetRootfsProviderPassthrough](#schemabootsetrootfsproviderpassthrough)|false|none|The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|network|string|false|none|The network over which the node will boot.<br>Choices:  NMN -- Node Management Network<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
-|boot_ordinal|integer|false|none|The boot ordinal. This will establish the order for Boot Set operations.<br>Boot Sets boot in order from the lowest to highest boot_ordinal.<br><br>It is recommended that this should have a maximum value of 65535.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
-|shutdown_ordinal|integer|false|none|The shutdown ordinal. This will establish the order for Boot Set<br>shutdown operations. Sets shutdown from low to high shutdown_ordinal.<br><br>It is recommended that this should have a maximum value of 65535.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
+| Name                        | Type                                                                        | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+|-----------------------------|-----------------------------------------------------------------------------|----------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                        | [BootSetName](#schemabootsetname)                                           | false    | none         | The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.                                                                             |
+| path                        | [BootManifestPath](#schemabootmanifestpath)                                 | true     | none         | A path identifying the metadata describing the components of the boot image.<br>This could be a URI, URL, etc, depending on the type of the Boot Set.<br><br>It is recommended that this should be 1-4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                   |
+| type                        | [BootSetType](#schemabootsettype)                                           | true     | none         | The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                      |
+| etag                        | [BootSetEtag](#schemabootsetetag)                                           | false    | none         | This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                |
+| kernel_parameters           | [BootKernelParameters](#schemabootkernelparameters)                         | false    | none         | The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                                                                        |
+| node_list                   | [NodeList](#schemanodelist)                                                 | false    | none         | A node list that is required to have at least one node.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                                                                |
+| node_roles_groups           | [NodeRoleList](#schemanoderolelist)                                         | false    | none         | Node role list. Allows actions against nodes with associated roles.<br><br>It is recommended that this list should be 1-1023 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                                                     |
+| node_groups                 | [NodeGroupList](#schemanodegrouplist)                                       | false    | none         | Node group list. Allows actions against associated nodes by logical groupings.<br><br>It is recommended that this list should be 1-4095 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                                          |
+| rootfs_provider             | [BootSetRootfsProvider](#schemabootsetrootfsprovider)                       | false    | none         | The root file system provider.<br><br>It is recommended that this should be 1-511 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                                                                                           |
+| rootfs_provider_passthrough | [BootSetRootfsProviderPassthrough](#schemabootsetrootfsproviderpassthrough) | false    | none         | The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                              |
+| network                     | string                                                                      | false    | none         | The network over which the node will boot.<br>Choices:  NMN -- Node Management Network<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.                                                                                                                                |
+| boot_ordinal                | integer                                                                     | false    | none         | The boot ordinal. This will establish the order for Boot Set operations.<br>Boot Sets boot in order from the lowest to highest boot_ordinal.<br><br>It is recommended that this should have a maximum value of 65535.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS. |
+| shutdown_ordinal            | integer                                                                     | false    | none         | The shutdown ordinal. This will establish the order for Boot Set<br>shutdown operations. Sets shutdown from low to high shutdown_ordinal.<br><br>It is recommended that this should have a maximum value of 65535.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.    |
 
 <h2 id="tocS_V1SessionTemplateUuid">V1SessionTemplateUuid</h2>
 <!-- backwards compatibility -->
@@ -8367,9 +8371,9 @@ It is recommended to use names which meet the following restrictions:
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|DEPRECATED - use templateName. This field is ignored if templateName is also set.<br><br>Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* 1-127 characters in length.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                  |
+|-------------|--------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | DEPRECATED - use templateName. This field is ignored if templateName is also set.<br><br>Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* 1-127 characters in length.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit. |
 
 <h2 id="tocS_V1SessionTemplate">V1SessionTemplate</h2>
 <!-- backwards compatibility -->
@@ -8462,17 +8466,17 @@ removed from it before storing it in BOS.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|description|[SessionTemplateDescription](#schemasessiontemplatedescription)|false|none|An optional description for the Session Template.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|cfs_url|[V1CfsUrl](#schemav1cfsurl)|false|none|The clone URL for the repository providing the configuration. (DEPRECATED)<br><br>It is recommended that this should be 1-4096 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
-|cfs_branch|[V1CfsBranch](#schemav1cfsbranch)|false|none|The name of the branch containing the configuration that you want to<br>apply to the nodes. Mutually exclusive with commit. (DEPRECATED)<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
-|enable_cfs|[EnableCfs](#schemaenablecfs)|false|none|Whether to enable the Configuration Framework Service (CFS).|
-|cfs|[V1CfsParameters](#schemav1cfsparameters)|false|none|This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled.|
-|partition|string|false|none|The machine partition to operate on.<br><br>It is recommended that this should be 1-255 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
-|boot_sets|object|false|none|Mapping from Boot Set names to Boot Sets.<br><br>It is recommended that:<br>* At least one Boot Set should be defined, because a Session Template with no<br>  Boot Sets is not functional.<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.|
-|» **additionalProperties**|[V1BootSet](#schemav1bootset)|false|none|A Boot Set defines a collection of nodes and the information about the<br>boot artifacts and parameters to be sent to each node over the specified<br>network to enable these nodes to boot. When multiple Boot Sets are used<br>in a Session Template, the boot_ordinal and shutdown_ordinal indicate<br>the order in which Boot Sets need to be acted upon. Boot Sets sharing<br>the same ordinal number will be addressed at the same time.|
+| Name                       | Type                                                            | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|----------------------------|-----------------------------------------------------------------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                       | [SessionTemplateName](#schemasessiontemplatename)               | true     | none         | Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.                                                                                |
+| description                | [SessionTemplateDescription](#schemasessiontemplatedescription) | false    | none         | An optional description for the Session Template.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                                                                    |
+| cfs_url                    | [V1CfsUrl](#schemav1cfsurl)                                     | false    | none         | The clone URL for the repository providing the configuration. (DEPRECATED)<br><br>It is recommended that this should be 1-4096 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.                                                               |
+| cfs_branch                 | [V1CfsBranch](#schemav1cfsbranch)                               | false    | none         | The name of the branch containing the configuration that you want to<br>apply to the nodes. Mutually exclusive with commit. (DEPRECATED)<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS. |
+| enable_cfs                 | [EnableCfs](#schemaenablecfs)                                   | false    | none         | Whether to enable the Configuration Framework Service (CFS).                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| cfs                        | [V1CfsParameters](#schemav1cfsparameters)                       | false    | none         | This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled.                                                                                                                                                                                                                                                                                                                                                                            |
+| partition                  | string                                                          | false    | none         | The machine partition to operate on.<br><br>It is recommended that this should be 1-255 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.                                                                                                      |
+| boot_sets                  | object                                                          | false    | none         | Mapping from Boot Set names to Boot Sets.<br><br>It is recommended that:<br>* At least one Boot Set should be defined, because a Session Template with no<br>  Boot Sets is not functional.<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.                                                                                |
+| » **additionalProperties** | [V1BootSet](#schemav1bootset)                                   | false    | none         | A Boot Set defines a collection of nodes and the information about the<br>boot artifacts and parameters to be sent to each node over the specified<br>network to enable these nodes to boot. When multiple Boot Sets are used<br>in a Session Template, the boot_ordinal and shutdown_ordinal indicate<br>the order in which Boot Sets need to be acted upon. Boot Sets sharing<br>the same ordinal number will be addressed at the same time.                                                           |
 
 <h2 id="tocS_V1BoaKubernetesJob">V1BoaKubernetesJob</h2>
 <!-- backwards compatibility -->
@@ -8490,9 +8494,9 @@ The identity of the Kubernetes job that is created to handle the Session.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|read-only|The identity of the Kubernetes job that is created to handle the Session.|
+| Name        | Type   | Required | Restrictions | Description                                                               |
+|-------------|--------|----------|--------------|---------------------------------------------------------------------------|
+| *anonymous* | string | false    | read-only    | The identity of the Kubernetes job that is created to handle the Session. |
 
 <h2 id="tocS_V1Operation">V1Operation</h2>
 <!-- backwards compatibility -->
@@ -8525,9 +8529,9 @@ Operation -- An operation to perform on nodes in this Session.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|-------------|--------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on. |
 
 <h2 id="tocS_V1SessionLink">V1SessionLink</h2>
 <!-- backwards compatibility -->
@@ -8550,20 +8554,20 @@ Link to other resources
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|href|string|false|none|none|
-|jobId|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
-|rel|string|false|none|none|
-|type|string|false|none|none|
+| Name  | Type                                            | Required | Restrictions | Description                                                               |
+|-------|-------------------------------------------------|----------|--------------|---------------------------------------------------------------------------|
+| href  | string                                          | false    | none         | none                                                                      |
+| jobId | [V1BoaKubernetesJob](#schemav1boakubernetesjob) | false    | none         | The identity of the Kubernetes job that is created to handle the Session. |
+| rel   | string                                          | false    | none         | none                                                                      |
+| type  | string                                          | false    | none         | none                                                                      |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|rel|session|
-|rel|status|
-|type|GET|
+| Property | Value   |
+|----------|---------|
+| rel      | session |
+| rel      | status  |
+| type     | GET     |
 
 <h2 id="tocS_V1SessionStatusUri">V1SessionStatusUri</h2>
 <!-- backwards compatibility -->
@@ -8581,9 +8585,9 @@ URI to the status for this Session
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string(uri)|false|none|URI to the status for this Session|
+| Name        | Type        | Required | Restrictions | Description                        |
+|-------------|-------------|----------|--------------|------------------------------------|
+| *anonymous* | string(uri) | false    | none         | URI to the status for this Session |
 
 <h2 id="tocS_V1SessionDetails">V1SessionDetails</h2>
 <!-- backwards compatibility -->
@@ -8611,17 +8615,17 @@ Details about a Session.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|complete|[V1CompleteMetadata](#schemav1completemetadata)|false|none|Is the object's status complete|
-|error_count|[V1ErrorCountMetadata](#schemav1errorcountmetadata)|false|none|How many errors were encountered|
-|in_progress|[V1InProgressMetadata](#schemav1inprogressmetadata)|false|none|Is the object still doing something|
-|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
-|operation|[V1Operation](#schemav1operation)|false|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
-|start_time|[V1StartTimeMetadata](#schemav1starttimemetadata)|false|none|The start time|
-|status_link|[V1SessionStatusUri](#schemav1sessionstatusuri)|false|none|URI to the status for this Session|
-|stop_time|[V1StopTimeMetadata](#schemav1stoptimemetadata)|false|none|The stop time. In some contexts, the value may be null before the operation finishes.|
-|templateName|[SessionTemplateName](#schemasessiontemplatename)|false|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+| Name         | Type                                                | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|--------------|-----------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| complete     | [V1CompleteMetadata](#schemav1completemetadata)     | false    | none         | Is the object's status complete                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| error_count  | [V1ErrorCountMetadata](#schemav1errorcountmetadata) | false    | none         | How many errors were encountered                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| in_progress  | [V1InProgressMetadata](#schemav1inprogressmetadata) | false    | none         | Is the object still doing something                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| job          | [V1BoaKubernetesJob](#schemav1boakubernetesjob)     | false    | none         | The identity of the Kubernetes job that is created to handle the Session.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| operation    | [V1Operation](#schemav1operation)                   | false    | none         | A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on. |
+| start_time   | [V1StartTimeMetadata](#schemav1starttimemetadata)   | false    | none         | The start time                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| status_link  | [V1SessionStatusUri](#schemav1sessionstatusuri)     | false    | none         | URI to the status for this Session                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| stop_time    | [V1StopTimeMetadata](#schemav1stoptimemetadata)     | false    | none         | The stop time. In some contexts, the value may be null before the operation finishes.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| templateName | [SessionTemplateName](#schemasessiontemplatename)   | false    | none         | Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                                                                                |
 
 <h2 id="tocS_V1SessionDetailsByTemplateUuid">V1SessionDetailsByTemplateUuid</h2>
 <!-- backwards compatibility -->
@@ -8650,17 +8654,17 @@ DEPRECATED -- these will only exist from Sessions created before templateUuid wa
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|complete|[V1CompleteMetadata](#schemav1completemetadata)|false|none|Is the object's status complete|
-|error_count|[V1ErrorCountMetadata](#schemav1errorcountmetadata)|false|none|How many errors were encountered|
-|in_progress|[V1InProgressMetadata](#schemav1inprogressmetadata)|false|none|Is the object still doing something|
-|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
-|operation|[V1Operation](#schemav1operation)|false|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
-|start_time|[V1StartTimeMetadata](#schemav1starttimemetadata)|false|none|The start time|
-|status_link|[V1SessionStatusUri](#schemav1sessionstatusuri)|false|none|URI to the status for this Session|
-|stop_time|[V1StopTimeMetadata](#schemav1stoptimemetadata)|false|none|The stop time. In some contexts, the value may be null before the operation finishes.|
-|templateName|[SessionTemplateName](#schemasessiontemplatename)|false|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+| Name         | Type                                                | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|--------------|-----------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| complete     | [V1CompleteMetadata](#schemav1completemetadata)     | false    | none         | Is the object's status complete                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| error_count  | [V1ErrorCountMetadata](#schemav1errorcountmetadata) | false    | none         | How many errors were encountered                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| in_progress  | [V1InProgressMetadata](#schemav1inprogressmetadata) | false    | none         | Is the object still doing something                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| job          | [V1BoaKubernetesJob](#schemav1boakubernetesjob)     | false    | none         | The identity of the Kubernetes job that is created to handle the Session.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| operation    | [V1Operation](#schemav1operation)                   | false    | none         | A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on. |
+| start_time   | [V1StartTimeMetadata](#schemav1starttimemetadata)   | false    | none         | The start time                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| status_link  | [V1SessionStatusUri](#schemav1sessionstatusuri)     | false    | none         | URI to the status for this Session                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| stop_time    | [V1StopTimeMetadata](#schemav1stoptimemetadata)     | false    | none         | The stop time. In some contexts, the value may be null before the operation finishes.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| templateName | [SessionTemplateName](#schemasessiontemplatename)   | false    | none         | Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                                                                                |
 
 <h2 id="tocS_V1SessionLinkList">V1SessionLinkList</h2>
 <!-- backwards compatibility -->
@@ -8683,9 +8687,9 @@ DEPRECATED -- these will only exist from Sessions created before templateUuid wa
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[V1SessionLink](#schemav1sessionlink)]|false|read-only|[Link to other resources]|
+| Name        | Type                                    | Required | Restrictions | Description               |
+|-------------|-----------------------------------------|----------|--------------|---------------------------|
+| *anonymous* | [[V1SessionLink](#schemav1sessionlink)] | false    | read-only    | [Link to other resources] |
 
 <h2 id="tocS_V1Session">V1Session</h2>
 <!-- backwards compatibility -->
@@ -8720,13 +8724,13 @@ A Session object
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|operation|[V1Operation](#schemav1operation)|true|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
-|templateName|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|links|[V1SessionLinkList](#schemav1sessionlinklist)|false|none|none|
+| Name         | Type                                              | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|--------------|---------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| operation    | [V1Operation](#schemav1operation)                 | true     | none         | A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on. |
+| templateName | [SessionTemplateName](#schemasessiontemplatename) | true     | none         | Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                                                                                |
+| job          | [V1BoaKubernetesJob](#schemav1boakubernetesjob)   | false    | none         | The identity of the Kubernetes job that is created to handle the Session.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| limit        | [SessionLimit](#schemasessionlimit)               | false    | none         | A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                                                                                                |
+| links        | [V1SessionLinkList](#schemav1sessionlinklist)     | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 <h2 id="tocS_V1SessionByTemplateName">V1SessionByTemplateName</h2>
 <!-- backwards compatibility -->
@@ -8762,14 +8766,14 @@ A Session object specified by templateName
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|operation|[V1Operation](#schemav1operation)|true|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
-|templateUuid|[V1SessionTemplateUuid](#schemav1sessiontemplateuuid)|false|none|DEPRECATED - use templateName. This field is ignored if templateName is also set.<br><br>Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* 1-127 characters in length.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
-|templateName|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|links|[V1SessionLinkList](#schemav1sessionlinklist)|false|none|none|
+| Name         | Type                                                  | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|--------------|-------------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| operation    | [V1Operation](#schemav1operation)                     | true     | none         | A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on. |
+| templateUuid | [V1SessionTemplateUuid](#schemav1sessiontemplateuuid) | false    | none         | DEPRECATED - use templateName. This field is ignored if templateName is also set.<br><br>Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* 1-127 characters in length.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.                                                                                                                                                                                                                                                                                                             |
+| templateName | [SessionTemplateName](#schemasessiontemplatename)     | true     | none         | Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                                                                                |
+| job          | [V1BoaKubernetesJob](#schemav1boakubernetesjob)       | false    | none         | The identity of the Kubernetes job that is created to handle the Session.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| limit        | [SessionLimit](#schemasessionlimit)                   | false    | none         | A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                                                                                                |
+| links        | [V1SessionLinkList](#schemav1sessionlinklist)         | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 <h2 id="tocS_V1SessionByTemplateUuid">V1SessionByTemplateUuid</h2>
 <!-- backwards compatibility -->
@@ -8804,13 +8808,13 @@ A Session object specified by templateUuid (DEPRECATED -- use templateName)
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|operation|[V1Operation](#schemav1operation)|true|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
-|templateUuid|[V1SessionTemplateUuid](#schemav1sessiontemplateuuid)|true|none|DEPRECATED - use templateName. This field is ignored if templateName is also set.<br><br>Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* 1-127 characters in length.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
-|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|links|[V1SessionLinkList](#schemav1sessionlinklist)|false|none|none|
+| Name         | Type                                                  | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|--------------|-------------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| operation    | [V1Operation](#schemav1operation)                     | true     | none         | A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on. |
+| templateUuid | [V1SessionTemplateUuid](#schemav1sessiontemplateuuid) | true     | none         | DEPRECATED - use templateName. This field is ignored if templateName is also set.<br><br>Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* 1-127 characters in length.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.                                                                                                                                                                                                                                                                                                             |
+| job          | [V1BoaKubernetesJob](#schemav1boakubernetesjob)       | false    | none         | The identity of the Kubernetes job that is created to handle the Session.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| limit        | [SessionLimit](#schemasessionlimit)                   | false    | none         | A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                                                                                                |
+| links        | [V1SessionLinkList](#schemav1sessionlinklist)         | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 <h2 id="tocS_V1PhaseName">V1PhaseName</h2>
 <!-- backwards compatibility -->
@@ -8829,9 +8833,9 @@ it belongs to the Boot Set itself, which only applies to the GenericMetadata typ
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                         |
+|-------------|--------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type. |
 
 <h2 id="tocS_V1NodeChangeList">V1NodeChangeList</h2>
 <!-- backwards compatibility -->
@@ -8858,12 +8862,12 @@ one category to another within a phase.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
-|source|[V1PhaseCategoryName](#schemav1phasecategoryname)|true|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
-|destination|[V1PhaseCategoryName](#schemav1phasecategoryname)|true|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
-|node_list|[NodeListEmptyOk](#schemanodelistemptyok)|true|none|A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type                                              | Required | Restrictions | Description                                                                                                                                                                                                                                                              |
+|-------------|---------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| phase       | [V1PhaseName](#schemav1phasename)                 | true     | none         | The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.                                                                                                      |
+| source      | [V1PhaseCategoryName](#schemav1phasecategoryname) | true     | none         | Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded                                                                                                                                                                                   |
+| destination | [V1PhaseCategoryName](#schemav1phasecategoryname) | true     | none         | Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded                                                                                                                                                                                   |
+| node_list   | [NodeListEmptyOk](#schemanodelistemptyok)         | true     | none         | A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_V1NodeErrorsList">V1NodeErrorsList</h2>
 <!-- backwards compatibility -->
@@ -8892,9 +8896,9 @@ This does not overwrite previously existing errors.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|**additionalProperties**|[NodeListEmptyOk](#schemanodelistemptyok)|false|none|A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name                     | Type                                      | Required | Restrictions | Description                                                                                                                                                                                                                                                              |
+|--------------------------|-------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **additionalProperties** | [NodeListEmptyOk](#schemanodelistemptyok) | false    | none         | A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_V1UpdateRequestNodeChange">V1UpdateRequestNodeChange</h2>
 <!-- backwards compatibility -->
@@ -8925,17 +8929,17 @@ updates to which categories nodes are in.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|update_type|string|true|none|The type of update data|
-|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
-|data|[V1NodeChangeList](#schemav1nodechangelist)|true|none|The information used to update the status of a node list. It moves nodes from<br>one category to another within a phase.|
+| Name        | Type                                        | Required | Restrictions | Description                                                                                                                                                         |
+|-------------|---------------------------------------------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| update_type | string                                      | true     | none         | The type of update data                                                                                                                                             |
+| phase       | [V1PhaseName](#schemav1phasename)           | true     | none         | The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type. |
+| data        | [V1NodeChangeList](#schemav1nodechangelist) | true     | none         | The information used to update the status of a node list. It moves nodes from<br>one category to another within a phase.                                            |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|update_type|NodeChangeList|
+| Property    | Value          |
+|-------------|----------------|
+| update_type | NodeChangeList |
 
 <h2 id="tocS_V1UpdateRequestNodeErrors">V1UpdateRequestNodeErrors</h2>
 <!-- backwards compatibility -->
@@ -8967,17 +8971,17 @@ updates to which errors have occurred and which nodes encountered those errors
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|update_type|string|true|none|The type of update data|
-|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
-|data|[V1NodeErrorsList](#schemav1nodeerrorslist)|true|none|Categorizing nodes into failures by the type of error they have.<br>This is an additive characterization. Nodes will be added to existing errors.<br>This does not overwrite previously existing errors.|
+| Name        | Type                                        | Required | Restrictions | Description                                                                                                                                                                                              |
+|-------------|---------------------------------------------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| update_type | string                                      | true     | none         | The type of update data                                                                                                                                                                                  |
+| phase       | [V1PhaseName](#schemav1phasename)           | true     | none         | The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.                                      |
+| data        | [V1NodeErrorsList](#schemav1nodeerrorslist) | true     | none         | Categorizing nodes into failures by the type of error they have.<br>This is an additive characterization. Nodes will be added to existing errors.<br>This does not overwrite previously existing errors. |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|update_type|NodeErrorsList|
+| Property    | Value          |
+|-------------|----------------|
+| update_type | NodeErrorsList |
 
 <h2 id="tocS_V1UpdateRequestGenericMetadata">V1UpdateRequestGenericMetadata</h2>
 <!-- backwards compatibility -->
@@ -9006,17 +9010,17 @@ updates to metadata, specifically start and stop times
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|update_type|string|true|none|The type of update data|
-|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
-|data|[V1GenericMetadata](#schemav1genericmetadata)|true|none|The status metadata|
+| Name        | Type                                          | Required | Restrictions | Description                                                                                                                                                         |
+|-------------|-----------------------------------------------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| update_type | string                                        | true     | none         | The type of update data                                                                                                                                             |
+| phase       | [V1PhaseName](#schemav1phasename)             | true     | none         | The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type. |
+| data        | [V1GenericMetadata](#schemav1genericmetadata) | true     | none         | The status metadata                                                                                                                                                 |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|update_type|GenericMetadata|
+| Property    | Value           |
+|-------------|-----------------|
+| update_type | GenericMetadata |
 
 <h2 id="tocS_V1UpdateRequestList">V1UpdateRequestList</h2>
 <!-- backwards compatibility -->
@@ -9050,21 +9054,21 @@ This is the payload sent during an update request. It contains a list of updates
 
 oneOf
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[V1UpdateRequestNodeChange](#schemav1updaterequestnodechange)|false|none|This is an element of the payload sent during an update request. It contains<br>updates to which categories nodes are in.|
+| Name        | Type                                                          | Required | Restrictions | Description                                                                                                               |
+|-------------|---------------------------------------------------------------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | [V1UpdateRequestNodeChange](#schemav1updaterequestnodechange) | false    | none         | This is an element of the payload sent during an update request. It contains<br>updates to which categories nodes are in. |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[V1UpdateRequestNodeErrors](#schemav1updaterequestnodeerrors)|false|none|This is an element of the payload sent during an update request. It contains<br>updates to which errors have occurred and which nodes encountered those errors|
+| Name        | Type                                                          | Required | Restrictions | Description                                                                                                                                                    |
+|-------------|---------------------------------------------------------------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | [V1UpdateRequestNodeErrors](#schemav1updaterequestnodeerrors) | false    | none         | This is an element of the payload sent during an update request. It contains<br>updates to which errors have occurred and which nodes encountered those errors |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[V1UpdateRequestGenericMetadata](#schemav1updaterequestgenericmetadata)|false|none|This is an element of the payload sent during an update request. It contains<br>updates to metadata, specifically start and stop times|
+| Name        | Type                                                                    | Required | Restrictions | Description                                                                                                                            |
+|-------------|-------------------------------------------------------------------------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | [V1UpdateRequestGenericMetadata](#schemav1updaterequestgenericmetadata) | false    | none         | This is an element of the payload sent during an update request. It contains<br>updates to metadata, specifically start and stop times |
 
 <h2 id="tocS_V2TenantName">V2TenantName</h2>
 <!-- backwards compatibility -->
@@ -9085,9 +9089,9 @@ the same.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string¦null|false|read-only|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same.|
+| Name        | Type        | Required | Restrictions | Description                                                                                                                                                                                                                                         |
+|-------------|-------------|----------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string¦null | false    | read-only    | Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same. |
 
 <h2 id="tocS_V2CfsParameters">V2CfsParameters</h2>
 <!-- backwards compatibility -->
@@ -9109,9 +9113,9 @@ a Session Template, or individually within a Boot Set.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name          | Type                                        | Required | Restrictions | Description                                                                                                                                                                                                                                                            |
+|---------------|---------------------------------------------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| configuration | [CfsConfiguration](#schemacfsconfiguration) | false    | none         | The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_V2SessionTemplate">V2SessionTemplate</h2>
 <!-- backwards compatibility -->
@@ -9199,16 +9203,16 @@ group of Components.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|false|read-only|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|tenant|[V2TenantName](#schemav2tenantname)|false|none|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same.|
-|description|[SessionTemplateDescription](#schemasessiontemplatedescription)|false|none|An optional description for the Session Template.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|enable_cfs|[EnableCfs](#schemaenablecfs)|false|none|Whether to enable the Configuration Framework Service (CFS).|
-|cfs|[V2CfsParameters](#schemav2cfsparameters)|false|none|This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a Boot Set.|
-|boot_sets|object|false|none|Mapping from Boot Set names to Boot Sets.<br><br>It is recommended that:<br>* At least one Boot Set should be defined, because a Session Template with no<br>  Boot Sets is not functional.<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|» **additionalProperties**|[V2BootSet](#schemav2bootset)|false|none|A Boot Set is a collection of nodes defined by an explicit list, their functional<br>role, and their logical groupings. This collection of nodes is associated with one<br>set of boot artifacts and optional additional records for configuration and root<br>filesystem provisioning.|
-|links|[LinkListReadOnly](#schemalinklistreadonly)|false|none|List of links to other resources|
+| Name                       | Type                                                            | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+|----------------------------|-----------------------------------------------------------------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                       | string                                                          | false    | read-only    | Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                 |
+| tenant                     | [V2TenantName](#schemav2tenantname)                             | false    | none         | Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same.                                                                                                                                                                                                                                                                                                                       |
+| description                | [SessionTemplateDescription](#schemasessiontemplatedescription) | false    | none         | An optional description for the Session Template.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                                                                                                                                     |
+| enable_cfs                 | [EnableCfs](#schemaenablecfs)                                   | false    | none         | Whether to enable the Configuration Framework Service (CFS).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| cfs                        | [V2CfsParameters](#schemav2cfsparameters)                       | false    | none         | This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a Boot Set.                                                                                                                                                                                                                                                                                                                                                |
+| boot_sets                  | object                                                          | false    | none         | Mapping from Boot Set names to Boot Sets.<br><br>It is recommended that:<br>* At least one Boot Set should be defined, because a Session Template with no<br>  Boot Sets is not functional.<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version. |
+| » **additionalProperties** | [V2BootSet](#schemav2bootset)                                   | false    | none         | A Boot Set is a collection of nodes defined by an explicit list, their functional<br>role, and their logical groupings. This collection of nodes is associated with one<br>set of boot artifacts and optional additional records for configuration and root<br>filesystem provisioning.                                                                                                                                                                                                                                                                                   |
+| links                      | [LinkListReadOnly](#schemalinklistreadonly)                     | false    | none         | List of links to other resources                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 
 <h2 id="tocS_V2SessionTemplateValidation">V2SessionTemplateValidation</h2>
 <!-- backwards compatibility -->
@@ -9226,9 +9230,9 @@ Message describing errors or incompleteness in a Session Template.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|Message describing errors or incompleteness in a Session Template.|
+| Name        | Type   | Required | Restrictions | Description                                                        |
+|-------------|--------|----------|--------------|--------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | Message describing errors or incompleteness in a Session Template. |
 
 <h2 id="tocS_V2SessionName">V2SessionName</h2>
 <!-- backwards compatibility -->
@@ -9246,9 +9250,9 @@ Name of the Session.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|Name of the Session.|
+| Name        | Type   | Required | Restrictions | Description          |
+|-------------|--------|----------|--------------|----------------------|
+| *anonymous* | string | false    | none         | Name of the Session. |
 
 <h2 id="tocS_V2SessionOperation">V2SessionOperation</h2>
 <!-- backwards compatibility -->
@@ -9274,17 +9278,17 @@ Operation -- An operation to perform on Components in this Session.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+|-------------|--------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on. |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|*anonymous*|boot|
-|*anonymous*|reboot|
-|*anonymous*|shutdown|
+| Property    | Value    |
+|-------------|----------|
+| *anonymous* | boot     |
+| *anonymous* | reboot   |
+| *anonymous* | shutdown |
 
 <h2 id="tocS_V2SessionCreate">V2SessionCreate</h2>
 <!-- backwards compatibility -->
@@ -9309,14 +9313,14 @@ A Session Creation object. A UUID name is generated if a name is not provided.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
-|operation|[V2SessionOperation](#schemav2sessionoperation)|true|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
-|template_name|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|stage|boolean|false|none|Set to stage a Session which will not immediately change the state of any Components.<br>The "applystaged" endpoint can be called at a later time to trigger the start of this Session.|
-|include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM).|
+| Name             | Type                                              | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+|------------------|---------------------------------------------------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name             | [V2SessionName](#schemav2sessionname)             | false    | none         | Name of the Session.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| operation        | [V2SessionOperation](#schemav2sessionoperation)   | true     | none         | A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on. |
+| template_name    | [SessionTemplateName](#schemasessiontemplatename) | true     | none         | Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                   |
+| limit            | [SessionLimit](#schemasessionlimit)               | false    | none         | A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                   |
+| stage            | boolean                                           | false    | none         | Set to stage a Session which will not immediately change the state of any Components.<br>The "applystaged" endpoint can be called at a later time to trigger the start of this Session.                                                                                                                                                                                                                                                                                                                                                                                                     |
+| include_disabled | boolean                                           | false    | none         | Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 
 <h2 id="tocS_V2SessionStatusLabel">V2SessionStatusLabel</h2>
 <!-- backwards compatibility -->
@@ -9334,17 +9338,17 @@ The status of a Session.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The status of a Session.|
+| Name        | Type   | Required | Restrictions | Description              |
+|-------------|--------|----------|--------------|--------------------------|
+| *anonymous* | string | false    | none         | The status of a Session. |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|*anonymous*|pending|
-|*anonymous*|running|
-|*anonymous*|complete|
+| Property    | Value    |
+|-------------|----------|
+| *anonymous* | pending  |
+| *anonymous* | running  |
+| *anonymous* | complete |
 
 <h2 id="tocS_V2SessionStartTime">V2SessionStartTime</h2>
 <!-- backwards compatibility -->
@@ -9362,9 +9366,9 @@ When the Session was created.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|When the Session was created.|
+| Name        | Type   | Required | Restrictions | Description                   |
+|-------------|--------|----------|--------------|-------------------------------|
+| *anonymous* | string | false    | none         | When the Session was created. |
 
 <h2 id="tocS_V2SessionEndTime">V2SessionEndTime</h2>
 <!-- backwards compatibility -->
@@ -9382,9 +9386,9 @@ When the Session was completed. A null value means the Session has not ended.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string¦null|false|none|When the Session was completed. A null value means the Session has not ended.|
+| Name        | Type        | Required | Restrictions | Description                                                                   |
+|-------------|-------------|----------|--------------|-------------------------------------------------------------------------------|
+| *anonymous* | string¦null | false    | none         | When the Session was completed. A null value means the Session has not ended. |
 
 <h2 id="tocS_V2SessionStatus">V2SessionStatus</h2>
 <!-- backwards compatibility -->
@@ -9407,12 +9411,12 @@ Information on the status of a Session.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|start_time|[V2SessionStartTime](#schemav2sessionstarttime)|false|none|When the Session was created.|
-|end_time|[V2SessionEndTime](#schemav2sessionendtime)|false|none|When the Session was completed. A null value means the Session has not ended.|
-|status|[V2SessionStatusLabel](#schemav2sessionstatuslabel)|false|none|The status of a Session.|
-|error|string¦null|false|none|Error which prevented the Session from running.<br>A null value means the Session has not encountered an error.|
+| Name       | Type                                                | Required | Restrictions | Description                                                                                                     |
+|------------|-----------------------------------------------------|----------|--------------|-----------------------------------------------------------------------------------------------------------------|
+| start_time | [V2SessionStartTime](#schemav2sessionstarttime)     | false    | none         | When the Session was created.                                                                                   |
+| end_time   | [V2SessionEndTime](#schemav2sessionendtime)         | false    | none         | When the Session was completed. A null value means the Session has not ended.                                   |
+| status     | [V2SessionStatusLabel](#schemav2sessionstatuslabel) | false    | none         | The status of a Session.                                                                                        |
+| error      | string¦null                                         | false    | none         | Error which prevented the Session from running.<br>A null value means the Session has not encountered an error. |
 
 <h2 id="tocS_V2BootSet">V2BootSet</h2>
 <!-- backwards compatibility -->
@@ -9456,29 +9460,29 @@ filesystem provisioning.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|[BootSetName](#schemabootsetname)|false|none|The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|path|[BootManifestPath](#schemabootmanifestpath)|true|none|A path identifying the metadata describing the components of the boot image.<br>This could be a URI, URL, etc, depending on the type of the Boot Set.<br><br>It is recommended that this should be 1-4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|cfs|[V2CfsParameters](#schemav2cfsparameters)|false|none|This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a Boot Set.|
-|type|[BootSetType](#schemabootsettype)|true|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|etag|[BootSetEtag](#schemabootsetetag)|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|kernel_parameters|[BootKernelParameters](#schemabootkernelparameters)|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_list|[NodeList](#schemanodelist)|false|none|A node list that is required to have at least one node.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_roles_groups|[NodeRoleList](#schemanoderolelist)|false|none|Node role list. Allows actions against nodes with associated roles.<br><br>It is recommended that this list should be 1-1023 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_groups|[NodeGroupList](#schemanodegrouplist)|false|none|Node group list. Allows actions against associated nodes by logical groupings.<br><br>It is recommended that this list should be 1-4095 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|arch|string|false|none|The node architecture to target. Filters nodes that are not part of matching architecture from being targeted by boot actions. This value should correspond to HSM component 'Arch' field exactly. For reasons of backwards compatibility, all HSM nodes that are of type Unknown are treated as being of type X86.|
-|rootfs_provider|[BootSetRootfsProvider](#schemabootsetrootfsprovider)|false|none|The root file system provider.<br><br>It is recommended that this should be 1-511 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|rootfs_provider_passthrough|[BootSetRootfsProviderPassthrough](#schemabootsetrootfsproviderpassthrough)|false|none|The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name                        | Type                                                                        | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|-----------------------------|-----------------------------------------------------------------------------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                        | [BootSetName](#schemabootsetname)                                           | false    | none         | The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version. |
+| path                        | [BootManifestPath](#schemabootmanifestpath)                                 | true     | none         | A path identifying the metadata describing the components of the boot image.<br>This could be a URI, URL, etc, depending on the type of the Boot Set.<br><br>It is recommended that this should be 1-4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                       |
+| cfs                         | [V2CfsParameters](#schemav2cfsparameters)                                   | false    | none         | This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a Boot Set.                                                                                                                                                                                                      |
+| type                        | [BootSetType](#schemabootsettype)                                           | true     | none         | The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                          |
+| etag                        | [BootSetEtag](#schemabootsetetag)                                           | false    | none         | This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                    |
+| kernel_parameters           | [BootKernelParameters](#schemabootkernelparameters)                         | false    | none         | The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                            |
+| node_list                   | [NodeList](#schemanodelist)                                                 | false    | none         | A node list that is required to have at least one node.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                    |
+| node_roles_groups           | [NodeRoleList](#schemanoderolelist)                                         | false    | none         | Node role list. Allows actions against nodes with associated roles.<br><br>It is recommended that this list should be 1-1023 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                         |
+| node_groups                 | [NodeGroupList](#schemanodegrouplist)                                       | false    | none         | Node group list. Allows actions against associated nodes by logical groupings.<br><br>It is recommended that this list should be 1-4095 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                              |
+| arch                        | string                                                                      | false    | none         | The node architecture to target. Filters nodes that are not part of matching architecture from being targeted by boot actions. This value should correspond to HSM component 'Arch' field exactly. For reasons of backwards compatibility, all HSM nodes that are of type Unknown are treated as being of type X86.                                                                                                             |
+| rootfs_provider             | [BootSetRootfsProvider](#schemabootsetrootfsprovider)                       | false    | none         | The root file system provider.<br><br>It is recommended that this should be 1-511 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                               |
+| rootfs_provider_passthrough | [BootSetRootfsProviderPassthrough](#schemabootsetrootfsproviderpassthrough) | false    | none         | The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                  |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|arch|X86|
-|arch|ARM|
-|arch|Other|
-|arch|Unknown|
+| Property | Value   |
+|----------|---------|
+| arch     | X86     |
+| arch     | ARM     |
+| arch     | Other   |
+| arch     | Unknown |
 
 <h2 id="tocS_V2SessionTemplateArray">V2SessionTemplateArray</h2>
 <!-- backwards compatibility -->
@@ -9562,9 +9566,9 @@ An array of Session Templates.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[V2SessionTemplate](#schemav2sessiontemplate)]|false|none|An array of Session Templates.|
+| Name        | Type                                            | Required | Restrictions | Description                    |
+|-------------|-------------------------------------------------|----------|--------------|--------------------------------|
+| *anonymous* | [[V2SessionTemplate](#schemav2sessiontemplate)] | false    | none         | An array of Session Templates. |
 
 <h2 id="tocS_V2Session">V2Session</h2>
 <!-- backwards compatibility -->
@@ -9601,17 +9605,17 @@ A Session object
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
-|tenant|[V2TenantName](#schemav2tenantname)|false|none|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same.|
-|operation|[V2SessionOperation](#schemav2sessionoperation)|false|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
-|template_name|[SessionTemplateName](#schemasessiontemplatename)|false|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|stage|boolean|false|none|Set to stage a Session which will not immediately change the state of any Components.<br>The "applystaged" endpoint can be called at a later time to trigger the start of this Session.|
-|components|string|false|none|A comma-separated list of nodes, representing the initial list of nodes<br>the Session should operate against.  The list will remain even if<br>other Sessions have taken over management of the nodes.|
-|include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM).|
-|status|[V2SessionStatus](#schemav2sessionstatus)|false|none|Information on the status of a Session.|
+| Name             | Type                                              | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+|------------------|---------------------------------------------------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name             | [V2SessionName](#schemav2sessionname)             | false    | none         | Name of the Session.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| tenant           | [V2TenantName](#schemav2tenantname)               | false    | none         | Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same.                                                                                                                                                                                                                                                                                                                                         |
+| operation        | [V2SessionOperation](#schemav2sessionoperation)   | false    | none         | A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on. |
+| template_name    | [SessionTemplateName](#schemasessiontemplatename) | false    | none         | Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                   |
+| limit            | [SessionLimit](#schemasessionlimit)               | false    | none         | A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.                                                                                                                                                                                   |
+| stage            | boolean                                           | false    | none         | Set to stage a Session which will not immediately change the state of any Components.<br>The "applystaged" endpoint can be called at a later time to trigger the start of this Session.                                                                                                                                                                                                                                                                                                                                                                                                     |
+| components       | string                                            | false    | none         | A comma-separated list of nodes, representing the initial list of nodes<br>the Session should operate against.  The list will remain even if<br>other Sessions have taken over management of the nodes.                                                                                                                                                                                                                                                                                                                                                                                     |
+| include_disabled | boolean                                           | false    | none         | Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| status           | [V2SessionStatus](#schemav2sessionstatus)         | false    | none         | Information on the status of a Session.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 <h2 id="tocS_V2SessionArray">V2SessionArray</h2>
 <!-- backwards compatibility -->
@@ -9646,9 +9650,9 @@ An array of Sessions.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[V2Session](#schemav2session)]|false|none|An array of Sessions.|
+| Name        | Type                            | Required | Restrictions | Description           |
+|-------------|---------------------------------|----------|--------------|-----------------------|
+| *anonymous* | [[V2Session](#schemav2session)] | false    | none         | An array of Sessions. |
 
 <h2 id="tocS_V2SessionExtendedStatusPhases">V2SessionExtendedStatusPhases</h2>
 <!-- backwards compatibility -->
@@ -9671,12 +9675,12 @@ Detailed information on the phases of a Session.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|percent_complete|number|false|none|The percent of Components currently in a completed/stable state|
-|percent_powering_on|number|false|none|The percent of Components currently in the powering-on phase|
-|percent_powering_off|number|false|none|The percent of Components currently in the powering-off phase|
-|percent_configuring|number|false|none|The percent of Components currently in the configuring phase|
+| Name                 | Type   | Required | Restrictions | Description                                                     |
+|----------------------|--------|----------|--------------|-----------------------------------------------------------------|
+| percent_complete     | number | false    | none         | The percent of Components currently in a completed/stable state |
+| percent_powering_on  | number | false    | none         | The percent of Components currently in the powering-on phase    |
+| percent_powering_off | number | false    | none         | The percent of Components currently in the powering-off phase   |
+| percent_configuring  | number | false    | none         | The percent of Components currently in the configuring phase    |
 
 <h2 id="tocS_V2SessionExtendedStatusTiming">V2SessionExtendedStatusTiming</h2>
 <!-- backwards compatibility -->
@@ -9698,11 +9702,11 @@ Detailed information on the timing of a Session.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|start_time|[V2SessionStartTime](#schemav2sessionstarttime)|false|none|When the Session was created.|
-|end_time|[V2SessionEndTime](#schemav2sessionendtime)|false|none|When the Session was completed. A null value means the Session has not ended.|
-|duration|string|false|none|The current duration of the ongoing Session or final duration of the completed Session.|
+| Name       | Type                                            | Required | Restrictions | Description                                                                             |
+|------------|-------------------------------------------------|----------|--------------|-----------------------------------------------------------------------------------------|
+| start_time | [V2SessionStartTime](#schemav2sessionstarttime) | false    | none         | When the Session was created.                                                           |
+| end_time   | [V2SessionEndTime](#schemav2sessionendtime)     | false    | none         | When the Session was completed. A null value means the Session has not ended.           |
+| duration   | string                                          | false    | none         | The current duration of the ongoing Session or final duration of the completed Session. |
 
 <h2 id="tocS_V2SessionExtendedStatus">V2SessionExtendedStatus</h2>
 <!-- backwards compatibility -->
@@ -9738,16 +9742,16 @@ Detailed information on the status of a Session.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|status|[V2SessionStatusLabel](#schemav2sessionstatuslabel)|false|none|The status of a Session.|
-|managed_components_count|integer|false|none|The count of Components currently managed by this Session|
-|phases|[V2SessionExtendedStatusPhases](#schemav2sessionextendedstatusphases)|false|none|Detailed information on the phases of a Session.|
-|percent_successful|number|false|none|The percent of Components currently in a successful state|
-|percent_failed|number|false|none|The percent of Components currently in a failed state|
-|percent_staged|number|false|none|The percent of Components currently still staged for this Session|
-|error_summary|object|false|none|A summary of the errors currently listed by all Components|
-|timing|[V2SessionExtendedStatusTiming](#schemav2sessionextendedstatustiming)|false|none|Detailed information on the timing of a Session.|
+| Name                     | Type                                                                  | Required | Restrictions | Description                                                       |
+|--------------------------|-----------------------------------------------------------------------|----------|--------------|-------------------------------------------------------------------|
+| status                   | [V2SessionStatusLabel](#schemav2sessionstatuslabel)                   | false    | none         | The status of a Session.                                          |
+| managed_components_count | integer                                                               | false    | none         | The count of Components currently managed by this Session         |
+| phases                   | [V2SessionExtendedStatusPhases](#schemav2sessionextendedstatusphases) | false    | none         | Detailed information on the phases of a Session.                  |
+| percent_successful       | number                                                                | false    | none         | The percent of Components currently in a successful state         |
+| percent_failed           | number                                                                | false    | none         | The percent of Components currently in a failed state             |
+| percent_staged           | number                                                                | false    | none         | The percent of Components currently still staged for this Session |
+| error_summary            | object                                                                | false    | none         | A summary of the errors currently listed by all Components        |
+| timing                   | [V2SessionExtendedStatusTiming](#schemav2sessionextendedstatustiming) | false    | none         | Detailed information on the timing of a Session.                  |
 
 <h2 id="tocS_V2BootArtifacts">V2BootArtifacts</h2>
 <!-- backwards compatibility -->
@@ -9769,11 +9773,11 @@ A collection of boot artifacts.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|kernel|[BootKernelPath](#schemabootkernelpath)|false|none|A path to the kernel to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|kernel_parameters|[BootKernelParameters](#schemabootkernelparameters)|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|initrd|[BootInitrdPath](#schemabootinitrdpath)|false|none|A path to the initrd to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name              | Type                                                | Required | Restrictions | Description                                                                                                                                                                                                                                                             |
+|-------------------|-----------------------------------------------------|----------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| kernel            | [BootKernelPath](#schemabootkernelpath)             | false    | none         | A path to the kernel to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
+| kernel_parameters | [BootKernelParameters](#schemabootkernelparameters) | false    | none         | The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.    |
+| initrd            | [BootInitrdPath](#schemabootinitrdpath)             | false    | none         | A path to the initrd to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_V2ComponentBssToken">V2ComponentBssToken</h2>
 <!-- backwards compatibility -->
@@ -9792,9 +9796,9 @@ For BOS use-only, users should not set this field. It will be overwritten.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|A token received from the node identifying the boot artifacts.<br>For BOS use-only, users should not set this field. It will be overwritten.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                  |
+|-------------|--------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | A token received from the node identifying the boot artifacts.<br>For BOS use-only, users should not set this field. It will be overwritten. |
 
 <h2 id="tocS_V2ComponentId">V2ComponentId</h2>
 <!-- backwards compatibility -->
@@ -9817,9 +9821,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The Component's ID. (e.g. xname for hardware Components)<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                                                                                                                                                                 |
+|-------------|--------|----------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | The Component's ID. (e.g. xname for hardware Components)<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
 
 <h2 id="tocS_V2ComponentIdList">V2ComponentIdList</h2>
 <!-- backwards compatibility -->
@@ -9839,9 +9843,9 @@ A list of Component IDs (xnames)
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[V2ComponentId](#schemav2componentid)]|false|none|A list of Component IDs (xnames)|
+| Name        | Type                                    | Required | Restrictions | Description                      |
+|-------------|-----------------------------------------|----------|--------------|----------------------------------|
+| *anonymous* | [[V2ComponentId](#schemav2componentid)] | false    | none         | A list of Component IDs (xnames) |
 
 <h2 id="tocS_V2ComponentLastUpdated">V2ComponentLastUpdated</h2>
 <!-- backwards compatibility -->
@@ -9859,9 +9863,9 @@ The date/time when the state was last updated in RFC 3339 format.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
+| Name        | Type              | Required | Restrictions | Description                                                       |
+|-------------|-------------------|----------|--------------|-------------------------------------------------------------------|
+| *anonymous* | string(date-time) | false    | read-only    | The date/time when the state was last updated in RFC 3339 format. |
 
 <h2 id="tocS_V2ComponentActualState">V2ComponentActualState</h2>
 <!-- backwards compatibility -->
@@ -9887,11 +9891,11 @@ The desired boot artifacts and configuration for a Component
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|boot_artifacts|[V2BootArtifacts](#schemav2bootartifacts)|false|none|A collection of boot artifacts.|
-|bss_token|[V2ComponentBssToken](#schemav2componentbsstoken)|false|none|A token received from the node identifying the boot artifacts.<br>For BOS use-only, users should not set this field. It will be overwritten.|
-|last_updated|[V2ComponentLastUpdated](#schemav2componentlastupdated)|false|none|The date/time when the state was last updated in RFC 3339 format.|
+| Name           | Type                                                    | Required | Restrictions | Description                                                                                                                                  |
+|----------------|---------------------------------------------------------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| boot_artifacts | [V2BootArtifacts](#schemav2bootartifacts)               | false    | none         | A collection of boot artifacts.                                                                                                              |
+| bss_token      | [V2ComponentBssToken](#schemav2componentbsstoken)       | false    | none         | A token received from the node identifying the boot artifacts.<br>For BOS use-only, users should not set this field. It will be overwritten. |
+| last_updated   | [V2ComponentLastUpdated](#schemav2componentlastupdated) | false    | none         | The date/time when the state was last updated in RFC 3339 format.                                                                            |
 
 <h2 id="tocS_V2ComponentDesiredState">V2ComponentDesiredState</h2>
 <!-- backwards compatibility -->
@@ -9918,12 +9922,12 @@ The desired boot artifacts and configuration for a Component
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|boot_artifacts|[V2BootArtifacts](#schemav2bootartifacts)|false|none|A collection of boot artifacts.|
-|configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|bss_token|[V2ComponentBssToken](#schemav2componentbsstoken)|false|none|A token received from the node identifying the boot artifacts.<br>For BOS use-only, users should not set this field. It will be overwritten.|
-|last_updated|[V2ComponentLastUpdated](#schemav2componentlastupdated)|false|none|The date/time when the state was last updated in RFC 3339 format.|
+| Name           | Type                                                    | Required | Restrictions | Description                                                                                                                                                                                                                                                            |
+|----------------|---------------------------------------------------------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| boot_artifacts | [V2BootArtifacts](#schemav2bootartifacts)               | false    | none         | A collection of boot artifacts.                                                                                                                                                                                                                                        |
+| configuration  | [CfsConfiguration](#schemacfsconfiguration)             | false    | none         | The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
+| bss_token      | [V2ComponentBssToken](#schemav2componentbsstoken)       | false    | none         | A token received from the node identifying the boot artifacts.<br>For BOS use-only, users should not set this field. It will be overwritten.                                                                                                                           |
+| last_updated   | [V2ComponentLastUpdated](#schemav2componentlastupdated) | false    | none         | The date/time when the state was last updated in RFC 3339 format.                                                                                                                                                                                                      |
 
 <h2 id="tocS_V2ComponentStagedState">V2ComponentStagedState</h2>
 <!-- backwards compatibility -->
@@ -9951,29 +9955,29 @@ may be set which can be triggered at a later time against this Component.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|boot_artifacts|[V2BootArtifacts](#schemav2bootartifacts)|false|none|A collection of boot artifacts.|
-|configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|session|any|false|none|none|
+| Name           | Type                                        | Required | Restrictions | Description                                                                                                                                                                                                                                                            |
+|----------------|---------------------------------------------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| boot_artifacts | [V2BootArtifacts](#schemav2bootartifacts)   | false    | none         | A collection of boot artifacts.                                                                                                                                                                                                                                        |
+| configuration  | [CfsConfiguration](#schemacfsconfiguration) | false    | none         | The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
+| session        | any                                         | false    | none         | none                                                                                                                                                                                                                                                                   |
 
 oneOf
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+| Name          | Type                                  | Required | Restrictions | Description          |
+|---------------|---------------------------------------|----------|--------------|----------------------|
+| » *anonymous* | [V2SessionName](#schemav2sessionname) | false    | none         | Name of the Session. |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[EmptyString](#schemaemptystring)|false|none|An empty string value.|
+| Name          | Type                              | Required | Restrictions | Description            |
+|---------------|-----------------------------------|----------|--------------|------------------------|
+| » *anonymous* | [EmptyString](#schemaemptystring) | false    | none         | An empty string value. |
 
 continued
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|last_updated|[V2ComponentLastUpdated](#schemav2componentlastupdated)|false|none|The date/time when the state was last updated in RFC 3339 format.|
+| Name         | Type                                                    | Required | Restrictions | Description                                                       |
+|--------------|---------------------------------------------------------|----------|--------------|-------------------------------------------------------------------|
+| last_updated | [V2ComponentLastUpdated](#schemav2componentlastupdated) | false    | none         | The date/time when the state was last updated in RFC 3339 format. |
 
 <h2 id="tocS_V2ComponentLastAction">V2ComponentLastAction</h2>
 <!-- backwards compatibility -->
@@ -9995,11 +9999,11 @@ Information on the most recent action taken against the node.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|last_updated|[V2ComponentLastUpdated](#schemav2componentlastupdated)|false|none|The date/time when the state was last updated in RFC 3339 format.|
-|action|string|false|none|A description of the most recent operator/action to impact the Component.|
-|failed|boolean|false|none|Denotes if the last action failed to accomplish its task|
+| Name         | Type                                                    | Required | Restrictions | Description                                                               |
+|--------------|---------------------------------------------------------|----------|--------------|---------------------------------------------------------------------------|
+| last_updated | [V2ComponentLastUpdated](#schemav2componentlastupdated) | false    | none         | The date/time when the state was last updated in RFC 3339 format.         |
+| action       | string                                                  | false    | none         | A description of the most recent operator/action to impact the Component. |
+| failed       | boolean                                                 | false    | none         | Denotes if the last action failed to accomplish its task                  |
 
 <h2 id="tocS_V2ComponentEventStats">V2ComponentEventStats</h2>
 <!-- backwards compatibility -->
@@ -10021,11 +10025,11 @@ Information on the most recent attempt to return the node to its desired state.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|power_on_attempts|integer|false|none|How many attempts have been made to power-on since the last time the node was in the desired state.|
-|power_off_graceful_attempts|integer|false|none|How many attempts have been made to power-off gracefully since the last time the node was in the desired state.|
-|power_off_forceful_attempts|integer|false|none|How many attempts have been made to power-off forcefully since the last time the node was in the desired state.|
+| Name                        | Type    | Required | Restrictions | Description                                                                                                     |
+|-----------------------------|---------|----------|--------------|-----------------------------------------------------------------------------------------------------------------|
+| power_on_attempts           | integer | false    | none         | How many attempts have been made to power-on since the last time the node was in the desired state.             |
+| power_off_graceful_attempts | integer | false    | none         | How many attempts have been made to power-off gracefully since the last time the node was in the desired state. |
+| power_off_forceful_attempts | integer | false    | none         | How many attempts have been made to power-off forcefully since the last time the node was in the desired state. |
 
 <h2 id="tocS_V2ComponentStatus">V2ComponentStatus</h2>
 <!-- backwards compatibility -->
@@ -10047,11 +10051,11 @@ Status information for the Component
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|phase|string|false|none|The current phase of the Component in the boot process.|
-|status|string|false|read-only|The current status of the Component.  More detailed than phase.|
-|status_override|string|false|none|If set, this will override the status value.|
+| Name            | Type   | Required | Restrictions | Description                                                     |
+|-----------------|--------|----------|--------------|-----------------------------------------------------------------|
+| phase           | string | false    | none         | The current phase of the Component in the boot process.         |
+| status          | string | false    | read-only    | The current status of the Component.  More detailed than phase. |
+| status_override | string | false    | none         | If set, this will override the status value.                    |
 
 <h2 id="tocS_V2Component">V2Component</h2>
 <!-- backwards compatibility -->
@@ -10120,36 +10124,36 @@ the Session responsible for the Component's current state.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|id|[V2ComponentId](#schemav2componentid)|false|none|The Component's ID. (e.g. xname for hardware Components)<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|actual_state|[V2ComponentActualState](#schemav2componentactualstate)|false|none|The desired boot artifacts and configuration for a Component|
-|desired_state|[V2ComponentDesiredState](#schemav2componentdesiredstate)|false|none|The desired boot artifacts and configuration for a Component|
-|staged_state|[V2ComponentStagedState](#schemav2componentstagedstate)|false|none|The desired boot artifacts and configuration for a Component. Optionally, a Session<br>may be set which can be triggered at a later time against this Component.|
-|last_action|[V2ComponentLastAction](#schemav2componentlastaction)|false|none|Information on the most recent action taken against the node.|
-|event_stats|[V2ComponentEventStats](#schemav2componenteventstats)|false|none|Information on the most recent attempt to return the node to its desired state.|
-|status|[V2ComponentStatus](#schemav2componentstatus)|false|none|Status information for the Component|
-|enabled|boolean|false|none|A flag indicating if actions should be taken for this Component.|
-|error|string|false|none|A description of the most recent error to impact the Component.|
-|session|any|false|none|none|
+| Name          | Type                                                      | Required | Restrictions | Description                                                                                                                                                                                                                                                                 |
+|---------------|-----------------------------------------------------------|----------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| id            | [V2ComponentId](#schemav2componentid)                     | false    | none         | The Component's ID. (e.g. xname for hardware Components)<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
+| actual_state  | [V2ComponentActualState](#schemav2componentactualstate)   | false    | none         | The desired boot artifacts and configuration for a Component                                                                                                                                                                                                                |
+| desired_state | [V2ComponentDesiredState](#schemav2componentdesiredstate) | false    | none         | The desired boot artifacts and configuration for a Component                                                                                                                                                                                                                |
+| staged_state  | [V2ComponentStagedState](#schemav2componentstagedstate)   | false    | none         | The desired boot artifacts and configuration for a Component. Optionally, a Session<br>may be set which can be triggered at a later time against this Component.                                                                                                            |
+| last_action   | [V2ComponentLastAction](#schemav2componentlastaction)     | false    | none         | Information on the most recent action taken against the node.                                                                                                                                                                                                               |
+| event_stats   | [V2ComponentEventStats](#schemav2componenteventstats)     | false    | none         | Information on the most recent attempt to return the node to its desired state.                                                                                                                                                                                             |
+| status        | [V2ComponentStatus](#schemav2componentstatus)             | false    | none         | Status information for the Component                                                                                                                                                                                                                                        |
+| enabled       | boolean                                                   | false    | none         | A flag indicating if actions should be taken for this Component.                                                                                                                                                                                                            |
+| error         | string                                                    | false    | none         | A description of the most recent error to impact the Component.                                                                                                                                                                                                             |
+| session       | any                                                       | false    | none         | none                                                                                                                                                                                                                                                                        |
 
 oneOf
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+| Name          | Type                                  | Required | Restrictions | Description          |
+|---------------|---------------------------------------|----------|--------------|----------------------|
+| » *anonymous* | [V2SessionName](#schemav2sessionname) | false    | none         | Name of the Session. |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[EmptyString](#schemaemptystring)|false|none|An empty string value.|
+| Name          | Type                              | Required | Restrictions | Description            |
+|---------------|-----------------------------------|----------|--------------|------------------------|
+| » *anonymous* | [EmptyString](#schemaemptystring) | false    | none         | An empty string value. |
 
 continued
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|retry_policy|integer|false|none|The maximum number attempts per action when actions fail.<br>Defaults to the global default_retry_policy if not set|
+| Name         | Type    | Required | Restrictions | Description                                                                                                         |
+|--------------|---------|----------|--------------|---------------------------------------------------------------------------------------------------------------------|
+| retry_policy | integer | false    | none         | The maximum number attempts per action when actions fail.<br>Defaults to the global default_retry_policy if not set |
 
 <h2 id="tocS_V2ComponentArray">V2ComponentArray</h2>
 <!-- backwards compatibility -->
@@ -10219,9 +10223,9 @@ An array of Component states.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[V2Component](#schemav2component)]|false|none|An array of Component states.|
+| Name        | Type                                | Required | Restrictions | Description                   |
+|-------------|-------------------------------------|----------|--------------|-------------------------------|
+| *anonymous* | [[V2Component](#schemav2component)] | false    | none         | An array of Component states. |
 
 <h2 id="tocS_V2ComponentsFilter">V2ComponentsFilter</h2>
 <!-- backwards compatibility -->
@@ -10243,10 +10247,10 @@ If a Session name is specified, then all Components part of this Session will be
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|ids|string|false|none|A comma-separated list of Component IDs.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|session|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+| Name    | Type                                  | Required | Restrictions | Description                                                                                                                                                                                                                                                   |
+|---------|---------------------------------------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ids     | string                                | false    | none         | A comma-separated list of Component IDs.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version. |
+| session | [V2SessionName](#schemav2sessionname) | false    | none         | Name of the Session.                                                                                                                                                                                                                                          |
 
 <h2 id="tocS_V2ComponentsUpdate">V2ComponentsUpdate</h2>
 <!-- backwards compatibility -->
@@ -10320,10 +10324,10 @@ Information for patching multiple Components.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|patch|[V2Component](#schemav2component)|true|none|The current and desired artifacts state for a Component, and<br>the Session responsible for the Component's current state.|
-|filters|[V2ComponentsFilter](#schemav2componentsfilter)|true|none|Information for patching multiple Components.<br>If a Session name is specified, then all Components part of this Session will be patched.|
+| Name    | Type                                            | Required | Restrictions | Description                                                                                                                                |
+|---------|-------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| patch   | [V2Component](#schemav2component)               | true     | none         | The current and desired artifacts state for a Component, and<br>the Session responsible for the Component's current state.                 |
+| filters | [V2ComponentsFilter](#schemav2componentsfilter) | true     | none         | Information for patching multiple Components.<br>If a Session name is specified, then all Components part of this Session will be patched. |
 
 <h2 id="tocS_V2ApplyStagedComponents">V2ApplyStagedComponents</h2>
 <!-- backwards compatibility -->
@@ -10345,9 +10349,9 @@ A list of Components that should have their staged Session applied.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|xnames|[V2ComponentIdList](#schemav2componentidlist)|false|none|A list of Component IDs (xnames)|
+| Name   | Type                                          | Required | Restrictions | Description                      |
+|--------|-----------------------------------------------|----------|--------------|----------------------------------|
+| xnames | [V2ComponentIdList](#schemav2componentidlist) | false    | none         | A list of Component IDs (xnames) |
 
 <h2 id="tocS_V2ApplyStagedStatus">V2ApplyStagedStatus</h2>
 <!-- backwards compatibility -->
@@ -10375,11 +10379,11 @@ Mapping from Component staged Session statuses to Components with that status.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|succeeded|[V2ComponentIdList](#schemav2componentidlist)|false|none|A list of Component IDs (xnames)|
-|failed|[V2ComponentIdList](#schemav2componentidlist)|false|none|A list of Component IDs (xnames)|
-|ignored|[V2ComponentIdList](#schemav2componentidlist)|false|none|A list of Component IDs (xnames)|
+| Name      | Type                                          | Required | Restrictions | Description                      |
+|-----------|-----------------------------------------------|----------|--------------|----------------------------------|
+| succeeded | [V2ComponentIdList](#schemav2componentidlist) | false    | none         | A list of Component IDs (xnames) |
+| failed    | [V2ComponentIdList](#schemav2componentidlist) | false    | none         | A list of Component IDs (xnames) |
+| ignored   | [V2ComponentIdList](#schemav2componentidlist) | false    | none         | A list of Component IDs (xnames) |
 
 <h2 id="tocS_V2Options">V2Options</h2>
 <!-- backwards compatibility -->
@@ -10409,17 +10413,17 @@ Options for the Boot Orchestration Service.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|cleanup_completed_session_ttl|string(^(0|0[mMhHdDwW]|[1-9][0-9]*[mMhHdDwW])$)|false|none|Delete complete Sessions that are older than cleanup_completed_session_ttl (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior.|
-|clear_stage|boolean|false|none|Allows a Component's staged information to be cleared when the requested staging action has been started. Defaults to false.|
-|component_actual_state_ttl|string(^(0|0[mMhHdDwW]|[1-9][0-9]*[mMhHdDwW])$)|false|none|The maximum amount of time a Component's actual state is considered valid (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior for newly booted nodes and instructs bos-state-reporter to report once instead of periodically.|
-|disable_components_on_completion|boolean|false|none|Allows for BOS Components to be marked as disabled after a Session has been completed. If false, BOS will continue to maintain the state<br>of the nodes declaratively, even after a Session finishes.|
-|discovery_frequency|integer|false|none|How frequently the BOS discovery agent syncs new Components from HSM. (in seconds)|
-|logging_level|string|false|none|The logging level for all BOS services|
-|max_boot_wait_time|integer|false|none|How long BOS will wait for a node to boot into a usable state before rebooting it again (in seconds)|
-|max_power_on_wait_time|integer|false|none|How long BOS will wait for a node to power on before calling power on again (in seconds)|
-|max_power_off_wait_time|integer|false|none|How long BOS will wait for a node to power off before forcefully powering off (in seconds)|
-|polling_frequency|integer|false|none|How frequently the BOS operators check Component state for needed actions. (in seconds)|
-|default_retry_policy|integer|false|none|The default maximum number attempts per node for failed actions.|
+| Name                             | Type       | Required    | Restrictions             | Description                                                                                                                                                                                            |
+|----------------------------------|------------|-------------|--------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| cleanup_completed_session_ttl    | string(^(0 | 0[mMhHdDwW] | [1-9][0-9]*[mMhHdDwW])$) | false                                                                                                                                                                                                  |none|Delete complete Sessions that are older than cleanup_completed_session_ttl (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior.|
+| clear_stage                      | boolean    | false       | none                     | Allows a Component's staged information to be cleared when the requested staging action has been started. Defaults to false.                                                                           |
+| component_actual_state_ttl       | string(^(0 | 0[mMhHdDwW] | [1-9][0-9]*[mMhHdDwW])$) | false                                                                                                                                                                                                  |none|The maximum amount of time a Component's actual state is considered valid (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior for newly booted nodes and instructs bos-state-reporter to report once instead of periodically.|
+| disable_components_on_completion | boolean    | false       | none                     | Allows for BOS Components to be marked as disabled after a Session has been completed. If false, BOS will continue to maintain the state<br>of the nodes declaratively, even after a Session finishes. |
+| discovery_frequency              | integer    | false       | none                     | How frequently the BOS discovery agent syncs new Components from HSM. (in seconds)                                                                                                                     |
+| logging_level                    | string     | false       | none                     | The logging level for all BOS services                                                                                                                                                                 |
+| max_boot_wait_time               | integer    | false       | none                     | How long BOS will wait for a node to boot into a usable state before rebooting it again (in seconds)                                                                                                   |
+| max_power_on_wait_time           | integer    | false       | none                     | How long BOS will wait for a node to power on before calling power on again (in seconds)                                                                                                               |
+| max_power_off_wait_time          | integer    | false       | none                     | How long BOS will wait for a node to power off before forcefully powering off (in seconds)                                                                                                             |
+| polling_frequency                | integer    | false       | none                     | How frequently the BOS operators check Component state for needed actions. (in seconds)                                                                                                                |
+| default_retry_policy             | integer    | false       | none                     | The default maximum number attempts per node for failed actions.                                                                                                                                       |
 

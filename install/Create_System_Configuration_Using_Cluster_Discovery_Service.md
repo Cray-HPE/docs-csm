@@ -96,12 +96,12 @@ Run the following steps before starting any of the system configuration procedur
 
      The variables and their descriptions are as follows:
 
-     | Variable  | Description  |
-     | ---       |  ---         |
-     | `ipaddr`   | IP address   |
-     | `netmask`  | netmask value |
+     | Variable           | Description        |
+     |--------------------|--------------------|
+     | `ipaddr`           | IP address         |
+     | `netmask`          | netmask value      |
      | `slave0`, `slave1` | network interfaces |
-     | `vlanid`    | VLAN ID number |
+     | `vlanid`           | VLAN ID number     |
 
      > **NOTE**: The IP address value, netmask value, network interface, and VLAN ID are available in the `system_config.yaml` file in the `prep` directory.
 

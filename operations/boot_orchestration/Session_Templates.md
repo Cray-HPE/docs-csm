@@ -168,21 +168,21 @@ root=craycps-s3:s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs:f04
 
 The following table explains the different pieces in the preceding example.
 
-|Field|Example Value|Explanation|
-|-----|-------------|-----------|
-|Protocol|`craycps-s3`|The protocol used to mount the root file system, using CPS in this example.|
-|`rootfs_provider` location|`s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs`|The `rootfs_provider` location is a SquashFS image stored in S3.|
-|`Etag`|`f040d70bd6fabaf91838fe4e484563cf-211`|The `Etag` (entity tag) is the identifier of the SquashFS image in S3.|
-|`rootfs_provider` passthrough parameters|`dvs:api-gw-service-nmn.local:300:nmn0`|These are additional parameters passed through to CPS in this example, which it uses to properly mount the file system.|
+| Field                                    | Example Value                                                  | Explanation                                                                                                             |
+|------------------------------------------|----------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| Protocol                                 | `craycps-s3`                                                   | The protocol used to mount the root file system, using CPS in this example.                                             |
+| `rootfs_provider` location               | `s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs` | The `rootfs_provider` location is a SquashFS image stored in S3.                                                        |
+| `Etag`                                   | `f040d70bd6fabaf91838fe4e484563cf-211`                         | The `Etag` (entity tag) is the identifier of the SquashFS image in S3.                                                  |
+| `rootfs_provider` passthrough parameters | `dvs:api-gw-service-nmn.local:300:nmn0`                        | These are additional parameters passed through to CPS in this example, which it uses to properly mount the file system. |
 
 The `rootfs_provider_passthrough` parameters are explained in the following table.
 
-|Parameter|Example|Explanation|
-|---|---|---|
-|Transport|`dvs`|Use DVS to project the SquashFS image down to the node.|
-|Gateway|`api-gw-service-nmn.local`|This is the URL that identifies the gateway where the DVS servers are located.|
-|Time-out|`300`|The number of seconds to wait to establish a contact.|
-|Interface|`nmn0`|The IP interface on the node to use to contact the DVS server; This interface must be up to continue booting.|
+| Parameter | Example                    | Explanation                                                                                                   |
+|-----------|----------------------------|---------------------------------------------------------------------------------------------------------------|
+| Transport | `dvs`                      | Use DVS to project the SquashFS image down to the node.                                                       |
+| Gateway   | `api-gw-service-nmn.local` | This is the URL that identifies the gateway where the DVS servers are located.                                |
+| Time-out  | `300`                      | The number of seconds to wait to establish a contact.                                                         |
+| Interface | `nmn0`                     | The IP interface on the node to use to contact the DVS server; This interface must be up to continue booting. |
 
 Regarding the interface to use for contacting DVS, the possible values are:
 

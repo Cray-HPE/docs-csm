@@ -72,25 +72,25 @@ The following list contains abbreviations for nodes used below
 
 This lists the common command prompts and their meanings.
 
-| Prompt | Description |
-|:------|:------------|
-| `ncn#` | Run the command as `root` on any NCN, except an NCN which is functioning as an Application Node, such as a UAN. |
-| `ncn-m#` | Run the command as `root` on any Kubernetes master NCN. |
-| `ncn-m002#` | Run the command as `root` on the specific Kubernetes master NCN which has this hostname (`ncn-m002` in this example). |
-| `ncn-s#` | Run the command as `root` on any utility storage NCN.|
-| `ncn-s003#` | Run the command as `root` on the specific utility storage NCN which has this hostname (`ncn-s003` in this example).  |
-| `ncn-w#` | Run the command as `root` on any Kubernetes worker NCN. |
-| `ncn-w001#` | Run the command as `root` on the specific Kubernetes worker NCN which has this hostname (`ncn-w001` in this example). |
-| `ncn-mw#` | Run the command as `root` on any Kubernetes master or worker NCN. |
-| `ncn-ms#` | Run the command as `root` on any Kubernetes master or utility storage NCN. |
-| `pit#` | Run the command as `root` on the PIT node. |
-| `external#` | Run the command as `root` on a Linux host external to the supercomputer. |
-| `uan#` | Run the command as `root` on any UAN. |
-| `uan01#` | Run the command as `root` on hostname `uan01`. |
-| `user@uan>` | Run the command as any non-`root` user on any UAN. |
-| `cn#` | Run the command as `root` on any CN. Note that a CN will have a hostname of the form `nid124356`. That is, `nid` followed by a six digit, zero padded number. |
-| `hostname#` | Run the command as `root` on the specified hostname. |
-| `user@hostname>` | Run the command as any non-`root` user on the specified hostname. |
+| Prompt           | Description                                                                                                                                                   |
+|:-----------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ncn#`           | Run the command as `root` on any NCN, except an NCN which is functioning as an Application Node, such as a UAN.                                               |
+| `ncn-m#`         | Run the command as `root` on any Kubernetes master NCN.                                                                                                       |
+| `ncn-m002#`      | Run the command as `root` on the specific Kubernetes master NCN which has this hostname (`ncn-m002` in this example).                                         |
+| `ncn-s#`         | Run the command as `root` on any utility storage NCN.                                                                                                         |
+| `ncn-s003#`      | Run the command as `root` on the specific utility storage NCN which has this hostname (`ncn-s003` in this example).                                           |
+| `ncn-w#`         | Run the command as `root` on any Kubernetes worker NCN.                                                                                                       |
+| `ncn-w001#`      | Run the command as `root` on the specific Kubernetes worker NCN which has this hostname (`ncn-w001` in this example).                                         |
+| `ncn-mw#`        | Run the command as `root` on any Kubernetes master or worker NCN.                                                                                             |
+| `ncn-ms#`        | Run the command as `root` on any Kubernetes master or utility storage NCN.                                                                                    |
+| `pit#`           | Run the command as `root` on the PIT node.                                                                                                                    |
+| `external#`      | Run the command as `root` on a Linux host external to the supercomputer.                                                                                      |
+| `uan#`           | Run the command as `root` on any UAN.                                                                                                                         |
+| `uan01#`         | Run the command as `root` on hostname `uan01`.                                                                                                                |
+| `user@uan>`      | Run the command as any non-`root` user on any UAN.                                                                                                            |
+| `cn#`            | Run the command as `root` on any CN. Note that a CN will have a hostname of the form `nid124356`. That is, `nid` followed by a six digit, zero padded number. |
+| `hostname#`      | Run the command as `root` on the specified hostname.                                                                                                          |
+| `user@hostname>` | Run the command as any non-`root` user on the specified hostname.                                                                                             |
 
 ### Command prompt location
 

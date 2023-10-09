@@ -174,7 +174,7 @@ one or more products. This information is also provided by the `iuf list-stages`
 **`NOTE`** Click the links in the `Stage` column for additional details about the stages.
 
 | Stage                                                              | Description                                                                              |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+|--------------------------------------------------------------------|------------------------------------------------------------------------------------------|
 | [process-media](stages/process_media.md)                           | Inventory and extract products in the media directory for use in subsequent stages       |
 | [pre-install-check](stages/pre_install_check.md)                   | Perform pre-install readiness checks                                                     |
 | [deliver-product](stages/deliver_product.md)                       | Upload product content onto the system                                                   |
@@ -184,7 +184,7 @@ one or more products. This information is also provided by the `iuf list-stages`
 | [management-nodes-rollout](stages/management_nodes_rollout.md)     | Rolling reboot or live update of management nodes                                        |
 | [deploy-product](stages/deploy_product.md)                         | Deploy services to system                                                                |
 | [post-install-service-check](stages/post_install_service_check.md) | Perform post-install checks of processed services                                        |
-| [managed-nodes-rollout](stages/managed_nodes_rollout.md)           | Rolling reboot or live update of managed nodes                                     |
+| [managed-nodes-rollout](stages/managed_nodes_rollout.md)           | Rolling reboot or live update of managed nodes                                           |
 | [post-install-check](stages/post_install_check.md)                 | Perform post-install checks                                                              |
 
 The `process-media` stage must be run at least once for a given activity before any of the other stages can be run. This is required because `process-media` associates the product content being installed or upgraded with an
@@ -194,16 +194,16 @@ activity identifier and that information is used for all other stages.
 
 The `iuf` command-line interface is used to invoke all IUF operations. The `iuf` command provides the following subcommands.
 
-| Subcommand      | Description                                              |
-| --------------- | -------------------------------------------------------- |
-| run             | Initiates execution of IUF operations                    |
-| abort           | Abort an IUF session                                     |
-| resume          | Resume a previously aborted or failed IUF session        |
-| restart         | Restart the most recently aborted or failed IUF session  |
-| activity        | Display IUF activity details, annotate IUF activity      |
-| list-activities | List all activities present on the system                |
-| list-stages     | Display stages and status for a given IUF activity       |
-| workflow        | List workflows or information for a particular workflow  |
+| Subcommand      | Description                                             |
+|-----------------|---------------------------------------------------------|
+| run             | Initiates execution of IUF operations                   |
+| abort           | Abort an IUF session                                    |
+| resume          | Resume a previously aborted or failed IUF session       |
+| restart         | Restart the most recently aborted or failed IUF session |
+| activity        | Display IUF activity details, annotate IUF activity     |
+| list-activities | List all activities present on the system               |
+| list-stages     | Display stages and status for a given IUF activity      |
+| workflow        | List workflows or information for a particular workflow |
 
 ### Global arguments
 
@@ -469,19 +469,19 @@ of IUF activity operations and associate time-based metrics and user-specified c
 
 The activity details displayed are:
 
-| Column                   | Description                                                          |
-| ------------------------ | -------------------------------------------------------------------- |
-| Start / Session          | The time that this operation began execution and name of session     |
-| Category                 | The state of the activity when the operation was created             |
-| Command / Argo Workflow  | The Argo workflow associated with the operation and command executed |
-| Status                   | The status of the operation                                          |
-| Duration                 | How long the operation has been in this state (if not completed)     |
-| Comment                  | User-specified comments associated with the operation                |
+| Column                  | Description                                                          |
+|-------------------------|----------------------------------------------------------------------|
+| Start / Session         | The time that this operation began execution and name of session     |
+| Category                | The state of the activity when the operation was created             |
+| Command / Argo Workflow | The Argo workflow associated with the operation and command executed |
+| Status                  | The status of the operation                                          |
+| Duration                | How long the operation has been in this state (if not completed)     |
+| Comment                 | User-specified comments associated with the operation                |
 
 Values for `Category` are:
 
 | Category Value | Description                                                                          |
-| -------------- | ------------------------------------------------------------------------------------ |
+|----------------|--------------------------------------------------------------------------------------|
 | in_progress    | An Argo workflow was initiated at the time recorded in `Start`                       |
 | waiting_admin  | No activity operations were in progress beginning at time recorded in `Start`        |
 | paused         | The administrator paused activity operations at the time recorded in `Start`         |
@@ -491,7 +491,7 @@ Values for `Category` are:
 Values for `Status` are:
 
 | Status Value | Description                                                                    |
-| ------------ | ------------------------------------------------------------------------------ |
+|--------------|--------------------------------------------------------------------------------|
 | Succeeded    | The `Argo Workflow` completed successfully                                     |
 | Failed       | The `Argo Workflow` failed                                                     |
 | Running      | The `Argo Workflow` is currently executing                                     |
@@ -651,7 +651,7 @@ The content in the top-level `log` directory contains information about the oper
 describes the contents of the files in the `log` directory for an activity:
 
 | Path                               | Description                                                                |
-| ---------------------------------- | -------------------------------------------------------------------------- |
+|------------------------------------|----------------------------------------------------------------------------|
 | `log/install.log`                  | Link to most recent log file in `log/<directory>/`                         |
 | `log/<directory>/`                 | Time-stamped directory created when a new `iuf` command is executed        |
 | `log/<directory>/install.log`      | Log file with content created by `iuf`                                     |

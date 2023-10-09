@@ -4,11 +4,11 @@ General procedure for powering off an external ClusterStor system.
 
 Use this procedure as a general guide to power off an external ClusterStor system. Refer to the detailed procedures in the appropriate ClusterStor administration guide:
 
-|Title|Model|
-|-----|-----|
-|`ClusterStor E1000 Administration Guide 4.2 - S-2758`|ClusterStor E1000|
-|`ClusterStor Administration Guide 3.4 - S-2756`|ClusterStor L300/L300N|
-|`ClusterStor Administration Guide - S-2755`|Legacy ClusterStor|
+| Title                                                 | Model                  |
+|-------------------------------------------------------|------------------------|
+| `ClusterStor E1000 Administration Guide 4.2 - S-2758` | ClusterStor E1000      |
+| `ClusterStor Administration Guide 3.4 - S-2756`       | ClusterStor L300/L300N |
+| `ClusterStor Administration Guide - S-2755`           | Legacy ClusterStor     |
 
 ## Procedure
 

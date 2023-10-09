@@ -44,11 +44,11 @@ To view certificates:
 
 Once a certificate is ready, the resulting secret will contain the following data fields:
 
-|Field|Description|
-|-----|-----------|
-|ca.crt|Contains trusted CA certificates|
-|tls.crt|Contains the generated certificate, along with trusted CA certificates in the trust chain|
-|tls.key|Contains the private key|
+| Field   | Description                                                                               |
+|---------|-------------------------------------------------------------------------------------------|
+| ca.crt  | Contains trusted CA certificates                                                          |
+| tls.crt | Contains the generated certificate, along with trusted CA certificates in the trust chain |
+| tls.key | Contains the private key                                                                  |
 
 To view certificate signing requests:
 

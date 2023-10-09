@@ -5,20 +5,20 @@ IP address as a Kubernetes service or pod, which would result in undefined behav
 
 The following table shows the default IP address ranges:
 
-|Network|IP Address Range|
-|-------|----------------|
-|Kubernetes service network|10.16.0.0/12|
-|Kubernetes pod network|10.32.0.0/12|
-|Install Network \(MTL\)|10.1.0.0/16|
-|Node Management Network \(NMN\)|10.252.0.0/17|
-|High Speed Network \(HSN\)|10.253.0.0/16|
-|Hardware Management Network \(HMN\)|10.254.0.0/17|
-|Mountain NMN **(see note below table)**|10.100.0.0/17|
-|Mountain HMN **(see note below table)**|10.104.0.0/17|
-|River NMN|10.106.0.0/17|
-|River HMN|10.107.0.0/17|
-|Load Balanced NMN|10.92.100.0/24|
-|Load Balanced HMN|10.94.100.0/24|
+| Network                                 | IP Address Range |
+|-----------------------------------------|------------------|
+| Kubernetes service network              | 10.16.0.0/12     |
+| Kubernetes pod network                  | 10.32.0.0/12     |
+| Install Network \(MTL\)                 | 10.1.0.0/16      |
+| Node Management Network \(NMN\)         | 10.252.0.0/17    |
+| High Speed Network \(HSN\)              | 10.253.0.0/16    |
+| Hardware Management Network \(HMN\)     | 10.254.0.0/17    |
+| Mountain NMN **(see note below table)** | 10.100.0.0/17    |
+| Mountain HMN **(see note below table)** | 10.104.0.0/17    |
+| River NMN                               | 10.106.0.0/17    |
+| River HMN                               | 10.107.0.0/17    |
+| Load Balanced NMN                       | 10.92.100.0/24   |
+| Load Balanced HMN                       | 10.94.100.0/24   |
 
 For the Mountain NMN:
 
