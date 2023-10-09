@@ -26,7 +26,7 @@ the steps below it provide detailed instructions which must be executed in the o
 
 ![Upgrade CSM and additional products with IUF](../../../img/operations/diagram_csm_stack_upgrade_15_04142023.png)
 
-1. CSM preparation, Stage 0.1, and Stage 0.2
+1. CSM preparation, prepare assets, and prerequisites.
    Read the _Important Notes_ section of the
    [CSM 1.4.0 or later to 1.5.0 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
    documentation and then follow only these CSM instructions in order:
@@ -54,7 +54,7 @@ the steps below it provide detailed instructions which must be executed in the o
 
    Follow the IUF [Image preparation](image_preparation.md) instructions
 
-1. CSM Stage 0.4
+1. CSM backup workload manager data
 
    Follow the CSM
    [Stage 0.4 - Backup workload manager data](../../../upgrade/Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data)
@@ -64,7 +64,7 @@ the steps below it provide detailed instructions which must be executed in the o
 
    Follow the IUF [Backup](backup.md) instructions
 
-1. CSM Stage 1 and CSM health validation
+1. CSM service upgrades and CSM health validation
 
    Follow these CSM instructions in order:
 
@@ -80,6 +80,7 @@ the steps below it provide detailed instructions which must be executed in the o
    Follow these IUF instructions in order:
 
    1. [Deploy product](deploy_product.md)
+   1. [Stage 3.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_3.md#stage-36---complete-kubernetes-upgrade)
    1. [Validate deployment](validate_deployment.md)
 
 1. Managed rollout
