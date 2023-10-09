@@ -36,29 +36,29 @@ Access to the Keycloak UI is needed.
 
         Set the table values to the following:
 
-        |Field|Requirement|
-        |-----|-----------|
-        |`Cookie`|`Alternative`|
-        |`Kerberos`|`Disabled`|
-        |`Identity Provider Redirector`|`Alternative`|
-        |`RSA - Browser Forms`|`REQUIRED`|
-        |`Username Password Form`|`REQUIRED`|
-        |`RSA - Browser - Conditional OTP`|`CONDITIONAL`|
-        |`Condition - User Configured`|`DISABLED`|
-        |`OTP Form`|`DISABLED`|
-        |`RSA`|`REQUIRED`|
+        | Field                             | Requirement   |
+        |-----------------------------------|---------------|
+        | `Cookie`                          | `Alternative` |
+        | `Kerberos`                        | `Disabled`    |
+        | `Identity Provider Redirector`    | `Alternative` |
+        | `RSA - Browser Forms`             | `REQUIRED`    |
+        | `Username Password Form`          | `REQUIRED`    |
+        | `RSA - Browser - Conditional OTP` | `CONDITIONAL` |
+        | `Condition - User Configured`     | `DISABLED`    |
+        | `OTP Form`                        | `DISABLED`    |
+        | `RSA`                             | `REQUIRED`    |
 
     1. Click the `Gear` icon on the `RSA` line of the table.
 
     1. Enter the different configuration options:
 
-        | Configuration Field                   | Value                                                        |
-        | ------------------------------------- | ------------------------------------------------------------ |
-        | `Alias`                                 | Enter the desired alias. For example, `RSA` could be used.   |
-        | `RSA URL`                               | The base URL of the RSA API service. For example, `https://rsa.mycompany.com:5555/` |
-        | `RSA Verify Endpoint`                   | `/mfa/v1_1/authn/initialize`                                 |
+        | Configuration Field                     | Value                                                                                                                                                      |
+        |-----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+        | `Alias`                                 | Enter the desired alias. For example, `RSA` could be used.                                                                                                 |
+        | `RSA URL`                               | The base URL of the RSA API service. For example, `https://rsa.mycompany.com:5555/`                                                                        |
+        | `RSA Verify Endpoint`                   | `/mfa/v1_1/authn/initialize`                                                                                                                               |
         | `Keycloak Client ID`                    | The authentication agent. For example, `rsa.mycompany.com`. The value is from `Access` \> `Authentication Agents` \> `Manage Existing in the RSA Console`. |
-        | `RSA Authentication Manager Client Key` | The key for the RSA API.                                     |
+        | `RSA Authentication Manager Client Key` | The key for the RSA API.                                                                                                                                   |
 
     1. Set the `Shared username` if applicable.
 
@@ -84,10 +84,10 @@ Access to the Keycloak UI is needed.
 
         Set the table values to the following:
 
-        |Field|Requirement|
-        |-----|-----------|
-        |`RSA - CLI`|`REQUIRED`|
-        |`RSA - CLI Direct Grant - Conditional OTP`|`DISABLED`|
+        | Field                                      | Requirement |
+        |--------------------------------------------|-------------|
+        | `RSA - CLI`                                | `REQUIRED`  |
+        | `RSA - CLI Direct Grant - Conditional OTP` | `DISABLED`  |
 
     1. Click `Save`.
 

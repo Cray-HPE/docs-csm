@@ -38,13 +38,13 @@ This procedure will perform and verify the following:
 
     Node xname format: `xXcCsSbBnN`
 
-    |   |                | SHCD Column to Reference | Description
-    | - | -------------- | ------------------------ | -----------
-    | X | Cabinet number | Source Rack (K20)        | The Cabinet or rack number containing the Management NCN.
-    | C | Chassis number |                          | For air-cooled nodes within a standard rack, the chassis is `0`. If the air-cooled node node is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
-    | S | Slot/Rack U    | Source Location (L20)    | The Slot of the node is determined by the bottom most rack U that node occupies.
-    | B | BMC number     |                          | For Management NCNs the BMC number is 0.
-    | N | Node number    |                          | For Management NCNs the Node number is 0.
+    |   |                | SHCD Column to Reference | Description                                                                                                                  |
+    |---|----------------|--------------------------|------------------------------------------------------------------------------------------------------------------------------|
+    | X | Cabinet number | Source Rack (K20)        | The Cabinet or rack number containing the Management NCN.                                                                    |
+    | C | Chassis number |                          | For air-cooled nodes within a standard rack, the chassis is `0`. If the air-cooled node node is within an air-cooled chassis | in an EX2500 cabinet, then this should be `4`.
+    | S | Slot/Rack U    | Source Location (L20)    | The Slot of the node is determined by the bottom most rack U that node occupies.                                             |
+    | B | BMC number     |                          | For Management NCNs the BMC number is 0.                                                                                     |
+    | N | Node number    |                          | For Management NCNs the Node number is 0.                                                                                    |
 
     ```bash
     export XNAME=x3000c0s4b0n0

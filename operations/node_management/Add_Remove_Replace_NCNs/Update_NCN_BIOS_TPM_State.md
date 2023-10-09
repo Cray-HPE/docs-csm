@@ -15,10 +15,10 @@ Disabling TPM is not required when not using it. Many types of hardware come wit
 
 The following table lists the type of hardware where the TPM State can be enabled. Not all models from a given manufacturer support TPM.
 
-| **Manufacturer** | **Type**     |
-| ---------------- | ------------ |
-| Gigabyte         | `nodeBMC`    |
-| HPE              | `nodeBMC`    |
+| **Manufacturer** | **Type**  |
+|------------------|-----------|
+| Gigabyte         | `nodeBMC` |
+| HPE              | `nodeBMC` |
 
 SCSD does not support setting the TPM state on Intel hardware.
 With Intel hardware skip these steps and proceed to the next step to [Boot NCN and Configure](Boot_NCN.md).

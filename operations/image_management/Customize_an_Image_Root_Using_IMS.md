@@ -130,7 +130,7 @@ to boot a node\) to the artifact repository.
     Consult with the site administrator to determine if these names have been changed for a given image or recipe.
 
     | Recipe                        | Recipe Name                             | Kernel File Name | `initrd` File Name |
-    |---------------------------    |-----------------------------------------|------------------|--------------------|
+    |-------------------------------|-----------------------------------------|------------------|--------------------|
     | SLES 15 SP5 Barebones x86     | `cray-sles15sp5-barebones`              | `vmlinuz`        | `initrd`           |
     | SLES 15 SP5 Barebones aarch64 | `cray-sles15sp5-barebones`              | `Image`          | `initrd`           |
     | COS x86                       | `cray-shasta-compute-sles15sp5.x86_646` | `vmlinuz`        | `initrd`           |
@@ -331,10 +331,10 @@ to boot a node\) to the artifact repository.
         After changes have been made, run the `touch` command on the `complete` file. The location of the `complete` file depends on whether or not the SSH job shell was created
         using the `--ssh-containers-jail True` parameter. See the table below for more information.
 
-        |`--ssh-containers-jail`|Command used to create the `complete` file|
-        |-----------------------|------------------------------------------|
-        | `False` \(default\)   | `touch /mnt/image/complete`              |
-        | `True`                | `touch /tmp/complete`                    |
+        | `--ssh-containers-jail` | Command used to create the `complete` file |
+        |-------------------------|--------------------------------------------|
+        | `False` \(default\)     | `touch /mnt/image/complete`                |
+        | `True`                  | `touch /tmp/complete`                      |
 
         ```bash
         [root@POD image]# cd /mnt/image/

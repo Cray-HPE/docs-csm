@@ -24,7 +24,7 @@ The `update-cfs-config` stage does not change the running state of the system as
 The following arguments are most often used with the `update-cfs-config` stage. See `iuf -h` and `iuf run -h` for additional arguments.
 
 | Input                                         | `iuf` Argument                   | Description                                                                                           |
-| --------------------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------- |
+|-----------------------------------------------|----------------------------------|-------------------------------------------------------------------------------------------------------|
 | Activity                                      | `-a ACTIVITY`                    | Activity created for the install or upgrade operations                                                |
 | Managed `sat bootprep` configuration files    | `-bc BOOTPREP_CONFIG_MANAGED`    | The `sat bootprep` configuration file used for managed nodes                                          |
 | Management `sat bootprep` configuration files | `-bm BOOTPREP_CONFIG_MANAGEMENT` | The `sat bootprep` configuration file used for management nodes                                       |

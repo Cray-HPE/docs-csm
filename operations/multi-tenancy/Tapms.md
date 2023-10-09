@@ -31,12 +31,12 @@ for the full schema. Below is a description of the required fields for a tenant:
 | `tenantkms`.`enablekms`                           | Create a Vault transit engine for the tenant if this setting is `true`. By default, this is `false`. If enabled, the transit name and other details will be shown in the CR status. |
 | `tenantkms`.`keyname`                             | Optional name for the transit engine key. If not provided, a default will be used and shown in the CR status. This is only used when `enablekms` is `true`.                         |
 | `tenantkms`.`keytype`                             | Optional transit engine key type. If not provided, a default will be used and shown in the CR status. This is only used when `enablekms` is `true`.                                 |
-| `tenanthooks`.`name`                              | Name of the webhook to be called by `tapms`.
-| `tenanthooks`.`url`                               | URL to inform/POST tenant creation, updates, and deletion.
-| `tenanthooks`.`blockingcall`                      | If true, `tapms` will wait for call to return prior to applying a tenant change.  By default, this is `false`.
-| `tenanthooks`.`eventtypes`                        | Type of event the URL should be called for.  Valid values are `CREATE`, `UPDATE`, `DELETE`.
-| `tenanthooks`.`hookcredentials`.`secretname`      | Name of the Kubernetes secret containing webhook credentials.
-| `tenanthooks`.`hookcredentials`.`secretnamespace` | Namespace of the Kubernetes secret containing webhook credentials.
+| `tenanthooks`.`name`                              | Name of the webhook to be called by `tapms`.                                                                                                                                        |
+| `tenanthooks`.`url`                               | URL to inform/POST tenant creation, updates, and deletion.                                                                                                                          |
+| `tenanthooks`.`blockingcall`                      | If true, `tapms` will wait for call to return prior to applying a tenant change.  By default, this is `false`.                                                                      |
+| `tenanthooks`.`eventtypes`                        | Type of event the URL should be called for.  Valid values are `CREATE`, `UPDATE`, `DELETE`.                                                                                         |
+| `tenanthooks`.`hookcredentials`.`secretname`      | Name of the Kubernetes secret containing webhook credentials.                                                                                                                       |
+| `tenanthooks`.`hookcredentials`.`secretnamespace` | Namespace of the Kubernetes secret containing webhook credentials.                                                                                                                  |
 
 ## Reconcile operations
 

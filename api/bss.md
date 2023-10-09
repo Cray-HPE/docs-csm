@@ -102,9 +102,9 @@ func main() {
 
 <h3 id="meta_data_get-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|key|query|string|false|Specific sub key(s) to query. Separated by periods.|
+| Name | In    | Type   | Required | Description                                         |
+|------|-------|--------|----------|-----------------------------------------------------|
+| key  | query | string | false    | Specific sub key(s) to query. Separated by periods. |
 
 > Example responses
 
@@ -116,12 +116,12 @@ func main() {
 
 <h3 id="meta_data_get-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|meta-data for node|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Error](#schemaerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Either the host, MAC or NID are unknown and there is no Default, or the existing entry does not specify a kernel image for boot.|[Error](#schemaerror)|
-|default|Default|Unexpected error|[Error](#schemaerror)|
+| Status  | Meaning                                                          | Description                                                                                                                                       | Schema                |
+|---------|------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
+| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | meta-data for node                                                                                                                                | Inline                |
+| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                                                                                                                                       | [Error](#schemaerror) |
+| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | Does Not Exist - Either the host, MAC or NID are unknown and there is no Default, or the existing entry does not specify a kernel image for boot. | [Error](#schemaerror) |
+| default | Default                                                          | Unexpected error                                                                                                                                  | [Error](#schemaerror) |
 
 <h3 id="meta_data_get-responseschema">Response Schema</h3>
 
@@ -196,12 +196,12 @@ func main() {
 
 <h3 id="user_data_get-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|user-data for node|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Error](#schemaerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Either the host, MAC or NID are unknown and there is no Default, or the existing entry does not specify a kernel image for boot.|[Error](#schemaerror)|
-|default|Default|Unexpected error|[Error](#schemaerror)|
+| Status  | Meaning                                                          | Description                                                                                                                                       | Schema                |
+|---------|------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
+| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | user-data for node                                                                                                                                | Inline                |
+| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                                                                                                                                       | [Error](#schemaerror) |
+| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | Does Not Exist - Either the host, MAC or NID are unknown and there is no Default, or the existing entry does not specify a kernel image for boot. | [Error](#schemaerror) |
+| default | Default                                                          | Unexpected error                                                                                                                                  | [Error](#schemaerror) |
 
 <h3 id="user_data_get-responseschema">Response Schema</h3>
 
@@ -290,9 +290,9 @@ func main() {
 
 <h3 id="phone_home_post-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[CloudInitPhoneHome](#schemacloudinitphonehome)|false|none|
+| Name | In   | Type                                            | Required | Description |
+|------|------|-------------------------------------------------|----------|-------------|
+| body | body | [CloudInitPhoneHome](#schemacloudinitphonehome) | false    | none        |
 
 > Example responses
 
@@ -331,12 +331,12 @@ func main() {
 
 <h3 id="phone_home_post-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Meta data for node|[BootParams](#schemabootparams)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Error](#schemaerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Either the host, MAC or NID are unknown and there is no Default, or the existing entry does not specify a kernel image for boot.|[Error](#schemaerror)|
-|default|Default|Unexpected error|[Error](#schemaerror)|
+| Status  | Meaning                                                          | Description                                                                                                                                       | Schema                          |
+|---------|------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------|
+| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | Meta data for node                                                                                                                                | [BootParams](#schemabootparams) |
+| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                                                                                                                                       | [Error](#schemaerror)           |
+| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | Does Not Exist - Either the host, MAC or NID are unknown and there is no Default, or the existing entry does not specify a kernel image for boot. | [Error](#schemaerror)           |
+| default | Default                                                          | Unexpected error                                                                                                                                  | [Error](#schemaerror)           |
 
 <aside class="success">
 This operation does not require authentication
@@ -409,14 +409,14 @@ Retrieve iPXE boot script for the host specified by the MAC parameter. Alternati
 
 <h3 id="bootscript_get-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|mac|query|string|false|MAC address of host requesting boot script|
-|name|query|string|false|Name of host requesting boot script or xname|
-|nid|query|integer|false|Node ID (NID) of host requesting boot script|
-|retry|query|integer|false|Number of times requesting script without a successful boot. This parameter is mostly used by the software itself to keep track of retries.|
-|arch|query|string|false|The architecture value from the iPXE variable ${buildarch}. This parameter is mostly used by the software itself.|
-|ts|query|integer|false|Timestamp for when the HSM state info needs to be up to date by.  This is the Unix concept of time, the number of seconds since Jan 1, 1970 UTC. This parameter is mostly used by the software itself.|
+| Name  | In    | Type    | Required | Description                                                                                                                                                                                            |
+|-------|-------|---------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| mac   | query | string  | false    | MAC address of host requesting boot script                                                                                                                                                             |
+| name  | query | string  | false    | Name of host requesting boot script or xname                                                                                                                                                           |
+| nid   | query | integer | false    | Node ID (NID) of host requesting boot script                                                                                                                                                           |
+| retry | query | integer | false    | Number of times requesting script without a successful boot. This parameter is mostly used by the software itself to keep track of retries.                                                            |
+| arch  | query | string  | false    | The architecture value from the iPXE variable ${buildarch}. This parameter is mostly used by the software itself.                                                                                      |
+| ts    | query | integer | false    | Timestamp for when the HSM state info needs to be up to date by.  This is the Unix concept of time, the number of seconds since Jan 1, 1970 UTC. This parameter is mostly used by the software itself. |
 
 > Example responses
 
@@ -428,12 +428,12 @@ Retrieve iPXE boot script for the host specified by the MAC parameter. Alternati
 
 <h3 id="bootscript_get-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Boot script for requested MAC address|string|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Error](#schemaerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Either the host, MAC, or NID are unknown and there is no Default, or the existing entry does not specify a kernel image for boot.|[Error](#schemaerror)|
-|default|Default|Unexpected error|[Error](#schemaerror)|
+| Status  | Meaning                                                          | Description                                                                                                                                        | Schema                |
+|---------|------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
+| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | Boot script for requested MAC address                                                                                                              | string                |
+| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                                                                                                                                        | [Error](#schemaerror) |
+| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | Does Not Exist - Either the host, MAC, or NID are unknown and there is no Default, or the existing entry does not specify a kernel image for boot. | [Error](#schemaerror) |
+| default | Default                                                          | Unexpected error                                                                                                                                   | [Error](#schemaerror) |
 
 <aside class="success">
 This operation does not require authentication
@@ -541,12 +541,12 @@ Retrieve the boot parameters for one or more hosts. If no parameters are provide
 
 <h3 id="get__boot_v1_bootparameters-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|name|query|string|false|Host name or tag name of boot parameters to return|
-|mac|query|string|false|MAC Address of host of boot parameters to return|
-|nid|query|integer|false|NID of host of boot parameters to return|
-|body|body|[BootParams](#schemabootparams)|false|none|
+| Name | In    | Type                            | Required | Description                                        |
+|------|-------|---------------------------------|----------|----------------------------------------------------|
+| name | query | string                          | false    | Host name or tag name of boot parameters to return |
+| mac  | query | string                          | false    | MAC Address of host of boot parameters to return   |
+| nid  | query | integer                         | false    | NID of host of boot parameters to return           |
+| body | body  | [BootParams](#schemabootparams) | false    | none                                               |
 
 > Example responses
 
@@ -587,38 +587,38 @@ Retrieve the boot parameters for one or more hosts. If no parameters are provide
 
 <h3 id="get__boot_v1_bootparameters-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|List of currently known boot parameters|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request - BootParams value incorrect|[Error](#schemaerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Cannot find host, MAC, or NID|[Error](#schemaerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Error](#schemaerror)|
-|default|Default|Unexpected error|[Error](#schemaerror)|
+| Status  | Meaning                                                                    | Description                                    | Schema                |
+|---------|----------------------------------------------------------------------------|------------------------------------------------|-----------------------|
+| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | List of currently known boot parameters        | Inline                |
+| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request - BootParams value incorrect       | [Error](#schemaerror) |
+| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Does Not Exist - Cannot find host, MAC, or NID | [Error](#schemaerror) |
+| 500     | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error                          | [Error](#schemaerror) |
+| default | Default                                                                    | Unexpected error                               | [Error](#schemaerror) |
 
 <h3 id="get__boot_v1_bootparameters-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[BootParams](#schemabootparams)]|false|none|[When used as a request body, the caller sets boot parameters and specifies hosts, along with the kernel image path/URL and initrd path/URL. To specify hosts, use one of the three parameters - hosts, MACs, or NIDs. If MAC addresses are used, they are mapped to host names based on information retrieved from the hardware state manager.  Likewise, if NIDs are used, they are mapped to host names with the same hardware state manager info.  While the expected usage is to specify hosts based on their host names, the "macs" and "nids" alternatives may be more convenient in some contexts.<br>You can also specify a general tag for hosts. A tag is 'Default', or one of the roles that a node may be defined as in the hardware state manager (HSM). Some of the HSM roles like 'Compute', 'Storage', 'System', and 'Application' can be specified as hosts and are managed similar to specific hosts. While BSS allows for fine grained control of individual nodes, the tags are typically more convenient, especially for a large system.<br><br>Alternatively, if you specify a kernel or initrd image and params, but no host, MAC, or NID, the boot script service will associate the specified params with the specified kernel or initrd image. When used as a response body, identifies the hosts available for booting using either hosts, MACs, or NIDs, depending on which parameter was used in the request.]|
-|» hosts|[string]|false|none|host names|
-|» macs|[string]|false|none|MAC addresses|
-|» nids|[integer]|false|none|Node ID|
-|» params|string|false|none|Specific to the kernel that is being booted.|
-|» kernel|string|false|none|URL or file system path specifying kernel image.|
-|» initrd|string|false|none|URL or file system path specifying initrd image.|
-|» cloud-init|[CloudInit](#schemacloudinit)|false|none|Cloud-Init data for the hosts|
-|»» meta-data|[CloudInitMetadata](#schemacloudinitmetadata)|false|none|Cloud-Init Instance Metadata for a host.|
-|»» user-data|[CloudInitUserData](#schemacloudinituserdata)|false|none|Cloud-Init User data for a host.|
-|»» phone-home|[CloudInitPhoneHome](#schemacloudinitphonehome)|false|none|Data sent from the Phone Home Cloud-Init module after a host's boot is complete.|
-|»»» pub_key_dsa|string|false|none|none|
-|»»» pub_key_rsa|string|false|none|none|
-|»»» pub_key_ecdsa|string|false|none|none|
-|»»» pub_key_ed25519|string|false|none|none|
-|»»» instance_id|string|false|none|none|
-|»»» hostname|string|false|none|none|
-|»»» fqdn|string|false|none|none|
+| Name                | Type                                            | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|---------------------|-------------------------------------------------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous*         | [[BootParams](#schemabootparams)]               | false    | none         | [When used as a request body, the caller sets boot parameters and specifies hosts, along with the kernel image path/URL and initrd path/URL. To specify hosts, use one of the three parameters - hosts, MACs, or NIDs. If MAC addresses are used, they are mapped to host names based on information retrieved from the hardware state manager.  Likewise, if NIDs are used, they are mapped to host names with the same hardware state manager info.  While the expected usage is to specify hosts based on their host names, the "macs" and "nids" alternatives may be more convenient in some contexts.<br>You can also specify a general tag for hosts. A tag is 'Default', or one of the roles that a node may be defined as in the hardware state manager (HSM). Some of the HSM roles like 'Compute', 'Storage', 'System', and 'Application' can be specified as hosts and are managed similar to specific hosts. While BSS allows for fine grained control of individual nodes, the tags are typically more convenient, especially for a large system.<br><br>Alternatively, if you specify a kernel or initrd image and params, but no host, MAC, or NID, the boot script service will associate the specified params with the specified kernel or initrd image. When used as a response body, identifies the hosts available for booting using either hosts, MACs, or NIDs, depending on which parameter was used in the request.] |
+| » hosts             | [string]                                        | false    | none         | host names                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| » macs              | [string]                                        | false    | none         | MAC addresses                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| » nids              | [integer]                                       | false    | none         | Node ID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| » params            | string                                          | false    | none         | Specific to the kernel that is being booted.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| » kernel            | string                                          | false    | none         | URL or file system path specifying kernel image.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| » initrd            | string                                          | false    | none         | URL or file system path specifying initrd image.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| » cloud-init        | [CloudInit](#schemacloudinit)                   | false    | none         | Cloud-Init data for the hosts                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| »» meta-data        | [CloudInitMetadata](#schemacloudinitmetadata)   | false    | none         | Cloud-Init Instance Metadata for a host.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| »» user-data        | [CloudInitUserData](#schemacloudinituserdata)   | false    | none         | Cloud-Init User data for a host.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| »» phone-home       | [CloudInitPhoneHome](#schemacloudinitphonehome) | false    | none         | Data sent from the Phone Home Cloud-Init module after a host's boot is complete.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| »»» pub_key_dsa     | string                                          | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| »»» pub_key_rsa     | string                                          | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| »»» pub_key_ecdsa   | string                                          | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| »»» pub_key_ed25519 | string                                          | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| »»» instance_id     | string                                          | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| »»» hostname        | string                                          | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| »»» fqdn            | string                                          | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 
 <aside class="success">
 This operation does not require authentication
@@ -729,9 +729,9 @@ Special entries for HSM roles like 'Compute', 'Storage' and 'Application' can al
 
 <h3 id="post__boot_v1_bootparameters-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[BootParams](#schemabootparams)|false|none|
+| Name | In   | Type                            | Required | Description |
+|------|------|---------------------------------|----------|-------------|
+| body | body | [BootParams](#schemabootparams) | false    | none        |
 
 > Example responses
 
@@ -749,18 +749,18 @@ Special entries for HSM roles like 'Compute', 'Storage' and 'Application' can al
 
 <h3 id="post__boot_v1_bootparameters-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|successfully created boot parameters|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request - Invalid BootParams value|[Error](#schemaerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Error](#schemaerror)|
-|default|Default|Unexpected error|[Error](#schemaerror)|
+| Status  | Meaning                                                                    | Description                            | Schema                |
+|---------|----------------------------------------------------------------------------|----------------------------------------|-----------------------|
+| 201     | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)               | successfully created boot parameters   | None                  |
+| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request - Invalid BootParams value | [Error](#schemaerror) |
+| 500     | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error                  | [Error](#schemaerror) |
+| default | Default                                                                    | Unexpected error                       | [Error](#schemaerror) |
 
 ### Response Headers
 
-|Status|Header|Type|Format|Description|
-|---|---|---|---|---|
-|201|BSS-Referral-Token|string||The UUID that will be included in the boot script. A new UUID is generated on each POST and PUT request.|
+| Status | Header             | Type   | Format | Description                                                                                              |
+|--------|--------------------|--------|--------|----------------------------------------------------------------------------------------------------------|
+| 201    | BSS-Referral-Token | string |        | The UUID that will be included in the boot script. A new UUID is generated on each POST and PUT request. |
 
 <aside class="success">
 This operation does not require authentication
@@ -870,9 +870,9 @@ Along with the hosts, there must be a kernel image reference in order for the bo
 
 <h3 id="put__boot_v1_bootparameters-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[BootParams](#schemabootparams)|false|none|
+| Name | In   | Type                            | Required | Description |
+|------|------|---------------------------------|----------|-------------|
+| body | body | [BootParams](#schemabootparams) | false    | none        |
 
 > Example responses
 
@@ -890,19 +890,19 @@ Along with the hosts, there must be a kernel image reference in order for the bo
 
 <h3 id="put__boot_v1_bootparameters-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|successfully update boot parameters|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request - Invalid BootParams value|[Error](#schemaerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Cannot find specified host, MAC, or NID|[Error](#schemaerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Error](#schemaerror)|
-|default|Default|Unexpected error|[Error](#schemaerror)|
+| Status  | Meaning                                                                    | Description                                              | Schema                |
+|---------|----------------------------------------------------------------------------|----------------------------------------------------------|-----------------------|
+| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | successfully update boot parameters                      | None                  |
+| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request - Invalid BootParams value                   | [Error](#schemaerror) |
+| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Does Not Exist - Cannot find specified host, MAC, or NID | [Error](#schemaerror) |
+| 500     | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error                                    | [Error](#schemaerror) |
+| default | Default                                                                    | Unexpected error                                         | [Error](#schemaerror) |
 
 ### Response Headers
 
-|Status|Header|Type|Format|Description|
-|---|---|---|---|---|
-|200|BSS-Referral-Token|string||The UUID that will be included in the boot script. A new UUID is generated on each POST and PUT request.|
+| Status | Header             | Type   | Format | Description                                                                                              |
+|--------|--------------------|--------|--------|----------------------------------------------------------------------------------------------------------|
+| 200    | BSS-Referral-Token | string |        | The UUID that will be included in the boot script. A new UUID is generated on each POST and PUT request. |
 
 <aside class="success">
 This operation does not require authentication
@@ -1008,9 +1008,9 @@ Update an existing entry with new boot parameters while retaining existing setti
 
 <h3 id="patch__boot_v1_bootparameters-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[BootParams](#schemabootparams)|false|none|
+| Name | In   | Type                            | Required | Description |
+|------|------|---------------------------------|----------|-------------|
+| body | body | [BootParams](#schemabootparams) | false    | none        |
 
 > Example responses
 
@@ -1028,12 +1028,12 @@ Update an existing entry with new boot parameters while retaining existing setti
 
 <h3 id="patch__boot_v1_bootparameters-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Successfully update boot parameters|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request - Invalid BootParams value.|[Error](#schemaerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Cannot find entry for specified host, MAC, or NID|[Error](#schemaerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Error](#schemaerror)|
+| Status | Meaning                                                                    | Description                                                        | Schema                |
+|--------|----------------------------------------------------------------------------|--------------------------------------------------------------------|-----------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Successfully update boot parameters                                | None                  |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request - Invalid BootParams value.                            | [Error](#schemaerror) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Does Not Exist - Cannot find entry for specified host, MAC, or NID | [Error](#schemaerror) |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error                                              | [Error](#schemaerror) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1139,9 +1139,9 @@ Remove an existing boot parameter settings for one or more hosts, as specified b
 
 <h3 id="delete__boot_v1_bootparameters-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[BootParams](#schemabootparams)|false|none|
+| Name | In   | Type                            | Required | Description |
+|------|------|---------------------------------|----------|-------------|
+| body | body | [BootParams](#schemabootparams) | false    | none        |
 
 > Example responses
 
@@ -1159,12 +1159,12 @@ Remove an existing boot parameter settings for one or more hosts, as specified b
 
 <h3 id="delete__boot_v1_bootparameters-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Successfully deleted the appropriate entry or entries|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request - Invalid BootParams value.|[Error](#schemaerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Cannot find specified host, MAC, or NID|[Error](#schemaerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Error](#schemaerror)|
+| Status | Meaning                                                                    | Description                                              | Schema                |
+|--------|----------------------------------------------------------------------------|----------------------------------------------------------|-----------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Successfully deleted the appropriate entry or entries    | None                  |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request - Invalid BootParams value.                  | [Error](#schemaerror) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Does Not Exist - Cannot find specified host, MAC, or NID | [Error](#schemaerror) |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error                                    | [Error](#schemaerror) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1235,11 +1235,11 @@ Retrieve list of known hosts obtained from HSM. This list can be filtered by spe
 
 <h3 id="get__boot_v1_hosts-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|name|query|string|false|Host name or tag name of boot parameters to return|
-|mac|query|string|false|MAC Address of host of boot parameters to return|
-|nid|query|integer|false|NID of host of boot parameters to return|
+| Name | In    | Type    | Required | Description                                        |
+|------|-------|---------|----------|----------------------------------------------------|
+| name | query | string  | false    | Host name or tag name of boot parameters to return |
+| mac  | query | string  | false    | MAC Address of host of boot parameters to return   |
+| nid  | query | integer | false    | NID of host of boot parameters to return           |
 
 > Example responses
 
@@ -1274,9 +1274,9 @@ Retrieve list of known hosts obtained from HSM. This list can be filtered by spe
 
 <h3 id="get__boot_v1_hosts-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Return list of hosts and associated attributes known to BSS|[HostInfo](#schemahostinfo)|
+| Status | Meaning                                                 | Description                                                 | Schema                      |
+|--------|---------------------------------------------------------|-------------------------------------------------------------|-----------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Return list of hosts and associated attributes known to BSS | [HostInfo](#schemahostinfo) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1359,11 +1359,11 @@ Retrieve the latest host information from HSM.
 
 <h3 id="post__boot_v1_hosts-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Successfully retrieved current state from HSM.|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Error](#schemaerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Error](#schemaerror)|
+| Status | Meaning                                                                    | Description                                    | Schema                |
+|--------|----------------------------------------------------------------------------|------------------------------------------------|-----------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)            | Successfully retrieved current state from HSM. | None                  |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request                                    | [Error](#schemaerror) |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error                          | [Error](#schemaerror) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1501,11 +1501,11 @@ Dump internal state of boot script service for debugging purposes. Return known 
 
 <h3 id="get__boot_v1_dumpstate-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Return internal service state|[StateInfo](#schemastateinfo)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Error](#schemaerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Error](#schemaerror)|
+| Status | Meaning                                                                    | Description                   | Schema                        |
+|--------|----------------------------------------------------------------------------|-------------------------------|-------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Return internal service state | [StateInfo](#schemastateinfo) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request                   | [Error](#schemaerror)         |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error         | [Error](#schemaerror)         |
 
 <aside class="success">
 This operation does not require authentication
@@ -1576,17 +1576,17 @@ Retrieve access information for xname and endpoint. Every time a node requests s
 
 <h3 id="get__boot_v1_endpoint-history-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|name|query|string|false|Xname of the node.|
-|endpoint|query|string|false|The endpoint to get the last access information for.|
+| Name     | In    | Type   | Required | Description                                          |
+|----------|-------|--------|----------|------------------------------------------------------|
+| name     | query | string | false    | Xname of the node.                                   |
+| endpoint | query | string | false    | The endpoint to get the last access information for. |
 
 #### Enumerated Values
 
-|Parameter|Value|
-|---|---|
-|endpoint|bootscript|
-|endpoint|user-data|
+| Parameter | Value      |
+|-----------|------------|
+| endpoint  | bootscript |
+| endpoint  | user-data  |
 
 > Example responses
 
@@ -1604,27 +1604,27 @@ Retrieve access information for xname and endpoint. Every time a node requests s
 
 <h3 id="get__boot_v1_endpoint-history-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Endpoint access information|Inline|
+| Status | Meaning                                                 | Description                 | Schema |
+|--------|---------------------------------------------------------|-----------------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Endpoint access information | Inline |
 
 <h3 id="get__boot_v1_endpoint-history-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[EndpointAccess](#schemaendpointaccess)]|false|none|[This data structure is used to return the endpoint access information for a given resource.]|
-|» name|string|false|none|Xname of the node|
-|» endpoint|string|false|none|none|
-|» last_epoch|integer|false|none|Unix epoch time of last request. An epoch of 0 indicates a request has not taken place.|
+| Name         | Type                                      | Required | Restrictions | Description                                                                                   |
+|--------------|-------------------------------------------|----------|--------------|-----------------------------------------------------------------------------------------------|
+| *anonymous*  | [[EndpointAccess](#schemaendpointaccess)] | false    | none         | [This data structure is used to return the endpoint access information for a given resource.] |
+| » name       | string                                    | false    | none         | Xname of the node                                                                             |
+| » endpoint   | string                                    | false    | none         | none                                                                                          |
+| » last_epoch | integer                                   | false    | none         | Unix epoch time of last request. An epoch of 0 indicates a request has not taken place.       |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|endpoint|bootscript|
-|endpoint|user-data|
+| Property | Value      |
+|----------|------------|
+| endpoint | bootscript |
+| endpoint | user-data  |
 
 <aside class="success">
 This operation does not require authentication
@@ -1707,24 +1707,24 @@ This endpoint can be used as a liveness probe for the BSS to determine if it is 
 
 <h3 id="get__boot_v1_service_status-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|The BSS REST API is alive and accessible.|Inline|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Error](#schemaerror)|
+| Status | Meaning                                                                    | Description                               | Schema                |
+|--------|----------------------------------------------------------------------------|-------------------------------------------|-----------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | The BSS REST API is alive and accessible. | Inline                |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error                     | [Error](#schemaerror) |
 
 <h3 id="get__boot_v1_service_status-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» bss-status|string|false|none|Current status of BSS.|
+| Name         | Type   | Required | Restrictions | Description            |
+|--------------|--------|----------|--------------|------------------------|
+| » bss-status | string | false    | none         | Current status of BSS. |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|bss-status|running|
+| Property   | Value   |
+|------------|---------|
+| bss-status | running |
 
 <aside class="success">
 This operation does not require authentication
@@ -1808,36 +1808,36 @@ is a connection error.
 
 <h3 id="get__boot_v1_service_etcd-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|The ETCD database connection is healthy.|Inline|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|The ETCD database connection is unhealthy.|Inline|
+| Status | Meaning                                                                    | Description                                | Schema |
+|--------|----------------------------------------------------------------------------|--------------------------------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | The ETCD database connection is healthy.   | Inline |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | The ETCD database connection is unhealthy. | Inline |
 
 <h3 id="get__boot_v1_service_etcd-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» bss-status-etcd|string|false|none|Current connection status to ETCD.|
+| Name              | Type   | Required | Restrictions | Description                        |
+|-------------------|--------|----------|--------------|------------------------------------|
+| » bss-status-etcd | string | false    | none         | Current connection status to ETCD. |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|bss-status-etcd|connected|
+| Property        | Value     |
+|-----------------|-----------|
+| bss-status-etcd | connected |
 
 Status Code **500**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» bss-status-etcd|string|false|none|Current connection status to ETCD.|
+| Name              | Type   | Required | Restrictions | Description                        |
+|-------------------|--------|----------|--------------|------------------------------------|
+| » bss-status-etcd | string | false    | none         | Current connection status to ETCD. |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|bss-status-etcd|error|
+| Property        | Value |
+|-----------------|-------|
+| bss-status-etcd | error |
 
 <aside class="success">
 This operation does not require authentication
@@ -1919,36 +1919,36 @@ is alive.
 
 <h3 id="get__boot_v1_service_hsm-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|The HSM connection is healthy.|Inline|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|The HSM connection is unhealthy.|Inline|
+| Status | Meaning                                                                    | Description                      | Schema |
+|--------|----------------------------------------------------------------------------|----------------------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | The HSM connection is healthy.   | Inline |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | The HSM connection is unhealthy. | Inline |
 
 <h3 id="get__boot_v1_service_hsm-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» bss-status-hsm|string|false|none|Current connection status to HSM.|
+| Name             | Type   | Required | Restrictions | Description                       |
+|------------------|--------|----------|--------------|-----------------------------------|
+| » bss-status-hsm | string | false    | none         | Current connection status to HSM. |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|bss-status-hsm|connected|
+| Property       | Value     |
+|----------------|-----------|
+| bss-status-hsm | connected |
 
 Status Code **500**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» bss-status-hsm|string|false|none|Current connection status to HSM.|
+| Name             | Type   | Required | Restrictions | Description                       |
+|------------------|--------|----------|--------------|-----------------------------------|
+| » bss-status-hsm | string | false    | none         | Current connection status to HSM. |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|bss-status-hsm|error|
+| Property       | Value |
+|----------------|-------|
+| bss-status-hsm | error |
 
 <aside class="success">
 This operation does not require authentication
@@ -2027,30 +2027,30 @@ Retrieve the current service version.
 
 <h3 id="get__boot_v1_service_version-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|The current running service version.|Inline|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error. Unable to determine current running service version.|Inline|
+| Status | Meaning                                                                    | Description                                                                 | Schema |
+|--------|----------------------------------------------------------------------------|-----------------------------------------------------------------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | The current running service version.                                        | Inline |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error. Unable to determine current running service version. | Inline |
 
 <h3 id="get__boot_v1_service_version-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» bss-version|string|false|none|none|
+| Name          | Type   | Required | Restrictions | Description |
+|---------------|--------|----------|--------------|-------------|
+| » bss-version | string | false    | none         | none        |
 
 Status Code **500**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» bss-version|string|false|none|none|
+| Name          | Type   | Required | Restrictions | Description |
+|---------------|--------|----------|--------------|-------------|
+| » bss-version | string | false    | none         | none        |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|bss-version|error|
+| Property    | Value |
+|-------------|-------|
+| bss-version | error |
 
 <aside class="success">
 This operation does not require authentication
@@ -2135,48 +2135,48 @@ This will retrieve the current BSS version and status, along with the connection
 
 <h3 id="get__boot_v1_service_status_all-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|All service checks reported a healthy status.|Inline|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|One or more service checks reported an unhealthy status.|Inline|
+| Status | Meaning                                                                    | Description                                              | Schema |
+|--------|----------------------------------------------------------------------------|----------------------------------------------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | All service checks reported a healthy status.            | Inline |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | One or more service checks reported an unhealthy status. | Inline |
 
 <h3 id="get__boot_v1_service_status_all-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» bss-status|string|false|none|none|
-|» bss-status-etcd|string|false|none|Current connection status to ETCD.|
-|» bss-status-hsm|string|false|none|Current connection status to HSM.|
-|» bss-version|string|false|none|none|
+| Name              | Type   | Required | Restrictions | Description                        |
+|-------------------|--------|----------|--------------|------------------------------------|
+| » bss-status      | string | false    | none         | none                               |
+| » bss-status-etcd | string | false    | none         | Current connection status to ETCD. |
+| » bss-status-hsm  | string | false    | none         | Current connection status to HSM.  |
+| » bss-version     | string | false    | none         | none                               |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|bss-status|running|
-|bss-status-etcd|connected|
-|bss-status-hsm|connected|
+| Property        | Value     |
+|-----------------|-----------|
+| bss-status      | running   |
+| bss-status-etcd | connected |
+| bss-status-hsm  | connected |
 
 Status Code **500**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» bss-status|string|false|none|none|
-|» bss-status-etcd|string|false|none|Current connection status to ETCD.|
-|» bss-status-hsm|string|false|none|Current connection status to HSM.|
-|» bss-version|string|false|none|none|
+| Name              | Type   | Required | Restrictions | Description                        |
+|-------------------|--------|----------|--------------|------------------------------------|
+| » bss-status      | string | false    | none         | none                               |
+| » bss-status-etcd | string | false    | none         | Current connection status to ETCD. |
+| » bss-status-hsm  | string | false    | none         | Current connection status to HSM.  |
+| » bss-version     | string | false    | none         | none                               |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|bss-status|running|
-|bss-status-etcd|connected|
-|bss-status-etcd|error|
-|bss-status-hsm|connected|
-|bss-status-hsm|error|
+| Property        | Value     |
+|-----------------|-----------|
+| bss-status      | running   |
+| bss-status-etcd | connected |
+| bss-status-etcd | error     |
+| bss-status-hsm  | connected |
+| bss-status-hsm  | error     |
 
 <aside class="success">
 This operation does not require authentication
@@ -2230,15 +2230,15 @@ Alternatively, if you specify a kernel or initrd image and params, but no host, 
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|hosts|[string]|false|none|host names|
-|macs|[string]|false|none|MAC addresses|
-|nids|[integer]|false|none|Node ID|
-|params|string|false|none|Specific to the kernel that is being booted.|
-|kernel|string|false|none|URL or file system path specifying kernel image.|
-|initrd|string|false|none|URL or file system path specifying initrd image.|
-|cloud-init|[CloudInit](#schemacloudinit)|false|none|Cloud-Init data for the hosts|
+| Name       | Type                          | Required | Restrictions | Description                                      |
+|------------|-------------------------------|----------|--------------|--------------------------------------------------|
+| hosts      | [string]                      | false    | none         | host names                                       |
+| macs       | [string]                      | false    | none         | MAC addresses                                    |
+| nids       | [integer]                     | false    | none         | Node ID                                          |
+| params     | string                        | false    | none         | Specific to the kernel that is being booted.     |
+| kernel     | string                        | false    | none         | URL or file system path specifying kernel image. |
+| initrd     | string                        | false    | none         | URL or file system path specifying initrd image. |
+| cloud-init | [CloudInit](#schemacloudinit) | false    | none         | Cloud-Init data for the hosts                    |
 
 <h2 id="tocS_CloudInit">CloudInit</h2>
 <!-- backwards compatibility -->
@@ -2263,11 +2263,11 @@ Cloud-Init data for the hosts
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|meta-data|[CloudInitMetadata](#schemacloudinitmetadata)|false|none|Cloud-Init Instance Metadata for a host.|
-|user-data|[CloudInitUserData](#schemacloudinituserdata)|false|none|Cloud-Init User data for a host.|
-|phone-home|[CloudInitPhoneHome](#schemacloudinitphonehome)|false|none|Data sent from the Phone Home Cloud-Init module after a host's boot is complete.|
+| Name       | Type                                            | Required | Restrictions | Description                                                                      |
+|------------|-------------------------------------------------|----------|--------------|----------------------------------------------------------------------------------|
+| meta-data  | [CloudInitMetadata](#schemacloudinitmetadata)   | false    | none         | Cloud-Init Instance Metadata for a host.                                         |
+| user-data  | [CloudInitUserData](#schemacloudinituserdata)   | false    | none         | Cloud-Init User data for a host.                                                 |
+| phone-home | [CloudInitPhoneHome](#schemacloudinitphonehome) | false    | none         | Data sent from the Phone Home Cloud-Init module after a host's boot is complete. |
 
 <h2 id="tocS_CloudInitMetadata">CloudInitMetadata</h2>
 <!-- backwards compatibility -->
@@ -2329,15 +2329,15 @@ Data sent from the Phone Home Cloud-Init module after a host's boot is complete.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|pub_key_dsa|string|false|none|none|
-|pub_key_rsa|string|false|none|none|
-|pub_key_ecdsa|string|false|none|none|
-|pub_key_ed25519|string|false|none|none|
-|instance_id|string|false|none|none|
-|hostname|string|false|none|none|
-|fqdn|string|false|none|none|
+| Name            | Type   | Required | Restrictions | Description |
+|-----------------|--------|----------|--------------|-------------|
+| pub_key_dsa     | string | false    | none         | none        |
+| pub_key_rsa     | string | false    | none         | none        |
+| pub_key_ecdsa   | string | false    | none         | none        |
+| pub_key_ed25519 | string | false    | none         | none        |
+| instance_id     | string | false    | none         | none        |
+| hostname        | string | false    | none         | none        |
+| fqdn            | string | false    | none         | none        |
 
 <h2 id="tocS_Component">Component</h2>
 <!-- backwards compatibility -->
@@ -2376,24 +2376,24 @@ This data structure is used to return host info for debug purposes
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|ID|string|false|none|none|
-|Type|string|false|none|none|
-|State|string|false|none|none|
-|Flag|string|false|none|none|
-|Enabled|boolean|false|none|none|
-|Role|string|false|none|none|
-|RubeRole|string|false|none|none|
-|NID|integer|false|none|none|
-|NetType|string|false|none|none|
-|Arch|string|false|none|none|
-|Class|string|false|none|none|
-|ReservationDisabled|boolean|false|none|none|
-|Locked|boolean|false|none|none|
-|FQDN|string|false|none|none|
-|MAC|[string]|false|none|none|
-|EndpointEnabled|boolean|false|none|none|
+| Name                | Type     | Required | Restrictions | Description |
+|---------------------|----------|----------|--------------|-------------|
+| ID                  | string   | false    | none         | none        |
+| Type                | string   | false    | none         | none        |
+| State               | string   | false    | none         | none        |
+| Flag                | string   | false    | none         | none        |
+| Enabled             | boolean  | false    | none         | none        |
+| Role                | string   | false    | none         | none        |
+| RubeRole            | string   | false    | none         | none        |
+| NID                 | integer  | false    | none         | none        |
+| NetType             | string   | false    | none         | none        |
+| Arch                | string   | false    | none         | none        |
+| Class               | string   | false    | none         | none        |
+| ReservationDisabled | boolean  | false    | none         | none        |
+| Locked              | boolean  | false    | none         | none        |
+| FQDN                | string   | false    | none         | none        |
+| MAC                 | [string] | false    | none         | none        |
+| EndpointEnabled     | boolean  | false    | none         | none        |
 
 <h2 id="tocS_StateInfo">StateInfo</h2>
 <!-- backwards compatibility -->
@@ -2470,12 +2470,12 @@ This data structure is used to return the full component and boot parameter info
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|components|[object]|false|none|none|
-|» schema|[Component](#schemacomponent)|false|none|This data structure is used to return host info for debug purposes|
-|params|[object]|false|none|none|
-|» schema|[BootParams](#schemabootparams)|false|none|When used as a request body, the caller sets boot parameters and specifies hosts, along with the kernel image path/URL and initrd path/URL. To specify hosts, use one of the three parameters - hosts, MACs, or NIDs. If MAC addresses are used, they are mapped to host names based on information retrieved from the hardware state manager.  Likewise, if NIDs are used, they are mapped to host names with the same hardware state manager info.  While the expected usage is to specify hosts based on their host names, the "macs" and "nids" alternatives may be more convenient in some contexts.<br>You can also specify a general tag for hosts. A tag is 'Default', or one of the roles that a node may be defined as in the hardware state manager (HSM). Some of the HSM roles like 'Compute', 'Storage', 'System', and 'Application' can be specified as hosts and are managed similar to specific hosts. While BSS allows for fine grained control of individual nodes, the tags are typically more convenient, especially for a large system.<br><br>Alternatively, if you specify a kernel or initrd image and params, but no host, MAC, or NID, the boot script service will associate the specified params with the specified kernel or initrd image. When used as a response body, identifies the hosts available for booting using either hosts, MACs, or NIDs, depending on which parameter was used in the request.|
+| Name       | Type                            | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+|------------|---------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| components | [object]                        | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| » schema   | [Component](#schemacomponent)   | false    | none         | This data structure is used to return host info for debug purposes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| params     | [object]                        | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| » schema   | [BootParams](#schemabootparams) | false    | none         | When used as a request body, the caller sets boot parameters and specifies hosts, along with the kernel image path/URL and initrd path/URL. To specify hosts, use one of the three parameters - hosts, MACs, or NIDs. If MAC addresses are used, they are mapped to host names based on information retrieved from the hardware state manager.  Likewise, if NIDs are used, they are mapped to host names with the same hardware state manager info.  While the expected usage is to specify hosts based on their host names, the "macs" and "nids" alternatives may be more convenient in some contexts.<br>You can also specify a general tag for hosts. A tag is 'Default', or one of the roles that a node may be defined as in the hardware state manager (HSM). Some of the HSM roles like 'Compute', 'Storage', 'System', and 'Application' can be specified as hosts and are managed similar to specific hosts. While BSS allows for fine grained control of individual nodes, the tags are typically more convenient, especially for a large system.<br><br>Alternatively, if you specify a kernel or initrd image and params, but no host, MAC, or NID, the boot script service will associate the specified params with the specified kernel or initrd image. When used as a response body, identifies the hosts available for booting using either hosts, MACs, or NIDs, depending on which parameter was used in the request. |
 
 <h2 id="tocS_HostInfo">HostInfo</h2>
 <!-- backwards compatibility -->
@@ -2516,9 +2516,9 @@ This data structure is used to return the component info for a /hosts get reques
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[Component](#schemacomponent)]|false|none|This data structure is used to return the component info for a /hosts get request|
+| Name        | Type                            | Required | Restrictions | Description                                                                       |
+|-------------|---------------------------------|----------|--------------|-----------------------------------------------------------------------------------|
+| *anonymous* | [[Component](#schemacomponent)] | false    | none         | This data structure is used to return the component info for a /hosts get request |
 
 <h2 id="tocS_EndpointAccess">EndpointAccess</h2>
 <!-- backwards compatibility -->
@@ -2540,18 +2540,18 @@ This data structure is used to return the endpoint access information for a give
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|false|none|Xname of the node|
-|endpoint|string|false|none|none|
-|last_epoch|integer|false|none|Unix epoch time of last request. An epoch of 0 indicates a request has not taken place.|
+| Name       | Type    | Required | Restrictions | Description                                                                             |
+|------------|---------|----------|--------------|-----------------------------------------------------------------------------------------|
+| name       | string  | false    | none         | Xname of the node                                                                       |
+| endpoint   | string  | false    | none         | none                                                                                    |
+| last_epoch | integer | false    | none         | Unix epoch time of last request. An epoch of 0 indicates a request has not taken place. |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|endpoint|bootscript|
-|endpoint|user-data|
+| Property | Value      |
+|----------|------------|
+| endpoint | bootscript |
+| endpoint | user-data  |
 
 <h2 id="tocS_Error">Error</h2>
 <!-- backwards compatibility -->
@@ -2575,11 +2575,11 @@ Return an RFC7808 error response.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|type|string|false|none|none|
-|title|string|false|none|none|
-|status|integer|false|none|none|
-|detail|string|false|none|none|
-|instance|string|false|none|none|
+| Name     | Type    | Required | Restrictions | Description |
+|----------|---------|----------|--------------|-------------|
+| type     | string  | false    | none         | none        |
+| title    | string  | false    | none         | none        |
+| status   | integer | false    | none         | none        |
+| detail   | string  | false    | none         | none        |
+| instance | string  | false    | none         | none        |
 

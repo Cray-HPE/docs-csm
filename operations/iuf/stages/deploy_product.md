@@ -17,9 +17,9 @@ The `deploy-product` stage changes the running state of the system.
 
 The following arguments are most often used with the `deploy-product` stage. See `iuf -h` and `iuf run -h` for additional arguments.
 
-| Input           | `iuf` Argument | Description                                            |
-| --------------- | -------------- | ------------------------------------------------------ |
-| Activity        | `-a ACTIVITY`  | Activity created for the install or upgrade operations |
+| Input    | `iuf` Argument | Description                                            |
+|----------|----------------|--------------------------------------------------------|
+| Activity | `-a ACTIVITY`  | Activity created for the install or upgrade operations |
 
 ## Execution details
 

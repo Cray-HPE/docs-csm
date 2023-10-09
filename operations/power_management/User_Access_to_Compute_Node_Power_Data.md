@@ -16,21 +16,21 @@ Note that each node has a power supply that can support a fixed number of Watts.
 
 Access to compute node power and energy data is provided by a set of files located in `/sys/cray/pm\_counters/` on the node. All pm\_counters are accompanied by a timestamp.
 
-| File | Description |
-| ---- | ----------- |
-|power|Point-in-time power \(Watts\). When accelerators are present, includes accel\_power. See limitation below on data collection from accelerators.|
-|energy|Accumulated energy, in joules. When accelerators are present, includes accel\_energy. See limitation below on data collection from accelerators.|
-|cpu\_power|Point-in-time power \(Watts\) used by the CPU domain.|
-|cpu\_energy|The total energy \(Joules\) used by the CPU domain.|
-|cpu\_temp|Temperature reading \(Celsius\) of the CPU domain.|
-|memory\_power|Point-in-time power \(Watts\) used by the memory domain.|
-|memory\_energy|The total energy \(Joules\) used by the memory domain.|
-|accel\_energy|Accumulated accelerator energy \(Joules\). The data is non-zero only when an accelerator is present on the node.|
-|accel\_power|Accelerator point-in-time power \(Watts\). The data is non-zero only when an accelerator is present on the node.|
-|generation|A counter that increments each time a power cap value is changed.|
-|startup|Startup counter.|
-|freshness|Free-running counter that increments at a rate of approximately 10Hz.|
-|version|Version number for power management counter support.|
-|power\_cap|Current power cap limit in Watts; 0 indicates no capping. When accelerators are present, includes accel\_power\_cap.|
-|raw\_scan\_hz|The power management scanning rate for all data in pm\_counters.|
+| File           | Description                                                                                                                                      |
+|----------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| power          | Point-in-time power \(Watts\). When accelerators are present, includes accel\_power. See limitation below on data collection from accelerators.  |
+| energy         | Accumulated energy, in joules. When accelerators are present, includes accel\_energy. See limitation below on data collection from accelerators. |
+| cpu\_power     | Point-in-time power \(Watts\) used by the CPU domain.                                                                                            |
+| cpu\_energy    | The total energy \(Joules\) used by the CPU domain.                                                                                              |
+| cpu\_temp      | Temperature reading \(Celsius\) of the CPU domain.                                                                                               |
+| memory\_power  | Point-in-time power \(Watts\) used by the memory domain.                                                                                         |
+| memory\_energy | The total energy \(Joules\) used by the memory domain.                                                                                           |
+| accel\_energy  | Accumulated accelerator energy \(Joules\). The data is non-zero only when an accelerator is present on the node.                                 |
+| accel\_power   | Accelerator point-in-time power \(Watts\). The data is non-zero only when an accelerator is present on the node.                                 |
+| generation     | A counter that increments each time a power cap value is changed.                                                                                |
+| startup        | Startup counter.                                                                                                                                 |
+| freshness      | Free-running counter that increments at a rate of approximately 10Hz.                                                                            |
+| version        | Version number for power management counter support.                                                                                             |
+| power\_cap     | Current power cap limit in Watts; 0 indicates no capping. When accelerators are present, includes accel\_power\_cap.                             |
+| raw\_scan\_hz  | The power management scanning rate for all data in pm\_counters.                                                                                 |
 

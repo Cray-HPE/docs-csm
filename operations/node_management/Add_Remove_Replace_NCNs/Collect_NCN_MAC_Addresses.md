@@ -114,13 +114,13 @@ See [Check for latest documentation](../../../update_product_stream/README.md#ch
 
         Using the above output from the MAC collection iPXE script, derive the following `add_management_ncn.py` script arguments:
 
-        | Interface   | MAC Address         | CLI Flag
-        | ----------- | ------------------- | --------
-        | `mgmt0`     | `98:03:9b:bb:a9:94` | `--mac-mgmt0=98:03:9b:bb:a9:94`
-        | `mgmt1`     | `98:03:9b:bb:a9:95` | `--mac-mgmt1=98:03:9b:bb:a9:95`
-        | `hsn0`      | `ec:0d:9a:d4:2b:d8` | `--mac-hsn0=ec:0d:9a:d4:2b:d8`
+        | Interface | MAC Address         | CLI Flag                        |
+        |-----------|---------------------|---------------------------------|
+        | `mgmt0`   | `98:03:9b:bb:a9:94` | `--mac-mgmt0=98:03:9b:bb:a9:94` |
+        | `mgmt1`   | `98:03:9b:bb:a9:95` | `--mac-mgmt1=98:03:9b:bb:a9:95` |
+        | `hsn0`    | `ec:0d:9a:d4:2b:d8` | `--mac-hsn0=ec:0d:9a:d4:2b:d8`  |
 
-    1. Power off the NCN.
+   1. Power off the NCN.
 
         ```bash
         ipmitool -I lanplus -U root -E -H "${BMC_IP}" chassis power off

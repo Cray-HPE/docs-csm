@@ -12,11 +12,11 @@ This section defines environment variables and directory content that is used th
 
     The following environment variables are used throughout the workflow:
 
-    | Name               | Recommended Value                                | Description                                                                               |
-    | ------------------ | ------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-    | `${ACTIVITY_NAME}` | Use a short descriptor for the activity          | String identifier for the IUF activity and the `iuf -a` argument for all `iuf` commands   |
-    | `${MEDIA_DIR}`     | `/etc/cray/upgrade/csm/media/"${ACTIVITY_NAME}"` | Directory containing product distribution files                                           |
-    | `${ACTIVITY_DIR}`  | `/etc/cray/upgrade/csm/iuf/"${ACTIVITY_NAME}"`   | Directory containing IUF activity logs and state                                          |
+    | Name               | Recommended Value                                | Description                                                                                                                       |
+    |--------------------|--------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+    | `${ACTIVITY_NAME}` | Use a short descriptor for the activity          | String identifier for the IUF activity and the `iuf -a` argument for all `iuf` commands                                           |
+    | `${MEDIA_DIR}`     | `/etc/cray/upgrade/csm/media/"${ACTIVITY_NAME}"` | Directory containing product distribution files                                                                                   |
+    | `${ACTIVITY_DIR}`  | `/etc/cray/upgrade/csm/iuf/"${ACTIVITY_NAME}"`   | Directory containing IUF activity logs and state                                                                                  |
     | `${ADMIN_DIR}`     | `/etc/cray/upgrade/csm/admin`                    | Directory containing files that define default values and site preferences for IUF, e.g. `product_vars.yaml` and `site_vars.yaml` |
 
     (`ncn-m001#`) Create a typescript and set environment variables that will be used later in the install or upgrade workflow. The example value of `${ACTIVITY_NAME}` can be changed as needed.

@@ -164,52 +164,52 @@ func main() {
 
 <h3 id="get__v1alpha3_tenants-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ResponseError](#schemaresponseerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
+| Status | Meaning                                                                    | Description           | Schema                                |
+|--------|----------------------------------------------------------------------------|-----------------------|---------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                    | Inline                                |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request           | [ResponseError](#schemaresponseerror) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Not Found             | [ResponseError](#schemaresponseerror) |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error | [ResponseError](#schemaresponseerror) |
 
 <h3 id="get__v1alpha3_tenants-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[Tenant](#schematenant)]|false|none|[The primary schema/definition of a tenant]|
-|» spec|[TenantSpec](#schematenantspec)|true|none|The desired state of Tenant|
-|»» childnamespaces|[string]|false|none|none|
-|»» state|string|false|none|+kubebuilder:validation:Optional|
-|»» tenanthooks|[[TenantHook](#schematenanthook)]|false|none|+kubebuilder:validation:Optional|
-|»»» blockingcall|boolean|false|none|+kubebuilder:default:=false<br>+kubebuilder:validation:Optional|
-|»»» eventtypes|[string]|false|none|none|
-|»»» hookcredentials|[HookCredentials](#schemahookcredentials)|false|none|+kubebuilder:validation:Optional|
-|»»»» secretname|string|false|none|+kubebuilder:validation:Optional<br>Optional Kubernetes secret name containing credentials for calling webhook|
-|»»»» secretnamespace|string|false|none|+kubebuilder:validation:Optional<br>Optional Kubernetes namespace for the secret|
-|»»» name|string|false|none|none|
-|»»» url|string|false|none|none|
-|»» tenantkms|[TenantKmsResource](#schematenantkmsresource)|false|none|+kubebuilder:validation:Optional|
-|»»» enablekms|boolean|false|none|+kubebuilder:default:=false<br>+kubebuilder:validation:Optional<br>Create a Vault transit engine for the tenant if this setting is true.|
-|»»» keyname|string|false|none|+kubebuilder:default:=key1<br>+kubebuilder:validation:Optional<br>Optional name for the transit engine key.|
-|»»» keytype|string|false|none|+kubebuilder:default:=rsa-3072<br>+kubebuilder:validation:Optional<br>Optional key type. See https://developer.hashicorp.com/vault/api-docs/secret/transit#type<br>The default of 3072 is the minimal permitted under the Commercial National Security Algorithm (CNSA) 1.0 suite.|
-|»» tenantname|string|true|none|none|
-|»» tenantresources|[[TenantResource](#schematenantresource)]|true|none|The desired resources for the Tenant|
-|»»» enforceexclusivehsmgroups|boolean|false|none|none|
-|»»» hsmgrouplabel|string|false|none|none|
-|»»» hsmpartitionname|string|false|none|none|
-|»»» type|string|true|none|none|
-|»»» xnames|[string]|true|none|none|
-|» status|[TenantStatus](#schematenantstatus)|false|none|The observed state of Tenant|
-|»» childnamespaces|[string]|false|none|none|
-|»» tenanthooks|[[TenantHook](#schematenanthook)]|false|none|[The webhook definition to call an API for tenant CRUD operations]|
-|»» tenantkms|[TenantKmsStatus](#schematenantkmsstatus)|false|none|The Vault KMS transit engine status for the tenant|
-|»»» keyname|string|false|none|The Vault transit key name.|
-|»»» keytype|string|false|none|The Vault transit key type.|
-|»»» publickey|string|false|none|The Vault public key.|
-|»»» transitname|string|false|none|The generated Vault transit engine name.|
-|»» tenantresources|[[TenantResource](#schematenantresource)]|false|none|The desired resources for the Tenant|
-|»» uuid|string(uuid)|false|none|none|
+| Name                          | Type                                          | Required | Restrictions | Description                                                                                                                                                                                                                                                                        |
+|-------------------------------|-----------------------------------------------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous*                   | [[Tenant](#schematenant)]                     | false    | none         | [The primary schema/definition of a tenant]                                                                                                                                                                                                                                        |
+| » spec                        | [TenantSpec](#schematenantspec)               | true     | none         | The desired state of Tenant                                                                                                                                                                                                                                                        |
+| »» childnamespaces            | [string]                                      | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »» state                      | string                                        | false    | none         | +kubebuilder:validation:Optional                                                                                                                                                                                                                                                   |
+| »» tenanthooks                | [[TenantHook](#schematenanthook)]             | false    | none         | +kubebuilder:validation:Optional                                                                                                                                                                                                                                                   |
+| »»» blockingcall              | boolean                                       | false    | none         | +kubebuilder:default:=false<br>+kubebuilder:validation:Optional                                                                                                                                                                                                                    |
+| »»» eventtypes                | [string]                                      | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »»» hookcredentials           | [HookCredentials](#schemahookcredentials)     | false    | none         | +kubebuilder:validation:Optional                                                                                                                                                                                                                                                   |
+| »»»» secretname               | string                                        | false    | none         | +kubebuilder:validation:Optional<br>Optional Kubernetes secret name containing credentials for calling webhook                                                                                                                                                                     |
+| »»»» secretnamespace          | string                                        | false    | none         | +kubebuilder:validation:Optional<br>Optional Kubernetes namespace for the secret                                                                                                                                                                                                   |
+| »»» name                      | string                                        | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »»» url                       | string                                        | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »» tenantkms                  | [TenantKmsResource](#schematenantkmsresource) | false    | none         | +kubebuilder:validation:Optional                                                                                                                                                                                                                                                   |
+| »»» enablekms                 | boolean                                       | false    | none         | +kubebuilder:default:=false<br>+kubebuilder:validation:Optional<br>Create a Vault transit engine for the tenant if this setting is true.                                                                                                                                           |
+| »»» keyname                   | string                                        | false    | none         | +kubebuilder:default:=key1<br>+kubebuilder:validation:Optional<br>Optional name for the transit engine key.                                                                                                                                                                        |
+| »»» keytype                   | string                                        | false    | none         | +kubebuilder:default:=rsa-3072<br>+kubebuilder:validation:Optional<br>Optional key type. See https://developer.hashicorp.com/vault/api-docs/secret/transit#type<br>The default of 3072 is the minimal permitted under the Commercial National Security Algorithm (CNSA) 1.0 suite. |
+| »» tenantname                 | string                                        | true     | none         | none                                                                                                                                                                                                                                                                               |
+| »» tenantresources            | [[TenantResource](#schematenantresource)]     | true     | none         | The desired resources for the Tenant                                                                                                                                                                                                                                               |
+| »»» enforceexclusivehsmgroups | boolean                                       | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »»» hsmgrouplabel             | string                                        | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »»» hsmpartitionname          | string                                        | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »»» type                      | string                                        | true     | none         | none                                                                                                                                                                                                                                                                               |
+| »»» xnames                    | [string]                                      | true     | none         | none                                                                                                                                                                                                                                                                               |
+| » status                      | [TenantStatus](#schematenantstatus)           | false    | none         | The observed state of Tenant                                                                                                                                                                                                                                                       |
+| »» childnamespaces            | [string]                                      | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »» tenanthooks                | [[TenantHook](#schematenanthook)]             | false    | none         | [The webhook definition to call an API for tenant CRUD operations]                                                                                                                                                                                                                 |
+| »» tenantkms                  | [TenantKmsStatus](#schematenantkmsstatus)     | false    | none         | The Vault KMS transit engine status for the tenant                                                                                                                                                                                                                                 |
+| »»» keyname                   | string                                        | false    | none         | The Vault transit key name.                                                                                                                                                                                                                                                        |
+| »»» keytype                   | string                                        | false    | none         | The Vault transit key type.                                                                                                                                                                                                                                                        |
+| »»» publickey                 | string                                        | false    | none         | The Vault public key.                                                                                                                                                                                                                                                              |
+| »»» transitname               | string                                        | false    | none         | The generated Vault transit engine name.                                                                                                                                                                                                                                           |
+| »» tenantresources            | [[TenantResource](#schematenantresource)]     | false    | none         | The desired resources for the Tenant                                                                                                                                                                                                                                               |
+| »» uuid                       | string(uuid)                                  | false    | none         | none                                                                                                                                                                                                                                                                               |
 
 <aside class="success">
 This operation does not require authentication
@@ -286,9 +286,9 @@ func main() {
 
 <h3 id="post__v1alpha3_tenants-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|string|true|Array of Xnames|
+| Name | In   | Type   | Required | Description     |
+|------|------|--------|----------|-----------------|
+| body | body | string | true     | Array of Xnames |
 
 > Example responses
 
@@ -383,52 +383,52 @@ func main() {
 
 <h3 id="post__v1alpha3_tenants-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ResponseError](#schemaresponseerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
+| Status | Meaning                                                                    | Description           | Schema                                |
+|--------|----------------------------------------------------------------------------|-----------------------|---------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                    | Inline                                |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request           | [ResponseError](#schemaresponseerror) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Not Found             | [ResponseError](#schemaresponseerror) |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error | [ResponseError](#schemaresponseerror) |
 
 <h3 id="post__v1alpha3_tenants-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[Tenant](#schematenant)]|false|none|[The primary schema/definition of a tenant]|
-|» spec|[TenantSpec](#schematenantspec)|true|none|The desired state of Tenant|
-|»» childnamespaces|[string]|false|none|none|
-|»» state|string|false|none|+kubebuilder:validation:Optional|
-|»» tenanthooks|[[TenantHook](#schematenanthook)]|false|none|+kubebuilder:validation:Optional|
-|»»» blockingcall|boolean|false|none|+kubebuilder:default:=false<br>+kubebuilder:validation:Optional|
-|»»» eventtypes|[string]|false|none|none|
-|»»» hookcredentials|[HookCredentials](#schemahookcredentials)|false|none|+kubebuilder:validation:Optional|
-|»»»» secretname|string|false|none|+kubebuilder:validation:Optional<br>Optional Kubernetes secret name containing credentials for calling webhook|
-|»»»» secretnamespace|string|false|none|+kubebuilder:validation:Optional<br>Optional Kubernetes namespace for the secret|
-|»»» name|string|false|none|none|
-|»»» url|string|false|none|none|
-|»» tenantkms|[TenantKmsResource](#schematenantkmsresource)|false|none|+kubebuilder:validation:Optional|
-|»»» enablekms|boolean|false|none|+kubebuilder:default:=false<br>+kubebuilder:validation:Optional<br>Create a Vault transit engine for the tenant if this setting is true.|
-|»»» keyname|string|false|none|+kubebuilder:default:=key1<br>+kubebuilder:validation:Optional<br>Optional name for the transit engine key.|
-|»»» keytype|string|false|none|+kubebuilder:default:=rsa-3072<br>+kubebuilder:validation:Optional<br>Optional key type. See https://developer.hashicorp.com/vault/api-docs/secret/transit#type<br>The default of 3072 is the minimal permitted under the Commercial National Security Algorithm (CNSA) 1.0 suite.|
-|»» tenantname|string|true|none|none|
-|»» tenantresources|[[TenantResource](#schematenantresource)]|true|none|The desired resources for the Tenant|
-|»»» enforceexclusivehsmgroups|boolean|false|none|none|
-|»»» hsmgrouplabel|string|false|none|none|
-|»»» hsmpartitionname|string|false|none|none|
-|»»» type|string|true|none|none|
-|»»» xnames|[string]|true|none|none|
-|» status|[TenantStatus](#schematenantstatus)|false|none|The observed state of Tenant|
-|»» childnamespaces|[string]|false|none|none|
-|»» tenanthooks|[[TenantHook](#schematenanthook)]|false|none|[The webhook definition to call an API for tenant CRUD operations]|
-|»» tenantkms|[TenantKmsStatus](#schematenantkmsstatus)|false|none|The Vault KMS transit engine status for the tenant|
-|»»» keyname|string|false|none|The Vault transit key name.|
-|»»» keytype|string|false|none|The Vault transit key type.|
-|»»» publickey|string|false|none|The Vault public key.|
-|»»» transitname|string|false|none|The generated Vault transit engine name.|
-|»» tenantresources|[[TenantResource](#schematenantresource)]|false|none|The desired resources for the Tenant|
-|»» uuid|string(uuid)|false|none|none|
+| Name                          | Type                                          | Required | Restrictions | Description                                                                                                                                                                                                                                                                        |
+|-------------------------------|-----------------------------------------------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous*                   | [[Tenant](#schematenant)]                     | false    | none         | [The primary schema/definition of a tenant]                                                                                                                                                                                                                                        |
+| » spec                        | [TenantSpec](#schematenantspec)               | true     | none         | The desired state of Tenant                                                                                                                                                                                                                                                        |
+| »» childnamespaces            | [string]                                      | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »» state                      | string                                        | false    | none         | +kubebuilder:validation:Optional                                                                                                                                                                                                                                                   |
+| »» tenanthooks                | [[TenantHook](#schematenanthook)]             | false    | none         | +kubebuilder:validation:Optional                                                                                                                                                                                                                                                   |
+| »»» blockingcall              | boolean                                       | false    | none         | +kubebuilder:default:=false<br>+kubebuilder:validation:Optional                                                                                                                                                                                                                    |
+| »»» eventtypes                | [string]                                      | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »»» hookcredentials           | [HookCredentials](#schemahookcredentials)     | false    | none         | +kubebuilder:validation:Optional                                                                                                                                                                                                                                                   |
+| »»»» secretname               | string                                        | false    | none         | +kubebuilder:validation:Optional<br>Optional Kubernetes secret name containing credentials for calling webhook                                                                                                                                                                     |
+| »»»» secretnamespace          | string                                        | false    | none         | +kubebuilder:validation:Optional<br>Optional Kubernetes namespace for the secret                                                                                                                                                                                                   |
+| »»» name                      | string                                        | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »»» url                       | string                                        | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »» tenantkms                  | [TenantKmsResource](#schematenantkmsresource) | false    | none         | +kubebuilder:validation:Optional                                                                                                                                                                                                                                                   |
+| »»» enablekms                 | boolean                                       | false    | none         | +kubebuilder:default:=false<br>+kubebuilder:validation:Optional<br>Create a Vault transit engine for the tenant if this setting is true.                                                                                                                                           |
+| »»» keyname                   | string                                        | false    | none         | +kubebuilder:default:=key1<br>+kubebuilder:validation:Optional<br>Optional name for the transit engine key.                                                                                                                                                                        |
+| »»» keytype                   | string                                        | false    | none         | +kubebuilder:default:=rsa-3072<br>+kubebuilder:validation:Optional<br>Optional key type. See https://developer.hashicorp.com/vault/api-docs/secret/transit#type<br>The default of 3072 is the minimal permitted under the Commercial National Security Algorithm (CNSA) 1.0 suite. |
+| »» tenantname                 | string                                        | true     | none         | none                                                                                                                                                                                                                                                                               |
+| »» tenantresources            | [[TenantResource](#schematenantresource)]     | true     | none         | The desired resources for the Tenant                                                                                                                                                                                                                                               |
+| »»» enforceexclusivehsmgroups | boolean                                       | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »»» hsmgrouplabel             | string                                        | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »»» hsmpartitionname          | string                                        | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »»» type                      | string                                        | true     | none         | none                                                                                                                                                                                                                                                                               |
+| »»» xnames                    | [string]                                      | true     | none         | none                                                                                                                                                                                                                                                                               |
+| » status                      | [TenantStatus](#schematenantstatus)           | false    | none         | The observed state of Tenant                                                                                                                                                                                                                                                       |
+| »» childnamespaces            | [string]                                      | false    | none         | none                                                                                                                                                                                                                                                                               |
+| »» tenanthooks                | [[TenantHook](#schematenanthook)]             | false    | none         | [The webhook definition to call an API for tenant CRUD operations]                                                                                                                                                                                                                 |
+| »» tenantkms                  | [TenantKmsStatus](#schematenantkmsstatus)     | false    | none         | The Vault KMS transit engine status for the tenant                                                                                                                                                                                                                                 |
+| »»» keyname                   | string                                        | false    | none         | The Vault transit key name.                                                                                                                                                                                                                                                        |
+| »»» keytype                   | string                                        | false    | none         | The Vault transit key type.                                                                                                                                                                                                                                                        |
+| »»» publickey                 | string                                        | false    | none         | The Vault public key.                                                                                                                                                                                                                                                              |
+| »»» transitname               | string                                        | false    | none         | The generated Vault transit engine name.                                                                                                                                                                                                                                           |
+| »» tenantresources            | [[TenantResource](#schematenantresource)]     | false    | none         | The desired resources for the Tenant                                                                                                                                                                                                                                               |
+| »» uuid                       | string(uuid)                                  | false    | none         | none                                                                                                                                                                                                                                                                               |
 
 <aside class="success">
 This operation does not require authentication
@@ -495,9 +495,9 @@ func main() {
 
 <h3 id="get__v1alpha3_tenants_{id}-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|id|path|string|true|Either the Name or UUID of the Tenant|
+| Name | In   | Type   | Required | Description                           |
+|------|------|--------|----------|---------------------------------------|
+| id   | path | string | true     | Either the Name or UUID of the Tenant |
 
 > Example responses
 
@@ -590,12 +590,12 @@ func main() {
 
 <h3 id="get__v1alpha3_tenants_{id}-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[Tenant](#schematenant)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ResponseError](#schemaresponseerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
+| Status | Meaning                                                                    | Description           | Schema                                |
+|--------|----------------------------------------------------------------------------|-----------------------|---------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                    | [Tenant](#schematenant)               |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request           | [ResponseError](#schemaresponseerror) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Not Found             | [ResponseError](#schemaresponseerror) |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error | [ResponseError](#schemaresponseerror) |
 
 <aside class="success">
 This operation does not require authentication
@@ -622,10 +622,10 @@ Optional credentials for calling webhook
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|secretname|string|false|none|+kubebuilder:validation:Optional<br>Optional Kubernetes secret name containing credentials for calling webhook|
-|secretnamespace|string|false|none|+kubebuilder:validation:Optional<br>Optional Kubernetes namespace for the secret|
+| Name            | Type   | Required | Restrictions | Description                                                                                                    |
+|-----------------|--------|----------|--------------|----------------------------------------------------------------------------------------------------------------|
+| secretname      | string | false    | none         | +kubebuilder:validation:Optional<br>Optional Kubernetes secret name containing credentials for calling webhook |
+| secretnamespace | string | false    | none         | +kubebuilder:validation:Optional<br>Optional Kubernetes namespace for the secret                               |
 
 <h2 id="tocS_ResponseError">ResponseError</h2>
 <!-- backwards compatibility -->
@@ -643,9 +643,9 @@ Optional credentials for calling webhook
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|message|string|false|none|none|
+| Name    | Type   | Required | Restrictions | Description |
+|---------|--------|----------|--------------|-------------|
+| message | string | false    | none         | none        |
 
 <h2 id="tocS_Tenant">Tenant</h2>
 <!-- backwards compatibility -->
@@ -744,10 +744,10 @@ The primary schema/definition of a tenant
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|spec|[TenantSpec](#schematenantspec)|true|none|The desired state of Tenant|
-|status|[TenantStatus](#schematenantstatus)|false|none|The observed state of Tenant|
+| Name   | Type                                | Required | Restrictions | Description                  |
+|--------|-------------------------------------|----------|--------------|------------------------------|
+| spec   | [TenantSpec](#schematenantspec)     | true     | none         | The desired state of Tenant  |
+| status | [TenantStatus](#schematenantstatus) | false    | none         | The observed state of Tenant |
 
 <h2 id="tocS_TenantHook">TenantHook</h2>
 <!-- backwards compatibility -->
@@ -778,13 +778,13 @@ The webhook definition to call an API for tenant CRUD operations
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|blockingcall|boolean|false|none|+kubebuilder:default:=false<br>+kubebuilder:validation:Optional|
-|eventtypes|[string]|false|none|none|
-|hookcredentials|[HookCredentials](#schemahookcredentials)|false|none|+kubebuilder:validation:Optional|
-|name|string|false|none|none|
-|url|string|false|none|none|
+| Name            | Type                                      | Required | Restrictions | Description                                                     |
+|-----------------|-------------------------------------------|----------|--------------|-----------------------------------------------------------------|
+| blockingcall    | boolean                                   | false    | none         | +kubebuilder:default:=false<br>+kubebuilder:validation:Optional |
+| eventtypes      | [string]                                  | false    | none         | none                                                            |
+| hookcredentials | [HookCredentials](#schemahookcredentials) | false    | none         | +kubebuilder:validation:Optional                                |
+| name            | string                                    | false    | none         | none                                                            |
+| url             | string                                    | false    | none         | none                                                            |
 
 <h2 id="tocS_TenantKmsResource">TenantKmsResource</h2>
 <!-- backwards compatibility -->
@@ -806,11 +806,11 @@ The Vault KMS transit engine specification for the tenant
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|enablekms|boolean|false|none|+kubebuilder:default:=false<br>+kubebuilder:validation:Optional<br>Create a Vault transit engine for the tenant if this setting is true.|
-|keyname|string|false|none|+kubebuilder:default:=key1<br>+kubebuilder:validation:Optional<br>Optional name for the transit engine key.|
-|keytype|string|false|none|+kubebuilder:default:=rsa-3072<br>+kubebuilder:validation:Optional<br>Optional key type. See https://developer.hashicorp.com/vault/api-docs/secret/transit#type<br>The default of 3072 is the minimal permitted under the Commercial National Security Algorithm (CNSA) 1.0 suite.|
+| Name      | Type    | Required | Restrictions | Description                                                                                                                                                                                                                                                                        |
+|-----------|---------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| enablekms | boolean | false    | none         | +kubebuilder:default:=false<br>+kubebuilder:validation:Optional<br>Create a Vault transit engine for the tenant if this setting is true.                                                                                                                                           |
+| keyname   | string  | false    | none         | +kubebuilder:default:=key1<br>+kubebuilder:validation:Optional<br>Optional name for the transit engine key.                                                                                                                                                                        |
+| keytype   | string  | false    | none         | +kubebuilder:default:=rsa-3072<br>+kubebuilder:validation:Optional<br>Optional key type. See https://developer.hashicorp.com/vault/api-docs/secret/transit#type<br>The default of 3072 is the minimal permitted under the Commercial National Security Algorithm (CNSA) 1.0 suite. |
 
 <h2 id="tocS_TenantKmsStatus">TenantKmsStatus</h2>
 <!-- backwards compatibility -->
@@ -833,12 +833,12 @@ The Vault KMS transit engine status for the tenant
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|keyname|string|false|none|The Vault transit key name.|
-|keytype|string|false|none|The Vault transit key type.|
-|publickey|string|false|none|The Vault public key.|
-|transitname|string|false|none|The generated Vault transit engine name.|
+| Name        | Type   | Required | Restrictions | Description                              |
+|-------------|--------|----------|--------------|------------------------------------------|
+| keyname     | string | false    | none         | The Vault transit key name.              |
+| keytype     | string | false    | none         | The Vault transit key type.              |
+| publickey   | string | false    | none         | The Vault public key.                    |
+| transitname | string | false    | none         | The generated Vault transit engine name. |
 
 <h2 id="tocS_TenantResource">TenantResource</h2>
 <!-- backwards compatibility -->
@@ -865,13 +865,13 @@ The desired resources for the Tenant
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|enforceexclusivehsmgroups|boolean|false|none|none|
-|hsmgrouplabel|string|false|none|none|
-|hsmpartitionname|string|false|none|none|
-|type|string|true|none|none|
-|xnames|[string]|true|none|none|
+| Name                      | Type     | Required | Restrictions | Description |
+|---------------------------|----------|----------|--------------|-------------|
+| enforceexclusivehsmgroups | boolean  | false    | none         | none        |
+| hsmgrouplabel             | string   | false    | none         | none        |
+| hsmpartitionname          | string   | false    | none         | none        |
+| type                      | string   | true     | none         | none        |
+| xnames                    | [string] | true     | none         | none        |
 
 <h2 id="tocS_TenantSpec">TenantSpec</h2>
 <!-- backwards compatibility -->
@@ -928,14 +928,14 @@ The desired state of Tenant
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|childnamespaces|[string]|false|none|none|
-|state|string|false|none|+kubebuilder:validation:Optional|
-|tenanthooks|[[TenantHook](#schematenanthook)]|false|none|+kubebuilder:validation:Optional|
-|tenantkms|[TenantKmsResource](#schematenantkmsresource)|false|none|+kubebuilder:validation:Optional|
-|tenantname|string|true|none|none|
-|tenantresources|[[TenantResource](#schematenantresource)]|true|none|The desired resources for the Tenant|
+| Name            | Type                                          | Required | Restrictions | Description                          |
+|-----------------|-----------------------------------------------|----------|--------------|--------------------------------------|
+| childnamespaces | [string]                                      | false    | none         | none                                 |
+| state           | string                                        | false    | none         | +kubebuilder:validation:Optional     |
+| tenanthooks     | [[TenantHook](#schematenanthook)]             | false    | none         | +kubebuilder:validation:Optional     |
+| tenantkms       | [TenantKmsResource](#schematenantkmsresource) | false    | none         | +kubebuilder:validation:Optional     |
+| tenantname      | string                                        | true     | none         | none                                 |
+| tenantresources | [[TenantResource](#schematenantresource)]     | true     | none         | The desired resources for the Tenant |
 
 <h2 id="tocS_TenantStatus">TenantStatus</h2>
 <!-- backwards compatibility -->
@@ -992,11 +992,11 @@ The observed state of Tenant
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|childnamespaces|[string]|false|none|none|
-|tenanthooks|[[TenantHook](#schematenanthook)]|false|none|[The webhook definition to call an API for tenant CRUD operations]|
-|tenantkms|[TenantKmsStatus](#schematenantkmsstatus)|false|none|The Vault KMS transit engine status for the tenant|
-|tenantresources|[[TenantResource](#schematenantresource)]|false|none|The desired resources for the Tenant|
-|uuid|string(uuid)|false|none|none|
+| Name            | Type                                      | Required | Restrictions | Description                                                        |
+|-----------------|-------------------------------------------|----------|--------------|--------------------------------------------------------------------|
+| childnamespaces | [string]                                  | false    | none         | none                                                               |
+| tenanthooks     | [[TenantHook](#schematenanthook)]         | false    | none         | [The webhook definition to call an API for tenant CRUD operations] |
+| tenantkms       | [TenantKmsStatus](#schematenantkmsstatus) | false    | none         | The Vault KMS transit engine status for the tenant                 |
+| tenantresources | [[TenantResource](#schematenantresource)] | false    | none         | The desired resources for the Tenant                               |
+| uuid            | string(uuid)                              | false    | none         | none                                                               |
 

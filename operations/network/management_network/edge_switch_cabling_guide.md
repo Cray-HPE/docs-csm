@@ -53,21 +53,21 @@ Please note that Site connections today are considered "custom configuration" as
 
 ***Note*** Edge switches would have their own tab in SHCD called "edge".
 
-| Source| Rack | Location | Slot | Port | Destination | Rack | Location | Port |
-|:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|:----|:---|
-| sw-edge-001 | x3000 | u21 | | 1  | sw-25g01 | x3000 | u12 | 47 |
-| sw-edge-002 | x3000 | u22 | | 1  | sw-25g01 | x3000 | u12 | 48 |
-| sw-edge-001 | x3000 | u21 | | 2  | sw-25g02 | x3000 | u13 | 47 |
-| sw-edge-002 | x3000 | u22 | | 2  | sw-25g02 | x3000 | u13 | 48 |
-| sw-edge-001 | x3000 | u21 | | 31  | sw-edge-002 | x3000 | u22 | 31 |
-| sw-edge-001 | x3000 | u21 | | 32  | sw-edge-002 | x3000 | u22 | 32 |
-| sw-edge-001 | x3000 | u21 | | 30  | sw-edge-002 | x3000 | u22 | 30 |
-| sw-edge-001 | x3000 | u21 | | 19  | SITE | SITE | SITE | 0 |
-| sw-edge-002 | x3000 | u22 | | 19  | SITE | SITE | SITE | 0 |
+| Source      | Rack  | Location | Slot | Port | Destination | Rack  | Location | Port |
+|:------------|-------|:---------|:-----|:-----|:------------|:------|:---------|:-----|
+| sw-edge-001 | x3000 | u21      |      | 1    | sw-25g01    | x3000 | u12      | 47   |
+| sw-edge-002 | x3000 | u22      |      | 1    | sw-25g01    | x3000 | u12      | 48   |
+| sw-edge-001 | x3000 | u21      |      | 2    | sw-25g02    | x3000 | u13      | 47   |
+| sw-edge-002 | x3000 | u22      |      | 2    | sw-25g02    | x3000 | u13      | 48   |
+| sw-edge-001 | x3000 | u21      |      | 31   | sw-edge-002 | x3000 | u22      | 31   |
+| sw-edge-001 | x3000 | u21      |      | 32   | sw-edge-002 | x3000 | u22      | 32   |
+| sw-edge-001 | x3000 | u21      |      | 30   | sw-edge-002 | x3000 | u22      | 30   |
+| sw-edge-001 | x3000 | u21      |      | 19   | SITE        | SITE  | SITE     | 0    |
+| sw-edge-002 | x3000 | u22      |      | 19   | SITE        | SITE  | SITE     | 0    |
 
 ***CAN:*** The table below is an example of how the spine switch entry in the SHCD should appear if spine switches connect to site network
 
-| Source| Rack | Location | Slot | Port | Destination | Rack | Location | Port |
-|:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|:----|:---|
-| sw-25g01 | x8000 | u37 | 36 | SITE | SITE | SITE | | 0  |
-| sw-25g02 | x8000 | u37 | 36 | SITE | SITE | SITE | | 0  |
+| Source   | Rack  | Location | Slot | Port | Destination | Rack | Location | Port |
+|:---------|-------|:---------|:-----|:-----|:------------|:-----|:---------|:-----|
+| sw-25g01 | x8000 | u37      | 36   | SITE | SITE        | SITE |          | 0    |
+| sw-25g02 | x8000 | u37      | 36   | SITE | SITE        | SITE |          | 0    |
