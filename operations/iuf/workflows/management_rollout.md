@@ -163,7 +163,7 @@ Once this step has completed:
 - All management NCNs have been upgraded to the image and CFS configuration created in the previous steps of this workflow
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [4. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware).
+Continue to the next section [3. Update management host Slingshot NIC firmware](#3-update-management-host-slingshot-nic-firmware).
 
 ### 2.2 `management-nodes-rollout` without CSM upgrade
 
