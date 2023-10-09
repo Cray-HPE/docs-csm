@@ -353,14 +353,14 @@ Run the following steps on each master node.
    **`NOTE`** There may be errors when copying files. The target may or may not exist depending on the version of CSM.
 
    - **DO NOT** copy this to the master node where this work is being performed.
-   - Copy `/etc/kubernetes/admin.conf` to all master and worker nodes.
+   - Copy `/etc/kubernetes/admin.conf` to all master and worker nodes, as well as the first storage node `ncn-s001`.
 
    Client access:
 
    **`NOTE`** Update the following command with the appropriate range of worker nodes.
 
    ```bash
-   pdcp -w ncn-m00[2-3] -w ncn-w00[1-3] /etc/kubernetes/admin.conf /etc/kubernetes/
+   pdcp -w ncn-m00[2-3] -w ncn-w00[1-3] -w ncn-s001 /etc/kubernetes/admin.conf /etc/kubernetes/
    ```
 
 ### Regenerate `kubelet` `.pem` Certificates
