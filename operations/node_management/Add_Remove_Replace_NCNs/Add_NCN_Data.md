@@ -251,31 +251,31 @@ Depending on the hardware present in the NCN, not all of these interfaces may be
 
 *NCN with a single PCIe card (two cards with one port each for two ports total):*
 
-| Interface | CLI Flag      | Required MAC Address     | Description                                             | 
-|:----------|:--------------|--------------------------|:--------------------------------------------------------| 
-| `mgmt0`   | `--mac-mgmt0` | Required                 | First MAC address for the MGMT network bond (`bond0`).  | 
-| `mgmt1`   | `--mac-mgmt1` | Required                 | Second MAC address for the MGMT network bond (`bond0`). | 
-| `hsn0`    | `--mac-hsn0`  | Required for Worker NCNs | MAC address of the first HSN NIC.                       | 
-| `hsn1`    | `--mac-hsn1`  | Optional for Worker NCNs | MAC address of the second HSN NIC.                      | 
-| `lan0`    | `--mac-lan0`  | Optional                 | MAC address for the first site-network.                 | 
-| `lan1`    | `--mac-lan1`  | Optional                 | MAC address for the second site-network.                | 
-| `lan2`    | `--mac-lan2`  | Optional                 | MAC address for the third site-network.                 | 
-| `lan3`    | `--mac-lan3`  | Optional                 | MAC address for the forth site-network.                 | 
+| Interface | CLI Flag      | Required MAC Address     | Description                                             |
+|:----------|:--------------|--------------------------|:--------------------------------------------------------|
+| `mgmt0`   | `--mac-mgmt0` | Required                 | First MAC address for the MGMT network bond (`bond0`).  |
+| `mgmt1`   | `--mac-mgmt1` | Required                 | Second MAC address for the MGMT network bond (`bond0`). |
+| `hsn0`    | `--mac-hsn0`  | Required for Worker NCNs | MAC address of the first HSN NIC.                       |
+| `hsn1`    | `--mac-hsn1`  | Optional for Worker NCNs | MAC address of the second HSN NIC.                      |
+| `lan0`    | `--mac-lan0`  | Optional                 | MAC address for the first site-network.                 |
+| `lan1`    | `--mac-lan1`  | Optional                 | MAC address for the second site-network.                |
+| `lan2`    | `--mac-lan2`  | Optional                 | MAC address for the third site-network.                 |
+| `lan3`    | `--mac-lan3`  | Optional                 | MAC address for the forth site-network.                 |
 
 *NCN with a dual PCIe cards (two cards with two ports each for four ports total):*
 
-| Interface | CLI Flag      | Required MAC Address      | Description                                             | 
-|:----------|:--------------|---------------------------|:--------------------------------------------------------| 
-| `mgmt0`   | `--mac-mgmt0` | Required                  | First MAC address for the MGMT network bond (`bond0`).  | 
-| `mgmt1`   | `--mac-mgmt1` | Required                  | Second MAC address for the MGMT network bond (`bond0`). | 
-| `sun0`    | `--mac-sun0`  | Required for Storage NCNs | First MAC address for the SUN network bond (`bond1`).   | 
-| `sun1`    | `--mac-sun1`  | Required for Storage NCNs | Second MAC address for the SUN network bond (`bond1`).  | 
-| `hsn0`    | `--mac-hsn0`  | Required for Worker NCNs  | MAC address of the first High Speed Network NIC.        | 
-| `hsn1`    | `--mac-hsn1`  | Optional for Worker NCNs  | MAC address of the second High Speed Network NIC.       | 
-| `lan0`    | `--mac-lan0`  | Optional                  | MAC address for the first site-network.                 | 
-| `lan1`    | `--mac-lan1`  | Optional                  | MAC address for the second site-network.                | 
-| `lan2`    | `--mac-lan2`  | Optional                  | MAC address for the third site-network.                 | 
-| `lan3`    | `--mac-lan3`  | Optional                  | MAC address for the forth site-network.                 | 
+| Interface | CLI Flag      | Required MAC Address      | Description                                             |
+|:----------|:--------------|---------------------------|:--------------------------------------------------------|
+| `mgmt0`   | `--mac-mgmt0` | Required                  | First MAC address for the MGMT network bond (`bond0`).  |
+| `mgmt1`   | `--mac-mgmt1` | Required                  | Second MAC address for the MGMT network bond (`bond0`). |
+| `sun0`    | `--mac-sun0`  | Required for Storage NCNs | First MAC address for the SUN network bond (`bond1`).   |
+| `sun1`    | `--mac-sun1`  | Required for Storage NCNs | Second MAC address for the SUN network bond (`bond1`).  |
+| `hsn0`    | `--mac-hsn0`  | Required for Worker NCNs  | MAC address of the first High Speed Network NIC.        |
+| `hsn1`    | `--mac-hsn1`  | Optional for Worker NCNs  | MAC address of the second High Speed Network NIC.       |
+| `lan0`    | `--mac-lan0`  | Optional                  | MAC address for the first site-network.                 |
+| `lan1`    | `--mac-lan1`  | Optional                  | MAC address for the second site-network.                |
+| `lan2`    | `--mac-lan2`  | Optional                  | MAC address for the third site-network.                 |
+| `lan3`    | `--mac-lan3`  | Optional                  | MAC address for the forth site-network.                 |
 
 1. See [swapping/moving an NCN](#swappingmoving-an-ncn) or [adding a new NCN](#adding-a-new-ncn) depending on the current course of action.
 

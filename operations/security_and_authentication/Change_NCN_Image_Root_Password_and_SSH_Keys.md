@@ -248,7 +248,7 @@ This step updates the entries in BSS for the NCNs to use the new images.
    1. Make a list of xnames of storage NCNs.
 
       ```bash
-      CEPH_XNAMES=( $(cray hsm state components list --role Management --subrole Storage --type Node --format json | 
+      CEPH_XNAMES=( $(cray hsm state components list --role Management --subrole Storage --type Node --format json |
                           jq -r '.Components | map(.ID) | join(" ")') )
       echo "${#CEPH_XNAMES[@]} storage NCNs found: ${CEPH_XNAMES[@]}"
       ```
