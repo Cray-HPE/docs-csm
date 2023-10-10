@@ -4,15 +4,6 @@
 
 ## Add Join Script
 
-1. Copy join script from `ncn-m001` to the storage node that was rebuilt or added.
-
-    > Run this command on the storage node that was rebuilt or added.
-
-    ```bash
-    mkdir -pv /usr/share/doc/csm/scripts &&
-           scp -p ncn-m001:/usr/share/doc/csm/scripts/join_ceph_cluster.sh /usr/share/doc/csm/scripts
-    ```
-
 1. Start monitoring the Ceph health alongside the main procedure.
 
     In a separate window, run the following command on `ncn-s001`, `ncn-s002`, or `ncn-s003` (but not the same node that was rebuilt or added):
@@ -21,12 +12,12 @@
     watch ceph -s
     ```
 
-1. Execute the script from the first step.
+1. Execute the script to have the rebuilt node join the Ceph cluster.
 
     > Run this command on the storage node that was rebuilt or added.
 
     ```bash
-    /usr/share/doc/csm/scripts/join_ceph_cluster.sh
+    /srv/cray/scripts/common/join_ceph_cluster.sh
     ```
 
     **IMPORTANT:** In the output from `watch ceph -s` the health should go to a `HEALTH_WARN` state. This is expected. Most commonly you will see an alert about `failed to probe daemons or devices`, but this should clear on its own.
