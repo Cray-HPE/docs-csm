@@ -14,11 +14,10 @@ Watch `ceph -s` and run the `ceph_join_cluster.sh` script.
    watch ceph -s
    ```
 
-1. (`ncn-s#`) **On the node being rebuilt**, execute the `ceph_join_cluster.sh` script.
+1. (`ncn-m001#`) **On the node being rebuilt**, execute the `ceph_join_cluster.sh` script.
 
    ```bash
-   scp ncn-m001:/usr/share/doc/csm/scripts/join_ceph_cluster.sh /srv/cray/scripts/common/join_ceph_cluster.sh
-   /srv/cray/scripts/common/join_ceph_cluster.sh
+   ssh $NODE /srv/cray/scripts/common/join_ceph_cluster.sh
    ```
 
    **IMPORTANT:** While watching the window running `watch ceph -s`, the health will go to a `HEALTH_WARN` state. This is expected. Most commonly, there will be an alert about "failed to probe daemons or devices" and this will clear.
