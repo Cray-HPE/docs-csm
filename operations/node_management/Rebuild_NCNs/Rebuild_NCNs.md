@@ -91,16 +91,6 @@ export CSM_ARTI_DIR="/etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_
 
 ```bash
 mount | grep /etc/cray/upgrade/csm
-admin-tools@<hostname>=/ on /etc/cray/upgrade/csm type ceph (rw,relatime,name=admin-tools,secret=<hidden>,ms_mode=prefer-crc,acl,mon_addr=<ip:port>)
-```
-
-> - If directory `/etc/cray/upgrade/csm/` is not ceph mount, use directory which is ceph mount as specified in file `/etc/fstab`. Sample example below:
-
-```bash
-cat /etc/fstab
-...
-admin-tools@<hostname>=/ <ceph mount directory> ceph
-...
 ```
 
 > - Steps to download CSM tarball are at [Update Product Stream](../../../update_product_stream/README.md).
