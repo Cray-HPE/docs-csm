@@ -60,14 +60,10 @@ For example, if this is a rebuild in place, then Ceph components will not be rep
 
 ## Procedure
 
-Upload Ceph container images into Nexus.
+This procedure can be performed on `ncn-m00[1-3]` or `ncn-s00[1-3]`. It is suggested to run this on
+`ncn-m001`.
 
-1. Log into one of the first three storage NCNs.
-
-    This procedure must be performed on a `ceph-mon`node. By default these will be
-    any of the first three storage NCNs: `ncn-s001`, `ncn-s002`, or `ncn-s003`
-
-1. (`ncn-s#`) Check the status of Ceph.
+1. (`ncn-m001#`) Check the status of Ceph.
 
     Check the OSD status, weight, and location:
 
@@ -103,10 +99,10 @@ Upload Ceph container images into Nexus.
     17   ssd   3.49309          osd.17         up   1.00000  1.00000
     ```
 
-1. (`ncn-s#`) If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
+1. (`ncn-m001#`) If the node to rebuild is up, then stop and disable all the Ceph services on the node being rebuilt.
 
     ```bash
-    ceph orch host maintenance enter <storage node hostname being rebuilt>
+    ceph orch host maintenance enter $NODE
     ```
 
     Example output:
@@ -129,7 +125,7 @@ Upload Ceph container images into Nexus.
 
     In this example, the warnings for RGW and Alertmanager would be ignored by passing the `--force` flag. The alert for active `Mgr` will need to be addressed with the provided command (`ceph mgr fail ncn-s003.ydycwn`).
 
-1. (`ncn-s#`) Re-check the OSD status, weight, and location:
+1. (`ncn-m001#`) Re-check the OSD status, weight, and location:
 
     ```bash
     ceph osd tree
@@ -163,7 +159,7 @@ Upload Ceph container images into Nexus.
     17   ssd   3.49309          osd.17       down   1.00000  1.00000
     ```
 
-1. (`ncn-s#`) Check the status of the Ceph cluster:
+1. (`ncn-m001#`) Check the status of the Ceph cluster:
 
     ```bash
     ceph -s
@@ -202,7 +198,7 @@ Upload Ceph container images into Nexus.
         client:   8.7 KiB/s rd, 353 KiB/s wr, 3 op/s rd, 53 op/s wr
     ```
 
-1. (`ncn-s#`) List down Ceph OSDs.
+1. (`ncn-m001#`) List down Ceph OSDs.
 
     **IMPORTANT:** Before proceeding, ensure that this rebuild requires OSD wipes. Storage node rebuilds that are done on an active node do not require the OSD removal. Some examples are rebuilds to get some a custom patched image.
 
@@ -226,7 +222,7 @@ Upload Ceph container images into Nexus.
      17   ssd   3.49309          osd.17       down   1.00000  1.00000
     ```
 
-1. (`ncn-s#`) Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
+1. (`ncn-m001#`) Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
   
     By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map.
     This will result in OSDs that no longer exist appearing to be down.
