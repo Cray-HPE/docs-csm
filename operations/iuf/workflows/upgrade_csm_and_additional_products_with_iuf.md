@@ -24,7 +24,7 @@ are not currently managed by IUF.
 The upgrade workflow comprises the following procedures. The diagram shows the workflow and
 the steps below it provide detailed instructions which must be executed in the order shown.
 
-![Upgrade CSM and additional products with IUF](../../../img/operations/diagram_csm_stack_upgrade_15_04142023.png)
+![Upgrade CSM and additional products with IUF](../../../img/operations/diagram_csm_stack_upgrade_15_101123.png)
 
 1. CSM preparation, prepare assets, and prerequisites.
    Read the _Important Notes_ section of the
@@ -81,7 +81,7 @@ the steps below it provide detailed instructions which must be executed in the o
 
    1. [Deploy product](deploy_product.md)
    1. [Stage 3.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_3.md#stage-36---complete-kubernetes-upgrade)
-   1. [Validate deployment](validate_deployment.md)
+   1. [Validate deployment and perform Slingshot switch FW updates](validate_deployment.md)
 
 1. Managed rollout
 
