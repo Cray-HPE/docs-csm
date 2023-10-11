@@ -9,7 +9,7 @@ This section updates the software running on managed compute and application (UA
   - [2.3 Application nodes](#23-application-nodes)
 - [3. Update managed host Slingshot NIC firmware](#3-update-managed-host-slingshot-nic-firmware)
 - [4. Execute the IUF `post-install-check` stage](#4-execute-the-iuf-post-install-check-stage)
-- [5. Next steps](#6-next-steps)
+- [5. Next steps](#5-next-steps)
 
 ## 1. Update managed host firmware (FAS)
 
