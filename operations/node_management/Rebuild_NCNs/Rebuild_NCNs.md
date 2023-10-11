@@ -87,7 +87,7 @@ export CSM_ARTI_DIR="/etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_
 >
 > - If the `/etc/cray/upgrade/csm/` directory is empty, create an empty directory at the same path. Download and extract CSM tarball to that directory.
 > - Update the value of `CSM_ARTI_DIR` with the newly created directory above.
-> - Ensure directory `/etc/cray/upgrade/csm/` is ceph mount using command as below:
+> - Ensure the `/etc/cray/upgrade/csm/` directory is `ceph` mount using the command below (its output should show `ceph` as the type):
 
 ```bash
 mount | grep /etc/cray/upgrade/csm
