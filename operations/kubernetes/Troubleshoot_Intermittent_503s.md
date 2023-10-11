@@ -80,16 +80,18 @@ If any pods are still affected by this specific issue the script will provide a 
 
 ### Description (`UAEX`)
 
-This error code typically indicates an issue with the authorization service (for example, Spire).
+This error code typically indicates an issue with the authorization service (for example, Spire or OPA).
 
 ### Remediation (`UAEX`)
 
-1. (`ncn-mw#`) Initiate a rolling restart of Spire.
+1. (`ncn-mw#`) Initiate a rolling restart of Spire and OPA.
 
     ```bash
     kubectl rollout restart -n spire statefulset spire-postgres spire-server
     kubectl rollout restart -n spire daemonset spire-agent request-ncn-join-token
     kubectl rollout restart -n spire deployment spire-jwks spire-postgres-pooler
+    kubectl rollout restart -n opa deployment cray-opa-ingressgateway cray-opa-ingressgateway-hmn
+    kubectl rollout restart -n opa deployment cray-opa-ingressgateway-customer-admin cray-opa-ingressgateway-customer-user
     ```
 
 1. (`ncn-mw#`) Wait for all of the restarts to complete.
@@ -101,6 +103,10 @@ This error code typically indicates an issue with the authorization service (for
     kubectl rollout status -n spire daemonset request-ncn-join-token
     kubectl rollout status -n spire deployment spire-jwks
     kubectl rollout status -n spire deployment spire-postgres-pooler
+    kubectl rollout status -n opa deployment cray-opa-ingressgateway
+    kubectl rollout status -n opa deployment cray-opa-ingressgateway-hmn
+    kubectl rollout status -n opa deployment cray-opa-ingressgateway-customer-admin
+    kubectl rollout status -n opa deployment cray-opa-ingressgateway-customer-user
     ```
 
 Once the restarts are all complete, the HTTP 503 message should clear.
