@@ -262,4 +262,4 @@ All Kubernetes nodes have been rebooted into the new image.
 > **REMINDER**: If password for `ncn-m002` was reset during Stage 3.3, then also reset the password
 > on `ncn-m001` at this time.
 
-This stage is completed. Proceed to [Validate CSM health](README.md#3-validate-csm-health) on the main upgrade page.
+This stage is completed. Proceed to [Validate CSM health during an upgrade](Validate_CSM_Health_During_Upgrade.md)

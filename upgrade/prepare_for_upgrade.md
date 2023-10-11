@@ -172,4 +172,4 @@ For any typescripts that were started during this preparation stage, stop them w
 ## Preparation completed
 
 After completing the above steps, proceed to
-[Upgrade Management Nodes and CSM Services](README.md#3-upgrade-management-nodes-and-csm-services).
+[Upgrade Management Nodes and CSM Services](Upgrade_Only_CSM.md#2-upgrade-management-nodes-and-csm-services).
