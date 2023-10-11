@@ -247,9 +247,9 @@ Run the following script to apply anti-affinity to `coredns` pods:
 helm uninstall -n operators cray-etcd-operator
 ```
 
-> If this step was executed as part of the IUF [Deploy Product](../operations/iuf/workflows/deploy_product.md)
-> procedure, return to the IUF [Deploy Product](../operations/iuf/workflows/deploy_product.md) procedure and
-> complete the remaining steps. Otherwise, proceed to the following topic.
+> If this step was executed as part of the IUF `Deploy Product` steps,
+> then return to the IUF [Upgrade CSM and Additional Products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md) and
+> complete the remaining steps under `Deploy Product`. Otherwise, proceed to the following topic.
 
 ### Stop typescript on `ncn-m002`
 
