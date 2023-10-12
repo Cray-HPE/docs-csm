@@ -105,7 +105,7 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
          If the above command complains that it cannot find `certs/sealed_secrets.crt` then you can run the following commands to create it:
 
          ```bash
-         mkdir -pV certs && ./utils/bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > certs/sealed_secrets.crt
+         mkdir -pv certs && ./utils/bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > certs/sealed_secrets.crt
          ```
 
    - (`ncn-w001#`) When reaching the step to validate that the redeploy was successful, perform the following step:
