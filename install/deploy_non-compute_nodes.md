@@ -277,12 +277,6 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
     See [SHCD check cabling guide](../operations/network/management_network/validate_cabling.md).
 
-1. (`pit#`) Install tests and test server on NCNs.
-
-    ```bash
-    "${CSM_PATH}"/lib/install-goss-tests.sh
-    ```
-
 1. (`pit#`) Check the storage nodes.
 
     ```bash
