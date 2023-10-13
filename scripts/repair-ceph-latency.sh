@@ -30,18 +30,18 @@ function wait_for_health_ok() {
   local num_attempts=$1
   cnt=0
   while true; do
-    if [[ "$cnt" -eq "$num_attempts" ]]; then
+    if [[ $cnt -eq $num_attempts ]]; then
       echo "ERROR: Ceph did not become healthy in the expected time, manual troubleshooting required."
       break
     fi
     ceph -s | grep -q HEALTH_OK
-    if [[ "$?" -eq 0 ]]; then
+    if [[ $? -eq 0 ]]; then
       echo "Ceph is healthy -- continuing..."
       break
     fi
     sleep 5
     echo "Sleeping for five seconds waiting ceph to be healthy..."
-    cnt=$((cnt+1))
+    cnt=$((cnt + 1))
   done
 }
 
@@ -50,8 +50,8 @@ function wait_for_stopped_daemons() {
   while true; do
     echo "Sleeping for ten seconds waiting for daemons to stop..."
     sleep 10
-    num_running=$(ceph orch ps ${host} --format json-pretty| jq -r '.[]|select(.status_desc!="stopped")|.daemon_name+"  status: "+.status_desc' | wc -l)
-    if [[ "$num_running" -eq 0 ]]; then
+    num_running=$(ceph orch ps ${host} --format json-pretty | jq -r '.[]|select(.status_desc!="stopped")|.daemon_name+"  status: "+.status_desc' | wc -l)
+    if [[ $num_running -eq 0 ]]; then
       echo "All daemons stopped, continuing..."
       break
     fi
@@ -62,18 +62,18 @@ function wait_for_osds_up() {
   local num_attempts=$1
   cnt=0
   while true; do
-    if [[ "$cnt" -eq "$num_attempts" ]]; then
+    if [[ $cnt -eq $num_attempts ]]; then
       echo "ERROR: osds did not come up in expected time, manual troubleshooting required."
       break
     fi
     ceph -s | grep -q 'osds down'
-    if [[ "$?" -ne 0 ]]; then
+    if [[ $? -ne 0 ]]; then
       echo "All osds up, continuing..."
       break
     fi
     echo "Sleeping for thirty seconds waiting for osds to be up (be patient)..."
     sleep 30
-    cnt=$((cnt+1))
+    cnt=$((cnt + 1))
   done
 }
 
@@ -94,22 +94,30 @@ function restart_osds_by_host() {
   local host=$1
   echo "INFO: beginning restart of daemons on ${host}."
   fail_active_mgr_if_needed ${host}
-  ceph osd set noout
-  ceph osd set norecover
-  ceph osd set nobackfill
-  ceph orch host maintenance enter ${host} --force
+  cmd_retry ceph osd set noout
+  cmd_retry ceph osd set norecover
+  cmd_retry ceph osd set nobackfill
+  cmd_retry ceph orch host maintenance enter ${host} --force
   wait_for_stopped_daemons ${host}
-  ceph orch host maintenance exit ${host}
+  cmd_retry ceph orch host maintenance exit ${host}
   wait_for_osds_up 360 # 3 hour max
-  ceph osd unset noout
-  ceph osd unset norecover
-  ceph osd unset nobackfill
+  cmd_retry ceph osd unset noout
+  cmd_retry ceph osd unset norecover
+  cmd_retry ceph osd unset nobackfill
   wait_for_health_ok 360 # 30 min max
   echo "INFO: done with restart of daemons on ${host}."
 }
 
 function restart_osds() {
-  for host in $(ceph node ls| jq -r '.osd|keys[]'); do
+  local hosts
+  if IFS=$'\n' read -rd '' -a hosts; then
+    :
+  fi <<< "$(ceph node ls | jq -r '.osd | keys | join("\n")')"
+  if [ ${#hosts[@]} -eq 0 ]; then
+    echo >&2 'No ceph nodes were found!'
+    return 1
+  fi
+  for host in "${hosts[@]}"; do
     restart_osds_by_host ${host}
     restart_osds_by_host ${host} # second restart frees up memory
   done
@@ -127,6 +135,27 @@ function repair_ceph_latency() {
   echo "INFO: failing active manager to another node one final time."
   ceph mgr fail
   echo "SUCCESS: all restarts complete."
+}
+
+function cmd_retry {
+  local -i attempt
+  local -i max_attempts=10
+  local -i sleep_time=10
+  attempt=1
+  while [ true ]; do
+    # We redirect to stderr just in case the output of this command is being piped
+    echo "Attempt #$attempt to run: $*" 1>&2
+    if "$@"; then
+      return 0
+    elif [ $attempt -lt $max_attempts ]; then
+      echo "Sleeping ${sleep_time} seconds before retry" 1>&2
+      sleep ${sleep_time}
+      attempt=$((attempt + 1))
+      continue
+    fi
+    echo "ERROR: Unable to run '$*' even after retries" 1>&2
+    return 1
+  done
 }
 
 wait_for_health_ok 60 # 5 minutes max
