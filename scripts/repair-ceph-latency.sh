@@ -109,7 +109,15 @@ function restart_osds_by_host() {
 }
 
 function restart_osds() {
-  for host in $(ceph node ls | jq -r '.osd|keys[]'); do
+  local hosts
+  if IFS=$'\n' read -rd '' -a hosts; then
+    :
+  fi <<< "$(ceph node ls | jq -r '.osd | keys | join("\n")')"
+  if [ ${#hosts[@]} -eq 0 ]; then
+    echo >&2 'No ceph nodes were found!'
+    return 1
+  fi
+  for host in "${hosts[@]}"; do
     restart_osds_by_host ${host}
     restart_osds_by_host ${host} # second restart frees up memory
   done
