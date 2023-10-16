@@ -212,3 +212,21 @@ function wait_for_kubernetes() {
       echo "====> ${state_name} has been completed"
   fi
 }
+
+function update_test_rpms() {
+  local state_name state_recorded target_ncn
+  target_ncn=$1
+  state_name="UPDATE_TEST_RPMS"
+  state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+  if [[ $state_recorded == "0" ]]; then
+      echo "====> ${state_name} ..."
+      {
+      ssh $target_ncn '/usr/share/doc/csm/upgrade/scripts/upgrade/util/upgrade-test-rpms.sh --local'
+      } >> ${LOG_FILE} 2>&1
+
+      record_state "${state_name}" ${target_ncn}
+      echo
+   else
+      echo "====> ${state_name} has been completed"
+   fi
+}
