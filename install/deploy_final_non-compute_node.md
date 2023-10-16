@@ -15,8 +15,9 @@ procedure entails deactivating the LiveCD, meaning the LiveCD and all of its res
    1. [Backup](#33-backup)
 1. [Reboot](#4-reboot)
 1. [Enable NCN disk wiping safeguard](#5-enable-ncn-disk-wiping-safeguard)
-1. [Configure DNS and NTP on each BMC](#6-configure-dns-and-ntp-on-each-bmc)
-1. [Next topic](#7-next-topic)
+1. [Update select RPMs](#6-update-select-rpms)
+1. [Configure DNS and NTP on each BMC](#7-configure-dns-and-ntp-on-each-bmc)
+1. [Next topic](#8-next-topic)
 
 ## 1. Required services
 
@@ -434,7 +435,17 @@ it is used for Cray installation and bootstrap.
     /tmp/csi handoff bss-update-param --set metal.no-wipe=1
     ```
 
-## 6. Configure DNS and NTP on each BMC
+## 6. Update select RPMs
+
+(`ncn-m001`) Run the following command to ensure that select RPMs on `ncn-m001` are at the correct version.
+
+```bash
+/usr/share/doc/csm/upgrade/scripts/upgrade/util/upgrade-test-rpms.sh --local
+```
+
+If the output ends with `PASSED`, then it was successful, despite any warning messages that may have been displayed.
+
+## 7. Configure DNS and NTP on each BMC
 
  > **`NOTE`** Only follow this section if the NCNs are HPE hardware. If the system uses
  > Gigabyte or Intel hardware, then skip this section.
@@ -518,6 +529,6 @@ However, the commands in this section are all run **on** `ncn-m001`.
     done ; echo "Configuration completed on all NCN BMCs"
     ```
 
-## 7. Next topic
+## 8. Next topic
 
 Return to the previous page and continue to the next step.
