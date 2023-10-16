@@ -19,6 +19,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.5`, follow the procedures descr
 1. [Setup Nexus](#setup-nexus)
 1. [Upgrade CANU](#upgrade-canu)
 1. [Upgrade services](#upgrade-services)
+1. [Update management node CFS configuration](#update-management-node-cfs-configuration)
 1. [Upgrade Ceph and stop local Docker registries](#upgrade-ceph-and-stop-local-docker-registries)
 1. [Update test suite packages](#update-test-suite-packages)
 1. [Verification](#verification)
@@ -143,6 +144,51 @@ pdsh -b -S -w $(grep -oP 'ncn-[mw]\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '
 cd "$CSM_DISTDIR"
 ./upgrade.sh
 ```
+
+### Update management node CFS configuration
+
+This step updates the CFS configuration which is set as the desired configuration for the management
+nodes (NCNs). It ensures that the CFS configuration layers reference the correct commit hash for the
+version of CSM being installed. It then waits for the components to reach a configured state in CFS.
+
+1. (`ncn-m001#`)
+
+   ```bash
+   cd "$CSM_DISTDIR"
+   ./update-mgmt-ncn-cfs-config.sh --base-query role=management \
+       --save --create-backups --clear-error
+   ```
+
+   The output will look similar to the truncated output shown below.
+
+   ```text
+   INFO: Querying CFS configurations for the following NCNs: x3000c0s5b0n0, ...
+   INFO: Found configuration "management-csm-1.3.0" for component x3000c0s5b0n0
+   ...
+   INFO: Updating existing layer with repo path /vcs/cray/csm-config-management.git and playbook site.yml
+   INFO: Property "commit" of layer with repo path /vcs/cray/csm-config-management.git and playbook site.yml updated ...
+   INFO: Property "name" of layer with repo path /vcs/cray/csm-config-management.git and playbook site.yml updated ...
+   INFO: No layer with repo path /vcs/cray/csm-config-management.git and playbook ncn-initrd.yml found.
+   INFO: Adding a layer with repo path /vcs/cray/csm-config-management.git and playbook ncn-initrd.yml to the end.
+   INFO: Successfully saved CFS configuration "management-csm-1.3.0-backup-20230918T205149"
+   INFO: Successfully saved CFS configuration "management-csm-1.3.0"
+   INFO: Successfully saved 1 changed CFS configuration(s) to CFS.
+   INFO: Updated 9 CFS components.
+   INFO: Waiting for 9 component(s) to finish configuration
+   INFO: Summary of number of components in each status: pending: 9
+   INFO: Waiting for 9 pending component(s)
+   INFO: Sleeping for 30 seconds before checking status of 9 pending component(s).
+   ...
+   INFO: Sleeping for 30 seconds before checking status of 9 pending component(s).
+   INFO: 9 pending components transitioned to status configured: x3000c0s5b0n0, ...
+   INFO: Finished waiting for 9 component(s) to finish configuration.
+   INFO: Summary of number of components in each status: configured: 9
+   ====> Completed update of CFS configuration(s)
+   ====> Cleaning up install dependencies
+   ```
+
+   When configuration of all components is successful, the summary line will show all components
+   with status "configured".
 
 ## Upgrade Ceph and stop local Docker registries
 
