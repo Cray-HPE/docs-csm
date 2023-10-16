@@ -16,8 +16,9 @@ procedure entails deactivating the LiveCD, meaning the LiveCD and all of its res
 1. [Reboot](#4-reboot)
 1. [Enable NCN disk wiping safeguard](#5-enable-ncn-disk-wiping-safeguard)
 1. [Remove the default NTP pool](#6-remove-the-default-ntp-pool)
-1. [Configure DNS and NTP on each BMC](#7-configure-dns-and-ntp-on-each-bmc)
-1. [Next topic](#8-next-topic)
+1. [Update select RPMs](#7-update-select-rpms)
+1. [Configure DNS and NTP on each BMC](#8-configure-dns-and-ntp-on-each-bmc)
+1. [Next topic](#9-next-topic)
 
 ## 1. Required services
 
@@ -435,7 +436,19 @@ it is used for Cray installation and bootstrap.
 sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf && systemctl restart chronyd
 ```
 
-## 7. Configure DNS and NTP on each BMC
+## 7. Update select RPMs
+
+(`ncn-m001`) Run the following command to ensure that select RPMs on `ncn-m001` are at the correct version.
+
+```bash
+zypper install -y hpe-csm-goss-package csm-testing goss-servers \
+    && systemctl enable goss-servers && systemctl restart goss-servers \
+    && echo PASSED || echo FAILED
+```
+
+If the output ends with `PASSED`, then it was successful, despite any warning messages that may have been displayed.
+
+## 8. Configure DNS and NTP on each BMC
 
  > **`NOTE`** Only follow this section if the NCNs are HPE hardware. If the system uses
  > Gigabyte or Intel hardware, then skip this section.
@@ -519,6 +532,6 @@ However, the commands in this section are all run **on** `ncn-m001`.
     done ; echo "Configuration completed on all NCN BMCs"
     ```
 
-## 8. Next topic
+## 9. Next topic
 
 After completing this procedure, the next step is to [Configure Administrative Access](README.md#5-configure-administrative-access).
