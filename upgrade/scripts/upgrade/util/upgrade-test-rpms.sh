@@ -22,11 +22,37 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
+
+# Usage: upgrade-test-rpms.sh [--local]
+# If --local is not specified, upgrade the test RPMs on all NCNs
+# If --local is specified, upgrade the test RPMs just on the system where the script is being executed
+
 set -euo pipefail
-ncns=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',')
+if [[ $# -eq 0 ]]; then
 
-echo "Installing updated versions of hpe-csm-goss-package csm-testing goss-servers craycli rpms"
-pdsh -S -b -w ${ncns} 'zypper install -y hpe-csm-goss-package csm-testing goss-servers craycli'
+  ncns=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',')
 
-echo "Enabling and starting goss-servers"
-pdsh -S -b -w ${ncns} 'systemctl enable goss-servers && systemctl start goss-servers'
+  echo "Installing updated versions of hpe-csm-goss-package csm-testing goss-servers craycli RPMs"
+  pdsh -S -b -w ${ncns} 'zypper install -y hpe-csm-goss-package csm-testing goss-servers craycli'
+
+  echo "Enabling and restarting goss-servers"
+  pdsh -S -b -w ${ncns} 'systemctl enable goss-servers && systemctl restart goss-servers'
+
+elif [[ $# -eq 1 && $1 == --local ]]; then
+
+  echo "Installing updated versions of hpe-csm-goss-package csm-testing goss-servers craycli RPMs"
+  zypper install -y hpe-csm-goss-package csm-testing goss-servers craycli
+
+  echo "Enabling and restarting goss-servers"
+  systemctl enable goss-servers && systemctl restart goss-servers
+
+else
+
+  echo "usage: upgrade-test-rpms.sh [--local]" >&2
+  echo >&2
+  echo "ERROR: Invalid arguments" >&2
+  exit 1
+
+fi
+
+echo "SUCCESS"

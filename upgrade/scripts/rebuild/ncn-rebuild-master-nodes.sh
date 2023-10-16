@@ -208,6 +208,9 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+# Update test RPMs on the newly upgraded master
+update_test_rpms $target_ncn
+
 cat <<EOF
 NOTE:
     If below test failed, try to fix it based on test output. Then run current script again

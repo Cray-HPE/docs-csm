@@ -219,7 +219,7 @@ This step will create an imperative CFS session that can be used to configure bo
 
 ```bash
 pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
-    'zypper install -y hpe-csm-goss-package csm-testing goss-servers craycli && systemctl enable goss-servers && systemctl start goss-servers' \
+    'zypper install -y hpe-csm-goss-package csm-testing goss-servers craycli && systemctl enable goss-servers && systemctl restart goss-servers' \
     && echo PASSED || echo FAILED
 ```
 
