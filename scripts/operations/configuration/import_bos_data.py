@@ -41,10 +41,6 @@ from python_lib.bos_session_templates import BosSessionTemplate, \
                                              InvalidBosSessionTemplate, \
                                              get_session_template_name, \
                                              get_session_template_version
-from python_lib.ims_id_maps import ImsIdEtagMaps, \
-                                   ImsIdMapFileFormatError, \
-                                   load_ims_id_map, \
-                                   update_session_template
 
 # Mapping from template name to associated session template record
 SessionTemplateMap = Dict[str, BosSessionTemplate]
@@ -70,24 +66,15 @@ def snapshot_bos_data() -> None:
     subprocess.check_call(BOS_EXPORT_TOOL)
 
 def get_template_to_import(template_name: str, template_to_create: BosSessionTemplate,
-                           ims_id_map: ImsIdEtagMaps,
                            current_templates: List[BosSessionTemplate]) -> Union[BosSessionTemplate,
                                                                                  None]:
     """
     Determines what session template should be created based on the specified template from the
     import data.
-    If ims_id_map is specified, it is used to replace any IMS IDs found in the template.
     If a BOS session template already exists with the same name, the import will not happen
     and a message will be printed to that effect.
     """
     print(f"Processing session template '{template_name}'")
-
-    if ims_id_map:
-        print("Updating IMS IDs and S3 etags in template (if any)")
-        template_to_create = update_session_template(template_to_create, ims_id_map)
-        if template_name != template_to_create["name"]:
-            template_name = template_to_create["name"]
-            print(f"After IMS ID and S3 etag update, new template name is '{template_name}'")
 
     for template in current_templates:
         if template_name != template["name"]:
@@ -103,33 +90,19 @@ def get_template_to_import(template_name: str, template_to_create: BosSessionTem
     return template_to_create
 
 def get_templates_to_import(template_name_map: SessionTemplateMap,
-                            current_templates: List[BosSessionTemplate],
-                            ims_id_map: ImsIdEtagMaps) -> SessionTemplateMap:
+                            current_templates: List[BosSessionTemplate]) -> SessionTemplateMap:
     """
     Returns all of the session templates that should be created on the system based on the templates
-    in the imported data, the IMS ID map (if any), and the current session templates on the system.
+    in the imported data and the current session templates on the system.
     """
     template_import_map = {}
     for template_name, template in template_name_map.items():
-        template_to_import = get_template_to_import(template_name, template, ims_id_map,
-                                                    current_templates)
+        template_to_import = get_template_to_import(template_name, template, current_templates)
         if not template_to_import:
             continue
-        # There is a possibility (unlikely) that we are already planning to import a template with
-        # this name. This would only occur if the name of a template got transformed (by IMS ID/S3
-        # etag replacement) in such a way that it collides with another template we are importing.
-        # If this happens, we will import neither template, unless they happen to now be identical.
-        template_name_to_import = template_to_import["name"]
-        if template_name_to_import in template_import_map:
-            if template_to_import == template_import_map[template_name_to_import]:
-                continue
-            print("After IMS ID/S3 etag replacement, there are two different session templates "
-                  f"named '{template_name_to_import}' planned for import. Skipping import of both.")
-            del template_import_map[template_name_to_import]
-            continue
         # Add this to the import list.
+        template_name_to_import = template_to_import["name"]
         template_import_map[template_name_to_import] = template_to_import
-
     return template_import_map
 
 def get_options_to_change(options_to_import: BosOptions, current_options: BosOptions) -> List[str]:
@@ -271,7 +244,6 @@ def main() -> None:
     Parses the command line arguments, does the stuff.
 
     Arguments:
-    [--ims-id-map-file <ims_id_map_file.json>]
     [--options-file <options_file.json>]
     {<session_template_directory> | <session_template_list.json> }
 
@@ -284,9 +256,6 @@ def main() -> None:
     - If a directory is specified, then the program does the above for every ".json" file found
       in that directory.
 
-    If an IMS ID map file is specified, then each BOS session template will have any old IMS IDs
-    replaced with the new ones (before it is imported).
-
     No existing session templates on the system will be overwritten -- in the case that this would
     happen, a message is printed and that template is skipped.
 
@@ -294,9 +263,6 @@ def main() -> None:
     """
     parser = argparse.ArgumentParser(
         description="Reads BOS session templates and options from files and creates them in BOS")
-    parser.add_argument("--ims-id-map-file", type=argparse.FileType('r'), required=False,
-                        help="JSON file created during IMS import containing map from old to "
-                             "new IMS IDs and S3 etags")
     parser.add_argument("--options-file", type=argparse.FileType('r'), required=False,
                         help="JSON file of BOS options")
     parser.add_argument("file_or_directory",
@@ -317,18 +283,9 @@ def main() -> None:
     else:
         options_to_change = None
 
-    ims_id_map = {}
-    if parsed_args.ims_id_map_file is not None:
-        try:
-            ims_id_map = load_ims_id_map(parsed_args.ims_id_map_file)
-        except ImsIdMapFileFormatError as exc:
-            raise BosError(str(exc)) from exc
-        print(f"Loaded {len(ims_id_map)} IMS ID mappings from IMS ID map file")
-
     # Get list of current BOS session templates on system
     current_session_templates = list_session_templates()
-    template_import_map = get_templates_to_import(template_name_map,
-                                                  current_session_templates, ims_id_map)
+    template_import_map = get_templates_to_import(template_name_map, current_session_templates)
 
     print("")
     # If there are no changes to make, we are already done
