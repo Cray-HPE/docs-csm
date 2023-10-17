@@ -97,30 +97,30 @@ Each phase contains the following categories: `not_started`, `in_progress`, `suc
 
 Each session, boot set, and phase contains similar metadata. The following is a table of useful attributes to look for in the metadata:
 
-| Attribute     | Meaning |
-|---------------|---------|
-| `start_time`  | The time when a session, boot set, or phase started work. |
+| Attribute     | Meaning                                                                                         |
+|---------------|-------------------------------------------------------------------------------------------------|
+| `start_time`  | The time when a session, boot set, or phase started work.                                       |
 | `in_progress` | If true, it means that the session, boot set, or phase has started and still has work going on. |
-| `complete`    | If true, it means the session, boot set, or phase has finished. |
-| `error_count` | The number of errors encountered in the boot sets or phases. |
-| `stop_time`   | The time when a session, boot set, or phase ended work. |
+| `complete`    | If true, it means the session, boot set, or phase has finished.                                 |
+| `error_count` | The number of errors encountered in the boot sets or phases.                                    |
+| `stop_time`   | The time when a session, boot set, or phase ended work.                                         |
 
 The following table summarizes how to interpret the various combinations of values for the `in_progress` and `complete` flags:
 
-| `in_progress` | `complete` | Meaning |
-|---------------|------------|---------|
-| false         | false      | Item has not started. |
-| true          | false      | Item is in progress. |
-| false         | true       | Item has completed. |
+| `in_progress` | `complete` | Meaning                             |
+|---------------|------------|-------------------------------------|
+| false         | false      | Item has not started.               |
+| true          | false      | Item is in progress.                |
+| false         | true       | Item has completed.                 |
 | true          | true       | Invalid state \(should not occur\). |
 
 The `in_progress`, `complete`, and `error_count` fields are cumulative, meaning that they summarize the state of the sub-items.
 
-| Item     | `in_progress` meaning                                                       | `complete` meaning |
-|----------|-----------------------------------------------------------------------------|--------------------|
+| Item     | `in_progress` meaning                                                       | `complete` meaning                                                                          |
+|----------|-----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
 | Phase    | If true, it means there is at least one node in the `in_progress` category. | If true, it means that there are no nodes in the `in_progress` or `not_started` categories. |
-| Boot set | If true, it means there is at least one phase that is `in_progress`.        | If true, it means that all phases in the boot set are `complete`. |
-| Session  | If true, it means that at least one boot set is `in_progress`.              | If true, it means that all boot sets are `complete`. |
+| Boot set | If true, it means there is at least one phase that is `in_progress`.        | If true, it means that all phases in the boot set are `complete`.                           |
+| Session  | If true, it means that at least one boot set is `in_progress`.              | If true, it means that all boot sets are `complete`.                                        |
 
 ### View the status of a v1 session
 

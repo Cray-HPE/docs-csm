@@ -347,9 +347,9 @@ Return supported UAS API versions.
 
 <h3 id="root_get-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Version response|None|
+| Status | Meaning                                                 | Description      | Schema |
+|--------|---------------------------------------------------------|------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Version response | None   |
 
 <aside class="success">
 This operation does not require authentication
@@ -445,32 +445,32 @@ List all available UAIs for username.
 
 <h3 id="get_uais_for_user-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|Inline|
+| Status | Meaning                                                 | Description | Schema |
+|--------|---------------------------------------------------------|-------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | OK          | Inline |
 
 <h3 id="get_uais_for_user-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[UAI](#schemauai)]|false|none|none|
-|» uai_name|string|false|none|none|
-|» username|string|false|none|none|
-|» publickey|string|false|none|none|
-|» class_id|string|false|none|none|
-|» public_ip|boolean|false|none|none|
-|» resource_id|string|false|none|none|
-|» image_id|string|false|none|none|
-|» uai_img|string|false|none|none|
-|» uai_status|string|false|none|none|
-|» uai_msg|string|false|none|none|
-|» uai_connect_string|string|false|none|none|
-|» uai_portmap|object|false|none|none|
-|»» **additionalProperties**|integer|false|none|none|
-|» uai_host|string|false|none|none|
-|» uai_age|string|false|none|none|
+| Name                        | Type                | Required | Restrictions | Description |
+|-----------------------------|---------------------|----------|--------------|-------------|
+| *anonymous*                 | [[UAI](#schemauai)] | false    | none         | none        |
+| » uai_name                  | string              | false    | none         | none        |
+| » username                  | string              | false    | none         | none        |
+| » publickey                 | string              | false    | none         | none        |
+| » class_id                  | string              | false    | none         | none        |
+| » public_ip                 | boolean             | false    | none         | none        |
+| » resource_id               | string              | false    | none         | none        |
+| » image_id                  | string              | false    | none         | none        |
+| » uai_img                   | string              | false    | none         | none        |
+| » uai_status                | string              | false    | none         | none        |
+| » uai_msg                   | string              | false    | none         | none        |
+| » uai_connect_string        | string              | false    | none         | none        |
+| » uai_portmap               | object              | false    | none         | none        |
+| »» **additionalProperties** | integer             | false    | none         | none        |
+| » uai_host                  | string              | false    | none         | none        |
+| » uai_age                   | string              | false    | none         | none        |
 
 <aside class="success">
 This operation does not require authentication
@@ -553,12 +553,12 @@ publickey: string
 
 <h3 id="create_uai-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|imagename|query|string|false|Image to use for UAI|
-|ports|query|string|false|Additional ports to project from the UAI besides ssh. Restricted|
-|body|body|object|false|none|
-|» publickey|body|string(binary)|false|File containing public ssh key for the user|
+| Name        | In    | Type           | Required | Description                                                      |
+|-------------|-------|----------------|----------|------------------------------------------------------------------|
+| imagename   | query | string         | false    | Image to use for UAI                                             |
+| ports       | query | string         | false    | Additional ports to project from the UAI besides ssh. Restricted |
+| body        | body  | object         | false    | none                                                             |
+| » publickey | body  | string(binary) | false    | File containing public ssh key for the user                      |
 
 #### Detailed descriptions
 
@@ -575,10 +575,10 @@ to ports 80, 443, and 8888.
 
 <h3 id="create_uai-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|UAI created|Inline|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Unable to create UAI|Inline|
+| Status | Meaning                                                        | Description          | Schema |
+|--------|----------------------------------------------------------------|----------------------|--------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)   | UAI created          | Inline |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | Unable to create UAI | Inline |
 
 <h3 id="create_uai-responseschema">Response Schema</h3>
 
@@ -647,16 +647,16 @@ associated UAI(s).
 
 <h3 id="delete_uai_by_name-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|uai_list|query|array[string]|true|comma-separated list of UAI names|
+| Name     | In    | Type          | Required | Description                       |
+|----------|-------|---------------|----------|-----------------------------------|
+| uai_list | query | array[string] | true     | comma-separated list of UAI names |
 
 <h3 id="delete_uai_by_name-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAIs deleted|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Failed to delete UAI with {uai_id}|None|
+| Status | Meaning                                                        | Description                        | Schema |
+|--------|----------------------------------------------------------------|------------------------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | UAIs deleted                       | None   |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | Failed to delete UAI with {uai_id} | None   |
 
 <aside class="success">
 This operation does not require authentication
@@ -742,10 +742,10 @@ List all available UAS images.
 
 <h3 id="get_uas_images-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAS Image List|[Image_list](#schemaimage_list)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|UAS Images not found|None|
+| Status | Meaning                                                        | Description          | Schema                          |
+|--------|----------------------------------------------------------------|----------------------|---------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | UAS Image List       | [Image_list](#schemaimage_list) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | UAS Images not found | None                            |
 
 <aside class="success">
 This operation does not require authentication
@@ -819,10 +819,10 @@ upload container image.  Optionally, set default.
 
 <h3 id="create_uas_image_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|imagename|query|string|true|Image to create|
-|default|query|boolean|false|default image (true/false)|
+| Name      | In    | Type    | Required | Description                |
+|-----------|-------|---------|----------|----------------------------|
+| imagename | query | string  | true     | Image to create            |
+| default   | query | boolean | false    | default image (true/false) |
 
 > Example responses
 
@@ -838,10 +838,10 @@ upload container image.  Optionally, set default.
 
 <h3 id="create_uas_image_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Image added|[Image](#schemaimage)|
-|304|[Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1)|Image not added|string|
+| Status | Meaning                                                         | Description     | Schema                |
+|--------|-----------------------------------------------------------------|-----------------|-----------------------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)    | Image added     | [Image](#schemaimage) |
+| 304    | [Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1) | Image not added | string                |
 
 <aside class="success">
 This operation does not require authentication
@@ -926,21 +926,21 @@ List all available UAS images.
 
 <h3 id="get_uas_images_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAS Image List|Inline|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|UAS Images not found|None|
+| Status | Meaning                                                        | Description          | Schema |
+|--------|----------------------------------------------------------------|----------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | UAS Image List       | Inline |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | UAS Images not found | None   |
 
 <h3 id="get_uas_images_admin-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[Image](#schemaimage)]|false|none|none|
-|» image_id|string|false|none|none|
-|» imagename|string|false|none|none|
-|» default|boolean|false|none|none|
+| Name        | Type                    | Required | Restrictions | Description |
+|-------------|-------------------------|----------|--------------|-------------|
+| *anonymous* | [[Image](#schemaimage)] | false    | none         | none        |
+| » image_id  | string                  | false    | none         | none        |
+| » imagename | string                  | false    | none         | none        |
+| » default   | boolean                 | false    | none         | none        |
 
 <aside class="success">
 This operation does not require authentication
@@ -1011,9 +1011,9 @@ Get a description of the named image
 
 <h3 id="get_uas_image_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|image_id|path|string|true|The image identifier (UUID) of the image to be retrieved from the|
+| Name     | In   | Type   | Required | Description                                                       |
+|----------|------|--------|----------|-------------------------------------------------------------------|
+| image_id | path | string | true     | The image identifier (UUID) of the image to be retrieved from the |
 
 #### Detailed descriptions
 
@@ -1034,10 +1034,10 @@ configuration.
 
 <h3 id="get_uas_image_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAS Image|[Image](#schemaimage)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|UAS Image {image_id} not found|None|
+| Status | Meaning                                                        | Description                    | Schema                |
+|--------|----------------------------------------------------------------|--------------------------------|-----------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | UAS Image                      | [Image](#schemaimage) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | UAS Image {image_id} not found | None                  |
 
 <aside class="success">
 This operation does not require authentication
@@ -1108,11 +1108,11 @@ Update an image, specifically this can set or unset the 'default' flag.
 
 <h3 id="update_uas_image_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|image_id|path|string|true|The image identifier (UUID) of the image to be updated in the|
-|imagename|query|string|false|The image name to be used by instances based on this UAI|
-|default|query|boolean|false|default image (true/false)|
+| Name      | In    | Type    | Required | Description                                                   |
+|-----------|-------|---------|----------|---------------------------------------------------------------|
+| image_id  | path  | string  | true     | The image identifier (UUID) of the image to be updated in the |
+| imagename | query | string  | false    | The image name to be used by instances based on this UAI      |
+| default   | query | boolean | false    | default image (true/false)                                    |
 
 #### Detailed descriptions
 
@@ -1136,10 +1136,10 @@ instance.
 
 <h3 id="update_uas_image_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Image updated|[Image](#schemaimage)|
-|304|[Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1)|No changes made|[Image](#schemaimage)|
+| Status | Meaning                                                         | Description     | Schema                |
+|--------|-----------------------------------------------------------------|-----------------|-----------------------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)    | Image updated   | [Image](#schemaimage) |
+| 304    | [Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1) | No changes made | [Image](#schemaimage) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1210,9 +1210,9 @@ Delete the named image from the set of valid UAI container images.
 
 <h3 id="delete_uas_image_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|image_id|path|string|true|The image identifier (UUID) of the image to be deleted from the|
+| Name     | In   | Type   | Required | Description                                                     |
+|----------|------|--------|----------|-----------------------------------------------------------------|
+| image_id | path | string | true     | The image identifier (UUID) of the image to be deleted from the |
 
 #### Detailed descriptions
 
@@ -1233,10 +1233,10 @@ configuration.
 
 <h3 id="delete_uas_image_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Image removed|[Image](#schemaimage)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Failed to delete image {image_id}|None|
+| Status | Meaning                                                        | Description                       | Schema                |
+|--------|----------------------------------------------------------------|-----------------------------------|-----------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | Image removed                     | [Image](#schemaimage) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | Failed to delete image {image_id} | None                  |
 
 <aside class="success">
 This operation does not require authentication
@@ -1320,10 +1320,10 @@ Return User Access Service information.
 
 <h3 id="get_uas_mgr_info-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAS-MGR Info|[UAS_mgr_info](#schemauas_mgr_info)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|UAS-MGR Info not found|Inline|
+| Status | Meaning                                                        | Description            | Schema                              |
+|--------|----------------------------------------------------------------|------------------------|-------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | UAS-MGR Info           | [UAS_mgr_info](#schemauas_mgr_info) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | UAS-MGR Info not found | Inline                              |
 
 <h3 id="get_uas_mgr_info-responseschema">Response Schema</h3>
 
@@ -1400,10 +1400,10 @@ list UAIs that implements a superset of this functionality under the
 
 <h3 id="get_all_uais-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|username|query|string|false|List all UAIs matching this username|
-|host|query|string|false|List all UAIs running on this host|
+| Name     | In    | Type   | Required | Description                          |
+|----------|-------|--------|----------|--------------------------------------|
+| username | query | string | false    | List all UAIs matching this username |
+| host     | query | string | false    | List all UAIs running on this host   |
 
 > Example responses
 
@@ -1415,10 +1415,10 @@ list UAIs that implements a superset of this functionality under the
 
 <h3 id="get_all_uais-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAI List|Inline|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|No UAIs found|Inline|
+| Status | Meaning                                                        | Description   | Schema |
+|--------|----------------------------------------------------------------|---------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | UAI List      | Inline |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | No UAIs found | Inline |
 
 <h3 id="get_all_uais-responseschema">Response Schema</h3>
 
@@ -1484,16 +1484,16 @@ of the functionality found here.  This path is deprecated in favor of
 
 <h3 id="delete_all_uais-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|username|query|string|false|delete all UAIs matching this username|
+| Name     | In    | Type   | Required | Description                            |
+|----------|-------|--------|----------|----------------------------------------|
+| username | query | string | false    | delete all UAIs matching this username |
 
 <h3 id="delete_all_uais-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|All UAIs Deleted|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|No UAIs found|None|
+| Status | Meaning                                                        | Description      | Schema |
+|--------|----------------------------------------------------------------|------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | All UAIs Deleted | None   |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | No UAIs found    | None   |
 
 <aside class="success">
 This operation does not require authentication
@@ -1567,10 +1567,10 @@ in the call) and / or owning user (specify the username in the call).
 
 <h3 id="get_uais_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|class_id|query|string|false|The class-id (UUID) of UAIs to retrieve.  If specified only UAIs|
-|owner|query|string|false|The owning username of UAIs to retrieve.  If specified only UAIs|
+| Name     | In    | Type   | Required | Description                                                      |
+|----------|-------|--------|----------|------------------------------------------------------------------|
+| class_id | query | string | false    | The class-id (UUID) of UAIs to retrieve.  If specified only UAIs |
+| owner    | query | string | false    | The owning username of UAIs to retrieve.  If specified only UAIs |
 
 #### Detailed descriptions
 
@@ -1607,32 +1607,32 @@ user and meeting all other filtering constraints will be returned.
 
 <h3 id="get_uais_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAI List|Inline|
+| Status | Meaning                                                 | Description | Schema |
+|--------|---------------------------------------------------------|-------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | UAI List    | Inline |
 
 <h3 id="get_uais_admin-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[UAI](#schemauai)]|false|none|none|
-|» uai_name|string|false|none|none|
-|» username|string|false|none|none|
-|» publickey|string|false|none|none|
-|» class_id|string|false|none|none|
-|» public_ip|boolean|false|none|none|
-|» resource_id|string|false|none|none|
-|» image_id|string|false|none|none|
-|» uai_img|string|false|none|none|
-|» uai_status|string|false|none|none|
-|» uai_msg|string|false|none|none|
-|» uai_connect_string|string|false|none|none|
-|» uai_portmap|object|false|none|none|
-|»» **additionalProperties**|integer|false|none|none|
-|» uai_host|string|false|none|none|
-|» uai_age|string|false|none|none|
+| Name                        | Type                | Required | Restrictions | Description |
+|-----------------------------|---------------------|----------|--------------|-------------|
+| *anonymous*                 | [[UAI](#schemauai)] | false    | none         | none        |
+| » uai_name                  | string              | false    | none         | none        |
+| » username                  | string              | false    | none         | none        |
+| » publickey                 | string              | false    | none         | none        |
+| » class_id                  | string              | false    | none         | none        |
+| » public_ip                 | boolean             | false    | none         | none        |
+| » resource_id               | string              | false    | none         | none        |
+| » image_id                  | string              | false    | none         | none        |
+| » uai_img                   | string              | false    | none         | none        |
+| » uai_status                | string              | false    | none         | none        |
+| » uai_msg                   | string              | false    | none         | none        |
+| » uai_connect_string        | string              | false    | none         | none        |
+| » uai_portmap               | object              | false    | none         | none        |
+| »» **additionalProperties** | integer             | false    | none         | none        |
+| » uai_host                  | string              | false    | none         | none        |
+| » uai_age                   | string              | false    | none         | none        |
 
 <aside class="success">
 This operation does not require authentication
@@ -1710,13 +1710,13 @@ apply to Broker UAIs because the function of a Broker UAI is different.
 
 <h3 id="create_uai_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|class_id|query|string|false|The Class ID (UUID) of the class to be used as a template for|
-|owner|query|string|false|The username of the owner of the UAI to be created.  The owner|
-|passwd_str|query|string|false|The /etc/passwd style string describing the user inside the UAI.|
-|publickey_str|query|string|false|The SSH Public key used to authorize use of the UAI through SSH.  This is a|
-|uai_name|query|string|false|An optional name to be assigned to the UAI on creation.  If this is|
+| Name          | In    | Type   | Required | Description                                                                 |
+|---------------|-------|--------|----------|-----------------------------------------------------------------------------|
+| class_id      | query | string | false    | The Class ID (UUID) of the class to be used as a template for               |
+| owner         | query | string | false    | The username of the owner of the UAI to be created.  The owner              |
+| passwd_str    | query | string | false    | The /etc/passwd style string describing the user inside the UAI.            |
+| publickey_str | query | string | false    | The SSH Public key used to authorize use of the UAI through SSH.  This is a |
+| uai_name      | query | string | false    | An optional name to be assigned to the UAI on creation.  If this is         |
 
 #### Detailed descriptions
 
@@ -1776,9 +1776,9 @@ character.
 
 <h3 id="create_uai_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|UAI Created|[UAI](#schemauai)|
+| Status | Meaning                                                      | Description | Schema            |
+|--------|--------------------------------------------------------------|-------------|-------------------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2) | UAI Created | [UAI](#schemauai) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1854,11 +1854,11 @@ system.
 
 <h3 id="delete_uais_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|class_id|query|string|false|The class-id (UUID) of UAIs to delete.  If specified only UAIs|
-|owner|query|string|false|The owning username of UAIs to delete.  If specified only UAIs|
-|uai_list|query|array[string]|false|Comma-separated list of UAI names.  If this is supplied 'owner'|
+| Name     | In    | Type          | Required | Description                                                     |
+|----------|-------|---------------|----------|-----------------------------------------------------------------|
+| class_id | query | string        | false    | The class-id (UUID) of UAIs to delete.  If specified only UAIs  |
+| owner    | query | string        | false    | The owning username of UAIs to delete.  If specified only UAIs  |
+| uai_list | query | array[string] | false    | Comma-separated list of UAI names.  If this is supplied 'owner' |
 
 #### Detailed descriptions
 
@@ -1898,32 +1898,32 @@ and 'class-id' are ignored.
 
 <h3 id="delete_uais_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAIs deleted|Inline|
+| Status | Meaning                                                 | Description  | Schema |
+|--------|---------------------------------------------------------|--------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | UAIs deleted | Inline |
 
 <h3 id="delete_uais_admin-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[UAI](#schemauai)]|false|none|none|
-|» uai_name|string|false|none|none|
-|» username|string|false|none|none|
-|» publickey|string|false|none|none|
-|» class_id|string|false|none|none|
-|» public_ip|boolean|false|none|none|
-|» resource_id|string|false|none|none|
-|» image_id|string|false|none|none|
-|» uai_img|string|false|none|none|
-|» uai_status|string|false|none|none|
-|» uai_msg|string|false|none|none|
-|» uai_connect_string|string|false|none|none|
-|» uai_portmap|object|false|none|none|
-|»» **additionalProperties**|integer|false|none|none|
-|» uai_host|string|false|none|none|
-|» uai_age|string|false|none|none|
+| Name                        | Type                | Required | Restrictions | Description |
+|-----------------------------|---------------------|----------|--------------|-------------|
+| *anonymous*                 | [[UAI](#schemauai)] | false    | none         | none        |
+| » uai_name                  | string              | false    | none         | none        |
+| » username                  | string              | false    | none         | none        |
+| » publickey                 | string              | false    | none         | none        |
+| » class_id                  | string              | false    | none         | none        |
+| » public_ip                 | boolean             | false    | none         | none        |
+| » resource_id               | string              | false    | none         | none        |
+| » image_id                  | string              | false    | none         | none        |
+| » uai_img                   | string              | false    | none         | none        |
+| » uai_status                | string              | false    | none         | none        |
+| » uai_msg                   | string              | false    | none         | none        |
+| » uai_connect_string        | string              | false    | none         | none        |
+| » uai_portmap               | object              | false    | none         | none        |
+| »» **additionalProperties** | integer             | false    | none         | none        |
+| » uai_host                  | string              | false    | none         | none        |
+| » uai_age                   | string              | false    | none         | none        |
 
 <aside class="success">
 This operation does not require authentication
@@ -1994,9 +1994,9 @@ Retrieve information on the specified UAI.
 
 <h3 id="get_uai_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|uai_name|path|string|true|The name of the UAI to retrieve.|
+| Name     | In   | Type   | Required | Description                      |
+|----------|------|--------|----------|----------------------------------|
+| uai_name | path | string | true     | The name of the UAI to retrieve. |
 
 #### Detailed descriptions
 
@@ -2025,10 +2025,10 @@ Retrieve information on the specified UAI.
 
 <h3 id="get_uai_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAI Description|[UAI](#schemauai)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|UAI not found|None|
+| Status | Meaning                                                        | Description     | Schema            |
+|--------|----------------------------------------------------------------|-----------------|-------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | UAI Description | [UAI](#schemauai) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | UAI not found   | None              |
 
 <aside class="success">
 This operation does not require authentication
@@ -2096,9 +2096,9 @@ with this request.
 
 <h3 id="delete_local_config_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Local configuration reset to defaults|None|
+| Status | Meaning                                                 | Description                           | Schema |
+|--------|---------------------------------------------------------|---------------------------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Local configuration reset to defaults | None   |
 
 <aside class="success">
 This operation does not require authentication
@@ -2176,11 +2176,11 @@ list does not affect existing UAIs.
 
 <h3 id="create_uas_volume_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|volumename|query|string|true|Volume to create|
-|mount_path|query|string|true|Mount path inside the UAI|
-|volume_description|query|string|true|JSON description of a Kubernetes volume to be|
+| Name               | In    | Type   | Required | Description                                   |
+|--------------------|-------|--------|----------|-----------------------------------------------|
+| volumename         | query | string | true     | Volume to create                              |
+| mount_path         | query | string | true     | Mount path inside the UAI                     |
+| volume_description | query | string | true     | JSON description of a Kubernetes volume to be |
 
 #### Detailed descriptions
 
@@ -2229,11 +2229,11 @@ or
 
 <h3 id="create_uas_volume_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Volume added|[Volume](#schemavolume)|
-|304|[Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1)|Volume not added|string|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid type for host, volume not added|string|
+| Status | Meaning                                                          | Description                             | Schema                  |
+|--------|------------------------------------------------------------------|-----------------------------------------|-------------------------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)     | Volume added                            | [Volume](#schemavolume) |
+| 304    | [Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1)  | Volume not added                        | string                  |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Invalid type for host, volume not added | string                  |
 
 <aside class="success">
 This operation does not require authentication
@@ -2321,22 +2321,22 @@ This call does not affect the k8s volume itself.
 
 <h3 id="get_uas_volumes_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAS Volume list|Inline|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|UAS Volumes not found|None|
+| Status | Meaning                                                        | Description           | Schema |
+|--------|----------------------------------------------------------------|-----------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | UAS Volume list       | Inline |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | UAS Volumes not found | None   |
 
 <h3 id="get_uas_volumes_admin-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[Volume](#schemavolume)]|false|none|none|
-|» volume_id|string|false|none|none|
-|» volumename|string|false|none|none|
-|» mount_path|string|false|none|none|
-|» volume_description|object|false|none|none|
+| Name                 | Type                      | Required | Restrictions | Description |
+|----------------------|---------------------------|----------|--------------|-------------|
+| *anonymous*          | [[Volume](#schemavolume)] | false    | none         | none        |
+| » volume_id          | string                    | false    | none         | none        |
+| » volumename         | string                    | false    | none         | none        |
+| » mount_path         | string                    | false    | none         | none        |
+| » volume_description | object                    | false    | none         | none        |
 
 <aside class="success">
 This operation does not require authentication
@@ -2407,9 +2407,9 @@ Get volume info for volume_id
 
 <h3 id="get_uas_volume_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|volume_id|path|string|true|The volume identifier (UUID) of the volume to retrieve|
+| Name      | In   | Type   | Required | Description                                            |
+|-----------|------|--------|----------|--------------------------------------------------------|
+| volume_id | path | string | true     | The volume identifier (UUID) of the volume to retrieve |
 
 #### Detailed descriptions
 
@@ -2431,10 +2431,10 @@ from the configuration.
 
 <h3 id="get_uas_volume_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAS Volume|[Volume](#schemavolume)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|UAS Volume {volumename} not found|None|
+| Status | Meaning                                                        | Description                       | Schema                  |
+|--------|----------------------------------------------------------------|-----------------------------------|-------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | UAS Volume                        | [Volume](#schemavolume) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | UAS Volume {volumename} not found | None                    |
 
 <aside class="success">
 This operation does not require authentication
@@ -2508,12 +2508,12 @@ future UAI containers and the volume.
 
 <h3 id="update_uas_volume_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|volume_id|path|string|true|The volume identifier (UUID) of the volume to update|
-|volumename|query|string|false|The name of the volume as it is applied to the UAI|
-|mount_path|query|string|false|Mount path for the volume inside the UAI|
-|volume_description|query|string|false|JSON description of a Kubernetes volume to be|
+| Name               | In    | Type   | Required | Description                                          |
+|--------------------|-------|--------|----------|------------------------------------------------------|
+| volume_id          | path  | string | true     | The volume identifier (UUID) of the volume to update |
+| volumename         | query | string | false    | The name of the volume as it is applied to the UAI   |
+| mount_path         | query | string | false    | Mount path for the volume inside the UAI             |
+| volume_description | query | string | false    | JSON description of a Kubernetes volume to be        |
 
 #### Detailed descriptions
 
@@ -2570,11 +2570,11 @@ or
 
 <h3 id="update_uas_volume_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Volume updated|[Volume](#schemavolume)|
-|304|[Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1)|No changes made|[Volume](#schemavolume)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid type for host, volume not updated|string|
+| Status | Meaning                                                          | Description                               | Schema                  |
+|--------|------------------------------------------------------------------|-------------------------------------------|-------------------------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)     | Volume updated                            | [Volume](#schemavolume) |
+| 304    | [Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1)  | No changes made                           | [Volume](#schemavolume) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Invalid type for host, volume not updated | string                  |
 
 <aside class="success">
 This operation does not require authentication
@@ -2647,9 +2647,9 @@ The actual volume itself is not affected in any way.
 
 <h3 id="delete_uas_volume_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|volume_id|path|string|true|The volume identifier (UUID) of the volume to delete|
+| Name      | In   | Type   | Required | Description                                          |
+|-----------|------|--------|----------|------------------------------------------------------|
+| volume_id | path | string | true     | The volume identifier (UUID) of the volume to delete |
 
 #### Detailed descriptions
 
@@ -2671,10 +2671,10 @@ from the configuration.
 
 <h3 id="delete_uas_volume_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Volume removed from list|[Volume](#schemavolume)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Failed to delete volume {volume_id}|None|
+| Status | Meaning                                                        | Description                         | Schema                  |
+|--------|----------------------------------------------------------------|-------------------------------------|-------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | Volume removed from list            | [Volume](#schemavolume) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | Failed to delete volume {volume_id} | None                    |
 
 <aside class="success">
 This operation does not require authentication
@@ -2749,11 +2749,11 @@ the Kubernetes documentation.
 
 <h3 id="create_uas_resource_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|comment|query|string|false|A descriptive comment explaining the intended use of the resource|
-|limit|query|string|false|JSON description of a Kubernetes resource limit to be applied to|
-|request|query|string|false|JSON description of a Kubernetes resource request to be|
+| Name    | In    | Type   | Required | Description                                                       |
+|---------|-------|--------|----------|-------------------------------------------------------------------|
+| comment | query | string | false    | A descriptive comment explaining the intended use of the resource |
+| limit   | query | string | false    | JSON description of a Kubernetes resource limit to be applied to  |
+| request | query | string | false    | JSON description of a Kubernetes resource request to be           |
 
 #### Detailed descriptions
 
@@ -2790,10 +2790,10 @@ Millicpus and 250 Mibibytes of memory:
 
 <h3 id="create_uas_resource_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Resource configuration added|[Resource](#schemaresource)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid limit or request specified|string|
+| Status | Meaning                                                          | Description                        | Schema                      |
+|--------|------------------------------------------------------------------|------------------------------------|-----------------------------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)     | Resource configuration added       | [Resource](#schemaresource) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Invalid limit or request specified | string                      |
 
 <aside class="success">
 This operation does not require authentication
@@ -2879,22 +2879,22 @@ List all available resource limit / request configurations
 
 <h3 id="get_uas_resources_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAS Resource Limit / Request Configuration List|Inline|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|UAS Resource Limit / Request Configuration  not found|None|
+| Status | Meaning                                                        | Description                                           | Schema |
+|--------|----------------------------------------------------------------|-------------------------------------------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | UAS Resource Limit / Request Configuration List       | Inline |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | UAS Resource Limit / Request Configuration  not found | None   |
 
 <h3 id="get_uas_resources_admin-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[Resource](#schemaresource)]|false|none|none|
-|» resource_id|string|false|none|none|
-|» comment|string|false|none|none|
-|» limit|string|false|none|none|
-|» request|string|false|none|none|
+| Name          | Type                          | Required | Restrictions | Description |
+|---------------|-------------------------------|----------|--------------|-------------|
+| *anonymous*   | [[Resource](#schemaresource)] | false    | none         | none        |
+| » resource_id | string                        | false    | none         | none        |
+| » comment     | string                        | false    | none         | none        |
+| » limit       | string                        | false    | none         | none        |
+| » request     | string                        | false    | none         | none        |
 
 <aside class="success">
 This operation does not require authentication
@@ -2966,9 +2966,9 @@ configuration item.
 
 <h3 id="get_uas_resource_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|resource_id|path|string|true|The resource identifier (UUID) of the resource limit / request|
+| Name        | In   | Type   | Required | Description                                                    |
+|-------------|------|--------|----------|----------------------------------------------------------------|
+| resource_id | path | string | true     | The resource identifier (UUID) of the resource limit / request |
 
 #### Detailed descriptions
 
@@ -2990,10 +2990,10 @@ config to be retrieved from the configuration.
 
 <h3 id="get_uas_resource_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Resource Limit / Request Configuration Item|[Resource](#schemaresource)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Resource Configuration {resource_id} not found|None|
+| Status | Meaning                                                        | Description                                    | Schema                      |
+|--------|----------------------------------------------------------------|------------------------------------------------|-----------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | Resource Limit / Request Configuration Item    | [Resource](#schemaresource) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | Resource Configuration {resource_id} not found | None                        |
 
 <aside class="success">
 This operation does not require authentication
@@ -3064,12 +3064,12 @@ Update a resource limit / request configuration item.
 
 <h3 id="update_uas_resource_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|resource_id|path|string|true|The resource identifier (UUID) of the resource limit / request config|
-|comment|query|string|false|A descriptive comment explaining the intended use of the resource|
-|limit|query|string|false|JSON description of a Kubernetes resource limit to be applied to|
-|request|query|string|false|JSON description of a Kubernetes resource request to be|
+| Name        | In    | Type   | Required | Description                                                           |
+|-------------|-------|--------|----------|-----------------------------------------------------------------------|
+| resource_id | path  | string | true     | The resource identifier (UUID) of the resource limit / request config |
+| comment     | query | string | false    | A descriptive comment explaining the intended use of the resource     |
+| limit       | query | string | false    | JSON description of a Kubernetes resource limit to be applied to      |
+| request     | query | string | false    | JSON description of a Kubernetes resource request to be               |
 
 #### Detailed descriptions
 
@@ -3109,10 +3109,10 @@ Millicpus and 250 Mibibytes of memory:
 
 <h3 id="update_uas_resource_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Resource updated|[Resource](#schemaresource)|
-|304|[Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1)|No changes made|[Resource](#schemaresource)|
+| Status | Meaning                                                         | Description      | Schema                      |
+|--------|-----------------------------------------------------------------|------------------|-----------------------------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)    | Resource updated | [Resource](#schemaresource) |
+| 304    | [Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1) | No changes made  | [Resource](#schemaresource) |
 
 <aside class="success">
 This operation does not require authentication
@@ -3184,9 +3184,9 @@ the configuration.
 
 <h3 id="delete_uas_resource_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|resource_id|path|string|true|The resource identifier (UUID) of the resource limit / request|
+| Name        | In   | Type   | Required | Description                                                    |
+|-------------|------|--------|----------|----------------------------------------------------------------|
+| resource_id | path | string | true     | The resource identifier (UUID) of the resource limit / request |
 
 #### Detailed descriptions
 
@@ -3208,10 +3208,10 @@ configuration to be removed from the configuration.
 
 <h3 id="delete_uas_resource_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Resource configuration removed|[Resource](#schemaresource)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Failed to delete resource configuration {resource_id}|None|
+| Status | Meaning                                                        | Description                                           | Schema                      |
+|--------|----------------------------------------------------------------|-------------------------------------------------------|-----------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | Resource configuration removed                        | [Resource](#schemaresource) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | Failed to delete resource configuration {resource_id} | None                        |
 
 <aside class="success">
 This operation does not require authentication
@@ -3287,23 +3287,23 @@ administratively.
 
 <h3 id="create_uas_class_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|comment|query|string|false|A descriptive comment explaining the intended use of the Class.|
-|default|query|boolean|false|Optionally specify whether this is the default UAI / Broker|
-|public_ip|query|boolean|false|A flag indicating whether a UAI or Broker created using this|
-|image_id|query|string|true|The image-id of the image to be used in UAIs created from|
-|priority_class_name|query|string|false|Optional Kubernetes priority class name to be assigned to|
-|namespace|query|string|false|The K8s namespace where UAIs of this class run.  Defaults to the|
-|opt_ports|query|string|false|A comma-separated list of port numbers on which software running in a|
-|uai_creation_class|query|string|false|For Brokers only, the class ID (UUID)  used to create UAIs|
-|uai_compute_network|query|boolean|false|A flag indicating whether a UAI or Broker created using this|
-|resource_id|query|string|false|Optional resource-id of the resource limit / request configuration|
-|volume_list|query|array[string]|false|Optional comma-separated list of volume-ids specifying the|
-|tolerations|query|string|false|Optional JSON string containing a JSON list of JSON objects|
-|timeout|query|string|false|Optional JSON string containing a timeout specification|
-|service_account|query|string|false|Optional name of a Kubernetes service account to be assigned to|
-|replicas|query|string|false|The number of UAI replicas created when a UAI of|
+| Name                | In    | Type          | Required | Description                                                           |
+|---------------------|-------|---------------|----------|-----------------------------------------------------------------------|
+| comment             | query | string        | false    | A descriptive comment explaining the intended use of the Class.       |
+| default             | query | boolean       | false    | Optionally specify whether this is the default UAI / Broker           |
+| public_ip           | query | boolean       | false    | A flag indicating whether a UAI or Broker created using this          |
+| image_id            | query | string        | true     | The image-id of the image to be used in UAIs created from             |
+| priority_class_name | query | string        | false    | Optional Kubernetes priority class name to be assigned to             |
+| namespace           | query | string        | false    | The K8s namespace where UAIs of this class run.  Defaults to the      |
+| opt_ports           | query | string        | false    | A comma-separated list of port numbers on which software running in a |
+| uai_creation_class  | query | string        | false    | For Brokers only, the class ID (UUID)  used to create UAIs            |
+| uai_compute_network | query | boolean       | false    | A flag indicating whether a UAI or Broker created using this          |
+| resource_id         | query | string        | false    | Optional resource-id of the resource limit / request configuration    |
+| volume_list         | query | array[string] | false    | Optional comma-separated list of volume-ids specifying the            |
+| tolerations         | query | string        | false    | Optional JSON string containing a JSON list of JSON objects           |
+| timeout             | query | string        | false    | Optional JSON string containing a timeout specification               |
+| service_account     | query | string        | false    | Optional name of a Kubernetes service account to be assigned to       |
+| replicas            | query | string        | false    | The number of UAI replicas created when a UAI of                      |
 
 #### Detailed descriptions
 
@@ -3473,10 +3473,10 @@ connections.
 
 <h3 id="create_uas_class_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|UAI / Broker Class added|[UAIClass](#schemauaiclass)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid UAI / Broker Class specified|string|
+| Status | Meaning                                                          | Description                          | Schema                      |
+|--------|------------------------------------------------------------------|--------------------------------------|-----------------------------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)     | UAI / Broker Class added             | [UAIClass](#schemauaiclass) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Invalid UAI / Broker Class specified | string                      |
 
 <aside class="success">
 This operation does not require authentication
@@ -3593,45 +3593,45 @@ List all available UAI / Broker Classes
 
 <h3 id="get_uas_classes_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAI / Broker Class List|Inline|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|UAI / Broker Classes not found|None|
+| Status | Meaning                                                        | Description                    | Schema |
+|--------|----------------------------------------------------------------|--------------------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | UAI / Broker Class List        | Inline |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | UAI / Broker Classes not found | None   |
 
 <h3 id="get_uas_classes_admin-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[UAIClass](#schemauaiclass)]|false|none|none|
-|» class_id|string|false|none|none|
-|» comment|string|false|none|none|
-|» default|boolean|false|none|none|
-|» public_ip|boolean|false|none|none|
-|» priority_class_name|string|false|none|none|
-|» namespace|string|false|none|none|
-|» opt_ports|string|false|none|none|
-|» uai_creation_class|string|false|none|none|
-|» uai_compute_network|boolean|false|none|none|
-|» tolerations|string|false|none|none|
-|» uai_image|object|false|none|none|
-|»» option|[Image](#schemaimage)|false|none|none|
-|»»» image_id|string|false|none|none|
-|»»» imagename|string|false|none|none|
-|»»» default|boolean|false|none|none|
-|» resource_config|object|false|none|none|
-|»» option|[Resource](#schemaresource)|false|none|none|
-|»»» resource_id|string|false|none|none|
-|»»» comment|string|false|none|none|
-|»»» limit|string|false|none|none|
-|»»» request|string|false|none|none|
-|» volume_mounts|[object]|false|none|none|
-|»» option|[Volume](#schemavolume)|false|none|none|
-|»»» volume_id|string|false|none|none|
-|»»» volumename|string|false|none|none|
-|»»» mount_path|string|false|none|none|
-|»»» volume_description|object|false|none|none|
+| Name                   | Type                          | Required | Restrictions | Description |
+|------------------------|-------------------------------|----------|--------------|-------------|
+| *anonymous*            | [[UAIClass](#schemauaiclass)] | false    | none         | none        |
+| » class_id             | string                        | false    | none         | none        |
+| » comment              | string                        | false    | none         | none        |
+| » default              | boolean                       | false    | none         | none        |
+| » public_ip            | boolean                       | false    | none         | none        |
+| » priority_class_name  | string                        | false    | none         | none        |
+| » namespace            | string                        | false    | none         | none        |
+| » opt_ports            | string                        | false    | none         | none        |
+| » uai_creation_class   | string                        | false    | none         | none        |
+| » uai_compute_network  | boolean                       | false    | none         | none        |
+| » tolerations          | string                        | false    | none         | none        |
+| » uai_image            | object                        | false    | none         | none        |
+| »» option              | [Image](#schemaimage)         | false    | none         | none        |
+| »»» image_id           | string                        | false    | none         | none        |
+| »»» imagename          | string                        | false    | none         | none        |
+| »»» default            | boolean                       | false    | none         | none        |
+| » resource_config      | object                        | false    | none         | none        |
+| »» option              | [Resource](#schemaresource)   | false    | none         | none        |
+| »»» resource_id        | string                        | false    | none         | none        |
+| »»» comment            | string                        | false    | none         | none        |
+| »»» limit              | string                        | false    | none         | none        |
+| »»» request            | string                        | false    | none         | none        |
+| » volume_mounts        | [object]                      | false    | none         | none        |
+| »» option              | [Volume](#schemavolume)       | false    | none         | none        |
+| »»» volume_id          | string                        | false    | none         | none        |
+| »»» volumename         | string                        | false    | none         | none        |
+| »»» mount_path         | string                        | false    | none         | none        |
+| »»» volume_description | object                        | false    | none         | none        |
 
 <aside class="success">
 This operation does not require authentication
@@ -3702,9 +3702,9 @@ Get a description of a UAI / Broker Class
 
 <h3 id="get_uas_class_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|class_id|path|string|true|The class identifier (UUID) UAI / Broker Class to be retrieved|
+| Name     | In   | Type   | Required | Description                                                    |
+|----------|------|--------|----------|----------------------------------------------------------------|
+| class_id | path | string | true     | The class identifier (UUID) UAI / Broker Class to be retrieved |
 
 #### Detailed descriptions
 
@@ -3757,10 +3757,10 @@ from the configuration.
 
 <h3 id="get_uas_class_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAI / Broker Class|[UAIClass](#schemauaiclass)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|UAI / Broker Class {class_id} not found|None|
+| Status | Meaning                                                        | Description                             | Schema                      |
+|--------|----------------------------------------------------------------|-----------------------------------------|-----------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | UAI / Broker Class                      | [UAIClass](#schemauaiclass) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | UAI / Broker Class {class_id} not found | None                        |
 
 <aside class="success">
 This operation does not require authentication
@@ -3834,24 +3834,24 @@ UAI / Broker Class.
 
 <h3 id="update_uas_class_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|class_id|path|string|true|The image identifier (UUID) of the UAI / Broker Class to be updated|
-|comment|query|string|false|A descriptive comment explaining the intended use of the Class.|
-|default|query|boolean|false|Optionally specify whether this is the default|
-|public_ip|query|boolean|false|A flag indicating whether a UAI or Broker created using this|
-|image_id|query|string|false|The image-id of the image to be used in UAIs created from|
-|priority_class_name|query|string|false|Optional Kubernetes priority class name to be assigned to|
-|namespace|query|string|false|The K8s namespace where UAIs of this class run.|
-|opt_ports|query|string|false|A comma-separated list of port numbers on which software running in a|
-|uai_creation_class|query|string|false|For Brokers only, the class ID (UUID)  used to create UAIs|
-|uai_compute_network|query|boolean|false|A flag indicating whether a UAI or Broker created using this|
-|resource_id|query|string|false|Optional resource-id of the resource limit / request configuration|
-|volume_list|query|array[string]|false|Comma-separated list of volume-ids specifying the|
-|tolerations|query|string|false|Optional JSON string containing a JSON list of JSON objects|
-|timeout|query|string|false|Optional JSON string containing a timeout specification|
-|service_account|query|string|false|Optional name of a Kubernetes service account to be assigned to|
-|replicas|query|string|false|The number of UAI replicas created when a UAI of|
+| Name                | In    | Type          | Required | Description                                                           |
+|---------------------|-------|---------------|----------|-----------------------------------------------------------------------|
+| class_id            | path  | string        | true     | The image identifier (UUID) of the UAI / Broker Class to be updated   |
+| comment             | query | string        | false    | A descriptive comment explaining the intended use of the Class.       |
+| default             | query | boolean       | false    | Optionally specify whether this is the default                        |
+| public_ip           | query | boolean       | false    | A flag indicating whether a UAI or Broker created using this          |
+| image_id            | query | string        | false    | The image-id of the image to be used in UAIs created from             |
+| priority_class_name | query | string        | false    | Optional Kubernetes priority class name to be assigned to             |
+| namespace           | query | string        | false    | The K8s namespace where UAIs of this class run.                       |
+| opt_ports           | query | string        | false    | A comma-separated list of port numbers on which software running in a |
+| uai_creation_class  | query | string        | false    | For Brokers only, the class ID (UUID)  used to create UAIs            |
+| uai_compute_network | query | boolean       | false    | A flag indicating whether a UAI or Broker created using this          |
+| resource_id         | query | string        | false    | Optional resource-id of the resource limit / request configuration    |
+| volume_list         | query | array[string] | false    | Comma-separated list of volume-ids specifying the                     |
+| tolerations         | query | string        | false    | Optional JSON string containing a JSON list of JSON objects           |
+| timeout             | query | string        | false    | Optional JSON string containing a timeout specification               |
+| service_account     | query | string        | false    | Optional name of a Kubernetes service account to be assigned to       |
+| replicas            | query | string        | false    | The number of UAI replicas created when a UAI of                      |
 
 #### Detailed descriptions
 
@@ -4016,10 +4016,10 @@ connections.
 
 <h3 id="update_uas_class_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|UAI / Broker Class updated|[UAIClass](#schemauaiclass)|
-|304|[Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1)|No changes made|[UAIClass](#schemauaiclass)|
+| Status | Meaning                                                         | Description                | Schema                      |
+|--------|-----------------------------------------------------------------|----------------------------|-----------------------------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)    | UAI / Broker Class updated | [UAIClass](#schemauaiclass) |
+| 304    | [Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1) | No changes made            | [UAIClass](#schemauaiclass) |
 
 <aside class="success">
 This operation does not require authentication
@@ -4090,9 +4090,9 @@ Delete the specified UAI / Broker Class
 
 <h3 id="delete_uas_class_admin-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|class_id|path|string|true|The class identifier (UUID) of the UAI / Broker Class to be|
+| Name     | In   | Type   | Required | Description                                                 |
+|----------|------|--------|----------|-------------------------------------------------------------|
+| class_id | path | string | true     | The class identifier (UUID) of the UAI / Broker Class to be |
 
 #### Detailed descriptions
 
@@ -4114,10 +4114,10 @@ removed from the configuration.
 
 <h3 id="delete_uas_class_admin-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Resource configuration removed|[Resource](#schemaresource)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Failed to delete resource configuration {resource_id}|None|
+| Status | Meaning                                                        | Description                                           | Schema                      |
+|--------|----------------------------------------------------------------|-------------------------------------------------------|-----------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | Resource configuration removed                        | [Resource](#schemaresource) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | Failed to delete resource configuration {resource_id} | None                        |
 
 <aside class="success">
 This operation does not require authentication
@@ -4152,23 +4152,23 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|uai_name|string|false|none|none|
-|username|string|false|none|none|
-|publickey|string|false|none|none|
-|class_id|string|false|none|none|
-|public_ip|boolean|false|none|none|
-|resource_id|string|false|none|none|
-|image_id|string|false|none|none|
-|uai_img|string|false|none|none|
-|uai_status|string|false|none|none|
-|uai_msg|string|false|none|none|
-|uai_connect_string|string|false|none|none|
-|uai_portmap|object|false|none|none|
-|» **additionalProperties**|integer|false|none|none|
-|uai_host|string|false|none|none|
-|uai_age|string|false|none|none|
+| Name                       | Type    | Required | Restrictions | Description |
+|----------------------------|---------|----------|--------------|-------------|
+| uai_name                   | string  | false    | none         | none        |
+| username                   | string  | false    | none         | none        |
+| publickey                  | string  | false    | none         | none        |
+| class_id                   | string  | false    | none         | none        |
+| public_ip                  | boolean | false    | none         | none        |
+| resource_id                | string  | false    | none         | none        |
+| image_id                   | string  | false    | none         | none        |
+| uai_img                    | string  | false    | none         | none        |
+| uai_status                 | string  | false    | none         | none        |
+| uai_msg                    | string  | false    | none         | none        |
+| uai_connect_string         | string  | false    | none         | none        |
+| uai_portmap                | object  | false    | none         | none        |
+| » **additionalProperties** | integer | false    | none         | none        |
+| uai_host                   | string  | false    | none         | none        |
+| uai_age                    | string  | false    | none         | none        |
 
 <h2 id="tocS_Volume">Volume</h2>
 <!-- backwards compatibility -->
@@ -4189,12 +4189,12 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|volume_id|string|false|none|none|
-|volumename|string|false|none|none|
-|mount_path|string|false|none|none|
-|volume_description|object|false|none|none|
+| Name               | Type   | Required | Restrictions | Description |
+|--------------------|--------|----------|--------------|-------------|
+| volume_id          | string | false    | none         | none        |
+| volumename         | string | false    | none         | none        |
+| mount_path         | string | false    | none         | none        |
+| volume_description | object | false    | none         | none        |
 
 <h2 id="tocS_Image">Image</h2>
 <!-- backwards compatibility -->
@@ -4214,11 +4214,11 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|image_id|string|false|none|none|
-|imagename|string|false|none|none|
-|default|boolean|false|none|none|
+| Name      | Type    | Required | Restrictions | Description |
+|-----------|---------|----------|--------------|-------------|
+| image_id  | string  | false    | none         | none        |
+| imagename | string  | false    | none         | none        |
+| default   | boolean | false    | none         | none        |
 
 <h2 id="tocS_Resource">Resource</h2>
 <!-- backwards compatibility -->
@@ -4239,12 +4239,12 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|resource_id|string|false|none|none|
-|comment|string|false|none|none|
-|limit|string|false|none|none|
-|request|string|false|none|none|
+| Name        | Type   | Required | Restrictions | Description |
+|-------------|--------|----------|--------------|-------------|
+| resource_id | string | false    | none         | none        |
+| comment     | string | false    | none         | none        |
+| limit       | string | false    | none         | none        |
+| request     | string | false    | none         | none        |
 
 <h2 id="tocS_UAIClass">UAIClass</h2>
 <!-- backwards compatibility -->
@@ -4296,24 +4296,24 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|class_id|string|false|none|none|
-|comment|string|false|none|none|
-|default|boolean|false|none|none|
-|public_ip|boolean|false|none|none|
-|priority_class_name|string|false|none|none|
-|namespace|string|false|none|none|
-|opt_ports|string|false|none|none|
-|uai_creation_class|string|false|none|none|
-|uai_compute_network|boolean|false|none|none|
-|tolerations|string|false|none|none|
-|uai_image|object|false|none|none|
-|» option|[Image](#schemaimage)|false|none|none|
-|resource_config|object|false|none|none|
-|» option|[Resource](#schemaresource)|false|none|none|
-|volume_mounts|[object]|false|none|none|
-|» option|[Volume](#schemavolume)|false|none|none|
+| Name                | Type                        | Required | Restrictions | Description |
+|---------------------|-----------------------------|----------|--------------|-------------|
+| class_id            | string                      | false    | none         | none        |
+| comment             | string                      | false    | none         | none        |
+| default             | boolean                     | false    | none         | none        |
+| public_ip           | boolean                     | false    | none         | none        |
+| priority_class_name | string                      | false    | none         | none        |
+| namespace           | string                      | false    | none         | none        |
+| opt_ports           | string                      | false    | none         | none        |
+| uai_creation_class  | string                      | false    | none         | none        |
+| uai_compute_network | boolean                     | false    | none         | none        |
+| tolerations         | string                      | false    | none         | none        |
+| uai_image           | object                      | false    | none         | none        |
+| » option            | [Image](#schemaimage)       | false    | none         | none        |
+| resource_config     | object                      | false    | none         | none        |
+| » option            | [Resource](#schemaresource) | false    | none         | none        |
+| volume_mounts       | [object]                    | false    | none         | none        |
+| » option            | [Volume](#schemavolume)     | false    | none         | none        |
 
 <h2 id="tocS_Image_list">Image_list</h2>
 <!-- backwards compatibility -->
@@ -4334,10 +4334,10 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|default_image|string|false|none|none|
-|image_list|[string]|false|none|none|
+| Name          | Type     | Required | Restrictions | Description |
+|---------------|----------|----------|--------------|-------------|
+| default_image | string   | false    | none         | none        |
+| image_list    | [string] | false    | none         | none        |
 
 <h2 id="tocS_UAS_mgr_info">UAS_mgr_info</h2>
 <!-- backwards compatibility -->
@@ -4356,8 +4356,8 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|service_name|string|false|none|none|
-|version|string|false|none|none|
+| Name         | Type   | Required | Restrictions | Description |
+|--------------|--------|----------|--------------|-------------|
+| service_name | string | false    | none         | none        |
+| version      | string | false    | none         | none        |
 

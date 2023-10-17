@@ -91,9 +91,9 @@ Generates a STS Token.
 
 <h3 id="sts.routes.put_token-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|A generated STS Token|[Token](#schematoken)|
+| Status | Meaning                                                      | Description           | Schema                |
+|--------|--------------------------------------------------------------|-----------------------|-----------------------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2) | A generated STS Token | [Token](#schematoken) |
 
 <aside class="success">
 This operation does not require authentication
@@ -176,17 +176,17 @@ Return health status
 
 <h3 id="sts.routes.get_healthz-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Everything is ok|Inline|
+| Status | Meaning                                                 | Description      | Schema |
+|--------|---------------------------------------------------------|------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Everything is ok | Inline |
 
 <h3 id="sts.routes.get_healthz-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» Status|string|false|read-only|none|
+| Name     | Type   | Required | Restrictions | Description |
+|----------|--------|----------|--------------|-------------|
+| » Status | string | false    | read-only    | none        |
 
 <aside class="success">
 This operation does not require authentication
@@ -216,12 +216,12 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|Credentials|object|false|none|none|
-|» EndpointURL|string|false|read-only|none|
-|» AccessKeyId|string|false|read-only|none|
-|» SecretAccessKey|string|false|read-only|none|
-|» SessionToken|string|false|read-only|none|
-|» Expiration|string|false|read-only|none|
+| Name              | Type   | Required | Restrictions | Description |
+|-------------------|--------|----------|--------------|-------------|
+| Credentials       | object | false    | none         | none        |
+| » EndpointURL     | string | false    | read-only    | none        |
+| » AccessKeyId     | string | false    | read-only    | none        |
+| » SecretAccessKey | string | false    | read-only    | none        |
+| » SessionToken    | string | false    | read-only    | none        |
+| » Expiration      | string | false    | read-only    | none        |
 

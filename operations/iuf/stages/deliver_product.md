@@ -17,9 +17,9 @@ The `deliver-product` stage does not change the running state of the system as t
 
 The following arguments are most often used with the `deliver-product` stage. See `iuf -h` and `iuf run -h` for additional arguments.
 
-| Input           | `iuf` Argument | Description                                           |
-| --------------- | -------------- | ----------------------------------------------------- |
-| Activity        | `-a ACTIVITY`  | Activity created for the install or upgrade operations|
+| Input    | `iuf` Argument | Description                                            |
+|----------|----------------|--------------------------------------------------------|
+| Activity | `-a ACTIVITY`  | Activity created for the install or upgrade operations |
 
 ## Execution details
 
@@ -29,7 +29,7 @@ for details on the commands executed.
 Artifacts will be uploaded to the following locations based on entries specified in the products' `iuf-product-manifest.yaml` files.
 
 | Location                      | `iuf-product-manifest.yaml` Entry |
-| ----------------------------- | --------------------------------- |
+|-------------------------------|-----------------------------------|
 | S3 Content                    | `s3`                              |
 | S3 Loftsman Manifests         | `loftsman`                        |
 | Nexus Docker Registries       | `docker`                          |
@@ -43,7 +43,7 @@ Artifacts will be uploaded to the following locations based on entries specified
 The following table describes upload behavior when the artifact being uploaded already exists on the system.
 
 | Artifact                      | Upload Behavior                                          |
-| ----------------------------- | ---------------------------------                        |
+|-------------------------------|----------------------------------------------------------|
 | S3 Content                    | overwrite existing artifact                              |
 | S3 Loftsman Manifests         | overwrite existing artifact                              |
 | Nexus Docker Registries       | new artifact uploaded with same tag as previous artifact |

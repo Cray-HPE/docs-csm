@@ -22,9 +22,9 @@ describes how to validate that the storage NCNs have the expected number of OSDs
 The following table shows the expected number of OSDs for every storage NCN.
 
 | Hardware Manufacturer | OSD Drive Count per Storage NCN (not including OS drives) |
-| :-------------------: | :---------------------------------------: |
-| GigaByte              | 12 |
-| HPE                   | 8  |
+|:---------------------:|:---------------------------------------------------------:|
+|       GigaByte        |                            12                             |
+|          HPE          |                             8                             |
 
 The expected total number of OSDs on the system is determined by taking the number in the second column of the above
 table and multiplying it by the number of storage NCNs in the system. That is:

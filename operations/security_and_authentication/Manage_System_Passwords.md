@@ -51,32 +51,32 @@ However, if the user gets locked out attempting to change the password or the co
 
 **Liquid-Cooled Cabinet:**
 
-| Name     | Role      | Switch          |  Login |
-| -----    | --------- | --------------- |  ----- |
-| sw-leaf-bmc | Leaf-BMC/Mgmt | Dell S3048-ON   |  admin |
-| sw-spine | Spine | Mellanox SN2100 |  admin |
-| sw-leaf-bmc | Leaf-BMC/Mgmt | Aruba 6300   |  admin |
-| sw-spine | Spine | Aruba 8325 |  admin |
-| sw-leaf | Leaf | Aruba 8325 |  admin |
+| Name        | Role          | Switch          | Login |
+|-------------|---------------|-----------------|-------|
+| sw-leaf-bmc | Leaf-BMC/Mgmt | Dell S3048-ON   | admin |
+| sw-spine    | Spine         | Mellanox SN2100 | admin |
+| sw-leaf-bmc | Leaf-BMC/Mgmt | Aruba 6300      | admin |
+| sw-spine    | Spine         | Aruba 8325      | admin |
+| sw-leaf     | Leaf          | Aruba 8325      | admin |
 
 **Air-Cooled Cabinet:**
 
-| Name    | Role      | Switch        |  Login |
-| ------- | --------- | ------------- |  ----- |
-| sw-leaf-bmc | Leaf/Mgmt | Dell S3048-ON |  admin |
-| sw-leaf-bmc | Leaf-BMC/Mgmt | Aruba 6300   |  admin |
+| Name        | Role          | Switch        | Login |
+|-------------|---------------|---------------|-------|
+| sw-leaf-bmc | Leaf/Mgmt     | Dell S3048-ON | admin |
+| sw-leaf-bmc | Leaf-BMC/Mgmt | Aruba 6300    | admin |
 
 **Coolant Distribution Unit (CDU):**
 
-| Name   | Role | Switch         |  Login |
-| ------ | ---- | -------------- |  ----- |
-| sw-cdu | CDU/Leaf | Dell S4048T-ON |  admin |
-| sw-cdu | CDU/Leaf | Aruba 8360 |  admin |
+| Name   | Role     | Switch         | Login |
+|--------|----------|----------------|-------|
+| sw-cdu | CDU/Leaf | Dell S4048T-ON | admin |
+| sw-cdu | CDU/Leaf | Aruba 8360     | admin |
 
 **ClusterStor:**
 
 | Name     | Role                  | Switch         | IP Address    | Login |
-| -------- | --------------------- | -------------- | ------------- | ----- |
+|----------|-----------------------|----------------|---------------|-------|
 | Arista   |                       | DCS-7060CX-32S | 172.16.249.10 | admin |
 | Sonexion | Entry point to Arista | CS-L300        | 172.30.49.178 | admin |
 | E1000    |                       | CS-E1000       |               | admin |

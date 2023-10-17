@@ -228,12 +228,12 @@ A similar flow can be used to update the resources for `cray-sls-postgres`, `cra
 The following table provides values the administrator will need based on which pods are
 experiencing problems.
 
-| Chart name           | Base manifest name   | Resource path name | Kubernetes namespace |
-| -------------------- | -------------------- | ------------------ | -------------------- |
-| `cray-sls-postgres`  | `core-services`      | `cray-hms-sls`     | `services`           |
-| `cray-smd-postgres`  | `core-services`      | `cray-hms-smd`     | `services`           |
-| `gitea-vcs-postgres` | `sysmgmt`            | `gitea`            | `services`           |
-| `spire-postgres`     | `sysmgmt`            | `spire`            | `spire`              |
+| Chart name           | Base manifest name | Resource path name | Kubernetes namespace |
+|----------------------|--------------------|--------------------|----------------------|
+| `cray-sls-postgres`  | `core-services`    | `cray-hms-sls`     | `services`           |
+| `cray-smd-postgres`  | `core-services`    | `cray-hms-smd`     | `services`           |
+| `gitea-vcs-postgres` | `sysmgmt`          | `gitea`            | `services`           |
+| `spire-postgres`     | `sysmgmt`          | `spire`            | `spire`              |
 
 Using the values from the above table, follow the [Redeploying a Chart](Redeploying_a_Chart.md) **with the following specifications**:
 
@@ -455,12 +455,12 @@ A similar flow can be used to update the resources for `cray-sls-postgres`, `git
 The following table provides values the administrator will need based on which pods are
 experiencing problems.
 
-| Chart name           | Base manifest name   | Resource path name | Kubernetes namespace |
-| -------------------- | -------------------- | ------------------ | -------------------- |
-| `cray-sls-postgres`  | `core-services`      | `cray-hms-sls`     | `services`           |
-| `cray-smd-postgres`  | `core-services`      | `cray-hms-smd`     | `services`           |
-| `gitea-vcs-postgres` | `sysmgmt`            | `gitea`            | `services`           |
-| `spire-postgres`     | `sysmgmt`            | `spire`            | `spire`              |
+| Chart name           | Base manifest name | Resource path name | Kubernetes namespace |
+|----------------------|--------------------|--------------------|----------------------|
+| `cray-sls-postgres`  | `core-services`    | `cray-hms-sls`     | `services`           |
+| `cray-smd-postgres`  | `core-services`    | `cray-hms-smd`     | `services`           |
+| `gitea-vcs-postgres` | `sysmgmt`          | `gitea`            | `services`           |
+| `spire-postgres`     | `sysmgmt`          | `spire`            | `spire`              |
 
 Using the values from the above table, follow the [Redeploying a Chart](Redeploying_a_Chart.md) **with the following specifications**:
 
