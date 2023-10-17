@@ -356,22 +356,21 @@ These variables will need to be set for many procedures within the CSM installat
 
    ```text
    = PIT Identification = COPY/CUT START =======================================
-   VERSION=1.6.0
-   TIMESTAMP=20220504161044
-   HASH=g10e2532
-   2022/05/04 17:08:19 Using config file: /var/www/ephemeral/prep/system_config.yaml
+   VERSION=a9d5138-1694719577775
+   TIMESTAMP=2023-09-14_19:26:17
    CRAY-Site-Init build signature...
-   Build Commit   : 0915d59f8292cfebe6b95dcba81b412a08e52ddf-main
-   Build Time     : 2022-05-02T20:21:46Z
-   Go Version     : go1.16.10
-   Git Version    : v1.9.13-29-g0915d59f
+   Build Commit   : 78867e48bc5b5f6df5df2f4e2f274f92b7476c05-heads-v1.32.2
+   Build Time     : 2023-08-18T19:34:01Z
+   Go Version     : go1.19
+   Version        : v1.32.2
    Platform       : linux/amd64
-   App. Version   : 1.17.1
-   metal-ipxe-2.2.6-1.noarch
-   metal-net-scripts-0.0.2-20210722171131_880ba18.noarch
-   metal-basecamp-1.1.12-1.x86_64
-   pit-init-1.2.20-1.noarch
-   pit-nexus-1.1.4-1.x86_64
+   canu-1.7.6-1.x86_64
+   ilorest-4.2.0.0-20.x86_64
+   metal-basecamp-1.2.6-1.x86_64
+   metal-ipxe-2.4.6-1.noarch
+   metal-init-1.4.6-1.noarch
+   metal-nexus-1.3.1-3.38.0_1.x86_64
+   metal-observability-1.0.9-1.x86_64
    = PIT Identification = COPY/CUT END =========================================
    ```
 
@@ -416,16 +415,16 @@ These variables will need to be set for many procedures within the CSM installat
 
    > ***NOTE*** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
 
-   1. Update `cray-site-init` and `pit-init`.
+   1. Update `cray-site-init` and `metal-init`.
 
        > ***NOTES***
        >
        > - `cray-site-init` provides `csi`, a tool for creating and managing configurations, as well as
        >   orchestrating the [handoff and deploy of the final non-compute node](deploy_final_non-compute_node.md).
-       > - `pit-init` provides several scripts in `/root/bin` used for fresh installations.
+       > - `metal-init` provides several scripts in `/root/bin` used for fresh installations.
 
        ```bash
-       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/noos" --no-gpg-checks update -y cray-site-init pit-init
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/noos" --no-gpg-checks update -y cray-site-init metal-init
        ```
 
 1. (`pit#`) Get the artifact versions.
@@ -492,22 +491,21 @@ These variables will need to be set for many procedures within the CSM installat
 
    ```text
    = PIT Identification = COPY/CUT START =======================================
-   VERSION=1.6.0
-   TIMESTAMP=20220504161044
-   HASH=g10e2532
-   2022/05/04 17:08:19 Using config file: /var/www/ephemeral/prep/system_config.yaml
+   VERSION=a9d5138-1694719577775
+   TIMESTAMP=2023-09-14_19:26:17
    CRAY-Site-Init build signature...
-   Build Commit   : 0915d59f8292cfebe6b95dcba81b412a08e52ddf-main
-   Build Time     : 2022-05-02T20:21:46Z
-   Go Version     : go1.16.10
-   Git Version    : v1.9.13-29-g0915d59f
+   Build Commit   : 78867e48bc5b5f6df5df2f4e2f274f92b7476c05-heads-v1.32.2
+   Build Time     : 2023-08-18T19:34:01Z
+   Go Version     : go1.19
+   Version        : v1.32.2
    Platform       : linux/amd64
-   App. Version   : 1.17.1
-   metal-ipxe-2.2.6-1.noarch
-   metal-net-scripts-0.0.2-20210722171131_880ba18.noarch
-   metal-basecamp-1.1.12-1.x86_64
-   pit-init-1.2.20-1.noarch
-   pit-nexus-1.1.4-1.x86_64
+   canu-1.7.6-1.x86_64
+   ilorest-4.2.0.0-20.x86_64
+   metal-basecamp-1.2.6-1.x86_64
+   metal-ipxe-2.4.6-1.noarch
+   metal-init-1.4.6-1.noarch
+   metal-nexus-1.3.1-3.38.0_1.x86_64
+   metal-observability-1.0.9-1.x86_64
    = PIT Identification = COPY/CUT END =========================================
    ```
 
