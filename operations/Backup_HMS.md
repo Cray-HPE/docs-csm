@@ -91,6 +91,7 @@ Dump the state of SLS
 
 ```bash
 cray sls dumpstate list --format json > cray-sls-dump_$BACKUPDIR.json
+cp cray-sls-dump_$BACKUPDIR.json sls_input_file.json
 ls -la
 ```
 
