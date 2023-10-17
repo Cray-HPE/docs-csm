@@ -24,13 +24,23 @@
 """Shared Python function library: basic functions"""
 
 import logging
+import os
+import shutil
+import subprocess
 import sys
 import traceback
 
+from contextlib import contextmanager
+from typing import Any, List
 
 class ScriptException(Exception):
     """
     Generic script exception class
+    """
+
+class InsufficientSpace(ScriptException):
+    """
+    To indicate when an operation is failing because not enough disk space is available
     """
 
 
@@ -63,7 +73,7 @@ def read_file(filename: str, min_length: int = 4) -> str:
     Reads contents of text file, verifies it is more than the specified length,
     and returns it as a string.
     """
-    logging.info(f"Reading in file '{filename}'")
+    logging.info("Reading in file '{%s}'", filename)
     try:
         with open(filename, "rt", encoding="utf-8") as textfile:
             contents = textfile.read()
@@ -75,3 +85,113 @@ def read_file(filename: str, min_length: int = 4) -> str:
             log_error_raise_exception(
                 f"File '{filename}' only contains {file_len} characters")
     return contents
+
+
+# https://dev.to/teckert/changing-directory-with-a-python-context-manager-2bj8
+@contextmanager
+def set_directory(path: str):
+    """Sets the cwd within the context
+
+    Args:
+        path (Path): The path to the cwd
+
+    Yields:
+        None
+    """
+
+    origin = os.getcwd()
+    try:
+        os.chdir(path)
+        yield
+    finally:
+        os.chdir(origin)
+
+
+# https://stackoverflow.com/a/15485265
+def sizeof_fmt(num):
+    """
+    Given a number of bytes, returns a human-friendly string
+    representation of the size.
+    """
+    suffix="bytes"
+    for unit in ("", "kilo", "mega", "giga", "tera"):
+        if abs(num) < 1024.0:
+            return f"{num:3.3f} {unit}{suffix}"
+        num /= 1024.0
+    return f"{num:.3f} peta{suffix}"
+
+
+def expected_format(obj: Any, obj_desc: str, expected_type: type) -> None:
+    """
+    Validates that obj is of the expected type. Otherwise an exception is raised.
+    obj_desc is a string to describe the object in the exception.
+    """
+    if isinstance(obj, expected_type):
+        return
+    msg = (f"{obj_desc} has unexpected format. Expected type={expected_type.__name__}, "
+           f"actual type={type(obj).__name__})")
+    logging.error(msg)
+    raise ScriptException(msg)
+
+
+def verify_free_space_in_dir(dirpath: str, min_bytes: int) -> None:
+    """
+    Raise InsufficientSpace if specified directory does not have at least min_bytes of free space
+    """
+    free_bytes = shutil.disk_usage(dirpath).free
+    if free_bytes >= min_bytes:
+        return
+
+    msg = (f"Only {sizeof_fmt(free_bytes)} free space in directory '{dirpath}'. "
+           f"An additional {sizeof_fmt(min_bytes-free_bytes)} is required.")
+    logging.error(msg)
+    raise InsufficientSpace(msg)
+
+
+def validate_directory_exists(dirpath: str) -> None:
+    """
+    Raises ScriptException if specified directory does not exists or is not a regular directory
+    """
+    if not os.path.exists(dirpath):
+        raise ScriptException(f"Directory does not exist: '{dirpath}'")
+    if not os.path.isdir(dirpath):
+        raise ScriptException(f"Exists but is not a directory: '{dirpath}'")
+
+
+def validate_directory_readable(dirpath: str) -> None:
+    """
+    First calls validate_directory_exists.
+    Then raises ScriptException if specified directory is not readable
+    """
+    validate_directory_exists(dirpath)
+    if not os.access(dirpath, os.R_OK):
+        raise ScriptException(f"Directory exists but is not readable: '{dirpath}'")
+
+
+def validate_file_exists(filepath: str) -> None:
+    """
+    Raises ScriptException if specified file does not exists or is not a regular file
+    """
+    if not os.path.exists(filepath):
+        raise ScriptException(f"File does not exist: '{filepath}'")
+    if not os.path.isfile(filepath):
+        raise ScriptException(f"Exists but is not a regular file: '{filepath}'")
+
+
+def validate_file_readable(filepath: str) -> None:
+    """
+    First calls validate_file_exists.
+    Then raises ScriptException if specified file is not readable
+    """
+    validate_file_exists(filepath)
+    if not os.access(filepath, os.R_OK):
+        raise ScriptException(f"File exists but is not readable: '{filepath}'")
+
+def run_command(command: List[str]) -> bytes:
+    """
+    Runs the specified command and returns the output.
+    """
+    logging.debug(command)
+    result = subprocess.check_output(command)
+    logging.debug(result)
+    return result
