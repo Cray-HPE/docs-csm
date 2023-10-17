@@ -11,22 +11,22 @@ the network interfaces for management NCNs.
 
 The following table includes information about the different NCN network interfaces:
 
-| Name | Type | MTU |
-| ---- | ---- | ---- |
-| `mgmt0` | Port 1 Slot 1 on the SMNET card | 9000
-| `mgmt1` | Port 1 Slot 2 on the SMNET card | 9000
-| `bond0` | LACP link aggregate of `mgmt0` and `mgmt1` | 9000
-| `bond0.nmn0` | Virtual LAN for managing nodes | 1500
-| `bond0.hmn0` | Virtual LAN for managing hardware | 1500
-| `bond0.can0` | Virtual LAN for the Customer Access Network | 1500
-| `sun0` | Port 2 Slot 2 on the SMNET card | 9000
-| `sun1` | Port 2 Slot 2 on the SMNET card | 9000
-| `bond1` | LACP link aggregate of `sun0` and `sun1` | 9000
-| `bond1.sun0` | Virtual LAN for the Storage Utility Network | 9000
-| `lan0` | Externally facing interface (DHCP) | 1500
-| `lan1` | Another externally facing interface, or anything (unused) | 1500
-| `hsn0` | High-Speed Network interface | 9000
-| `hsnN+1` | Another High-Speed Network interface | 9000
+| Name         | Type                                                      | MTU  |
+|--------------|-----------------------------------------------------------|------|
+| `mgmt0`      | Port 1 Slot 1 on the SMNET card                           | 9000 |
+| `mgmt1`      | Port 1 Slot 2 on the SMNET card                           | 9000 |
+| `bond0`      | LACP link aggregate of `mgmt0` and `mgmt1`                | 9000 |
+| `bond0.nmn0` | Virtual LAN for managing nodes                            | 1500 |
+| `bond0.hmn0` | Virtual LAN for managing hardware                         | 1500 |
+| `bond0.can0` | Virtual LAN for the Customer Access Network               | 1500 |
+| `sun0`       | Port 2 Slot 2 on the SMNET card                           | 9000 |
+| `sun1`       | Port 2 Slot 2 on the SMNET card                           | 9000 |
+| `bond1`      | LACP link aggregate of `sun0` and `sun1`                  | 9000 |
+| `bond1.sun0` | Virtual LAN for the Storage Utility Network               | 9000 |
+| `lan0`       | Externally facing interface (DHCP)                        | 1500 |
+| `lan1`       | Another externally facing interface, or anything (unused) | 1500 |
+| `hsn0`       | High-Speed Network interface                              | 9000 |
+| `hsnN+1`     | Another High-Speed Network interface                      | 9000 |
 
 (`ncn#`) These interfaces can be observed on an NCN with the following command.
 
@@ -76,11 +76,11 @@ The following table includes popular vendor and device IDs.
 
 > The numbers in bold are the defaults in `metal-ipxe`'s boot script.
 
-| Vendor | Model | Device ID | Vendor ID |
-| :---- | :---- | :-----: | :---------: |
-| Intel Corporation | Ethernet Connection X722 | `37d2` | `8086` |
-| Intel Corporation | 82576 | `1526` | `8086` |
-| Mellanox Technologies | ConnectX-4 | `1013` | **`15b3`** |
-| Mellanox Technologies | ConnectX-5 | **`1017`** | `15b3` |
-| Giga-Byte | Intel Corporation I350 | `1521` | `8086` |
-| QLogic Corporation | FastLinQ QL41000 | `8070` | **`1077`** |
+| Vendor                | Model                    | Device ID  | Vendor ID  |
+|:----------------------|:-------------------------|:----------:|:----------:|
+| Intel Corporation     | Ethernet Connection X722 |   `37d2`   |   `8086`   |
+| Intel Corporation     | 82576                    |   `1526`   |   `8086`   |
+| Mellanox Technologies | ConnectX-4               |   `1013`   | **`15b3`** |
+| Mellanox Technologies | ConnectX-5               | **`1017`** |   `15b3`   |
+| Giga-Byte             | Intel Corporation I350   |   `1521`   |   `8086`   |
+| QLogic Corporation    | FastLinQ QL41000         |   `8070`   | **`1077`** |

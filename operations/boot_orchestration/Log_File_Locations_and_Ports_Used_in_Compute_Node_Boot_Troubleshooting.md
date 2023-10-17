@@ -23,9 +23,9 @@ The log file locations for ConMan, DHCP, and TFTP.
 
 The following table includes the port IDs for DHCP and TFTP.
 
-|Component|Port|
-|---------|----|
-|DHCP server|67|
-|DHCP client|68|
-|TFTP server|69|
+| Component   | Port |
+|-------------|------|
+| DHCP server | 67   |
+| DHCP client | 68   |
+| TFTP server | 69   |
 

@@ -30,8 +30,8 @@ The source name is the name of the device that is being connected to the HMN net
 Example SHCD row from HMN tab with column headers representing an application node with SourceName `uan01` in cabinet `x3000` in slot 19. Its BMC is connected to port 37 of the management leaf switch in x3000 in slot 14.
 
 | Source (J20) | Rack (K20) | Location (L20) | (M20) | Parent (N20) | (O20) | Port (P20) | Destination (Q20) | Rack (R20) | Location (S20) | (T20) | Port (U20) |
-| ------------ | ---------- | -------------- | ----- | ------------ | ----- | ---------- | ----------------- | ---------- | -------------- | ----- | ---------- |
-| uan01    | x3000      | u19            |       |              | -     | j3         | sw-smn01          | x3000      | u14            | -     | j37        |
+|--------------|------------|----------------|-------|--------------|-------|------------|-------------------|------------|----------------|-------|------------|
+| uan01        | x3000      | u19            |       |              | -     | j3         | sw-smn01          | x3000      | u14            | -     | j37        |
 
 Example `hmn_connections.json` row representing an application node with SourceName `uan01` in cabinet `x3000` in slot 19. Its BMC is connected to port 37 of the management leaf switch in x3000 in slot 14.
 
@@ -62,7 +62,7 @@ Example `hmn_connections.json` row representing an application node with SourceN
     If the `hmn_connections.json` file is not available, then use the HMN tab of SHCD spreadsheet. This table is equivalent to the [example hmn_connections.json output](#what-is-a-source-name) below.
 
     | Source (J20) | Rack (K20) | Location (L20) | (M20) | Parent (N20) | (O20) | Port (P20) | Destination (Q20) | Rack (R20) | Location (S20) | (T20) | Port (U20) |
-    | ------------ | ---------- | -------------- | ----- | ------------ | ----- | ---------- | ----------------- | ---------- | -------------- | ----- | ---------- |
+    |--------------|------------|----------------|-------|--------------|-------|------------|-------------------|------------|----------------|-------|------------|
     | gateway01    | x3000      | u29            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j42        |
     | login02      | x3000      | u28            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j43        |
     | lnet01       | x3000      | u27            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j41        |
@@ -111,13 +111,13 @@ Example `hmn_connections.json` row representing an application node with SourceN
 
     By default, the `csi config init` command will use the following SubRoles for application nodes:
 
-    Prefix | HSM SubRole
-    ------ | -----------
-    uan    | UAN
-    ln     | UAN
-    gn     | Gateway
+   | Prefix | HSM SubRole |
+   |--------|-------------|
+   | uan    | UAN         |
+   | ln     | UAN         |
+   | gn     | Gateway     |
 
-    If there are no additional prefixes in the SHCD or no desire to use a different HSM SubRole than the default, then this `prefix_hsm_subroles` field does not need any data populated.
+   If there are no additional prefixes in the SHCD or no desire to use a different HSM SubRole than the default, then this `prefix_hsm_subroles` field does not need any data populated.
 
     To add additional HSM SubRole for a given prefix, add a new mapping under the `prefix_hsm_subroles` field. Where the key is the application node prefix and the value is the HSM SubRole.
 

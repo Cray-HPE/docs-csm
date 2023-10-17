@@ -153,9 +153,9 @@ Return list of versions currently running.
 
 <h3 id="get_version-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Version information for the service|[Version](#schemaversion)|
+| Status | Meaning                                                 | Description                         | Schema                    |
+|--------|---------------------------------------------------------|-------------------------------------|---------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Version information for the service | [Version](#schemaversion) |
 
 <aside class="success">
 This operation does not require authentication
@@ -238,9 +238,9 @@ Return list of versions currently running.
 
 <h3 id="get_versions-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Version information for the service|[Version](#schemaversion)|
+| Status | Meaning                                                 | Description                         | Schema                    |
+|--------|---------------------------------------------------------|-------------------------------------|---------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Version information for the service | [Version](#schemaversion) |
 
 <aside class="success">
 This operation does not require authentication
@@ -323,9 +323,9 @@ Return list of versions currently running.
 
 <h3 id="get_versions_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Version information for the service|[Version](#schemaversion)|
+| Status | Meaning                                                 | Description                         | Schema                    |
+|--------|---------------------------------------------------------|-------------------------------------|---------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Version information for the service | [Version](#schemaversion) |
 
 <aside class="success">
 This operation does not require authentication
@@ -408,9 +408,9 @@ Return list of versions currently running.
 
 <h3 id="get_versions_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Version information for the service|[Version](#schemaversion)|
+| Status | Meaning                                                 | Description                         | Schema                    |
+|--------|---------------------------------------------------------|-------------------------------------|---------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Version information for the service | [Version](#schemaversion) |
 
 <aside class="success">
 This operation does not require authentication
@@ -494,10 +494,10 @@ Get cfs-api health details.
 
 <h3 id="get_healthz-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Status information for the service|[Healthz](#schemahealthz)|
-|503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|Status information for the service|[Healthz](#schemahealthz)|
+| Status | Meaning                                                                  | Description                        | Schema                    |
+|--------|--------------------------------------------------------------------------|------------------------------------|---------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                  | Status information for the service | [Healthz](#schemahealthz) |
+| 503    | [Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4) | Status information for the service | [Healthz](#schemahealthz) |
 
 <aside class="success">
 This operation does not require authentication
@@ -592,9 +592,9 @@ Retrieve the list of configuration service options.
 
 <h3 id="get_options_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of service-wide configuration options|[V2Options](#schemav2options)|
+| Status | Meaning                                                 | Description                                        | Schema                        |
+|--------|---------------------------------------------------------|----------------------------------------------------|-------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | A collection of service-wide configuration options | [V2Options](#schemav2options) |
 
 <aside class="success">
 This operation does not require authentication
@@ -689,9 +689,9 @@ Update one or more of the configuration service options.
 
 <h3 id="patch_options_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V2Options](#schemav2options)|true|Service-wide configuration options|
+| Name | In   | Type                          | Required | Description                        |
+|------|------|-------------------------------|----------|------------------------------------|
+| body | body | [V2Options](#schemav2options) | true     | Service-wide configuration options |
 
 > Example responses
 
@@ -717,10 +717,10 @@ Update one or more of the configuration service options.
 
 <h3 id="patch_options_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of service-wide configuration options|[V2Options](#schemav2options)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                        | Schema                                  |
+|--------|------------------------------------------------------------------|----------------------------------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of service-wide configuration options | [V2Options](#schemav2options)           |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                                        | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -816,9 +816,9 @@ Retrieve the list of configuration service options.
 
 <h3 id="get_options_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of service-wide configuration options|[V3Options](#schemav3options)|
+| Status | Meaning                                                 | Description                                        | Schema                        |
+|--------|---------------------------------------------------------|----------------------------------------------------|-------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | A collection of service-wide configuration options | [V3Options](#schemav3options) |
 
 <aside class="success">
 This operation does not require authentication
@@ -915,9 +915,9 @@ Update one or more of the configuration service options.
 
 <h3 id="patch_options_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V3Options](#schemav3options)|true|Service-wide configuration options|
+| Name | In   | Type                          | Required | Description                        |
+|------|------|-------------------------------|----------|------------------------------------|
+| body | body | [V3Options](#schemav3options) | true     | Service-wide configuration options |
 
 > Example responses
 
@@ -946,10 +946,10 @@ Update one or more of the configuration service options.
 
 <h3 id="patch_options_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of service-wide configuration options|[V3Options](#schemav3options)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                        | Schema                                  |
+|--------|------------------------------------------------------------------|----------------------------------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of service-wide configuration options | [V3Options](#schemav3options)           |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                                        | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1022,27 +1022,27 @@ Retrieve all the configuration framework sessions on the system.
 
 <h3 id="get_sessions_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h" DEPRECATED: This field has been replaced by min_age and max_age|
-|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
-|status|query|string|false|Return only sessions with the given status.|
-|name_contains|query|string|false|Return only sessions whose session name contains the given string.|
-|succeeded|query|string|false|Return only sessions that have succeeded/failed.|
-|tags|query|string|false|Return only sessions whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list. Only sessions that match all tags will be returned.|
+| Name          | In    | Type   | Required | Description                                                                                                                                                                                  |
+|---------------|-------|--------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| age           | query | string | false    | Return only sessions older than the given age.  Age is given in the format "1d" or "6h" DEPRECATED: This field has been replaced by min_age and max_age                                      |
+| min_age       | query | string | false    | Return only sessions older than the given age.  Age is given in the format "1d" or "6h"                                                                                                      |
+| max_age       | query | string | false    | Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"                                                                                                    |
+| status        | query | string | false    | Return only sessions with the given status.                                                                                                                                                  |
+| name_contains | query | string | false    | Return only sessions whose session name contains the given string.                                                                                                                           |
+| succeeded     | query | string | false    | Return only sessions that have succeeded/failed.                                                                                                                                             |
+| tags          | query | string | false    | Return only sessions whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list. Only sessions that match all tags will be returned. |
 
 #### Enumerated Values
 
-|Parameter|Value|
-|---|---|
-|status|pending|
-|status|running|
-|status|complete|
-|succeeded|none|
-|succeeded|true|
-|succeeded|false|
-|succeeded|unknown|
+| Parameter | Value    |
+|-----------|----------|
+| status    | pending  |
+| status    | running  |
+| status    | complete |
+| succeeded | none     |
+| succeeded | true     |
+| succeeded | false    |
+| succeeded | unknown  |
 
 > Example responses
 
@@ -1107,9 +1107,9 @@ Retrieve all the configuration framework sessions on the system.
 
 <h3 id="get_sessions_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of configuration sessions|[V2SessionArray](#schemav2sessionarray)|
+| Status | Meaning                                                 | Description                            | Schema                                  |
+|--------|---------------------------------------------------------|----------------------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | A collection of configuration sessions | [V2SessionArray](#schemav2sessionarray) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1221,9 +1221,9 @@ Create a new configuration session. A configuration session stages Ansible inven
 
 <h3 id="create_session_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V2SessionCreate](#schemav2sessioncreate)|true|A JSON object for creating Config Framework Sessions|
+| Name | In   | Type                                      | Required | Description                                          |
+|------|------|-------------------------------------------|----------|------------------------------------------------------|
+| body | body | [V2SessionCreate](#schemav2sessioncreate) | true     | A JSON object for creating Config Framework Sessions |
 
 > Example responses
 
@@ -1286,11 +1286,11 @@ Create a new configuration session. A configuration session stages Ansible inven
 
 <h3 id="create_session_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|A single configuration session|[V2Session](#schemav2session)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|A session with the same name already exists.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                  | Schema                                  |
+|--------|------------------------------------------------------------------|----------------------------------------------|-----------------------------------------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)     | A single configuration session               | [V2Session](#schemav2session)           |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                                  | [ProblemDetails](#schemaproblemdetails) |
+| 409    | [Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)    | A session with the same name already exists. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1361,27 +1361,27 @@ Delete multiple configuration sessions.  If filters are provided, only sessions 
 
 <h3 id="delete_sessions_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|age|query|string|false|Deletes only sessions older than the given age.  Age is given in the format "1d" or "6h" DEPRECATED: This field has been replaced by min_age and max_age|
-|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
-|status|query|string|false|Deletes only sessions with the given status.|
-|name_contains|query|string|false|Delete only sessions whose session name contains the given string.|
-|succeeded|query|string|false|Delete only sessions that have succeeded/failed.|
-|tags|query|string|false|Return only sessions whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list. Only sessions that match all tags will be deleted.|
+| Name          | In    | Type   | Required | Description                                                                                                                                                                                 |
+|---------------|-------|--------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| age           | query | string | false    | Deletes only sessions older than the given age.  Age is given in the format "1d" or "6h" DEPRECATED: This field has been replaced by min_age and max_age                                    |
+| min_age       | query | string | false    | Return only sessions older than the given age.  Age is given in the format "1d" or "6h"                                                                                                     |
+| max_age       | query | string | false    | Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"                                                                                                   |
+| status        | query | string | false    | Deletes only sessions with the given status.                                                                                                                                                |
+| name_contains | query | string | false    | Delete only sessions whose session name contains the given string.                                                                                                                          |
+| succeeded     | query | string | false    | Delete only sessions that have succeeded/failed.                                                                                                                                            |
+| tags          | query | string | false    | Return only sessions whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list. Only sessions that match all tags will be deleted. |
 
 #### Enumerated Values
 
-|Parameter|Value|
-|---|---|
-|status|pending|
-|status|running|
-|status|complete|
-|succeeded|none|
-|succeeded|true|
-|succeeded|false|
-|succeeded|unknown|
+| Parameter | Value    |
+|-----------|----------|
+| status    | pending  |
+| status    | running  |
+| status    | complete |
+| succeeded | none     |
+| succeeded | true     |
+| succeeded | false    |
+| succeeded | unknown  |
 
 > Example responses
 
@@ -1399,10 +1399,10 @@ Delete multiple configuration sessions.  If filters are provided, only sessions 
 
 <h3 id="delete_sessions_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description               | Schema                                  |
+|--------|------------------------------------------------------------------|---------------------------|-----------------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)  | The resource was deleted. | None                                    |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request               | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1473,9 +1473,9 @@ View details about a specific configuration session. This allows you to track th
 
 <h3 id="get_session_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_name|path|string|true|Config Framework Session name|
+| Name         | In   | Type   | Required | Description                   |
+|--------------|------|--------|----------|-------------------------------|
+| session_name | path | string | true     | Config Framework Session name |
 
 > Example responses
 
@@ -1538,10 +1538,10 @@ View details about a specific configuration session. This allows you to track th
 
 <h3 id="get_session_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration session|[V2Session](#schemav2session)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                        | Description                    | Schema                                  |
+|--------|----------------------------------------------------------------|--------------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | A single configuration session | [V2Session](#schemav2session)           |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | The resource was not found.    | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1612,9 +1612,9 @@ Update the status of an existing configuration framework session
 
 <h3 id="patch_session_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_name|path|string|true|Config Framework Session name|
+| Name         | In   | Type   | Required | Description                   |
+|--------------|------|--------|----------|-------------------------------|
+| session_name | path | string | true     | Config Framework Session name |
 
 > Example responses
 
@@ -1677,11 +1677,11 @@ Update the status of an existing configuration framework session
 
 <h3 id="patch_session_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration session|[V2Session](#schemav2session)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                    | Schema                                  |
+|--------|------------------------------------------------------------------|--------------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A single configuration session | [V2Session](#schemav2session)           |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                    | [ProblemDetails](#schemaproblemdetails) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.    | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1752,9 +1752,9 @@ Deleting a configuration session deletes the Kubernetes objects associated with 
 
 <h3 id="delete_session_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_name|path|string|true|Config Framework Session name|
+| Name         | In   | Type   | Required | Description                   |
+|--------------|------|--------|----------|-------------------------------|
+| session_name | path | string | true     | Config Framework Session name |
 
 > Example responses
 
@@ -1772,10 +1772,10 @@ Deleting a configuration session deletes the Kubernetes objects associated with 
 
 <h3 id="delete_session_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                         | Description                 | Schema                                  |
+|--------|-----------------------------------------------------------------|-----------------------------|-----------------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5) | The resource was deleted.   | None                                    |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)  | The resource was not found. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1846,30 +1846,30 @@ Retrieve all the configuration framework sessions on the system.
 
 <h3 id="get_sessions_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|limit|query|integer|false|When set, CFS will only return a number of sessions up to this limit.  Combined with after_id, this enables paging across results|
-|after_id|query|string|false|When set, CFS will only return the sessions after the session specified.  Combined with limit, this enables paging across results.|
-|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
-|status|query|string|false|Return only sessions with the given status.|
-|name_contains|query|string|false|Return only sessions whose session name contains the given string.|
-|succeeded|query|string|false|Return only sessions that have succeeded/failed.|
-|tags|query|string|false|Return only sessions whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list. Only sessions that match all tags will be returned.|
+| Name          | In    | Type    | Required | Description                                                                                                                                                                                  |
+|---------------|-------|---------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| limit         | query | integer | false    | When set, CFS will only return a number of sessions up to this limit.  Combined with after_id, this enables paging across results                                                            |
+| after_id      | query | string  | false    | When set, CFS will only return the sessions after the session specified.  Combined with limit, this enables paging across results.                                                           |
+| min_age       | query | string  | false    | Return only sessions older than the given age.  Age is given in the format "1d" or "6h"                                                                                                      |
+| max_age       | query | string  | false    | Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"                                                                                                    |
+| status        | query | string  | false    | Return only sessions with the given status.                                                                                                                                                  |
+| name_contains | query | string  | false    | Return only sessions whose session name contains the given string.                                                                                                                           |
+| succeeded     | query | string  | false    | Return only sessions that have succeeded/failed.                                                                                                                                             |
+| tags          | query | string  | false    | Return only sessions whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list. Only sessions that match all tags will be returned. |
 
 #### Enumerated Values
 
-|Parameter|Value|
-|---|---|
-|status|pending|
-|status|running|
-|status|complete|
-|status||
-|succeeded|none|
-|succeeded|true|
-|succeeded|false|
-|succeeded|unknown|
-|succeeded||
+| Parameter | Value    |
+|-----------|----------|
+| status    | pending  |
+| status    | running  |
+| status    | complete |
+| status    |          |
+| succeeded | none     |
+| succeeded | true     |
+| succeeded | false    |
+| succeeded | unknown  |
+| succeeded |          |
 
 > Example responses
 
@@ -1943,9 +1943,9 @@ Retrieve all the configuration framework sessions on the system.
 
 <h3 id="get_sessions_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of configuration sessions|[V3SessionDataCollection](#schemav3sessiondatacollection)|
+| Status | Meaning                                                 | Description                            | Schema                                                    |
+|--------|---------------------------------------------------------|----------------------------------------|-----------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | A collection of configuration sessions | [V3SessionDataCollection](#schemav3sessiondatacollection) |
 
 <aside class="success">
 This operation does not require authentication
@@ -2058,9 +2058,9 @@ Create a new configuration session. A configuration session stages Ansible inven
 
 <h3 id="create_session_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V3SessionCreate](#schemav3sessioncreate)|true|A JSON object for creating Config Framework Sessions|
+| Name | In   | Type                                      | Required | Description                                          |
+|------|------|-------------------------------------------|----------|------------------------------------------------------|
+| body | body | [V3SessionCreate](#schemav3sessioncreate) | true     | A JSON object for creating Config Framework Sessions |
 
 > Example responses
 
@@ -2126,11 +2126,11 @@ Create a new configuration session. A configuration session stages Ansible inven
 
 <h3 id="create_session_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|A single configuration session|[V3SessionData](#schemav3sessiondata)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|A session with the same name already exists.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                                  | Schema                                  |
+|--------|------------------------------------------------------------------|----------------------------------------------|-----------------------------------------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)     | A single configuration session               | [V3SessionData](#schemav3sessiondata)   |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                                  | [ProblemDetails](#schemaproblemdetails) |
+| 409    | [Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)    | A session with the same name already exists. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -2201,28 +2201,28 @@ Delete multiple configuration sessions.  If filters are provided, only sessions 
 
 <h3 id="delete_sessions_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
-|status|query|string|false|Deletes only sessions with the given status.|
-|name_contains|query|string|false|Delete only sessions whose session name contains the given string.|
-|succeeded|query|string|false|Delete only sessions that have succeeded/failed.|
-|tags|query|string|false|Return only sessions whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list. Only sessions that match all tags will be deleted.|
+| Name          | In    | Type   | Required | Description                                                                                                                                                                                 |
+|---------------|-------|--------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| min_age       | query | string | false    | Return only sessions older than the given age.  Age is given in the format "1d" or "6h"                                                                                                     |
+| max_age       | query | string | false    | Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"                                                                                                   |
+| status        | query | string | false    | Deletes only sessions with the given status.                                                                                                                                                |
+| name_contains | query | string | false    | Delete only sessions whose session name contains the given string.                                                                                                                          |
+| succeeded     | query | string | false    | Delete only sessions that have succeeded/failed.                                                                                                                                            |
+| tags          | query | string | false    | Return only sessions whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list. Only sessions that match all tags will be deleted. |
 
 #### Enumerated Values
 
-|Parameter|Value|
-|---|---|
-|status|pending|
-|status|running|
-|status|complete|
-|status||
-|succeeded|none|
-|succeeded|true|
-|succeeded|false|
-|succeeded|unknown|
-|succeeded||
+| Parameter | Value    |
+|-----------|----------|
+| status    | pending  |
+| status    | running  |
+| status    | complete |
+| status    |          |
+| succeeded | none     |
+| succeeded | true     |
+| succeeded | false    |
+| succeeded | unknown  |
+| succeeded |          |
 
 > Example responses
 
@@ -2292,10 +2292,10 @@ Delete multiple configuration sessions.  If filters are provided, only sessions 
 
 <h3 id="delete_sessions_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of configuration sessions|[V3SessionIdCollection](#schemav3sessionidcollection)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                            | Schema                                                |
+|--------|------------------------------------------------------------------|----------------------------------------|-------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of configuration sessions | [V3SessionIdCollection](#schemav3sessionidcollection) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                            | [ProblemDetails](#schemaproblemdetails)               |
 
 <aside class="success">
 This operation does not require authentication
@@ -2366,9 +2366,9 @@ View details about a specific configuration session. This allows you to track th
 
 <h3 id="get_session_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_name|path|string|true|Config Framework Session name|
+| Name         | In   | Type   | Required | Description                   |
+|--------------|------|--------|----------|-------------------------------|
+| session_name | path | string | true     | Config Framework Session name |
 
 > Example responses
 
@@ -2434,10 +2434,10 @@ View details about a specific configuration session. This allows you to track th
 
 <h3 id="get_session_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration session|[V3SessionData](#schemav3sessiondata)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                        | Description                    | Schema                                  |
+|--------|----------------------------------------------------------------|--------------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | A single configuration session | [V3SessionData](#schemav3sessiondata)   |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | The resource was not found.    | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -2508,9 +2508,9 @@ Update the status of an existing configuration framework session
 
 <h3 id="patch_session_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_name|path|string|true|Config Framework Session name|
+| Name         | In   | Type   | Required | Description                   |
+|--------------|------|--------|----------|-------------------------------|
+| session_name | path | string | true     | Config Framework Session name |
 
 > Example responses
 
@@ -2576,11 +2576,11 @@ Update the status of an existing configuration framework session
 
 <h3 id="patch_session_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration session|[V3SessionData](#schemav3sessiondata)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                    | Schema                                  |
+|--------|------------------------------------------------------------------|--------------------------------|-----------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A single configuration session | [V3SessionData](#schemav3sessiondata)   |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                    | [ProblemDetails](#schemaproblemdetails) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.    | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -2651,9 +2651,9 @@ Deleting a configuration session deletes the Kubernetes objects associated with 
 
 <h3 id="delete_session_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|session_name|path|string|true|Config Framework Session name|
+| Name         | In   | Type   | Required | Description                   |
+|--------------|------|--------|----------|-------------------------------|
+| session_name | path | string | true     | Config Framework Session name |
 
 > Example responses
 
@@ -2671,10 +2671,10 @@ Deleting a configuration session deletes the Kubernetes objects associated with 
 
 <h3 id="delete_session_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                         | Description                 | Schema                                  |
+|--------|-----------------------------------------------------------------|-----------------------------|-----------------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5) | The resource was deleted.   | None                                    |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)  | The resource was not found. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -2747,23 +2747,23 @@ Retrieve the full collection of components in the form of a ComponentArray. Full
 
 <h3 id="get_components_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|ids|query|string|false|Retrieve the components with the given id (e.g. xname for hardware components). Can be chained for selecting groups of components.|
-|status|query|string|false|Retrieve the components with the status. Multiple statuses can be specified in a comma-separated list.|
-|enabled|query|boolean|false|Retrieve the components with the "enabled" state.|
-|configName|query|string|false|Retrieve the components with the given configuration set as the desired state.|
-|configDetails|query|boolean|false|Include the configuration and config status in the response|
-|tags|query|string|false|Return only components whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list.  Only components that match all tags will be returned.|
+| Name          | In    | Type    | Required | Description                                                                                                                                                                                       |
+|---------------|-------|---------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ids           | query | string  | false    | Retrieve the components with the given id (e.g. xname for hardware components). Can be chained for selecting groups of components.                                                                |
+| status        | query | string  | false    | Retrieve the components with the status. Multiple statuses can be specified in a comma-separated list.                                                                                            |
+| enabled       | query | boolean | false    | Retrieve the components with the "enabled" state.                                                                                                                                                 |
+| configName    | query | string  | false    | Retrieve the components with the given configuration set as the desired state.                                                                                                                    |
+| configDetails | query | boolean | false    | Include the configuration and config status in the response                                                                                                                                       |
+| tags          | query | string  | false    | Return only components whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list.  Only components that match all tags will be returned. |
 
 #### Enumerated Values
 
-|Parameter|Value|
-|---|---|
-|status|unconfigured|
-|status|failed|
-|status|pending|
-|status|configured|
+| Parameter | Value        |
+|-----------|--------------|
+| status    | unconfigured |
+| status    | failed       |
+| status    | pending      |
+| status    | configured   |
 
 > Example responses
 
@@ -2813,10 +2813,10 @@ Retrieve the full collection of components in the form of a ComponentArray. Full
 
 <h3 id="get_components_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of component states|[V2ComponentStateArray](#schemav2componentstatearray)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                      | Schema                                                |
+|--------|------------------------------------------------------------------|----------------------------------|-------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of component states | [V2ComponentStateArray](#schemav2componentstatearray) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                      | [ProblemDetails](#schemaproblemdetails)               |
 
 <aside class="success">
 This operation does not require authentication
@@ -2930,9 +2930,9 @@ Update the state for a collection of components in the cfs database
 
 <h3 id="put_components_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|any|true|The configuration/state for an array of components|
+| Name | In   | Type | Required | Description                                        |
+|------|------|------|----------|----------------------------------------------------|
+| body | body | any  | true     | The configuration/state for an array of components |
 
 > Example responses
 
@@ -2982,10 +2982,10 @@ Update the state for a collection of components in the cfs database
 
 <h3 id="put_components_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of component states|[V2ComponentStateArray](#schemav2componentstatearray)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                      | Schema                                                |
+|--------|------------------------------------------------------------------|----------------------------------|-------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of component states | [V2ComponentStateArray](#schemav2componentstatearray) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                      | [ProblemDetails](#schemaproblemdetails)               |
 
 <aside class="success">
 This operation does not require authentication
@@ -3099,9 +3099,9 @@ Update the state for a collection of components in the cfs database
 
 <h3 id="patch_components_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|any|true|The configuration/state for an array of components|
+| Name | In   | Type | Required | Description                                        |
+|------|------|------|----------|----------------------------------------------------|
+| body | body | any  | true     | The configuration/state for an array of components |
 
 > Example responses
 
@@ -3151,11 +3151,11 @@ Update the state for a collection of components in the cfs database
 
 <h3 id="patch_components_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of component states|[V2ComponentStateArray](#schemav2componentstatearray)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                      | Schema                                                |
+|--------|------------------------------------------------------------------|----------------------------------|-------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of component states | [V2ComponentStateArray](#schemav2componentstatearray) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                      | [ProblemDetails](#schemaproblemdetails)               |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.      | [ProblemDetails](#schemaproblemdetails)               |
 
 <aside class="success">
 This operation does not require authentication
@@ -3226,10 +3226,10 @@ Retrieve the configuration and current state of a single component
 
 <h3 id="get_component_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|configDetails|query|boolean|false|Include the configuration and config status in the response|
-|component_id|path|string|true|Component id. e.g. xname for hardware components|
+| Name          | In    | Type    | Required | Description                                                 |
+|---------------|-------|---------|----------|-------------------------------------------------------------|
+| configDetails | query | boolean | false    | Include the configuration and config status in the response |
+| component_id  | path  | string  | true     | Component id. e.g. xname for hardware components            |
 
 > Example responses
 
@@ -3277,11 +3277,11 @@ Retrieve the configuration and current state of a single component
 
 <h3 id="get_component_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single component state|[V2ComponentState](#schemav2componentstate)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                 | Schema                                      |
+|--------|------------------------------------------------------------------|-----------------------------|---------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A single component state    | [V2ComponentState](#schemav2componentstate) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                 | [ProblemDetails](#schemaproblemdetails)     |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found. | [ProblemDetails](#schemaproblemdetails)     |
 
 <aside class="success">
 This operation does not require authentication
@@ -3386,10 +3386,10 @@ Update the state for a given component in the cfs database
 
 <h3 id="put_component_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V2ComponentState](#schemav2componentstate)|true|The configuration/state for a single component|
-|component_id|path|string|true|Component id. e.g. xname for hardware components|
+| Name         | In   | Type                                        | Required | Description                                      |
+|--------------|------|---------------------------------------------|----------|--------------------------------------------------|
+| body         | body | [V2ComponentState](#schemav2componentstate) | true     | The configuration/state for a single component   |
+| component_id | path | string                                      | true     | Component id. e.g. xname for hardware components |
 
 > Example responses
 
@@ -3437,10 +3437,10 @@ Update the state for a given component in the cfs database
 
 <h3 id="put_component_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single component state|[V2ComponentState](#schemav2componentstate)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description              | Schema                                      |
+|--------|------------------------------------------------------------------|--------------------------|---------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A single component state | [V2ComponentState](#schemav2componentstate) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request              | [ProblemDetails](#schemaproblemdetails)     |
 
 <aside class="success">
 This operation does not require authentication
@@ -3545,10 +3545,10 @@ Update the state for a given component in the cfs database
 
 <h3 id="patch_component_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V2ComponentState](#schemav2componentstate)|true|The configuration/state for a single component|
-|component_id|path|string|true|Component id. e.g. xname for hardware components|
+| Name         | In   | Type                                        | Required | Description                                      |
+|--------------|------|---------------------------------------------|----------|--------------------------------------------------|
+| body         | body | [V2ComponentState](#schemav2componentstate) | true     | The configuration/state for a single component   |
+| component_id | path | string                                      | true     | Component id. e.g. xname for hardware components |
 
 > Example responses
 
@@ -3596,11 +3596,11 @@ Update the state for a given component in the cfs database
 
 <h3 id="patch_component_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single component state|[V2ComponentState](#schemav2componentstate)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                 | Schema                                      |
+|--------|------------------------------------------------------------------|-----------------------------|---------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A single component state    | [V2ComponentState](#schemav2componentstate) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                 | [ProblemDetails](#schemaproblemdetails)     |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found. | [ProblemDetails](#schemaproblemdetails)     |
 
 <aside class="success">
 This operation does not require authentication
@@ -3671,9 +3671,9 @@ Delete the given component
 
 <h3 id="delete_component_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|component_id|path|string|true|Component id. e.g. xname for hardware components|
+| Name         | In   | Type   | Required | Description                                      |
+|--------------|------|--------|----------|--------------------------------------------------|
+| component_id | path | string | true     | Component id. e.g. xname for hardware components |
 
 > Example responses
 
@@ -3691,10 +3691,10 @@ Delete the given component
 
 <h3 id="delete_component_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                         | Description                 | Schema                                  |
+|--------|-----------------------------------------------------------------|-----------------------------|-----------------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5) | The resource was deleted.   | None                                    |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)  | The resource was not found. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -3765,27 +3765,27 @@ Retrieve the full collection of components in the form of a ComponentArray. Full
 
 <h3 id="get_components_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|limit|query|integer|false|When set, CFS will only return a number of components up to this limit.  Combined with after_id, this enables paging across results|
-|after_id|query|string|false|When set, CFS will only return the components after the component specified.  Combined with limit, this enables paging across results.|
-|ids|query|string|false|Retrieve the components with the given id (e.g. xname for hardware components). Can be chained for selecting groups of components.|
-|status|query|string|false|Retrieve the components with the status. Multiple statuses can be specified in a comma-separated list.|
-|enabled|query|boolean|false|Retrieve the components with the "enabled" state.|
-|config_name|query|string|false|Retrieve the components with the given configuration set as the desired state.|
-|state_details|query|boolean|false|Include the details on the currently applied layers|
-|config_details|query|boolean|false|Include the configuration and config status in the response|
-|tags|query|string|false|Return only components whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list.  Only components that match all tags will be returned.|
+| Name           | In    | Type    | Required | Description                                                                                                                                                                                       |
+|----------------|-------|---------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| limit          | query | integer | false    | When set, CFS will only return a number of components up to this limit.  Combined with after_id, this enables paging across results                                                               |
+| after_id       | query | string  | false    | When set, CFS will only return the components after the component specified.  Combined with limit, this enables paging across results.                                                            |
+| ids            | query | string  | false    | Retrieve the components with the given id (e.g. xname for hardware components). Can be chained for selecting groups of components.                                                                |
+| status         | query | string  | false    | Retrieve the components with the status. Multiple statuses can be specified in a comma-separated list.                                                                                            |
+| enabled        | query | boolean | false    | Retrieve the components with the "enabled" state.                                                                                                                                                 |
+| config_name    | query | string  | false    | Retrieve the components with the given configuration set as the desired state.                                                                                                                    |
+| state_details  | query | boolean | false    | Include the details on the currently applied layers                                                                                                                                               |
+| config_details | query | boolean | false    | Include the configuration and config status in the response                                                                                                                                       |
+| tags           | query | string  | false    | Return only components whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list.  Only components that match all tags will be returned. |
 
 #### Enumerated Values
 
-|Parameter|Value|
-|---|---|
-|status|unconfigured|
-|status|failed|
-|status|pending|
-|status|configured|
-|status||
+| Parameter | Value        |
+|-----------|--------------|
+| status    | unconfigured |
+| status    | failed       |
+| status    | pending      |
+| status    | configured   |
+| status    |              |
 
 > Example responses
 
@@ -3845,10 +3845,10 @@ Retrieve the full collection of components in the form of a ComponentArray. Full
 
 <h3 id="get_components_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of component states|[V3ComponentDataCollection](#schemav3componentdatacollection)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                      | Schema                                                        |
+|--------|------------------------------------------------------------------|----------------------------------|---------------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of component states | [V3ComponentDataCollection](#schemav3componentdatacollection) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                      | [ProblemDetails](#schemaproblemdetails)                       |
 
 <aside class="success">
 This operation does not require authentication
@@ -3964,9 +3964,9 @@ Update the state for a collection of components in the cfs database
 
 <h3 id="put_components_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|any|true|The configuration/state for an array of components|
+| Name | In   | Type | Required | Description                                        |
+|------|------|------|----------|----------------------------------------------------|
+| body | body | any  | true     | The configuration/state for an array of components |
 
 > Example responses
 
@@ -3982,10 +3982,10 @@ Update the state for a collection of components in the cfs database
 
 <h3 id="put_components_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of component ids|[V3ComponentIdCollection](#schemav3componentidcollection)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                   | Schema                                                    |
+|--------|------------------------------------------------------------------|-------------------------------|-----------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of component ids | [V3ComponentIdCollection](#schemav3componentidcollection) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                   | [ProblemDetails](#schemaproblemdetails)                   |
 
 <aside class="success">
 This operation does not require authentication
@@ -4101,9 +4101,9 @@ Update the state for a collection of components in the cfs database
 
 <h3 id="patch_components_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|any|true|The configuration/state for an array of components|
+| Name | In   | Type | Required | Description                                        |
+|------|------|------|----------|----------------------------------------------------|
+| body | body | any  | true     | The configuration/state for an array of components |
 
 > Example responses
 
@@ -4119,11 +4119,11 @@ Update the state for a collection of components in the cfs database
 
 <h3 id="patch_components_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of component ids|[V3ComponentIdCollection](#schemav3componentidcollection)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                   | Schema                                                    |
+|--------|------------------------------------------------------------------|-------------------------------|-----------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of component ids | [V3ComponentIdCollection](#schemav3componentidcollection) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                   | [ProblemDetails](#schemaproblemdetails)                   |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found.   | [ProblemDetails](#schemaproblemdetails)                   |
 
 <aside class="success">
 This operation does not require authentication
@@ -4194,11 +4194,11 @@ Retrieve the configuration and current state of a single component
 
 <h3 id="get_component_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|state_details|query|boolean|false|Include the details on the currently applied layers|
-|config_details|query|boolean|false|Include the configuration and config status in the response|
-|component_id|path|string|true|Component id. e.g. xname for hardware components|
+| Name           | In    | Type    | Required | Description                                                 |
+|----------------|-------|---------|----------|-------------------------------------------------------------|
+| state_details  | query | boolean | false    | Include the details on the currently applied layers         |
+| config_details | query | boolean | false    | Include the configuration and config status in the response |
+| component_id   | path  | string  | true     | Component id. e.g. xname for hardware components            |
 
 > Example responses
 
@@ -4250,11 +4250,11 @@ Retrieve the configuration and current state of a single component
 
 <h3 id="get_component_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single component state|[V3ComponentData](#schemav3componentdata)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                 | Schema                                    |
+|--------|------------------------------------------------------------------|-----------------------------|-------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A single component state    | [V3ComponentData](#schemav3componentdata) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                 | [ProblemDetails](#schemaproblemdetails)   |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found. | [ProblemDetails](#schemaproblemdetails)   |
 
 <aside class="success">
 This operation does not require authentication
@@ -4361,10 +4361,10 @@ Update the state for a given component in the cfs database
 
 <h3 id="put_component_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V3ComponentData](#schemav3componentdata)|true|The configuration/state for a single component|
-|component_id|path|string|true|Component id. e.g. xname for hardware components|
+| Name         | In   | Type                                      | Required | Description                                      |
+|--------------|------|-------------------------------------------|----------|--------------------------------------------------|
+| body         | body | [V3ComponentData](#schemav3componentdata) | true     | The configuration/state for a single component   |
+| component_id | path | string                                    | true     | Component id. e.g. xname for hardware components |
 
 > Example responses
 
@@ -4416,10 +4416,10 @@ Update the state for a given component in the cfs database
 
 <h3 id="put_component_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single component state|[V3ComponentData](#schemav3componentdata)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description              | Schema                                    |
+|--------|------------------------------------------------------------------|--------------------------|-------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A single component state | [V3ComponentData](#schemav3componentdata) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request              | [ProblemDetails](#schemaproblemdetails)   |
 
 <aside class="success">
 This operation does not require authentication
@@ -4526,10 +4526,10 @@ Update the state for a given component in the cfs database
 
 <h3 id="patch_component_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V3ComponentData](#schemav3componentdata)|true|The configuration/state for a single component|
-|component_id|path|string|true|Component id. e.g. xname for hardware components|
+| Name         | In   | Type                                      | Required | Description                                      |
+|--------------|------|-------------------------------------------|----------|--------------------------------------------------|
+| body         | body | [V3ComponentData](#schemav3componentdata) | true     | The configuration/state for a single component   |
+| component_id | path | string                                    | true     | Component id. e.g. xname for hardware components |
 
 > Example responses
 
@@ -4581,11 +4581,11 @@ Update the state for a given component in the cfs database
 
 <h3 id="patch_component_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single component state|[V3ComponentData](#schemav3componentdata)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                 | Schema                                    |
+|--------|------------------------------------------------------------------|-----------------------------|-------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A single component state    | [V3ComponentData](#schemav3componentdata) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                 | [ProblemDetails](#schemaproblemdetails)   |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found. | [ProblemDetails](#schemaproblemdetails)   |
 
 <aside class="success">
 This operation does not require authentication
@@ -4656,9 +4656,9 @@ Delete the given component
 
 <h3 id="delete_component_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|component_id|path|string|true|Component id. e.g. xname for hardware components|
+| Name         | In   | Type   | Required | Description                                      |
+|--------------|------|--------|----------|--------------------------------------------------|
+| component_id | path | string | true     | Component id. e.g. xname for hardware components |
 
 > Example responses
 
@@ -4676,10 +4676,10 @@ Delete the given component
 
 <h3 id="delete_component_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                         | Description                 | Schema                                  |
+|--------|-----------------------------------------------------------------|-----------------------------|-----------------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5) | The resource was deleted.   | None                                    |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)  | The resource was not found. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -4752,9 +4752,9 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
 
 <h3 id="get_configurations_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|in_use|query|boolean|false|Query for only configurations that are currently referenced by components.|
+| Name   | In    | Type    | Required | Description                                                                |
+|--------|-------|---------|----------|----------------------------------------------------------------------------|
+| in_use | query | boolean | false    | Query for only configurations that are currently referenced by components. |
 
 > Example responses
 
@@ -4790,10 +4790,10 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
 
 <h3 id="get_configurations_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of configurations|[V2ConfigurationArray](#schemav2configurationarray)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                    | Schema                                              |
+|--------|------------------------------------------------------------------|--------------------------------|-----------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of configurations | [V2ConfigurationArray](#schemav2configurationarray) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                    | [ProblemDetails](#schemaproblemdetails)             |
 
 <aside class="success">
 This operation does not require authentication
@@ -4864,9 +4864,9 @@ Retrieve the given configuration
 
 <h3 id="get_configuration_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|configuration_id|path|string|true|Name of the target configuration|
+| Name             | In   | Type   | Required | Description                      |
+|------------------|------|--------|----------|----------------------------------|
+| configuration_id | path | string | true     | Name of the target configuration |
 
 > Example responses
 
@@ -4900,10 +4900,10 @@ Retrieve the given configuration
 
 <h3 id="get_configuration_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration|[V2Configuration](#schemav2configuration)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                        | Description                 | Schema                                    |
+|--------|----------------------------------------------------------------|-----------------------------|-------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | A single configuration      | [V2Configuration](#schemav2configuration) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | The resource was not found. | [ProblemDetails](#schemaproblemdetails)   |
 
 <aside class="success">
 This operation does not require authentication
@@ -5004,10 +5004,10 @@ Add a configuration to CFS or replace an existing configuration.
 
 <h3 id="put_configuration_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V2Configuration](#schemav2configuration)|true|A desired configuration state|
-|configuration_id|path|string|true|Name of the target configuration|
+| Name             | In   | Type                                      | Required | Description                      |
+|------------------|------|-------------------------------------------|----------|----------------------------------|
+| body             | body | [V2Configuration](#schemav2configuration) | true     | A desired configuration state    |
+| configuration_id | path | string                                    | true     | Name of the target configuration |
 
 > Example responses
 
@@ -5041,10 +5041,10 @@ Add a configuration to CFS or replace an existing configuration.
 
 <h3 id="put_configuration_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration|[V2Configuration](#schemav2configuration)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description            | Schema                                    |
+|--------|------------------------------------------------------------------|------------------------|-------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A single configuration | [V2Configuration](#schemav2configuration) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request            | [ProblemDetails](#schemaproblemdetails)   |
 
 <aside class="success">
 This operation does not require authentication
@@ -5115,9 +5115,9 @@ Updates the commits for all layers that specify a branch
 
 <h3 id="patch_configuration_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|configuration_id|path|string|true|Name of the target configuration|
+| Name             | In   | Type   | Required | Description                      |
+|------------------|------|--------|----------|----------------------------------|
+| configuration_id | path | string | true     | Name of the target configuration |
 
 > Example responses
 
@@ -5151,10 +5151,10 @@ Updates the commits for all layers that specify a branch
 
 <h3 id="patch_configuration_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration|[V2Configuration](#schemav2configuration)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description            | Schema                                    |
+|--------|------------------------------------------------------------------|------------------------|-------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A single configuration | [V2Configuration](#schemav2configuration) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request            | [ProblemDetails](#schemaproblemdetails)   |
 
 <aside class="success">
 This operation does not require authentication
@@ -5225,9 +5225,9 @@ Delete the given configuration. This will fail in any components are using the s
 
 <h3 id="delete_configuration_v2-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|configuration_id|path|string|true|Name of the target configuration|
+| Name             | In   | Type   | Required | Description                      |
+|------------------|------|--------|----------|----------------------------------|
+| configuration_id | path | string | true     | Name of the target configuration |
 
 > Example responses
 
@@ -5245,11 +5245,11 @@ Delete the given configuration. This will fail in any components are using the s
 
 <h3 id="delete_configuration_v2-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                 | Schema                                  |
+|--------|------------------------------------------------------------------|-----------------------------|-----------------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)  | The resource was deleted.   | None                                    |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                 | [ProblemDetails](#schemaproblemdetails) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -5320,11 +5320,11 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
 
 <h3 id="get_configurations_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|limit|query|integer|false|When set, CFS will only return a number of configurations up to this limit.  Combined with after_id, this enables paging across results|
-|after_id|query|string|false|When set, CFS will only return the configurations after the configuration specified.  Combined with limit, this enables paging across results.|
-|in_use|query|boolean|false|Query for only configurations that are currently referenced by components.|
+| Name     | In    | Type    | Required | Description                                                                                                                                    |
+|----------|-------|---------|----------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| limit    | query | integer | false    | When set, CFS will only return a number of configurations up to this limit.  Combined with after_id, this enables paging across results        |
+| after_id | query | string  | false    | When set, CFS will only return the configurations after the configuration specified.  Combined with limit, this enables paging across results. |
+| in_use   | query | boolean | false    | Query for only configurations that are currently referenced by components.                                                                     |
 
 > Example responses
 
@@ -5363,10 +5363,10 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
 
 <h3 id="get_configurations_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of configurations|[V3ConfigurationDataCollection](#schemav3configurationdatacollection)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                    | Schema                                                                |
+|--------|------------------------------------------------------------------|--------------------------------|-----------------------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A collection of configurations | [V3ConfigurationDataCollection](#schemav3configurationdatacollection) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                    | [ProblemDetails](#schemaproblemdetails)                               |
 
 <aside class="success">
 This operation does not require authentication
@@ -5437,9 +5437,9 @@ Retrieve the given configuration
 
 <h3 id="get_configuration_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|configuration_id|path|string|true|Name of the target configuration|
+| Name             | In   | Type   | Required | Description                      |
+|------------------|------|--------|----------|----------------------------------|
+| configuration_id | path | string | true     | Name of the target configuration |
 
 > Example responses
 
@@ -5470,10 +5470,10 @@ Retrieve the given configuration
 
 <h3 id="get_configuration_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration|[V3ConfigurationData](#schemav3configurationdata)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                        | Description                 | Schema                                            |
+|--------|----------------------------------------------------------------|-----------------------------|---------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | A single configuration      | [V3ConfigurationData](#schemav3configurationdata) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | The resource was not found. | [ProblemDetails](#schemaproblemdetails)           |
 
 <aside class="success">
 This operation does not require authentication
@@ -5571,10 +5571,10 @@ Add a configuration to CFS or replace an existing configuration.
 
 <h3 id="put_configuration_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[V3ConfigurationData](#schemav3configurationdata)|true|A desired configuration state|
-|configuration_id|path|string|true|Name of the target configuration|
+| Name             | In   | Type                                              | Required | Description                      |
+|------------------|------|---------------------------------------------------|----------|----------------------------------|
+| body             | body | [V3ConfigurationData](#schemav3configurationdata) | true     | A desired configuration state    |
+| configuration_id | path | string                                            | true     | Name of the target configuration |
 
 > Example responses
 
@@ -5605,10 +5605,10 @@ Add a configuration to CFS or replace an existing configuration.
 
 <h3 id="put_configuration_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration|[V3ConfigurationData](#schemav3configurationdata)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description            | Schema                                            |
+|--------|------------------------------------------------------------------|------------------------|---------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A single configuration | [V3ConfigurationData](#schemav3configurationdata) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request            | [ProblemDetails](#schemaproblemdetails)           |
 
 <aside class="success">
 This operation does not require authentication
@@ -5679,9 +5679,9 @@ Updates the commits for all layers that specify a branch
 
 <h3 id="patch_configuration_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|configuration_id|path|string|true|Name of the target configuration|
+| Name             | In   | Type   | Required | Description                      |
+|------------------|------|--------|----------|----------------------------------|
+| configuration_id | path | string | true     | Name of the target configuration |
 
 > Example responses
 
@@ -5712,10 +5712,10 @@ Updates the commits for all layers that specify a branch
 
 <h3 id="patch_configuration_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration|[V3ConfigurationData](#schemav3configurationdata)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description            | Schema                                            |
+|--------|------------------------------------------------------------------|------------------------|---------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | A single configuration | [V3ConfigurationData](#schemav3configurationdata) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request            | [ProblemDetails](#schemaproblemdetails)           |
 
 <aside class="success">
 This operation does not require authentication
@@ -5786,9 +5786,9 @@ Delete the given configuration. This will fail in any components are using the s
 
 <h3 id="delete_configuration_v3-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|configuration_id|path|string|true|Name of the target configuration|
+| Name             | In   | Type   | Required | Description                      |
+|------------------|------|--------|----------|----------------------------------|
+| configuration_id | path | string | true     | Name of the target configuration |
 
 > Example responses
 
@@ -5806,11 +5806,11 @@ Delete the given configuration. This will fail in any components are using the s
 
 <h3 id="delete_configuration_v3-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+| Status | Meaning                                                          | Description                 | Schema                                  |
+|--------|------------------------------------------------------------------|-----------------------------|-----------------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)  | The resource was deleted.   | None                                    |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                 | [ProblemDetails](#schemaproblemdetails) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | The resource was not found. | [ProblemDetails](#schemaproblemdetails) |
 
 <aside class="success">
 This operation does not require authentication
@@ -5838,11 +5838,11 @@ Version data
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|major|integer|false|none|none|
-|minor|integer|false|none|none|
-|patch|integer|false|none|none|
+| Name  | Type    | Required | Restrictions | Description |
+|-------|---------|----------|--------------|-------------|
+| major | integer | false    | none         | none        |
+| minor | integer | false    | none         | none        |
+| patch | integer | false    | none         | none        |
 
 <h2 id="tocS_Healthz">Healthz</h2>
 <!-- backwards compatibility -->
@@ -5863,10 +5863,10 @@ Service health status
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|db_status|string|false|none|none|
-|kafka_status|string|false|none|none|
+| Name         | Type   | Required | Restrictions | Description |
+|--------------|--------|----------|--------------|-------------|
+| db_status    | string | false    | none         | none        |
+| kafka_status | string | false    | none         | none        |
 
 <h2 id="tocS_V3NextData">V3NextData</h2>
 <!-- backwards compatibility -->
@@ -5887,10 +5887,10 @@ Information for requesting the next page of data
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|limit|integer|false|none|none|
-|after_id|string|false|none|none|
+| Name     | Type    | Required | Restrictions | Description |
+|----------|---------|----------|--------------|-------------|
+| limit    | integer | false    | none         | none        |
+| after_id | string  | false    | none         | none        |
 
 <h2 id="tocS_V2Options">V2Options</h2>
 <!-- backwards compatibility -->
@@ -5922,21 +5922,21 @@ Configuration options for the configuration service.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|hardwareSyncInterval|integer|false|none|How frequently the CFS hardware-sync-agent checks with the Hardware State Manager to update its known hardware (in seconds)|
-|batcherCheckInterval|integer|false|none|How frequently the batcher checks the configuration states to see if work needs to be done (in seconds)|
-|batchSize|integer|false|none|The maximum number of nodes the batcher will run a single CFS session against.|
-|batchWindow|integer|false|none|The maximum number of seconds the batcher will wait to run a CFS session once a node has been detected that needs configuration.|
-|defaultBatcherRetryPolicy|integer|false|none|The default maximum number retries per node when configuration fails.|
-|defaultPlaybook|string|false|none|The default playbook to be used if not specified in a node's desired state.|
-|defaultAnsibleConfig|string|false|none|The Kubernetes ConfigMap which holds the default ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service.|
-|sessionTTL|string|false|none|A time-to-live applied to all completed CFS sessions.  Specified in hours or days. e.g. 3d or 24h.  Set to an empty string to disable.|
-|additionalInventoryUrl|string|false|none|The git clone URL of a repo with additional inventory files.  All files in the repo will be copied into the hosts directory of CFS.|
-|batcherMaxBackoff|integer|false|none|The maximum number of seconds that batcher will backoff from session creation if problems are detected.|
-|batcherDisable|boolean|false|none|Disables cfs-batcher's automatic session creation if set to True.|
-|batcherPendingTimeout|integer|false|none|How long cfs-batcher will wait on a pending session before deleting and recreating it (in seconds).|
-|loggingLevel|string|false|none|The logging level for core CFS services.  This does not affect the Ansible logging level.|
+| Name                      | Type    | Required | Restrictions | Description                                                                                                                                                               |
+|---------------------------|---------|----------|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| hardwareSyncInterval      | integer | false    | none         | How frequently the CFS hardware-sync-agent checks with the Hardware State Manager to update its known hardware (in seconds)                                               |
+| batcherCheckInterval      | integer | false    | none         | How frequently the batcher checks the configuration states to see if work needs to be done (in seconds)                                                                   |
+| batchSize                 | integer | false    | none         | The maximum number of nodes the batcher will run a single CFS session against.                                                                                            |
+| batchWindow               | integer | false    | none         | The maximum number of seconds the batcher will wait to run a CFS session once a node has been detected that needs configuration.                                          |
+| defaultBatcherRetryPolicy | integer | false    | none         | The default maximum number retries per node when configuration fails.                                                                                                     |
+| defaultPlaybook           | string  | false    | none         | The default playbook to be used if not specified in a node's desired state.                                                                                               |
+| defaultAnsibleConfig      | string  | false    | none         | The Kubernetes ConfigMap which holds the default ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service. |
+| sessionTTL                | string  | false    | none         | A time-to-live applied to all completed CFS sessions.  Specified in hours or days. e.g. 3d or 24h.  Set to an empty string to disable.                                    |
+| additionalInventoryUrl    | string  | false    | none         | The git clone URL of a repo with additional inventory files.  All files in the repo will be copied into the hosts directory of CFS.                                       |
+| batcherMaxBackoff         | integer | false    | none         | The maximum number of seconds that batcher will backoff from session creation if problems are detected.                                                                   |
+| batcherDisable            | boolean | false    | none         | Disables cfs-batcher's automatic session creation if set to True.                                                                                                         |
+| batcherPendingTimeout     | integer | false    | none         | How long cfs-batcher will wait on a pending session before deleting and recreating it (in seconds).                                                                       |
+| loggingLevel              | string  | false    | none         | The logging level for core CFS services.  This does not affect the Ansible logging level.                                                                                 |
 
 <h2 id="tocS_V3Options">V3Options</h2>
 <!-- backwards compatibility -->
@@ -5971,33 +5971,33 @@ Configuration options for the configuration service.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|hardware_sync_interval|integer|false|none|How frequently the CFS hardware-sync-agent checks with the Hardware State Manager to update its known hardware (in seconds)|
-|batcher_check_interval|integer|false|none|How frequently the batcher checks the configuration states to see if work needs to be done (in seconds)|
-|batch_size|integer|false|none|The maximum number of nodes the batcher will run a single CFS session against.|
-|batch_window|integer|false|none|The maximum number of seconds the batcher will wait to run a CFS session once a node has been detected that needs configuration.|
-|default_batcher_retry_policy|integer|false|none|The default maximum number retries per node when configuration fails.|
-|default_playbook|string|false|read-only|[DEPRECATED] The default playbook to be used if not specified in a node's desired state. This option is read-only via the v3 API and remains only for compatibility with the v2 API. This option will be removed from v3 when the v2 API is removed.|
-|default_ansible_config|string|false|none|The Kubernetes ConfigMap which holds the default ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service.|
-|session_ttl|string|false|none|A time-to-live applied to all completed CFS sessions.  Specified in hours or days. e.g. 3d or 24h.  Set to an empty string to disable.|
-|additional_inventory_url|string|false|none|The git clone URL of a repo with additional inventory files.  All files in the repo will be copied into the hosts directory of CFS.|
-|batcher_max_backoff|integer|false|none|The maximum number of seconds that batcher will backoff from session creation if problems are detected.|
-|batcher_disable|boolean|false|none|Disables cfs-batcher's automatic session creation if set to True.|
-|batcher_pending_timeout|integer|false|none|How long cfs-batcher will wait on a pending session before deleting and recreating it (in seconds).|
-|logging_level|string|false|none|The logging level for core CFS services.  This does not affect the Ansible logging level.|
-|default_page_size|integer|false|none|The maximum number of results that a query will return if the limit parameter is not specified.|
-|debug_wait_time|integer|false|none|The number of seconds CFS sessions will wait after failure for debugging when debug_on_failure is true.|
-|include_ara_links|boolean|false|none|If true, session and component records will include links to ARA dashboards for the logs|
+| Name                         | Type    | Required | Restrictions | Description                                                                                                                                                                                                                                          |
+|------------------------------|---------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| hardware_sync_interval       | integer | false    | none         | How frequently the CFS hardware-sync-agent checks with the Hardware State Manager to update its known hardware (in seconds)                                                                                                                          |
+| batcher_check_interval       | integer | false    | none         | How frequently the batcher checks the configuration states to see if work needs to be done (in seconds)                                                                                                                                              |
+| batch_size                   | integer | false    | none         | The maximum number of nodes the batcher will run a single CFS session against.                                                                                                                                                                       |
+| batch_window                 | integer | false    | none         | The maximum number of seconds the batcher will wait to run a CFS session once a node has been detected that needs configuration.                                                                                                                     |
+| default_batcher_retry_policy | integer | false    | none         | The default maximum number retries per node when configuration fails.                                                                                                                                                                                |
+| default_playbook             | string  | false    | read-only    | [DEPRECATED] The default playbook to be used if not specified in a node's desired state. This option is read-only via the v3 API and remains only for compatibility with the v2 API. This option will be removed from v3 when the v2 API is removed. |
+| default_ansible_config       | string  | false    | none         | The Kubernetes ConfigMap which holds the default ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service.                                                                            |
+| session_ttl                  | string  | false    | none         | A time-to-live applied to all completed CFS sessions.  Specified in hours or days. e.g. 3d or 24h.  Set to an empty string to disable.                                                                                                               |
+| additional_inventory_url     | string  | false    | none         | The git clone URL of a repo with additional inventory files.  All files in the repo will be copied into the hosts directory of CFS.                                                                                                                  |
+| batcher_max_backoff          | integer | false    | none         | The maximum number of seconds that batcher will backoff from session creation if problems are detected.                                                                                                                                              |
+| batcher_disable              | boolean | false    | none         | Disables cfs-batcher's automatic session creation if set to True.                                                                                                                                                                                    |
+| batcher_pending_timeout      | integer | false    | none         | How long cfs-batcher will wait on a pending session before deleting and recreating it (in seconds).                                                                                                                                                  |
+| logging_level                | string  | false    | none         | The logging level for core CFS services.  This does not affect the Ansible logging level.                                                                                                                                                            |
+| default_page_size            | integer | false    | none         | The maximum number of results that a query will return if the limit parameter is not specified.                                                                                                                                                      |
+| debug_wait_time              | integer | false    | none         | The number of seconds CFS sessions will wait after failure for debugging when debug_on_failure is true.                                                                                                                                              |
+| include_ara_links            | boolean | false    | none         | If true, session and component records will include links to ARA dashboards for the logs                                                                                                                                                             |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|logging_level|DEBUG|
-|logging_level|INFO|
-|logging_level|WARNING|
-|logging_level|ERROR|
+| Property      | Value   |
+|---------------|---------|
+| logging_level | DEBUG   |
+| logging_level | INFO    |
+| logging_level | WARNING |
+| logging_level | ERROR   |
 
 <h2 id="tocS_SessionTargetSection">SessionTargetSection</h2>
 <!-- backwards compatibility -->
@@ -6033,24 +6033,24 @@ A target lets you define the nodes or images that you want to customize and cons
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|definition|string|false|none|Source of inventory definition to be used in the configuration session.<br><br>'image' denotes that the session will target an image root through the Image<br>Management Service (IMS). Group members should be a single image identifier known by IMS.<br><br>'spec' denotes inventory that is specified directly via CFS in the target<br>groups/members of this object. You can include a node name (a DNS resolvable name),<br>or a group name and a list of nodes. The command line inventory can be a quick<br>and simple way to run Ansible against a small subset of nodes. However, if more<br>customization of the inventory is needed, specifically customization of host and<br>groups variables, the repo target definition should be used.<br><br>'repo' denotes the inventory will be used from the git repository<br>specified for this session (via `cloneUrl`, and `branch` or `commit`). The inventory<br>must be located in the "hosts" file at the root of the repository.<br><br>'dynamic' (default) will use the CFS-provided dynamic inventory plugin to define<br>the inventory. The hosts file is automatically generated by CFS with data from<br>the Hardware State Manager (HSM), which includes groups and hardware roles.|
-|groups|[object]|false|none|Specification of the groups and group members per the inventory definition. This list is not valid for the 'repo' and 'dynamic' inventory definition types. Multiple groups can be specified for 'image' and 'spec' inventory definition types.|
-|» name|string|true|none|Group name|
-|» members|[string]|true|none|Group members for the inventory.|
-|image_map|[object]|false|none|Mapping of image IDs to resultant image names.  This is only valid for 'image' inventory definition types.<br>Only images that are defined in 'groups' will result in a new image.<br>If images in 'groups' are not specified here, CFS will generate a name for the resultant image.|
-|» source_id|string|true|none|Source image id.  This is the image id that is used in 'groups'.|
-|» result_name|string|true|none|Resultant image name.|
+| Name          | Type     | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+|---------------|----------|----------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| definition    | string   | false    | none         | Source of inventory definition to be used in the configuration session.<br><br>'image' denotes that the session will target an image root through the Image<br>Management Service (IMS). Group members should be a single image identifier known by IMS.<br><br>'spec' denotes inventory that is specified directly via CFS in the target<br>groups/members of this object. You can include a node name (a DNS resolvable name),<br>or a group name and a list of nodes. The command line inventory can be a quick<br>and simple way to run Ansible against a small subset of nodes. However, if more<br>customization of the inventory is needed, specifically customization of host and<br>groups variables, the repo target definition should be used.<br><br>'repo' denotes the inventory will be used from the git repository<br>specified for this session (via `cloneUrl`, and `branch` or `commit`). The inventory<br>must be located in the "hosts" file at the root of the repository.<br><br>'dynamic' (default) will use the CFS-provided dynamic inventory plugin to define<br>the inventory. The hosts file is automatically generated by CFS with data from<br>the Hardware State Manager (HSM), which includes groups and hardware roles. |
+| groups        | [object] | false    | none         | Specification of the groups and group members per the inventory definition. This list is not valid for the 'repo' and 'dynamic' inventory definition types. Multiple groups can be specified for 'image' and 'spec' inventory definition types.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| » name        | string   | true     | none         | Group name                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| » members     | [string] | true     | none         | Group members for the inventory.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| image_map     | [object] | false    | none         | Mapping of image IDs to resultant image names.  This is only valid for 'image' inventory definition types.<br>Only images that are defined in 'groups' will result in a new image.<br>If images in 'groups' are not specified here, CFS will generate a name for the resultant image.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| » source_id   | string   | true     | none         | Source image id.  This is the image id that is used in 'groups'.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| » result_name | string   | true     | none         | Resultant image name.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|definition|image|
-|definition|spec|
-|definition|repo|
-|definition|dynamic|
+| Property   | Value   |
+|------------|---------|
+| definition | image   |
+| definition | spec    |
+| definition | repo    |
+| definition | dynamic |
 
 <h2 id="tocS_SessionConfigurationSection">SessionConfigurationSection</h2>
 <!-- backwards compatibility -->
@@ -6071,10 +6071,10 @@ The configuration information which the session will apply
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|false|none|The name of the CFS configuration to be applied|
-|limit|string|false|none|A comma separated list of layers in the configuration to limit the session to. This can be either a list of named layers, or a list of indices.|
+| Name  | Type   | Required | Restrictions | Description                                                                                                                                     |
+|-------|--------|----------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| name  | string | false    | none         | The name of the CFS configuration to be applied                                                                                                 |
+| limit | string | false    | none         | A comma separated list of layers in the configuration to limit the session to. This can be either a list of named layers, or a list of indices. |
 
 <h2 id="tocS_SessionAnsibleSection">SessionAnsibleSection</h2>
 <!-- backwards compatibility -->
@@ -6097,12 +6097,12 @@ Additional options that will be used when invoking Ansible.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|config|string|false|none|The Kubernetes ConfigMap which holds the ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service. If no value is given, the value of the defaultAnsibleConfig field in the /options endpoint will be used.|
-|limit|string¦null|false|none|Additional filtering of hosts or groups from the inventory to run against. This is especially useful when running with dynamic inventory and when you want to run on a subset of nodes or groups. This option corresponds to ansible-playbook's --limit and can be used to specify nodes or groups.|
-|verbosity|integer|false|none|The verbose mode to use in the call to the ansible-playbook command. 1 = -v, 2 = -vv, etc. Valid values range from 0 to 4. See the ansible-playbook help for more information.|
-|passthrough|string¦null|false|none|Additional parameters that are added to all Ansible calls for the session. This field is currently limited to the following Ansible parameters: "--extra-vars", "--forks", "--skip-tags", "--start-at-task", and "--tags". WARNING: Parameters passed to Ansible in this way should be used with caution.  State will not be recorded for components when using these flags to avoid incorrect reporting of partial playbook runs.|
+| Name        | Type        | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|-------------|-------------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| config      | string      | false    | none         | The Kubernetes ConfigMap which holds the ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service. If no value is given, the value of the defaultAnsibleConfig field in the /options endpoint will be used.                                                                                                                                                         |
+| limit       | string¦null | false    | none         | Additional filtering of hosts or groups from the inventory to run against. This is especially useful when running with dynamic inventory and when you want to run on a subset of nodes or groups. This option corresponds to ansible-playbook's --limit and can be used to specify nodes or groups.                                                                                                                                |
+| verbosity   | integer     | false    | none         | The verbose mode to use in the call to the ansible-playbook command. 1 = -v, 2 = -vv, etc. Valid values range from 0 to 4. See the ansible-playbook help for more information.                                                                                                                                                                                                                                                     |
+| passthrough | string¦null | false    | none         | Additional parameters that are added to all Ansible calls for the session. This field is currently limited to the following Ansible parameters: "--extra-vars", "--forks", "--skip-tags", "--start-at-task", and "--tags". WARNING: Parameters passed to Ansible in this way should be used with caution.  State will not be recorded for components when using these flags to avoid incorrect reporting of partial playbook runs. |
 
 <h2 id="tocS_SessionStatusArtifactsSection">SessionStatusArtifactsSection</h2>
 <!-- backwards compatibility -->
@@ -6126,17 +6126,17 @@ Status of artifacts
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|image_id|string(uuid)|false|none|The IMS id of the original image to be customized via a configuration session.|
-|result_id|string(uuid)|false|none|The IMS id of the image that was customized via a configuration session. This is the resultant image of the customization.|
-|type|string|false|none|none|
+| Name      | Type         | Required | Restrictions | Description                                                                                                                |
+|-----------|--------------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------|
+| image_id  | string(uuid) | false    | none         | The IMS id of the original image to be customized via a configuration session.                                             |
+| result_id | string(uuid) | false    | none         | The IMS id of the image that was customized via a configuration session. This is the resultant image of the customization. |
+| type      | string       | false    | none         | none                                                                                                                       |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|type|ims_customized_image|
+| Property | Value                |
+|----------|----------------------|
+| type     | ims_customized_image |
 
 <h2 id="tocS_V2SessionStatusSessionSection">V2SessionStatusSessionSection</h2>
 <!-- backwards compatibility -->
@@ -6160,25 +6160,25 @@ Status of session
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|job|string|false|read-only|The name of the configuration execution environment associated with this session.|
-|completionTime|string(date-time)¦null|false|read-only|The date/time when the session completed execution in RFC 3339 format. This has a null value when the session has not yet completed.|
-|startTime|string(date-time)|false|read-only|The date/time when the session started execution in RFC 3339 format.|
-|status|string|false|read-only|The execution status of the session.|
-|succeeded|string|false|read-only|Whether the session executed successfully or not. A 'none'<br>value denotes that the execution has not completed. This<br>field has context when the `status` field is 'complete'.<br>A session may successfully execute even if the underlying<br>tasks do not.|
+| Name           | Type                   | Required | Restrictions | Description                                                                                                                                                                                                                                                      |
+|----------------|------------------------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| job            | string                 | false    | read-only    | The name of the configuration execution environment associated with this session.                                                                                                                                                                                |
+| completionTime | string(date-time)¦null | false    | read-only    | The date/time when the session completed execution in RFC 3339 format. This has a null value when the session has not yet completed.                                                                                                                             |
+| startTime      | string(date-time)      | false    | read-only    | The date/time when the session started execution in RFC 3339 format.                                                                                                                                                                                             |
+| status         | string                 | false    | read-only    | The execution status of the session.                                                                                                                                                                                                                             |
+| succeeded      | string                 | false    | read-only    | Whether the session executed successfully or not. A 'none'<br>value denotes that the execution has not completed. This<br>field has context when the `status` field is 'complete'.<br>A session may successfully execute even if the underlying<br>tasks do not. |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|status|pending|
-|status|running|
-|status|complete|
-|succeeded|none|
-|succeeded|true|
-|succeeded|false|
-|succeeded|unknown|
+| Property  | Value    |
+|-----------|----------|
+| status    | pending  |
+| status    | running  |
+| status    | complete |
+| succeeded | none     |
+| succeeded | true     |
+| succeeded | false    |
+| succeeded | unknown  |
 
 <h2 id="tocS_V3SessionStatusSessionSection">V3SessionStatusSessionSection</h2>
 <!-- backwards compatibility -->
@@ -6203,26 +6203,26 @@ Status of session
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|job|string|false|none|The name of the configuration execution environment associated with this session.|
-|ims_job|string|false|none|The name os the IMS job associated with the session when running against an image.|
-|completion_time|string(date-time)|false|read-only|The date/time when the session completed execution in RFC 3339 format.|
-|start_time|string(date-time)|false|read-only|The date/time when the session started execution in RFC 3339 format.|
-|status|string|false|read-only|The execution status of the session.|
-|succeeded|string|false|read-only|Whether the session executed successfully or not. A 'none'<br>value denotes that the execution has not completed. This<br>field has context when the `status` field is 'complete'.<br>A session may successfully execute even if the underlying<br>tasks do not.|
+| Name            | Type              | Required | Restrictions | Description                                                                                                                                                                                                                                                      |
+|-----------------|-------------------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| job             | string            | false    | none         | The name of the configuration execution environment associated with this session.                                                                                                                                                                                |
+| ims_job         | string            | false    | none         | The name os the IMS job associated with the session when running against an image.                                                                                                                                                                               |
+| completion_time | string(date-time) | false    | read-only    | The date/time when the session completed execution in RFC 3339 format.                                                                                                                                                                                           |
+| start_time      | string(date-time) | false    | read-only    | The date/time when the session started execution in RFC 3339 format.                                                                                                                                                                                             |
+| status          | string            | false    | read-only    | The execution status of the session.                                                                                                                                                                                                                             |
+| succeeded       | string            | false    | read-only    | Whether the session executed successfully or not. A 'none'<br>value denotes that the execution has not completed. This<br>field has context when the `status` field is 'complete'.<br>A session may successfully execute even if the underlying<br>tasks do not. |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|status|pending|
-|status|running|
-|status|complete|
-|succeeded|none|
-|succeeded|true|
-|succeeded|false|
-|succeeded|unknown|
+| Property  | Value    |
+|-----------|----------|
+| status    | pending  |
+| status    | running  |
+| status    | complete |
+| succeeded | none     |
+| succeeded | true     |
+| succeeded | false    |
+| succeeded | unknown  |
 
 <h2 id="tocS_V2SessionStatusSection">V2SessionStatusSection</h2>
 <!-- backwards compatibility -->
@@ -6255,10 +6255,10 @@ Status of artifacts, session, and targets. Lists details like session status, se
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|artifacts|[SessionStatusArtifactsSection](#schemasessionstatusartifactssection)|false|none|Status of artifacts|
-|session|[V2SessionStatusSessionSection](#schemav2sessionstatussessionsection)|false|none|Status of session|
+| Name      | Type                                                                  | Required | Restrictions | Description         |
+|-----------|-----------------------------------------------------------------------|----------|--------------|---------------------|
+| artifacts | [SessionStatusArtifactsSection](#schemasessionstatusartifactssection) | false    | none         | Status of artifacts |
+| session   | [V2SessionStatusSessionSection](#schemav2sessionstatussessionsection) | false    | none         | Status of session   |
 
 <h2 id="tocS_V3SessionStatusSection">V3SessionStatusSection</h2>
 <!-- backwards compatibility -->
@@ -6292,10 +6292,10 @@ Status of artifacts, session, and targets. Lists details like session status, se
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|artifacts|[SessionStatusArtifactsSection](#schemasessionstatusartifactssection)|false|none|Status of artifacts|
-|session|[V3SessionStatusSessionSection](#schemav3sessionstatussessionsection)|false|none|Status of session|
+| Name      | Type                                                                  | Required | Restrictions | Description         |
+|-----------|-----------------------------------------------------------------------|----------|--------------|---------------------|
+| artifacts | [SessionStatusArtifactsSection](#schemasessionstatusartifactssection) | false    | none         | Status of artifacts |
+| session   | [V3SessionStatusSessionSection](#schemav3sessionstatussessionsection) | false    | none         | Status of session   |
 
 <h2 id="tocS_V2Session">V2Session</h2>
 <!-- backwards compatibility -->
@@ -6364,15 +6364,15 @@ An execution session for the Configuration Framework.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|false|none|Name of the session. The length of the name is restricted to 45 characters.|
-|configuration|[SessionConfigurationSection](#schemasessionconfigurationsection)|false|none|The configuration information which the session will apply|
-|ansible|[SessionAnsibleSection](#schemasessionansiblesection)|false|none|Additional options that will be used when invoking Ansible.|
-|target|[SessionTargetSection](#schemasessiontargetsection)|false|none|A target lets you define the nodes or images that you want to customize and consists of two sub-parameters - Definition and groups. By default, Configuration Framework Sessions use dynamic inventory definition to target hosts. When using a session to customize an image, or if a static inventory is required, use this optional section to specify entities (whether images or nodes) for the session to target.|
-|status|[V2SessionStatusSection](#schemav2sessionstatussection)|false|none|Status of artifacts, session, and targets. Lists details like session status, session start and completion time, number of successful, failed, or running targets. If the target definition is an image, it also lists the image_id, result_id, and type of image under Artifacts.|
-|tags|object|false|none|A collection of key-value pairs containing descriptive information for the session, such as information about the session creator.|
-|» **additionalProperties**|string|false|none|none|
+| Name                       | Type                                                              | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                             |
+|----------------------------|-------------------------------------------------------------------|----------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                       | string                                                            | false    | none         | Name of the session. The length of the name is restricted to 45 characters.                                                                                                                                                                                                                                                                                                                                             |
+| configuration              | [SessionConfigurationSection](#schemasessionconfigurationsection) | false    | none         | The configuration information which the session will apply                                                                                                                                                                                                                                                                                                                                                              |
+| ansible                    | [SessionAnsibleSection](#schemasessionansiblesection)             | false    | none         | Additional options that will be used when invoking Ansible.                                                                                                                                                                                                                                                                                                                                                             |
+| target                     | [SessionTargetSection](#schemasessiontargetsection)               | false    | none         | A target lets you define the nodes or images that you want to customize and consists of two sub-parameters - Definition and groups. By default, Configuration Framework Sessions use dynamic inventory definition to target hosts. When using a session to customize an image, or if a static inventory is required, use this optional section to specify entities (whether images or nodes) for the session to target. |
+| status                     | [V2SessionStatusSection](#schemav2sessionstatussection)           | false    | none         | Status of artifacts, session, and targets. Lists details like session status, session start and completion time, number of successful, failed, or running targets. If the target definition is an image, it also lists the image_id, result_id, and type of image under Artifacts.                                                                                                                                      |
+| tags                       | object                                                            | false    | none         | A collection of key-value pairs containing descriptive information for the session, such as information about the session creator.                                                                                                                                                                                                                                                                                      |
+| » **additionalProperties** | string                                                            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                    |
 
 <h2 id="tocS_V3SessionData">V3SessionData</h2>
 <!-- backwards compatibility -->
@@ -6444,17 +6444,17 @@ An execution session for the Configuration Framework.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|false|none|Name of the session. The length of the name is restricted to 45 characters.|
-|configuration|[SessionConfigurationSection](#schemasessionconfigurationsection)|false|none|The configuration information which the session will apply|
-|ansible|[SessionAnsibleSection](#schemasessionansiblesection)|false|none|Additional options that will be used when invoking Ansible.|
-|target|[SessionTargetSection](#schemasessiontargetsection)|false|none|A target lets you define the nodes or images that you want to customize and consists of two sub-parameters - Definition and groups. By default, Configuration Framework Sessions use dynamic inventory definition to target hosts. When using a session to customize an image, or if a static inventory is required, use this optional section to specify entities (whether images or nodes) for the session to target.|
-|status|[V3SessionStatusSection](#schemav3sessionstatussection)|false|none|Status of artifacts, session, and targets. Lists details like session status, session start and completion time, number of successful, failed, or running targets. If the target definition is an image, it also lists the image_id, result_id, and type of image under Artifacts.|
-|tags|object|false|none|A collection of key-value pairs containing descriptive information for the session, such as information about the session creator.|
-|» **additionalProperties**|string|false|none|none|
-|debug_on_failure|boolean|false|none|When true, the ansible container for the session will remain running after an Ansible failure.  The container will remain running for a number of seconds specified by the debug_wait_time options, or until complete flag is touched.|
-|logs|string|false|read-only|The link to the ARA UI with logs for this component|
+| Name                       | Type                                                              | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                             |
+|----------------------------|-------------------------------------------------------------------|----------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                       | string                                                            | false    | none         | Name of the session. The length of the name is restricted to 45 characters.                                                                                                                                                                                                                                                                                                                                             |
+| configuration              | [SessionConfigurationSection](#schemasessionconfigurationsection) | false    | none         | The configuration information which the session will apply                                                                                                                                                                                                                                                                                                                                                              |
+| ansible                    | [SessionAnsibleSection](#schemasessionansiblesection)             | false    | none         | Additional options that will be used when invoking Ansible.                                                                                                                                                                                                                                                                                                                                                             |
+| target                     | [SessionTargetSection](#schemasessiontargetsection)               | false    | none         | A target lets you define the nodes or images that you want to customize and consists of two sub-parameters - Definition and groups. By default, Configuration Framework Sessions use dynamic inventory definition to target hosts. When using a session to customize an image, or if a static inventory is required, use this optional section to specify entities (whether images or nodes) for the session to target. |
+| status                     | [V3SessionStatusSection](#schemav3sessionstatussection)           | false    | none         | Status of artifacts, session, and targets. Lists details like session status, session start and completion time, number of successful, failed, or running targets. If the target definition is an image, it also lists the image_id, result_id, and type of image under Artifacts.                                                                                                                                      |
+| tags                       | object                                                            | false    | none         | A collection of key-value pairs containing descriptive information for the session, such as information about the session creator.                                                                                                                                                                                                                                                                                      |
+| » **additionalProperties** | string                                                            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| debug_on_failure           | boolean                                                           | false    | none         | When true, the ansible container for the session will remain running after an Ansible failure.  The container will remain running for a number of seconds specified by the debug_wait_time options, or until complete flag is touched.                                                                                                                                                                                  |
+| logs                       | string                                                            | false    | read-only    | The link to the ARA UI with logs for this component                                                                                                                                                                                                                                                                                                                                                                     |
 
 <h2 id="tocS_V2SessionCreate">V2SessionCreate</h2>
 <!-- backwards compatibility -->
@@ -6503,18 +6503,18 @@ The information required to create a Config Framework Session.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|true|none|Name of the session. The length of the name is restricted to 45 characters.|
-|configurationName|string|true|none|The name of a CFS configuration to apply|
-|configurationLimit|string|false|none|A comma separated list of layers in the configuration to limit the session to. This can be either a list of named layers, or a list of indices.|
-|ansibleLimit|string|false|none|Additional filtering of hosts or groups from the inventory to run against. This is especially useful when running with dynamic inventory and when you want to run on a subset of nodes or groups. This option corresponds to ansible-playbook's --limit and can be used to specify nodes or groups.|
-|ansibleConfig|string|false|none|The Kubernetes ConfigMap which holds the ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service. If no value is given, the value of the defaultAnsibleConfig field in the /options endpoint will be used.|
-|ansibleVerbosity|integer|false|none|The verbose mode to use in the call to the ansible-playbook command. 1 = -v, 2 = -vv, etc. Valid values range from 0 to 4. See the ansible-playbook help for more information.|
-|ansiblePassthrough|string|false|none|Additional parameters that are added to all Ansible calls for the session. This field is currently limited to the following Ansible parameters: "--extra-vars", "--forks", "--skip-tags", "--start-at-task", and "--tags". WARNING: Parameters passed to Ansible in this way should be used with caution.  State will not be recorded for components when using these flags to avoid incorrect reporting of partial playbook runs.|
-|target|[SessionTargetSection](#schemasessiontargetsection)|false|none|A target lets you define the nodes or images that you want to customize and consists of two sub-parameters - Definition and groups. By default, Configuration Framework Sessions use dynamic inventory definition to target hosts. When using a session to customize an image, or if a static inventory is required, use this optional section to specify entities (whether images or nodes) for the session to target.|
-|tags|object|false|none|A collection of key-value pairs containing descriptive information for the session, such as information about the session creator.|
-|» **additionalProperties**|string|false|none|none|
+| Name                       | Type                                                | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|----------------------------|-----------------------------------------------------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                       | string                                              | true     | none         | Name of the session. The length of the name is restricted to 45 characters.                                                                                                                                                                                                                                                                                                                                                        |
+| configurationName          | string                                              | true     | none         | The name of a CFS configuration to apply                                                                                                                                                                                                                                                                                                                                                                                           |
+| configurationLimit         | string                                              | false    | none         | A comma separated list of layers in the configuration to limit the session to. This can be either a list of named layers, or a list of indices.                                                                                                                                                                                                                                                                                    |
+| ansibleLimit               | string                                              | false    | none         | Additional filtering of hosts or groups from the inventory to run against. This is especially useful when running with dynamic inventory and when you want to run on a subset of nodes or groups. This option corresponds to ansible-playbook's --limit and can be used to specify nodes or groups.                                                                                                                                |
+| ansibleConfig              | string                                              | false    | none         | The Kubernetes ConfigMap which holds the ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service. If no value is given, the value of the defaultAnsibleConfig field in the /options endpoint will be used.                                                                                                                                                         |
+| ansibleVerbosity           | integer                                             | false    | none         | The verbose mode to use in the call to the ansible-playbook command. 1 = -v, 2 = -vv, etc. Valid values range from 0 to 4. See the ansible-playbook help for more information.                                                                                                                                                                                                                                                     |
+| ansiblePassthrough         | string                                              | false    | none         | Additional parameters that are added to all Ansible calls for the session. This field is currently limited to the following Ansible parameters: "--extra-vars", "--forks", "--skip-tags", "--start-at-task", and "--tags". WARNING: Parameters passed to Ansible in this way should be used with caution.  State will not be recorded for components when using these flags to avoid incorrect reporting of partial playbook runs. |
+| target                     | [SessionTargetSection](#schemasessiontargetsection) | false    | none         | A target lets you define the nodes or images that you want to customize and consists of two sub-parameters - Definition and groups. By default, Configuration Framework Sessions use dynamic inventory definition to target hosts. When using a session to customize an image, or if a static inventory is required, use this optional section to specify entities (whether images or nodes) for the session to target.            |
+| tags                       | object                                              | false    | none         | A collection of key-value pairs containing descriptive information for the session, such as information about the session creator.                                                                                                                                                                                                                                                                                                 |
+| » **additionalProperties** | string                                              | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 <h2 id="tocS_V3SessionCreate">V3SessionCreate</h2>
 <!-- backwards compatibility -->
@@ -6564,19 +6564,19 @@ The information required to create a Config Framework Session.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|true|none|Name of the session. The length of the name is restricted to 45 characters.|
-|configuration_name|string|true|none|The name of a CFS configuration to apply|
-|configuration_limit|string|false|none|A comma separated list of layers in the configuration to limit the session to. This can be either a list of named layers, or a list of indices.|
-|ansible_limit|string|false|none|Additional filtering of hosts or groups from the inventory to run against. This is especially useful when running with dynamic inventory and when you want to run on a subset of nodes or groups. This option corresponds to ansible-playbook's --limit and can be used to specify nodes or groups.|
-|ansible_config|string|false|none|The Kubernetes ConfigMap which holds the ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service. If no value is given, the value of the defaultAnsibleConfig field in the /options endpoint will be used.|
-|ansible_verbosity|integer|false|none|The verbose mode to use in the call to the ansible-playbook command. 1 = -v, 2 = -vv, etc. Valid values range from 0 to 4. See the ansible-playbook help for more information.|
-|ansible_passthrough|string|false|none|Additional parameters that are added to all Ansible calls for the session. This field is currently limited to the following Ansible parameters: "--extra-vars", "--forks", "--skip-tags", "--start-at-task", and "--tags". WARNING: Parameters passed to Ansible in this way should be used with caution.  State will not be recorded for components when using these flags to avoid incorrect reporting of partial playbook runs.|
-|target|[SessionTargetSection](#schemasessiontargetsection)|false|none|A target lets you define the nodes or images that you want to customize and consists of two sub-parameters - Definition and groups. By default, Configuration Framework Sessions use dynamic inventory definition to target hosts. When using a session to customize an image, or if a static inventory is required, use this optional section to specify entities (whether images or nodes) for the session to target.|
-|tags|object|false|none|A collection of key-value pairs containing descriptive information for the session, such as information about the session creator.|
-|» **additionalProperties**|string|false|none|none|
-|debug_on_failure|boolean|false|none|When true, the ansible container for the session will remain running after an Ansible failure.  The container will remain running for a number of seconds specified by the debug_wait_time options, or until complete flag is touched.|
+| Name                       | Type                                                | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|----------------------------|-----------------------------------------------------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                       | string                                              | true     | none         | Name of the session. The length of the name is restricted to 45 characters.                                                                                                                                                                                                                                                                                                                                                        |
+| configuration_name         | string                                              | true     | none         | The name of a CFS configuration to apply                                                                                                                                                                                                                                                                                                                                                                                           |
+| configuration_limit        | string                                              | false    | none         | A comma separated list of layers in the configuration to limit the session to. This can be either a list of named layers, or a list of indices.                                                                                                                                                                                                                                                                                    |
+| ansible_limit              | string                                              | false    | none         | Additional filtering of hosts or groups from the inventory to run against. This is especially useful when running with dynamic inventory and when you want to run on a subset of nodes or groups. This option corresponds to ansible-playbook's --limit and can be used to specify nodes or groups.                                                                                                                                |
+| ansible_config             | string                                              | false    | none         | The Kubernetes ConfigMap which holds the ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service. If no value is given, the value of the defaultAnsibleConfig field in the /options endpoint will be used.                                                                                                                                                         |
+| ansible_verbosity          | integer                                             | false    | none         | The verbose mode to use in the call to the ansible-playbook command. 1 = -v, 2 = -vv, etc. Valid values range from 0 to 4. See the ansible-playbook help for more information.                                                                                                                                                                                                                                                     |
+| ansible_passthrough        | string                                              | false    | none         | Additional parameters that are added to all Ansible calls for the session. This field is currently limited to the following Ansible parameters: "--extra-vars", "--forks", "--skip-tags", "--start-at-task", and "--tags". WARNING: Parameters passed to Ansible in this way should be used with caution.  State will not be recorded for components when using these flags to avoid incorrect reporting of partial playbook runs. |
+| target                     | [SessionTargetSection](#schemasessiontargetsection) | false    | none         | A target lets you define the nodes or images that you want to customize and consists of two sub-parameters - Definition and groups. By default, Configuration Framework Sessions use dynamic inventory definition to target hosts. When using a session to customize an image, or if a static inventory is required, use this optional section to specify entities (whether images or nodes) for the session to target.            |
+| tags                       | object                                              | false    | none         | A collection of key-value pairs containing descriptive information for the session, such as information about the session creator.                                                                                                                                                                                                                                                                                                 |
+| » **additionalProperties** | string                                              | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| debug_on_failure           | boolean                                             | false    | none         | When true, the ansible container for the session will remain running after an Ansible failure.  The container will remain running for a number of seconds specified by the debug_wait_time options, or until complete flag is touched.                                                                                                                                                                                             |
 
 <h2 id="tocS_V2SessionArray">V2SessionArray</h2>
 <!-- backwards compatibility -->
@@ -6647,9 +6647,9 @@ An array of sessions.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[V2Session](#schemav2session)]|false|none|An array of sessions.|
+| Name        | Type                            | Required | Restrictions | Description           |
+|-------------|---------------------------------|----------|--------------|-----------------------|
+| *anonymous* | [[V2Session](#schemav2session)] | false    | none         | An array of sessions. |
 
 <h2 id="tocS_V3SessionDataCollection">V3SessionDataCollection</h2>
 <!-- backwards compatibility -->
@@ -6729,10 +6729,10 @@ A collection of session data.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|components|[[V3SessionData](#schemav3sessiondata)]|false|none|[An execution session for the Configuration Framework.<br>]|
-|next|[V3NextData](#schemav3nextdata)|false|none|Information for requesting the next page of data|
+| Name       | Type                                    | Required | Restrictions | Description                                                 |
+|------------|-----------------------------------------|----------|--------------|-------------------------------------------------------------|
+| components | [[V3SessionData](#schemav3sessiondata)] | false    | none         | [An execution session for the Configuration Framework.<br>] |
+| next       | [V3NextData](#schemav3nextdata)         | false    | none         | Information for requesting the next page of data            |
 
 <h2 id="tocS_V3SessionIdCollection">V3SessionIdCollection</h2>
 <!-- backwards compatibility -->
@@ -6808,9 +6808,9 @@ A collection of session data.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|session_ids|[[V3SessionData](#schemav3sessiondata)]|false|none|[An execution session for the Configuration Framework.<br>]|
+| Name        | Type                                    | Required | Restrictions | Description                                                 |
+|-------------|-----------------------------------------|----------|--------------|-------------------------------------------------------------|
+| session_ids | [[V3SessionData](#schemav3sessiondata)] | false    | none         | [An execution session for the Configuration Framework.<br>] |
 
 <h2 id="tocS_V2AdditionalInventoryLayer">V2AdditionalInventoryLayer</h2>
 <!-- backwards compatibility -->
@@ -6833,12 +6833,12 @@ An inventory reference to include in a set of configurations.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|false|none|The name of the inventory layer.|
-|cloneUrl|string|true|none|The clone URL of the configuration content repository.|
-|commit|string|false|none|The commit hash of the configuration repository when the state is set.|
-|branch|string|false|none|The repository branch to use. This will automatically set `commit` to master on the branch<br>when the configuration is added.|
+| Name     | Type   | Required | Restrictions | Description                                                                                                                    |
+|----------|--------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------|
+| name     | string | false    | none         | The name of the inventory layer.                                                                                               |
+| cloneUrl | string | true     | none         | The clone URL of the configuration content repository.                                                                         |
+| commit   | string | false    | none         | The commit hash of the configuration repository when the state is set.                                                         |
+| branch   | string | false    | none         | The repository branch to use. This will automatically set `commit` to master on the branch<br>when the configuration is added. |
 
 <h2 id="tocS_V3AdditionalInventoryLayer">V3AdditionalInventoryLayer</h2>
 <!-- backwards compatibility -->
@@ -6861,12 +6861,12 @@ An inventory reference to include in a set of configurations.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|false|none|The name of the inventory layer.|
-|clone_url|string|true|none|The clone URL of the configuration content repository.|
-|commit|string|false|none|The commit hash of the configuration repository when the state is set.|
-|branch|string|false|none|The repository branch to use. This will automatically set `commit` to master on the branch<br>when the configuration is added.|
+| Name      | Type   | Required | Restrictions | Description                                                                                                                    |
+|-----------|--------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------|
+| name      | string | false    | none         | The name of the inventory layer.                                                                                               |
+| clone_url | string | true     | none         | The clone URL of the configuration content repository.                                                                         |
+| commit    | string | false    | none         | The commit hash of the configuration repository when the state is set.                                                         |
+| branch    | string | false    | none         | The repository branch to use. This will automatically set `commit` to master on the branch<br>when the configuration is added. |
 
 <h2 id="tocS_V2ConfigurationLayer">V2ConfigurationLayer</h2>
 <!-- backwards compatibility -->
@@ -6893,15 +6893,15 @@ A single desired configuration state for a component.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|false|none|The name of the configuration layer.|
-|cloneUrl|string|true|none|The clone URL of the configuration content repository.|
-|playbook|string|false|none|The Ansible playbook to run.|
-|commit|string|false|none|The commit hash of the configuration repository when the state is set.|
-|branch|string|false|none|The configuration branch to use.  This will automatically set commit to master on the branch<br>when the configuration is added.|
-|specialParameters|object|false|none|Optional parameters that do not affect the configuration content or are only used in<br>special circumstances.|
-|» imsRequireDkms|boolean|false|none|If true, any image customization sessions that use this configuration will enable DKMS in IMS.|
+| Name              | Type    | Required | Restrictions | Description                                                                                                                      |
+|-------------------|---------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------|
+| name              | string  | false    | none         | The name of the configuration layer.                                                                                             |
+| cloneUrl          | string  | true     | none         | The clone URL of the configuration content repository.                                                                           |
+| playbook          | string  | false    | none         | The Ansible playbook to run.                                                                                                     |
+| commit            | string  | false    | none         | The commit hash of the configuration repository when the state is set.                                                           |
+| branch            | string  | false    | none         | The configuration branch to use.  This will automatically set commit to master on the branch<br>when the configuration is added. |
+| specialParameters | object  | false    | none         | Optional parameters that do not affect the configuration content or are only used in<br>special circumstances.                   |
+| » imsRequireDkms  | boolean | false    | none         | If true, any image customization sessions that use this configuration will enable DKMS in IMS.                                   |
 
 <h2 id="tocS_V3ConfigurationLayer">V3ConfigurationLayer</h2>
 <!-- backwards compatibility -->
@@ -6925,13 +6925,13 @@ A single desired configuration state for a component.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|false|none|The name of the configuration layer.|
-|clone_url|string|true|none|The clone URL of the configuration content repository.|
-|playbook|string|true|none|The Ansible playbook to run.|
-|commit|string|false|none|The commit hash of the configuration repository when the state is set.|
-|branch|string|false|none|The configuration branch to use.  This will automatically set commit to master on the branch<br>when the configuration is added.|
+| Name      | Type   | Required | Restrictions | Description                                                                                                                      |
+|-----------|--------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------|
+| name      | string | false    | none         | The name of the configuration layer.                                                                                             |
+| clone_url | string | true     | none         | The clone URL of the configuration content repository.                                                                           |
+| playbook  | string | true     | none         | The Ansible playbook to run.                                                                                                     |
+| commit    | string | false    | none         | The commit hash of the configuration repository when the state is set.                                                           |
+| branch    | string | false    | none         | The configuration branch to use.  This will automatically set commit to master on the branch<br>when the configuration is added. |
 
 <h2 id="tocS_V2Configuration">V2Configuration</h2>
 <!-- backwards compatibility -->
@@ -6971,13 +6971,13 @@ A collection of ConfigurationLayers.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|false|read-only|The name of the configuration.|
-|description|string|false|none|A user-defined description. This field is not used by CFS.|
-|lastUpdated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
-|layers|[[V2ConfigurationLayer](#schemav2configurationlayer)]|false|none|A list of ConfigurationLayer(s).|
-|additional_inventory|[V2AdditionalInventoryLayer](#schemav2additionalinventorylayer)|false|none|An inventory reference to include in a set of configurations.|
+| Name                 | Type                                                            | Required | Restrictions | Description                                                       |
+|----------------------|-----------------------------------------------------------------|----------|--------------|-------------------------------------------------------------------|
+| name                 | string                                                          | false    | read-only    | The name of the configuration.                                    |
+| description          | string                                                          | false    | none         | A user-defined description. This field is not used by CFS.        |
+| lastUpdated          | string(date-time)                                               | false    | read-only    | The date/time when the state was last updated in RFC 3339 format. |
+| layers               | [[V2ConfigurationLayer](#schemav2configurationlayer)]           | false    | none         | A list of ConfigurationLayer(s).                                  |
+| additional_inventory | [V2AdditionalInventoryLayer](#schemav2additionalinventorylayer) | false    | none         | An inventory reference to include in a set of configurations.     |
 
 <h2 id="tocS_V3ConfigurationData">V3ConfigurationData</h2>
 <!-- backwards compatibility -->
@@ -7014,13 +7014,13 @@ A collection of ConfigurationLayers.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|false|read-only|The name of the configuration.|
-|description|string|false|none|A user-defined description. This field is not used by CFS.|
-|last_updated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
-|layers|[[V3ConfigurationLayer](#schemav3configurationlayer)]|false|none|A list of ConfigurationLayer(s).|
-|additional_inventory|[V3AdditionalInventoryLayer](#schemav3additionalinventorylayer)|false|none|An inventory reference to include in a set of configurations.|
+| Name                 | Type                                                            | Required | Restrictions | Description                                                       |
+|----------------------|-----------------------------------------------------------------|----------|--------------|-------------------------------------------------------------------|
+| name                 | string                                                          | false    | read-only    | The name of the configuration.                                    |
+| description          | string                                                          | false    | none         | A user-defined description. This field is not used by CFS.        |
+| last_updated         | string(date-time)                                               | false    | read-only    | The date/time when the state was last updated in RFC 3339 format. |
+| layers               | [[V3ConfigurationLayer](#schemav3configurationlayer)]           | false    | none         | A list of ConfigurationLayer(s).                                  |
+| additional_inventory | [V3AdditionalInventoryLayer](#schemav3additionalinventorylayer) | false    | none         | An inventory reference to include in a set of configurations.     |
 
 <h2 id="tocS_V2ConfigurationArray">V2ConfigurationArray</h2>
 <!-- backwards compatibility -->
@@ -7062,9 +7062,9 @@ An array of configurations.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[V2Configuration](#schemav2configuration)]|false|none|An array of configurations.|
+| Name        | Type                                        | Required | Restrictions | Description                 |
+|-------------|---------------------------------------------|----------|--------------|-----------------------------|
+| *anonymous* | [[V2Configuration](#schemav2configuration)] | false    | none         | An array of configurations. |
 
 <h2 id="tocS_V3ConfigurationDataCollection">V3ConfigurationDataCollection</h2>
 <!-- backwards compatibility -->
@@ -7109,10 +7109,10 @@ A collection of configuration data.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|components|[[V3ConfigurationData](#schemav3configurationdata)]|false|none|[A collection of ConfigurationLayers.]|
-|next|[V3NextData](#schemav3nextdata)|false|none|Information for requesting the next page of data|
+| Name       | Type                                                | Required | Restrictions | Description                                      |
+|------------|-----------------------------------------------------|----------|--------------|--------------------------------------------------|
+| components | [[V3ConfigurationData](#schemav3configurationdata)] | false    | none         | [A collection of ConfigurationLayers.]           |
+| next       | [V3NextData](#schemav3nextdata)                     | false    | none         | Information for requesting the next page of data |
 
 <h2 id="tocS_V2ComponentsFilter">V2ComponentsFilter</h2>
 <!-- backwards compatibility -->
@@ -7136,22 +7136,22 @@ Information for patching multiple components.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|ids|string|false|none|A comma-separated list of component IDs|
-|status|string|false|none|All components with this status will be patched.|
-|enabled|boolean|false|none|Patches all components with the given "enabled" state.|
-|configName|string|false|none|A configuration name.  All components with this configuration set will be patched.|
-|tags|string|false|none|Patches all components with the given tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list.  Only components that match all tags will be patched.|
+| Name       | Type    | Required | Restrictions | Description                                                                                                                                                                             |
+|------------|---------|----------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ids        | string  | false    | none         | A comma-separated list of component IDs                                                                                                                                                 |
+| status     | string  | false    | none         | All components with this status will be patched.                                                                                                                                        |
+| enabled    | boolean | false    | none         | Patches all components with the given "enabled" state.                                                                                                                                  |
+| configName | string  | false    | none         | A configuration name.  All components with this configuration set will be patched.                                                                                                      |
+| tags       | string  | false    | none         | Patches all components with the given tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list.  Only components that match all tags will be patched. |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|status|unconfigured|
-|status|pending|
-|status|failed|
-|status|configured|
+| Property | Value        |
+|----------|--------------|
+| status   | unconfigured |
+| status   | pending      |
+| status   | failed       |
+| status   | configured   |
 
 <h2 id="tocS_V3ComponentsFilter">V3ComponentsFilter</h2>
 <!-- backwards compatibility -->
@@ -7175,23 +7175,23 @@ Information for patching multiple components.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|ids|string|false|none|A comma-separated list of component IDs|
-|status|string|false|none|All components with this status will be patched.|
-|enabled|boolean|false|none|Patches all components with the given "enabled" state.|
-|config_name|string|false|none|A configuration name.  All components with this configuration set will be patched.|
-|tags|string|false|none|Patches all components with the given tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list.  Only components that match all tags will be patched.|
+| Name        | Type    | Required | Restrictions | Description                                                                                                                                                                             |
+|-------------|---------|----------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ids         | string  | false    | none         | A comma-separated list of component IDs                                                                                                                                                 |
+| status      | string  | false    | none         | All components with this status will be patched.                                                                                                                                        |
+| enabled     | boolean | false    | none         | Patches all components with the given "enabled" state.                                                                                                                                  |
+| config_name | string  | false    | none         | A configuration name.  All components with this configuration set will be patched.                                                                                                      |
+| tags        | string  | false    | none         | Patches all components with the given tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list.  Only components that match all tags will be patched. |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|status|unconfigured|
-|status|pending|
-|status|failed|
-|status|configured|
-|status||
+| Property | Value        |
+|----------|--------------|
+| status   | unconfigured |
+| status   | pending      |
+| status   | failed       |
+| status   | configured   |
+| status   |              |
 
 <h2 id="tocS_V2ConfigurationStateLayer">V2ConfigurationStateLayer</h2>
 <!-- backwards compatibility -->
@@ -7215,13 +7215,13 @@ The current configuration state for a component.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|cloneUrl|string|false|none|The clone URL of the configuration content repository.|
-|playbook|string|false|none|The Ansible playbook to run.|
-|commit|string|false|none|The commit hash of the configuration repository when the state is set.|
-|lastUpdated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
-|sessionName|string|false|none|The name of the CFS session that last configured the component.|
+| Name        | Type              | Required | Restrictions | Description                                                            |
+|-------------|-------------------|----------|--------------|------------------------------------------------------------------------|
+| cloneUrl    | string            | false    | none         | The clone URL of the configuration content repository.                 |
+| playbook    | string            | false    | none         | The Ansible playbook to run.                                           |
+| commit      | string            | false    | none         | The commit hash of the configuration repository when the state is set. |
+| lastUpdated | string(date-time) | false    | read-only    | The date/time when the state was last updated in RFC 3339 format.      |
+| sessionName | string            | false    | none         | The name of the CFS session that last configured the component.        |
 
 <h2 id="tocS_V3ConfigurationStateLayer">V3ConfigurationStateLayer</h2>
 <!-- backwards compatibility -->
@@ -7246,22 +7246,22 @@ The current configuration state for a component.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|clone_url|string|false|none|The clone URL of the configuration content repository.|
-|playbook|string|false|none|The Ansible playbook to run.|
-|commit|string|false|none|The commit hash of the configuration repository when the state is set.|
-|status|string|false|none|The status of the configuration layer.|
-|last_updated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
-|session_name|string|false|none|The name of the CFS session that last configured the component.|
+| Name         | Type              | Required | Restrictions | Description                                                            |
+|--------------|-------------------|----------|--------------|------------------------------------------------------------------------|
+| clone_url    | string            | false    | none         | The clone URL of the configuration content repository.                 |
+| playbook     | string            | false    | none         | The Ansible playbook to run.                                           |
+| commit       | string            | false    | none         | The commit hash of the configuration repository when the state is set. |
+| status       | string            | false    | none         | The status of the configuration layer.                                 |
+| last_updated | string(date-time) | false    | read-only    | The date/time when the state was last updated in RFC 3339 format.      |
+| session_name | string            | false    | none         | The name of the CFS session that last configured the component.        |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|status|applied|
-|status|failed|
-|status|skipped|
+| Property | Value   |
+|----------|---------|
+| status   | applied |
+| status   | failed  |
+| status   | skipped |
 
 <h2 id="tocS_V2ComponentState">V2ComponentState</h2>
 <!-- backwards compatibility -->
@@ -7315,28 +7315,28 @@ The configuration state and desired state for a component.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|id|string|false|none|The component's id. e.g. xname for hardware components|
-|state|[[V2ConfigurationStateLayer](#schemav2configurationstatelayer)]|false|none|Information about the desired config and status of the layers|
-|stateAppend|[V2ConfigurationStateLayer](#schemav2configurationstatelayer)|false|none|A single state that will be appended to the list of current states.|
-|desiredConfig|string|false|none|A reference to a configuration|
-|desiredState|[[V2ConfigurationStateLayer](#schemav2configurationstatelayer)]|false|read-only|Information about the desired config and status of the layers|
-|errorCount|integer|false|none|The count of failed configuration attempts.|
-|retryPolicy|integer|false|none|The maximum number retries per component when configuration fails.|
-|enabled|boolean|false|none|A flag indicating if the component should be scheduled for configuration.|
-|configurationStatus|string|false|read-only|A summary of the component's configuration state.|
-|tags|object|false|none|A collection of key-value pairs containing descriptive information for the component, such as information about the component owner.|
-|» **additionalProperties**|string|false|none|none|
+| Name                       | Type                                                            | Required | Restrictions | Description                                                                                                                          |
+|----------------------------|-----------------------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| id                         | string                                                          | false    | none         | The component's id. e.g. xname for hardware components                                                                               |
+| state                      | [[V2ConfigurationStateLayer](#schemav2configurationstatelayer)] | false    | none         | Information about the desired config and status of the layers                                                                        |
+| stateAppend                | [V2ConfigurationStateLayer](#schemav2configurationstatelayer)   | false    | none         | A single state that will be appended to the list of current states.                                                                  |
+| desiredConfig              | string                                                          | false    | none         | A reference to a configuration                                                                                                       |
+| desiredState               | [[V2ConfigurationStateLayer](#schemav2configurationstatelayer)] | false    | read-only    | Information about the desired config and status of the layers                                                                        |
+| errorCount                 | integer                                                         | false    | none         | The count of failed configuration attempts.                                                                                          |
+| retryPolicy                | integer                                                         | false    | none         | The maximum number retries per component when configuration fails.                                                                   |
+| enabled                    | boolean                                                         | false    | none         | A flag indicating if the component should be scheduled for configuration.                                                            |
+| configurationStatus        | string                                                          | false    | read-only    | A summary of the component's configuration state.                                                                                    |
+| tags                       | object                                                          | false    | none         | A collection of key-value pairs containing descriptive information for the component, such as information about the component owner. |
+| » **additionalProperties** | string                                                          | false    | none         | none                                                                                                                                 |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|configurationStatus|unconfigured|
-|configurationStatus|pending|
-|configurationStatus|failed|
-|configurationStatus|configured|
+| Property            | Value        |
+|---------------------|--------------|
+| configurationStatus | unconfigured |
+| configurationStatus | pending      |
+| configurationStatus | failed       |
+| configurationStatus | configured   |
 
 <h2 id="tocS_V3ComponentData">V3ComponentData</h2>
 <!-- backwards compatibility -->
@@ -7394,29 +7394,29 @@ The configuration state and desired state for a component.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|id|string|false|none|The component's id. e.g. xname for hardware components|
-|state|[[V3ConfigurationStateLayer](#schemav3configurationstatelayer)]|false|none|Information about the desired config and status of the layers|
-|state_append|[V3ConfigurationStateLayer](#schemav3configurationstatelayer)|false|none|A single state that will be appended to the list of current states.|
-|desired_config|string|false|none|A reference to a configuration|
-|desired_state|[[V3ConfigurationStateLayer](#schemav3configurationstatelayer)]|false|read-only|Information about the desired config and status of the layers|
-|error_count|integer|false|none|The count of failed configuration attempts.|
-|retry_policy|integer|false|none|The maximum number retries per component when configuration fails.|
-|enabled|boolean|false|none|A flag indicating if the component should be scheduled for configuration.|
-|configuration_status|string|false|read-only|A summary of the component's configuration state.|
-|tags|object|false|none|A collection of key-value pairs containing descriptive information for the component, such as information about the component owner.|
-|» **additionalProperties**|string|false|none|none|
-|logs|string|false|read-only|The link to the ARA UI with logs for this component|
+| Name                       | Type                                                            | Required | Restrictions | Description                                                                                                                          |
+|----------------------------|-----------------------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| id                         | string                                                          | false    | none         | The component's id. e.g. xname for hardware components                                                                               |
+| state                      | [[V3ConfigurationStateLayer](#schemav3configurationstatelayer)] | false    | none         | Information about the desired config and status of the layers                                                                        |
+| state_append               | [V3ConfigurationStateLayer](#schemav3configurationstatelayer)   | false    | none         | A single state that will be appended to the list of current states.                                                                  |
+| desired_config             | string                                                          | false    | none         | A reference to a configuration                                                                                                       |
+| desired_state              | [[V3ConfigurationStateLayer](#schemav3configurationstatelayer)] | false    | read-only    | Information about the desired config and status of the layers                                                                        |
+| error_count                | integer                                                         | false    | none         | The count of failed configuration attempts.                                                                                          |
+| retry_policy               | integer                                                         | false    | none         | The maximum number retries per component when configuration fails.                                                                   |
+| enabled                    | boolean                                                         | false    | none         | A flag indicating if the component should be scheduled for configuration.                                                            |
+| configuration_status       | string                                                          | false    | read-only    | A summary of the component's configuration state.                                                                                    |
+| tags                       | object                                                          | false    | none         | A collection of key-value pairs containing descriptive information for the component, such as information about the component owner. |
+| » **additionalProperties** | string                                                          | false    | none         | none                                                                                                                                 |
+| logs                       | string                                                          | false    | read-only    | The link to the ARA UI with logs for this component                                                                                  |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|configuration_status|unconfigured|
-|configuration_status|pending|
-|configuration_status|failed|
-|configuration_status|configured|
+| Property             | Value        |
+|----------------------|--------------|
+| configuration_status | unconfigured |
+| configuration_status | pending      |
+| configuration_status | failed       |
+| configuration_status | configured   |
 
 <h2 id="tocS_V2ComponentStateArray">V2ComponentStateArray</h2>
 <!-- backwards compatibility -->
@@ -7472,9 +7472,9 @@ An array of component configurations.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[V2ComponentState](#schemav2componentstate)]|false|none|An array of component configurations.|
+| Name        | Type                                          | Required | Restrictions | Description                           |
+|-------------|-----------------------------------------------|----------|--------------|---------------------------------------|
+| *anonymous* | [[V2ComponentState](#schemav2componentstate)] | false    | none         | An array of component configurations. |
 
 <h2 id="tocS_V3ComponentDataArray">V3ComponentDataArray</h2>
 <!-- backwards compatibility -->
@@ -7534,9 +7534,9 @@ An array of component configurations.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[V3ComponentData](#schemav3componentdata)]|false|none|An array of component configurations.|
+| Name        | Type                                        | Required | Restrictions | Description                           |
+|-------------|---------------------------------------------|----------|--------------|---------------------------------------|
+| *anonymous* | [[V3ComponentData](#schemav3componentdata)] | false    | none         | An array of component configurations. |
 
 <h2 id="tocS_V3ComponentDataCollection">V3ComponentDataCollection</h2>
 <!-- backwards compatibility -->
@@ -7602,10 +7602,10 @@ A collection of component data.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|components|[[V3ComponentData](#schemav3componentdata)]|false|none|[The configuration state and desired state for a component.<br>]|
-|next|[V3NextData](#schemav3nextdata)|false|none|Information for requesting the next page of data|
+| Name       | Type                                        | Required | Restrictions | Description                                                      |
+|------------|---------------------------------------------|----------|--------------|------------------------------------------------------------------|
+| components | [[V3ComponentData](#schemav3componentdata)] | false    | none         | [The configuration state and desired state for a component.<br>] |
+| next       | [V3NextData](#schemav3nextdata)             | false    | none         | Information for requesting the next page of data                 |
 
 <h2 id="tocS_V3ComponentIdCollection">V3ComponentIdCollection</h2>
 <!-- backwards compatibility -->
@@ -7627,9 +7627,9 @@ A collection of component ids.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|component_ids|[string]|false|none|none|
+| Name          | Type     | Required | Restrictions | Description |
+|---------------|----------|----------|--------------|-------------|
+| component_ids | [string] | false    | none         | none        |
 
 <h2 id="tocS_V2ComponentsUpdate">V2ComponentsUpdate</h2>
 <!-- backwards compatibility -->
@@ -7692,10 +7692,10 @@ Information for patching multiple components.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|patch|[V2ComponentState](#schemav2componentstate)|true|none|The configuration state and desired state for a component.|
-|filters|[V2ComponentsFilter](#schemav2componentsfilter)|true|none|Information for patching multiple components.|
+| Name    | Type                                            | Required | Restrictions | Description                                                |
+|---------|-------------------------------------------------|----------|--------------|------------------------------------------------------------|
+| patch   | [V2ComponentState](#schemav2componentstate)     | true     | none         | The configuration state and desired state for a component. |
+| filters | [V2ComponentsFilter](#schemav2componentsfilter) | true     | none         | Information for patching multiple components.              |
 
 <h2 id="tocS_V3ComponentsUpdate">V3ComponentsUpdate</h2>
 <!-- backwards compatibility -->
@@ -7762,10 +7762,10 @@ Information for patching multiple components.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|patch|[V3ComponentData](#schemav3componentdata)|true|none|The configuration state and desired state for a component.|
-|filters|[V3ComponentsFilter](#schemav3componentsfilter)|true|none|Information for patching multiple components.|
+| Name    | Type                                            | Required | Restrictions | Description                                                |
+|---------|-------------------------------------------------|----------|--------------|------------------------------------------------------------|
+| patch   | [V3ComponentData](#schemav3componentdata)       | true     | none         | The configuration state and desired state for a component. |
+| filters | [V3ComponentsFilter](#schemav3componentsfilter) | true     | none         | Information for patching multiple components.              |
 
 <h2 id="tocS_ProblemDetails">ProblemDetails</h2>
 <!-- backwards compatibility -->
@@ -7789,11 +7789,11 @@ An error response for RFC 7807 problem details.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|type|string(uri)|false|none|Relative URI reference to the type of problem which includes human readable documentation.|
-|title|string|false|none|Short, human-readable summary of the problem, should not change by occurrence.|
-|status|integer|false|none|HTTP status code|
-|instance|string(uri)|false|none|A relative URI reference that identifies the specific occurrence of the problem|
-|detail|string|false|none|A human-readable explanation specific to this occurrence of the problem. Focus on helping correct the problem, rather than giving debugging information.|
+| Name     | Type        | Required | Restrictions | Description                                                                                                                                              |
+|----------|-------------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| type     | string(uri) | false    | none         | Relative URI reference to the type of problem which includes human readable documentation.                                                               |
+| title    | string      | false    | none         | Short, human-readable summary of the problem, should not change by occurrence.                                                                           |
+| status   | integer     | false    | none         | HTTP status code                                                                                                                                         |
+| instance | string(uri) | false    | none         | A relative URI reference that identifies the specific occurrence of the problem                                                                          |
+| detail   | string      | false    | none         | A human-readable explanation specific to this occurrence of the problem. Focus on helping correct the problem, rather than giving debugging information. |
 

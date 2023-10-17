@@ -48,11 +48,11 @@ For more information about the pods displayed in the output above:
 The table below describes what the status of each pod means for the health of the `cray-dns-unbound` services and pods. The `Init` and `NotReady` states are not necessarily bad;
 they mean that the pod is being started or is processing. The `cray-dns-manager` and `cray-dns-coredns` pods for `cray-dns-unbound` are job pods that run periodically.
 
-|Pod|Healthy Status|Error Status|Other|
-|---|--------------|------------|-----|
-|`cray-dns-unbound`|`Running`|`CrashBackOffLoop`||
-|`cray-dns-coredns`|`Completed`|`CrashBackOffLoop`|`InitNotReady`|
-|`cray-dns-manager`|`Completed`|`CrashBackOffLoop`|`InitNotReady`|
+| Pod                | Healthy Status | Error Status       | Other          |
+|--------------------|----------------|--------------------|----------------|
+| `cray-dns-unbound` | `Running`      | `CrashBackOffLoop` |                |
+| `cray-dns-coredns` | `Completed`    | `CrashBackOffLoop` | `InitNotReady` |
+| `cray-dns-manager` | `Completed`    | `CrashBackOffLoop` | `InitNotReady` |
 
 ## Unbound logs
 

@@ -88,9 +88,9 @@ func main() {
 
 <h3 id="post__nls_v1_ncns_reboot-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[models.CreateRebootWorkflowRequest](#schemamodels.createrebootworkflowrequest)|true|hostnames to include|
+| Name | In   | Type                                                                            | Required | Description          |
+|------|------|---------------------------------------------------------------------------------|----------|----------------------|
+| body | body | [models.CreateRebootWorkflowRequest](#schemamodels.createrebootworkflowrequest) | true     | hostnames to include |
 
 > Example responses
 
@@ -107,12 +107,12 @@ func main() {
 
 <h3 id="post__nls_v1_ncns_reboot-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[models.CreateRebootWorkflowResponse](#schemamodels.createrebootworkflowresponse)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ResponseError](#schemaresponseerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
+| Status | Meaning                                                                    | Description           | Schema                                                                            |
+|--------|----------------------------------------------------------------------------|-----------------------|-----------------------------------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                    | [models.CreateRebootWorkflowResponse](#schemamodels.createrebootworkflowresponse) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request           | [ResponseError](#schemaresponseerror)                                             |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Not Found             | [ResponseError](#schemaresponseerror)                                             |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error | [ResponseError](#schemaresponseerror)                                             |
 
 <aside class="success">
 This operation does not require authentication
@@ -203,9 +203,9 @@ func main() {
 
 <h3 id="post__nls_v1_ncns_rebuild-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[models.CreateRebuildWorkflowRequest](#schemamodels.createrebuildworkflowrequest)|true|hostnames to include|
+| Name | In   | Type                                                                              | Required | Description          |
+|------|------|-----------------------------------------------------------------------------------|----------|----------------------|
+| body | body | [models.CreateRebuildWorkflowRequest](#schemamodels.createrebuildworkflowrequest) | true     | hostnames to include |
 
 > Example responses
 
@@ -222,12 +222,12 @@ func main() {
 
 <h3 id="post__nls_v1_ncns_rebuild-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[models.CreateRebuildWorkflowResponse](#schemamodels.createrebuildworkflowresponse)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ResponseError](#schemaresponseerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
+| Status | Meaning                                                                    | Description           | Schema                                                                              |
+|--------|----------------------------------------------------------------------------|-----------------------|-------------------------------------------------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                    | [models.CreateRebuildWorkflowResponse](#schemamodels.createrebuildworkflowresponse) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request           | [ResponseError](#schemaresponseerror)                                               |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Not Found             | [ResponseError](#schemaresponseerror)                                               |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error | [ResponseError](#schemaresponseerror)                                               |
 
 <aside class="success">
 This operation does not require authentication
@@ -296,9 +296,9 @@ func main() {
 
 <h3 id="get__nls_v1_workflows-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|labelSelector|query|string|false|Label Selector|
+| Name          | In    | Type   | Required | Description    |
+|---------------|-------|--------|----------|----------------|
+| labelSelector | query | string | false    | Label Selector |
 
 > Example responses
 
@@ -316,23 +316,23 @@ func main() {
 
 <h3 id="get__nls_v1_workflows-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ResponseError](#schemaresponseerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
+| Status | Meaning                                                                    | Description           | Schema                                |
+|--------|----------------------------------------------------------------------------|-----------------------|---------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                    | Inline                                |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request           | [ResponseError](#schemaresponseerror) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Not Found             | [ResponseError](#schemaresponseerror) |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error | [ResponseError](#schemaresponseerror) |
 
 <h3 id="get__nls_v1_workflows-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[models.GetWorkflowResponse](#schemamodels.getworkflowresponse)]|false|none|none|
-|» label|object|false|none|none|
-|» name|string|false|none|none|
-|» status|object|false|none|none|
+| Name        | Type                                                              | Required | Restrictions | Description |
+|-------------|-------------------------------------------------------------------|----------|--------------|-------------|
+| *anonymous* | [[models.GetWorkflowResponse](#schemamodels.getworkflowresponse)] | false    | none         | none        |
+| » label     | object                                                            | false    | none         | none        |
+| » name      | string                                                            | false    | none         | none        |
+| » status    | object                                                            | false    | none         | none        |
 
 <aside class="success">
 This operation does not require authentication
@@ -399,9 +399,9 @@ func main() {
 
 <h3 id="delete__nls_v1_workflows_{name}-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|name|path|string|true|name of workflow|
+| Name | In   | Type   | Required | Description      |
+|------|------|--------|----------|------------------|
+| name | path | string | true     | name of workflow |
 
 > Example responses
 
@@ -415,12 +415,12 @@ func main() {
 
 <h3 id="delete__nls_v1_workflows_{name}-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[ResponseOk](#schemaresponseok)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ResponseError](#schemaresponseerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
+| Status | Meaning                                                                    | Description           | Schema                                |
+|--------|----------------------------------------------------------------------------|-----------------------|---------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                    | [ResponseOk](#schemaresponseok)       |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request           | [ResponseError](#schemaresponseerror) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Not Found             | [ResponseError](#schemaresponseerror) |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error | [ResponseError](#schemaresponseerror) |
 
 <aside class="success">
 This operation does not require authentication
@@ -487,9 +487,9 @@ func main() {
 
 <h3 id="put__nls_v1_workflows_{name}_rerun-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|name|path|string|true|name of workflow|
+| Name | In   | Type   | Required | Description      |
+|------|------|--------|----------|------------------|
+| name | path | string | true     | name of workflow |
 
 > Example responses
 
@@ -503,12 +503,12 @@ func main() {
 
 <h3 id="put__nls_v1_workflows_{name}_rerun-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[ResponseOk](#schemaresponseok)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ResponseError](#schemaresponseerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
+| Status | Meaning                                                                    | Description           | Schema                                |
+|--------|----------------------------------------------------------------------------|-----------------------|---------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                    | [ResponseOk](#schemaresponseok)       |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request           | [ResponseError](#schemaresponseerror) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Not Found             | [ResponseError](#schemaresponseerror) |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error | [ResponseError](#schemaresponseerror) |
 
 <aside class="success">
 This operation does not require authentication
@@ -588,10 +588,10 @@ func main() {
 
 <h3 id="put__nls_v1_workflows_{name}_retry-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|name|path|string|true|name of workflow|
-|body|body|[models.RetryWorkflowRequestBody](#schemamodels.retryworkflowrequestbody)|true|retry options|
+| Name | In   | Type                                                                      | Required | Description      |
+|------|------|---------------------------------------------------------------------------|----------|------------------|
+| name | path | string                                                                    | true     | name of workflow |
+| body | body | [models.RetryWorkflowRequestBody](#schemamodels.retryworkflowrequestbody) | true     | retry options    |
 
 > Example responses
 
@@ -605,12 +605,12 @@ func main() {
 
 <h3 id="put__nls_v1_workflows_{name}_retry-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[ResponseOk](#schemaresponseok)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ResponseError](#schemaresponseerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
+| Status | Meaning                                                                    | Description           | Schema                                |
+|--------|----------------------------------------------------------------------------|-----------------------|---------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                    | [ResponseOk](#schemaresponseok)       |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request           | [ResponseError](#schemaresponseerror) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Not Found             | [ResponseError](#schemaresponseerror) |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error | [ResponseError](#schemaresponseerror) |
 
 <aside class="success">
 This operation does not require authentication
@@ -634,9 +634,9 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|message|string|false|none|none|
+| Name    | Type   | Required | Restrictions | Description |
+|---------|--------|----------|--------------|-------------|
+| message | string | false    | none         | none        |
 
 <h2 id="tocS_ResponseOk">ResponseOk</h2>
 <!-- backwards compatibility -->
@@ -654,9 +654,9 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|message|string|false|none|none|
+| Name    | Type   | Required | Restrictions | Description |
+|---------|--------|----------|--------------|-------------|
+| message | string | false    | none         | none        |
 
 <h2 id="tocS_models.CreateRebootWorkflowRequest">models.CreateRebootWorkflowRequest</h2>
 <!-- backwards compatibility -->
@@ -679,12 +679,12 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|dryRun|boolean|false|none|none|
-|hosts|[string]|false|none|none|
-|switchPassword|string|false|none|none|
-|wipeOsd|boolean|false|none|none|
+| Name           | Type     | Required | Restrictions | Description |
+|----------------|----------|----------|--------------|-------------|
+| dryRun         | boolean  | false    | none         | none        |
+| hosts          | [string] | false    | none         | none        |
+| switchPassword | string   | false    | none         | none        |
+| wipeOsd        | boolean  | false    | none         | none        |
 
 <h2 id="tocS_models.CreateRebootWorkflowResponse">models.CreateRebootWorkflowResponse</h2>
 <!-- backwards compatibility -->
@@ -705,10 +705,10 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|false|none|none|
-|targetNcns|[string]|false|none|none|
+| Name       | Type     | Required | Restrictions | Description |
+|------------|----------|----------|--------------|-------------|
+| name       | string   | false    | none         | none        |
+| targetNcns | [string] | false    | none         | none        |
 
 <h2 id="tocS_models.CreateRebuildWorkflowRequest">models.CreateRebuildWorkflowRequest</h2>
 <!-- backwards compatibility -->
@@ -738,17 +738,17 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|desiredCfsConfig|string|false|none|none|
-|dryRun|boolean|false|none|none|
-|hosts|[string]|false|none|none|
-|imageId|string|false|none|none|
-|labels|object|false|none|none|
-|» **additionalProperties**|string|false|none|none|
-|switchPassword|string|false|none|none|
-|workflowType|string|false|none|used to determine storage rebuild vs upgrade|
-|zapOsds|boolean|false|none|this is necessary for storage rebuilds when unable to wipe the node prior to rebuild|
+| Name                       | Type     | Required | Restrictions | Description                                                                          |
+|----------------------------|----------|----------|--------------|--------------------------------------------------------------------------------------|
+| desiredCfsConfig           | string   | false    | none         | none                                                                                 |
+| dryRun                     | boolean  | false    | none         | none                                                                                 |
+| hosts                      | [string] | false    | none         | none                                                                                 |
+| imageId                    | string   | false    | none         | none                                                                                 |
+| labels                     | object   | false    | none         | none                                                                                 |
+| » **additionalProperties** | string   | false    | none         | none                                                                                 |
+| switchPassword             | string   | false    | none         | none                                                                                 |
+| workflowType               | string   | false    | none         | used to determine storage rebuild vs upgrade                                         |
+| zapOsds                    | boolean  | false    | none         | this is necessary for storage rebuilds when unable to wipe the node prior to rebuild |
 
 <h2 id="tocS_models.CreateRebuildWorkflowResponse">models.CreateRebuildWorkflowResponse</h2>
 <!-- backwards compatibility -->
@@ -769,10 +769,10 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|name|string|false|none|none|
-|targetNcns|[string]|false|none|none|
+| Name       | Type     | Required | Restrictions | Description |
+|------------|----------|----------|--------------|-------------|
+| name       | string   | false    | none         | none        |
+| targetNcns | [string] | false    | none         | none        |
 
 <h2 id="tocS_models.GetWorkflowResponse">models.GetWorkflowResponse</h2>
 <!-- backwards compatibility -->
@@ -792,11 +792,11 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|label|object|false|none|none|
-|name|string|false|none|none|
-|status|object|false|none|none|
+| Name   | Type   | Required | Restrictions | Description |
+|--------|--------|----------|--------------|-------------|
+| label  | object | false    | none         | none        |
+| name   | string | false    | none         | none        |
+| status | object | false    | none         | none        |
 
 <h2 id="tocS_models.RetryWorkflowRequestBody">models.RetryWorkflowRequestBody</h2>
 <!-- backwards compatibility -->
@@ -815,8 +815,8 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|restartSuccessful|boolean|false|none|none|
-|stepName|string|false|none|none|
+| Name              | Type    | Required | Restrictions | Description |
+|-------------------|---------|----------|--------------|-------------|
+| restartSuccessful | boolean | false    | none         | none        |
+| stepName          | string  | false    | none         | none        |
 

@@ -218,141 +218,141 @@ Retrieve a JSON list of the networks available in the system.  Return value is a
 
 <h3 id="get__hardware-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request successful|Inline|
+| Status | Meaning                                                 | Description        | Schema |
+|--------|---------------------------------------------------------|--------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Request successful | Inline |
 
 <h3 id="get__hardware-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[hardware](#schemahardware)]|false|none|none|
-|» Parent|string|false|read-only|The xname of the parent of this piece of hardware|
-|» Xname|[xname](#schemaxname)|true|none|The xname of this piece of hardware|
-|» Children|[string]|false|read-only|none|
-|» Type|string|false|read-only|The type of this piece of hardware.  This is an optional hint during upload; it will be ignored if it does not match the xname|
-|» TypeString|string|false|read-only|none|
-|» Class|[hwclass](#schemahwclass)|true|none|The hardware class.|
-|» LastUpdated|[last_updated](#schemalast_updated)|false|read-only|The unix timestamp of the last time this entry was created or updated|
-|» LastUpdatedTime|[last_updated_time](#schemalast_updated_time)|false|read-only|The human-readable time this object was last created or updated.|
-|» ExtraProperties|any|false|none|none|
+| Name              | Type                                          | Required | Restrictions | Description                                                                                                                    |
+|-------------------|-----------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous*       | [[hardware](#schemahardware)]                 | false    | none         | none                                                                                                                           |
+| » Parent          | string                                        | false    | read-only    | The xname of the parent of this piece of hardware                                                                              |
+| » Xname           | [xname](#schemaxname)                         | true     | none         | The xname of this piece of hardware                                                                                            |
+| » Children        | [string]                                      | false    | read-only    | none                                                                                                                           |
+| » Type            | string                                        | false    | read-only    | The type of this piece of hardware.  This is an optional hint during upload; it will be ignored if it does not match the xname |
+| » TypeString      | string                                        | false    | read-only    | none                                                                                                                           |
+| » Class           | [hwclass](#schemahwclass)                     | true     | none         | The hardware class.                                                                                                            |
+| » LastUpdated     | [last_updated](#schemalast_updated)           | false    | read-only    | The unix timestamp of the last time this entry was created or updated                                                          |
+| » LastUpdatedTime | [last_updated_time](#schemalast_updated_time) | false    | read-only    | The human-readable time this object was last created or updated.                                                               |
+| » ExtraProperties | any                                           | false    | none         | none                                                                                                                           |
 
 *oneOf*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_comptype_hsn_connector](#schemahardware_comptype_hsn_connector)|false|none|none|
-|»»» Object|[[xname](#schemaxname)]|true|none|An array of xnames that this connector is connected to.  All xnames should have type==comptype_hsn_connector_port|
+| Name           | Type                                                                      | Required | Restrictions | Description                                                                                                       |
+|----------------|---------------------------------------------------------------------------|----------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| »» *anonymous* | [hardware_comptype_hsn_connector](#schemahardware_comptype_hsn_connector) | false    | none         | none                                                                                                              |
+| »»» Object     | [[xname](#schemaxname)]                                                   | true     | none         | An array of xnames that this connector is connected to.  All xnames should have type==comptype_hsn_connector_port |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_pwr_connector](#schemahardware_pwr_connector)|false|none|none|
-|»»» PoweredBy|[xname](#schemaxname)|true|none|The xname of this piece of hardware|
+| Name           | Type                                                    | Required | Restrictions | Description                         |
+|----------------|---------------------------------------------------------|----------|--------------|-------------------------------------|
+| »» *anonymous* | [hardware_pwr_connector](#schemahardware_pwr_connector) | false    | none         | none                                |
+| »»» PoweredBy  | [xname](#schemaxname)                                   | true     | none         | The xname of this piece of hardware |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_mgmt_switch_connector](#schemahardware_mgmt_switch_connector)|false|none|none|
-|»»» NodeNics|[[xname](#schemaxname)]|true|none|An array of xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.|
-|»»» VendorName|string|false|none|The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (Berkeley-style names), but may be any string.|
+| Name           | Type                                                                    | Required | Restrictions | Description                                                                                                                                                                                      |
+|----------------|-------------------------------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| »» *anonymous* | [hardware_mgmt_switch_connector](#schemahardware_mgmt_switch_connector) | false    | none         | none                                                                                                                                                                                             |
+| »»» NodeNics   | [[xname](#schemaxname)]                                                 | true     | none         | An array of xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.                                                                                                |
+| »»» VendorName | string                                                                  | false    | none         | The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (Berkeley-style names), but may be any string. |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_bmc](#schemahardware_bmc)|false|none|none|
-|»»» IP6addr|string|true|none|The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.|
-|»»» IP4addr|string|true|none|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
-|»»» Username|string|false|none|The username that should be used to access the device (or be assigned to the device)|
-|»»» Password|string|false|none|The password that should be used to access the device (or be assigned to the device)|
+| Name           | Type                                | Required | Restrictions | Description                                                                                          |
+|----------------|-------------------------------------|----------|--------------|------------------------------------------------------------------------------------------------------|
+| »» *anonymous* | [hardware_bmc](#schemahardware_bmc) | false    | none         | none                                                                                                 |
+| »»» IP6addr    | string                              | true     | none         | The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed. |
+| »»» IP4addr    | string                              | true     | none         | The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed. |
+| »»» Username   | string                              | false    | none         | The username that should be used to access the device (or be assigned to the device)                 |
+| »»» Password   | string                              | false    | none         | The password that should be used to access the device (or be assigned to the device)                 |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_nic](#schemahardware_nic)|false|none|none|
-|»»» Networks|[[xname](#schemaxname)]|true|none|An array of network names that this NIC is connected to|
-|»»» Peers|[[xname](#schemaxname)]|true|none|An array of xnames this NIC is connected directly to.  These ideally connector xnames, not switches|
+| Name           | Type                                | Required | Restrictions | Description                                                                                         |
+|----------------|-------------------------------------|----------|--------------|-----------------------------------------------------------------------------------------------------|
+| »» *anonymous* | [hardware_nic](#schemahardware_nic) | false    | none         | none                                                                                                |
+| »»» Networks   | [[xname](#schemaxname)]             | true     | none         | An array of network names that this NIC is connected to                                             |
+| »»» Peers      | [[xname](#schemaxname)]             | true     | none         | An array of xnames this NIC is connected directly to.  These ideally connector xnames, not switches |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_nic](#schemahardware_nic)|false|none|none|
+| Name           | Type                                | Required | Restrictions | Description |
+|----------------|-------------------------------------|----------|--------------|-------------|
+| »» *anonymous* | [hardware_nic](#schemahardware_nic) | false    | none         | none        |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_powered_device](#schemahardware_powered_device)|false|none|none|
-|»»» PowerConnector|[[xname](#schemaxname)]|true|none|An array of xnames, where each xname has type==*_pwr_connector.  Empty for Mountain switch cards|
+| Name               | Type                                                      | Required | Restrictions | Description                                                                                      |
+|--------------------|-----------------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------|
+| »» *anonymous*     | [hardware_powered_device](#schemahardware_powered_device) | false    | none         | none                                                                                             |
+| »»» PowerConnector | [[xname](#schemaxname)]                                   | true     | none         | An array of xnames, where each xname has type==*_pwr_connector.  Empty for Mountain switch cards |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_powered_device](#schemahardware_powered_device)|false|none|none|
+| Name           | Type                                                      | Required | Restrictions | Description |
+|----------------|-----------------------------------------------------------|----------|--------------|-------------|
+| »» *anonymous* | [hardware_powered_device](#schemahardware_powered_device) | false    | none         | none        |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_powered_device](#schemahardware_powered_device)|false|none|none|
+| Name           | Type                                                      | Required | Restrictions | Description |
+|----------------|-----------------------------------------------------------|----------|--------------|-------------|
+| »» *anonymous* | [hardware_powered_device](#schemahardware_powered_device) | false    | none         | none        |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_comptype_cab_pdu](#schemahardware_comptype_cab_pdu)|false|none|none|
-|»»» IP6addr|string|true|none|The ipv6 address that should be assigned to this BMC, or "DHCPv6". If omitted, "DHCPv6" is assumed.|
-|»»» IP4addr|string|true|none|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
-|»»» Username|string|true|none|The username that should be used to access the device (or be assigned to the device)|
-|»»» Password|string(password)|true|none|The password that should be used to access the device|
+| Name           | Type                                                          | Required | Restrictions | Description                                                                                          |
+|----------------|---------------------------------------------------------------|----------|--------------|------------------------------------------------------------------------------------------------------|
+| »» *anonymous* | [hardware_comptype_cab_pdu](#schemahardware_comptype_cab_pdu) | false    | none         | none                                                                                                 |
+| »»» IP6addr    | string                                                        | true     | none         | The ipv6 address that should be assigned to this BMC, or "DHCPv6". If omitted, "DHCPv6" is assumed.  |
+| »»» IP4addr    | string                                                        | true     | none         | The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed. |
+| »»» Username   | string                                                        | true     | none         | The username that should be used to access the device (or be assigned to the device)                 |
+| »»» Password   | string(password)                                              | true     | none         | The password that should be used to access the device                                                |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_comptype_node](#schemahardware_comptype_node)|false|none|none|
-|»»» NodeType|string|true|none|The role type assigned to this node.|
-|»»» nid|integer|false|none|none|
+| Name           | Type                                                    | Required | Restrictions | Description                          |
+|----------------|---------------------------------------------------------|----------|--------------|--------------------------------------|
+| »» *anonymous* | [hardware_comptype_node](#schemahardware_comptype_node) | false    | none         | none                                 |
+| »»» NodeType   | string                                                  | true     | none         | The role type assigned to this node. |
+| »»» nid        | integer                                                 | false    | none         | none                                 |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node)|false|none|none|
-|»»» NodeType|string|true|none|The role type assigned to this node.|
-|»»» nid|integer|false|none|none|
+| Name           | Type                                                                    | Required | Restrictions | Description                          |
+|----------------|-------------------------------------------------------------------------|----------|--------------|--------------------------------------|
+| »» *anonymous* | [hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node) | false    | none         | none                                 |
+| »»» NodeType   | string                                                                  | true     | none         | The role type assigned to this node. |
+| »»» nid        | integer                                                                 | false    | none         | none                                 |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_ip_and_creds_optional](#schemahardware_ip_and_creds_optional)|false|none|none|
-|»»» IP6addr|string|false|none|The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.|
-|»»» IP4addr|string|false|none|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
-|»»» Username|string|false|none|The username that should be used to access the device (or be assigned to the device)|
-|»»» Password|string|false|none|The password that should be used to access the device (or be assigned to the device)|
+| Name           | Type                                                                    | Required | Restrictions | Description                                                                                          |
+|----------------|-------------------------------------------------------------------------|----------|--------------|------------------------------------------------------------------------------------------------------|
+| »» *anonymous* | [hardware_ip_and_creds_optional](#schemahardware_ip_and_creds_optional) | false    | none         | none                                                                                                 |
+| »»» IP6addr    | string                                                                  | false    | none         | The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed. |
+| »»» IP4addr    | string                                                                  | false    | none         | The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed. |
+| »»» Username   | string                                                                  | false    | none         | The username that should be used to access the device (or be assigned to the device)                 |
+| »»» Password   | string                                                                  | false    | none         | The password that should be used to access the device (or be assigned to the device)                 |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|Class|River|
-|Class|Mountain|
-|Class|Hill|
-|NodeType|Compute|
-|NodeType|System|
-|NodeType|Application|
-|NodeType|Storage|
-|NodeType|Management|
-|NodeType|Management|
+| Property | Value       |
+|----------|-------------|
+| Class    | River       |
+| Class    | Mountain    |
+| Class    | Hill        |
+| NodeType | Compute     |
+| NodeType | System      |
+| NodeType | Application |
+| NodeType | Storage     |
+| NodeType | Management  |
+| NodeType | Management  |
 
 <aside class="success">
 This operation does not require authentication
@@ -439,9 +439,9 @@ Create a new hardware object.
 
 <h3 id="post__hardware-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[hardware_post](#schemahardware_post)|false|none|
+| Name | In   | Type                                  | Required | Description |
+|------|------|---------------------------------------|----------|-------------|
+| body | body | [hardware_post](#schemahardware_post) | false    | none        |
 
 > Example responses
 
@@ -469,12 +469,12 @@ Create a new hardware object.
 
 <h3 id="post__hardware-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Request successful. The item was created|[hardware](#schemahardware)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request. See body for details|None|
-|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Conflict. The requested resource already exists|None|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Unexpected error. See body for details|None|
+| Status | Meaning                                                                    | Description                                     | Schema                      |
+|--------|----------------------------------------------------------------------------|-------------------------------------------------|-----------------------------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)               | Request successful. The item was created        | [hardware](#schemahardware) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad request. See body for details               | None                        |
+| 409    | [Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)              | Conflict. The requested resource already exists | None                        |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Unexpected error. See body for details          | None                        |
 
 <aside class="success">
 This operation does not require authentication
@@ -543,9 +543,9 @@ Retrieve information about the requested xname. All properties are returned as a
 
 <h3 id="get__hardware_{xname}-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|xname|path|[xname](#schemaxname)|true|The xname to look up or alter.|
+| Name  | In   | Type                  | Required | Description                    |
+|-------|------|-----------------------|----------|--------------------------------|
+| xname | path | [xname](#schemaxname) | true     | The xname to look up or alter. |
 
 > Example responses
 
@@ -573,9 +573,9 @@ Retrieve information about the requested xname. All properties are returned as a
 
 <h3 id="get__hardware_{xname}-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request successful|[hardware](#schemahardware)|
+| Status | Meaning                                                 | Description        | Schema                      |
+|--------|---------------------------------------------------------|--------------------|-----------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Request successful | [hardware](#schemahardware) |
 
 <aside class="success">
 This operation does not require authentication
@@ -661,10 +661,10 @@ Update a hardware object.  Parent objects will be created, if possible.
 
 <h3 id="put__hardware_{xname}-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|xname|path|[xname](#schemaxname)|true|The xname to look up or alter.|
-|body|body|[hardware_put](#schemahardware_put)|false|none|
+| Name  | In   | Type                                | Required | Description                    |
+|-------|------|-------------------------------------|----------|--------------------------------|
+| xname | path | [xname](#schemaxname)               | true     | The xname to look up or alter. |
+| body  | body | [hardware_put](#schemahardware_put) | false    | none                           |
 
 > Example responses
 
@@ -692,12 +692,12 @@ Update a hardware object.  Parent objects will be created, if possible.
 
 <h3 id="put__hardware_{xname}-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request successful. The item was updated|[hardware](#schemahardware)|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Request successful. The item was created|[hardware](#schemahardware)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request. See body for details|None|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Unexpected error. See body for details|None|
+| Status | Meaning                                                                    | Description                              | Schema                      |
+|--------|----------------------------------------------------------------------------|------------------------------------------|-----------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Request successful. The item was updated | [hardware](#schemahardware) |
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)               | Request successful. The item was created | [hardware](#schemahardware) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad request. See body for details        | None                        |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Unexpected error. See body for details   | None                        |
 
 <aside class="success">
 This operation does not require authentication
@@ -757,17 +757,17 @@ Delete the requested xname from SLS. Note that if you delete a parent object, th
 
 <h3 id="delete__hardware_{xname}-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|xname|path|[xname](#schemaxname)|true|The xname to look up or alter.|
+| Name  | In   | Type                  | Required | Description                    |
+|-------|------|-----------------------|----------|--------------------------------|
+| xname | path | [xname](#schemaxname) | true     | The xname to look up or alter. |
 
 <h3 id="delete__hardware_{xname}-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK. xname removed|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Xname not found|None|
-|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Conflict. The xname probably still had children.|None|
+| Status | Meaning                                                        | Description                                      | Schema |
+|--------|----------------------------------------------------------------|--------------------------------------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | OK. xname removed                                | None   |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | Xname not found                                  | None   |
+| 409    | [Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)  | Conflict. The xname probably still had children. | None   |
 
 <aside class="success">
 This operation does not require authentication
@@ -840,25 +840,25 @@ Search for nodes matching a set of criteria. Any of the properties of any entry 
 
 <h3 id="get__search_hardware-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|xname|query|[xname](#schemaxname)|false|Matches the specified xname|
-|parent|query|[xname](#schemaxname)|false|Matches all objects that are direct children of the given xname|
-|class|query|[hwclass](#schemahwclass)|false|Matches all objects of the given class|
-|type|query|[hwtype](#schemahwtype)|false|Matches all objects of the given type|
-|power_connector|query|[xname](#schemaxname)|false|Matches all objects with the given xname in their power_connector property|
-|object|query|[xname](#schemaxname)|false|Matches all objects with the given xname in their object property.|
-|node_nics|query|[xname](#schemaxname)|false|Matches all objects with the given xname in their node_nics property|
-|networks|query|string|false|Matches all objects with the given xname in their networks property|
-|peers|query|[xname](#schemaxname)|false|Matches all objects with the given xname in their peers property|
+| Name            | In    | Type                      | Required | Description                                                                |
+|-----------------|-------|---------------------------|----------|----------------------------------------------------------------------------|
+| xname           | query | [xname](#schemaxname)     | false    | Matches the specified xname                                                |
+| parent          | query | [xname](#schemaxname)     | false    | Matches all objects that are direct children of the given xname            |
+| class           | query | [hwclass](#schemahwclass) | false    | Matches all objects of the given class                                     |
+| type            | query | [hwtype](#schemahwtype)   | false    | Matches all objects of the given type                                      |
+| power_connector | query | [xname](#schemaxname)     | false    | Matches all objects with the given xname in their power_connector property |
+| object          | query | [xname](#schemaxname)     | false    | Matches all objects with the given xname in their object property.         |
+| node_nics       | query | [xname](#schemaxname)     | false    | Matches all objects with the given xname in their node_nics property       |
+| networks        | query | string                    | false    | Matches all objects with the given xname in their networks property        |
+| peers           | query | [xname](#schemaxname)     | false    | Matches all objects with the given xname in their peers property           |
 
 #### Enumerated Values
 
-|Parameter|Value|
-|---|---|
-|class|River|
-|class|Mountain|
-|class|Hill|
+| Parameter | Value    |
+|-----------|----------|
+| class     | River    |
+| class     | Mountain |
+| class     | Hill     |
 
 > Example responses
 
@@ -888,144 +888,144 @@ Search for nodes matching a set of criteria. Any of the properties of any entry 
 
 <h3 id="get__search_hardware-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Search completed successfully.  The return is an array of xnames that match the search criteria.|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request. See body for details.|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Search did not find any matching hardware.|None|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An unexpected error occurred. See body for details.|None|
+| Status | Meaning                                                                    | Description                                                                                      | Schema |
+|--------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Search completed successfully.  The return is an array of xnames that match the search criteria. | Inline |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad request. See body for details.                                                               | None   |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Search did not find any matching hardware.                                                       | None   |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | An unexpected error occurred. See body for details.                                              | None   |
 
 <h3 id="get__search_hardware-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[hardware](#schemahardware)]|false|none|none|
-|» Parent|string|false|read-only|The xname of the parent of this piece of hardware|
-|» Xname|[xname](#schemaxname)|true|none|The xname of this piece of hardware|
-|» Children|[string]|false|read-only|none|
-|» Type|string|false|read-only|The type of this piece of hardware.  This is an optional hint during upload; it will be ignored if it does not match the xname|
-|» TypeString|string|false|read-only|none|
-|» Class|[hwclass](#schemahwclass)|true|none|The hardware class.|
-|» LastUpdated|[last_updated](#schemalast_updated)|false|read-only|The unix timestamp of the last time this entry was created or updated|
-|» LastUpdatedTime|[last_updated_time](#schemalast_updated_time)|false|read-only|The human-readable time this object was last created or updated.|
-|» ExtraProperties|any|false|none|none|
+| Name              | Type                                          | Required | Restrictions | Description                                                                                                                    |
+|-------------------|-----------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous*       | [[hardware](#schemahardware)]                 | false    | none         | none                                                                                                                           |
+| » Parent          | string                                        | false    | read-only    | The xname of the parent of this piece of hardware                                                                              |
+| » Xname           | [xname](#schemaxname)                         | true     | none         | The xname of this piece of hardware                                                                                            |
+| » Children        | [string]                                      | false    | read-only    | none                                                                                                                           |
+| » Type            | string                                        | false    | read-only    | The type of this piece of hardware.  This is an optional hint during upload; it will be ignored if it does not match the xname |
+| » TypeString      | string                                        | false    | read-only    | none                                                                                                                           |
+| » Class           | [hwclass](#schemahwclass)                     | true     | none         | The hardware class.                                                                                                            |
+| » LastUpdated     | [last_updated](#schemalast_updated)           | false    | read-only    | The unix timestamp of the last time this entry was created or updated                                                          |
+| » LastUpdatedTime | [last_updated_time](#schemalast_updated_time) | false    | read-only    | The human-readable time this object was last created or updated.                                                               |
+| » ExtraProperties | any                                           | false    | none         | none                                                                                                                           |
 
 *oneOf*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_comptype_hsn_connector](#schemahardware_comptype_hsn_connector)|false|none|none|
-|»»» Object|[[xname](#schemaxname)]|true|none|An array of xnames that this connector is connected to.  All xnames should have type==comptype_hsn_connector_port|
+| Name           | Type                                                                      | Required | Restrictions | Description                                                                                                       |
+|----------------|---------------------------------------------------------------------------|----------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| »» *anonymous* | [hardware_comptype_hsn_connector](#schemahardware_comptype_hsn_connector) | false    | none         | none                                                                                                              |
+| »»» Object     | [[xname](#schemaxname)]                                                   | true     | none         | An array of xnames that this connector is connected to.  All xnames should have type==comptype_hsn_connector_port |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_pwr_connector](#schemahardware_pwr_connector)|false|none|none|
-|»»» PoweredBy|[xname](#schemaxname)|true|none|The xname of this piece of hardware|
+| Name           | Type                                                    | Required | Restrictions | Description                         |
+|----------------|---------------------------------------------------------|----------|--------------|-------------------------------------|
+| »» *anonymous* | [hardware_pwr_connector](#schemahardware_pwr_connector) | false    | none         | none                                |
+| »»» PoweredBy  | [xname](#schemaxname)                                   | true     | none         | The xname of this piece of hardware |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_mgmt_switch_connector](#schemahardware_mgmt_switch_connector)|false|none|none|
-|»»» NodeNics|[[xname](#schemaxname)]|true|none|An array of xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.|
-|»»» VendorName|string|false|none|The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (Berkeley-style names), but may be any string.|
+| Name           | Type                                                                    | Required | Restrictions | Description                                                                                                                                                                                      |
+|----------------|-------------------------------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| »» *anonymous* | [hardware_mgmt_switch_connector](#schemahardware_mgmt_switch_connector) | false    | none         | none                                                                                                                                                                                             |
+| »»» NodeNics   | [[xname](#schemaxname)]                                                 | true     | none         | An array of xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.                                                                                                |
+| »»» VendorName | string                                                                  | false    | none         | The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (Berkeley-style names), but may be any string. |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_bmc](#schemahardware_bmc)|false|none|none|
-|»»» IP6addr|string|true|none|The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.|
-|»»» IP4addr|string|true|none|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
-|»»» Username|string|false|none|The username that should be used to access the device (or be assigned to the device)|
-|»»» Password|string|false|none|The password that should be used to access the device (or be assigned to the device)|
+| Name           | Type                                | Required | Restrictions | Description                                                                                          |
+|----------------|-------------------------------------|----------|--------------|------------------------------------------------------------------------------------------------------|
+| »» *anonymous* | [hardware_bmc](#schemahardware_bmc) | false    | none         | none                                                                                                 |
+| »»» IP6addr    | string                              | true     | none         | The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed. |
+| »»» IP4addr    | string                              | true     | none         | The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed. |
+| »»» Username   | string                              | false    | none         | The username that should be used to access the device (or be assigned to the device)                 |
+| »»» Password   | string                              | false    | none         | The password that should be used to access the device (or be assigned to the device)                 |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_nic](#schemahardware_nic)|false|none|none|
-|»»» Networks|[[xname](#schemaxname)]|true|none|An array of network names that this NIC is connected to|
-|»»» Peers|[[xname](#schemaxname)]|true|none|An array of xnames this NIC is connected directly to.  These ideally connector xnames, not switches|
+| Name           | Type                                | Required | Restrictions | Description                                                                                         |
+|----------------|-------------------------------------|----------|--------------|-----------------------------------------------------------------------------------------------------|
+| »» *anonymous* | [hardware_nic](#schemahardware_nic) | false    | none         | none                                                                                                |
+| »»» Networks   | [[xname](#schemaxname)]             | true     | none         | An array of network names that this NIC is connected to                                             |
+| »»» Peers      | [[xname](#schemaxname)]             | true     | none         | An array of xnames this NIC is connected directly to.  These ideally connector xnames, not switches |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_nic](#schemahardware_nic)|false|none|none|
+| Name           | Type                                | Required | Restrictions | Description |
+|----------------|-------------------------------------|----------|--------------|-------------|
+| »» *anonymous* | [hardware_nic](#schemahardware_nic) | false    | none         | none        |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_powered_device](#schemahardware_powered_device)|false|none|none|
-|»»» PowerConnector|[[xname](#schemaxname)]|true|none|An array of xnames, where each xname has type==*_pwr_connector.  Empty for Mountain switch cards|
+| Name               | Type                                                      | Required | Restrictions | Description                                                                                      |
+|--------------------|-----------------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------|
+| »» *anonymous*     | [hardware_powered_device](#schemahardware_powered_device) | false    | none         | none                                                                                             |
+| »»» PowerConnector | [[xname](#schemaxname)]                                   | true     | none         | An array of xnames, where each xname has type==*_pwr_connector.  Empty for Mountain switch cards |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_powered_device](#schemahardware_powered_device)|false|none|none|
+| Name           | Type                                                      | Required | Restrictions | Description |
+|----------------|-----------------------------------------------------------|----------|--------------|-------------|
+| »» *anonymous* | [hardware_powered_device](#schemahardware_powered_device) | false    | none         | none        |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_powered_device](#schemahardware_powered_device)|false|none|none|
+| Name           | Type                                                      | Required | Restrictions | Description |
+|----------------|-----------------------------------------------------------|----------|--------------|-------------|
+| »» *anonymous* | [hardware_powered_device](#schemahardware_powered_device) | false    | none         | none        |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_comptype_cab_pdu](#schemahardware_comptype_cab_pdu)|false|none|none|
-|»»» IP6addr|string|true|none|The ipv6 address that should be assigned to this BMC, or "DHCPv6". If omitted, "DHCPv6" is assumed.|
-|»»» IP4addr|string|true|none|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
-|»»» Username|string|true|none|The username that should be used to access the device (or be assigned to the device)|
-|»»» Password|string(password)|true|none|The password that should be used to access the device|
+| Name           | Type                                                          | Required | Restrictions | Description                                                                                          |
+|----------------|---------------------------------------------------------------|----------|--------------|------------------------------------------------------------------------------------------------------|
+| »» *anonymous* | [hardware_comptype_cab_pdu](#schemahardware_comptype_cab_pdu) | false    | none         | none                                                                                                 |
+| »»» IP6addr    | string                                                        | true     | none         | The ipv6 address that should be assigned to this BMC, or "DHCPv6". If omitted, "DHCPv6" is assumed.  |
+| »»» IP4addr    | string                                                        | true     | none         | The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed. |
+| »»» Username   | string                                                        | true     | none         | The username that should be used to access the device (or be assigned to the device)                 |
+| »»» Password   | string(password)                                              | true     | none         | The password that should be used to access the device                                                |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_comptype_node](#schemahardware_comptype_node)|false|none|none|
-|»»» NodeType|string|true|none|The role type assigned to this node.|
-|»»» nid|integer|false|none|none|
+| Name           | Type                                                    | Required | Restrictions | Description                          |
+|----------------|---------------------------------------------------------|----------|--------------|--------------------------------------|
+| »» *anonymous* | [hardware_comptype_node](#schemahardware_comptype_node) | false    | none         | none                                 |
+| »»» NodeType   | string                                                  | true     | none         | The role type assigned to this node. |
+| »»» nid        | integer                                                 | false    | none         | none                                 |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node)|false|none|none|
-|»»» NodeType|string|true|none|The role type assigned to this node.|
-|»»» nid|integer|false|none|none|
+| Name           | Type                                                                    | Required | Restrictions | Description                          |
+|----------------|-------------------------------------------------------------------------|----------|--------------|--------------------------------------|
+| »» *anonymous* | [hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node) | false    | none         | none                                 |
+| »»» NodeType   | string                                                                  | true     | none         | The role type assigned to this node. |
+| »»» nid        | integer                                                                 | false    | none         | none                                 |
 
 *xor*
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|»» *anonymous*|[hardware_ip_and_creds_optional](#schemahardware_ip_and_creds_optional)|false|none|none|
-|»»» IP6addr|string|false|none|The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.|
-|»»» IP4addr|string|false|none|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
-|»»» Username|string|false|none|The username that should be used to access the device (or be assigned to the device)|
-|»»» Password|string|false|none|The password that should be used to access the device (or be assigned to the device)|
+| Name           | Type                                                                    | Required | Restrictions | Description                                                                                          |
+|----------------|-------------------------------------------------------------------------|----------|--------------|------------------------------------------------------------------------------------------------------|
+| »» *anonymous* | [hardware_ip_and_creds_optional](#schemahardware_ip_and_creds_optional) | false    | none         | none                                                                                                 |
+| »»» IP6addr    | string                                                                  | false    | none         | The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed. |
+| »»» IP4addr    | string                                                                  | false    | none         | The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed. |
+| »»» Username   | string                                                                  | false    | none         | The username that should be used to access the device (or be assigned to the device)                 |
+| »»» Password   | string                                                                  | false    | none         | The password that should be used to access the device (or be assigned to the device)                 |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|Class|River|
-|Class|Mountain|
-|Class|Hill|
-|NodeType|Compute|
-|NodeType|System|
-|NodeType|Application|
-|NodeType|Storage|
-|NodeType|Management|
-|NodeType|Management|
+| Property | Value       |
+|----------|-------------|
+| Class    | River       |
+| Class    | Mountain    |
+| Class    | Hill        |
+| NodeType | Compute     |
+| NodeType | System      |
+| NodeType | Application |
+| NodeType | Storage     |
+| NodeType | Management  |
+| NodeType | Management  |
 
 <aside class="success">
 This operation does not require authentication
@@ -1094,12 +1094,12 @@ Perform a search for networks matching a set of criteria.  Any of the properties
 
 <h3 id="get__search_networks-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|name|query|string|false|Matches the specified network name|
-|full_name|query|string|false|Matches the specified network full name|
-|type|query|[network_type](#schemanetwork_type)|false|Matches the specified network type|
-|ip_address|query|[network_ip_range](#schemanetwork_ip_range)|false|Matches all networks that could contain the specified IP address in their IP ranges|
+| Name       | In    | Type                                        | Required | Description                                                                         |
+|------------|-------|---------------------------------------------|----------|-------------------------------------------------------------------------------------|
+| name       | query | string                                      | false    | Matches the specified network name                                                  |
+| full_name  | query | string                                      | false    | Matches the specified network full name                                             |
+| type       | query | [network_type](#schemanetwork_type)         | false    | Matches the specified network type                                                  |
+| ip_address | query | [network_ip_range](#schemanetwork_ip_range) | false    | Matches all networks that could contain the specified IP address in their IP ranges |
 
 > Example responses
 
@@ -1152,43 +1152,43 @@ Perform a search for networks matching a set of criteria.  Any of the properties
 
 <h3 id="get__search_networks-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Search completed successfully.  Return is an array of networks matching the search criteria.|Inline|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Search did not find any matching networks.|None|
+| Status | Meaning                                                        | Description                                                                                  | Schema |
+|--------|----------------------------------------------------------------|----------------------------------------------------------------------------------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | Search completed successfully.  Return is an array of networks matching the search criteria. | Inline |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | Search did not find any matching networks.                                                   | None   |
 
 <h3 id="get__search_networks-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[network](#schemanetwork)]|false|none|none|
-|» Name|string|true|none|none|
-|» FullName|string|false|none|none|
-|» IPRanges|[[network_ip_range](#schemanetwork_ip_range)]|true|none|none|
-|» Type|[network_type](#schemanetwork_type)|true|none|none|
-|» LastUpdated|[last_updated](#schemalast_updated)|false|read-only|The unix timestamp of the last time this entry was created or updated|
-|» LastUpdatedTime|[last_updated_time](#schemalast_updated_time)|false|read-only|The human-readable time this object was last created or updated.|
-|» ExtraProperties|[network_extra_properties](#schemanetwork_extra_properties)|false|none|none|
-|»» CIDR|string|false|none|none|
-|»» VlanRange|[integer]|false|none|none|
-|»» MTU|integer|false|none|none|
-|»» Subnets|[[network_ipv4_subnet](#schemanetwork_ipv4_subnet)]|false|none|none|
-|»»» Name|string|true|none|none|
-|»»» FullName|string|false|none|none|
-|»»» CIDR|string|true|none|none|
-|»»» VlanID|integer|true|none|none|
-|»»» Gateway|string(ipv4)|false|none|none|
-|»»» DHCPStart|string(ipv4)|false|none|none|
-|»»» DHCPEnd|string(ipv4)|false|none|none|
-|»»» IPReservations|[[network_ip_reservation](#schemanetwork_ip_reservation)]|false|none|none|
-|»»»» IPAddress|string(ipv4)|true|none|none|
-|»»»» Name|string|true|none|none|
-|»»»» Aliases|[string]|false|none|none|
-|»»»» Comment|string|false|none|none|
-|»»» Comment|string|false|none|none|
-|»» Comment|string|false|none|none|
+| Name               | Type                                                        | Required | Restrictions | Description                                                           |
+|--------------------|-------------------------------------------------------------|----------|--------------|-----------------------------------------------------------------------|
+| *anonymous*        | [[network](#schemanetwork)]                                 | false    | none         | none                                                                  |
+| » Name             | string                                                      | true     | none         | none                                                                  |
+| » FullName         | string                                                      | false    | none         | none                                                                  |
+| » IPRanges         | [[network_ip_range](#schemanetwork_ip_range)]               | true     | none         | none                                                                  |
+| » Type             | [network_type](#schemanetwork_type)                         | true     | none         | none                                                                  |
+| » LastUpdated      | [last_updated](#schemalast_updated)                         | false    | read-only    | The unix timestamp of the last time this entry was created or updated |
+| » LastUpdatedTime  | [last_updated_time](#schemalast_updated_time)               | false    | read-only    | The human-readable time this object was last created or updated.      |
+| » ExtraProperties  | [network_extra_properties](#schemanetwork_extra_properties) | false    | none         | none                                                                  |
+| »» CIDR            | string                                                      | false    | none         | none                                                                  |
+| »» VlanRange       | [integer]                                                   | false    | none         | none                                                                  |
+| »» MTU             | integer                                                     | false    | none         | none                                                                  |
+| »» Subnets         | [[network_ipv4_subnet](#schemanetwork_ipv4_subnet)]         | false    | none         | none                                                                  |
+| »»» Name           | string                                                      | true     | none         | none                                                                  |
+| »»» FullName       | string                                                      | false    | none         | none                                                                  |
+| »»» CIDR           | string                                                      | true     | none         | none                                                                  |
+| »»» VlanID         | integer                                                     | true     | none         | none                                                                  |
+| »»» Gateway        | string(ipv4)                                                | false    | none         | none                                                                  |
+| »»» DHCPStart      | string(ipv4)                                                | false    | none         | none                                                                  |
+| »»» DHCPEnd        | string(ipv4)                                                | false    | none         | none                                                                  |
+| »»» IPReservations | [[network_ip_reservation](#schemanetwork_ip_reservation)]   | false    | none         | none                                                                  |
+| »»»» IPAddress     | string(ipv4)                                                | true     | none         | none                                                                  |
+| »»»» Name          | string                                                      | true     | none         | none                                                                  |
+| »»»» Aliases       | [string]                                                    | false    | none         | none                                                                  |
+| »»»» Comment       | string                                                      | false    | none         | none                                                                  |
+| »»» Comment        | string                                                      | false    | none         | none                                                                  |
+| »» Comment         | string                                                      | false    | none         | none                                                                  |
 
 <aside class="success">
 This operation does not require authentication
@@ -1388,10 +1388,10 @@ Get a dump of current service state. The format of this is implementation-specif
 
 <h3 id="get__dumpstate-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|State dumped successfully|[slsState](#schemaslsstate)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An error occurred in state dumping.  See body for details|None|
+| Status | Meaning                                                                    | Description                                               | Schema                      |
+|--------|----------------------------------------------------------------------------|-----------------------------------------------------------|-----------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | State dumped successfully                                 | [slsState](#schemaslsstate) |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | An error occurred in state dumping.  See body for details | None                        |
 
 <aside class="success">
 This operation does not require authentication
@@ -1535,105 +1535,105 @@ sls_dump:
 
 <h3 id="post__loadstate-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|object|false|A JSON dictionary, where each item has a key equal to the xname of the object it contains.  Each value is a JSON representation of an object SLS should maintain.|
-|» sls_dump|body|[slsState](#schemaslsstate)|false|none|
-|»» Hardware|body|object|false|none|
-|»»» **additionalProperties**|body|[hardware](#schemahardware)|false|none|
-|»»»» Parent|body|string|false|The xname of the parent of this piece of hardware|
-|»»»» Xname|body|[xname](#schemaxname)|true|The xname of this piece of hardware|
-|»»»» Children|body|[string]|false|none|
-|»»»» Type|body|string|false|The type of this piece of hardware.  This is an optional hint during upload; it will be ignored if it does not match the xname|
-|»»»» TypeString|body|string|false|none|
-|»»»» Class|body|[hwclass](#schemahwclass)|true|The hardware class.|
-|»»»» LastUpdated|body|[last_updated](#schemalast_updated)|false|The unix timestamp of the last time this entry was created or updated|
-|»»»» LastUpdatedTime|body|[last_updated_time](#schemalast_updated_time)|false|The human-readable time this object was last created or updated.|
-|»»»» ExtraProperties|body|any|false|none|
-|»»»»» *anonymous*|body|[hardware_comptype_hsn_connector](#schemahardware_comptype_hsn_connector)|false|none|
-|»»»»»» Object|body|[[xname](#schemaxname)]|true|An array of xnames that this connector is connected to.  All xnames should have type==comptype_hsn_connector_port|
-|»»»»» *anonymous*|body|[hardware_pwr_connector](#schemahardware_pwr_connector)|false|none|
-|»»»»»» PoweredBy|body|[xname](#schemaxname)|true|The xname of this piece of hardware|
-|»»»»» *anonymous*|body|[hardware_mgmt_switch_connector](#schemahardware_mgmt_switch_connector)|false|none|
-|»»»»»» NodeNics|body|[[xname](#schemaxname)]|true|An array of xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.|
-|»»»»»» VendorName|body|string|false|The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (Berkeley-style names), but may be any string.|
-|»»»»» *anonymous*|body|[hardware_bmc](#schemahardware_bmc)|false|none|
-|»»»»»» IP6addr|body|string|true|The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.|
-|»»»»»» IP4addr|body|string|true|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
-|»»»»»» Username|body|string|false|The username that should be used to access the device (or be assigned to the device)|
-|»»»»»» Password|body|string|false|The password that should be used to access the device (or be assigned to the device)|
-|»»»»» *anonymous*|body|[hardware_nic](#schemahardware_nic)|false|none|
-|»»»»»» Networks|body|[[xname](#schemaxname)]|true|An array of network names that this NIC is connected to|
-|»»»»»» Peers|body|[[xname](#schemaxname)]|true|An array of xnames this NIC is connected directly to.  These ideally connector xnames, not switches|
-|»»»»» *anonymous*|body|[hardware_nic](#schemahardware_nic)|false|none|
-|»»»»» *anonymous*|body|[hardware_powered_device](#schemahardware_powered_device)|false|none|
-|»»»»»» PowerConnector|body|[[xname](#schemaxname)]|true|An array of xnames, where each xname has type==*_pwr_connector.  Empty for Mountain switch cards|
-|»»»»» *anonymous*|body|[hardware_powered_device](#schemahardware_powered_device)|false|none|
-|»»»»» *anonymous*|body|[hardware_powered_device](#schemahardware_powered_device)|false|none|
-|»»»»» *anonymous*|body|[hardware_comptype_cab_pdu](#schemahardware_comptype_cab_pdu)|false|none|
-|»»»»»» IP6addr|body|string|true|The ipv6 address that should be assigned to this BMC, or "DHCPv6". If omitted, "DHCPv6" is assumed.|
-|»»»»»» IP4addr|body|string|true|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
-|»»»»»» Username|body|string|true|The username that should be used to access the device (or be assigned to the device)|
-|»»»»»» Password|body|string(password)|true|The password that should be used to access the device|
-|»»»»» *anonymous*|body|[hardware_comptype_node](#schemahardware_comptype_node)|false|none|
-|»»»»»» NodeType|body|string|true|The role type assigned to this node.|
-|»»»»»» nid|body|integer|false|none|
-|»»»»» *anonymous*|body|[hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node)|false|none|
-|»»»»»» NodeType|body|string|true|The role type assigned to this node.|
-|»»»»»» nid|body|integer|false|none|
-|»»»»» *anonymous*|body|[hardware_ip_and_creds_optional](#schemahardware_ip_and_creds_optional)|false|none|
-|»»»»»» IP6addr|body|string|false|The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.|
-|»»»»»» IP4addr|body|string|false|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
-|»»»»»» Username|body|string|false|The username that should be used to access the device (or be assigned to the device)|
-|»»»»»» Password|body|string|false|The password that should be used to access the device (or be assigned to the device)|
-|»» Networks|body|object|false|none|
-|»»» **additionalProperties**|body|[network](#schemanetwork)|false|none|
-|»»»» Name|body|string|true|none|
-|»»»» FullName|body|string|false|none|
-|»»»» IPRanges|body|[[network_ip_range](#schemanetwork_ip_range)]|true|none|
-|»»»» Type|body|[network_type](#schemanetwork_type)|true|none|
-|»»»» LastUpdated|body|[last_updated](#schemalast_updated)|false|The unix timestamp of the last time this entry was created or updated|
-|»»»» LastUpdatedTime|body|[last_updated_time](#schemalast_updated_time)|false|The human-readable time this object was last created or updated.|
-|»»»» ExtraProperties|body|[network_extra_properties](#schemanetwork_extra_properties)|false|none|
-|»»»»» CIDR|body|string|false|none|
-|»»»»» VlanRange|body|[integer]|false|none|
-|»»»»» MTU|body|integer|false|none|
-|»»»»» Subnets|body|[[network_ipv4_subnet](#schemanetwork_ipv4_subnet)]|false|none|
-|»»»»»» Name|body|string|true|none|
-|»»»»»» FullName|body|string|false|none|
-|»»»»»» CIDR|body|string|true|none|
-|»»»»»» VlanID|body|integer|true|none|
-|»»»»»» Gateway|body|string(ipv4)|false|none|
-|»»»»»» DHCPStart|body|string(ipv4)|false|none|
-|»»»»»» DHCPEnd|body|string(ipv4)|false|none|
-|»»»»»» IPReservations|body|[[network_ip_reservation](#schemanetwork_ip_reservation)]|false|none|
-|»»»»»»» IPAddress|body|string(ipv4)|true|none|
-|»»»»»»» Name|body|string|true|none|
-|»»»»»»» Aliases|body|[string]|false|none|
-|»»»»»»» Comment|body|string|false|none|
-|»»»»»» Comment|body|string|false|none|
-|»»»»» Comment|body|string|false|none|
+| Name                         | In   | Type                                                                      | Required | Description                                                                                                                                                                                      |
+|------------------------------|------|---------------------------------------------------------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| body                         | body | object                                                                    | false    | A JSON dictionary, where each item has a key equal to the xname of the object it contains.  Each value is a JSON representation of an object SLS should maintain.                                |
+| » sls_dump                   | body | [slsState](#schemaslsstate)                                               | false    | none                                                                                                                                                                                             |
+| »» Hardware                  | body | object                                                                    | false    | none                                                                                                                                                                                             |
+| »»» **additionalProperties** | body | [hardware](#schemahardware)                                               | false    | none                                                                                                                                                                                             |
+| »»»» Parent                  | body | string                                                                    | false    | The xname of the parent of this piece of hardware                                                                                                                                                |
+| »»»» Xname                   | body | [xname](#schemaxname)                                                     | true     | The xname of this piece of hardware                                                                                                                                                              |
+| »»»» Children                | body | [string]                                                                  | false    | none                                                                                                                                                                                             |
+| »»»» Type                    | body | string                                                                    | false    | The type of this piece of hardware.  This is an optional hint during upload; it will be ignored if it does not match the xname                                                                   |
+| »»»» TypeString              | body | string                                                                    | false    | none                                                                                                                                                                                             |
+| »»»» Class                   | body | [hwclass](#schemahwclass)                                                 | true     | The hardware class.                                                                                                                                                                              |
+| »»»» LastUpdated             | body | [last_updated](#schemalast_updated)                                       | false    | The unix timestamp of the last time this entry was created or updated                                                                                                                            |
+| »»»» LastUpdatedTime         | body | [last_updated_time](#schemalast_updated_time)                             | false    | The human-readable time this object was last created or updated.                                                                                                                                 |
+| »»»» ExtraProperties         | body | any                                                                       | false    | none                                                                                                                                                                                             |
+| »»»»» *anonymous*            | body | [hardware_comptype_hsn_connector](#schemahardware_comptype_hsn_connector) | false    | none                                                                                                                                                                                             |
+| »»»»»» Object                | body | [[xname](#schemaxname)]                                                   | true     | An array of xnames that this connector is connected to.  All xnames should have type==comptype_hsn_connector_port                                                                                |
+| »»»»» *anonymous*            | body | [hardware_pwr_connector](#schemahardware_pwr_connector)                   | false    | none                                                                                                                                                                                             |
+| »»»»»» PoweredBy             | body | [xname](#schemaxname)                                                     | true     | The xname of this piece of hardware                                                                                                                                                              |
+| »»»»» *anonymous*            | body | [hardware_mgmt_switch_connector](#schemahardware_mgmt_switch_connector)   | false    | none                                                                                                                                                                                             |
+| »»»»»» NodeNics              | body | [[xname](#schemaxname)]                                                   | true     | An array of xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.                                                                                                |
+| »»»»»» VendorName            | body | string                                                                    | false    | The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (Berkeley-style names), but may be any string. |
+| »»»»» *anonymous*            | body | [hardware_bmc](#schemahardware_bmc)                                       | false    | none                                                                                                                                                                                             |
+| »»»»»» IP6addr               | body | string                                                                    | true     | The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.                                                                                             |
+| »»»»»» IP4addr               | body | string                                                                    | true     | The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.                                                                                             |
+| »»»»»» Username              | body | string                                                                    | false    | The username that should be used to access the device (or be assigned to the device)                                                                                                             |
+| »»»»»» Password              | body | string                                                                    | false    | The password that should be used to access the device (or be assigned to the device)                                                                                                             |
+| »»»»» *anonymous*            | body | [hardware_nic](#schemahardware_nic)                                       | false    | none                                                                                                                                                                                             |
+| »»»»»» Networks              | body | [[xname](#schemaxname)]                                                   | true     | An array of network names that this NIC is connected to                                                                                                                                          |
+| »»»»»» Peers                 | body | [[xname](#schemaxname)]                                                   | true     | An array of xnames this NIC is connected directly to.  These ideally connector xnames, not switches                                                                                              |
+| »»»»» *anonymous*            | body | [hardware_nic](#schemahardware_nic)                                       | false    | none                                                                                                                                                                                             |
+| »»»»» *anonymous*            | body | [hardware_powered_device](#schemahardware_powered_device)                 | false    | none                                                                                                                                                                                             |
+| »»»»»» PowerConnector        | body | [[xname](#schemaxname)]                                                   | true     | An array of xnames, where each xname has type==*_pwr_connector.  Empty for Mountain switch cards                                                                                                 |
+| »»»»» *anonymous*            | body | [hardware_powered_device](#schemahardware_powered_device)                 | false    | none                                                                                                                                                                                             |
+| »»»»» *anonymous*            | body | [hardware_powered_device](#schemahardware_powered_device)                 | false    | none                                                                                                                                                                                             |
+| »»»»» *anonymous*            | body | [hardware_comptype_cab_pdu](#schemahardware_comptype_cab_pdu)             | false    | none                                                                                                                                                                                             |
+| »»»»»» IP6addr               | body | string                                                                    | true     | The ipv6 address that should be assigned to this BMC, or "DHCPv6". If omitted, "DHCPv6" is assumed.                                                                                              |
+| »»»»»» IP4addr               | body | string                                                                    | true     | The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.                                                                                             |
+| »»»»»» Username              | body | string                                                                    | true     | The username that should be used to access the device (or be assigned to the device)                                                                                                             |
+| »»»»»» Password              | body | string(password)                                                          | true     | The password that should be used to access the device                                                                                                                                            |
+| »»»»» *anonymous*            | body | [hardware_comptype_node](#schemahardware_comptype_node)                   | false    | none                                                                                                                                                                                             |
+| »»»»»» NodeType              | body | string                                                                    | true     | The role type assigned to this node.                                                                                                                                                             |
+| »»»»»» nid                   | body | integer                                                                   | false    | none                                                                                                                                                                                             |
+| »»»»» *anonymous*            | body | [hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node)   | false    | none                                                                                                                                                                                             |
+| »»»»»» NodeType              | body | string                                                                    | true     | The role type assigned to this node.                                                                                                                                                             |
+| »»»»»» nid                   | body | integer                                                                   | false    | none                                                                                                                                                                                             |
+| »»»»» *anonymous*            | body | [hardware_ip_and_creds_optional](#schemahardware_ip_and_creds_optional)   | false    | none                                                                                                                                                                                             |
+| »»»»»» IP6addr               | body | string                                                                    | false    | The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.                                                                                             |
+| »»»»»» IP4addr               | body | string                                                                    | false    | The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.                                                                                             |
+| »»»»»» Username              | body | string                                                                    | false    | The username that should be used to access the device (or be assigned to the device)                                                                                                             |
+| »»»»»» Password              | body | string                                                                    | false    | The password that should be used to access the device (or be assigned to the device)                                                                                                             |
+| »» Networks                  | body | object                                                                    | false    | none                                                                                                                                                                                             |
+| »»» **additionalProperties** | body | [network](#schemanetwork)                                                 | false    | none                                                                                                                                                                                             |
+| »»»» Name                    | body | string                                                                    | true     | none                                                                                                                                                                                             |
+| »»»» FullName                | body | string                                                                    | false    | none                                                                                                                                                                                             |
+| »»»» IPRanges                | body | [[network_ip_range](#schemanetwork_ip_range)]                             | true     | none                                                                                                                                                                                             |
+| »»»» Type                    | body | [network_type](#schemanetwork_type)                                       | true     | none                                                                                                                                                                                             |
+| »»»» LastUpdated             | body | [last_updated](#schemalast_updated)                                       | false    | The unix timestamp of the last time this entry was created or updated                                                                                                                            |
+| »»»» LastUpdatedTime         | body | [last_updated_time](#schemalast_updated_time)                             | false    | The human-readable time this object was last created or updated.                                                                                                                                 |
+| »»»» ExtraProperties         | body | [network_extra_properties](#schemanetwork_extra_properties)               | false    | none                                                                                                                                                                                             |
+| »»»»» CIDR                   | body | string                                                                    | false    | none                                                                                                                                                                                             |
+| »»»»» VlanRange              | body | [integer]                                                                 | false    | none                                                                                                                                                                                             |
+| »»»»» MTU                    | body | integer                                                                   | false    | none                                                                                                                                                                                             |
+| »»»»» Subnets                | body | [[network_ipv4_subnet](#schemanetwork_ipv4_subnet)]                       | false    | none                                                                                                                                                                                             |
+| »»»»»» Name                  | body | string                                                                    | true     | none                                                                                                                                                                                             |
+| »»»»»» FullName              | body | string                                                                    | false    | none                                                                                                                                                                                             |
+| »»»»»» CIDR                  | body | string                                                                    | true     | none                                                                                                                                                                                             |
+| »»»»»» VlanID                | body | integer                                                                   | true     | none                                                                                                                                                                                             |
+| »»»»»» Gateway               | body | string(ipv4)                                                              | false    | none                                                                                                                                                                                             |
+| »»»»»» DHCPStart             | body | string(ipv4)                                                              | false    | none                                                                                                                                                                                             |
+| »»»»»» DHCPEnd               | body | string(ipv4)                                                              | false    | none                                                                                                                                                                                             |
+| »»»»»» IPReservations        | body | [[network_ip_reservation](#schemanetwork_ip_reservation)]                 | false    | none                                                                                                                                                                                             |
+| »»»»»»» IPAddress            | body | string(ipv4)                                                              | true     | none                                                                                                                                                                                             |
+| »»»»»»» Name                 | body | string                                                                    | true     | none                                                                                                                                                                                             |
+| »»»»»»» Aliases              | body | [string]                                                                  | false    | none                                                                                                                                                                                             |
+| »»»»»»» Comment              | body | string                                                                    | false    | none                                                                                                                                                                                             |
+| »»»»»» Comment               | body | string                                                                    | false    | none                                                                                                                                                                                             |
+| »»»»» Comment                | body | string                                                                    | false    | none                                                                                                                                                                                             |
 
 #### Enumerated Values
 
-|Parameter|Value|
-|---|---|
-|»»»» Class|River|
-|»»»» Class|Mountain|
-|»»»» Class|Hill|
-|»»»»»» NodeType|Compute|
-|»»»»»» NodeType|System|
-|»»»»»» NodeType|Application|
-|»»»»»» NodeType|Storage|
-|»»»»»» NodeType|Management|
-|»»»»»» NodeType|Management|
+| Parameter       | Value       |
+|-----------------|-------------|
+| »»»» Class      | River       |
+| »»»» Class      | Mountain    |
+| »»»» Class      | Hill        |
+| »»»»»» NodeType | Compute     |
+| »»»»»» NodeType | System      |
+| »»»»»» NodeType | Application |
+| »»»»»» NodeType | Storage     |
+| »»»»»» NodeType | Management  |
+| »»»»»» NodeType | Management  |
 
 <h3 id="post__loadstate-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|State loaded successfully|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Loading state failed.  See body for error|None|
+| Status | Meaning                                                          | Description                               | Schema |
+|--------|------------------------------------------------------------------|-------------------------------------------|--------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)     | State loaded successfully                 | None   |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Loading state failed.  See body for error | None   |
 
 <aside class="success">
 This operation does not require authentication
@@ -1722,19 +1722,19 @@ This is primarily intended as a diagnostic tool to investigate the functioning o
 
 <h3 id="get__health-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|[OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success|Inline|
-|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /health, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
+| Status | Meaning                                                                 | Description                                                                                     | Schema                            |
+|--------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                 | [OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success | Inline                            |
+| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | Operation Not Permitted.  For /health, only GET operations are allowed.                         | [Problem7807](#schemaproblem7807) |
 
 <h3 id="get__health-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» Vault|string|true|none|Status of the Vault.|
-|» DBConnection|string|true|none|Status of the connection with the database.|
+| Name           | Type   | Required | Restrictions | Description                                 |
+|----------------|--------|----------|--------------|---------------------------------------------|
+| » Vault        | string | true     | none         | Status of the Vault.                        |
+| » DBConnection | string | true     | none         | Status of the connection with the database. |
 
 <aside class="success">
 This operation does not require authentication
@@ -1819,10 +1819,10 @@ This is primarily an endpoint for the automated Kubernetes system.
 
 <h3 id="get__liveness-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
-|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /liveness, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
+| Status | Meaning                                                                 | Description                                                                                             | Schema                            |
+|--------|-------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|-----------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)         | [No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success | None                              |
+| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | Operation Not Permitted.  For /liveness, only GET operations are allowed.                               | [Problem7807](#schemaproblem7807) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1907,10 +1907,10 @@ This is primarily an endpoint for the automated Kubernetes system.
 
 <h3 id="get__readiness-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
-|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /readiness, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
+| Status | Meaning                                                                 | Description                                                                                             | Schema                            |
+|--------|-------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|-----------------------------------|
+| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)         | [No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success | None                              |
+| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | Operation Not Permitted.  For /readiness, only GET operations are allowed.                              | [Problem7807](#schemaproblem7807) |
 
 <aside class="success">
 This operation does not require authentication
@@ -1994,10 +1994,10 @@ Retrieve the current version of the SLS mapping. Information returned is a JSON 
 
 <h3 id="get__version-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Information retrieved successfully|[versionResponse](#schemaversionresponse)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An error occurred, see text of response for more information|None|
+| Status | Meaning                                                                    | Description                                                  | Schema                                    |
+|--------|----------------------------------------------------------------------------|--------------------------------------------------------------|-------------------------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Information retrieved successfully                           | [versionResponse](#schemaversionresponse) |
+| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | An error occurred, see text of response for more information | None                                      |
 
 <aside class="success">
 This operation does not require authentication
@@ -2118,42 +2118,42 @@ is an array of strings with each string representing the name field of the netwo
 
 <h3 id="get__networks-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request successful|Inline|
+| Status | Meaning                                                 | Description        | Schema |
+|--------|---------------------------------------------------------|--------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | Request successful | Inline |
 
 <h3 id="get__networks-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[network](#schemanetwork)]|false|none|none|
-|» Name|string|true|none|none|
-|» FullName|string|false|none|none|
-|» IPRanges|[[network_ip_range](#schemanetwork_ip_range)]|true|none|none|
-|» Type|[network_type](#schemanetwork_type)|true|none|none|
-|» LastUpdated|[last_updated](#schemalast_updated)|false|read-only|The unix timestamp of the last time this entry was created or updated|
-|» LastUpdatedTime|[last_updated_time](#schemalast_updated_time)|false|read-only|The human-readable time this object was last created or updated.|
-|» ExtraProperties|[network_extra_properties](#schemanetwork_extra_properties)|false|none|none|
-|»» CIDR|string|false|none|none|
-|»» VlanRange|[integer]|false|none|none|
-|»» MTU|integer|false|none|none|
-|»» Subnets|[[network_ipv4_subnet](#schemanetwork_ipv4_subnet)]|false|none|none|
-|»»» Name|string|true|none|none|
-|»»» FullName|string|false|none|none|
-|»»» CIDR|string|true|none|none|
-|»»» VlanID|integer|true|none|none|
-|»»» Gateway|string(ipv4)|false|none|none|
-|»»» DHCPStart|string(ipv4)|false|none|none|
-|»»» DHCPEnd|string(ipv4)|false|none|none|
-|»»» IPReservations|[[network_ip_reservation](#schemanetwork_ip_reservation)]|false|none|none|
-|»»»» IPAddress|string(ipv4)|true|none|none|
-|»»»» Name|string|true|none|none|
-|»»»» Aliases|[string]|false|none|none|
-|»»»» Comment|string|false|none|none|
-|»»» Comment|string|false|none|none|
-|»» Comment|string|false|none|none|
+| Name               | Type                                                        | Required | Restrictions | Description                                                           |
+|--------------------|-------------------------------------------------------------|----------|--------------|-----------------------------------------------------------------------|
+| *anonymous*        | [[network](#schemanetwork)]                                 | false    | none         | none                                                                  |
+| » Name             | string                                                      | true     | none         | none                                                                  |
+| » FullName         | string                                                      | false    | none         | none                                                                  |
+| » IPRanges         | [[network_ip_range](#schemanetwork_ip_range)]               | true     | none         | none                                                                  |
+| » Type             | [network_type](#schemanetwork_type)                         | true     | none         | none                                                                  |
+| » LastUpdated      | [last_updated](#schemalast_updated)                         | false    | read-only    | The unix timestamp of the last time this entry was created or updated |
+| » LastUpdatedTime  | [last_updated_time](#schemalast_updated_time)               | false    | read-only    | The human-readable time this object was last created or updated.      |
+| » ExtraProperties  | [network_extra_properties](#schemanetwork_extra_properties) | false    | none         | none                                                                  |
+| »» CIDR            | string                                                      | false    | none         | none                                                                  |
+| »» VlanRange       | [integer]                                                   | false    | none         | none                                                                  |
+| »» MTU             | integer                                                     | false    | none         | none                                                                  |
+| »» Subnets         | [[network_ipv4_subnet](#schemanetwork_ipv4_subnet)]         | false    | none         | none                                                                  |
+| »»» Name           | string                                                      | true     | none         | none                                                                  |
+| »»» FullName       | string                                                      | false    | none         | none                                                                  |
+| »»» CIDR           | string                                                      | true     | none         | none                                                                  |
+| »»» VlanID         | integer                                                     | true     | none         | none                                                                  |
+| »»» Gateway        | string(ipv4)                                                | false    | none         | none                                                                  |
+| »»» DHCPStart      | string(ipv4)                                                | false    | none         | none                                                                  |
+| »»» DHCPEnd        | string(ipv4)                                                | false    | none         | none                                                                  |
+| »»» IPReservations | [[network_ip_reservation](#schemanetwork_ip_reservation)]   | false    | none         | none                                                                  |
+| »»»» IPAddress     | string(ipv4)                                                | true     | none         | none                                                                  |
+| »»»» Name          | string                                                      | true     | none         | none                                                                  |
+| »»»» Aliases       | [string]                                                    | false    | none         | none                                                                  |
+| »»»» Comment       | string                                                      | false    | none         | none                                                                  |
+| »»» Comment        | string                                                      | false    | none         | none                                                                  |
+| »» Comment         | string                                                      | false    | none         | none                                                                  |
 
 <aside class="success">
 This operation does not require authentication
@@ -2265,17 +2265,17 @@ Create a new network. Must include all fields at the time of upload.
 
 <h3 id="post__networks-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[network](#schemanetwork)|false|none|
+| Name | In   | Type                      | Required | Description |
+|------|------|---------------------------|----------|-------------|
+| body | body | [network](#schemanetwork) | false    | none        |
 
 <h3 id="post__networks-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Network created|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request. See body for details|None|
-|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Network with that name already exists|None|
+| Status | Meaning                                                          | Description                           | Schema |
+|--------|------------------------------------------------------------------|---------------------------------------|--------|
+| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)     | Network created                       | None   |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad request. See body for details     | None   |
+| 409    | [Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)    | Network with that name already exists | None   |
 
 <aside class="success">
 This operation does not require authentication
@@ -2344,9 +2344,9 @@ Retrieve the specific network.
 
 <h3 id="get__networks_{network}-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|network|path|string|true|The network to look up or alter.|
+| Name    | In   | Type   | Required | Description                      |
+|---------|------|--------|----------|----------------------------------|
+| network | path | string | true     | The network to look up or alter. |
 
 > Example responses
 
@@ -2397,10 +2397,10 @@ Retrieve the specific network.
 
 <h3 id="get__networks_{network}-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request successful|[network](#schemanetwork)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|No network item found with requested name|None|
+| Status | Meaning                                                        | Description                               | Schema                    |
+|--------|----------------------------------------------------------------|-------------------------------------------|---------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | Request successful                        | [network](#schemanetwork) |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | No network item found with requested name | None                      |
 
 <aside class="success">
 This operation does not require authentication
@@ -2516,10 +2516,10 @@ Update a network object. Parent objects will be created, if possible.
 
 <h3 id="put__networks_{network}-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|network|path|string|true|The network to look up or alter.|
-|body|body|[network](#schemanetwork)|false|none|
+| Name    | In   | Type                      | Required | Description                      |
+|---------|------|---------------------------|----------|----------------------------------|
+| network | path | string                    | true     | The network to look up or alter. |
+| body    | body | [network](#schemanetwork) | false    | none                             |
 
 > Example responses
 
@@ -2570,11 +2570,11 @@ Update a network object. Parent objects will be created, if possible.
 
 <h3 id="put__networks_{network}-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request successful|[network](#schemanetwork)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request. See body for details|None|
-|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Conflict. The requested resource already exists|None|
+| Status | Meaning                                                          | Description                                     | Schema                    |
+|--------|------------------------------------------------------------------|-------------------------------------------------|---------------------------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | Request successful                              | [network](#schemanetwork) |
+| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad request. See body for details               | None                      |
+| 409    | [Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)    | Conflict. The requested resource already exists | None                      |
 
 <aside class="success">
 This operation does not require authentication
@@ -2634,16 +2634,16 @@ Delete the specific network from SLS.
 
 <h3 id="delete__networks_{network}-parameters">Parameters</h3>
 
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|network|path|string|true|The network to look up or alter.|
+| Name    | In   | Type   | Required | Description                      |
+|---------|------|--------|----------|----------------------------------|
+| network | path | string | true     | The network to look up or alter. |
 
 <h3 id="delete__networks_{network}-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK. Network removed|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Network not found|None|
+| Status | Meaning                                                        | Description         | Schema |
+|--------|----------------------------------------------------------------|---------------------|--------|
+| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | OK. Network removed | None   |
+| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | Network not found   | None   |
 
 <aside class="success">
 This operation does not require authentication
@@ -2668,10 +2668,10 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|counter|integer|false|none|A monotonically increasing counter that increases every time a change is made to SLS|
-|last_updated|string(date-time)|false|none|An ISO-8601 datetime representing when a change was last made to SLS|
+| Name         | Type              | Required | Restrictions | Description                                                                          |
+|--------------|-------------------|----------|--------------|--------------------------------------------------------------------------------------|
+| counter      | integer           | false    | none         | A monotonically increasing counter that increases every time a change is made to SLS |
+| last_updated | string(date-time) | false    | none         | An ISO-8601 datetime representing when a change was last made to SLS                 |
 
 <h2 id="tocS_network">network</h2>
 <!-- backwards compatibility -->
@@ -2726,15 +2726,15 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|Name|string|true|none|none|
-|FullName|string|false|none|none|
-|IPRanges|[[network_ip_range](#schemanetwork_ip_range)]|true|none|none|
-|Type|[network_type](#schemanetwork_type)|true|none|none|
-|LastUpdated|[last_updated](#schemalast_updated)|false|none|The unix timestamp of the last time this entry was created or updated|
-|LastUpdatedTime|[last_updated_time](#schemalast_updated_time)|false|none|The human-readable time this object was last created or updated.|
-|ExtraProperties|[network_extra_properties](#schemanetwork_extra_properties)|false|none|none|
+| Name            | Type                                                        | Required | Restrictions | Description                                                           |
+|-----------------|-------------------------------------------------------------|----------|--------------|-----------------------------------------------------------------------|
+| Name            | string                                                      | true     | none         | none                                                                  |
+| FullName        | string                                                      | false    | none         | none                                                                  |
+| IPRanges        | [[network_ip_range](#schemanetwork_ip_range)]               | true     | none         | none                                                                  |
+| Type            | [network_type](#schemanetwork_type)                         | true     | none         | none                                                                  |
+| LastUpdated     | [last_updated](#schemalast_updated)                         | false    | none         | The unix timestamp of the last time this entry was created or updated |
+| LastUpdatedTime | [last_updated_time](#schemalast_updated_time)               | false    | none         | The human-readable time this object was last created or updated.      |
+| ExtraProperties | [network_extra_properties](#schemanetwork_extra_properties) | false    | none         | none                                                                  |
 
 <h2 id="tocS_network_ip_range">network_ip_range</h2>
 <!-- backwards compatibility -->
@@ -2750,9 +2750,9 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|none|
+| Name        | Type   | Required | Restrictions | Description |
+|-------------|--------|----------|--------------|-------------|
+| *anonymous* | string | false    | none         | none        |
 
 <h2 id="tocS_network_type">network_type</h2>
 <!-- backwards compatibility -->
@@ -2768,9 +2768,9 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|none|
+| Name        | Type   | Required | Restrictions | Description |
+|-------------|--------|----------|--------------|-------------|
+| *anonymous* | string | false    | none         | none        |
 
 <h2 id="tocS_network_extra_properties">network_extra_properties</h2>
 <!-- backwards compatibility -->
@@ -2815,13 +2815,13 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|CIDR|string|false|none|none|
-|VlanRange|[integer]|false|none|none|
-|MTU|integer|false|none|none|
-|Subnets|[[network_ipv4_subnet](#schemanetwork_ipv4_subnet)]|false|none|none|
-|Comment|string|false|none|none|
+| Name      | Type                                                | Required | Restrictions | Description |
+|-----------|-----------------------------------------------------|----------|--------------|-------------|
+| CIDR      | string                                              | false    | none         | none        |
+| VlanRange | [integer]                                           | false    | none         | none        |
+| MTU       | integer                                             | false    | none         | none        |
+| Subnets   | [[network_ipv4_subnet](#schemanetwork_ipv4_subnet)] | false    | none         | none        |
+| Comment   | string                                              | false    | none         | none        |
 
 <h2 id="tocS_network_ipv4_subnet">network_ipv4_subnet</h2>
 <!-- backwards compatibility -->
@@ -2856,17 +2856,17 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|Name|string|true|none|none|
-|FullName|string|false|none|none|
-|CIDR|string|true|none|none|
-|VlanID|integer|true|none|none|
-|Gateway|string(ipv4)|false|none|none|
-|DHCPStart|string(ipv4)|false|none|none|
-|DHCPEnd|string(ipv4)|false|none|none|
-|IPReservations|[[network_ip_reservation](#schemanetwork_ip_reservation)]|false|none|none|
-|Comment|string|false|none|none|
+| Name           | Type                                                      | Required | Restrictions | Description |
+|----------------|-----------------------------------------------------------|----------|--------------|-------------|
+| Name           | string                                                    | true     | none         | none        |
+| FullName       | string                                                    | false    | none         | none        |
+| CIDR           | string                                                    | true     | none         | none        |
+| VlanID         | integer                                                   | true     | none         | none        |
+| Gateway        | string(ipv4)                                              | false    | none         | none        |
+| DHCPStart      | string(ipv4)                                              | false    | none         | none        |
+| DHCPEnd        | string(ipv4)                                              | false    | none         | none        |
+| IPReservations | [[network_ip_reservation](#schemanetwork_ip_reservation)] | false    | none         | none        |
+| Comment        | string                                                    | false    | none         | none        |
 
 <h2 id="tocS_network_ip_reservation">network_ip_reservation</h2>
 <!-- backwards compatibility -->
@@ -2889,12 +2889,12 @@ This operation does not require authentication
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|IPAddress|string(ipv4)|true|none|none|
-|Name|string|true|none|none|
-|Aliases|[string]|false|none|none|
-|Comment|string|false|none|none|
+| Name      | Type         | Required | Restrictions | Description |
+|-----------|--------------|----------|--------------|-------------|
+| IPAddress | string(ipv4) | true     | none         | none        |
+| Name      | string       | true     | none         | none        |
+| Aliases   | [string]     | false    | none         | none        |
+| Comment   | string       | false    | none         | none        |
 
 <h2 id="tocS_xname">xname</h2>
 <!-- backwards compatibility -->
@@ -2912,9 +2912,9 @@ The xname of this piece of hardware
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The xname of this piece of hardware|
+| Name        | Type   | Required | Restrictions | Description                         |
+|-------------|--------|----------|--------------|-------------------------------------|
+| *anonymous* | string | false    | none         | The xname of this piece of hardware |
 
 <h2 id="tocS_hwtype">hwtype</h2>
 <!-- backwards compatibility -->
@@ -2932,9 +2932,9 @@ The type of this piece of hardware.  This is an optional hint during upload; it 
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The type of this piece of hardware.  This is an optional hint during upload; it will be ignored if it does not match the xname|
+| Name        | Type   | Required | Restrictions | Description                                                                                                                    |
+|-------------|--------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------|
+| *anonymous* | string | false    | none         | The type of this piece of hardware.  This is an optional hint during upload; it will be ignored if it does not match the xname |
 
 <h2 id="tocS_hwclass">hwclass</h2>
 <!-- backwards compatibility -->
@@ -2952,17 +2952,17 @@ The hardware class.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The hardware class.|
+| Name        | Type   | Required | Restrictions | Description         |
+|-------------|--------|----------|--------------|---------------------|
+| *anonymous* | string | false    | none         | The hardware class. |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|*anonymous*|River|
-|*anonymous*|Mountain|
-|*anonymous*|Hill|
+| Property    | Value    |
+|-------------|----------|
+| *anonymous* | River    |
+| *anonymous* | Mountain |
+| *anonymous* | Hill     |
 
 <h2 id="tocS_last_updated">last_updated</h2>
 <!-- backwards compatibility -->
@@ -2980,9 +2980,9 @@ The unix timestamp of the last time this entry was created or updated
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|integer|false|read-only|The unix timestamp of the last time this entry was created or updated|
+| Name        | Type    | Required | Restrictions | Description                                                           |
+|-------------|---------|----------|--------------|-----------------------------------------------------------------------|
+| *anonymous* | integer | false    | read-only    | The unix timestamp of the last time this entry was created or updated |
 
 <h2 id="tocS_last_updated_time">last_updated_time</h2>
 <!-- backwards compatibility -->
@@ -3000,9 +3000,9 @@ The human-readable time this object was last created or updated.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|read-only|The human-readable time this object was last created or updated.|
+| Name        | Type   | Required | Restrictions | Description                                                      |
+|-------------|--------|----------|--------------|------------------------------------------------------------------|
+| *anonymous* | string | false    | read-only    | The human-readable time this object was last created or updated. |
 
 <h2 id="tocS_hardware_put">hardware_put</h2>
 <!-- backwards compatibility -->
@@ -3025,10 +3025,10 @@ The human-readable time this object was last created or updated.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|Class|[hwclass](#schemahwclass)|true|none|The hardware class.|
-|ExtraProperties|[hardware_extra_properties](#schemahardware_extra_properties)|false|none|none|
+| Name            | Type                                                          | Required | Restrictions | Description         |
+|-----------------|---------------------------------------------------------------|----------|--------------|---------------------|
+| Class           | [hwclass](#schemahwclass)                                     | true     | none         | The hardware class. |
+| ExtraProperties | [hardware_extra_properties](#schemahardware_extra_properties) | false    | none         | none                |
 
 <h2 id="tocS_hardware_post">hardware_post</h2>
 <!-- backwards compatibility -->
@@ -3052,11 +3052,11 @@ The human-readable time this object was last created or updated.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|Xname|[xname](#schemaxname)|true|none|The xname of this piece of hardware|
-|Class|[hwclass](#schemahwclass)|true|none|The hardware class.|
-|ExtraProperties|[hardware_extra_properties](#schemahardware_extra_properties)|false|none|none|
+| Name            | Type                                                          | Required | Restrictions | Description                         |
+|-----------------|---------------------------------------------------------------|----------|--------------|-------------------------------------|
+| Xname           | [xname](#schemaxname)                                         | true     | none         | The xname of this piece of hardware |
+| Class           | [hwclass](#schemahwclass)                                     | true     | none         | The hardware class.                 |
+| ExtraProperties | [hardware_extra_properties](#schemahardware_extra_properties) | false    | none         | none                                |
 
 <h2 id="tocS_hardware">hardware</h2>
 <!-- backwards compatibility -->
@@ -3088,17 +3088,17 @@ The human-readable time this object was last created or updated.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|Parent|string|false|read-only|The xname of the parent of this piece of hardware|
-|Xname|[xname](#schemaxname)|true|none|The xname of this piece of hardware|
-|Children|[string]|false|read-only|none|
-|Type|string|false|read-only|The type of this piece of hardware.  This is an optional hint during upload; it will be ignored if it does not match the xname|
-|TypeString|string|false|read-only|none|
-|Class|[hwclass](#schemahwclass)|true|none|The hardware class.|
-|LastUpdated|[last_updated](#schemalast_updated)|false|none|The unix timestamp of the last time this entry was created or updated|
-|LastUpdatedTime|[last_updated_time](#schemalast_updated_time)|false|none|The human-readable time this object was last created or updated.|
-|ExtraProperties|[hardware_extra_properties](#schemahardware_extra_properties)|false|none|none|
+| Name            | Type                                                          | Required | Restrictions | Description                                                                                                                    |
+|-----------------|---------------------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------|
+| Parent          | string                                                        | false    | read-only    | The xname of the parent of this piece of hardware                                                                              |
+| Xname           | [xname](#schemaxname)                                         | true     | none         | The xname of this piece of hardware                                                                                            |
+| Children        | [string]                                                      | false    | read-only    | none                                                                                                                           |
+| Type            | string                                                        | false    | read-only    | The type of this piece of hardware.  This is an optional hint during upload; it will be ignored if it does not match the xname |
+| TypeString      | string                                                        | false    | read-only    | none                                                                                                                           |
+| Class           | [hwclass](#schemahwclass)                                     | true     | none         | The hardware class.                                                                                                            |
+| LastUpdated     | [last_updated](#schemalast_updated)                           | false    | none         | The unix timestamp of the last time this entry was created or updated                                                          |
+| LastUpdatedTime | [last_updated_time](#schemalast_updated_time)                 | false    | none         | The human-readable time this object was last created or updated.                                                               |
+| ExtraProperties | [hardware_extra_properties](#schemahardware_extra_properties) | false    | none         | none                                                                                                                           |
 
 <h2 id="tocS_hardware_bmc">hardware_bmc</h2>
 <!-- backwards compatibility -->
@@ -3119,12 +3119,12 @@ The human-readable time this object was last created or updated.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|IP6addr|string|true|none|The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.|
-|IP4addr|string|true|none|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
-|Username|string|false|none|The username that should be used to access the device (or be assigned to the device)|
-|Password|string|false|none|The password that should be used to access the device (or be assigned to the device)|
+| Name     | Type   | Required | Restrictions | Description                                                                                          |
+|----------|--------|----------|--------------|------------------------------------------------------------------------------------------------------|
+| IP6addr  | string | true     | none         | The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed. |
+| IP4addr  | string | true     | none         | The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed. |
+| Username | string | false    | none         | The username that should be used to access the device (or be assigned to the device)                 |
+| Password | string | false    | none         | The password that should be used to access the device (or be assigned to the device)                 |
 
 <h2 id="tocS_hardware_ip_and_creds_optional">hardware_ip_and_creds_optional</h2>
 <!-- backwards compatibility -->
@@ -3145,12 +3145,12 @@ The human-readable time this object was last created or updated.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|IP6addr|string|false|none|The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.|
-|IP4addr|string|false|none|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
-|Username|string|false|none|The username that should be used to access the device (or be assigned to the device)|
-|Password|string|false|none|The password that should be used to access the device (or be assigned to the device)|
+| Name     | Type   | Required | Restrictions | Description                                                                                          |
+|----------|--------|----------|--------------|------------------------------------------------------------------------------------------------------|
+| IP6addr  | string | false    | none         | The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed. |
+| IP4addr  | string | false    | none         | The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed. |
+| Username | string | false    | none         | The username that should be used to access the device (or be assigned to the device)                 |
+| Password | string | false    | none         | The password that should be used to access the device (or be assigned to the device)                 |
 
 <h2 id="tocS_hardware_powered_device">hardware_powered_device</h2>
 <!-- backwards compatibility -->
@@ -3170,9 +3170,9 @@ The human-readable time this object was last created or updated.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|PowerConnector|[[xname](#schemaxname)]|true|none|An array of xnames, where each xname has type==*_pwr_connector.  Empty for Mountain switch cards|
+| Name           | Type                    | Required | Restrictions | Description                                                                                      |
+|----------------|-------------------------|----------|--------------|--------------------------------------------------------------------------------------------------|
+| PowerConnector | [[xname](#schemaxname)] | true     | none         | An array of xnames, where each xname has type==*_pwr_connector.  Empty for Mountain switch cards |
 
 <h2 id="tocS_hardware_comptype_hsn_connector">hardware_comptype_hsn_connector</h2>
 <!-- backwards compatibility -->
@@ -3192,9 +3192,9 @@ The human-readable time this object was last created or updated.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|Object|[[xname](#schemaxname)]|true|none|An array of xnames that this connector is connected to.  All xnames should have type==comptype_hsn_connector_port|
+| Name   | Type                    | Required | Restrictions | Description                                                                                                       |
+|--------|-------------------------|----------|--------------|-------------------------------------------------------------------------------------------------------------------|
+| Object | [[xname](#schemaxname)] | true     | none         | An array of xnames that this connector is connected to.  All xnames should have type==comptype_hsn_connector_port |
 
 <h2 id="tocS_hardware_pwr_connector">hardware_pwr_connector</h2>
 <!-- backwards compatibility -->
@@ -3212,9 +3212,9 @@ The human-readable time this object was last created or updated.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|PoweredBy|[xname](#schemaxname)|true|none|The hardware this cable is connected to.  May be any type of object.  Parent is excluded|
+| Name      | Type                  | Required | Restrictions | Description                                                                              |
+|-----------|-----------------------|----------|--------------|------------------------------------------------------------------------------------------|
+| PoweredBy | [xname](#schemaxname) | true     | none         | The hardware this cable is connected to.  May be any type of object.  Parent is excluded |
 
 <h2 id="tocS_hardware_mgmt_switch_connector">hardware_mgmt_switch_connector</h2>
 <!-- backwards compatibility -->
@@ -3235,10 +3235,10 @@ The human-readable time this object was last created or updated.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|NodeNics|[[xname](#schemaxname)]|true|none|An array of xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.|
-|VendorName|string|false|none|The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (Berkeley-style names), but may be any string.|
+| Name       | Type                    | Required | Restrictions | Description                                                                                                                                                                                      |
+|------------|-------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| NodeNics   | [[xname](#schemaxname)] | true     | none         | An array of xnames that the hardware_mgmt_switch_connector is connected to.  Excludes the parent.                                                                                                |
+| VendorName | string                  | false    | none         | The vendor-assigned name for this port, as it appears in the switch management software.  Typically this is something like "GigabitEthernet 1/31" (Berkeley-style names), but may be any string. |
 
 <h2 id="tocS_hardware_comptype_rtr_bmc">hardware_comptype_rtr_bmc</h2>
 <!-- backwards compatibility -->
@@ -3305,10 +3305,10 @@ The human-readable time this object was last created or updated.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|Networks|[[xname](#schemaxname)]|true|none|An array of network names that this NIC is connected to|
-|Peers|[[xname](#schemaxname)]|true|none|An array of xnames this NIC is connected directly to.  These ideally connector xnames, not switches|
+| Name     | Type                    | Required | Restrictions | Description                                                                                         |
+|----------|-------------------------|----------|--------------|-----------------------------------------------------------------------------------------------------|
+| Networks | [[xname](#schemaxname)] | true     | none         | An array of network names that this NIC is connected to                                             |
+| Peers    | [[xname](#schemaxname)] | true     | none         | An array of xnames this NIC is connected directly to.  These ideally connector xnames, not switches |
 
 <h2 id="tocS_hardware_comptype_rtmod">hardware_comptype_rtmod</h2>
 <!-- backwards compatibility -->
@@ -3389,12 +3389,12 @@ The human-readable time this object was last created or updated.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|IP6addr|string|true|none|The ipv6 address that should be assigned to this BMC, or "DHCPv6". If omitted, "DHCPv6" is assumed.|
-|IP4addr|string|true|none|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
-|Username|string|true|none|The username that should be used to access the device (or be assigned to the device)|
-|Password|string(password)|true|none|The password that should be used to access the device|
+| Name     | Type             | Required | Restrictions | Description                                                                                          |
+|----------|------------------|----------|--------------|------------------------------------------------------------------------------------------------------|
+| IP6addr  | string           | true     | none         | The ipv6 address that should be assigned to this BMC, or "DHCPv6". If omitted, "DHCPv6" is assumed.  |
+| IP4addr  | string           | true     | none         | The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed. |
+| Username | string           | true     | none         | The username that should be used to access the device (or be assigned to the device)                 |
+| Password | string(password) | true     | none         | The password that should be used to access the device                                                |
 
 <h2 id="tocS_hardware_comptype_node">hardware_comptype_node</h2>
 <!-- backwards compatibility -->
@@ -3413,20 +3413,20 @@ The human-readable time this object was last created or updated.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|NodeType|string|true|none|The role type assigned to this node.|
-|nid|integer|false|none|none|
+| Name     | Type    | Required | Restrictions | Description                          |
+|----------|---------|----------|--------------|--------------------------------------|
+| NodeType | string  | true     | none         | The role type assigned to this node. |
+| nid      | integer | false    | none         | none                                 |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|NodeType|Compute|
-|NodeType|System|
-|NodeType|Application|
-|NodeType|Storage|
-|NodeType|Management|
+| Property | Value       |
+|----------|-------------|
+| NodeType | Compute     |
+| NodeType | System      |
+| NodeType | Application |
+| NodeType | Storage     |
+| NodeType | Management  |
 
 <h2 id="tocS_hardware_comptype_virtual_node">hardware_comptype_virtual_node</h2>
 <!-- backwards compatibility -->
@@ -3445,16 +3445,16 @@ The human-readable time this object was last created or updated.
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|NodeType|string|true|none|The role type assigned to this node.|
-|nid|integer|false|none|none|
+| Name     | Type    | Required | Restrictions | Description                          |
+|----------|---------|----------|--------------|--------------------------------------|
+| NodeType | string  | true     | none         | The role type assigned to this node. |
+| nid      | integer | false    | none         | none                                 |
 
 #### Enumerated Values
 
-|Property|Value|
-|---|---|
-|NodeType|Management|
+| Property | Value      |
+|----------|------------|
+| NodeType | Management |
 
 <h2 id="tocS_hardware_comptype_nodecard">hardware_comptype_nodecard</h2>
 <!-- backwards compatibility -->
@@ -3497,81 +3497,81 @@ The human-readable time this object was last created or updated.
 
 oneOf
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[hardware_comptype_hsn_connector](#schemahardware_comptype_hsn_connector)|false|none|none|
+| Name        | Type                                                                      | Required | Restrictions | Description |
+|-------------|---------------------------------------------------------------------------|----------|--------------|-------------|
+| *anonymous* | [hardware_comptype_hsn_connector](#schemahardware_comptype_hsn_connector) | false    | none         | none        |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[hardware_pwr_connector](#schemahardware_pwr_connector)|false|none|none|
+| Name        | Type                                                    | Required | Restrictions | Description |
+|-------------|---------------------------------------------------------|----------|--------------|-------------|
+| *anonymous* | [hardware_pwr_connector](#schemahardware_pwr_connector) | false    | none         | none        |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[hardware_mgmt_switch_connector](#schemahardware_mgmt_switch_connector)|false|none|none|
+| Name        | Type                                                                    | Required | Restrictions | Description |
+|-------------|-------------------------------------------------------------------------|----------|--------------|-------------|
+| *anonymous* | [hardware_mgmt_switch_connector](#schemahardware_mgmt_switch_connector) | false    | none         | none        |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[hardware_comptype_rtr_bmc](#schemahardware_comptype_rtr_bmc)|false|none|none|
+| Name        | Type                                                          | Required | Restrictions | Description |
+|-------------|---------------------------------------------------------------|----------|--------------|-------------|
+| *anonymous* | [hardware_comptype_rtr_bmc](#schemahardware_comptype_rtr_bmc) | false    | none         | none        |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[hardware_comptype_bmc_nic](#schemahardware_comptype_bmc_nic)|false|none|none|
+| Name        | Type                                                          | Required | Restrictions | Description |
+|-------------|---------------------------------------------------------------|----------|--------------|-------------|
+| *anonymous* | [hardware_comptype_bmc_nic](#schemahardware_comptype_bmc_nic) | false    | none         | none        |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[hardware_nic](#schemahardware_nic)|false|none|none|
+| Name        | Type                                | Required | Restrictions | Description |
+|-------------|-------------------------------------|----------|--------------|-------------|
+| *anonymous* | [hardware_nic](#schemahardware_nic) | false    | none         | none        |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[hardware_comptype_rtmod](#schemahardware_comptype_rtmod)|false|none|none|
+| Name        | Type                                                      | Required | Restrictions | Description |
+|-------------|-----------------------------------------------------------|----------|--------------|-------------|
+| *anonymous* | [hardware_comptype_rtmod](#schemahardware_comptype_rtmod) | false    | none         | none        |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[hardware_comptype_mgmt_switch](#schemahardware_comptype_mgmt_switch)|false|none|none|
+| Name        | Type                                                                  | Required | Restrictions | Description |
+|-------------|-----------------------------------------------------------------------|----------|--------------|-------------|
+| *anonymous* | [hardware_comptype_mgmt_switch](#schemahardware_comptype_mgmt_switch) | false    | none         | none        |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[hardware_comptype_compmod](#schemahardware_comptype_compmod)|false|none|none|
+| Name        | Type                                                          | Required | Restrictions | Description |
+|-------------|---------------------------------------------------------------|----------|--------------|-------------|
+| *anonymous* | [hardware_comptype_compmod](#schemahardware_comptype_compmod) | false    | none         | none        |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[hardware_comptype_cab_pdu](#schemahardware_comptype_cab_pdu)|false|none|none|
+| Name        | Type                                                          | Required | Restrictions | Description |
+|-------------|---------------------------------------------------------------|----------|--------------|-------------|
+| *anonymous* | [hardware_comptype_cab_pdu](#schemahardware_comptype_cab_pdu) | false    | none         | none        |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[hardware_comptype_node](#schemahardware_comptype_node)|false|none|none|
+| Name        | Type                                                    | Required | Restrictions | Description |
+|-------------|---------------------------------------------------------|----------|--------------|-------------|
+| *anonymous* | [hardware_comptype_node](#schemahardware_comptype_node) | false    | none         | none        |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node)|false|none|none|
+| Name        | Type                                                                    | Required | Restrictions | Description |
+|-------------|-------------------------------------------------------------------------|----------|--------------|-------------|
+| *anonymous* | [hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node) | false    | none         | none        |
 
 xor
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[hardware_comptype_nodecard](#schemahardware_comptype_nodecard)|false|none|none|
+| Name        | Type                                                            | Required | Restrictions | Description |
+|-------------|-----------------------------------------------------------------|----------|--------------|-------------|
+| *anonymous* | [hardware_comptype_nodecard](#schemahardware_comptype_nodecard) | false    | none         | none        |
 
 <h2 id="tocS_slsState">slsState</h2>
 <!-- backwards compatibility -->
@@ -3706,12 +3706,12 @@ xor
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|Hardware|object|false|none|none|
-|» **additionalProperties**|[hardware](#schemahardware)|false|none|none|
-|Networks|object|false|none|none|
-|» **additionalProperties**|[network](#schemanetwork)|false|none|none|
+| Name                       | Type                        | Required | Restrictions | Description |
+|----------------------------|-----------------------------|----------|--------------|-------------|
+| Hardware                   | object                      | false    | none         | none        |
+| » **additionalProperties** | [hardware](#schemahardware) | false    | none         | none        |
+| Networks                   | object                      | false    | none         | none        |
+| » **additionalProperties** | [network](#schemanetwork)   | false    | none         | none        |
 
 <h2 id="tocS_Problem7807">Problem7807</h2>
 <!-- backwards compatibility -->
@@ -3735,11 +3735,11 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 
 ### Properties
 
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|type|string|true|none|none|
-|detail|string|false|none|none|
-|instance|string|false|none|none|
-|status|number(int32)|false|none|none|
-|title|string|false|none|none|
+| Name     | Type          | Required | Restrictions | Description |
+|----------|---------------|----------|--------------|-------------|
+| type     | string        | true     | none         | none        |
+| detail   | string        | false    | none         | none        |
+| instance | string        | false    | none         | none        |
+| status   | number(int32) | false    | none         | none        |
+| title    | string        | false    | none         | none        |
 

@@ -46,12 +46,12 @@ The diagram below shows how the connection is established:
 
 The system can be setup using other customer requirements. In order to do so, the following information will be needed:
 
-|Item|Description|
-|----|-----------|
-|Customer network IP address|Specifies an IP address on the customer network that is routable to the customer network gateway|
-|CMN IP address space|Specifies a dedicated network \(typically `/24`\) that is routable from the customer network to be used for the CMN|
-|CAN IP address space|Specifies a dedicated network that is routable from the customer network to be used for the CAN (optional)|
-|System name|Specifies the system name to be used and configured|
-|Domain namespace extension|Specifies the domain extension to be used; for example, `customer.com`|
-|Customer network IP address for `ncn-m001`|Specifies an IP address for administrative access on the customer network for `ncn-m001`|
-|\(Optional\) BMC customer network IP address for `ncn-m001`|Specifies an IP address for BMC access on the customer network for `ncn-m001`|
+| Item                                                        | Description                                                                                                         |
+|-------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
+| Customer network IP address                                 | Specifies an IP address on the customer network that is routable to the customer network gateway                    |
+| CMN IP address space                                        | Specifies a dedicated network \(typically `/24`\) that is routable from the customer network to be used for the CMN |
+| CAN IP address space                                        | Specifies a dedicated network that is routable from the customer network to be used for the CAN (optional)          |
+| System name                                                 | Specifies the system name to be used and configured                                                                 |
+| Domain namespace extension                                  | Specifies the domain extension to be used; for example, `customer.com`                                              |
+| Customer network IP address for `ncn-m001`                  | Specifies an IP address for administrative access on the customer network for `ncn-m001`                            |
+| \(Optional\) BMC customer network IP address for `ncn-m001` | Specifies an IP address for BMC access on the customer network for `ncn-m001`                                       |
