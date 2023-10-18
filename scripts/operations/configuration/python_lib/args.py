@@ -30,23 +30,22 @@ import os
 
 from typing import Callable, List
 
+from . import common
 
 TEXT_FILE_TYPE = argparse.FileType('rt', encoding="utf-8")
 
 
-def readable_directory(directory_string: str) -> str:
+def readable_directory(dirpath_string: str) -> str:
     """
     Validates that the string is the path to a readable directory.
     If so, returns the directory string.
     Raises an ArgumentTypeError if not.
     """
-    if not os.path.exists(directory_string):
-        raise argparse.ArgumentTypeError(f"Directory does not exist: '{directory_string}'")
-    if not os.path.isdir(directory_string):
-        raise argparse.ArgumentTypeError(f"Exists but is not a directory: '{directory_string}'")
-    if not os.access(directory_string, os.R_OK):
-        raise argparse.ArgumentTypeError(f"Directory exists but is not readable: '{directory_string}'")
-    return directory_string
+    try:
+        common.validate_directory_readable(dirpath_string)
+    except common.ScriptException as exc:
+        raise argparse.ArgumentTypeError(f"{exc}")
+    return dirpath_string
 
 
 def readable_file(filepath_string: str) -> str:
@@ -55,13 +54,22 @@ def readable_file(filepath_string: str) -> str:
     If so, returns the filepath string.
     Raises an ArgumentTypeError if not.
     """
-    if not os.path.exists(filepath_string):
-        raise argparse.ArgumentTypeError(f"File does not exist: '{filepath_string}'")
-    if not os.path.isfile(filepath_string):
-        raise argparse.ArgumentTypeError(f"Exists but is not a regular file: '{filepath_string}'")
-    if not os.access(filepath_string, os.R_OK):
-        raise argparse.ArgumentTypeError(f"File exists but is not readable: '{filepath_string}'")
+    try:
+        common.validate_file_readable(filepath_string)
+    except common.ScriptException as exc:
+        raise argparse.ArgumentTypeError(f"{exc}")
     return filepath_string
+
+
+def readable_file_with_ext(filepath_string: str, ext: str) -> str:
+    """
+    Validates that the filename ends with the specified extension.
+    Also calls readable_file.
+    Raises an ArgumentTypeError if error.
+    """
+    if filepath_string[-len(ext):] != ext:
+        raise argparse.ArgumentTypeError(f"Filename does not have '{ext}' extension: '{filepath_string}'")
+    return readable_file(filepath_string)
 
 
 def get_text_file_contents(file_name: str,
@@ -111,7 +119,7 @@ def get_env_var_value(env_var_name: str,
     if env_var_value is None:
         msg = f"Environment variable {env_var_name} is not set"
         if unset_ok:
-            logging.debug(f"{msg}; unset_ok is True")
+            logging.debug("%s; unset_ok is True", msg)
             env_var_value = ""
         else:
             logging.error(msg)
