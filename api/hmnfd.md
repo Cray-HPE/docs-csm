@@ -154,14 +154,14 @@ Retrieve all information on currently held State Change Notification subscriptio
 
 <h3 id="dogetsubscriptioninfo-responses">Responses</h3>
 
-| Status  | Meaning                                                                    | Description                                                                                  | Schema                                                |
-|---------|----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|-------------------------------------------------------|
-| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Success.  Currently held subscriptions are returned.                                         | [SubscriptionListArray](#schemasubscriptionlistarray) |
-| 401     | [Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)            | Unauthorized.  RBAC prevented operation from executing, or authentication token has expired. | [Problem7807](#schemaproblem7807)                     |
-| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Does Not Exist.  Endpoint not available.                                                     | [Problem7807](#schemaproblem7807)                     |
-| 405     | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)    | Operation Not Permitted.  For /subscriptions, only GET operations are allowed.               | [Problem7807](#schemaproblem7807)                     |
-| 500     | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error.  Unexpected condition encountered when processing the request.        | [Problem7807](#schemaproblem7807)                     |
-| default | Default                                                                    | Unexpected error                                                                             | [Problem7807](#schemaproblem7807)                     |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success.  Currently held subscriptions are returned.|[SubscriptionListArray](#schemasubscriptionlistarray)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /subscriptions, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
+|default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -232,9 +232,9 @@ Retrieve currently held State Change Notification subscriptions for a component.
 
 <h3 id="dogetsubscriptioninfoxname-parameters">Parameters</h3>
 
-| Name  | In   | Type                              | Required | Description |
-|-------|------|-----------------------------------|----------|-------------|
-| xname | path | [XName.1.0.0](#schemaxname.1.0.0) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|xname|path|[XName.1.0.0](#schemaxname.1.0.0)|true|none|
 
 > Example responses
 
@@ -268,15 +268,15 @@ Retrieve currently held State Change Notification subscriptions for a component.
 
 <h3 id="dogetsubscriptioninfoxname-responses">Responses</h3>
 
-| Status  | Meaning                                                                    | Description                                                                                  | Schema                                                |
-|---------|----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|-------------------------------------------------------|
-| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Success.  Currently held subscriptions are returned.                                         | [SubscriptionListArray](#schemasubscriptionlistarray) |
-| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request.  Invalid XName in URL path.                                                     | [Problem7807](#schemaproblem7807)                     |
-| 401     | [Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)            | Unauthorized.  RBAC prevented operation from executing, or authentication token has expired. | [Problem7807](#schemaproblem7807)                     |
-| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Does Not Exist.  Endpoint not available.                                                     | [Problem7807](#schemaproblem7807)                     |
-| 405     | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)    | Operation Not Permitted.  For /subscriptions, only GET operations are allowed.               | [Problem7807](#schemaproblem7807)                     |
-| 500     | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error.  Unexpected condition encountered when processing the request.        | [Problem7807](#schemaproblem7807)                     |
-| default | Default                                                                    | Unexpected error                                                                             | [Problem7807](#schemaproblem7807)                     |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success.  Currently held subscriptions are returned.|[SubscriptionListArray](#schemasubscriptionlistarray)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request.  Invalid XName in URL path.|[Problem7807](#schemaproblem7807)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /subscriptions, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
+|default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -347,9 +347,9 @@ Delete all state change notification subscriptions for a component.
 
 <h3 id="dosubscriptiondeletexname-parameters">Parameters</h3>
 
-| Name  | In   | Type                              | Required | Description |
-|-------|------|-----------------------------------|----------|-------------|
-| xname | path | [XName.1.0.0](#schemaxname.1.0.0) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|xname|path|[XName.1.0.0](#schemaxname.1.0.0)|true|none|
 
 > Example responses
 
@@ -367,15 +367,15 @@ Delete all state change notification subscriptions for a component.
 
 <h3 id="dosubscriptiondeletexname-responses">Responses</h3>
 
-| Status  | Meaning                                                                    | Description                                                                                  | Schema                            |
-|---------|----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|-----------------------------------|
-| 204     | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)            | Success.                                                                                     | None                              |
-| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request.  Invalid XName in URL path.                                                     | [Problem7807](#schemaproblem7807) |
-| 401     | [Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)            | Unauthorized.  RBAC prevented operation from executing, or authentication token has expired. | [Problem7807](#schemaproblem7807) |
-| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Does Not Exist.  Endpoint not available.                                                     | [Problem7807](#schemaproblem7807) |
-| 405     | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)    | Operation Not Permitted.  Only DELETE operations are allowed.                                | [Problem7807](#schemaproblem7807) |
-| 500     | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error.  Unexpected condition encountered when processing the request.        | [Problem7807](#schemaproblem7807) |
-| default | Default                                                                    | Unexpected error                                                                             | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Success.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request.  Invalid XName in URL path.|[Problem7807](#schemaproblem7807)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  Only DELETE operations are allowed.|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
+|default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -471,11 +471,11 @@ Subscribe to state change notifications for a set of components. Once this is do
 
 <h3 id="dosubscriptionpostv2-parameters">Parameters</h3>
 
-| Name  | In   | Type                                      | Required | Description                                               |
-|-------|------|-------------------------------------------|----------|-----------------------------------------------------------|
-| body  | body | [SubscribePostV2](#schemasubscribepostv2) | true     | none                                                      |
-| xname | path | string                                    | true     | The xname of the subscribing component (typically a node) |
-| agent | path | string                                    | true     | The software agent running on the subscribing component   |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[SubscribePostV2](#schemasubscribepostv2)|true|none|
+|xname|path|string|true|The xname of the subscribing component (typically a node)|
+|agent|path|string|true|The software agent running on the subscribing component|
 
 > Example responses
 
@@ -493,15 +493,15 @@ Subscribe to state change notifications for a set of components. Once this is do
 
 <h3 id="dosubscriptionpostv2-responses">Responses</h3>
 
-| Status  | Meaning                                                                    | Description                                                                                                       | Schema                            |
-|---------|----------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|-----------------------------------|
-| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Success.                                                                                                          | None                              |
-| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request.  Malformed JSON.  Verify all JSON formatting in payload, and that all xnames are properly formatted. | [Problem7807](#schemaproblem7807) |
-| 401     | [Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)            | Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.                      | [Problem7807](#schemaproblem7807) |
-| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Does Not Exist.  Endpoint not available.                                                                          | [Problem7807](#schemaproblem7807) |
-| 405     | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)    | Operation Not Permitted.  Only PATCH and DELETE operations are allowed.                                           | [Problem7807](#schemaproblem7807) |
-| 500     | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error.  Unexpected condition encountered when processing the request.                             | [Problem7807](#schemaproblem7807) |
-| default | Default                                                                    | Unexpected error                                                                                                  | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request.  Malformed JSON.  Verify all JSON formatting in payload, and that all xnames are properly formatted.|[Problem7807](#schemaproblem7807)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  Only PATCH and DELETE operations are allowed.|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
+|default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -597,11 +597,11 @@ Modify an existing subscription to state change notifications for a  component a
 
 <h3 id="dosubscriptionpatchv2-parameters">Parameters</h3>
 
-| Name  | In   | Type                                      | Required | Description                                               |
-|-------|------|-------------------------------------------|----------|-----------------------------------------------------------|
-| body  | body | [SubscribePostV2](#schemasubscribepostv2) | true     | none                                                      |
-| xname | path | string                                    | true     | The xname of the subscribing component (typically a node) |
-| agent | path | string                                    | true     | The software agent running on the subscribing component   |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[SubscribePostV2](#schemasubscribepostv2)|true|none|
+|xname|path|string|true|The xname of the subscribing component (typically a node)|
+|agent|path|string|true|The software agent running on the subscribing component|
 
 > Example responses
 
@@ -619,15 +619,15 @@ Modify an existing subscription to state change notifications for a  component a
 
 <h3 id="dosubscriptionpatchv2-responses">Responses</h3>
 
-| Status  | Meaning                                                                    | Description                                                                                                       | Schema                            |
-|---------|----------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|-----------------------------------|
-| 204     | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)            | Success.                                                                                                          | None                              |
-| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request.  Malformed JSON.  Verify all JSON formatting in payload, and that all xnames are properly formatted. | [Problem7807](#schemaproblem7807) |
-| 401     | [Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)            | Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.                      | [Problem7807](#schemaproblem7807) |
-| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Does Not Exist.  Endpoint not available.                                                                          | [Problem7807](#schemaproblem7807) |
-| 405     | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)    | Operation Not Permitted.  Only POST, PATCH and DELETE operations are allowed.                                     | [Problem7807](#schemaproblem7807) |
-| 500     | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error.  Unexpected condition encountered when processing the request.                             | [Problem7807](#schemaproblem7807) |
-| default | Default                                                                    | Unexpected error                                                                                                  | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Success.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request.  Malformed JSON.  Verify all JSON formatting in payload, and that all xnames are properly formatted.|[Problem7807](#schemaproblem7807)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  Only POST, PATCH and DELETE operations are allowed.|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
+|default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -698,10 +698,10 @@ Delete a specific state change notification subscription associated  with a targ
 
 <h3 id="dosubscriptiondeletexnameagentv2-parameters">Parameters</h3>
 
-| Name  | In   | Type   | Required | Description                                               |
-|-------|------|--------|----------|-----------------------------------------------------------|
-| xname | path | string | true     | The xname of the subscribing component (typically a node) |
-| agent | path | string | true     | The software agent running on the subscribing component   |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|xname|path|string|true|The xname of the subscribing component (typically a node)|
+|agent|path|string|true|The software agent running on the subscribing component|
 
 > Example responses
 
@@ -719,15 +719,15 @@ Delete a specific state change notification subscription associated  with a targ
 
 <h3 id="dosubscriptiondeletexnameagentv2-responses">Responses</h3>
 
-| Status  | Meaning                                                                    | Description                                                                                  | Schema                            |
-|---------|----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|-----------------------------------|
-| 204     | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)            | Success.                                                                                     | None                              |
-| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request.  Invalid XName in URL path or No matching subscription for DELETE.              | [Problem7807](#schemaproblem7807) |
-| 401     | [Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)            | Unauthorized.  RBAC prevented operation from executing, or authentication token has expired. | [Problem7807](#schemaproblem7807) |
-| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Does Not Exist.  Endpoint not available.                                                     | [Problem7807](#schemaproblem7807) |
-| 405     | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)    | Operation Not Permitted.  Only DELETE operations are allowed.                                | [Problem7807](#schemaproblem7807) |
-| 500     | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error.  Unexpected condition encountered when processing the request.        | [Problem7807](#schemaproblem7807) |
-| default | Default                                                                    | Unexpected error                                                                             | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Success.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request.  Invalid XName in URL path or No matching subscription for DELETE.|[Problem7807](#schemaproblem7807)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  Only DELETE operations are allowed.|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
+|default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -820,9 +820,9 @@ Send a state change notification for fanout to subscribers. This is the API endp
 
 <h3 id="doscn-parameters">Parameters</h3>
 
-| Name | In   | Type                                | Required | Description |
-|------|------|-------------------------------------|----------|-------------|
-| body | body | [StateChanges](#schemastatechanges) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[StateChanges](#schemastatechanges)|true|none|
 
 > Example responses
 
@@ -840,15 +840,15 @@ Send a state change notification for fanout to subscribers. This is the API endp
 
 <h3 id="doscn-responses">Responses</h3>
 
-| Status  | Meaning                                                                    | Description                                                                                  | Schema                            |
-|---------|----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|-----------------------------------|
-| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Success.                                                                                     | None                              |
-| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request.  Malformed JSON.  Verify all JSON formatting in payload.                        | [Problem7807](#schemaproblem7807) |
-| 401     | [Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)            | Unauthorized.  RBAC prevented operation from executing, or authentication token has expired. | [Problem7807](#schemaproblem7807) |
-| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Does Not Exist.  Endpoint not available.                                                     | [Problem7807](#schemaproblem7807) |
-| 405     | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)    | Operation Not Permitted.  For /scn, only POST operations are allowed.                        | [Problem7807](#schemaproblem7807) |
-| 500     | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error.  Unexpected condition encountered when processing the request.        | [Problem7807](#schemaproblem7807) |
-| default | Default                                                                    | Unexpected error                                                                             | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request.  Malformed JSON.  Verify all JSON formatting in payload.|[Problem7807](#schemaproblem7807)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /scn, only POST operations are allowed.|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
+|default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -941,14 +941,14 @@ Retrieve a JSON-formatted list of current configurable parameters.
 
 <h3 id="doparamsget-responses">Responses</h3>
 
-| Status  | Meaning                                                                    | Description                                                                                  | Schema                            |
-|---------|----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|-----------------------------------|
-| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Success.  Current configurable parameter values are returned.                                | [parameters](#schemaparameters)   |
-| 401     | [Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)            | Unauthorized.  RBAC prevented operation from executing, or authentication token has expired. | [Problem7807](#schemaproblem7807) |
-| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Does Not Exist.  Endpoint not available.                                                     | [Problem7807](#schemaproblem7807) |
-| 405     | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)    | Operation Not Permitted.  For /params, only GET and PATCH operations are allowed.            | [Problem7807](#schemaproblem7807) |
-| 500     | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error.  Unexpected condition encountered when processing the request.        | [Problem7807](#schemaproblem7807) |
-| default | Default                                                                    | Unexpected error                                                                             | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success.  Current configurable parameter values are returned.|[parameters](#schemaparameters)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /params, only GET and PATCH operations are allowed.|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
+|default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -1041,9 +1041,9 @@ Change the value of one or more configurable parameters.
 
 <h3 id="doparamspatch-parameters">Parameters</h3>
 
-| Name | In   | Type                            | Required | Description |
-|------|------|---------------------------------|----------|-------------|
-| body | body | [parameters](#schemaparameters) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[parameters](#schemaparameters)|true|none|
 
 > Example responses
 
@@ -1061,15 +1061,15 @@ Change the value of one or more configurable parameters.
 
 <h3 id="doparamspatch-responses">Responses</h3>
 
-| Status  | Meaning                                                                    | Description                                                                                  | Schema                            |
-|---------|----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|-----------------------------------|
-| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Success.                                                                                     | None                              |
-| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request.  Malformed JSON.  Verify all JSON formatting in payload.                        | [Problem7807](#schemaproblem7807) |
-| 401     | [Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)            | Unauthorized.  RBAC prevented operation from executing, or authentication token has expired. | [Problem7807](#schemaproblem7807) |
-| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Does Not Exist.  Endpoint not available.                                                     | [Problem7807](#schemaproblem7807) |
-| 405     | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)    | Operation Not Permitted.  For /params, only GET and PATCH operations are allowed.            | [Problem7807](#schemaproblem7807) |
-| 500     | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error.  Unexpected condition encountered when processing the request.        | [Problem7807](#schemaproblem7807) |
-| default | Default                                                                    | Unexpected error                                                                             | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request.  Malformed JSON.  Verify all JSON formatting in payload.|[Problem7807](#schemaproblem7807)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /params, only GET and PATCH operations are allowed.|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
+|default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -1160,22 +1160,22 @@ This is primarily intended as a diagnostic tool to investigate the functioning o
 
 <h3 id="get__health-responses">Responses</h3>
 
-| Status | Meaning                                                                 | Description                                                                                     | Schema                            |
-|--------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                 | [OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success | Inline                            |
-| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | Operation Not Permitted.  For /health, only GET operations are allowed.                         | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|[OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success|Inline|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /health, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 
 <h3 id="get__health-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-| Name               | Type   | Required | Restrictions | Description                                                                                                                                               |
-|--------------------|--------|----------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| » KvStore          | string | true     | none         | Status of the KV Store.                                                                                                                                   |
-| » MsgBus           | string | true     | none         | Status of the connection with the message bus.                                                                                                            |
-| » HsmSubscriptions | string | true     | none         | Status of the subscriptions to the Hardware State Manager (HSM).  Any error reported by an attempt to access the HSM subscriptions will be included here. |
-| » PruneMap         | string | true     | none         | Status of the list of subscriptions to be pruned.                                                                                                         |
-| » WorkerPool       | string | true     | none         | Status of the worker pool servicing the notifications.                                                                                                    |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» KvStore|string|true|none|Status of the KV Store.|
+|» MsgBus|string|true|none|Status of the connection with the message bus.|
+|» HsmSubscriptions|string|true|none|Status of the subscriptions to the Hardware State Manager (HSM).  Any error reported by an attempt to access the HSM subscriptions will be included here.|
+|» PruneMap|string|true|none|Status of the list of subscriptions to be pruned.|
+|» WorkerPool|string|true|none|Status of the worker pool servicing the notifications.|
 
 <aside class="success">
 This operation does not require authentication
@@ -1260,10 +1260,10 @@ This is primarily an endpoint for the automated Kubernetes system.
 
 <h3 id="get__liveness-responses">Responses</h3>
 
-| Status | Meaning                                                                 | Description                                                                                             | Schema                            |
-|--------|-------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|-----------------------------------|
-| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)         | [No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success | None                              |
-| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | Operation Not Permitted.  For /liveness, only GET operations are allowed.                               | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /liveness, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -1348,10 +1348,10 @@ This is primarily an endpoint for the automated Kubernetes system.
 
 <h3 id="get__readiness-responses">Responses</h3>
 
-| Status | Meaning                                                                 | Description                                                                                             | Schema                            |
-|--------|-------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|-----------------------------------|
-| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)         | [No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success | None                              |
-| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | Operation Not Permitted.  For /readiness, only GET operations are allowed.                              | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /readiness, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -1393,17 +1393,17 @@ State Change Notification Subscription Message Payload
 
 ### Properties
 
-| Name                | Type                                                  | Required | Restrictions | Description                                                                                                                                                                   |
-|---------------------|-------------------------------------------------------|----------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Components          | [[XName.1.0.0](#schemaxname.1.0.0)]                   | false    | none         | This is a list of components to associate with a State Change Notification.                                                                                                   |
-| Subscriber          | string                                                | false    | none         | This is the xname of the subscriber. It can have an optional service name.  Note that this is only used for backward compatibility with the V1 API, and is not actually used. |
-| SubscriberComponent | string                                                | false    | none         | This is the xname of the subscriber.                                                                                                                                          |
-| SubscriberAgent     | string                                                | false    | none         | This is the name of the subscribing software agent.                                                                                                                           |
-| Enabled             | boolean                                               | false    | none         | If true, subscribe to changes to the Enabled status of a component.                                                                                                           |
-| Roles               | [[Roles.1.0.0](#schemaroles.1.0.0)]                   | false    | none         | Node role change to subscribe for                                                                                                                                             |
-| SoftwareStatus      | [[SoftwareStatus.1.0.0](#schemasoftwarestatus.1.0.0)] | false    | none         | Logical status associated with a component                                                                                                                                    |
-| States              | [[HMSState.1.0.0](#schemahmsstate.1.0.0)]             | false    | none         | List of states to subscribe for                                                                                                                                               |
-| Url                 | string                                                | false    | none         | URL to send State Change Notifications to                                                                                                                                     |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|Components|[[XName.1.0.0](#schemaxname.1.0.0)]|false|none|This is a list of components to associate with a State Change Notification.|
+|Subscriber|string|false|none|This is the xname of the subscriber. It can have an optional service name.  Note that this is only used for backward compatibility with the V1 API, and is not actually used.|
+|SubscriberComponent|string|false|none|This is the xname of the subscriber.|
+|SubscriberAgent|string|false|none|This is the name of the subscribing software agent.|
+|Enabled|boolean|false|none|If true, subscribe to changes to the Enabled status of a component.|
+|Roles|[[Roles.1.0.0](#schemaroles.1.0.0)]|false|none|Node role change to subscribe for|
+|SoftwareStatus|[[SoftwareStatus.1.0.0](#schemasoftwarestatus.1.0.0)]|false|none|Logical status associated with a component|
+|States|[[HMSState.1.0.0](#schemahmsstate.1.0.0)]|false|none|List of states to subscribe for|
+|Url|string|false|none|URL to send State Change Notifications to|
 
 <h2 id="tocS_SubscribePostV2">SubscribePostV2</h2>
 <!-- backwards compatibility -->
@@ -1436,14 +1436,14 @@ State Change Notification Subscription Message Payload
 
 ### Properties
 
-| Name           | Type                                                  | Required | Restrictions | Description                                                                 |
-|----------------|-------------------------------------------------------|----------|--------------|-----------------------------------------------------------------------------|
-| Components     | [[XName.1.0.0](#schemaxname.1.0.0)]                   | false    | none         | This is a list of components to associate with a State Change Notification. |
-| Enabled        | boolean                                               | false    | none         | If true, subscribe to changes to the Enabled status of a component.         |
-| Roles          | [[Roles.1.0.0](#schemaroles.1.0.0)]                   | false    | none         | Node role change to subscribe for                                           |
-| SoftwareStatus | [[SoftwareStatus.1.0.0](#schemasoftwarestatus.1.0.0)] | false    | none         | Logical status associated with a component                                  |
-| States         | [[HMSState.1.0.0](#schemahmsstate.1.0.0)]             | false    | none         | List of states to subscribe for                                             |
-| Url            | string                                                | false    | none         | URL to send State Change Notifications to                                   |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|Components|[[XName.1.0.0](#schemaxname.1.0.0)]|false|none|This is a list of components to associate with a State Change Notification.|
+|Enabled|boolean|false|none|If true, subscribe to changes to the Enabled status of a component.|
+|Roles|[[Roles.1.0.0](#schemaroles.1.0.0)]|false|none|Node role change to subscribe for|
+|SoftwareStatus|[[SoftwareStatus.1.0.0](#schemasoftwarestatus.1.0.0)]|false|none|Logical status associated with a component|
+|States|[[HMSState.1.0.0](#schemahmsstate.1.0.0)]|false|none|List of states to subscribe for|
+|Url|string|false|none|URL to send State Change Notifications to|
 
 <h2 id="tocS_parameters">parameters</h2>
 <!-- backwards compatibility -->
@@ -1473,19 +1473,19 @@ Configurable Parameters Message Payload
 
 ### Properties
 
-| Name            | Type    | Required | Restrictions | Description                                                                                  |
-|-----------------|---------|----------|--------------|----------------------------------------------------------------------------------------------|
-| Debug           | integer | false    | none         | This is the debug level of the heartbeat service. It increases the verbosity of the logging. |
-| KV_url          | string  | false    | none         | ETCD Key-Value store URL                                                                     |
-| Nosm            | integer | false    | none         | Do not contact Hardware State Manager (for testing/debug)                                    |
-| Port            | integer | false    | none         | Port number to respond to                                                                    |
-| Scn_cache_delay | integer | false    | none         | Max number seconds before sending cached and coalesced SCNs to subscribers.                  |
-| Scn_max_cache   | integer | false    | none         | Max number of similar SCNs to cache and coalesce before sending to  subscribers.             |
-| SM_retries      | integer | false    | none         | Number of times to retry operations with Hardware State Manager on failure                   |
-| SM_timeout      | integer | false    | none         | Number of seconds to wait before giving up when communicating with Hardware State Manager    |
-| SM_url          | string  | false    | none         | URL used when contacting the Hardware State Manager                                          |
-| Telemetry_host  | string  | false    | none         | URL used when contacting the telemetry bus.  Contains service URL, port, and bus topic.      |
-| Use_telemetry   | integer | false    | none         | Specifies whether or not to dump State Change Notifications onto the telemetry bus           |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|Debug|integer|false|none|This is the debug level of the heartbeat service. It increases the verbosity of the logging.|
+|KV_url|string|false|none|ETCD Key-Value store URL|
+|Nosm|integer|false|none|Do not contact Hardware State Manager (for testing/debug)|
+|Port|integer|false|none|Port number to respond to|
+|Scn_cache_delay|integer|false|none|Max number seconds before sending cached and coalesced SCNs to subscribers.|
+|Scn_max_cache|integer|false|none|Max number of similar SCNs to cache and coalesce before sending to  subscribers.|
+|SM_retries|integer|false|none|Number of times to retry operations with Hardware State Manager on failure|
+|SM_timeout|integer|false|none|Number of seconds to wait before giving up when communicating with Hardware State Manager|
+|SM_url|string|false|none|URL used when contacting the Hardware State Manager|
+|Telemetry_host|string|false|none|URL used when contacting the telemetry bus.  Contains service URL, port, and bus topic.|
+|Use_telemetry|integer|false|none|Specifies whether or not to dump State Change Notifications onto the telemetry bus|
 
 <h2 id="tocS_XName.1.0.0">XName.1.0.0</h2>
 <!-- backwards compatibility -->
@@ -1503,9 +1503,9 @@ Identifies sender by xname. This is the physical, location-based name of a compo
 
 ### Properties
 
-| Name        | Type   | Required | Restrictions | Description                                                                           |
-|-------------|--------|----------|--------------|---------------------------------------------------------------------------------------|
-| *anonymous* | string | false    | none         | Identifies sender by xname. This is the physical, location-based name of a component. |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|Identifies sender by xname. This is the physical, location-based name of a component.|
 
 <h2 id="tocS_HMSState.1.0.0">HMSState.1.0.0</h2>
 <!-- backwards compatibility -->
@@ -1523,24 +1523,24 @@ This property indicates the state of the underlying component.
 
 ### Properties
 
-| Name        | Type   | Required | Restrictions | Description                                                    |
-|-------------|--------|----------|--------------|----------------------------------------------------------------|
-| *anonymous* | string | false    | none         | This property indicates the state of the underlying component. |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|This property indicates the state of the underlying component.|
 
 #### Enumerated Values
 
-| Property    | Value     |
-|-------------|-----------|
-| *anonymous* | Unknown   |
-| *anonymous* | Empty     |
-| *anonymous* | Populated |
-| *anonymous* | Off       |
-| *anonymous* | On        |
-| *anonymous* | Active    |
-| *anonymous* | Standby   |
-| *anonymous* | Halt      |
-| *anonymous* | Ready     |
-| *anonymous* | Paused    |
+|Property|Value|
+|---|---|
+|*anonymous*|Unknown|
+|*anonymous*|Empty|
+|*anonymous*|Populated|
+|*anonymous*|Off|
+|*anonymous*|On|
+|*anonymous*|Active|
+|*anonymous*|Standby|
+|*anonymous*|Halt|
+|*anonymous*|Ready|
+|*anonymous*|Paused|
 
 <h2 id="tocS_SoftwareStatus.1.0.0">SoftwareStatus.1.0.0</h2>
 <!-- backwards compatibility -->
@@ -1602,13 +1602,13 @@ This is the JSON payload that contains State Change Notification information, se
 
 ### Properties
 
-| Name           | Type                                                | Required | Restrictions | Description                                                                                          |
-|----------------|-----------------------------------------------------|----------|--------------|------------------------------------------------------------------------------------------------------|
-| Components     | [[XName.1.0.0](#schemaxname.1.0.0)]                 | false    | none         | This is a list of components to associate with a State Change Notification                           |
-| Enabled        | boolean                                             | false    | none         | If true, component has changed to the Enabled state; if false, it has changed to the Disabled state. |
-| Role           | [Roles.1.0.0](#schemaroles.1.0.0)                   | false    | none         | This property indicates a node's role -- compute, service, uan, ssn, and others                      |
-| SoftwareStatus | [SoftwareStatus.1.0.0](#schemasoftwarestatus.1.0.0) | false    | none         | This property indicates a logical state of the underlying component.                                 |
-| State          | [HMSState.1.0.0](#schemahmsstate.1.0.0)             | false    | none         | This property indicates the state of the underlying component.                                       |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|Components|[[XName.1.0.0](#schemaxname.1.0.0)]|false|none|This is a list of components to associate with a State Change Notification|
+|Enabled|boolean|false|none|If true, component has changed to the Enabled state; if false, it has changed to the Disabled state.|
+|Role|[Roles.1.0.0](#schemaroles.1.0.0)|false|none|This property indicates a node's role -- compute, service, uan, ssn, and others|
+|SoftwareStatus|[SoftwareStatus.1.0.0](#schemasoftwarestatus.1.0.0)|false|none|This property indicates a logical state of the underlying component.|
+|State|[HMSState.1.0.0](#schemahmsstate.1.0.0)|false|none|This property indicates the state of the underlying component.|
 
 <h2 id="tocS_SubscriptionUrl">SubscriptionUrl</h2>
 <!-- backwards compatibility -->
@@ -1626,9 +1626,9 @@ URL to send State Change Notifications to
 
 ### Properties
 
-| Name        | Type   | Required | Restrictions | Description                               |
-|-------------|--------|----------|--------------|-------------------------------------------|
-| *anonymous* | string | false    | none         | URL to send State Change Notifications to |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|URL to send State Change Notifications to|
 
 <h2 id="tocS_SubscriptionListArray">SubscriptionListArray</h2>
 <!-- backwards compatibility -->
@@ -1668,9 +1668,9 @@ List of all currently held State Change Notification subscriptions.
 
 ### Properties
 
-| Name             | Type                                    | Required | Restrictions | Description                                                                                  |
-|------------------|-----------------------------------------|----------|--------------|----------------------------------------------------------------------------------------------|
-| SubscriptionList | [[SubscribePost](#schemasubscribepost)] | false    | none         | [This is the JSON payload that contains State Change Notification subscription information.] |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|SubscriptionList|[[SubscribePost](#schemasubscribepost)]|false|none|[This is the JSON payload that contains State Change Notification subscription information.]|
 
 <h2 id="tocS_Problem7807">Problem7807</h2>
 <!-- backwards compatibility -->
@@ -1694,11 +1694,11 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 
 ### Properties
 
-| Name     | Type          | Required | Restrictions | Description |
-|----------|---------------|----------|--------------|-------------|
-| type     | string        | true     | none         | none        |
-| detail   | string        | false    | none         | none        |
-| instance | string        | false    | none         | none        |
-| status   | number(int32) | false    | none         | none        |
-| title    | string        | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|type|string|true|none|none|
+|detail|string|false|none|none|
+|instance|string|false|none|none|
+|status|number(int32)|false|none|none|
+|title|string|false|none|none|
 

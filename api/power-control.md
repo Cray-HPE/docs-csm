@@ -132,9 +132,9 @@ Request to perform power transitions.
 
 <h3 id="post__transitions-parameters">Parameters</h3>
 
-| Name | In   | Type                                          | Required | Description           |
-|------|------|-----------------------------------------------|----------|-----------------------|
-| body | body | [transition_create](#schematransition_create) | true     | Transition parameters |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[transition_create](#schematransition_create)|true|Transition parameters|
 
 > Example responses
 
@@ -151,11 +151,11 @@ Request to perform power transitions.
 
 <h3 id="post__transitions-responses">Responses</h3>
 
-| Status | Meaning                                                                    | Description                                      | Schema                                                    |
-|--------|----------------------------------------------------------------------------|--------------------------------------------------|-----------------------------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Accepted                                         | [transition_start_output](#schematransition_start_output) |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request                                      | [Problem7807](#schemaproblem7807)                         |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Database error prevented starting the transition | [Problem7807](#schemaproblem7807)                         |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Accepted|[transition_start_output](#schematransition_start_output)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error prevented starting the transition|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -254,10 +254,10 @@ are automatically deleted.
 
 <h3 id="get__transitions-responses">Responses</h3>
 
-| Status | Meaning                                                                    | Description                                      | Schema                                          |
-|--------|----------------------------------------------------------------------------|--------------------------------------------------|-------------------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                                               | [transitions_getAll](#schematransitions_getall) |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Database error prevented getting the transitions | [Problem7807](#schemaproblem7807)               |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[transitions_getAll](#schematransitions_getall)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error prevented getting the transitions|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -327,9 +327,9 @@ transitionID.
 
 <h3 id="get__transitions_{transitionid}-parameters">Parameters</h3>
 
-| Name         | In   | Type         | Required | Description |
-|--------------|------|--------------|----------|-------------|
-| transitionID | path | string(uuid) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|transitionID|path|string(uuid)|true|none|
 
 > Example responses
 
@@ -365,11 +365,11 @@ transitionID.
 
 <h3 id="get__transitions_{transitionid}-responses">Responses</h3>
 
-| Status | Meaning                                                                    | Description                                     | Schema                                        |
-|--------|----------------------------------------------------------------------------|-------------------------------------------------|-----------------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                                              | [transitions_getID](#schematransitions_getid) |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request                                     | [Problem7807](#schemaproblem7807)             |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Database error prevented getting the transition | [Problem7807](#schemaproblem7807)             |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[transitions_getID](#schematransitions_getid)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error prevented getting the transition|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -438,9 +438,9 @@ Attempt to abort an in-progress transition by transitionID
 
 <h3 id="delete__transitions_{transitionid}-parameters">Parameters</h3>
 
-| Name         | In   | Type         | Required | Description |
-|--------------|------|--------------|----------|-------------|
-| transitionID | path | string(uuid) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|transitionID|path|string(uuid)|true|none|
 
 > Example responses
 
@@ -456,12 +456,12 @@ Attempt to abort an in-progress transition by transitionID
 
 <h3 id="delete__transitions_{transitionid}-responses">Responses</h3>
 
-| Status | Meaning                                                                    | Description                              | Schema                                        |
-|--------|----------------------------------------------------------------------------|------------------------------------------|-----------------------------------------------|
-| 202    | [Accepted](https://tools.ietf.org/html/rfc7231#section-6.3.3)              | Accepted - abort initiated               | [transitions_abort](#schematransitions_abort) |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Specified transition is complete         | [Problem7807](#schemaproblem7807)             |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | TransitionID not found                   | [Problem7807](#schemaproblem7807)             |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Database error prevented abort signaling | [Problem7807](#schemaproblem7807)             |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|202|[Accepted](https://tools.ietf.org/html/rfc7231#section-6.3.3)|Accepted - abort initiated|[transitions_abort](#schematransitions_abort)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Specified transition is complete|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|TransitionID not found|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error prevented abort signaling|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -534,21 +534,21 @@ Retrieve the power state of the component specified by xname.
 
 <h3 id="get__power-status-parameters">Parameters</h3>
 
-| Name                  | In    | Type          | Required | Description |
-|-----------------------|-------|---------------|----------|-------------|
-| xname                 | query | array[string] | false    | none        |
-| powerStateFilter      | query | string        | false    | none        |
-| managementStateFilter | query | string        | false    | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|xname|query|array[string]|false|none|
+|powerStateFilter|query|string|false|none|
+|managementStateFilter|query|string|false|none|
 
 #### Enumerated Values
 
-| Parameter             | Value       |
-|-----------------------|-------------|
-| powerStateFilter      | on          |
-| powerStateFilter      | off         |
-| powerStateFilter      | undefined   |
-| managementStateFilter | available   |
-| managementStateFilter | unavailable |
+|Parameter|Value|
+|---|---|
+|powerStateFilter|on|
+|powerStateFilter|off|
+|powerStateFilter|undefined|
+|managementStateFilter|available|
+|managementStateFilter|unavailable|
 
 > Example responses
 
@@ -575,11 +575,11 @@ Retrieve the power state of the component specified by xname.
 
 <h3 id="get__power-status-responses">Responses</h3>
 
-| Status | Meaning                                                                    | Description    | Schema                                      |
-|--------|----------------------------------------------------------------------------|----------------|---------------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK             | [power_status_all](#schemapower_status_all) |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request    | [Problem7807](#schemaproblem7807)           |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Database error | [Problem7807](#schemaproblem7807)           |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[power_status_all](#schemapower_status_all)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -666,9 +666,9 @@ Get power cap snapshot for a set of targets.  This operation returns a taskID to
 
 <h3 id="post__power-cap_snapshot-parameters">Parameters</h3>
 
-| Name | In   | Type                                                    | Required | Description |
-|------|------|---------------------------------------------------------|----------|-------------|
-| body | body | [power_cap_snapshot_req](#schemapower_cap_snapshot_req) | false    | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[power_cap_snapshot_req](#schemapower_cap_snapshot_req)|false|none|
 
 > Example responses
 
@@ -684,11 +684,11 @@ Get power cap snapshot for a set of targets.  This operation returns a taskID to
 
 <h3 id="post__power-cap_snapshot-responses">Responses</h3>
 
-| Status | Meaning                                                                    | Description                             | Schema                                                  |
-|--------|----------------------------------------------------------------------------|-----------------------------------------|---------------------------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK. The data was successfully retrieved | [op_task_start_response](#schemaop_task_start_response) |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request                             | [Problem7807](#schemaproblem7807)                       |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Database error                          | [Problem7807](#schemaproblem7807)                       |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK. The data was successfully retrieved|[op_task_start_response](#schemaop_task_start_response)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -779,9 +779,9 @@ Set power cap parameters for a list of targets.  The PATCH payload contains the 
 
 <h3 id="patch__power-cap-parameters">Parameters</h3>
 
-| Name | In   | Type                                      | Required | Description |
-|------|------|-------------------------------------------|----------|-------------|
-| body | body | [power_cap_patch](#schemapower_cap_patch) | false    | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[power_cap_patch](#schemapower_cap_patch)|false|none|
 
 > Example responses
 
@@ -797,11 +797,11 @@ Set power cap parameters for a list of targets.  The PATCH payload contains the 
 
 <h3 id="patch__power-cap-responses">Responses</h3>
 
-| Status | Meaning                                                                    | Description                             | Schema                                                  |
-|--------|----------------------------------------------------------------------------|-----------------------------------------|---------------------------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK. The data was successfully retrieved | [op_task_start_response](#schemaop_task_start_response) |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request                             | [Problem7807](#schemaproblem7807)                       |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Database error                          | [Problem7807](#schemaproblem7807)                       |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK. The data was successfully retrieved|[op_task_start_response](#schemaop_task_start_response)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -896,10 +896,10 @@ func main() {
 
 <h3 id="get__power-cap-responses">Responses</h3>
 
-| Status | Meaning                                                                    | Description                             | Schema                                            |
-|--------|----------------------------------------------------------------------------|-----------------------------------------|---------------------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK. The data was successfully retrieved | [power_cap_task_list](#schemapower_cap_task_list) |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Database error                          | [Problem7807](#schemaproblem7807)                 |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK. The data was successfully retrieved|[power_cap_task_list](#schemapower_cap_task_list)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -968,9 +968,9 @@ Queries the current status for the specified taskID. Use the taskID returned fro
 
 <h3 id="get__power-cap_{taskid}-parameters">Parameters</h3>
 
-| Name   | In   | Type                      | Required | Description |
-|--------|------|---------------------------|----------|-------------|
-| taskID | path | [task_id](#schematask_id) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|taskID|path|[task_id](#schematask_id)|true|none|
 
 > Example responses
 
@@ -1017,11 +1017,11 @@ Queries the current status for the specified taskID. Use the taskID returned fro
 
 <h3 id="get__power-cap_{taskid}-responses">Responses</h3>
 
-| Status | Meaning                                                                    | Description                                                                                                                                 | Schema                                          |
-|--------|----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK. The data was successfully retrieved.  Task Info is only present for task status operations (PATCH power-cap or POST power-cap/snapshot) | [power_caps_retdata](#schemapower_caps_retdata) |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | TaskID not found                                                                                                                            | [Problem7807](#schemaproblem7807)               |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Database error                                                                                                                              | [Problem7807](#schemaproblem7807)               |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK. The data was successfully retrieved.  Task Info is only present for task status operations (PATCH power-cap or POST power-cap/snapshot)|[power_caps_retdata](#schemapower_caps_retdata)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|TaskID not found|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -1083,10 +1083,10 @@ Get liveness status of the service
 
 <h3 id="get__liveness-responses">Responses</h3>
 
-| Status | Meaning                                                                  | Description                                                                                             | Schema |
-|--------|--------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|--------|
-| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)          | [No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success | None   |
-| 503    | [Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4) | The service is not taking HTTP requests                                                                 | None   |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
+|503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|The service is not taking HTTP requests|None|
 
 <aside class="success">
 This operation does not require authentication
@@ -1146,10 +1146,10 @@ Get readiness status of the service
 
 <h3 id="get__readiness-responses">Responses</h3>
 
-| Status | Meaning                                                                  | Description                                                                                             | Schema |
-|--------|--------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|--------|
-| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)          | [No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success | None   |
-| 503    | [Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4) | The service is not taking HTTP requests                                                                 | None   |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
+|503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|The service is not taking HTTP requests|None|
 
 <aside class="success">
 This operation does not require authentication
@@ -1240,10 +1240,10 @@ This is primarily intended as a diagnostic tool to investigate the functioning o
 
 <h3 id="get__health-responses">Responses</h3>
 
-| Status | Meaning                                                                 | Description                                                                                     | Schema                            |
-|--------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                 | [OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success | [health_rsp](#schemahealth_rsp)   |
-| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | Operation Not Permitted. For /health, only GET operations are allowed.                          | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|[OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success|[health_rsp](#schemahealth_rsp)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted. For /health, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -1274,24 +1274,24 @@ This operation does not require authentication
 
 ### Properties
 
-| Name                      | Type                  | Required | Restrictions | Description                                                                               |
-|---------------------------|-----------------------|----------|--------------|-------------------------------------------------------------------------------------------|
-| xname                     | [xname](#schemaxname) | false    | none         | The xname of this piece of hardware                                                       |
-| powerState                | string                | false    | none         | What the power state was detected.                                                        |
-| managementState           | string                | false    | none         | Describes if the device is currently available for commands via its management controller |
-| error                     | string¦null           | false    | none         | none                                                                                      |
-| supportedPowerTransitions | [string]              | false    | none         | none                                                                                      |
-| lastUpdated               | string(date-time)     | false    | read-only    | none                                                                                      |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|xname|[xname](#schemaxname)|false|none|The xname of this piece of hardware|
+|powerState|string|false|none|What the power state was detected.|
+|managementState|string|false|none|Describes if the device is currently available for commands via its management controller|
+|error|string¦null|false|none|none|
+|supportedPowerTransitions|[string]|false|none|none|
+|lastUpdated|string(date-time)|false|read-only|none|
 
 #### Enumerated Values
 
-| Property        | Value       |
-|-----------------|-------------|
-| powerState      | on          |
-| powerState      | off         |
-| powerState      | undefined   |
-| managementState | unavailable |
-| managementState | available   |
+|Property|Value|
+|---|---|
+|powerState|on|
+|powerState|off|
+|powerState|undefined|
+|managementState|unavailable|
+|managementState|available|
 
 <h2 id="tocS_power_status_all">power_status_all</h2>
 <!-- backwards compatibility -->
@@ -1320,9 +1320,9 @@ This operation does not require authentication
 
 ### Properties
 
-| Name   | Type                                  | Required | Restrictions | Description |
-|--------|---------------------------------------|----------|--------------|-------------|
-| status | [[power_status](#schemapower_status)] | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|status|[[power_status](#schemapower_status)]|false|none|none|
 
 <h2 id="tocS_transitions_getID">transitions_getID</h2>
 <!-- backwards compatibility -->
@@ -1360,32 +1360,32 @@ This operation does not require authentication
 
 ### Properties
 
-| Name                    | Type                                                  | Required | Restrictions | Description                     |
-|-------------------------|-------------------------------------------------------|----------|--------------|---------------------------------|
-| transitionID            | string(uuid)                                          | false    | none         | none                            |
-| createTime              | string                                                | false    | none         | none                            |
-| automaticExpirationTime | string(date-time)                                     | false    | none         | When the record will be deleted |
-| transitionStatus        | string                                                | false    | none         | none                            |
-| operation               | string                                                | false    | none         | none                            |
-| taskCounts              | [task_counts](#schematask_counts)                     | false    | none         | none                            |
-| tasks                   | [[transition_task_data](#schematransition_task_data)] | false    | none         | none                            |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|transitionID|string(uuid)|false|none|none|
+|createTime|string|false|none|none|
+|automaticExpirationTime|string(date-time)|false|none|When the record will be deleted|
+|transitionStatus|string|false|none|none|
+|operation|string|false|none|none|
+|taskCounts|[task_counts](#schematask_counts)|false|none|none|
+|tasks|[[transition_task_data](#schematransition_task_data)]|false|none|none|
 
 #### Enumerated Values
 
-| Property         | Value          |
-|------------------|----------------|
-| transitionStatus | new            |
-| transitionStatus | in-progress    |
-| transitionStatus | completed      |
-| transitionStatus | aborted        |
-| transitionStatus | abort-signaled |
-| operation        | on             |
-| operation        | off            |
-| operation        | soft-restart   |
-| operation        | hard-restart   |
-| operation        | init           |
-| operation        | force-off      |
-| operation        | soft-off       |
+|Property|Value|
+|---|---|
+|transitionStatus|new|
+|transitionStatus|in-progress|
+|transitionStatus|completed|
+|transitionStatus|aborted|
+|transitionStatus|abort-signaled|
+|operation|on|
+|operation|off|
+|operation|soft-restart|
+|operation|hard-restart|
+|operation|init|
+|operation|force-off|
+|operation|soft-off|
 
 <h2 id="tocS_transitions_getAll">transitions_getAll</h2>
 <!-- backwards compatibility -->
@@ -1419,9 +1419,9 @@ This operation does not require authentication
 
 ### Properties
 
-| Name        | Type                                        | Required | Restrictions | Description |
-|-------------|---------------------------------------------|----------|--------------|-------------|
-| transitions | [[transitions_get](#schematransitions_get)] | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|transitions|[[transitions_get](#schematransitions_get)]|false|none|none|
 
 <h2 id="tocS_transitions_get">transitions_get</h2>
 <!-- backwards compatibility -->
@@ -1451,31 +1451,31 @@ This operation does not require authentication
 
 ### Properties
 
-| Name                    | Type                              | Required | Restrictions | Description                     |
-|-------------------------|-----------------------------------|----------|--------------|---------------------------------|
-| transitionID            | string(uuid)                      | false    | none         | none                            |
-| createTime              | string                            | false    | none         | none                            |
-| automaticExpirationTime | string(date-time)                 | false    | none         | When the record will be deleted |
-| transitionStatus        | string                            | false    | none         | none                            |
-| operation               | string                            | false    | none         | none                            |
-| taskCounts              | [task_counts](#schematask_counts) | false    | none         | none                            |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|transitionID|string(uuid)|false|none|none|
+|createTime|string|false|none|none|
+|automaticExpirationTime|string(date-time)|false|none|When the record will be deleted|
+|transitionStatus|string|false|none|none|
+|operation|string|false|none|none|
+|taskCounts|[task_counts](#schematask_counts)|false|none|none|
 
 #### Enumerated Values
 
-| Property         | Value          |
-|------------------|----------------|
-| transitionStatus | in-progress    |
-| transitionStatus | new            |
-| transitionStatus | completed      |
-| transitionStatus | aborted        |
-| transitionStatus | abort-signaled |
-| operation        | on             |
-| operation        | off            |
-| operation        | soft-restart   |
-| operation        | hard-restart   |
-| operation        | init           |
-| operation        | force-off      |
-| operation        | soft-off       |
+|Property|Value|
+|---|---|
+|transitionStatus|in-progress|
+|transitionStatus|new|
+|transitionStatus|completed|
+|transitionStatus|aborted|
+|transitionStatus|abort-signaled|
+|operation|on|
+|operation|off|
+|operation|soft-restart|
+|operation|hard-restart|
+|operation|init|
+|operation|force-off|
+|operation|soft-off|
 
 <h2 id="tocS_transition_start_output">transition_start_output</h2>
 <!-- backwards compatibility -->
@@ -1494,22 +1494,22 @@ This operation does not require authentication
 
 ### Properties
 
-| Name         | Type         | Required | Restrictions | Description |
-|--------------|--------------|----------|--------------|-------------|
-| transitionID | string(uuid) | false    | none         | none        |
-| operation    | string       | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|transitionID|string(uuid)|false|none|none|
+|operation|string|false|none|none|
 
 #### Enumerated Values
 
-| Property  | Value        |
-|-----------|--------------|
-| operation | on           |
-| operation | off          |
-| operation | soft-restart |
-| operation | hard-restart |
-| operation | init         |
-| operation | force-off    |
-| operation | soft-off     |
+|Property|Value|
+|---|---|
+|operation|on|
+|operation|off|
+|operation|soft-restart|
+|operation|hard-restart|
+|operation|init|
+|operation|force-off|
+|operation|soft-off|
 
 <h2 id="tocS_transitions_abort">transitions_abort</h2>
 <!-- backwards compatibility -->
@@ -1527,9 +1527,9 @@ This operation does not require authentication
 
 ### Properties
 
-| Name        | Type   | Required | Restrictions | Description |
-|-------------|--------|----------|--------------|-------------|
-| abortStatus | string | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|abortStatus|string|false|none|none|
 
 <h2 id="tocS_transition_task_data">transition_task_data</h2>
 <!-- backwards compatibility -->
@@ -1550,22 +1550,22 @@ This operation does not require authentication
 
 ### Properties
 
-| Name                  | Type                  | Required | Restrictions | Description                         |
-|-----------------------|-----------------------|----------|--------------|-------------------------------------|
-| xname                 | [xname](#schemaxname) | false    | none         | The xname of this piece of hardware |
-| taskStatus            | string                | false    | none         | none                                |
-| taskStatusDescription | string                | false    | none         | none                                |
-| error                 | string                | false    | none         | none                                |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|xname|[xname](#schemaxname)|false|none|The xname of this piece of hardware|
+|taskStatus|string|false|none|none|
+|taskStatusDescription|string|false|none|none|
+|error|string|false|none|none|
 
 #### Enumerated Values
 
-| Property   | Value       |
-|------------|-------------|
-| taskStatus | new         |
-| taskStatus | in-progress |
-| taskStatus | failed      |
-| taskStatus | succeeded   |
-| taskStatus | unsupported |
+|Property|Value|
+|---|---|
+|taskStatus|new|
+|taskStatus|in-progress|
+|taskStatus|failed|
+|taskStatus|succeeded|
+|taskStatus|unsupported|
 
 <h2 id="tocS_reserved_location">reserved_location</h2>
 <!-- backwards compatibility -->
@@ -1584,10 +1584,10 @@ This operation does not require authentication
 
 ### Properties
 
-| Name      | Type                  | Required | Restrictions | Description                         |
-|-----------|-----------------------|----------|--------------|-------------------------------------|
-| xname     | [xname](#schemaxname) | true     | none         | The xname of this piece of hardware |
-| deputyKey | string(uuid)          | false    | none         | none                                |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|xname|[xname](#schemaxname)|true|none|The xname of this piece of hardware|
+|deputyKey|string(uuid)|false|none|none|
 
 <h2 id="tocS_transition_create">transition_create</h2>
 <!-- backwards compatibility -->
@@ -1612,23 +1612,23 @@ This operation does not require authentication
 
 ### Properties
 
-| Name                | Type                                            | Required | Restrictions | Description                                                                                                                                                                          |
-|---------------------|-------------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| operation           | string                                          | false    | none         | The operation that should be applied to the hardware.                                                                                                                                |
-| taskDeadlineMinutes | integer                                         | false    | none         | The number of minutes to wait for a single transition task  to complete before continuing.  Defaults to 5 minutes, if unspecified. 0 disables waiting. -1 waits as long as it takes. |
-| location            | [[reserved_location](#schemareserved_location)] | false    | none         | none                                                                                                                                                                                 |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|operation|string|false|none|The operation that should be applied to the hardware.|
+|taskDeadlineMinutes|integer|false|none|The number of minutes to wait for a single transition task  to complete before continuing.  Defaults to 5 minutes, if unspecified. 0 disables waiting. -1 waits as long as it takes.|
+|location|[[reserved_location](#schemareserved_location)]|false|none|none|
 
 #### Enumerated Values
 
-| Property  | Value        |
-|-----------|--------------|
-| operation | on           |
-| operation | off          |
-| operation | soft-off     |
-| operation | soft-restart |
-| operation | hard-restart |
-| operation | init         |
-| operation | force-off    |
+|Property|Value|
+|---|---|
+|operation|on|
+|operation|off|
+|operation|soft-off|
+|operation|soft-restart|
+|operation|hard-restart|
+|operation|init|
+|operation|force-off|
 
 <h2 id="tocS_task_counts">task_counts</h2>
 <!-- backwards compatibility -->
@@ -1651,14 +1651,14 @@ This operation does not require authentication
 
 ### Properties
 
-| Name         | Type    | Required | Restrictions | Description |
-|--------------|---------|----------|--------------|-------------|
-| total        | integer | false    | none         | none        |
-| new          | integer | false    | none         | none        |
-| in-progress  | integer | false    | none         | none        |
-| failed       | integer | false    | none         | none        |
-| succeeded    | integer | false    | none         | none        |
-| un-supported | integer | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|total|integer|false|none|none|
+|new|integer|false|none|none|
+|in-progress|integer|false|none|none|
+|failed|integer|false|none|none|
+|succeeded|integer|false|none|none|
+|un-supported|integer|false|none|none|
 
 <h2 id="tocS_Problem7807">Problem7807</h2>
 <!-- backwards compatibility -->
@@ -1682,13 +1682,13 @@ RFC 7807 compliant error payload. All fields are optional except the 'type' fiel
 
 ### Properties
 
-| Name       | Type            | Required | Restrictions | Description |
-|------------|-----------------|----------|--------------|-------------|
-| type       | string          | true     | none         | none        |
-| detail     | string          | false    | none         | none        |
-| instance   | string          | false    | none         | none        |
-| statusCode | number(integer) | false    | none         | none        |
-| title      | string          | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|type|string|true|none|none|
+|detail|string|false|none|none|
+|instance|string|false|none|none|
+|statusCode|number(integer)|false|none|none|
+|title|string|false|none|none|
 
 <h2 id="tocS_xname">xname</h2>
 <!-- backwards compatibility -->
@@ -1706,9 +1706,9 @@ The xname of this piece of hardware
 
 ### Properties
 
-| Name        | Type   | Required | Restrictions | Description                         |
-|-------------|--------|----------|--------------|-------------------------------------|
-| *anonymous* | string | false    | none         | The xname of this piece of hardware |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|The xname of this piece of hardware|
 
 <h2 id="tocS_task_id">task_id</h2>
 <!-- backwards compatibility -->
@@ -1726,9 +1726,9 @@ Task ID from power-cap, snapshot operation
 
 ### Properties
 
-| Name        | Type         | Required | Restrictions | Description                                |
-|-------------|--------------|----------|--------------|--------------------------------------------|
-| *anonymous* | string(uuid) | false    | none         | Task ID from power-cap, snapshot operation |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string(uuid)|false|none|Task ID from power-cap, snapshot operation|
 
 <h2 id="tocS_power_cap_patch">power_cap_patch</h2>
 <!-- backwards compatibility -->
@@ -1756,9 +1756,9 @@ Task ID from power-cap, snapshot operation
 
 ### Properties
 
-| Name       | Type                                                            | Required | Restrictions | Description |
-|------------|-----------------------------------------------------------------|----------|--------------|-------------|
-| components | [[power_cap_patch_component](#schemapower_cap_patch_component)] | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|components|[[power_cap_patch_component](#schemapower_cap_patch_component)]|false|none|none|
 
 <h2 id="tocS_power_cap_patch_component">power_cap_patch_component</h2>
 <!-- backwards compatibility -->
@@ -1782,10 +1782,10 @@ Task ID from power-cap, snapshot operation
 
 ### Properties
 
-| Name     | Type                                                                            | Required | Restrictions | Description                         |
-|----------|---------------------------------------------------------------------------------|----------|--------------|-------------------------------------|
-| xname    | [xname](#schemaxname)                                                           | false    | none         | The xname of this piece of hardware |
-| controls | [[power_cap_patch_component_control](#schemapower_cap_patch_component_control)] | false    | none         | none                                |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|xname|[xname](#schemaxname)|false|none|The xname of this piece of hardware|
+|controls|[[power_cap_patch_component_control](#schemapower_cap_patch_component_control)]|false|none|none|
 
 <h2 id="tocS_power_cap_patch_component_control">power_cap_patch_component_control</h2>
 <!-- backwards compatibility -->
@@ -1804,10 +1804,10 @@ Task ID from power-cap, snapshot operation
 
 ### Properties
 
-| Name  | Type    | Required | Restrictions | Description |
-|-------|---------|----------|--------------|-------------|
-| name  | string  | false    | none         | none        |
-| value | integer | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|string|false|none|none|
+|value|integer|false|none|none|
 
 <h2 id="tocS_op_task_start_response">op_task_start_response</h2>
 <!-- backwards compatibility -->
@@ -1825,9 +1825,9 @@ Task ID from power-cap, snapshot operation
 
 ### Properties
 
-| Name   | Type         | Required | Restrictions | Description |
-|--------|--------------|----------|--------------|-------------|
-| taskID | string(uuid) | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|taskID|string(uuid)|false|none|none|
 
 <h2 id="tocS_power_caps_retdata">power_caps_retdata</h2>
 <!-- backwards compatibility -->
@@ -1878,16 +1878,16 @@ Task ID from power-cap, snapshot operation
 
 allOf
 
-| Name        | Type                                              | Required | Restrictions | Description |
-|-------------|---------------------------------------------------|----------|--------------|-------------|
-| *anonymous* | [power_cap_task_info](#schemapower_cap_task_info) | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[power_cap_task_info](#schemapower_cap_task_info)|false|none|none|
 
 and
 
-| Name         | Type                                                          | Required | Restrictions | Description |
-|--------------|---------------------------------------------------------------|----------|--------------|-------------|
-| *anonymous*  | object                                                        | false    | none         | none        |
-| » components | [[rsp_power_cap_components](#schemarsp_power_cap_components)] | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|object|false|none|none|
+|» components|[[rsp_power_cap_components](#schemarsp_power_cap_components)]|false|none|none|
 
 <h2 id="tocS_power_cap_task_list">power_cap_task_list</h2>
 <!-- backwards compatibility -->
@@ -1921,9 +1921,9 @@ and
 
 ### Properties
 
-| Name  | Type                                                | Required | Restrictions | Description |
-|-------|-----------------------------------------------------|----------|--------------|-------------|
-| tasks | [[power_cap_task_info](#schemapower_cap_task_info)] | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|tasks|[[power_cap_task_info](#schemapower_cap_task_info)]|false|none|none|
 
 <h2 id="tocS_power_cap_task_info">power_cap_task_info</h2>
 <!-- backwards compatibility -->
@@ -1953,21 +1953,21 @@ and
 
 ### Properties
 
-| Name                    | Type                              | Required | Restrictions | Description                                                |
-|-------------------------|-----------------------------------|----------|--------------|------------------------------------------------------------|
-| taskID                  | string(uuid)                      | false    | none         | none                                                       |
-| type                    | string                            | false    | none         | The task can either be the result of a snapshot or a patch |
-| taskCreateTime          | string                            | false    | none         | none                                                       |
-| automaticExpirationTime | string(date-time)                 | false    | none         | When the record will be deleted                            |
-| taskStatus              | string                            | false    | none         | none                                                       |
-| taskCounts              | [task_counts](#schematask_counts) | false    | none         | none                                                       |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|taskID|string(uuid)|false|none|none|
+|type|string|false|none|The task can either be the result of a snapshot or a patch|
+|taskCreateTime|string|false|none|none|
+|automaticExpirationTime|string(date-time)|false|none|When the record will be deleted|
+|taskStatus|string|false|none|none|
+|taskCounts|[task_counts](#schematask_counts)|false|none|none|
 
 #### Enumerated Values
 
-| Property | Value    |
-|----------|----------|
-| type     | snapshot |
-| type     | patch    |
+|Property|Value|
+|---|---|
+|type|snapshot|
+|type|patch|
 
 <h2 id="tocS_power_cap_snapshot_req">power_cap_snapshot_req</h2>
 <!-- backwards compatibility -->
@@ -1987,9 +1987,9 @@ and
 
 ### Properties
 
-| Name   | Type                    | Required | Restrictions | Description                           |
-|--------|-------------------------|----------|--------------|---------------------------------------|
-| xnames | [[xname](#schemaxname)] | false    | none         | [The xname of this piece of hardware] |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|xnames|[[xname](#schemaxname)]|false|none|[The xname of this piece of hardware]|
 
 <h2 id="tocS_rsp_power_cap_components">rsp_power_cap_components</h2>
 <!-- backwards compatibility -->
@@ -2021,12 +2021,12 @@ and
 
 ### Properties
 
-| Name           | Type                                                                          | Required | Restrictions | Description                         |
-|----------------|-------------------------------------------------------------------------------|----------|--------------|-------------------------------------|
-| xname          | [xname](#schemaxname)                                                         | false    | none         | The xname of this piece of hardware |
-| error          | string                                                                        | false    | none         | nullable error field                |
-| limits         | [capabilities_limits](#schemacapabilities_limits)                             | false    | none         | none                                |
-| powerCapLimits | [[rsp_power_cap_components_control](#schemarsp_power_cap_components_control)] | false    | none         | none                                |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|xname|[xname](#schemaxname)|false|none|The xname of this piece of hardware|
+|error|string|false|none|nullable error field|
+|limits|[capabilities_limits](#schemacapabilities_limits)|false|none|none|
+|powerCapLimits|[[rsp_power_cap_components_control](#schemarsp_power_cap_components_control)]|false|none|none|
 
 <h2 id="tocS_rsp_power_cap_components_control">rsp_power_cap_components_control</h2>
 <!-- backwards compatibility -->
@@ -2047,19 +2047,19 @@ and
 
 ### Properties
 
-| Name         | Type    | Required | Restrictions | Description                                           |
-|--------------|---------|----------|--------------|-------------------------------------------------------|
-| name         | string  | false    | none         | none                                                  |
-| currentValue | integer | false    | none         | The current power cap limit as reported by the device |
-| maximumValue | integer | false    | none         | The maximum power cap limit the device may be set to  |
-| minimumValue | integer | false    | none         | The minimum power cap limit the device may be set to  |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|string|false|none|none|
+|currentValue|integer|false|none|The current power cap limit as reported by the device|
+|maximumValue|integer|false|none|The maximum power cap limit the device may be set to|
+|minimumValue|integer|false|none|The minimum power cap limit the device may be set to|
 
 #### Enumerated Values
 
-| Property | Value |
-|----------|-------|
-| name     | Node  |
-| name     | Accel |
+|Property|Value|
+|---|---|
+|name|Node|
+|name|Accel|
 
 <h2 id="tocS_capabilities_limits">capabilities_limits</h2>
 <!-- backwards compatibility -->
@@ -2079,11 +2079,11 @@ and
 
 ### Properties
 
-| Name         | Type    | Required | Restrictions | Description                                                                                  |
-|--------------|---------|----------|--------------|----------------------------------------------------------------------------------------------|
-| hostLimitMax | integer | false    | none         | Node maximum power draw, measured in watts, as reported by underlying Redfish implementation |
-| hostLimitMin | integer | false    | none         | Node minimum power draw, measured in watts, as reported by underlying Redfish implementation |
-| powerupPower | integer | false    | none         | Typical power consumption of each node during hardware initialization, specified in watts    |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|hostLimitMax|integer|false|none|Node maximum power draw, measured in watts, as reported by underlying Redfish implementation|
+|hostLimitMin|integer|false|none|Node minimum power draw, measured in watts, as reported by underlying Redfish implementation|
+|powerupPower|integer|false|none|Typical power consumption of each node during hardware initialization, specified in watts|
 
 <h2 id="tocS_health_rsp">health_rsp</h2>
 <!-- backwards compatibility -->
@@ -2105,11 +2105,11 @@ and
 
 ### Properties
 
-| Name         | Type   | Required | Restrictions | Description                                             |
-|--------------|--------|----------|--------------|---------------------------------------------------------|
-| KvStore      | string | true     | none         | Status of the KV Store.                                 |
-| DistLocking  | string | true     | none         | Status of the distributed locking mechanism             |
-| StateManager | string | true     | none         | Status of the connection to the Hardware State Manager. |
-| Vault        | string | true     | none         | Status of the connection to Vault.                      |
-| TaskRunner   | any    | true     | none         | TRS status and mode (local or remote/worker).           |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|KvStore|string|true|none|Status of the KV Store.|
+|DistLocking|string|true|none|Status of the distributed locking mechanism|
+|StateManager|string|true|none|Status of the connection to the Hardware State Manager.|
+|Vault|string|true|none|Status of the connection to Vault.|
+|TaskRunner|any|true|none|TRS status and mode (local or remote/worker).|
 

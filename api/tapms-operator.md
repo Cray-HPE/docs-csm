@@ -123,35 +123,35 @@ func main() {
 
 <h3 id="get__v1alpha2_tenants-responses">Responses</h3>
 
-| Status | Meaning                                                                    | Description           | Schema                                |
-|--------|----------------------------------------------------------------------------|-----------------------|---------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                    | Inline                                |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request           | [ResponseError](#schemaresponseerror) |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Not Found             | [ResponseError](#schemaresponseerror) |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error | [ResponseError](#schemaresponseerror) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ResponseError](#schemaresponseerror)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
 
 <h3 id="get__v1alpha2_tenants-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-| Name                          | Type                                      | Required | Restrictions | Description                                 |
-|-------------------------------|-------------------------------------------|----------|--------------|---------------------------------------------|
-| *anonymous*                   | [[Tenant](#schematenant)]                 | false    | none         | [The primary schema/definition of a tenant] |
-| » spec                        | [TenantSpec](#schematenantspec)           | true     | none         | The desired state of Tenant                 |
-| »» childnamespaces            | [string]                                  | false    | none         | none                                        |
-| »» state                      | string                                    | false    | none         | none                                        |
-| »» tenantname                 | string                                    | true     | none         | none                                        |
-| »» tenantresources            | [[TenantResource](#schematenantresource)] | true     | none         | The desired resources for the Tenant        |
-| »»» enforceexclusivehsmgroups | boolean                                   | false    | none         | none                                        |
-| »»» forcepoweroff             | boolean                                   | false    | none         | none                                        |
-| »»» hsmgrouplabel             | string                                    | false    | none         | none                                        |
-| »»» hsmpartitionname          | string                                    | false    | none         | none                                        |
-| »»» type                      | string                                    | true     | none         | none                                        |
-| »»» xnames                    | [string]                                  | true     | none         | none                                        |
-| » status                      | [TenantStatus](#schematenantstatus)       | false    | none         | The observed state of Tenant                |
-| »» childnamespaces            | [string]                                  | false    | none         | none                                        |
-| »» tenantresources            | [[TenantResource](#schematenantresource)] | false    | none         | The desired resources for the Tenant        |
-| »» uuid                       | string(uuid)                              | false    | none         | none                                        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[Tenant](#schematenant)]|false|none|[The primary schema/definition of a tenant]|
+|» spec|[TenantSpec](#schematenantspec)|true|none|The desired state of Tenant|
+|»» childnamespaces|[string]|false|none|none|
+|»» state|string|false|none|none|
+|»» tenantname|string|true|none|none|
+|»» tenantresources|[[TenantResource](#schematenantresource)]|true|none|The desired resources for the Tenant|
+|»»» enforceexclusivehsmgroups|boolean|false|none|none|
+|»»» forcepoweroff|boolean|false|none|none|
+|»»» hsmgrouplabel|string|false|none|none|
+|»»» hsmpartitionname|string|false|none|none|
+|»»» type|string|true|none|none|
+|»»» xnames|[string]|true|none|none|
+|» status|[TenantStatus](#schematenantstatus)|false|none|The observed state of Tenant|
+|»» childnamespaces|[string]|false|none|none|
+|»» tenantresources|[[TenantResource](#schematenantresource)]|false|none|The desired resources for the Tenant|
+|»» uuid|string(uuid)|false|none|none|
 
 <aside class="success">
 This operation does not require authentication
@@ -218,9 +218,9 @@ func main() {
 
 <h3 id="get__v1alpha2_tenants_{id}-parameters">Parameters</h3>
 
-| Name | In   | Type   | Required | Description                           |
-|------|------|--------|----------|---------------------------------------|
-| id   | path | string | true     | Either the Name or UUID of the Tenant |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|id|path|string|true|Either the Name or UUID of the Tenant|
 
 > Example responses
 
@@ -272,12 +272,12 @@ func main() {
 
 <h3 id="get__v1alpha2_tenants_{id}-responses">Responses</h3>
 
-| Status | Meaning                                                                    | Description           | Schema                                |
-|--------|----------------------------------------------------------------------------|-----------------------|---------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                    | [Tenant](#schematenant)               |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request           | [ResponseError](#schemaresponseerror) |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Not Found             | [ResponseError](#schemaresponseerror) |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error | [ResponseError](#schemaresponseerror) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[Tenant](#schematenant)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ResponseError](#schemaresponseerror)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
 
 <aside class="success">
 This operation does not require authentication
@@ -301,9 +301,9 @@ This operation does not require authentication
 
 ### Properties
 
-| Name    | Type   | Required | Restrictions | Description |
-|---------|--------|----------|--------------|-------------|
-| message | string | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|message|string|false|none|none|
 
 <h2 id="tocS_Tenant">Tenant</h2>
 <!-- backwards compatibility -->
@@ -361,10 +361,10 @@ The primary schema/definition of a tenant
 
 ### Properties
 
-| Name   | Type                                | Required | Restrictions | Description                  |
-|--------|-------------------------------------|----------|--------------|------------------------------|
-| spec   | [TenantSpec](#schematenantspec)     | true     | none         | The desired state of Tenant  |
-| status | [TenantStatus](#schematenantstatus) | false    | none         | The observed state of Tenant |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|spec|[TenantSpec](#schematenantspec)|true|none|The desired state of Tenant|
+|status|[TenantStatus](#schematenantstatus)|false|none|The observed state of Tenant|
 
 <h2 id="tocS_TenantResource">TenantResource</h2>
 <!-- backwards compatibility -->
@@ -392,14 +392,14 @@ The desired resources for the Tenant
 
 ### Properties
 
-| Name                      | Type     | Required | Restrictions | Description |
-|---------------------------|----------|----------|--------------|-------------|
-| enforceexclusivehsmgroups | boolean  | false    | none         | none        |
-| forcepoweroff             | boolean  | false    | none         | none        |
-| hsmgrouplabel             | string   | false    | none         | none        |
-| hsmpartitionname          | string   | false    | none         | none        |
-| type                      | string   | true     | none         | none        |
-| xnames                    | [string] | true     | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|enforceexclusivehsmgroups|boolean|false|none|none|
+|forcepoweroff|boolean|false|none|none|
+|hsmgrouplabel|string|false|none|none|
+|hsmpartitionname|string|false|none|none|
+|type|string|true|none|none|
+|xnames|[string]|true|none|none|
 
 <h2 id="tocS_TenantSpec">TenantSpec</h2>
 <!-- backwards compatibility -->
@@ -436,12 +436,12 @@ The desired state of Tenant
 
 ### Properties
 
-| Name            | Type                                      | Required | Restrictions | Description                          |
-|-----------------|-------------------------------------------|----------|--------------|--------------------------------------|
-| childnamespaces | [string]                                  | false    | none         | none                                 |
-| state           | string                                    | false    | none         | none                                 |
-| tenantname      | string                                    | true     | none         | none                                 |
-| tenantresources | [[TenantResource](#schematenantresource)] | true     | none         | The desired resources for the Tenant |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|childnamespaces|[string]|false|none|none|
+|state|string|false|none|none|
+|tenantname|string|true|none|none|
+|tenantresources|[[TenantResource](#schematenantresource)]|true|none|The desired resources for the Tenant|
 
 <h2 id="tocS_TenantStatus">TenantStatus</h2>
 <!-- backwards compatibility -->
@@ -477,9 +477,9 @@ The observed state of Tenant
 
 ### Properties
 
-| Name            | Type                                      | Required | Restrictions | Description                          |
-|-----------------|-------------------------------------------|----------|--------------|--------------------------------------|
-| childnamespaces | [string]                                  | false    | none         | none                                 |
-| tenantresources | [[TenantResource](#schematenantresource)] | false    | none         | The desired resources for the Tenant |
-| uuid            | string(uuid)                              | false    | none         | none                                 |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|childnamespaces|[string]|false|none|none|
+|tenantresources|[[TenantResource](#schematenantresource)]|false|none|The desired resources for the Tenant|
+|uuid|string(uuid)|false|none|none|
 
