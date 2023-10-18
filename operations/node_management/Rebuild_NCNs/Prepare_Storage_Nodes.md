@@ -256,4 +256,4 @@ Upload Ceph container images into Nexus.
 
 ## Next step
 
-If executing this procedure as part of an NCN rebuild, then return to the main [Rebuild NCNs](Rebuild_NCNs.md#storage-node) page and proceed with the next step.
+Proceed to the next step of the storage node rebuild procedure to [identify nodes and update metadata](Identify_Nodes_and_Update_Metadata.md). Otherwise, return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
