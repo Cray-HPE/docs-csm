@@ -1277,12 +1277,26 @@ if [[ ${state_recorded} == "0" ]]; then
       exit 1
     fi
 
-    # retry cray-nls upgrade which is expected to succeed
-    "${locOfScript}/util/upgrade-cray-nls.sh"
+    # CASMINST-6700 retry cray-nls upgrade
+    set +e
+    i=0
+    max_checks=40
+    wait_time=30
+    until "${locOfScript}/util/upgrade-cray-nls.sh"; do
+      i=$((i + 1))
+      echo "Waiting for cray-nls upgrade to succeed (${i}/${max_checks})"
+      sleep ${wait_time}
+      # retry for up to 20 minutes
+      if [[ ${i} -gt ${max_checks} ]]; then
+        echo "ERROR: failed to finish cray-nls upgrade"
+        exit 1
+      fi
+    done
+
     # CASMINST-6040 - need to wait for hooks.cray-nls.hpe.com crd to be created
     # before uploading rebuild workflow templates which use hooks
     echo "Wait for hooks.cray-nls.hpe.com crd to be created"
-    set +e
+
     counter=0
     until kubectl get crd hooks.cray-nls.hpe.com; do
       counter=$((counter + 1))
