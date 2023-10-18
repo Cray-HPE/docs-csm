@@ -36,16 +36,17 @@ shown here with numbered topics.
     1. [Validate CSM health before final NCN deployment](#3-validate-csm-health-before-final-ncn-deployment)
     1. [Deploy final NCN](#4-deploy-final-ncn)
     1. [Configure administrative access](#5-configure-administrative-access)
-    1. [Validate CSM health](#6-validate-csm-health)
-    1. [Configure Prometheus alert notifications](#7-configure-prometheus-alert-notifications)
-    1. [Upload Olympus BMC recovery firmware into TFTP server](#8-upload-olympus-bmc-recovery-firmware-into-tftp-server)
-    1. [Update firmware with FAS](#9-update-firmware-with-fas)
-    1. [Prepare compute nodes](#10-prepare-compute-nodes)
-    1. [Next topic](#11-next-topic)
+    1. [Upgrade Ceph and stop local Docker registries](#6-upgrade-ceph-and-stop-local-docker-registries)
+    1. [Validate CSM health](#7-validate-csm-health)
+    1. [Configure Prometheus alert notifications](#8-configure-prometheus-alert-notifications)
+    1. [Upload Olympus BMC recovery firmware into TFTP server](#9-upload-olympus-bmc-recovery-firmware-into-tftp-server)
+    1. [Update firmware with FAS](#10-update-firmware-with-fas)
+    1. [Prepare compute nodes](#11-prepare-compute-nodes)
+    1. [Next topic](#12-next-topic)
     - [Troubleshooting installation problems](#troubleshooting-installation-problems)
 1. [Post-installation](#post-installation)
-    1. [Apply security hardening](#12-apply-security-hardening)
-    1. [Export Nexus data](#13-export-nexus-data)
+    1. [Apply security hardening](#13-apply-security-hardening)
+    1. [Export Nexus data](#14-export-nexus-data)
 
 > **`NOTE`** If problems are encountered during the installation,
 > [Troubleshooting installation problems](#troubleshooting-installation-problems) and
@@ -140,7 +141,17 @@ controllers) for nodes in liquid-cooled cabinets.
 
 See [Configure Administrative Access](configure_administrative_access.md).
 
-### 6. Validate CSM health
+### 6. Upgrade Ceph and stop local Docker registries
+
+> **IMPORTANT** If performing a fresh install of CSM 1.3.0, 1.3.1, 1.3.2, 1.3.3, or 1.3.4, then skip this procedure.
+> This procedure should only be done during installs of CSM 1.3 patch version 1.3.5 or later.
+
+Now that all management nodes have joined the Kubernetes cluster, Ceph should be upgraded local registries on storage nodes
+should be stopped.
+
+See [Upgrade Ceph and stop local docker registries](./upgrade_ceph_stop_local_registries.md).
+
+### 7. Validate CSM health
 
 Now that all management nodes have joined the Kubernetes cluster, CSM services have been installed,
 and administrative access has been enabled, the health of the management nodes and all CSM services
@@ -152,7 +163,7 @@ a full system power down or power up, or after other types of system maintenance
 
 See [Validate CSM Health](../operations/validate_csm_health.md).
 
-### 7. Configure Prometheus alert notifications
+### 8. Configure Prometheus alert notifications
 
 Now that CSM has been installed and health has been validated, if the system management health monitoring tools (specifically
 Prometheus) are found to be useful, then email notifications can be configured for specific alerts defined in Prometheus.
@@ -163,7 +174,7 @@ types include Slack, Pager Duty, email, or a custom integration via a generic we
 See [Configure Prometheus Email Alert Notifications](../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md) for an example
 configuration of an email alert notification for the Postgres replication alerts that are defined on the system.
 
-### 8. Upload Olympus BMC recovery firmware into TFTP server
+### 9. Upload Olympus BMC recovery firmware into TFTP server
 
 > **IMPORTANT:**
 > Before Firmware can be updated the HPC Firmware Pack (HFP) must be installed  refer to the
@@ -176,7 +187,7 @@ This procedure does not modify any BMC firmware, but only stages the firmware on
 
 See [Load Olympus BMC Recovery Firmware into TFTP server](../operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md).
 
-### 9. Update firmware with FAS
+### 10. Update firmware with FAS
 
 Now that all management nodes and CSM services have been validated as healthy, the firmware on other
 components in the system can be checked and updated. The Firmware Action Service (FAS) communicates
@@ -185,7 +196,7 @@ communicates with at once, or specific devices can be targeted for a firmware up
 
 See [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md)
 
-### 10. Prepare compute nodes
+### 11. Prepare compute nodes
 
 After completion of the firmware update with FAS, compute nodes can be prepared. Some compute node
 types have special preparation steps, but most compute nodes are ready to be used now.
@@ -197,7 +208,7 @@ These compute node types require preparation:
 
 See [Prepare Compute Nodes](prepare_compute_nodes.md).
 
-### 11. Next topic
+### 12. Next topic
 
 After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
 been fully installed and configured.
@@ -215,13 +226,13 @@ See [Troubleshooting Installation Problems](troubleshooting_installation.md).
 
 ## Post-installation
 
-### 12. Apply security hardening
+### 13. Apply security hardening
 
 Review the security hardening guide, apply non-optional procedures, and review optional procedures.
 
 See [Security Hardening](../operations/CSM_product_management/Apply_Security_Hardening.md).
 
-### 13. Export Nexus data
+### 14. Export Nexus data
 
 **Warning:** This process can take multiple hours where Nexus is unavailable and should be done during scheduled maintenance periods.
 
