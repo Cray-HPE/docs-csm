@@ -162,6 +162,12 @@ yq4 -i eval 'del(.spec.kubernetes.services.cray-hms-reds)' "$c"
 # Add customizations for cray-hms-discovery for it to get the River credential sealed secret:
 yq4 -i eval '.spec.kubernetes.services.cray-hms-discovery.sealedSecrets = ["{{ kubernetes.sealed_secrets.cray_reds_credentials | toYaml }}"]' "$c"
 
+# lower cpu request for tds systems (4 workers)
+num_workers=$(kubectl get nodes | grep ncn-w | wc -l)
+if [ $num_workers -le 4 ]; then
+  yq m -i --overwrite "$c" /usr/share/doc/csm/upgrade/scripts/upgrade/tds_cpu_requests.yaml
+fi
+
 if [[ $inplace == "yes" ]]; then
   cp "$c" "$customizations"
 else
