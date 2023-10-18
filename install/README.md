@@ -149,7 +149,7 @@ See [Configure Administrative Access](configure_administrative_access.md).
 Now that all management nodes have joined the Kubernetes cluster, Ceph should be upgraded local registries on storage nodes
 should be stopped.
 
-See [Upgrade Ceph and stop local docker registreis](./upgrade_ceph_stop_local_registries.md).
+See [Upgrade Ceph and stop local docker registries](./upgrade_ceph_stop_local_registries.md).
 
 ### 7. Validate CSM health
 
