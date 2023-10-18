@@ -42,6 +42,11 @@ in [Upgrade CSM](../README.md) instead.
 * Addition of a procedure to enable `SMART` data collection on `UANs` that support it
 * Updated `hmcollector` `kafka` topics to handle new telemetry data
 * Updated `helm` example in documentation for reset of console services
+* Improved handling of empty nodes by `BOS` to prevent live lock scenario
+* Addition of time scale `grafana` dashboard
+* Mitigation of `CVE-2023-38545` for `curl` and `libcurl` on `NCNs`
+* Fix to `OPA` to cache `spire-jwks` requests going through `Kuberenetes` network to avoid port exhaustion
+* Update to `IMS` backup and restore to preserve `IMS image IDs`
 
 ## Steps
 
