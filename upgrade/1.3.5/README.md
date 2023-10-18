@@ -7,18 +7,18 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.5`, follow the procedures descr
 
 ## Bug Fixes and Improvements
 
-* Patch for `Zenbleed` to address `CVE-2023-20593` on `NCNs`
-* Fix issue with state manager failing to discover `HPE` nodes with four `HSN NICs`
+* Patched `Zenbleed` to address `CVE-2023-20593` on `NCNs`
+* Fixed issue with state manager failing to discover `HPE` nodes with four `HSN NICs`
 * Added ability to configure requests and limits for `postgres pooler`
 * Fixed storage `goss` test in case where `admin keyring` is not on `ncn-s004` and above
 * Updated `hmcollector` `kafka` topics to handle new telemetry data
 * Improved failure handling in `cfs-hwsync`
-* Update to the `goss` package version
-* Fix issue with `FRU` tracking not creating a detected event after a removed event
-* Update `goss` tests to use `goss` hostname variable rather than `HOSTNAME` environment variable
+* Updated the `goss` package version
+* Fixed issue with `FRU` tracking not creating a detected event after a removed event
+* Updated `goss` tests to use `goss` hostname variable rather than `HOSTNAME` environment variable
 * Fixed some broken links in the storage node rebuild documentation
 * Added `Ceph` upgrade and stopping of docker registries on storage nodes to fresh install documentation
-* Update to `IMS` backup and restore to preserve `IMS image IDs`
+* Updated `IMS` backup and restore to preserve `IMS image IDs`
 
 ## Steps
 
