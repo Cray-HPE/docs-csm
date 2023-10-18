@@ -79,7 +79,7 @@ def get_api_client() -> CoreV1API:
     """
     Creates a Kubernetes API client and returns it.
     """
-    logging.info("Initializing Kubernetes client")
+    logging.debug("Initializing Kubernetes client")
     k8s_config = get_configuration()
     logging.debug("Setting client default Kubernetes configuration")
     try:
@@ -117,7 +117,7 @@ class Client:
         Wrapper for read_namespaced_config_map function
         """
         configmap_label = f"{namespace}/{name} Kubernetes configmap"
-        logging.debug(f"Getting {configmap_label}")
+        logging.debug("Getting %s", configmap_label)
         try:
             return self.client.read_namespaced_config_map(name=name, namespace=namespace)
         except Exception as exc:
@@ -137,7 +137,7 @@ class Client:
         Wrapper for read_namespaced_secret function
         """
         secret_label = f"{namespace}/{name} Kubernetes secret"
-        logging.debug(f"Getting {secret_label}")
+        logging.debug("Getting %s", secret_label)
         try:
             return self.client.read_namespaced_secret(name=name, namespace=namespace)
         except Exception as exc:
@@ -156,7 +156,7 @@ class Client:
         Wrapper for read_namespaced_service function
         """
         service_label = f"{namespace}/{name} Kubernetes service"
-        logging.debug(f"Getting {service_label}")
+        logging.debug("Getting %s", service_label)
         try:
             return self.client.read_namespaced_service(name=name, namespace=namespace)
         except Exception as exc:
