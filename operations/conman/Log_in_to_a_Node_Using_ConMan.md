@@ -15,9 +15,7 @@ The user performing this procedure needs to have access permission to the `cray-
 1. (`ncn-mw#`) Find the `cray-console-operator` pod.
 
     ```bash
-    OP_POD=$(kubectl get pods -n services \
-            -o wide|grep cray-console-operator|awk '{print $1}')
-    echo $OP_POD
+    OP_POD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}'); echo $OP_POD
     ```
 
     Example output:
@@ -35,8 +33,7 @@ The user performing this procedure needs to have access permission to the `cray-
 1. (`ncn-mw#`) Find the `cray-console-node` pod that is connected to that node.
 
     ```bash
-    NODEPOD=$(kubectl -n services exec $OP_POD -c cray-console-operator -- \
-        sh -c "/app/get-node $XNAME" | jq .podname | sed 's/"//g')
+    NODEPOD=$(kubectl -n services exec $OP_POD -c cray-console-operator -- sh -c "/app/get-node $XNAME" | jq .podname | sed 's/"//g')
     echo $NODEPOD
     ```
 
