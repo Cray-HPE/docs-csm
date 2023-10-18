@@ -131,7 +131,7 @@ def make_api_request_with_retries(request_method: Callable, url: str, add_api_to
         try:
             headers = copy.deepcopy(request_kwargs["headers"])
         except KeyError:
-            headers = dict()
+            headers = {}
         token = get_api_token(k8s_client)
         headers["Authorization"] = f"Bearer {token}"
         request_kwargs["headers"] = headers
@@ -140,21 +140,21 @@ def make_api_request_with_retries(request_method: Callable, url: str, add_api_to
     max_attempts = 6
     while count < max_attempts:
         count += 1
-        logging.info(f"Making {method_name} request to {url}")
+        logging.debug("Making %s request to %s", method_name, url)
         try:
             resp = request_method(url, **request_kwargs)
         except Exception as exc:
             log_error_raise_exception(
                 f"Error making {method_name} request to {url}", exc)
-        logging.debug(f"Response status code = {resp.status_code}")
+        logging.debug("Response status code = %d", resp.status_code)
         if not 500 <= resp.status_code <= 599:
             return resp
-        logging.debug(f"Response reason = {resp.reason}")
-        logging.debug(f"Response text = {resp.text}")
+        logging.debug("Response reason = %s", resp.reason)
+        logging.debug("Response text = %s", resp.text)
         if count >= max_attempts:
             log_error_raise_exception(
                 f"API request unsuccessful even after {max_attempts} attempts")
-        logging.info("Sleeping 3 seconds before retrying..")
+        logging.debug("Sleeping 3 seconds before retrying..")
         time.sleep(3)
     log_error_raise_exception(
         "PROGRAMMING LOGIC ERROR: make_api_request_with_retries function should get here")
