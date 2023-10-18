@@ -201,6 +201,12 @@ fi
 # When upgrading to CSM 1.5 or later, ensure that we remove obsolete cray-service.sqlCluster entries (CASMPET-6584).
 yq4 -i eval 'del(.spec.kubernetes.services.*.cray-service.sqlCluster)' "$c"
 
+# lower cpu request for tds systems (4 workers)
+num_workers=$(kubectl get nodes | grep ncn-w | wc -l)
+if [ $num_workers -le 4 ]; then
+  yq m -i --overwrite "$c" /usr/share/doc/csm/upgrade/scripts/upgrade/tds_cpu_requests.yaml
+fi
+
 if [[ $inplace == "yes" ]]; then
   cp "$c" "$customizations"
 else
