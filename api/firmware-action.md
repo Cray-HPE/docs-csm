@@ -177,9 +177,9 @@ end time for completed and in-progress actions.
 
 <h3 id="get__actions-responses">Responses</h3>
 
-| Status | Meaning                                                 | Description | Schema                                  |
-|--------|---------------------------------------------------------|-------------|-----------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | OK          | [ActionSummarys](#schemaactionsummarys) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[ActionSummarys](#schemaactionsummarys)|
 
 <aside class="success">
 This operation does not require authentication
@@ -344,9 +344,9 @@ commands:
 
 <h3 id="post__actions-parameters">Parameters</h3>
 
-| Name | In   | Type                                        | Required | Description                        |
-|------|------|---------------------------------------------|----------|------------------------------------|
-| body | body | [ActionParameters](#schemaactionparameters) | true     | Optional description in *Markdown* |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[ActionParameters](#schemaactionparameters)|true|Optional description in *Markdown*|
 
 > Example responses
 
@@ -363,10 +363,10 @@ commands:
 
 <h3 id="post__actions-responses">Responses</h3>
 
-| Status | Meaning                                                        | Description          | Schema                            |
-|--------|----------------------------------------------------------------|----------------------|-----------------------------------|
-| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)   | Created              | [ActionID](#schemaactionid)       |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | action set not found | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Created|[ActionID](#schemaactionid)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|action set not found|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -435,9 +435,9 @@ Retrieve detailed information for a firmware action set specified by actionID.
 
 <h3 id="get__actions_{actionid}-parameters">Parameters</h3>
 
-| Name     | In   | Type         | Required | Description |
-|----------|------|--------------|----------|-------------|
-| actionID | path | string(uuid) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|actionID|path|string(uuid)|true|none|
 
 > Example responses
 
@@ -628,10 +628,10 @@ Retrieve detailed information for a firmware action set specified by actionID.
 
 <h3 id="get__actions_{actionid}-responses">Responses</h3>
 
-| Status | Meaning                                                        | Description          | Schema                            |
-|--------|----------------------------------------------------------------|----------------------|-----------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | OK                   | [Action](#schemaaction)           |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | action set not found | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[Action](#schemaaction)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|action set not found|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -700,9 +700,9 @@ Delete all information about a completed firmware action set.
 
 <h3 id="delete__actions_{actionid}-parameters">Parameters</h3>
 
-| Name     | In   | Type         | Required | Description |
-|----------|------|--------------|----------|-------------|
-| actionID | path | string(uuid) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|actionID|path|string(uuid)|true|none|
 
 > Example responses
 
@@ -710,11 +710,11 @@ Delete all information about a completed firmware action set.
 
 <h3 id="delete__actions_{actionid}-responses">Responses</h3>
 
-| Status | Meaning                                                          | Description                    | Schema                            |
-|--------|------------------------------------------------------------------|--------------------------------|-----------------------------------|
-| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)  | Deleted  - no content          | None                              |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | cannot delete a running action | [Problem7807](#schemaproblem7807) |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | action set not found           | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Deleted  - no content|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|cannot delete a running action|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|action set not found|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -783,9 +783,9 @@ Abort a running firmware action set. Stops all actions in progress (will not rol
 
 <h3 id="delete__actions_{actionid}_instance-parameters">Parameters</h3>
 
-| Name     | In   | Type         | Required | Description |
-|----------|------|--------------|----------|-------------|
-| actionID | path | string(uuid) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|actionID|path|string(uuid)|true|none|
 
 > Example responses
 
@@ -803,11 +803,11 @@ Abort a running firmware action set. Stops all actions in progress (will not rol
 
 <h3 id="delete__actions_{actionid}_instance-responses">Responses</h3>
 
-| Status | Meaning                                                        | Description              | Schema                            |
-|--------|----------------------------------------------------------------|--------------------------|-----------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | Action already finalized | None                              |
-| 202    | [Accepted](https://tools.ietf.org/html/rfc7231#section-6.3.3)  | Aborting action          | None                              |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | action set not found     | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Action already finalized|None|
+|202|[Accepted](https://tools.ietf.org/html/rfc7231#section-6.3.3)|Aborting action|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|action set not found|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -876,9 +876,9 @@ Retrieve summary information of a firmware action set.
 
 <h3 id="get__actions_{actionid}_status-parameters">Parameters</h3>
 
-| Name     | In   | Type         | Required | Description |
-|----------|------|--------------|----------|-------------|
-| actionID | path | string(uuid) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|actionID|path|string(uuid)|true|none|
 
 > Example responses
 
@@ -921,10 +921,10 @@ Retrieve summary information of a firmware action set.
 
 <h3 id="get__actions_{actionid}_status-responses">Responses</h3>
 
-| Status | Meaning                                                        | Description          | Schema                                |
-|--------|----------------------------------------------------------------|----------------------|---------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | OK                   | [ActionSummary](#schemaactionsummary) |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | action set not found | [Problem7807](#schemaproblem7807)     |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[ActionSummary](#schemaactionsummary)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|action set not found|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -993,9 +993,9 @@ Retrieve detailed information of a firmware action set.
 
 <h3 id="get__actions_{actionid}_operations-parameters">Parameters</h3>
 
-| Name     | In   | Type         | Required | Description |
-|----------|------|--------------|----------|-------------|
-| actionID | path | string(uuid) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|actionID|path|string(uuid)|true|none|
 
 > Example responses
 
@@ -1366,10 +1366,10 @@ Retrieve detailed information of a firmware action set.
 
 <h3 id="get__actions_{actionid}_operations-responses">Responses</h3>
 
-| Status | Meaning                                                        | Description          | Schema                              |
-|--------|----------------------------------------------------------------|----------------------|-------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | OK                   | [ActionDetail](#schemaactiondetail) |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | action set not found | [Problem7807](#schemaproblem7807)   |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[ActionDetail](#schemaactiondetail)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|action set not found|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -1438,10 +1438,10 @@ Retrieve detailed information of a firmware operation.
 
 <h3 id="get__actions_{actionid}_operations_{operationid}-parameters">Parameters</h3>
 
-| Name        | In   | Type         | Required | Description |
-|-------------|------|--------------|----------|-------------|
-| actionID    | path | string(uuid) | true     | none        |
-| operationID | path | string(uuid) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|actionID|path|string(uuid)|true|none|
+|operationID|path|string(uuid)|true|none|
 
 > Example responses
 
@@ -1477,10 +1477,10 @@ Retrieve detailed information of a firmware operation.
 
 <h3 id="get__actions_{actionid}_operations_{operationid}-responses">Responses</h3>
 
-| Status | Meaning                                                        | Description          | Schema                            |
-|--------|----------------------------------------------------------------|----------------------|-----------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | OK                   | [Operation](#schemaoperation)     |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | action set not found | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[Operation](#schemaoperation)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|action set not found|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -1549,9 +1549,9 @@ Retrieve detailed information of a firmware operation.
 
 <h3 id="get__operations_{operationid}-parameters">Parameters</h3>
 
-| Name        | In   | Type         | Required | Description |
-|-------------|------|--------------|----------|-------------|
-| operationID | path | string(uuid) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|operationID|path|string(uuid)|true|none|
 
 > Example responses
 
@@ -1587,10 +1587,10 @@ Retrieve detailed information of a firmware operation.
 
 <h3 id="get__operations_{operationid}-responses">Responses</h3>
 
-| Status | Meaning                                                        | Description         | Schema                            |
-|--------|----------------------------------------------------------------|---------------------|-----------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | OK                  | [Operation](#schemaoperation)     |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | operation not found | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[Operation](#schemaoperation)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|operation not found|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -1702,9 +1702,9 @@ Create a new image record
 
 <h3 id="post__images-parameters">Parameters</h3>
 
-| Name | In   | Type                              | Required | Description             |
-|------|------|-----------------------------------|----------|-------------------------|
-| body | body | [ImageCreate](#schemaimagecreate) | true     | a firmware image record |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[ImageCreate](#schemaimagecreate)|true|a firmware image record|
 
 > Example responses
 
@@ -1720,11 +1720,11 @@ Create a new image record
 
 <h3 id="post__images-responses">Responses</h3>
 
-| Status | Meaning                                                          | Description                 | Schema                            |
-|--------|------------------------------------------------------------------|-----------------------------|-----------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | OK                          | [ImageID](#schemaimageid)         |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad request                 | [Problem7807](#schemaproblem7807) |
-| 409    | [Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)    | Image Record Already Exists | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[ImageID](#schemaimageid)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request|[Problem7807](#schemaproblem7807)|
+|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Image Record Already Exists|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -1835,9 +1835,9 @@ Retrieve a list of images that are known to the system.
 
 <h3 id="get__images-responses">Responses</h3>
 
-| Status | Meaning                                                 | Description | Schema                        |
-|--------|---------------------------------------------------------|-------------|-------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | OK          | [ImageList](#schemaimagelist) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[ImageList](#schemaimagelist)|
 
 <aside class="success">
 This operation does not require authentication
@@ -1947,10 +1947,10 @@ Modify or update an existing image record.
 
 <h3 id="put__images_{imageid}-parameters">Parameters</h3>
 
-| Name    | In   | Type                              | Required | Description  |
-|---------|------|-----------------------------------|----------|--------------|
-| imageID | path | string(uuid)                      | true     | none         |
-| body    | body | [ImageCreate](#schemaimagecreate) | true     | image record |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|imageID|path|string(uuid)|true|none|
+|body|body|[ImageCreate](#schemaimagecreate)|true|image record|
 
 > Example responses
 
@@ -1958,11 +1958,11 @@ Modify or update an existing image record.
 
 <h3 id="put__images_{imageid}-responses">Responses</h3>
 
-| Status | Meaning                                                          | Description | Schema                            |
-|--------|------------------------------------------------------------------|-------------|-----------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | Updated     | None                              |
-| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)     | Created     | None                              |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Updated|None|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Created|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -2031,9 +2031,9 @@ Retrieve the image record that is associated with the imageID.
 
 <h3 id="get__images_{imageid}-parameters">Parameters</h3>
 
-| Name    | In   | Type         | Required | Description |
-|---------|------|--------------|----------|-------------|
-| imageID | path | string(uuid) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|imageID|path|string(uuid)|true|none|
 
 > Example responses
 
@@ -2077,10 +2077,10 @@ Retrieve the image record that is associated with the imageID.
 
 <h3 id="get__images_{imageid}-responses">Responses</h3>
 
-| Status | Meaning                                                          | Description | Schema                            |
-|--------|------------------------------------------------------------------|-------------|-----------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)          | OK          | [ImageGet](#schemaimageget)       |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[ImageGet](#schemaimageget)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -2149,9 +2149,9 @@ Deletes an image record from the FAS datastore. Does not delete the actual image
 
 <h3 id="delete__images_{imageid}-parameters">Parameters</h3>
 
-| Name    | In   | Type         | Required | Description |
-|---------|------|--------------|----------|-------------|
-| imageID | path | string(uuid) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|imageID|path|string(uuid)|true|none|
 
 > Example responses
 
@@ -2159,10 +2159,10 @@ Deletes an image record from the FAS datastore. Does not delete the actual image
 
 <h3 id="delete__images_{imageid}-responses">Responses</h3>
 
-| Status | Meaning                                                          | Description       | Schema                            |
-|--------|------------------------------------------------------------------|-------------------|-----------------------------------|
-| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)  | Successful delete | None                              |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request       | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Successful delete|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -2245,10 +2245,10 @@ Retrieve the status of the Firmware Action Service.
 
 <h3 id="get__service_status-responses">Responses</h3>
 
-| Status | Meaning                                                                    | Description           | Schema                                |
-|--------|----------------------------------------------------------------------------|-----------------------|---------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                    | [ServiceStatus](#schemaservicestatus) |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error | [Problem7807](#schemaproblem7807)     |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[ServiceStatus](#schemaservicestatus)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -2332,10 +2332,10 @@ Retrieve the status of the Firmware Action Service. HSM, ETCD, Service Status an
 
 <h3 id="get__service_status_details-responses">Responses</h3>
 
-| Status | Meaning                                                                    | Description           | Schema                                              |
-|--------|----------------------------------------------------------------------------|-----------------------|-----------------------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                    | [ServiceStatusDetails](#schemaservicestatusdetails) |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error | [Problem7807](#schemaproblem7807)                   |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[ServiceStatusDetails](#schemaservicestatusdetails)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -2416,10 +2416,10 @@ Retrieve the internal version of FAS.
 
 <h3 id="get__service_version-responses">Responses</h3>
 
-| Status | Meaning                                                                    | Description           | Schema                                  |
-|--------|----------------------------------------------------------------------------|-----------------------|-----------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                    | [ServiceVersion](#schemaserviceversion) |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error | [Problem7807](#schemaproblem7807)       |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[ServiceVersion](#schemaserviceversion)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -2518,10 +2518,10 @@ Return summary of all stored snapshots
 
 <h3 id="get__snapshots-responses">Responses</h3>
 
-| Status | Meaning                                                                    | Description           | Schema                            |
-|--------|----------------------------------------------------------------------------|-----------------------|-----------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | OK                    | [SnapshotAll](#schemasnapshotall) |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal server error | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[SnapshotAll](#schemasnapshotall)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal server error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -2629,9 +2629,9 @@ Records a snapshot of the firmware versions for every target for every device th
 
 <h3 id="post__snapshots-parameters">Parameters</h3>
 
-| Name | In   | Type                                            | Required | Description                        |
-|------|------|-------------------------------------------------|----------|------------------------------------|
-| body | body | [SnapshotParameters](#schemasnapshotparameters) | true     | Optional description in *Markdown* |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[SnapshotParameters](#schemasnapshotparameters)|true|Optional description in *Markdown*|
 
 > Example responses
 
@@ -2647,16 +2647,16 @@ Records a snapshot of the firmware versions for every target for every device th
 
 <h3 id="post__snapshots-responses">Responses</h3>
 
-| Status | Meaning                                                       | Description                   | Schema                            |
-|--------|---------------------------------------------------------------|-------------------------------|-----------------------------------|
-| 201    | [Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)  | OK                            | [SnapshotID](#schemasnapshotid)   |
-| 409    | [Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8) | Duplicate, key already exists | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|OK|[SnapshotID](#schemasnapshotid)|
+|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Duplicate, key already exists|[Problem7807](#schemaproblem7807)|
 
 ### Response Headers
 
-| Status | Header   | Type   | Format | Description          |
-|--------|----------|--------|--------|----------------------|
-| 201    | Location | string |        | location of snapshot |
+|Status|Header|Type|Format|Description|
+|---|---|---|---|---|
+|201|Location|string||location of snapshot|
 
 <aside class="success">
 This operation does not require authentication
@@ -2725,9 +2725,9 @@ Retrieve a snapshot of the system
 
 <h3 id="get__snapshots_{snapshotname}-parameters">Parameters</h3>
 
-| Name         | In   | Type   | Required | Description |
-|--------------|------|--------|----------|-------------|
-| snapshotName | path | string | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|snapshotName|path|string|true|none|
 
 > Example responses
 
@@ -2801,10 +2801,10 @@ Retrieve a snapshot of the system
 
 <h3 id="get__snapshots_{snapshotname}-responses">Responses</h3>
 
-| Status | Meaning                                                        | Description | Schema                            |
-|--------|----------------------------------------------------------------|-------------|-----------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | OK          | [Snapshot](#schemasnapshot)       |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | Not found   | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[Snapshot](#schemasnapshot)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not found|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -2873,9 +2873,9 @@ Delete a snapshot of the system. Does not delete any firmware images from S3.
 
 <h3 id="delete__snapshots_{snapshotname}-parameters">Parameters</h3>
 
-| Name         | In   | Type   | Required | Description |
-|--------------|------|--------|----------|-------------|
-| snapshotName | path | string | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|snapshotName|path|string|true|none|
 
 > Example responses
 
@@ -2883,10 +2883,10 @@ Delete a snapshot of the system. Does not delete any firmware images from S3.
 
 <h3 id="delete__snapshots_{snapshotname}-responses">Responses</h3>
 
-| Status | Meaning                                                         | Description       | Schema                            |
-|--------|-----------------------------------------------------------------|-------------------|-----------------------------------|
-| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5) | Successful delete | None                              |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)  | Not found         | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Successful delete|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not found|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -2957,12 +2957,12 @@ Restore a snapshot by replacing each component (device + target) with the stored
 
 <h3 id="post__snapshots_{snapshotname}_restore-parameters">Parameters</h3>
 
-| Name           | In    | Type    | Required | Description                                                                                                                                                                |
-|----------------|-------|---------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| snapshotName   | path  | string  | true     | none                                                                                                                                                                       |
-| overrideDryrun | query | boolean | false    | Note that leaving this blank or misspelling true is considered false resulting in a dryrun restore action to be performed. You must specify true to force an actual update |
-| confirm        | query | string  | true     | none                                                                                                                                                                       |
-| timeLimit      | query | integer | false    | time limit in seconds that any operation for a firmware action may be allowed to attempt to complete.                                                                      |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|snapshotName|path|string|true|none|
+|overrideDryrun|query|boolean|false|Note that leaving this blank or misspelling true is considered false resulting in a dryrun restore action to be performed. You must specify true to force an actual update|
+|confirm|query|string|true|none|
+|timeLimit|query|integer|false|time limit in seconds that any operation for a firmware action may be allowed to attempt to complete.|
 
 > Example responses
 
@@ -2979,17 +2979,17 @@ Restore a snapshot by replacing each component (device + target) with the stored
 
 <h3 id="post__snapshots_{snapshotname}_restore-responses">Responses</h3>
 
-| Status | Meaning                                                          | Description                                               | Schema                            |
-|--------|------------------------------------------------------------------|-----------------------------------------------------------|-----------------------------------|
-| 202    | [Accepted](https://tools.ietf.org/html/rfc7231#section-6.3.3)    | request to restore accepted. Creating firmware action set | [ActionID](#schemaactionid)       |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1) | Bad Request                                               | [Problem7807](#schemaproblem7807) |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)   | Snapshot name not found                                   | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|202|[Accepted](https://tools.ietf.org/html/rfc7231#section-6.3.3)|request to restore accepted. Creating firmware action set|[ActionID](#schemaactionid)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Snapshot name not found|[Problem7807](#schemaproblem7807)|
 
 ### Response Headers
 
-| Status | Header   | Type   | Format | Description                                 |
-|--------|----------|--------|--------|---------------------------------------------|
-| 202    | Location | string | uuid   | actionID of the created firmware action set |
+|Status|Header|Type|Format|Description|
+|---|---|---|---|---|
+|202|Location|string|uuid|actionID of the created firmware action set|
 
 <aside class="success">
 This operation does not require authentication
@@ -3071,9 +3071,9 @@ string
 
 <h3 id="post__loader-parameters">Parameters</h3>
 
-| Name | In   | Type           | Required | Description |
-|------|------|----------------|----------|-------------|
-| body | body | string(binary) | false    | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|string(binary)|false|none|
 
 > Example responses
 
@@ -3089,13 +3089,13 @@ string
 
 <h3 id="post__loader-responses">Responses</h3>
 
-| Status | Meaning                                                                      | Description                  | Schema                            |
-|--------|------------------------------------------------------------------------------|------------------------------|-----------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                      | OK                           | [LoaderRunID](#schemaloaderrunid) |
-| 400    | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)             | Bad Request - No file found  | [Problem7807](#schemaproblem7807) |
-| 415    | [Unsupported Media Type](https://tools.ietf.org/html/rfc7231#section-6.5.13) | Unsupported Media Type       | [Problem7807](#schemaproblem7807) |
-| 429    | [Too Many Requests](https://tools.ietf.org/html/rfc6585#section-4)           | Loader busy, try again later | [Problem7807](#schemaproblem7807) |
-| 500    | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)   | Internal Server Error        | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[LoaderRunID](#schemaloaderrunid)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request - No file found|[Problem7807](#schemaproblem7807)|
+|415|[Unsupported Media Type](https://tools.ietf.org/html/rfc7231#section-6.5.13)|Unsupported Media Type|[Problem7807](#schemaproblem7807)|
+|429|[Too Many Requests](https://tools.ietf.org/html/rfc6585#section-4)|Loader busy, try again later|[Problem7807](#schemaproblem7807)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -3177,9 +3177,9 @@ Return the loader status and list loader runs
 
 <h3 id="get__loader-responses">Responses</h3>
 
-| Status | Meaning                                                 | Description | Schema                              |
-|--------|---------------------------------------------------------|-------------|-------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1) | OK          | [LoaderStatus](#schemaloaderstatus) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[LoaderStatus](#schemaloaderstatus)|
 
 <aside class="success">
 This operation does not require authentication
@@ -3248,9 +3248,9 @@ Return the results of a loader run
 
 <h3 id="get__loader_{loaderrunid}-parameters">Parameters</h3>
 
-| Name        | In   | Type         | Required | Description |
-|-------------|------|--------------|----------|-------------|
-| loaderRunID | path | string(uuid) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|loaderRunID|path|string(uuid)|true|none|
 
 > Example responses
 
@@ -3268,10 +3268,10 @@ Return the results of a loader run
 
 <h3 id="get__loader_{loaderrunid}-responses">Responses</h3>
 
-| Status | Meaning                                                        | Description | Schema                                    |
-|--------|----------------------------------------------------------------|-------------|-------------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)        | OK          | [LoaderRunOutput](#schemaloaderrunoutput) |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4) | Not found   | [Problem7807](#schemaproblem7807)         |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[LoaderRunOutput](#schemaloaderrunoutput)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not found|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -3340,9 +3340,9 @@ Delete a loader run
 
 <h3 id="delete__loader_{loaderrunid}-parameters">Parameters</h3>
 
-| Name        | In   | Type         | Required | Description |
-|-------------|------|--------------|----------|-------------|
-| loaderRunID | path | string(uuid) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|loaderRunID|path|string(uuid)|true|none|
 
 > Example responses
 
@@ -3350,10 +3350,10 @@ Delete a loader run
 
 <h3 id="delete__loader_{loaderrunid}-responses">Responses</h3>
 
-| Status | Meaning                                                         | Description       | Schema                            |
-|--------|-----------------------------------------------------------------|-------------------|-----------------------------------|
-| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5) | Successful delete | None                              |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)  | Not found         | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Successful delete|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not found|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -3434,10 +3434,10 @@ Have the loader read the firmware library from Nexus and add to S3 and create FA
 
 <h3 id="post__loader_nexus-responses">Responses</h3>
 
-| Status | Meaning                                                            | Description                  | Schema                            |
-|--------|--------------------------------------------------------------------|------------------------------|-----------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)            | OK                           | [LoaderRunID](#schemaloaderrunid) |
-| 429    | [Too Many Requests](https://tools.ietf.org/html/rfc6585#section-4) | Loader busy, try again later | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[LoaderRunID](#schemaloaderrunid)|
+|429|[Too Many Requests](https://tools.ietf.org/html/rfc6585#section-4)|Loader busy, try again later|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -3464,17 +3464,17 @@ This operation does not require authentication
 
 ### Properties
 
-| Name          | Type     | Required | Restrictions | Description |
-|---------------|----------|----------|--------------|-------------|
-| loaderStatus  | string   | false    | none         | none        |
-| loaderRunList | [string] | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|loaderStatus|string|false|none|none|
+|loaderRunList|[string]|false|none|none|
 
 #### Enumerated Values
 
-| Property     | Value |
-|--------------|-------|
-| loaderStatus | busy  |
-| loaderStatus | ready |
+|Property|Value|
+|---|---|
+|loaderStatus|busy|
+|loaderStatus|ready|
 
 <h2 id="tocS_LoaderRunID">LoaderRunID</h2>
 <!-- backwards compatibility -->
@@ -3492,9 +3492,9 @@ This operation does not require authentication
 
 ### Properties
 
-| Name        | Type         | Required | Restrictions | Description |
-|-------------|--------------|----------|--------------|-------------|
-| loaderRunID | string(uuid) | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|loaderRunID|string(uuid)|false|none|none|
 
 <h2 id="tocS_LoaderRunOutput">LoaderRunOutput</h2>
 <!-- backwards compatibility -->
@@ -3514,9 +3514,9 @@ This operation does not require authentication
 
 ### Properties
 
-| Name            | Type     | Required | Restrictions | Description |
-|-----------------|----------|----------|--------------|-------------|
-| loaderRunOutput | [string] | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|loaderRunOutput|[string]|false|none|none|
 
 <h2 id="tocS_ActionSummary">ActionSummary</h2>
 <!-- backwards compatibility -->
@@ -3561,30 +3561,30 @@ This operation does not require authentication
 
 ### Properties
 
-| Name            | Type                                      | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                    |
-|-----------------|-------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| actionID        | string(uuid)                              | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| snapshotID      | string(uuid)                              | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| overrideDryrun  | boolean                                   | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| startTime       | string(date-time)                         | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| endTime         | string(date-time)                         | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| state           | string                                    | false    | none         | The state of the action -<br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations |
-| operationCounts | [OperationCounts](#schemaoperationcounts) | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| description     | string                                    | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| blockedBy       | [string]                                  | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| errors          | [string]                                  | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|actionID|string(uuid)|false|none|none|
+|snapshotID|string(uuid)|false|none|none|
+|overrideDryrun|boolean|false|none|none|
+|startTime|string(date-time)|false|none|none|
+|endTime|string(date-time)|false|none|none|
+|state|string|false|none|The state of the action -<br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
+|operationCounts|[OperationCounts](#schemaoperationcounts)|false|none|none|
+|description|string|false|none|none|
+|blockedBy|[string]|false|none|none|
+|errors|[string]|false|none|none|
 
 #### Enumerated Values
 
-| Property | Value         |
-|----------|---------------|
-| state    | new           |
-| state    | configure     |
-| state    | blocked       |
-| state    | running       |
-| state    | completed     |
-| state    | abortSignaled |
-| state    | aborted       |
+|Property|Value|
+|---|---|
+|state|new|
+|state|configure|
+|state|blocked|
+|state|running|
+|state|completed|
+|state|abortSignaled|
+|state|aborted|
 
 <h2 id="tocS_ActionSummarys">ActionSummarys</h2>
 <!-- backwards compatibility -->
@@ -3633,9 +3633,9 @@ This operation does not require authentication
 
 ### Properties
 
-| Name    | Type                                    | Required | Restrictions | Description |
-|---------|-----------------------------------------|----------|--------------|-------------|
-| actions | [[ActionSummary](#schemaactionsummary)] | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|actions|[[ActionSummary](#schemaactionsummary)]|false|none|none|
 
 <h2 id="tocS_Action">Action</h2>
 <!-- backwards compatibility -->
@@ -3828,31 +3828,31 @@ This operation does not require authentication
 
 ### Properties
 
-| Name             | Type                                        | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                    |
-|------------------|---------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| actionID         | string(uuid)                                | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| snapshotID       | string(uuid)                                | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| startTime        | string(date-time)                           | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| endTime          | string(date-time)                           | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| state            | string                                      | false    | none         | The state of the action -<br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations |
-| description      | string                                      | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| operationSummary | [OperationSummary](#schemaoperationsummary) | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| overrideDryrun   | boolean                                     | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| parameters       | [ActionParameters](#schemaactionparameters) | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| blockedBy        | [string]                                    | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| errors           | [string]                                    | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|actionID|string(uuid)|false|none|none|
+|snapshotID|string(uuid)|false|none|none|
+|startTime|string(date-time)|false|none|none|
+|endTime|string(date-time)|false|none|none|
+|state|string|false|none|The state of the action -<br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
+|description|string|false|none|none|
+|operationSummary|[OperationSummary](#schemaoperationsummary)|false|none|none|
+|overrideDryrun|boolean|false|none|none|
+|parameters|[ActionParameters](#schemaactionparameters)|false|none|none|
+|blockedBy|[string]|false|none|none|
+|errors|[string]|false|none|none|
 
 #### Enumerated Values
 
-| Property | Value         |
-|----------|---------------|
-| state    | new           |
-| state    | configure     |
-| state    | blocked       |
-| state    | running       |
-| state    | completed     |
-| state    | abortSignaled |
-| state    | aborted       |
+|Property|Value|
+|---|---|
+|state|new|
+|state|configure|
+|state|blocked|
+|state|running|
+|state|completed|
+|state|abortSignaled|
+|state|aborted|
 
 <h2 id="tocS_ActionDetail">ActionDetail</h2>
 <!-- backwards compatibility -->
@@ -4225,31 +4225,31 @@ This operation does not require authentication
 
 ### Properties
 
-| Name             | Type                                        | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                    |
-|------------------|---------------------------------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| actionID         | string(uuid)                                | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| snapshotID       | string(uuid)                                | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| startTime        | string(date-time)                           | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| endTime          | string(date-time)                           | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| state            | string                                      | false    | none         | The state of the action -<br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations |
-| description      | string                                      | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| operationSummary | [OperationDetail](#schemaoperationdetail)   | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| overrideDryrun   | boolean                                     | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| parameters       | [ActionParameters](#schemaactionparameters) | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| blockedBy        | [string]                                    | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| errors           | [string]                                    | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|actionID|string(uuid)|false|none|none|
+|snapshotID|string(uuid)|false|none|none|
+|startTime|string(date-time)|false|none|none|
+|endTime|string(date-time)|false|none|none|
+|state|string|false|none|The state of the action -<br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
+|description|string|false|none|none|
+|operationSummary|[OperationDetail](#schemaoperationdetail)|false|none|none|
+|overrideDryrun|boolean|false|none|none|
+|parameters|[ActionParameters](#schemaactionparameters)|false|none|none|
+|blockedBy|[string]|false|none|none|
+|errors|[string]|false|none|none|
 
 #### Enumerated Values
 
-| Property | Value         |
-|----------|---------------|
-| state    | new           |
-| state    | configure     |
-| state    | blocked       |
-| state    | running       |
-| state    | completed     |
-| state    | abortSignaled |
-| state    | aborted       |
+|Property|Value|
+|---|---|
+|state|new|
+|state|configure|
+|state|blocked|
+|state|running|
+|state|completed|
+|state|abortSignaled|
+|state|aborted|
 
 <h2 id="tocS_ActionID">ActionID</h2>
 <!-- backwards compatibility -->
@@ -4268,10 +4268,10 @@ This operation does not require authentication
 
 ### Properties
 
-| Name           | Type         | Required | Restrictions | Description                                                              |
-|----------------|--------------|----------|--------------|--------------------------------------------------------------------------|
-| actionID       | string(uuid) | false    | none         | none                                                                     |
-| overrideDryrun | boolean      | false    | none         | this field represents if the automatic dryrun was overridden by command. |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|actionID|string(uuid)|false|none|none|
+|overrideDryrun|boolean|false|none|this field represents if the automatic dryrun was overridden by command.|
 
 <h2 id="tocS_ActionParameters">ActionParameters</h2>
 <!-- backwards compatibility -->
@@ -4327,13 +4327,13 @@ This operation does not require authentication
 
 ### Properties
 
-| Name                    | Type                                                                                  | Required | Restrictions | Description |
-|-------------------------|---------------------------------------------------------------------------------------|----------|--------------|-------------|
-| stateComponentFilter    | [ActionParameters_StateComponentFilter](#schemaactionparameters_statecomponentfilter) | false    | none         | none        |
-| inventoryHardwareFilter | [ActionParameters_HardwareFilter](#schemaactionparameters_hardwarefilter)             | false    | none         | none        |
-| imageFilter             | [ActionParameters_ImageFilter](#schemaactionparameters_imagefilter)                   | false    | none         | none        |
-| targetFilter            | [ActionParameters_TargetFilter](#schemaactionparameters_targetfilter)                 | false    | none         | none        |
-| command                 | [ActionParameters_Command](#schemaactionparameters_command)                           | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|stateComponentFilter|[ActionParameters_StateComponentFilter](#schemaactionparameters_statecomponentfilter)|false|none|none|
+|inventoryHardwareFilter|[ActionParameters_HardwareFilter](#schemaactionparameters_hardwarefilter)|false|none|none|
+|imageFilter|[ActionParameters_ImageFilter](#schemaactionparameters_imagefilter)|false|none|none|
+|targetFilter|[ActionParameters_TargetFilter](#schemaactionparameters_targetfilter)|false|none|none|
+|command|[ActionParameters_Command](#schemaactionparameters_command)|false|none|none|
 
 <h2 id="tocS_ActionParameters_StateComponentFilter">ActionParameters_StateComponentFilter</h2>
 <!-- backwards compatibility -->
@@ -4364,12 +4364,12 @@ This operation does not require authentication
 
 ### Properties
 
-| Name        | Type     | Required | Restrictions | Description |
-|-------------|----------|----------|--------------|-------------|
-| xnames      | [string] | false    | none         | none        |
-| partitions  | [string] | false    | none         | none        |
-| groups      | [string] | false    | none         | none        |
-| deviceTypes | [string] | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|xnames|[string]|false|none|none|
+|partitions|[string]|false|none|none|
+|groups|[string]|false|none|none|
+|deviceTypes|[string]|false|none|none|
 
 <h2 id="tocS_ActionParameters_HardwareFilter">ActionParameters_HardwareFilter</h2>
 <!-- backwards compatibility -->
@@ -4388,10 +4388,10 @@ This operation does not require authentication
 
 ### Properties
 
-| Name         | Type   | Required | Restrictions | Description |
-|--------------|--------|----------|--------------|-------------|
-| manufacturer | string | false    | none         | none        |
-| model        | string | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|manufacturer|string|false|none|none|
+|model|string|false|none|none|
 
 <h2 id="tocS_ActionParameters_TargetFilter">ActionParameters_TargetFilter</h2>
 <!-- backwards compatibility -->
@@ -4412,9 +4412,9 @@ This operation does not require authentication
 
 ### Properties
 
-| Name    | Type     | Required | Restrictions | Description |
-|---------|----------|----------|--------------|-------------|
-| targets | [string] | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|targets|[string]|false|none|none|
 
 <h2 id="tocS_ActionParameters_ImageFilter">ActionParameters_ImageFilter</h2>
 <!-- backwards compatibility -->
@@ -4433,10 +4433,10 @@ This operation does not require authentication
 
 ### Properties
 
-| Name          | Type         | Required | Restrictions | Description                                                                                         |
-|---------------|--------------|----------|--------------|-----------------------------------------------------------------------------------------------------|
-| imageID       | string(uuid) | false    | none         | none                                                                                                |
-| overrideImage | boolean      | false    | none         | Will not check device properties against image properties to ensure valid image.  Default is false. |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|imageID|string(uuid)|false|none|none|
+|overrideImage|boolean|false|none|Will not check device properties against image properties to ensure valid image.  Default is false.|
 
 <h2 id="tocS_ActionParameters_Command">ActionParameters_Command</h2>
 <!-- backwards compatibility -->
@@ -4460,23 +4460,23 @@ This operation does not require authentication
 
 ### Properties
 
-| Name                       | Type    | Required | Restrictions | Description                                                                                                                                                 |
-|----------------------------|---------|----------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| version                    | string  | false    | none         | Go to the latest, earliest semantic version, or explicitly set a specific version as per the imageID.                                                       |
-| tag                        | string  | false    | none         | none                                                                                                                                                        |
-| overrideDryrun             | boolean | false    | none         | causes the action to be executed instead of simulated.  False by default. Checks to see if there are images available to update device firmware as desired. |
-| restoreNotPossibleOverride | boolean | false    | none         | Force the operation, even if the `fromFirmwareVersion` cannot be found. Default to false                                                                    |
-| overwriteSameImage         | boolean | false    | none         | Force the operation, even if the 'fromFirmwareVersion' and the 'toFirmwareVersion' are the same.  Default to false.                                         |
-| timeLimit                  | integer | false    | none         | time limit for any operation in seconds                                                                                                                     |
-| description                | string  | false    | none         | none                                                                                                                                                        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|version|string|false|none|Go to the latest, earliest semantic version, or explicitly set a specific version as per the imageID.|
+|tag|string|false|none|none|
+|overrideDryrun|boolean|false|none|causes the action to be executed instead of simulated.  False by default. Checks to see if there are images available to update device firmware as desired.|
+|restoreNotPossibleOverride|boolean|false|none|Force the operation, even if the `fromFirmwareVersion` cannot be found. Default to false|
+|overwriteSameImage|boolean|false|none|Force the operation, even if the 'fromFirmwareVersion' and the 'toFirmwareVersion' are the same.  Default to false.|
+|timeLimit|integer|false|none|time limit for any operation in seconds|
+|description|string|false|none|none|
 
 #### Enumerated Values
 
-| Property | Value    |
-|----------|----------|
-| version  | latest   |
-| version  | earliest |
-| version  | explicit |
+|Property|Value|
+|---|---|
+|version|latest|
+|version|earliest|
+|version|explicit|
 
 <h2 id="tocS_DeviceFirmware">DeviceFirmware</h2>
 <!-- backwards compatibility -->
@@ -4503,11 +4503,11 @@ This operation does not require authentication
 
 ### Properties
 
-| Name    | Type                      | Required | Restrictions | Description                                                        |
-|---------|---------------------------|----------|--------------|--------------------------------------------------------------------|
-| xname   | string                    | false    | none         | none                                                               |
-| targets | [[Target](#schematarget)] | false    | none         | none                                                               |
-| error   | string                    | false    | none         | any error that was encountered while populating device information |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|xname|string|false|none|none|
+|targets|[[Target](#schematarget)]|false|none|none|
+|error|string|false|none|any error that was encountered while populating device information|
 
 <h2 id="tocS_ImageCreate">ImageCreate</h2>
 <!-- backwards compatibility -->
@@ -4554,24 +4554,24 @@ This operation does not require authentication
 
 ### Properties
 
-| Name                              | Type     | Required | Restrictions | Description                                                                                   |
-|-----------------------------------|----------|----------|--------------|-----------------------------------------------------------------------------------------------|
-| deviceType                        | string   | false    | none         | node type                                                                                     |
-| manufacturer                      | string   | false    | none         | none                                                                                          |
-| models                            | [string] | false    | none         | none                                                                                          |
-| target                            | string   | false    | none         | node target                                                                                   |
-| softwareIds                       | [string] | false    | none         | none                                                                                          |
-| tags                              | [string] | true     | none         | none                                                                                          |
-| firmwareVersion                   | string   | true     | none         | none                                                                                          |
-| semanticFirmwareVersion           | string   | true     | none         | none                                                                                          |
-| updateURI                         | string   | false    | none         | where to point the update at                                                                  |
-| needManualReboot                  | boolean  | false    | none         | whether or not FAS needs to initiate a manual reboot after the update command has been issued |
-| waitTimeBeforeManualRebootSeconds | integer  | false    | none         | amount of time to wait after an update to perform a manual reboot                             |
-| waitTimeAfterRebootSeconds        | integer  | false    | none         | amount of time to wait after a manual reboot before proceeding to verification step           |
-| pollingSpeedSeconds               | integer  | false    | none         | amount of time to wait between requests to the device to avoid overloading it                 |
-| forceResetType                    | string   | false    | none         | the command to issue to the Redfish device to force a reboot                                  |
-| s3URL                             | string   | true     | none         | none                                                                                          |
-| allowableDeviceStates             | [string] | false    | none         | none                                                                                          |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|deviceType|string|false|none|node type|
+|manufacturer|string|false|none|none|
+|models|[string]|false|none|none|
+|target|string|false|none|node target|
+|softwareIds|[string]|false|none|none|
+|tags|[string]|true|none|none|
+|firmwareVersion|string|true|none|none|
+|semanticFirmwareVersion|string|true|none|none|
+|updateURI|string|false|none|where to point the update at|
+|needManualReboot|boolean|false|none|whether or not FAS needs to initiate a manual reboot after the update command has been issued|
+|waitTimeBeforeManualRebootSeconds|integer|false|none|amount of time to wait after an update to perform a manual reboot|
+|waitTimeAfterRebootSeconds|integer|false|none|amount of time to wait after a manual reboot before proceeding to verification step|
+|pollingSpeedSeconds|integer|false|none|amount of time to wait between requests to the device to avoid overloading it|
+|forceResetType|string|false|none|the command to issue to the Redfish device to force a reboot|
+|s3URL|string|true|none|none|
+|allowableDeviceStates|[string]|false|none|none|
 
 <h2 id="tocS_ImageGet">ImageGet</h2>
 <!-- backwards compatibility -->
@@ -4617,26 +4617,26 @@ This operation does not require authentication
 
 ### Properties
 
-| Name                              | Type              | Required | Restrictions | Description                                                                                   |
-|-----------------------------------|-------------------|----------|--------------|-----------------------------------------------------------------------------------------------|
-| imageID                           | string(uuid)      | false    | none         | none                                                                                          |
-| createTime                        | string(date-time) | false    | none         | none                                                                                          |
-| deviceType                        | string            | false    | none         | node type                                                                                     |
-| manufacturer                      | string            | false    | none         | none                                                                                          |
-| models                            | [string]          | false    | none         | none                                                                                          |
-| target                            | string            | true     | none         | node target                                                                                   |
-| softwareIds                       | [string]          | false    | none         | none                                                                                          |
-| tags                              | [string]          | false    | none         | none                                                                                          |
-| firmwareVersion                   | string            | false    | none         | none                                                                                          |
-| semanticFirmwareVersion           | string            | false    | none         | none                                                                                          |
-| updateURI                         | string            | false    | none         | where to point the update at                                                                  |
-| needManualReboot                  | boolean           | false    | none         | whether or not FAS needs to initiate a manual reboot after the update command has been issued |
-| waitTimeBeforeManualRebootSeconds | integer           | false    | none         | amount of time to wait after an update to perform a manual reboot                             |
-| waitTimeAfterRebootSeconds        | integer           | false    | none         | amount of time to wait after a manual reboot before proceeding to verification step           |
-| pollingSpeedSeconds               | integer           | false    | none         | amount of time to wait between requests to the device to avoid overloading it                 |
-| forceResetType                    | string            | false    | none         | the command to issue to the Redfish device to force a reboot                                  |
-| s3URL                             | string            | false    | none         | none                                                                                          |
-| allowableDeviceStates             | [string]          | false    | none         | none                                                                                          |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|imageID|string(uuid)|false|none|none|
+|createTime|string(date-time)|false|none|none|
+|deviceType|string|false|none|node type|
+|manufacturer|string|false|none|none|
+|models|[string]|false|none|none|
+|target|string|true|none|node target|
+|softwareIds|[string]|false|none|none|
+|tags|[string]|false|none|none|
+|firmwareVersion|string|false|none|none|
+|semanticFirmwareVersion|string|false|none|none|
+|updateURI|string|false|none|where to point the update at|
+|needManualReboot|boolean|false|none|whether or not FAS needs to initiate a manual reboot after the update command has been issued|
+|waitTimeBeforeManualRebootSeconds|integer|false|none|amount of time to wait after an update to perform a manual reboot|
+|waitTimeAfterRebootSeconds|integer|false|none|amount of time to wait after a manual reboot before proceeding to verification step|
+|pollingSpeedSeconds|integer|false|none|amount of time to wait between requests to the device to avoid overloading it|
+|forceResetType|string|false|none|the command to issue to the Redfish device to force a reboot|
+|s3URL|string|false|none|none|
+|allowableDeviceStates|[string]|false|none|none|
 
 <h2 id="tocS_ImageID">ImageID</h2>
 <!-- backwards compatibility -->
@@ -4654,9 +4654,9 @@ This operation does not require authentication
 
 ### Properties
 
-| Name    | Type         | Required | Restrictions | Description |
-|---------|--------------|----------|--------------|-------------|
-| imageID | string(uuid) | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|imageID|string(uuid)|false|none|none|
 
 <h2 id="tocS_ImageList">ImageList</h2>
 <!-- backwards compatibility -->
@@ -4706,9 +4706,9 @@ This operation does not require authentication
 
 ### Properties
 
-| Name   | Type  | Required | Restrictions | Description |
-|--------|-------|----------|--------------|-------------|
-| images | array | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|images|array|false|none|none|
 
 <h2 id="tocS_Operation">Operation</h2>
 <!-- backwards compatibility -->
@@ -4746,45 +4746,45 @@ This operation does not require authentication
 
 ### Properties
 
-| Name                        | Type              | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-|-----------------------------|-------------------|----------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| operationID                 | string(uuid)      | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| actionID                    | string(uuid)      | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| startTime                   | string(date-time) | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| endTime                     | string(date-time) | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| state                       | string            | false    | none         | The state of the operation -<br><br>  *initial* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - cannot run because another operation is blocking this<br>  *inProgress* - operation started - sent update command<br>  *needsVerified* - operation was sent update command, waiting for finish to verify<br>  *verifying* - operation verifying operation<br>  *aborted* - operation was aborted<br>  *noOperation* - operation has nothing to do - already at firmware level<br>  *noSolution* - operation could not find a firmware to flash<br>  *succeeded* - operation completed successfully<br>  *failed* - operation failed |
-| error                       | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| xname                       | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| deviceType                  | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| target                      | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| targetName                  | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| manufacturer                | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| model                       | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| softwareId                  | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| fromFirmwareVersion         | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| fromSemanticFirmwareVersion | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| fromImageURL                | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| fromTag                     | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| toFirmwareVersion           | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| toSemanticFirmwareVersion   | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| toImageURL                  | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| toTag                       | string            | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|operationID|string(uuid)|false|none|none|
+|actionID|string(uuid)|false|none|none|
+|startTime|string(date-time)|false|none|none|
+|endTime|string(date-time)|false|none|none|
+|state|string|false|none|The state of the operation -<br><br>  *initial* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - cannot run because another operation is blocking this<br>  *inProgress* - operation started - sent update command<br>  *needsVerified* - operation was sent update command, waiting for finish to verify<br>  *verifying* - operation verifying operation<br>  *aborted* - operation was aborted<br>  *noOperation* - operation has nothing to do - already at firmware level<br>  *noSolution* - operation could not find a firmware to flash<br>  *succeeded* - operation completed successfully<br>  *failed* - operation failed|
+|error|string|false|none|none|
+|xname|string|false|none|none|
+|deviceType|string|false|none|none|
+|target|string|false|none|none|
+|targetName|string|false|none|none|
+|manufacturer|string|false|none|none|
+|model|string|false|none|none|
+|softwareId|string|false|none|none|
+|fromFirmwareVersion|string|false|none|none|
+|fromSemanticFirmwareVersion|string|false|none|none|
+|fromImageURL|string|false|none|none|
+|fromTag|string|false|none|none|
+|toFirmwareVersion|string|false|none|none|
+|toSemanticFirmwareVersion|string|false|none|none|
+|toImageURL|string|false|none|none|
+|toTag|string|false|none|none|
 
 #### Enumerated Values
 
-| Property | Value         |
-|----------|---------------|
-| state    | initial       |
-| state    | configured    |
-| state    | blocked       |
-| state    | inProgress    |
-| state    | needsVerified |
-| state    | verifying     |
-| state    | abort         |
-| state    | noOperation   |
-| state    | noSolution    |
-| state    | succeeded     |
-| state    | failed        |
+|Property|Value|
+|---|---|
+|state|initial|
+|state|configured|
+|state|blocked|
+|state|inProgress|
+|state|needsVerified|
+|state|verifying|
+|state|abort|
+|state|noOperation|
+|state|noSolution|
+|state|succeeded|
+|state|failed|
 
 <h2 id="tocS_OperationCounts">OperationCounts</h2>
 <!-- backwards compatibility -->
@@ -4814,21 +4814,21 @@ This operation does not require authentication
 
 ### Properties
 
-| Name          | Type    | Required | Restrictions | Description                                                                                                                 |
-|---------------|---------|----------|--------------|-----------------------------------------------------------------------------------------------------------------------------|
-| total         | integer | false    | none         | total count of all operations                                                                                               |
-| initial       | integer | false    | none         | count of operations that have not yet been configured                                                                       |
-| configured    | integer | false    | none         | count of operations that have been configured but not started                                                               |
-| blocked       | integer | false    | none         | count of operations that have been configured, but cannot yet launch because another operation is pending on the same xname |
-| needsVerified | integer | false    | none         | count of operations that have been started, but need final verification to determine if the operation was successful        |
-| verifying     | integer | false    | none         | count of operations that have started verification, but are not finished verification.                                      |
-| inProgress    | integer | false    | none         | count of operations that have been started, but have not reach the verification stage.                                      |
-| failed        | integer | false    | none         | count of operations that have failed to complete firmware task                                                              |
-| success       | integer | false    | none         | count of operations that have succeeded in completing firmware task                                                         |
-| noSolution    | integer | false    | none         | count of operations that have no viable solution to satisfy the request.  This is usually because no suitable image exists. |
-| noOperation   | integer | false    | none         | count of operations that do not need to be executed, because the desired end state is already achieved.                     |
-| aborted       | integer | false    | none         | count of operations that have been aborted.  It is indeterminate if their firmware task was executed.                       |
-| unknown       | integer | false    | none         | count of unknown states -> should not be present.                                                                           |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|total|integer|false|none|total count of all operations|
+|initial|integer|false|none|count of operations that have not yet been configured|
+|configured|integer|false|none|count of operations that have been configured but not started|
+|blocked|integer|false|none|count of operations that have been configured, but cannot yet launch because another operation is pending on the same xname|
+|needsVerified|integer|false|none|count of operations that have been started, but need final verification to determine if the operation was successful|
+|verifying|integer|false|none|count of operations that have started verification, but are not finished verification.|
+|inProgress|integer|false|none|count of operations that have been started, but have not reach the verification stage.|
+|failed|integer|false|none|count of operations that have failed to complete firmware task|
+|success|integer|false|none|count of operations that have succeeded in completing firmware task|
+|noSolution|integer|false|none|count of operations that have no viable solution to satisfy the request.  This is usually because no suitable image exists.|
+|noOperation|integer|false|none|count of operations that do not need to be executed, because the desired end state is already achieved.|
+|aborted|integer|false|none|count of operations that have been aborted.  It is indeterminate if their firmware task was executed.|
+|unknown|integer|false|none|count of unknown states -> should not be present.|
 
 <h2 id="tocS_OperationSummary">OperationSummary</h2>
 <!-- backwards compatibility -->
@@ -4965,20 +4965,20 @@ This operation does not require authentication
 
 ### Properties
 
-| Name          | Type                                  | Required | Restrictions | Description                                                                                                                 |
-|---------------|---------------------------------------|----------|--------------|-----------------------------------------------------------------------------------------------------------------------------|
-| initial       | [[OperationKey](#schemaoperationkey)] | false    | none         | count of operations that have not yet been configured                                                                       |
-| configured    | [[OperationKey](#schemaoperationkey)] | false    | none         | count of operations that have been configured but not started                                                               |
-| blocked       | [[OperationKey](#schemaoperationkey)] | false    | none         | count of operations that have been configured, but cannot yet launch because another operation is pending on the same xname |
-| needsVerified | [[OperationKey](#schemaoperationkey)] | false    | none         | count of operations that have been started, but need final verification to determine if the operation was successful        |
-| verifying     | [[OperationKey](#schemaoperationkey)] | false    | none         | count of operations that have started verification, but are not finished verification.                                      |
-| inProgress    | [[OperationKey](#schemaoperationkey)] | false    | none         | count of operations that have been started, but have not reach the verification stage.                                      |
-| failed        | [[OperationKey](#schemaoperationkey)] | false    | none         | count of operations that have failed to complete firmware task                                                              |
-| success       | [[OperationKey](#schemaoperationkey)] | false    | none         | count of operations that have succeeded in completing firmware task                                                         |
-| noSolution    | [[OperationKey](#schemaoperationkey)] | false    | none         | count of operations that have no viable solution to satisfy the request.  This is usually because no suitable image exists. |
-| noOperation   | [[OperationKey](#schemaoperationkey)] | false    | none         | count of operations that do not need to be executed, because the desired end state is already achieved.                     |
-| aborted       | [[OperationKey](#schemaoperationkey)] | false    | none         | count of operations that have been aborted.  It is indeterminate if their firmware task was executed.                       |
-| unknown       | [[OperationKey](#schemaoperationkey)] | false    | none         | count of unknown states -> should not be present.                                                                           |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|initial|[[OperationKey](#schemaoperationkey)]|false|none|count of operations that have not yet been configured|
+|configured|[[OperationKey](#schemaoperationkey)]|false|none|count of operations that have been configured but not started|
+|blocked|[[OperationKey](#schemaoperationkey)]|false|none|count of operations that have been configured, but cannot yet launch because another operation is pending on the same xname|
+|needsVerified|[[OperationKey](#schemaoperationkey)]|false|none|count of operations that have been started, but need final verification to determine if the operation was successful|
+|verifying|[[OperationKey](#schemaoperationkey)]|false|none|count of operations that have started verification, but are not finished verification.|
+|inProgress|[[OperationKey](#schemaoperationkey)]|false|none|count of operations that have been started, but have not reach the verification stage.|
+|failed|[[OperationKey](#schemaoperationkey)]|false|none|count of operations that have failed to complete firmware task|
+|success|[[OperationKey](#schemaoperationkey)]|false|none|count of operations that have succeeded in completing firmware task|
+|noSolution|[[OperationKey](#schemaoperationkey)]|false|none|count of operations that have no viable solution to satisfy the request.  This is usually because no suitable image exists.|
+|noOperation|[[OperationKey](#schemaoperationkey)]|false|none|count of operations that do not need to be executed, because the desired end state is already achieved.|
+|aborted|[[OperationKey](#schemaoperationkey)]|false|none|count of operations that have been aborted.  It is indeterminate if their firmware task was executed.|
+|unknown|[[OperationKey](#schemaoperationkey)]|false|none|count of unknown states -> should not be present.|
 
 <h2 id="tocS_OperationDetail">OperationDetail</h2>
 <!-- backwards compatibility -->
@@ -5295,20 +5295,20 @@ This operation does not require authentication
 
 ### Properties
 
-| Name          | Type                            | Required | Restrictions | Description                                                                                                                 |
-|---------------|---------------------------------|----------|--------------|-----------------------------------------------------------------------------------------------------------------------------|
-| initial       | [[Operation](#schemaoperation)] | false    | none         | count of operations that have not yet been configured                                                                       |
-| configured    | [[Operation](#schemaoperation)] | false    | none         | count of operations that have been configured but not started                                                               |
-| blocked       | [[Operation](#schemaoperation)] | false    | none         | count of operations that have been configured, but cannot yet launch because another operation is pending on the same xname |
-| needsVerified | [[Operation](#schemaoperation)] | false    | none         | count of operations that have been started, but need final verification to determine if the operation was successful        |
-| verifying     | [[Operation](#schemaoperation)] | false    | none         | count of operations that have started verification, but are not finished verification.                                      |
-| inProgress    | [[Operation](#schemaoperation)] | false    | none         | count of operations that have been started, but have not reach the verification stage.                                      |
-| failed        | [[Operation](#schemaoperation)] | false    | none         | count of operations that have failed to complete firmware task                                                              |
-| success       | [[Operation](#schemaoperation)] | false    | none         | count of operations that have succeeded in completing firmware task                                                         |
-| noSolution    | [[Operation](#schemaoperation)] | false    | none         | count of operations that have no viable solution to satisfy the request.  This is usually because no suitable image exists. |
-| noOperation   | [[Operation](#schemaoperation)] | false    | none         | count of operations that do not need to be executed, because the desired end state is already achieved.                     |
-| aborted       | [[Operation](#schemaoperation)] | false    | none         | count of operations that have been aborted.  It is indeterminate if their firmware task was executed.                       |
-| unknown       | [[Operation](#schemaoperation)] | false    | none         | count of unknown states -> should not be present.                                                                           |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|initial|[[Operation](#schemaoperation)]|false|none|count of operations that have not yet been configured|
+|configured|[[Operation](#schemaoperation)]|false|none|count of operations that have been configured but not started|
+|blocked|[[Operation](#schemaoperation)]|false|none|count of operations that have been configured, but cannot yet launch because another operation is pending on the same xname|
+|needsVerified|[[Operation](#schemaoperation)]|false|none|count of operations that have been started, but need final verification to determine if the operation was successful|
+|verifying|[[Operation](#schemaoperation)]|false|none|count of operations that have started verification, but are not finished verification.|
+|inProgress|[[Operation](#schemaoperation)]|false|none|count of operations that have been started, but have not reach the verification stage.|
+|failed|[[Operation](#schemaoperation)]|false|none|count of operations that have failed to complete firmware task|
+|success|[[Operation](#schemaoperation)]|false|none|count of operations that have succeeded in completing firmware task|
+|noSolution|[[Operation](#schemaoperation)]|false|none|count of operations that have no viable solution to satisfy the request.  This is usually because no suitable image exists.|
+|noOperation|[[Operation](#schemaoperation)]|false|none|count of operations that do not need to be executed, because the desired end state is already achieved.|
+|aborted|[[Operation](#schemaoperation)]|false|none|count of operations that have been aborted.  It is indeterminate if their firmware task was executed.|
+|unknown|[[Operation](#schemaoperation)]|false|none|count of unknown states -> should not be present.|
 
 <h2 id="tocS_OperationKey">OperationKey</h2>
 <!-- backwards compatibility -->
@@ -5331,14 +5331,14 @@ This operation does not require authentication
 
 ### Properties
 
-| Name                | Type         | Required | Restrictions | Description                                                                                              |
-|---------------------|--------------|----------|--------------|----------------------------------------------------------------------------------------------------------|
-| operationID         | string(uuid) | false    | none         | none                                                                                                     |
-| xname               | string       | false    | none         | none                                                                                                     |
-| target              | string       | false    | none         | none                                                                                                     |
-| targetName          | string       | false    | none         | none                                                                                                     |
-| fromFirmwareVersion | string       | false    | none         | the currently identified firmware version on the xname/target before attempting an update. May be empty. |
-| stateHelper         | string       | false    | none         | a helper string that might further explain the current state.                                            |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|operationID|string(uuid)|false|none|none|
+|xname|string|false|none|none|
+|target|string|false|none|none|
+|targetName|string|false|none|none|
+|fromFirmwareVersion|string|false|none|the currently identified firmware version on the xname/target before attempting an update. May be empty.|
+|stateHelper|string|false|none|a helper string that might further explain the current state.|
 
 <h2 id="tocS_Problem7807">Problem7807</h2>
 <!-- backwards compatibility -->
@@ -5362,13 +5362,13 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 
 ### Properties
 
-| Name     | Type          | Required | Restrictions | Description |
-|----------|---------------|----------|--------------|-------------|
-| type     | string        | true     | none         | none        |
-| detail   | string        | false    | none         | none        |
-| instance | string        | false    | none         | none        |
-| status   | number(int32) | false    | none         | none        |
-| title    | string        | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|type|string|true|none|none|
+|detail|string|false|none|none|
+|instance|string|false|none|none|
+|status|number(int32)|false|none|none|
+|title|string|false|none|none|
 
 <h2 id="tocS_RelatedSnapshotActions">RelatedSnapshotActions</h2>
 <!-- backwards compatibility -->
@@ -5389,24 +5389,24 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 
 ### Properties
 
-| Name      | Type              | Required | Restrictions | Description                                                                                                                                                                                                                                                                                                                                                                                                                    |
-|-----------|-------------------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| actionID  | string(uuid)      | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| startTime | string(date-time) | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| endTime   | string(date-time) | false    | none         | none                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| state     | string            | false    | none         | The state of the action -<br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|actionID|string(uuid)|false|none|none|
+|startTime|string(date-time)|false|none|none|
+|endTime|string(date-time)|false|none|none|
+|state|string|false|none|The state of the action -<br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
 
 #### Enumerated Values
 
-| Property | Value         |
-|----------|---------------|
-| state    | new           |
-| state    | configure     |
-| state    | blocked       |
-| state    | running       |
-| state    | completed     |
-| state    | abortSignaled |
-| state    | aborted       |
+|Property|Value|
+|---|---|
+|state|new|
+|state|configure|
+|state|blocked|
+|state|running|
+|state|completed|
+|state|abortSignaled|
+|state|aborted|
 
 <h2 id="tocS_ServiceStatus">ServiceStatus</h2>
 <!-- backwards compatibility -->
@@ -5424,9 +5424,9 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 
 ### Properties
 
-| Name          | Type   | Required | Restrictions | Description |
-|---------------|--------|----------|--------------|-------------|
-| serviceStatus | string | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|serviceStatus|string|false|none|none|
 
 <h2 id="tocS_ServiceStatusDetails">ServiceStatusDetails</h2>
 <!-- backwards compatibility -->
@@ -5447,12 +5447,12 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 
 ### Properties
 
-| Name           | Type   | Required | Restrictions | Description |
-|----------------|--------|----------|--------------|-------------|
-| serviceVersion | string | false    | none         | none        |
-| serviceStatus  | string | false    | none         | none        |
-| hmsStatus      | string | false    | none         | none        |
-| storageStatus  | string | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|serviceVersion|string|false|none|none|
+|serviceStatus|string|false|none|none|
+|hmsStatus|string|false|none|none|
+|storageStatus|string|false|none|none|
 
 <h2 id="tocS_ServiceVersion">ServiceVersion</h2>
 <!-- backwards compatibility -->
@@ -5470,9 +5470,9 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 
 ### Properties
 
-| Name           | Type   | Required | Restrictions | Description |
-|----------------|--------|----------|--------------|-------------|
-| serviceVersion | string | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|serviceVersion|string|false|none|none|
 
 <h2 id="tocS_Snapshot">Snapshot</h2>
 <!-- backwards compatibility -->
@@ -5548,16 +5548,16 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 
 ### Properties
 
-| Name           | Type                                                      | Required | Restrictions | Description                               |
-|----------------|-----------------------------------------------------------|----------|--------------|-------------------------------------------|
-| name           | string                                                    | false    | none         | none                                      |
-| captureTime    | string(date-time)                                         | false    | none         | none                                      |
-| expirationTime | string(date-time)                                         | false    | none         | none                                      |
-| ready          | boolean                                                   | false    | none         | whether or not the snapshot has completed |
-| relatedActions | [[RelatedSnapshotActions](#schemarelatedsnapshotactions)] | false    | none         | none                                      |
-| devices        | [[DeviceFirmware](#schemadevicefirmware)]                 | false    | none         | none                                      |
-| parameters     | [SnapshotParameters](#schemasnapshotparameters)           | false    | none         | none                                      |
-| errors         | [string]                                                  | false    | none         | none                                      |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|string|false|none|none|
+|captureTime|string(date-time)|false|none|none|
+|expirationTime|string(date-time)|false|none|none|
+|ready|boolean|false|none|whether or not the snapshot has completed|
+|relatedActions|[[RelatedSnapshotActions](#schemarelatedsnapshotactions)]|false|none|none|
+|devices|[[DeviceFirmware](#schemadevicefirmware)]|false|none|none|
+|parameters|[SnapshotParameters](#schemasnapshotparameters)|false|none|none|
+|errors|[string]|false|none|none|
 
 <h2 id="tocS_SnapshotAll">SnapshotAll</h2>
 <!-- backwards compatibility -->
@@ -5591,9 +5591,9 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 
 ### Properties
 
-| Name      | Type                                        | Required | Restrictions | Description |
-|-----------|---------------------------------------------|----------|--------------|-------------|
-| snapshots | [[SnapshotSummary](#schemasnapshotsummary)] | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|snapshots|[[SnapshotSummary](#schemasnapshotsummary)]|false|none|none|
 
 <h2 id="tocS_SnapshotID">SnapshotID</h2>
 <!-- backwards compatibility -->
@@ -5611,9 +5611,9 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 
 ### Properties
 
-| Name | Type   | Required | Restrictions | Description |
-|------|--------|----------|--------------|-------------|
-| name | string | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|string|false|none|none|
 
 <h2 id="tocS_SnapshotParameters">SnapshotParameters</h2>
 <!-- backwards compatibility -->
@@ -5658,13 +5658,13 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 
 ### Properties
 
-| Name                    | Type                                                                                  | Required | Restrictions | Description                                                     |
-|-------------------------|---------------------------------------------------------------------------------------|----------|--------------|-----------------------------------------------------------------|
-| name                    | string                                                                                | false    | none         | none                                                            |
-| expirationTime          | string(date-time)                                                                     | false    | none         | time at which the snapshot expires and is automatically deleted |
-| stateComponentFilter    | [ActionParameters_StateComponentFilter](#schemaactionparameters_statecomponentfilter) | false    | none         | none                                                            |
-| inventoryHardwareFilter | [ActionParameters_HardwareFilter](#schemaactionparameters_hardwarefilter)             | false    | none         | none                                                            |
-| targetFilter            | [ActionParameters_TargetFilter](#schemaactionparameters_targetfilter)                 | false    | none         | none                                                            |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|string|false|none|none|
+|expirationTime|string(date-time)|false|none|time at which the snapshot expires and is automatically deleted|
+|stateComponentFilter|[ActionParameters_StateComponentFilter](#schemaactionparameters_statecomponentfilter)|false|none|none|
+|inventoryHardwareFilter|[ActionParameters_HardwareFilter](#schemaactionparameters_hardwarefilter)|false|none|none|
+|targetFilter|[ActionParameters_TargetFilter](#schemaactionparameters_targetfilter)|false|none|none|
 
 <h2 id="tocS_SnapshotSummary">SnapshotSummary</h2>
 <!-- backwards compatibility -->
@@ -5694,14 +5694,14 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 
 ### Properties
 
-| Name              | Type                                                      | Required | Restrictions | Description                                         |
-|-------------------|-----------------------------------------------------------|----------|--------------|-----------------------------------------------------|
-| name              | string                                                    | false    | none         | none                                                |
-| captureTime       | string(date-time)                                         | false    | none         | none                                                |
-| expirationTime    | string(date-time)                                         | false    | none         | none                                                |
-| ready             | boolean                                                   | false    | none         | whether or not the snapshot has completed           |
-| relatedActions    | [[RelatedSnapshotActions](#schemarelatedsnapshotactions)] | false    | none         | none                                                |
-| uniqueDeviceCount | integer                                                   | false    | none         | count of unique xnames associated with the snapshot |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|string|false|none|none|
+|captureTime|string(date-time)|false|none|none|
+|expirationTime|string(date-time)|false|none|none|
+|ready|boolean|false|none|whether or not the snapshot has completed|
+|relatedActions|[[RelatedSnapshotActions](#schemarelatedsnapshotactions)]|false|none|none|
+|uniqueDeviceCount|integer|false|none|count of unique xnames associated with the snapshot|
 
 <h2 id="tocS_Target">Target</h2>
 <!-- backwards compatibility -->
@@ -5722,10 +5722,10 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 
 ### Properties
 
-| Name            | Type         | Required | Restrictions | Description                                                        |
-|-----------------|--------------|----------|--------------|--------------------------------------------------------------------|
-| name            | string       | false    | none         | none                                                               |
-| firmwareVersion | string       | false    | none         | none                                                               |
-| imageID         | string(uuid) | false    | none         | none                                                               |
-| error           | string       | false    | none         | any error that was encountered while populating target information |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|string|false|none|none|
+|firmwareVersion|string|false|none|none|
+|imageID|string(uuid)|false|none|none|
+|error|string|false|none|any error that was encountered while populating target information|
 

@@ -123,10 +123,10 @@ Send a heartbeat message from a managed component like compute node to the heart
 
 <h3 id="trackheartbeatxname-parameters">Parameters</h3>
 
-| Name  | In   | Type                                      | Required | Description |
-|-------|------|-------------------------------------------|----------|-------------|
-| body  | body | [heartbeat_xname](#schemaheartbeat_xname) | true     | none        |
-| xname | path | [XName.1.0.0](#schemaxname.1.0.0)         | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[heartbeat_xname](#schemaheartbeat_xname)|true|none|
+|xname|path|[XName.1.0.0](#schemaxname.1.0.0)|true|none|
 
 > Example responses
 
@@ -134,14 +134,14 @@ Send a heartbeat message from a managed component like compute node to the heart
 
 <h3 id="trackheartbeatxname-responses">Responses</h3>
 
-| Status  | Meaning                                                                 | Description                                                                                                                                                                                                                                                                                         | Schema                |
-|---------|-------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
-| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                 | Success                                                                                                                                                                                                                                                                                             | [Error](#schemaerror) |
-| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)        | Bad Request. Malformed JSON.  Verify all JSON formatting in payload. Verify that the all entries are properly set.                                                                                                                                                                                  | None                  |
-| 401     | [Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)         | Unauthorized. RBAC and/or authenticated token does not allow calling this method.  Check the authentication token expiration.  Verify that the RBAC information is correct.                                                                                                                         | [Error](#schemaerror) |
-| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)          | Not Found. Endpoint not available. Check IP routing between managed and management plane. Check that any SMS node services are running on management plane. Check that SMS node API gateway service is running on management plane. Check that SMS node HMI service is running on management plane. | [Error](#schemaerror) |
-| 405     | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | Operation not permitted.  For /heartbeat, only POST operations are allowed.                                                                                                                                                                                                                         | [Error](#schemaerror) |
-| default | Default                                                                 | Unexpected error                                                                                                                                                                                                                                                                                    | [Error](#schemaerror) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|[Error](#schemaerror)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request. Malformed JSON.  Verify all JSON formatting in payload. Verify that the all entries are properly set.|None|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized. RBAC and/or authenticated token does not allow calling this method.  Check the authentication token expiration.  Verify that the RBAC information is correct.|[Error](#schemaerror)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found. Endpoint not available. Check IP routing between managed and management plane. Check that any SMS node services are running on management plane. Check that SMS node API gateway service is running on management plane. Check that SMS node HMI service is running on management plane.|[Error](#schemaerror)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation not permitted.  For /heartbeat, only POST operations are allowed.|[Error](#schemaerror)|
+|default|Default|Unexpected error|[Error](#schemaerror)|
 
 <aside class="success">
 This operation does not require authentication
@@ -228,9 +228,9 @@ Send a heartbeat message from a managed component like compute node to the heart
 
 <h3 id="trackheartbeat-parameters">Parameters</h3>
 
-| Name | In   | Type                          | Required | Description |
-|------|------|-------------------------------|----------|-------------|
-| body | body | [heartbeat](#schemaheartbeat) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[heartbeat](#schemaheartbeat)|true|none|
 
 > Example responses
 
@@ -238,14 +238,14 @@ Send a heartbeat message from a managed component like compute node to the heart
 
 <h3 id="trackheartbeat-responses">Responses</h3>
 
-| Status  | Meaning                                                                 | Description                                                                                                                                                                                                                                                                                         | Schema                |
-|---------|-------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
-| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                 | Success                                                                                                                                                                                                                                                                                             | [Error](#schemaerror) |
-| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)        | Bad Request. Malformed JSON.  Verify all JSON formatting in payload. Verify that the all entries are properly set.                                                                                                                                                                                  | None                  |
-| 401     | [Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)         | Unauthorized. RBAC and/or authenticated token does not allow calling this method.  Check the authentication token expiration.  Verify that the RBAC information is correct.                                                                                                                         | [Error](#schemaerror) |
-| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)          | Not Found. Endpoint not available. Check IP routing between managed and management plane. Check that any SMS node services are running on management plane. Check that SMS node API gateway service is running on management plane. Check that SMS node HMI service is running on management plane. | [Error](#schemaerror) |
-| 405     | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | Operation not permitted.  For /heartbeat, only POST operations are allowed.                                                                                                                                                                                                                         | [Error](#schemaerror) |
-| default | Default                                                                 | Unexpected error                                                                                                                                                                                                                                                                                    | [Error](#schemaerror) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|[Error](#schemaerror)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request. Malformed JSON.  Verify all JSON formatting in payload. Verify that the all entries are properly set.|None|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized. RBAC and/or authenticated token does not allow calling this method.  Check the authentication token expiration.  Verify that the RBAC information is correct.|[Error](#schemaerror)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found. Endpoint not available. Check IP routing between managed and management plane. Check that any SMS node services are running on management plane. Check that SMS node API gateway service is running on management plane. Check that SMS node HMI service is running on management plane.|[Error](#schemaerror)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation not permitted.  For /heartbeat, only POST operations are allowed.|[Error](#schemaerror)|
+|default|Default|Unexpected error|[Error](#schemaerror)|
 
 <aside class="success">
 This operation does not require authentication
@@ -332,9 +332,9 @@ Sends a list of components to the service in a JSON formatted payload. The servi
 
 <h3 id="gethbstates-parameters">Parameters</h3>
 
-| Name | In   | Type                        | Required | Description |
-|------|------|-----------------------------|----------|-------------|
-| body | body | [hbstates](#schemahbstates) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[hbstates](#schemahbstates)|true|none|
 
 > Example responses
 
@@ -355,14 +355,14 @@ Sends a list of components to the service in a JSON formatted payload. The servi
 
 <h3 id="gethbstates-responses">Responses</h3>
 
-| Status  | Meaning                                                                 | Description                                                                                                                                                                                                                                                                                         | Schema                              |
-|---------|-------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------|
-| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                 | OK.  The operation was successful and a payload was returned                                                                                                                                                                                                                                        | [hbstates_rsp](#schemahbstates_rsp) |
-| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)        | Bad Request. Malformed JSON.  Verify all JSON formatting in payload. Verify that the all entries are properly set.                                                                                                                                                                                  | None                                |
-| 401     | [Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)         | Unauthorized. RBAC and/or authenticated token does not allow calling this method.  Check the authentication token expiration.  Verify that the RBAC information is correct.                                                                                                                         | [Error](#schemaerror)               |
-| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)          | Not Found. Endpoint not available. Check IP routing between managed and management plane. Check that any SMS node services are running on management plane. Check that SMS node API gateway service is running on management plane. Check that SMS node HMI service is running on management plane. | [Error](#schemaerror)               |
-| 405     | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | Operation not permitted.  For /hbstates, only POST operations are allowed.                                                                                                                                                                                                                          | [Error](#schemaerror)               |
-| default | Default                                                                 | Unexpected error                                                                                                                                                                                                                                                                                    | [Error](#schemaerror)               |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The operation was successful and a payload was returned|[hbstates_rsp](#schemahbstates_rsp)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request. Malformed JSON.  Verify all JSON formatting in payload. Verify that the all entries are properly set.|None|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized. RBAC and/or authenticated token does not allow calling this method.  Check the authentication token expiration.  Verify that the RBAC information is correct.|[Error](#schemaerror)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found. Endpoint not available. Check IP routing between managed and management plane. Check that any SMS node services are running on management plane. Check that SMS node API gateway service is running on management plane. Check that SMS node HMI service is running on management plane.|[Error](#schemaerror)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation not permitted.  For /hbstates, only POST operations are allowed.|[Error](#schemaerror)|
+|default|Default|Unexpected error|[Error](#schemaerror)|
 
 <aside class="success">
 This operation does not require authentication
@@ -431,9 +431,9 @@ Query the service for the heartbeat status of a single component.  The service w
 
 <h3 id="get__hbstate_{xname}-parameters">Parameters</h3>
 
-| Name  | In   | Type                              | Required | Description |
-|-------|------|-----------------------------------|----------|-------------|
-| xname | path | [XName.1.0.0](#schemaxname.1.0.0) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|xname|path|[XName.1.0.0](#schemaxname.1.0.0)|true|none|
 
 > Example responses
 
@@ -450,11 +450,11 @@ Query the service for the heartbeat status of a single component.  The service w
 
 <h3 id="get__hbstate_{xname}-responses">Responses</h3>
 
-| Status | Meaning                                                                 | Description                                                                                                                                                                                                                                                                                         | Schema                                            |
-|--------|-------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                 | OK.  The data was succesfully retrieved                                                                                                                                                                                                                                                             | [hbstates_single_rsp](#schemahbstates_single_rsp) |
-| 404    | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)          | Not Found. Endpoint not available. Check IP routing between managed and management plane. Check that any SMS node services are running on management plane. Check that SMS node API gateway service is running on management plane. Check that SMS node HMI service is running on management plane. | [Error](#schemaerror)                             |
-| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | Operation not permitted.  For /hbstate/{xname}, only GET operations are allowed.                                                                                                                                                                                                                    | [Error](#schemaerror)                             |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was succesfully retrieved|[hbstates_single_rsp](#schemahbstates_single_rsp)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found. Endpoint not available. Check IP routing between managed and management plane. Check that any SMS node services are running on management plane. Check that SMS node API gateway service is running on management plane. Check that SMS node HMI service is running on management plane.|[Error](#schemaerror)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation not permitted.  For /hbstate/{xname}, only GET operations are allowed.|[Error](#schemaerror)|
 
 <aside class="success">
 This operation does not require authentication
@@ -541,15 +541,15 @@ Fetch current heartbeat tracker configurable parameters.
 
 <h3 id="get__params-responses">Responses</h3>
 
-| Status  | Meaning                                                                    | Description                                                                                                                                                                                                                                                                                         | Schema                  |
-|---------|----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
-| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Current heartbeat service operational parameter values                                                                                                                                                                                                                                              | [params](#schemaparams) |
-| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request. Malformed JSON.  Verify all JSON formatting in payload.                                                                                                                                                                                                                                | [Error](#schemaerror)   |
-| 401     | [Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)            | Unauthorized. RBAC and/or authenticated token does not allow calling this method.  Check the authentication token expiration.  Verify that the RBAC information is correct.                                                                                                                         | [Error](#schemaerror)   |
-| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Not Found. Endpoint not available. Check IP routing between managed and management plane. Check that any SMS node services are running on management plane. Check that SMS node API gateway service is running on management plane. Check that SMS node HMI service is running on management plane. | [Error](#schemaerror)   |
-| 405     | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)    | Operation not permitted.  For /params, only PATCH and GET operations are allowed.                                                                                                                                                                                                                   | [Error](#schemaerror)   |
-| 500     | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error.  Unexpected condition encountered when processing the request.                                                                                                                                                                                                               | None                    |
-| default | Default                                                                    | Unexpected error                                                                                                                                                                                                                                                                                    | [Error](#schemaerror)   |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Current heartbeat service operational parameter values|[params](#schemaparams)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request. Malformed JSON.  Verify all JSON formatting in payload.|[Error](#schemaerror)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized. RBAC and/or authenticated token does not allow calling this method.  Check the authentication token expiration.  Verify that the RBAC information is correct.|[Error](#schemaerror)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found. Endpoint not available. Check IP routing between managed and management plane. Check that any SMS node services are running on management plane. Check that SMS node API gateway service is running on management plane. Check that SMS node HMI service is running on management plane.|[Error](#schemaerror)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation not permitted.  For /params, only PATCH and GET operations are allowed.|[Error](#schemaerror)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|None|
+|default|Default|Unexpected error|[Error](#schemaerror)|
 
 <aside class="success">
 This operation does not require authentication
@@ -640,9 +640,9 @@ Set one or more configurable parameters for the heartbeat tracker service and ha
 
 <h3 id="patch__params-parameters">Parameters</h3>
 
-| Name | In   | Type                    | Required | Description |
-|------|------|-------------------------|----------|-------------|
-| body | body | [params](#schemaparams) | true     | none        |
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[params](#schemaparams)|true|none|
 
 > Example responses
 
@@ -662,15 +662,15 @@ Set one or more configurable parameters for the heartbeat tracker service and ha
 
 <h3 id="patch__params-responses">Responses</h3>
 
-| Status  | Meaning                                                                    | Description                                                                                                                                                                                                                                                                                         | Schema                  |
-|---------|----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
-| 200     | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                    | Current heartbeat service operational parameter values                                                                                                                                                                                                                                              | [params](#schemaparams) |
-| 400     | [Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)           | Bad Request. Malformed JSON.  Verify all JSON formatting in payload.                                                                                                                                                                                                                                | [Error](#schemaerror)   |
-| 401     | [Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)            | Unauthorized. RBAC and/or authenticated token does not allow calling this method.  Check the authentication token expiration.  Verify that the RBAC information is correct.                                                                                                                         | [Error](#schemaerror)   |
-| 404     | [Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)             | Not Found. Endpoint not available. Check IP routing between managed and management plane. Check that any SMS node services are running on management plane. Check that SMS node API gateway service is running on management plane. Check that SMS node HMI service is running on management plane. | [Error](#schemaerror)   |
-| 405     | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)    | Operation not permitted.  For /params, only PATCH and GET operations are allowed.                                                                                                                                                                                                                   | [Error](#schemaerror)   |
-| 500     | [Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1) | Internal Server Error.  Unexpected condition encountered when processing the request.                                                                                                                                                                                                               | None                    |
-| default | Default                                                                    | Unexpected error                                                                                                                                                                                                                                                                                    | [Error](#schemaerror)   |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Current heartbeat service operational parameter values|[params](#schemaparams)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request. Malformed JSON.  Verify all JSON formatting in payload.|[Error](#schemaerror)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized. RBAC and/or authenticated token does not allow calling this method.  Check the authentication token expiration.  Verify that the RBAC information is correct.|[Error](#schemaerror)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found. Endpoint not available. Check IP routing between managed and management plane. Check that any SMS node services are running on management plane. Check that SMS node API gateway service is running on management plane. Check that SMS node HMI service is running on management plane.|[Error](#schemaerror)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation not permitted.  For /params, only PATCH and GET operations are allowed.|[Error](#schemaerror)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|None|
+|default|Default|Unexpected error|[Error](#schemaerror)|
 
 <aside class="success">
 This operation does not require authentication
@@ -759,20 +759,20 @@ This is primarily intended as a diagnostic tool to investigate the functioning o
 
 <h3 id="get__health-responses">Responses</h3>
 
-| Status | Meaning                                                                 | Description                                                                                     | Schema                            |
-|--------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------|
-| 200    | [OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)                 | [OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success | Inline                            |
-| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | Operation Not Permitted.  For /health, only GET operations are allowed.                         | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|[OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success|Inline|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /health, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 
 <h3 id="get__health-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-| Name        | Type   | Required | Restrictions | Description                                                                                                                              |
-|-------------|--------|----------|--------------|------------------------------------------------------------------------------------------------------------------------------------------|
-| » KvStore   | string | true     | none         | Status of the KV Store.                                                                                                                  |
-| » MsgBus    | string | true     | none         | Status of the connection with the message bus.                                                                                           |
-| » HsmStatus | string | true     | none         | Status of the connection to the Hardware State Manager (HSM).  Any error reported by an attempt to access the HSM will be included here. |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» KvStore|string|true|none|Status of the KV Store.|
+|» MsgBus|string|true|none|Status of the connection with the message bus.|
+|» HsmStatus|string|true|none|Status of the connection to the Hardware State Manager (HSM).  Any error reported by an attempt to access the HSM will be included here.|
 
 <aside class="success">
 This operation does not require authentication
@@ -857,10 +857,10 @@ This is primarily an endpoint for the automated Kubernetes system.
 
 <h3 id="get__liveness-responses">Responses</h3>
 
-| Status | Meaning                                                                 | Description                                                                                             | Schema                            |
-|--------|-------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|-----------------------------------|
-| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)         | [No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success | None                              |
-| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | Operation Not Permitted.  For /liveness, only GET operations are allowed.                               | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /liveness, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -945,10 +945,10 @@ This is primarily an endpoint for the automated Kubernetes system.
 
 <h3 id="get__readiness-responses">Responses</h3>
 
-| Status | Meaning                                                                 | Description                                                                                             | Schema                            |
-|--------|-------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|-----------------------------------|
-| 204    | [No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)         | [No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success | None                              |
-| 405    | [Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5) | Operation Not Permitted.  For /readiness, only GET operations are allowed.                              | [Problem7807](#schemaproblem7807) |
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /readiness, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 
 <aside class="success">
 This operation does not require authentication
@@ -978,13 +978,13 @@ Heartbeat Message
 
 ### Properties
 
-| Name      | Type                                                  | Required | Restrictions | Description                                                                           |
-|-----------|-------------------------------------------------------|----------|--------------|---------------------------------------------------------------------------------------|
-| Component | [XName.1.0.0](#schemaxname.1.0.0)                     | true     | none         | Identifies sender by xname. This is the physical, location-based name of a component. |
-| Hostname  | [Hostname.1.0.0](#schemahostname.1.0.0)               | false    | none         | Identifies sender by hostname. This is the host name of a component.                  |
-| NID       | [NID.1.0.0](#schemanid.1.0.0)                         | false    | none         | Identifies sender by Numeric ID (NID). This is the Numeric ID of a compute node.      |
-| Status    | [HeartbeatStatus.1.0.0](#schemaheartbeatstatus.1.0.0) | true     | none         | Special status field for specific failure modes.                                      |
-| TimeStamp | [TimeStamp.1.0.0](#schematimestamp.1.0.0)             | true     | none         | When heartbeat was sent. This is an ISO8601 formatted time stamp.                     |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|Component|[XName.1.0.0](#schemaxname.1.0.0)|true|none|Identifies sender by xname. This is the physical, location-based name of a component.|
+|Hostname|[Hostname.1.0.0](#schemahostname.1.0.0)|false|none|Identifies sender by hostname. This is the host name of a component.|
+|NID|[NID.1.0.0](#schemanid.1.0.0)|false|none|Identifies sender by Numeric ID (NID). This is the Numeric ID of a compute node.|
+|Status|[HeartbeatStatus.1.0.0](#schemaheartbeatstatus.1.0.0)|true|none|Special status field for specific failure modes.|
+|TimeStamp|[TimeStamp.1.0.0](#schematimestamp.1.0.0)|true|none|When heartbeat was sent. This is an ISO8601 formatted time stamp.|
 
 <h2 id="tocS_heartbeat_xname">heartbeat_xname</h2>
 <!-- backwards compatibility -->
@@ -1005,10 +1005,10 @@ Heartbeat Message
 
 ### Properties
 
-| Name      | Type                                                  | Required | Restrictions | Description                                                       |
-|-----------|-------------------------------------------------------|----------|--------------|-------------------------------------------------------------------|
-| Status    | [HeartbeatStatus.1.0.0](#schemaheartbeatstatus.1.0.0) | true     | none         | Special status field for specific failure modes.                  |
-| TimeStamp | [TimeStamp.1.0.0](#schematimestamp.1.0.0)             | true     | none         | When heartbeat was sent. This is an ISO8601 formatted time stamp. |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|Status|[HeartbeatStatus.1.0.0](#schemaheartbeatstatus.1.0.0)|true|none|Special status field for specific failure modes.|
+|TimeStamp|[TimeStamp.1.0.0](#schematimestamp.1.0.0)|true|none|When heartbeat was sent. This is an ISO8601 formatted time stamp.|
 
 <h2 id="tocS_hbstates">hbstates</h2>
 <!-- backwards compatibility -->
@@ -1030,9 +1030,9 @@ Heartbeat Status Query
 
 ### Properties
 
-| Name   | Type                                | Required | Restrictions | Description                                             |
-|--------|-------------------------------------|----------|--------------|---------------------------------------------------------|
-| XNames | [[XName.1.0.0](#schemaxname.1.0.0)] | false    | none         | List of component XNames to query for heartbeat status. |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|XNames|[[XName.1.0.0](#schemaxname.1.0.0)]|false|none|List of component XNames to query for heartbeat status.|
 
 <h2 id="tocS_hbstates_rsp">hbstates_rsp</h2>
 <!-- backwards compatibility -->
@@ -1057,9 +1057,9 @@ Heartbeat Status Query Response
 
 ### Properties
 
-| Name     | Type                                                | Required | Restrictions | Description                           |
-|----------|-----------------------------------------------------|----------|--------------|---------------------------------------|
-| HBStates | [[hbstates_single_rsp](#schemahbstates_single_rsp)] | false    | none         | List of components' heartbeat status. |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|HBStates|[[hbstates_single_rsp](#schemahbstates_single_rsp)]|false|none|List of components' heartbeat status.|
 
 <h2 id="tocS_hbstates_single_rsp">hbstates_single_rsp</h2>
 <!-- backwards compatibility -->
@@ -1080,10 +1080,10 @@ Heartbeat Status for a Component
 
 ### Properties
 
-| Name         | Type    | Required | Restrictions | Description                                        |
-|--------------|---------|----------|--------------|----------------------------------------------------|
-| XName        | string  | false    | none         | XName of a component                               |
-| Heartbeating | boolean | false    | none         | Signifies if a component is actively heartbeating. |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|XName|string|false|none|XName of a component|
+|Heartbeating|boolean|false|none|Signifies if a component is actively heartbeating.|
 
 <h2 id="tocS_params">params</h2>
 <!-- backwards compatibility -->
@@ -1114,20 +1114,20 @@ Operational Parameters Message
 
 ### Properties
 
-| Name           | Type   | Required | Restrictions | Description                                                                                                                                                                                                  |
-|----------------|--------|----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Debug          | string | false    | none         | This is the debug level of the heartbeat service. Debug parameter increases the verbosity of the logging.                                                                                                    |
-| Errtime        | string | false    | none         | This is the timeout interval resulting in a missing heartbeat error. Allows you to change the max time elapsed since the last heatbeat received by a component before sending an ALERT to the HSM.           |
-| Warntime       | string | false    | none         | This is the timeout interval resulting in a missing heartbeat warning. Allows you to change the max time elapsed since last heartbeat received by a component before sending a WARNING to the State Manager. |
-| Kv_url         | string | false    | none         | This is the URL of a Key/Value store service.                                                                                                                                                                |
-| Interval       | string | false    | none         | This is the time interval between heartbeat checks (in seconds).                                                                                                                                             |
-| Nosm           | string | false    | none         | This enables/disables actual State Manager interaction.                                                                                                                                                      |
-| Port           | string | false    | read-only    | This is the port the heartbeat service listens on.                                                                                                                                                           |
-| Sm_retries     | string | false    | none         | This is the number of times to retry failed State Manager interactions.                                                                                                                                      |
-| Sm_timeout     | string | false    | none         | This is max time (in seconds) to wait for a response from the HSM in any given interaction.                                                                                                                  |
-| Sm_url         | string | false    | none         | This is the State Manager URL                                                                                                                                                                                |
-| Telemetry_host | string | false    | none         | Telemetry bus host description (host:port:topic)                                                                                                                                                             |
-| Use_telemetry  | string | false    | none         | Turn on or off the ability to dump notifications of heartbeat state changes to the telemetry bus. If non-zero dump heartbeat change notifications onto the telemetry bus.                                    |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|Debug|string|false|none|This is the debug level of the heartbeat service. Debug parameter increases the verbosity of the logging.|
+|Errtime|string|false|none|This is the timeout interval resulting in a missing heartbeat error. Allows you to change the max time elapsed since the last heatbeat received by a component before sending an ALERT to the HSM.|
+|Warntime|string|false|none|This is the timeout interval resulting in a missing heartbeat warning. Allows you to change the max time elapsed since last heartbeat received by a component before sending a WARNING to the State Manager.|
+|Kv_url|string|false|none|This is the URL of a Key/Value store service.|
+|Interval|string|false|none|This is the time interval between heartbeat checks (in seconds).|
+|Nosm|string|false|none|This enables/disables actual State Manager interaction.|
+|Port|string|false|read-only|This is the port the heartbeat service listens on.|
+|Sm_retries|string|false|none|This is the number of times to retry failed State Manager interactions.|
+|Sm_timeout|string|false|none|This is max time (in seconds) to wait for a response from the HSM in any given interaction.|
+|Sm_url|string|false|none|This is the State Manager URL|
+|Telemetry_host|string|false|none|Telemetry bus host description (host:port:topic)|
+|Use_telemetry|string|false|none|Turn on or off the ability to dump notifications of heartbeat state changes to the telemetry bus. If non-zero dump heartbeat change notifications onto the telemetry bus.|
 
 <h2 id="tocS_XName.1.0.0">XName.1.0.0</h2>
 <!-- backwards compatibility -->
@@ -1145,9 +1145,9 @@ Identifies sender by xname. This is the physical, location-based name of a compo
 
 ### Properties
 
-| Name        | Type   | Required | Restrictions | Description                                                                           |
-|-------------|--------|----------|--------------|---------------------------------------------------------------------------------------|
-| *anonymous* | string | false    | none         | Identifies sender by xname. This is the physical, location-based name of a component. |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|Identifies sender by xname. This is the physical, location-based name of a component.|
 
 <h2 id="tocS_Hostname.1.0.0">Hostname.1.0.0</h2>
 <!-- backwards compatibility -->
@@ -1165,9 +1165,9 @@ Identifies sender by hostname. This is the host name of a component.
 
 ### Properties
 
-| Name        | Type   | Required | Restrictions | Description                                                          |
-|-------------|--------|----------|--------------|----------------------------------------------------------------------|
-| *anonymous* | string | false    | none         | Identifies sender by hostname. This is the host name of a component. |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|Identifies sender by hostname. This is the host name of a component.|
 
 <h2 id="tocS_NID.1.0.0">NID.1.0.0</h2>
 <!-- backwards compatibility -->
@@ -1185,9 +1185,9 @@ Identifies sender by Numeric ID (NID). This is the Numeric ID of a compute node.
 
 ### Properties
 
-| Name        | Type   | Required | Restrictions | Description                                                                      |
-|-------------|--------|----------|--------------|----------------------------------------------------------------------------------|
-| *anonymous* | string | false    | none         | Identifies sender by Numeric ID (NID). This is the Numeric ID of a compute node. |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|Identifies sender by Numeric ID (NID). This is the Numeric ID of a compute node.|
 
 <h2 id="tocS_TimeStamp.1.0.0">TimeStamp.1.0.0</h2>
 <!-- backwards compatibility -->
@@ -1205,9 +1205,9 @@ When heartbeat was sent. This is an ISO8601 formatted time stamp.
 
 ### Properties
 
-| Name        | Type   | Required | Restrictions | Description                                                       |
-|-------------|--------|----------|--------------|-------------------------------------------------------------------|
-| *anonymous* | string | false    | none         | When heartbeat was sent. This is an ISO8601 formatted time stamp. |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|When heartbeat was sent. This is an ISO8601 formatted time stamp.|
 
 <h2 id="tocS_HeartbeatStatus.1.0.0">HeartbeatStatus.1.0.0</h2>
 <!-- backwards compatibility -->
@@ -1225,9 +1225,9 @@ Special status field for specific failure modes.
 
 ### Properties
 
-| Name        | Type   | Required | Restrictions | Description                                      |
-|-------------|--------|----------|--------------|--------------------------------------------------|
-| *anonymous* | string | false    | none         | Special status field for specific failure modes. |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|Special status field for specific failure modes.|
 
 <h2 id="tocS_Error">Error</h2>
 <!-- backwards compatibility -->
@@ -1251,13 +1251,13 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 
 ### Properties
 
-| Name     | Type   | Required | Restrictions | Description |
-|----------|--------|----------|--------------|-------------|
-| type     | string | true     | none         | none        |
-| detail   | string | false    | none         | none        |
-| instance | string | false    | none         | none        |
-| status   | string | false    | none         | none        |
-| title    | string | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|type|string|true|none|none|
+|detail|string|false|none|none|
+|instance|string|false|none|none|
+|status|string|false|none|none|
+|title|string|false|none|none|
 
 <h2 id="tocS_Problem7807">Problem7807</h2>
 <!-- backwards compatibility -->
@@ -1281,11 +1281,11 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 
 ### Properties
 
-| Name     | Type          | Required | Restrictions | Description |
-|----------|---------------|----------|--------------|-------------|
-| type     | string        | true     | none         | none        |
-| detail   | string        | false    | none         | none        |
-| instance | string        | false    | none         | none        |
-| status   | number(int32) | false    | none         | none        |
-| title    | string        | false    | none         | none        |
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|type|string|true|none|none|
+|detail|string|false|none|none|
+|instance|string|false|none|none|
+|status|number(int32)|false|none|none|
+|title|string|false|none|none|
 
