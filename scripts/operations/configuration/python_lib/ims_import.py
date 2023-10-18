@@ -30,14 +30,13 @@ import logging
 import os
 import tarfile
 import tempfile
-from typing import Callable, NamedTuple, Union
+from typing import Callable, NamedTuple
 
 from . import common
 from . import ims
 from . import k8s
-from . import s3
 
-from .ims_import_export import ExportedData, ImsData, ImsImportExportError, ImsJobsRunning, S3BucketInfo
+from .ims_import_export import ExportedData, ImsData, ImsImportExportError, ImsJobsRunning, S3BucketListings
 
 
 parent_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
@@ -108,7 +107,67 @@ def update_ims_data(import_options: ImportOptions) -> None:
 
 # The doc string for this function is used in the import script argparse help message
 def overwrite_ims_data(import_options: ImportOptions) -> None:
-    """Soft delete current IMS resources then add exported ones"""
+    """Delete current IMS jobs, hard delete current IMS resources, then add exported resources"""
+    exported_data, tarfile_dir = import_options.exported_data, import_options.tarfile_dir
+    current_ims_data = import_options.current_ims_data
+
+    exported_data.verify_artifact_files_exist(tarfile_dir)
+    import_options.verify_no_running_jobs()
+
+    # First, delete the current IMS images, jobs, recipes, and public keys.
+    s3_buckets = S3BucketListings()
+    def delete_all(label: str, current: ims.ImsObjectMap, deleted: ims.ImsObjectMap) -> None:
+        hard_delete = IMS_DELETE_FUNCS[label].hard
+        delete_deleted = IMS_DELETE_FUNCS[label].deleted
+
+        # Check if the hard delete function takes the "remove_s3" argument
+        remove_s3_arg = "remove_s3" in inspect.signature(hard_delete).parameters
+        logging.info("Deleting IMS %ss (this may take a while)", label)
+        for ims_id in deleted:
+            logging.debug("Deleting deleted IMS %s %s", label, ims_id)
+            delete_deleted(ims_id)
+
+        for ims_id, ims_obj in current.items():
+            logging.debug("Hard deleting IMS %s %s", label, ims_id)
+            if remove_s3_arg:
+                s3_url = ims.get_s3_url(ims_obj)
+                hard_delete(ims_id, remove_s3=s3_buckets.artifact_exists(s3_url=s3_url, load_if_needed=True))
+            else:
+                hard_delete(ims_id)
+
+    delete_all("image", current=current_ims_data.images, deleted=current_ims_data.deleted.images)
+    delete_all("public key", current=current_ims_data.public_keys, deleted=current_ims_data.deleted.public_keys)
+    delete_all("recipe", current=current_ims_data.recipes, deleted=current_ims_data.deleted.recipes)
+
+    logging.info("Deleting IMS jobs")
+    for ims_id in current_ims_data.jobs:
+        logging.debug("Deleting IMS job %s", ims_id)
+        ims.delete_job(ims_id)
+
+    # Refresh the current IMS data and validate that no deleted or non-deleted objects exist
+    logging.info("Reloading data from IMS")
+    current_ims_data = ImsData.load_from_system(include_deleted=True)
+    if current_ims_data.images:
+        raise ImsImportExportError("IMS images still exist even after deleting them all")
+    if current_ims_data.deleted.images:
+        raise ImsImportExportError("Deleted IMS images still exist even after deleting them all")
+    if current_ims_data.jobs:
+        raise ImsImportExportError("IMS jobs still exist even after deleting them all")
+    if current_ims_data.public_keys:
+        raise ImsImportExportError("IMS public keys still exist even after deleting them all")
+    if current_ims_data.deleted.public_keys:
+        raise ImsImportExportError("Deleted IMS public keys still exist even after deleting them all")
+    if current_ims_data.recipes:
+        raise ImsImportExportError("IMS recipes still exist even after deleting them all")
+    if current_ims_data.deleted.recipes:
+        raise ImsImportExportError("Deleted IMS recipes still exist even after deleting them all")
+
+    do_import(tarfile_dir=tarfile_dir, current_ims_data=current_ims_data, exported_data=exported_data)
+
+
+# The doc string for this function is used in the import script argparse help message
+def soft_overwrite_ims_data(import_options: ImportOptions) -> None:
+    """Delete current IMS jobs, soft delete current IMS resources, then add exported resources"""
     exported_data, tarfile_dir = import_options.exported_data, import_options.tarfile_dir
     current_ims_data = import_options.current_ims_data
 
@@ -118,20 +177,7 @@ def overwrite_ims_data(import_options: ImportOptions) -> None:
     # First, delete the current IMS images, jobs, recipes, and public keys.
     # For those whose IDs do not conflict with ones being imported, we soft delete them.
     # For any whose IDs do conflict with ones being imported, they must be hard deleted.
-    s3_bucket_listings = {}
-    def s3_artifact_exists(s3_url: Union[s3.S3Url, None]) -> bool:
-        # Check to see if there is an associated S3 artifact
-        if s3_url is None:
-            return False
-        # Check to see if this S3 artifact actually exists
-        try:
-            s3_bucket_listing = s3_bucket_listings[s3_url.bucket]
-        except KeyError:
-            # Need to get this listing
-            s3_bucket_listing = S3BucketInfo.load_from_system(s3_url.bucket)
-            s3_bucket_listings[s3_url.bucket] = s3_bucket_listing
-        return s3_bucket_listing.has_artifact(s3_url)
-
+    s3_buckets = S3BucketListings()
     def delete_conflicts(label: str, current: ims.ImsObjectMap, deleted: ims.ImsObjectMap,
                          exported: ims.ImsObjectMap) -> None:
         hard_delete = IMS_DELETE_FUNCS[label].hard
@@ -152,7 +198,8 @@ def overwrite_ims_data(import_options: ImportOptions) -> None:
                 # This resource needs to be hard deleted
                 logging.debug("Hard deleting IMS %s %s", label, ims_id)
                 if remove_s3_arg:
-                    hard_delete(ims_id, remove_s3=s3_artifact_exists(ims.get_s3_url(ims_obj)))
+                    s3_url = ims.get_s3_url(ims_obj)
+                    hard_delete(ims_id, remove_s3=s3_buckets.artifact_exists(s3_url=s3_url, load_if_needed=True))
                 else:
                     hard_delete(ims_id)
             else:
@@ -190,7 +237,8 @@ def overwrite_ims_data(import_options: ImportOptions) -> None:
 IMPORT_FUNCTIONS = {
     "add": add_ims_data,
     "update": update_ims_data,
-    "overwrite": overwrite_ims_data }
+    "overwrite": overwrite_ims_data,
+    "soft_overwrite": soft_overwrite_ims_data }
 
 
 def do_import(tarfile_dir: str,
