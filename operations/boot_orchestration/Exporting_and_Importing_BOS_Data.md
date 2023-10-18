@@ -1,4 +1,4 @@
-# Export and Importing BOS Data
+# Exporting and Importing BOS Data
 
 - [Prerequisites](#prerequisites)
 - [Automated procedures](#automated-procedures)
@@ -44,24 +44,9 @@ the automated export script.
    > The file may be a JSON file or a `tgz` file, depending on when the backup was made, because the BOS export tools
    > have had multiple versions. Any file produced by any version of these tools will work as input for this restore procedure.
 
-   - If this BOS import procedure is being done **after** an IMS
-     [Automated import procedure](../image_management/Exporting_and_Importing_IMS_Data.md#automated-import-procedure),
-     then the IMS import script should have generated a file containing the IMS ID and S3 etag mappings -- it is displayed near
-     the end of the script output. This file should be specified with the `--ims-id-map-file` argument, as shown in the following
-     example:
-
-      ```bash
-      /usr/share/doc/csm/scripts/operations/configuration/import_bos_data.sh \
-        --ims-id-map-file /root/ims-import-export-data/ims-id-maps-post-import-12f86451ce7c49d79e345bee42cc8586.json \
-        /root/bos-export-20230417181409-oK4WMw.tgz
-      ```
-
-   - Otherwise, if no IMS import procedure was done, or if this BOS import procedure is being done first, then only the
-     BOS export file needs to be specified, as shown in the following example:
-
-      ```bash
-      /usr/share/doc/csm/scripts/operations/configuration/import_bos_data.sh /root/bos-export-20230417181409-oK4WMw.tgz
-      ```
+   ```bash
+   /usr/share/doc/csm/scripts/operations/configuration/import_bos_data.sh /root/bos-export-20230417181409-oK4WMw.tgz
+   ```
 
 ## Manual procedures
 
