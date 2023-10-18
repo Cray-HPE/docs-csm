@@ -16,12 +16,12 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 ## 1. Install CSM services
 
-> **`NOTE`**: During this step, only on systems with only three worker nodes (typically Testing and
+> **`NOTE`**: During this step, only on systems with only four worker nodes (typically Testing and
 > Development Systems (TDS)), the `customizations.yaml` file will be automatically edited to lower
 > pod
 > CPU requests for some services, in order to better facilitate scheduling on smaller systems. See
 > the
-> file `${CSM_PATH}/tds_cpu_requests.yaml` for these settings. This file can be modified with
+> file `/usr/share/doc/csm/upgrade/scripts/upgrade/tds_cpu_requests.yaml` for these settings. This file can be modified with
 > different values (prior to executing the `yapl` command below), if other settings are desired in
 > the `customizations.yaml` file for this system. For more information about
 > modifying `customizations.yaml` and tuning for specific systems,
