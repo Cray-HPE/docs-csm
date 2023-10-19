@@ -47,3 +47,8 @@
     To fix this issue, re-cable `ncn-w001` so that it is correctly connected to `sw-spine-001`.
 
 1. Return to [deploying the management nodes](../../../install/deploy_non-compute_nodes.md#23-check-lvm-on-kubernetes-ncns).
+
+> **`NOTE`** The values for `--tabs` is sheet within SHCD.xlsx file with name G_G e.g. 25G_10G, 40G_10G etc.
+The values for `--corners` options are start cell and end cell of rightmost table (including table headers) on sheet specified with `--tabs` option. 
+The value for `--shcd` is the path of SHCD file to be used for the cluster under install.
+The cluster type e.g. Full or TDS or V1 can be obatined from [Generate Switch Configurations](generate_switch_config.md)
