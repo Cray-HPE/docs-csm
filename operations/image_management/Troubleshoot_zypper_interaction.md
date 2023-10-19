@@ -4,7 +4,7 @@ There are some common problems while interacting with the zypper install utility
 
 ## Prerequisites
 
-This page requires interactive access to the image being worked with. 
+This page requires interactive access to the image being worked with.
 
 ## Error: "Cannot read input: bad stream or EOF"
 
