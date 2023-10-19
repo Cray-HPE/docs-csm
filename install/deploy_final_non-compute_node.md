@@ -438,12 +438,10 @@ sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf && systemctl restart chro
 
 ## 7. Update select RPMs
 
-(`ncn-m001`) Run the following command to ensure that select RPMs on `ncn-m001` are at the correct version.
+(`ncn-m001`) Run the following script to ensure that select RPMs on `ncn-m001` are at the correct version.
 
 ```bash
-zypper install -y hpe-csm-goss-package csm-testing goss-servers \
-    && systemctl enable goss-servers && systemctl restart goss-servers \
-    && echo PASSED || echo FAILED
+/usr/share/doc/csm/install/scripts/install-goss-tests.sh
 ```
 
 If the output ends with `PASSED`, then it was successful, despite any warning messages that may have been displayed.

@@ -330,8 +330,10 @@ If the check fails after doing the rebuild, contact support.
 1. (`pit#`) Install tests and test server on NCNs.
 
     ```bash
-    "${CSM_PATH}"/lib/install-goss-tests.sh
+    /usr/share/doc/csm/install/scripts/install-goss-tests.sh
     ```
+
+    If the output ends with `PASSED`, then it was successful, despite any warning messages that may have been displayed.
 
 1. (`pit#`) Remove the default NTP pool.
 
