@@ -296,8 +296,10 @@ Ceph can begin to exhibit latency over time unless OSDs are restarted and some O
 1. (`pit#`) Install tests and test server on NCNs.
 
     ```bash
-    "${CSM_PATH}"/lib/install-goss-tests.sh
+    /usr/share/doc/csm/install/scripts/install-goss-tests.sh
     ```
+
+    If the output ends with `PASSED`, then it was successful, despite any warning messages that may have been displayed.
 
 1. (`pit#`) Check the storage nodes.
 
