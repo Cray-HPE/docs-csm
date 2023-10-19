@@ -424,7 +424,7 @@ For example:
 
         Example output:
 
-        ```text
+        ```csv
         2022-02-01 16:59:35.529 UTC,"standby","",227600,"127.0.0.1:42264",61f966f7.37910,3,"sending backup ""pg_basebackup base backup""",2022-02-01 16:59:35 UTC,7/0,0,ERROR,XX000,"invalid segment number 0 in file ""pg_internal.init.2239188""",,,,,,,,,"pg_basebackup"
         ```
 
@@ -530,8 +530,7 @@ encounters issues syncing updates to the `postgresql` cluster.
 1. Check the logs for the `postgres-operator`.
 
     ```bash
-    ncn-mw# kubectl logs cray-postgres-operator-6fffc48b4c-mqz7z -n services \
-                -c postgres-operator | grep -i sync | grep -i msg
+    ncn-mw# kubectl logs cray-postgres-operator-6fffc48b4c-mqz7z -n services -c postgres-operator | grep -i sync | grep -i msg
     ```
 
 #### Case 1: `some persistent volumes are not compatible with existing resizing providers`
@@ -802,8 +801,12 @@ Kubernetes secret and update the password in the database.
         ncn-mw# kubectl exec ${POSTGRES_LEADER} -n ${NAMESPACE} -c postgres -it -- bash
         root@cray-smd-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
         postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
+        ```
+
+        On success, output of the final command resembles the following:
+
+        ```text
         ALTER ROLE
-        postgres=#
         ```
 
 1. Restart the `postgresql` cluster.
