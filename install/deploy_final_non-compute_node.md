@@ -437,10 +437,10 @@ it is used for Cray installation and bootstrap.
 
 ## 6. Update select RPMs
 
-(`ncn-m001`) Run the following command to ensure that select RPMs on `ncn-m001` are at the correct version.
+(`ncn-m001`) Run the following script to ensure that select RPMs on `ncn-m001` are at the correct version.
 
 ```bash
-/usr/share/doc/csm/upgrade/scripts/upgrade/util/upgrade-test-rpms.sh --local
+/usr/share/doc/csm/install/scripts/install-goss-tests.sh
 ```
 
 If the output ends with `PASSED`, then it was successful, despite any warning messages that may have been displayed.
