@@ -86,8 +86,11 @@ class S3ArtifactNotFound(ImsImportExportError):
     When an S3 artifact is not found
     """
 
-# Parsed response to a 'cray artifacts list <bucket>' query
 class S3BucketInfo(dict):
+    """
+    Parsed response to a 'cray artifacts list <bucket>' query
+    """
+
     # Use a string for the type hint in the case where the type is not yet defined.
     # https://peps.python.org/pep-0484/#forward-references
     @classmethod
@@ -171,6 +174,54 @@ class S3BucketInfo(dict):
         Raises an exception if not found
         """
         return self.get_artifact(s3_url)["Size"]
+
+
+class S3BucketListings(dict):
+    """
+    Mapping from bucket names (str) to S3BucketInfo for that bucket
+    """
+    # Use a string for the type hint in the case where the type is not yet defined.
+    # https://peps.python.org/pep-0484/#forward-references
+    @classmethod
+    def load_from_system(cls, bucket_names: Iterable[str]) -> "S3BucketListings":
+        return S3BucketListings({ bucket_name: S3BucketInfo.load_from_system(bucket_name)
+                                  for bucket_name in bucket_names })
+
+
+    # Use a string for the type hint in the case where the type is not yet defined.
+    # https://peps.python.org/pep-0484/#forward-references
+    @classmethod
+    def load_from_json(cls, json_dict: JsonDict) -> "S3BucketListings":
+        """
+        Returns a S3BucketListings object populated with the data from json_dict
+        """
+        return S3BucketListings({ bucket_name: S3BucketInfo(bucket_info)
+                                  for bucket_name, bucket_info in json_dict.items() })
+
+
+    def artifact_exists(self, s3_url: Union[s3.S3Url, None], load_if_needed: bool) -> bool:
+        """
+        If s3_url is None, return False.
+
+        If a listing for the bucket for the specified s3_url does not exist in our dict, then:
+        * If load_if_needed is False, raise a KeyError. Otherwise query S3 to get the listing for
+          the bucket and proceed.
+
+        Call has_artifact for the specified s3_url on the bucket listing
+        """
+        # Check to see if there is an associated S3 artifact
+        if s3_url is None:
+            return False
+        # Check to see if this S3 artifact actually exists
+        try:
+            s3_bucket_listing = self[s3_url.bucket]
+        except KeyError:
+            if not load_if_needed:
+                raise
+            # Need to get this listing
+            s3_bucket_listing = S3BucketInfo.load_from_system(s3_url.bucket)
+            self[s3_url.bucket] = s3_bucket_listing
+        return s3_bucket_listing.has_artifact(s3_url)
 
 
 class ImsDeletedData(NamedTuple):
@@ -314,7 +365,7 @@ class ImsData(NamedTuple):
 
 class S3Data(NamedTuple):
     artifacts: Dict[s3.S3Url, JsonDict]
-    buckets: Dict[str, S3BucketInfo]
+    buckets: S3BucketListings
 
     # Use a string for the type hint in the case where the type is not yet defined.
     # https://peps.python.org/pep-0484/#forward-references
@@ -341,6 +392,7 @@ class S3Data(NamedTuple):
     def load_from_json(cls, json_dict: JsonDict) -> "S3Data":
         """
         Converts S3 URL strings in JSON dict to s3.S3Url objects.
+        Converts buckets field from JSON dict to S3BucketListings object.
         Creates and returns S3Data object populated with the result.
         """
         new_artifacts = {}
@@ -349,7 +401,7 @@ class S3Data(NamedTuple):
                 new_manifest_links = [ s3.S3Url(mlink) for mlink in artifact_data["manifest_links"] ]
                 artifact_data["manifest_links"] = new_manifest_links
             new_artifacts[s3.S3Url(s3_url)] = artifact_data
-        return S3Data(artifacts=new_artifacts, buckets=json_dict["buckets"])
+        return S3Data(artifacts=new_artifacts, buckets=S3BucketListings.load_from_json(json_dict["buckets"]))
 
 
     @property
@@ -416,7 +468,7 @@ class S3Data(NamedTuple):
 
         # Get listings of buckets for all S3 links we're concerned with
         buckets_names = { s3_link.bucket for s3_link in all_s3_urls }
-        s3_buckets = { bucket_name: S3BucketInfo.load_from_system(bucket_name) for bucket_name in buckets_names }
+        s3_buckets = S3BucketListings.load_from_system(buckets_names)
 
         # Before downloading the rest of the artifacts, since we now have the complete list, let's make sure
         # we have enough free space
@@ -548,7 +600,7 @@ def get_running_jobs(jobs: ims.ImsObjectList) -> List[str]:
 
 
 def verify_free_space(outdir: str, remaining_s3_links: Set[s3.S3Url],
-                      bucket_info: Dict[str, S3BucketInfo]) -> None:
+                      bucket_info: S3BucketListings) -> None:
     """
     Looks at how much free space is in the specified directory, adds up the total size of the remaining
     artifacts to be downloaded, and raises an exception if we're too close to the limit.
