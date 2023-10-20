@@ -32,7 +32,7 @@ If you run zypper without a terminal, use '--non-interactive' global
 option to make zypper use default answers to prompts.
 ```
 
-There are two possible work-around for this situation:
+There are two possible workarounds for this situation:
 
 1. Use the `--non-interactive` option with zypper and it will proceed without error.
 
