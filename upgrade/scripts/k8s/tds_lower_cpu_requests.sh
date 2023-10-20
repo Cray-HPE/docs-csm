@@ -119,20 +119,28 @@ yaml_path="$base.cray-metallb.metallb.speaker.resources.requests.cpu"
 cray_metallb_speaker_new_cpu_request=$(yq r $yaml -pv $yaml_path)
 fail_if_empty $yaml_path $cray_metallb_speaker_new_cpu_request
 
-if [ ! -z $spire_postgres_new_request ]; then
-  roll_postgres "spire" "spire-postgres" $spire_postgres_new_request
+if kubectl get postgresqls -n spire spire-postgres > /dev/null 2>&1; then
+  if [ ! -z $spire_postgres_new_request ]; then
+    roll_postgres "spire" "spire-postgres" $spire_postgres_new_request
+  fi
 fi
 
-if [ ! -z $cray_spire_postgres_new_request ]; then
-  roll_postgres "spire" "cray-spire-postgres" $cray_spire_postgres_new_request
+if kubectl get postgresqls -n spire cray-spire-postgres > /dev/null 2>&1; then
+  if [ ! -z $cray_spire_postgres_new_request ]; then
+    roll_postgres "spire" "cray-spire-postgres" $cray_spire_postgres_new_request
+  fi
 fi
 
-if [ ! -z $cray_dhcp_kea_postgres_new_request ]; then
-  roll_postgres "services" "cray-dhcp-kea-postgres" $cray_dhcp_kea_postgres_new_request
+if kubectl get postgresqls -n services cray-dhcp-kea-postgres > /dev/null 2>&1; then
+  if [ ! -z $cray_dhcp_kea_postgres_new_request ]; then
+    roll_postgres "services" "cray-dhcp-kea-postgres" $cray_dhcp_kea_postgres_new_request
+  fi
 fi
 
-if [ ! -z $cray_smd_postgres_new_cpu_request ]; then
-  roll_postgres "services" "cray-smd-postgres" $cray_smd_postgres_new_cpu_request
+if kubectl get postgresqls -n services cray-smd-postgres > /dev/null 2>&1; then
+  if [ ! -z $cray_smd_postgres_new_cpu_request ]; then
+    roll_postgres "services" "cray-smd-postgres" $cray_smd_postgres_new_cpu_request
+  fi
 fi
 
 if [ ! -z $cray_smd_new_cpu_request ]; then
