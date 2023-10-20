@@ -84,7 +84,7 @@ The user performing these procedures needs to have access permission to the `cra
 1. (`ncn-mw#`) Establish a serial console session with the desired NCN.
 
     ```bash
-    kubectl -n services exec -it $NODE_POD -- conman -j $XNAME
+    kubectl -n services exec -it $NODE_POD -c cray-console-node -- conman -j $XNAME
     ```
 
     The console session log files for each NCN are located in a shared volume in the `cray-console-node` pods.
