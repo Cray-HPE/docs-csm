@@ -48,7 +48,14 @@ There are three types of imports possible:
 
 - `overwrite`
 
-    All data in IMS is cleared. Then an `add` import is performed.
+    All jobs and resources in IMS are cleared, including deleted resources and associated S3 artifacts.
+    Then an `add` import is performed.
+
+- `soft_overwrite`
+
+    All IMS jobs are deleted. Soft deletes are done on all existing IMS resources whose IDs are not associated with resources
+    being imported. Hard deletes (including associated S3 artifacts) are done on all existing IMS resources whose IDs are
+    associated with resources being imported. Then an `add` import is performed.
 
 - `update`
 
