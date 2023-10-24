@@ -120,7 +120,7 @@ The possible values for this field are:
 
 * `stable`
 
-    This indicates that the component is in the desired state.  This status will be set when the `phase` is not set.
+    This indicates that the component is in the desired state. This status will be set when the `phase` is not set.
 
 * `failed`
 
