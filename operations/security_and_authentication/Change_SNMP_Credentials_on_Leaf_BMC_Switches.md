@@ -5,6 +5,11 @@ This procedure changes the SNMP credentials on management leaf-BMC switches in t
 **`NOTE`** This procedure will not update the default SNMP credentials used when new leaf BMC switches are added to the system. To update the default SNMP credentials for new hardware, follow
 the [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md) procedure.
 
+- [Prerequisites](#prerequisites)
+- [Procedure](#procedure)
+- [Troubleshooting](#troubleshooting)
+- [Viewing SNMP credentials stored in Vault](#viewing-snmp-credentials-stored-in-vault)
+
 ## Prerequisites
 
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
@@ -15,6 +20,7 @@ There are three steps involved. The first two steps involve running the `leaf_sw
 and then set new credentials. The script can be run either interactively (no environment variables or command line options) or non-interactively (using environment variables on the command line). The following examples use the environment variable method.
 
 1. (`ncn-mw#`) Set environment variables containing the new SNMP credentials.
+
     > `read -s` is used to prevent the password from appearing in the command history.
 
     1. Set the SNMP authentication password environment variable.
@@ -62,7 +68,6 @@ and then set new credentials. The script can be run either interactively (no env
 
    ==> SNMP user ID 'testuser' found on switch sw-leaf-001.
    Setting SNMP default creds on Dell leaf switch: sw-leaf-002
-
    ```
 
 1. (`ncn-mw#`) Set the Vault alias, if it is not already set.
@@ -142,15 +147,14 @@ and then set new credentials. The script can be run either interactively (no env
 
 If the credentials are not working, then check the Vault credentials as shown above.
 
-If the `leaf_switch_snmp_creds.sh` script fails for whatever reason on any
-leaf-BMC switch, then validate and change the credentials manually using the
+If the `leaf_switch_snmp_creds.sh` script fails for any leaf-BMC switch, then validate and change the credentials manually using the
 procedures found in [Aruba SNMP Users Guide](../network/management_network/aruba/snmpv3_users.md) or [Dell SNMP Users Guide](../network/management_network/dell/snmpv3_users.md).
 
-### Viewing SNMP credentials stored in Vault
+## Viewing SNMP credentials stored in Vault
 
 **If desired** view the existing SNMP credentials stored in Vault for a `leaf-bmc` switch.
 
-1. (`ncn-mw#`) Set up the `vault` alias.
+1. (`ncn-mw#`) Set the Vault alias, if it is not already set.
 
     ```bash
     VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)

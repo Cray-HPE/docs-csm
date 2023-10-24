@@ -219,10 +219,10 @@ of container images spins up with each major CSM release.
 |-----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
 | `csm-dckr/stable/quay.io/ceph/ceph:v15.2.15`                                | This version of Ceph (Octopus) is needed in the upgrade procedure, but is not present after that. |
 | `csm-docker/stable/quay.io/ceph/ceph:v15.2.16`                              | This version of Ceph (Octopus) is needed in the upgrade procedure, but is not present after that. |
-| `csm-docker/stable/quay.io/ceph/ceph:v16.2.9`                               | This version of Ceph (Pacific) is pinned for the CSM 1.3 release.  The next CSM version released as a part of a recipe will support Ceph (`Quincy`). |
+| `csm-docker/stable/quay.io/ceph/ceph:v16.2.9`                               | This version of Ceph (Pacific) is pinned for the CSM 1.3 release. The next CSM version released as a part of a recipe will support Ceph (`Quincy`). |
 | `csm-docker/stable/quay.io/cephcsi/cephcsi:v3.6.2`                          | Upstream fixes became available after CSM 1.3 release content was frozen. |
 | `csm-dckr/stable/dckr.io/bitnami/external-dns:0.10.2-debian-10-r23`         | Upstream fixes are needed and are not yet available. |
-| `csm-docker/stable/quay.io/kiali/kiali-operator:v1.36.7`                    | The updated `RedHat` base image is available but not pulled in by upstream.  See procedure to [Remove Kiali](operations/system_management_health/Remove_Kiali.md) if desired. |
+| `csm-docker/stable/quay.io/kiali/kiali-operator:v1.36.7`                    | The updated `RedHat` base image is available but not pulled in by upstream. See procedure to [Remove Kiali](operations/system_management_health/Remove_Kiali.md) if desired. |
 | `csm-dckr/stable/k8s.gcr.io/kube-proxy:v1.20.13`                            | This version is needed for the upgrade procedure but will not be running after the upgrade has been completed. |
 | `csm-docker/stable/k8s.gcr.io/kube-proxy:v1.21.12`                          | Upstream fixes are needed and are not yet available for the `1.21.12` version of Kubernetes included in CSM 1.3. |
 | `csm-docker/stable/cray-postgres-db-backup:0.2.3`                           | To ensure success of `postgres` restore functionality, we needed to pin to `psql v12` in this image. |
