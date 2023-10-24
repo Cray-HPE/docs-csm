@@ -1,32 +1,39 @@
 # Recreate StatefulSet Pods on Another Node
 
-Some pods are members of StatefulSets, meaning that there is a very specific number of them, each likely running on a different node. Similar to DaemonSets, these pods will never be recreated on another node as long as they are sitting in a `Terminating` state.
+Some pods are members of StatefulSets, meaning that there is a very specific number of them, each likely running on a
+different node. Similar to DaemonSets, these pods will never be recreated on another node as long as they are sitting
+in a `Terminating` state.
 
-**Warning:** This procedure should only be done for pods that are known to no longer be running. Corruption may occur if the worker node is still running when deleting the deleting the StatefulSet pod in a `Terminating` state.
+**Warning:** This procedure should only be done for pods that are known to no longer be running. Corruption may occur
+if the worker node is still running when deleting the deleting the StatefulSet pod in a `Terminating` state.
 
-The design of StatefulSet pods prohibits the creation of new pods on another node. This is the expected behavior for StatefulSet pods. In many cases, the StatefulSet is a set of only one pod. If a StatefulSet pod needs to be recreated on another node, the `Terminating` pod needs to be force deleted and then it will automatically recreate.
+The design of StatefulSet pods prohibits the creation of new pods on another node. This is the expected behavior for
+StatefulSet pods. In many cases, the StatefulSet is a set of only one pod. If a StatefulSet pod needs to be recreated
+on another node, the `Terminating` pod needs to be force deleted and then it will automatically recreate.
 
 This procedure prevents services from being taken out of service when a node goes down.
 
-### Prerequisites
+## Prerequisites
 
--   A StatefulSet pod failed to be moved to another healthy non-compute node \(NCN\) acting as a worker node.
--   If the network is being brought down temporarily during testing, ignore any issues with StatefulSet pods until the testing is complete. These errors should be ignored because the nodes could have the network restored, and then the `Terminating` pod may go `ACTIVE` temporarily \(causing a race and corruption\) if it comes up at the same time as another StatefulSet running the pod. This is much more likely to occur during testing of a network outage.
+- A StatefulSet pod failed to be moved to another healthy non-compute node \(NCN\) acting as a worker node.
+- If the network is being brought down temporarily during testing, ignore any issues with StatefulSet pods until the
+  testing is complete. These errors should be ignored because the nodes could have the network restored, and then the
+  `Terminating` pod may go `ACTIVE` temporarily \(causing a race and corruption\) if it comes up at the same time as
+  another StatefulSet running the pod. This is much more likely to occur during testing of a network outage.
 
+## Procedure
 
-### Procedure
+1. View the StatefulSet pods on the system.
 
-1.  View the StatefulSet pods on the system.
-
-    Any of the pods with `x/1` in the READY column could be on a node that goes down, at which point that service will no longer be available.
+    Any of the pods with `x/1` in the `READY` column could be on a node that goes down, at which point that service will no longer be available.
 
     ```bash
-    ncn-w001# kubectl get statefulsets -A
+    ncn-mw# kubectl get statefulsets -A
     ```
 
     Example output:
 
-    ```
+    ```text
     NAMESPACE        NAME                                                   READY              AGE
     backups          benji-k8s-postgresql                                   1/1                2d14h
     nexus            nexus                                                  1/1                2d14h
@@ -58,17 +65,17 @@ This procedure prevents services from being taken out of service when a node goe
     vault            cray-vault                                             3/3                2d14h
     ```
 
-2.  Describe a service to find the StatefulSet pod name.
+1. Describe a service to find the StatefulSet pod name.
 
-    The StatefulSet pod will have a name in the StatefulSet-0 format. Vault is the service being described in the example below. The StatefulSet pod name is cray-vault-0.
+    The StatefulSet pod will have a name in the `StatefulSet-0` format. Vault is the service being described in the example below. The StatefulSet pod name is `cray-vault-0`.
 
     ```bash
-    ncn-w001# kubectl get pods -A -o wide | grep SERVICE_NAME
+    ncn-mw# kubectl get pods -A -o wide | grep SERVICE_NAME
     ```
 
     Example output:
 
-    ```
+    ```text
     operators   cray-vault-operator-57dbbb7db5-9lr6z       1/1     Running        0    5d18h   10.40.0.11    ncn-w002   <none>  <none>
     services    cray-meds-vault-loader-bzgbd               0/2     Completed      0    5d18h   10.40.0.24    ncn-w002   <none>  <none>
     services    cray-reds-vault-loader-d9cn9               0/2     Completed      0    5d18h   10.40.0.25    ncn-w002   <none>  <none>
@@ -81,19 +88,18 @@ This procedure prevents services from being taken out of service when a node goe
     vault       cray-vault-etcd-mx8qc596t9                 1/1     Running        0    5d18h   10.47.0.23    ncn-w001   <none>  <none>
     ```
 
-3.  Delete the StatefulSet pod in a `Terminating` state.
+1. Delete the StatefulSet pod in a `Terminating` state.
 
     The StatefulSet \(the controller\) will recreate the pod on a working node when the pod or the node it sits on is deleted. The command below assumes the pod is located on the downed node and is currently in a `Terminating` state.
 
     ```bash
-    ncn-w001# kubectl delete pod -n NAMESPACE POD_NAME --force --grace-period 0
+    ncn-mw# kubectl delete pod -n NAMESPACE POD_NAME --force --grace-period 0
     ```
 
     For example:
 
     ```bash
-    ncn-w001# kubectl delete pod -n vault cray-vault-0 --force --grace-period 0
+    ncn-mw# kubectl delete pod -n vault cray-vault-0 --force --grace-period 0
     ```
 
-    The StatefulSet will then recreate cray-vault-0 on a node that is in `Ready` state.
-
+    The StatefulSet will then recreate `cray-vault-0` on a node that is in `Ready` state.

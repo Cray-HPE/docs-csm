@@ -7,67 +7,64 @@ Boot Script Service \(BSS\) delivers a boot script to a node based on its MAC ad
 
 In addition, the boot script also contains the kernel boot parameters. This procedure helps resolve issues related to missing boot artifacts.
 
-### Prerequisites
+## Prerequisites
 
 This procedure requires administrative privileges.
 
-### Limitations
+## Limitations
 
 Encryption of compute node logs is not enabled, so the passwords may be passed in clear text.
 
-### Procedure
+## Procedure
 
-1.  Log onto a non-compute node \(NCN\) as root.
-
-2.  Check that BSS is running.
+1. Check that BSS is running.
 
     ```bash
-    ncn-m001# kubectl get pods -n services -o wide | grep cray-bss | grep -v -etcd-
+    ncn-mw# kubectl get pods -n services -o wide | grep cray-bss | grep -v -etcd-
     ```
 
     Example output:
 
-    ```
+    ```text
     cray-bss-fd888bd54-gvpxq       2/2     Running     0      2d3h    10.32.0.16   ncn-w002   <none>    <none>
     ```
 
-3.  Check that the boot script of the node that is failing to boot contains the correct boot artifacts.
+1. Check that the boot script of the node that is failing to boot contains the correct boot artifacts.
 
-    -   If nodes are identified by their host names, execute the following:
-
-        ```bash
-        ncn-m001# cray bss bootparameters list --hosts HOST_NAME
-        ```
-
-    -   If nodes are identified by their node IDs, execute the following:
+    - If nodes are identified by their host names, then execute the following:
 
         ```bash
-        ncn-m001# cray bss bootparameters list --nids NODE_ID
+        ncn-mw# cray bss bootparameters list --hosts HOST_NAME
         ```
 
-4.  View the entire BSS contents.
+    - If nodes are identified by their node IDs, then execute the following:
+
+        ```bash
+        ncn-mw# cray bss bootparameters list --nids NODE_ID
+        ```
+
+1. View the entire BSS contents.
 
     ```bash
-    ncn-m001# cray bss dumpstate list
+    ncn-mw# cray bss dumpstate list
     ```
 
-5.  View the actual boot script.
+1. View the actual boot script.
 
-    Using hosts:
+    - Using host name:
 
-    ```bash
-    ncn-m001# cray bss bootscript list --host HOST_NAME
-    ```
+        ```bash
+        ncn-mw# cray bss bootscript list --host HOST_NAME
+        ```
 
-    Using the MAC address to get the actual boot script:
+    - Using the MAC address:
 
-    ```bash
-    ncn-m001# cray bss bootscript list --mac MAC_ADDRESS
-    ```
+        ```bash
+        ncn-mw# cray bss bootscript list --mac MAC_ADDRESS
+        ```
 
-    Using node IDs to retrieve boot parameters:
+    - Using node ID:
 
-    ```bash
-    ncn-m001# cray bss bootscript list --nid NODE_ID
-    ```
-
+        ```bash
+        ncn-mw# cray bss bootscript list --nid NODE_ID
+        ```

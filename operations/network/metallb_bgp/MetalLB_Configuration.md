@@ -71,7 +71,7 @@ linux# csi config init
 
 ## CAN or CHN Configuration
 
-There will be either CAN or CHN configured, not both.  This network has one MetalLB address pool for dynamic IP allocation. A static pool is not needed for this network.
+There will be either CAN or CHN configured, not both. This network has one MetalLB address pool for dynamic IP allocation. A static pool is not needed for this network.
 
 The following is an example of the values for the CAN address pool in the ConfigMap:
 
