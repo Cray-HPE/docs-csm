@@ -121,6 +121,51 @@ Example output:
 }
 ```
 
+(`ncn-mw#`) If the branch information does not need to be stored, use `--update-branches`.
+This is useful in cases where the branch is being provided to allow CFS to find the correct commit, but the branch should not be stored to avoid accidentally updating the commit id in the future.
+
+```bash
+cat configurations-example.json
+```
+
+Example configuration:
+
+```json
+{
+  "layers": [
+    {
+      "name": "configurations-layer-example-1",
+      "clone_url": "https://api-gw-service-nmn.local/vcs/cray/example-repo.git",
+      "playbook": "site.yml",
+      "branch": "main"
+    }
+  ]
+}
+```
+
+```bash
+cray cfs v3 configurations update configurations-example \
+    --file ./configurations-example.json --format json \
+    --drop-branches true
+```
+
+Example output:
+
+```json
+{
+  "last_updated": "2021-07-28T03:26:30:37Z",
+  "layers": [
+    {
+      "clone_url": "https://api-gw-service-nmn.local/vcs/cray/example-repo.git",
+      "commit": "43ecfa8236bed625b54325ebb70916f55884b3a4",
+      "name": "configurations-layer-example-1",
+      "playbook": "site.yml"
+    }
+  ],
+  "name": "configurations-example"
+}
+```
+
 (`ncn-mw#`) If changes are made to a repository and branches are specified in the configuration,
 users can then use the `--update-branches` flag to update a configuration so that all commits reflect the latest commit on the branches specified.
 
@@ -137,6 +182,56 @@ Example output:
     {
       "clone_url": "https://api-gw-service-nmn.local/vcs/cray/example-repo.git",
       "commit": "<latest git commit id>",
+      "branch": "main",
+      "name": "configurations-layer-example-1",
+      "playbook": "site.yml"
+    }
+  ],
+  "name": "configurations-example"
+}
+```
+
+## Using sources in a configuration layer
+
+When defining a configuration layer, either the `clone_url` or `source` values can be used to reference a Git repo.
+`clone_url` can be used for repos where CFS can use the default username, password and CA certificate, such as internal repos.
+`source` allows the layer to reference a CFS source which can include information beyond a single `clone_url`.  See [CFS Sources](CFS_Sources.md) for more information.
+
+(`ncn-mw#`) In the following example, a `source` is specified rather than a `clone_url`.
+
+```bash
+cat configurations-example.json
+```
+
+Example configuration:
+
+```json
+{
+  "layers": [
+    {
+      "name": "configurations-layer-example-1",
+      "source": "example",
+      "playbook": "site.yml",
+      "branch": "main"
+    }
+  ]
+}
+```
+
+```bash
+cray cfs v3 configurations update configurations-example \
+    --file ./configurations-example.json --format json
+```
+
+Example output:
+
+```json
+{
+  "last_updated": "2021-07-28T03:26:30:37Z",
+  "layers": [
+    {
+      "source": "example",
+      "commit": "43ecfa8236bed625b54325ebb70916f55884b3a4",
       "branch": "main",
       "name": "configurations-layer-example-1",
       "playbook": "site.yml"
