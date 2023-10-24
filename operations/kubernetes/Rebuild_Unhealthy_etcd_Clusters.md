@@ -1,40 +1,49 @@
 # Rebuild Unhealthy etcd Clusters
 
-Rebuild any cluster that does not have healthy pods by deleting and redeploying unhealthy pods. This procedure includes examples for rebuilding etcd clusters in the services namespace. This procedure must be used for each unhealthy cluster, not just the services used in the following examples.
+Rebuild any cluster that does not have healthy pods by deleting and redeploying unhealthy pods.
+This procedure includes examples for rebuilding etcd clusters in the `services` namespace.
+This procedure must be used for each unhealthy cluster, and not just those used in the following examples.
 
 This process also applies when etcd is not visible when running the `kubectl get pods` command.
 
-A special use case is also included for the Content Projection Service \(CPS\) as the process for rebuilding the cluster is slightly different.
+The commands in this procedure can be run on any Kubernetes master or worker node on the system.
 
+1. [Prerequisites](#prerequisites)
+1. [Rebuild procedure](#rebuild-procedure)
+1. [Post-rebuild steps](#post-rebuild-steps)
+1. [Final checks](#final-checks)
 
-### Prerequisites
+## Prerequisites
 
 An etcd cluster has pods that are not healthy, or the etcd cluster has no pods. See [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md) for more information.
 
-### Clusters in the Services Namespace
+## Rebuild procedure
 
 The following examples use the `cray-bos` etcd cluster, but these steps must be repeated for every unhealthy service.
 
-1.  Retrieve the .yaml file for the deployment and the etcd cluster objects.
+1. Create YAML files for the deployment and the etcd cluster objects.
 
     ```bash
-    ncn-w001# kubectl -n services get deployment cray-bos -o yaml > /root/etcd/cray-bos.yaml
-    ncn-w001# kubectl -n services get etcd cray-bos-etcd -o yaml > /root/etcd/cray-bos-etcd.yaml
+    ncn-mw# kubectl -n services get deployment cray-bos -o yaml > /root/etcd/cray-bos.yaml
+    ncn-mw# kubectl -n services get etcd cray-bos-etcd -o yaml > /root/etcd/cray-bos-etcd.yaml
     ```
 
-    Only two files must be retrieved in most cases. There is a third file needed if rebuilding clusters for the CPS. CPS must be unmounted before running the commands to rebuild the etcd cluster.
+    Only two files must be retrieved in most cases. There is a third file needed if rebuilding clusters for CPS. CPS must be unmounted before running the commands to rebuild its etcd cluster.
 
     ```bash
-    ncn-w001# kubectl -n services get deployment cray-cps -o yaml > /root/etcd/cray-cps.yaml
-    ncn-w001# kubectl -n services get daemonset cray-cps-cm-pm -o yaml > /root/etcd/cray-cps-cm-pm.yaml
-    ncn-w001# kubectl -n services get etcd cray-cps-etcd -o yaml > /root/etcd/cray-cps-etcd.yaml
+    ncn-mw# kubectl -n services get deployment cray-cps -o yaml > /root/etcd/cray-cps.yaml
+    ncn-mw# kubectl -n services get daemonset cray-cps-cm-pm -o yaml > /root/etcd/cray-cps-cm-pm.yaml
+    ncn-mw# kubectl -n services get etcd cray-cps-etcd -o yaml > /root/etcd/cray-cps-etcd.yaml
     ```
 
-2.  Edit each .yaml file to remove the entire line for creationTimestamp, generation, resourceVersion, selfLink, uid, and everything after status \(including status\).
+1. Edit each YAML file.
+
+    * Remove the entire lines for `creationTimestamp`, generation, `resourceVersion`, and `uid`.
+    * Remove the `status` line, as well as every line after it.
 
     For example:
 
-    ```screen
+    ```yaml
     creationTimestamp: "2019-11-26T16:54:23Z"
     generation: 1
 
@@ -63,78 +72,100 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
       updatedReplicas: 1
     ```
 
-3.  Delete the deployment and the etcd cluster objects.
+1. Delete the deployment and the etcd cluster objects.
 
     Wait for the pods to terminate before proceeding to the next step.
 
     ```bash
-    ncn-w001# kubectl delete -f /root/etcd/cray-bos.yaml
-    ncn-w001# kubectl delete -f /root/etcd/cray-bos-etcd.yaml
+    ncn-mw# kubectl delete -f /root/etcd/cray-bos.yaml
+    ncn-mw# kubectl delete -f /root/etcd/cray-bos-etcd.yaml
     ```
 
-    In the use case of CPS clusters being rebuilt, the following files must be deleted:
+    If rebuilding CPS, the etcd cluster, deployment, and daemonset must be removed:
 
     ```bash
-    ncn-w001# kubectl delete -f /root/etcd/cray-cps.yaml
-    ncn-w001# kubectl delete -f /root/etcd/cray-cps-cm-pm.yaml
-    ncn-w001# kubectl delete -f /root/etcd/cray-cps-etcd.yaml
+    ncn-mw# kubectl delete -f /root/etcd/cray-cps.yaml
+    ncn-mw# kubectl delete -f /root/etcd/cray-cps-cm-pm.yaml
+    ncn-mw# kubectl delete -f /root/etcd/cray-cps-etcd.yaml
     ```
 
-4.  Apply the etcd cluster file.
+1. Apply the etcd cluster file.
 
     ```bash
-    ncn-w001# kubectl apply -f /root/etcd/cray-bos-etcd.yaml
+    ncn-mw# kubectl apply -f /root/etcd/cray-bos-etcd.yaml
     ```
 
-    Wait for all three pods to go into the Running state before proceeding to the next step. Use the following command to monitor the status of the pods:
+    Wait for all three pods to go into the `Running` state before proceeding to the next step. Use the following command to monitor the status of the pods:
 
     ```bash
-    ncn-w001# kubectl get pods -n services | grep bos-etcd
+    ncn-mw# kubectl get pods -n services | grep bos-etcd
+    ```
+
+    Example output:
+
+    ```text
     cray-bos-etcd-hwcw4429b9                  1/1     Running         1          7d18h
     cray-bos-etcd-mdnl28vq9c                  1/1     Running         0          36h
     cray-bos-etcd-w5vv7j4ghh                  1/1     Running         0          18h
     ```
 
-5.  Apply the deployment file.
+1. Apply the deployment file.
 
     ```bash
-    ncn-w001# kubectl apply -f /root/etcd/cray-bos.yaml
+    ncn-mw# kubectl apply -f /root/etcd/cray-bos.yaml
     ```
 
-    If using CPS, the etcd cluster file, deployment file, and daemonset file must be reapplied:
+    If rebuilding CPS, the etcd cluster file, deployment file, and daemonset file must be reapplied:
 
     ```bash
-    ncn-w001# kubectl apply -f /root/etcd/cray-cps.yaml
-    ncn-w001# kubectl apply -f /root/etcd/cray-cps-cm-pm.yaml
-    ncn-w001# kubectl apply -f /root/etcd/cray-cps-etcd.yaml
+    ncn-mw# kubectl apply -f /root/etcd/cray-cps.yaml
+    ncn-mw# kubectl apply -f /root/etcd/cray-cps-cm-pm.yaml
+    ncn-mw# kubectl apply -f /root/etcd/cray-cps-etcd.yaml
     ```
 
-    Proceed to the next step to finish rebuilding the cluster.
+Proceed to [Post-rebuild steps](#post-rebuild-steps) in order to finish rebuilding the cluster.
 
-### Post-Rebuild
+## Post-rebuild steps
 
-1.  Update the IP address needed to interact with the rebuilt cluster.
+1. Update the IP address that interacts with the rebuilt cluster.
 
     After recreating the etcd cluster, the IP address needed to interact with the cluster changes, which requires recreating the etcd backup. The IP address is created automatically via a cronjob that runs at the top of each hour.
 
-    1.  Determine the periodic backup name for the cluster.
+1. Determine the periodic backup name for the cluster.
 
-        The following example is for the `bos` cluster:
+    The following example is for the `bos` cluster:
 
-        ```bash
-        ncn-w001# kubectl get etcdbackup -n services | grep bos.*periodic
-        cray-bos-etcd-cluster-periodic-backup
-        ```
+    ```bash
+    ncn-mw# kubectl get etcdbackup -n services | grep bos.*periodic
+    ```
 
-    2.  Delete the etcd backup definition.
+    Example output:
 
-        A new backup will be created that points to the new IP address. Use the value returned in the previous substep.
+    ```text
+    cray-bos-etcd-cluster-periodic-backup
+    ```
 
-        ```bash
-        ncn-w001# kubectl delete etcdbackup -n services \
-        cray-bos-etcd-cluster-periodic-backup
-        ```
+1. Delete the etcd backup definition.
 
+    A new backup will be created that points to the new IP address.
 
-Rerun the etcd cluster health check \(see [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md)\) after recovering one or more clusters. Ensure that the clusters are healthy and have the correct number of pods.
+    In the following command, substitute the backup name obtained in the previous step.
 
+    ```bash
+    ncn-mw# kubectl delete etcdbackup -n services cray-bos-etcd-cluster-periodic-backup
+    ```
+
+Proceed to the next section and perform the [Final checks](#final-checks).
+
+## Final checks
+
+Whether the rebuild was done manually or with the automated script, after completing the procedure, perform the following checks.
+
+1. Check if the rebuilt cluster's data needs to be repopulated.
+
+    See [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md).
+
+1. Run the etcd cluster health check.
+
+    Ensure that the clusters are healthy and have the correct number of pods.
+    See [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md).

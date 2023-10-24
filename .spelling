@@ -158,6 +158,8 @@ Cutoff
 CVEs
 CX-5
 CX-series
+DaemonSet
+DaemonSets
 datastore
 DB-9
 defense
@@ -494,6 +496,8 @@ SSHing
 SSHKey
 standalone
 startup
+StatefulSet
+StatefulSets
 Strimzi
 Submodule
 subnetting
@@ -645,6 +649,10 @@ ExternalDNS
 
 - operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
 LoadBalancer
+
+- operations/node_management/Updating_Cabinet_Routes_on_Management_NCNs.md
+# To allow Site Init
+Init
 
 - operations/power_management/Power_Off_Compute_and_IO_Cabinets.md
 lockout-tagout

@@ -2,18 +2,21 @@
 
 Postgres uses SQL language to store and manage databases on the system. This procedure describes how to view and obtain helpful information about system databases, as well as the types of data being stored.
 
-
-### Prerequisites
+## Prerequisites
 
 This procedure requires administrative privileges.
 
+## Procedure
 
-### Procedure
-
-1.  Log in to the Postgres container.
+1. Log in to the Postgres container.
 
     ```bash
-    ncn-w001# kubectl -n services exec -it cray-smd-postgres-0 -- bash
+    ncn-mw# kubectl -n services exec -it cray-smd-postgres-0 -- bash
+    ```
+
+    Example output:
+
+    ```text
     Defaulting container name to postgres.
     Use 'kubectl describe pod/cray-smd-postgres-0 -n services' to see all of the containers in this pod.
 
@@ -38,20 +41,30 @@ This procedure requires administrative privileges.
     run: /etc/service/pgqd: (pid 25) 487273s
     ```
 
-2.  Log in as the postgres user.
+1. Log in as the `postgres` user.
 
     ```bash
-    root@cray-smd-postgres-0:/home/postgres# psql -U postgres
+    postgres-container# psql -U postgres
+    ```
+
+    Example output:
+
+    ```text
     psql (12.2 (Ubuntu 12.2-1.pgdg18.04+1), server 11.7 (Ubuntu 11.7-1.pgdg18.04+1))
     Type "help" for help.
 
     postgres=#
     ```
 
-3.  List the existing databases.
+1. List the existing databases.
 
-    ```bash
-    postgres=# \l
+    ```text
+    postgres# \l
+    ```
+
+    Example output:
+
+    ```text
                                           List of databases
         Name    |      Owner      | Encoding |   Collate   |    Ctype    |   Access privileges
     ------------+-----------------+----------+-------------+-------------+-----------------------
@@ -65,21 +78,31 @@ This procedure requires administrative privileges.
     (5 rows)
     ```
 
-4.  Establish a connection to the desired database.
+1. Establish a connection to the desired database.
 
     In the example below, the `hmsds` database is used.
 
-    ```bash
-    postgres=# \c hmsds
+    ```text
+    postgres# \c hmsds
+    ```
+
+    Example output:
+
+    ```text
     psql (12.2 (Ubuntu 12.2-1.pgdg18.04+1), server 11.7 (Ubuntu 11.7-1.pgdg18.04+1))
     You are now connected to database "hmsds" as user "postgres".
     hmsds=#
     ```
 
-5.  List the data types that are in the database being viewed.
+1. List the data types that are in the database being viewed.
 
-    ```bash
-    hmsds-# \dt
+    ```text
+    postgres# \dt
+    ```
+
+    Example output:
+
+    ```text
                       List of relations
      Schema |          Name           | Type  |   Owner
     --------+-------------------------+-------+-----------
@@ -105,4 +128,3 @@ This procedure requires administrative privileges.
      public | system                  | table | hmsdsuser
     (20 rows)
     ```
-
