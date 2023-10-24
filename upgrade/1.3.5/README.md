@@ -207,20 +207,20 @@ The third step stops the local Docker registry on all storage nodes.
 1. (`ncn-m001#`) Run Ceph upgrade to `v16.2.13`.
 
    ```bash
-   /usr/share/doc/csm/upgrade/scripts/ceph/ceph-upgrade-tool.py --version "v16.2.13"
+   "${CSM_DISTDIR}/docs/upgrade/scripts/ceph/ceph-upgrade-tool.py" --version "v16.2.13"
    ```
 
 1. (`ncn-m001#`) Redeploy Ceph monitoring daemons so they are using images in Nexus.
 
    ```bash
-   scp /usr/share/doc/csm/scripts/operations/ceph/redeploy_monitoring_stack_to_nexus.sh ncn-s001:/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh
+   scp "${CSM_DISTDIR}/docs/scripts/operations/ceph/redeploy_monitoring_stack_to_nexus.sh" ncn-s001:/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh
    ssh ncn-s001 "/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh"
    ```
 
 1. (`ncn-m001#`) Stop the local Docker registries on all storage nodes.
 
    ```bash
-   scp /usr/share/doc/csm/scripts/operations/ceph/disable_local_registry.sh ncn-s001:/srv/cray/scripts/common/disable_local_registry.sh
+   scp "${CSM_DISTDIR}/docs/scripts/operations/ceph/disable_local_registry.sh" ncn-s001:/srv/cray/scripts/common/disable_local_registry.sh
    ssh ncn-s001 "/srv/cray/scripts/common/disable_local_registry.sh"
    ```
 
