@@ -500,6 +500,8 @@ SSHing
 SSHKey
 standalone
 startup
+StatefulSet
+StatefulSets
 Strimzi
 Submodule
 subnetting
@@ -662,6 +664,10 @@ ASes
 - operations/network/management_network/upgrade.md
 Preconfig
 preconfig
+
+- operations/node_management/Updating_Cabinet_Routes_on_Management_NCNs.md
+# To allow Site Init
+Init
 
 - operations/power_management/Power_Off_Compute_and_IO_Cabinets.md
 lockout-tagout

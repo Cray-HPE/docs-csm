@@ -2,24 +2,25 @@
 
 Set the passwordless SSH keys for the root account and/or console of all liquid-cooled Baseboard Management Controllers \(BMCs\) on the system. This procedure will not work on BMCs for air-cooled hardware.
 
-**Warning:** If admin uses SCSD to update the SSHConsoleKey value outside of ConMan, it will disrupt the ConMan connection to the console and collection of console logs. Refer to [ConMan](../conman/ConMan.md) for more information.
+**Warning:** If administrator uses SCSD to update the `SSHConsoleKey` value outside of ConMan, it will disrupt the ConMan connection to the console and collection of console logs. Refer to [ConMan](../conman/ConMan.md) for more information.
 
 Setting up SSH keys enables administrators to view recent console messages and interact with the console device for nodes.
 
-### Prerequisites
+## Prerequisites
 
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+  See [Configure the Cray CLI](../configure_cray_cli.md).
 - This procedure requires administrative privileges.
 
-### Procedure
+## Procedure
 
-1.  Save the public SSH key for the root user.
+1. Save the public SSH key for the root user.
 
     ```bash
     ncn-w001# export SSH_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub | sed 's/[[:space:]]*$//')
     ```
 
-2.  Enable passwordless SSH to the root user of the BMCs.
+1. Enable passwordless SSH to the root user of the BMCs.
 
     Skip this step if passwordless SSH to the root user is not desired.
 
@@ -27,7 +28,7 @@ Setting up SSH keys enables administrators to view recent console messages and i
     ncn-w001# export SCSD_SSH_KEY=$SSH_PUBLIC_KEY
     ```
 
-3.  Enable passwordless SSH to the consoles on the BMCs.
+1. Enable passwordless SSH to the consoles on the BMCs.
 
     Skip this step if passwordless SSH to the consoles is not desired.
 
@@ -35,9 +36,9 @@ Setting up SSH keys enables administrators to view recent console messages and i
     ncn-w001# export SCSD_SSH_CONSOLE_KEY=$SSH_PUBLIC_KEY
     ```
 
-4.  Generate a System Configuration Service configuration via the scsd tool.
+1. Generate a System Configuration Service configuration using the `scsd` tool.
 
-    The admin must be authenticated to the Cray CLI before proceeding.
+    The administrator must be authenticated to the Cray CLI before proceeding.
 
     ```bash
     ncn-w001# cat > scsd_cfg.json <<DATA
@@ -53,16 +54,17 @@ Setting up SSH keys enables administrators to view recent console messages and i
     DATA
     ```
 
-5.  Inspect the generated scsd\_cfg.json file.
+1. Inspect the generated `scsd_cfg.json` file.
 
-    Ensure the following are true before running the command below:
+    Ensure that the following are true before running the command below:
 
-    - The component name (xname) list looks valid/appropriate
-    - The `SSHKey` and `SSHConsoleKey` settings match the desired public key
+    - The component name (xname) list looks valid/appropriate.
+    - The `SSHKey` and `SSHConsoleKey` settings match the desired public key.
+
+1. Load the configuration from the file to the System Configuration Service.
 
     ```bash
-    ncn-w001# cray scsd bmc loadcfg create scsd\_cfg.json
+    ncn-w001# cray scsd bmc loadcfg create scsd_cfg.json
     ```
 
     Check the output to verify all hardware has been set with the correct keys. Passwordless SSH to the root user and/or the consoles should now function as expected.
-
