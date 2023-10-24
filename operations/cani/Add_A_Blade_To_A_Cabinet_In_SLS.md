@@ -9,7 +9,7 @@
       --csm-api-host api-gw-service-nmn.local # initialize a session by importing SLS data to cani
     ```
 
-    > Note: SLS data may be unstable if `cani` has never been run against it, in which case `cani` will not continue.  Resolve any of the data integrity errors before running the above command again.  Known issues and solutions can be found [here](https://cray-hpe.github.io/cani/latest/troubleshooting/known_errors/).
+    > Note: SLS data may be unstable if `cani` has never been run against it, in which case `cani` will not continue. Resolve any of the data integrity errors before running the above command again. Known issues and solutions can be found [here](https://cray-hpe.github.io/cani/latest/troubleshooting/known_errors/).
 
 1. (`ncn#`|`external#`) [View available blade types and add one](https://cray-hpe.github.io/cani/latest/commands/cani_alpha_add_blade/) using suggested values.
 

@@ -1,6 +1,6 @@
 # Using `canu-inventory` with Ansible
 
-`canu-inventory` is a dynamic inventory script that queries a `sls_input_file.json` in the working directory, or an API gateway (`$SLS_API_GW`).  It can be called directly to print the information or it can be passed as an argument to `ansible-inventory`.
+`canu-inventory` is a dynamic inventory script that queries a `sls_input_file.json` in the working directory, or an API gateway (`$SLS_API_GW`). It can be called directly to print the information or it can be passed as an argument to `ansible-inventory`.
 
 - `$SLS_API_GW` and `$SLS_TOKEN` (or `$TOKEN`) must be set in order to query the API.
 - `$SWITCH_USERNAME` and `$SWITCH_PASSWORD` must be set in order to execute playbooks.
