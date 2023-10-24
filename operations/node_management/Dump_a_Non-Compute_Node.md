@@ -1,33 +1,32 @@
 # Dump a Non-Compute Node
 
-Trigger an NCN memory dump and send the dump for analysis. This procedure is helpful for debugging NCN crashes.
+Trigger a non-compute node \(NCN\) memory dump and send the dump for analysis. This procedure is helpful for debugging NCN crashes.
 
-### Prerequisites
+## Prerequisites
 
-A non-compute node \(NCN\) has crashed or an admin has triggered a node crash.
+An NCN has crashed or an administrator has triggered a node crash.
 
-### Procedure
+## Procedure
 
-1.  Force a dump on an NCN.
+1. (`ncn#`) Force a dump on an NCN.
 
     ```bash
     echo c > /proc/sysrq-trigger
     ```
 
-2.  Wait for the node to reboot.
+1. Wait for the node to reboot.
 
-    The NCN dump is stored in /var/crash is on local disk after the node is rebooted.
+    The NCN dump is stored in `/var/crash` on the local disk after the node is rebooted.
 
-3.  Collect the dump data using the System Diagnostic Utility (SDU).
+1. (`ncn#`) Collect the dump data using the System Diagnostic Utility (SDU).
 
     Refer to the "Run a Triage Collection with SDU" procedure in the SDU product stream documentation for more information about collecting dump data.
 
-    The `--start_time` command option can be customized. For example, "-1 day", "-2 hours", or a date/time string can be used. For more information on the SDU command options, use the `sdu --help` command.
+    The `--start_time` command option can be customized. For example, `-1 day`, `-2 hours`, or a date/time string can be used.
+    For more information on the SDU command options, use the `sdu --help` command.
 
     ```bash
-    sdu --scenario triage --start_time DATE_OR_TIME_STRING --end_time DATE_OR_TIME_STRING \
-    --plugin ncn.gather.nodes --plugin ncn.gather.kernel.dumps
+    sdu --scenario triage --start_time DATE_OR_TIME_STRING --end_time DATE_OR_TIME_STRING --plugin ncn.gather.nodes --plugin ncn.gather.kernel.dumps
     ```
 
-    Refer to the [https://documentation.suse.com/](https://documentation.suse.com/) for more information on memory dumps or crash dumps.
-
+    Refer to the [SUSE documentation](https://documentation.suse.com/) for more information on memory dumps or crash dumps.

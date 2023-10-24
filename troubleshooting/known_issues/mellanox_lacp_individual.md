@@ -1,8 +1,9 @@
-# Mellanox lacp-individual limitations
+# Mellanox `lacp-individual` Limitations
 
 ## Description
 
-In some failover/maintenance scenarios admins may want to shutdown one port of the bond on an NCN.  Due to the way Mellanox handles `lacp-individual` mode the ports need to be shutdown from the switch instead of the NCN.
+In some failover/maintenance scenarios, administrators may want to shut down one port of the bond on an NCN.
+Because of the way Mellanox handles `lacp-individual` mode, the ports need to be shut down from the switch instead of the NCN.
 
 ## Fix
 
