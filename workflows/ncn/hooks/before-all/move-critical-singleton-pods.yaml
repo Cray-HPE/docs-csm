@@ -52,7 +52,7 @@ spec:
 
     echo
 
-    criticalPodLabels=( "app=nexus" "app.kubernetes.io/instance=cms-ipxe" "app.kubernetes.io/name=cray-cfs-api-db" )
+    criticalPodLabels=( "app=nexus" "app.kubernetes.io/instance=cms-ipxe" "app.kubernetes.io/name=cray-dhcp-kea" "app.kubernetes.io/name=cray-cfs-api-db" )
     for label in ${criticalPodLabels[@]};do
       pods=($(kubectl get pods -A -l ${label} -o custom-columns=:.metadata.name))
       if [[ ${#pods[@]} -eq 0 ]]; then
