@@ -11,27 +11,15 @@ This procedure provides the ability to view the etcd cluster endpoint status.
 
 ## Procedure
 
-1. Report the endpoint status for all etcd clusters in a namespace.
+1. (`ncn-mw#`) Report the endpoint status for all etcd clusters in a namespace.
 
-    The following example is for the services namespace.
+    The following example is for the `services` namespace.
 
     ```bash
-    for pod in $(kubectl get pods -l app=etcd -n services \
-                         -o jsonpath='{.items[*].metadata.name}')
-    do
+    for pod in $(kubectl get pods -l app=etcd -n services -o jsonpath='{.items[*].metadata.name}'); do
         echo "### ${pod} Endpoint Status: ###"
-        kubectl -n services exec ${pod} -c etcd -- /bin/sh \
-                -c "ETCDCTL_API=3 etcdctl endpoint status -w table"
+        kubectl -n services exec ${pod} -c etcd -- /bin/sh -c "ETCDCTL_API=3 etcdctl endpoint status -w table"
     done
-    ```
-
-    Example of command being run:
-
-    ```bash
-    for pod in $(kubectl get pods -l app=etcd -n services -o \
-    jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} Endpoint Status: ###"; \
-    kubectl -n services exec ${pod} -c etcd -- /bin/sh -c \
-    "ETCDCTL_API=3 etcdctl endpoint status -w table"; done;
     ```
 
     Example output:
@@ -77,27 +65,15 @@ This procedure provides the ability to view the etcd cluster endpoint status.
     [...]
     ```
 
-2. Report the endpoint status for a singe etcd cluster in a namespace.
+1. Report the endpoint status for a singe etcd cluster in a namespace.
 
-    The following example is for the services namespace.
+    The following example is for the `services` namespace.
 
     ```bash
-    for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd -n services \
-                         -o jsonpath='{.items[*].metadata.name}')
-    do
+    for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd -n services -o jsonpath='{.items[*].metadata.name}'); do
         echo "### ${pod} Endpoint Status: ###"
-        kubectl -n services exec ${pod} -c etcd -- /bin/sh \
-                -c "ETCDCTL_API=3 etcdctl endpoint status -w table"
+        kubectl -n services exec ${pod} -c etcd -- /bin/sh -c "ETCDCTL_API=3 etcdctl endpoint status -w table"
     done
-    ```
-
-    Example of command being run:
-
-    ```bash
-    for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd -n services \
-    -o jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} Endpoint Status: \
-    ###"; kubectl -n services exec ${pod} -c etcd -- /bin/sh -c \
-    "ETCDCTL\_API=3 etcdctl endpoint status -w table"; done
     ```
 
     Example output:
@@ -121,5 +97,4 @@ This procedure provides the ability to view the etcd cluster endpoint status.
     +----------------+------------------+---------+---------+-----------+-----------+------------+
     | 127.0.0.1:2379 | 78949579ff08b422 |  3.3.22 |  139 kB |     false |        26 |      78333 |
     +----------------+------------------+---------+---------+-----------+-----------+------------+
-
     ```

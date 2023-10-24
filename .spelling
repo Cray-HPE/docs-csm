@@ -509,6 +509,8 @@ SSHing
 SSHKey
 standalone
 startup
+StatefulSet
+StatefulSets
 Strimzi
 Submodule
 subnetting

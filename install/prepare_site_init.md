@@ -433,7 +433,7 @@ with system-specific customizations.
 1. (`pit#`) Generate secrets.
 
     ```bash
-    "${SITE_INIT}/utils/secrets-seed-customizations.s"h "${SITE_INIT}/customizations.yaml"
+    "${SITE_INIT}/utils/secrets-seed-customizations.sh" "${SITE_INIT}/customizations.yaml"
     ```
 
 1. Leave the `site-init` directory.
