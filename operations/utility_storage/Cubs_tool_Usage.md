@@ -17,7 +17,7 @@
 
 ## Usage
 
-***IMPORTANT:*** The `cubs_tool.py` utility at this time will only work on `ncn-s00[1-3]`.  Only run this tool from one of those servers.
+***IMPORTANT:*** The `cubs_tool.py` utility at this time will only work on `ncn-s00[1-3]`. Only run this tool from one of those servers.
 
 (`ncn-s#`) Run the following command to see the tool usage.
 

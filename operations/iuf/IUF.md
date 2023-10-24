@@ -85,7 +85,7 @@ There are two separate workflows that utilize IUF when installing or upgrading n
 
 An activity is a user-specified unique string identifier used to group and track IUF actions, typically those needed to complete an install or upgrade using a set of product distribution files. An example of an activity
 identifier is `admin-230127`. `iuf` subcommands accept an activity as input, and the corresponding IUF output and log files are organized by that activity. The activity can be specified via an `iuf` argument or an environment
-variable; for more details, see `iuf -h`.  The activity will be created automatically upon the first invocation of `iuf` with that given activity string.
+variable; for more details, see `iuf -h`. The activity will be created automatically upon the first invocation of `iuf` with that given activity string.
 
 IUF provides operational metrics associated with an activity (e.g. the time duration of each stage executed). Users can also create annotations for an activity, e.g. to note that an operation has been paused, to note that time was
 spent debugging an issue, etc. `iuf` subcommands can be invoked to display a summary of actions, annotations, and metrics associated with an activity.

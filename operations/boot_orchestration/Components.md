@@ -70,7 +70,7 @@ Stores the session ID of the session that is currently tracking the component.
 
 ### `status`
 
-This collection of fields stores status information that the BOS operators and other users can query to determine the status of the component. Status fields should generally not be manually updated and should be left to BOS.  These fields include:
+This collection of fields stores status information that the BOS operators and other users can query to determine the status of the component. Status fields should generally not be manually updated and should be left to BOS. These fields include:
 
 * `phase` - Describes the general phase of the boot process the component is currently in, such as `powering_on`, `powering_off` and `configuring`.
 * `status` - A more specific description of where in the boot process the component is. This can be more detailed phases, such as `power_on_pending`, `power_on_called`, as well as final states such as `failed`.  
@@ -199,7 +199,7 @@ Example output:
 
 ### Update a component
 
-Update a BOS component using `xname`.  While most fields can be updated manually, users should restrict themselves to updating the `desired_state` and `enabled`.  Altering other fields such as `status` or `last_action` may result in unintended behavior.
+Update a BOS component using `xname`. While most fields can be updated manually, users should restrict themselves to updating the `desired_state` and `enabled`. Altering other fields such as `status` or `last_action` may result in unintended behavior.
 
 (`ncn-mw#`):
 

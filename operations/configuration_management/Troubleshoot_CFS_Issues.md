@@ -49,7 +49,7 @@ If set to true this will cause sessions that fail during Ansible execution to re
 kubectl -n services exec -it <pod> -c ansible -- /bin/sh
 ```
 
-Once debugging is complete users should touch the `/tmp/complete` file to complete and cleanup the session.  If this is not done, the session will remain up until the `debug_wait_time` expires.
+Once debugging is complete users should touch the `/tmp/complete` file to complete and cleanup the session. If this is not done, the session will remain up until the `debug_wait_time` expires.
 
 ## Debug playbooks
 
