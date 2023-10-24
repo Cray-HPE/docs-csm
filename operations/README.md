@@ -215,6 +215,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
   - [Automatic Configuration Management](configuration_management/Automatic_Configuration_Management.md)
   - [CFS Key Management](configuration_management/CFS_Key_Management.md)
 - [CFS Configurations](configuration_management/CFS_Configurations.md)
+- [CFS Sources](configuration_management/CFS_Sources.md)
 - [CFS Components](configuration_management/CFS_Components.md)
 - [CFS Sessions](configuration_management/CFS_Sessions.md)
   - [Create a Node Personalization CFS Session](configuration_management/Create_a_Node_Personalization_CFS_Session.md)
