@@ -13,7 +13,7 @@
 ### Get the individual firmware component from SPP ISO image
 
 * Mount or extract the SPP ISO image and locate the `contents.html` file.
-* Get the location of the file/package in the extracted/mounted ISO image from the 'contents.html' file.  Usually it will be in the folder `Packages`.
+* Get the location of the file/package in the extracted/mounted ISO image from the 'contents.html' file. Usually it will be in the folder `Packages`.
 * For example, to flash the BIOS/ROM for `DL360 Gen11` server, find DL360 in `Description` column, and then find relevant component to flash. Note the extension should be `.fwpkg` if we are flashing through ILO.
 
 ### Steps to deploy individual components
