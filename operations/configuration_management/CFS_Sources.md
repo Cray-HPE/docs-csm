@@ -101,7 +101,7 @@ Source names cannot be updated, and updating either the username or password req
    kubectl create configmap example-ca-cert --from-file=example.crt
    ```
 
-1. (`ncn-mw#`) Either create a new source, or updating an existing source with the new `configmap` map:
+1. (`ncn-mw#`) Either create a new source, or update an existing source with the new `configmap` map:
 
    ```bash
    cray cfs v3 sources create --name example \

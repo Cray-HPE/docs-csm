@@ -122,7 +122,7 @@ Example output:
 ```
 
 (`ncn-mw#`) If the branch information does not need to be stored, use `--update-branches`.
-This is useful in cases where the branch is being provided to allow CFS to find the correct commit, but the branch should not be stored to avoid accidentally updating the commit id in the future.
+This is useful in cases where the branch is being provided to allow CFS to find the correct commit, but the branch should not be stored to avoid accidentally updating the commit ID in the future.
 
 ```bash
 cat configurations-example.json
