@@ -84,6 +84,11 @@ yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-hmn.iss
 yq d -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.shasta-cmn'
 yq d -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.keycloak-cmn'
 
+# cray-spire
+if [[ "$(yq r "$c" "spec.kubernetes.services.spire.server.tokenService.enableXNameWorkloads")" == "true" ]]; then
+  yq w -i "$c" 'spec.kubernetes.services.cray-spire.server.tokenService.enableXNameWorkloads' 'true'
+fi
+
 # cray-istio
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.hmnlb.{{ network.dns.external }},auth.hmnlb.{{ network.dns.external }},hmcollector.hmnlb.{{ network.dns.external }}'
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' 'istio-ingressgateway-cmn.istio-system.svc.cluster.local'
