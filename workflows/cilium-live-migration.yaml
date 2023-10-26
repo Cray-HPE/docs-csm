@@ -1,0 +1,156 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  labels:
+    target-ncns: ncn-m001.ncn-m002.ncn-m003.ncn-w001.ncn-w002.ncn-w003
+  name: cilium-live-migration-test2
+spec:
+  podMetadata:
+    annotations:
+      sidecar.istio.io/inject: "false"    
+  volumes:
+    - name: ssh
+      hostPath:
+        path: /root/.ssh
+        type: Directory
+    - name: podinfo
+      downwardAPI:
+        items:
+          - path: "labels"
+            fieldRef:
+              fieldPath: metadata.labels
+          - path: "annotations"
+            fieldRef:
+              fieldPath: metadata.annotations
+  # schedule workflow jobs asap
+  priorityCLassName: system-node-critical
+  # Pod GC strategy must be one of the following:
+  # * OnPodCompletion - delete pods immediately when pod is completed (including errors/failures)
+  # * OnPodSuccess - delete pods immediately when pod is successful
+  # * OnWorkflowCompletion - delete pods when workflow is completed
+  # * OnWorkflowSuccess - delete pods when workflow is successful
+  podGC:
+    strategy: OnPodSuccess 
+  entrypoint: main
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: cilium-deploy
+            templateRef:
+              name: deploy-cilium
+              template: main
+            arguments:
+              parameters:
+              - name: dryRun
+                value: "false"
+          - name: cilium-migrate-ncn-m001
+            dependencies:
+              - cilium-deploy
+            templateRef:
+              name: migrate-cilium 
+              template: main
+            arguments:
+              parameters:
+              - name: targetNcn
+                value: ncn-m001 
+              - name: dryRun
+                value: "false"
+          - name: cilium-migrate-ncn-m002
+            dependencies:
+              - cilium-migrate-ncn-m001
+            templateRef:
+              name: migrate-cilium 
+              template: main
+            arguments:
+              parameters:
+              - name: targetNcn
+                value: ncn-m002
+              - name: dryRun
+                value: "false"
+          - name: cilium-migrate-ncn-m003
+            dependencies:
+              - cilium-migrate-ncn-m002
+            templateRef:
+              name: migrate-cilium 
+              template: main
+            arguments:
+              parameters:
+              - name: targetNcn
+                value: ncn-m003
+              - name: dryRun
+                value: "false"
+          - name: cilium-migrate-ncn-w001
+            dependencies:
+              - cilium-migrate-ncn-m003
+            templateRef:
+              name: migrate-cilium 
+              template: main
+            arguments:
+              parameters:
+              - name: targetNcn
+                value: ncn-w001
+              - name: dryRun
+                value: "false"
+          - name: cilium-migrate-ncn-w002
+            dependencies:
+              - cilium-migrate-ncn-w001
+            templateRef:
+              name: migrate-cilium 
+              template: main
+            arguments:
+              parameters:
+              - name: targetNcn
+                value: ncn-w002
+              - name: dryRun
+                value: "false"
+          - name: cilium-migrate-ncn-w003
+            dependencies:
+              - cilium-migrate-ncn-w002
+            templateRef:
+              name: migrate-cilium 
+              template: main
+            arguments:
+              parameters:
+              - name: targetNcn
+                value: ncn-w003
+              - name: dryRun
+                value: "false"
+          - name: post-migrate-cilium
+            dependencies:
+              - cilium-migrate-ncn-m001
+              - cilium-migrate-ncn-m002
+              - cilium-migrate-ncn-m003
+              - cilium-migrate-ncn-w001
+              - cilium-migrate-ncn-w002
+              - cilium-migrate-ncn-w003
+            templateRef:
+              name: post-migrate-cilium
+              template: main
+            arguments:
+              parameters:
+              - name: dryRun
+                value: "false"
