@@ -46,10 +46,10 @@ NMN IP Address to scrape metrics from.
 The most common configuration parameters are specified in the following table. They must be set in the `customizations.yaml` file
 under the `spec.kubernetes.services.cray-sysmgmt-health.uanNodeExporter` service definition.
 
-| Customization            | Default      | Description                                                                         |
-|--------------------------|--------------|-------------------------------------------------------------------------------------|
-| `enabled`                | `false`       | Enables `service` for UAN NODE Exporter \(default chart value is `false`\)         |
-| `endpoints`              | `10.252.1.13` | list of UAN NMN IP Address to monitor SMARTMON data                              |
+| Customization | Default       | Description                                                                |
+|---------------|---------------|----------------------------------------------------------------------------|
+| `enabled`     | `false`       | Enables `service` for UAN NODE Exporter \(default chart value is `false`\) |
+| `endpoints`   | `10.252.1.13` | list of UAN NMN IP Address to monitor SMARTMON data                        |
 
 For a complete set of available parameters, consult the `values.yaml` file for the `cray-sysmgmt-health` chart.
 
