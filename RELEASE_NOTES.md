@@ -5,6 +5,7 @@
 ## New
 
 * v1 of Power Control Service (PCS) is active.
+* The v3 CFS API is now available, including support for paging, external repository "sources", and new options for debugging.
 
 ### Monitoring
 
