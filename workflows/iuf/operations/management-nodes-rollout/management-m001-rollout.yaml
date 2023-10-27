@@ -41,7 +41,7 @@ spec:
           help: "Count of step execution by result status"
           labels:
             - key: "opname"
-              value: "management-two-master-nodes-rollout"
+              value: "management-m001-rollout"
             - key: stage
               value: "management-nodes-rollout"
             - key: type
@@ -208,7 +208,7 @@ spec:
             help: "Duration gauge by operation name in seconds"
             labels:
               - key: "opname"
-                value: "management-two-master-nodes-rollout"
+                value: "management-m001-rollout"
               - key: stage
                 value: "management-nodes-rollout"
               - key: type
