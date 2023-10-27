@@ -548,7 +548,7 @@ successfully.
    > - This provides `iuf`, a command line interface to the [Install and Upgrade Framework](../operations/iuf/IUF.md).
 
    ```bash
-   zypper --no-gpg-checks install -y canu craycli csm-testing hpe-csm-goss-package iuf-cli
+   zypper --no-gpg-checks install -y canu craycli csm-testing hpe-csm-goss-package iuf-cli platform-utils
    ```
 
 ## 5 Validate the LiveCD
