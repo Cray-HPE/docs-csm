@@ -801,12 +801,16 @@ a User Access Instance \(UAI\) using the `cray` command. Users can also transfer
 
 ## System Admin Toolkit (SAT)
 
-The System Admin Toolkit (SAT) is a command-line interface that can assist administrators with common tasks, such as
-troubleshooting and querying information about the HPE Cray EX System, system boot and shutdown, and replacing hardware
-components. In CSM 1.3 and newer, the `sat` command is available on the Kubernetes NCNs without installing the SAT
-product stream.
+The System Admin Toolkit (SAT) is a command-line interface that can assist administrators with
+common tasks, such as troubleshooting and querying information about the HPE Cray EX System, system
+boot and shutdown, replacing hardware components, and more. In CSM 1.3 and newer, the `sat` command
+is available on the Kubernetes NCNs without installing the SAT product stream.
 
-- [System Admin Toolkit in CSM](sat/sat_in_csm.md)
+Starting in CSM 1.6.0, SAT is fully included in CSM. There is no longer a separate SAT product
+stream to install. SAT 2.6 releases, which accompanied CSM 1.5, are the last releases of SAT as a
+separate product.
+
+- [System Admin Toolkit in CSM](system_admin_toolkit/sat_in_csm.md)
 
 ## Install and Upgrade Framework (IUF)
 
