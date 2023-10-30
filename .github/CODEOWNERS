@@ -74,7 +74,7 @@ Jenkinsfile.github                                       @Cray-HPE/csm-devops
 /operations/network/                                     @Cray-HPE/management-network
 
 # SAT Items
-/operations/sat                                          @Cray-HPE/system-admin-toolkit-admin
+/operations/system_admin_toolkit                         @Cray-HPE/system-admin-toolkit-admin
 
 # IUF Items
 /operations/iuf/                                         @Cray-HPE/IUF
