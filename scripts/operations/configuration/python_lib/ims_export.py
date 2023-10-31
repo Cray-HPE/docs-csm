@@ -36,43 +36,55 @@ from . import common
 from .ims_import_export import ExportedData, EXPORTED_DATA_FILENAME
 
 
-def do_export(ignore_running_jobs: bool, include_deleted: bool, exclude_linked_artifacts: bool,
+def do_export(ignore_running_jobs: bool, include_deleted: bool, exclude_linked_artifacts: bool, no_tar: bool,
               target_directory: str) -> Tuple[ExportedData, str]:
     """
     1. Creates a directory for the exported data
     2. Collects current IMS data and writes it to a file (including data for the deleted resources, if specified)
     3. If specified, downloads the associated S3 artifacts
-    4. Creates a tarfile containing all of this
-    5. Returns the data exported from IMS and the path to the tarfile
+    4. If no_tar and exclude_linked_artifacts are both False, creates a tarfile containing all of this
+    5. Returns the data exported from IMS and the path to the tarfile (if no_tar and exclude_linked_artifacts are
+       False) or the root of the exported data directory (if no_tar or exclude_linked_artifacts is True)
     """
     # Create output directory
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S.%f")
     outdir = tempfile.mkdtemp(prefix=f"export-ims-data-{timestamp}-", dir=target_directory)
 
-    file_list = []
+    # Do not create a tar archive if explicitly told not to, or if we are omitting linked artifacts.
+    create_tarfile = not no_tar and not exclude_linked_artifacts
+
+    if create_tarfile:
+        file_list = []
     if exclude_linked_artifacts:
         exported_data = ExportedData.load_from_system(ignore_running_jobs=ignore_running_jobs,
                                                       include_deleted=include_deleted, s3_directory=None)
     else:
         exported_data = ExportedData.load_from_system(ignore_running_jobs=ignore_running_jobs,
                                                       include_deleted=include_deleted, s3_directory=outdir)
-        file_list.extend(exported_data.s3_data.downloaded_artifact_relpaths)
+        if create_tarfile:
+            file_list.extend(exported_data.s3_data.downloaded_artifact_relpaths)
 
     # Write exported data to a file
     exported_data_file = os.path.join(outdir, EXPORTED_DATA_FILENAME)
     with open(exported_data_file, "wt") as jsonfile:
         json.dump(exported_data.jsondict, jsonfile)
-    file_list.append(EXPORTED_DATA_FILENAME)
 
-    tarfile_path = tempfile.mkstemp(prefix=f"export-ims-data-{timestamp}-", suffix=".tar", dir=target_directory)[1]
-    # Create tar archive of all files
-    write_tarfile(tarfile_path, outdir, file_list)
+    if create_tarfile:
+        file_list.append(EXPORTED_DATA_FILENAME)
 
-    logging.info("Data saved to tar archive: %s", tarfile_path)
-    # Now we should be able to remove outdir
-    logging.debug("Removing directory %s", outdir)
-    os.rmdir(outdir)
-    return exported_data, tarfile_path
+        tarfile_path = tempfile.mkstemp(prefix=f"export-ims-data-{timestamp}-", suffix=".tar", dir=target_directory)[1]
+        # Create tar archive of all files
+        write_tarfile(tarfile_path, outdir, file_list)
+
+        logging.info("Data saved to tar archive: %s", tarfile_path)
+
+        # Now we should be able to remove outdir
+        logging.debug("Removing directory %s", outdir)
+        os.rmdir(outdir)
+        return exported_data, tarfile_path
+
+    logging.info("Data saved in directory: %s", outdir)
+    return exported_data, outdir
 
 
 def write_tarfile(tarfile_path: str, basedir: str, file_list: List[str]) -> None:
