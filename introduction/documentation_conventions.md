@@ -14,6 +14,8 @@ This outlines conventions and standards that are used in this documentation.
     - [`chroot` example](#chroot-example)
     - [`kubectl exec` example](#kubectl-exec-example)
     - [Combined `ssh` and `chroot` example](#combined-ssh-and-chroot-example)
+    - [`sat bash` example](#sat-bash-example)
+  - [Command prompts in Python virtual environments](#command-prompts-in-python-virtual-environments)
   - [Directory path in command prompt](#directory-path-in-command-prompt)
 - [Ability to pause and resume procedures](#ability-to-pause-and-resume-procedures)
   - [Bad example](#bad-example)
@@ -115,8 +117,9 @@ the documentation of CSM 1.2 and earlier.
 
 ### Command prompts inside new shells
 
-Some commands open new shells when they are executed (for example, `chroot`, `kubectl exec`, and `ssh`). When these commands are used,
-the prompt changes to indicate that subsequent commands are to be run inside the new shell.
+Some commands open new shells when they are executed (for example, `chroot`, `kubectl exec`, `ssh`,
+and `sat bash`). When these commands are used, the prompt changes to indicate that subsequent
+commands are to be run inside the new shell.
 
 #### `chroot` example
 
@@ -178,6 +181,42 @@ changes to indicate that it is inside this environment. This example uses `$PORT
     ```bash
     echo $PS1
     ```
+
+#### `sat bash` example
+
+The `sat bash` command opens a shell inside the `cray-sat` container image. The shell prompt changes
+to indicate the ID of the Podman container where the shell is executing.
+
+1. (`ncn-m#`) Enter a SAT shell:
+
+   ```bash
+   sat bash
+   ```
+
+1. (`(CONTAINER_ID) sat-container#`) Execute the `sat status` command inside the shell in the
+   `cray-sat` container started by `sat bash`:
+
+   ```bash
+   sat status
+   ```
+
+### Command prompts in Python virtual environments
+
+Some documentation may involve running commands inside a Python virtual environment. When a Python
+virtual environment is activated, the command prompt will change to reflect the active virtual
+environment.
+
+1. (`user@hostname>`) Activate the Python virtual environment.
+
+   ```bash
+   . venv/bin/activate
+   ```
+
+1. (`(venv) user@hostname>`) Open the Python 3 interpreter inside the virtual environment.
+
+   ```bash
+   python3
+   ```
 
 ### Directory path in command prompt
 
