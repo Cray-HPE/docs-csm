@@ -1,64 +1,67 @@
 # Classifier Policies
 
-Classifier policies allow a network administrator to define sets of rules based on network traffic addressing or other header content and use these rules to restrict or alter the passage of traffic through the switch.
+Classifier policies allow a network administrator to define sets of rules based on network traffic addressing or other header content and use these rules to restrict or alter the
+passage of traffic through the switch.
 
 Choosing the rule criteria is called classification, and one such rule, or list, is called a policy.
 
-Classification is achieved by creating a traffic class. There are three types of classes – MAC, IPv4, and IPv6 – which are each focused on relevant frame/packet characteristics. Classes can be configured to match or ignore almost any frame or packet header field.
+Classification is achieved by creating a traffic class. There are three types of classes – MAC, IPv4, and IPv6 – which are each focused on relevant frame/packet characteristics.
+Classes can be configured to match or ignore almost any frame or packet header field.
 
-A policy contains one or more policy entries which are listed according to priority by sequence number. A single policy entry contains a class and corresponding policy action. Policy action is taken on traffic matched by its corresponding class.
+A policy contains one or more policy entries which are listed according to priority by sequence number. A single policy entry contains a class and corresponding policy action.
+Policy action is taken on traffic matched by its corresponding class.
 
-## Configuration Commands
+## Configuration commands
 
-Create a class:
+* Create a class
 
-```
-switch(config)# class <all|ip|ip6|mac> NAME
-```
+    ```console
+    switch(config)# class <all|ip|ip6|mac> NAME
+    ```
 
-Configure a class:
+* Configure a class
 
-```
-switch(config-class-ip)# [SEQ] <match|ignore> <any|PROTOCOL> <any|SRC-IP> <any|DST-IP> switch(config-class-ip)# [SEQ] comment TEXT
-```
+    ```console
+    switch(config-class-ip)# [SEQ] <match|ignore> <any|PROTOCOL> <any|SRC-IP> <any|DST-IP> switch(config-class-ip)# [SEQ] comment TEXT
+    ```
 
-Create a policy:
+* Create a policy
 
-```
-switch(config)# policy NAME
-```
+    ```console
+    switch(config)# policy NAME
+    ```
 
-Configure a policy:
+* Configure a policy
 
-```
-switch(config-policy)#  [SEQ] class <ip|ipv6|mac> NAME [action [ip-precedence VALUE|pcp VALUE|dsc VALUE|cir kbps RATE cbs BYTES exceed drop|mirror MIRROR|drop] ...]
-```
+    ```console
+    switch(config-policy)# [SEQ] class <ip|ipv6|mac> NAME [action [ip-precedence VALUE|pcp VALUE|dsc VALUE|cir kbps RATE cbs BYTES exceed drop|mirror MIRROR|drop] ...]
+    ```
 
-Apply a policy:
+* Apply a policy
 
-```
-switch(config-if)# apply policy NAME [in|routed-in]
-switch(config-vlan)# apply policy NAME [in|routed-in]
-switch(config-tunnel)# apply policy NAME [in|routed-in]
-```
+    ```console
+    switch(config-if)# apply policy NAME [in|routed-in]
+    switch(config-vlan)# apply policy NAME [in|routed-in]
+    switch(config-tunnel)# apply policy NAME [in|routed-in]
+    ```
 
-Show commands to validate functionality: :
+* Show commands to validate functionality
 
-```
-switch# show class [ip|ipv6|mac] [NAME]
-switch# show policy [NAME]
-```
+    ```console
+    switch# show class [ip|ipv6|mac] [NAME]
+    switch# show policy [NAME]
+    ```
 
-## Expected Results
+## Expected results
 
 1. Administrators can configure a class
-2. Administrators can configure a policy
-3. Administrators can apply a policy to an interface
-4. The output of the `show` commands is correct
+1. Administrators can configure a policy
+1. Administrators can apply a policy to an interface
+1. The output of the `show` commands is correct
 
-## Example Output
+## Example
 
-```text
+```console
 switch(config)# class ip BROWSER
 switch(config-class-ip)# match tcp any any eq 80
 switch(config-class-ip)# match tcp any any eq 8080
@@ -144,5 +147,3 @@ Interface 1/1/1* (in):
 * policy statistics are shared among all applied interfaces
   use 'policy NAME copy' to create a uniquely-named policy
 ```
-
-[Back to Index](../index.md)
