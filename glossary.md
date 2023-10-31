@@ -36,6 +36,7 @@ Glossary of terms used in CSM documentation.
 * [Heartbeat Tracker Daemon (HBTD)](#heartbeat-tracker-daemon-hbtd)
 * [High Speed Network (HSN)](#high-speed-network-hsn)
 * [Image Management Service (IMS)](#image-management-service-ims)
+* [JSON Web Token (JWT)](#json-web-token-jwt)
 * [Kubernetes NCNs](#kubernetes-ncns)
 * [Management Cabinet](#management-cabinet)
 * [Management Nodes](#management-nodes)
@@ -44,11 +45,15 @@ Glossary of terms used in CSM documentation.
 * [NIC Mezzanine Card (NMC)](#nic-mezzanine-card-nmc)
 * [Node Controller (nC)](#node-controller-nc)
 * [Node Management Network (NMN)](#node-management-network-nmn)
+* [Node Memory Dump (NMD)](#node-memory-dump-nmd)
 * [Non-Compute Node (NCN)](#non-compute-node-ncn)
+* [Online Certificate Status Protocol (OCSP)](operations/security_and_authentication/Public_Key_Infrastructure_PKI.md#revocation-lists-and-online-certificate-status-protocol-ocsp)
 * [Olympus Cabinet](#olympus-cabinet)
+* [Parallel Application Launch Service (PALS)](#parallel-application-launch-service-pals)
 * [Power Distribution Unit (PDU)](#power-distribution-unit-pdu)
 * [Pre-Install Toolkit (PIT)](#pre-install-toolkit-pit)
   * [LiveCD](#livecd)
+* [Public Key Infrastructure (PKI)](operations/security_and_authentication/Public_Key_Infrastructure_PKI.md)
 * [Rack-Mounted CDU](#rack-mounted-cdu)
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
 * [Redfish Translation Service (RTS)](#redfish-translation-service)
@@ -73,6 +78,7 @@ Glossary of terms used in CSM documentation.
 * [User Access Node (UAN)](#user-access-node-uan)
 * [User Access Service (UAS)](#user-access-service-uas)
 * [Version Control Service (VCS)](#version-control-service-vcs)
+* [Virtual Network Identifier Daemon (VNID)](#virtual-network-identifier-daemon-vnid)
 * [xname](#xname)
 
 ## Ansible Execution Environment (AEE)
@@ -400,6 +406,10 @@ configuration of the image root. These images are bootable on [compute nodes](#c
 
 For more information, see [Image Management](operations/image_management/Image_Management.md).
 
+## JSON Web Token (JWT)
+
+For more information, see [JSON Web Tokens (JWTs)](operations/security_and_authentication/System_Security_and_Authentication.md#json-web-tokens-jwts).
+
 ## Kubernetes NCNs
 
 The Kubernetes [NCNs](#non-compute-node-ncn) are the [management nodes](#management-nodes) which are known as Kubernetes master nodes
@@ -469,6 +479,10 @@ typically 10GbE Ethernet LAN-on-motherboard (LOM) interfaces. This network suppo
 node boot protocols (DHCP/TFTP/HTTP), in-band telemetry and event exchange, and
 general access to management REST APIs.
 
+## Node Memory Dump (NMD)
+
+The Node Memory Dump service is used to interact with node memory dumps.
+
 <a name="non-compute-node"></a>
 
 ## Non-Compute Node (NCN)
@@ -486,6 +500,10 @@ cabinets will also have at least one [River cabinet](#river-cabinet) to house [n
 such as [management nodes](#management-nodes), management network switches, storage nodes, [application nodes](#application-node-an),
 and possibly other air-cooled [compute nodes](#compute-node-cn). Some software and documentation refers to
 the Olympus cabinet as a [Mountain cabinet](#mountain-cabinet).
+
+## Parallel Application Launch Service (PALS)
+
+Parallel Application Launch Service is a Cray product that may be installed on CSM systems.
 
 <a name="power-distribution-unit"></a>
 
@@ -725,6 +743,10 @@ web interface for repository management, pull requests, and a visual view of all
 and organizations.
 
 For more information, see [Version Control Service](operations/configuration_management/Version_Control_Service_VCS.md).
+
+## Virtual Network Identifier Daemon (VNID)
+
+The Virtual Network Identifier Daemon is part of the Cray Slingshot product that may be installed on CSM systems.
 
 ## xname
 
