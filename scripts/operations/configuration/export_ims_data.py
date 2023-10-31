@@ -65,12 +65,19 @@ def parse_args() -> argparse.Namespace:
 
     parser.add_argument(
         '--exclude-linked-artifacts', action='store_true',
-        help="Exclude linked recipe and image S3 artifacts (included by default)"
+        help="Exclude linked recipe and image S3 artifacts (included by default). This implies --no-tar"
+    )
+
+    parser.add_argument(
+        '--no-tar', action='store_true',
+        help=("Do not create a tar archive of the exported data. This is the default behavior if "
+              "--exclude-linked-artifacts is specified. Otherwise, by default the individual export files are deleted "
+              "after being added to a tar archive")
     )
 
     parser.add_argument(
         'target_directory', nargs='?', default=os.getcwd(), type=args.readable_directory,
-        help='Directory in which to create IMS export archive'
+        help='Directory in which to create IMS export'
     )
 
     return parser.parse_args()
@@ -83,8 +90,10 @@ def main():
                         format='%(asctime)s %(levelname)-8s %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
     try:
-        ims_export.do_export(parsed_args.ignore_running_jobs, parsed_args.include_deleted,
-                             parsed_args.exclude_linked_artifacts, parsed_args.target_directory)
+        ims_export.do_export(ignore_running_jobs=parsed_args.ignore_running_jobs,
+                             include_deleted=parsed_args.include_deleted,
+                             exclude_linked_artifacts=parsed_args.exclude_linked_artifacts, no_tar=parsed_args.no_tar,
+                             target_directory=parsed_args.target_directory)
     except ims_import_export.ImsJobsRunning:
         LOGGER.info("Wait until jobs are completed or see script usage for override option")
         common.print_err_exit("Aborted export due to incomplete jobs")
