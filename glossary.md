@@ -4,6 +4,7 @@ Glossary of terms used in CSM documentation.
 
 * [Ansible Execution Environment (AEE)](#ansible-execution-environment-aee)
 * [Application Node (AN)](#application-node-an)
+* [ARA Records Ansible (ARA)](#ara-records-ansible-ara)
 * [Baseboard Management Controller (BMC)](#baseboard-management-controller-bmc)
 * [Blade Switch Controller (sC)](#blade-switch-controller-sc)
 * [Boot Orchestration Service (BOS)](#boot-orchestration-service-bos)
@@ -38,6 +39,7 @@ Glossary of terms used in CSM documentation.
 * [High Speed Network (HSN)](#high-speed-network-hsn)
 * [Image Management Service (IMS)](#image-management-service-ims)
 * [Install and Upgrade Framework (IUF)](#install-and-upgrade-framework-iuf)
+* [JSON Web Token (JWT)](#json-web-token-jwt)
 * [Management Nodes](#management-nodes)
 * [Mountain Cabinet](#mountain-cabinet)
 * [Mountain Endpoint Discovery Service (MEDS)](#mountain-endpoint-discovery-service-meds)
@@ -45,13 +47,17 @@ Glossary of terms used in CSM documentation.
 * [NIC Mezzanine Card (NMC)](#nic-mezzanine-card-nmc)
 * [Node Controller (nC)](#node-controller-nc)
 * [Node Management Network (NMN)](#node-management-network-nmn)
+* [Node Memory Dump (NMD)](#node-memory-dump-nmd)
 * [Non-Compute Node (NCN)](#non-compute-node-ncn)
+* [Online Certificate Status Protocol (OCSP)](operations/security_and_authentication/Public_Key_Infrastructure_PKI.md#revocation-lists-and-online-certificate-status-protocol-ocsp)
 * [Olympus Cabinet](#olympus-cabinet)
+* [Parallel Application Launch Service (PALS)](#parallel-application-launch-service-pals)
 * [Power Control Service (PCS)](#power-control-service-pcs)
 * [Power Distribution Unit (PDU)](#power-distribution-unit-pdu)
 * [Pre-Install Toolkit (PIT)](#pre-install-toolkit-pit)
   * [LiveCD](#livecd)
   * [RemoteISO](#remoteiso)
+* [Public Key Infrastructure (PKI)](operations/security_and_authentication/Public_Key_Infrastructure_PKI.md)
 * [Rack-Mounted CDU](#rack-mounted-cdu)
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
 * [Redfish Translation Service (RTS)](#redfish-translation-service-rts)
@@ -77,6 +83,7 @@ Glossary of terms used in CSM documentation.
 * [User Access Node (UAN)](#user-access-node-uan)
 * [User Access Service (UAS)](#user-access-service-uas)
 * [Version Control Service (VCS)](#version-control-service-vcs)
+* [Virtual Network Identifier Daemon (VNID)](#virtual-network-identifier-daemon-vnid)
 * [xname](#xname)
 
 ## Ansible Execution Environment (AEE)
@@ -97,6 +104,10 @@ is the [User Access Node (UAN)](#user-access-node-uan), but different systems ma
 * data movers between two different network file systems
 * visualization servers
 * other special-purpose nodes
+
+## ARA Records Ansible (ARA)
+
+For more information, see [ARA Records Ansible (ARA)](operations/configuration_management/Ansible_Log_Collection.md#ara-records-ansible-ara).
 
 ## Baseboard Management Controller (BMC)
 
@@ -379,6 +390,10 @@ systems. It automates large portions of the install/upgrade processes in order t
 
 The IUF has an API, but it is only intended to be used by the IUF CLI, not directly by administrators.
 
+## JSON Web Token (JWT)
+
+For more information, see [JSON Web Tokens (JWTs)](operations/security_and_authentication/System_Security_and_Authentication.md#json-web-tokens-jwts).
+
 ## Management Nodes
 
 The management nodes are a type of [Non-Compute Node (NCN)](#non-compute-node-ncn). Management nodes
@@ -431,6 +446,10 @@ typically 10GbE Ethernet LAN-on-motherboard (LOM) interfaces. This network suppo
 node boot protocols (DHCP/TFTP/HTTP), in-band telemetry and event exchange, and
 general access to management REST APIs.
 
+## Node Memory Dump (NMD)
+
+The Node Memory Dump service is used to interact with node memory dumps.
+
 ## Non-Compute Node (NCN)
 
 The non-compute nodes are in the management-plane, these nodes serve infrastructure for microservices
@@ -446,6 +465,10 @@ cabinets will also have at least one [River cabinet](#river-cabinet) to house [n
 such as [management nodes](#management-nodes), management network switches, storage nodes, [application nodes](#application-node-an),
 and possibly other air-cooled [compute nodes](#compute-node-cn). Some software and documentation refers to
 the Olympus cabinet as a [Mountain cabinet](#mountain-cabinet).
+
+## Parallel Application Launch Service (PALS)
+
+Parallel Application Launch Service is a Cray product that may be installed on CSM systems.
 
 ## Power Control Service (PCS)
 
@@ -676,6 +699,10 @@ web interface for repository management, pull requests, and a visual view of all
 and organizations.
 
 For more information, see [Version Control Service](operations/configuration_management/Version_Control_Service_VCS.md).
+
+## Virtual Network Identifier Daemon (VNID)
+
+The Virtual Network Identifier Daemon is part of the Cray Slingshot product that may be installed on CSM systems.
 
 ## xname
 
