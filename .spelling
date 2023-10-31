@@ -111,6 +111,7 @@ centers
 Ceph
 Cephadm
 CephFS
+Cert-manager
 CFS
 CFS-Batcher
 CFS-BOA
@@ -281,6 +282,7 @@ Jetstack
 Jinja
 Jinja2
 JViewer
+JWTs
 Kafka
 Kea
 Keepalived
@@ -610,6 +612,7 @@ wireshark
 workarea
 writable
 X.509
+x.509
 XL645d
 XL675d
 xname
@@ -693,11 +696,17 @@ ASes
 Preconfig
 preconfig
 
+- operations/node_management/Configuration_of_NCN_Bonding.md
+NetPlan
+
 - operations/power_management/Power_Off_Compute_and_IO_Cabinets.md
 lockout-tagout
 
 - operations/README.md
 Alerta
+
+- operations/security_and_authentication/API_Authorization.md
+Replicant
 
 - operations/security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md
 # To allow System Admin Toolkit
