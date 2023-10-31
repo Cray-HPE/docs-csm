@@ -62,7 +62,8 @@ spec:
             valueFrom:
               path: "{{inputs.parameters.script_stdout_file}}"
       script:
-        image: artifactory.algol60.net/sat-docker/stable/cray-sat:3.25.6
+        # Note that the tag is replaced at install time by update_tags.sh
+        image: artifactory.algol60.net/csm-docker/stable/cray-sat:3.26.0
         command: [sh]
         source: |
           #!/bin/sh
