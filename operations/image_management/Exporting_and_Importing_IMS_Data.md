@@ -71,7 +71,7 @@ There are three types of imports possible:
 > - Run the script with the `--help` argument to see full usage options.
 
 ```bash
-/usr/share/doc/csm/scripts/operations/configuration/import_ims_data.py -f <path-to-tar file> <add|overwrite|update>
+/usr/share/doc/csm/scripts/operations/configuration/import_ims_data.py -f <path-to-tar file> <add|overwrite|soft_overwrite|update>
 ```
 
 On success, the final lines of output will resemble the following:
