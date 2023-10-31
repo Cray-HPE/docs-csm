@@ -116,7 +116,8 @@ def do_import(script_args: argparse.Namespace) -> None:
     # Backup current IMS data
     LOGGER.info("Performing pre-import backup of IMS data to directory '%s'", script_args.backup_dir)
     current_data, _ = ims_export.do_export(ignore_running_jobs=script_args.ignore_running_jobs, include_deleted=True,
-                                           exclude_linked_artifacts=True, target_directory=script_args.backup_dir)
+                                           exclude_linked_artifacts=True, no_tar=True,
+                                           target_directory=script_args.backup_dir)
 
     # We pass ignore_running_jobs = True here because we have already checked this above, if applicable
     import_options = ims_import.ImportOptions(tarfile_dir=tarfile_dir,
