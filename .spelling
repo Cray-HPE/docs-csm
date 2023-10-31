@@ -109,6 +109,7 @@ centers
 Ceph
 Cephadm
 CephFS
+Cert-manager
 CFS
 CFS-Batcher
 CFS-BOA
@@ -276,6 +277,7 @@ Jetstack
 Jinja
 Jinja2
 JViewer
+JWTs
 Kafka
 Kea
 Keepalived
@@ -596,6 +598,7 @@ wireshark
 workarea
 writable
 X.509
+x.509
 XL645d
 XL675d
 xname
@@ -650,12 +653,18 @@ ExternalDNS
 - operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
 LoadBalancer
 
+- operations/node_management/Configuration_of_NCN_Bonding.md
+NetPlan
+
 - operations/node_management/Updating_Cabinet_Routes_on_Management_NCNs.md
 # To allow Site Init
 Init
 
 - operations/power_management/Power_Off_Compute_and_IO_Cabinets.md
 lockout-tagout
+
+- operations/security_and_authentication/API_Authorization.md
+Replicant
 
 - operations/security_and_authentication/Manage_Sealed_Secrets.md
 # To allow Site Init

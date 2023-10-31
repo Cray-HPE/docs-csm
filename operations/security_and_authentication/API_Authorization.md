@@ -1,125 +1,92 @@
 # API Authorization
 
-Authorization for REST API calls is only done at the API gateway. This is facilitated through policy checks to the Open Policy Agent \(OPA\). Every REST API call into the system is sent to the OPA to make an authorization decision. The decision is based on the Authenticated JSON Web Token \(JWT\) passed into the request.
+Authorization for REST API calls is only done at the API gateway. This is facilitated through policy checks to the Open Policy Agent \(OPA\).
+Every REST API call into the system is sent to the OPA to make an authorization decision.
+The decision is based on the authenticated [JSON Web Token (JWT)](../../glossary.md#json-web-token-jwt) passed into the request.
 
-The following is a list of available personas and the supported REST API endpoints for each:
+This page lists the available personas and the supported REST API endpoints for each.
 
--   **`admin`**
+- [`admin`](#admin)
+- [`user`](#user)
+- [`system-pxe`](#system-pxe)
+- [`system-compute`](#system-compute)
+- [`wlm`](#wlm)
 
-    Authorized for every possible REST API endpoint.
+## `admin`
 
--   **`user`**
+Authorized for every possible REST API endpoint.
 
-    Authorized for a subset of endpoints to allow users to create and use User Access Instances \(UAI\), run jobs, view job results, and use capsules.
+## `user`
 
-    REST API endpoints for the `user` persona:
+Authorized for a subset of endpoints to allow users to create and use [User Access Instances (UAIs)](../../glossary.md#user-access-instance-uai),
+run jobs, view job results, and use capsules.
 
-    ```screen
-    # UAS
-    {"method": "GET", "path": `^/apis/uas-mgr/v1/$`}, # Get UAS API Version
-    {"method": "GET", "path": `^/apis/uas-mgr/v1/uas$`}, # List UAIs for current user
-    {"method": "POST", "path": `^/apis/uas-mgr/v1/uas$`}, # Create a UAI for current user
-    {"method": "DELETE", "path": `^/apis/uas-mgr/v1/uas$`}, # Delete a UAI(s) for current user
-    {"method": "GET", "path": `^/apis/uas-mgr/v1/images$`}, # List Available UAI Images
-    {"method": "GET", "path": `^/apis/uas-mgr/v1/mgr-info$`}, # Get UAS Service Version
-    # PALS
-    {"method": "GET", "path": `^/apis/pals/v1/.*$`}, # All PALs API Calls - GET
-    {"method": "PUT", "path": `^/apis/pals/v1/.*$`}, # All PALs API Calls - PUT
-    {"method": "POST", "path": `^/apis/pals/v1/.*$`}, # All PALs API Calls - POST
-    {"method": "DELETE", "path": `^/apis/pals/v1/.*$`}, # All PALs API Calls - DELETE
-    {"method": "HEAD", "path": `^/apis/pals/v1/.*$`}, # All PALs API Calls - HEAD
-    {"method": "PATCH", "path": `^/apis/pals/v1/.*$`}, # All PALs API Calls - PATCH
-    # Replicant
-    {"method": "GET", "path": `^/apis/rm/v1/report/[\d\w|-]+$`}, # Get Report by id
-    {"method": "GET", "path": `^/apis/rm/v1/reports$`}, # Get Reports
-    # Analytics Capsules
-    {"method": "DELETE", "path": `^/apis/capsules/.*$`}, # All Capsules API Calls - DELETE
-    {"method": "GET", "path": `^/apis/capsules/.*$`}, # All Capsules API Calls - GET
-    {"method": "HEAD", "path": `^/apis/capsules/.*$`}, # All Capsules API Calls - HEAD
-    {"method": "PATCH", "path": `^/apis/capsules/.*$`}, # All Capsules API Calls - PATCH
-    {"method": "POST", "path": `^/apis/capsules/.*$`}, # All Capsules API Calls - POST
-    {"method": "PUT", "path": `^/apis/capsules/.*$`}, # All Capsules API Calls - PUT
-    ```
+- [`user` UAS endpoints](#user-uas-endpoints)
+- [`user` PALS endpoints](#user-pals-endpoints)
+- [`user` Replicant endpoints](#user-replicant-endpoints)
+- [`user` Analytics Capsules endpoints](#user-analytics-capsules-endpoints)
 
--   **`system-pxe`**
+### `user` UAS endpoints
 
-    Authorized for endpoints related to booting.
+REST API endpoints for the `user` persona for the [User Access Service (UAS)](../../glossary.md#user-access-service-uas):
 
-    REST API endpoints for the `system-pxe` persona:
+| Method   | Endpoint                    | Description |
+| -------- | --------------------------- | ----------- |
+| `GET`    | `/apis/uas-mgr/v1/`         | Get UAS API version |
+| `GET`    | `/apis/uas-mgr/v1/uas`      | List UAIs for current user |
+| `POST`   | `/apis/uas-mgr/v1/uas`      | Create a UAI for current user |
+| `DELETE` | `/apis/uas-mgr/v1/uas`      | Delete UAIs for current user |
+| `GET`    | `/apis/uas-mgr/v1/images`   | List available UAI images |
+| `GET`    | `/apis/uas-mgr/v1/mgr-info` | Get UAS service version |
 
-    ```screen
-    {"method": "GET",  "path": `^/apis/bss/.*$`},
-    {"method": "HEAD",  "path": `^/apis/bss/.*$`},
-    {"method": "POST",  "path": `^/apis/bss/.*$`},
-    ```
+### `user` PALS endpoints
 
--   **`system-compute`**
+The `user` persona is authorized to make `DELETE`, `GET`, `HEAD`, `PATCH`, `POST` or `PUT` calls to any
+[Parallel Application Launch Service (PALS)](../../glossary.md#parallel-application-launch-service-pals) endpoint (`/apis/pals/v1/*`).
 
-    Authorized for endpoints required by the Cray Operating System \(COS\) to manage compute nodes and NCN services.
+### `user` Replicant endpoints
 
-    REST API endpoints for the `system-compute` persona:
+REST API endpoints for the `user` persona for Replicant:
 
-    ```screen
-    {"method": "GET",  "path": `^/apis/cfs/.*$`},
-    {"method": "HEAD",  "path": `^/apis/cfs/.*$`},
-    {"method": "PATCH",  "path": `^/apis/cfs/.*$`},
+| Method   | Endpoint                    | Description |
+| -------- | --------------------------- | ----------- |
+| `GET`    | `/apis/rm/v1/report/<id>`   | Get report by ID |
+| `GET`    | `/apis/rm/v1/reports`       | Get reports |
 
-    {"method": "GET",  "path": `^/apis/v2/cps/.*$`},
-    {"method": "HEAD",  "path": `^/apis/v2/cps/.*$`},
-    {"method": "POST",  "path": `^/apis/v2/cps/.*$`},
+### `user` Analytics Capsules endpoints
 
-    {"method": "GET",  "path": `^/apis/hbtd/.*$`},
-    {"method": "HEAD",  "path": `^/apis/hbtd/.*$`},
-    {"method": "POST",  "path": `^/apis/hbtd/.*$`},
+The `user` persona is authorized to make `DELETE`, `GET`, `HEAD`, `PATCH`, `POST` or `PUT` calls to any Analytics Capsules endpoint (`/apis/capsules/*`).
 
-    {"method": "GET",  "path": `^/apis/v2/nmd/.*$`},
-    {"method": "HEAD",  "path": `^/apis/v2/nmd/.*$`},
-    {"method": "POST",  "path": `^/apis/v2/nmd/.*$`},
-    {"method": "PUT",  "path": `^/apis/v2/nmd/.*$`},
+## `system-pxe`
 
-    {"method": "GET",  "path": `^/apis/smd/.*$`},
-    {"method": "HEAD",  "path": `^/apis/smd/.*$`},
+Authorized for endpoints related to booting.
 
-    {"method": "GET",  "path": `^/apis/hmnfd/.*$`},
-    {"method": "HEAD",  "path": `^/apis/hmnfd/.*$`},
-    {"method": "PATCH",  "path": `^/apis/hmnfd/.*$`},
-    {"method": "POST",  "path": `^/apis/hmnfd/.*$`},
-    {"method": "DELETE",  "path": `^/apis/hmnfd/.*$`},
-    ```
+The `system-pxe` persona is authorized to make `GET`, `HEAD`, or `POST` calls to any [Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss) endpoint (`/apis/bss/*`).
 
--   **`wlm`**
+## `system-compute`
 
-    Authorized for endpoints related to the use of the Slurm or PBS workload managers.
+Authorized for endpoints required by the [Cray Operating System (COS)](../../glossary.md#cray-operating-system-cos) to manage compute nodes and NCN services.
 
-    REST API endpoints for the `wlm` persona:
+The `system-compute` persona is authorized to make:
 
-    ```screen
-    # PALS - application launch
-    {"method": "GET", "path": `^/apis/pals/.*$`},
-    {"method": "HEAD", "path": `^/apis/pals/.*$`},
-    {"method": "POST", "path": `^/apis/pals/.*$`},
-    {"method": "DELETE", "path": `^/apis/pals/.*$`},
-    # CAPMC - power capping
-    {"method": "GET", "path": `^/apis/capmc/.*$`},
-    {"method": "HEAD", "path": `^/apis/capmc/.*$`},
-    {"method": "POST", "path": `^/apis/capmc/.*$`},
-    # BOS - node boot
-    {"method": "GET", "path": `^/apis/bos/.*$`},
-    {"method": "HEAD", "path": `^/apis/bos/.*$`},
-    {"method": "POST", "path": `^/apis/bos/.*$`},
-    {"method": "PATCH", "path": `^/apis/bos/.*$`},
-    {"method": "DELETE", "path": `^/apis/bos/.*$`},
-    # SLS - hardware query
-    {"method": "GET", "path": `^/apis/sls/.*$`},
-    {"method": "HEAD", "path": `^/apis/sls/.*$`},
-    # SMD - hardware state query
-    {"method": "GET", "path": `^/apis/smd/.*$`},
-    {"method": "HEAD", "path": `^/apis/smd/.*$`},
-    # FC - VNI reservation
-    {"method": "GET", "path": `^/apis/fc/.*$`},
-    {"method": "HEAD", "path": `^/apis/fc/.*$`},
-    {"method": "POST", "path": `^/apis/fc/.*$`},
-    {"method": "PUT", "path": `^/apis/fc/.*$`},
-    {"method": "DELETE", "path": `^/apis/fc/.*$`},
-    ```
+- `GET`, `HEAD`, or `PATCH` calls to any [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) endpoint (`/apis/cfs/*`).
+- `GET`, `HEAD`, or `POST` calls to any [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) endpoint (`/apis/v2/cps/*`).
+- `GET`, `HEAD`, or `POST` calls to any [Heartbeat Tracker Daemon (HBTD)](../../glossary.md#heartbeat-tracker-daemon-hbtd) endpoint (`/apis/hbtd/*`).
+- `GET`, `HEAD`, `POST`, or `PUT` calls to any [Node Memory Dump (NMD)](../../glossary.md#node-memory-dump-nmd) endpoint (`/apis/v2/nmd/*`).
+- `GET` or `HEAD` calls to any [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) endpoint (`/apis/smd/*`).
+- `DELETE`, `GET`, `HEAD`, `PATCH`, or `POST` calls to any
+  [Hardware Management Notification Fanout Daemon (HMNFD)](../../glossary.md#hardware-management-notification-fanout-daemon-hmnfd) endpoint (`apis/hmnfd/*`).
 
+## `wlm`
+
+Authorized for endpoints related to the use of the Slurm or PBS workload managers.
+
+The `wlm` persona is authorized to make:
+
+- `DELETE`, `GET`, `HEAD`, or `POST` calls to any PALS endpoint (`/apis/pals/*`).
+- `GET`, `HEAD`, or `POST` calls to any [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
+  endpoint (`/apis/capmc/*`).
+- `DELETE`, `GET`, `HEAD`, `PATCH`, or `POST` calls to any [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) endpoint (`/apis/bos/*`).
+- `GET` or `HEAD` calls to any [System Layout Service (SLS)](../../glossary.md#system-layout-service-sls) endpoint (`/apis/sls/*`).
+- `GET` or `HEAD` calls to any HSM endpoint (`/apis/smd/*`).
+- `DELETE`, `GET`, `HEAD`, `POST` or `PUT` calls to any `/apis/fc/*` endpoint.
