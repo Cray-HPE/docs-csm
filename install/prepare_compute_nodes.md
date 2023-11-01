@@ -198,7 +198,7 @@ Configure the switch port for the iLO to use HMN VLAN.
     show running-config interface 1/1/46
     ```
 
-    Expect output:
+    Example output:
 
     ```text
     interface 1/1/46
@@ -220,7 +220,7 @@ Configure the switch port for the iLO to use HMN VLAN.
 
 Clear bad MAC and IP address out of Kea.
 
- > **`NOTE`** Skip this section if there was no bad MAC address and IP address found in step 1.
+ > **`NOTE`** Skip this section if there was no bad MAC address and IP address found in section 1.
 
 1. (`ncn-mw#`) Retrieve an API token, if not done previously.
 
@@ -246,16 +246,16 @@ Clear bad MAC and IP address out of Kea.
      [ { "result": 0, "text": "IPv4 lease deleted." } ]
      ```
 
-#### 5. Cleanup HSM
+### 5. Cleanup HSM
 
 Clear bad ID out of HSM.
 
-> **`NOTE`** Skip this section if there was no bad ID found in step 1.
+> **`NOTE`** Skip this section if there was no bad ID found in section 1.
 
 (`ncn-mw#`) Tell HSM to delete the bad ID out of the Ethernet interfaces table.
 
 ```bash
-cray hsm inventory ethernetInterfaces delete $ID
+cray hsm inventory ethernetInterfaces delete $ID --format json
 ```
 
 Expected results:
@@ -271,7 +271,7 @@ Everything is now configured and the CSM software will automatically discover
 the node after several minutes. After it has been discovered, the node is ready
 to be booted.
 
-#### 6. Update BIOS time
+### 6. Update BIOS time
 
 The BIOS time for Gigabyte compute nodes must be synced with the rest of the system.
 See [Update the Gigabyte Node BIOS Time](../operations/node_management/Update_the_Gigabyte_Node_BIOS_Time.md).
@@ -281,5 +281,5 @@ See [Update the Gigabyte Node BIOS Time](../operations/node_management/Update_th
 After completing the preparation for compute nodes, the CSM product stream
 has been fully installed and configured.
 
-See [Next topic](README.md#10-next-topic) for more information on other product
+See [Next topic](README.md#installation-of-additional-hpe-cray-ex-software-products) for more information on other product
 streams to be installed and configured after CSM.

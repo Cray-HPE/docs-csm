@@ -83,10 +83,10 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
 
     **Important**: Save the `ifnames` and `bmc_mac` information if planning to add this NCN back at some time in the future.
 
-1. (`ncn-mw#`) Shutdown `cray-reds`.
+1. (`ncn-mw#`) Suspend the HMS Discovery Kubernetes cronjob.
 
     ```bash
-    kubectl -n services scale deployment cray-reds --replicas=0
+    kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
     ```
 
 1. (`ncn-mw#`) Remove the node from SLS, HSM, and BSS.
@@ -133,10 +133,10 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
     error: timed out waiting for the condition
     ```
 
-1. (`ncn-mw#`) Start `cray-reds`.
+1. (`ncn-mw#`) Unsuspend the HMS Discovery Kubernetes cronjob.
 
     ```bash
-    kubectl -n services scale deployment cray-reds --replicas=1
+    kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
     ```
 
 1. (`ncn-mw#`) Verify the results by fetching the status of the management nodes.

@@ -207,7 +207,7 @@ def get_comps_to_update(comps_to_import: NameObjectMap, current_comps: NameObjec
     # For these, we must then check if there is already a desired configuration set on the live
     # system.
     for comp_id in sorted(list(comps_to_import.keys() & current_comps.keys())):
-        imported_desired_config_name = comps_to_import[comp_id]["desiredConfig"]
+        imported_desired_config_name = comps_to_import[comp_id]["desired_config"]
         if not imported_desired_config_name:
             comps_no_desired_config.append(comp_id)
             continue
@@ -217,7 +217,7 @@ def get_comps_to_update(comps_to_import: NameObjectMap, current_comps: NameObjec
             print(f"Component {comp_id} will not be updated because its import data specifies"
                   f" a nonexistent desired configuration: '{imported_desired_config_name}'")
             continue
-        if current_comps[comp_id]["desiredConfig"]:
+        if current_comps[comp_id]["desired_config"]:
             comps_have_config_set.append(comp_id)
         else:
             comps_to_update.append(comp_id)
@@ -280,6 +280,14 @@ def create_configs(configs_map: NameObjectMap, config_names_to_create: List[str]
     print("")
     for config_name in config_names_to_create:
         print(f"Importing configuration '{config_name}'")
+        # First, check for any layers which contain both "branch" and "commit" fields. It is not legal to
+        # specify both for a layer when creating a configuration. In these cases, we omit the
+        # "commit" field when recreating the layer, as it will be automatically populated by CFS.
+        # The alternative (omitting the "branch" field) means that information is lost, since the
+        # "branch" field is only present if it is specified when creating the configuration.
+        for layer in configs_map[config_name]["layers"]:
+            if "commit" in layer and "branch" in layer:
+                del layer["commit"]
         cfs.create_configuration(config_name, configs_map[config_name]["layers"])
 
 def update_components(comps_map: NameObjectMap, comp_ids_to_update: List[str]) -> None:
@@ -291,7 +299,7 @@ def update_components(comps_map: NameObjectMap, comp_ids_to_update: List[str]) -
         return
     print("")
     for comp_id in comp_ids_to_update:
-        desired_config_name = comps_map[comp_id]["desiredConfig"]
+        desired_config_name = comps_map[comp_id]["desired_config"]
         print(f"Updating component {comp_id} to desired configuration '{desired_config_name}'")
         cfs.update_component_desired_config(comp_id, desired_config_name)
 
@@ -300,12 +308,13 @@ def main() -> None:
     Parses the command line arguments, does the stuff.
 
     Arguments:
-    <directory containing JSON files>
+    [--clear-cfs] <directory containing JSON files>
 
     Raises CfsError if there is an error or if no data is found to import
     """
     parser = argparse.ArgumentParser(
         description="Reads CFS data from JSON files and imports the data info CFS")
+    parser.add_argument("--clear-cfs", action='store_true', help="Delete CFS configurations and clear CFS components before importing")
     parser.add_argument(metavar="json_directory", type=json_data_from_directory, dest="json_data",
                         help=f"Directory containing {CMP_JSON}, {CFG_JSON}, and {OPT_JSON}")
     parsed_args = parser.parse_args()
@@ -314,6 +323,25 @@ def main() -> None:
 
     print("Reading current data from CFS")
     current_cfs_data = load_cfs_data()
+
+    if parsed_args.clear_cfs:
+        # Take a snapshot of the CFS data before clearing it
+        print("Taking a snapshot of system CFS data before clearing it")
+        snapshot_cfs_data()
+
+        for config_name in list(current_cfs_data.configurations):
+            print(f"Deleting configuration '{config_name}'")
+            cfs.delete_configuration(config_name)
+            del current_cfs_data.configurations[config_name]
+
+        for comp_name, comp_data in list(current_cfs_data.components.items()):
+            if "tags" in comp_data and comp_data["tags"]:
+                print(f"Clearing error count, desired configuration, state, and tags for component '{comp_name}'")
+                updated_comp = cfs.update_component(comp_name, errorCount=0, state=[], desired_config="", tags={})
+            else:
+                print(f"Clearing error count, desired configuration, and state for component '{comp_name}'")
+                updated_comp = cfs.update_component(comp_name, errorCount=0, state=[], desired_config="", tags={})
+            current_cfs_data.components[comp_name] = updated_comp
 
     # Determine the necessary updates
     print("\nExamining CFS configurations...")
@@ -334,9 +362,11 @@ def main() -> None:
         print("No updates to be performed.")
         return
 
-    # Take a snapshot of the CFS data before we begin.
-    print("Taking a snapshot of system CFS data before making changes")
-    snapshot_cfs_data()
+    if not parsed_args.clear_cfs:
+        # Only need to do this if we didn't clear CFS earlier
+        # Take a snapshot of the CFS data before we begin.
+        print("Taking a snapshot of system CFS data before making changes")
+        snapshot_cfs_data()
 
     change_options(cfs_data_to_import.options, options_to_change)
     create_configs(cfs_data_to_import.configurations, configs_to_create)

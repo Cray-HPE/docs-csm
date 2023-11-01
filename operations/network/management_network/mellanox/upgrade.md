@@ -2,12 +2,12 @@
 
 Supported Software Upgrades
 
-|Target Version |Verified Starting Versions|
-| ------------- | ------------------------ |
-| 3.9.3xxx      | 3.9.2xxx, 3.9.1xxx       |
-| 3.9.2xxx      | 3.9.1xxx, 3.9.0xxx       |
-| 3.9.1xxx      | 3.9.0xxx, 3.8.2xxx       |
-| 3.9.0xxx      | 3.8.2xxx, 3.8.1xxx       |
+| Target Version | Verified Starting Versions |
+|----------------|----------------------------|
+| 3.9.3xxx       | 3.9.2xxx, 3.9.1xxx         |
+| 3.9.2xxx       | 3.9.1xxx, 3.9.0xxx         |
+| 3.9.1xxx       | 3.9.0xxx, 3.8.2xxx         |
+| 3.9.0xxx       | 3.8.2xxx, 3.8.1xxx         |
 
 Repeated the following procedure for each "upgrade hop".
 

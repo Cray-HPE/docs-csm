@@ -18,7 +18,19 @@
 
 The Version Control Service \(VCS\) includes a web interface for repository management, pull requests, and a visual view of all repositories and organizations. The following URL is for the VCS web interface:
 
-`https://vcs.SHASTA_CLUSTER_DNS_NAME`
+`https://vcs.ext.system.domain.com`
+
+(`ncn-mw#`) To look up the external system domain name, run the following command:
+
+```bash
+kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | grep "external:"
+```
+
+Example output:
+
+```yaml
+      external: ext.system.domain.com
+```
 
 ## Cloning a VCS repository
 
@@ -102,147 +114,84 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 
 1. Enter the existing password (from previous step), new password, and confirmation, and then click `Update Password`.
 
-1. Now SSH into `ncn-w001` or `ncn-m001`.
+1. SSH into `ncn-w001` or `ncn-m001`.
 
-1. Run `git clone https://github.com/Cray-HPE/csm.git`.
+1. (`ncn-mw#`) Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure with the following specifications:
 
-1. Copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` to the desired working directory.
+   * Name of chart to be redeployed: `gitea`
+   * Base name of manifest: `sysmgmt`
+   * When reaching the step to update customizations, perform the following steps:
 
-1. Change directories to be in the working directory set in the previous step.
+      **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-1. (`ncn-mw#`) Save a local copy of the `customizations.yaml` file.
+      1. Run `git clone https://github.com/Cray-HPE/csm.git`.
 
-    ```bash
-    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' |
-        base64 -d > customizations.yaml
-    ```
+      1. Copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` from the cloned repository into the desired working directory.
 
-1. Change the password in the `customizations.yaml` file.
+         ```bash
+         cp -vr ./csm/vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils .
+         ```
 
-   The Gitea `crayvcs` password is stored in the `vcs-user-credentials` Kubernetes Secret in the `services` namespace. This must be updated so that clients which need to make requests can authenticate with the new password.
+      1. Change the password in the `customizations.yaml` file.
 
-   In the `customizations.yaml` file, set the values for the `gitea` keys in the `spec.kubernetes.sealed_secrets` field.
-   The value in the data element where the name is `password` needs to be changed to the new Gitea password. The section
-   below will replace the existing sealed secret data in the `customizations.yaml` file.
+         The Gitea `crayvcs` password is stored in the `vcs-user-credentials` Kubernetes Secret in the `services` namespace. This must be updated so that clients which need to make requests can authenticate with the new password.
 
-   For example:
+         In the `customizations.yaml` file, set the values for the `gitea` keys in the `spec.kubernetes.sealed_secrets` field.
+         The value in the data element where the name is `password` needs to be changed to the new Gitea password. The section
+         below will replace the existing sealed secret data in the `customizations.yaml` file.
 
-   ```yaml
-   gitea:
-      generate:
-         name: vcs-user-credentials
-         data:
-           - type: static
-             args:
-             name: vcs_password
-             value: my_secret_password
-           - type: static
-             args:
-             name: vcs_username
-             value: crayvcs
-   ```
+         For example:
 
-1. (`ncn-mw#`) Encrypt the values after changing the `customizations.yaml` file.
+         ```yaml
+         gitea:
+            generate:
+               name: vcs-user-credentials
+               data:
+                 - type: static
+                   args:
+                   name: vcs_password
+                   value: my_secret_password
+                 - type: static
+                   args:
+                   name: vcs_username
+                   value: crayvcs
+         ```
 
-    ```bash
-    ./utils/secrets-seed-customizations.sh customizations.yaml
-    ```
+      1. Encrypt the values after changing the `customizations.yaml` file.
 
-   (`ncn-mw#`) If the above command complains that it cannot find `certs/sealed_secrets.crt`, then run the following commands to create it:
+          > This command makes use of the `$CUSTOMIZATIONS` variable that is set earlier in the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure.
 
-    ```bash
-    mkdir -p ./certs &&
-    ./utils/bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > ./certs/sealed_secrets.crt
-    ```
+          ```bash
+          ./utils/secrets-seed-customizations.sh "${CUSTOMIZATIONS}"
+          ```
 
-1. (`ncn-mw#`) Upload the modified `customizations.yaml` file to Kubernetes.
+         If the above command complains that it cannot find `certs/sealed_secrets.crt`, then run the following commands to create it:
 
-   ```bash
-   kubectl delete secret -n loftsman site-init
-   kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-   ```
+          ```bash
+          mkdir -pv ./certs && ./utils/bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > ./certs/sealed_secrets.crt
+          ```
 
-1. (`ncn-mw#`) Get the current cached `sysmgmt` manifest and save it into a `gitea.yaml` file.
+   * When reaching the step to validate that the redeploy was successful, perform the following steps:
 
-    ```bash
-    kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > gitea.yaml
-    ```
+      **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-1. (`ncn-mw#`) Remove non-Gitea charts from the `gitea.yaml` file.
+      1. Verify that the Secret has been updated.
 
-   The following command will also change the `metadata.name` so
-   that it does not overwrite the `sysmgmt.yaml` file that is stored in the `loftsman` namespace.
+         Give the SealedSecret controller a few seconds to update the Secret, then run the following command to see the current value of the Secret:
 
-   ```bash
-   for i in $(yq r gitea.yaml 'spec.charts[*].name' | grep -Ev '^gitea'); do yq d -i gitea.yaml  'spec.charts(name=='"$i"')'; done
-   yq w -i gitea.yaml metadata.name gitea
-   yq d -i gitea.yaml spec.sources
-   yq w -i gitea.yaml spec.sources.charts[0].location 'https://packages.local/repository/charts'
-   yq w -i gitea.yaml spec.sources.charts[0].name csm-algol60
-   yq w -i gitea.yaml spec.sources.charts[0].type repo
-   ```
+         ```bash
+         kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode
+         ```
 
-   After the command is run, the beginning of the `gitea.yaml` file will resemble the following:
+      1. Run a VCS health check.
 
-   ```yaml
-   apiVersion: manifests/v1beta1
-     metadata:
-       name: sysmgmt
-     spec:
-       charts:
-         - name: gitea
-           namespace: services
-           source: csm-algol60
-           values:
-             cray-service:
-               sealedSecrets:
-               - apiVersion: bitnami.com/v1alpha1
-                 kind: SealedSecret
-                 metadata:
-                   annotations:
-                     sealedsecrets.bitnami.com/cluster-wide: 'true'
-                     ...
-       sources:
-         charts:
-           - location: https://packages.local/repository/charts
-             name: csm-algol60
-             type: repo
-   ```
+         ```bash
+         /usr/local/bin/cmsdev test -q vcs
+         ```
 
-1. (`ncn-mw#`) Generate the manifest that will be used to redeploy the chart with the modified resources.
+         For more details on this test, including known issues and other command line options, see [Software Management Services health checks](../../troubleshooting/known_issues/sms_health_check.md).
 
-    ```bash
-    manifestgen -c customizations.yaml -i gitea.yaml -o manifest.yaml
-    ```
-
-1. Validate that the `manifest.yaml` file only contains chart information for Gitea, and that the sources chart location
-   points to `https://packages.local/repository/charts`.
-
-1. (`ncn-mw#`) Re-apply the `gitea` Helm chart with the updated `customizations.yaml` file.
-
-   This will update the `vcs-user-credentials` SealedSecret which will cause the SealedSecret controller to update the Secret.
-
-    ```bash
-    loftsman ship --manifest-path ${PWD}/manifest.yaml
-    ```
-
-1. (`ncn-mw#`) Verify that the Secret has been updated.
-
-   Give the SealedSecret controller a few seconds to update the Secret, then run the following command to see the current value of the Secret:
-
-    ```bash
-    kubectl get secret -n services vcs-user-credentials \
-            --template={{.data.vcs_password}} | base64 --decode
-    ```
-
-1. (`ncn-mw#`) Save an updated copy of `customizations.yaml` to the `site-init` secret in the `loftsman` Kubernetes namespace.
-
-    ```bash
-    CUSTOMIZATIONS=$(base64 < customizations.yaml  | tr -d '\n')
-    kubectl get secrets -n loftsman site-init -o json |
-        jq ".data.\"customizations.yaml\" |= \"$CUSTOMIZATIONS\"" |
-        kubectl apply -f -
-    ```
+   * **Make sure to perform the entire linked procedure, including the step to save the updated customizations.**
 
 ## Access the `cray` Gitea organization
 
@@ -348,8 +297,8 @@ while the service is running using the following commands:
 
 ```bash
 POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
-kubectl -n services exec ${POD} -- tar -cvf vcs.tar /var/lib/gitea/
-kubectl -n services cp ${POD}:vcs.tar ./vcs.tar
+kubectl -n services exec ${POD} -- tar -cvf /tmp/vcs.tar /var/lib/gitea/
+kubectl -n services cp ${POD}:/tmp/vcs.tar ./vcs.tar
 ```
 
 Be sure to save the resulting `tar` file to a safe location.
@@ -365,8 +314,8 @@ process can be run at any time while the service is running using the following 
 
 ```bash
 POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
-kubectl -n services cp ./vcs.tar ${POD}:vcs.tar
-kubectl -n services exec ${POD} -- tar -xvf vcs.tar
+kubectl -n services cp ./vcs.tar ${POD}:/tmp/vcs.tar
+kubectl -n services exec ${POD} -- tar -C / -xvf /tmp/vcs.tar
 kubectl -n services rollout restart deployment gitea-vcs
 ```
 

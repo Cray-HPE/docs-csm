@@ -2,7 +2,7 @@
 
 This procedure is only required if the current version if iLO 5 is below `v2.78`.
 
-iLO 5 versions above `v2.78` are larger than 32MB in size.  iLO 5 versions prior to `v2.78` will only accept 32MB size binary files.  iLO 5 `v2.78` removed this restriction.  To upgrade to a version after `v2.78`, iLO 5 must first be update to `v2.78`.
+iLO 5 versions above `v2.78` are larger than 32MB in size.  iLO 5 versions prior to `v2.78` will only accept 32MB size binary files.  iLO 5 `v2.78` removed this restriction. To upgrade to a version after `v2.78`, iLO 5 must first be update to `v2.78`.
 
 ## Find Image Id for iLO 5 version 2.78
 

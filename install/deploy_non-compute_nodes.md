@@ -162,6 +162,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
     > - If the nodes have PXE boot issues (for example, getting PXE errors, or not pulling the `ipxe.efi` binary), then see [PXE boot troubleshooting](troubleshooting_pxe_boot.md).
     > - If ncn-s001 console has the message 'Sleeping for five seconds waiting ceph to be healthy...'
     for an extended period of time, then see [Utility Storage Installation Troubleshooting](troubleshooting_utility_storage_node_installation.md).
+    > - In the deployment of Storage NCN's the console may show errors regarding `cray-heartbeat.service`. These are expected until the PIT is deployed as m001.
 
 1. (`pit#`) Wait for storage nodes to output the following before booting Kubernetes master nodes and worker nodes.
 
@@ -228,12 +229,12 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
         Expected output looks similar to the following:
 
         ```text
-        NAME       STATUS   ROLES                  AGE   VERSION    INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
-        ncn-m002   Ready    control-plane,master   2h    v1.20.13   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
-        ncn-m003   Ready    control-plane,master   2h    v1.20.13   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
-        ncn-w001   Ready    <none>                 2h    v1.20.13   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
-        ncn-w002   Ready    <none>                 2h    v1.20.13   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
-        ncn-w003   Ready    <none>                 2h    v1.20.13   10.252.1.9    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+        NAME       STATUS   ROLES                  AGE     VERSION    INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION                 CONTAINER-RUNTIME
+        ncn-m002   Ready    control-plane,master   7m39s   v1.22.13   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP5   5.14.21-150500.55.12-default   containerd://1.5.16
+        ncn-m003   Ready    control-plane,master   7m16s   v1.22.13   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP5   5.14.21-150500.55.12-default   containerd://1.5.16
+        ncn-w001   Ready    <none>                 7m16s   v1.22.13   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP5   5.14.21-150500.55.12-default   containerd://1.5.16
+        ncn-w002   Ready    <none>                 7m18s   v1.22.13   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP5   5.14.21-150500.55.12-default   containerd://1.5.16
+        ncn-w003   Ready    <none>                 7m16s   v1.22.13   10.252.1.9    <none>        SUSE Linux Enterprise High Performance Computing 15 SP5   5.14.21-150500.55.12-default   containerd://1.5.16
         ```
 
 1. (`pit#`) Stop watching the consoles.
@@ -247,7 +248,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 1. (`pit#`) This was done in a previous step, but if the user is resuming/starting here then the first master needs to be
     redefined.
 
-    > ***NOTE*** This requires that the [set reusable environment variables](./pre-installation.md#15-set-reusable-environment-variables) step
+    > ***NOTE*** This requires that the [set reusable environment variables](pre-installation.md#15-set-reusable-environment-variables) step
     > was completed, `PITDATA` should be defined in the users environment before continuing.
 
     ```bash
@@ -275,12 +276,6 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 1. (`pit#`) Check cabling.
 
     See [SHCD check cabling guide](../operations/network/management_network/validate_cabling.md).
-
-1. (`pit#`) Install tests and test server on NCNs.
-
-    ```bash
-    "${CSM_PATH}"/lib/install-goss-tests.sh
-    ```
 
 1. (`pit#`) Check the storage nodes.
 

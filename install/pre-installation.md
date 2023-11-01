@@ -9,16 +9,10 @@ The page walks a user through setting up the Cray LiveCD with the intention of i
     1. [Prepare the data partition](#14-prepare-the-data-partition)
     1. [Set reusable environment variables](#15-set-reusable-environment-variables)
     1. [Exit the console and log in with SSH](#16-exit-the-console-and-log-in-with-ssh)
-1. [Import CSM tarball](#2-import-csm-tarball)
-    1. [Download CSM tarball](#21-download-csm-tarball)
-    1. [Import tarball assets](#22-import-tarball-assets)
+1. [Download and extract the CSM tarball](#2-download-and-extract-the-csm-tarball)
 1. [Create system configuration](#3-create-system-configuration)
-    1. [Validate SHCD](#31-validate-shcd)
-    1. [Generate topology files](#32-generate-topology-files)
-    1. [Customize `system_config.yaml`](#33-customize-system_configyaml)
-    1. [Run CSI](#34-run-csi)
-    1. [Prepare Site Init](#35-prepare-site-init)
-    1. [Initialize the LiveCD](#36-initialize-the-livecd)
+1. [Import the CSM Tarball](#4-import-the-csm-tarball)
+1. [Validate the LiveCD](#5-validate-the-livecd)
 1. [Next topic](#next-topic)
 
 ## 1. Boot installation environment
@@ -35,7 +29,7 @@ Any steps run on an `external` server require that server to have the following 
 - `ssh`
 - `tar`
 
-> **NOTE:** The CSM tarball will be fetched from the external server in the [Import tarball assets](#22-import-tarball-assets) step using `curl` or `scp`. If a web server is not installed, then `scp` is the backup option.
+> **NOTE:** The CSM tarball will be fetched from the external server in the [download and extract the CSM tarball](#2-download-and-extract-the-csm-tarball) step using `curl` or `scp`. If a web server is not installed, then `scp` is the backup option.
 
 ### 1.1 Prepare installation environment server
 
@@ -45,7 +39,7 @@ Any steps run on an `external` server require that server to have the following 
    >
    > - `-C -` is used to allow partial downloads. These tarballs are large; in the event of a connection disruption, the same `curl` command can be used to continue the disrupted download.
    > - **If air-gapped or behind a strict firewall**, then the tarball must be obtained from the medium delivered by Cray-HPE. For these cases, copy or download the tarball to the working
-   >   directory and then proceed to the next step. The tarball will need to be fetched with `scp` during the [Download CSM tarball](#21-download-csm-tarball) step.
+   >   directory and then proceed to the next step. The tarball will need to be fetched with `scp` during the [download and extract the CSM tarball](#2-download-and-extract-the-csm-tarball) step.
 
    1. (`external#`) Set the CSM RELEASE version
 
@@ -362,28 +356,25 @@ These variables will need to be set for many procedures within the CSM installat
 
    ```text
    = PIT Identification = COPY/CUT START =======================================
-   VERSION=1.6.0
-   TIMESTAMP=20220504161044
-   HASH=g10e2532
-   2022/05/04 17:08:19 Using config file: /var/www/ephemeral/prep/system_config.yaml
+   VERSION=a9d5138-1694719577775
+   TIMESTAMP=2023-09-14_19:26:17
    CRAY-Site-Init build signature...
-   Build Commit   : 0915d59f8292cfebe6b95dcba81b412a08e52ddf-main
-   Build Time     : 2022-05-02T20:21:46Z
-   Go Version     : go1.16.10
-   Git Version    : v1.9.13-29-g0915d59f
+   Build Commit   : 78867e48bc5b5f6df5df2f4e2f274f92b7476c05-heads-v1.32.2
+   Build Time     : 2023-08-18T19:34:01Z
+   Go Version     : go1.19
+   Version        : v1.32.2
    Platform       : linux/amd64
-   App. Version   : 1.17.1
-   metal-ipxe-2.2.6-1.noarch
-   metal-net-scripts-0.0.2-20210722171131_880ba18.noarch
-   metal-basecamp-1.1.12-1.x86_64
-   pit-init-1.2.20-1.noarch
-   pit-nexus-1.1.4-1.x86_64
+   canu-1.7.6-1.x86_64
+   ilorest-4.2.0.0-20.x86_64
+   metal-basecamp-1.2.6-1.x86_64
+   metal-ipxe-2.4.6-1.noarch
+   metal-init-1.4.6-1.noarch
+   metal-nexus-1.3.1-3.38.0_1.x86_64
+   metal-observability-1.0.9-1.x86_64
    = PIT Identification = COPY/CUT END =========================================
    ```
 
-## 2. Import CSM tarball
-
-### 2.1 Download CSM tarball
+## 2. Download and extract the CSM Tarball
 
 1. Download and install the latest documentation and scripts RPMs, see [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation).
 
@@ -414,11 +405,6 @@ These variables will need to be set for many procedures within the CSM installat
       scp "<external-server>:/<path>/csm-${CSM_RELEASE}.tar.gz" /var/www/ephemeral/
       ```
 
-### 2.2 Import tarball assets
-
-If resuming at this stage, the `CSM_RELEASE` and `PITDATA` variables are already set
-in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) step.
-
 1. (`pit#`) Extract the tarball.
 
    ```bash
@@ -429,32 +415,16 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
    > ***NOTE*** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
 
-   1. Update `cray-site-init`.
+   1. Update `cray-site-init` and `metal-init`.
 
-       > ***NOTE*** This provides `csi`, a tool for creating and managing configurations, as well as
-       > orchestrating the [handoff and deploy of the final non-compute node](deploy_final_non-compute_node.md).
-
-       ```bash
-       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
-              --no-gpg-checks update -y cray-site-init
-       ```
-
-   1. Install `iuf-cli`.
-
-       > ***NOTE*** This provides `iuf`, a command line interface to the [Install and Upgrade Framework](../operations/iuf/IUF.md).
+       > ***NOTES***
+       >
+       > - `cray-site-init` provides `csi`, a tool for creating and managing configurations, as well as
+       >   orchestrating the [handoff and deploy of the final non-compute node](deploy_final_non-compute_node.md).
+       > - `metal-init` provides several scripts in `/root/bin` used for fresh installations.
 
        ```bash
-       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
-              --no-gpg-checks install -y iuf-cli
-       ```
-
-   1. Install `csm-testing` RPM.
-
-       > ***NOTE*** This package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.
-
-       ```bash
-       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
-              --no-gpg-checks install -y csm-testing
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/noos" --no-gpg-checks update -y cray-site-init metal-init
        ```
 
 1. (`pit#`) Get the artifact versions.
@@ -521,174 +491,67 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
    ```text
    = PIT Identification = COPY/CUT START =======================================
-   VERSION=1.6.0
-   TIMESTAMP=20220504161044
-   HASH=g10e2532
-   2022/05/04 17:08:19 Using config file: /var/www/ephemeral/prep/system_config.yaml
+   VERSION=a9d5138-1694719577775
+   TIMESTAMP=2023-09-14_19:26:17
    CRAY-Site-Init build signature...
-   Build Commit   : 0915d59f8292cfebe6b95dcba81b412a08e52ddf-main
-   Build Time     : 2022-05-02T20:21:46Z
-   Go Version     : go1.16.10
-   Git Version    : v1.9.13-29-g0915d59f
+   Build Commit   : 78867e48bc5b5f6df5df2f4e2f274f92b7476c05-heads-v1.32.2
+   Build Time     : 2023-08-18T19:34:01Z
+   Go Version     : go1.19
+   Version        : v1.32.2
    Platform       : linux/amd64
-   App. Version   : 1.17.1
-   metal-ipxe-2.2.6-1.noarch
-   metal-net-scripts-0.0.2-20210722171131_880ba18.noarch
-   metal-basecamp-1.1.12-1.x86_64
-   pit-init-1.2.20-1.noarch
-   pit-nexus-1.1.4-1.x86_64
+   canu-1.7.6-1.x86_64
+   ilorest-4.2.0.0-20.x86_64
+   metal-basecamp-1.2.6-1.x86_64
+   metal-ipxe-2.4.6-1.noarch
+   metal-init-1.4.6-1.noarch
+   metal-nexus-1.3.1-3.38.0_1.x86_64
+   metal-observability-1.0.9-1.x86_64
    = PIT Identification = COPY/CUT END =========================================
    ```
 
 ## 3. Create system configuration
 
-This stage walks the user through creating the configuration payload for the system.
+Create the system configuration using one of the following options:
 
-Run the following steps before starting any of the system configuration procedures.
+- [Create System Configuration Using Cluster Discovery Service](Create_System_Configuration_Using_Cluster_Discovery_Service.md): This is a dynamic discovery process, the system and its connections are dynamically discovered and compared
+with the SHCD to create the system configuration files. This method is highly recommended for the new installations.
 
-1. (`pit#`) Make the `prep` directory.
+- [Create System Configuration Using SHCD](Create_System_Configuration_Using_SHCD.md): This method relies on the SHCD data to create the system configuration files.
 
-   ```bash
-   mkdir -pv "${PITDATA}/prep"
-   ```
+## 4 Import the CSM Tarball
 
-1. (`pit#`) Change into the `prep` directory.
+The following steps require [create system configuration](#3-create-system-configuration) to have completed
+successfully.
 
-   ```bash
-   cd "${PITDATA}/prep"
-   ```
-
-### 3.1 Validate SHCD
-
-1. (`pit#`) Download the SHCD to the `prep` directory.
-
-    This will need to be retrieved from the administrator's Cray deliverable.
-
-1. Validate the SHCD.
-
-    See [Validate SHCD](../operations/network/management_network/validate_shcd.md) and then return to this page.
-
-### 3.2 Generate topology files
-
-The following steps use the new, automated method for generating files. The previous step for
-[validate SHCD](#31-validate-shcd) generated "paddle" files; these are necessary for generating
-the rest of the seed files.
-
-> ***NOTE*** The paddle files are temporarily not used due to bugs in the seed file generation software.
-> Until these bugs are resolved, the seed files must be manually generated.
-
-If seed files from a prior installation of the same major-minor version of CSM exist, then these can be used and
-this step may be skipped.
-
-1. (`pit#`) Create each seed file, unless they already exist from a previous installation.
-
-   - For new installations of CSM that have no prior seed files, each one must be created:
-
-      - [Create `application_node_config.yaml`](create_application_node_config_yaml.md)
-      - [Create `cabinets.yaml`](create_cabinets_yaml.md)
-      - [Create `hmn_connections.json`](create_hmn_connections_json.md)
-      - [Create `ncn_metadata.csv`](create_ncn_metadata_csv.md)
-      - [Create `switch_metadata.csv`](create_switch_metadata_csv.md)
-
-   - For re-installations of CSM 1.3, the previous seed files may be used and this step can be skipped.
-   - For new installations of CSM 1.3 that have prior seed files from CSM 1.2 or older, the previous seed files
-     may be used **except that the following files must be recreated** because of content or formatting changes:
-
-      - [Create `cabinets.yaml`](create_cabinets_yaml.md)
-      - [Create `hmn_connections.json`](create_hmn_connections_json.md)
-
-1. (`pit#`) Confirm that the following files exist.
+1. (`pit#`) Upload the CSM tarball's RPMs and container images to the local Nexus instance.
 
    ```bash
-   ls -l "${PITDATA}"/prep/{application_node_config.yaml,cabinets.yaml,hmn_connections.json,ncn_metadata.csv,switch_metadata.csv}
+   /srv/cray/metal-provision/scripts/nexus/setup-nexus.sh -s
    ```
 
-   Expected output may look like:
+1. Add the local Zypper repositories for `noos` and the current SLES distribution.
 
-   ```text
-   -rw-r--r-- 1 root root  146 Jun  6 00:12 /var/www/ephemeral/prep/application_node_config.yaml
-   -rw-r--r-- 1 root root  392 Jun  6 00:12 /var/www/ephemeral/prep/cabinets.yaml
-   -rwxr-xr-x 1 root root 3768 Jun  6 00:12 /var/www/ephemeral/prep/hmn_connections.json
-   -rw-r--r-- 1 root root 1216 Jun  6 00:12 /var/www/ephemeral/prep/ncn_metadata.csv
-   -rw-r--r-- 1 root root  150 Jun  6 00:12 /var/www/ephemeral/prep/switch_metadata.csv
-   ```
-
-### 3.3 Customize `system_config.yaml`
-
-1. (`pit#`) Create or copy `system_config.yaml`.
-
-   - If one does not exist from a prior installation, then create an empty one:
-
-      ```bash
-      csi config init empty
-      ```
-
-   - Otherwise, copy the existing `system_config.yaml` file into the working directory and proceed to the [Run CSI](#34-run-csi) step.
-
-1. (`pit#`) Edit the `system_config.yaml` file with the appropriate values.
-
-   > **NOTES:**
-   >
-   > - For a short description of each key in the file, run `csi config init --help`.
-   > - For more description of these settings and the default values, see
-   >   [Default IP Address Ranges](../introduction/csm_overview.md#2-default-ip-address-ranges) and the other topics in
-   >   [CSM Overview](../introduction/csm_overview.md).
-   > - To enable or disable audit logging, refer to [Audit Logs](../operations/security_and_authentication/Audit_Logs.md)
-   >   for more information.
-   > - If the system is using a `cabinets.yaml` file, be sure to update the `cabinets-yaml` field with `'cabinets.yaml'` as its value.
+   > ***NOTE*** The `${releasever_major}` and `${releasever_minor}` variables are interpolated by Zypper, the URI
+   > is intentionally wrapped with single-quotes to prevent the shell from interpolating them. Zypper will replace
+   > these variables with the currently running distributions major and minor version numbers.
 
    ```bash
-   vim system_config.yaml
+   zypper addrepo --no-gpgcheck --refresh http://packages/repository/csm-noos csm-noos
+   zypper addrepo --no-gpgcheck --refresh 'http://packages/repository/csm-sle-${releasever_major}sp${releasever_minor}' 'csm-sle'
    ```
 
-### 3.4 Run CSI
-
-1. (`pit#`) Generate the initial configuration for CSI.
-
-   This will validate whether the inputs for CSI are correct.
-
-   ```bash
-   csi config init
-   ```
-
-### 3.5 Prepare Site Init
-
-Follow the [Prepare Site Init](prepare_site_init.md) procedure.
-
-### 3.6 Initialize the LiveCD
-
-> **NOTE:** If starting an installation at this point, then be sure to copy the previous `prep` directory back onto the system.
-
-1. (`pit#`) Initialize the PIT.
-
-   The `pit-init.sh` script will prepare the PIT server for deploying NCNs.
-
-   ```bash
-   /root/bin/pit-init.sh
-   ```
-
-1. (`pit#`) Set the `IPMI_PASSWORD` variable.
-
-   ```bash
-   read -r -s -p "NCN BMC root password: " IPMI_PASSWORD
-   ```
-
-1. (`pit#`) Export the `IPMI_PASSWORD` variable.
-
-   ```bash
-   export IPMI_PASSWORD
-   ```
-
-1. (`pit#`) Setup links to the boot artifacts extracted from the CSM tarball.
+1. (`pit#`) Ensure any new, updated packages pertinent to the CSM install are installed.
 
    > ***NOTES***
    >
-   > - This will also set all the BMCs to DHCP.
-   > - Changing into the `$HOME` directory ensures the proper operation of the script.
+   > - `csm-testing` package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.
+   > - This provides `iuf`, a command line interface to the [Install and Upgrade Framework](../operations/iuf/IUF.md).
 
    ```bash
-   cd $HOME && /root/bin/set-sqfs-links.sh
+   zypper --no-gpg-checks install -y canu craycli csm-testing hpe-csm-goss-package iuf-cli platform-utils
    ```
+
+## 5 Validate the LiveCD
 
 1. (`pit#`) Verify that the LiveCD is ready by running the preflight tests.
 
@@ -698,7 +561,7 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 
    If any tests fail, they need to be investigated. After actions have been taken to rectify the tests
    (for example, editing configuration or CSI inputs), then restart from the beginning of the
-   [Initialize the LiveCD](#36-initialize-the-livecd) procedure.
+   [Initialize the LiveCD](Create_System_Configuration_Using_SHCD.md#6-initialize-the-livecd) procedure.
 
 1. Save the `prep` directory for re-use.
 

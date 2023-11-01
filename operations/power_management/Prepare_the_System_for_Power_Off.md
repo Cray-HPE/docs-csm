@@ -25,7 +25,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
    See the "SAT Authentication" section in the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
 
-1. Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
+1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
 
    There will be separate session templates for UANs and computes nodes.
 
@@ -34,7 +34,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
        If it is unclear what session template is in use, proceed to the next substep.
 
        ```bash
-       cray bos sessiontemplate list
+       cray bos v2 sessiontemplates list
        ```
 
     1. Find the xname with `sat status`.
@@ -56,50 +56,50 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     1. Find the `bos_session` value via the Configuration Framework Service (CFS).
 
        ```bash
-       cray cfs components describe XNAME | grep bos_session
+       cray cfs v3 components describe XNAME --format toml | grep bos_session
        ```
 
        Example output:
 
-       ```text
+       ```toml
        bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
        ```
 
-    1. Find the required `templateUuid` value with BOS.
+    1. Find the required `templateName` value with BOS.
 
        ```bash
-       cray bos session describe BOS_SESSION | grep templateUuid
+       cray bos v2 sessions describe BOS_SESSION --format toml | grep templateName
        ```
 
        Example output:
 
-       ```text
-       templateUuid = "compute-nid1-4-sessiontemplate"
+       ```toml
+       templateName = "compute-nid1-4-sessiontemplate"
        ```
 
     1. Determine the list of xnames associated with the desired boot session template.
 
        ```bash
-       cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | egrep "node_list|node_roles_groups|node_groups"
+       cray bos v2 sessiontemplates describe SESSION_TEMPLATE_NAME | egrep "node_list|node_roles_groups|node_groups"
        ```
 
-       Example output(s):
+       Example outputs:
 
-       ```text
+       ```toml
        node_list = [ "x3000c0s19b1n0", "x3000c0s19b2n0", "x3000c0s19b3n0", "x3000c0s19b4n0",]
        ```
 
-       ```text
+       ```toml
        node_roles_groups = [ "Compute",]
        ```
 
-1. Use sat to capture state of the system before the shutdown.
+1. (`ncn-mw#`) Use SAT to capture state of the system before the shutdown.
 
     ```bash
     sat bootsys shutdown --stage capture-state
     ```
 
-1. Optional system health checks.
+1. (`ncn-mw#`) Optional system health checks.
 
     1. Use the System Diagnostic Utility (SDU) to capture current state of system before the shutdown.
 
@@ -113,43 +113,43 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     1. Capture the state of all nodes.
 
         ```bash
-        sat status | tee sat.status.off
+        sat status | tee -a sat.status
         ```
 
     1. Capture the list of disabled nodes.
 
         ```bash
-        sat status --filter Enabled=false | tee sat.status.disabled
+        sat status --filter Enabled=false | tee -a sat.status.disabled
         ```
 
     1. Capture the list of nodes that are `off`.
 
         ```bash
-        sat status --filter State=Off | tee sat.status.off
+        sat status --filter State=Off | tee -a sat.status.off
         ```
 
     1. Capture the state of nodes in the workload manager. For example, if the system uses Slurm:
 
         ```bash
-        ssh uan01 sinfo | tee uan01.sinfo
+        ssh uan01 sinfo | tee -a uan01.sinfo
         ```
 
     1. Capture the list of down nodes in the workload manager and the reason.
 
         ```bash
-        ssh nid000001-nmn sinfo --list-reasons | tee sinfo.reasons
+        ssh uan01 sinfo --list-reasons | tee -a sinfo.reasons
         ```
 
     1. Check Ceph status.
 
         ```bash
-        ceph -s | tee ceph.status
+        ceph -s | tee -a ceph.status
         ```
 
     1. Check Kubernetes pod status for all pods.
 
         ```bash
-        kubectl get pods -o wide -A | tee k8s.pods
+        kubectl get pods -o wide -A | tee -a k8s.pods
         ```
 
         Additional Kubernetes status check examples:
@@ -179,19 +179,38 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
         ```bash
         kubectl exec -it -n services slingshot-fabric-manager-5dc448779c-d8n6q \
-                     -c slingshot-fabric-manager -- fmn_status --details | tee fabric.status
+                     -c slingshot-fabric-manager -- fmn_status --details | tee -a fabric.status
         ```
 
     1. Check management switches to verify they are reachable.
 
         > *Note:* The switch host names depend on the system configuration.
 
-        1. Look in `/etc/hosts` for the management network switches on this system. The names of
-        all spine switches, leaf switches, leaf BMC switches, and CDU switches need to be used in
-        the next step.
+        1. Use CANU to confirm that all switches are reachable. Reachable switches will have their
+           version information populated in the network version report.
 
            ```bash
-           ncn# grep sw- /etc/hosts
+           canu report network version
+           ```
+
+           Example output:
+
+           ```text
+           SWITCH            CANU VERSION      CSM VERSION
+           sw-spine-001      1.7.1.post1       1.5
+           sw-spine-002      1.7.1.post1       1.5
+           sw-leaf-bmc-001   1.7.1.post1       1.5
+           sw-leaf-bmc-002   1.7.1.post1       1.5
+           sw-cdu-001        1.7.1.post1       1.5
+           sw-cdu-002        1.7.1.post1       1.5
+           ```
+
+        1. (Optional) If CANU is not available, look in `/etc/hosts` for the management network
+           switches on this system. The names of all spine switches, leaf switches, leaf BMC
+           switches, and CDU switches need to be used in the next step.
+
+           ```bash
+           grep 'sw-' /etc/hosts
            ```
 
            Example output:
@@ -205,17 +224,13 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
            10.100.0.3      sw-cdu-002
            ```
 
-        1. Ping all switches using the proper list of hostnames in the index of the for loop.
+        1. Ping the switches obtained in the previous step to determine if they are reachable.
 
            ```bash
-           ncn# for switch in sw-leaf-00{1,2} sw-leaf-bmc-00{1-2} sw-spine-00{1,2} sw-cdu-00{1,2}l; do
-                   while true; do
-                        ping -c 1 $switch > /dev/null && break
-                        echo "switch $switch is not yet up"
-                        sleep 5
-                    done
-                    echo "switch $switch is up"
-                done | tee switches
+           for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do
+               echo -n "switch ${switch} is "
+               ping -c 1 -W 10 $switch > /dev/null && echo "up" || echo "not up"
+           done | tee -a switches
            ```
 
     1. Check Lustre server health.
@@ -232,10 +247,10 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         lfs df
         ```
 
-1. Check for running sessions.
+1. (`ncn-mw#`) Check for running sessions.
 
     ```bash
-    sat bootsys shutdown --stage session-checks 2>&1 | tee sat.session-checks
+    sat bootsys shutdown --stage session-checks 2>&1 | tee -a sat.session-checks
     ```
 
     Example output:
@@ -245,8 +260,6 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     Found no active BOS sessions.
     Checking for active CFS sessions.
     Found no active CFS sessions.
-    Checking for active CRUS upgrades.
-    Found no active CRUS upgrades.
     Checking for active FAS actions.
     Found no active FAS actions.
     Checking for active NMD dumps.
@@ -258,100 +271,24 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     If active sessions are running, either wait for them to complete or cancel the session. See the following step.
 
-1. Cancel the running BOS sessions.
+1. (`ncn-mw#`) Cancel the running BOS sessions.
 
-    1. Identify the BOS Sessions and associated BOA Kubernetes jobs to delete.
-
-        Determine which BOS session(s) to cancel. To cancel a BOS session, kill
-        its associated Boot Orchestration Agent (BOA) Kubernetes job.
-
-        To find a list of BOA jobs that are still running:
+    1. Identify the BOS sessions to delete.
 
         ```bash
-        kubectl -n services get jobs|egrep -i "boa|Name"
+        cray bos v2 sessions list --format json
         ```
 
-        Output similar to the following will be returned:
-
-        ```text
-        NAME                                       COMPLETIONS   DURATION   AGE
-        boa-0216d2d9-b2bc-41b0-960d-165d2af7a742   0/1           36m        36m
-        boa-0dbd7adb-fe53-4cda-bf0b-c47b0c111c9f   1/1           36m        3d5h
-        boa-4274b117-826a-4d8b-ac20-800fcac9afcc   1/1           36m        3d7h
-        boa-504dd626-d566-4f58-9974-3c50573146d6   1/1           8m47s      3d5h
-        boa-bae3fc19-7d91-44fc-a1ad-999e03f1daef   1/1           36m        3d7h
-        boa-bd95dc0b-8cb2-4ad4-8673-bb4cc8cae9b0   1/1           36m        3d7h
-        boa-ccdd1c29-cbd2-45df-8e7f-540d0c9cf453   1/1           35m        3d5h
-        boa-e0543eb5-3445-4ee0-93ec-c53e3d1832ce   1/1           36m        3d5h
-        boa-e0fca5e3-b671-4184-aa21-84feba50e85f   1/1           36m        3d5h
-        ```
-
-        Any job with a `0/1` `COMPLETIONS` column is still running and is a candidate to be forcibly deleted.
-        The BOA Job ID appears in the NAME column.
-
-    1. Clean up prior to BOA job deletion.
-
-        The BOA pod mounts a ConfigMap under the name `boot-session` at the directory `/mnt/boot_session` inside the pod. This ConfigMap has a random UUID name like `e0543eb5-3445-4ee0-93ec-c53e3d1832ce`.
-        Prior to deleting a BOA job, delete its ConfigMap.
-        Find the BOA job's ConfigMap with the following command:
+    1. Delete each running BOS session.
 
         ```bash
-        kubectl -n services describe job <BOA Job ID> |grep ConfigMap -A 1 -B 1
+        cray bos v2 sessions delete <session ID>
         ```
 
         Example:
 
         ```bash
-        kubectl -n services describe job boa-0216d2d9-b2bc-41b0-960d-165d2af7a742 |grep ConfigMap -A 1 -B 1
-           boot-session:
-            Type:      ConfigMap (a volume populated by a ConfigMap)
-            Name:      e0543eb5-3445-4ee0-93ec-c53e3d1832ce    <<< ConfigMap name. Delete this one.
-        --
-           ca-pubkey:
-            Type:      ConfigMap (a volume populated by a ConfigMap)
-            Name:      cray-configmap-ca-public-key
-        ```
-
-        Delete the ConfigMap associated with the boot-session, not the ca-pubkey.
-
-        To delete the ConfigMap:
-
-        ```bash
-        kubectl -n services delete cm <ConfigMap name>
-        ```
-
-        Example:
-
-        ```bash
-        kubectl -n services delete cm e0543eb5-3445-4ee0-93ec-c53e3d1832ce
-        configmap "e0543eb5-3445-4ee0-93ec-c53e3d1832ce" deleted
-        ```
-
-    1. Delete the BOA job(s).
-
-        ```bash
-        kubectl -n services delete job <boa-job-id>
-        ```
-
-        This will kill the BOA job and the BOS session associated with it.
-
-        When a job is killed, BOA will no longer attempt to execute the operation it was attempting to perform. This does not mean that
-        nothing continues to happen. If BOA has instructed a node to power on, the node will continue to power even after the BOA job
-        has been killed.
-
-    1. Delete the BOS session.
-        BOS keeps track of sessions in its database. These entries need to be deleted.
-        The BOS Session ID is the same as the BOA Job ID minus the prepended 'boa-'
-        string. Use the following command to delete the BOS database entry.
-
-        ```bash
-        cray bos session delete <session ID>
-        ```
-
-        Example:
-
-        ```bash
-        cray bos session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
+        cray bos v2 sessions delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
         ```
 
 1. Coordinate with the site to prevent new sessions from starting in the services listed.
@@ -370,6 +307,6 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     scontrol update NodeName=ALL State=DRAIN Reason="Shutdown"
     ```
 
-## Next Step
+## Next step
 
 Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.

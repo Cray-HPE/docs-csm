@@ -29,16 +29,23 @@ jobs:
   shellcheck:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v35
+      uses: tj-actions/changed-files@v40
       with:
         files: "**/*.sh"
-        files_ignore: ".github/**/*"
+        files_ignore: |
+          .github/**/*
+          api/*
 
     - uses: docker://koalaman/shellcheck:stable
       if: ${{ steps.changed-files.outputs.all_changed_files }}
       with:
         args: --severity=warning --color=always ${{ steps.changed-files.outputs.all_changed_files }}
+
+    - uses: docker://mvdan/shfmt:v3
+      if: ${{ steps.changed-files.outputs.all_changed_files }}
+      with:
+        args: -ci -s -i 2 -bn -sr -d ${{ steps.changed-files.outputs.all_changed_files }}

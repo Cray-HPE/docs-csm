@@ -30,8 +30,6 @@ spec:
     - key: "node-role.kubernetes.io/master"
       operator: "Exists"
       effect: "NoSchedule"
-  nodeSelector:
-    kubernetes.io/hostname: ncn-m001
   entrypoint: main
   templates:
     - name: main
@@ -64,10 +62,78 @@ spec:
             templateRef:
               name: workflow-template-record-time-template
               template: record-time-template
-          # TODO: @Lindsay, add the rest of the steps here
+          - name: INFO-to-read
+            dependencies:
+              - start-operation
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                   
+                - name: scriptContent
+                  value: |
+                    echo "NOTICE This workflow will rollout storage nodes according to --limit-management-rollout parameter."
+                    echo "NOTICE This stage will start an additional Argo workflow whose name contains 'ncn-lifecycle-rebuild'. Check for this workflow in the Argo UI."
+                    echo "NOTICE Check the argo pod logs from each step in the workflow to see what the step is doing"
+          - name: verify-storage-images-and-configuration
+            dependencies:
+              - INFO-to-read
+            templateRef:
+              name: verify-ncn-images-and-configs
+              template: main
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+                - name: nodeType
+                  value: "Storage"
+          - name: storage-node-upgrade
+            dependencies:
+              - verify-storage-images-and-configuration
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                   
+                - name: scriptContent
+                  value: |
+                    echo "INFO This stage will start a new Argo workflow with a name containing 'ncn-lifecycle-rebuild'."
+                    prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                    image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Storage")) | .[].final_image_id' | tr -d '"')
+                    configuration=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Storage")) | .[].configuration' | tr -d '"')
+
+                    limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
+                    rebuild_set=""
+                    if [[ -n $(echo $limit_management_nodes | grep 'Management_Storage') ]]; then
+                      for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
+                        rebuild_set="${rebuild_set},${storage_node}"
+                      done
+                    else
+                      # rebuild storage nodes specified by hostnames
+                      storage_nodes_to_rebuild="${limit_management_nodes}"
+                      for storage_node in $storage_nodes_to_rebuild; do
+                        rebuild_set="${rebuild_set},${storage_node}"
+                      done
+                    fi
+                    # remove first comma from rebuild set
+                    rebuild_set=${rebuild_set#?}
+                    
+                    export TERM=linux
+                    echo "DEBUG Starting upgrade of $rebuild_set using image: $image and cfs-configuration: $configuration"
+                    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh $rebuild_set --upgrade --image-id $image --desired-cfs-conf $configuration --labels '{"activity":"{{workflow.labels.activity}}","session":"{{workflow.labels.session}}"}'
           - name: end-operation
             dependencies:
-              - start-operation # TODO: add dependencies
+              - storage-node-upgrade
             templateRef:
               name: workflow-template-record-time-template
               template: record-time-template

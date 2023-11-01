@@ -165,7 +165,7 @@ The steps in this section load hand-off data before a later procedure reboots th
 
 1. (`pit#`) Collect a backdoor login. Fetch the CMN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
 
-    1. (`pit#`) Get the IP address.
+    1. Get the IP address.
 
         ```bash
         ssh ncn-m002 ip -4 a show bond0.cmn0 | grep inet | awk '{print $2}' | cut -d / -f1
@@ -238,14 +238,14 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
     ssh ncn-m002 \
         "mkdir -pv /metal/bootstrap
          rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${PITDATA}'/prep /metal/bootstrap/
-         rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${CSM_PATH}'/pre-install-toolkit*.iso /metal/bootstrap/"
+         rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${CSM_PATH}'/images/pre-install-toolkit/pre-install-toolkit*.iso /metal/bootstrap/"
     ```
 
 1. (`pit#`) Upload install files to S3 in the cluster.
 
     ```bash
     PITBackupDateTime=$(date +%Y-%m-%d_%H-%M-%S)
-    tar -czf "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" "${PITDATA}/prep" "${PITDATA}/configs" "${CSM_PATH}/pre-install-toolkit"*.iso &&
+    tar -czvf "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" "${PITDATA}/prep" "${PITDATA}/configs" "${CSM_PATH}/images/pre-install-toolkit/pre-install-toolkit"*.iso &&
     cray artifacts create config-data \
         "PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" \
         "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" &&
@@ -315,19 +315,21 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
     Expected output looks similar to the following:
 
     ```text
-    NAME       STATUS   ROLES                  AGE   VERSION
-    ncn-m001   Ready    control-plane,master   27s   v1.20.13
-    ncn-m002   Ready    control-plane,master   4h    v1.20.13
-    ncn-m003   Ready    control-plane,master   4h    v1.20.13
-    ncn-w001   Ready    <none>                 4h    v1.20.13
-    ncn-w002   Ready    <none>                 4h    v1.20.13
-    ncn-w003   Ready    <none>                 4h    v1.20.13
+    NAME       STATUS   ROLES                  AGE     VERSION
+    ncn-m001   Ready    control-plane,master   3m31s   v1.22.13
+    ncn-m002   Ready    control-plane,master   115m    v1.22.13
+    ncn-m003   Ready    control-plane,master   114m    v1.22.13
+    ncn-w001   Ready    <none>                 114m    v1.22.13
+    ncn-w002   Ready    <none>                 114m    v1.22.13
+    ncn-w003   Ready    <none>                 112m    v1.22.13
     ```
 
 1. (`ncn-m001#`) Restore and verify the site link.
 
     Restore networking files from the manual backup taken during the
     [Backup](#33-backup) step.
+
+    > **`NOTE`** Do NOT change any default NCN hostname; otherwise, unexpected deployment or upgrade errors may happen.
 
     ```bash
     SYSTEM_NAME=eniac
@@ -472,7 +474,14 @@ However, the commands in this section are all run **on** `ncn-m001`.
     Expected output looks similar to the following:
 
     ```text
-    ncn-m002-mgmt ncn-m003-mgmt ncn-s001-mgmt ncn-s002-mgmt ncn-s003-mgmt ncn-w001-mgmt ncn-w002-mgmt ncn-w003-mgmt
+    ncn-m002-mgmt
+    ncn-m003-mgmt
+    ncn-s001-mgmt
+    ncn-s002-mgmt
+    ncn-s003-mgmt
+    ncn-w001-mgmt
+    ncn-w002-mgmt
+    ncn-w003-mgmt
     ```
 
 1. (`ncn-m001#`) Get the DNS server IP address for the HMN.
@@ -511,6 +520,4 @@ However, the commands in this section are all run **on** `ncn-m001`.
 
 ## 7. Next topic
 
-After completing this procedure, the next step is to [Configure Administrative Access](README.md#5-configure-administrative-access).
-
-> **`NOTE`** Do NOT change any default NCN hostname; otherwise, unexpected deployment or upgrade errors may happen.
+Return to the previous page and continue to the next step.

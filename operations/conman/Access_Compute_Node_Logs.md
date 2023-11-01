@@ -16,7 +16,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 
 1. Log on to a Kubernetes master or worker node.
 
-1. Find the `cray-console-operator` pod.
+1. (`ncn-mw#`) Find the `cray-console-operator` pod.
 
     ```bash
     OP_POD=$(kubectl get pods -n services \
@@ -30,10 +30,10 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     cray-console-operator-6cf89ff566-kfnjr
     ```
 
-1. Log on to the pod.
+1. (`ncn-mw#`) Log on to the pod.
 
     ```bash
-    kubectl exec -it -n services $OP_POD -- sh
+    kubectl exec -it -n services $OP_POD  -c cray-console-operator -- sh
     ```
 
 1. The console log file for each node is labeled with the component name (xname) of that node.

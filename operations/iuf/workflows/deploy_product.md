@@ -1,7 +1,8 @@
 # Deploy product
 
 - [1. Execute the IUF `deploy-product` stage](#1-execute-the-iuf-deploy-product-stage)
-- [2. Next steps](#2-next-steps)
+- [2. Upgrade Kubernetes](#2-upgrade-kubernetes)
+- [3. Next steps](#3-next-steps)
 
 ## 1. Execute the IUF `deploy-product` stage
 
@@ -22,7 +23,11 @@ Once this step has completed:
 - New versions of product microservices have been deployed
 - Per-stage product hooks have executed for the `deploy-product` stage
 
-## 2. Next steps
+## 2. Upgrade Kubernetes
+
+Follow the steps documented in [Stage 3.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_3.md#stage-36---complete-kubernetes-upgrade).
+
+## 3. Next steps
 
 - If performing an initial install or an upgrade of non-CSM products only, return to the
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)

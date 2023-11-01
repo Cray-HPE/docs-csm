@@ -155,5 +155,5 @@ Over network {} ({})""".format(
 def get_ssh_host_for_node_type(node_type, excluded_hostnames):
     target_list = SSH_TARGETS.__dict__[node_type]
     for i in target_list:
-        if not i.hostname in excluded_hostnames and i.is_ready():
+        if not i.hostname in excluded_hostnames and i.is_ready(node_type):
             return i

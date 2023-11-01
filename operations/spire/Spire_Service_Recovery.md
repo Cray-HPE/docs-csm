@@ -7,7 +7,7 @@ The following covers redeploying the Spire service and restoring the data.
 - The system is fully installed and has transitioned off of the LiveCD.
 - All activities required for site maintenance are complete.
 - A backup or export of the data already exists.
-- The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../../update_product_stream/index.md#check-for-latest-documentation).
+- The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 - The Cray CLI has been configured on the node where the procedure is being performed. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Service recovery for Spire
@@ -88,94 +88,59 @@ The following covers redeploying the Spire service and restoring the data.
          for ncn in $(kubectl get nodes -o name | cut -d'/' -f2); do
              echo "Cleaning up NCN ${ncn}"
              ssh "${ncn}" systemctl stop spire-agent
-             ssh "${ncn}" rm -v /root/spire/data/svid.key /root/spire/agent_svid.der /root/spire/bundle.der
+             ssh "${ncn}" rm -v /var/lib/spire/data/svid.key /var/lib/spire/agent_svid.der /var/lib/spire/bundle.der
          done
          ```
 
 1. (`ncn-mw#`) Redeploy the chart and wait for the resources to start.
 
-   1. Create the manifest.
+   Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure with the following specifications:
 
-      ```bash
-      kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
-      kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}' > spire.yaml
-      for i in $(yq r spire.yaml 'spec.charts[*].name' | grep -Ev '^spire$'); do yq d -i spire.yaml 'spec.charts(name=='"$i"')'; done
-      yq w -i spire.yaml metadata.name spire
-      yq d -i spire.yaml spec.sources
-      yq w -i spire.yaml spec.sources.charts[0].location 'https://packages.local/repository/charts'
-      yq w -i spire.yaml spec.sources.charts[0].name csm-algol60
-      yq w -i spire.yaml spec.sources.charts[0].type repo
-      manifestgen -c customizations.yaml -i spire.yaml -o manifest.yaml
-      ```
+   - Name of chart to be redeployed: `spire`
+   - Base name of manifest: `sysmgmt`
+   - When reaching the step to update customizations, no edits need to be made to the customizations file.
+   - When reaching the step to validate that the redeploy was successful, perform the following step:
 
-   1. Check that the chart version is correct based on the earlier `helm history`.
+      **Only follow this step as part of the previously linked chart redeploy procedure.**
 
-      ```bash
-      grep "version:" manifest.yaml 
-      ```
+      1. Wait for the resources to start.
 
-      Example output:
+         ```bash
+         watch "kubectl get pods -n spire"
+         ```
 
-      ```yaml
-            version: 2.6.0
-      ```
+         Example output:
 
-   1. Redeploy the chart.
+         ```text
+         NAME                                     READY   STATUS      RESTARTS   AGE
+         request-ncn-join-token-89hp7             2/2     Running     0          31m
+         request-ncn-join-token-fvqdj             2/2     Running     0          31m
+         request-ncn-join-token-h7qc2             2/2     Running     0          31m
+         request-ncn-join-token-wv56n             2/2     Running     0          31m
+         request-ncn-join-token-dnfhk             2/2     Running     0          31m
+         request-ncn-join-token-hbvwc             2/2     Running     0          31m
+         spire-agent-cmn9q                        1/1     Running     0          31m
+         spire-agent-gzn2d                        1/1     Running     0          31m
+         spire-agent-pl595                        1/1     Running     0          31m
+         spire-create-pooler-schema-1-g6gr6       0/3     Completed   0          31m
+         spire-jwks-6c97b5694f-d94rg              3/3     Running     0          31m
+         spire-jwks-6c97b5694f-h89lb              3/3     Running     0          31m
+         spire-jwks-6c97b5694f-kz9k4              3/3     Running     0          31m
+         spire-postgres-0                         3/3     Running     0          31m
+         spire-postgres-1                         3/3     Running     0          31m
+         spire-postgres-2                         3/3     Running     0          30m
+         spire-postgres-pooler-695d4cd48f-57p5s   2/2     Running     0          30m
+         spire-postgres-pooler-695d4cd48f-bzm6n   2/2     Running     0          30m
+         spire-postgres-pooler-695d4cd48f-mv57z   2/2     Running     0          30m
+         spire-server-0                           2/2     Running     4          31m
+         spire-server-1                           2/2     Running     0          28m
+         spire-server-2                           2/2     Running     0          28m
+         spire-update-bss-1-cfbxc                 0/2     Completed   0          31m
+         ```
 
-      ```bash
-      loftsman ship --manifest-path ${PWD}/manifest.yaml
-      ```
-
-      Example output contains:
-
-      ```text
-      NAME: spire
-      ...
-      STATUS: deployed
-      ```
-
-   1. Wait for the resources to start.
-
-      ```bash
-      watch "kubectl get pods -n spire"
-      ```
-
-      Example output:
-
-      ```text
-      NAME                                     READY   STATUS      RESTARTS   AGE
-      request-ncn-join-token-89hp7             2/2     Running     0          31m
-      request-ncn-join-token-fvqdj             2/2     Running     0          31m
-      request-ncn-join-token-h7qc2             2/2     Running     0          31m
-      request-ncn-join-token-wv56n             2/2     Running     0          31m
-      request-ncn-join-token-dnfhk             2/2     Running     0          31m
-      request-ncn-join-token-hbvwc             2/2     Running     0          31m
-      spire-agent-cmn9q                        1/1     Running     0          31m
-      spire-agent-gzn2d                        1/1     Running     0          31m
-      spire-agent-pl595                        1/1     Running     0          31m
-      spire-create-pooler-schema-1-g6gr6       0/3     Completed   0          31m
-      spire-jwks-6c97b5694f-d94rg              3/3     Running     0          31m
-      spire-jwks-6c97b5694f-h89lb              3/3     Running     0          31m
-      spire-jwks-6c97b5694f-kz9k4              3/3     Running     0          31m
-      spire-postgres-0                         3/3     Running     0          31m
-      spire-postgres-1                         3/3     Running     0          31m
-      spire-postgres-2                         3/3     Running     0          30m
-      spire-postgres-pooler-695d4cd48f-57p5s   2/2     Running     0          30m
-      spire-postgres-pooler-695d4cd48f-bzm6n   2/2     Running     0          30m
-      spire-postgres-pooler-695d4cd48f-mv57z   2/2     Running     0          30m
-      spire-server-0                           2/2     Running     4          31m
-      spire-server-1                           2/2     Running     0          28m
-      spire-server-2                           2/2     Running     0          28m
-      spire-update-bss-1-cfbxc                 0/2     Completed   0          31m
-      ```
-
-   1. Rejoin the storage nodes to spire and restart the spire-agent on all NCNs
+   1. Rejoin the storage nodes to Spire and restart the `spire-agent` on all NCNs.
 
       ```bash
       /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
       for i in $(kubectl get nodes -o name | cut -d"/" -f2) $(ceph node ls | jq -r '.[] | keys[]' | sort -u); do ssh $i systemctl start spire-agent; done
       ```
-
-1. (`ncn-mw#`) Restore the critical data.
-
-   See [Restore Postgres for Spire](../kubernetes/Restore_Postgres.md#restore-postgres-for-spire).

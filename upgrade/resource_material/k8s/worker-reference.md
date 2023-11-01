@@ -40,7 +40,7 @@
    cray cps deployment update --nodes "ncn-w002"
    ```
 
-1. Confirm the CFS `configurationStatus` for **all** worker nodes before shutting down this worker node.
+1. Confirm the CFS `configuration_status` for **all** worker nodes before shutting down this worker node.
 
    (`ncn#`) If the following command reports that the state is `pending`, then the administrator should tail the logs of the CFS pod running on that node
    in order to watch the job finish before rebooting this node. If the state is `failed` for this node, then this indicates that the failed CFS job state
@@ -51,7 +51,7 @@
    ```bash
    NODE=ncn-w002
    XNAME=$(ssh "${NODE}" cat /etc/cray/xname)
-   cray cfs components describe "${XNAME}" --format json | jq .configurationStatus
+   cray cfs v3 components describe "${XNAME}" --format json | jq .configuration_status
    ```
 
    Example output:

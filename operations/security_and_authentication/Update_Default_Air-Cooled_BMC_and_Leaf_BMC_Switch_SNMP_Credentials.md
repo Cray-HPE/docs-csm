@@ -6,237 +6,202 @@ new air-cooled `NodeBMCs` and Slingshot switch BMCs (`RouterBMCs`), and SNMP cre
 ***IMPORTANT*** After this procedure is completed, **all future air-cooled hardware** added to the system will be assumed to be configured with the new global default credential.
 
 > ***NOTE*** This procedure will not update the Redfish or SNMP credentials for existing air-cooled devices. To change the credentials on existing air-cooled hardware follow the
-> [Change Air-Cooled Node BMC Credentials](Change_Air-Cooled_Node_BMC_Credentials.md) and [Change SNMP Credentials on Leaf-BMC Switches](Change_SNMP_Credentials_on_Leaf_BMC_Switches.md) procedures.
+> [Change Air-Cooled Node BMC Credentials](Change_Air-Cooled_Node_BMC_Credentials.md) and [Configuring SNMP in CSM]( ../../operations/network/management_network/configure_snmp.md) procedures.
+
+- [Limitation](#limitation)
+- [Procedure](#procedure)
+    1. [Update the default credentials used by HMS Discovery](#1-update-the-default-credentials-used-by-hms-discovery-kubernetes-cronjob)
+    1. [Restart the SNMP-backed RTS to pick up the SNMP credential changes](#2-restart-the-snmp-backed-rts-to-pick-up-the-snmp-credential-changes)
 
 ## Limitation
 
 The default global credentials used for liquid-cooled BMCs in the [Change Cray EX Liquid-Cooled Cabinet Global Default Password](Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
-procedure needs to be the same as the one used in this procedure for air-cooled BMCs river hardware.
-
-## Prerequisites
-
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+procedure needs to be the same as the one used in this procedure for air-cooled BMCs (River hardware).
 
 ## Procedure
 
-### 1.1 Acquire `site-init`
+The HMS Discovery Kubernetes cronjob sealed secret contains the default global credential used by REDS.
 
-Before redeploying the River Endpoint Discovery Service (REDS), update the `customizations.yaml` file in the `site-init` secret in the `loftsman` namespace.
+### 1. Update the default credentials used by HMS Discovery Kubernetes cronjob
 
-1. If the `site-init` repository is available as a remote repository, then clone it to `ncn-m001`. Otherwise, ensure that the `site-init` repository is available on `ncn-m001`.
+Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure **with the following specifications**:
 
-    ```bash
-    git clone "$SITE_INIT_REPO_URL" site-init
-    ```
+- Chart name: `cray-hms-discovery`
+- Base manifest name: `core-services`
+- (`ncn-mw#`) When reaching the step to update the customizations, perform the following steps:
 
-1. Acquire `customizations.yaml` from the currently running system:
+    **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-    ```bash
-    kubectl get secrets -n loftsman `site-init` -o jsonpath='{.data.customizations\.yaml}' | base64 -d > site-init/customizations.yaml
-    ```
+    1. Run `git clone https://github.com/Cray-HPE/csm.git`.
 
-1. Review, add, and commit `customizations.yaml` to the local `site-init` repository as appropriate.
+    1. Copy the directory `./csm/vendor/github.com/Cray-HPE/shasta-cfg/utils` from the cloned repository into the desired working directory.
 
-    > **`NOTE`** If `site-init` was cloned from a remote repository in step 1,
-    > there may not be any differences and hence nothing to commit. This is
-    > okay. If there are differences between what is in the repository and what
-    > was stored in the `site-init`, then it suggests settings were changed at some
-    > point.
+        ```bash
+        cp -vr ./csm/vendor/github.com/Cray-HPE/shasta-cfg/utils .
+        ```
 
-    ```bash
-    cd site-init
-    git diff
-    git add customizations.yaml
-    git commit -m 'Add customizations.yaml from site-init secret'
-    ```
+    1. Acquire sealed secret keys.
 
-1. Acquire sealed secret keys:
+        ```bash
+        mkdir -pv certs
+        kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d > certs/sealed_secrets.crt
+        kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d > certs/sealed_secrets.key
+        ```
 
-    ```bash
-    mkdir -p certs
-    kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d > certs/sealed_secrets.crt
-    kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d > certs/sealed_secrets.key
-    ```
+    1. Modify HMS discovery sealed secret to use new global default credentials.
 
-### 1.2 Modify REDS sealed secret to use new global default credentials
+        1. Inspect the original default Redfish credentials used by HMS discovery.
 
-1. Inspect the original default Redfish credentials used by REDS and HMS Discovery:
+            ```bash
+            ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults -r | base64 -d | jq
+            ```
 
-    ```bash
-    ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults -r | base64 -d | jq
-    ```
+            Expected output looks similar to the following:
 
-    Expected output looks similar to the following:
+            ```json
+            {
+                "Cray": {
+                    "Username": "root",
+                    "Password": "foo"
+                }
+            }
+            ```
 
-    ```json
-    {
-        "Cray": {
-            "Username": "root",
-            "Password": "foo"
-        }
-    }
-    ```
+        1. Inspect the original default switch SNMP credentials used by REDS and HMS discovery.
 
-1. Inspect the original default switch SNMP credentials used by REDS and HMS Discovery:
+            ```bash
+            ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_switch_defaults -r | base64 -d | jq
+            ```
 
-    ```bash
-    ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_switch_defaults -r | base64 -d | jq
-    ```
+            Expected output looks similar to the following:
 
-    Expected output looks similar to the following:
+            ```json
+            {
+                "SNMPUsername": "testuser",
+                "SNMPAuthPassword": "foo",
+                "SNMPPrivPassword": "bar"
+            }
+            ```
 
-    ```json
-    {
-        "SNMPUsername": "testuser",
-        "SNMPAuthPassword": "foo",
-        "SNMPPrivPassword": "bar"
-    }
-    ```
+        1. Update the default credentials in `customizations.yaml` for HMS discovery to use.
 
-1. Update the default credentials in `customizations.yaml` for REDS and HMS Discovery to use:
+            1. Specify the desired default Redfish credentials.
 
-    Specify the desired default Redfish credentials:
+                ```bash
+                echo '{"Cray":{"Username":"root","Password":"foobar"}}' | base64 > reds.redfish.creds.json.b64
+                ```
 
-    ```bash
-    echo '{"Cray":{"Username":"root","Password":"foobar"}}' | base64 > reds.redfish.creds.json.b64
-    ```
+            1. Specify the desired default SNMP credentials.
 
-    Specify the desired default SNMP credentials:
+                ```bash
+                echo '{"SNMPUsername":"testuser","SNMPAuthPassword":"foo1","SNMPPrivPassword":"bar2"}' | base64 > reds.switch.creds.json.b64
+                ```
 
-    ```bash
-    echo '{"SNMPUsername":"testuser","SNMPAuthPassword":"foo1","SNMPPrivPassword":"bar2"}' | base64 > reds.switch.creds.json.b64
-    ```
+        1. Update and regenerate the `cray_reds_credentials` sealed secret.
 
-    Update and regenerate `cray_reds_credentials` sealed secret:
+            ```bash
+            cat << EOF | yq w - 'data.vault_redfish_defaults' "$(<reds.redfish.creds.json.b64)" | yq w - 'data.vault_switch_defaults' "$(<reds.switch.creds.json.b64)" | yq r -j - | ./utils/secrets-encrypt.sh | yq w -f - -i ./customizations.yaml 'spec.kubernetes.sealed_secrets.cray_reds_credentials'
+            {
+                "kind": "Secret",
+                "apiVersion": "v1",
+                "metadata": {
+                    "name": "cray-reds-credentials",
+                    "namespace": "services",
+                    "creationTimestamp": null
+                },
+                "data": {}
+            }
+            EOF
+            ```
 
-    ```bash
-    cat << EOF | yq w - 'data.vault_redfish_defaults' "$(<reds.redfish.creds.json.b64)" | yq w - 'data.vault_switch_defaults' "$(<reds.switch.creds.json.b64)" | yq r -j - | ./utils/secrets-encrypt.sh | yq w -f - -i ./customizations.yaml 'spec.kubernetes.sealed_secrets.cray_reds_credentials'
-    {
-        "kind": "Secret",
-        "apiVersion": "v1",
-        "metadata": {
-            "name": "cray-reds-credentials",
-            "namespace": "services",
-            "creationTimestamp": null
-        },
-        "data": {}
-    }
-    EOF
-    ```
+        1. Decrypt generated secret for review.
 
-1. Decrypt generated secret for review.
+            1. Review the default Redfish credentials.
 
-    Default Redfish credentials:
+                ```bash
+                ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults -r | base64 -d | jq
+                ```
 
-    ```bash
-    ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults -r | base64 -d | jq
-    ```
+                Expected output looks similar to the following:
 
-    Expected output looks similar to the following:
+                ```json
+                {
+                    "Username": "root",
+                    "Password": "foobar"
+                }
+                ```
 
-    ```json
-    {
-        "Username": "root",
-        "Password": "foobar"
-    }
-    ```
+            1. Review the default switch SNMP credentials.
 
-    Default Switch SNMP credentials:
+                ```bash
+                ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_switch_defaults -r | base64 -d | jq
+                ```
 
-    ```bash
-    ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_switch_defaults -r | base64 -d | jq
-    ```
+                Expected output looks similar to the following:
 
-    Expected output looks similar to the following:
+                ```json
+                {
+                    "SNMPUsername": "testuser",
+                    "SNMPAuthPassword": "foo1",
+                    "SNMPPrivPassword": "bar2"
+                }
+                ```
 
-    ```json
-    {
-        "SNMPUsername": "testuser",
-        "SNMPAuthPassword": "foo1",
-        "SNMPPrivPassword": "bar2"
-    }
-    ```
+- (`ncn-mw#`) When reaching the step to validate the redeployed chart, perform the following steps:
 
-1. Update the `site-init` secret for the system:
+    **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-    ```bash
-    kubectl delete secret -n loftsman site-init
-    kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-    ```
+    1. Wait for the HMS Discovery Vault loader job to run to completion.
 
-### 1.3 Redeploy REDS to pick up the new sealed secret and push credentials into vault
+        ```bash
+        kubectl -n services wait job -l app=hms-discovery-vault-loader --for=condition=complete --timeout=5m
+        ```
 
-1. Determine the version of REDS:
+    1. Verify that the default Redfish credentials have updated in Vault.
 
-    ```bash
-    REDS_VERSION=$(kubectl -n loftsman get cm loftsman-core-services -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-hms-reds).version')
-    echo $REDS_VERSION
-    ```
+        ```bash
+        VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+        kubectl -n vault exec -it cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 vault kv get secret/reds-creds/defaults
+        ```
 
-1. Create `reds-manifest.yaml`:
+        Expected output:
 
-    ```bash
-    cat > reds-manifest.yaml << EOF
-    apiVersion: manifests/v1beta1
-    metadata:
-        name: reds
-    spec:
-        charts:
-        - name: cray-hms-reds
-          version: $REDS_VERSION
-          namespace: services
-    EOF
-    ```
+        ```text
+        ==== Data ====
+        Key     Value
+        ---     -----
+        Cray    map[password:foobar username:root]
+        ```
 
-1. Merge `customizations.yaml` with `reds-manifest.yaml`:
+    1. Verify that the default SNMP credentials have updated in Vault.
 
-    ```bash
-    manifestgen -c customizations.yaml -i ./reds-manifest.yaml > ./reds-manifest.out.yaml
-    ```
+        ```bash
+        kubectl -n vault exec -it cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 vault kv get secret/reds-creds/switch_defaults
+        ```
 
-1. Redeploy the REDS helm chart:
+        Expected output:
 
-    ```bash
-    loftsman ship \
-        --charts-repo https://packages.local/repository/charts \
-        --manifest-path reds-manifest.out.yaml
-    ```
+        ```text
+        ========== Data ==========
+        Key                 Value
+        ---                 -----
+        SNMPAuthPassword    foo1
+        SNMPPrivPassword    bar2
+        SNMPUsername        testuser
+        ```
 
-1. Wait for the REDS Vault loader job to run to completion:
+- **Make sure to perform the entire linked procedure, including the step to save the updated customizations.**
+
+### 2. Restart the SNMP-backed RTS to pick up the SNMP credential changes
+
+1. Scale the SNMP-backed RTS down.
 
     ```bash
-    kubectl -n services wait job cray-reds-vault-loader --for=condition=complete --timeout=5m
+    kubectl scale deployment cray-hms-rts-snmp -n services --replicas=0
     ```
 
-1. Verify the default Redfish credentials have updated in Vault:
+1. Scale the SNMP-backed RTS up.
 
     ```bash
-    VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
-    kubectl -n vault exec -it cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 vault kv get secret/reds-creds/defaults
-    ```
-
-    Expected output:
-
-    ```text
-    ==== Data ====
-    Key     Value
-    ---     -----
-    Cray    map[password:foobar username:root]
-    ```
-
-1. Verify the default SNMP credentials have updated in Vault:
-
-    ```bash
-    kubectl -n vault exec -it cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 vault kv get secret/reds-creds/switch_defaults
-    ```
-
-    Expected output:
-
-    ```text
-    ========== Data ==========
-    Key                 Value
-    ---                 -----
-    SNMPAuthPassword    foo1
-    SNMPPrivPassword    bar2
-    SNMPUsername        testuser
+    kubectl scale deployment cray-hms-rts-snmp -n services --replicas=1
     ```

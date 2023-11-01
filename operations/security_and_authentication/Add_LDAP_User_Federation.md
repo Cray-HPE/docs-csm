@@ -2,13 +2,35 @@
 
 Add LDAP user federation using the Keycloak localization tool.
 
+- [Prerequisites](#prerequisites)
+- [System domain name](#system-domain-name)
+- [Procedure](#procedure)
+
 ## Prerequisites
 
 LDAP user federation is not currently configured in Keycloak. For example, if it was not configured in Keycloak when the system was initially installed or the LDAP user federation was removed.
 
+## System domain name
+
+The `SYSTEM_DOMAIN_NAME` value found in some of the URLs on this page is expected to be the system's fully qualified domain name (FQDN).
+
+(`ncn-mw#`) The FQDN can be found by running the following command on any Kubernetes NCN.
+
+```bash
+kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | yq r - spec.network.dns.external
+```
+
+Example output:
+
+```text
+system..hpc.amslabs.hpecorp.net
+```
+
+Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME` with the actual value found using the above command.
+
 ## Procedure
 
-1. Prepare to edit the `customizations.yaml` file.
+1. (`ncn-mw#`) Prepare to edit the `customizations.yaml` file.
 
    If the `customizations.yaml` file is managed in an external Git repository (as recommended), then clone a local working tree. Replace the `<URL>` value in the following command before running it.
 
@@ -45,7 +67,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
    > **`NOTE`** All subsequent steps of this procedure should be performed within the `/root/site-init` directory created in this step.
 
-1. Repopulate the `keycloak_users_localize` and `cray-keycloak` sealed secrets in the `customizations.yaml` file with the desired configuration.
+1. (`ncn-mw#`) Repopulate the `keycloak_users_localize` and `cray-keycloak` sealed secrets in the `customizations.yaml` file with the desired configuration.
 
    Update the LDAP settings with the desired configuration. LDAP connection information
    is stored in the `keycloak-users-localize` secret in the `customizations.yaml` file.
@@ -257,7 +279,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
          - type: string
    ```
 
-1. (Optional) Add the LDAP CA certificate in the `certs.jks` section of `customizations.yaml`.
+1. (Optional) (`ncn-mw#`) Add the LDAP CA certificate in the `certs.jks` section of `customizations.yaml`.
 
    If LDAP requires TLS (recommended), update the `cray-keycloak` sealed
    secret value by supplying a base-64-encoded Java KeyStore (JKS) that
@@ -452,7 +474,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       kubectl rollout restart -n services deployments cray-shared-kafka-entity-operator
       ```
 
-1. Prepare to generate sealed secrets.
+1. (`ncn-mw#`) Prepare to generate sealed secrets.
 
    Secrets are stored in `customizations.yaml` as `SealedSecret` resources
    (encrypted secrets), which are deployed by specific charts and decrypted by the
@@ -463,7 +485,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
    ```
 
-1. Encrypt the static values in the `customizations.yaml` file after making changes.
+1. (`ncn-mw#`) Encrypt the static values in the `customizations.yaml` file after making changes.
 
    The following command must be run within the `site-init` directory.
 
@@ -508,7 +530,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    Generating type static...
    ```
 
-1. Decrypt the sealed secret to verify it was generated correctly.
+1. (`ncn-mw#`) Decrypt the sealed secret to verify it was generated correctly.
 
    ```bash
    ./utils/secrets-decrypt.sh keycloak_users_localize | jq -r '.data.ldap_connection_url' | base64 --decode
@@ -520,136 +542,98 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    ldaps://my_ldap.my_org.test
    ```
 
-1. Upload the modified `customizations.yaml` file to Kubernetes.
+1. (`ncn-mw#`) Upload the modified `customizations.yaml` file to Kubernetes.
 
    ```bash
    kubectl delete secret -n loftsman site-init
    kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
-1. Re-apply the `cray-keycloak` Helm chart with the updated `customizations.yaml` file.
+1. (`ncn-mw#`) Re-apply the `cray-keycloak` Helm chart with the updated `customizations.yaml` file.
 
-   1. Retrieve the current `platform.yaml` manifest.
+   Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure with the following specifications:
 
-      ```bash
-      kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' > platform.yaml
-      ```
+   - Name of chart to be redeployed: `cray-keycloak`
+   - Base name of manifest: `platform`
+   - Instead of downloading the customizations from Kubernetes, use the updated `customizations.yaml` file.
+   - When reaching the step to validate that the redeploy was successful, perform the following steps:
 
-   1. Remove all charts from the `platform.yaml` manifest except for `cray-keycloak`.
+      **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-      Edit the `platform.yaml` file and delete all sections starting with `-name: <chart_name>`, except for the `cray-keycloak` section.
+      1. Wait for the `keycloak-certs` secret to reflect the new `cert.jks`.
 
-   1. Change the name of the manifest being deployed from `platform` to `cray-keycloak`.
+         Run the following command until there is a non-empty value in the secret (this can take a minute or two):
 
-      ```bash
-      sed -i 's/name: platform/name: cray-keycloak/' platform.yaml
-      ```
+         ```bash
+         kubectl get secret -n services keycloak-certs -o yaml | grep certs.jks
+         ```
 
-   1. Populate the platform manifest with data from the `customizations.yaml` file.
+         Example output:
 
-      ```bash
-      manifestgen -i platform.yaml -c customizations.yaml -o new-platform.yaml
-      ```
+         ```text
+           certs.jks: <REDACTED>
+         ```
 
-   1. Re-apply the platform manifest with the updated `cray-keycloak` chart.
+      1. Restart the `cray-keycloak-` pods.
 
-      ```bash
-      loftsman ship --manifest-path ./new-platform.yaml --charts-repo https://packages.local/repository/charts
-      ```
+         ```bash
+         kubectl rollout restart statefulset -n services cray-keycloak
+         ```
 
-   1. Wait for the `keycloak-certs` secret to reflect the new `cert.jks`.
+      1. Wait for the Keycloak pods to restart.
 
-      Run the following command until there is a non-empty value in the secret (this can take a minute or two):
+         ```bash
+         kubectl rollout status statefulset -n services cray-keycloak
+         ```
 
-      ```bash
-      kubectl get secret -n services keycloak-certs -o yaml | grep certs.jks
-        certs.jks: <REDACTED>
-      ```
+   - **Make sure to perform the entire linked procedure, including the step to save the updated customizations.**
 
-   1. Restart the `cray-keycloak-` pods.
+1. (`ncn-mw#`) Uninstall the current `cray-keycloak-users-localize` chart.
 
-      ```bash
-      kubectl rollout restart statefulset -n services cray-keycloak
-      ```
+   ```bash
+   helm del cray-keycloak-users-localize -n services
+   ```
 
-   1. Wait for the Keycloak pods to restart.
+1. (`ncn-mw#`) Re-apply the `cray-keycloak-users-localize` Helm chart with the updated `customizations.yaml` file.
 
-      ```bash
-      kubectl rollout status statefulset -n services cray-keycloak
-      ```
+   Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure with the following specifications:
 
-1. Re-apply the `cray-keycloak-users-localize` Helm chart with the updated `customizations.yaml` file.
+   - Name of chart to be redeployed: `cray-keycloak-users-localize`
+   - Base name of manifest: `platform`
+   - Instead of downloading the customizations from Kubernetes, use the updated `customizations.yaml` file.
+   - When reaching the step to validate that the redeploy was successful, perform the following steps:
 
-   1. Determine the `cray-keycloak-users-localize` chart version that is currently deployed.
+      **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-      ```bash
-      helm ls -A -a | grep cray-keycloak-users-localize | awk '{print $(NF-1)}'
-      cray-keycloak-users-localize-<VERSION>
-      ```
+      1. Watch the pod to check the status of the job.
 
-   1. Create a manifest file that will be used to reapply the same chart version.
+         The pod will go through the normal Kubernetes states. It will stay in a `Running` state for a while, and then it will go to `Completed`.
 
-      Create the file `./cray-keycloak-users-localize-manifest.yaml` with the following contents:
+         ```bash
+         kubectl get pods -n services | grep keycloak-users-localize
+         ```
 
-      ```yaml
-      apiVersion: manifests/v1beta1
-      metadata:
-        name: reapply-cray-keycloak-users-localize
-      spec:
-        charts:
-          - name: cray-keycloak-users-localize
-            namespace: services
-            version: <VERSION FROM OUTPUT>
-      ```
+         Example output:
 
-   1. Uninstall the current `cray-keycloak-users-localize` chart.
+         ```text
+         keycloak-users-localize-1-sk2hn                                0/2     Completed   0          2m35s
+         ```
 
-      ```bash
-      helm del cray-keycloak-users-localize -n services
-      ```
+      1. Check the pod's logs.
 
-   1. Populate the deployment manifest with data from the `customizations.yaml` file.
+         Replace the `KEYCLOAK_POD_NAME` value with the pod name from the previous step.
 
-      ```bash
-      manifestgen -i cray-keycloak-users-localize-manifest.yaml -c customizations.yaml -o deploy.yaml
-      ```
+         ```bash
+         kubectl logs -n services KEYCLOAK_POD_NAME keycloak-localize
+         ```
 
-   1. Reapply the `cray-keycloak-users-localize` chart.
+         Example log entry showing that it has updated the "s3" objects and `ConfigMaps`:
 
-      ```bash
-      loftsman ship --manifest-path ./deploy.yaml \
-        --charts-repo https://packages.local/repository/charts
-      ```
+         ```text
+         2020-07-20 18:26:15,774 - INFO    - keycloak_localize - keycloak-localize complete
+         ```
 
-   1. Watch the pod to check the status of the job.
-
-      The pod will go through the normal Kubernetes states. It will stay in a `Running` state for a while, and then it will go to `Completed`.
-
-      ```bash
-      kubectl get pods -n services | grep keycloak-users-localize
-      ```
-
-      Example output:
-
-      ```text
-      keycloak-users-localize-1-sk2hn                                0/2     Completed   0          2m35s
-      ```
-
-   1. Check the pod's logs.
-
-      Replace the `KEYCLOAK_POD_NAME` value with the pod name from the previous step.
-
-      ```bash
-      kubectl logs -n services KEYCLOAK_POD_NAME keycloak-localize
-      ```
-
-      Example log entry showing that it has updated the "s3" objects and `ConfigMaps`:
-
-      ```text
-      2020-07-20 18:26:15,774 - INFO    - keycloak_localize - keycloak-localize complete
-      ```
-
-1. Sync the users and groups from Keycloak to the compute nodes.
+1. (`ncn-mw#`) Sync the users and groups from Keycloak to the compute nodes.
 
    1. Get the `crayvcs` password.
 
@@ -686,17 +670,17 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Update the Configuration Framework Service (CFS) configuration.
 
       ```bash
-      cray cfs configurations update configurations-example --file ./configurations-example.json --format json
+      cray cfs v3 configurations update configurations-example --file ./configurations-example.json --format json
       ```
 
       Example output:
 
       ```json
       {
-        "lastUpdated": "2021-07-28T03:26:30:37Z",
+        "last_updated": "2021-07-28T03:26:30:37Z",
         "layers": [
            {
-            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/example-repo.git",
+            "clone_url": "https://api-gw-service-nmn.local/vcs/cray/example-repo.git",
             "commit": "<git commit id>",
             "name": "configurations-layer-example-1",
             "playbook": "site.yml"
@@ -709,10 +693,10 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Reboot with the Boot Orchestration Service (BOS).
 
       ```bash
-      cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
+      cray bos v2 sessions create --template-name BOS_TEMPLATE --operation reboot
       ```
 
-1. Validate that LDAP integration was added successfully.
+1. (`ncn-mw#`) Validate that LDAP integration was added successfully.
 
    1. Retrieve the `admin` user's password for Keycloak.
 
@@ -722,7 +706,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
    1. Log in to the Keycloak UI using the `admin` user and the password obtained in the previous step.
 
-      The Keycloak UI URL is typically similar to the following: `https://auth.cmn.<system_name>/keycloak`
+      The Keycloak UI URL is typically similar to the following: `https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak`
   
    1. Ensure that the selected `Realm` is `Shasta`, and not `Master`
 

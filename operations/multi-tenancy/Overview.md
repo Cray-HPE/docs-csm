@@ -1,24 +1,24 @@
 # Multi-Tenancy Support
 
-This page will provide an overview of the multi-tenancy feature.
-
-## Table of Contents
-
 - [Disclaimer](#disclaimer)
 - [Components](#components)
   - [Hierarchical Namespace Controller (HNC)](#hierarchical-namespace-controller-hnc)
   - [Tenant and Partition Management System (TAPMS)](#tenant-and-partition-management-system-tapms)
-  - [Slurm Operator](#slurm-operator)
-- [Getting Started](#getting-started)
-  - [Create a Tenant](#create-a-tenant)
-  - [Modify a Tenant](#modify-a-tenant)
-  - [Remove a Tenant](#remove-a-tenant)
-  - [Tenant Administrator Configuration](#tenant-administrator-configuration)
+  - [Slurm operator](#slurm-operator)
+  - [Vault integration](#vault-integration)
+- [Getting started](#getting-started)
+  - [Create a tenant](#create-a-tenant)
+  - [Modify a tenant](#modify-a-tenant)
+  - [Remove a tenant](#remove-a-tenant)
+  - [Tenant administrator configuration](#tenant-administrator-configuration)
 
 ## Disclaimer
 
-**`IMPORTANT`** Beginning in the CSM 1.3 release, this feature is offered as a preview only, and is not considered production-ready.
-This first release should be considered _soft_ multi-tenancy, with additional functionality which hardens this feature in subsequent releases.
+**`IMPORTANT`** This feature is in alpha, collectively denoted by the API versioning strategy associated with TAPMS and other operators represented herein.
+Users should expect breaking changes in the API across CSM releases as the feature set gains operational exposure and enhancements are introduced, ultimately leading to more stable API version series (for example, beta, and then stable).
+While we do not anticipate that users will experience issues with pre-stable APIs, additional care should be taken to validate desired functionality in test environments prior to use in production.
+
+**`IMPORTANT`** This feature is intended for _soft_ multi-tenancy use cases at this time.
 _Soft_ multi-tenancy is defined as tenants that are hospitable, analogous to business units (as opposed to different companies), and the tenants are not considered to have malicious intent.
 
 ## Components
@@ -30,30 +30,35 @@ See [Cray HNC Manager](CrayHncManager.md) for specifics of how to configure the 
 ### Tenant and Partition Management System (TAPMS)
 
 `tapms` is the primary Kubernetes Operator for the multi-tenancy solution. Creating and modifying a tenant is accomplished by creating a `Tenant` custom resource, which is managed and reconciled by `tapms`.
-See [`TAPMS` Overview](Tapms.md) for details on this Kubernetes Operator.
+See [TAPMS Overview](Tapms.md) for details on this Kubernetes Operator.
 
-### Slurm Operator
+### Slurm operator
 
 The Slurm operator can be used to deploy the Slurm workload manager within a
 tenant. See [Slurm Operator](SlurmOperator.md) for details.
 
-## Getting Started
+### Vault integration
+
+The `tapms` operator can create a Cray Vault transit engine for the tenant. Creating a transit engine is accomplished by enabling the feature in the `Tenant` custom resource, which is managed and reconciled by `tapms`.
+See the [Vault Overview](Vault.md) for details.
+
+## Getting started
 
 Below are common activities performed by an infrastructure administrator for managing a tenant's lifecycle.
 
-### Create a Tenant
+### Create a tenant
 
-Follow instructions at [Create a Tenant](Create_a_Tenant.md) for how to create a tenant using the `Tenant` custom resource definition (CRD) which is managed by the `tapms`.
+See [Create a Tenant](Create_a_Tenant.md) for how to create a tenant using the `Tenant` custom resource definition (CRD) which is managed by the `tapms`.
 
-### Modify a Tenant
+### Modify a tenant
 
-Follow instructions at [Modify a Tenant](Modify_a_Tenant.md) for how to modify a tenant after initial creation.  Tenants can be modified to add/remove `xnames` from the tenant, as well as additions/deletions to the `childNamespaces` list.
+See [Modify a Tenant](Modify_a_Tenant.md) for how to modify a tenant after initial creation. Tenants can be modified to add/remove `xnames` from the tenant, as well as additions/deletions to the `childNamespaces` list.
 
-### Remove a Tenant
+### Remove a tenant
 
-Follow instructions at [Remove a Tenant](Remove_a_Tenant.md) for how to remove a tenant when it is no longer needed.
+See [Remove a Tenant](Remove_a_Tenant.md) for how to remove a tenant when it is no longer needed.
 
-### Tenant Administrator Configuration
+### Tenant administrator configuration
 
 For information on how to configure a user to perform tenant administration functions, see [Tenant Administrator Configuration](TenantAdminConfig.md).
 Users configured as `Tenant Administrators` can modify `xname` assignments (and other changes to the `tapms` custom resource) for one or more tenants.

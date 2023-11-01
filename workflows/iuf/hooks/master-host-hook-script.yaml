@@ -39,13 +39,15 @@ spec:
               parameters:
                 - name: dryRun
                   value: 'false'
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"
                 - name: scriptContent
                   value: >
                     set -e
 
                     global_params_file=$(echo $RANDOM | md5sum | head -c 20; echo)
 
-                    echo "INFO  Saving global_params into file /tmp/${global_params_file}.json"
+                    echo "DEBUG Saving global_params into file /tmp/${global_params_file}.json"
 
                     cat << EOF > /tmp/${global_params_file}.json
 
@@ -53,7 +55,7 @@ spec:
 
                     EOF
 
-                    echo "INFO  Calling {{inputs.parameters.script_path}}"
+                    echo "DEBUG Calling {{inputs.parameters.script_path}}"
 
                     chmod +x {{inputs.parameters.script_path}}
 

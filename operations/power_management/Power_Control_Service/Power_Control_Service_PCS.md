@@ -1,18 +1,19 @@
 # Power Control Service (PCS)
 
 The Power Control Service (PCS) enables direct hardware control of nodes,
-compute blades, router modules, and liquid cooled chassis. PCS talks to
-BMCs via Redfish to control power, query status, and manage power capping
-on target components. These controls enable an administrator and 3rd party
-software to more intelligently manage state and system-wide power consumption.
+compute blades, router modules, liquid cooled chassis, and management network
+switches. PCS talks to BMCs via Redfish to control power, query status, and
+manage power capping on target components. These controls enable an administrator
+and 3rd party software to more intelligently manage state and system-wide power
+consumption.
 
 Administrators can use the `cray` CLI for power operations from any system that
 has HTTPS access to the
 [System Management Services](../../network/Access_to_System_Management_Services.md).
 
 Third party software can access the API directly. Refer to the
-[PCS API](https://github.com/Cray-HPE/hms-power-control/blob/v1.4.0/api/swagger.yaml)
-documentation for detailed information about API options and features.
+[PCS API documentation](../../../api/power-control.md)
+for detailed information about API options and features.
 
 The `cray power` command (see `--help`) can be used to control power to
 specific components by specifying the component xname.
@@ -72,6 +73,8 @@ Examples of valid xnames:
 * NCN Slots: `x3200c0s9` (U9)
 * NCN Nodes: `x3200c0s9b0n0`
 
+`NOTE` Power control is not supported for management network switches.
+
 ## Power Capping
 
 * power-cap
@@ -84,5 +87,56 @@ calls are required to power cap different compute node types as each compute
 node type has its own power capping capabilities.
 
 `NOTE` Power capping is not supported for liquid cooled chassis, switch
-modules, compute blades, and any non-compute nodes (NCNs) in air cooled
-cabinets.
+modules, compute blades, management network switches, or any non-compute
+nodes (NCNs) in air cooled cabinets.
+
+## Monitoring the Availability/Reachability of Managed Hardware
+
+The `/power-status` API in PCS can be used to monitor the Availability/Reachability of all managed hardware.
+PCS periodically reaches out to all managed hardware for status. This includes the following hardware types:
+
+* `Chassis`
+* `ChassisBMC`
+* `ComputeModule`
+* `RouterModule`
+* `NodeBMC`
+* `RouterBMC`
+* `Node`
+* `HSNBoard`
+* `MgmtSwitch`
+* `MgmtHLSwitch`
+* `CDUMgmtSwitch`
+* `CabinetPDUPowerConnector`
+
+PCS will respond with the power status, the manager availability, what power controls are available, and when
+the component's entry was last updated. For example:
+
+```json
+{
+  "status": [
+    {
+      "xname": "x1000c0s0b0n0",
+      "powerState": "on",
+      "managementState": "available",
+      "error": "",
+      "supportedPowerTransitions": [
+        "Force-Off",
+        "On",
+        "Soft-Off",
+        "Off",
+        "Init",
+        "Hard-Restart",
+        "Soft-Restart"
+      ],
+      "lastUpdated": "2023-05-09T20:52:53.489834846Z"
+    }
+  ]
+}
+```
+
+The `managementState` can be used to determine if the component's management endpoint was reachable during
+the last hardware scan and can be used to monitor system hardware readiness and availability.
+
+See the `/power-status` section in the
+[PCS API documentation](../../../api/power-control.md)
+for detailed information about the API options and features.

@@ -8,202 +8,140 @@ product documentation. To update Slingshot switch BMCs, refer to "Change Rosetta
 
 This procedure provisions only the default Redfish `root` account passwords. It does not modify Redfish accounts that have been added after an initial system installation.
 
+- [Prerequisites](#prerequisites)
+- [Procedure](#procedure)
+
+    1. [Update the default credentials used by MEDS for new hardware](#1-update-the-default-credentials-used-by-meds-for-new-hardware)
+    1. [Update credentials for existing EX hardware in the system](#2-update-credentials-for-existing-ex-hardware-in-the-system)
+    1. [Reapply BMC settings if a `StatefulReset` was performed on any BMC](#3-reapply-bmc-settings-if-a-statefulreset-was-performed-on-any-bmc)
+
 ## Prerequisites
 
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 - The `hms-discovery` Kubernetes CronJob has been disabled.
 - All blades in the cabinets have been powered off.
-- Procedures in [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md) have
+- The procedures in [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md) have
   been performed on all CECs in the system.
 - All of the CECs must be configured with the **same** global credential.
 - The previous default global credential for liquid-cooled BMCs must be known.
 
 ## Procedure
 
+The Mountain Endpoint Discovery Service (MEDS) sealed secret contains the default global credential used by MEDS when it discovers new liquid-cooled EX cabinet hardware.
+
 ### 1. Update the default credentials used by MEDS for new hardware
 
-The MEDS sealed secret contains the default global credential used by MEDS when it discovers new liquid-cooled EX cabinet hardware.
+Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure **with the following specifications**:
 
-#### 1.1 Acquire `site-init`
+- Chart name: `cray-hms-bss`
+- Base manifest name: `core-services`
+- (`ncn-mw#`) When reaching the step to update the customizations, perform the following steps:
 
-Before redeploying MEDS, update the `customizations.yaml` file in the `site-init` secret in the `loftsman` namespace.
+    **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-1. Ensure that the `site-init` repository is available on `ncn-m001`.
+    1. Run `git clone https://github.com/Cray-HPE/csm.git`.
 
-    If the `site-init` repository is available as a remote repository, then clone it to `ncn-m001`.
+    1. Copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` from the cloned repository into the desired working directory.
 
-    ```bash
-    git clone "$SITE_INIT_REPO_URL" site-init
-    ```
+        ```bash
+        cp -vr ./csm/vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils .
+        ```
 
-1. Acquire `customizations.yaml` from the currently running system.
+    1. Acquire sealed secret keys.
 
-    ```bash
-    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > site-init/customizations.yaml
-    ```
+        ```bash
+        mkdir -pv certs
+        kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d > certs/sealed_secrets.crt
+        kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d > certs/sealed_secrets.key
+        ```
 
-1. Review, add, and commit `customizations.yaml` to the local `site-init` repository as appropriate.
+    1. Modify MEDS sealed secret to use new global default credential.
 
-    > **`NOTE`** If `site-init` was cloned from a remote repository, then
-    > there may not be any differences and hence nothing to commit. This is
-    > okay. If there are differences between what is in the repository and what
-    > was stored in the `site-init`, then this suggests that settings were changed at some
-    > point.
+        1. Inspect the original default credential for MEDS.
 
-    ```bash
-    cd site-init
-    git diff
-    git add customizations.yaml
-    git commit -m 'Add customizations.yaml from site-init secret'
-    ```
+            ```bash
+            ./utils/secrets-decrypt.sh cray_meds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults -r | base64 -d | jq
+            ```
 
-1. Acquire sealed secret keys:
+            Example output:
 
-    ```bash
-    mkdir -p certs
-    kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d > certs/sealed_secrets.crt
-    kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d > certs/sealed_secrets.key
-    ```
+            ```json
+            {
+                "Username": "root",
+                "Password": "bar"
+            }
+            ```
 
-#### 1.2 Modify MEDS sealed secret to use new global default credential
+        1. Specify the desired default credentials for MEDS to use with new hardware.
 
-1. Inspect the original default credentials for MEDS.
+            > Replace `foobar` with the `root` user password configured on the CECs.
 
-    ```bash
-    ./utils/secrets-decrypt.sh cray_meds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults -r | base64 -d | jq
-    ```
+            ```bash
+            echo '{ "Username": "root", "Password": "foobar" }' | base64 > creds.json.b64
+            ```
 
-    Example output:
+        1. Update and regenerate the `cray_meds_credentials` sealed secret.
 
-    ```json
-    {
-        "Username": "root",
-        "Password": "bar"
-    }
-    ```
+            ```bash
+            cat << EOF | yq w - 'data.vault_redfish_defaults' "$(<creds.json.b64)" | yq r -j - | ./utils/secrets-encrypt.sh | yq w -f - -i ./customizations.yaml 'spec.kubernetes.sealed_secrets.cray_meds_credentials'
+            {
+                "kind": "Secret",
+                "apiVersion": "v1",
+                "metadata": {
+                    "name": "cray-meds-credentials",
+                    "namespace": "services",
+                    "creationTimestamp": null
+                },
+                "data": {}
+            }
+            EOF
+            ```
 
-1. Specify the desired default credentials for MEDS to use with new hardware.
+        1. Decrypt updated sealed secret for review.
 
-    > Replace `foobar` with the `root` user password configured on the CECs.
+            The sealed secret should match the credentials set on the CEC.
 
-    ```bash
-    echo '{ "Username": "root", "Password": "foobar" }' | base64 > creds.json.b64
-    ```
+            ```bash
+            ./utils/secrets-decrypt.sh cray_meds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults -r | base64 -d | jq
+            ```
 
-1. Update and regenerate the `cray_meds_credentials` sealed secret.
+            Example output:
 
-    ```bash
-    cat << EOF | yq w - 'data.vault_redfish_defaults' "$(<creds.json.b64)" | yq r -j - | ./utils/secrets-encrypt.sh | yq w -f - -i ./customizations.yaml 'spec.kubernetes.sealed_secrets.cray_meds_credentials'
-    {
-        "kind": "Secret",
-        "apiVersion": "v1",
-        "metadata": {
-            "name": "cray-meds-credentials",
-            "namespace": "services",
-            "creationTimestamp": null
-        },
-        "data": {}
-    }
-    EOF
-    ```
+            ```json
+            {
+                "Username": "root",
+                "Password": "foobar"
+            }
+            ```
 
-1. Decrypt updated sealed secret for review.
+- (`ncn-mw#`) When reaching the step to validate the redeployed chart, perform the following steps:
 
-    The sealed secret should match the credentials set on the CEC.
+    **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-    ```bash
-    ./utils/secrets-decrypt.sh cray_meds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults -r | base64 -d | jq
-    ```
+    1. Wait for the MEDS Vault loader job to run to completion.
 
-    Example output:
+        ```bash
+        kubectl wait -n services job cray-meds-vault-loader --for=condition=complete --timeout=5m
+        ```
 
-    ```json
-    {
-        "Username": "root",
-        "Password": "foobar"
-    }
-    ```
+    1. Verify that the default credentials have changed in Vault.
 
-1. Update the `site-init` secret containing `customizations.yaml` for the system.
+        ```bash
+        VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+        kubectl -n vault exec -it cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 vault kv get secret/meds-cred/global/ipmi
+        ```
 
-    ```bash
-    kubectl delete secret -n loftsman site-init
-    kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-    ```
+        Example output:
 
-1. Check in changes made to `customizations.yaml`.
+        ```text
+        ====== Data ======
+        Key         Value
+        ---         -----
+        Password    foobar
+        Username    root
+        ```
 
-    ```bash
-    git diff
-    git add customizations.yaml
-    git commit -m 'Update customizations.yaml with global default credential for MEDS'
-    ```
-
-1. Push to the remote repository as appropriate.
-
-    ```bash
-    git push
-    ```
-
-#### 1.3 Redeploy MEDS to pick up the new sealed secret and push credentials into Vault
-
-1. Determine the version of MEDS.
-
-    ```bash
-    MEDS_VERSION=$(kubectl -n loftsman get cm loftsman-core-services -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-hms-meds).version')
-    echo $MEDS_VERSION
-    ```
-
-1. Create `meds-manifest.yaml`.
-
-    ```bash
-    cat > meds-manifest.yaml << EOF
-    apiVersion: manifests/v1beta1
-    metadata:
-        name: meds
-    spec:
-        charts:
-        - name: cray-hms-meds
-          version: $MEDS_VERSION
-          namespace: services
-    EOF
-    ```
-
-1. Merge `customizations.yaml` with `meds-manifest.yaml`.
-
-    ```bash
-    manifestgen -c customizations.yaml -i ./meds-manifest.yaml > ./meds-manifest.out.yaml
-    ```
-
-1. Redeploy the MEDS Helm chart.
-
-    ```bash
-    loftsman ship \
-        --charts-repo https://packages.local/repository/charts \
-        --manifest-path meds-manifest.out.yaml
-    ```
-
-1. Wait for the MEDS Vault loader job to run to completion.
-
-    ```bash
-    kubectl wait -n services job cray-meds-vault-loader --for=condition=complete --timeout=5m
-    ```
-
-1. Verify the default credentials have changed in Vault.
-
-    ```bash
-    VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
-    kubectl -n vault exec -it cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 vault kv get secret/meds-cred/global/ipmi
-    ```
-
-    Example output:
-
-    ```text
-    ====== Data ======
-    Key         Value
-    ---         -----
-    Password    foobar
-    Username    root
-    ```
+- **Make sure to perform the entire linked procedure, including the step to save the updated customizations.**
 
 ### 2. Update credentials for existing EX hardware in the system
 

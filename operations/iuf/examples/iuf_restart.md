@@ -37,3 +37,9 @@ iuf -a admin-230126 abort -f
 ```bash
 iuf -a admin-230126 restart -f
 ```
+
+(`ncn-m001#`) Restart activity `admin-230126` and add a comment to the activity log.
+
+```bash
+iuf -a admin-230126 restart "Restarting activity admin-230126"
+```

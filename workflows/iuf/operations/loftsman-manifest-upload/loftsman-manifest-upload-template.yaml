@@ -71,23 +71,29 @@ spec:
                 CONTENT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest')
                 PARENT_DIR=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params."process-media".current_product.parent_directory')
                 PRODUCT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest.name')
+                VERSION=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest.version')
 
                 if [[ "${CONTENT,,}" == "null" ]] || [[ "$CONTENT" == "" ]]; then
-                    echo "ERROR current_product.manifest is null or empty"
-                    exit 1
-                fi
-
-                if [[ "${PARENT_DIR,,}" == "null" ]] || [[ "$PARENT_DIR" == "" ]]; then
-                    echo "ERROR current_product.parent_directory is null or empty"
+                    echo "ERROR No products found. IUF requires at least one product. Please place at least one valid product tarball in {{inputs.parameters.global_params.media_dir}} and start again from the 'process-media' stage"
                     exit 1
                 fi
 
                 if [[ "${PRODUCT,,}" == "null" ]] || [[ "$PRODUCT" == "" ]]; then
-                    echo "ERROR current_product.manifest.name is null or empty"
+                    echo "ERROR Product name not found in the product manifest. Rerun with valid product tarball from 'process-media' stage"
                     exit 1
                 fi
 
+                if [[ "${PARENT_DIR,,}" == "null" ]] || [[ "$PARENT_DIR" == "" ]]; then
+                    echo "ERROR Cannot access product directory for $PRODUCT. Rerun with valid product tarball from 'process-media' stage"
+                    exit 1
+                fi
+
+                echo "INFO Loftsman uploading manifest for $PRODUCT-$VERSION from $PARENT_DIR"
                 /usr/local/bin/loftsman-manifest-upload "$CONTENT" "$PARENT_DIR" "$PRODUCT"
+                if [ $? -ne 0 ]; then
+                  echo "ERROR Loftsman manifest upload failed for $PRODUCT from $PARENT_DIR"
+                  exit 1
+                fi
 
     - - name: loftsman-update-product-catalog
         templateRef:

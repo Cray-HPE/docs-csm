@@ -7,7 +7,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 1. [Install CSM services](#1-install-csm-services)
 1. [Create base BSS global boot parameters](#2-create-base-bss-global-boot-parameters)
-1. [Adding Switch Admin Password to Vault](#3-adding-switch-admin-password-to-vault)
+1. [Adding switch admin password to Vault](#3-adding-switch-admin-password-to-vault)
 1. [Wait for everything to settle](#4-wait-for-everything-to-settle)
 1. [Next topic](#next-topic)
 1. [Known issues](#known-issues)
@@ -16,12 +16,12 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 ## 1. Install CSM services
 
-> **`NOTE`**: During this step, only on systems with only three worker nodes (typically Testing and
+> **`NOTE`**: During this step, only on systems with only four worker nodes (typically Testing and
 > Development Systems (TDS)), the `customizations.yaml` file will be automatically edited to lower
 > pod
 > CPU requests for some services, in order to better facilitate scheduling on smaller systems. See
 > the
-> file `${CSM_PATH}/tds_cpu_requests.yaml` for these settings. This file can be modified with
+> file `/usr/share/doc/csm/upgrade/scripts/upgrade/tds_cpu_requests.yaml` for these settings. This file can be modified with
 > different values (prior to executing the `yapl` command below), if other settings are desired in
 > the `customizations.yaml` file for this system. For more information about
 > modifying `customizations.yaml` and tuning for specific systems,
@@ -93,22 +93,22 @@ This procedure will install CSM applications and services into the CSM Kubernete
    server: istio-envoy
    ```
 
-1. (`pit#`) Restart the `spire-update-bss` job.
+1. (`pit#`) Restart the `cray-spire-update-bss` job.
 
    ```bash
-   SPIRE_JOB=$(kubectl -n spire get jobs -l app.kubernetes.io/name=spire-update-bss -o name)
+   SPIRE_JOB=$(kubectl -n spire get jobs -l app.kubernetes.io/name=cray-spire-update-bss -o name)
    kubectl -n spire get "${SPIRE_JOB}" -o json | jq 'del(.spec.selector)' \
        | jq 'del(.spec.template.metadata.labels."controller-uid")' \
        | kubectl replace --force -f -
    ```
 
-1. (`pit#`) Wait for the `spire-update-bss` job to complete.
+1. (`pit#`) Wait for the `cray-spire-update-bss` job to complete.
 
    ```bash
    kubectl -n spire wait "${SPIRE_JOB}" --for=condition=complete --timeout=5m
    ```
 
-## 3. Adding Switch Admin Password to Vault
+## 3. Adding switch admin password to Vault
 
 If CSM has been installed and Vault is running, add the switch credentials into Vault. Certain
 tests, including `goss-switch-bgp-neighbor-aruba-or-mellanox` use these credentials to test the
@@ -154,12 +154,12 @@ immediately after the install script completes.
    ```
 
 1. The next step is to validate CSM health before redeploying the final NCN.
-   See [Validate CSM health before final NCN deployment](./README.md#3-validate-csm-health-before-final-ncn-deployment).
+   See [Validate CSM health before final NCN deployment](README.md#3-validate-csm-health-before-final-ncn-deployment).
 
-## Next Topic
+## Next topic
 
 After installing CSM, proceed
-to [validate CSM health before final NCN deployment](./README.md#3-validate-csm-health-before-final-ncn-deployment).
+to [validate CSM health before final NCN deployment](README.md#3-validate-csm-health-before-final-ncn-deployment).
 
 ## Known issues
 

@@ -30,14 +30,16 @@ jobs:
   spellcheck:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v35
+      uses: tj-actions/changed-files@v40
       with:
         files: "**/*.md"
-        files_ignore: ".github/**/*"
+        files_ignore: |
+          .github/**/*
+          api/*
 
     - uses: docker://tmaier/markdown-spellcheck:latest
       env:

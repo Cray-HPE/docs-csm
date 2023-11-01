@@ -117,7 +117,7 @@ in the [Management Node Personalization](../configuration_management/Management_
         "layers": [
           {
             "name": "ncn-password-update",
-            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+            "clone_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
             "playbook": "rotate-pw-mgmt-nodes.yml",
             "commit": "<INSERT GIT COMMIT ID>"
           }
@@ -131,13 +131,13 @@ in the [Management Node Personalization](../configuration_management/Management_
       If a CFS configuration already exists with this name, the following command will overwrite it.
 
       ```bash
-      cray cfs configurations update ncn-password-update --file <INSERT FILE PATH HERE>
+      cray cfs v3 configurations update ncn-password-update --file <INSERT FILE PATH HERE>
       ```
 
 1. (`ncn-mw#`) Create a CFS configuration session to apply the password update.
 
    ```bash
-   cray cfs sessions create --name ncn-password-update-`date +%Y%m%d%H%M%S` --configuration-name ncn-password-update
+   cray cfs v3 sessions create --name ncn-password-update-`date +%Y%m%d%H%M%S` --configuration-name ncn-password-update
    ```
 
 1. Monitor the CFS session.

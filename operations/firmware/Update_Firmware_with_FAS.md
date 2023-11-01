@@ -53,8 +53,8 @@ The following table describes the hardware items that can have their firmware up
 
 Table 1. Upgradable Firmware Items
 
-| **Manufacturer** | **Type**     | **Target**                                                                          |
-| ---------------- | ------------ | -------------------------------------------------------------------------------------------------------------|
+| **Manufacturer** | **Type**     | **Target**                                                                                                   |
+|------------------|--------------|--------------------------------------------------------------------------------------------------------------|
 | Cray             | `nodeBMC`    | `BMC`, `Node[0-3].BIOS`,  `Recovery`, `Node[0-1].AccFPGA0`, `Node0.AccVBIOS`, `Node[0-3].ManagementEthernet` |
 | Cray             | `chassisBMC` | `BMC`, `Recovery`                                                                                            |
 | Cray             | `routerBMC`  | `BMC`, `Recovery`                                                                                            |

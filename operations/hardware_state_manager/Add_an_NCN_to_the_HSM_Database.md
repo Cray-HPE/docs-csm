@@ -121,7 +121,7 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
         This may take up to 5 minutes.
 
         ```bash
-        cray cfs sessions list --format toml | grep "name ="
+        cray cfs v3 sessions list --format toml | grep "name ="
         ```
 
         Example output:
@@ -135,7 +135,7 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
         This may take up to 5 minutes.
 
         ```bash
-        cray cfs sessions list --format toml | grep "name ="
+        cray cfs v3 sessions list --format toml | grep "name ="
         ```
 
         Example output:
@@ -146,5 +146,5 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
 
         Once the load job completes, if there are no errors returned, the session is removed.
 
-        Running `cray cfs sessions list --format toml | grep "name ="` again should return with no sessions active.
+        Running `cray cfs v3 sessions list --format toml | grep "name ="` again should return with no sessions active.
         If Ansible errors were encountered during the unload or load sessions, then the dormant CFS session artifacts remain for CFS Ansible failure troubleshooting.

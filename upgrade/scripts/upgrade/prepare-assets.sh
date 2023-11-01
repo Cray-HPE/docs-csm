@@ -77,6 +77,11 @@ if [[ -z ${CSM_RELEASE} ]]; then
     exit 1
 fi
 
+# rename the old myenv file
+if test -f "/etc/cray/upgrade/csm/myenv"; then
+    mv /etc/cray/upgrade/csm/myenv /etc/cray/upgrade/csm/myenv.old
+fi
+
 CSM_REL_NAME="csm-${CSM_RELEASE}"
 CSM_ARTI_DIR="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}"
 
@@ -90,7 +95,9 @@ if [[ -z ${TARBALL_FILE} ]]; then
 
     if [[ -z ${ENDPOINT} ]]; then
         # default endpoint to release.algol60.net
-        ENDPOINT=https://release.algol60.net/csm-1.4/csm/
+        # Example input: CSM_RELEASE=1.5.0-alpha.3
+        # Example output: ENDPOINT=https://release.algol60.net/csm-1.5/csm/
+        ENDPOINT=https://release.algol60.net/csm-$(echo ${CSM_RELEASE} | cut -d'.' -f1,2)/csm/
         echo "Use internal endpoint: ${ENDPOINT}"
     fi
 

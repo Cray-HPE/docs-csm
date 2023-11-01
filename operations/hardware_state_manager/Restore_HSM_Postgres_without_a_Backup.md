@@ -56,15 +56,19 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
     cray hsm state components list --type Node --format json | jq .Components[].ID | wc -l
     ```
 
-4. Restart MEDS and REDS.
+4. Ensure HMS Discovery Kubernetes cronjob is enabled.
 
-    To repopulate HSM with components, restart MEDS and REDS so that they will add known `RedfishEndpoints` back in to HSM. This will also kick off HSM rediscovery to repopulate components and hardware inventory.
+    ```bash
+    kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
+    ```
+
+5. Restart MEDS.
+
+    To repopulate HSM with components, restart MEDS so it will add known `RedfishEndpoints` back in to HSM. This will also kick off HSM rediscovery to repopulate components and hardware inventory.
 
     ```bash
     kubectl scale deployment cray-meds -n services --replicas=0
     kubectl scale deployment cray-meds -n services --replicas=1
-    kubectl scale deployment cray-reds -n services --replicas=0
-    kubectl scale deployment cray-reds -n services --replicas=1
     ```
 
     Wait for the RedfishEndpoints table to get repopulated and discovery to complete.
@@ -76,7 +80,7 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
     0
     ```
 
-5. Check for Discovery Errors.
+6. Check for Discovery Errors.
 
     ```bash
     cray hsm inventory redfishEndpoints list --format json | grep LastDiscoveryStatus | grep -v -c "DiscoverOK"
@@ -85,7 +89,7 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
     If any of the RedfishEndpoint entries have a `LastDiscoveryStatus` other than `DiscoverOK` after discovery has completed, refer
     to the [Troubleshoot Issues with Redfish Endpoint Discovery](../node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md) procedure for guidance.
 
-6. Re-apply any component group or partition customizations.
+7. Re-apply any component group or partition customizations.
 
     Any component groups or partitions created before HSM's Postgres information was lost will need to be manually re-entered.
 

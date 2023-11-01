@@ -29,7 +29,7 @@ metadata:
     before-each: "true"
 spec:
   scriptContent: |
-    TARGET_NCN={{inputs.parameters.targetNcn}}
+    #!/bin/sh
     SSH_OPT="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     SSH_OPT="${SSH_OPT} -o ConnectTimeout=10"
     # Note: this file path cannot change without coordinated changes to the COS

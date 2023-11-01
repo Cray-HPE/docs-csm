@@ -1,80 +1,259 @@
-# Stage 3 - CSM Service Upgrades
+# Stage 3 - Kubernetes Upgrade
 
 **Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 [Relevant troubleshooting links for upgrade-related issues](Upgrade_Management_Nodes_and_CSM_Services.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
-- [Start typescript](#start-typescript)
-- [Perform upgrade](#perform-upgrade)
-- [Verify Keycloak users](#verify-keycloak-users)
-- [Take Etcd Manual Backup](#take-etcd-manual-backup)
-- [Stop typescript](#stop-typescript)
+- [Start typescript on `ncn-m001`](#start-typescript-on-ncn-m001)
+- [Stage 3.1 - Master node image upgrade](#stage-31---master-node-image-upgrade)
+- [Argo workflows](#argo-workflows)
+- [Stage 3.2 - Worker node image upgrade](#stage-32---worker-node-image-upgrade)
+  - [Option 1 - Serial upgrade](#option-1---serial-upgrade)
+  - [Option 2 - Parallel upgrade (Tech preview)](#option-2---parallel-upgrade-tech-preview)
+    - [Restrictions](#restrictions)
+    - [Example](#example)
+- [Stage 3.3 - `ncn-m001` upgrade](#stage-33---ncn-m001-upgrade)
+  - [Stop typescript on `ncn-m001`](#stop-typescript-on-ncn-m001)
+  - [Backup artifacts on `ncn-m001`](#backup-artifacts-on-ncn-m001)
+  - [Move to `ncn-m002`](#move-to-ncn-m002)
+  - [Start typescript on `ncn-m002`](#start-typescript-on-ncn-m002)
+  - [Prepare `ncn-m002`](#prepare-ncn-m002)
+  - [Upgrade `ncn-m001`](#upgrade-ncn-m001)
+- [Stage 3.4 - Upgrade `weave` and `multus`](#stage-34---upgrade-weave-and-multus)
+- [Stage 3.5 - `coredns` anti-affinity](#stage-35---coredns-anti-affinity)
+- [Stage 3.6 - Complete Kubernetes upgrade](#stage-36---complete-kubernetes-upgrade)
+- [Stop typescript on `ncn-m002`](#stop-typescript-on-ncn-m002)
 - [Stage completed](#stage-completed)
 
-## Start typescript
+## Start typescript on `ncn-m001`
 
-1. (`ncn-m002#`) If a typescript session is already running in the shell, then first stop it with the `exit` command.
+1. (`ncn-m001#`) If a typescript session is already running in the shell, then first stop it with the `exit` command.
 
-1. (`ncn-m002#`) Start a typescript.
+1. (`ncn-m001#`) Start a typescript.
 
     ```bash
-    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).stage_3.txt
+    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).stage_3_ncn-m001.txt
     export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     ```
 
 If additional shells are opened during this procedure, then record those with typescripts as well. When resuming a procedure
 after a break, always be sure that a typescript is running before proceeding.
 
-## Perform upgrade
+## Stage 3.1 - Master node image upgrade
 
-During this stage there will be a brief (approximately five minutes) window where pods with Persistent Volumes (`PV`s) will not be able to migrate between nodes.
-This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in order to accommodate the newer charts and a better upgrade strategy.
+1. (`ncn-m001#`) Run `ncn-upgrade-master-nodes.sh` for `ncn-m002`.
 
-1. (`ncn-m002#`) Set the `SW_ADMIN_PASSWORD` environment variable.
-
-   Set it to the `admin` user password for the switches. This is required for post-upgrade tests.
-
-   > `read -s` is used to prevent the password from being written to the screen or the shell history.
+   Follow output of the script carefully. The script will pause for manual interaction.
 
    ```bash
-   read -s SW_ADMIN_PASSWORD
+   /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
    ```
+
+   > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
+
+1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
+
+## Argo workflows
+
+Before starting [Stage 3.2 - Worker node image upgrade](#stage-32---worker-node-image-upgrade), access the Argo UI to view the progress of this stage.
+Note that the progress for the current stage will not show up in Argo before the worker node image upgrade script has been started.
+
+For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_UI.md) and [Using Argo Workflows](../operations/argo/Using_Argo_Workflows.md).
+
+> **`NOTE`** One of the Argo steps (`wait-for-cfs`) will prevent the upgrade of a worker node from proceeding if the CFS component status for that worker is in an `Error` state, and this must be fixed in order for the upgrade to continue.
+The following steps can be used to reset the component state in CFS (replace `XNAME` below with the `XNAME` for the worker node:
+
+```bash
+cray cfs v3 components update --error-count 0 <XNAME>
+cray cfs v3 components update --state '[]' <XNAME>
+```
+
+## Stage 3.2 - Worker node image upgrade
+
+> **`NOTE`** When upgrading worker nodes which are running DVS, it is not recommended to simultaneously reboot compute nodes. This is to avoid restarting DVS clients and servers at the same time.
+
+There are two options available for upgrading worker nodes.
+
+### Option 1 - Serial upgrade
+
+1. (`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` for `ncn-w001`.
+
+   Follow output of the script carefully. The script will pause for manual interaction.
 
    ```bash
-   export SW_ADMIN_PASSWORD
+   /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-w001
    ```
 
-1. (`ncn-m002#`) Perform the upgrade.
+   > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
 
-   Run `csm-upgrade.sh` to deploy upgraded CSM applications and services.
+1. Repeat the previous steps for each other worker node, one at a time.
+
+### Option 2 - Parallel upgrade (Tech preview)
+
+Multiple workers can be upgraded simultaneously by passing them as a comma-separated list into the upgrade script.
+
+#### Restrictions
+
+In some cases, it is not possible to upgrade all workers in one request. It is system administrator's responsibility to
+make sure that the following conditions are met:
+
+- If the system has more than five workers, then they cannot all be upgraded with a single request.
+
+    In this case, the upgrade should be split into multiple requests, with each request specifying no more than five workers.
+
+- No single upgrade request should include all of the worker nodes that have DVS running on them.
+
+#### Example
+
+(`ncn-m001#`) An example of a single request to upgrade multiple worker nodes simultaneously:
+
+```bash
+/usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-w002,ncn-w003,ncn-w004
+```
+
+## Stage 3.3 - `ncn-m001` upgrade
+
+By this point, all NCNs have been upgraded, except for `ncn-m001`. In the upgrade process so far, `ncn-m001`
+has been the "stable node" -- that is, the node from which the other nodes were upgraded. At this point, the
+upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to allow the upgrade of `ncn-m001`.
+
+### Stop typescript on `ncn-m001`
+
+For any typescripts that were started earlier on `ncn-m001`, stop them with the `exit` command.
+
+### Backup artifacts on `ncn-m001`
+
+1. (`ncn-m001#`) Create an archive of the artifacts.
+
+    ```bash
+    BACKUP_TARFILE="csm_upgrade.pre_m001_reboot_artifacts.$(date +%Y%m%d_%H%M%S).tgz"
+    ls -d \
+        /root/apply_csm_configuration.* \
+        /root/csm_upgrade.* \
+        /root/output.log 2>/dev/null |
+    sed 's_^/__' |
+    xargs tar -C / -czvf "/root/${BACKUP_TARFILE}"
+    ```
+
+1. (`ncn-m001#`) Upload the archive to S3 in the cluster.
+
+    ```bash
+    cray artifacts create config-data "${BACKUP_TARFILE}" "/root/${BACKUP_TARFILE}"
+    ```
+
+### Move to `ncn-m002`
+
+1. Log out of `ncn-m001`.
+
+1. Log in to `ncn-m002` from outside the cluster.
+
+    > **`NOTE`** Very rarely, a password hash for the `root` user that works properly on a SLES SP2 NCN is
+    > not recognized on a SLES SP3 NCN. If password login fails, then log in to `ncn-m002` from
+    > `ncn-m001` and use the `passwd` command to reset the password. Then log in using the CMN IP address as directed
+    > below. Once `ncn-m001` has been upgraded, log in from `ncn-m002` and use the `passwd` command to reset
+    > the password. The other NCNs will have their passwords updated when NCN personalization is run in a
+    > subsequent step.
+
+    `ssh` to the `bond0.cmn0`/CMN IP address of `ncn-m002`.
+
+### Start typescript on `ncn-m002`
+
+1. (`ncn-m002#`) Start a typescript.
+
+    ```bash
+    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).stage_3_ncn-m002.txt
+    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+    ```
+
+### Prepare `ncn-m002`
+
+1. Authenticate with the Cray CLI on `ncn-m002`.
+
+   See [Configure the Cray Command Line Interface](../operations/configure_cray_cli.md) for details on how to do this.
+
+1. (`ncn-m002#`) Set upgrade variables.
 
    ```bash
-   /usr/share/doc/csm/upgrade/scripts/upgrade/csm-upgrade.sh
+   source /etc/cray/upgrade/csm/myenv
    ```
 
-## Verify Keycloak users
+1. (`ncn-m002#`) Copy artifacts from `ncn-m001`.
 
-1. (`ncn-m002#`) Verify that the Keycloak users localize job has completed as expected.
+    > A later stage of the upgrade expects the `docs-csm` and `libcsm` RPMs to be located at `/root/` on `ncn-m002`;
+    > that is why this command copies them there.
 
-    > This step can be skipped if user localization is not required.
+   - Install `csi` and `docs-csm`.
 
-    After an upgrade, it is possible that all expected Keycloak users were not localized.
-    See [Verification procedure](../operations/security_and_authentication/Keycloak_User_Localization.md#Verification-procedure)
-    to confirm that Keycloak localization has completed as expected.
+       ```bash
+       scp ncn-m001:/root/csm_upgrade.pre_m001_reboot_artifacts.*.tgz /root
+       zypper --plus-repo="/etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)" --no-gpg-checks install -y cray-site-init
+       scp ncn-m001:/root/*.noarch.rpm /root/
+       rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+       ```
 
-## Take Etcd Manual Backup
+   - Install `libcsm`.
 
-1. (`ncn-m002#`) Execute the following script to take a manual backup of the Etcd clusters.
-   These clusters are automatically backed up every 24 hours, but taking a manual backup
-   at this stage in the upgrade enables restoring from backup later in this process if needed.
+       > ***NOTE*** Since `libcsm` depends on versions of Python relative to what is included in the SLES service packs,
+       > then in the event that `ncn-m002` is running a newer SLES distro a new `libcsm` must be downloaded. This will
+       > often be the case when jumping to a new CSM minor version (e.g. CSM 1.3 to CSM 1.4).
+       > e.g. if `ncn-m001` is running SLES15SP3, and `ncn-m002` is running SLES15SP4 then the SLES15SP4 `libcsm` is needed.
+       > Follow the [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation)
+       > guide again, but from `ncn-m002`.
+
+       ```bash
+       rpm -Uvh --force /root/libcsm-latest.noarch.rpm
+       ```
+
+    If this step was executed as a result of the [`management-nodes-rollout` with CSM upgrade](../operations/iuf/workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade)
+    instructions, return to that procedure and continue with the next step.
+    Otherwise, if performing an upgrade of only CSM, proceed to the next step.
+
+### Upgrade `ncn-m001`
+
+1. Upgrade `ncn-m001`.
 
    ```bash
-   /usr/share/doc/csm/scripts/operations/etcd/take-etcd-manual-backups.sh post_upgrade
+   /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
    ```
 
-## Stop typescript
+## Stage 3.4 - Upgrade `weave` and `multus`
 
-For any typescripts that were started during this stage, stop them with the `exit` command.
+Run the following command to complete the upgrade of the `weave` and `multus` manifest versions:
+
+```bash
+/srv/cray/scripts/common/apply-networking-manifests.sh
+```
+
+## Stage 3.5 - `coredns` anti-affinity
+
+Run the following script to apply anti-affinity to `coredns` pods:
+
+```bash
+/usr/share/doc/csm/upgrade/scripts/k8s/apply-coredns-pod-affinity.sh
+```
+
+## Stage 3.6 - Complete Kubernetes upgrade
+
+Complete the Kubernetes upgrade. This script will restart several pods on each master node to their new Docker containers.
+
+```bash
+/usr/share/doc/csm/upgrade/scripts/k8s/upgrade_control_plane.sh
+```
+
+> **`NOTE`**: `kubelet` has been upgraded already, ignore the warning to upgrade it.
+
+If the previous three steps were executed as part of the IUF [Deploy Product](../operations/iuf/workflows/deploy_product.md)
+procedure, return to the IUF [Deploy Product](../operations/iuf/workflows/deploy_product.md) procedure and
+complete the remaining steps. Otherwise, proceed to the following topic.
+
+### Stop typescript on `ncn-m002`
+
+For any typescripts that were started during this stage on `ncn-m002`, stop them with the `exit` command.
 
 ## Stage completed
 
-This stage is completed. Proceed to [Validate CSM health](README.md#3-validate-csm-health) on the main upgrade page.
+All Kubernetes nodes have been rebooted into the new image.
+
+> **REMINDER**: If password for `ncn-m002` was reset during Stage 3.3, then also reset the password
+> on `ncn-m001` at this time.
+
+This stage is completed. Proceed to [Validate CSM health during an upgrade](Validate_CSM_Health_During_Upgrade.md)

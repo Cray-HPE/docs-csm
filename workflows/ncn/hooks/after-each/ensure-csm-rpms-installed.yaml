@@ -29,6 +29,7 @@ metadata:
     after-each: "true"
 spec:
   scriptContent: |
-    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{inputs.parameters.targetNcn}} \
+    #!/bin/sh
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $TARGET_NCN \
       'source /srv/cray/scripts/metal/metal-lib.sh;install_csm_rpms'
   templateRefName: ssh-template

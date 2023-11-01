@@ -104,12 +104,16 @@ class SshHost:
         else:
             self.state = state
 
-    def is_ready(self):
+    def is_ready(self, node_type):
         """
         Whether this host is marked as ready for use
         """
         state = self.get_state()
-        return state == "Configured" or state == "Ready" or state == None # if None, state is unknown, so we'll assume it is ready
+
+        if node_type == "spine_switch":
+            return state == "On" or state == None # if None, state is unknown, so we'll assume it is ready
+        else:
+            return state == "Configured" or state == "Ready" or state == None # if None, state is unknown, so we'll assume it is ready
 
     def get_full_domain_name(self):
         """

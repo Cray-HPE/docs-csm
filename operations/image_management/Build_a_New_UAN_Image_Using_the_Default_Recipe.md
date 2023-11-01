@@ -49,7 +49,7 @@ This procedure does not need to be followed if the Slingshot package is installe
 
 This procedure does not need to be followed if choosing to build the UAN image manually.
 
-1. Identify the UAN image recipe.
+1. (`ncn-mw#`) Identify the UAN image recipe.
 
     ```bash
     cray ims recipes list --format json | jq '.[] | select(.name | contains("uan"))'
@@ -85,7 +85,7 @@ This procedure does not need to be followed if choosing to build the UAN image m
 
 This procedure does not need to be followed if the previous procedure was used to build the UAN image automatically.
 
-1. Identify the base UAN image to customize.
+1. (`ncn-mw#`) Identify the base UAN image to customize.
 
     ```bash
     cray ims images list --format json | jq '.[] | select(.name | contains("uan"))'

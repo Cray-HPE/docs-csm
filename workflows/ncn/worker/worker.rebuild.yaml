@@ -102,7 +102,9 @@ spec:
       dag:
         tasks:
           - name: before-all
-            template: before-all
+            templateRef:
+              name: before-all-hooks
+              template: main
             arguments:
               parameters:
                 - name: dryRun
@@ -111,7 +113,9 @@ spec:
                   value: "{{$.TargetNcns}}"
           {{- range $index,$value := .TargetNcns }}
           - name: add-labels-{{$value}}
-            template: add-labels
+            templateRef: 
+              name: add-labels
+              template: main
             arguments: 
               parameters:
               - name: targetNcn
@@ -124,25 +128,25 @@ spec:
               {{ if ne $index 0 }}
               - drain-{{ index $.TargetNcns (add $index -1) }}
               {{ end }}
-            template: before-each
+            templateRef:
+              name: before-each-hooks
+              template: main
             arguments:
               parameters:
-                - name: targetNcn
-                  value: {{$value}}
                 - name: dryRun
                   value: "{{$.DryRun}}"
-                - name: imageId
-                  value: "{{$.ImageId}}"
-                - name: desiredCfsConfig
-                  value: "{{$.DesiredCfsConfig}}"
+                - name: targetNcn
+                  value: "{{$value}}"
           # drain: sync
           #     Only one worker can be drained at a time
           - name: drain-{{$value}}
-            template: drain
             dependencies:
               - add-labels-{{$value}}
               - before-all
               - before-each-{{$value}}
+            templateRef:
+              name: drain-worker
+              template: main
             arguments:
               parameters:
               - name: targetNcn
@@ -160,7 +164,9 @@ spec:
           - name: wipe-and-reboot-{{$value}}
             dependencies: 
               - drain-{{$value}}
-            template: wipe-and-reboot
+            templateRef:
+              name: wipe-and-reboot-worker
+              template: main
             arguments:
               parameters:
               - name: targetNcn
@@ -171,114 +177,53 @@ spec:
                 value: "{{$.ImageId}}"
               - name: desiredCfsConfig
                 value: "{{$.DesiredCfsConfig}}"
+              - name: bootTimeoutInSeconds
+                value: "{{$.BootTimeoutInSeconds}}"
           # after each: parallel
           #     once a worker node is rebooted
           #     we need to run post boot hooks
           - name: after-each-{{$value}}
             dependencies:
               - wipe-and-reboot-{{$value}}
-            template: after-each
+            templateRef:
+              name: after-each-hooks
+              template: main
             arguments:
               parameters:
-                - name: targetNcn
-                  value: {{$value}}
                 - name: dryRun
                   value: "{{$.DryRun}}"
-                - name: imageId
-                  value: "{{$.ImageId}}"
-                - name: desiredCfsConfig
-                  value: "{{$.DesiredCfsConfig}}"
+                - name: targetNcn
+                  value: "{{$value}}"
           # post rebuild: parallel
           #     Post rebuild validation can be run in parallel
           - name: post-rebuild-{{$value}}
             dependencies: 
               - after-each-{{$value}}
-            template: post-rebuild
+            templateRef: 
+              name: post-rebuild-worker
+              template: main
             arguments:
               parameters:
               - name: targetNcn
                 value: {{$value}}
               - name: dryRun
                 value: "{{$.DryRun}}"
-              - name: imageId
-                value: "{{$.ImageId}}"
-              - name: desiredCfsConfig
-                value: "{{$.DesiredCfsConfig}}"
+              - name: switchPassword
+                value: "{{$.SwitchPassword}}"
           {{- end }}
           - name: after-all
-            template: after-all
             dependencies:
               # each drain depends on previous drain action
               # so we make sure only one node is drained at a time
               {{- range $index,$value := .TargetNcns }}
               - post-rebuild-{{$value}}
               {{- end }}
+            templateRef:
+              name: after-all-hooks
+              template: main
             arguments:
               parameters:
                 - name: dryRun
                   value: "{{$.DryRun}}"
-    # reference to individual tasks
-    - name: before-all
-      inputs:
-        parameters:
-          - name: dryRun
-          - name: targetNcns
-      dag:
-        tasks:
-{{ getHooks "before-all" . | indent 8 }}
-    - name: before-each
-      inputs:
-        # import ./common.envar.yaml
-        {{- include "worker.common.parameters" . | indent 8 }}
-      dag:
-        tasks:
-{{ getHooks "before-each" . | indent 8 }}
-    - name: add-labels
-      inputs:
-        parameters:
-          - name: targetNcn
-      resource:
-        action: patch
-        mergeStrategy: json
-        flags:
-          - "node"
-          - "{{ `{{inputs.parameters.targetNcn}}` }}"
-        manifest: |
-          - op: add
-            path: /metadata/labels/cray.nls
-            value: {{ `{{inputs.parameters.targetNcn}}` }}
-    - name: drain
-      inputs:
-        # import ./common.envar.yaml
-        {{- include "worker.common.parameters" . | indent 8 }}
-      dag:
-        # import ./worker.drain.yaml
-        {{- include "worker.drain" . | indent 8 }}
-    - name: wipe-and-reboot
-      inputs:
-        # import ./worker.common.parameters.yaml
-        {{- include "worker.common.parameters" . | indent 8 }}
-      dag:
-        # import ./worker.wipe-and-reboot.yaml
-        {{- include "worker.wipe-and-reboot" . | indent 8 }}
-    - name: after-each
-      inputs:
-        # import ./common.envar.yaml
-        {{- include "worker.common.parameters" . | indent 8 }}
-      dag:
-        tasks:
-{{ getHooks "after-each" . | indent 8 }}
-    - name: post-rebuild
-      inputs:
-        # import ./worker.common.parameters.yaml
-        {{- include "worker.common.parameters" . | indent 8 }}
-      dag:
-        # import ./worker.post-rebuild.yaml
-        {{- include "worker.post-rebuild" . | indent 8 }}
-    - name: after-all
-      inputs:
-        parameters:
-          - name: dryRun
-      dag:
-        tasks:
-{{ getHooks "after-all" . | indent 8 }}
+                - name: targetNcns
+                  value: "{{$.TargetNcns}}"

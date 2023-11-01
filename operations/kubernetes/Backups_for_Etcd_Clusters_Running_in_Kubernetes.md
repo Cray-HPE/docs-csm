@@ -62,7 +62,6 @@ The following projects are not backed up as part of the automated solution:
 - Content Projection Service \(CPS\)
 - Heartbeat Tracking Daemon \(HBTD\)
 - HMS Notification Fanout Daemon \(HMNFD\)
-- River Endpoint Discovery Service \(REDS\)
 
 If these clusters become unhealthy, the process for rediscovering their data should be followed.
 See [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md).

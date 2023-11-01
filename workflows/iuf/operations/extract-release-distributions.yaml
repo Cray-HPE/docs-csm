@@ -30,8 +30,6 @@ spec:
     - key: "node-role.kubernetes.io/master"
       operator: "Exists"
       effect: "NoSchedule"
-  nodeSelector:
-    kubernetes.io/hostname: ncn-m001
   entrypoint: main
   templates:
     - name: main
@@ -69,7 +67,7 @@ spec:
               - start-operation
             inline:
               script:
-                image: artifactory.algol60.net/csm-docker/stable/iuf:v0.1.3
+                image: artifactory.algol60.net/csm-docker/stable/iuf:v0.1.12
                 command: [sh]
                 source: |
                   #!/bin/sh
@@ -162,10 +160,30 @@ spec:
           #!/bin/sh
           set -x
           media_dir={{inputs.parameters.media_dir}}
+          tar_filename={{inputs.parameters.tarfile}}
+          echo "DEBUG Inputs for extract-tar-files are - tarfile=$tar_filename, media_dir=$media_dir"
+
           cd $media_dir
-          dir_name=`tar -tzf {{inputs.parameters.tarfile}} | head -1 | cut -f1 -d"/"`
-          tar -xvzf {{inputs.parameters.tarfile}} &> /dev/stderr
-          cat ${dir_name}/iuf-product-manifest.yaml > /tmp/manifest.yaml
+          echo "INFO Extracting product tarball $media_dir/$tar_filename"
+          result=$(gunzip -c $tar_filename | tar -t 2>&1)
+          if [ $? -ne 0 ]; then
+            echo "ERROR Provided product tarfile $tar_filename is corrupted. Please replace with the valid product tarfile and re-run this 'process-media' stage"
+            echo "$result" | sed -e 's/^/DEBUG /'
+            exit 1
+          fi
+          dir_name=`tar -tzf $tar_filename | head -1 | cut -f1 -d"/"`
+          result=$(tar -xvzf $tar_filename 2>&1)
+          if [ $? -ne 0 ]; then
+            echo "ERROR Extracting product tarfile $tar_filename failed"
+            echo "$result" | sed -e 's/^/DEBUG /'
+            exit 1
+          fi
+          MANIFEST_FILE="${dir_name}/iuf-product-manifest.yaml"
+          if [ ! -f "$MANIFEST_FILE" ]; then
+            echo "DEBUG IUF Manifest file does not exist in the tarball - $tar_filename, ignoring"
+          fi
+          echo "DEBUG Outputs for extract-tar-files are manifest.yaml and original_location=$media_dir/$dir_name"
+          cat $MANIFEST_FILE > /tmp/manifest.yaml
           echo $media_dir/$dir_name > /tmp/original_location
         volumeMounts:
           - name: iuf

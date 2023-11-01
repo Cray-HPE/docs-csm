@@ -5,20 +5,20 @@ IP address as a Kubernetes service or pod, which would result in undefined behav
 
 The following table shows the default IP address ranges:
 
-|Network|IP Address Range|
-|-------|----------------|
-|Kubernetes service network|10.16.0.0/12|
-|Kubernetes pod network|10.32.0.0/12|
-|Install Network \(MTL\)|10.1.0.0/16|
-|Node Management Network \(NMN\)|10.252.0.0/17|
-|High Speed Network \(HSN\)|10.253.0.0/16|
-|Hardware Management Network \(HMN\)|10.254.0.0/17|
-|Mountain NMN **(see note below table)**|10.100.0.0/17|
-|Mountain HMN **(see note below table)**|10.104.0.0/17|
-|River NMN|10.106.0.0/17|
-|River HMN|10.107.0.0/17|
-|Load Balanced NMN|10.92.100.0/24|
-|Load Balanced HMN|10.94.100.0/24|
+| Network                                 | IP Address Range |
+|-----------------------------------------|------------------|
+| Kubernetes service network              | 10.16.0.0/12     |
+| Kubernetes pod network                  | 10.32.0.0/12     |
+| Install Network \(MTL\)                 | 10.1.0.0/16      |
+| Node Management Network \(NMN\)         | 10.252.0.0/17    |
+| High Speed Network \(HSN\)              | 10.253.0.0/16    |
+| Hardware Management Network \(HMN\)     | 10.254.0.0/17    |
+| Mountain NMN **(see note below table)** | 10.100.0.0/17    |
+| Mountain HMN **(see note below table)** | 10.104.0.0/17    |
+| River NMN                               | 10.106.0.0/17    |
+| River HMN                               | 10.107.0.0/17    |
+| Load Balanced NMN                       | 10.92.100.0/24   |
+| Load Balanced HMN                       | 10.94.100.0/24   |
 
 For the Mountain NMN:
 
@@ -44,7 +44,7 @@ HPE Cray EX system, these values can be safely reused across them all.
 Contact customer support for this site if it is required to change the IP address range for Kubernetes services or pods; for example, if the IP addresses within those ranges must be used for something else.
 The cluster must be fully reinstalled if either of those ranges are changed.
 
-## Customizable Network Values
+## Customizable network values
 
 There are several network values and other pieces of system information that must be unique to the customer system.
 
@@ -63,7 +63,7 @@ There are several network values and other pieces of system information that mus
 
 - HPE Cray EX DNS IP: The IP address used for the HPE Cray EX DNS service. Central DNS delegates the resolution for addresses in the HPE Cray EX Domain to this server. The IP address must be in the `cmn-static-pool` subnet.
 - CMN gateway IP address: The IP address assigned to a specific port on the spine switch, which will act as the gateway between the CMN and the rest of the customer's internal networks. This address would be the
-  last-hop route to the CMN network.   This will default to the first IP in the main CMN subnet if it is not specified otherwise.
+  last-hop route to the CMN network. This will default to the first IP address in the main CMN subnet if it is not specified otherwise.
 
 - The User Network subnet which will be either the Customer Access Network \(CAN\) or Customer High-speed Network \(CHN\). The address pool mentioned below needs to be part of this subnet.
 

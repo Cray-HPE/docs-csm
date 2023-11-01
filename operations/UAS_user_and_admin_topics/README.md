@@ -8,30 +8,30 @@ Once logged into a UAI, users can use most of the facilities found on a User Acc
 
 By default, the timezone inside the UAI container is configured to match the timezone on the host NCN on which it is running, For example, if the timezone on the host NCN is set to CDT, the UAIs on that host will also be set to CDT.
 
-|Component|Function/Description|
-|---------|--------------------|
-|User Access Instance \(UAI\)|An instance of UAS container.|
-|`cray-uas-mgr`|Manages UAI life cycles.|
+| Component                    | Function/Description          |
+|------------------------------|-------------------------------|
+| User Access Instance \(UAI\) | An instance of UAS container. |
+| `cray-uas-mgr`               | Manages UAI life cycles.      |
 
-|Container Element|Components|
-|-----------------|----------|
-|Operating system|SLES15 SP2|
-|kubectl command|Utility to interact with Kubernetes.|
-|cray command|Command that allows users to create, describe, and delete UAIs.|
+| Container Element | Components                                                      |
+|-------------------|-----------------------------------------------------------------|
+| Operating system  | SLES15 SP2                                                      |
+| kubectl command   | Utility to interact with Kubernetes.                            |
+| cray command      | Command that allows users to create, describe, and delete UAIs. |
 
 Administrative users use `cray uas admin uais list` to list the following parameters for all existing UAIs:
 
 **`NOTE`** The example values below are used throughout the UAS procedures. They are used as examples only. Users should substitute with site-specific values.
 
-|Parameter|Description|Example value|
-|---------|-----------|-------------|
-|`uai_connect_string`|The UAI connection string|`ssh user@203.0.113.0 -i ~/.ssh/id\_rsa`|
-|`uai_img`|The UAI image ID|`registry.local/cray/cray-uas-sles15sp1-slurm:latest`|
-|`uai_name`|The UAI name|`uai-user-be3a6770`|
-|`uai_status`|The state of the UAI.|`Running: Ready`|
-|`username`|The user who created the UAI.|`user`|
-|`uai_age`|The age of the UAI.|`11m`|
-|`uai_host`|The node hosting the UAI.|`ncn-w001`|
+| Parameter            | Description                   | Example value                                         |
+|----------------------|-------------------------------|-------------------------------------------------------|
+| `uai_connect_string` | The UAI connection string     | `ssh user@203.0.113.0 -i ~/.ssh/id\_rsa`              |
+| `uai_img`            | The UAI image ID              | `registry.local/cray/cray-uas-sles15sp1-slurm:latest` |
+| `uai_name`           | The UAI name                  | `uai-user-be3a6770`                                   |
+| `uai_status`         | The state of the UAI.         | `Running: Ready`                                      |
+| `username`           | The user who created the UAI. | `user`                                                |
+| `uai_age`            | The age of the UAI.           | `11m`                                                 |
+| `uai_host`           | The node hosting the UAI.     | `ncn-w001`                                            |
 
 Authorized users in [Legacy UAI Management](Legacy_Mode_User-Driven_UAI_Management.md) use `cray uas list` to see the same information on all existing UAIs owned by the user (if any).
 

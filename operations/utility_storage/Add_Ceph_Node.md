@@ -4,15 +4,6 @@
 
 ## Add Join Script
 
-1. Copy join script from `ncn-m001` to the storage node that was rebuilt or added.
-
-    > Run this command on the storage node that was rebuilt or added.
-
-    ```bash
-    mkdir -pv /usr/share/doc/csm/scripts &&
-           scp -p ncn-m001:/usr/share/doc/csm/scripts/join_ceph_cluster.sh /usr/share/doc/csm/scripts
-    ```
-
 1. Start monitoring the Ceph health alongside the main procedure.
 
     In a separate window, run the following command on `ncn-s001`, `ncn-s002`, or `ncn-s003` (but not the same node that was rebuilt or added):
@@ -21,12 +12,12 @@
     watch ceph -s
     ```
 
-1. Execute the script from the first step.
+1. Execute the script to have the rebuilt node join the Ceph cluster.
 
     > Run this command on the storage node that was rebuilt or added.
 
     ```bash
-    /usr/share/doc/csm/scripts/join_ceph_cluster.sh
+    /srv/cray/scripts/common/join_ceph_cluster.sh
     ```
 
     **IMPORTANT:** In the output from `watch ceph -s` the health should go to a `HEALTH_WARN` state. This is expected. Most commonly you will see an alert about `failed to probe daemons or devices`, but this should clear on its own.
@@ -87,24 +78,16 @@
    **IMPORTANT:** `radosgw` by default is deployed to the first three storage nodes. This includes `haproxy` and `keepalived`.
    This is automated as part of the install, but the configuration may need to be regenerated if not running on the first three storage nodes or all nodes.
 
-1. Deploy Rados Gateway containers to the new nodes.
-
-   - If running Rados Gateway on all nodes is the desired configuration, then run:
-
-      ```bash
-      ncn-s00(1/2/3)# ceph orch apply rgw site1 zone1 --placement="*" --port=8080
-      ```
-
-   - If deploying to select nodes, then instead run:
+1. `ncn-s00[1/2/3]#` Deploy Rados Gateway containers to the new nodes. The placement should be all nodes that Rados Gateway should be running on, not only the new node.
 
      ```bash
-     ncn-s00(1/2/3)# ceph orch apply rgw site1 zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
+     ceph orch apply rgw site1 zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
      ```
 
-1. Verify that Rados Gateway is running on the desired nodes.
+1. `ncn-s00[1/2/3]#` Verify that Rados Gateway is running on the desired nodes.
 
     ```bash
-    ncn-s00(1/2/3)# ceph orch ps --daemon_type rgw
+    ceph orch ps --daemon_type rgw
     ```
 
     Example output:

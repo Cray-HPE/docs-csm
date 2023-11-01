@@ -138,8 +138,6 @@ spec:
         args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]      
 
     - name: build-sat-general-subcommand
-      nodeSelector:
-        kubernetes.io/hostname: ncn-m001
       tolerations:
         - key: node-role.kubernetes.io/master
           effect: NoSchedule
@@ -169,10 +167,10 @@ spec:
           function main_sat_command {
               print_inputs_variables
               if [ -z "$managed_rollout_strategy" ] || [[ "$managed_rollout_strategy" == *"$JSONPATH"* ]] ; then
-                  echo "ERROR: No managed_rollout_strategy provided."
+                  echo "ERROR No managed_rollout_strategy provided. Please provide -mrs reboot or -mrs stage input parameter in IUF command"
                   exit 1
               elif [ -z "$prepare_images_output" ] || [[ "$prepare_images_output" == *"$JSONPATH"* ]] ; then
-                  echo "ERROR: No prepare_images_output provided."
+                  echo "ERROR No output from 'prepare-images' stage. The 'managed-nodes-rollout' stage relies on the images created in the 'prepare-images' stage. Run the 'prepare-images' stage and try again"
                   exit 1
               fi
 
@@ -189,7 +187,7 @@ spec:
               echo "${prepare_images_output}" | jq ".session_templates" >> "$tmpfile"
               count=$(jq '. | length' "$tmpfile")
               if [[ "$count" == "0" ]]; then
-                  echo "ERROR: No session templates provided to parse, prepare_images_output is empty."
+                  echo "ERROR No session templates provided to parse from 'prepare_images' stage. The 'managed-nodes-rollout' stage relies on the BOS session templates created in the 'prepare-images' stage. Run the 'prepare-images' stage and try again"
                   exit 1
               fi
 
@@ -203,17 +201,17 @@ spec:
 
               rm "${tmpfile}"
               if [ "$session_templates_string" == "" ]; then
-                  echo "ERROR: Failed to parse session_templates from prepare_images_output"
+                  echo "ERROR Failed to parse session templates from 'prepare_images' stage. The 'managed-nodes-rollout' stage relies on the BOS session templates created in the 'prepare-images' stage. Run the 'prepare-images' stage and try again"
                   exit 1
               fi
-              echo "$session_templates_string"
+              echo "DEBUG Session templates are $session_templates_string"
           }
 
           function clean_limit_managed_nodes {
             limit_managed_nodes=${limit_managed_nodes//[/}
             limit_managed_nodes=${limit_managed_nodes//]/}
             limit_managed_nodes=${limit_managed_nodes// /,}
-            echo "limit_managed_nodes = $limit_managed_nodes"
+            echo "DEBUG Formatted limit_managed_nodes = $limit_managed_nodes"
           }
 
           function sat_bootsys_subcommand {
@@ -230,19 +228,21 @@ spec:
               fi
 
               if [ -z "$sat_command" ] ; then
-                  echo "ERROR: Failed to create a valid sat bootsys command."
+                  echo "ERROR Failed to create a valid sat bootsys command. It might be because managed_rollout_strategy is not set to either reboot or stage"
                   exit 1
               fi
 
+              echo "INFO sat command created is $sat_command"
               output_file=/tmp/sat_command.txt
               touch "$output_file"
               echo "$sat_command" >> "$output_file"
           }
 
           function print_inputs_variables {
-              echo "prepare_images_output = $prepare_images_output"
-              echo "managed_rollout_strategy = $managed_rollout_strategy"
-              echo "limit_managed_nodes = $limit_managed_nodes" 
+              echo -e "DEBUG Output from prepare_images stage provided for 'managed-nodes-rollout' stage = $prepare_images_output"
+              echo "DEBUG Strategy to update the managed nodes provided as input is $managed_rollout_strategy"
+              echo "DEBUG Input provided for limit_managed_nodes = $limit_managed_nodes"
           }
 
           main_sat_command
+

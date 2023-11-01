@@ -41,29 +41,29 @@ In the following table of examples the `Backwards Compatible` column indicates w
 
 The following table of examples assumes that the system was configured with a `system-name` of `shasta` and a `site-domain` of `dev.cray.com`
 
-| Old Name                           | New Name                                | Short name            | Backwards Compatible        |
-|------------------------------------|-----------------------------------------|-----------------------|-----------------------------|
-| api-gw-service-nmn.local           | api.nmnlb.shasta.dev.cray.com           | api.nmnlb             | Yes                         |
-| registry.local                     | registry.nmnlb.shasta.dev.cray.com      | registry.nmnlb        | Yes                         |
-| packages.local                     | packages.nmnlb.shasta.dev.cray.com      | packages.nmnlb        | Yes                         |
-| spire.local                        | spire.nmnlb.shasta.dev.cray.com         | spire.nmnlb           | Yes                         |
-| rgw-vip.nmn <br> rgw-vip.nmn.local | rgw-vip.nmn.shasta.dev.cray.com         | rgw-vip.nmn           | Yes                         |
-| rgw-vip.hmn <br> rgw-vip.hmn.local | rgw-vip.hmn.shasta.dev.cray.com         | rgw-vip.hmn           | Yes                         |
-| ncn-w001                           | ncn-w001.nmn.shasta.dev.cray.com        | ncn-w001.nmn          | Yes                         |
-| ncn-w001-mgmt                      | ncn-w001-mgmt.hmn.shasta.dev.cray.com   | ncn-w001-mgmt.hmn     | Yes                         |
-| nid000001-nmn                      | nid000001.nmn.shasta.dev.cray.com       | nid000001.nmn         | Yes                         |
-| x3000c0s2b0                        | x3000c0s2b0.hmn.shasta.dev.cray.com     | x3000c0s2b0.hmn       | Yes                         |
-| x3000c0s2b0n0                      | x3000c0s2b0n0.nmn.shasta.dev.cray.com   | x3000c0s2b0n0.nmn     | Yes                         |
-| x1000c5s0b0n0h0                    | x1000c5s0b0n0h0.hsn.shasta.dev.cray.com | x1000c5s0b0n0h0.hsn   | Yes                         |
-| x1000c5s0b0n0h1                    | x1000c5s0b0n0h1.hsn.shasta.dev.cray.com | x1000c5s0b0n0h1.hsn   | Yes                         |
-| auth.shasta.dev.cray.com           | auth.cmn.shasta.dev.cray.com            |                       | No                          |
-| nexus.shasta.dev.cray.com          | nexus.cmn.shasta.dev.cray.com           |                       | No                          |
-| grafana.shasta.dev.cray.com        | grafana.cmn.shasta.dev.cray.com         |                       | No                          |
-| prometheus.shasta.dev.cray.com     | prometheus.cmn.shasta.dev.cray.com      |                       | No                          |
-| alertmanager.shasta.dev.cray.com   | alertmanager.cmn.shasta.dev.cray.com    |                       | No                          |
-| vcs.shasta.dev.cray.com            | vcs.cmn.shasta.dev.cray.com             |                       | No                          |
-| kiali-istio.shasta.dev.cray.com    | kiali-istio.cmn.shasta.dev.cray.com     |                       | No                          |
-| s3.shasta.dev.cray.com             | s3.cmn.shasta.dev.cray.com              |                       | No                          |
-| sma-grafana.shasta.dev.cray.com    | sma-grafana.cmn.shasta.dev.cray.com     |                       | No                          |
-| sma-kibana.shasta.dev.cray.com     | sma-kibana.cmn.shasta.dev.cray.com      |                       | No                          |
-| api.shasta.dev.cray.com            | api.cmn.shasta.dev.cray.com<br>api.chn.shasta.dev.cray.com<br>api.can.shasta.dev.cray.com | | No |
+| Old Name                           | New Name                                                                                  | Short name          | Backwards Compatible |
+|------------------------------------|-------------------------------------------------------------------------------------------|---------------------|----------------------|
+| api-gw-service-nmn.local           | api.nmnlb.shasta.dev.cray.com                                                             | api.nmnlb           | Yes                  |
+| registry.local                     | registry.nmnlb.shasta.dev.cray.com                                                        | registry.nmnlb      | Yes                  |
+| packages.local                     | packages.nmnlb.shasta.dev.cray.com                                                        | packages.nmnlb      | Yes                  |
+| spire.local                        | spire.nmnlb.shasta.dev.cray.com                                                           | spire.nmnlb         | Yes                  |
+| rgw-vip.nmn <br> rgw-vip.nmn.local | rgw-vip.nmn.shasta.dev.cray.com                                                           | rgw-vip.nmn         | Yes                  |
+| rgw-vip.hmn <br> rgw-vip.hmn.local | rgw-vip.hmn.shasta.dev.cray.com                                                           | rgw-vip.hmn         | Yes                  |
+| ncn-w001                           | ncn-w001.nmn.shasta.dev.cray.com                                                          | ncn-w001.nmn        | Yes                  |
+| ncn-w001-mgmt                      | ncn-w001-mgmt.hmn.shasta.dev.cray.com                                                     | ncn-w001-mgmt.hmn   | Yes                  |
+| nid000001-nmn                      | nid000001.nmn.shasta.dev.cray.com                                                         | nid000001.nmn       | Yes                  |
+| x3000c0s2b0                        | x3000c0s2b0.hmn.shasta.dev.cray.com                                                       | x3000c0s2b0.hmn     | Yes                  |
+| x3000c0s2b0n0                      | x3000c0s2b0n0.nmn.shasta.dev.cray.com                                                     | x3000c0s2b0n0.nmn   | Yes                  |
+| x1000c5s0b0n0h0                    | x1000c5s0b0n0h0.hsn.shasta.dev.cray.com                                                   | x1000c5s0b0n0h0.hsn | Yes                  |
+| x1000c5s0b0n0h1                    | x1000c5s0b0n0h1.hsn.shasta.dev.cray.com                                                   | x1000c5s0b0n0h1.hsn | Yes                  |
+| auth.shasta.dev.cray.com           | auth.cmn.shasta.dev.cray.com                                                              |                     | No                   |
+| nexus.shasta.dev.cray.com          | nexus.cmn.shasta.dev.cray.com                                                             |                     | No                   |
+| grafana.shasta.dev.cray.com        | grafana.cmn.shasta.dev.cray.com                                                           |                     | No                   |
+| prometheus.shasta.dev.cray.com     | prometheus.cmn.shasta.dev.cray.com                                                        |                     | No                   |
+| alertmanager.shasta.dev.cray.com   | alertmanager.cmn.shasta.dev.cray.com                                                      |                     | No                   |
+| vcs.shasta.dev.cray.com            | vcs.cmn.shasta.dev.cray.com                                                               |                     | No                   |
+| kiali-istio.shasta.dev.cray.com    | kiali-istio.cmn.shasta.dev.cray.com                                                       |                     | No                   |
+| s3.shasta.dev.cray.com             | s3.cmn.shasta.dev.cray.com                                                                |                     | No                   |
+| sma-grafana.shasta.dev.cray.com    | sma-grafana.cmn.shasta.dev.cray.com                                                       |                     | No                   |
+| sma-kibana.shasta.dev.cray.com     | sma-kibana.cmn.shasta.dev.cray.com                                                        |                     | No                   |
+| api.shasta.dev.cray.com            | api.cmn.shasta.dev.cray.com<br>api.chn.shasta.dev.cray.com<br>api.can.shasta.dev.cray.com |                     | No                   |

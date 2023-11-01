@@ -2,64 +2,70 @@
 
 Prepare a storage node before rebuilding it.
 
-**IMPORTANT:** All of the output examples may not reflect the cluster status where this operation is being performed. For example, if this is a rebuild in place, then Ceph components will not be reporting down, in contrast to a failed node rebuild.
+**IMPORTANT:** All of the output examples may not reflect the cluster status where this operation is being performed.
+For example, if this is a rebuild in place, then Ceph components will not be reporting down, in contrast to a failed node rebuild.
+
+* [Prerequisites](#prerequisites)
+* [Procedure](#procedure)
+* [Next step](#next-step)
 
 ## Prerequisites
 
-When rebuilding a node, make sure that `/srv/cray/scripts/common/storage-ceph-cloudinit.sh` and `/srv/cray/scripts/common/pre-load-images.sh` have been removed from the `runcmd` in BSS.
+1. Ensure that the latest CSM documentation RPM is installed on `ncn-m001`.
 
-1. (`ncn-m001#`) Set node name and xname if not already set.
+    See [Check for Latest Documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
 
-   ```bash
-   NODE=ncn-s00n
-   ```
+1. (`ncn-m001#`) When rebuilding a node, make sure that `/srv/cray/scripts/common/storage-ceph-cloudinit.sh` and `/srv/cray/scripts/common/pre-load-images.sh` have been removed from the `runcmd` in BSS.
 
-   ```bash
-   XNAME=$(ssh $NODE cat /etc/cray/xname)
-   ```
+    1. Set node name and xname if not already set.
 
-1. (`ncn-m001#`) Get the `runcmd` in BSS.
+        ```bash
+        NODE=ncn-s00n
+        XNAME=$(ssh $NODE cat /etc/cray/xname)
+        ```
 
-   ```bash
-   cray bss bootparameters list --name ${XNAME} --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd'
-   ```
+    1. Get the `runcmd` in BSS.
 
-   Expected Output:
+        ```bash
+        cray bss bootparameters list --name ${XNAME} --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd'
+        ```
 
-   ```json
-   [
-   "/srv/cray/scripts/metal/net-init.sh",
-   "/srv/cray/scripts/common/update_ca_certs.py",
-   "/srv/cray/scripts/metal/install.sh",
-   "/srv/cray/scripts/common/ceph-enable-services.sh",
-   "touch /etc/cloud/cloud-init.disabled"
-   ]
-   ```
+        Expected output:
 
-   If `/srv/cray/scripts/common/storage-ceph-cloudinit.sh` or `/srv/cray/scripts/common/pre-load-images.sh` is in the `runcmd`, then it will need to be fixed by running:
+        ```json
+        [
+        "/srv/cray/scripts/metal/net-init.sh",
+        "/srv/cray/scripts/common/update_ca_certs.py",
+        "/srv/cray/scripts/metal/install.sh",
+        "/srv/cray/scripts/common/ceph-enable-services.sh",
+        "touch /etc/cloud/cloud-init.disabled"
+        ]
+        ```
 
-   A token will need to be generated and made available as an environment variable. Refer to the [Retrieve an Authentication Token](../../security_and_authentication/Retrieve_an_Authentication_Token.md) procedure for more information.
+        If `/srv/cray/scripts/common/storage-ceph-cloudinit.sh` or `/srv/cray/scripts/common/pre-load-images.sh` is in the `runcmd`, then it will need to be fixed using
+        the following procedure:
 
-   **IMPORTANT:** The below python script is provided by the `docs-csm` RPM. To install the latest version of it, see [Check for Latest Documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
+        1. Obtain an API authentication token.
 
-   ```bash
-   python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
-   ```
+            A token will need to be generated and made available as an environment variable.
+            Refer to the [Retrieve an Authentication Token](../../security_and_authentication/Retrieve_an_Authentication_Token.md) procedure for more information.
+
+        1. Run the following command to patch BSS.
+
+            ```bash
+            python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
+            ```
+
+        1. Repeat the original Cray CLI command and verify that the expected output is obtained.
 
 ## Procedure
 
-Upload Ceph container images into nexus.
+This procedure can be performed on `ncn-m00[1-3]` or `ncn-s00[1-3]`. It is suggested to run this on
+`ncn-m001`.
 
-1. Logged into one of (`ncn-s00[1/2/3]`), copy `upload_ceph_images_to_nexus.sh` from `ncn-m001` and execute it.
+1. (`ncn-m001#`) Check the status of Ceph.
 
-   ```bash
-   scp ncn-m001:/usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
-   /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
-   ```
-
-Check the status of Ceph.
-
-1. Check the OSD status, weight, and location:
+    Check the OSD status, weight, and location:
 
     ```bash
     ceph osd tree
@@ -91,38 +97,35 @@ Check the status of Ceph.
     11   ssd   3.49309          osd.11         up   1.00000  1.00000
     14   ssd   3.49309          osd.14         up   1.00000  1.00000
     17   ssd   3.49309          osd.17         up   1.00000  1.00000
+    ```
 
-2. If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
-
-    From `(ncn-s00[1/2/3])`, run:
+1. (`ncn-m001#`) If the node to rebuild is up, then stop and disable all the Ceph services on the node being rebuilt.
 
     ```bash
-    ceph orch maintenance enter <storage node hostname being rebuilt>
+    ceph orch host maintenance enter $NODE
     ```
 
     Example output:
 
     ```screen
-    ncn-s001:~ # ceph orch host maintenance enter ncn-s003 --force
     Daemons for Ceph cluster 5f79a490-c281-11ed-b6ec-fa163e741e89 stopped on host ncn-s003. Host ncn-s003 moved to maintenance mode
     ```
 
-    **IMPORTANT**: The --force flag is used to bypass warnings.  These pertain to ceph services which can handle failures like rgw.  
+    **IMPORTANT**: The --force flag is used to bypass warnings. These pertain to Ceph services which can handle failures, like `rgw`.  
     * ***IF*** the command returns any lines with an **ALERT** status then please follow the output to remedy.  
-      * Typically this will be something like the active MGR process is on that node and you have to fail it over first.  
+      * Typically this will be something like the active MGR process is on that node and it must be failed over first.
 
     Example:
 
     ```screen
-    ncn-s001:~ # ceph orch host maintenance enter ncn-s003
     WARNING: Stopping 1 out of 1 daemons in Alertmanager service. Service will not be operational with no daemons left. At least 1 daemon must be running to guarantee service.
     ALERT: Cannot stop active Mgr daemon, Please switch active Mgrs with 'ceph mgr fail ncn-s003.ydycwn'
     WARNING: Removing RGW daemons can cause clients to lose connectivity.
     ```
 
-    In this example our warnings for RGW and Alertmanager would be ignored by passing the `--force` flag.  The Alert for active MGR will need to be addressed with the provided command `ceph mgr fail ncn-s003.ydycwn`
+    In this example, the warnings for RGW and Alertmanager would be ignored by passing the `--force` flag. The alert for active `Mgr` will need to be addressed with the provided command (`ceph mgr fail ncn-s003.ydycwn`).
 
-3. Re-check the OSD status, weight, and location:
+1. (`ncn-m001#`) Re-check the OSD status, weight, and location:
 
     ```bash
     ceph osd tree
@@ -156,7 +159,7 @@ Check the status of Ceph.
     17   ssd   3.49309          osd.17       down   1.00000  1.00000
     ```
 
-4. Check the status of the Ceph cluster:
+1. (`ncn-m001#`) Check the status of the Ceph cluster:
 
     ```bash
     ceph -s
@@ -195,60 +198,58 @@ Check the status of Ceph.
         client:   8.7 KiB/s rd, 353 KiB/s wr, 3 op/s rd, 53 op/s wr
     ```
 
-5. Remove Ceph OSDs
+1. (`ncn-m001#`) List down Ceph OSDs.
 
-   **IMPORTANT:** Before proceeding please ensure you are doing a rebuild that requires OSD wipes. Storage node rebuilds that are done on an active node do not require the OSD removal.  Some examples are rebuilds to get some a custom patched image.
+    **IMPORTANT:** Before proceeding, ensure that this rebuild requires OSD wipes. Storage node rebuilds that are done on an active node do not require the OSD removal. Some examples are rebuilds to get some a custom patched image.
 
-   The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
+    The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
 
-     ```bash
-     ceph osd tree down
-     ```
+    ```bash
+    ceph osd tree down
+    ```
 
     Example output:
 
     ```bash
-     ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
-     -1         62.87758  root default
-     -7         20.95853      host ncn-s003
-      1    ssd   3.49309          osd.1        down   1.00000  1.00000
-      4    ssd   3.49309          osd.4        down   1.00000  1.00000
-      8    ssd   3.49309          osd.8        down   1.00000  1.00000
-      11   ssd   3.49309          osd.11       down   1.00000  1.00000
-      14   ssd   3.49309          osd.14       down   1.00000  1.00000
-      17   ssd   3.49309          osd.17       down   1.00000  1.00000
-     ```
+    ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
+    -1         62.87758  root default
+    -7         20.95853      host ncn-s003
+     1    ssd   3.49309          osd.1        down   1.00000  1.00000
+     4    ssd   3.49309          osd.4        down   1.00000  1.00000
+     8    ssd   3.49309          osd.8        down   1.00000  1.00000
+     11   ssd   3.49309          osd.11       down   1.00000  1.00000
+     14   ssd   3.49309          osd.14       down   1.00000  1.00000
+     17   ssd   3.49309          osd.17       down   1.00000  1.00000
+    ```
 
-   1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
+1. (`ncn-m001#`) Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
   
-       By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map.
-       This will result in OSDs that no longer exist appearing to be down.
+    By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map.
+    This will result in OSDs that no longer exist appearing to be down.
 
-       The following command assumes the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) are set.
+    The following command assumes the variables from [the prerequisites section](Rebuild_NCNs.md#prerequisites) are set.
 
-       This must be run from a `ceph-mon` node (ncn-s00[1/2/3])
+    ```bash
+    for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
+    ```
 
-       ```bash
-       for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
-       ```
+    Example output:
 
-       Example Output:
+    ```bash
+    destroyed osd.1
+    purged osd.1
+    destroyed osd.4
+    purged osd.4
+    destroyed osd.6
+    purged osd.6
+    destroyed osd.11
+    purged osd.11
+    destroyed osd.14
+    purged osd.14
+    destroyed osd.17
+    purged osd.17
+    ```
 
-       ```bash
-       destroyed osd.1
-       purged osd.1
-       destroyed osd.4
-       purged osd.4
-       destroyed osd.6
-       purged osd.6
-       destroyed osd.11
-       purged osd.11
-       destroyed osd.14
-       purged osd.14
-       destroyed osd.17
-       purged osd.17
-       ```
+## Next step
 
-## Next Step
-
-If executing this procedure as part of an NCN rebuild, return to the main [Rebuild NCNs](Rebuild_NCNs.md#storage-node) page and proceed with the next step.
+If executing this procedure as part of an NCN rebuild, then return to the main [Rebuild NCNs](Rebuild_NCNs.md#storage-node) page and proceed with the next step.

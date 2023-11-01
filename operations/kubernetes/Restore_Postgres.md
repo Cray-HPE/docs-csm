@@ -4,11 +4,17 @@ Below are the service-specific steps required to restore data to a Postgres clus
 
 Restore Postgres procedures by service:
 
-* [Restore Postgres for Spire](#restore-postgres-for-spire)
+* Restore Postgres for Spire
+  * [Restore from backup](#restore-postgres-for-spire)
+  * [Restore without backup](../spire/Restore_Spire_Postgres_without_a_Backup.md)
 * [Restore Postgres for Keycloak](#restore-postgres-for-keycloak)
 * [Restore Postgres for VCS](#restore-postgres-for-vcs)
-* [Restore Postgres for HSM](../hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
-* [Restore Postgres for SLS](../system_layout_service/Restore_SLS_Postgres_Database_from_Backup.md)
+* Restore Postgres for HSM
+  * [Restore from backup](../hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
+  * [Restore without backup](../hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
+* Restore Postgres for SLS
+  * [Restore from backup](../system_layout_service/Restore_SLS_Postgres_Database_from_Backup.md)
+  * [Restore without backup](../system_layout_service/Restore_SLS_Postgres_without_an_Existing_Backup.md)
 
 ## Restore Postgres for Spire
 
@@ -168,20 +174,59 @@ In the event that the Spire Postgres cluster must be rebuilt and the data restor
         /usr/bin/psql postgres postgres
         ```
 
-    1. (`postgres#`) Update the password for each user.
+    1. (`postgres#`) Update the password for each user to match the values found in the secrets.
 
-        For example:
+        1. Update the password for the `postgres` user.
 
-        ```console
-        ALTER USER postgres WITH PASSWORD 'ABCXYZ';
-        ALTER ROLE
-        ALTER USER service_account WITH PASSWORD 'ABC123';
-        ALTER ROLE
-        ALTER USER spire WITH PASSWORD 'XYZ123';
-        ALTER ROLE
-        ALTER USER standby WITH PASSWORD '123456';
-        ALTER ROLE
-        ```
+            ```console
+            ALTER USER postgres WITH PASSWORD 'ABCXYZ';
+            ```
+
+            Example of successful output:
+
+            ```text
+            ALTER ROLE
+            ```
+
+        1. Update the password for the `service_account` user.
+
+            ```console
+            ALTER USER service_account WITH PASSWORD 'ABC123';
+            ```
+
+            Example of successful output:
+
+            ```text
+            ALTER ROLE
+            ```
+
+        1. Update the password for the `spire` user.
+
+            ```console
+            ALTER USER spire WITH PASSWORD 'XYZ123';
+            ```
+
+            Example of successful output:
+
+            ```text
+            ALTER ROLE
+            ```
+
+        1. Update the password for the `standby` user.
+
+            ```console
+            ALTER USER standby WITH PASSWORD '123456';
+            ```
+
+            Example of successful output:
+
+            ```text
+            ALTER ROLE
+            ```
+
+    1. (`postgres#`) Exit the Postgres console with the `\q` command.
+
+    1. (`pod#`) Exit the Postgres pod with the `exit` command.
 
 1. (`ncn-mw#`) Restart the Postgres cluster.
 
@@ -271,7 +316,7 @@ In the event that the Spire Postgres cluster must be rebuilt and the data restor
     The following should return a token.
 
     ```bash
-    /usr/bin/heartbeat-spire-agent api fetch jwt -socketPath=/root/spire/agent.sock -audience test
+    /usr/bin/heartbeat-spire-agent api fetch jwt -socketPath=/var/lib/spire/agent.sock -audience test
     ```
 
 ## Restore Postgres for Keycloak
@@ -441,18 +486,47 @@ In the event that the Keycloak Postgres cluster must be rebuilt and the data res
         /usr/bin/psql postgres postgres
         ```
 
-    1. (`postgres#`) Update the password for each user.
+    1. (`postgres#`) Update the password for each user to match the values found in the secrets.
 
-        For example:
+        1. Update the password for the `postgres` user.
 
-        ```console
-        ALTER USER postgres WITH PASSWORD 'ABCXYZ';
-        ALTER ROLE
-        ALTER USER service_account WITH PASSWORD 'ABC123';
-        ALTER ROLE
-        ALTER USER standby WITH PASSWORD '123456';
-        ALTER ROLE
-        ```
+            ```console
+            ALTER USER postgres WITH PASSWORD 'ABCXYZ';
+            ```
+
+            Example of successful output:
+
+            ```text
+            ALTER ROLE
+            ```
+
+        1. Update the password for the `service_account` user.
+
+            ```console
+            ALTER USER service_account WITH PASSWORD 'ABC123';
+            ```
+
+            Example of successful output:
+
+            ```text
+            ALTER ROLE
+            ```
+
+        1. Update the password for the `standby` user.
+
+            ```console
+            ALTER USER standby WITH PASSWORD '123456';
+            ```
+
+            Example of successful output:
+
+            ```text
+            ALTER ROLE
+            ```
+
+    1. (`postgres#`) Exit the Postgres console with the `\q` command.
+
+    1. (`pod#`) Exit the Postgres pod with the `exit` command.
 
 1. (`ncn-mw#`) Restart the Postgres cluster.
 
@@ -723,7 +797,7 @@ In the event that the VCS Postgres cluster must be rebuilt and the data restored
 1. (`ncn-mw#`) Restore the data.
 
     ```bash
-    kubectl exec "${SERVICE}-0" -c postgres -n services -it -- psql -U postgres < "${DUMPFILE}"
+    kubectl exec "${POSTGRESQL}-0" -c postgres -n services -it -- psql -U postgres < "${DUMPFILE}"
     ```
 
     Errors such as `... already exists` can be ignored; the restore can be considered successful when it completes.
@@ -763,18 +837,47 @@ In the event that the VCS Postgres cluster must be rebuilt and the data restored
         /usr/bin/psql postgres postgres
         ```
 
-    1. (`postgres#`) Update the password for each user.
+    1. (`postgres#`) Update the password for each user to match the values found in the secrets.
 
-        For example:
+        1. Update the password for the `postgres` user.
 
-        ```console
-        ALTER USER postgres WITH PASSWORD 'ABCXYZ';
-        ALTER ROLE
-        ALTER USER service_account WITH PASSWORD 'ABC123';
-        ALTER ROLE
-        ALTER USER standby WITH PASSWORD '123456';
-        ALTER ROLE
-        ```
+            ```console
+            ALTER USER postgres WITH PASSWORD 'ABCXYZ';
+            ```
+
+            Example of successful output:
+
+            ```text
+            ALTER ROLE
+            ```
+
+        1. Update the password for the `service_account` user.
+
+            ```console
+            ALTER USER service_account WITH PASSWORD 'ABC123';
+            ```
+
+            Example of successful output:
+
+            ```text
+            ALTER ROLE
+            ```
+
+        1. Update the password for the `standby` user.
+
+            ```console
+            ALTER USER standby WITH PASSWORD '123456';
+            ```
+
+            Example of successful output:
+
+            ```text
+            ALTER ROLE
+            ```
+
+    1. (`postgres#`) Exit the Postgres console with the `\q` command.
+
+    1. (`pod#`) Exit the Postgres pod with the `exit` command.
 
 1. (`ncn-mw#`) Restart the Postgres cluster.
 

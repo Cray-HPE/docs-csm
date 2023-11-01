@@ -8,13 +8,13 @@ See [Configuration Management Use Cases](Configuration_Management.md#use-cases) 
 During image customization, CFS will automatically add all image customization hosts into a special `cfs_image` host group in Ansible inventory.
 Plays intended for image customization can then target this group in addition to any other provided host groups.
 
-To target only image customization, plays should use the following syntax.  In this example the play is targeting only _images_ for `Compute` nodes. `&` takes the intersection of the `Compute` and `cfs_image` groups.
+To target only image customization, plays should use the following syntax. In this example the play is targeting only _images_ for `Compute` nodes. `&` takes the intersection of the `Compute` and `cfs_image` groups.
 
 ```yaml
 hosts: Compute:&cfs_image
 ```
 
-To target only node personalization, plays should use the following syntax.  In this example the play is targeting only _running_ `Compute` nodes. `!` negates the `cfs_image` group, so that only Compute nodes that are not an image are targeted.
+To target only node personalization, plays should use the following syntax. In this example the play is targeting only _running_ `Compute` nodes. `!` negates the `cfs_image` group, so that only Compute nodes that are not an image are targeted.
 
 ```yaml
 hosts: Compute:!cfs_image
@@ -40,7 +40,7 @@ For more information on complex host targets, see the [Ansible Hosts Documentati
 
 ## Using the `cray_cfs_image` variable
 
-`** NOTE **` This option is no longer recommended and should only be used in small playbooks and one-off cases
+> `** NOTE **` This option is no longer recommended and should only be used in small playbooks and one-off cases
  as it is more efficient for Ansible to determine this at the host level rather than checking the `cray_cfs_image` variable for multiple tasks.
  The preferred method is to use the aforementioned `cfs_image` host group.
 
@@ -61,6 +61,24 @@ It is best practice to include a default in Ansible roles for playbook and role 
 If a default is not provided, any playbooks or roles will not be runnable outside of the CFS Ansible Execution Environment \(AEE\) without the user specifying `cray_cfs_image` in the `vars` files or with the Ansible `extra-vars` options.
 
 CFS automatically sets this variable in the `hosts/01-cfs-generated.yaml` file for all sessions. When the session target is image customization, it sets `cray_cfs_image` to `true`; otherwise, it is `false`.
+
+## Image Management Service (IMS) variable passthrough
+
+IMS provides environment variables during image customization only for the purposes of
+further describing an image environment. This allows users to write their own Ansible tasks that can key off of this
+specific information in order to contextually configure an image correctly, regardless of where the host operating
+system is hosted. This is helpful in a number of scenarios, including when writing Ansible tasks specific to
+[DKMS](../image_management/Configure_IMS_to_Use_DKMS.md) or for use with multi-architecture specific Ansible tasks.
+
+The full set of variables exposed is provided as an Ansible role alongside the `cfs-config` Git project within version
+control, and will be updated with the full set of variables, and a sample task to output the current read values, in
+the form of an Ansible role contained therein. See [related documentation about version control](Version_Control_Service_VCS.md#cloning-a-vcs-repository)
+for an up-to-date set of variables that IMS exposes during image customization. The `csm.ims-passthrough` role and
+accompanying role documentation for a sample playbook that demonstrates how this can be used.
+
+As IMS is not involved during node personalization, it does not provide these variables. Ansible playbooks that are
+written to target both image customization and node personalization use cases should choose sane defaults, so that the
+correct behavior is selected when the task is run.
 
 ## Image customization limitations
 

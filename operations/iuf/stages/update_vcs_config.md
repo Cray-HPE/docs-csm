@@ -27,10 +27,10 @@ product, product version, and branch values used by IUF when executing stages su
 
 ## Terminology
 
-| Term                     | Example              | Meaning |
-| ------------------------ | -------------------- | ------- |
-| Pristine branch          | `cray/cos/2.4.79`    | The branch provided by HPE for a given product |
-| Customer branch          | `integration-2.4.79` | The customer's working branch for a given product |
+| Term                     | Example              | Meaning                                                                                              |
+|--------------------------|----------------------|------------------------------------------------------------------------------------------------------|
+| Pristine branch          | `cray/cos/2.4.79`    | The branch provided by HPE for a given product                                                       |
+| Customer branch          | `integration-2.4.79` | The customer's working branch for a given product                                                    |
 | Previous customer branch | `integration-2.3.50` | The latest existing customer branch for a given product which predates the specified customer branch |
 
 ## Branch creation and modification
@@ -125,11 +125,11 @@ Once `iuf` has performed the merges, it performs substitutions based on the foll
 
 The following arguments are most often used with the `update-vcs-config` stage. See `iuf -h` and `iuf run -h` for additional arguments.
 
-| Input                                  | `iuf` Argument              | Description   |
-| -------------------------------------- | --------------------------- |-------------- |
-| Activity                               | `-a ACTIVITY`               | Activity created for the install or upgrade operations |
-| Site variables                         | `-sv SITE_VARS`             | Path to YAML file containing site defaults and any overrides |
-| Recipe variables                       | `-rv RECIPE_VARS`           | Path to YAML file containing recipe variables provided by HPE |
+| Input                                  | `iuf` Argument              | Description                                                                  |
+|----------------------------------------|-----------------------------|------------------------------------------------------------------------------|
+| Activity                               | `-a ACTIVITY`               | Activity created for the install or upgrade operations                       |
+| Site variables                         | `-sv SITE_VARS`             | Path to YAML file containing site defaults and any overrides                 |
+| Recipe variables                       | `-rv RECIPE_VARS`           | Path to YAML file containing recipe variables provided by HPE                |
 | `sat bootprep` configuration directory | `-bpcd BOOTPREP_CONFIG_DIR` | Directory containing `sat bootprep` configuration files and recipe variables |
 
 ## Execution details

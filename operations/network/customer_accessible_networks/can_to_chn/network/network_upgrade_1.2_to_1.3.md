@@ -1,16 +1,17 @@
 # Management Network Upgrade CSM 1.2 to 1.3
 
-- [Management network changelog](#management-network-changelog)
-- [When to perform switch upgrades](#when-to-perform-switch-upgrades)
-- [Prerequisites](#prerequisites)
-- [Upgrade CANU to the latest version](#upgrade-canu-to-the-latest-version)
-- [Backup running switch configurations](#backup-running-switch-configurations)
-- [Retrieve SLS data](#retrieve-sls-data)
-- [Generate CSM 1.3 switch configurations](#generate-csm-13-switch-configurations)
-- [Discover CSM 1.2 to CSM 1.3 configuration changes](#discover-csm-12-to-csm-13-configuration-changes)
-- [Test the network prior to update](#test-the-network-prior-to-update)
-- [Apply and save the new switch configurations](#apply-and-save-the-new-switch-configurations)
-- [Test the network after update](#test-the-network-after-update)
+- [Management Network Upgrade CSM 1.2 to 1.3](#management-network-upgrade-csm-12-to-13)
+  - [Management network changelog](#management-network-changelog)
+  - [When to perform switch upgrades](#when-to-perform-switch-upgrades)
+  - [Prerequisites](#prerequisites)
+  - [Upgrade CANU to the latest version](#upgrade-canu-to-the-latest-version)
+  - [Backup running switch configurations](#backup-running-switch-configurations)
+  - [Retrieve SLS data](#retrieve-sls-data)
+  - [Generate CSM 1.3 switch configurations](#generate-csm-13-switch-configurations)
+  - [Discover CSM 1.2 to CSM 1.3 configuration changes](#discover-csm-12-to-csm-13-configuration-changes)
+  - [Test the network prior to update](#test-the-network-prior-to-update)
+  - [Apply and save the new switch configurations](#apply-and-save-the-new-switch-configurations)
+  - [Test the network after update](#test-the-network-after-update)
 
 ## Management network changelog
 
@@ -36,10 +37,10 @@ Additionally, UAN can be operated normally and any reboot or rebuild operations 
 ## Prerequisites
 
 - **IMPORTANT** If conversion from CAN to CHN is required, the [SLS update procedure](chn_enable.md) must have been applied prior to running this procedure.
-- An up-to-date and validated copy of the system [CCJ/Paddle JSON topology file](https://github.com/Cray-HPE/canu/tree/main#validate-paddle) (preferred), or an up-to-date and validated [SHCD spreadsheet](https://github.com/Cray-HPE/canu/tree/main#validate-shcd).
+- An up-to-date and validated copy of the system [CCJ/Paddle JSON topology file](https://github.com/Cray-HPE/canu/blob/main/docs/templates/quickstart.md) (preferred), or an up-to-date and validated [SHCD spreadsheet](https://github.com/Cray-HPE/canu/blob/main/docs/network_configuration_and_upgrade/validate_shcd.md).
   - The SHCD should be used as starting data over the CCJ/Paddle file only when node, network or cabling changes have taken place on the system.
   - A correct cabling and network topology must be reflected to ensure working switch configurations.
-- An [up-to-date custom configurations](https://github.com/Cray-HPE/canu/tree/main#generate-switch-configs-including-custom-configurations) YAML file to be used in CANU switch configuration generation with the `--custom-config` flag.
+- An [up-to-date custom configurations](https://github.com/Cray-HPE/canu/blob/main/docs/network_configuration_and_upgrade/custom_config.md) YAML file to be used in CANU switch configuration generation with the `--custom-config` flag.
   - These custom configurations are critical to preserve site uplinks and any configurations which extend beyond plan-of-record.
   - This file should have been created during the CSM 1.2 system install or upgrade process and is required to ensure working switch configurations.
 
@@ -71,7 +72,7 @@ Additionally, UAN can be operated normally and any reboot or rebuild operations 
 
 ## Generate CSM 1.3 switch configurations
 
-- (`ncn-m001#`) Use CANU to [generate new switch configurations](https://github.com/Cray-HPE/canu/blob/main/docs/generate_network_config.md). Shown below is an example using the preferred CCJ/Paddle file.
+- (`ncn-m001#`) Use CANU to [generate new switch configurations](https://github.com/Cray-HPE/canu/blob/main/docs/network_configuration_and_upgrade/generate_config.md). Shown below is an example using the preferred CCJ/Paddle file.
 
    ```bash
    canu generate network config --csm 1.3 --architecture <full|tds|v1> --ccj <system-ccj.json> --custom-config <system-custom-config.yaml> --folder generated --sls-file sls_input_file.json

@@ -47,59 +47,28 @@ procedures based on whether or not CSM is being upgraded:
 
 ### 3.1 `management-nodes-rollout` with CSM upgrade
 
-All management nodes will be upgraded to a new image because CSM itself is being upgraded. NCN master nodes, excluding `ncn-m001`, and NCN worker nodes will be upgraded with IUF.
-NCN storage nodes and `ncn-m001` will be upgraded with manual commands.
-This section describes how to test a new image and CFS configuration on a single canary node for NCN master nodes and NCN worker nodes first before rolling it out to the other NCN master nodes and NCN worker nodes.
+All management nodes will be upgraded to a new image because CSM itself is being upgraded. All management nodes, excluding `ncn-m001`, will be upgraded with IUF.
+`ncn-m001` will be upgraded with manual commands.
+This section describes how to test a new image and CFS configuration on a single canary node first before rolling it out to the other management nodes of the same management type.
 Follow the steps below to upgrade all management nodes.
 
 1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. Get the image ID and CFS configuration created for management nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the
-[`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation to get the values for `final_image_id` and `configuration` for images with a `configuration_group_name` value matching `Management_Master`
-or `Management_Storage`. These values will be needed when upgrading NCN storage nodes and `ncn-m001` in the following steps.
+1. Perform the NCN storage node upgrades. This upgrades a single storage node first to test the storage node image and then upgrades the remaining storage nodes.
 
-1. Perform the NCN storage node upgrades.
+    **`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN storage nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`.
+    If monitoring progress with the Argo UI, remember to include these workflows.
 
-    1. Set the CFS configuration on all storage nodes.
-
-        1. (`ncn-m#`) Set `CFS_CONFIG_NAME` to be the value for `configuration` found for `Management_Storage` nodes in the previous step.
-
-            ```bash
-            CFS_CONFIG_NAME=<appropriate configuration value>
-            ```
-
-        1. (`ncn-m#`) Get all NCN storage node xnames.
-
-            ```bash
-            XNAMES=$(cray hsm state components list --role Management --subrole Storage --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
-            echo "${XNAMES}"
-            ```
-
-        1. (`ncn-m#`) Set the configuration on all storage nodes.
-
-            ```bash
-            /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-            --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames "${XNAMES}" --no-enable --no-clear-err
-            ```
-
-            The expected output is:
-
-              ```bash
-              All components updated successfully.
-              ```
-
-    1. Set the image in BSS for all storage nodes by following the [Set NCN boot image for `ncn-m001` and NCN storage nodes](../stages/management_nodes_rollout.md#set-ncn-boot-image-for-ncn-m001-and-ncn-storage-nodes)
-    section of the [Management nodes rollout stage documentation](../stages/management_nodes_rollout.md).
-    Set the `IMS_RESULTANT_IMAGE_ID` variable to the `final_image_id` value for `Management_Storage` found in step 2 above.
-
-    1. (`ncn-m#`) Upgrade one NCN storage node (`ncn-s001`).
-
-        **NOTE** This creates an additional, separate Argo workflow for rebuilding a NCN storage node. The Argo workflow name will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI, remember to include these workflows.
+    1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage with a single NCN storage node.
 
         ```bash
-        /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001 --upgrade
+        STORAGE_CANARY=ncn-s001
+        ```
+
+        ```bash
+        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
         ```
 
     1. (`ncn-m#`) Verify that the storage node booted and is configured correctly. The CFS configuration can be
@@ -107,36 +76,23 @@ or `Management_Storage`. These values will be needed when upgrading NCN storage 
 
         ```bash
         XNAME=x3000c0s13b0n0
-        cray cfs components describe "${XNAME}"
+        cray cfs v3 components describe "${XNAME}"
         ```
 
-        The desired value for `configurationStatus` is `configured`. If it is `pending`, then wait for the status to change to `configured`.
+        The desired value for `configuration_status` is `configured`. If it is `pending`, then wait for the status to change to `configured`.
 
-    1. (`ncn-m#`) Upgrade the remaining storage nodes serially.
-
-        **NOTE** This creates an additional, separate Argo workflow for upgrading NCN storage nodes. The Argo workflow name will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI, remember to include these workflows.
+    1. (`ncn-m001#`) Upgrade the remaining NCN storage nodes once the first has upgraded successfully. This upgrades NCN storage nodes serially.
+    Adjust the number of storage nodes based on the cluster.
 
         ```bash
-        /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s002,ncn-s003,ncn-s004 --upgrade
+        STORAGE_NODES="ncn-s002 ncn-s003 ncn-s004"
         ```
 
-    1. Follow the steps documented in [Ensure that `rbd` stats monitoring is enabled](../../../upgrade/Stage_1.md#ensure-that-rbd-stats-monitoring-is-enabled)
+        ```bash
+        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_NODES}
+        ```
 
 1. Perform the NCN master node upgrade on `ncn-m002` and `ncn-m003`.
-
-    1. Use `kubectl` to label `ncn-m003` with `iuf-prevent-rollout=true` to ensure `management-nodes-rollout` only rebuilds the single NCN master node `ncn-m002`.
-
-        (`ncn-m001#`) Label `ncn-m003` to prevent it from rebuilding.
-
-        ```bash
-        kubectl label nodes "ncn-m003" --overwrite iuf-prevent-rollout=true
-        ```
-
-        (`ncn-m001#`) Verify the IUF node label is present on the desired node.
-
-        ```bash
-        kubectl get nodes --show-labels | grep iuf-prevent-rollout
-        ```
 
     1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m002`. This will rebuild `ncn-m002` with the new CFS configuration and image built in
     previous steps of the workflow.
@@ -144,25 +100,10 @@ or `Management_Storage`. These values will be needed when upgrading NCN storage 
         (`ncn-m001#`) Execute the `management-nodes-rollout` stage with `ncn-m002`.
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout Management_Master
+        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ncn-m002
         ```
 
     1. Verify that `ncn-m002` booted successfully with the desired image and CFS configuration.
-
-    1. Use `kubectl` to remove the `iuf-prevent-rollout=true` label from `ncn-m003` and add it to `ncn-m002`.
-
-        (`ncn-m001#`) Remove label from `ncn-m003` and add it to `ncn-m002` to prevent it from rebuilding.
-
-        ```bash
-        kubectl label nodes "ncn-m002" --overwrite iuf-prevent-rollout=true
-        kubectl label nodes "ncn-m003" --overwrite iuf-prevent-rollout-
-        ```
-
-        (`ncn-m001#`) Verify the IUF node label is present on the desired node.
-
-        ```bash
-        kubectl get nodes --show-labels | grep iuf-prevent-rollout
-        ```
 
     1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m003`. This will rebuild `ncn-m003` with the new CFS configuration and image built in
     previous steps of the workflow.
@@ -170,29 +111,19 @@ or `Management_Storage`. These values will be needed when upgrading NCN storage 
         (`ncn-m001#`) Execute the `management-nodes-rollout` stage with `ncn-m003`.
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout Management_Master
-        ```
-
-    1. Use `kubectl` to remove the `iuf-prevent-rollout=true` label from `ncn-m002`.
-
-        (`ncn-m001#`) Remove label from `ncn-m002`.
-
-        ```bash
-        kubectl label nodes "ncn-m002" --overwrite iuf-prevent-rollout-
-        ```
-
-        (`ncn-m001#`) Verify the IUF node label is no longer set on `ncn-m002`.
-
-        ```bash
-        kubectl get nodes --show-labels | grep iuf-prevent-rollout
+        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ncn-m003
         ```
 
 1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [3.3 NCN worker nodes](#33-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
 1. Upgrade `ncn-m001`.
 
-    1. Follow the steps documented in [Stage 2.3 - `ncn-m001` upgrade](../../../upgrade/Stage_2.md#stage-23---ncn-m001-upgrade).
-    **Stop** before performing the specific [upgrade `ncn-m001`](../../../upgrade/Stage_2.md#upgrade-ncn-m001) step and return to this document.
+    1. Follow the steps documented in [Stage 3.3 - `ncn-m001` upgrade](../../../upgrade/Stage_3.md#stage-33---ncn-m001-upgrade).
+    **Stop** before performing the specific [upgrade `ncn-m001`](../../../upgrade/Stage_3.md#upgrade-ncn-m001) step and return to this document.
+
+    1. Get the image ID and CFS configuration created for NCN master nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the
+    [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation to get the values for `final_image_id` and `configuration` for images with a `configuration_group_name` value matching `Management_Master`.
+    These values will be needed for upgrading `ncn-m001` in the following steps.
 
     1. Set the CFS configuration on `ncn-m001`.
 
@@ -222,7 +153,7 @@ or `Management_Storage`. These values will be needed when upgrading NCN storage 
               All components updated successfully.
               ```
 
-    1. Set the image in BSS for `ncn-m001` by following the [Set NCN boot image for `ncn-m001` and NCN storage nodes](../stages/management_nodes_rollout.md#set-ncn-boot-image-for-ncn-m001-and-ncn-storage-nodes)
+    1. Set the image in BSS for `ncn-m001` by following the [Set NCN boot image for `ncn-m001`](../stages/management_nodes_rollout.md#set-ncn-boot-image-for-ncn-m001)
     section of the [Management nodes rollout stage documentation](../stages/management_nodes_rollout.md).
     Set the `IMS_RESULTANT_IMAGE_ID` variable to the `final_image_id` for `Management_Master` found in the second step.
 
@@ -232,11 +163,9 @@ or `Management_Storage`. These values will be needed when upgrading NCN storage 
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
         ```
 
-1. Follow the steps documented in [Stage 2.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_2.md#stage-24---upgrade-weave-and-multus)
+1. Follow the steps documented in [Stage 3.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_3.md#stage-34---upgrade-weave-and-multus)
 
-1. Follow the steps documented in [Stage 2.5 - `coredns` anti-affinity](../../../upgrade/Stage_2.md#stage-25---coredns-anti-affinity)
-
-1. Follow the steps documented in [Stage 2.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_2.md#stage-26---complete-kubernetes-upgrade).
+1. Follow the steps documented in [Stage 3.5 - `coredns` anti-affinity](../../../upgrade/Stage_3.md#stage-35---coredns-anti-affinity)
 
 Once this step has completed:
 
@@ -307,8 +236,7 @@ Continue to the next section [4. Update management host Slingshot NIC firmware](
 ### 3.3 NCN worker nodes
 
 NCN worker node images contain kernel module content from non-CSM products and need to be rebuilt as part of the workflow. This section describes how to test a new image and CFS configuration on a single canary node (`ncn-w001`) first before
-rolling it out to the other NCN worker nodes. Modify the procedure as necessary to accommodate site preferences for rebuilding NCN worker nodes. Since the default node target for the `management-nodes-rollout` is `Management_Worker`
-nodes, the `--limit-management-rollout` argument is not used in the instructions below.
+rolling it out to the other NCN worker nodes. Modify the procedure as necessary to accommodate site preferences for rebuilding NCN worker nodes.
 
 The images and CFS configurations used are created by the `prepare-images` and `update-cfs-config` stages respectively; see the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation
 for details on how to query the images and CFS configurations and see the [update-cfs-config](../stages/update_cfs_config.md) documentation for details about how the CFS configuration is updated.
@@ -320,63 +248,45 @@ remember to include these workflows.
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. Use `kubectl` to label all NCN worker nodes but one with `iuf-prevent-rollout=true` to ensure `management-nodes-rollout` only rebuilds a single NCN worker node. This node is referred to as the canary node in the remainder of
-this section and the steps are documented with `ncn-w001` as the canary node.
-
-    (`ncn-m001#`) Label a NCN to prevent it from rebuilding. Replace the example value of `${HOSTNAME}` with the appropriate value. **Repeat this step for all NCN worker nodes except for the canary node.**
+1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage with a single NCN worker node.
+This will rebuild the canary node with the new CFS configuration and image built in previous steps of the workflow.
+The worker canary node can be any worker node and does not have to be `ncn-w001`.
 
     ```bash
-    HOSTNAME=ncn-w002
-    kubectl label nodes "${HOSTNAME}" --overwrite iuf-prevent-rollout=true
+    WORKER_CANARY=ncn-w001
     ```
 
-    (`ncn-m001#`) Verify the IUF node labels are present on the desired node.
+    ```bash
+    iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${WORKER_CANARY}
+    ```
+
+1. Verify the canary node booted successfully with the desired image and CFS configuration.
+
+1. (`ncn-m001#`) Use `kubectl` to apply the `iuf-prevent-rollout=true` label to the canary node to prevent it from unnecessarily rebuilding again.
+
+    ```bash
+    kubectl label nodes "${WORKER_CANARY}" --overwrite iuf-prevent-rollout=true
+    ```
+
+1. (`ncn-m001#`) Verify the IUF node labels are present on the desired node.
 
     ```bash
     kubectl get nodes --show-labels | grep iuf-prevent-rollout
     ```
 
-1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on the canary node. This will rebuild the canary node with the new CFS configuration and image built in
-previous steps of the workflow.
+1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
 
-    (`ncn-m001#`) Execute the `management-nodes-rollout` stage with a single NCN worker node.
+    **`NOTE`** Instead of supplying `Management_Worker` as the argument to `--limit-management-rollout`, worker node hostnames could be supplied.
+    For example, `--limit-management-rollout ncn-w002 ncn-w003` will rebuild `ncn-w002` and `ncn-w003`.
 
     ```bash
-    iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout
+    iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout Management_Worker
     ```
 
-1. Verify the canary node booted successfully with the desired image and CFS configuration.
-
-1. Use `kubectl` to remove the `iuf-prevent-rollout=true` label from all NCN worker nodes and apply it to the canary node to prevent it from unnecessarily rebuilding again.
-
-    (`ncn-m001#`) Remove the label from a NCN to allow it to rebuild. Replace the example value of `${HOSTNAME}` with the appropriate value. **Repeat this step for all NCN worker nodes except for the canary node.**
+1. Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the canary node.
 
     ```bash
-    HOSTNAME=ncn-w002
-    kubectl label nodes "${HOSTNAME}" --overwrite iuf-prevent-rollout-
-    ```
-
-    (`ncn-m001#`) Label the canary node to prevent it from rebuilding. Replace the example value of `${HOSTNAME}` with the hostname of the canary node.
-
-    ```bash
-    HOSTNAME=ncn-w001
-    kubectl label nodes "${HOSTNAME}" --overwrite iuf-prevent-rollout=true
-    ```
-
-1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on all remaining NCN worker nodes. This will rebuild the nodes with the new CFS configuration and
-image built in previous steps of the workflow.
-
-    (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker and master nodes.
-
-    ```bash
-    iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout
-    ```
-
-1. Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the canary node. Replace the example value of `${HOSTNAME}` with the hostname of the canary node.
-
-    ```bash
-    HOSTNAME=ncn-w001
-    kubectl label nodes "${HOSTNAME}" --overwrite iuf-prevent-rollout-
+    kubectl label nodes "${WORKER_CANARY}" --overwrite iuf-prevent-rollout-
     ```
 
 Once this step has completed:

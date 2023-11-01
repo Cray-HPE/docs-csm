@@ -22,7 +22,7 @@ The `process-media` stage does not change the running state of the system.
 The following arguments are most often used with the `process-media`. See `iuf -h` and `iuf run -h` for additional arguments.
 
 | Input           | `iuf` Argument | Description                                                                     |
-| --------------- | -------------- | ------------------------------------------------------------------------------- |
+|-----------------|----------------|---------------------------------------------------------------------------------|
 | Activity        | `-a ACTIVITY`  | Activity created for the install or upgrade operations                          |
 | Media directory | `-m MEDIA_DIR` | Directory containing the product distribution files to be installed or upgraded |
 

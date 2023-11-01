@@ -64,7 +64,7 @@
         ```
 
   - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens are expired. If this happens, delete
-    `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the
+    `/var/lib/spire/agent_svid.der`, `/var/lib/spire/bundle.der`, and `/var/lib/spire/data/svid.key` off the NCN before deleting the
     `request-ncn-join-token` daemon set pod.
 
 - `cfs-state-reporter service ran successfully`
@@ -128,7 +128,7 @@
 
 - `Etcd backups missing after system power up`
 
-   After system power up, automated Etcd backups will resume within about 24 hours of the cluster being back up.  When running the `ncnHealthChecks.sh` script within this time period, it may report a failure:
+   After system power up, automated Etcd backups will resume within about 24 hours of the cluster being back up. When running the `ncnHealthChecks.sh` script within this time period, it may report a failure:
 
    ```text
    --- FAILED --- not all Etcd clusters had expected backups.

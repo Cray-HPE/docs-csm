@@ -21,7 +21,7 @@ cfs-debug
 Example output:
 
 ```text
-Select debugger mode.  Type help for more details.
+Select debugger mode. Type help for more details.
 1) Auto-debug (default)
 2) Directed-debug
 3) Auto-debug report
@@ -37,3 +37,28 @@ For issues where the `cfs-debugger` is not available or not able to diagnose an 
 * For sessions that failed, see [Troubleshoot Session Failed](Troubleshoot_CFS_Session_Failed.md).
 * For sessions that are not starting, see [Troubleshoot Session Failing to Start](Troubleshoot_CFS_Sessions_Failing_to_Start.md).
 * For sessions that are stuck and will not complete, see [Troubleshoot Session Failing to Complete](Troubleshoot_CFS_Session_Failing_to_Complete.md).
+
+## Debug on failure
+
+> **`NOTE`** This feature is only available in the v3 CFS API.
+
+(`ncn-mw#`) CFS sessions can be created with the `debug_on_failure` flag.
+If set to true this will cause sessions that fail during Ansible execution to remain running so that users can exec into the pod.
+
+```bash
+kubectl -n services exec -it <pod> -c ansible -- /bin/sh
+```
+
+Once debugging is complete users should touch the `/tmp/complete` file to complete and cleanup the session. If this is not done, the session will remain up until the `debug_wait_time` expires.
+
+## Debug playbooks
+
+> **`NOTE`** This feature is only available in the v3 CFS API.
+
+CFS supports special debug playbooks, which are part of the AEE image and always available.
+These playbooks can be used without requiring a special configuration to be created.
+The following playbooks are available, and can be specified as the configuration name for a session if no other configuration has already been created with these names.
+
+* `debug_fail` - This playbook immediately fails, which can be used with the `debug_on_failure` flag to create a quick debugging Ansible environment.
+* `debug_facts` - This playbook gather and prints the facts for all available targets.
+* `debug_noop` - This playbook will not gather facts or perform any tasks and is useful for skipping past the Ansible container for debugging.

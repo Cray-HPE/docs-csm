@@ -81,7 +81,7 @@ Use this procedure to obtain important triage information for Ansible plays bein
 
         Sidecar available
         2019-12-05 15:00:12,160 - INFO    - cray.cfs.inventory - Starting CFS Inventory version=0.4.3, namespace=services
-        2019-12-05 15:00:12,171 - INFO    - cray.cfs.inventory - Inventory target=dynamic for cfsession=boa-2878e4c0-39c2-4df0-989e-053bb1edee0c
+        2019-12-05 15:00:12,171 - INFO    - cray.cfs.inventory - Inventory target=dynamic for cfsession=2878e4c0-39c2-4df0-989e-053bb1edee0c
         2019-12-05 15:00:12,227 - INFO    - cray.cfs.inventory.dynamic - Dynamic inventory found a total of 2 groups
         2019-12-05 15:00:12,227 - INFO    - cray.cfs.inventory - Writing out the inventory to /inventory/hosts
         ```
@@ -124,4 +124,7 @@ Use this procedure to obtain important triage information for Ansible plays bein
         ```
 
 Debugging beyond this point is determined by the specific Ansible failure.
-If there is not enough information to determine a next step, see the documentation on how to [Increase the Ansible Verbosity](Change_the_Ansible_Verbosity_Logs.md).
+Permission denied failures for example should indicate looking at [CFS Key Management](CFS_Key_Management.md)
+If there is not enough information to determine a next step, see the documentation on how to [Increase the Ansible Verbosity](Change_the_Ansible_Verbosity.md).
+Alternatively, create a session with `debug_on_failure` enabled to keep the session running long enough to exec into the Ansible container and debug the issue manually.
+See [Troubleshoot CFS Issues](Troubleshoot_CFS_Issues.md) for more information on this option.

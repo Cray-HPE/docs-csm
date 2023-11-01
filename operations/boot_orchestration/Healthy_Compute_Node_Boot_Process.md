@@ -6,12 +6,12 @@ In order to investigate node boot-related issues, it is important to understand 
 
 A healthy DHCP exchange between server and client looks like the following:
 
-|Traffic|Description|Sender|
-|-------|-----------|------|
-|DHCP Discover|A broadcast request from the client requesting an IP address. The request contains the client's MAC address.|Client|
-|DHCP Offer|The server offers an IP address to the client.|Server|
-|DHCP Request|After testing the IP address to see that it is not in use, the client requests the proffered IP address.|Client|
-|DHCP ACK|The server acknowledges that the client owns the lease on the IP address.|Server|
+| Traffic       | Description                                                                                                  | Sender |
+|---------------|--------------------------------------------------------------------------------------------------------------|--------|
+| DHCP Discover | A broadcast request from the client requesting an IP address. The request contains the client's MAC address. | Client |
+| DHCP Offer    | The server offers an IP address to the client.                                                               | Server |
+| DHCP Request  | After testing the IP address to see that it is not in use, the client requests the proffered IP address.     | Client |
+| DHCP ACK      | The server acknowledges that the client owns the lease on the IP address.                                    | Server |
 
 The following figure shows what a healthy DHCP discover process looks like via Wireshark, which is a packet analyzer:
 
@@ -23,16 +23,16 @@ The DHCP client uses port 68, whereas the DHCP server uses port 67. Unlike most 
 
 A healthy TFTP exchange between server and client looks like the following.
 
-|Traffic|Description|Sender|
-|-------|-----------|------|
-|`Read Request File: filename tsize=0`|The client requests a file with a `tsize` equal to zero.|Client|
-|`Option Acknowledgement`|The server acknowledges the request and provides the file's size and block transfer size.|Server|
-|`Error Code, Code: Option negotiation failed, Message: User aborted the transfer`|The client aborts the transfer once it determines the file size.|Client|
-|`Read Request File: filename`|The client requests the file again.|Client|
-|`Option Acknowledgement`|The server acknowledges the request and provides the block transfer size.|Server|
-|`Acknowledgement, Block: 0`|The client acknowledges the server.|Client|
-|`Data Packet, Block: 1`|The server sends the first data packet.|Server|
-|`Acknowledgement, Block: 1`|The client acknowledges reception of block 1.|Client|
+| Traffic                                                                           | Description                                                                               | Sender |
+|-----------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|--------|
+| `Read Request File: filename tsize=0`                                             | The client requests a file with a `tsize` equal to zero.                                  | Client |
+| `Option Acknowledgement`                                                          | The server acknowledges the request and provides the file's size and block transfer size. | Server |
+| `Error Code, Code: Option negotiation failed, Message: User aborted the transfer` | The client aborts the transfer once it determines the file size.                          | Client |
+| `Read Request File: filename`                                                     | The client requests the file again.                                                       | Client |
+| `Option Acknowledgement`                                                          | The server acknowledges the request and provides the block transfer size.                 | Server |
+| `Acknowledgement, Block: 0`                                                       | The client acknowledges the server.                                                       | Client |
+| `Data Packet, Block: 1`                                                           | The server sends the first data packet.                                                   | Server |
+| `Acknowledgement, Block: 1`                                                       | The client acknowledges reception of block 1.                                             | Client |
 
 The last two steps repeat until the file transfer is complete. The last block from the server will be labeled as \(`Last`\). The TFTP server listens on port 69. Kubernetes forwards port 69 on every node in the Kubernetes cluster to the TFTP pod.
 

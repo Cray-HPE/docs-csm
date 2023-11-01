@@ -7,8 +7,9 @@ been made, that information will be available on this page. For any deprecated f
 version for their planned removal, customers are still strongly encouraged to make plans to migrate away from the deprecated feature.
 
 * [Removals](#removals)
+  * [Removals in CSM 1.4](#removals-in-csm-14)
   * [Removals in CSM 1.5](#removals-in-csm-15)
-  * [Removals in CSM 1.9](#removals-in-csm-19)
+  * [Removals in CSM 1.6](#removals-in-csm-16)
 * [Deprecations](#deprecations)
   * [Deprecated in CSM 1.3](#deprecated-in-csm-13)
   * [Deprecated in CSM 1.2](#deprecated-in-csm-12)
@@ -27,8 +28,15 @@ in chronological order.
 ### Removals in CSM 1.5
 
 * [Compute Rolling Upgrade Service (CRUS)](../../glossary.md#compute-rolling-upgrade-service-crus)
+* Deprecated [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos)
+  v1 session template and boot set fields are no longer stored in BOS.
+  * This applied to the following deprecated BOS v1 session template fields: `cfs_branch`, `cfs_url`, `partition`
+  * This applied to the following deprecated BOS v1 boot set fields: `boot_ordinal`, `network`, `shutdown_ordinal`
+  * When upgrading to CSM 1.5, these fields were automatically removed from all BOS session
+    templates that contain them.
+  * When creating BOS v1 session templates in CSM 1.5, these fields were automatically removed.
 
-### Removals in CSM 1.9
+### Removals in CSM 1.6
 
 * [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) v1
 
@@ -40,18 +48,16 @@ features are listed first).
 ### Deprecated in CSM 1.3
 
 * [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) v1
-  * BOS v1 will be removed in CSM 1.9.
-  * It is likely that even prior to BOS v1 being removed from CSM, the [Cray CLI](../../glossary.md#cray-cli-cray) will change its behavior when no
-    version is explicitly specified in BOS commands. Currently it defaults to BOS v1, but it may change to default to BOS v2 even before BOS v1
-    is removed from CSM.
+  * BOS v1 is removed in CSM 1.6.
+  * The [Cray CLI](../../glossary.md#cray-cli-cray) changed in CSM 1.4 so that it defaults to BOS v2 when no version is explicitly specified in BOS commands.
 
 ### Deprecated in CSM 1.2
 
 * [Hardware Management Notification Fanout Daemon (HMNFD)](../../glossary.md#hardware-management-notification-fanout-daemon-hmnfd) v1 REST API
   * The v1 HMNFD APIs are targeted for removal in the CSM 1.5 release.
 * [Compute Rolling Upgrade Service (CRUS)](../../glossary.md#compute-rolling-upgrade-service-crus)
-  * CRUS will be removed in CSM 1.5.
-  * Enhanced [BOS](../../glossary.md#boot-orchestration-service-bos) functionality will replace CRUS. This includes the ability to stage changes to nodes that can be acted upon later when the node reboots.
+  * CRUS was removed in CSM 1.5.
+  * Enhanced [BOS](../../glossary.md#boot-orchestration-service-bos) functionality replaces CRUS. This includes the ability to stage changes to nodes that can be acted upon later when the node reboots.
     It also includes the ability to reboot nodes without specifying any boot artifacts, provided that the artifacts had been previously staged.
 * The `--template-body` option for the [BOS](../../glossary.md#boot-orchestration-service-bos) Cray CLI.
 

@@ -1,9 +1,10 @@
 # Ansible Execution Environments
 
-Configuration Framework Service \(CFS\) sessions are comprised of a single Kubernetes pod with several containers. The `inventory` and `git-clone` containers run first, and a `teardown` container runs last \(if the session is running an image customization\).
+Configuration Framework Service \(CFS\) sessions are comprised of a single Kubernetes pod with several containers.
+The `inventory` and `git-clone` containers run first, and a `teardown` container runs last \(if the session is running an image customization\).
 
-The container that runs the Ansible code cloned from the Git repositories in the configuration layers is the Ansible Execution Environments \(AEE\).
-The AEE is provided as a SLES-based docker image, which includes Ansible version 2.9.11 installed using Python 3.6.
+The container that runs the Ansible code cloned from the Git repositories in the configuration layers is the Ansible Execution Environment \(AEE\).
+The AEE is provided as a SLES-based docker image, which includes Ansible version 2.11.12 installed using Python 3.9.
 In addition to the base Ansible installation, CFS also includes several Ansible modules and plug-ins that are required for CFS and Ansible to work properly on the system.
 
 The following modules and plug-ins are available:

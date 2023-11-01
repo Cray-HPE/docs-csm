@@ -13,14 +13,14 @@ has HTTPS access to the
 See [Configure the Cray CLI](../configure_cray_cli.md).
 
 Third party software can access the API directly. Refer to the
-[CAPMC API](https://github.com/Cray-HPE/hms-capmc/blob/v1.31.0/api/swagger.yaml)
-documentation for detailed information about API options and features.
+[CAPMC API documentation](../../api/capmc.md)
+for detailed information about API options and features.
 
 The `cray capmc` command (see `--help`) can be used to control power to
 specific components by specifying the component NID, component name (xname), or group.
 
 - [Power control and query by xname](#power-control-and-query-by-xname)
-  - [Controllable components](#controllable components)
+  - [Controllable components](#controllable-components)
   - [Power capping](#power-capping)
   - [Power control and query by NID](#power-control-and-query-by-nid)
   - [Power control and query by group](#power-control-and-query-by-group)

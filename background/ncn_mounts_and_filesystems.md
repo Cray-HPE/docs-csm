@@ -1,6 +1,6 @@
 # NCN Mounts and Filesystems
 
-The management nodes use drive storage for persistence and block storage. This page outlines
+The management non-compute nodes (NCNs) use drive storage for persistence and block storage. This page outlines
 reference information for these disks, their partition tables, and their management.
 
 * [Disk layout quick-reference tables](#disk-layout-quick-reference-tables)
@@ -26,20 +26,20 @@ reference information for these disks, their partition tables, and their managem
 
 The table below represents all recognizable FS labels on any given management node, varying slightly by node role (Kubernetes master or Kubernetes worker).
 
-| Master | Worker | Storage | FS Label        | Partitions                    | Devices              |  Partition Size | OverlayFS | Notes                                                          |
-| ------ | ------ | ------- | --------------- | ----------------------------- | -------------------- | --------------- | --------- | -------------------------------------------------------------- |
-|   Yes  |  Yes   |   Yes   | `BOOTRAID`      | `/metal/recovery`             | RAID1: 2 small disks | 500 MiB         |    No     |                                                                |
-|   Yes  |  Yes   |   Yes   | `SQFSRAID`      | `/run/initramfs/live`         | RAID1: 2 small disks | 25 GiB          |    Yes    |                                                                |
-|   Yes  |  Yes   |   Yes   | `ROOTRAID`      | `/run/initramfs/overlayfs`    | RAID1: 2 small disks | 150 GiB         |    Yes    | The persistent image file is loaded from this partition[^1].   |
-|   Yes  |  Yes   |   Yes   | `AUX`           | `/dev/md/AUX` _(Not Mounted)_ | RAID0: 2 small disks | 250 GiB         |    No     | Auxiliary RAID array for `cloud-init` to use.                  |
-|   No   |   No   |   Yes   | `CEPHETC`       | `/etc/ceph`                   | LVM                  | 10 GiB          |    No     |                                                                |
-|   No   |   No   |   Yes   | `CEPHVAR`       | `/var/lib/ceph`               | LVM                  | 60 GiB          |    No     |                                                                |
-|   No   |   No   |   Yes   | `CONTAIN`       | `/run/containers`             | LVM                  | 60 GiB          |    No     |                                                                |
-|   Yes  |  Yes   |   No    | `CRAYS3FSCACHE` | `/var/lib/s3fs_cache`         | LVM                  | 100 GiB         |    No     |                                                                |
-|   No   |  Yes   |   No    | `CONRUN`        | `/run/containerd`             | Ephemeral            | 75 GiB          |    No     |                                                                |
-|   No   |  Yes   |   No    | `CONLIB`        | `/run/lib-containerd`         | Ephemeral            | 25%             |    Yes    |                                                                |
-|   Yes  |   No   |   No    | `ETCDLVM`       | `/run/lib-etcd`               | Ephemeral            | 32 GiB          |    Yes    |                                                                |
-|   Yes  |   No   |   No    | `K8SLET`        | `/var/lib/kubelet`            | Ephemeral            | 25%             |    No     |                                                                |
+| Master | Worker | Storage | FS Label        | Partitions                    | Devices              | Partition Size | OverlayFS | Notes                                                        |
+|--------|--------|---------|-----------------|-------------------------------|----------------------|----------------|-----------|--------------------------------------------------------------|
+| Yes    | Yes    | Yes     | `BOOTRAID`      | `/metal/recovery`             | RAID1: 2 small disks | 500 MiB        | No        |                                                              |
+| Yes    | Yes    | Yes     | `SQFSRAID`      | `/run/initramfs/live`         | RAID1: 2 small disks | 25 GiB         | Yes       |                                                              |
+| Yes    | Yes    | Yes     | `ROOTRAID`      | `/run/initramfs/overlayfs`    | RAID1: 2 small disks | 150 GiB        | Yes       | The persistent image file is loaded from this partition[^1]. |
+| Yes    | Yes    | Yes     | `AUX`           | `/dev/md/AUX` _(Not Mounted)_ | RAID0: 2 small disks | 250 GiB        | No        | Auxiliary RAID array for `cloud-init` to use.                |
+| No     | No     | Yes     | `CEPHETC`       | `/etc/ceph`                   | LVM                  | 10 GiB         | No        |                                                              |
+| No     | No     | Yes     | `CEPHVAR`       | `/var/lib/ceph`               | LVM                  | 60 GiB         | No        |                                                              |
+| No     | No     | Yes     | `CONTAIN`       | `/run/containers`             | LVM                  | 60 GiB         | No        |                                                              |
+| Yes    | Yes    | No      | `CRAYS3FSCACHE` | `/var/lib/s3fs_cache`         | LVM                  | 100 GiB        | No        |                                                              |
+| No     | Yes    | No      | `CONRUN`        | `/run/containerd`             | Ephemeral            | 75 GiB         | No        |                                                              |
+| No     | Yes    | No      | `CONLIB`        | `/run/lib-containerd`         | Ephemeral            | 25%            | Yes       |                                                              |
+| Yes    | No     | No      | `ETCDLVM`       | `/run/lib-etcd`               | Ephemeral            | 32 GiB         | Yes       |                                                              |
+| Yes    | No     | No      | `K8SLET`        | `/var/lib/kubelet`            | Ephemeral            | 25%            | No        |                                                              |
 
 [^1]:  When the image is loaded, the underlying drive is lazily unmounted (`umount -l`), so that it will close once the overlay closes.
 
@@ -48,7 +48,7 @@ The above table's rows with OverlayFS map their `Mount Paths` to the `Upper Dire
 > The "OverlayFS Name" is the name used in `/etc/fstab` and seen in the output of `mount`.
 
 | OverlayFS Name         | Upper Directory       | Lower Directory       |
-| ---------------------- | --------------------- | --------------------- |
+|------------------------|-----------------------|-----------------------|
 | `etcd_overlayfs`       | `/run/lib-etcd`       | `/var/lib/etcd`       |
 | `containerd_overlayfs` | `/run/lib-containerd` | `/var/lib/containerd` |
 
@@ -79,7 +79,7 @@ There are a few overlays used for NCN image boots:
 ### Helpful commands
 
 | Commands              | Details                                         |
-| --------------------  | ----------------------------------------------- |
+|-----------------------|-------------------------------------------------|
 | `lsblk`, `lsblk -f`   | Shows how the RAIDs and disks are mounted       |
 | `losetup -a`          | Shows where the SquashFS is mounted from        |
 | `mount \| grep ' / '` | Shows the overlay being layered on the SquashFS |
@@ -363,7 +363,7 @@ systemctl stop metalfs
 This is a table of deprecated FS labels/partitions from Shasta 1.3 (no longer in Shasta 1.4 / CSM 0.9 and onwards).
 
 | FS Label      | Partitions                    | Nodes                   | Device    | Size on Disk  |
-| ------------- | ----------------------------- | ----------------------- | --------- | ------------- |
+|---------------|-------------------------------|-------------------------|-----------|---------------|
 | `K8SKUBE`     | `/var/lib/kubelet`            | `ncn-w001`, `ncn-w002`  | Ephemeral | Max/Remainder |
 | `K8SEPH`      | `/var/lib/cray/k8s_ephemeral` | `ncn-w001`, `ncn-w002`  | Ephemeral | Max/Remainder |
 | `CRAYINSTALL` | `/var/cray/vfat`              | `ncn-w001`, `ncn-w002`  | Ephemeral | 12 GiB        |

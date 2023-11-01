@@ -77,7 +77,7 @@ spec:
         arguments:
           parameters:
           - name: nexus_setup_image
-            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.9.3
+            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.10.1
           - name: nexus_admin_credential_secret_name
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
           - name: content
@@ -155,8 +155,6 @@ spec:
 ### Templates ###
 ## nexus-get-prerequisites-template ##
   - name: nexus-get-prerequisites-template
-    nodeSelector:
-      kubernetes.io/hostname: ncn-m001
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -194,8 +192,9 @@ spec:
           source_ns="$2"
           destination_name="$3-$RANDOM"
           destination_ns="$4"
-          if kubectl get $item_name -n $source_ns &> /dev/null; then
-            echo "Syncing $item_name from $source_ns to $destination_ns as $destination_name"
+          result=$(kubectl get $item_name -n $source_ns 2>&1)
+          if [ $? -eq 0 ]; then
+            echo "DEBUG Syncing $item_name from $source_ns to $destination_ns as $destination_name"
             kubectl get $item_name -n $source_ns -o json | \
               jq 'del(.metadata.namespace)' | \
               jq 'del(.metadata.creationTimestamp)' | \
@@ -206,37 +205,43 @@ spec:
               jq 'del(.metadata.name)' | \
               jq '.metadata |= . + {"name":"'$destination_name'"}' | \
               kubectl apply -n $destination_ns -f -
-              return $?
+              rc=$?
+              if [ $rc -ne 0 ]; then
+                echo "ERROR Failed to create secret $destination_name in $destination_ns namespace from $item_name in $source_ns namespace"
+              fi
+              return $rc
           else
-            echo "Didn't find $item_name in the $source_ns namespace"
+            echo "ERROR $item_name not found in $source_ns namespace"
+            result=$(echo "$result" | sed -e 's/^/DEBUG /')
+            echo -e "DEBUG <kubectl get $item_name -n $source_ns> failed with\n\n$result"
             return 1
           fi
         }
         err=0
         sync_item secret/nexus-admin-credential nexus nexus-admin-credential-argo argo
-        rc=$?
-        echo $destination_name > /tmp/secret_name
-        if [ $rc -ne 0 ]; then
+        if [ $? -ne 0 ]; then
           err=1
         fi
+        echo $destination_name > /tmp/secret_name
 
-        # Extract the content of the current product manifest as json.
-        echo "Extracting the product manifest."
+        # Retrieve the content of the current product manifest as json.
+        product_name={{inputs.parameters.global_params}} | jq -r '.product_manifest.current_product.name'
+        echo "DEBUG Fetching the product manifest for $product_name"
         cat <<EOF | jq '.product_manifest.current_product.manifest.content' > /tmp/current_product_manifest
           {{inputs.parameters.global_params}}
         EOF
-        rc=$?
-        if [ $rc -ne 0 ]; then
+        if [ $? -ne 0 ]; then
           err=1
+          echo "ERROR Failed to fetch product manifest for $product_name. Rerun with valid product tarball from 'process-media' stage"
         fi
 
-        # Extract the product directory.
-        echo "Extracting the product directory."
+        # Retrieve the product directory.
+        echo "DEBUG Retrieving the product directory for $product_name"
         cat <<EOF | jq -r '.product_manifest.current_product.original_location' > /tmp/product_directory
           {{inputs.parameters.global_params}}
         EOF
-        rc=$?
-        if [ $rc -ne 0 ]; then
+        if [ $? -ne 0 ]; then
+          echo "ERROR Failed to fetch product directory for $product_name. Rerun with valid product tarball from 'process-media' stage"
           err=1
         fi
 
@@ -250,8 +255,6 @@ spec:
       - name: nexus_admin_credential_secret_name
       - name: content
       - name: product_directory
-    nodeSelector:
-      kubernetes.io/hostname: ncn-m001
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -295,8 +298,6 @@ spec:
     inputs:
       parameters:
       - name: nexus_admin_credential_secret_name
-    nodeSelector:
-      kubernetes.io/hostname: ncn-m001
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -307,4 +308,11 @@ spec:
       image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
       command: [bash]
       source: |
-        kubectl -n argo delete secret/{{inputs.parameters.nexus_admin_credential_secret_name}}
+        nexus_secret_name={{inputs.parameters.nexus_admin_credential_secret_name}}
+        echo "DEBUG Deleting secret $nexus_secret_name from argo workspace"
+        result=$(kubectl -n argo delete secret/$nexus_secret_name 2>&1)
+        if [ $? -ne 0 ]; then
+          result=$(echo "$result" | sed -e 's/^/DEBUG /')
+          echo "ERROR Deleting secret $nexus_secret_name failed in argo namespace"
+          echo -e "DEBUG <kubectl -n argo delete secret/$nexus_secret_name> failed with\n\n$result"
+        fi

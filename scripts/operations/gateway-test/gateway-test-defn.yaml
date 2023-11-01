@@ -66,7 +66,7 @@ ingress_api_services:
   gateways: ["services-gateway","customer-admin-gateway"]
   project: CSM
 - name: cray-cfs-api
-  path: apis/cfs/v2/sessions
+  path: apis/cfs/v3/sessions
   port: 443
   expected-result: 200
   namespace: services
@@ -135,13 +135,6 @@ ingress_api_services:
   namespace: services
   gateways: ["services-gateway","customer-admin-gateway"]
   project: CSM
-- name: cray-reds
-  path: apis/reds/v1/liveness
-  port: 443
-  expected-result: 204
-  namespace: services
-  gateways: ["services-gateway","customer-admin-gateway"]
-  project: CSM
 - name: cray-scsd
   path: apis/scsd/v1/health
   port: 443
@@ -165,13 +158,6 @@ ingress_api_services:
   project: CSM
 - name: cray-sts
   path: apis/sts/healthz
-  port: 443
-  expected-result: 200
-  namespace: services
-  gateways: ["services-gateway","customer-admin-gateway"]
-  project: CSM
-- name: cray-uas-mgr
-  path: apis/uas-mgr/v1/images
   port: 443
   expected-result: 200
   namespace: services

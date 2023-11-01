@@ -27,24 +27,24 @@ If these two things are true, then it is likely that CFS is creating new session
 
 ## Procedure
 
-The primary method of handling this problem is the `batcherMaxBackoff` option. This will slow automatic session creation in these situations and give the `cfs-operator` a chance to catch up.
+The primary method of handling this problem is the `batcher_max_backoff` option. This will slow automatic session creation in these situations and give the `cfs-operator` a chance to catch up.
 
 (`ncn-mw#`) If this value has been changed from its default value of 3600 (1 hour), then it should be set back to that value:
 
  ```bash
-cray cfs options update --batcher-max-backoff 3600
+cray cfs v3 options update --batcher-max-backoff 3600
 ```
 
 The issue should eventually resolve automatically.
 
 If there is a reason that users cannot wait for the back-off to resolve this automatically, then the following procedure can be used to purge the event queue. This will disrupt CFS operation and may disrupt existing sessions, so caution should be used.
 
-1. (`ncn-mw#`) Slow down session creation.
+1. (`ncn-mw#`) Disable session creation.
 
-    If any others users or scripts are creating sessions, make sure that they have stopped. CFS-batcher should be slowed by setting its check interval to an arbitrary high number.
+    If any others users or scripts are creating sessions, make sure that they have stopped. `cfs-batcher` should then be disabled.
 
     ```bash
-    cray cfs options update --batcher-check-interval 99999
+    cray cfs v3 options update --batcher-disable true
     ```
 
 1. Start a new consumer on the Kafka event queue.
@@ -84,16 +84,8 @@ If there is a reason that users cannot wait for the back-off to resolve this aut
     kubectl -n services scale --replicas=1 deployment/cray-cfs-operator
     ```
 
-1. (`ncn-mw#`) Restore `cfs-batcher`.
+1. (`ncn-mw#`) Enable `cfs-batcher`.
 
-    1. Restore the batcher check interval.
-
-        ```bash
-        cray cfs options update --batcher-check-interval 10
-        ```
-
-    1. Initiate a rolling restart of the batcher.
-
-        ```bash
-        kubectl -n services rollout restart deployment/cray-cfs-batcher
-        ```
+    ```bash
+    cray cfs v3 options update --batcher-disable false
+    ```

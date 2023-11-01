@@ -1,9 +1,10 @@
 # Update Management Network Firmware
 
-This page describes how to update firmware on the management network switches.
-More details and other options to upgrade firmware can be found in the switch [External User Guides](../external_user_guides.md).
+This page describes how to update firmware on the management network switches. More details and other options to upgrade
+firmware can be found in the switch [External User Guides](../external_user_guides.md).
 
 ## Prerequisites
+
 - Access to the switches.
 - Firmware in a location that the switches can reach.
 
@@ -11,80 +12,91 @@ All firmware can be found in the HFP package provided with the Shasta release.
 
 ## Switch Firmware
 
-| Model | software version |
-| ----- | -----: |
-| Aruba 8320 Switch Series | 10.09.0010  |
-| Aruba 8325 Switch Series | 10.09.0010  |
-| Aruba 8360 Switch Series | 10.09.0010  |
-| Aruba 6300 Switch Series | 10.09.0010  |
-| Mellanox SN2100 Switch Series | 3.9.3210|
-| Mellanox SN2700 Switch Series | 3.9.3210|
-| Dell S3048-ON Switch Series | 10.5.1.4|
-| Dell S4148T-ON Switch Series | 10.5.1.4|
-| Dell S4148F-ON Switch Series | 10.5.1.4|
+| Model                         | software version |
+|-------------------------------|-----------------:|
+| Aruba 8320 Switch Series      |     `10.11.1010` |
+| Aruba 8325 Switch Series      |     `10.11.1010` |
+| Aruba 8360 Switch Series      |     `10.11.1010` |
+| Aruba 6300 Switch Series      |     `10.11.1010` |
+| Mellanox SN2100 Switch Series |       `3.9.3210` |
+| Mellanox SN2700 Switch Series |       `3.9.3210` |
+| Dell S3048-ON Switch Series   |       `10.5.1.4` |
+| Dell S4148T-ON Switch Series  |       `10.5.1.4` |
+| Dell S4148F-ON Switch Series  |       `10.5.1.4` |
 
 ## Aruba Firmware Best Practices
 
 Aruba software version number explained:
 
-For example: 10.06.0120
+For example: `10.11.1010`
 
-- 10		= OS
+- 10 = OS
 
-- 06		= Major branch (new features)
+- 11 = Major branch (new features)
 
-- 0120	= CPE release (bug fixes)
+- 1010 = CPE release (bug fixes)
 
 It is considered to be a best practice to keep all Aruba CX platform devices running the same software version.
 
-Aruba CX devices two software image banks, which means sw images can be pre-staged to the device without booting to the new image.
+Aruba CX devices two software image banks, which means switch images can be pre-staged to the device without booting to the
+new image.
 
 If upgrading to a new major branch, in Aruba identified by the second integer in the software image number.
 
-When upgrading past a major software release, for example, from 10.6 to 10.8 (and skipping 10.7), issue the `allow-unsafe-upgrades` command to allow any low level firmware/driver upgrades to complete. If going from the 10.6 branch to 10.7 branch, this step can be skipped as the low level firmware/driver upgrade would be automatically completed.
+When upgrading past a major software release, for example, from 10.9 to 10.11 (and skipping `10.10.xxxx`)
+issue the `allow-unsafe-upgrades` command to allow any low level firmware/driver upgrades to complete. If going from the
+10.6 branch to 10.7 branch, this step can be skipped as the low level firmware/driver upgrade would be automatically
+completed.
 
-```
+```bash
 config
 sw-leaf-001(config)# allow-unsafe-updates 30
 ```
 
-This command will enable non-failsafe updates of programmable devices for
-the next 30 minutes. First, wait for all line and fabric
-modules to reach the ready state, and then reboot the switch to begin
-applying any needed updates. Ensure that the switch will not lose power,
-be rebooted again, or have any modules removed until all updates have
-finished and all line and fabric modules have returned to the ready state.
+This command will enable non-failsafe updates of programmable devices for the next 30 minutes. First, wait for all line
+and fabric modules to reach the ready state, and then reboot the switch to begin applying any needed updates. Ensure
+that the switch will not lose power, be rebooted again, or have any modules removed until all updates have finished and
+all line and fabric modules have returned to the ready state.
 
 **WARNING:** Interrupting these updates may make the product unusable!
 
-```
+```bash
 Continue (y/n)? y
 Unsafe updates      : allowed (less than 30 minute(s) remaining)
 ```
 
-VSX software upgrade command can automatically upgrade both of the peers in VSX topology by staging upgrade and automatically doing traffic shifting between peers to minimize impact to network. The following examples include the option for standalone and vsx-pair upgrade.
+VSX software upgrade command can automatically upgrade both of the peers in VSX topology by staging upgrade and
+automatically doing traffic shifting between peers to minimize impact to network. The following examples include the
+option for standalone and vsx-pair upgrade.
 
 ## Aruba Firmware Update - Standalone
 
 Console into the switch being upgraded.
+
 1. Check images
+
+   ```bash
+   show images                        
    ```
-   show images
+
+   Potential output:
+
+   ```text
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
-   Version : FL.10.06.0010
-   Size    : 658 MB
-   Date    : 2020-12-14 11:49:52 PST
-   SHA-256 : 9e03da5697ef40d261b4a2920a19197ab64ea338533578ce576e5ca1a6849285
+   Version : GL.10.09.0010
+   Size    : 480 MB
+   Date    : 2022-02-01 01:04:17 UTC
+   SHA-256 : 52b2a6d2c5c039ed8eb0dbd6a3313ea93d268dd91688d2e3b295e03f946eb177
 
    ---------------------------------------------------------------------------
    ArubaOS-CX Secondary Image
    ---------------------------------------------------------------------------
-   Version : FL.10.04.0010
-   Size    : 722 MB
-   Date    : 2019-12-03 10:41:01 PST
-   SHA-256 : 2f00ca2d86338701225aadf4b9aa9b076e929b2b4620239b44122f300ff29e2d
+   Version : GL.10.11.1010
+   Size    : 501 MB
+   Date    : 2023-03-28 04:53:23 UTC
+   SHA-256 : 7c3594162675c5d95d06e4a465546e6fac8b60b8fce9a82ab82d303f8defd2cd
 
    Default Image : primary
    Boot Profile Timeout : 5 seconds
@@ -92,37 +104,51 @@ Console into the switch being upgraded.
    ------------------------------------------------------
    Management Module 1/1 (Active)
    ------------------------------------------------------
-   Active Image       : primary
-   Service OS Version : FL.01.07.0002
-   BIOS Version       : FL.01.0002
+   Active Image       : secondary
+   Service OS Version : GL.01.08.0003
+   BIOS Version       : GL-01-0013
    ```
+
 1. Upload the firmware to the desired image.
-In this example we are uploading it to the secondary.
-   ```
+
+   In this example we are uploading it to the secondary.
+
+   ```bash
    copy sftp://root@10.252.1.12//root/ArubaOS-CX_6400-6300_10_08_1021.swi secondary
 
    write mem
+   ```
+
+   Expected output:
+
+   ```text
    Copying configuration: [Success]
    ```
+
 1. Once the upload is complete, check the images:
 
-   ```
+   ```bash
    show image
+   ```
+
+   Potential output:
+
+   ```text
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
-   Version : FL.10.06.0010
-   Size    : 658 MB
-   Date    : 2020-12-14 11:49:52 PST
-   SHA-256 : 9e03da5697ef40d261b4a2920a19197ab64ea338533578ce576e5ca1a6849285
+   Version : GL.10.09.0010
+   Size    : 480 MB
+   Date    : 2022-02-01 01:04:17 UTC
+   SHA-256 : 52b2a6d2c5c039ed8eb0dbd6a3313ea93d268dd91688d2e3b295e03f946eb177
 
    ---------------------------------------------------------------------------
    ArubaOS-CX Secondary Image
    ---------------------------------------------------------------------------
-   Version : FL.10.08.1021
-   Size    : 812 MB
-   Date    : 2021-11-08 02:09:58 UTC
-   SHA-256 : 3e7f5e22843b49438d2eab19f0e6df8ebccef053e38d6cd65110cfeb37d707fc
+   Version : GL.10.11.1010
+   Size    : 501 MB
+   Date    : 2023-03-28 04:53:23 UTC
+   SHA-256 : 7c3594162675c5d95d06e4a465546e6fac8b60b8fce9a82ab82d303f8defd2cd
 
    Default Image : primary
    Boot Profile Timeout : 5 seconds
@@ -130,57 +156,71 @@ In this example we are uploading it to the secondary.
    ------------------------------------------------------
    Management Module 1/1 (Active)
    ------------------------------------------------------
-   Active Image       : primary
-   Service OS Version : FL.01.07.0002
-   BIOS Version       : FL.01.0002
+   Active Image       : secondary
+   Service OS Version : GL.01.08.0003
+   BIOS Version       : GL-01-0013
    ```
+
 1. After the firmware is uploaded, boot the switch to the correct image.
 
-   ```
+   ```bash
    boot system secondary
    ```
 
 1. Once the reboot is complete, check and make sure the firmware version is correct.
 
-   ```
+   ```bash
    show version
+   ```
+
+   Potential output:
+
+   ```text
    -----------------------------------------------------------------------------
    ArubaOS-CX
    (c) Copyright 2017-2020 Hewlett Packard Enterprise Development LP
    -----------------------------------------------------------------------------
-   Version      : FL.10.06.0010
-   Build Date   : 2020-09-29 07:44:16 PDT
-   Build ID     : ArubaOS-CX:FL.10.06.0010:3cbfcce60961:202009291304
-   Build SHA    : 3cbfcce609617b0cf84a6b941a2b36c43dfeb2cb
-   Active Image : primary
+   Version      : GL.10.11.1010
+   Build Date   : 2023-03-28 04:53:23 UTC
+   Build ID     : ArubaOS-CX:GL.10.11.1010:966f173e8e4e:202303280333
+   Build SHA    : 966f173e8e4e519b5296fa51297754f663ef2ad8
+   Hot Patches  : 
+   Active Image : secondary
 
-   Service OS Version : FL.01.07.0002
-   BIOS Version       : FL.01.0002
+   Service OS Version : GL.01.08.0003
+   BIOS Version       : GL-01-0013
    ```
+
 ## Aruba Firmware Update - VSX Software Upgrade
 
-1. Console into both VSX switches and pre-stage the firmware.
+Console into both VSX switches and pre-stage the firmware.
+
 In this example we are pre-staging the firmware to `sw-spine-001` and `sw-spine-002`
 
 1. Check images first.
 
-   ```
+   ```bash
    show images
+   ```
+
+   Potential output:
+
+   ```text
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
-   Version : GL.10.06.0010
-   Size    : 444 MB
-   Date    : 2020-12-14 11:55:16 PST
-   SHA-256 : 4157d15a5cad6efce4d0e8b35f75b4d6212de5af0c5c9bf3ad8f74853df67733
+   Version : GL.10.09.0010
+   Size    : 480 MB
+   Date    : 2022-02-01 01:04:17 UTC
+   SHA-256 : 52b2a6d2c5c039ed8eb0dbd6a3313ea93d268dd91688d2e3b295e03f946eb177
 
    ---------------------------------------------------------------------------
    ArubaOS-CX Secondary Image
    ---------------------------------------------------------------------------
-   Version : GL.10.02.0020
-   Size    : 360 MB
-   Date    : 2019-03-12 09:26:31 PDT
-   SHA-256 : da629a197e6acbdd805bc7cb85f1decff772ce25223ea20f7c55d426df03fcbe
+   Version : GL.10.11.1010
+   Size    : 501 MB
+   Date    : 2023-03-28 04:53:23 UTC
+   SHA-256 : 7c3594162675c5d95d06e4a465546e6fac8b60b8fce9a82ab82d303f8defd2cd
 
    Default Image : primary
    Boot Profile Timeout : 5 seconds
@@ -188,39 +228,51 @@ In this example we are pre-staging the firmware to `sw-spine-001` and `sw-spine-
    ------------------------------------------------------
    Management Module 1/1 (Active)
    ------------------------------------------------------
-   Active Image       : primary
-   Service OS Version : GL.01.08.0002
+   Active Image       : secondary
+   Service OS Version : GL.01.08.0003
    BIOS Version       : GL-01-0013
    ```
 
 1. Upload the firmware to the desired image.
-In this example we are uploading it to the secondary.
-   ```
+
+   In this example we are uploading it to the secondary.
+
+    ```bash
    copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_8325_10_08_1021.swi secondary
 
    write mem
+   ```
+
+   Expected output:
+
+   ```text
    Copying configuration: [Success]
    ```
 
 1. Once the upload is complete, check the images and make sure the version is correct.
 
-   ```
+   ```bash
    show image
+   ```
+
+   Potential output:
+
+   ```text
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
-   Version : GL.10.06.0010
-   Size    : 444 MB
-   Date    : 2020-12-14 11:55:16 PST
-   SHA-256 : 4157d15a5cad6efce4d0e8b35f75b4d6212de5af0c5c9bf3ad8f74853df67733
+   Version : GL.10.09.0010
+   Size    : 480 MB
+   Date    : 2022-02-01 01:04:17 UTC
+   SHA-256 : 52b2a6d2c5c039ed8eb0dbd6a3313ea93d268dd91688d2e3b295e03f946eb177
 
    ---------------------------------------------------------------------------
    ArubaOS-CX Secondary Image
    ---------------------------------------------------------------------------
-   Version : GL.10.08.1021
-   Size    : 473 MB
-   Date    : 2021-11-08 01:48:56 UTC
-   SHA-256 : c16dc680333eaf72188061209e56cd24854cb291e6babe2333110ff6029e8227
+   Version : GL.10.11.1010
+   Size    : 501 MB
+   Date    : 2023-03-28 04:53:23 UTC
+   SHA-256 : 7c3594162675c5d95d06e4a465546e6fac8b60b8fce9a82ab82d303f8defd2cd
 
    Default Image : primary
    Boot Profile Timeout : 5 seconds
@@ -228,71 +280,87 @@ In this example we are uploading it to the secondary.
    ------------------------------------------------------
    Management Module 1/1 (Active)
    ------------------------------------------------------
-   Active Image       : primary
-   Service OS Version : GL.01.08.0002
+   Active Image       : secondary
+   Service OS Version : GL.01.08.0003
    BIOS Version       : GL-01-0013
    ```
 
-1. After the firmware is uploaded to both VSX switches, you will need to start the software update from the VSX primary member.
+1. After the firmware is uploaded to both VSX switches, you will need to start the software update from the VSX primary
+   member.
 
-Since we uploaded to the secondary image, we choose that one to boot to.
-```
-vsx update-software boot-bank secondary
-```
-This will trigger the upgrade process on the VSX pair and it will start the dialogue explaining what will happen next, i.e. if any firmware/driver upgrades are needed (i.e. the unit would reboot twice if this was the case) and it will show you on the screen the current status of the upgrade process. in VSX upgrade process the secondary VSX member will always boot first.
+   Since we uploaded to the secondary image, we choose that one to boot to.
 
-Once software update is complete verify the image version on both switches.
+    ```bash
+    vsx update-software boot-bank secondary
+    ```
 
-```
-show version
------------------------------------------------------------------------------
-ArubaOS-CX
-(c) Copyright 2017-2021 Hewlett Packard Enterprise Development LP
------------------------------------------------------------------------------
-Version      : GL.10.08.1021
-Build Date   : 2021-11-08 01:48:56 UTC
-Build ID     : ArubaOS-CX:GL.10.08.1021:befed610d5e5:202111080115
-Build SHA    : befed610d5e59c29e3cfb6e163fa45af615a2bd3
-Active Image : secondary
+   This will trigger the upgrade process on the VSX pair and it will start the dialogue explaining what will happen
+   next, i.e. if any firmware/driver upgrades are needed (i.e. the unit would reboot twice if this was the case)
+   and it will show you on the screen the current status of the upgrade process. In VSX upgrade process the secondary
+   VSX member will always boot first.
 
-Service OS Version : GL.01.08.0002
-BIOS Version       : GL-01-0013
-```
+   Once software update is complete verify the image version on both switches.
+
+   ```bash
+   show version
+   ```
+
+   Potential output:
+
+   ```text
+   -----------------------------------------------------------------------------
+   ArubaOS-CX
+   (c) Copyright 2017-2020 Hewlett Packard Enterprise Development LP
+   -----------------------------------------------------------------------------
+   Version      : GL.10.11.1010
+   Build Date   : 2023-03-28 04:53:23 UTC
+   Build ID     : ArubaOS-CX:GL.10.11.1010:966f173e8e4e:202303280333
+   Build SHA    : 966f173e8e4e519b5296fa51297754f663ef2ad8
+   Hot Patches  : 
+   Active Image : secondary
+
+   Service OS Version : GL.01.08.0003
+   BIOS Version       : GL-01-0013
+   ```
 
 ## Mellanox Firmware Update
 
-1. SSH into the switch being upgraded.
+SSH into the switch being upgraded.
 
 1. Fetch the image from `ncn-m001`.
 
-   ```
-   sw-spine-001 [standalone: master] # image fetch scp://root@10.252.1.4/root/onyx-X86_64-3.9.3210.img
-   ```
-
-3. Install the image.
-
-   ```
-   sw-spine-001 [standalone: master] # image install onyx-X86_64-3.9.3210.img
+   ```bash
+   image fetch scp://root@10.252.1.4/root/onyx-X86_64-3.9.3210.img
    ```
 
-4. Select the image to boot next.
+2. Install the image.
 
-   ```
-   sw-spine-001 [standalone: master] # image boot next
-   ```
-
-5. Write memory and reload.
-
-   ```
-   sw-spine-001 [standalone: master] # write memory
-   sw-spine-001 [standalone: master] # reload
+   ```bash
+   image install onyx-X86_64-3.9.3210.img
    ```
 
-6. Once the switch is available, verify the image is installed.
+3. Select the image to boot next.
 
+   ```bash
+   image boot next
    ```
-   sw-spine-001 [standalone: master] # show images
 
+4. Write memory and reload.
+
+   ```bash
+   write memory
+   reload
+   ```
+
+5. Once the switch is available, verify the image is installed.
+
+   ```bash
+   show images
+   ```
+
+   Expected output:
+
+   ```text
    Installed images:
    Partition 1:
      version: X86_64 3.9.0300 2020-02-26 19:25:24 x86_64
@@ -311,18 +379,23 @@ BIOS Version       : GL-01-0013
 
 ## Dell Firmware Update
 
-1. SSH into the switch being upgraded.
+SSH into the switch being upgraded.
 
 1. Fetch the image from `ncn-m001`.
 
-   ```
+   ```bash
    image install http://10.252.1.4/fw/network/OS10_Enterprise_10.5.1.4.stable.tar
    ```
 
-3. Check the image upload status.
+2. Check the image upload status.
 
-   ```
+   ```bash
    show image status
+   ```
+
+   Potential output:
+
+   ```text
    Image Upgrade State:     download
    ==================================================
    File Transfer State:     download
@@ -336,17 +409,22 @@ BIOS Version       : GL-01-0013
      Transfer Rate:         869 kbps
    ```
 
-4. Reboot after the image is uploaded.
+3. Reboot after the image is uploaded.
 
-   ```
+   ```bash
    write memory
    reload
    ```
 
-5. Once the switch is available, verify the image is installed.
+4. Once the switch is available, verify the image is installed.
 
-   ```
+   ```bash
    show version
+   ```
+
+   Potential output:
+
+   ```text
    Dell EMC Networking OS10 Enterprise
    Copyright (c) 1999-2020 by Dell Inc. All Rights Reserved.
    OS Version: 10.5.1.4

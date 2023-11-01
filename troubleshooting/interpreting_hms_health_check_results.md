@@ -5,6 +5,9 @@
   - [Prerequisites](#prerequisites)
   - [Overview](#overview)
   - [Execution](#execution)
+    - [Test all HMS services](#test-all-hms-services)
+    - [Test specific HMS service](#test-specific-hms-service)
+    - [Example output](#example-output)
   - [Failure analysis](#failure-analysis)
     - [Smoke test failure](#smoke-test-failure)
     - [Functional test failure](#functional-test-failure)
@@ -53,13 +56,40 @@ the proper management or expected use of hardware in the system.
 The `run_hms_ct_tests.sh` script executes the HMS CT tests in parallel. It waits for each Helm test job to complete, logs the results in a file for the test run, and
 prints a summary of the results. The script returns a status code of zero if all tests pass and non-zero if there are one or more failures.
 
+These tests may be executed on any one worker or master NCN (but **not** `ncn-m001` if it is still the PIT node).
+
+### Test all HMS services
+
+(`ncn-mw#`) Run the HMS CT tests by executing the following command:
+
+```bash
+/opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh
+```
+
+### Test specific HMS service
+
+(`ncn-mw#`) After remediating a test failure for a particular service, just the tests for that individual service
+can be re-run by supplying the name of the service to the `run_hms_ct_tests.sh` script with the `-t` option:
+
+```bash
+/opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh -t <service>
+```
+
+(`ncn-mw#`) To list the HMS services that can be tested, use the `-l` option:
+
+```bash
+/opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh -l
+```
+
+### Example output
+
 Example output:
 
 ```text
 Log file for run is: /opt/cray/tests/hms_ct_test-<datetime>.log
 Running all tests...
 DONE.
-SUCCESS: All 9 service tests passed: bss, capmc, fas, hbtd, hmnfd, hsm, reds, scsd, sls
+SUCCESS: All 9 service tests passed: bss, capmc, fas, hbtd, hmnfd, hsm, scsd, sls
 ```
 
 The following is example output reporting a single service failure:
@@ -68,7 +98,7 @@ The following is example output reporting a single service failure:
 Log file for run is: /opt/cray/tests/hms_ct_test-<datetime>.log
 Running all tests...
 DONE.
-FAILURE: 1 service test FAILED (hsm), 8 passed (bss, capmc, fas, hbtd, hmnfd, reds, scsd, sls)
+FAILURE: 1 service test FAILED (hsm), 8 passed (bss, capmc, fas, hbtd, hmnfd, scsd, sls)
 For troubleshooting and manual steps, see: https://github.com/Cray-HPE/docs-csm/blob/main/troubleshooting/hms_ct_manual_run.md
 ```
 
@@ -78,7 +108,7 @@ The following is an example output reporting multiple service failures:
 Log file for run is: /opt/cray/tests/hms_ct_test-<datetime>.log
 Running all tests...
 DONE.
-FAILURE: All 9 service tests FAILED: bss, capmc, fas, hbtd, hmnfd, hsm, reds, scsd, sls
+FAILURE: All 9 service tests FAILED: bss, capmc, fas, hbtd, hmnfd, hsm, scsd, sls
 For troubleshooting and manual steps, see: https://github.com/Cray-HPE/docs-csm/blob/main/troubleshooting/hms_ct_manual_run.md
 ```
 
@@ -650,7 +680,7 @@ determine the cause of the failure:
 
 1. (`ncn-mw#`) Check to see if the failed component name (xname) responds to a Redfish query.
 
-    If not, then the problem may be a credentials issue. Use the password set in the REDS sealed secret.
+    If not, then the problem may be a credentials issue. Use the password set in the HMS Discovery (REDS) sealed secret.
 
     ```bash
     curl -s -k -u root:<password> https://<xname>/redfish/v1/Managers | jq

@@ -14,12 +14,12 @@ To setup the compute configuration layer, first gather the following information
 * Path to the Ansible play to run in the repository.
 * Commit ID in the repository for CFS to pull and run on the nodes.
 
-| Field | Value  | Description  |
-|:----------|:----------|:----------|
-| `cloneUrl` | `https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git` | CSM configuration repository |
-| `commit`  | **Example:** `5081c1ecea56002df41218ee39f6030c3eebdf27` | CSM configuration commit hash |
-| `name` | **Example:** `csm-<version>` | CSM configuration layer name |
-| `playbook` | `compute_nodes.yml` | Default Ansible playbook for CSM configuration of compute nodes |
+| Field       | Value                                                                 | Description                                                     |
+|:------------|:----------------------------------------------------------------------|:----------------------------------------------------------------|
+| `clone_url` | `https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git` | CSM configuration repository                                    |
+| `commit`    | **Example:** `5081c1ecea56002df41218ee39f6030c3eebdf27`               | CSM configuration commit hash                                   |
+| `name`      | **Example:** `csm-<version>`                                          | CSM configuration layer name                                    |
+| `playbook`  | `compute_nodes.yml`                                                   | Default Ansible playbook for CSM configuration of compute nodes |
 
 1. (`ncn-mw#`) Retrieve the commit in the repository to use for configuration.
    * If changes have been made to the default branch that was imported during a CSM
@@ -55,7 +55,7 @@ To setup the compute configuration layer, first gather the following information
     ```json
     {
         "name": "csm-<version>",
-        "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+        "clone_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
         "playbook": "csm_packages.yml",
         "commit": "<retrieved git commit>"
     }

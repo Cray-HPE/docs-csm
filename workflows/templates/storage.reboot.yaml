@@ -1,0 +1,229 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: reboot
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: dryRun
+          - name: targetNcn
+      dag:
+        tasks:
+          - name: validate-bss-ntp
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                        jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                    if ! cray bss bootparameters list --hosts $TARGET_XNAME --format json | jq '.[] |."cloud-init"."user-data".ntp' | grep -q '/etc/chrony.d/cray.conf'; then
+                      echo "${TARGET_NCN} is missing NTP data in BSS. Please see the procedure which can be found in the 'Known Issues and Bugs' section titled 'Fix BSS Metadata' on the 'Configure NTP on NCNs' page of the CSM documentation."
+                      exit 1
+                    fi
+          - name: get-bootscript-last-access-timestamp
+            dependencies:
+              - validate-bss-ntp
+            templateRef:
+              name: kubectl-and-curl-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                    TARGET_NCN={{inputs.parameters.targetNcn}}
+                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                        jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                    
+                    bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
+                    -H "Authorization: Bearer ${TOKEN}" \
+                    "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$TARGET_XNAME" \
+                    | jq '.[]| select(.endpoint=="bootscript")|.last_epoch' 2> /dev/null)
+                    
+                    if [[ $bootscript_last_epoch -gt 0 ]]; then
+                      echo $bootscript_last_epoch
+                    else
+                      # sometimes we don't have endpoint history
+                      # because a node might never pxe booted in the past
+                      # we set it to zero as default value
+                      bootscript_last_epoch=0
+                      echo $bootscript_last_epoch
+                    fi
+          - name: "pxe-boot-node"
+            dependencies:
+              - get-bootscript-last-access-timestamp
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                    TARGET_NCN={{inputs.parameters.targetNcn}}
+                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                        jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                    TARGET_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Parent")
+                    TARGET_NCN_mgmt_host="${TARGET_NCN}-mgmt"
+                    export IPMI_USERNAME=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Username")
+                    export IPMI_PASSWORD=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Password")
+                    
+                    # Set ncn to pxe boot
+                    ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis bootdev pxe options=efiboot
+                    
+                    powerStatus=$(ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power status)
+                    if [[ "$powerStatus" == *"is on"* ]]; then
+                      # power cycle node
+                      ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power off
+                      sleep 20
+                    fi
+                    ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power on
+          - name: "wait-for-boot"
+            dependencies:
+              - pxe-boot-node
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+
+                    TARGET_NCN={{inputs.parameters.targetNcn}}
+                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                        jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                    TARGET_NCN_mgmt_host="${TARGET_NCN}-mgmt"
+                    export IPMI_USERNAME=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Username")
+                    export IPMI_PASSWORD=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Password")
+
+                    bootscript_last_epoch="{{tasks.get-bootscript-last-access-timestamp.outputs.result}}"
+                    # wait for boot
+                    counter=0
+                    echo "waiting for boot: $TARGET_NCN ..."
+                    while true
+                    do
+                        set +e
+                        while true
+                        do
+                            tmp_bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
+                                -H "Authorization: Bearer ${TOKEN}" \
+                                "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$TARGET_XNAME" \
+                                | jq '.[]| select(.endpoint=="bootscript")|.last_epoch' 2> /dev/null)
+                            if [[ $? -eq 0 ]]; then
+                                break
+                            fi
+                        done
+                        set -e
+                        if [[ $tmp_bootscript_last_epoch -ne $bootscript_last_epoch ]]; then
+                            echo "bootscript fetched"
+                            break
+                        fi
+
+                        echo "waiting for boot: $TARGET_NCN ..."
+                        counter=$((counter+1))
+                        if [ $counter -gt 300 ]; then
+                            counter=0
+                            ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power cycle
+                            echo "Boot timeout, power cycle again"
+                        fi
+                        sleep 2
+                    done
+          - name: "wait-for-cloud-init"
+            dependencies:
+              - wait-for-boot
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN={{inputs.parameters.targetNcn}}
+
+                    # wait random seconds (1-10s) until ssh is working
+                    echo "wait for ssh ..."
+                    while ! ssh "${TARGET_NCN}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'ls /var/log/cloud-init-output.log'
+                    do
+                      echo "wait for ssh ..."
+                      sleep $(( ( RANDOM % 10 )  + 1 ))
+                    done
+
+                    # wait for cloud-init
+                    # ssh commands are expected to fail for a while, so we temporarily disable set -e
+                    set +e
+                    echo "waiting for cloud-init: $TARGET_NCN ..."
+                    while true ; do
+                        ssh "${TARGET_NCN}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cat /var/log/cloud-init-output.log | grep "The system is finally up"' &> /dev/null && break
+                        echo "waiting for cloud-init: $TARGET_NCN ..."
+                        sleep 20
+                    done
+                    # Restore set -e
+                    set -e
+          - name: set-bss-no-wipe-to-1
+            dependencies:
+              - wait-for-cloud-init
+            templateRef:
+              name: set-no-wipe
+              template: set-bss-no-wipe-1
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: targetNcn
+                  value: "{{inputs.parameters.targetNcn}}"

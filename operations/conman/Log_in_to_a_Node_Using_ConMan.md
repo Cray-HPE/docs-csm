@@ -1,6 +1,6 @@
 # Log in to a Node Using ConMan
 
-This procedure shows how to connect to the node's Serial Over Lan (SOL) via ConMan.
+This procedure shows how to connect to the node's Serial Over LAN (SOL) via ConMan.
 
 ## Prerequisites
 
@@ -12,12 +12,10 @@ The user performing this procedure needs to have access permission to the `cray-
 
 1. Log on to a Kubernetes master or worker node.
 
-1. Find the `cray-console-operator` pod.
+1. (`ncn-mw#`) Find the `cray-console-operator` pod.
 
     ```bash
-    OP_POD=$(kubectl get pods -n services \
-            -o wide|grep cray-console-operator|awk '{print $1}')
-    echo $OP_POD
+    OP_POD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}'); echo $OP_POD
     ```
 
     Example output:
@@ -26,17 +24,16 @@ The user performing this procedure needs to have access permission to the `cray-
     cray-console-operator-6cf89ff566-kfnjr
     ```
 
-1. Set the `XNAME` variable to the component name (xname) of the node whose console you wish to open.
+1. (`ncn-mw#`) Set the `XNAME` variable to the component name (xname) of the node whose console is to be opened.
 
     ```bash
     XNAME=x123456789s0c0n0
     ```
 
-1. Find the `cray-console-node` pod that is connected to that node.
+1. (`ncn-mw#`) Find the `cray-console-node` pod that is connected to that node.
 
     ```bash
-    NODEPOD=$(kubectl -n services exec $OP_POD -c cray-console-operator -- \
-        sh -c "/app/get-node $XNAME" | jq .podname | sed 's/"//g')
+    NODEPOD=$(kubectl -n services exec $OP_POD -c cray-console-operator -- sh -c "/app/get-node $XNAME" | jq .podname | sed 's/"//g')
     echo $NODEPOD
     ```
 
@@ -46,7 +43,7 @@ The user performing this procedure needs to have access permission to the `cray-
     cray-console-node-1
     ```
 
-1. Connect to the node's console using ConMan on the `cray-console-node` pod you found.
+1. (`ncn-mw#`) Connect to the node's console using ConMan on the `cray-console-node` pod which was found.
 
     ```bash
     kubectl exec -it -n services $NODEPOD -c cray-console-node -- conman -j $XNAME

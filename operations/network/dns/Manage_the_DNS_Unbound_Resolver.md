@@ -9,6 +9,7 @@ This instance is accessible only within the HPE Cray EX system.
 - [Restart Unbound](#restart-unbound)
 - [Clear bad data in the Unbound ConfigMap](#clear-bad-data-in-the-unbound-configmap)
 - [Change the site DNS server](#change-the-site-dns-server)
+- [Increase the number of Unbound pods](#increase-the-number-of-unbound-pods)
 
 ## Check the status of the `cray-dns-unbound` pods
 
@@ -47,11 +48,11 @@ For more information about the pods displayed in the output above:
 The table below describes what the status of each pod means for the health of the `cray-dns-unbound` services and pods. The `Init` and `NotReady` states are not necessarily bad;
 they mean that the pod is being started or is processing. The `cray-dns-manager` and `cray-dns-coredns` pods for `cray-dns-unbound` are job pods that run periodically.
 
-|Pod|Healthy Status|Error Status|Other|
-|---|--------------|------------|-----|
-|`cray-dns-unbound`|`Running`|`CrashBackOffLoop`||
-|`cray-dns-coredns`|`Completed`|`CrashBackOffLoop`|`InitNotReady`|
-|`cray-dns-manager`|`Completed`|`CrashBackOffLoop`|`InitNotReady`|
+| Pod                | Healthy Status | Error Status       | Other          |
+|--------------------|----------------|--------------------|----------------|
+| `cray-dns-unbound` | `Running`      | `CrashBackOffLoop` |                |
+| `cray-dns-coredns` | `Completed`    | `CrashBackOffLoop` | `InitNotReady` |
+| `cray-dns-manager` | `Completed`    | `CrashBackOffLoop` | `InitNotReady` |
 
 ## Unbound logs
 
@@ -96,7 +97,7 @@ If there are any errors in the Unbound logs:
 
 Manager logs will show the status of the latest "true up" of DNS with respect to DHCP actual leases and SLS/SMD status.
 
-(`ncn-mw#`) The following command shows the last four lines of the last Manager run, and can be adjusted as needed.
+(`ncn-mw#`) The following command shows the last four lines of the last manager run, and can be adjusted as needed.
 
 ```bash
 kubectl logs -n services pod/$(kubectl get -n services pods | grep unbound | tail -n 1 | cut -f 1 -d ' ') -c manager | tail -n4
@@ -117,13 +118,13 @@ The healthy states are described below, as long as the write to the ConfigMap ha
 - `No differences found. Skipping DNS update`
 - `Differences found. Writing new DNS records to our configmap.`
 
-### Troubleshooting the Manager
+### Troubleshooting the manager
 
-The Manager runs periodically, about once every minute. Check if this is a one-time occurrence or if it is a recurring issue.
+The manager runs periodically, about once every minute. Check if this is a one-time occurrence or if it is a recurring issue.
 
-- If the error shows in one Manager log, but not during the next one, then this is likely a one-time failure.
+- If the error shows in one manager log, but not during the next one, then this is likely a one-time failure.
   - Check to see if the record exists in DNS, and if so, move on.
-- If several or all Manager logs show errors, particularly the same error, then this could be one of several sources:
+- If several or all manager logs show errors, particularly the same error, then this could be one of several sources:
   - Bad network connections to DHCP or SLS/SMD.
     - **ACTION:** Capture as much log data as possible and contact customer support.
   - Bad data from DHCP or SLS/SMD.
@@ -143,7 +144,7 @@ A rolling restart of the Unbound pods will occur; old pods will not be terminate
 
 ## Clear bad data in the Unbound ConfigMap
 
-Unbound stores records it obtains from DHCP, SLS, and SMD via the Manager job in a ConfigMap. It is possible to clear this ConfigMap and allow the next Manager job to regenerate the content.
+Unbound stores records it obtains from DHCP, SLS, and SMD via the manager job in a ConfigMap. It is possible to clear this ConfigMap and allow the next manager job to regenerate the content.
 
 This is useful in the following cases:
 
@@ -151,7 +152,7 @@ This is useful in the following cases:
 - SLS and SMD data needed to be reset because of bad or incorrect data there.
 - DHCP \(Kea\) has been restarted to clear errors.
 
-(`ncn-mw#`) The following clears the \(DNS Helper\) Manager generated data in the ConfigMap. This is generally safe as Unbound runtime data is held elsewhere.
+(`ncn-mw#`) The following clears the \(DNS Helper\) manager generated data in the ConfigMap. This is generally safe as Unbound runtime data is held elsewhere.
 
 ```bash
 kubectl -n services patch configmaps cray-dns-unbound --type merge -p '{"binaryData":{"records.json.gz":"H4sICLQ/Z2AAA3JlY29yZHMuanNvbgCLjuUCAETSaHADAAAA"}}'
@@ -236,3 +237,8 @@ Use the following procedure to change the site DNS server that Unbound forwards 
       kubectl delete secret -n loftsman site-init
       kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
       ```
+
+## Increase the number of Unbound pods
+
+On large systems it may be necessary to increase the number of Unbound Pods because of the increased DNS query load.
+See [Scale `cray-dns-unbound` service](../../CSM_product_management/Post_Install_Customizations.md#scale-cray-dns-unbound-service) for more information.

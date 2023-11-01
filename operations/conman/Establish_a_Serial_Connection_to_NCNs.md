@@ -37,7 +37,7 @@ The user performing these procedures needs to have access permission to the `cra
 1. (`ncn-mw#`) Find the `cray-console-node` pod that is connecting with the console.
 
     ```bash
-    NODE_POD=$(kubectl -n services exec $OP_POD -c cray-console-operator -- sh -c \
+    NODE_POD=$(kubectl -n services exec $OP_POD -c cray-console-operator  -c cray-console-operator -- sh -c \
         "/app/get-node $XNAME" | jq .podname | sed 's/"//g')
     echo $NODE_POD
     ```
@@ -84,7 +84,7 @@ The user performing these procedures needs to have access permission to the `cra
 1. (`ncn-mw#`) Establish a serial console session with the desired NCN.
 
     ```bash
-    kubectl -n services exec -it $NODE_POD -- conman -j $XNAME
+    kubectl -n services exec -it $NODE_POD -c cray-console-node -- conman -j $XNAME
     ```
 
     The console session log files for each NCN are located in a shared volume in the `cray-console-node` pods.

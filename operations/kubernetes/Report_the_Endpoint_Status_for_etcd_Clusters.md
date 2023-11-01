@@ -11,7 +11,7 @@ This procedure provides the ability to view the etcd cluster endpoint status.
 
 ## Procedure
 
-1. Report the endpoint status for all etcd clusters.
+1. (`ncn-mw#`) Report the endpoint status for all etcd clusters.
 
     ```bash
     /opt/cray/platform-utils/etcd/etcd-util.sh endpoint_status all_clusters
@@ -42,9 +42,7 @@ This procedure provides the ability to view the etcd cluster endpoint status.
     [...]
     ```
 
-2. Report the endpoint status for a singe etcd cluster.
-
-    The following example is for the services namespace.
+1. Report the endpoint status for a singe etcd cluster.
 
     ```bash
     /opt/cray/platform-utils/etcd/etcd-util.sh endpoint_status cray-bos

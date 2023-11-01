@@ -147,8 +147,6 @@ spec:
 ### Templates ###
 ## get-s3-secrets-template ##
   - name: get-s3-secrets-template
-    nodeSelector:
-      kubernetes.io/hostname: ncn-m001
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -176,8 +174,9 @@ spec:
           source_ns="$2"
           destination_name="$3-$RANDOM"
           destination_ns="$4"
-          if kubectl get $item_name -n $source_ns &> /dev/null; then
-            echo "Syncing $item_name from $source_ns to $destination_ns as $destination_name"
+          result=$(kubectl get $item_name -n $source_ns 2>&1)
+          if [ $? -eq 0 ]; then
+            echo "DEBUG Syncing $item_name from $source_ns to $destination_ns as $destination_name"
             kubectl get $item_name -n $source_ns -o json | \
               jq 'del(.metadata.namespace)' | \
               jq 'del(.metadata.creationTimestamp)' | \
@@ -188,9 +187,15 @@ spec:
               jq 'del(.metadata.name)' | \
               jq '.metadata |= . + {"name":"'$destination_name'"}' | \
               kubectl apply -n $destination_ns -f -
-              return $?
+              rc=$?
+              if [ $rc -ne 0 ]; then
+                echo "ERROR Failed to create secret $destination_name in $destination_ns namespace from $item_name in $source_ns namespace"
+              fi
+              return $rc
           else
-            echo "Didn't find $item_name in the $source_ns namespace"
+            echo "ERROR $item_name not found in $source_ns namespace"
+            result=$(echo "$result" | sed -e 's/^/DEBUG /')
+            echo -e "DEBUG <kubectl get $item_name -n $source_ns> failed with\n\n$result"
             return 1
           fi
         }
@@ -200,8 +205,6 @@ spec:
         exit $rc
 ## ims-upload-content ##
   - name: ims-upload-content
-    nodeSelector:
-      kubernetes.io/hostname: ncn-m001
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -225,7 +228,7 @@ spec:
           default: "{}"
 
     container:
-      image: artifactory.algol60.net/csm-docker/stable/cray-ims-load-artifacts:2.2.1
+      image: artifactory.algol60.net/csm-docker/stable/cray-ims-load-artifacts:2.6.0
       command:
         - "/bin/sh"
       args: ["-c", "/ims_load_artifacts/argo_entrypoint.sh"]
@@ -287,8 +290,6 @@ spec:
       parameters:
       - name: s3_credentials_secret_name
         value: "{{steps.get-s3-secrets.outputs.parameters.secret_name}}"
-    nodeSelector:
-      kubernetes.io/hostname: ncn-m001
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
@@ -299,4 +300,11 @@ spec:
       image: registry.local/artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
       command: [bash]
       source: |
-        kubectl -n argo delete secret/{{inputs.parameters.s3_credentials_secret_name}}
+        s3_secret_name={{inputs.parameters.s3_credentials_secret_name}}
+        echo "DEBUG Deleting secret $s3_secret_name from argo workspace"
+        result=$(kubectl -n argo delete secret/$s3_secret_name 2>&1)
+        if [ $? -ne 0 ]; then
+          result=$(echo "$result" | sed -e 's/^/DEBUG /')
+          echo "ERROR Deleting secret $s3_secret_name failed in argo namespace"
+          echo -e "DEBUG <kubectl -n argo delete secret/$s3_secret_name> failed with\n\n$result"
+        fi

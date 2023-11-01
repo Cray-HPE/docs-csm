@@ -15,6 +15,10 @@ There are two ways to initialize the `cray` CLI:
 
 - [Configure all NCNs with temporary Keycloak user](#configure-all-ncns-with-temporary-keycloak-user)
 
+**NOTE:**  The `cray` CLI supports an optional parameter (`--tenant <tenant-name>`) when using the CLI for tenant-scoped operations.
+This argument is not used by default, but the CLI should be configured with the appropriate tenant when operating on tenant specific resources (i.e. creating BOS session templates for Compute Nodes that are members of a tenant, etc..).
+See [Tenant Administrator Configuration](multi-tenancy/TenantAdminConfig.md) or execute `cray init --help` for more information.
+
 ## Single user already configured in Keycloak
 
 There are times in normal operation that a particular user must be authenticated on the `cray` CLI. In
@@ -67,6 +71,8 @@ That account can in turn be used to initialize and authorize the `cray` CLI on a
 in the cluster that have Kubernetes configured. This account is only intended to be used for the duration of the
 install and should be removed when the install is complete.
 
+As the script leverages Keycloak administrative APIs, the `--keycloakHost` command line option must be set to use the CMN load balancer, as detailed below.
+
 ### Procedure for temporary Keycloak user
 
 1. (`ncn-mws#`) Unset the `CRAY_CREDENTIALS` environment variable, if previously set.
@@ -86,12 +92,16 @@ install and should be removed when the install is complete.
     worker nodes that are in a ready state. Call the script with the `--run` option:
 
     ```bash
-    python3 /usr/share/doc/csm/install/scripts/craycli_init.py --run
+    SITE_DOMAIN="$(craysys metadata get site-domain)"
+    SYSTEM_NAME="$(craysys metadata get system-name)"
+    AUTH_FQDN="auth.cmn.${SYSTEM_NAME}.${SITE_DOMAIN}"
+    python3 /usr/share/doc/csm/install/scripts/craycli_init.py --run --keycloakHost "$AUTH_FQDN"
     ```
 
     Expected output showing the results of the operation on each node:
 
     ```text
+    2021-12-21 15:50:47,095 - INFO     - Keycloak Admin URL: https://auth.cmn.system1.dev.cray.com/keycloak
     2021-12-21 15:50:47,814 - INFO     - Loading Keycloak secrets.
     2021-12-21 15:50:48,095 - INFO     - Created user 'craycli_tmp_user'
     2021-12-21 15:50:52,714 - INFO     - Initializing nodes:
@@ -124,12 +134,16 @@ install and should be removed when the install is complete.
     and uninitialize the `cray` CLI on all master and worker nodes in the cluster.
 
     ```bash
-    python3 /usr/share/doc/csm/install/scripts/craycli_init.py --cleanup
+    SITE_DOMAIN="$(craysys metadata get site-domain)"
+    SYSTEM_NAME="$(craysys metadata get system-name)"
+    AUTH_FQDN="auth.cmn.${SYSTEM_NAME}.${SITE_DOMAIN}"
+    python3 /usr/share/doc/csm/install/scripts/craycli_init.py --cleanup --keycloakHost "$AUTH_FQDN"
     ```
 
     Expect output showing the results of the operation on each node:
 
     ```text
+    2021-12-21 15:52:31,095 - INFO     - Keycloak Admin URL: https://auth.cmn.system1.dev.cray.com/keycloak
     2021-12-21 15:52:31,611 - INFO     - Removing temporary user and uninitializing the cray CLI
     2021-12-21 15:52:31,783 - INFO     - Deleted user 'craycli_tmp_user'
     2021-12-21 15:52:31,798 - INFO     - Uninitializing nodes:
@@ -152,13 +166,17 @@ install and should be removed when the install is complete.
     cleanup command:
 
     ```bash
-    python3 /usr/share/doc/csm/install/scripts/craycli_init.py --cleanup -u MY_USERNAME -p MY_PASSWORD
+    SITE_DOMAIN="$(craysys metadata get site-domain)"
+    SYSTEM_NAME="$(craysys metadata get system-name)"
+    AUTH_FQDN="auth.cmn.${SYSTEM_NAME}.${SITE_DOMAIN}"
+    python3 /usr/share/doc/csm/install/scripts/craycli_init.py --cleanup --keycloakHost "$AUTH_FQDN" -u MY_USERNAME -p MY_PASSWORD
     ```
 
     Expected output showing the cleanup of the temporary user on each node, then the results of
     using the input user to initialize and authorize the `cray` CLI on each node:
 
     ```text
+    2021-12-21 15:52:31,095 - INFO     - Keycloak Admin URL: https://auth.cmn.system1.dev.cray.com/keycloak
     2021-12-21 15:52:31,611 - INFO     - Removing temporary user and uninitializing the cray CLI
     2021-12-21 15:52:31,783 - INFO     - Deleted user 'craycli_tmp_user'
     2021-12-21 15:52:31,798 - INFO     - Uninitializing nodes:
@@ -193,9 +211,12 @@ Each node will have `Success` reported if everything worked, the node was initia
 and the `cray` CLI is operational for that node. For nodes with problems, there will be a
 brief warning message that reports what the problem is on that node.
 
+For all debugging steps, ensure you add `--keycloakHost` to the command line, else Keycloak requests may fail.
+
 Results with problems on some nodes may look like the following:
 
 ```text
+2021-12-21 15:50:47,095 - INFO     - Keycloak Admin URL: https://auth.cmn.system1.dev.cray.com/keycloak
 2021-12-21 15:50:47,814 - INFO     - Loading Keycloak secrets.
 2021-12-21 15:50:48,095 - INFO     - Created user 'craycli_tmp_user'
 2021-12-21 15:50:52,714 - INFO     - Initializing nodes:
@@ -269,7 +290,7 @@ debug level log messages to be displayed. Alternatively, each failing node may b
 1. (`ncn-mws#`) Check for Kubernetes setup on the node
 
    The script relies on Kubernetes Secrets to store the credentials of the temporary Keycloak user. If
-   a does not have Kubernetes initialized on it, the user must manually initialize the `cray` CLI with a
+   a node does not have Kubernetes initialized on it, the user must manually initialize the `cray` CLI with a
    valid Keycloak user.
 
    Run the following command:
@@ -309,8 +330,8 @@ debug level log messages to be displayed. Alternatively, each failing node may b
 
     If initialization fails in the above step, then there are several common causes:
 
-    - DNS failure looking up `api-gw-service-nmn.local` may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
-    - Network connectivity issues with the NMN may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
+    - DNS failure looking up `api-gw-service-nmn.local` or the host provided via `--keycloakHost` may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
+    - Network connectivity issues with the NMN or CMN may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
     - Certificate mismatch or trust issues may be preventing a secure connection to the API Gateway
     - Istio failures may be preventing traffic from reaching Keycloak
     - Keycloak may not yet be set up to authorize the user

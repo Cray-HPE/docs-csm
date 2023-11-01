@@ -55,7 +55,7 @@ CA bundle if the file exists.
 
 ```text
 python3[3705657]: Unable to contact CFS to report component status: HTTPSConnectionPool(host='api-gw-service-nmn.local', port=443):
-Max retries exceeded with url: /apis/cfs/v2/components/XNAME (Caused by SSLError(SSLError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate
+Max retries exceeded with url: /apis/cfs/v3/components/XNAME (Caused by SSLError(SSLError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate
 verify failed (_ssl.c:852)'),))
 ```
 

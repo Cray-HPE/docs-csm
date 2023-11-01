@@ -23,10 +23,10 @@ This procedure requires administrative privileges.
 
 1. Within the ConfigMap, edit the following keys to set the desired iPXE binary names.
 
-   | iPXE Binary | ConfigMap Key Name | Default Value |
-   | --- | --- | --- |
-   | Regular iPXE | `cray_ipxe_binary_name` | `ipxe.efi` |
-   | Debug iPXE | `cray_ipxe_debug_binary_name` | `debug-ipxe.efi` |
+   | iPXE Binary  | ConfigMap Key Name            | Default Value    |
+   |--------------|-------------------------------|------------------|
+   | Regular iPXE | `cray_ipxe_binary_name`       | `ipxe.efi`       |
+   | Debug iPXE   | `cray_ipxe_debug_binary_name` | `debug-ipxe.efi` |
 
    > **`NOTE`** Do not change the `cray_ipxe_binary_name_active` or
    `cray_ipxe_debug_binary_name_active` keys in the

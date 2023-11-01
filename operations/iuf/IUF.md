@@ -39,11 +39,13 @@ The following IUF topics are discussed in the sections below.
     - [activity](#activity)
     - [list-activities](#list-activities)
     - [list-stages](#list-stages)
+    - [workflow](#workflow)
 - [Output and log files](#output-and-log-files)
   - [`iuf` output](#iuf-output)
   - [Log files](#log-files)
 - [Site and recipe variables](#site-and-recipe-variables)
 - [`sat bootprep` configuration files](#sat-bootprep-configuration-files)
+  - [ARM images](#arm-images)
 - [Recovering from failures](#recovering-from-failures)
   - [Addressing the issue without changing products](#addressing-the-issue-without-changing-products)
   - [Addressing the issue by removing a product](#addressing-the-issue-by-removing-a-product)
@@ -57,10 +59,10 @@ The following IUF topics are discussed in the sections below.
 - While IUF enables non-interactive deployment of product software, it does not automatically configure the software beyond merging new VCS release branch content to customer working branches. For example, if a product requires
   manual configuration, the administrator must stop IUF execution after the `update-vcs-config` stage, perform the manual configuration steps, and then resume with the next IUF stage (`update-cfs-config`).
 - IUF leverages `sat bootprep` for CFS configuration and image creation. It is intended to be used with the configuration files provided in the HPC CSM Software Recipe and requires the administrator to verify and customize
-  those configurations to their specific needs. Note that `sat` capabilities used by IUF rely on BOS V2.
+  those configurations to their specific needs.
 - IUF will fail and provide feedback to the administrator in the event of an error, but it cannot automatically resolve issues.
 - IUF does not handle many aspects of installs and upgrades of CSM itself and cannot be used until a base level of CSM functionality is present.
-- The `management-nodes-rollout` stage currently does not automatically upgrade management storage nodes or `ncn-m001`. These nodes must be upgraded using non-IUF methods described in the IUF documentation.
+- The `management-nodes-rollout` stage does not automatically upgrade `ncn-m001`. This node must be upgraded using non-IUF methods described in the IUF documentation.
 - If the `iuf run` subcommand ends unexpectedly before the Argo workflow it created completes, there is no CLI option to reconnect to the Argo workflow and continue displaying status. It is recommended the administrator
   monitors progress via the Argo workflow UI and/or IUF log files in this scenario.
 - It is currently not possible to add or remove product distribution files to an in progress IUF session without first re-executing the `process-media` stage and then re-executing any other stages required for that product. See
@@ -83,7 +85,7 @@ There are two separate workflows that utilize IUF when installing or upgrading n
 
 An activity is a user-specified unique string identifier used to group and track IUF actions, typically those needed to complete an install or upgrade using a set of product distribution files. An example of an activity
 identifier is `admin-230127`. `iuf` subcommands accept an activity as input, and the corresponding IUF output and log files are organized by that activity. The activity can be specified via an `iuf` argument or an environment
-variable; for more details, see `iuf -h`.  The activity will be created automatically upon the first invocation of `iuf` with that given activity string.
+variable; for more details, see `iuf -h`. The activity will be created automatically upon the first invocation of `iuf` with that given activity string.
 
 IUF provides operational metrics associated with an activity (e.g. the time duration of each stage executed). Users can also create annotations for an activity, e.g. to note that an operation has been paused, to note that time was
 spent debugging an issue, etc. `iuf` subcommands can be invoked to display a summary of actions, annotations, and metrics associated with an activity.
@@ -101,30 +103,41 @@ iuf -a admin-230127 activity
 Example output:
 
 ```text
-+-------------------------------------------------------------------------------------------------------------------------------+
-| Activity: admin-230127                                                                                                        |
-+---------------------+-------------+--------------------------------------------+-----------+----------+-----------------------+
-| Start               | Category    | Argo Workflow                              | Status    | Duration | Comment               |
-+---------------------+-------------+--------------------------------------------+-----------+----------+-----------------------+
-| 2023-01-27t20:37:42 | in_progress | admin-230127-zb268-process-media-v5dsw     | Succeeded | 0:01:54  | Run process-media     |
-| 2023-01-27t20:39:36 | in_progress | admin-230127-f1w34-pre-install-check-ztsrg | Failed    | 0:01:16  | Run pre-install-check |
-| 2023-01-27t20:40:52 | debug       | None                                       | n/a       | 0:31:11  | None                  |
-| 2023-01-27t21:12:03 | in_progress | admin-230127-7jtws-process-media-29hzl     | Succeeded | 0:02:00  | Run process-media     |
-| 2023-01-27t21:14:03 | in_progress | admin-230127-o7sp4-pre-install-check-phm2w | Failed    | 0:26:09  | Run pre-install-check |
-| 2023-01-27t21:40:12 | debug       | None                                       | n/a       | 0:57:40  | None                  |
-| 2023-01-27t22:37:52 | in_progress | admin-230127-zgd6o-process-media-zvnqk     | Succeeded | 0:02:06  | Run process-media     |
-| 2023-01-27t22:39:58 | in_progress | admin-230127-svs41-pre-install-check-89gjf | Failed    | 0:01:31  | Run pre-install-check |
-| 2023-01-27t22:41:29 | debug       | None                                       | n/a       | 0:52:26  | None                  |
-| 2023-01-27t23:33:55 | in_progress | admin-230127-0f2xe-update-vcs-config-trpjw | Failed    | 0:00:53  | Run update-vcs-config |
-| 2023-01-27t23:34:48 | debug       | None                                       | n/a       | 0:00:00  | None                  |
-+---------------------+-------------+--------------------------------------------+-----------+----------+-----------------------+
-
++-----------------------------------------------------------------------------------------------------------------------------------------------+
+| Activity:  admin.05-17                                                                                                                        |
++---------------------------------+-------------+------------------------------------------------+-----------+----------+-----------------------+
+| Start                           | Category    | Command / Argo Workflow                        | Status    | Duration | Comment               |
++---------------------------------+-------------+------------------------------------------------+-----------+----------+-----------------------+
+| session: admin.05-17-4x1nn      |             | command: ./iuf -i input.yaml run -b \          |           |          |                       |
+|                                 |             | process-media                                  |           |          |                       |
+| 2023-05-17t20:52:41             | in_progress | admin.05-17-4x1nn-process-media-d2r6f          | Succeeded | 0:01:27  | Run process-media     |
+| -------------------             | -----       | -----                                          | -----     | -----    | -----                 |
+| session: admin.05-17-kshk3      |             | command: ./iuf -i input.yaml run -b \          |           |          |                       |
+|                                 |             | process-media                                  |           |          |                       |
+| 2023-05-17t20:54:08             | in_progress | admin.05-17-kshk3-pre-install-check-bd6sz      | Succeeded | 0:01:05  | Run pre-install-check |
+| 2023-05-17t20:55:13             | in_progress | admin.05-17-kshk3-deliver-product-8c6bk        | Failed    | 0:03:40  | Run deliver-product   |
+| 2023-05-17t20:58:53             | debug       | None                                           | None      | 0:01:19  | None                  |
+| 2023-05-17t21:00:12             | None        | admin.05-17-kshk3-deliver-product-8c6bk        | resume    | 0:00:01  | resuming install      |
+| 2023-05-17t21:00:13             | in_progress | admin.05-17-kshk3-deliver-product-8c6bk        | Unknown   | 0:00:00  | Run deliver-product   |
++---------------------------------+-------------+------------------------------------------------+-----------+----------+-----------------------+
 Summary:
-  Start time: 2023-01-27t20:37:40
-    End time: 2023-01-27t23:34:48
+  Start time: 2023-05-17t20:52:41
+  End time:   2023-05-17t21:00:13
 
-   in_progress: 0:35:49
-         debug: 2:21:17
+  Time spent in sessions:
+    admin.05-17-4x1nn: 0:01:27
+    admin.05-17-kshk3: 0:06:05
+
+  Stage Durations:
+        process-media: 0:01:18
+    pre-install-check: 0:00:52
+      deliver-product: 0:03:39
+
+  Time spent in states:
+  in_progress: 0:06:12
+        debug: 0:01:19
+
+  Total time: 0:07:32
 ```
 
 ## Argo workflows
@@ -161,7 +174,7 @@ one or more products. This information is also provided by the `iuf list-stages`
 **`NOTE`** Click the links in the `Stage` column for additional details about the stages.
 
 | Stage                                                              | Description                                                                              |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+|--------------------------------------------------------------------|------------------------------------------------------------------------------------------|
 | [process-media](stages/process_media.md)                           | Inventory and extract products in the media directory for use in subsequent stages       |
 | [pre-install-check](stages/pre_install_check.md)                   | Perform pre-install readiness checks                                                     |
 | [deliver-product](stages/deliver_product.md)                       | Upload product content onto the system                                                   |
@@ -171,7 +184,7 @@ one or more products. This information is also provided by the `iuf list-stages`
 | [management-nodes-rollout](stages/management_nodes_rollout.md)     | Rolling reboot or live update of management nodes                                        |
 | [deploy-product](stages/deploy_product.md)                         | Deploy services to system                                                                |
 | [post-install-service-check](stages/post_install_service_check.md) | Perform post-install checks of processed services                                        |
-| [managed-nodes-rollout](stages/managed_nodes_rollout.md)           | Rolling reboot or live update of managed nodes                                     |
+| [managed-nodes-rollout](stages/managed_nodes_rollout.md)           | Rolling reboot or live update of managed nodes                                           |
 | [post-install-check](stages/post_install_check.md)                 | Perform post-install checks                                                              |
 
 The `process-media` stage must be run at least once for a given activity before any of the other stages can be run. This is required because `process-media` associates the product content being installed or upgraded with an
@@ -181,15 +194,16 @@ activity identifier and that information is used for all other stages.
 
 The `iuf` command-line interface is used to invoke all IUF operations. The `iuf` command provides the following subcommands.
 
-| Subcommand      | Description                                              |
-| --------------- | -------------------------------------------------------- |
-| run             | Initiates execution of IUF operations                    |
-| abort           | Abort an IUF session                                     |
-| resume          | Resume a previously aborted or failed IUF session        |
-| restart         | Restart the most recently aborted or failed IUF session  |
-| activity        | Display IUF activity details, annotate IUF activity      |
-| list-activities | List all activities present on the system                |
-| list-stages     | Display stages and status for a given IUF activity       |
+| Subcommand      | Description                                             |
+|-----------------|---------------------------------------------------------|
+| run             | Initiates execution of IUF operations                   |
+| abort           | Abort an IUF session                                    |
+| resume          | Resume a previously aborted or failed IUF session       |
+| restart         | Restart the most recently aborted or failed IUF session |
+| activity        | Display IUF activity details, annotate IUF activity     |
+| list-activities | List all activities present on the system               |
+| list-stages     | Display stages and status for a given IUF activity      |
+| workflow        | List workflows or information for a particular workflow |
 
 ### Global arguments
 
@@ -200,7 +214,7 @@ The following shows the global arguments available.
 ```text
 usage: iuf [-h] [-i INPUT_FILE] [-w] [-a ACTIVITY] [-c CONCURRENCY] [-b BASE_DIR] [-s STATE_DIR] [-m MEDIA_DIR]
            [--log-dir LOG_DIR] [-l {CRITICAL,ERROR,WARNING,INFO,DEBUG,TRACE}] [-v]
-           {run,activity,list-stages|ls,resume,restart,abort,list-activities|la} ...
+           {run,activity,list-stages|ls,resume,restart,abort,list-activities|la,workflow} ...
 
 The CSM Install and Upgrade Framework (IUF) CLI.
 
@@ -210,9 +224,10 @@ options:
                         YAML input file used to provide arguments to `iuf`. Command line arguments will override
                         entries in the input file. Can also be set via the IUF_INPUT_FILE environment variable.
   -w, --write-input-file
-                        Create a new input file populated with default values overridden by any other command line
-                        options also specified. The file is named via the `-i` argument. The command exits once the
-                        file has been created.
+                        Create an input file for iuf populated with the command line options specified and exit.
+                        This input file can be specified with the `-i` option on subsequent runs.  Using an input
+                        file simplifies iuf commands with many options. Note that the general iuf command does not
+                        change; so for a long iuf command, add this flag to the command to write the input file.
   -a ACTIVITY, --activity ACTIVITY
                         Activity name. Must be a unique identifier. Activity names must contain only lowercase letters (a-z),
                         numbers (0-9), periods (.), and dashes (-). Can also be set via the IUF_ACTIVITY environment
@@ -239,7 +254,7 @@ options:
   -v, --verbose         generate more verbose messages
 
 subcommands:
-  {run,activity,list-stages|ls,resume,restart,abort,list-activities|la}
+  {run,activity,list-stages|ls,resume,restart,abort,list-activities|la,workflow}
 ```
 
 ### Input file
@@ -301,7 +316,7 @@ Would you like to abort this run?
     Enter D, d, or disconnect to exit the IUF CLI.  The install will continue in the background, however no logs will be collected.
 
     Enter <return> to resume monitoring.
-    NOTE: The IUF CLI will remain connected until Argo completes the abort process.  Use the disconnect option to exit the IUF CLI immediately.
+    NOTE: The IUF CLI will remain connected until Argo completes the abort process. Use the disconnect option to exit the IUF CLI immediately.
     NOTE: All logging will be suspended when disconnected.
 ```
 
@@ -324,7 +339,7 @@ options:
   -b BEGIN_STAGE, --begin-stage BEGIN_STAGE
                         The first stage to execute. Defaults to process-media
   -e END_STAGE, --end-stage END_STAGE
-                        The last stage to execute.  Defaults to post-install-check
+                        The last stage to execute. Defaults to post-install-check
   -r RUN_STAGES [RUN_STAGES ...], --run-stages RUN_STAGES [RUN_STAGES ...]
                         Run the specified stages only. This argument is not compatible with `-b`, `-e`, or `-s`.
   -s SKIP_STAGES [SKIP_STAGES ...], --skip-stages SKIP_STAGES [SKIP_STAGES ...]
@@ -333,10 +348,14 @@ options:
   -bc BOOTPREP_CONFIG_MANAGED, --bootprep-config-managed BOOTPREP_CONFIG_MANAGED
                         `sat bootprep` config file for managed (compute and
                         application) nodes.  Note the path is relative to $PWD, unless an
-                        absolute path is specified.
+                        absolute path is specified.  Omit this argument to skip building the
+                        managed images (and ensure the `--bootprep-config-dir` option is not
+                        specified).
   -bm BOOTPREP_CONFIG_MANAGEMENT, --bootprep-config-management BOOTPREP_CONFIG_MANAGEMENT
                         `sat bootprep` config file for management NCNs.  Note the
-                        path is relative to $PWD, unless an absolute path is specified.
+                        path is relative to $PWD, unless an absolute path is specified. Omit
+                        this argument to skip building the management images (and ensure the
+                        `--bootprep-config-dir` option is not specified).
   -bpcd BOOTPREP_CONFIG_DIR, --bootprep-config-dir BOOTPREP_CONFIG_DIR
                         Directory containing HPE `product_vars.yaml` and `sat bootprep` configuration files.
                         The expected content is:
@@ -360,11 +379,13 @@ options:
                         concurrently based on the percentage specified. Must be an integer
                         between 1-100. Defaults to 20 (percent).
   --limit-managed-rollout LIMIT_MANAGED_ROLLOUT [LIMIT_MANAGED_ROLLOUT ...]
-                        Override list used to target specific nodes only when rolling out managed nodes.  Arguments
+                        Override list used to target specific nodes only when rolling out managed nodes. Arguments
                         should be xnames or HSM node groups. Defaults to the Compute role.
   --limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT [LIMIT_MANAGEMENT_ROLLOUT ...]
-                        Override list used to target specific role_subrole(s) only when rolling out management nodes.
-                        Defaults to the Management_Worker role.
+                        List used to target specific hostnames or HSM management role_subrole only when rolling 
+                        out management nodes. Hostname arguments can only belong to a single node type. For example, 
+                        both master and worker hostnames can not be provided at the same time. Defaults to an empty list
+                        which means no nodes will be rolled out.
   -mrp MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...], --mask-recipe-prods MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...]
                         If `--recipe-vars` is specified, mask the versions found within the recipe variables YAML
                         file for the specified products, such that the largest version of the package already installed on
@@ -383,9 +404,12 @@ terminated Argo Workflows will have a `Status` of `Failed` when displayed via `i
 The following arguments may be specified when invoking `iuf abort`:
 
 ```text
-usage: iuf abort [-h] [-f]
+usage: iuf abort [-h] [-f] [comment ...]
 
 Abort an IUF session for a given activity after the current stage completes.
+
+positional arguments:
+  comment      Add a comment to the activity log
 
 options:
   -h, --help   show this help message and exit
@@ -402,9 +426,12 @@ not executed during the most recent stage.
 The following arguments may be specified when invoking `iuf resume`:
 
 ```text
-usage: iuf resume [-h]
+usage: iuf resume [-h] [comment ...]
 
 Resume a previously aborted or failed IUF session for a given activity.
+
+positional arguments:
+  comment     Add a comment to the activity log
 
 options:
   -h, --help  show this help message and exit
@@ -425,6 +452,9 @@ usage: iuf restart [-h] [-f]
 
 Restart a previously aborted or failed IUF session for a given activity.
 
+positional arguments:
+  comment      Add a comment to the activity log
+
 options:
   -h, --help  show this help message and exit
   -f, --force  Force all operations to be re-executed irrespective if they have been successful in the past.
@@ -434,24 +464,24 @@ These [examples](examples/iuf_restart.md) highlight common use cases of `iuf res
 
 #### `activity`
 
-The `activity` subcommand allows the administrator to create a new activity, display details for an activity, and create, update, and annotate activity states. These operations allow the administrator to easily determine the status
+The `activity` subcommand allows the administrator to create a new activity, display details for an activity, list activities, and create, update, and annotate activity states. These operations allow the administrator to easily determine the status
 of IUF activity operations and associate time-based metrics and user-specified comments with them.
 
 The activity details displayed are:
 
-| Column         | Description                                                      |
-| -------------- | ---------------------------------------------------------------- |
-| Start          | The time that this operation began execution                     |
-| Category       | The state of the activity when the operation was created         |
-| Argo Workflow  | The Argo workflow associated with the operation                  |
-| Status         | The status of the operation                                      |
-| Duration       | How long the operation has been in this state (if not completed) |
-| Comment        | User-specified comments associated with the operation            |
+| Column                  | Description                                                          |
+|-------------------------|----------------------------------------------------------------------|
+| Start / Session         | The time that this operation began execution and name of session     |
+| Category                | The state of the activity when the operation was created             |
+| Command / Argo Workflow | The Argo workflow associated with the operation and command executed |
+| Status                  | The status of the operation                                          |
+| Duration                | How long the operation has been in this state (if not completed)     |
+| Comment                 | User-specified comments associated with the operation                |
 
 Values for `Category` are:
 
 | Category Value | Description                                                                          |
-| -------------- | ------------------------------------------------------------------------------------ |
+|----------------|--------------------------------------------------------------------------------------|
 | in_progress    | An Argo workflow was initiated at the time recorded in `Start`                       |
 | waiting_admin  | No activity operations were in progress beginning at time recorded in `Start`        |
 | paused         | The administrator paused activity operations at the time recorded in `Start`         |
@@ -461,7 +491,7 @@ Values for `Category` are:
 Values for `Status` are:
 
 | Status Value | Description                                                                    |
-| ------------ | ------------------------------------------------------------------------------ |
+|--------------|--------------------------------------------------------------------------------|
 | Succeeded    | The `Argo Workflow` completed successfully                                     |
 | Failed       | The `Argo Workflow` failed                                                     |
 | Running      | The `Argo Workflow` is currently executing                                     |
@@ -531,6 +561,23 @@ options:
 
 These [examples](examples/iuf_list_stages.md) highlight common use cases of `iuf list-stages`.
 
+### `workflow`
+
+```bash
+usage: iuf workflow [-h] [--debug] [workflows ...]
+
+List information for a particular workflow
+
+positional arguments:
+  workflows    workflow to look up
+
+options:
+  -h, --help   show this help message and exit
+  --debug, -d  Give more granular details about the workflow
+```
+
+These [examples](examples/iuf_workflow.md) highlight common use cases if `iuf workflow`.
+
 ## Output and log files
 
 ### `iuf` output
@@ -548,44 +595,49 @@ In addition, any IUF log messages generated by IUF or products with a severity o
 
 **`NOTE`** Messages from community software utilized by IUF and products being installed may also be displayed on `iuf` standard output if they match the message format and severity level `iuf` monitors.
 
-The Argo workflow identifiers displayed, like `admin-230127-zb268-process-media-v5dsw` in the example below, can be queried in the [Argo UI](../argo/Using_the_Argo_UI.md) to provide access to more detailed log
-information and monitoring capabilities. The lines prefixed with `BEGIN:` and `FINISHED:` primarily map to Argo steps and pods that are linked to the corresponding Argo workflow in the Argo UI.
+The Argo workflow identifiers displayed, like `admin-05-15-psdlp-process-media-l8n8c` in the example below, can be queried in the [Argo UI](../argo/Using_the_Argo_UI.md) to provide access to more detailed log
+information and monitoring capabilities. The lines prefixed with `BEG` and `END` primarily map to Argo steps and pods that are linked to the corresponding Argo workflow in the Argo UI.
 
 (`ncn-m001#`) Example of `iuf` command and output.
 
 ```bash
-iuf -a admin-230127 run --site-vars /etc/cray/upgrade/csm/admin/site_vars.yaml --bootprep-config-dir /etc/cray/upgrade/csm/admin -e update-vcs-config
+iuf -a admin.05-15 run --site-vars /etc/cray/upgrade/csm/admin/site_vars.yaml --bootprep-config-managed /etc/cray/upgrade/csm/admin/compute-and-uan-bootprep.yaml --recipe-vars /etc/cray/upgrade/csm/admin/product_vars.yaml -e update-vcs-config
 ```
 
 Example output:
 
 ```text
-INFO   ARGO WORKFLOW: admin-230127-zb268-process-media-v5dsw
-INFO              BEGIN: extract-release-distributions
-INFO              BEGIN: start-operation
-INFO           FINISHED: start-operation [Succeeded]
-INFO              BEGIN: list-tar-files
-INFO           FINISHED: list-tar-files [Succeeded]
-INFO              BEGIN: extract-tar-files
-INFO              BEGIN: extract-tar-files(0:cpe-slurm-23.02-sles15-1.2.9-20230123212534_30822fc.tar.gz)
-INFO           FINISHED: extract-tar-files [Succeeded]
-INFO           FINISHED: extract-tar-files(0:cpe-slurm-23.02-sles15-1.2.9-20230123212534_30822fc.tar.gz) [Succeeded]
-INFO              BEGIN: end-operation
-INFO           FINISHED: end-operation [Succeeded]
-INFO              BEGIN: prom-metrics
-INFO           FINISHED: extract-release-distributions [Succeeded]
-INFO           FINISHED: prom-metrics [Succeeded]
-INFO          RESULT: Succeeded
-INFO        DURATION: 0:01:51
-INFO Dumping rendered site variables to /etc/cray/upgrade/csm/iuf/admin-230127/state/session_vars.yaml
-INFO IUF SESSION: admin-230127-f1w34
-INFO       IUF STAGE: pre-install-check
-INFO   ARGO WORKFLOW: admin-230127-f1w34-pre-install-check-ztsrg
-INFO              BEGIN: preflight-checks-for-services
-INFO              BEGIN: start-operation
-INFO           FINISHED: start-operation [Succeeded]
-INFO              BEGIN: preflight-checks
-INFO              BEGIN: preflight-checks(0)
+INFO All logs will be stored in /etc/cray/upgrade/csm/iuf/admin.05-15/log/20230516171522
+WARN --bootprep-config-management was specified without --bootprep-config-managed.  The managed images will not be built.
+INFO [ACTIVITY: admin.05-15                                    ] BEG Install started at 2023-05-16 17:15:22.812087
+INFO [IUF SESSION: admin-05-15-psdlp                           ] BEG Started at 2023-05-16 17:15:24.849971
+INFO [STAGE: process-media                                     ] BEG Argo workflow: admin-05-15-psdlp-process-media-l8n8c
+INFO [extract-release-distributions                            ] BEG extract-release-distributions
+INFO [extract-release-distributions                            ] BEG start-operation
+INFO [extract-release-distributions                            ] END start-operation [Succeeded]
+INFO [extract-release-distributions                            ] BEG list-tar-files
+INFO [extract-release-distributions                            ] END list-tar-files [Succeeded]
+INFO [extract-tar-files                                        ] BEG extract-tar-files
+INFO [extract-tar-files(0:analytics-1.4.22.tar.gz)             ] BEG extract-tar-files(0:analytics-1.4.22.tar.gz)
+INFO [extract-tar-files(1:cos-2.5.91.tar.gz)                   ] BEG extract-tar-files(1:cos-2.5.91.tar.gz)
+INFO [extract-tar-files(2:slingshot-host-software-2.0.2-102-cos] BEG extract-tar-files(2:slingshot-host-software-2.0.2-102-cos-2.5.tar.gz)
+INFO [extract-tar-files(0:analytics-1.4.22.tar.gz)             ]       Extracting product tarball /etc/cray/upgrade/csm/admin.05-15/analytics-1.4.22.tar.gz
+INFO [extract-tar-files(1:cos-2.5.91.tar.gz)                   ]       Extracting product tarball /etc/cray/upgrade/csm/admin.05-15/cos-2.5.91.tar.gz
+INFO [extract-tar-files(2:slingshot-host-software-2.0.2-102-cos]       Extracting product tarball /etc/cray/upgrade/csm/admin.05-15/slingshot-host-software-2.0.2-102-cos-2.5.tar.gz
+INFO [extract-tar-files(2:slingshot-host-software-2.0.2-102-cos] END extract-tar-files(2:slingshot-host-software-2.0.2-102-cos-2.5.tar.gz) [Succeeded]
+INFO [extract-tar-files                                        ] END extract-tar-files [Succeeded]
+INFO [extract-tar-files(0:analytics-1.4.22.tar.gz)             ] END extract-tar-files(0:analytics-1.4.22.tar.gz) [Succeeded]
+INFO [extract-release-distributions                            ] BEG end-operation
+INFO [extract-tar-files(1:cos-2.5.91.tar.gz)                   ] END extract-tar-files(1:cos-2.5.91.tar.gz) [Succeeded]
+INFO [extract-release-distributions                            ] END end-operation [Succeeded]
+INFO [extract-release-distributions                            ] BEG prom-metrics
+INFO [extract-release-distributions                            ] END extract-release-distributions [Succeeded]
+INFO [extract-release-distributions                            ] END prom-metrics [Succeeded]
+INFO [STAGE: process-media                                     ] END Succeeded in 0:01:43
+INFO [IUF SESSION: admin-05-15-psdlp                           ] END Completed at 2023-05-16 17:17:20.954763
+INFO [IUF SESSION: admin-05-15-o0o25                           ] BEG Started at 2023-05-16 17:17:21.781044
+INFO [STAGE: pre-install-check                                 ] BEG Argo workflow: admin-05-15-o0o25-pre-install-check-9rlq6
+INFO [preflight-checks-for-services                            ] BEG preflight-checks-for-services
 [...]
 ```
 
@@ -599,7 +651,7 @@ The content in the top-level `log` directory contains information about the oper
 describes the contents of the files in the `log` directory for an activity:
 
 | Path                               | Description                                                                |
-| ---------------------------------- | -------------------------------------------------------------------------- |
+|------------------------------------|----------------------------------------------------------------------------|
 | `log/install.log`                  | Link to most recent log file in `log/<directory>/`                         |
 | `log/<directory>/`                 | Time-stamped directory created when a new `iuf` command is executed        |
 | `log/<directory>/install.log`      | Log file with content created by `iuf`                                     |
@@ -663,6 +715,41 @@ input files to define the CFS configurations used to customize management NCN an
 HPE provides management NCN and managed node `sat bootprep` configuration files in the HPC CSM Software Recipe. The files provide default
 CFS configuration, image, and BOS session template definitions. The administrator may customize the files as needed. The files include
 variables, and the values used are provided by the recipe variables and/or site variables files specified when running `iuf run`.
+
+### ARM images
+
+`sat bootprep` files support building ARM images on an opt-in basis. A commented configuration is provided in the `compute-and-uan-bootprep.yaml` file.
+
+```yaml
+# The following images are required only on systems with aarch64 (ARM) nodes.
+# Uncomment the lines below if ARM images are needed.
+#- name: "{{default.note}}{{base.name}}{{default.suffix}}"
+#  ref_name: base_cos_image.aarch64
+#  base:
+#    product:
+#      name: cos
+#      type: recipe
+#      version: "{{cos.version}}"
+#      filter:
+#        arch: aarch64
+#
+#- name: "compute-{{base.name}}"
+#  ref_name: compute_image.aarch64
+#  base:
+#    image_ref: base_cos_image.aarch64
+#  configuration: "{{default.note}}compute-{{recipe.version}}{{default.suffix}}"
+#  configuration_group_names:
+#  - Compute
+#
+#- name: "uan-{{base.name}}"
+#  ref_name: uan_image.aarch64
+#  base:
+#    image_ref: base_cos_image.aarch64
+#  configuration: "{{default.note}}uan-{{recipe.version}}{{default.suffix}}"
+#  configuration_group_names:
+#  - Application
+#  - Application_UAN
+```
 
 ## Recovering from failures
 
@@ -728,3 +815,56 @@ The framework also includes a unified consistent method to automatically track T
 The Install and Upgrade Observability Framework is automatically deployed and configured in the CSM environment.
 
 For more information on the Install and Upgrade Observability Framework, refer to [Install and Upgrade Observability Framework](../observability/Observability.md).
+
+## Deleting Products installed with IUF
+
+To help the CSM administrator in clearing the cray-product-catalog
+of unused product version entries which were installed
+using IUF, the `prodmgr` CLI provides a new option
+`delete`. This option when used with the `product` and
+`version` helps cleanup the following installed by
+the product version (if they are not used by other
+product versions or other products):
+
+- `Docker Images`
+- `Helm Charts`
+- `Loftsman Manifests`
+- `s3 artifacts`
+- `ims images`
+- `ims receipes`
+- `hosted repos`
+
+Finally, the product entry is also deleted from the cray-product-catalog
+ConfigMap.
+
+An example of launching the `prodmgr` for cleaning a `cos` version
+`1.25.31` is shown below:
+
+```bash
+prodmgr delete cos 1.25.31 --container-registry-hostname arti.hpc.amslabs.hpecorp.net/csm-docker/stable --deletion-image-name product-deletion-utility --deletion-image-version 1.0.0
+```
+
+The `prodmgr` is installed as an `rpm` and has a well documented
+`help`. The `product-deletion-utility` is a `container` which
+interacts with various repos to complete the deletion of
+artifacts and subsequent cleanup of the ConfigMap entry.
+
+Both the `rpm` and `container` image are installed as a part of
+CSM installation.
+
+For more information about `prodmgr` and `product-deletion-utility`
+refer to the following:
+
+- [`prodmgr`](https://github.com/Cray-HPE/prodmgr/blob/main/README.md)
+- [`product-deletion-utility`](https://github.com/Cray-HPE/product-deletion-utility/blob/integration/README.md)
+
+### Cleanup of Nexus storage after deletion
+
+Note that the `product-deletion-utility` only marks the artifacts in the blob store for deletion but is not removed from the disk.
+For cleaning up the Nexus blob storage, refer to the operational procedure mentioned in [Nexus Space Cleanup](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/package_repository_management/Nexus_Space_Cleanup.md#cleanup-of-data-not-being-used).
+
+### Deletion Logs
+
+The `logs` for the progress of deletion is generated in the
+`/etc/cray/upgrade/csm/iuf/deletion` directory or the `$CWD` from
+where the `prodmgr` is run. The filename is generated as: `delete-<product>-<version>-<timestamp>`. This can be used to analyze the components deleted as part of the deletion run.

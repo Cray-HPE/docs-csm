@@ -80,7 +80,7 @@ If LDAP user federation is required, then refer to
    Remove the sealed secrets not being regenerated from the `spec.kubernetes.tracked_sealed_secrets` list in
    `/root/site-init/${CSM_DISTDIR}/shasta-cfg/customizations.yaml` prior to executing the remaining steps in this section.
 
-   Retain the REDS/MEDS/RTS credentials.
+   Retain the HMS Discovery (REDS)/MEDS/RTS credentials.
 
    ```bash
    yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
@@ -148,7 +148,7 @@ To prevent regeneration, sealed secrets **MUST BE REMOVED** from the `spec.kuber
 list in the `customizations.yaml` file prior to executing the
 "Generate Sealed Secrets" section of the [Prepare Site Init](../../install/prepare_site_init.md) procedure.
 
-To retain the REDS/MEDS/RTS credentials:
+To retain the HMS Discovery (REDS)/MEDS/RTS credentials:
 
 ```bash
 yq delete -i /mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials

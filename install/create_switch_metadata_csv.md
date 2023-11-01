@@ -28,14 +28,14 @@ x3000c0h34s1,Spine,Mellanox
 
 The above file would lead to this pairing between component name and hostname:
 
-| Hostname | Component Name |
-| --------- | -------------- |
-| `sw-spine-001` | `x3000c0h33s1` |
-| `sw-spine-002` | `x3000c0h34s1` |
-| `sw-LeafBMC-001` | `x3000c0w38` |
-| `sw-LeafBMC-002` | `x3000c0w36` |
-| `sw-cdu-001` | `d0w1` |
-| `sw-cdu-002` | `d0w2` |
+| Hostname         | Component Name |
+|------------------|----------------|
+| `sw-spine-001`   | `x3000c0h33s1` |
+| `sw-spine-002`   | `x3000c0h34s1` |
+| `sw-LeafBMC-001` | `x3000c0w38`   |
+| `sw-LeafBMC-002` | `x3000c0w36`   |
+| `sw-cdu-001`     | `d0w1`         |
+| `sw-cdu-002`     | `d0w2`         |
 
 The hostnames are automatically generated in ascending order by switch type.
 
@@ -55,15 +55,15 @@ the management network switches. This will have a long name which shows the part
 
 The Rack Layout or River Rack Layout tab shows the part number in the context of its location within the cabinet.
 
-| Part Number | Brand |
-| ----------- | ----- |
-| Aruba `8320 48P 1G/10GBASE-T` and `6P 40G QSFP with X472 (JL481A)` | Aruba |
-| Aruba `8325-23C 32-port 100G QSFP+/QSFP28 (JL627A)` | Aruba |
-| `CS-XGE40-MLNX-2100-16` | Mellanox |
-| `HPE Aruba 6300M` - switch - 48 ports - managed - rack-mountable | Aruba |
-| `JL625A` - Aruba `8325-48Y8C BF 6 F 2 PS Bdl` | Aruba |
-| `XC-XGE-48P-DL2` Ethernet switch (Dell `S3048-ON`) | Dell |
-| `XC-XGT-48P-DL2` Ethernet switch (Dell `S4048-ON`) | Dell |
+| Part Number                                                        | Brand    |
+|--------------------------------------------------------------------|----------|
+| Aruba `8320 48P 1G/10GBASE-T` and `6P 40G QSFP with X472 (JL481A)` | Aruba    |
+| Aruba `8325-23C 32-port 100G QSFP+/QSFP28 (JL627A)`                | Aruba    |
+| `CS-XGE40-MLNX-2100-16`                                            | Mellanox |
+| `HPE Aruba 6300M` - switch - 48 ports - managed - rack-mountable   | Aruba    |
+| `JL625A` - Aruba `8325-48Y8C BF 6 F 2 PS Bdl`                      | Aruba    |
+| `XC-XGE-48P-DL2` Ethernet switch (Dell `S3048-ON`)                 | Dell     |
+| `XC-XGT-48P-DL2` Ethernet switch (Dell `S4048-ON`)                 | Dell     |
 
 ## Format
 

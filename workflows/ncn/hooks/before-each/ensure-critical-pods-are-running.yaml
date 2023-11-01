@@ -29,6 +29,7 @@ metadata:
     before-each: "true"
 spec:
   scriptContent: |
+    #!/bin/sh
     labels=( "cray-bss" "cray-scsd" )
     for label in ${labels[@]};do
       while true; do

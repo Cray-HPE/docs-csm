@@ -29,6 +29,7 @@
 /install/livecd                                          @Cray-HPE/metal
 /operations/bare_metal                                   @Cray-HPE/metal
 /operations/system_configuration_service                 @Cray-HPE/metal
+/operations/cani                                         @Cray-HPE/metal
 
 # Continuous Integration Items
 .github/                                                 @Cray-HPE/csm-devops
@@ -67,6 +68,7 @@ Jenkinsfile.github                                       @Cray-HPE/csm-devops
 /operations/hpe_pdu                                      @Cray-HPE/hardware-management
 /operations/power_management                             @Cray-HPE/hardware-management
 /operations/system_layout_service                        @Cray-HPE/hardware-management
+/operations/cani                                         @Cray-HPE/hardware-management
 
 # Network Items
 /operations/network/                                     @Cray-HPE/management-network

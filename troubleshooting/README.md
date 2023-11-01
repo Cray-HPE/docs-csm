@@ -2,41 +2,36 @@
 
 This document provides links to troubleshooting information for services and functionality provided by CSM.
 
+* [Helpful tips for navigating the CSM repository](#helpful-tips-for-navigating-the-csm-repository)
+* [Known issues](#known-issues)
+* [Booting](#booting)
+  * [UAN boot issues](#uan-boot-issues)
+  * [Compute node boot issues](#compute-node-boot-issues)
+* [Configuration management](#configuration-management)
+* [ConMan](#conman)
+* [Customer Management Network (CMN)](#customer-management-network-cmn)
+* [Domain Name Service (DNS)](#domain-name-service-dns)
+* [Grafana dashboards](#grafana-dashboards)
+* [Kubernetes](#kubernetes)
+* [MetalLB](#metallb)
+* [Node management](#node-management)
+* [Security and authentication](#security-and-authentication)
+* [Spire](#spire)
+* [User Access Service (UAS)](#user-access-service-uas)
+* [Utility storage](#utility-storage)
+
 ## Helpful tips for navigating the CSM repository
 
-In the main repository landing page, change the branch to the CSM version being used on the system (for example, release/1.0, release/1.2, release/1.3).
+In the main repository landing page, change the branch to the CSM version being used on the system (for example, `release/1.0`, `release/1.2`, `release/1.3`, etc.).
 
 Use the pre-populated GitHub "Search or jump to..." function in the upper left hand side of the page and append keywords related
 to the exiting problem seen into the existing search. (The example searches for "ping" and "PXE" related troubleshooting resources on the "main" branch.)
 
 * Follow any run-books, guides, or procedures which are directly related to the problem.
 
-* Change the branch to "main" and search a second time to retrieve very recent or beta run-books and guides.
+* Change the branch to `main` and search a second time to retrieve very recent or beta run-books and guides.
 
 * Users can also expand the search beyond the "troubleshooting" section (instead of doing "path troubleshooting") and/or use more advanced GitHub searches such as "path configure" to find the right context.
-
-## Quick links
-
-* [CSM Troubleshooting Information](#csm-troubleshooting-information)
-  * [Helpful tips for navigating the CSM repository](#helpful-tips-for-navigating-the-csm-repository)
-  * [Quick links](#quick-links)
-  * [Known issues](#known-issues)
-  * [Booting](#booting)
-    * [UAN boot issues](#uan-boot-issues)
-    * [Compute node boot issues](#compute-node-boot-issues)
-  * [Compute rolling upgrades](#compute-rolling-upgrades)
-  * [Configuration management](#configuration-management)
-  * [ConMan](#conman)
-  * [Customer Management Network (CMN)](#customer-management-network-cmn)
-  * [Domain Name Service (DNS)](#domain-name-service-dns)
-  * [Grafana dashboards](#grafana-dashboards)
-  * [Kubernetes](#kubernetes)
-  * [MetalLB](#metallb)
-  * [Node management](#node-management)
-  * [Security and authentication](#security-and-authentication)
-  * [Spire](#spire)
-  * [User Access Service (UAS)](#user-access-service-uas)
-  * [Utility storage](#utility-storage)
 
 ## Known issues
 
@@ -47,6 +42,9 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
 * [Antero node NID allocation](known_issues/antero_node_NID_allocation.md)
 * [HPE nodes not properly transitioning power state](known_issues/hpe_systems_not_transitioning_power_state.md)
+* [Software Management Services health check](known_issues/sms_health_check.md)
+* [QLogic driver crash on storage nodes](known_issues/qlogic_driver_crash.md)
+* [Nexus Fails Authentication with Keycloak Users](known_issues/Nexus_Fail_Authentication_with_Keycloak_Users.md)
 
 ## Booting
 
@@ -62,7 +60,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Issues Related to Trivial File Transfer Protocol (TFTP)](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Trivial_File_Transfer_Protocol_TFTP.md)
 * [Troubleshooting Using Kubernetes](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Using_Kubernetes.md)
 * [Log File Locations and Ports Used](../operations/boot_orchestration/Log_File_Locations_and_Ports_Used_in_Compute_Node_Boot_Troubleshooting.md)
-* [Issues Related to Slow Boot Times](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
 
 ## Configuration management
 
@@ -70,9 +67,11 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 ## ConMan
 
+* [Console Services Troubleshooting Guide](../operations/conman/Console_Services_Troubleshooting_Guide.md)
 * [ConMan Blocking Access to a Node BMC](../operations/conman/Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md)
 * [ConMan Failing to Connect to a Console](../operations/conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
 * [ConMan Asking for Password on SSH Connection](../operations/conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
+* [Console Node Pod Stuck in Terminating State](../operations/conman/Troubleshoot_ConMan_Node_Pod_Stuck_Terminating.md)
 
 ## Customer Management Network (CMN)
 

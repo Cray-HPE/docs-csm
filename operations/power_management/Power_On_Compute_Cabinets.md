@@ -52,21 +52,10 @@ power-on command from Cray System Management \(CSM\) software.
    Finally, the `sat bootsys` command waits for the components in the liquid-cooled cabinets to be
    powered on. The `sat bootsys` command controls power only to liquid-cooled cabinets.
 
-   The `sat bootsys` command may time out while waiting for the `hms-discovery` cronjob to be
-   scheduled and display the following message:
-
-   ```text
-   ERROR: The cronjob hms-discovery in namespace services was not scheduled within expected window after being resumed.
-   ```
-
-   If this occurs, first check if the cronjob needs to be re-created. To do this, follow the instructions
-   in the [Check `cronjobs`](Power_On_and_Start_the_Management_Kubernetes_Cluster.md#check-cronjobs)
-   section of the [Power On and Start the Management Kubernetes Cluster](Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
-   procedure.
-
-   If the cronjob does not need to be re-created and has been scheduled within the time expected
-   (based on its cron schedule), execute the `sat bootsys boot --stage cabinet-power` command
-   again.
+   If the `hms-disocvery` cronjob fails to be scheduled after it is resumed, then SAT will delete
+   and re-create the cronjob, and will wait for it to run. After the cronjob has been scheduled
+   within the time expected based on its cron schedule, execute the `sat bootsys boot --stage
+   cabinet-power` command again.
 
    If `sat bootsys` fails to power on the cabinets through `hms-discovery`, then use CAPMC to manually power on the cabinet chassis,
    compute blade slots, and all populated switch blade slots \(1, 3, 5, and 7\). This example shows cabinets 1000-1003.
