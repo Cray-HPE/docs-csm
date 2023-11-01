@@ -46,6 +46,8 @@
 
 set -e
 
+PITFILE="/etc/pit-release"
+
 function find_latest_rpm {
   # $1 - RPM name prefix (e.g. csm-testing, goss-servers, etc)
   local name vpattern rpm_regex1 rpm_regex2 filepath
@@ -78,7 +80,7 @@ function find_latest_rpm {
   return 0
 }
 
-function paths_to_basenames() {
+function paths_to_basenames {
   local rpm_name_list
   while [[ $# -gt 0 ]]; do
     rpm_name_list="${rpm_name_list} ${1##*/}"
@@ -88,11 +90,16 @@ function paths_to_basenames() {
   return 0
 }
 
+function err_exit {
+  while [[ $# -gt 0 ]]; do
+    echo "$1" >&2
+    shift
+  done
+  exit 1
+}
+
 function run_on_pit {
-  if [[ -z ${CSM_RELEASE} ]]; then
-    echo "Please set and export \$CSM_RELEASE and try again" >&2
-    exit 1
-  fi
+  [[ -n ${CSM_RELEASE} ]] || err_exit "Please set and export \$CSM_RELEASE and try again"
 
   local MTOKEN STOKEN WTOKEN PREPDIR STORAGE_NCNS K8S_NCNS PREP_RPM_DIR ncn
   local STORAGE_RPM_PATHS K8S_RPM_PATHS STORAGE_RPM_BASENAMES K8S_RPM_BASENAMES
@@ -107,19 +114,23 @@ function run_on_pit {
   CSM_PATH=${CSM_PATH:-${CSM_DIRNAME}/csm-${CSM_RELEASE}}
   RPMDIR=${RPMDIR:-${CSM_PATH}/rpm}
   PREPDIR="${PITDATA}/prep"
+  PREP_RPM_DIR="${PREPDIR}/rpms"
 
-  if [[ ! -d ${CSM_PATH} ]]; then
-    echo "The csm-${CSM_RELEASE} directory was not found at the expected location. Please set \$CSM_DIRNAME to the absolute path" >&2
-    echo "containing the csm-$CSM_RELEASE directory" >&2
-    exit 1
-  elif [[ ! -d ${RPMDIR} ]]; then
-    echo "The 'rpm' directory was not found in the base directory of the expanded CSM tarball: ${CSM_PATH}" >&2
-    echo "Please set \$CSM_PATH to the path of the base directory of the expanded CSM tarball, and verify that it contains the 'rpm' directory." >&2
-    exit 1
-  elif [[ ! -d ${PREPDIR} ]]; then
-    echo "The 'prep' directory was not found in its expected location: '${PREPDIR}'" >&2
-    exit 1
-  fi
+  [[ -d ${CSM_PATH} ]] \
+    || err_exit "The csm-${CSM_RELEASE} directory was not found at the expected location." \
+                "Please set \$CSM_DIRNAME to the absolute path containing the csm-$CSM_RELEASE directory"
+
+  [[ -d ${RPMDIR} ]] \
+    || err_exit "The 'rpm' directory was not found in the base directory of the expanded CSM tarball: ${CSM_PATH}" \
+                "Please set \$CSM_PATH to the path of the base directory of the expanded CSM tarball, and verify that it contains the 'rpm' directory."
+    
+  [[ -d ${PREPDIR} ]] || err_exit "The 'prep' directory was not found in its expected location: '${PREPDIR}'"
+
+  # It's okay if our RPM prep subdirectory already exists (we'll just delete and recreate it), but if it exists
+  # and isn't a directory, then that means something other than this script created it, so we should be
+  # cautious and not automatically delete it.
+  [[ ! -e ${PREP_RPM_DIR} || -d ${PREP_RPM_DIR} ]] \
+    || err_exit "ERROR: '${PREP_RPM_DIR}' already exists but it is not a directory. Move, rename, or delete it and then re-run this script"
 
   STORAGE_NCNS=$(grep -oE "${STOKEN}" /etc/dnsmasq.d/statics.conf | grep -v m001 | sort -u)
   K8S_NCNS=$(grep -oE "(${MTOKEN}|${WTOKEN})" /etc/dnsmasq.d/statics.conf | grep -v m001 | sort -u)
@@ -135,15 +146,22 @@ function run_on_pit {
   STORAGE_RPM_PATHS="${HPE_GOSS_RPM} ${CANU_RPM} ${CSM_TESTING_RPM} ${GOSS_SERVERS_RPM} ${PLATFORM_UTILS_RPM}"
   K8S_RPM_PATHS="${STORAGE_RPM_PATHS} ${CMSTOOLS_RPM}"
 
-  STORAGE_RPM_BASENAMES=$(paths_to_basenames ${STORAGE_RPM_PATHS})
-  K8S_RPM_BASENAMES=$(paths_to_basenames ${K8S_RPM_PATHS})
+  # If the RPM prep subdirectory already exists, remove it and its contents
+  if [[ -d ${PREP_RPM_DIR} ]]; then
+    echo "Deleting existing directory: '${PREP_RPM_DIR}'"
+    rm -rf "${PREP_RPM_DIR}"
+    [[ ! -e ${PREP_RPM_DIR} ]] || err_exit "ERROR: Still exists even after deleting it: '${PREP_RPM_DIR}'"
+  fi
 
   # Create prep subdirectory
-  PREP_RPM_DIR="${PREPDIR}/rpms"
+  echo "Creating directory: '${PREP_RPM_DIR}'"
   mkdir -v "${PREP_RPM_DIR}"
 
   # Copy test RPMs into it
   cp -v ${K8S_RPM_PATHS} "${PREP_RPM_DIR}"
+
+  STORAGE_RPM_BASENAMES=$(paths_to_basenames ${STORAGE_RPM_PATHS})
+  K8S_RPM_BASENAMES=$(paths_to_basenames ${K8S_RPM_PATHS})
 
   # Install the RPMs onto the other NCNs
   for ncn in ${STORAGE_NCNS}; do
@@ -174,10 +192,7 @@ function run_on_m001 {
   local PREP_RPM_DIR
 
   PREP_RPM_DIR=/metal/bootstrap/prep/rpms
-  if [[ ! -d ${PREP_RPM_DIR} ]]; then
-    echo "ERROR: Directory does not exist: '${PREP_RPM_DIR}'"
-    exit 1
-  fi
+  [[ -d ${PREP_RPM_DIR} ]] || err_exit "ERROR: Directory does not exist: '${PREP_RPM_DIR}'"
 
   echo "Installing RPMs from '${PREP_RPM_DIR}':"
   rpm -Uvh --force "${PREP_RPM_DIR}/"*.rpm
@@ -192,13 +207,14 @@ function run_on_m001 {
   systemctl daemon-reload && echo "systemctl daemon-reload has been run"
 }
 
-if [[ -f /etc/pit-release ]]; then
+if [[ -f ${PITFILE} ]]; then
+  echo "${PITFILE} exists -- running on PIT node"
   run_on_pit
 elif [[ ${HOSTNAME} == ncn-m001 ]]; then
+  echo "Running on ncn-m001 (non-PIT)"
   run_on_m001
 else
-  echo "ERROR: This script should only be run from the PIT node or ncn-m001"
-  exit 1
+  err_exit "ERROR: This script should only be run from the PIT node or ncn-m001"
 fi
 
 echo PASSED
