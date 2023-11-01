@@ -34,7 +34,11 @@ spec:
     SSH_OPT="${SSH_OPT} -o ConnectTimeout=10"
     # Note: this file path cannot change without coordinated changes to the COS
     # product stream
-    file_path=/opt/cray/shasta/cos/bin/prechecks_for_worker_reboots
+    if [[ -d /opt/cray/shasta/cne ]];then
+        file_path=/opt/cray/shasta/cne/bin/prechecks_for_worker_reboots
+    else
+        file_path=/opt/cray/shasta/cos/bin/prechecks_for_worker_reboots
+    fi
     # Check for remote installation, gracefully handling non-existence as COS
     # may not be installed yet (or this functionality may be deprecated).
     has_file=$(ssh ${SSH_OPT} ${TARGET_NCN} find ${file_path} || true)
