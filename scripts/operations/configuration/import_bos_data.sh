@@ -39,10 +39,15 @@
 # Otherwise (TGZ option #2 or a JSON file), just session templates will be
 # restored.
 #
+# If the --clear-bos parameter is specified, then all BOS sessions and session
+# templates will be deleted before the import is performed.
+#
 # Most of the work is done by a Python script. This shell script mostly just
 # handles the TGZ case, if needed.
 #
 ##################################################################################
+
+CLEAR_BOS=""
 
 err_exit() {
   echo "ERROR: $*" >&2
@@ -59,7 +64,7 @@ import_python_script="${basedir}/import_bos_data.py"
   || err_exit "File is not executable: '${import_python_script}'"
 
 usage() {
-  echo "Usage: $0 <JSON or TGZ file containing BOS data>"
+  echo "Usage: $0 [--clear-bos] <JSON or TGZ file containing BOS data>"
   exit 1
 }
 
@@ -71,6 +76,9 @@ run_import() {
 
 if [[ $# -eq 1 ]]; then
   ARCHIVE=$1
+elif [[ $# -eq 2 && $1 == --clear-bos ]]; then
+  CLEAR_BOS="--clear-bos"
+  ARCHIVE=$2
 else
   usage
 fi
@@ -96,20 +104,20 @@ if [[ ${ARCHIVE} =~ .*\.tgz$ ]]; then
     OPTIONS_JSON=$(echo "${TEMPLATES_JSON}" | sed 's#/v2/sessiontemplates.json$#/v2/options.json#')
     [[ -e ${OPTIONS_JSON} ]] || err_exit "${OPTIONS_JSON} not found"
     echo "Found options file in archive: '${OPTIONS_JSON}'"
-    run_import --options-file "${OPTIONS_JSON}" "${TEMPLATES_JSON}"
+    run_import ${CLEAR_BOS} --options-file "${OPTIONS_JSON}" "${TEMPLATES_JSON}"
   elif [[ -z ${TEMPLATES_JSON} ]]; then
     # In this case, there should be a directory in the archive containing JSON files of the session templates
     TEMPLATES_JSON=$(find "${TMPDIR}" -type f -name \*.json -printf "%h" -quit)
     [[ -n ${TEMPLATES_JSON} ]] || err_exit "No JSON files found in archive"
     echo "Found sessiontemplates directory in archive: '${TEMPLATES_JSON}'"
-    run_import "${TEMPLATES_JSON}"
+    run_import ${CLEAR_BOS} "${TEMPLATES_JSON}"
   fi
 
   # Clean up
   rm -rf "${TMPDIR}"
   exit 0
 elif [[ ${ARCHIVE} =~ .*\.json$ ]]; then
-  run_import "${ARCHIVE}"
+  run_import ${CLEAR_BOS} "${ARCHIVE}"
   exit 0
 fi
 
