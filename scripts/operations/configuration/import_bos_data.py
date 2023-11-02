@@ -35,8 +35,10 @@ import subprocess
 import sys
 from typing import Dict, List, Union
 
-from python_lib.bos import BosError, BosOptions, update_options
-from python_lib.bos_cli import create_session_template, list_options, list_session_templates
+from python_lib.bos import BosError, BosOptions, delete_v1_session, delete_v2_session, \
+                           delete_v2_session_template, list_options, list_v1_session_names, \
+                           list_v2_sessions, list_v2_session_templates, update_options
+from python_lib.bos_cli import create_session_template
 from python_lib.bos_session_templates import BosSessionTemplate, \
                                              InvalidBosSessionTemplate, \
                                              get_session_template_name, \
@@ -244,9 +246,11 @@ def main() -> None:
     Parses the command line arguments, does the stuff.
 
     Arguments:
+    [--clear-bos]
     [--options-file <options_file.json>]
     {<session_template_directory> | <session_template_list.json> }
 
+    - If --clear-bos is specified, all BOS sessions and session templates will be deleted before the import.
     - If options-file is specified, the BOS v2 options in that file are imported onto the system
       (for those that differ from the current options)
     - If a JSON file for a single session template is specified, then that session template
@@ -257,12 +261,15 @@ def main() -> None:
       in that directory.
 
     No existing session templates on the system will be overwritten -- in the case that this would
-    happen, a message is printed and that template is skipped.
+    happen, a message is printed and that template is skipped (keeping in mind that if --clear-bos is
+    specified, all templates are first deleted, so some templates may essentially be overwritten in
+    that case)
 
     Raises BosError if there is an error.
     """
     parser = argparse.ArgumentParser(
         description="Reads BOS session templates and options from files and creates them in BOS")
+    parser.add_argument("--clear-bos", action='store_true', help="Delete BOS sessions and session templates before importing")
     parser.add_argument("--options-file", type=argparse.FileType('r'), required=False,
                         help="JSON file of BOS options")
     parser.add_argument("file_or_directory",
@@ -284,7 +291,43 @@ def main() -> None:
         options_to_change = None
 
     # Get list of current BOS session templates on system
-    current_session_templates = list_session_templates()
+    current_session_templates = list_v2_session_templates()
+
+    if parsed_args.clear_bos:
+        # Take a snapshot of the BOS data before we begin.
+        print("Taking a snapshot of system BOS data before clearing BOS")
+        snapshot_bos_data()
+        print("")
+
+        v1_session_names = list_v1_session_names()
+        v2_session_names = [ session["name"] for session in list_v2_sessions() ]
+        template_names = [ template["name"] for template in current_session_templates ]
+
+        print("Deleting all BOS sessions and session templates")
+        for session in v1_session_names:
+            print(f"Deleting v1 session '{session}'")
+            delete_v1_session(session)
+
+        # If we deleted any, make sure they are now gone
+        if v1_session_names and list_v1_session_names():
+            raise BosError("V1 sessions still exist after deleting all of them")
+
+        for session in v2_session_names:
+            print(f"Deleting v2 session '{session}'")
+            delete_v2_session(session)
+
+        if v2_session_names and list_v2_sessions():
+            raise BosError("V2 sessions still exist after deleting all of them")
+
+        for template in template_names:
+            print(f"Deleting session template '{template}'")
+            delete_v2_session_template(template)
+
+        if current_session_templates:
+            current_session_templates = list_v2_session_templates()
+            if current_session_templates:
+                raise BosError("Session templates still exist after deleting all of them")
+
     template_import_map = get_templates_to_import(template_name_map, current_session_templates)
 
     print("")
@@ -293,10 +336,12 @@ def main() -> None:
         print("No updates to be performed.")
         return
 
-    # Take a snapshot of the BOS data before we begin.
-    print("Taking a snapshot of system BOS data before making changes")
-    snapshot_bos_data()
-    print("")
+    # Take a snapshot if we didn't already
+    if not parsed_args.clear_bos:
+        # Take a snapshot of the BOS data before we begin.
+        print("Taking a snapshot of system BOS data before making changes")
+        snapshot_bos_data()
+        print("")
 
     if options_to_change:
         change_options(imported_bos_options, options_to_change)
