@@ -35,6 +35,6 @@ spec:
     # Note: this file path cannot change without coordinated changes to the COS product stream
     # Run the precheck_for_worker_reboots script from the new location or the old location
     # If not found, return a message and continue
-    ssh ${SSH_OPT} ${TARGET_NCN} "if [[ -f /opt/cray/shasta/cne/bin/prechecks_for_worker_reboots ]]; then /opt/cray/shasta/cne/bin/prechecks_for_worker_reboots; elif [[ -f /opt/cray/shasta/cos/bin/prechecks_for_worker_reboots ]]; then /opt/cray/shasta/cos/bin/prechecks_for_worker_reboots; else echo WARN prechecks_for_worker_reboots not present on ${TARGET_NCN}; fi"
+    ssh ${SSH_OPT} ${TARGET_NCN} "if [[ -f /opt/cray/shasta/cne/bin/prechecks_for_worker_reboots ]]; then /opt/cray/shasta/cne/bin/prechecks_for_worker_reboots; elif [[ -f /opt/cray/shasta/cos/bin/prechecks_for_worker_reboots ]]; then /opt/cray/shasta/cos/bin/prechecks_for_worker_reboots; else echo >&2 WARN prechecks_for_worker_reboots not present on ${TARGET_NCN}; fi"
     exit $?
   templateRefName: ssh-template
