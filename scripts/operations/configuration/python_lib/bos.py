@@ -27,12 +27,15 @@
 import traceback
 import logging
 
-from typing import Dict, Union
+from typing import Dict, List, Union
 
 from . import api_requests
 from . import common
+from .bos_session_templates import BosSessionTemplate
+from .types import JsonObject
 
 BosOptions = Dict[str, Union[bool, int, str]]
+BosV2Session = Dict[str, JsonObject]
 
 BOS_BASE_URL = f"{api_requests.API_GW_BASE_URL}/apis/bos"
 
@@ -87,3 +90,63 @@ def update_options(new_options: BosOptions) -> BosOptions:
                       "expected_status_codes": {200},
                       "json": new_options}
     return api_requests.patch_retry_validate_return_json(**request_kwargs)
+
+# BOS v1 session functions
+
+def delete_v1_session(session_name: str) -> None:
+    """
+    Deletes the specified v1 session.
+    """
+    request_kwargs = {"url": f"{BOS_V1_SESSIONS_URL}/{session_name}",
+                      "add_api_token": True,
+                      "expected_status_codes": {204}}
+    api_requests.delete_retry_validate(**request_kwargs)
+
+def list_v1_session_names() -> List[str]:
+    """
+    Queries BOS for a list of all v1 session names, and returns that list.
+    """
+    request_kwargs = {"url": BOS_V1_SESSIONS_URL,
+                      "add_api_token": True,
+                      "expected_status_codes": {200}}
+    return api_requests.get_retry_validate_return_json(**request_kwargs)
+
+# BOS v2 session functions
+
+def delete_v2_session(session_name: str) -> None:
+    """
+    Deletes the specified v2 session.
+    """
+    request_kwargs = {"url": f"{BOS_V2_SESSIONS_URL}/{session_name}",
+                      "add_api_token": True,
+                      "expected_status_codes": {204}}
+    api_requests.delete_retry_validate(**request_kwargs)
+
+def list_v2_sessions() -> List[BosV2Session]:
+    """
+    Queries BOS for a list of all v1 session names, and returns that list.
+    """
+    request_kwargs = {"url": BOS_V2_SESSIONS_URL,
+                      "add_api_token": True,
+                      "expected_status_codes": {200}}
+    return api_requests.get_retry_validate_return_json(**request_kwargs)
+
+# BOS v2 session template functions
+
+def delete_v2_session_template(template_name: str) -> None:
+    """
+    Deletes the specified v2 session template.
+    """
+    request_kwargs = {"url": f"{BOS_V2_TEMPLATES_URL}/{template_name}",
+                      "add_api_token": True,
+                      "expected_status_codes": {204}}
+    api_requests.delete_retry_validate(**request_kwargs)
+
+def list_v2_session_templates() -> List[BosSessionTemplate]:
+    """
+    Queries BOS v2 for a list of all session templates, and returns that list.
+    """
+    request_kwargs = {"url": BOS_V2_TEMPLATES_URL,
+                      "add_api_token": True,
+                      "expected_status_codes": {200}}
+    return api_requests.get_retry_validate_return_json(**request_kwargs)
