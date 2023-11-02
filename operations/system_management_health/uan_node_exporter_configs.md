@@ -7,7 +7,7 @@ The Prometheus UAN NODE Exporter service, service monitor and endpoints are depl
 In order to provide data to the Grafana SMART dashboards, the UAN NODE Exporter must be configured with a list of UAN
 NMN IP Address to scrape metrics from.
 
-(`pre-install-CSM#`)
+### Pre-install CSM
 
 > **`NOTE`** All variables used within this page depend on the `/etc/environment` setup done in [Pre-installation](../../install/pre-installation.md).
 
@@ -53,7 +53,7 @@ under the `spec.kubernetes.services.cray-sysmgmt-health.uanNodeExporter` service
 
 For a complete set of available parameters, consult the `values.yaml` file for the `cray-sysmgmt-health` chart.
 
-(`post-install-CSM#`)
+### Post-install CSM
 
 This procedure is to configure the UAN NODE Exporter once the PIT node no longer exists by editing manifest and deploying `cray-sysmgmt-health chart`.
 
@@ -62,7 +62,7 @@ This procedure is to configure the UAN NODE Exporter once the PIT node no longer
    (`uan#`)
 
     ```bash
-    # hostname -i
+    hostname -i
     ```
 
    Expected output looks similar to the following:
@@ -86,7 +86,7 @@ This procedure is to configure the UAN NODE Exporter once the PIT node no longer
 1. (`ncn#`) Update `customizations.yaml` with the list of UAN nodes IPs.
 
     ```bash
-    yq write -s - -i /root/customizations.yaml <<EOF
+    yq write -s - -i customizations.yaml <<EOF
     - command: update
       path: spec.kubernetes.services.cray-sysmgmt-health.uanNodeExporter
       value:
@@ -100,7 +100,7 @@ This procedure is to configure the UAN NODE Exporter once the PIT node no longer
 1. (`ncn#`) Review the UAN NODE Exporter configuration.
 
     ```bash
-    yq r /root/customizations.yaml spec.kubernetes.services.cray-sysmgmt-health.uanNodeExporter
+    yq r customizations.yaml spec.kubernetes.services.cray-sysmgmt-health.uanNodeExporter
     ```
 
    The expected output looks similar to:
@@ -156,10 +156,10 @@ This procedure is to configure the UAN NODE Exporter once the PIT node no longer
 1. (`ncn#`) Redeploy the same chart version but with the desired UAN NODE Exporter configuration settings.
 
    ```bash
-   loftsman ship charts-path /helm --manifest-path /root/manifest.yaml
+   loftsman ship --charts-path /etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}/helm/ --manifest-path manifest.yaml
    ```
 
-   Here, /helm is the path of the `cray-sysmgmt-health` chart.
+   Here, `/etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}/helm/` is the path of the `cray-sysmgmt-health` chart.
 
 1. (`ncn#`) **This step is critical.** Store the modified `customizations.yaml` file in the `site-init` repository in the customer-managed location.
 
