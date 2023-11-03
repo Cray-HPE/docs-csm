@@ -65,6 +65,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 ## Configuration management
 
 * [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md)
+* [Incrementally Configuring Images](incrementally_configuring_images.md)
 
 ## ConMan
 
