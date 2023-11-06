@@ -1,4 +1,4 @@
-# System Admin Toolkit (SAT) in CSM
+# SAT in CSM
 
 In CSM 1.3 and newer, the `sat` command is available on the Kubernetes NCNs without installing the
 SAT product stream.
@@ -27,7 +27,7 @@ SAT included in CSM 1.6.0. They are described below.
 - The `sat-config-management` repository in Gitea (VCS) is no longer used. All SAT configuration
   content has been added to the `csm-config-management` repository. It is no longer required to use
   a separate layer which references the `sat-config-management` repository in CFS configurations
-  targeting the management nodes. 
+  targeting the management nodes.
 
 ## Frequently Asked Questions (FAQ)
 
