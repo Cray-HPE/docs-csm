@@ -32,20 +32,17 @@ spec:
     #!/bin/sh
     SSH_OPT="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     SSH_OPT="${SSH_OPT} -o ConnectTimeout=10"
-    # Note: this file path cannot change without coordinated changes to the COS
-    # product stream
-    file_path=/opt/cray/shasta/cos/bin/prechecks_for_worker_reboots
-    # Check for remote installation, gracefully handling non-existence as COS
-    # may not be installed yet (or this functionality may be deprecated).
-    has_file=$(ssh ${SSH_OPT} ${TARGET_NCN} find ${file_path} || true)
-    if [[ -z ${has_file} ]]; then
-        # double check that we can generally ssh to TARGET_NCN
-        ssh ${SSH_OPT} ${TARGET_NCN} hostname
-        # 'hostname' failure triggers 'set -e' (established in calling context)
-        echo "cannot find ${file_path} on ${TARGET_NCN}"
-        exit 0
-    fi
-    # remotely execute the file using its exit code as our own
-    ssh ${SSH_OPT} ${TARGET_NCN} ${file_path}
+    # Note: this file path cannot change without coordinated changes to the COS product stream
+    # Run the precheck_for_worker_reboots script from the new location or the old location
+    # If not found, return a message and continue
+    ssh ${SSH_OPT} ${TARGET_NCN} "\
+      if [[ -f /opt/cray/shasta/cne/bin/prechecks_for_worker_reboots ]]; then \
+          /opt/cray/shasta/cne/bin/prechecks_for_worker_reboots; \
+      elif [[ -f /opt/cray/shasta/cos/bin/prechecks_for_worker_reboots ]]; then \
+          /opt/cray/shasta/cos/bin/prechecks_for_worker_reboots; \
+      else \
+          echo >&2 WARN prechecks_for_worker_reboots not present on ${TARGET_NCN}; \
+      fi\
+      "
     exit $?
   templateRefName: ssh-template
