@@ -117,11 +117,14 @@ function create-admin-tools-cephfs-share {
     echo "fstab entry for cephfs already present..."
   fi
 
+  echo "Calling systemctl daemon-reload to ensure changes to ${fstab} are loaded..."
+  systemctl daemon-reload
+
   umount -f ${upgrade_dir} > /dev/null 2>&1
   mkdir -p ${upgrade_dir} > /dev/null 2>&1
   mount ${upgrade_dir}
 
-  if ! mountpoint ${upgrade_dir} > /dev/null 2>&1; then
+  if [[ "$?" -ne 0 ]]; then
     echo "ERROR: CSM share failed to mount!"
     exit 1
   fi
