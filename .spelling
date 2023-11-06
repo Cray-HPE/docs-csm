@@ -453,6 +453,7 @@ buses
 c0
 catalog
 cataloged
+cdu
 cdu0sw01
 cdu0sw02
 cec0
@@ -542,6 +543,7 @@ laborer
 laborers
 laboring
 labors
+leaf-bmc
 license
 licenses
 lifecycle
