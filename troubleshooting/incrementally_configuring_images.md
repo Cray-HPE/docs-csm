@@ -44,7 +44,7 @@ can be adapted for other image types.
 
 1. (`ncn-mw#`) Set `BASE_IMAGE_ID`.
 
-   1. View the log and look for a line the includes `Creation of image`
+   1. View the log and look for a line that includes `Creation of image`.
 
       ```text
       INFO: Creation of image ssi-cne-1.0.0-32-csm-1.5.x86_64-csm-1.5.0.beta37-10 succeeded: ID f5374c4c-8c5a-4b79-a5e5-aef778ed36cd
@@ -103,7 +103,7 @@ can be adapted for other image types.
       ```
 
    SAT may have generated multiple configurations, in which case it is up to the user to determine which is the desired configuration.
-   However if the default SAT `bootprep` file is being used, then the configuration name should include `compute`
+   However, if the default SAT `bootprep` file is being used, then the configuration name should include `compute`.
 
 1. (`ncn-mw#`) Set `SESSION_NAME`.
 
@@ -130,7 +130,7 @@ can be adapted for other image types.
    CONFIGURATION_LIMIT=0
    ```
 
-   Optionally, this can instead be set to a comma-separated list of numbers starting at 0 when trying to apply all layers up to the failed layer. For example:
+   Optionally, this can instead be set to a comma-separated list of numbers starting at `0` when trying to apply all layers up to the failed layer. For example:
 
       ```bash
    CONFIGURATION_LIMIT=0,1,2
