@@ -14,7 +14,7 @@ grep 'sw-' /etc/hosts
 
 Example output:
 
-```
+```bash
 10.254.0.2 sw-spine-001
 10.254.0.3 sw-spine-002
 10.254.0.4 sw-leaf-001
