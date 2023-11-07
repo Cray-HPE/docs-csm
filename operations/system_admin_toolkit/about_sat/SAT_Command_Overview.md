@@ -1,17 +1,30 @@
-# SAT Command Authentication
+# SAT Command Overview
+
+The SAT command-line utility, `sat`, is organized into multiple subcommands
+that perform different administrative tasks. For example, `sat status` provides
+a summary of the status of the components in the system while `sat bootprep`
+provides a way to create CFS configurations, IMS images, and session templates
+to prepare for booting the system.
 
 Some SAT subcommands make requests to the HPE Cray EX services through the API
 gateway and thus require authentication to the API gateway in order to function.
-Other SAT subcommands use the Kubernetes API. Some `sat` commands require S3 to
-be configured. In order to use the SAT S3 bucket, the System Administrator must
-generate the S3 access key and secret keys and write them to a local file. This
-must be done on every Kubernetes control plane node where SAT commands are run.
+Other SAT subcommands use the Kubernetes API. Some `sat` subcommands require S3
+to be configured. In order to use the SAT S3 bucket, the System Administrator
+must generate the S3 access key and secret keys and write them to a local file.
+This must be done on every Kubernetes control plane node where SAT commands are
+run.
 
-For more information on authentication to the API gateway, see
-[System Security and Authentication](../../security_and_authentication/System_Security_and_Authentication.md).
+See the following procedures to set up SAT authentication and S3 credentials:
 
-The following is a table describing SAT commands and the types of authentication
-they require.
+* [Authenticate SAT Commands](../configuration/Authenticate_SAT_Commands.md)
+* [Generate SAT S3 Credentials](../configuration/Generate_SAT_S3_Credentials.md)
+
+## Summary of SAT Subcommands
+
+The following table summarizes the various subcommands provided by the `sat`
+CLI. It includes information about the types of authentication required by the
+command, the name of the associated man page, and a short description of the
+command.
 
 |SAT Subcommand|Authentication/Credentials Required|Man Page|Description|
 |--------------|-----------------------------------|--------|-----------|
@@ -37,18 +50,3 @@ they require.
 |`sat swap`|Requires authentication to the API gateway.|`sat-swap`|Prepare HSN switch or cable for replacement and bring HSN switch or cable into service.|
 |`sat xname2nid`|Requires authentication to the API gateway.|`sat-xname2nid`|Translate node and node BMC XNames to node IDs.|
 |`sat switch`|**This command has been deprecated.** It has been replaced by `sat swap`.|
-
-In order to authenticate to the API gateway, run the `sat auth`
-command. This command will prompt for a password on the command line. The
-username value is obtained from the following locations, in order of higher
-precedence to lower precedence:
-
-- The `--username` global command-line option.
-- The `username` option in the `api_gateway` section of the configuration file
-  at `~/.config/sat/sat.toml`.
-- The name of currently logged in user running the `sat` command.
-
-If credentials are entered correctly when prompted by `sat auth`, a token file
-will be obtained and saved to `~/.config/sat/tokens`. Subsequent sat commands
-will determine the username the same way as `sat auth` described above and will
-use the token for that username if it has been obtained and saved by `sat auth`.
