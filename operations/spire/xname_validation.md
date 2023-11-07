@@ -1,6 +1,6 @@
 # Xname Validation
 
-CSM 1.2.5 supports the ability to require API calls that contain xnames to be
+CSM 1.5 supports the ability to require API calls that contain xnames to be
 from the node with that xname. This is done by assigning unique workloads per
 node. This may impact performance and require the replica count of the
 spire-server statefulset to be increased.
@@ -12,9 +12,9 @@ API Gateway to fail until the spire-jwks service is running again.
 ## Enable Xname Validation
 
 In order to enable xname validation you need the docs-csm RPM installed and the
-CSM 1.2.5 or newer tarball extracted somewhere on the node you are enabling it
-from. In the command example below the CSM 1.2.5 tarball is extracted to
-`/etc/cray/upgrade/csm/csm-1.2.5/tarball`.
+CSM 1.5 or newer tarball extracted somewhere on the node you are enabling it
+from. In the command example below the CSM 1.5 tarball is extracted to
+`/etc/cray/upgrade/csm/csm-1.5/tarball`.
 
 Enabling xname validation requires the reinstallation of the spire server and
 rejoining all nodes to spire. The `xnamevalidation.sh` script handles this for
@@ -25,7 +25,7 @@ these nodes then they will be unable to acquire JWTs from spire.
 ### Example Commands
 
 ```bash
-CSM_RELEASE=1.2.5
+CSM_RELEASE=1.5
 cd /etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}
 /usr/share/doc/csm/scripts/operations/xnamevalidation.sh enable
 ```
@@ -62,7 +62,7 @@ persistentvolumeclaim "spire-data-spire-server-2" deleted
   ~~~~~~\_____/~~~~~~~
 
 2022-03-29T18:15:22Z INF Ensuring that the loftsman namespace exists command=ship
-2022-03-29T18:15:22Z INF Loftsman will use the packaged charts at /etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5/helm as the Helm install source command=ship
+2022-03-29T18:15:22Z INF Loftsman will use the packaged charts at /etc/cray/upgrade/csm/csm-1.5/tarball/csm-1.5/helm as the Helm install source command=ship
 2022-03-29T18:15:22Z INF Running a release for the provided manifest at /tmp/tmp.rsDPG4zZf6/manifest.yaml command=ship
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -120,9 +120,9 @@ token(spiffe://shasta/ncn/x3000c0s2b0n0/workload/heartbeat):
 ## Disable Xname Validation
 
 In order to disable xname validation you need the docs-csm RPM installed and the
-CSM 1.2.5 or newer tarball extracted somewhere on the node you are enabling it
-from. In the command example below the CSM 1.2.5 tarball is extracted to
-`/etc/cray/upgrade/csm/csm-1.2.5/tarball`.
+CSM 1.5 or newer tarball extracted somewhere on the node you are enabling it
+from. In the command example below the CSM 1.5 tarball is extracted to
+`/etc/cray/upgrade/csm/csm-1.5/tarball`.
 
 Disabling xname validation requires the reinstallation of the spire server and
 rejoining all nodes to spire. The `xnamevalidation.sh` script handles this for
@@ -133,7 +133,7 @@ these nodes then they will be unable to acquire JWTs from spire.
 ### Example Commands
 
 ```bash
-CSM_RELEASE=1.2.5
+CSM_RELEASE=1.5
 cd /etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}
 /usr/share/doc/csm/scripts/operations/xnamevalidation.sh disable
 ```
@@ -169,7 +169,7 @@ persistentvolumeclaim "spire-data-spire-server-2" deleted
   ~~~~~~\_____/~~~~~~~
 
 2022-03-29T18:27:14Z INF Ensuring that the loftsman namespace exists command=ship
-2022-03-29T18:27:15Z INF Loftsman will use the packaged charts at /etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5/helm as the Helm install source command=ship
+2022-03-29T18:27:15Z INF Loftsman will use the packaged charts at /etc/cray/upgrade/csm/csm-1.5/tarball/csm-1.5/helm as the Helm install source command=ship
 2022-03-29T18:27:15Z INF Running a release for the provided manifest at /tmp/tmp.HbfRHgiQzP/manifest.yaml command=ship
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
