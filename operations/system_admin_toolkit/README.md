@@ -14,9 +14,13 @@
 - [Set System Revision Information](configuration/Set_System_Revision_Information.md)
 - [Configure Multi-tenancy (Optional)](configuration/Configure_Multi-tenancy_Optional.md)
 
+## [SAT on an External System](SAT_on_an_External_System.md)
+
+- [Limitations](SAT_on_an_External_System.md#limitations)
+- [Install and Configure SAT](SAT_on_an_External_System.md#install-and-configure-sat)
+
 ## [SAT Usage](usage/README.md)
 
 - [SAT Bootprep](usage/SAT_Bootprep.md)
 - [SAT and IUF](usage/SAT_and_IUF.md)
 - [Change the BOS Version](usage/Change_BOS_Version.md)
-
