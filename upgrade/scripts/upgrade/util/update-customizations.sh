@@ -158,6 +158,12 @@ if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-opera
   yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.thanos.s3_endpoint =  "{{network.dns.internal_s3 }}"' -i $c
 fi
 
+# sma-pcim
+yq4 eval '.spec.proxiedWebAppExternalHostnames.customerManagement += [ "sma-pcim.cmn.{{network.dns.external}}" ]' -i $c
+yq4 eval '.spec.kubernetes.services.sma-pcim.externalAuthority = "sma-pcim.cmn.{{ network.dns.external }}"' -i $c
+yq4 eval '.spec.kubernetes.services.sma-pcim.cray-service.containers.sma-pcim.resources.requests.cpu = "1"' -i $c
+yq4 eval '.spec.kubernetes.services.sma-pcim.cray-service.containers.sma-pcim.resources.requests.memory = "2Gi"' -i $c
+
 # cray-hms-bss (CASMPET-6786)
 if [ "$(yq4 eval '.spec.kubernetes.services.cray-hms-bss.cray-service.containers.cray-bss.env' $c)" != null ]; then
   yq4 eval 'del(.spec.kubernetes.services.cray-hms-bss.cray-service.containers.cray-bss.env[] | select(.name == "SPIRE_TOKEN_URL"))' -i $c
