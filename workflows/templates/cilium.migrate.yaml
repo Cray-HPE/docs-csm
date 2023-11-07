@@ -100,11 +100,11 @@ spec:
                 value: |
                   echo "restarting daemonsets on {{inputs.parameters.targetNcn}}"
                   NODE={{inputs.parameters.targetNcn}}
-                  kubectl get nodes --no-headers=true | awk '{print $1}' | grep -q "^${NODE}$" || { echo "ERROR: Invalid node name ${NODE}"; exit 1; }
+                  kubectl get node ${NODE} >/dev/null 2>&1 || { echo "Error: Invalid node name ${NODE}; exit 1; }
 
-                  while read -r a b; do
-                    echo "Restarting pod $b"
-                    kubectl -n $a delete pod $b
+                  while read -r ns pod; do
+                    echo "Restarting pod $pod"
+                    kubectl -n $ns delete pod $pod
                   done < <(kubectl get pods -A -o json | jq -j --arg n "$NODE" '.items[] | select (.spec.nodeName==$n) | select(.spec.hostNetwork!=true) |.metadata.namespace, " ", .metadata.name, "\n"')
         - name: uncordon 
           dependencies:
