@@ -14,10 +14,10 @@ grep 'sw-' /etc/hosts
 
 Example output:
 
-```
-10.252.0.2 sw-spine-001
-10.252.0.3 sw-spine-002
-10.252.0.4 sw-leaf-001
+```bash
+10.254.0.2 sw-spine-001
+10.254.0.3 sw-spine-002
+10.254.0.4 sw-leaf-001
 ncn-m001:~ #
 ```
 
@@ -35,7 +35,7 @@ For each switch:
 Example:
 
  ```bash
- ssh admin@sw-spine-001.nmn
+ ssh admin@sw-spine-001.hmn
  admin@sw-spine-001 password:
  write memory
  exit
@@ -53,7 +53,7 @@ On Dell and Mellanox based systems, all spine and any leaf switches will be Mell
 Mellanox Example:
 
  ```bash
- ssh admin@sw-spine-001.nmn
+ ssh admin@sw-spine-001.hmn
  admin@sw-spine-001 password:
  enable
  write memory
