@@ -105,4 +105,32 @@ spec:
                 value: |
                   echo "Waiting for cilium to start up"
                   cilium status --wait
-      
+        - name: "stash-network-policies"
+          dependencies:
+            - wait-for-cilium-status
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  kubectl get netpol -A
+                  rm -f /tmp/netpol.yaml
+                  for i in $(kubectl get netpol -A --no-headers | awk '{print $1}' | sort | uniq);do
+                    echo "--- namespace ${i} ---"
+                    # Not stashing network policies for cray-shared-kafka because they get recreated by the operator
+                    for j in $(kubectl -n ${i} get netpol --no-headers | grep -v cray-shared-kafka-network-policy | awk '{print $1}');do
+                      echo "Saving off network policy ${j}"
+                      echo "---" >> /tmp/netpol.yaml
+                      kubectl -n ${i} get netpol ${j} -o yaml >> /tmp/netpol.yaml
+                      echo "Removing network policy ${j}"
+                      kubectl -n ${i} delete netpol ${j}
+                    done
+                  done
+                  if [ -r /tmp/netpol.yaml ]; then
+                    kubectl -n argo create configmap stash-netpol --from-file=/tmp/netpol.yaml
+                  fi
+                  kubectl get netpol -A
