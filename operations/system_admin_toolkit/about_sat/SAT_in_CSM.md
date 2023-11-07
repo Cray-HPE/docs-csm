@@ -59,40 +59,8 @@ SAT included in CSM 1.6 will take precedence.
 
 Although it is uncommon to need to revert to using an older version of SAT, it is possible to do so
 using environment variables. Specifically, the environment variable `SAT_IMAGE` can be set to the
-name and tag of the `cray-sat` container image to use. The available image versions can be inspected
-in the Nexus image registry, and the images cached locally by podman can be viewed with `podman
-image list`.
+name and tag of the `cray-sat` container image to use. The available image versions in the Nexus
+registry can be inspected with `podman image search`.
 
-(`ncn-m#`) For example, to view the `cray-sat` images in Podman, execute the following command:
-
-```bash
-podman image list | awk '{OFS=":"} {if ($1 ~ /cray-sat/) { print $1,$2; }}'
-```
-
-The output will look similar to the following:
-
-```text
-registry.local/cray/cray-sat:3.21.7
-registry.local/cray/cray-sat:3.25.6
-registry.local/artifactory.algol60.net/sat-docker/stable/cray-sat:csm-latest
-```
-
-(`ncn-m#`) Set the `SAT_IMAGE` environment variable to the desired image name and tag. For example:
-
-```bash
-export SAT_IMAGE="registry.local/cray/cray-sat:3.25.6"
-```
-
-(`ncn-m#`) Execute `sat --version` to ensure the expected version is used.
-
-```bash
-sat --version
-```
-
-This should output just the semantic version, which should match the tag of the `cray-sat` image
-currently in use:
-
-```text
-3.25.6
-```
-
+For detailed instructions, see
+[Downgrade: Switch Between SAT Versions](../SAT_Uninstall_and_Downgrade.md#downgrade-switch-between-sat-versions).

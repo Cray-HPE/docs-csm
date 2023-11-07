@@ -24,3 +24,8 @@
 - [SAT Bootprep](usage/SAT_Bootprep.md)
 - [SAT and IUF](usage/SAT_and_IUF.md)
 - [Change the BOS Version](usage/Change_BOS_Version.md)
+
+## [SAT Uninstall and Downgrade](SAT_Uninstall_and_Downgrade.md)
+
+- [Uninstall: Remove a Version of SAT](SAT_Uninstall_and_Downgrade.md#uninstall-remove-a-version-of-sat)
+- [Downgrade: Switch Between SAT Versions](SAT_Uninstall_and_Downgrade.md#downgrade-switch-between-sat-versions)
