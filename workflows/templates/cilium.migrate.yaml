@@ -99,7 +99,13 @@ spec:
               - name: scriptContent
                 value: |
                   echo "restarting daemonsets on {{inputs.parameters.targetNcn}}"
-                  /srv/cray/scripts/common/restart-ds.sh {{inputs.parameters.targetNcn}}
+                  NODE={{inputs.parameters.targetNcn}}
+                  kubectl get node ${NODE} >/dev/null 2>&1 || { echo "Error: Invalid node name ${NODE}; exit 1; }
+
+                  while read -r ns pod; do
+                    echo "Restarting pod $pod"
+                    kubectl -n $ns delete pod $pod
+                  done < <(kubectl get pods -A -o json | jq -j --arg n "$NODE" '.items[] | select (.spec.nodeName==$n) | select(.spec.hostNetwork!=true) |.metadata.namespace, " ", .metadata.name, "\n"')
         - name: uncordon 
           dependencies:
             - restart-daemonsets 

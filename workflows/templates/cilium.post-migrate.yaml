@@ -35,7 +35,25 @@ spec:
           - name: dryRun
       dag:
         tasks:
+        - name: restore-network-policies
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  if kubectl -n argo get cm stash-netpol -o jsonpath='{.data.netpol\.yaml}' > /tmp/netpol-out.yaml; then
+                    kubectl apply -f /tmp/netpol-out.yaml
+                    kubectl -n argo delete cm stash-netpol
+                  fi
+                  kubectl get netpol -A
+                  rm -f /tmp/netpol-out.yaml
         - name: validate-cilium-content
+          dependencies:
+            - restore-network-policies
           templateRef:
             name: ssh-template
             template: shell-script
