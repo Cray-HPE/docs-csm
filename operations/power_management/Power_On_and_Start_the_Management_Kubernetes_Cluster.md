@@ -168,11 +168,11 @@ Verify that the Lustre file system is available from the management cluster.
 1. (`ncn-m001#`) Start the Kubernetes cluster.
 
     Note that the default timeout for Ceph to become healthy is 600 seconds, which is excessive. To work
-    around this issue, set the timeout to a more reasonable value (like 60 seconds) using the `--ceph-timeout`
+    around this issue, set the timeout to a more reasonable value (like 120 seconds) using the `--ceph-timeout`
     option, as shown below.
 
     ```bash
-    sat bootsys boot --stage platform-services --ceph-timeout 60
+    sat bootsys boot --stage platform-services --ceph-timeout 120
     ```
 
     Example output:
@@ -199,8 +199,8 @@ Verify that the Lustre file system is available from the management cluster.
 
     ```text
     Executing step: Start inactive Ceph services, unfreeze Ceph cluster and wait for Ceph health.
-    Waiting up to 60 seconds for Ceph to become healthy after unfreeze
-    Waiting for condition "Ceph cluster in healthy state" timed out after 60 seconds
+    Waiting up to 120 seconds for Ceph to become healthy after unfreeze
+    Waiting for condition "Ceph cluster in healthy state" timed out after 120 seconds
     ERROR: Fatal error in step "Start inactive Ceph services, unfreeze Ceph cluster and wait for Ceph health." of platform services start: Ceph is not healthy. Please correct Ceph health and try again.
     ```
 
