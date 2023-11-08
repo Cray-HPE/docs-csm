@@ -1,15 +1,16 @@
 # Configure Administrative Access
 
 There are several operations which configure administrative access to different parts of the system.
-Ensuring that the `cray` CLI can be used with administrative credentials enables use of many management
-services via commands. The management nodes can be locked from accidental manipulation by the
-`cray power` (or `cray capmc`) and `cray fas` commands when the intent is to work on the entire system
-except the management nodes. The `cray scsd` command can change the SSH keys, NTP server, `syslog` server,
-and BMC/controller passwords.
+Ensuring that the `cray` CLI can be used with administrative credentials enables use of many
+management services via commands. Authentication of the `sat` CLI allows the use of additional
+administrative commands. The management nodes can be locked from accidental manipulation by the
+`cray power` (or `cray capmc`) and `cray fas` commands when the intent is to work on the entire
+system except the management nodes. The `cray scsd` command can change the SSH keys, NTP server,
+`syslog` server, and BMC/controller passwords.
 
 ## Topics
 
-1. [Configure the Cray command line interface](#1-configure-the-cray-command-line-interface)
+1. [Configure the Cray and SAT command line interfaces](#1-configure-the-cray-and-sat-command-line-interfaces)
 1. [Set `Management` role on the BMCs of management nodes](#2-set-management-role-on-the-bmcs-of-management-nodes)
 1. [Lock management nodes](#3-lock-management-nodes)
 1. [Configure BMC and controller parameters with SCSD](#4-configure-bmc-and-controller-parameters-with-scsd)
@@ -21,27 +22,31 @@ and BMC/controller passwords.
 > **`NOTE`** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
 > administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
 
-## 1. Configure the Cray command line interface
+## 1. Configure the Cray and SAT command line interfaces
 
-The `cray` command line interface (CLI) is a framework created to integrate all of the system management REST
-APIs into easily usable commands.
+The `cray` command line interface (CLI) is a framework created to integrate all of the system
+management REST APIs into easily usable commands. The System Admin Toolkit (SAT) CLI, `sat`, is an
+additional CLI that automates common administrative workflows.
 
-Later procedures in the installation workflow use the `cray` command to interact with multiple services.
-The `cray` CLI configuration needs to be initialized for the Linux account. The Keycloak user who initializes the
-CLI configuration needs to be authorized for administrative actions.
+Later procedures in the installation workflow use the `cray` and `sat` commands to interact with
+multiple services. The `cray` and `sat` CLI configurations need to be initialized for the Linux
+account. The Keycloak user who initializes these CLI configurations needs to be authorized for
+administrative actions.
+
+### Cray CLI Configuration
 
 There are two options to proceed with `cray` CLI authentication:
 
 - [Automatic configuration using temporary Keycloak account](#automatic-configuration-using-temporary-keycloak-account)
 - [Manual configuration](#manual-configuration)
 
-### Automatic configuration using temporary Keycloak account
+#### Automatic configuration using temporary Keycloak account
 
 Configure all NCNs with a temporary Keycloak account for the duration of the install.
 
 See [Configure All NCNs With Temporary Keycloak User](../operations/configure_cray_cli.md#configure-all-ncns-with-temporary-keycloak-user).
 
-### Manual configuration
+#### Manual configuration
 
 Manually configure the `cray` CLI with a valid Keycloak account using the following steps:
 
@@ -57,6 +62,11 @@ Manually configure the `cray` CLI with a valid Keycloak account using the follow
 1. Initialize and authorize the `cray` CLI on each NCN being used.
 
     See [Single User Already Configured in Keycloak](../operations/configure_cray_cli.md#single-user-already-configured-in-keycloak).
+
+### SAT CLI Configuration
+
+Follow the procedures in [SAT Configuration](../operations/system_admin_toolkit/configuration/README.md)
+to configure `sat` and authenticate to the API Gateway.
 
 ## 2. Set `Management` role on the BMCs of management nodes
 
