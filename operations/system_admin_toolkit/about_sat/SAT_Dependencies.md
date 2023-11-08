@@ -7,19 +7,19 @@ product it belongs to.
 
 ## `sat auth`
 
-### CSM
+CSM dependencies:
 
 - Keycloak
 
 ## `sat bmccreds`
 
-### CSM
+CSM dependencies:
 
 - System Configuration Service (SCSD)
 
 ## `sat bootprep`
 
-### CSM
+CSM dependencies:
 
 - Boot Orchestration Service (BOS)
 - Configuration Framework Service (CFS)
@@ -30,7 +30,7 @@ product it belongs to.
 
 ## `sat bootsys`
 
-### CSM
+CSM dependencies:
 
 - Boot Orchestration Service (BOS)
 - Cray Advanced Platform Monitoring and Control (CAPMC)
@@ -41,41 +41,41 @@ product it belongs to.
 - Kubernetes
 - S3
 
-### HPE Cray Supercomputing Compute Node Software Environment
+HPE Cray Supercomputing Compute Node Software Environment dependencies:
 
 - Node Memory Dump (NMD)
 
 ## `sat diag`
 
-### CSM
+CSM dependencies:
 
 - Hardware State Manager (HSM)
 
-### CSM Diagnostics
+CSM Diagnostics dependencies:
 
 - Fox
 
 ## `sat firmware`
 
-### CSM
+CSM dependencies:
 
 - Firmware Action Service (FAS)
 
 ## `sat hwhist`
 
-### CSM
+CSM dependencies:
 
 - Hardware State Manager (HSM)
 
 ## `sat hwinv`
 
-### CSM
+CSM dependencies:
 
 - Hardware State Manager (HSM)
 
 ## `sat hwmatch`
 
-### CSM
+CSM dependencies:
 
 - Hardware State Manager (HSM)
 
@@ -85,42 +85,42 @@ None
 
 ## `sat jobstat`
 
-### PBS
+PBS dependencies:
 
 - HPE State Checker
 
 ## `sat k8s`
 
-### CSM
+CSM dependencies:
 
 - Kubernetes
 
 ## `sat nid2xname`
 
-### CSM
+CSM dependencies:
 
 - Hardware State Manager (HSM)
 
 ## `sat sensors`
 
-### CSM
+CSM dependencies:
 
 - Hardware State Manager (HSM)
 - HM Collector
 
-### SMA
+SMA dependencies:
 
 - Telemetry API
 
 ## `sat setrev`
 
-### CSM
+CSM dependencies:
 
 - S3
 
 ## `sat showrev`
 
-### CSM
+CSM dependencies:
 
 - Hardware State Manager (HSM)
 - Kubernetes
@@ -128,7 +128,7 @@ None
 
 ## `sat slscheck`
 
-### CSM
+CSM dependencies:
 
 - Hardware State Manager (HSM)
 - Kubernetes
@@ -136,13 +136,13 @@ None
 
 ## `sat status`
 
-### CSM
+CSM dependencies:
 
 - Hardware State Manager (HSM)
 
 ## `sat swap`
 
-### Slingshot
+Slingshot dependencies:
 
 - Fabric Manager
 
@@ -152,6 +152,6 @@ None
 
 ## `sat xname2nid`
 
-### CSM
+CSM dependencies:
 
 - Hardware State Manager (HSM)
