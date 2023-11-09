@@ -1,7 +1,7 @@
 # Prometheus SNMP Exporter
 
 The Prometheus SNMP Exporter is deployed by the `cray-sysmgmt-health` chart to the `sysmgmt-health` namespace as part of
-the Cray System Management \(CSM\) release.
+the [Cray System Management (CSM)](../../../glossary.md#cray-system-management-csm) release.
 
 <!-- snmp-authentication-tag -->
 <!-- When updating this information, search the docs for the snmp-authentication-tag to find related content -->
@@ -9,7 +9,8 @@ the Cray System Management \(CSM\) release.
 
 ## Adding SNMP credentials to the system
 
-Both the Prometheus SNMP Exporter and REDS hardware discovery use SNMP credentials stored in Vault. These credentials are read from
+Both the Prometheus SNMP Exporter and [River Endpoint Discovery Service (REDS)](../../../glossary.md#river-endpoint-discovery-service-reds)
+hardware discovery use SNMP credentials stored in Vault. These credentials are read from
 Vault and pushed into `customizations.yaml` as a [sealed secret](../../security_and_authentication/Manage_Sealed_Secrets.md). For
 the SNMP Exporter and REDS hardware discovery to work, three things need to have been done by an administrator:
 
@@ -25,7 +26,7 @@ the SNMP Exporter and REDS hardware discovery to work, three things need to have
       * Information about [managing Aruba switches](aruba/README.md) including [SNMPv2 community](aruba/snmp-community.md) and
         [SNMPv3](aruba/snmpv3_users.md) settings
 
-Note: While the [Cray Automated Networking Utility (CANU)](canu/README.md) will typically not overwrite SNMP settings that are
+Note: While the [CSM Automatic Network Utility (CANU)](../../../glossary.md#csm-automatic-network-utility-canu) will typically not overwrite SNMP settings that are
 manually applied to the management switches, there are certain cases where SNMP configuration can be over-written or lost (such
 as when resetting and reconfiguring a switch from factory defaults). To persist the SNMP settings, see
 [CANU Custom Configuration](canu/custom_config.md). CANU custom configuration files are used to persist site management network
@@ -45,7 +46,7 @@ network switches to scrape metrics from.
 
 > **`NOTE`** All variables used within this page depend on the `/etc/environment` setup done in [Pre-installation](../../../install/pre-installation.md).
 
-1. (`pit#`) Obtain the list of switches to use as targets using CSM Automatic Network Utility (CANU).
+1. (`pit#`) Obtain the list of switches to use as targets using CANU.
 
     ```bash
     canu init --sls-file ${PITDATA}/prep/${SYSTEM_NAME}/sls_input_file.json --out -
