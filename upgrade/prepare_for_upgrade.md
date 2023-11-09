@@ -15,8 +15,6 @@ first.
    1. [Health validation](#6-health-validation)
    1. [Stop typescript](#7-stop-typescript)
 
-- [Preparation completed](#preparation-completed)
-
 ## Reduced resiliency during upgrade
 
 **Warning:** Management service resiliency is reduced during the upgrade.
@@ -181,8 +179,3 @@ Return here after verifying that SNMP is properly configured on the management n
 ### 7. Stop typescript
 
 For any typescripts that were started during this preparation stage, stop them with the `exit` command.
-
-## Preparation completed
-
-After completing the above steps, proceed to
-[Upgrade Management Nodes and CSM Services](README.md#3-upgrade-management-nodes-and-csm-services).
