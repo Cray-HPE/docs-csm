@@ -88,6 +88,20 @@ function update_tags_in_file() {
 # Look up the latest tag for each image found and update the references in every file.
 for THIS_IMAGE in $(get_list_of_images_to_update); do
   LATEST_TAG=$(get_latest_tag_for_image $THIS_IMAGE)
+  # CASMTRIAGE-6188 retry for up to 60 seconds if LATEST_TAG is empty
+  i=1
+  while [[ -z ${LATEST_TAG} ]]; do
+    if [[ ${i} -le 6 ]]; then
+      echo "Retry getting the latest tag for image: $THIS_IMAGE"
+      sleep 10
+      LATEST_TAG=$(get_latest_tag_for_image $THIS_IMAGE)
+      i=$((i + 1))
+    else
+      echo "ERROR: unable to get the latest tag for image: $THIS_IMAGE"
+      exit 1
+    fi
+  done
+
   for FILE in $(get_filenames_referring_to_image); do
     update_tags_in_file $THIS_IMAGE $LATEST_TAG $FILE
   done
