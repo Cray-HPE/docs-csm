@@ -5,6 +5,7 @@ Glossary of terms used in CSM documentation.
 * [Ansible Execution Environment (AEE)](#ansible-execution-environment-aee)
 * [Application Node (AN)](#application-node-an)
 * [Baseboard Management Controller (BMC)](#baseboard-management-controller-bmc)
+* [Bifurcated CAN (BICAN)](#bifurcated-can-bican)
 * [Blade Switch Controller (sC)](#blade-switch-controller-sc)
 * [Boot Orchestration Service (BOS)](#boot-orchestration-service-bos)
 * [Boot Script Service (BSS)](#boot-script-service-bss)
@@ -16,6 +17,7 @@ Glossary of terms used in CSM documentation.
 * [Compute Rolling Upgrade Service (CRUS)](#compute-rolling-upgrade-service-crus)
 * [Configuration Framework Service (CFS)](#configuration-framework-service-cfs)
 * [Content Projection Service (CPS)](#content-projection-service-cps)
+* [Coolant Distribution Unit (CDU)](#coolant-distribution-unit-cdu)
 * [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control-capmc)
 * [Cray CLI (`cray`)](#cray-cli-cray)
 * [Cray Operating System (COS)](#cray-operating-system-cos)
@@ -23,6 +25,7 @@ Glossary of terms used in CSM documentation.
 * [Cray Security Token Service (STS)](#cray-security-token-service-sts)
 * [Cray Site Init (CSI)](#cray-site-init-csi)
 * [Cray System Management (CSM)](#cray-system-management-csm)
+* [CSM Automatic Network Utility (CANU)](#csm-automatic-network-utility-canu)
 * [Customer Access Network (CAN)](#customer-access-network-can)
 * [Data Virtualization Service (DVS)](#data-virtualization-service-dvs)
 * [EX Compute Cabinet](#ex-compute-cabinet)
@@ -61,14 +64,16 @@ Glossary of terms used in CSM documentation.
 * [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service)
 * [Rosetta ASIC](#rosetta-asic)
 * [Service/IO Cabinet](#serviceio-cabinet)
+* [Shasta Cabling Diagram (SHCD)](#shasta-cabling-diagram)
 * [Simple Storage Service (S3)](#simple-storage-service-s3)
 * [Slingshot](#slingshot)
 * [Slingshot Blade Switch](#slingshot-blade-switch)
+* [Slingshot Host Software (SHS)](#slingshot-host-software-shs)
 * [Slingshot Top of Rack (ToR) Switch](#slingshot-top-of-rack-switch)
-* [Shasta Cabling Diagram (SHCD)](#shasta-cabling-diagram)
 * [Supply/Return Cutoff Valves](#supply-return-cutoff-valves)
 * [System Admin Toolkit (SAT)](#system-admin-toolkit)
 * [System Configuration Service (SCSD)](#system-configuration-service-scsd)
+* [System Diagnostic Utility (SDU)](#system-diagnostic-utility-sdu)
 * [System Layout Service (SLS)](#system-layout-service)
 * [System Management Network (SMNet)](#system-management-network)
 * [System Management Services (SMS)](#system-management-services-sms)
@@ -110,6 +115,16 @@ Air-Cooled cabinet COTS servers that include a Redfish-enabled baseboard managem
 controller (BMC) and REST endpoint for API control and management. Either IPMI
 commands or REST API calls can be used to manage a BMC.
 
+## Bifurcated CAN (BICAN)
+
+Introduced in CSM 1.2, a major feature of CSM is the Bifurcated [Customer Access Network](#customer-access-network-can).
+The BICAN is designed to separate administrative network traffic from user network traffic.
+
+For more information, see:
+
+* [BICAN Technical Summary](operations/network/management_network/bican_technical_summary.md)
+* [BICAN Technical Details](operations/network/management_network/bican_technical_details.md)
+
 <a name="blade-switch-controller"></a>
 
 ## Blade Switch Controller (sC)
@@ -141,8 +156,8 @@ component. Nodes consult BSS for their boot artifacts and boot parameters when n
 
 ## Cabinet Cooling Group
 
-A cabinet cooling group is a group of [Olympus cabinets](#olympus-cabinet) that are connected to a floor-standing coolant
-distribution unit (CDU). Management network CDU switches in the CDU aggregate all the
+A cabinet cooling group is a group of [Olympus cabinets](#olympus-cabinet) that are connected to a floor-standing
+[Coolant Distribution Unit (CDU)](#coolant-distribution-unit-cdu). Management network CDU switches in the CDU aggregate all the
 [Node Management Network (NMN)](#node-management-network-nmn) and
 [Hardware Management Network (HMN)](#hardware-management-network-hmn) connections for the cabinet group.
 
@@ -151,8 +166,8 @@ distribution unit (CDU). Management network CDU switches in the CDU aggregate al
 ## Cabinet Environmental Controller (CEC)
 
 The Liquid-Cooled [Olympus Cabinet](#olympus-cabinet) Environmental Controller (CEC) sets the cabinet's geolocation,
-monitors environmental sensors, and communicates status to the cooling distribution unit
-(CDU). The [CEC microcontroller (eC)](#cec-microcontroller-ec) signals the cooling distribution unit (CDU) to start
+monitors environmental sensors, and communicates status to the [Coolant Distribution Unit (CDU)](#coolant-distribution-unit-cdu).
+The [CEC microcontroller (eC)](#cec-microcontroller-ec) signals the cooling distribution unit (CDU) to start
 liquid cooling and then enables the DC rectifiers so that a chassis can be powered on. The
 CEC does not provide a REST endpoint on [SMNet](#system-management-network-smnet), it simply provides the cabinet
 environmental and CDU status to the [CMM](#chassis-management-module-cmm) for evaluation or action; the CEC takes no
@@ -165,8 +180,8 @@ system can ride through these events without issuing an EPO.
 ## CEC microcontroller (eC)
 
 The CEC microcontroller (eC) sets the cabinet's geolocation, monitors the cabinet
-environmental sensors, and communicates cabinet status to the cooling distribution unit
-(CDU). The eC does not provide a REST endpoint on [SMNet](#system-management-network-smnet) as do other embedded
+environmental sensors, and communicates cabinet status to the [Coolant Distribution Unit (CDU)](#coolant-distribution-unit-cdu).
+The eC does not provide a REST endpoint on [SMNet](#system-management-network-smnet) as do other embedded
 controllers, but simply monitors the cabinet sensors and provides the cabinet environmental
 and CDU status to the [CMMs](#chassis-management-module-cmm) for evaluation and/or action.
 
@@ -183,8 +198,8 @@ shelf (a shelf connects two adjacent chassis - 0 and 1, 2 and 3, 4 and 5, 6 and 
 both CMMs sharing shelf power are both enabling the rectifiers, one of the CMMs can be
 removed (but only one at a time) without the rectifier shelf powering off. Removing a
 CMM will shutdown all compute blades and switches in the chassis.
-Cooling Considerations - Any single CMM in any cabinet can enable CDU cooling. Note
-that the CDU "enable path" has vertical control which means CMMs 0, 2, 4, and 6 and CEC0 are
+Cooling Considerations - Any single CMM in any cabinet can enable [Coolant Distribution Unit (CDU)](#coolant-distribution-unit-cdu)
+cooling. Note that the CDU "enable path" has vertical control which means CMMs 0, 2, 4, and 6 and CEC0 are
 in a path (half of the cabinet), and CMMs 1, 3, 5, and 7 and CEC1 are in another path. Any CMM
 or CEC in the same half-cabinet path can be removed and CDU cooling will stay enabled as
 long as the other CMMs/CEC enables CDU cooling.
@@ -237,6 +252,17 @@ in conjunction with the [Data Virtualization Service (DVS)](#data-virtualization
 Using CPS and DVS, the HPE Cray Programming Environment (CPE) and Analytics products are provided as separately mounted filesystems
 to compute nodes, application nodes (such as [UANs](#user-access-node-uan)), and worker nodes hosting [UAI](#user-access-instance-uai) pods.
 
+## Coolant Distribution Unit (CDU)
+
+See:
+
+* [Cabinet Cooling Group](#cabinet-cooling-group)
+* [Cabinet Environmental Controller (CEC)](#cabinet-environmental-controller-cec)
+* [CEC microcontroller (eC)](#cec-microcontroller-ec)
+* [Chassis Management Module (CMM)](#chassis-management-module-cmm)
+* [Floor Standing CDU](#floor-standing-cdu)
+* [Rack-Mounted CDU](#rack-mounted-cdu)
+
 <a name="cray-advanced-platform-monitoring-and-control"></a>
 
 ## Cray Advanced Platform Monitoring and Control (CAPMC)
@@ -288,6 +314,12 @@ hardware platform, manage configuration of the system, configure the network, bo
 log and telemetry data, connect API access and user level access to Identity Providers (IdPs),
 and provide a method for system administrators and end-users to access the HPE Cray EX system.
 
+## CSM Automatic Network Utility (CANU)
+
+CANU is a tool used to generate, validate, and test the network in a CSM environment.
+
+For more information see [CSM Automatic Network Utility](operations/network/management_network/canu/index.md).
+
 <a name="customer-access-network"></a>
 
 ## Customer Access Network (CAN)
@@ -301,7 +333,7 @@ and [User Access Nodes (UANs)](#user-access-node-uan) in the system. This allows
   * Access web UIs within the system (e.g. Prometheus, Grafana, and more).
   * Access the Rest APIs within the system.
   * Access a DNS server within the system for resolution of names for the webUI and REST API services.
-  * Run Cray CLI commands from outside the system.
+  * Run [Cray CLI](#cray-cli-cray) commands from outside the system.
   * Access the [User Access Instances (UAIs)](#user-access-instance-uai).
 * NCNs and UANs to access systems outside the cluster (e.g. LDAP, license servers, and more).
 * Services within the cluster to access systems outside the cluster.
@@ -309,7 +341,10 @@ and [User Access Nodes (UANs)](#user-access-node-uan) in the system. This allows
 These nodes and services need an IP address that routes to the customer's network in order to be accessed from
 outside the network.
 
-For more information, see [Customer Accessible Networks](operations/network/customer_accessible_networks/Customer_Accessible_Networks.md).
+For more information, see:
+
+* [Bifurcated CAN (BICAN)](#bifurcated-can-bican)
+* [Customer Accessible Networks](operations/network/customer_accessible_networks/Customer_Accessible_Networks.md).
 
 <a name="data-virtualization-service"></a>
 
@@ -333,7 +368,7 @@ This Liquid-Cooled [Olympus cabinet](#olympus-cabinet) is a dense compute cabine
 
 A Liquid-Cooled TDS cabinet is a dense compute cabinet that supports 2-chassis, 16
 compute blades and 16 [High Speed Network (HSN)](#high-speed-network-hsn) switches, and includes a rack-mounted
-4U coolant distribution unit (MCDU-4U).
+4U [Coolant Distribution Unit (CDU)](#coolant-distribution-unit-cdu) (MCDU-4U).
 
 ## Fabric
 
@@ -350,7 +385,7 @@ For more information, see [Update firmware with FAS](operations/firmware/Update_
 
 ## Floor Standing CDU
 
-A floor-standing coolant distribution unit (CDU) pumps liquid coolant through a cabinet
+A floor-standing [Coolant Distribution Unit (CDU)](#coolant-distribution-unit-cdu) pumps liquid coolant through a cabinet
 group or cabinet chilled doors.
 
 <a name="hardware-management-network"></a>
@@ -538,7 +573,7 @@ from it during the install is known as the PIT node.
 
 ## Rack-Mounted CDU
 
-The rack-mounted coolant distribution unit (MCDU-4U) pumps liquid coolant through the
+The rack-mounted [Coolant Distribution Unit (CDU)](#coolant-distribution-unit-cdu) (MCDU-4U) pumps liquid coolant through the
 Liquid-Cooled TDS cabinet coolant manifolds.
 
 ## Rack System Compute Cabinet
@@ -583,6 +618,20 @@ An Air-Cooled service/IO cabinet houses a cluster of [NCNs](#non-compute-node-nc
 and management network ToR switches to support the managed ecosystem storage,
 network, user access services (UAS), and other IO services such as LNet and gateways.
 
+<a name="shasta-cabling-diagram"></a>
+
+## Shasta Cabling Diagram (SHCD)
+
+The Shasta Cabling Diagram (SHCD) is a multiple tab spreadsheet prepared by HPE Cray Manufacturing
+with information about the components in an HPE Cray EX system. This document has much information
+about the system. Included in the SHCD are a configuration summary with revision history, floor layout
+plan, type and location of components in the air-cooled cabinets, type and location of components in
+the Liquid-Cooled cabinets, device diagrams for switches and nodes in the cabinets, list of source
+and destination of every [HSN](#high-speed-network-hsn) cable, list of source and destination of every cable connected to the
+spine switches, list of source and destination of every cable connected to the [NMN](#node-management-network-nmn), list of source
+and destination of every cable connected to the [HMN](#hardware-management-network-hmn). list of cabling for the KVM, and routing of power to the
+[PDUs](#power-distribution-unit-pdu).
+
 ## Simple Storage Service (S3)
 
 CSM uses S3 to store a variety of data and artifacts.
@@ -606,6 +655,17 @@ networks.
 * Lossy and lossless delivery
 * Flow control, 802.1x (PAUSE), 802.1p (PFC), credit-based flow control on fabric links, fine-grain flow control on host links and edge ports, link-level retry, low latency FEC, Ethernet physical interfaces.
 
+See also:
+
+* [Blade Switch Controller (sC)](#blade-switch-controller-sc)
+* [Fabric](#fabric)
+* [High Speed Network (HSN)](#high-speed-network-hsn)
+* [Rosetta ASIC](#rosetta-asic)
+* [Slingshot Blade Switch](#slingshot-blade-switch)
+* [Slingshot Host Software (SHS)](#slingshot-host-software-shs)
+* [Slingshot Top of Rack (ToR) Switch](#slingshot-top-of-rack-tor-switch)
+* [Virtual Network Identifier Daemon (VNID)](#virtual-network-identifier-daemon-vnid)
+
 ## Slingshot Blade Switch
 
 The Liquid-Cooled [Olympus cabinet](#olympus-cabinet) blade switch supports one switch ASIC and 48 fabric ports. Eight
@@ -617,6 +677,10 @@ switches. The front-panel top ports support passive electrical cables (PEC) or a
 cables (AOC). The front-panel bottom ports support only PECs for proper cooling in the
 blade enclosure.
 
+## Slingshot Host Software (SHS)
+
+Slingshot Host Software is a Cray product that may be installed on CSM systems to support [Slingshot](#slingshot).
+
 <a name="slingshot-top-of-rack-switch"></a>
 
 ## Slingshot Top of Rack (ToR) Switch
@@ -625,20 +689,6 @@ A standard [River cabinet](#river-cabinet) can support one, two, or four, rack-m
 Each switch supports a total of 64 fabric ports. 32 QSFP-DD connectors on the front panel
 connect 64 ports to the fabric. All front-panel connectors support either passive electrical
 cables (PEC) or active optical cables (AOC).
-
-<a name="shasta-cabling-diagram"></a>
-
-## Shasta Cabling Diagram (SHCD)
-
-The Shasta Cabling Diagram (SHCD) is a multiple tab spreadsheet prepared by HPE Cray Manufacturing
-with information about the components in an HPE Cray EX system. This document has much information
-about the system. Included in the SHCD are a configuration summary with revision history, floor layout
-plan, type and location of components in the air-cooled cabinets, type and location of components in
-the Liquid-Cooled cabinets, device diagrams for switches and nodes in the cabinets, list of source
-and destination of every [HSN](#high-speed-network-hsn) cable, list of source and destination of every cable connected to the
-spine switches, list of source and destination of every cable connected to the [NMN](#node-management-network-nmn), list of source
-and destination of every cable connected to the [HMN](#hardware-management-network-hmn). list of cabling for the KVM, and routing of power to the
-[PDUs](#power-distribution-unit-pdu).
 
 <a name="supply-return-cutoff-valves"></a>
 
@@ -660,6 +710,10 @@ The System Admin Toolkit (SAT) product provides the `sat` command line interface
 The System Configuration Service (SCSD) allows administrators to set various [BMC](#baseboard-management-controller-bmc) and
 controller parameters. These parameters are typically set during discovery, but this tool enables parameters to be set before or
 after discovery.
+
+## System Diagnostic Utility (SDU)
+
+The System Diagnostic Utility is a Cray product that may be installed on CSM systems to provide diagnostic tools.
 
 <a name="system-layout-service"></a>
 
@@ -751,10 +805,10 @@ The Virtual Network Identifier Daemon is part of the Cray Slingshot product that
 ## xname
 
 Component names (xnames) identify the geolocation for hardware components in the HPE Cray EX system. Every
-component is uniquely identified by these component names. Some, like the system cabinet number or the CDU
-number, can be changed by site needs. There is no geolocation encoded within the cabinet number, such as an
-X-Y coordinate system to relate to the floor layout of the cabinets. Other component names refer to the location
-within a cabinet and go down to the port on a card or switch or the socket holding a processor or a memory DIMM
-location.
+component is uniquely identified by these component names. Some, like the system cabinet number or the
+[Coolant Distribution Unit (CDU)](#coolant-distribution-unit-cdu) number, can be changed by site needs. There
+is no geolocation encoded within the cabinet number, such as an X-Y coordinate system to relate to the floor
+layout of the cabinets. Other component names refer to the location within a cabinet and go down to the port
+on a card or switch or the socket holding a processor or a memory DIMM location.
 
 For more information, see [Component Names (xnames)](operations/Component_Names_xnames.md).

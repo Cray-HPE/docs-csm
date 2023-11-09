@@ -1,7 +1,7 @@
 # Prometheus SNMP Exporter
 
 The Prometheus SNMP Exporter is deployed by the `cray-sysmgmt-health` chart to the `sysmgmt-health` namespace as part of
-the Cray System Management \(CSM\) release.
+the [Cray System Management (CSM)](../../../glossary.md#cray-system-management-csm) release.
 
 ## Configuration
 
@@ -12,7 +12,7 @@ This procedure assumes that this is being done as part of a CSM install as part 
 Specifically, it assumes that the `SYSTEM_NAME` and `PITDATA` variables are set, and that the `PITDATA` mount is
 in place.
 
-1. Obtain the list of switches to use as targets using CSM Automatic Network Utility (CANU).
+1. Obtain the list of switches to use as targets using [CSM Automatic Network Utility (CANU)](../../../glossary.md#csm-automatic-network-utility-canu).
 
     ```bash
     linux# canu init --sls-file ${PITDATA}/prep/${SYSTEM_NAME}/sls_input_file.json --out -
