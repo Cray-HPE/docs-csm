@@ -11,13 +11,13 @@ order.
 
 After completing an installation, the CSM product's installed state will need to be validated
 with various health checks before operational tasks or other product installs (such as
-Slingshot) can commence.
+[Slingshot](../glossary.md#slingshot)) can commence.
 
-Introduced in CSM 1.2, a major feature of CSM is the Bifurcated CAN (BICAN).
+Introduced in CSM 1.2, a major feature of CSM is the [Bifurcated CAN (BICAN)](../glossary.md#bifurcated-can-bican).
 The BICAN is designed to separate administrative network traffic from user network traffic.
-More information can be found on the [BICAN summary page](../operations/network/management_network/bican_technical_summary.md).
+More information can be found on the [BICAN Technical Summary](../operations/network/management_network/bican_technical_summary.md).
 Review the BICAN summary before continuing with the CSM install.
-For detailed BICAN documentation, see [BICAN technical details](../operations/network/management_network/bican_technical_details.md).
+For detailed BICAN documentation, see [BICAN Technical Details](../operations/network/management_network/bican_technical_details.md).
 
 ## Topics
 
@@ -96,7 +96,8 @@ See [Management Network User Guide](../operations/network/management_network/REA
 
 ## 1. Deploy management nodes
 
-The first nodes to deploy are the NCNs. These will host CSM services that are required for deploying the rest of the supercomputer.
+The first nodes to deploy are the [management nodes](../glossary.md#management-nodes).
+These [Non-Compute Nodes (NCNs)](../glossary.md#non-compute-node-ncn) will host CSM services that are required for deploying the rest of the supercomputer.
 
 See [Deploy Management Nodes](deploy_non-compute_nodes.md).
 
@@ -123,21 +124,25 @@ See [Validate CSM Health](../operations/validate_csm_health.md).
 
 ### 4. Deploy final NCN
 
-Now that all CSM services have been installed and the CSM health checks completed, with the possible exception
-of Booting the CSM Barebones Image and the UAS/UAI tests, the PIT has served its purpose and the final NCN can
-be deployed. The node used for the PIT will be rebooted, this node will be the final NCN to deploy in the CSM
-install.
+Now that all CSM services have been installed and the CSM health checks completed, with the possible exception of the
+[User Access Service (UAS)](../glossary.md#user-access-service-uas)/[User Access Instance (UAI)](../glossary.md#user-access-instance-uai) tests,
+the PIT has served its purpose and the final NCN can be deployed. The node used for the PIT will be rebooted, this node will be the final NCN to deploy
+in the CSM install.
 
 See [Deploy Final NCN](deploy_final_non-compute_node.md).
 
 ### 5. Configure administrative access
 
-Now that all of the CSM services have been installed and the final NCN has been deployed, administrative access
-can be prepared. This may include configuring Keycloak with a local Keycloak account or confirming that Keycloak
-is properly federating LDAP or another Identity Provider (IdP), initializing the `cray` CLI for administrative
-commands, locking the management nodes from accidental actions such as firmware updates by FAS or power actions by
-CAPMC, configuring the CSM layer of configuration by CFS in NCN personalization, and configuring the node BMCs (node
-controllers) for nodes in liquid-cooled cabinets.
+Now that all of the CSM services have been installed and the final NCN has been deployed, administrative access can be prepared.
+This may include:
+
+- Configuring Keycloak with a local Keycloak account or confirming that Keycloak is properly federating LDAP or another Identity Provider (IdP)
+- Initializing the [Cray CLI (`cray`)](../glossary.md#cray-cli-cray) for administrative commands
+- Locking the management nodes from accidental actions such as firmware updates by [Firmware Action Service (FAS)](../glossary.md#firmware-action-service-fas)
+  or power actions by [Cray Advanced Platform Monitoring and Control (CAPMC)](../glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
+- Configuring the CSM layer of configuration by [Configuration Framework Service (CFS)](../glossary.md#configuration-framework-service-cfs) in NCN personalization
+- Configuring the node [BMCs](../glossary.md#baseboard-management-controller-bmc) ([node controllers](../glossary.md#node-controller-nc))
+  for nodes in liquid-cooled cabinets
 
 See [Configure Administrative Access](configure_administrative_access.md).
 
@@ -149,13 +154,12 @@ See [Configure Administrative Access](configure_administrative_access.md).
 Now that all management nodes have joined the Kubernetes cluster, Ceph should be upgraded local registries on storage nodes
 should be stopped.
 
-See [Upgrade Ceph and stop local docker registries](./upgrade_ceph_stop_local_registries.md).
+See [Upgrade Ceph and stop local docker registries](upgrade_ceph_stop_local_registries.md).
 
 ### 7. Validate CSM health
 
-Now that all management nodes have joined the Kubernetes cluster, CSM services have been installed,
-and administrative access has been enabled, the health of the management nodes and all CSM services
-should be validated. There are no exceptions to running the tests--all can be run now.
+Now that all management nodes have joined the Kubernetes cluster, CSM services have been installed, and administrative access has been enabled, the health of the
+management nodes and all CSM services should be validated. There are no exceptions to running the tests -- all tests should be run now.
 
 This CSM health validation can also be run at other points during the system lifecycle, such as when replacing
 a management node, checking the health after a management node has rebooted because of a crash, as part of doing
@@ -165,11 +169,11 @@ See [Validate CSM Health](../operations/validate_csm_health.md).
 
 ### 8. Configure Prometheus alert notifications
 
-Now that CSM has been installed and health has been validated, if the system management health monitoring tools (specifically
-Prometheus) are found to be useful, then email notifications can be configured for specific alerts defined in Prometheus.
+Now that CSM has been installed and health has been validated, if the system management health monitoring tools (specifically Prometheus) are found to be useful, then
+email notifications can be configured for specific alerts defined in Prometheus.
 Prometheus upstream documentation can be leveraged for an [Alert Notification Template Reference](https://prometheus.io/docs/alerting/latest/notifications/)
-as well as [Notification Template Examples](https://prometheus.io/docs/alerting/latest/notification_examples/). Currently supported notification
-types include Slack, Pager Duty, email, or a custom integration via a generic webhook interface.
+as well as [Notification Template Examples](https://prometheus.io/docs/alerting/latest/notification_examples/).
+Currently supported notification types include Slack, Pager Duty, email, or a custom integration via a generic webhook interface.
 
 See [Configure Prometheus Email Alert Notifications](../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md) for an example
 configuration of an email alert notification for the Postgres replication alerts that are defined on the system.
@@ -181,6 +185,7 @@ configuration of an email alert notification for the Postgres replication alerts
 > [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
 > on the HPE Customer Support Center for more information about how to install
 > the HPE Cray EX HPC Firmware Pack (HFP) product.
+
 The Olympus hardware needs to have recovery firmware loaded to the `cray-tftp` server in case the BMC loses its firmware.
 The BMCs are configured to load a recovery firmware from a TFTP server.
 This procedure does not modify any BMC firmware, but only stages the firmware on the TFTP server for download in the event it is needed.
