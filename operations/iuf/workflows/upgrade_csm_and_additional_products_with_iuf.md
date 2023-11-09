@@ -10,16 +10,18 @@ when CSM itself is not being upgraded. See
 
 This procedure streamlines the rollout of new images to management nodes. These images are based
 on the new images provided by the CSM product and customized by the additional HPE Cray EX software
-products, including the Cray Operating System (COS) and Slingshot Host Software (SHS).
+products, including the [Cray Operating System (COS)](../../../glossary.md#cray-operating-system-cos)
+and [Slingshot Host Software (SHS)](../../../glossary.md#slingshot-host-software-shs).
 
 The steps in this procedure alternate between CSM upgrade instructions that do not utilize the IUF
 and instructions for upgrading additional HPE Cray EX software products whose installation is
 managed by the IUF.
 
 All stages of `iuf` are executed in this procedure. All of the new product software provided in the
-recipe release is deployed and all management NCNs and managed compute and application nodes are
-rebooted to new images and CFS configurations. Manual operations are documented for procedures that
-are not currently managed by IUF.
+recipe release is deployed and all [management NCNs](../../../glossary.md#management-nodes) and managed
+[compute nodes](../../../glossary.md#compute-node-cn) and [application nodes](../../../glossary.md#application-node-an) are
+rebooted to new images and [Configuration Framework Service (CFS)](../../../glossary.md#configuration-framework-service-cfs)
+configurations. Manual operations are documented for procedures that are not currently managed by IUF.
 
 The upgrade workflow comprises the following procedures. The diagram shows the workflow and
 the steps below it provide detailed instructions which must be executed in the order shown.
@@ -27,8 +29,9 @@ the steps below it provide detailed instructions which must be executed in the o
 ![Upgrade CSM and additional products with IUF](../../../img/operations/diagram_csm_stack_upgrade_15_04142023.png)
 
 1. CSM preparation, Stage 0.1, and Stage 0.2
+
    Read the _Important Notes_ section of the
-   [CSM 1.4.0 or later to 1.5.0 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
+   [CSM 1.5.0 or later to 1.6.0 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
    documentation and then follow only these CSM instructions in order:
 
    1. [Prepare for Upgrade](../../../upgrade/prepare_for_upgrade.md)
@@ -38,35 +41,35 @@ the steps below it provide detailed instructions which must be executed in the o
 1. Prepare for the upgrade procedure and download product media
 
    1. Follow the IUF [Prepare for the install or upgrade](preparation.md) instructions to set
-      environment variables used during the upgrade process
+      environment variables used during the upgrade process.
 
-   1. Download the desired HPE product media defined by the HPC CSM Software Recipe to `${MEDIA_DIR}`, which was defined in the previous step
+   1. Download the desired HPE product media defined by the HPC CSM Software Recipe to `${MEDIA_DIR}`, which was defined in the previous step.
 
 1. Product delivery
 
-   Follow the IUF [Product delivery](product_delivery.md) instructions
+   Follow the IUF [Product delivery](product_delivery.md) instructions.
 
 1. Configuration
 
-   Follow the IUF [Configuration](configuration.md) instructions
+   Follow the IUF [Configuration](configuration.md) instructions.
 
 1. Image preparation
 
-   Follow the IUF [Image preparation](image_preparation.md) instructions
+   Follow the IUF [Image preparation](image_preparation.md) instructions.
 
 1. CSM Stage 0.4
 
    Follow the CSM
    [Stage 0.4 - Backup workload manager data](../../../upgrade/Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data)
-   instructions
+   instructions.
 
 1. Backup
 
-   Follow the IUF [Backup](backup.md) instructions
+   Follow the IUF [Backup](backup.md) instructions.
 
 1. Management rollout
 
-   Follow the IUF [Management rollout](management_rollout.md) instructions
+   Follow the IUF [Management rollout](management_rollout.md) instructions.
 
 1. CSM Stage 3 and CSM health validation
 
@@ -84,7 +87,7 @@ the steps below it provide detailed instructions which must be executed in the o
 
 1. Managed rollout
 
-   Follow the IUF [Managed rollout](managed_rollout.md) instructions
+   Follow the IUF [Managed rollout](managed_rollout.md) instructions.
 
 The IUF upgrade workflow is now complete. Exit any typescript sessions created during the upgrade
 procedure and remove any installation artifacts, if desired.

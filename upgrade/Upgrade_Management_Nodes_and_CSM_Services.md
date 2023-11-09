@@ -1,8 +1,8 @@
-# CSM 1.4.0 or later to 1.5.0 Upgrade Process
+# CSM 1.5.0 or later to 1.6 Upgrade Process
 
 ## Introduction
 
-This document guides an administrator through the upgrade of Cray Systems Management from version 1.4 or later to version 1.5. When upgrading a system, follow this top-level file
+This document guides an administrator through the upgrade of Cray Systems Management from version 1.5 or later to version 1.6. When upgrading a system, follow this top-level file
 from top to bottom. The content on this top-level page is meant to be terse. For additional reference material on the upgrade processes and scripts
 mentioned explicitly on this page, see [resource material](resource_material/README.md).
 
