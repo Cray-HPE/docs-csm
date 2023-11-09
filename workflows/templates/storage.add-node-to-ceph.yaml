@@ -242,3 +242,43 @@ spec:
                   TARGET_NCN="{{inputs.parameters.targetNcn}}"
                   scp ./${TARGET_NCN}-ceph.tgz $TARGET_NCN:/
                   ssh ${TARGET_NCN} 'cd /; tar -xvf ./$(hostname)-ceph.tgz; rm /$(hostname)-ceph.tgz'
+                  # check that files are correctly on TARGET_NCN
+                  ceph_files=$(ssh ${TARGET_NCN} 'ls /etc/ceph')
+                  if [[ -z $(echo ${ceph_files} | grep 'rgw.pem') ]] || [[ -z $(echo ${ceph_files} | grep 'ceph.client.ro.keyring') ]]; then
+                    # ceph files are missing, try recopying the tar file over
+                    scp ./${TARGET_NCN}-ceph.tgz $TARGET_NCN:/
+                    ssh ${TARGET_NCN} 'cd /; tar -xvf ./$(hostname)-ceph.tgz; rm /$(hostname)-ceph.tgz'
+                  else
+                    # ceph files are there so exit
+                    exit 0
+                  fi
+                  # check that files are correctly on TARGET_NCN
+                  ceph_files=$(ssh ${TARGET_NCN} 'ls /etc/ceph')
+                  if [[ -z $(echo ${ceph_files} | grep 'rgw.pem') ]] || [[ -z $(echo ${ceph_files} | grep 'ceph.client.ro.keyring') ]]; then
+                    # ceph files are missing, copy files from another node
+                    echo "WARN unable to untar ${TARGET_NCN}-ceph.tgz on ${TARGET_NCN}. Copying neccessary Ceph files from another node instead of getting them from tar file."
+                    for node in ncn-s001 ncn-s002 ncn-s003; do
+                      if [[ "$TARGET_NCN" == "$node" ]]; then
+                        continue
+                      else
+                        if [[ "$TARGET_NCN" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]
+                        then
+                          scp $node:/etc/ceph/\{rgw.pem,ceph.conf,ceph_conf_min,ceph.client.ro.keyring,ceph.client.admin.keyring\} ${TARGET_NCN}:/etc/ceph
+                        else
+                          scp $node:/etc/ceph/\{rgw.pem,ceph.conf,ceph_conf_min,ceph.client.ro.keyring\}  ${TARGET_NCN}:/etc/ceph/
+                        fi
+                        break
+                      fi
+                    done
+                  else
+                    # ceph files are there so exit
+                    exit 0
+                  fi
+                  ceph_files=$(ssh ${TARGET_NCN} 'ls /etc/ceph')
+                  if [[ -z $(echo ${ceph_files} | grep 'rgw.pem') ]] || [[ -z $(echo ${ceph_files} | grep 'ceph.client.ro.keyring') ]]; then
+                    echo "ERROR neccessary Ceph files were not copied to ${TARGET_NCN}. Manually try to populate ${TARGET_NCN}:/etc/ceph with the same files seen in /etc/ceph other storage nodes."
+                    exit 1
+                  else
+                    echo "INFO /etc/ceph files were successfully copied to ${TARGET_NCN} from another storage node."
+                    exit 0
+                  fi
