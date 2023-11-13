@@ -142,19 +142,21 @@ spec:
                         manifest_files=$(ls "${MANIFEST_PATH}"/*.yml "${MANIFEST_PATH}"/*.yaml 2>/dev/null) || true
                         for manifest in $manifest_files; do
                           deploy_output=$(deploy_manifest ${manifest} $PRODUCT_NAME)
-                          if [[ $? != 0 ]]; then
-                            deploy_output=$(echo "$deploy_output" | sed -e 's/^/DEBUG /')
+                          deploy_result=$?
+                          echo "DEBUG $deploy_output"
+                          if [[ $deploy_result -ne 0 ]]; then
                             echo "ERROR Unable to deploy manifest $manifest for product $PRODUCT_NAME"
-                            echo -e "DEBUG Loftsman manifest deployment failed with\n\n$deploy_output"
+                            echo "ERROR Loftsman manifest deployment failed"
                             err=1
                           fi
                         done
                       else
                         deploy_output=$(deploy_manifest $MANIFEST_PATH $PRODUCT_NAME)
-                        if [[ $? != 0 ]]; then
-                          deploy_output=$(echo "$deploy_output" | sed -e 's/^/DEBUG /')
+                        deploy_result=$?
+                        echo "DEBUG $deploy_output"
+                        if [[ $deploy_result -ne 0 ]]; then
                           echo "ERROR Unable to deploy manifest $MANIFEST_PATH for product $PRODUCT_NAME"
-                          echo -e "DEBUG Loftsman manifest deployment failed with\n\n$deploy_output"
+                          echo "ERROR Loftsman manifest deployment failed"
                           err=1
                         fi
                       fi
