@@ -95,8 +95,11 @@ function err_report() {
   echo "${cmd}"
 
   # restore previous ssh config if there was one, remove ours
-  rm -f /root/.ssh/config
-  test -f /root/.ssh/config.bak && mv /root/.ssh/config.bak /root/.ssh/config
+  # only do this if called by prerequisites.
+  if [[ -n $(echo "${caller}" | grep 'prerequisites.sh') ]]; then
+    rm -f /root/.ssh/config
+    test -f /root/.ssh/config.bak && mv /root/.ssh/config.bak /root/.ssh/config
+  fi
 
   # ignore some internal expected errors
   local ignoreCmd="cray artifacts list config-data"
