@@ -329,18 +329,19 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Set new ssh config, this should be done everytime the script is run
+# This is reversed at the end of the script and also reversed in err_report function
+test -f /root/.ssh/config && mv /root/.ssh/config /root/.ssh/config.bak
+cat << EOF > /root/.ssh/config
+Host *
+    StrictHostKeyChecking no
+EOF
+
 state_name="UPDATE_SSH_KEYS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
-
-    test -f /root/.ssh/config && mv /root/.ssh/config /root/.ssh/config.bak
-    cat << EOF > /root/.ssh/config
-Host *
-    StrictHostKeyChecking no
-EOF
-
     grep -oP "(ncn-\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
 
     grep -oP "(ncn-\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
