@@ -30,3 +30,51 @@ The "Branch Workflow" diagram is an example workflow that can be used to manage 
 require any specific branching strategy. Users are free to manage the branches as they see fit with the exception of the pristine branches imported by individual HPE Cray
 products. CFS configuration layers \(see [Configuration Layers](Configuration_Layers.md)\) only require a Git commit ID, a Git repository clone URL, and the path to an
 Ansible playbook to run the configuration content in the repository.
+
+## Resolving VCS merge conflicts
+
+If the `update-vcs-config` stage of IUF fails due to git merge conflicts, they must be resolved manually. To do so, follow these steps:
+
+1. (`ncn-mw#`) Get the VCS username and password for git operations.
+
+    ```bash
+    echo $(kubectl get secret -n services vcs-user-credentials \
+        --template={{.data.vcs_username}} | base64 -d)
+    echo $(kubectl get secret -n services vcs-user-credentials \
+        --template={{.data.vcs_password}} | base64 -d)
+    ```
+
+1. (`ncn-mw#`) Clone the VCS repository. This example uses the COS repo, but this procedure can be applied for any VCS repo.
+
+    ```bash
+    git clone https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git
+    cd cos-config-management
+    ```
+
+1. (`ncn-mw#`) Get the name of the previous integration branch, new integration branch, and pristine branch (e.g. `integration-2.4.109`, `integration-2.4.118`, `origin/cray/cos/2.5.132`).
+    Use `git branch -r` to list the available branches.
+
+    ```bash
+    git branch -r
+    ```
+
+1. (`ncn-mw#`) Create the new integration branch from the previous integration branch and merge the pristine branch.
+
+    ```bash
+    git checkout <previous integration branch>
+    git branch <new integration branch>
+    git checkout <new integration branch>
+    git merge <pristine branch>
+    ```
+
+1. (`ncn-mw#`) Resolve the merge conflicts.
+
+1. (`ncn-mw#`) Commit the merge and push the results:
+
+    ```bash
+    git add .
+    git commit
+    git push origin <new integration branch>
+    ```
+
+1. (`ncn-mw#`) If the merge conflict occurred during an IUF run, re-run the IUF update-vcs-config stage.
