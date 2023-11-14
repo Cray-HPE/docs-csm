@@ -5,28 +5,47 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 first.
 
 - [Reduced resiliency during upgrade](#reduced-resiliency-during-upgrade)
-- [Export Nexus data](#export-nexus-data)
-- [Adding switch admin password to Vault](#adding-switch-admin-password-to-vault)
-- [Ensure SNMP is configured on the management network switches](#ensure-snmp-is-configured-on-the-management-network-switches)
-- [Start typescript](#start-typescript)
-- [Running sessions](#running-sessions)
-- [Health validation](#health-validation)
-- [Stop typescript](#stop-typescript)
-- [Preparation completed](#preparation-completed)
+- [Preparation steps]
+
+   1. [Start typescript](#1-start-typescript)
+   1. [Export Nexus data](#2-export-nexus-data)
+   1. [Adding switch admin password to Vault](#3-adding-switch-admin-password-to-vault)
+   1. [Ensure SNMP is configured on the management network switches](#4-ensure-snmp-is-configured-on-the-management-network-switches)
+   1. [Running sessions](#5-running-sessions)
+   1. [Health validation](#6-health-validation)
+   1. [Stop typescript](#7-stop-typescript)
 
 ## Reduced resiliency during upgrade
 
 **Warning:** Management service resiliency is reduced during the upgrade.
 
-Although it is expected that compute nodes and application nodes will continue to provide their
+Although it is expected that [compute nodes](../glossary.md#compute-node-cn) and
+[application nodes](../glossary.md#application-node-an) will continue to provide their
 services without interruption, it is important to be aware that the degree of management services
-resiliency is reduced during the upgrade. If, while one node is being upgraded, another node of the
-same type has an unplanned fault that removes it from service, there may be a degraded system. For
+resiliency is reduced during the upgrade. While one node is being upgraded, if another node of the
+same type has an unplanned fault that removes it from service, then this may result in a degraded system. For
 example, if there are three Kubernetes master nodes and one is being upgraded, the quorum is
 maintained by the remaining two nodes. If one of those two nodes has a fault before the third node
 completes its upgrade, then quorum would be lost.
 
-## Export Nexus data
+## Preparation steps
+
+### 1. Start typescript
+
+1. (`ncn-m001#`) If a typescript session is already running in the shell, then first stop it with
+   the `exit` command.
+
+1. (`ncn-m001#`) Start a typescript.
+
+   ```bash
+   script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).prepare_for_upgrade.txt
+   export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   ```
+
+If additional shells are opened during this procedure, then record those with typescripts as well.
+When resuming a procedure after a break, always be sure that a typescript is running before proceeding.
+
+### 2. Export Nexus data
 
 **Warning:** This process can take multiple hours where Nexus is unavailable and should be done
 during scheduled maintenance periods.
@@ -38,7 +57,7 @@ If there is no maintenance period available, then skip this step until after the
 Reference [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md)
 for details.
 
-## Adding switch admin password to Vault
+### 3. Adding switch admin password to Vault
 
 If CSM has been installed and Vault is running, add the switch credentials into Vault. Certain
 tests (for example, `goss-switch-bgp-neighbor-aruba-or-mellanox`) use these credentials to test the
@@ -63,20 +82,22 @@ credentials being in Vault will fail until they are added.
    vault kv put secret/net-creds/switch_admin admin=$SW_ADMIN_PASSWORD
    ```
 
-## Ensure SNMP is configured on the management network switches
+### 4. Ensure SNMP is configured on the management network switches
 <!-- snmp-authentication-tag -->
 <!-- When updating this information, search the docs for the snmp-authentication-tag to find related content -->
 <!-- These comments can be removed once we adopt HTTP/lw-dita/Generated docs with re-usable snippets -->
 
-To ensure proper operation of the REDS hardware discovery process, PCS/RTS management switch availability monitoring,
-and the Prometheus SNMP Exporter, validate the following:
+To ensure proper operation of the [River Endpoint Discovery Service (REDS)](../glossary.md#river-endpoint-discovery-service-reds) hardware discovery process,
+[Power Control Service (PCS)](../glossary.md#power-control-service-pcs)/[Redfish Translation Service (RTS)](../glossary.md#redfish-translation-service-rts)
+management switch availability monitoring, and the Prometheus SNMP Exporter, validate the following:
 
 - SNMP is enabled on the management network switches.
 - The SNMP credentials on the switches match the credentials stored in all of the following locations:
   - Vault
   - `customizations.yaml` (stored as a sealed secret)
   - [SNMP custom configuration](../operations/network/management_network/canu/custom_config.md), if applicable. If a
-    custom configuration was used with CANU when generating the management network switch configurations, also check that
+    custom configuration was used with the [CSM Automatic Network Utility (CANU)](../glossary.md#csm-automatic-network-utility-canu)
+    when generating the management network switch configurations, also check that
     the credentials in this custom configuration match.
 
 These checks help avoid failure scenarios that can impact the ability to add new hardware to the system.
@@ -99,29 +120,18 @@ contains the following relevant information:
 
 Return here after verifying that SNMP is properly configured on the management network switches.
 
-## Start typescript
+### 5. Running sessions
 
-1. (`ncn-m001#`) If a typescript session is already running in the shell, then first stop it with
-   the `exit` command.
-
-1. (`ncn-m001#`) Start a typescript.
-
-   ```bash
-   script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).prepare_for_upgrade.txt
-   export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
-   ```
-
-If additional shells are opened during this procedure, then record those with typescripts as well.
-When resuming a procedure after a break, always be sure that a typescript is running before proceeding.
-
-## Running sessions
-
-BOS, CFS, FAS, and NMD sessions should not be started or underway during the CSM upgrade process.
+[Boot Orchestration Service (BOS)](../glossary.md#boot-orchestration-service-bos),
+[Configuration Framework Service (CFS)](../glossary.md#configuration-framework-service-cfs),
+[Compute Rolling Upgrade Service (CRUS)](../glossary.md#compute-rolling-upgrade-service-crus),
+[Firmware Action Service (FAS)](../glossary.md#firmware-action-service-fas), and
+[Node Memory Dump (NMD)](../glossary.md#node-memory-dump-nmd) sessions should not be started or underway during the CSM upgrade process.
 
 1. (`ncn-m001#`) Ensure that these services do not have any sessions in progress.
 
-   > This SAT command has `shutdown` as one of the command line options, but it will not start a
-   > shutdown process on the system.
+   > This [System Admin Toolkit (SAT)](../glossary.md#system-admin-toolkit-sat) command has `shutdown` as one of the command line options,
+   > but it will **not** start a shutdown process on the system.
 
    ```bash
    sat bootsys shutdown --stage session-checks
@@ -149,12 +159,13 @@ BOS, CFS, FAS, and NMD sessions should not be started or underway during the CSM
    There is currently no method to prevent new sessions from being created as long as the service
    APIs are accessible on the API gateway.
 
-## Health validation
+### 6. Health validation
 
 1. Validate CSM health.
 
    Run the CSM health checks to ensure that everything is working properly before the upgrade
-   starts.
+   starts. After the upgrade is completed, another health check is performed, and it is important to know
+   if any problems observed at that time existed prior to the upgrade.
 
    **`IMPORTANT`**: See the `CSM Install Validation and Health Checks` procedures in the
    documentation for the **`CURRENT`** CSM version on the system. The validation procedures in the CSM
@@ -165,11 +176,6 @@ BOS, CFS, FAS, and NMD sessions should not be started or underway during the CSM
    If a Lustre file system is being used, then see the ClusterStor documentation for details on how
    to validate Lustre health.
 
-## Stop typescript
+### 7. Stop typescript
 
 For any typescripts that were started during this preparation stage, stop them with the `exit` command.
-
-## Preparation completed
-
-After completing the above steps, proceed to
-[Upgrade Management Nodes and CSM Services](Upgrade_Only_CSM.md#2-upgrade-management-nodes-and-csm-services).

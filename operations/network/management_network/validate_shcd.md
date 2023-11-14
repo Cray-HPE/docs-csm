@@ -1,6 +1,8 @@
 # Validate the SHCD
 
-Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validation is required to ensure Plan-of-Record network configurations are generated. This is an iterative process to create a model of the entire network topology connection by connection.
+Use the [CSM Automatic Network Utility (CANU)](../../../glossary.md#csm-automatic-network-utility-canu) to validate the
+[Shasta Cabling Diagram (SHCD)](../../../glossary.md#shasta-cabling-diagram-shcd). SHCD validation is required to ensure that Plan of Record (PoR)
+network configurations are generated. This is an iterative process to create a model of the entire network topology connection by connection.
 
 ## Topics
 
@@ -31,7 +33,8 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
    In this example above, the `10G_25G_40G_100G` worksheet has the upper left and lower right corners of `I37` and `T107` respectively.
    Note, the above screenshot is trimmed and only the first full 68 rows are shown.
 
-1. (`pit#`) Generate the HMN paddle file (by default this runs in interactive mode to select the tabs and corners).
+1. (`pit#`) Generate the [HMN](../../../glossary.md#hardware-management-network-hmn) paddle file (by default this runs in
+   interactive mode to select the tabs and corners).
 
    > **`NOTE`**
    > `-a` defines the architecture, this will be:
@@ -120,7 +123,7 @@ Cell: P16      Name: SITE
 
 **From the above example, two important observations can be made:**
 
-1. CAN and SITE uplinks are not in the "clean run" model. This means that these ports will not be configured.
+1. [CAN](../../../glossary.md#customer-access-network-can) and SITE uplinks are not in the "clean run" model. This means that these ports will not be configured.
 
 1. Critically, cell `I38` has a name of `sw-spinx-002`. This should be noted as a misspelling of `sw-spine-002` and corrected.
 
@@ -130,8 +133,9 @@ Today CANU validates many things, but a future feature is full cable specificati
 which switches to properly form bonds). There are several CANU roadmap items, but today a manual review of the `SHCD Port Usage`
 connections list is vital. Specifically, check:
 
-- Both Management NCNs (manager, worker, storage) and UAN NCNs (UAN, viz, and other Application Nodes) follow Plan of Record (PoR)
-  cabling. See [Cable Management Network Servers](cable_management_network_servers.md).
+- Both [Management NCNs](../../../glossary.md#management-nodes) (manager, worker, storage) and [Application Nodes](../../../glossary.md#application-node-an)
+  ([UANs](../../../glossary.md#user-access-node-uan), `viz`, and others) follow Plan of Record (PoR) cabling.
+  See [Cable Management Network Servers](cable_management_network_servers.md).
 
 - Switch pair cabling is appropriate for VSX, MAGP, etc.
 
