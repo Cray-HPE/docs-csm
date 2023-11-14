@@ -1,12 +1,12 @@
 # Nexus Space Cleanup
 
-Nexus stores all data in a PVC called `nexus-data`. If this PVC fills up, then it will enter a read-only state. This read-only state causes
-issues for Nexus as well as all the services that rely on Nexus. There is no automatic cleanup of old data from Nexus.
+Nexus stores all data in a Kubernetes Persistent Volume Claim (PVC) called `nexus-data`. If this PVC fills up, then it will enter a read-only state.
+This read-only state causes issues for Nexus as well as all the services that rely on Nexus. There is no automatic cleanup of old data from Nexus.
 
 During the install of any CSM version, a large amount data is added to Nexus. If there has not been a manual cleanup of old files in Nexus,
 then there is likely to be insufficient space for the next version of CSM to be installed.
 
-**NOTE:** The HPE Cray EX System Software 22.07 release has around 130 Gigabytes of space needed in Nexus.
+**NOTE:** The HPE Cray EX System Software release has around 130 Gigabytes of space needed in Nexus.
 
 This page outlines the procedure to manually cleanup Nexus, in order to ensure that there is sufficient free space for a CSM upgrade.
 
@@ -64,8 +64,8 @@ an extended period of time, or been put through multiple upgrades, then submit a
 Before submitting the help request, run a script to gather data about the system. This script outputs all of the blob stores and repositories in
 Nexus, and a list of what blob store each repository point to.
 
-The script can be run on any master NCN where the latest CSM documentation is installed. See
-[Check for latest documentation](../../update_product_stream/index.md#check-for-latest-documentation).
+The script can be run on any Kubernetes master [management node](../../glossary.md#management-nodes) where the latest CSM documentation is installed.
+See [Check for latest documentation](../../update_product_stream/index.md#check-for-latest-documentation).
 
 ```bash
 ncn-m# /usr/share/doc/csm/scripts/nexus-space-usage.sh
