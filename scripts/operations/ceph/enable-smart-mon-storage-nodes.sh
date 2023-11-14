@@ -112,4 +112,4 @@ for storage_node in "${ORCH_HOSTS[@]}"; do
 done
 
 echo "Reconfiguring node-exporter to publish smartmon data"
-ssh ncn-s001 ${ssh_options} "ceph orch apply -i /etc/cray/ceph/node-exporter.yml"
+ssh ncn-s001 ${ssh_options} "cephadm shell --mount /etc/cray/ceph/ -- ceph orch apply -i /mnt/node-exporter.yml" 
