@@ -655,9 +655,10 @@ valves are closed during operation, the action automatically causes the [CMMs](#
 
 ## System Admin Toolkit (SAT)
 
-The System Admin Toolkit (SAT) product provides the `sat` command line interface which interacts with the REST APIs of many services to perform more complex system management tasks.
+The System Admin Toolkit (SAT) product provides the `sat` command line interface which interacts
+with the REST APIs of many services to perform more complex system management tasks.
 
-For more information, see [System Admin Toolkit in CSM](operations/sat/sat_in_csm.md).
+For more information, see [System Admin Toolkit](operations/system_admin_toolkit/README.md).
 
 ## System Configuration Service (SCSD)
 

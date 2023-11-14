@@ -24,7 +24,7 @@ This procedure is referenced from operational procedures that occur after CSM in
 * The Cray CLI must be configured and authenticated.
   * See [Configure the Cray CLI](../configure_cray_cli.md).
 * SAT must be configured and authenticated.
-  * See [SAT documentation](../sat/sat_in_csm.md#sat-documentation).
+  * See [Authenticate SAT Commands](../system_admin_toolkit/configuration/Authenticate_SAT_Commands.md).
 
 ## Procedure
 

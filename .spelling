@@ -106,6 +106,8 @@ Basecamp
 Basecamp's
 BiCAN
 Bitnami
+Bootprep
+Bootsys
 Burstable
 CAN
 CAN-to-CMN
@@ -172,6 +174,7 @@ DellOS
 Docker
 Dockerfile
 EX
+EX-1C
 EX2500
 Elasticsearch
 FAS
@@ -448,7 +451,9 @@ behavior
 behaviors
 binfmt_misc
 blackhole
+bootprep
 bootscript
+bootsys
 buses
 c0
 catalog
@@ -478,6 +483,7 @@ cronjobs
 custom-config
 customizations.yaml
 customizations.yaml.
+daemonless
 datastore
 defense
 defenses
@@ -560,6 +566,7 @@ management-nodes-rollout
 maneuver
 maneuvers
 md65-group
+metaschema
 mgmt
 microservice
 microservices
@@ -757,6 +764,7 @@ v1.5
 v1.5.
 v1.5.0
 v15.2.9
+v1.6.0
 v2
 v2.0
 v277935

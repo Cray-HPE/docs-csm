@@ -9,8 +9,9 @@ for an HPE Cray EX system.
 - [Installing or upgrading CSM](#installing-or-upgrading-csm)
 - [CSM product stream updates](#csm-product-stream-updates)
 - [CSM operational activities](#csm-operational-activities)
-- [Deprecated Features](deprecated_features/README.md)
-- [Documentation Conventions](documentation_conventions.md)
+- [Deprecated Features](#deprecated-features)
+- [Documentation Conventions](#documentation-conventions)
+- [Viewing CSM Documentation](#viewing-csm-documentation)
 
 ## CSM overview
 
@@ -47,3 +48,21 @@ Procedures which are used during either installation, upgrading, or general oper
 of the specific workflow. For example, updating firmware with FAS or running the CSM health checks.
 
 See [CSM Operational Activities](../operations/README.md).
+
+## Deprecated features
+
+For information on deprecated features in CSM releases, see [Deprecated Features](deprecated_features/README.md).
+
+## Documentation conventions
+
+The CSM documentation follows conventions to ensure consistency across documentation and provide a
+better experience for readers.
+
+These conventions must be followed when writing or updating documentation.
+
+See [Documentation Conventions](documentation_conventions.md).
+
+## Viewing CSM documentation
+
+The CSM documentation can be viewed in multiple ways, both online and offline. See
+[Viewing CSM documentation](viewing_csm_documentation.md) for more details and tips.
