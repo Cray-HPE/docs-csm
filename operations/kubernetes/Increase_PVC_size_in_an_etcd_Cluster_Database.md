@@ -3,7 +3,7 @@
 This procedure will detail how to increase the size of the Persistent Volume Claims (PVCs) that back an etcd cluster, in the event they have filled the database. Below are symptoms which may be caused by etcd running out of space:
 
 1. The etcd pods for a given cluster won't start and end up in CLBO (Crash Loop Back Off).
-1. The pod logs for one of the etcd members reports 'no space' errors.  
+1. The pod logs for one of the etcd members reports 'no space' errors.
 
 ## Prerequisites
 
@@ -39,7 +39,7 @@ so it may be necessary to run this command multiple times in order to catch the 
 1. (`ncn-mw#`) Scale the `statefulset` down to zero
 
     ```bash
-    kubectl scale `statefulset` -n services cray-power-control-bitnami-etcd --replicas=0
+    kubectl scale statefulset -n services cray-power-control-bitnami-etcd --replicas=0
     ```
 
 1. (`ncn-mw#`) Edit each of the three PVCs, and increase the storage request size. Repeat for all three PVCs (0, 1 and 2):
