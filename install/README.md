@@ -6,13 +6,11 @@ this guide in order.
 
 ## Bifurcated CAN notice
 
-The Bifurcated CAN (BICAN) is a major feature introduced in CSM 1.2. The BICAN is designed to
-separate administrative network traffic from user network traffic. More information can be found
-on the [BICAN summary page](../operations/network/management_network/bican_technical_summary.md).
-Review the BICAN summary before continuing with the CSM install. For detailed BICAN documentation,
-see [BICAN technical details](../operations/network/management_network/bican_technical_details.md).
-
-Detailed BICAN documentation can be found on the [BICAN technical details](../operations/network/management_network/bican_technical_details.md) pages.
+Introduced in CSM 1.2, a major feature of CSM is the [Bifurcated CAN (BICAN)](../glossary.md#bifurcated-can-bican).
+The BICAN is designed to separate administrative network traffic from user network traffic.
+More information can be found on the [BICAN Technical Summary](../operations/network/management_network/bican_technical_summary.md).
+Review the BICAN summary before continuing with the CSM install.
+For detailed BICAN documentation, see [BICAN Technical Details](../operations/network/management_network/bican_technical_details.md).
 
 Install Cray System Management by using one of the following options:
 

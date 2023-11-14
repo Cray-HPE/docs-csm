@@ -5,8 +5,8 @@
 In the [Pre-installation](#pre-installation) section of the install, information about the HPE Cray
 EX system and the site is used to prepare the configuration payload. An initial node called the PIT
 node is then set up to bootstrap the installation process. It is called the PIT node because the
-Pre-Install Toolkit is installed there. The management network switches are also configured in this
-section.
+[Pre-Install Toolkit](../../glossary.md#pre-install-toolkit-pit) is installed there. The management
+network switches are also configured in this section.
 
 In the [Installation](#installation) section of the install, the other management nodes are deployed
 with an operating system and the software required to create a Kubernetes cluster utilizing Ceph
@@ -14,14 +14,14 @@ storage. The CSM services are then deployed in the Kubernetes cluster to provide
 infrastructure including the API gateway and many micro-services with REST APIs for managing the
 system. Administrative access is then configured, and the health of the system is validated before
 proceeding with operational tasks like checking and updating firmware on system components and
-preparing compute nodes.
+preparing [compute nodes](../../glossary.md#compute-node-cn).
 
 The [Post-installation](#post-installation) section covers tasks which are performed after the
 main install procedure is completed.
 
 The final section, [Installation of additional HPE Cray EX software products](#installation-of-additional-hpe-cray-ex-software-products)
-describes how to install additional HPE Cray EX software products using the Install and Upgrade
-Framework (IUF).
+describes how to install additional HPE Cray EX software products using the
+[Install and Upgrade Framework (IUF)](../../glossary.md#install-and-upgrade-framework-iuf).
 
 ## Topics
 
@@ -31,7 +31,7 @@ shown here with numbered topics.
 [Prerequisites](#prerequisites)
 
 1. [Pre-installation](#pre-installation)  
-    1. [Boot Pre-Install Live ISO and Seed Files Generation](#1-boot-pre-install-live-iso-and-seed-files-generation)
+    1. [Boot pre-install live ISO and seed files generation](#1-boot-pre-install-live-iso-and-seed-files-generation)
     1. [Preparing for a re-installation](#2-preparing-for-a-re-installation)
     1. [Boot installation environment](#3-boot-installation-environment)
     1. [Import CSM tarball](#4-import-csm-tarball)
@@ -45,11 +45,12 @@ shown here with numbered topics.
     1. [Validate CSM health before final NCN deployment](#3-validate-csm-health-before-final-ncn-deployment)
     1. [Deploy final NCN](#4-deploy-final-ncn)
     1. [Configure administrative access](#5-configure-administrative-access)
-    1. [Validate CSM health](#6-validate-csm-health)
-    1. [Configure Prometheus alert notifications](#7-configure-prometheus-alert-notifications)
-    1. [Update firmware with FAS](#8-update-firmware-with-fas)
-    1. [Prepare compute nodes](#9-prepare-compute-nodes)
-    1. [Troubleshooting installation problems](#10-troubleshooting-installation-problems)
+    1. [Upgrade Ceph and enable `Smartmon` metrics on storage NCNs](#6-upgrade-ceph-and-enable-smartmon-metrics-on-storage-ncns)
+    1. [Validate CSM health](#7-validate-csm-health)
+    1. [Configure Prometheus alert notifications](#8-configure-prometheus-alert-notifications)
+    1. [Update firmware with FAS](#9-update-firmware-with-fas)
+    1. [Prepare compute nodes](#10-prepare-compute-nodes)
+    1. [Troubleshooting installation problems](#11-troubleshooting-installation-problems)
 1. [Post-installation](#post-installation)
     1. [Kubernetes Encryption](#1-kubernetes-encryption)
     1. [Export Nexus Data](#2-export-nexus-data)
@@ -63,29 +64,32 @@ shown here with numbered topics.
 
 The following must be verified before starting the Pre-installation procedure:
 
-- Ensure all the River Node BMCs are reachable and is set to DHCP mode. Refer to [Set node BMCs to DHCP](../re-installation.md#set-node-bmcs-to-dhcp).
+- Ensure all the [River](../../glossary.md#river-cabinet) Node [BMCs](../../glossary.md#baseboard-management-controller-bmc) are reachable and set to DHCP mode.
+  Refer to [Set node BMCs to DHCP](../re-installation.md#set-node-bmcs-to-dhcp).
 
   >**Note:** For bare-metal installation these settings will be default.
 
-- Ensure that list of Management Switch IP address configured on `vlan1` is available, this need to be shared or will require serial console to the switches.
+- Ensure that the list of management switch IP addresses configured on `vlan1` is available; this need to be shared or a serial console to the switches will be required.
 
-- Verify if the SHCD document is available with the component names (xnames) of server.
+- Verify that the SHCD document is available with the component names (xnames) of the server.
 
-- Collect IP address of admin node, site DNS, gateway IP, and proxy details, and ensure all these IPs are reachable from admin node.
+- Collect the IP addresses of the administrative node, site DNS, gateway, and proxy.
+  Ensure that all these IP addresses are reachable from the administrative node.
 
-- Verify and ensure you have access to admin node and BMC.
+- Verify access to the administrative node and BMC.
 
-- Verify and ensure you are able to download the `SLE-15-SP4-Full-x86_64` and `cm-admin-install-1.8-sles15sp4-x86_64.iso` ISO files and CSM tarball.
+- Verify the ability to download the `SLE-15-SP4-Full-x86_64` and `cm-admin-install-1.8-sles15sp4-x86_64.iso` ISO files and the CSM tarball.
 
-- Verify and ensure a minimum of 64GB memory is available for the admin node.
+- Verify that a minimum of 64GB storage is available on the administrative node.
 
 ## Pre-installation
 
 This section will guide the administrator through creating and setting up the Cray Pre-Install Toolkit (PIT).
 
-Fresh-installations may start at the [Boot installation environment](#3-boot-installation-environment) section. Re-installations will have other steps to complete in the [Preparing for a re-installation](#2-preparing-for-a-re-installation) section.
+Fresh-installations may start at the [Boot installation environment](#3-boot-installation-environment) section.
+Re-installations will have other steps to complete in the [Preparing for a re-installation](#2-preparing-for-a-re-installation) section.
 
-### 1. Boot Pre-Install Live ISO and Seed Files Generation
+### 1. Boot pre-install live ISO and seed files generation
 
 This section will guide the administrator through installing HPCM to generate seed files. The seed files will be used later in the step of the CSM installation.
 
@@ -95,7 +99,7 @@ See [Boot Pre-Install Live ISO and Seed Files Generation](hpcm_installation-cpi.
 
 If one is reinstalling a system, the existing cluster needs to be wiped and powered down.
 
-See [Prepare Management Nodes](../re-installation.md), and then come back and proceed to the [Pre-Installation](#pre-installation) guide.
+See [Prepare Management Nodes](../re-installation.md), then proceed to the [Pre-Installation](#pre-installation) guide.
 
 These steps walk the user through properly setting up a Cray supercomputer for an installation.
 
@@ -123,8 +127,9 @@ See [Create system configuration](pre-installation-cpi.md#3-create-system-config
 <!-- markdownlint-disable-next-line MD036 MD026 -->
 **IMPORTANT**
 
-The REDS hardware discovery process, PCS/RTS management switch availability monitoring, and the
-Prometheus SNMP Exporter depend on SNMP. To ensure that these services function correctly, validate
+The [River Endpoint Discovery Service (REDS)](../../glossary.md#river-endpoint-discovery-service-reds) hardware discovery process,
+[Power Control Service (PCS)](../../glossary.md#power-control-service-pcs)/[Redfish Translation Service (RTS)](../../glossary.md#redfish-translation-service-rts)
+management switch availability monitoring, and the Prometheus SNMP Exporter depend on SNMP. To ensure that these services function correctly, validate
 the SNMP settings in the system to ensure that the management network switches have SNMP enabled
 and that the SNMP credentials configured on the switches match the credentials stored in Vault and
 `customizations.yaml`.
@@ -144,7 +149,7 @@ If the passwords do not match, then either update `customizations.yaml` to match
 switches to match `customizations.yaml`. For procedures for either option, see
 [Configure SNMP](../../operations/network/management_network/configure_snmp.md).
 
-Note: While the [Cray Automated Networking Utility (CANU)](../../operations/network/management_network/canu/README.md)
+Note: While the [CSM Automatic Network Utility (CANU)](../../glossary.md#csm-automatic-network-utility-canu)
 will typically not overwrite SNMP settings that are manually applied to the management switches, there are certain
 cases where SNMP configuration can be over-written or lost (such as when resetting and reconfiguring a switch from
 factory defaults). To persist the SNMP settings, see
@@ -189,7 +194,8 @@ subject matter expert.
 
 ## 1. Deploy management nodes
 
-The first nodes to deploy are the NCNs. These will host CSM services that are required for deploying the rest of the supercomputer.
+The first nodes to deploy are the [management nodes](../../glossary.md#management-nodes).
+These [Non-Compute Nodes (NCNs)](../../glossary.md#non-compute-node-ncn) will host CSM services that are required for deploying the rest of the supercomputer.
 
 See [Deploy Management Nodes](../deploy_non-compute_nodes.md).
 
@@ -212,49 +218,66 @@ See [Validate CSM Health](../../operations/validate_csm_health.md).
 
 ### 4. Deploy final NCN
 
-Now that all CSM services have been installed and the CSM health checks completed, with the possible exception of Booting the CSM Barebones Image and the UAS/UAI tests,
-the PIT has served its purpose and the final NCN can be deployed. The node used for the PIT will be rebooted, this node will be the final NCN to deploy in the CSM install.
+Now that all CSM services have been installed and the CSM health checks completed, with the possible exception of the
+[User Access Service (UAS)](../../glossary.md#user-access-service-uas)/[User Access Instance (UAI)](../../glossary.md#user-access-instance-uai)
+tests, the PIT has served its purpose and the final NCN can be deployed. The node used for the PIT will be rebooted, this node will be the final
+NCN to deploy in the CSM install.
 
 See [Deploy Final NCN](../deploy_final_non-compute_node.md).
 
 ### 5. Configure administrative access
 
 Now that all of the CSM services have been installed and the final NCN has been deployed, administrative access can be prepared.
-This may include configuring Keycloak with a local Keycloak account or confirming that Keycloak is properly federating LDAP or another Identity Provider (IdP),
-initializing the `cray` CLI for administrative commands, locking the management nodes from accidental actions such as firmware updates by FAS or power actions by
-CAPMC, configuring the CSM layer of configuration by CFS in NCN personalization, and configuring the node BMCs (node controllers) for nodes in liquid-cooled cabinets.
+This may include:
+
+- Configuring Keycloak with a local Keycloak account or confirming that Keycloak is properly federating LDAP or another Identity Provider (IdP)
+- Initializing the [Cray CLI (`cray`)](../../glossary.md#cray-cli-cray) for administrative commands
+- Locking the management nodes from accidental actions such as firmware updates by [Firmware Action Service (FAS)](../../glossary.md#firmware-action-service-fas)
+  or power actions by [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs) or
+  [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
+- Configuring the CSM layer of configuration by [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) in NCN personalization
+- Configuring the node BMCs ([node controllers](../../glossary.md#node-controller-nc)) for nodes in liquid-cooled cabinets
 
 See [Configure Administrative Access](../configure_administrative_access.md).
 
-### 6. Validate CSM health
+### 6. Upgrade Ceph and enable `Smartmon` metrics on storage NCNs
+
+> **IMPORTANT** If performing a fresh install of CSM 1.4.0 or 1.4.1, then skip this step.
+> This step should only be done during installs of CSM 1.4 patch version 1.4.2 or later.
+
+Now that all management nodes have joined the Kubernetes cluster, Ceph should be upgraded and `Smartmon` metrics should be enabled on Storage NCNs.
+
+See [Upgrade Ceph and enable `Smartmon` metrics on storage nodes](../upgrade_ceph_enable_smartmon.md).
+
+### 7. Validate CSM health
 
 Now that all management nodes have joined the Kubernetes cluster, CSM services have been installed, and administrative access has been enabled,
-the health of the management nodes and all CSM services should be validated. There are no exceptions to running the `tests--all` can be run now.
+the health of the management nodes and all CSM services should be validated. There are no exceptions to running the tests -- all tests should be run now.
 
 This CSM health validation can also be run at other points during the system lifecycle, such as when replacing a management node,
 checking the health after a management node has rebooted because of a crash, as part of doing a full system power down or power up, or after other types of system maintenance.
 
 See [Validate CSM Health](../../operations/validate_csm_health.md).
 
-### 7. Configure Prometheus alert notifications
+### 8. Configure Prometheus alert notifications
 
 Now that CSM has been installed and health has been validated, if the system management health monitoring tools (specifically Prometheus) are found to be useful,
 then email notifications can be configured for specific alerts defined in Prometheus.
-Prometheus upstream documentation can be leveraged for an [Alert Notification Template Reference](https://prometheus.io/docs/alerting/latest/notifications/) as well as
-[Notification Template Examples](https://prometheus.io/docs/alerting/latest/notification_examples/).
+Prometheus upstream documentation can be leveraged for an [Alert Notification Template Reference](https://prometheus.io/docs/alerting/latest/notifications/)
+as well as [Notification Template Examples](https://prometheus.io/docs/alerting/latest/notification_examples/).
 Currently supported notification types include Slack, Pager Duty, email, or a custom integration via a generic webhook interface.
 
 See [Configure Prometheus Email Alert Notifications](../../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
 for an example configuration of an email alert notification for the Postgres replication alerts that are defined on the system.
 
-### 8. Update firmware with FAS
+### 9. Update firmware with FAS
 
 Now that all management nodes and CSM services have been validated as healthy, the firmware on other components in the system can be checked and updated. The Firmware Action Service (FAS) communicates with many devices on the system.
 FAS can be used to update the firmware for all of the devices it communicates with at once, or specific devices can be targeted for a firmware update.
 
 See [Update Firmware with FAS](../../operations/firmware/Update_Firmware_with_FAS.md)
 
-### 9. Prepare compute nodes
+### 10. Prepare compute nodes
 
 After completion of the firmware update with FAS, compute nodes can be prepared. Some compute node types have special preparation steps, but most compute nodes are ready to be used now.
 
@@ -265,7 +288,7 @@ These compute node types require preparation:
 
 See [Prepare Compute Nodes](../prepare_compute_nodes.md).
 
-### 10. Troubleshooting installation problems
+### 11. Troubleshooting installation problems
 
 The installation of the Cray System Management (CSM) product requires knowledge of the various nodes and switches for the HPE Cray EX system.
 The procedures in this section should be referenced during the CSM install for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
