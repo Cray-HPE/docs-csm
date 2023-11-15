@@ -100,7 +100,7 @@ spec:
                 value: |
                   echo "restarting daemonsets on {{inputs.parameters.targetNcn}}"
                   NODE={{inputs.parameters.targetNcn}}
-                  kubectl get node ${NODE} >/dev/null 2>&1 || { echo "Error: Invalid node name ${NODE}; exit 1; }
+                  kubectl get node ${NODE} >/dev/null 2>&1 || { echo "Error: Invalid node name ${NODE}"; exit 1; }
 
                   while read -r ns pod; do
                     echo "Restarting pod $pod"
