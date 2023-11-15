@@ -120,7 +120,7 @@ spec:
                     CFS_CONFIG_NAME=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration' | tr -d '"')
                     IMAGE_ID=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
                     XNAME=$(cat /etc/cray/xname)
-                    # Check for the XNAME variable 
+                    # Check for the XNAME variable
                     echo "DEBUG Setting CFS config $config on ncn-m001 ($XNAME)"
                     /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
                     --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames "${XNAME}" --no-enable --no-clear-err
@@ -130,7 +130,7 @@ spec:
                        | awk -F 'metal.server=' '{print $2}' \
                        | awk -F ' ' '{print $1}')
                     echo "${METAL_SERVER}"
-                    
+
                     S3_ARTIFACT_PATH="boot-images/${IMS_RESULTANT_IMAGE_ID}"
                     echo "${S3_ARTIFACT_PATH}"
                     NEW_METAL_SERVER="s3://${S3_ARTIFACT_PATH}/rootfs"
@@ -139,12 +139,12 @@ spec:
                     sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
                     tr -d \")
                     echo "${PARAMS}"
-                   
+
                     cray bss bootparameters update --hosts "${XNAME}" \
                         --kernel "s3://${S3_ARTIFACT_PATH}/kernel" \
                         --initrd "s3://${S3_ARTIFACT_PATH}/initrd" \
                         --params "${PARAMS}"
-         - name: upgrade-m001
+          - name: upgrade-m001
             dependencies:
               - backup-m001
             templateRef:
