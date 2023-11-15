@@ -26,7 +26,7 @@ these nodes then they will be unable to acquire JWTs from spire.
 
 ```bash
 CSM_RELEASE=1.5
-cd /etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}
+cd /etc/cray/upgrade/csm/csm-${CSM_RELEASE}
 /usr/share/doc/csm/scripts/operations/xnamevalidation.sh enable
 ```
 
@@ -134,7 +134,7 @@ these nodes then they will be unable to acquire JWTs from spire.
 
 ```bash
 CSM_RELEASE=1.5
-cd /etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}
+cd /etc/cray/upgrade/csm/csm-${CSM_RELEASE}
 /usr/share/doc/csm/scripts/operations/xnamevalidation.sh disable
 ```
 Example Output
