@@ -244,7 +244,7 @@ The following procedure describes how to find the CFS configuration applied to t
    
    ```
 
-   In case, the "desired config" from above does not have the `ncn-initrd.yml` within the layers, you may create a configuration as follows:
+   In case the "desired config" from above does not have `ncn-initrd.yml` within the layers, create a configuration as follows:
 
    ```bash
    cat <filename>.json
