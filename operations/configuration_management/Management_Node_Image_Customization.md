@@ -278,6 +278,7 @@ The following procedure describes how to find the CFS configuration applied to t
     "commit": "<hash value>"
     "name": "<name>"
     playbook = "ncn-initrd.yml"
+
    cray cfs configurations describe <configname> --format json
    {
     "lastUpdated": "<yyyy-mm-ddThh:mm:ssZ>",
