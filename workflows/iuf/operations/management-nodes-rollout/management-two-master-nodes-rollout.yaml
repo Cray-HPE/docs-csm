@@ -198,6 +198,9 @@ spec:
                     else
                       echo "INFO Successfully updated BSS boot parameters on $TARGET_NCN ($TARGET_XNAME) with --kernel $kernel_image --initrd $initrd_image --params ${PARAMS}"
                     fi
+                    if [[ -f /etc/cray/upgrade/csm/myenv ]]; then
+                      source /etc/cray/upgrade/csm/myenv
+                    fi
                     export TERM=linux
                     echo "DEBUG Upgrading $TARGET_NCN"
                     /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh $TARGET_NCN
@@ -305,6 +308,9 @@ spec:
                       echo -e "DEBUG <cray bss bootparameters update --hosts ${TARGET_XNAME} --kernel $kernel_image --initrd $initrd_image --params ${PARAMS}> with error -\n\n$result"
                     else
                       echo "INFO Successfully updated BSS boot parameters on $TARGET_NCN ($TARGET_XNAME) with --kernel $kernel_image --initrd $initrd_image --params ${PARAMS}"
+                    fi
+                    if [[ -f /etc/cray/upgrade/csm/myenv ]]; then
+                      source /etc/cray/upgrade/csm/myenv
                     fi
                     export TERM=linux
                     echo "DEBUG Upgrading $TARGET_NCN"
