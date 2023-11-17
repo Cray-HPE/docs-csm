@@ -243,7 +243,7 @@ The following procedure describes how to find the CFS configuration applied to t
      playbook = "ncn-initrd.yml"
    
    ```
-   
+
    In case, the "desired config" from above does not have the `ncn-initrd.yml` within the layers, you may create a configuration as follows:
 
    ```bash
