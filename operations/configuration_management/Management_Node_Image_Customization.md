@@ -296,7 +296,6 @@ The following procedure describes how to find the CFS configuration applied to t
     ],
     "name": "<configname>"
    }
-
    ```
 
 #### Option 2: Create a new CFS configuration for management nodes
