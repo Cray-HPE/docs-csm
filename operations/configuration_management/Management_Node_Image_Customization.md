@@ -264,6 +264,7 @@ The following procedure describes how to find the CFS configuration applied to t
      }
     ]
    }
+
    cray cfs configurations update <configname> --file <filename>.json
     lastUpdated = "<yyyy-mm-ddThh:mm:ssZ>"
     name = "<configname>"
