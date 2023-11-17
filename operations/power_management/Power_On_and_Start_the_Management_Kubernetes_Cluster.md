@@ -238,6 +238,8 @@ Verify that the Lustre file system is available from the management cluster.
 
     Once Ceph is healthy, repeat the `sat bootsys boot --stage platform-services` command to finish
     starting the Kubernetes cluster.
+    If any other errors are observed run the `sat bootsys boot --stage platform-services` command again
+    and verify if they are cleared.
 
 1. (`ncn-m001#`) Check the space available on the Ceph cluster.
 
