@@ -244,6 +244,62 @@ The following procedure describes how to find the CFS configuration applied to t
    
    ```
 
+   In case the "desired config" from above does not have `ncn-initrd.yml` within the layers, create a configuration as follows:
+
+   ```bash
+   cat <filename>.json
+   {
+      "layers": [
+      {
+        "cloneUrl": "https://<repo.git>",
+        "commit": "<hash value>",
+        "name": "<name>",
+        "playbook": "site.yml"
+      },
+      {
+        "cloneUrl": "https://<repo.git>",
+        "commit": "<hash value>",
+        "name": "<name>",
+        "playbook": "ncn-initrd.yml"
+     }
+    ]
+   }
+
+   cray cfs configurations update <configname> --file <filename>.json
+    lastUpdated = "<yyyy-mm-ddThh:mm:ssZ>"
+    name = "<configname>"
+    [[layers]]
+    cloneUrl = "https://<repo.git>"
+    "commit": "<hash value>"
+    "name": "<name>"
+    playbook = "site.yml"
+    [[layers]]
+    cloneUrl = "https://<repo.git>"
+    "commit": "<hash value>"
+    "name": "<name>"
+    playbook = "ncn-initrd.yml"
+
+   cray cfs configurations describe <configname> --format json
+   {
+    "lastUpdated": "<yyyy-mm-ddThh:mm:ssZ>",
+    "layers": [
+      {
+        "cloneUrl": "https://<repo.git>",
+        "commit": "<hash value>",
+        "name": "<name>",
+        "playbook": "site.yml"
+      },
+      {
+        "cloneUrl": "https://<repo.git>",
+        "commit": "<hash value>",
+        "name": "<name>",
+        "playbook": "ncn-initrd.yml"
+      }
+    ],
+    "name": "<configname>"
+   }
+   ```
+
 #### Option 2: Create a new CFS configuration for management nodes
 
 Use this option to create a new CFS configuration for management nodes.
