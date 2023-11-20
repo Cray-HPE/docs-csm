@@ -44,3 +44,24 @@ jobs:
     - uses: docker://ghcr.io/tcort/markdown-link-check:3.9.3
       with:
         args: "--config .github/config/markdown_link.json ${{ steps.changed-files.outputs.all_changed_files }}"
+
+    # In case if any files were renamed or deleted, other files may still have references - need a full scan
+    - name: Full scan
+      uses: docker://ghcr.io/tcort/markdown-link-check:3.9.3
+      if: ${{ steps.changed-files.outputs.deleted_files != '' || steps.changed-files.outputs.renamed_files != '' || inputs.force_full_scan }}
+      with:
+        entrypoint: find
+        args: -name "*.md" -not -path "./.github/*" -exec sh -c "set -o pipefail; markdown-link-check --config .github/config/markdown_link.json {} 2>&1 | tee output.txt || cat output.txt >> error.txt" ";"
+
+    - name: Report errors
+      if: ${{ steps.changed-files.outputs.deleted_files != '' || steps.changed-files.outputs.renamed_files != '' || inputs.force_full_scan }}
+      uses: actions/github-script@v7
+      with:
+        script: |
+            const fs = require('fs');
+            if (fs.existsSync('error.txt')) {
+              fs.readFile('error.txt', 'utf8', (err, data) => {
+                console.log(data);
+              });
+              core.setFailed('Unsatisfied links found')
+            }
