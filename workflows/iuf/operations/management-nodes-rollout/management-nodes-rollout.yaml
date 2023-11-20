@@ -216,6 +216,9 @@ spec:
                       --initrd $initrd_image \
                       --params "${PARAMS}"
 
+                    if [[ -f /etc/cray/upgrade/csm/myenv ]]; then
+                      source /etc/cray/upgrade/csm/myenv
+                    fi
                     export TERM=linux
                     echo "NOTICE  upgrading ncn-m002"
                     /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
@@ -285,6 +288,9 @@ spec:
                       --initrd $initrd_image \
                       --params "${PARAMS}"
 
+                    if [[ -f /etc/cray/upgrade/csm/myenv ]]; then
+                      source /etc/cray/upgrade/csm/myenv
+                    fi
                     export TERM=linux
                     echo "NOTICE  upgrading ncn-m003"
                     /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m003
