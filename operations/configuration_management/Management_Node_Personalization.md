@@ -109,7 +109,7 @@ node components at once. This causes CFS to reconfigure these components.
     [[ -z ${FAILED} ]] && echo "No errors" || echo "ERROR: There were errors clearing the CFS state for the following nodes:${FAILED}"
     ```
 
-> **NOTE:** Do replace `<node>` with proper value for the cluster being used. The different options of `--type` parameter is obtained by using command `cray hsm state components list --help`. Example snippet from command for `--type <node>' is given below.
+> **NOTE:** Do replace `node` with proper value for the cluster being used. The different options of `--type` parameter is obtained by using command `cray hsm state components list --help`. Example snippet from command for `--type ' is given below.
 
 ```bash
 cray hsm state components list --help
