@@ -98,7 +98,7 @@ node components at once. This causes CFS to reconfigure these components.
     ```bash
     FAILED="" ; COUNT=0 ; \
     for xname in $(cray hsm state components list \
-                        --role Management --type node \
+                        --role Management --type <node> \
                         --format json |
                 jq -r .Components[].ID)
     do
@@ -108,6 +108,19 @@ node components at once. This causes CFS to reconfigure these components.
     echo "Cleared CFS state on ${COUNT} nodes" ; \
     [[ -z ${FAILED} ]] && echo "No errors" || echo "ERROR: There were errors clearing the CFS state for the following nodes:${FAILED}"
     ```
+
+> **NOTE:** Do replace `<node>` with proper value for the cluster being used. The different options of `--type` parameter is obtained by using command `cray hsm state components list --help`. Example snippet from command for `--type <node>' is given below.
+
+```bash
+cray hsm state components list --help
+Usage: cray hsm state components list [OPTIONS]
+Options:
+  --type [CDU|CabinetCDU|CabinetPDU|CabinetPDUOutlet|CabinetPDUPowerConnector|CabinetPDUController|Cabinet|Chassis|ChassisBMC|CMMRectifier|CMMFpga|CEC|ComputeModule|RouterModule|NodeBMC|NodeEnclosure|NodeEnclosurePowerSupply|HSNBoard|Node|Processor|Drive|StorageGroup|NodeNIC|Memory|NodeAccel|NodeAccelRiser|NodeFpga|HSNAsic|RouterFpga|RouterBMC|HSNLink|HSNConnector|INVALID]
+                                  Filter the results based on HMS type like
+                                  Node, NodeEnclosure, NodeBMC etc. Can be
+                                  specified multiple times for selecting
+                                  entries of multiple types.
+```
 
 ## Re-run node personalization on a specific management node
 
