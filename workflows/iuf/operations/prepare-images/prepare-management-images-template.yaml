@@ -73,7 +73,7 @@ spec:
                     MEDIA_DIR="{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_dir')}}"
                     BOOTPREP_FILE_PATH="{{=jsonpath(inputs.parameters.global_params, '$.input_params.bootprep_config_management')}}"
                     if [[ -z "$BOOTPREP_FILE_PATH" ]]; then
-                      echo "INFO Cannot access bootprep config file (Input parameter '-bc' not provided). Skipping the 'prepare-management-images' operation" 1>&2
+                      echo "INFO Cannot access bootprep config file (Input parameter '-bm' not provided). Skipping the 'prepare-management-images' operation" 1>&2
                       exit 0
                     else
                       echo "INFO Using bootprep file $BOOTPREP_FILE_PATH for preparing images on management nodes" 1>&2
