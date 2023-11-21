@@ -140,7 +140,6 @@ for more information on the CFS Batcher.
   - See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ### Manual procedure to re-run node personalization on a specific management node
-
 1. (`ncn#`) Set `XNAME` to the xname of the management node which should be reconfigured.
     Here is one way the xname can be obtained from the node to be reconfigured:
 
