@@ -41,7 +41,9 @@ CFS uses a Git version control server running in the management services infrast
 
 /components - Add, update, retrieve, or delete component information.
 
-/configurations - Add, update, retrieve or delete desired configuration states. (v2 api only)
+/configurations - Add, update, retrieve or delete desired configuration states.
+
+/sources - Add, update, retrieve, or delete playbook source information. (v3 api only)
 ## Workflows
 ### Image Customization
 
@@ -804,6 +806,7 @@ Retrieve the list of configuration service options.
   "default_ansible_config": "cfs-default-ansible-cfg",
   "session_ttl": "24h",
   "additional_inventory_url": "https://api-gw-service-nmn.local/vcs/cray/inventory.git",
+  "additional_inventory_source": "example-source",
   "batcher_max_backoff": 3600,
   "batcher_disable": true,
   "batcher_pending_timeout": 1,
@@ -903,6 +906,7 @@ Update one or more of the configuration service options.
   "default_ansible_config": "cfs-default-ansible-cfg",
   "session_ttl": "24h",
   "additional_inventory_url": "https://api-gw-service-nmn.local/vcs/cray/inventory.git",
+  "additional_inventory_source": "example-source",
   "batcher_max_backoff": 3600,
   "batcher_disable": true,
   "batcher_pending_timeout": 1,
@@ -934,6 +938,7 @@ Update one or more of the configuration service options.
   "default_ansible_config": "cfs-default-ansible-cfg",
   "session_ttl": "24h",
   "additional_inventory_url": "https://api-gw-service-nmn.local/vcs/cray/inventory.git",
+  "additional_inventory_source": "example-source",
   "batcher_max_backoff": 3600,
   "batcher_disable": true,
   "batcher_pending_timeout": 1,
@@ -5341,6 +5346,7 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
         {
           "name": "sample-config",
           "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+          "source": "string",
           "playbook": "site.yml",
           "commit": "string",
           "branch": "string"
@@ -5349,6 +5355,7 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
       "additional_inventory": {
         "name": "sample-inventory",
         "clone_url": "https://vcs.domain/vcs/org/inventory.git",
+        "source": "string",
         "commit": "string",
         "branch": "string"
       }
@@ -5454,6 +5461,7 @@ Retrieve the given configuration
     {
       "name": "sample-config",
       "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+      "source": "string",
       "playbook": "site.yml",
       "commit": "string",
       "branch": "string"
@@ -5462,6 +5470,7 @@ Retrieve the given configuration
   "additional_inventory": {
     "name": "sample-inventory",
     "clone_url": "https://vcs.domain/vcs/org/inventory.git",
+    "source": "string",
     "commit": "string",
     "branch": "string"
   }
@@ -5555,6 +5564,7 @@ Add a configuration to CFS or replace an existing configuration.
     {
       "name": "sample-config",
       "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+      "source": "string",
       "playbook": "site.yml",
       "commit": "string",
       "branch": "string"
@@ -5563,6 +5573,7 @@ Add a configuration to CFS or replace an existing configuration.
   "additional_inventory": {
     "name": "sample-inventory",
     "clone_url": "https://vcs.domain/vcs/org/inventory.git",
+    "source": "string",
     "commit": "string",
     "branch": "string"
   }
@@ -5573,6 +5584,7 @@ Add a configuration to CFS or replace an existing configuration.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
+|drop_branches|query|boolean|false|Don't store the branches after converting each branch to a commit.|
 |body|body|[V3ConfigurationData](#schemav3configurationdata)|true|A desired configuration state|
 |configuration_id|path|string|true|Name of the target configuration|
 
@@ -5589,6 +5601,7 @@ Add a configuration to CFS or replace an existing configuration.
     {
       "name": "sample-config",
       "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+      "source": "string",
       "playbook": "site.yml",
       "commit": "string",
       "branch": "string"
@@ -5597,6 +5610,7 @@ Add a configuration to CFS or replace an existing configuration.
   "additional_inventory": {
     "name": "sample-inventory",
     "clone_url": "https://vcs.domain/vcs/org/inventory.git",
+    "source": "string",
     "commit": "string",
     "branch": "string"
   }
@@ -5696,6 +5710,7 @@ Updates the commits for all layers that specify a branch
     {
       "name": "sample-config",
       "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+      "source": "string",
       "playbook": "site.yml",
       "commit": "string",
       "branch": "string"
@@ -5704,6 +5719,7 @@ Updates the commits for all layers that specify a branch
   "additional_inventory": {
     "name": "sample-inventory",
     "clone_url": "https://vcs.domain/vcs/org/inventory.git",
+    "source": "string",
     "commit": "string",
     "branch": "string"
   }
@@ -5805,6 +5821,564 @@ Delete the given configuration. This will fail in any components are using the s
 ```
 
 <h3 id="delete_configuration_v3-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+<h1 id="configuration-framework-service-sources">sources</h1>
+
+## get_sources_v3
+
+<a id="opIdget_sources_v3"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/cfs/v3/sources HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3/sources \
+  -H 'Accept: application/json'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v3/sources', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/cfs/v3/sources", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /v3/sources`
+
+*Retrieve a collection of sources*
+
+Retrieve the full collection of sources in the form of a SourceArray.
+
+<h3 id="get_sources_v3-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|limit|query|integer|false|When set, CFS will only return a number of sources up to this limit.  Combined with after_id, this enables paging across results|
+|after_id|query|string|false|When set, CFS will only return the configurations after the source specified.  Combined with limit, this enables paging across results.|
+|in_use|query|boolean|false|Query for only sources that are currently referenced by configurations.|
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "components": [
+    {
+      "name": "sample-config",
+      "description": "string",
+      "last_updated": "2019-07-28T03:26:00Z",
+      "clone_url": "string",
+      "credentials": {
+        "authentication_method": "password",
+        "secret_name": "string"
+      },
+      "ca_cert": {
+        "configmap_name": "string",
+        "configmap_namespace": "string"
+      }
+    }
+  ],
+  "next": {
+    "limit": 0,
+    "after_id": "string"
+  }
+}
+```
+
+<h3 id="get_sources_v3-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of sources|[V3SourceDataCollection](#schemav3sourcedatacollection)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## post_source_v3
+
+<a id="opIdpost_source_v3"></a>
+
+> Code samples
+
+```http
+POST https://api-gw-service-nmn.local/apis/cfs/v3/sources HTTP/1.1
+Host: api-gw-service-nmn.local
+Content-Type: application/json
+Accept: application/json
+
+```
+
+```shell
+# You can also use wget
+curl -X POST https://api-gw-service-nmn.local/apis/cfs/v3/sources \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json'
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+r = requests.post('https://api-gw-service-nmn.local/apis/cfs/v3/sources', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+        "Accept": []string{"application/json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/cfs/v3/sources", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /v3/sources`
+
+*Add a single source*
+
+Add a source to CFS
+
+> Body parameter
+
+```json
+{
+  "name": "sample-config",
+  "description": "string",
+  "clone_url": "string",
+  "credentials": {
+    "authentication_method": "password",
+    "username": "string",
+    "password": "string"
+  },
+  "ca_cert": {
+    "configmap_name": "string",
+    "configmap_namespace": "string"
+  }
+}
+```
+
+<h3 id="post_source_v3-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[V3SourceCreateData](#schemav3sourcecreatedata)|true|A source|
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "name": "sample-config",
+  "description": "string",
+  "last_updated": "2019-07-28T03:26:00Z",
+  "clone_url": "string",
+  "credentials": {
+    "authentication_method": "password",
+    "secret_name": "string"
+  },
+  "ca_cert": {
+    "configmap_name": "string",
+    "configmap_namespace": "string"
+  }
+}
+```
+
+<h3 id="post_source_v3-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single source|[V3SourceData](#schemav3sourcedata)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|A source with the same name already exists|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## get_source_v3
+
+<a id="opIdget_source_v3"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id} HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id} \
+  -H 'Accept: application/json'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /v3/sources/{source_id}`
+
+*Retrieve a single source*
+
+Retrieve the given source
+
+<h3 id="get_source_v3-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|source_id|path|string|true|Name of the target source|
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "name": "sample-config",
+  "description": "string",
+  "last_updated": "2019-07-28T03:26:00Z",
+  "clone_url": "string",
+  "credentials": {
+    "authentication_method": "password",
+    "secret_name": "string"
+  },
+  "ca_cert": {
+    "configmap_name": "string",
+    "configmap_namespace": "string"
+  }
+}
+```
+
+<h3 id="get_source_v3-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single source|[V3SourceData](#schemav3sourcedata)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## patch_source_v3
+
+<a id="opIdpatch_source_v3"></a>
+
+> Code samples
+
+```http
+PATCH https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id} HTTP/1.1
+Host: api-gw-service-nmn.local
+Content-Type: application/json
+Accept: application/json
+
+```
+
+```shell
+# You can also use wget
+curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id} \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json'
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+r = requests.patch('https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+        "Accept": []string{"application/json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`PATCH /v3/sources/{source_id}`
+
+*Update the commits for a source*
+
+Updates a CFS source
+
+> Body parameter
+
+```json
+{
+  "description": "string",
+  "clone_url": "string",
+  "credentials": {
+    "authentication_method": "password",
+    "username": "string",
+    "password": "string"
+  },
+  "ca_cert": {
+    "configmap_name": "string",
+    "configmap_namespace": "string"
+  }
+}
+```
+
+<h3 id="patch_source_v3-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[V3SourceUpdateData](#schemav3sourceupdatedata)|true|A source|
+|source_id|path|string|true|Name of the target source|
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "name": "sample-config",
+  "description": "string",
+  "last_updated": "2019-07-28T03:26:00Z",
+  "clone_url": "string",
+  "credentials": {
+    "authentication_method": "password",
+    "secret_name": "string"
+  },
+  "ca_cert": {
+    "configmap_name": "string",
+    "configmap_namespace": "string"
+  }
+}
+```
+
+<h3 id="patch_source_v3-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single source|[V3SourceData](#schemav3sourcedata)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## delete_source_v3
+
+<a id="opIddelete_source_v3"></a>
+
+> Code samples
+
+```http
+DELETE https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id} HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/problem+json
+
+```
+
+```shell
+# You can also use wget
+curl -X DELETE https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id} \
+  -H 'Accept: application/problem+json'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/problem+json'
+}
+
+r = requests.delete('https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/problem+json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`DELETE /v3/sources/{source_id}`
+
+*Delete a single source*
+
+Delete the given source. This will fail in any components are using the specified source.
+
+<h3 id="delete_source_v3-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|source_id|path|string|true|Name of the target source|
+
+> Example responses
+
+> 400 Response
+
+```json
+{
+  "type": "about:blank",
+  "title": "string",
+  "status": 400,
+  "instance": "http://example.com",
+  "detail": "string"
+}
+```
+
+<h3 id="delete_source_v3-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -5956,6 +6530,7 @@ Configuration options for the configuration service.
   "default_ansible_config": "cfs-default-ansible-cfg",
   "session_ttl": "24h",
   "additional_inventory_url": "https://api-gw-service-nmn.local/vcs/cray/inventory.git",
+  "additional_inventory_source": "example-source",
   "batcher_max_backoff": 3600,
   "batcher_disable": true,
   "batcher_pending_timeout": 1,
@@ -5981,7 +6556,8 @@ Configuration options for the configuration service.
 |default_playbook|string|false|read-only|[DEPRECATED] The default playbook to be used if not specified in a node's desired state. This option is read-only via the v3 API and remains only for compatibility with the v2 API. This option will be removed from v3 when the v2 API is removed.|
 |default_ansible_config|string|false|none|The Kubernetes ConfigMap which holds the default ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service.|
 |session_ttl|string|false|none|A time-to-live applied to all completed CFS sessions.  Specified in hours or days. e.g. 3d or 24h.  Set to an empty string to disable.|
-|additional_inventory_url|string|false|none|The git clone URL of a repo with additional inventory files.  All files in the repo will be copied into the hosts directory of CFS.|
+|additional_inventory_url|string|false|none|The git clone URL of a repo with additional inventory files.  All files in the repo will be copied into the hosts directory of CFS. This is mutually exclusive with the additional_inventory_source option and only one can be set.|
+|additional_inventory_source|string|false|none|A CFS source with additional inventory files.  All files in the repo will be copied into the hosts directory of CFS. This is mutually exclusive with the additional_source_url option and only one can be set.|
 |batcher_max_backoff|integer|false|none|The maximum number of seconds that batcher will backoff from session creation if problems are detected.|
 |batcher_disable|boolean|false|none|Disables cfs-batcher's automatic session creation if set to True.|
 |batcher_pending_timeout|integer|false|none|How long cfs-batcher will wait on a pending session before deleting and recreating it (in seconds).|
@@ -6851,6 +7427,7 @@ An inventory reference to include in a set of configurations.
 {
   "name": "sample-inventory",
   "clone_url": "https://vcs.domain/vcs/org/inventory.git",
+  "source": "string",
   "commit": "string",
   "branch": "string"
 }
@@ -6865,6 +7442,7 @@ An inventory reference to include in a set of configurations.
 |---|---|---|---|---|
 |name|string|false|none|The name of the inventory layer.|
 |clone_url|string|true|none|The clone URL of the configuration content repository.|
+|source|string|false|none|A CFS source with directions to the configuration content repository|
 |commit|string|false|none|The commit hash of the configuration repository when the state is set.|
 |branch|string|false|none|The repository branch to use. This will automatically set `commit` to master on the branch<br>when the configuration is added.|
 
@@ -6914,6 +7492,7 @@ A single desired configuration state for a component.
 {
   "name": "sample-config",
   "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+  "source": "string",
   "playbook": "site.yml",
   "commit": "string",
   "branch": "string"
@@ -6928,7 +7507,8 @@ A single desired configuration state for a component.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |name|string|false|none|The name of the configuration layer.|
-|clone_url|string|true|none|The clone URL of the configuration content repository.|
+|clone_url|string|false|none|The clone URL of the configuration content repository.|
+|source|string|false|none|A CFS source with directions to the configuration content repository|
 |playbook|string|true|none|The Ansible playbook to run.|
 |commit|string|false|none|The commit hash of the configuration repository when the state is set.|
 |branch|string|false|none|The configuration branch to use.  This will automatically set commit to master on the branch<br>when the configuration is added.|
@@ -6995,6 +7575,7 @@ A collection of ConfigurationLayers.
     {
       "name": "sample-config",
       "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+      "source": "string",
       "playbook": "site.yml",
       "commit": "string",
       "branch": "string"
@@ -7003,6 +7584,7 @@ A collection of ConfigurationLayers.
   "additional_inventory": {
     "name": "sample-inventory",
     "clone_url": "https://vcs.domain/vcs/org/inventory.git",
+    "source": "string",
     "commit": "string",
     "branch": "string"
   }
@@ -7084,6 +7666,7 @@ An array of configurations.
         {
           "name": "sample-config",
           "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+          "source": "string",
           "playbook": "site.yml",
           "commit": "string",
           "branch": "string"
@@ -7092,6 +7675,7 @@ An array of configurations.
       "additional_inventory": {
         "name": "sample-inventory",
         "clone_url": "https://vcs.domain/vcs/org/inventory.git",
+        "source": "string",
         "commit": "string",
         "branch": "string"
       }
@@ -7766,6 +8350,253 @@ Information for patching multiple components.
 |---|---|---|---|---|
 |patch|[V3ComponentData](#schemav3componentdata)|true|none|The configuration state and desired state for a component.|
 |filters|[V3ComponentsFilter](#schemav3componentsfilter)|true|none|Information for patching multiple components.|
+
+<h2 id="tocS_V3SourceCredentials">V3SourceCredentials</h2>
+<!-- backwards compatibility -->
+<a id="schemav3sourcecredentials"></a>
+<a id="schema_V3SourceCredentials"></a>
+<a id="tocSv3sourcecredentials"></a>
+<a id="tocsv3sourcecredentials"></a>
+
+```json
+{
+  "authentication_method": "password",
+  "secret_name": "string",
+  "username": "string",
+  "password": "string"
+}
+
+```
+
+Information for retrieving the git credentials
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|authentication_method|string|false|none|The git authentication method used.|
+|secret_name|string|false|read-only|The name of the credentials vault secret.|
+|username|string|false|write-only|The username for authenticating to git|
+|password|string|false|write-only|The password for authenticating to git|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|authentication_method|password|
+
+<h2 id="tocS_V3SourceCert">V3SourceCert</h2>
+<!-- backwards compatibility -->
+<a id="schemav3sourcecert"></a>
+<a id="schema_V3SourceCert"></a>
+<a id="tocSv3sourcecert"></a>
+<a id="tocsv3sourcecert"></a>
+
+```json
+{
+  "configmap_name": "string",
+  "configmap_namespace": "string"
+}
+
+```
+
+CA certificate info for retrieving the git credentials
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|configmap_name|string|true|none|The name of the configmap containing a necessary CA cert.|
+|configmap_namespace|string|false|none|The namespace of the CA cert configmap in kubernetes.|
+
+<h2 id="tocS_V3SourceData">V3SourceData</h2>
+<!-- backwards compatibility -->
+<a id="schemav3sourcedata"></a>
+<a id="schema_V3SourceData"></a>
+<a id="tocSv3sourcedata"></a>
+<a id="tocsv3sourcedata"></a>
+
+```json
+{
+  "name": "sample-config",
+  "description": "string",
+  "last_updated": "2019-07-28T03:26:00Z",
+  "clone_url": "string",
+  "credentials": {
+    "authentication_method": "password",
+    "secret_name": "string",
+    "username": "string",
+    "password": "string"
+  },
+  "ca_cert": {
+    "configmap_name": "string",
+    "configmap_namespace": "string"
+  }
+}
+
+```
+
+Information for retrieving git content from a source.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|string|false|none|The name of the configuration.  This field is optional and will default to the clone_url if not specified.|
+|description|string|false|none|A user-defined description. This field is not used by CFS.|
+|last_updated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
+|clone_url|string|false|none|The url to access the git content|
+|credentials|[V3SourceCredentials](#schemav3sourcecredentials)|false|none|Information on a secret containing the username and password for accessing the git content|
+|ca_cert|[V3SourceCert](#schemav3sourcecert)|false|none|Information on a configmap containing a CA certificate for authenticating to git|
+
+<h2 id="tocS_V3SourceDataCollection">V3SourceDataCollection</h2>
+<!-- backwards compatibility -->
+<a id="schemav3sourcedatacollection"></a>
+<a id="schema_V3SourceDataCollection"></a>
+<a id="tocSv3sourcedatacollection"></a>
+<a id="tocsv3sourcedatacollection"></a>
+
+```json
+{
+  "components": [
+    {
+      "name": "sample-config",
+      "description": "string",
+      "last_updated": "2019-07-28T03:26:00Z",
+      "clone_url": "string",
+      "credentials": {
+        "authentication_method": "password",
+        "secret_name": "string",
+        "username": "string",
+        "password": "string"
+      },
+      "ca_cert": {
+        "configmap_name": "string",
+        "configmap_namespace": "string"
+      }
+    }
+  ],
+  "next": {
+    "limit": 0,
+    "after_id": "string"
+  }
+}
+
+```
+
+A collection of source data.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|components|[[V3SourceData](#schemav3sourcedata)]|false|none|[Information for retrieving git content from a source.]|
+|next|[V3NextData](#schemav3nextdata)|false|none|Information for requesting the next page of data|
+
+<h2 id="tocS_V3SourceCreateCredentials">V3SourceCreateCredentials</h2>
+<!-- backwards compatibility -->
+<a id="schemav3sourcecreatecredentials"></a>
+<a id="schema_V3SourceCreateCredentials"></a>
+<a id="tocSv3sourcecreatecredentials"></a>
+<a id="tocsv3sourcecreatecredentials"></a>
+
+```json
+{
+  "authentication_method": "password",
+  "username": "string",
+  "password": "string"
+}
+
+```
+
+Information for retrieving the git credentials
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|authentication_method|string|false|none|The git authentication method used.|
+|username|string|true|write-only|The username for authenticating to git|
+|password|string|true|write-only|The password for authenticating to git|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|authentication_method|password|
+
+<h2 id="tocS_V3SourceCreateData">V3SourceCreateData</h2>
+<!-- backwards compatibility -->
+<a id="schemav3sourcecreatedata"></a>
+<a id="schema_V3SourceCreateData"></a>
+<a id="tocSv3sourcecreatedata"></a>
+<a id="tocsv3sourcecreatedata"></a>
+
+```json
+{
+  "name": "sample-config",
+  "description": "string",
+  "clone_url": "string",
+  "credentials": {
+    "authentication_method": "password",
+    "username": "string",
+    "password": "string"
+  },
+  "ca_cert": {
+    "configmap_name": "string",
+    "configmap_namespace": "string"
+  }
+}
+
+```
+
+Information for retrieving git content from a source.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|string|false|none|The name of the configuration.  This field is optional and will default to the clone_url if not specified.|
+|description|string|false|none|A user-defined description. This field is not used by CFS.|
+|clone_url|string|true|none|The url to access the git content|
+|credentials|[V3SourceCreateCredentials](#schemav3sourcecreatecredentials)|true|none|Information on a secret containing the username and password for accessing the git content|
+|ca_cert|[V3SourceCert](#schemav3sourcecert)|false|none|Information on a configmap containing a CA certificate for authenticating to git|
+
+<h2 id="tocS_V3SourceUpdateData">V3SourceUpdateData</h2>
+<!-- backwards compatibility -->
+<a id="schemav3sourceupdatedata"></a>
+<a id="schema_V3SourceUpdateData"></a>
+<a id="tocSv3sourceupdatedata"></a>
+<a id="tocsv3sourceupdatedata"></a>
+
+```json
+{
+  "description": "string",
+  "clone_url": "string",
+  "credentials": {
+    "authentication_method": "password",
+    "secret_name": "string",
+    "username": "string",
+    "password": "string"
+  },
+  "ca_cert": {
+    "configmap_name": "string",
+    "configmap_namespace": "string"
+  }
+}
+
+```
+
+Information for retrieving git content from a source.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|description|string|false|none|A user-defined description. This field is not used by CFS.|
+|clone_url|string|false|none|The url to access the git content|
+|credentials|[V3SourceCredentials](#schemav3sourcecredentials)|false|none|Information on a secret containing the username and password for accessing the git content|
+|ca_cert|[V3SourceCert](#schemav3sourcecert)|false|none|Information on a configmap containing a CA certificate for authenticating to git|
 
 <h2 id="tocS_ProblemDetails">ProblemDetails</h2>
 <!-- backwards compatibility -->
