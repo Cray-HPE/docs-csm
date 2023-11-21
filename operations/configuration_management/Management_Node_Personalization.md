@@ -149,7 +149,7 @@ for more information on the CFS Batcher.
     XNAME=$(cat /etc/cray/xname)
     ```
 
-1. (`ncn#`) Clear the state and error count of the node using CFS.
+2. (`ncn#`) Clear the state and error count of the node using CFS.
 
     ```bash
     cray cfs v3 components update --error-count 0 --state '[]' --format json "${XNAME}"
