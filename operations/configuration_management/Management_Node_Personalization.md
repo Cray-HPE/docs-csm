@@ -109,18 +109,7 @@ node components at once. This causes CFS to reconfigure these components.
     [[ -z ${FAILED} ]] && echo "No errors" || echo "ERROR: There were errors clearing the CFS state for the following nodes:${FAILED}"
     ```
 
-> **NOTE:** Do replace `node` with proper value for the cluster being used. The different options of `--type` parameter is obtained by using command `cray hsm state components list --help`. Example snippet from command for `--type ' is given below.
-
-```bash
-cray hsm state components list --help
-Usage: cray hsm state components list [OPTIONS]
-Options:
-  --type [CDU|CabinetCDU|CabinetPDU|CabinetPDUOutlet|CabinetPDUPowerConnector|CabinetPDUController|Cabinet|Chassis|ChassisBMC|CMMRectifier|CMMFpga|CEC|ComputeModule|RouterModule|NodeBMC|NodeEnclosure|NodeEnclosurePowerSupply|HSNBoard|Node|Processor|Drive|StorageGroup|NodeNIC|Memory|NodeAccel|NodeAccelRiser|NodeFpga|HSNAsic|RouterFpga|RouterBMC|HSNLink|HSNConnector|INVALID]
-                                  Filter the results based on HMS type like
-                                  Node, NodeEnclosure, NodeBMC etc. Can be
-                                  specified multiple times for selecting
-                                  entries of multiple types.
-```
+> **NOTE:** Do replace `node` with proper value for the cluster being used. The different options of `--type` parameter is obtained by using command `cray hsm state components list --help`. 
 
 ## Re-run node personalization on a specific management node
 
@@ -141,7 +130,7 @@ for more information on the CFS Batcher.
 
 ### Manual procedure to re-run node personalization on a specific management node
 
-1. (`ncn-msw#`) Set XNAME to the xname of the management node which should be reconfigured.
+1. (`ncn#`) Set XNAME to the xname of the management node which should be reconfigured.
     Here is one way the xname can be obtained from the node to be reconfigured:
 
     ```bash
