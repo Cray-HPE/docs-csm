@@ -242,3 +242,67 @@ Use the following procedure to change the site DNS server that Unbound forwards 
 
 On large systems it may be necessary to increase the number of Unbound Pods because of the increased DNS query load.
 See [Scale `cray-dns-unbound` service](../../CSM_product_management/Post_Install_Customizations.md#scale-cray-dns-unbound-service) for more information.
+
+## Change which HSN NIC is used for the nid alias
+
+Previous CSM versions associate all HSN IPs with the node nid alias.
+
+Example output:
+
+```bash
+ncn-m001:~ # host nid000001
+nid000001 has address 10.253.0.1
+nid000001 has address 10.253.0.1
+nid000001 has address 10.253.0.1
+nid000001 has address 10.253.0.1
+```
+
+Some workload managers do not handle this well so CSM 1.6 and above will only use the IP address of the first HSN NIC for this alias.
+
+Example output:
+
+```bash
+ncn-m001:~ # host nid000001
+nid000001 has address 10.253.0.1
+```
+
+This behaviour is configurable, use the following procedure to change the HSN NIC used for the nid alias.
+
+1. (`ncn-mw#`) Edit the `cray-dns-unbound-manager` CronJob.
+
+   ```bash
+   kubectl -n services edit cronjob cray-dns-unbound-manager
+   ```
+
+   Update the `HSN_NIC_ALIAS` environment variable in the CronJob with the desired value.
+
+   Valid values are "all" or the numeric index of a HSN interface. This variable should be set to the number of an interface that is common to all nodes with HSN interfaces.
+   For example if `HSN_NIC_ALIAS` is set to `4` and there are nodes in the system that only have two HSN interfaces then aliases will not be created for those nodes.
+
+   ```text
+   - name: HSN_NIC_ALIAS
+     value: "all"
+   ```
+
+1. (`ncn-mw#`) Update `customizations.yaml`.
+
+   **IMPORTANT:** If this step is not performed, then the Unbound configuration will be overwritten with the previous value the next time CSM or Unbound is upgraded.
+
+   1. Extract `customizations.yaml` from the `site-init` secret in the `loftsman` namespace.
+
+      ```bash
+      kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml
+      ```
+
+   1. Update `hsnNicAlias` with the desired value.
+
+      ```bash
+      yq w -i customizations.yaml spec.kubernetes.services.cray-dns-unbound.hsnNicAlias all
+      ```
+
+   1. Update the `site-init` secret in the `loftsman` namespace.
+
+      ```bash
+      kubectl delete secret -n loftsman site-init
+      kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+      ```
