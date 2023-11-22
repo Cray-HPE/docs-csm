@@ -10,6 +10,7 @@ This instance is accessible only within the HPE Cray EX system.
 - [Clear bad data in the Unbound ConfigMap](#clear-bad-data-in-the-unbound-configmap)
 - [Change the site DNS server](#change-the-site-dns-server)
 - [Increase the number of Unbound pods](#increase-the-number-of-unbound-pods)
+- [Change which HSN NIC is used for the nid alias](#change-which-hsn-nic-is-used-for-the-nid-alias)
 
 ## Check the status of the `cray-dns-unbound` pods
 
