@@ -248,10 +248,9 @@ See [Scale `cray-dns-unbound` service](../../CSM_product_management/Post_Install
 
 Previous CSM versions associate all HSN IPs with the node nid alias.
 
-Example output:
+Example output from the `host nid000001` command:
 
 ```bash
-ncn-m001:~ # host nid000001
 nid000001 has address 10.253.0.1
 nid000001 has address 10.253.0.1
 nid000001 has address 10.253.0.1
@@ -260,10 +259,9 @@ nid000001 has address 10.253.0.1
 
 Some workload managers do not handle this well so CSM 1.6 and above will only use the IP address of the first HSN NIC for this alias.
 
-Example output:
+Example output from the `host nid000001` command:
 
 ```bash
-ncn-m001:~ # host nid000001
 nid000001 has address 10.253.0.1
 ```
 
