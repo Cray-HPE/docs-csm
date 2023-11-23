@@ -27,7 +27,7 @@ This procedure can be performed on any master or worker NCN.
 1. (`ncn-mw#`) Save the current alert notification configuration, in case a rollback is needed.
 
     ```bash
-    kubectl get secret -n sysmgmt-health alertmanager-cray-sysmgmt-health-promet-alertmanager \
+    kubectl get secret -n sysmgmt-health alertmanager-cray-sysmgmt-health-kube-p-alertmanager \
             -ojsonpath='{.data.alertmanager\.yaml}' | base64 --decode > /tmp/alertmanager-default.yaml
     ```
 
@@ -46,7 +46,7 @@ This procedure can be performed on any master or worker NCN.
           labels:
             app: kube-prometheus-stack-alertmanager
             chart: kube-prometheus-stack-45.1.1
-            heritage: Tiller
+            heritage: Helm
             release: cray-sysmgmt-health
           name: alertmanager-cray-sysmgmt-health-kube-p-alertmanager
           namespace: sysmgmt-health
@@ -91,17 +91,48 @@ This procedure can be performed on any master or worker NCN.
 
 1. (`ncn-mw#`) Validate the configuration changes.
 
-    1. View the current configuration.
+    1. Validate the alerts using `cm health` commands.
 
         ```bash
-        kubectl exec alertmanager-cray-sysmgmt-health-promet-alertmanager-0 \
-                -n sysmgmt-health -c alertmanager -- cat /etc/alertmanager/config/alertmanager.yaml
+        cm health  alert -s
         ```
+
+       Example output:
+
+       ```text
+       Alert Status        Count
+       ------------        -----
+       Critical            13
+       Warnings            31
+       .
+       .
+       . 
+       prometheus             critical        critical : 13, warning : 31, info : 0
+       ```
+
+       ```bash
+       cm health  alert  prometheus
+       ```
+
+       Example output:
+
+       ```text
+       prometheus              Severity         Summary
+       ----------              ---------        -------
+       10.12.1.100:8080         warning         KubeDeploymentReplicasMismatch:1,
+                                                KubeStatefulSetReplicasMismatch:1, KubeJobFailed:1
+       10.13.1.100:9187         warning         PostgresqlHighRollbackRate:1,
+                                                PostgresqlInactiveReplicationSlot:1,
+                                                PostgresqlFollowerReplicationLagSMA:1
+       .
+       .
+       .
+       ```
 
     1. If the configuration does not look accurate, check the logs for errors.
 
         ```bash
-        kubectl logs -f -n sysmgmt-health pod/alertmanager-cray-sysmgmt-health-promet-alertmanager-0 alertmanager
+        kubectl logs -f -n sysmgmt-health pod/alertmanager-cray-sysmgmt-health-kube-p-alertmanager-0 alertmanager
         ```
 
 An Alerta notification will be sent once either of the alerts set in this procedure is `FIRING` in Prometheus.
