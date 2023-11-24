@@ -332,6 +332,20 @@ def delete_kea_lease(ip, token):
     kea_resp = ingress_api('POST', kea_url, headers=kea_request_header, json=kea_delete_data)
 
 
+def delete_smd_record(smd_id, token):
+    """
+    delete ethernetInterfaces record from SMD
+    :param smd_id:
+    :param token:
+    :return:
+    """
+
+    smd_url = '/apis/smd/hsm/v2/Inventory/EthernetInterfaces/' + smd_id
+    smd_request_header = {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}
+
+    smd_resp = ingress_api('DELETE', smd_url, headers=smd_request_header)
+
+
 def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks):
     """
     Updates SLS networks by expanding static IP range and moving DHCP IP pool.
@@ -469,6 +483,8 @@ def update_smd_and_kea(ips_update_in_smd, api_header, token):
                 post_result = post_api_request('/apis/smd/hsm/v2/Inventory/EthernetInterfaces/' + smd_id, api_header, post_data)
                 # placeholder print out
                 log.warning (f'Deleting {json.dumps(post_data)} from SMD EthernetInterfaces.')
+                # delete SMD ethernetInterfaces record
+                delete_smd_record(smd_id, token)
                 log.warning (f'Deleting {ip} from kea active leases.')
                 #kea lease delete
                 delete_kea_lease(ip, token)
