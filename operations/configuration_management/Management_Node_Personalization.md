@@ -98,7 +98,7 @@ node components at once. This causes CFS to reconfigure these components.
     ```bash
     FAILED="" ; COUNT=0 ; \
     for xname in $(cray hsm state components list \
-                        --role Management --type node \
+                        --role Management --type <node> \
                         --format json |
                 jq -r .Components[].ID)
     do
@@ -108,6 +108,8 @@ node components at once. This causes CFS to reconfigure these components.
     echo "Cleared CFS state on ${COUNT} nodes" ; \
     [[ -z ${FAILED} ]] && echo "No errors" || echo "ERROR: There were errors clearing the CFS state for the following nodes:${FAILED}"
     ```
+
+> **NOTE:** Replace `<node>` with the value for the cluster being used. The different options for the `--type` parameter can be viewed with the `cray hsm state components list --help` command.
 
 ## Re-run node personalization on a specific management node
 
@@ -128,8 +130,7 @@ for more information on the CFS Batcher.
 
 ### Manual procedure to re-run node personalization on a specific management node
 
-1. (`ncn#`) Set `XNAME` to the xname of the management node which should be reconfigured.
-
+1. (`ncn#`) Set XNAME to the xname of the management node which should be reconfigured.
     Here is one way the xname can be obtained from the node to be reconfigured:
 
     ```bash
