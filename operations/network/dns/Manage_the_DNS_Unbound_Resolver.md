@@ -250,7 +250,7 @@ Previous CSM versions associate all HSN IPs with the node `nid` alias.
 
 Example output from the `host nid000001` command:
 
-```bash
+```text
 nid000001 has address 10.253.0.1
 nid000001 has address 10.253.0.1
 nid000001 has address 10.253.0.1
@@ -261,7 +261,7 @@ Some workload managers do not handle this well so CSM 1.6 and above will only us
 
 Example output from the `host nid000001` command:
 
-```bash
+```text
 nid000001 has address 10.253.0.1
 ```
 
