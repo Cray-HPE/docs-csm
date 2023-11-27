@@ -278,7 +278,7 @@ This behaviour is configurable, use the following procedure to change the HSN NI
    Valid values are "all" or the numeric index of a HSN interface. This variable should be set to the number of an interface that is common to all nodes with HSN interfaces.
    For example if `HSN_NIC_ALIAS` is set to `4` and there are nodes in the system that only have two HSN interfaces then aliases will not be created for those nodes.
 
-   ```text
+   ```yaml
    - name: HSN_NIC_ALIAS
      value: "all"
    ```
