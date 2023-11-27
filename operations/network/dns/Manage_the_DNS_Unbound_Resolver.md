@@ -10,7 +10,7 @@ This instance is accessible only within the HPE Cray EX system.
 - [Clear bad data in the Unbound ConfigMap](#clear-bad-data-in-the-unbound-configmap)
 - [Change the site DNS server](#change-the-site-dns-server)
 - [Increase the number of Unbound pods](#increase-the-number-of-unbound-pods)
-- [Change which HSN NIC is used for the nid alias](#change-which-hsn-nic-is-used-for-the-nid-alias)
+- [Change which HSN NIC is used for the node alias](#change-which-hsn-nic-is-used-for-the-node-alias)
 
 ## Check the status of the `cray-dns-unbound` pods
 
@@ -244,9 +244,9 @@ Use the following procedure to change the site DNS server that Unbound forwards 
 On large systems it may be necessary to increase the number of Unbound Pods because of the increased DNS query load.
 See [Scale `cray-dns-unbound` service](../../CSM_product_management/Post_Install_Customizations.md#scale-cray-dns-unbound-service) for more information.
 
-## Change which HSN NIC is used for the nid alias
+## Change which HSN NIC is used for the node alias
 
-Previous CSM versions associate all HSN IPs with the node nid alias.
+Previous CSM versions associate all HSN IPs with the node `nid` alias.
 
 Example output from the `host nid000001` command:
 
@@ -265,7 +265,7 @@ Example output from the `host nid000001` command:
 nid000001 has address 10.253.0.1
 ```
 
-This behaviour is configurable, use the following procedure to change the HSN NIC used for the nid alias.
+This behaviour is configurable, use the following procedure to change the HSN NIC used for the `nid` alias.
 
 1. (`ncn-mw#`) Edit the `cray-dns-unbound-manager` CronJob.
 
