@@ -102,7 +102,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     ```bash
     cray ims recipes create --name "My Recipe" \
             --recipe-type kiwi-ng --linux-distribution sles15 \
-            --arch x86_64 --reqire-dkms False
+            --arch x86_64 --require-dkms False
     ```
 
     Example output:
