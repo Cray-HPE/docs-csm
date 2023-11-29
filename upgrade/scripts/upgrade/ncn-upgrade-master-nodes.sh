@@ -62,7 +62,7 @@ if [[ $state_recorded == "0" ]]; then
   } >> ${LOG_FILE} 2>&1
   record_state "${state_name}" ${target_ncn}
 else
-  echo "====> ${state_name} has been completed"
+  echo "INFO ====> ${state_name} has been completed"
 fi
 
 if [[ ${target_ncn} == "ncn-m001" ]]; then
@@ -75,7 +75,7 @@ if [[ ${target_ncn} == "ncn-m001" ]]; then
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
   else
-    echo "====> ${state_name} has been completed"
+    echo "INFO ====> ${state_name} has been completed"
   fi
 fi
 
@@ -134,7 +134,7 @@ fi
 
       record_state "${state_name}" ${target_ncn}
     else
-      echo "====> ${state_name} has been completed"
+      echo "INFO ====> ${state_name} has been completed"
     fi
   fi
 } >> ${LOG_FILE} 2>&1
@@ -178,7 +178,7 @@ if [[ $state_recorded == "0" ]]; then
   } >> ${LOG_FILE} 2>&1
   record_state "${state_name}" ${target_ncn}
 else
-  echo "====> ${state_name} has been completed"
+  echo "INFO ====> ${state_name} has been completed"
 fi
 
 # Install the docs-csm on newly upgraded master
@@ -193,7 +193,7 @@ if [[ $state_recorded == "0" ]]; then
   } >> ${LOG_FILE} 2>&1
   record_state "${state_name}" ${target_ncn}
 else
-  echo "====> ${state_name} has been completed"
+  echo "INFO ====> ${state_name} has been completed"
 fi
 
 state_name="ENSURE_TESTING_RPMS"
@@ -205,14 +205,36 @@ if [[ $state_recorded == "0" ]]; then
   } >> ${LOG_FILE} 2>&1
   record_state "${state_name}" ${target_ncn}
 else
-  echo "====> ${state_name} has been completed"
+  echo "INFO ====> ${state_name} has been completed"
 fi
 
 cat << EOF
 NOTE:
     If below test failed, try to fix it based on test output. Then run current script again
 EOF
-ssh $target_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
+state_name="RUN_GOSS_TESTS"
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+if [[ $state_recorded == "0" ]]; then
+  echo "====> ${state_name} ..."
+  {
+    set +e
+    return_code=0
+    while read line; do
+      if [[ -n $(echo $line | grep 'Title\|desc') ]]; then
+        echo "ERROR failed goss test: $line"
+	      return_code=1
+      else
+        echo -e "$line"
+      fi
+    done < <(ssh $target_ncn -t "GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate")
+    if [[ $return_code -eq 1 ]]; then
+      exit $return_code
+    fi
+  } | tee -a ${LOG_FILE} 2>&1
+  record_state "${state_name}" ${target_ncn}
+else
+  echo "INFO ====> ${state_name} has been completed"
+fi
 
 move_state_file ${target_ncn}
 
