@@ -36,7 +36,9 @@ spec:
     # Run the precheck_for_worker_reboots script from the new location or the old location
     # If not found, return a message and continue
     ssh ${SSH_OPT} ${TARGET_NCN} "\
-      if [[ -f /opt/cray/shasta/cne/bin/prechecks_for_worker_reboots ]]; then \
+      if [[ -f /opt/cray/shasta/uss/bin/prechecks_for_worker_reboots ]]; then \
+          /opt/cray/shasta/uss/bin/prechecks_for_worker_reboots; \
+      elif [[ -f /opt/cray/shasta/cne/bin/prechecks_for_worker_reboots ]]; then \
           /opt/cray/shasta/cne/bin/prechecks_for_worker_reboots; \
       elif [[ -f /opt/cray/shasta/cos/bin/prechecks_for_worker_reboots ]]; then \
           /opt/cray/shasta/cos/bin/prechecks_for_worker_reboots; \
