@@ -33,7 +33,7 @@ spec:
     SSH_OPT="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     SSH_OPT="${SSH_OPT} -o ConnectTimeout=10"
     # Note: this file path cannot change without coordinated changes to the COS product stream
-    # Run the precheck_for_worker_reboots script from the new location or the old location
+    # Run the prechecks_for_worker_reboots script from the new location or an older one
     # If not found, return a message and continue
     ssh ${SSH_OPT} ${TARGET_NCN} "\
       if [[ -f /opt/cray/shasta/cne/bin/prechecks_for_worker_reboots ]]; then \
