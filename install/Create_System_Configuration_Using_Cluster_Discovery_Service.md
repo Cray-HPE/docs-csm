@@ -183,11 +183,17 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
    "${CVT_PATH}"/cds/discover_status.py nodes -o
    ```
 
+   > **NOTE**: 
+   > 1. Ensure that all the NCNs and CNs are discovered and listed. If any nodes are not discovered, identify the nodes using the MAC address and verify the switch connectivity of those nodes.
+   > 2. If the discover status step is re-run after a long duration, make sure that to start the procedure from the beginning of [Configure the management network](#2-configure-the-management-network) section.
+
    1. Create a `bond0` network interface on all the listed nodes.
 
       ```bash
       pdsh -w^nodelist -x localhost "sh "${CVT_PATH}"/scripts/create_bond0.sh"
       ```
+
+      > **NOTE**: If there is a host-key verification failure, use `ssh-key-gen` command to retrieve the host-key and retry the procedure.
 
    1. Ensure that `bond0` network interface is created on all the nodes listed in the `nodelist`.
 
