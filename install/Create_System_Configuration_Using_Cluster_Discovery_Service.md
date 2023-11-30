@@ -186,7 +186,7 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
    > **NOTE**:
    >
    > - Ensure that all the NCNs and CNs are discovered and listed. If any nodes are not discovered, identify the nodes using the MAC address and verify the switch connectivity of those nodes.
-   > - If the discover status step is rerun after a long duration, make sure that to start the procedure from the beginning of [Configure the management network](#2-configure-the-management-network) section.
+   > - If the discover status step is rerun after a long duration, start the procedure from the beginning of section [Configure the management network](#2-configure-the-management-network).
 
    1. Create a `bond0` network interface on all the listed nodes.
 
