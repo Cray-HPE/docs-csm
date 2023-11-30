@@ -194,7 +194,11 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
       pdsh -w^nodelist -x localhost "sh "${CVT_PATH}"/scripts/create_bond0.sh"
       ```
 
-      > **NOTE**: If there is a host-key verification failure, use `ssh-key-gen` command to retrieve the host-key and retry the procedure.
+      > **NOTE**: If there is a host-key verification failure, use the `ssh-keygen` command to retrieve the host-key and retry the procedure.
+      > 
+      > `ssh-keygen -R <node_IP> -f /root/.ssh/known_hosts`
+      > 
+      > Where, `<node_IP>` is the IP of the node where the error exist.
 
    1. Ensure that `bond0` network interface is created on all the nodes listed in the `nodelist`.
 
