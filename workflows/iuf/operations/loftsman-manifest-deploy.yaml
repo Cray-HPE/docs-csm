@@ -107,6 +107,7 @@ spec:
                     else
                       echo "INFO Deploying loftman manifest ${manifest}"
                       manifest_deploy_output=$(loftsman ship --manifest-path /tmp/"$(basename $manifest)" --charts-repo https://packages.local/repository/charts 2>&1)
+                      echo >&2 "DEBUG $manifest_deploy_output"
                       if [ $? -ne 0 ]; then
                         manifest_deploy_output=$(echo "$manifest_deploy_output" | sed -e 's/^/ERROR /')
                         echo "ERROR There was a problem deploying the loftsman manifest ${manifest}"
@@ -141,20 +142,18 @@ spec:
                         echo "INFO Deploying loftsman manifests under $MANIFEST_PATH/"
                         manifest_files=$(ls "${MANIFEST_PATH}"/*.yml "${MANIFEST_PATH}"/*.yaml 2>/dev/null) || true
                         for manifest in $manifest_files; do
-                          deploy_output=$(deploy_manifest ${manifest} $PRODUCT_NAME)
-                          if [[ $? != 0 ]]; then
-                            deploy_output=$(echo "$deploy_output" | sed -e 's/^/DEBUG /')
-                            echo "ERROR Unable to deploy manifest $manifest for product $PRODUCT_NAME"
-                            echo -e "DEBUG Loftsman manifest deployment failed with\n\n$deploy_output"
+                          deploy_manifest ${manifest} $PRODUCT_NAME
+                          if [[ $? -ne 0 ]]; then
+                            echo >&2 "ERROR Unable to deploy manifest $manifest for product $PRODUCT_NAME"
+                            echo >&2 "ERROR Loftsman manifest deployment failed"
                             err=1
                           fi
                         done
                       else
-                        deploy_output=$(deploy_manifest $MANIFEST_PATH $PRODUCT_NAME)
-                        if [[ $? != 0 ]]; then
-                          deploy_output=$(echo "$deploy_output" | sed -e 's/^/DEBUG /')
-                          echo "ERROR Unable to deploy manifest $MANIFEST_PATH for product $PRODUCT_NAME"
-                          echo -e "DEBUG Loftsman manifest deployment failed with\n\n$deploy_output"
+                        deploy_manifest $MANIFEST_PATH $PRODUCT_NAME
+                        if [[ $? -ne 0 ]]; then
+                          echo >&2 "ERROR Unable to deploy manifest $MANIFEST_PATH for product $PRODUCT_NAME"
+                          echo >&2 "ERROR Loftsman manifest deployment failed"
                           err=1
                         fi
                       fi
