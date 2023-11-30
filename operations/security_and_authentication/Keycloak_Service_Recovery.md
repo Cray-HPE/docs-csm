@@ -56,7 +56,7 @@ The following covers redeploying the Keycloak service and restoring the data.
    1. Wait for the resources to terminate.
 
       ```bash
-      watch "kubectl get pods -n services | grep keycloak | grep -v 'keycloak-users-localize\|keycloak-vcs-user'"
+      watch "kubectl get pods -n services | grep keycloak | grep -v 'keycloak-users-localize\|keycloak-vcs-user\|logical-backup'"
       ```
 
      Example output:
