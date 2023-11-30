@@ -133,7 +133,7 @@ In the event that the Spire Postgres cluster must be rebuilt and the data restor
 1. (`ncn-mw#`) Restore the data.
 
     ```bash
-    kubectl exec "${POSTGRESQL}-0" -c postgres -n "${NAMESPACE}" -it -- psql -U postgres < "${DUMPFILE}"
+    kubectl exec "${POSTGRESQL}-0" -c postgres -n "${NAMESPACE}" -it -- bash -c "zcat ${DUMPFILE} | psql -U postgres" 
     ```
 
     Errors such as `... already exists` can be ignored; the restore can be considered successful when it completes.
@@ -446,7 +446,7 @@ In the event that the Keycloak Postgres cluster must be rebuilt and the data res
 1. (`ncn-mw#`) Restore the data.
 
     ```bash
-    kubectl exec "${POSTGRESQL}-0" -c postgres -n "${NAMESPACE}" -it -- psql -U postgres < "${DUMPFILE}"
+    kubectl exec "${POSTGRESQL}-0" -c postgres -n "${NAMESPACE}" -it -- bash -c "zcat ${DUMPFILE} | psql -U postgres" 
     ```
 
     Errors such as `... already exists` can be ignored; the restore can be considered successful when it completes.
@@ -791,13 +791,13 @@ In the event that the VCS Postgres cluster must be rebuilt and the data restored
 1. (`ncn-mw#`) Copy the database dump file to the Postgres member.
 
     ```bash
-    kubectl cp "./${DUMPFILE}" "${POSTGRESQL}-0:/home/postgres/${DUMPFILE}" -c postgres -n services
+    kubectl cp "./${DUMPFILE}" "${POSTGRESQL}-0:/home/postgres/${DUMPFILE}" -c postgres -n "${NAMESPACE}" 
     ```
 
 1. (`ncn-mw#`) Restore the data.
 
     ```bash
-    kubectl exec "${POSTGRESQL}-0" -c postgres -n services -it -- psql -U postgres < "${DUMPFILE}"
+    kubectl exec "${POSTGRESQL}-0" -c postgres -n "${NAMESPACE}" -it -- bash -c "zcat ${DUMPFILE} | psql -U postgres" 
     ```
 
     Errors such as `... already exists` can be ignored; the restore can be considered successful when it completes.
