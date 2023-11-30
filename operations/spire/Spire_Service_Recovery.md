@@ -88,7 +88,7 @@ The following covers redeploying the Spire service and restoring the data.
          for ncn in $(kubectl get nodes -o name | cut -d'/' -f2); do
              echo "Cleaning up NCN ${ncn}"
              ssh "${ncn}" systemctl stop spire-agent
-             ssh "${ncn}" rm -v /var/lib/spire/data/svid.key /var/lib/spire/agent_svid.der /var/lib/spire/bundle.der
+             ssh "${ncn}" rm -v /var/lib/spire/data/keys.json /var/lib/spire/agent_svid.der /var/lib/spire/bundle.der
          done
          ```
 

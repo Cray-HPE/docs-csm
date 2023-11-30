@@ -226,7 +226,7 @@ disable_spire_on_NCNs() {
 
   for node in $storageNodes $ncnNodes; do
     sshnh "$node" systemctl stop spire-agent
-    sshnh "$node" rm -f /var/lib/spire/data/svid.key /var/lib/spire/bundle.der /var/lib/spire/agent_svid.der
+    sshnh "$node" rm -f /var/lib/spire/data/keys.json /var/lib/spire/bundle.der /var/lib/spire/agent_svid.der
   done
 }
 
