@@ -107,7 +107,7 @@ spec:
                     else
                       echo "INFO Deploying loftman manifest ${manifest}"
                       manifest_deploy_output=$(loftsman ship --manifest-path /tmp/"$(basename $manifest)" --charts-repo https://packages.local/repository/charts 2>&1)
-                      echo "DEBUG $manifest_deploy_output"
+                      echo >&2 "DEBUG $manifest_deploy_output"
                       if [ $? -ne 0 ]; then
                         manifest_deploy_output=$(echo "$manifest_deploy_output" | sed -e 's/^/ERROR /')
                         echo "ERROR There was a problem deploying the loftsman manifest ${manifest}"
@@ -144,16 +144,16 @@ spec:
                         for manifest in $manifest_files; do
                           deploy_manifest ${manifest} $PRODUCT_NAME
                           if [[ $? -ne 0 ]]; then
-                            echo "ERROR Unable to deploy manifest $manifest for product $PRODUCT_NAME"
-                            echo "ERROR Loftsman manifest deployment failed"
+                            echo >&2 "ERROR Unable to deploy manifest $manifest for product $PRODUCT_NAME"
+                            echo >&2 "ERROR Loftsman manifest deployment failed"
                             err=1
                           fi
                         done
                       else
                         deploy_manifest $MANIFEST_PATH $PRODUCT_NAME
                         if [[ $? -ne 0 ]]; then
-                          echo "ERROR Unable to deploy manifest $MANIFEST_PATH for product $PRODUCT_NAME"
-                          echo "ERROR Loftsman manifest deployment failed"
+                          echo >&2 "ERROR Unable to deploy manifest $MANIFEST_PATH for product $PRODUCT_NAME"
+                          echo >&2 "ERROR Loftsman manifest deployment failed"
                           err=1
                         fi
                       fi
