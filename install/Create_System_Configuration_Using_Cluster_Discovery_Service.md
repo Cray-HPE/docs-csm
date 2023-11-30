@@ -195,9 +195,9 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
       ```
 
       > **NOTE**: If there is a host-key verification failure, use the `ssh-keygen` command to retrieve the host-key and retry the procedure.
-      > 
+      >
       > `ssh-keygen -R <node_IP> -f /root/.ssh/known_hosts`
-      > 
+      >
       > Where, `<node_IP>` is the IP of the node where the error exist.
 
    1. Ensure that `bond0` network interface is created on all the nodes listed in the `nodelist`.
