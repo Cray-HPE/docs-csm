@@ -39,11 +39,11 @@ renewncnjoin NODE_HOSTNAME
 
 The spire-agent service may also fail if an NCN was powered off for too long
 and its tokens expired. If this happens, delete `/var/lib/spire/agent_svid.der`,
-`/var/lib/spire/bundle.der`, and `/var/lib/spire/data/svid.key` off the NCN before
+`/var/lib/spire/bundle.der`, and `/var/lib/spire/data/keys.json` off the NCN before
 deleting the `request-ncn-join-token` `daemonset` pod.
 
 ```bash
 rm /var/lib/spire/agent_svid.der
 rm /var/lib/spire/bundle.der
-rm /var/lib/spire/data/svid.key
+rm /var/lib/spire/data/keys.json
 ```
