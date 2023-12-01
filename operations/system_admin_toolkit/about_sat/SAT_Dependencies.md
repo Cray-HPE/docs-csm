@@ -131,14 +131,17 @@ CSM dependencies:
 CSM dependencies:
 
 - Hardware State Manager (HSM)
-- Kubernetes
-- S3
+- System Layout Service (SLS)
 
 ## `sat status`
 
 CSM dependencies:
 
+- Boot Orchestration Service (BOS)
+- Configuration Framework Service (CFS)
 - Hardware State Manager (HSM)
+- Image Management Service (IMS)
+- System Layout Service (SLS)
 
 ## `sat swap`
 
