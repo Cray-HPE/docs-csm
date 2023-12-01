@@ -21,7 +21,7 @@ Reinstall the Spire Helm chart in the event that `spire-postgres` databases cann
    master nodes) and delete the join data.
 
    ```bash
-   for ncn in $(kubectl get nodes -o name | cut -d'/' -f2); do ssh "${ncn}" systemctl stop spire-agent; ssh "${ncn}" rm /var/lib/spire/data/svid.key /var/lib/spire/agent_svid.der /var/lib/spire/bundle.der; done
+   for ncn in $(kubectl get nodes -o name | cut -d'/' -f2); do ssh "${ncn}" systemctl stop spire-agent; ssh "${ncn}" rm /var/lib/spire/data/keys.json /var/lib/spire/agent_svid.der /var/lib/spire/bundle.der; done
    ```
 
 ## Re-install the Spire Helm Chart
