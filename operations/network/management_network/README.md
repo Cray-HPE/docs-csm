@@ -41,21 +41,22 @@ including `goss-switch-bgp-neighbor-aruba-or-mellanox` use these credentials to 
 is not required to configure the management network. If Vault is unavailable, this step can be temporarily skipped. Any
 automated tests that depend on the switch credentials being in Vault will fail until they are added.
 
-(`ncn-mw#`) The following script will prompt for the password, write it to Vault, and then read it back
-to verify that it was written correctly.
+1. (`ncn-mw#`) Write the switch admin password to the `SW_ADMIN_PASSWORD` variable if it is not already set.
 
-```bash
-/usr/share/doc/csm/scripts/operations/configuration/write_sw_admin_pw_to_vault.py
-```
+   > The use of `read -s` is a convention used throughout this documentation which allows for the
+   > user input of secrets without echoing them to the terminal or saving them in history.
 
-On success, the script will exit with return code 0 and have the following final lines
-of output:
+    ```bash
+    read -s SW_ADMIN_PASSWORD
+    ```
 
-```text
-Writing switch admin password to Vault
-Password read from Vault matches what was written
-SUCCESS
-```
+1. (`ncn-mw#`) Run the following commands to add the password to Vault.
+
+    ```bash
+    VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+    alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
+    vault kv put secret/net-creds/switch_admin admin=$SW_ADMIN_PASSWORD
+    ```
 
 ## Starting points
 
