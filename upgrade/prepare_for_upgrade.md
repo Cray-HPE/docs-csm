@@ -59,9 +59,28 @@ for details.
 
 ### 3. Adding switch admin password to Vault
 
-If it has not been done previously, record in Vault the `admin` user password for the management switches in the system.
+If CSM has been installed and Vault is running, add the switch credentials into Vault. Certain
+tests (for example, `goss-switch-bgp-neighbor-aruba-or-mellanox`) use these credentials to test the
+state of the switch. This step is not required to configure the management network. If Vault is
+unavailable, then this step can be temporarily skipped. Any automated tests that depend on the switch
+credentials being in Vault will fail until they are added.
 
-See [Adding switch admin password to Vault](../operations/network/management_network/README.md#adding-switch-admin-password-to-vault).
+1. (`ncn-mw#`) Write the switch admin password to the `SW_ADMIN_PASSWORD` variable if it is not already set.
+
+   ```bash
+   read -s SW_ADMIN_PASSWORD
+   ```
+
+   > Note: The use of `read -s` is a convention used throughout this documentation which allows for the
+   > user input of secrets without echoing them to the terminal or saving them in history.
+
+1. (`ncn-mw#`) Run the following commands to add the switch admin password to Vault.
+
+   ```bash
+   VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+   alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
+   vault kv put secret/net-creds/switch_admin admin=$SW_ADMIN_PASSWORD
+   ```
 
 ### 4. Ensure SNMP is configured on the management network switches
 <!-- snmp-authentication-tag -->

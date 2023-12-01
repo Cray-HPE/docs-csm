@@ -208,6 +208,8 @@ spec:
                 value: {{$value}}
               - name: dryRun
                 value: "{{$.DryRun}}"
+              - name: switchPassword
+                value: "{{$.SwitchPassword}}"
           {{- end }}
           - name: after-all
             dependencies:
