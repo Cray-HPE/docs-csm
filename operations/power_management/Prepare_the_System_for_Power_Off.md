@@ -249,7 +249,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
 1. (`ncn-mw#`) Check for running sessions.
 
-   > *Note:* This step may take a longer time if there are many BOS sessions. Recommend to keep the sessions count Minimal to save overall time taken.
+   > *Note:* This step may take a longer time if there are many BOS sessions running. It is recommended to keep the sessions count minimal to reduce the overall time taken.
 
     ```bash
     sat bootsys shutdown --stage session-checks 2>&1 | tee -a sat.session-checks
