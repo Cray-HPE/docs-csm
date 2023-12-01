@@ -49,6 +49,8 @@ because of the size it will take follow the steps on [Nexus Space Cleanup](Nexus
 The restore will delete any changes made to Nexus after the backup was taken. The restore takes around half the time that the export took
 (for example, if the export took two hours then the restore would take around one hour). While the restore is underway, Nexus is unavailable.
 
+> If an export has been taken recently, then the export job may still exist and will need to be deleted prior to restoring. See [Cleanup export job](#cleanup-export-job).
+
 (`ncn-m#`) To restore Nexus to the state of the backup, run the restore script on any master node where the latest CSM documentation is installed. See
 [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
