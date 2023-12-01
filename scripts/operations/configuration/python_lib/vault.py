@@ -39,8 +39,6 @@ K8S_SECRET_NAME = "cray-vault-unseal-keys"
 K8S_SERVICE_NAME = "cray-vault"
 
 CSM_ROOT_SECRET_KEY = "csm/users/root"
-SW_ADMIN_PW_KEY = "secret/net-creds/switch_admin"
-SW_ADMIN_PW_FIELD = "admin"
 
 API_STATUS_OK_WITH_DATA = 200
 API_STATUS_OK_EMPTY = 204
@@ -284,21 +282,8 @@ class Vault():
         """
         return self.get_secret(secret_key=CSM_ROOT_SECRET_KEY, **kwargs)
 
-    def get_sw_admin_password(self) -> str:
-        """
-        Wrapper function that supplies the switch admin password key to get_secret(),
-        and extracts the SW_ADMIN_PW_FIELD field from the result
-        """
-        return self.get_secret(secret_key=SW_ADMIN_PW_KEY, must_exist=True)[SW_ADMIN_PW_FIELD]
-
     def write_csm_root_secret(self, **kwargs) -> None:
         """
         Wrapper function that supplies the CSM root secret key to write_secret()
         """
         self.write_secret(secret_key=CSM_ROOT_SECRET_KEY, **kwargs)
-
-    def write_sw_admin_password(self, pw_string: str) -> None:
-        """
-        Wrapper function that supplies the switch admin password key to write_secret()
-        """
-        self.write_secret(secret_key=SW_ADMIN_PW_KEY, secret_data={ SW_ADMIN_PW_FIELD: pw_string })
