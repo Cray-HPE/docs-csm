@@ -29,9 +29,19 @@ after a break, always be sure that a typescript is running before proceeding.
 During this stage there will be a brief (approximately five minutes) window where pods with Persistent Volumes (`PV`s) will not be able to migrate between nodes.
 This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in order to accommodate the newer charts and a better upgrade strategy.
 
-1. If it has not been done previously, record in Vault the `admin` user password for the management switches in the system.
+1. (`ncn-m001#`) Set the `SW_ADMIN_PASSWORD` environment variable.
 
-   See [Adding switch admin password to Vault](../operations/network/management_network/README.md#adding-switch-admin-password-to-vault).
+   Set it to the `admin` user password for the switches. This is required for post-upgrade tests.
+
+   > `read -s` is used to prevent the password from being written to the screen or the shell history.
+
+   ```bash
+   read -s SW_ADMIN_PASSWORD
+   ```
+
+   ```bash
+   export SW_ADMIN_PASSWORD
+   ```
 
 1. (`ncn-m001#`) Ensure that the `CSM_RELEASE` variable is set to the **target** CSM version of this upgrade.
 

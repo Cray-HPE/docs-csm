@@ -34,6 +34,7 @@ spec:
         parameters:
           - name: targetNcn
           - name: dryRun
+          - name: switchPassword
       dag:
         tasks:
         - name: worker-ensure-testing-rpms
@@ -61,7 +62,8 @@ spec:
               - name: scriptContent
                 value: |
                   ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{inputs.parameters.targetNcn}} \
-                    -t "GOSS_BASE=/opt/cray/tests/install/ncn \
+                    -t "SW_ADMIN_PASSWORD='{{inputs.parameters.switchPassword}}' \
+                        GOSS_BASE=/opt/cray/tests/install/ncn \
                         TARGET_NCN={{inputs.parameters.targetNcn}} \
                         goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml \
                           --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate \
