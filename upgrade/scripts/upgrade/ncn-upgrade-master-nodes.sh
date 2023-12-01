@@ -24,7 +24,7 @@
 #
 
 set -e
-basedir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+basedir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 . ${basedir}/../common/upgrade-state.sh
 trap 'err_report' ERR
 
@@ -50,7 +50,7 @@ if [[ $state_recorded == "0" ]]; then
     mkdir -p $sat_backup_directory
     for path in $sat_paths_to_backup; do
       # Check path exists on the remote host
-      if ssh "$target_ncn" "ls $path" 2> /dev/null; then
+      if ssh "$target_ncn" "ls $path" 2>/dev/null; then
         echo "Copying $path from $target_ncn to $sat_backup_directory"
         mkdir -p "$(dirname "${sat_backup_directory}/${path}")"
         rsync -azl "${target_ncn}:${path}" "${sat_backup_directory}/${path}"
@@ -59,7 +59,7 @@ if [[ $state_recorded == "0" ]]; then
       fi
     done
     echo "SAT local files backed up to $sat_backup_directory"
-  } >> ${LOG_FILE} 2>&1
+  } >>${LOG_FILE} 2>&1
   record_state "${state_name}" ${target_ncn}
 else
   echo "INFO ====> ${state_name} has been completed"
@@ -72,7 +72,7 @@ if [[ ${target_ncn} == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
       scp root@ncn-m001:/etc/sysconfig/network/ifcfg-lan0 .
-    } >> ${LOG_FILE} 2>&1
+    } >>${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
   else
     echo "INFO ====> ${state_name} has been completed"
@@ -93,8 +93,8 @@ if helm ls -n operators | grep -q etcd-operator; then
 fi
 
 {
-  first_master_hostname=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global \
-    | jq -r '.[] | ."cloud-init"."meta-data"."first-master-hostname"')
+  first_master_hostname=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global |
+    jq -r '.[] | ."cloud-init"."meta-data"."first-master-hostname"')
   #shellcheck disable=SC2053
   if [[ ${first_master_hostname} == ${target_ncn} ]]; then
     state_name="RECONFIGURE_FIRST_MASTER"
@@ -137,13 +137,13 @@ fi
       echo "INFO ====> ${state_name} has been completed"
     fi
   fi
-} >> ${LOG_FILE} 2>&1
+} >>${LOG_FILE} 2>&1
 
 drain_node $target_ncn
 
 # Validate SLS health before calling csi handoff bss-update-*, since
 # it relies on SLS
-check_sls_health >> "${LOG_FILE}" 2>&1
+check_sls_health >>"${LOG_FILE}" 2>&1
 
 {
   set +e
@@ -156,7 +156,7 @@ check_sls_health >> "${LOG_FILE}" 2>&1
     fi
   done
   set -e
-} >> ${LOG_FILE} 2>&1
+} >>${LOG_FILE} 2>&1
 
 ${basedir}/../common/ncn-rebuild-common.sh $target_ncn
 
@@ -175,7 +175,7 @@ if [[ $state_recorded == "0" ]]; then
     else
       echo "$sat_backup_directory does not exist"
     fi
-  } >> ${LOG_FILE} 2>&1
+  } >>${LOG_FILE} 2>&1
   record_state "${state_name}" ${target_ncn}
 else
   echo "INFO ====> ${state_name} has been completed"
@@ -190,7 +190,7 @@ if [[ $state_recorded == "0" ]]; then
     record_state "${state_name}" ${target_ncn}
     scp /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
     ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
-  } >> ${LOG_FILE} 2>&1
+  } >>${LOG_FILE} 2>&1
   record_state "${state_name}" ${target_ncn}
 else
   echo "INFO ====> ${state_name} has been completed"
@@ -202,13 +202,13 @@ if [[ $state_recorded == "0" ]]; then
   echo "====> ${state_name} ..."
   {
     /usr/share/doc/csm/scripts/ensure_testing_rpms.sh ${target_ncn}
-  } >> ${LOG_FILE} 2>&1
+  } >>${LOG_FILE} 2>&1
   record_state "${state_name}" ${target_ncn}
 else
   echo "INFO ====> ${state_name} has been completed"
 fi
 
-cat << EOF
+cat <<EOF
 NOTE:
     If below test failed, try to fix it based on test output. Then run current script again
 EOF
@@ -222,7 +222,7 @@ if [[ $state_recorded == "0" ]]; then
     while read line; do
       if [[ -n $(echo $line | grep 'Title\|desc') ]]; then
         echo "ERROR failed goss test: $line"
-	      return_code=1
+        return_code=1
       else
         echo -e "$line"
       fi
