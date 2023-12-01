@@ -78,19 +78,9 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
 
 1. (`ncn-m#` or `pit#`) Run the automated tests.
 
-    1. Specify the `admin` user password for the management switches in the system.
+    1. If it has not been done previously, record in Vault the `admin` user password for the management switches in the system.
 
-        This is required for some of the tests to execute.
-
-        > `read -s` is used to prevent the password from being written to the screen or the shell history.
-
-        ```bash
-        read -r -s -p "Switch admin password: " SW_ADMIN_PASSWORD
-        ```
-
-        ```bash
-        export SW_ADMIN_PASSWORD
-        ```
+        See [Adding switch admin password to Vault](network/management_network/README.md#adding-switch-admin-password-to-vault).
 
     1. Run the combined health check script.
 
