@@ -30,14 +30,9 @@ The following procedures can be run from any master NCN.
    pdsh -w ncn-m00[1-3],ncn-w00[1-3],ncn-s00[1-3] systemctl restart goss-servers
    ```
 
-1. (`ncn-m#`) Specify the `admin` user password for the management switches in the system.
+1. If it has not been done previously, record in Vault the `admin` user password for the management switches in the system.
 
-   > `read -s` is used in order to prevent the password from being echoed to the screen or saved in the shell history.
-
-    ```bash
-    read -s SW_ADMIN_PASSWORD
-    export SW_ADMIN_PASSWORD
-    ```
+   See [Adding switch admin password to Vault](../../network/management_network/README.md#adding-switch-admin-password-to-vault).
 
 1. (`ncn-m#`) Validate the health of the various subsystems.
 

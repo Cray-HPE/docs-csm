@@ -210,16 +210,11 @@ function uploadWorkflowTemplates() {
 
 function createWorkflowPayload() {
   if [[ ${nodeType} == "worker" ]]; then
-    # ask for switch password if it's not set
-    if [[ -z ${SW_ADMIN_PASSWORD} ]]; then
-      read -r -s -p "Switch password:" SW_ADMIN_PASSWORD
-    fi
     echo
     cat << EOF
 {
 "dryRun": ${dryRun},
 "hosts": ${jsonArray},
-"switchPassword": "${SW_ADMIN_PASSWORD}",
 "imageId": "${imageId}",
 "bootTimeoutInSeconds": ${rebootTimeout},
 "desiredCfsConfig": "${desiredCfsConfig}"$(if [[ -n ${labels} ]]; then echo ", \"labels\": ${labels}"; fi)
