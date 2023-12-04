@@ -127,19 +127,9 @@ The http proxy variables must be `unset` after the desired artifacts are downloa
 
 ## Stage 0.2 - Prerequisites
 
-1. (`ncn-m001#`) Set the `SW_ADMIN_PASSWORD` environment variable.
+1. If it has not been done previously, record in Vault the `admin` user password for the management switches in the system.
 
-   Set it to the password for `admin` user on the switches. This is needed for preflight tests within the check script.
-
-   > **NOTE:** `read -s` is used to prevent the password from being written to the screen or the shell history.
-
-   ```bash
-   read -s SW_ADMIN_PASSWORD
-   ```
-
-   ```bash
-   export SW_ADMIN_PASSWORD
-   ```
+   See [Adding switch admin password to Vault](../operations/network/management_network/README.md#adding-switch-admin-password-to-vault).
 
 1. (`ncn-m001#`) Set the `NEXUS_PASSWORD` variable **only if needed**.
 

@@ -210,16 +210,15 @@ function uploadWorkflowTemplates() {
 
 function createWorkflowPayload() {
   if [[ ${nodeType} == "worker" ]]; then
-    # ask for switch password if it's not set
-    if [[ -z ${SW_ADMIN_PASSWORD} ]]; then
-      read -r -s -p "Switch password:" SW_ADMIN_PASSWORD
-    fi
     echo
     cat << EOF
 {
 "dryRun": ${dryRun},
 "hosts": ${jsonArray},
-"switchPassword": "${SW_ADMIN_PASSWORD}",
+"switchPassword": "$(kubectl -n vault exec -i cray-vault-0 -c vault -- env \
+      VAULT_TOKEN="$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' | base64 -d)" \
+      VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json \
+      vault kv get secret/net-creds/switch_admin | jq -r '.data.admin')",
 "imageId": "${imageId}",
 "bootTimeoutInSeconds": ${rebootTimeout},
 "desiredCfsConfig": "${desiredCfsConfig}"$(if [[ -n ${labels} ]]; then echo ", \"labels\": ${labels}"; fi)
