@@ -358,6 +358,7 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
     networks_data = {}
     ip_reservation = {}
     ip_dhcp_pool_start = {}
+    ip_dhcp_pool_end = {}
     new_ip_dhcp_pool_start = {}
     ips_to_delete_from_smd = {}
 
@@ -371,6 +372,7 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
                 ip_reservation[name] = []
                 ip_reservation[name] = networks_data[name]['ExtraProperties']['Subnets'][i]['IPReservations']
                 ip_dhcp_pool_start[name] = networks_data[name]['ExtraProperties']['Subnets'][i]['DHCPStart']
+                ip_dhcp_pool_end[name] = networks_data[name]['ExtraProperties']['Subnets'][i]['DHCPEnd']
 
     for network in network_list:
         ip_set = set()
@@ -401,8 +403,7 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
         new_ip_dhcp_pool_start[network] = ''
         ip_shift = 0
         if add_ncn_count >= ip_white_space-1:
-            print('There is not enough static IP space to add an NCN.'
-                  'Adjusting DHCP pool start.')
+            print('There is not enough static IP space to add an NCN. Adjusting DHCP pool start.')
             # for all networks other than HMN
             if network != 'HMN':
                 for i in range(1, add_ncn_count + 1):
@@ -424,6 +425,9 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
 
         if new_ip_dhcp_pool_start[network] == '':
             new_ip_dhcp_pool_start[network] = start_dhcp_pool
+        elif ipaddress.ip_address(new_ip_dhcp_pool_start[network]) >= ipaddress.ip_address(ip_dhcp_pool_end[network]):
+            log.error(f'New {network} DHCPStart value {new_ip_dhcp_pool_start[network]} exceeds available DHCP pool capacity.')
+            sys.exit(1)
         else:
             new_ip_dhcp_pool_start[network] = str(temp)
 
