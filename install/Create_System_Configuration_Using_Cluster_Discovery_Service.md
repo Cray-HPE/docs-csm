@@ -4,7 +4,7 @@ This stage walks the user through creating the configuration payload for the sys
 
 Run the following steps before starting any of the system configuration procedures.
 
-1. (`pit#`) Make the `prep` and `cds` directory.
+1. (`pit#`) Create the `prep` and `cds` directory.
 
    ```bash
    mkdir -pv "${PITDATA}/prep/cds"
@@ -85,13 +85,13 @@ Run the following steps before starting any of the system configuration procedur
    - Configure `bond0` interface for single VLAN:
 
      ```bash
-     "${CVT_PATH}"/cds/network_setup.py --mtlip <ipaddr>,<netmask>,<slave0>,<slave1>
+     "${CVT_PATH}"/cds/network_setup.py -mtl <ipaddr>,<netmask>,<slave0>,<slave1>
      ```
 
    - Configure `bond0` interface for HMN configured network (VLAN 1, 2, and 4):
 
      ```bash
-     "${CVT_PATH}"/cds/network_setup.py --mtlip <ipaddr>,<netmask>,<slave0>,<slave1> --hmnip <ipaddr>,<netmask>,<vlanid> --nmnip <ipaddr>,<netmask>,<vlanid>
+     "${CVT_PATH}"/cds/network_setup.py -mtl <ipaddr>,<netmask>,<slave0>,<slave1> -hmn <ipaddr>,<netmask>,<vlanid> -nmn <ipaddr>,<netmask>,<vlanid>
      ```
 
      The variables and their descriptions are as follows:
@@ -116,29 +116,29 @@ Run the following steps before starting any of the system configuration procedur
      > The `<leasetime>` parameter is optional.
 
      ```bash
-     "${CVT_PATH}"/cds/discover_enable.py --iprange <dhcp_ip_start>,<dhcp_ip_end>,<subnet>,<leasetime> --interface bond0
+     "${CVT_PATH}"/cds/discover_enable.py -ip <dhcp_ip_start>,<dhcp_ip_end>,<subnet>,<leasetime> -i bond0
      ```
 
      Example command:
 
      ```bash
-     "${CVT_PATH}"/cds/discover_enable.py --iprange 10.x.x.x,10.x.x.x,255.x.x.x,24h --interface bond0
+     "${CVT_PATH}"/cds/discover_enable.py -ip 10.x.x.x,10.x.x.x,255.x.x.x,24h -i bond0
      ```
 
    - Configure Dnsmasq for HMN configured network (VLAN 1, 2, and 4):
 
      ```bash
-     "${CVT_PATH}"/cds/discover_enable.py --mtlrange <admin_node_mtl_ip>,<start_ip>,<end_ip> \
-                                          --nmnrange <admin_node_nmn_ip>,<start_ip>,<end_ip> \
-                                          --hmnrange <admin_node_hmn_ip>,<start_ip>,<end_ip>
+     "${CVT_PATH}"/cds/discover_enable.py -mtl <admin_node_mtl_ip>,<start_ip>,<end_ip> \
+                                          -nmn <admin_node_nmn_ip>,<start_ip>,<end_ip> \
+                                          -hmn <admin_node_hmn_ip>,<start_ip>,<end_ip>
      ```
 
      Example command:
 
      ```bash
-     "${CVT_PATH}"/cds/discover_enable.py --mtlrange 10.x.x.x,10.x.x.x,10.x.x.x \
-                                          --nmnrange 10.x.x.x,10.x.x.x,10.x.x.x \
-                                          --hmnrange 10.x.x.x,10..x.x.x,10.x.x.x
+     "${CVT_PATH}"/cds/discover_enable.py -mtl 10.x.x.x,10.x.x.x,10.x.x.x \
+                                          -nmn 10.x.x.x,10.x.x.x,10.x.x.x \
+                                          -hmn 10.x.x.x,10.x.x.x,10.x.x.x
      ```
 
      > **NOTE**: The `iprange` for single VLAN or `mtliprange`, `nmniprange`, and `hmniprange` for HMN configured network are available in the `system_config.yaml` file in the `prep` directory.
@@ -152,7 +152,7 @@ The following steps will verify if IP addresses are assigned to the BMC nodes an
 1. (`pit#`) List the BMC nodes.
 
    ```bash
-   "${CVT_PATH}"/cds/discover_start.py -u <bmc_username> --list
+   "${CVT_PATH}"/cds/discover_start.py -u <bmc_username> -l
    ```
 
    > A prompt to enter the password will appear, enter the correct BMC password.
@@ -166,7 +166,7 @@ The following steps will verify if IP addresses are assigned to the BMC nodes an
 1. (`pit#`) Reset the listed BMC nodes.
 
    ```bash
-   "${CVT_PATH}"/cds/discover_start.py -u <bmc_username> --reset
+   "${CVT_PATH}"/cds/discover_start.py -u <bmc_username> -r
    ```
 
    > A prompt to enter the password will appear, enter the correct BMC password.
@@ -180,14 +180,25 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 1. (`pit#`) Verify the status and list the IP addresses of the nodes.
 
    ```bash
-   "${CVT_PATH}"/cds/discover_status.py nodes --out
+   "${CVT_PATH}"/cds/discover_status.py nodes -o
    ```
+
+   > **NOTE**:
+   >
+   > - Ensure that all the NCNs and CNs are discovered and listed. If any nodes are not discovered, identify the nodes using the MAC address and verify the switch connectivity of those nodes.
+   > - If the discover status step is rerun after a long duration, start the procedure from the beginning of section [Configure the management network](#2-configure-the-management-network).
 
    1. Create a `bond0` network interface on all the listed nodes.
 
       ```bash
       pdsh -w^nodelist -x localhost "sh "${CVT_PATH}"/scripts/create_bond0.sh"
       ```
+
+      > **NOTE**: If there is a host-key verification failure, use the `ssh-keygen` command to retrieve the host-key and retry the procedure.
+      >
+      > `ssh-keygen -R <node_IP> -f /root/.ssh/known_hosts`
+      >
+      > Where, `<node_IP>` is the IP of the node where the error exist.
 
    1. Ensure that `bond0` network interface is created on all the nodes listed in the `nodelist`.
 
@@ -198,7 +209,7 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 1. (`pit#`) Verify the status and list the IP addresses of the fabric switches.
 
    ```bash
-   "${CVT_PATH}"/cds/discover_status.py fabric --username <fabric_username> --out
+   "${CVT_PATH}"/cds/discover_status.py fabric -u <fabric_username> -o
    ```
 
    > A prompt to enter the password will appear, enter the correct fabric switch password.
@@ -210,13 +221,13 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 1. (`pit#`) Verify the status and list the IP addresses of the PDUs.
 
    ```bash
-   "${CVT_PATH}"/cds/discover_status.py pdu --out
+   "${CVT_PATH}"/cds/discover_status.py pdu -o
    ```
 
 1. (`pit#`) Verify the status and list the IP addresses of the CMCs.
 
    ```bash
-   "${CVT_PATH}"/cds/discover_status.py cmc --username <cmc_username> --out
+   "${CVT_PATH}"/cds/discover_status.py cmc -u <cmc_username> -o
    ```
 
    > A prompt to enter the password will appear, enter the correct CMC password.
@@ -234,13 +245,13 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 1. (`pit#`) Collect the hardware inventory data.
 
    ```bash
-   "${CVT_PATH}"/system_inventory.py --nodefile nodelist
+   "${CVT_PATH}"/system_inventory.py -nf nodelist
    ```
 
 1. (`pit#`) Collect the fabric inventory data.
 
    ```bash
-   "${CVT_PATH}"/fabric_inventory.py --switchfile ./cds/fabricswlist --username <switch_username>
+   "${CVT_PATH}"/fabric_inventory.py -sf fabricswlist -u <switch_username>
    ```
 
    > A prompt to enter the password will appear, enter the correct fabric password.
@@ -252,7 +263,7 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
    1. Collect the management network inventory data.
 
       ```bash
-      "${CVT_PATH}"/management_inventory.py  --username <username> --switchfile mgmtswlist
+      "${CVT_PATH}"/management_inventory.py  -u <username> -sf mgmtswlist
       ```
 
       > A prompt to enter the password will appear, enter the correct fabric password.
@@ -260,13 +271,13 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 1. (`pit#`) Collect the PDU inventory data.
 
    ```bash
-   "${CVT_PATH}"/cds/pdu_cmc_inventory.py --pdu_file pdulist
+   "${CVT_PATH}"/cds/pdu_cmc_inventory.py -pf pdulist
    ```
 
 1. (`pit#`) Collect the CMC inventory data.
 
    ```bash
-   "${CVT_PATH}"/cds/pdu_cmc_inventory.py --cmc_file cmclist
+   "${CVT_PATH}"/cds/pdu_cmc_inventory.py -cf cmclist
    ```
 
 #### 3.4.2 SHCD data population
@@ -286,7 +297,7 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 1. (`pit#`) Store the SHCD data in the CVT database.
 
    ```bash
-   "${CVT_PATH}"/parse_shcd.py --canu_json_file cabling.json
+   "${CVT_PATH}"/parse_shcd.py -c cabling.json
    ```
 
 #### 3.4.3 Server classification
@@ -296,7 +307,7 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 > In the following command, replace `<N>` with the number of worker NCNs in the system.
 
 ```bash
-"${CVT_PATH}"/scripts/server_classification.py --no_of_workers <N>
+"${CVT_PATH}"/scripts/server_classification.py -n <N>
 ```
 
 #### 3.4.4 Compare the SHCD data with CVT inventory data
@@ -304,19 +315,19 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 1. (`pit#`) List the snapshot IDs of the SHCD and the CVT inventory data.
 
    ```bash
-   "${CVT_PATH}"/shcd_compare.py --list
+   "${CVT_PATH}"/shcd_compare.py -l
    ```
 
 1. (`pit#`) Compare the SHCD data with the CVT inventory data.
 
    ```bash
-   "${CVT_PATH}"/shcd_compare.py --shcd_id <SnapshotID_SHCD> --cvt_id <SnapshotID_CVT>
+   "${CVT_PATH}"/shcd_compare.py -s <SnapshotID_SHCD> -c <SnapshotID_CVT>
    ```
 
    Example command:
 
    ```bash
-   "${CVT_PATH}"/shcd_compare.py --shcd_id 4ea86f99-47ca-4cd9-b142-ea572d0566bf --cvt_id 326a6edd-adce-4d1f-9f30-ae9539284733
+   "${CVT_PATH}"/shcd_compare.py -s 4ea86f99-47ca-4cd9-b142-ea572d0566bf -c 326a6edd-adce-4d1f-9f30-ae9539284733
    ```
 
 ## 4. Generate seed files and paddle file
