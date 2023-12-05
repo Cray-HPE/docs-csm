@@ -332,6 +332,20 @@ def delete_kea_lease(ip, token):
     kea_resp = ingress_api('POST', kea_url, headers=kea_request_header, json=kea_delete_data)
 
 
+def delete_smd_record(smd_id, token):
+    """
+    delete ethernetInterfaces record from SMD
+    :param smd_id:
+    :param token:
+    :return:
+    """
+
+    smd_url = '/apis/smd/hsm/v2/Inventory/EthernetInterfaces/' + smd_id
+    smd_request_header = {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}
+
+    smd_resp = ingress_api('DELETE', smd_url, headers=smd_request_header)
+
+
 def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks):
     """
     Updates SLS networks by expanding static IP range and moving DHCP IP pool.
@@ -344,6 +358,7 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
     networks_data = {}
     ip_reservation = {}
     ip_dhcp_pool_start = {}
+    ip_dhcp_pool_end = {}
     new_ip_dhcp_pool_start = {}
     ips_to_delete_from_smd = {}
 
@@ -357,6 +372,7 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
                 ip_reservation[name] = []
                 ip_reservation[name] = networks_data[name]['ExtraProperties']['Subnets'][i]['IPReservations']
                 ip_dhcp_pool_start[name] = networks_data[name]['ExtraProperties']['Subnets'][i]['DHCPStart']
+                ip_dhcp_pool_end[name] = networks_data[name]['ExtraProperties']['Subnets'][i]['DHCPEnd']
 
     for network in network_list:
         ip_set = set()
@@ -387,8 +403,7 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
         new_ip_dhcp_pool_start[network] = ''
         ip_shift = 0
         if add_ncn_count >= ip_white_space-1:
-            print('There is not enough static IP space to add an NCN.'
-                  'Adjusting DHCP pool start.')
+            print('There is not enough static IP space to add an NCN. Adjusting DHCP pool start.')
             # for all networks other than HMN
             if network != 'HMN':
                 for i in range(1, add_ncn_count + 1):
@@ -410,6 +425,9 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
 
         if new_ip_dhcp_pool_start[network] == '':
             new_ip_dhcp_pool_start[network] = start_dhcp_pool
+        elif ipaddress.ip_address(new_ip_dhcp_pool_start[network]) >= ipaddress.ip_address(ip_dhcp_pool_end[network]):
+            log.error(f'New {network} DHCPStart value {new_ip_dhcp_pool_start[network]} exceeds available DHCP pool capacity.')
+            sys.exit(1)
         else:
             new_ip_dhcp_pool_start[network] = str(temp)
 
@@ -469,6 +487,8 @@ def update_smd_and_kea(ips_update_in_smd, api_header, token):
                 post_result = post_api_request('/apis/smd/hsm/v2/Inventory/EthernetInterfaces/' + smd_id, api_header, post_data)
                 # placeholder print out
                 log.warning (f'Deleting {json.dumps(post_data)} from SMD EthernetInterfaces.')
+                # delete SMD ethernetInterfaces record
+                delete_smd_record(smd_id, token)
                 log.warning (f'Deleting {ip} from kea active leases.')
                 #kea lease delete
                 delete_kea_lease(ip, token)
