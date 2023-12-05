@@ -27,9 +27,9 @@ The following covers redeploying the Spire service and restoring the data.
       2023-03-24T16:00:11.010220+00:00 spilo/spire-postgres/f5d7952e-b049-4bcf-ba7f-6357898bd617/logical_backups/1679677088.sql.gz
       ```
 
-1. (`ncn-mw#`) Uninstall the chart and wait for the resources to terminate.
+1. (`ncn-mw#`) Uninstall the `spire` and `cray-spire` charts and wait for the resources to terminate.
 
-   1. Note the version of the chart that is currently deployed.
+   1. Note the version of the `spire` chart that is currently deployed.
 
       ```bash
       helm history -n spire spire
@@ -38,11 +38,11 @@ The following covers redeploying the Spire service and restoring the data.
       Example output:
 
       ```text
-      REVISION    UPDATED                     STATUS      CHART       APP VERSION DESCRIPTION
-      1           Tue Aug  2 22:14:31 2022    deployed    spire-2.6.0 0.12.2      Install complete
+      REVISION	UPDATED                 	STATUS  	CHART       	APP VERSION	DESCRIPTION
+      1       	Wed Nov 15 12:41:47 2023	deployed	spire-2.14.2	0.12.2     	Install complete
       ```
 
-   1. Uninstall the chart.
+   1. Uninstall the `spire` chart.
 
       ```bash
       helm uninstall -n spire spire
@@ -54,9 +54,34 @@ The following covers redeploying the Spire service and restoring the data.
       release "spire" uninstalled
       ```
 
-   1. Wait for the resources to terminate, delete the PVCs, and clean up `spire-agent` before reinstalling the chart.
+   1. Note the version of the `cray-spire` chart that is currently deployed.
 
-      1. Verify that no Spire pods are running.
+      ```bash
+      helm history -n spire cray-spire
+      ```
+
+      Example output:
+
+      ```text
+      REVISION	UPDATED                 	STATUS  	CHART           	APP VERSION	DESCRIPTION
+      1       	Wed Nov 15 12:41:50 2023	deployed	cray-spire-1.5.4	1.5.5      	Install complete
+      ```
+
+   1. Uninstall the `cray-spire` chart.
+
+      ```bash
+      helm uninstall -n spire cray-spire
+      ```
+
+      Example output:
+
+      ```text
+      release "cray-spire" uninstalled
+      ```
+
+   1. Wait for the resources to terminate, delete the PVCs, and clean up `spire-agent` before reinstalling the charts.
+
+      1. Verify that only `tpm-provisioner` pods (or no pods) are running in `spire` namespace.
 
          ```bash
          watch "kubectl get pods -n spire"
@@ -65,18 +90,22 @@ The following covers redeploying the Spire service and restoring the data.
          Example output:
 
          ```text
-         No resources found in spire namespace.
+         NAME                                          READY   STATUS    RESTARTS      AGE
+         tpm-provisioner-0                             2/2     Running   0             17d
          ```
 
-      1. Delete the Spire PVCs.
+      1. Delete the Spire server PVCs.
 
          ```bash
-         kubectl get pvc -n spire | grep spire-data-spire-server | awk '{print $1}' | xargs kubectl delete -n spire pvc
+         kubectl get pvc -n spire | grep spire-server | awk '{print $1}' | xargs kubectl delete -n spire pvc
          ```
 
          Example output:
 
          ```text
+         persistentvolumeclaim "data-cray-spire-server-0" deleted
+         persistentvolumeclaim "data-cray-spire-server-1" deleted
+         persistentvolumeclaim "data-cray-spire-server-2" deleted
          persistentvolumeclaim "spire-data-spire-server-0" deleted
          persistentvolumeclaim "spire-data-spire-server-1" deleted
          persistentvolumeclaim "spire-data-spire-server-2" deleted
@@ -92,51 +121,70 @@ The following covers redeploying the Spire service and restoring the data.
          done
          ```
 
-1. (`ncn-mw#`) Redeploy the chart and wait for the resources to start.
+1. (`ncn-mw#`) Redeploy the `spire` and `cray-spire` charts and wait for the resources to start.
 
-   Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure with the following specifications:
+   1. Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure to redeploy the `spire` chart:
 
-   - Name of chart to be redeployed: `spire`
-   - Base name of manifest: `sysmgmt`
-   - When reaching the step to update customizations, no edits need to be made to the customizations file.
-   - When reaching the step to validate that the redeploy was successful, perform the following step:
+      - Name of chart to be redeployed: `spire`
+      - Base name of manifest: `sysmgmt`
+      - When reaching the step to update customizations, no edits need to be made to the customizations file.
 
-      **Only follow this step as part of the previously linked chart redeploy procedure.**
+   1. Repeat the above procedure for the `cray-spire` chart:
 
-      1. Wait for the resources to start.
+      - Name of chart to be redeployed: `cray-spire`
+      - Base name of manifest: `sysmgmt`
 
-         ```bash
-         watch "kubectl get pods -n spire"
-         ```
+   1. Wait for the resources to start.
 
-         Example output:
+      ```bash
+      watch "kubectl get pods -n spire"
+      ```
 
-         ```text
-         NAME                                     READY   STATUS      RESTARTS   AGE
-         request-ncn-join-token-89hp7             2/2     Running     0          31m
-         request-ncn-join-token-fvqdj             2/2     Running     0          31m
-         request-ncn-join-token-h7qc2             2/2     Running     0          31m
-         request-ncn-join-token-wv56n             2/2     Running     0          31m
-         request-ncn-join-token-dnfhk             2/2     Running     0          31m
-         request-ncn-join-token-hbvwc             2/2     Running     0          31m
-         spire-agent-cmn9q                        1/1     Running     0          31m
-         spire-agent-gzn2d                        1/1     Running     0          31m
-         spire-agent-pl595                        1/1     Running     0          31m
-         spire-create-pooler-schema-1-g6gr6       0/3     Completed   0          31m
-         spire-jwks-6c97b5694f-d94rg              3/3     Running     0          31m
-         spire-jwks-6c97b5694f-h89lb              3/3     Running     0          31m
-         spire-jwks-6c97b5694f-kz9k4              3/3     Running     0          31m
-         spire-postgres-0                         3/3     Running     0          31m
-         spire-postgres-1                         3/3     Running     0          31m
-         spire-postgres-2                         3/3     Running     0          30m
-         spire-postgres-pooler-695d4cd48f-57p5s   2/2     Running     0          30m
-         spire-postgres-pooler-695d4cd48f-bzm6n   2/2     Running     0          30m
-         spire-postgres-pooler-695d4cd48f-mv57z   2/2     Running     0          30m
-         spire-server-0                           2/2     Running     4          31m
-         spire-server-1                           2/2     Running     0          28m
-         spire-server-2                           2/2     Running     0          28m
-         spire-update-bss-1-cfbxc                 0/2     Completed   0          31m
-         ```
+      Example output:
+
+      ```text
+      NAME                                          READY   STATUS    RESTARTS       AGE
+      cray-spire-agent-7w6tc                        1/1     Running   0              10m
+      cray-spire-agent-b6754                        1/1     Running   0              10m
+      cray-spire-agent-pxqmq                        1/1     Running   0              10m
+      cray-spire-agent-rxsbf                        1/1     Running   0              10m
+      cray-spire-jwks-76f48d6484-b72jf              3/3     Running   0              10m
+      cray-spire-jwks-76f48d6484-v5b5n              3/3     Running   0              10m
+      cray-spire-jwks-76f48d6484-xgnxw              3/3     Running   0              10m
+      cray-spire-postgres-0                         3/3     Running   0              10m
+      cray-spire-postgres-1                         3/3     Running   0              10m
+      cray-spire-postgres-2                         3/3     Running   0              10m
+      cray-spire-postgres-pooler-86797d8b9b-p2nkf   2/2     Running   0              10m
+      cray-spire-postgres-pooler-86797d8b9b-rfvr8   2/2     Running   0              10m
+      cray-spire-postgres-pooler-86797d8b9b-t9xwt   2/2     Running   0              10m
+      cray-spire-server-0                           2/2     Running   0              10m
+      cray-spire-server-1                           2/2     Running   0              10m
+      cray-spire-server-2                           2/2     Running   0              10m
+      request-ncn-join-token-4hgnt                  2/2     Running   0              15m
+      request-ncn-join-token-67qlz                  2/2     Running   0              15m
+      request-ncn-join-token-75q2l                  2/2     Running   0              15m
+      request-ncn-join-token-d24wv                  2/2     Running   0              15m
+      request-ncn-join-token-q56zm                  2/2     Running   0              15m
+      request-ncn-join-token-tmz4l                  2/2     Running   0              15m
+      request-ncn-join-token-z87pl                  2/2     Running   0              15m
+      spire-agent-42gb2                             1/1     Running   0              15m
+      spire-agent-6lxv9                             1/1     Running   0              15m
+      spire-agent-hhbqm                             1/1     Running   0              15m
+      spire-agent-sztjm                             1/1     Running   0              15m
+      spire-jwks-6cd9d5b5b5-6bmcb                   3/3     Running   0              15m
+      spire-jwks-6cd9d5b5b5-gz2tl                   3/3     Running   0              15m
+      spire-jwks-6cd9d5b5b5-pds25                   3/3     Running   0              15m
+      spire-postgres-0                              3/3     Running   0              15m
+      spire-postgres-1                              3/3     Running   0              15m
+      spire-postgres-2                              3/3     Running   0              15m
+      spire-postgres-pooler-75964fbc66-6hvvq        2/2     Running   0              15m
+      spire-postgres-pooler-75964fbc66-d52mg        2/2     Running   0              15m
+      spire-postgres-pooler-75964fbc66-nm6v6        2/2     Running   0              15m
+      spire-server-0                                2/2     Running   0              15m
+      spire-server-1                                2/2     Running   0              15m
+      spire-server-2                                2/2     Running   0              15m
+      tpm-provisioner-0                             2/2     Running   0              17d
+      ```
 
    1. Rejoin the storage nodes to Spire and restart the `spire-agent` on all NCNs.
 
