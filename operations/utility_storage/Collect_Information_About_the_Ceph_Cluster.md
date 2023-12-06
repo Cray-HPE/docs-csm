@@ -24,7 +24,7 @@ ceph -s
 
 Example output:
 
-```
+```text
   cluster:
   id:     5f3b4031-d6c0-4118-94c0-bffd90b534eb
   health: HEALTH_OK  <<-- WARN/ERROR/CRITICAL are other states
@@ -58,7 +58,7 @@ ceph osd tree
 
 Example output:
 
-```
+```text
 ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 -1       62.85938 root default
 -7       20.95312     host ncn-s001
@@ -94,7 +94,7 @@ ceph df
 
 Example output:
 
-```
+```text
 RAW STORAGE:
     CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED
     kube      27 GiB     15 GiB     9.2 GiB       12 GiB         45.25
@@ -125,7 +125,7 @@ ceph osd df
 
 Example output:
 
-```
+```text
 ID CLASS WEIGHT  REWEIGHT SIZE   RAW USE DATA    OMAP META  AVAIL   %USE  VAR  PGS STATUS
  1  kube 0.00879  1.00000  9 GiB 4.1 GiB 3.1 GiB  0 B 1 GiB 4.9 GiB 45.25 0.96  99     up
  4   smf 0.01859  1.00000 19 GiB 9.1 GiB 8.1 GiB  0 B 1 GiB 9.9 GiB 48.09 1.02 141     up
@@ -147,7 +147,7 @@ ceph osd find OSD.ID
 
 Example output:
 
-```
+```text
 {
     "osd": 1,
     "addrs": {
@@ -178,7 +178,7 @@ ceph osd lspools
 
 Example output:
 
-```
+```text
 1 cephfs_data
 2 cephfs_metadata
 3 .rgw.root
@@ -191,3 +191,22 @@ Example output:
 11 smf
 ```
 
+### Change Logging Verbosity
+
+You can change the logging levels for Ceph services via the `ceph config` command.  
+
+Increasing the logging for all rgw containers:
+
+```bash
+ceph config set client.rgw debug_ms 1
+ceph config set client.rgw debug_rgw 20
+```
+
+Decreasing the logging for all rgw containers:
+
+```bash
+ceph config rm client.rgw debug_ms
+ceph config rm client.rgw debug_rgw
+```
+
+***Note:*** The above step is removing the customer overrides and will fall back to default values when removed.
