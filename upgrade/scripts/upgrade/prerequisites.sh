@@ -755,34 +755,23 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-state_name="UPGRADE_NLS_POSTGRES"
+do_upgrade_csm_chart cray-psp platform.yaml
+do_upgrade_csm_chart cray-postgres-operator platform.yaml
+
+state_name="FIX_POSTGRES"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
-    # CASMPET-6602 ignore the cray-nls deployment error as cray-nls-postgres is not ready
-    "${locOfScript}/util/upgrade-cray-nls.sh" || true
-    sleep 5
-    echo "Rolling cray-nls-postgres statefulset"
-    kubectl rollout restart -n argo statefulset cray-nls-postgres
+    "${locOfScript}/util/fix-postgres.sh"
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-state_name="RESTART_SPIRE_POSTGRES"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-    echo "Rolling spire-postgres statefulset"
-    kubectl rollout restart -n spire statefulset spire-postgres
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
+do_upgrade_csm_chart cray-iuf platform.yaml
+do_upgrade_csm_chart cray-nls platform.yaml
 
 state_name="UPGRADE_SYSMGMT_HEALTH"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
@@ -1339,41 +1328,11 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
-    # make sure cray-nls-postgres is healthy
-    i=1
-    max_checks=40
-    wait_time=15
-    healthy="false"
-    while [[ ${i} -le ${max_checks} ]]; do
-      if [[ "$(kubectl get postgresql cray-nls-postgres -n argo -ojsonpath='{.status.PostgresClusterStatus}')" == "Running" ]]; then
-        echo "cray-nls-postgres is healthy"
-        healthy="true"
-        break
-      fi
-      echo "Waiting for postgres operator to consider cray-nls-postgres healthy (${i}/${max_checks})"
-      sleep ${wait_time}
-      i=$((i + 1))
-    done
-
-    if [[ ${healthy} == "false" ]]; then
-      echo "ERROR: cray-nls-postgres is not healthy after $((max_checks * wait_time)) seconds"
-      exit 1
-    fi
-
-    # CASMINST-6700 retry cray-nls upgrade
-    set +e
-    i=0
-    max_checks=40
-    wait_time=30
-    until "${locOfScript}/util/upgrade-cray-nls.sh"; do
-      i=$((i + 1))
-      echo "Waiting for cray-nls upgrade to succeed (${i}/${max_checks})"
-      sleep ${wait_time}
-      # retry for up to 20 minutes
-      if [[ ${i} -gt ${max_checks} ]]; then
-        echo "ERROR: failed to finish cray-nls upgrade"
-        exit 1
-      fi
+    # Restore labels and annotations on Argo CRDs
+    for c in $(kubectl get crd | grep argo | cut -d' ' -f1); do
+      kubectl label --overwrite crd "$c" app.kubernetes.io/managed-by="Helm"
+      kubectl annotate --overwrite crd "$c" meta.helm.sh/release-name="cray-nls"
+      kubectl annotate --overwrite crd "$c" meta.helm.sh/release-namespace="argo"
     done
 
     # CASMINST-6040 - need to wait for hooks.cray-nls.hpe.com crd to be created
@@ -1394,37 +1353,6 @@ if [[ ${state_recorded} == "0" ]]; then
     "${locOfScript}/../../../workflows/scripts/upload-rebuild-templates.sh"
     rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*iuf-cli\*.rpm | sort -V | tail -1)"
 
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
-
-state_name="VALIDATE_SPIRE_POSTGRES_HEALTH"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-    # make sure spire-postgres is healthy
-    i=1
-    max_checks=40
-    wait_time=15
-    healthy="false"
-    while [[ ${i} -le ${max_checks} ]]; do
-      if [[ "$(kubectl get postgresql spire-postgres -n spire -ojsonpath='{.status.PostgresClusterStatus}')" == "Running" ]]; then
-        echo "spire-postgres is healthy"
-        healthy="true"
-        break
-      fi
-      echo "Waiting for postgres operator to consider spire-postgres healthy (${i}/${max_checks})"
-      sleep ${wait_time}
-      i=$((i + 1))
-    done
-
-    if [[ ${healthy} == "false" ]]; then
-      echo "ERROR: spire-postgres is not healthy after $((max_checks * wait_time)) seconds"
-      exit 1
-    fi
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
