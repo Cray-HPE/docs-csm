@@ -45,4 +45,17 @@ spec:
                   value: "{{inputs.parameters.dryRun}}"  
                 - name: scriptContent
                   value: |
-                    /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true
+                    sleep_time=15
+                    max_retries=45
+                    attempt=1
+                    while [[ $attempt -le $max_retries ]]; do
+                      echo -e "\nChecking Ceph health status. Attempt ${attempt}/${max_retries}..."
+                      if ! /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true; then
+                        attempt=$(( attempt + 1 ))
+                        sleep $sleep_time
+                      else
+                        exit 0
+                      fi
+                    done
+                    echo "ERROR Ceph is unhealthy. Please run 'Ceph health detail' and investigate what is causing Ceph to be unhealthy".
+                    exit 1
