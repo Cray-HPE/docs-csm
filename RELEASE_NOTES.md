@@ -33,7 +33,7 @@
 * `IUF` stage for `management-nodes-rollout` consumes logs from `ncn-rebuild`
 * Add a test to check taints on master nodes
 * Augment `postgres` backup `goss` test to also check for `cronjob`
- 
+
 ### Base platform component upgrades
 
 | Platform Component           | Version        |
