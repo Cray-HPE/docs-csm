@@ -3,7 +3,8 @@
 [CSM](glossary.md#cray-system-management-csm) 1.5 contains many changes spanning bug fixes, new feature development, and documentation improvements. This page lists some of the highlights.
 
 ## New
-* Highly available prometheus through integration of thanos
+
+* Highly available `prometheus` through integration of `thanos`
 * Support and migration to `bitnami-etcd`
 * Updates to all services using `etcd` cluster to migrate to use of `bitnami-etcd`
 * Support for old and new `spire` versions running simultaneously toward zero downtime upgrades
@@ -16,7 +17,7 @@
 * Update version of `cert-manager`
 * Upgrade to `Kubernetes` version 1.22
 * Bump `iuf-cli` version to 1.4.5
-* Upgrade `argo` verson to pick up bug-fixes
+* Upgrade `argo` version to pick up bug-fixes
 
 ### Monitoring
 
@@ -27,6 +28,7 @@
 ### New hardware support
 
 ### Automation improvements
+
 * Updates to etcd health checks due to replacement of `etcd` vendor to `bitnami-etcd`
 * `IUF` stage for `management-nodes-rollout` consumes logs from `ncn-rebuild`
 * Add a test to check taints on master nodes
@@ -58,6 +60,7 @@
 | `argo workflow-controller`   | 3.4.5          |
 
 ### Security improvements
+
 * `CVE - KERNEL 5.14.21-150400.24.46.1 - mozilla-nss`
 * Removed `postgresql` from `NCNs` to fix `CVEs`
 * Updates to `bind-utils`, `curl`, `git-core`, `java-1_8_0-ibm`, and `less` in `NCN` image for `CVEs`
@@ -66,10 +69,12 @@
 * Additional of `kyverno` and network policies to ensure some secure controls over `mqtt` namespace
   
 ### Customer-requested enhancements
+
 * Keycloak upgrade for CVE fixes
-* Enablement of bonded NMN connections for the UANs
+* Enable bonded NMN connections for the UANs
 
 ### Documentation enhancements
+
 * `IUF` documentation updates for `upgrade_all_products` issues
 * Addition of a `CSM` cabling page for the management and edge network
 * Added system recovery procedure for `keycloak`
@@ -80,6 +85,7 @@
 * Updates to `NCN` Customization and Personalization documentation to use `sat bootprep`
 
 ## Bug fixes
+
 * Fix for invalid `preinstall` `VCS` check in `IUF` in the event of a fresh install
 * Fix deployment failure due to `DNS` timeouts when `max_fails=0` is set in `coredns`
 * Fixed an issue on upgrade of master `NCNs` due to not generating the `admin-tools` keyring
@@ -93,12 +99,14 @@
 * Removed `subPath` `volumeMount` in the `multus` `daemonset` to avoid being stuck in termination
   
 ## Deprecations
+
 * The `ipv4-resolvers` option has been removed for `CSI` as it is not used
 * [CAPMC](glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
 
 For a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
 
 ## Removals
+
 * Remove `TRS operator` for fresh installs and on upgrades
 * Remove `metal-net` scripts as they are no longer used
 * Remove `etcd-operator` as a result of migration to use `bitnami-etcd`
