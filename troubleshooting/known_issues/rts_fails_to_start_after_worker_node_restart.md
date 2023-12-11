@@ -18,13 +18,13 @@ but that job no longer exists because it has been cleaned up.
 
 ## Fix
 
-1. (`ncn-mw#`) Generate a RTS init yaml from the manifest.
+1. (`ncn-mw#`) Generate a RTS init `yaml` from the manifest.
 
 ```bash
 helm get manifest -n services cray-hms-rts | yq4 ea 'select(.kind == "Job")' > cray-hms-rts-init.yaml
 ```
 
-1. (`ncn-mw#`) Apply the RTS init yaml to get it created.
+1. (`ncn-mw#`) Apply the RTS init `yaml` to get it created.
 
 ```bash
 kubectl apply -n services -f cray-hms-rts-init.yaml
