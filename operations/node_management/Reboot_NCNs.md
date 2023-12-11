@@ -485,11 +485,13 @@ Before rebooting NCNs:
 
          If terminating pods are reported when checking the status of the Kubernetes pods, then wait for all pods to recover before proceeding.
 
-    1. Disconnect from the console.
+    1. If RTS was running on the worker node and it has not started Running, then see [RTS fails to start after worker node is restarted](../../troubleshooting/known_issues/rts_fails_to_start_after_worker_node_restart.md)
 
-    1. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number, until all worker nodes have successfully rebooted.
+    2. Disconnect from the console.
 
-1. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an `ESTABLISHED` state.
+    3. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number, until all worker nodes have successfully rebooted.
+
+2. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an `ESTABLISHED` state.
 
    See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 

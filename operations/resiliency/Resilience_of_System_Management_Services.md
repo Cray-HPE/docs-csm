@@ -100,6 +100,9 @@ pods. Work is ongoing to correct these issues in a future release.
     `slingshot-fabric-manager` pod is brought back up and the sweeping process restarts.
   - The `slingshot-fabric-manager` relies on data in persistent storage. The data is persistent across upgrades but when the pods are deleted, the data is also deleted.
 
+- **RTS fails to start after worker node is restarted**
+  - If RTS was running on the worker node and it has not started Running, then see [RTS fails to start after worker node is restarted](../../troubleshooting/known_issues/rts_fails_to_start_after_worker_node_restart.md)
+
 ## Future Resiliency Improvements
 
 In a future release, strides will be made to further improve the resiliency of the system. These improvements may include one or more of the following:

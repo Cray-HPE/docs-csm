@@ -212,4 +212,6 @@ error state. Once any remaining testing or validation work is complete, these po
         kubectl describe pod POD_NAME
         ```
 
+    1. If RTS was running on the worker node and it has not started Running, then see [RTS fails to start after worker node is restarted](../../troubleshooting/known_issues/rts_fails_to_start_after_worker_node_restart.md)
+
 The node that encountered issues should now be returned to a healthy state.

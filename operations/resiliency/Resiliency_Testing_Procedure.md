@@ -6,14 +6,17 @@ the loss of a single non-compute node (NCN).
 It is assumed that some procedures are already known by admins and thus does not go into great detail or attempt to encompass every command necessary for execution. It is intended to be higher level guidance (with some command
 examples) to inform internal users and customers about our process.
 
-* [Prepare for resiliency testing](#prepare-for-resiliency-testing)
-* [Establish system health before beginning](#establish-system-health-before-beginning)
-* [Monitor for changes](#monitor-for-changes)
-* [Launch a non-interactive batch job](#launch-a-non-interactive-batch-job)
-* [Shut down an NCN](#shut-down-an-ncn)
-* [Conduct testing](#conduct-testing)
-* [Power on the downed NCN](#power-on-the-downed-ncn)
-* [Execute post-boot health checks](#execute-post-boot-health-checks)
+- [Resiliency Testing Procedure](#resiliency-testing-procedure)
+  - [Prepare for resiliency testing](#prepare-for-resiliency-testing)
+  - [Establish system health before beginning](#establish-system-health-before-beginning)
+  - [Monitor for changes](#monitor-for-changes)
+  - [Launch a non-interactive batch job](#launch-a-non-interactive-batch-job)
+    - [Launch on a UAI](#launch-on-a-uai)
+    - [Launch on a UAN](#launch-on-a-uan)
+  - [Shut down an NCN](#shut-down-an-ncn)
+  - [Conduct testing](#conduct-testing)
+  - [Power on the downed NCN](#power-on-the-downed-ncn)
+  - [Execute post-boot health checks](#execute-post-boot-health-checks)
 
 ## Prepare for resiliency testing
 
@@ -399,9 +402,11 @@ a healthy state.
 
 1. Re-run the `Platform Health Checks` section of [Validate CSM Health](../validate_csm_health.md) noting any output that indicates output is not as expected.
 
+1. If RTS was running on the worker node and it has not started Running, then see [RTS fails to start after worker node is restarted](../../troubleshooting/known_issues/rts_fails_to_start_after_worker_node_restart.md)
+
 1. Ensure that after a downed NCN worker node (can ignore if not a worker node) has been powered up, a new UAI can be created on that NCN. It may be necessary to label the nodes again, to ensure the UAI gets created on the
    worker node that was just powered on. Refer to the section above for `Launch a Non-Interactive Batch Job` for the procedure.
 
    > **IMPORTANT:** Do not forget to remove the labels after the UAI has been created. Once the UAI has been created, log into it and ensure a new workload manager job can be launched.
 
-1. Ensure tickets have been opened for any unexpected behavior along with associated logs and notes on workarounds, if any were executed.
+3. Ensure tickets have been opened for any unexpected behavior along with associated logs and notes on workarounds, if any were executed.

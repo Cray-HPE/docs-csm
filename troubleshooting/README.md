@@ -2,23 +2,24 @@
 
 This document provides links to troubleshooting information for services and functionality provided by CSM.
 
-* [Helpful tips for navigating the CSM repository](#helpful-tips-for-navigating-the-csm-repository)
-* [Known issues](#known-issues)
-* [Booting](#booting)
-  * [UAN boot issues](#uan-boot-issues)
-  * [Compute node boot issues](#compute-node-boot-issues)
-* [Configuration management](#configuration-management)
-* [ConMan](#conman)
-* [Customer Management Network (CMN)](#customer-management-network-cmn)
-* [Domain Name Service (DNS)](#domain-name-service-dns)
-* [Grafana dashboards](#grafana-dashboards)
-* [Kubernetes](#kubernetes)
-* [MetalLB](#metallb)
-* [Node management](#node-management)
-* [Security and authentication](#security-and-authentication)
-* [Spire](#spire)
-* [User Access Service (UAS)](#user-access-service-uas)
-* [Utility storage](#utility-storage)
+- [CSM Troubleshooting Information](#csm-troubleshooting-information)
+  - [Helpful tips for navigating the CSM repository](#helpful-tips-for-navigating-the-csm-repository)
+  - [Known issues](#known-issues)
+  - [Booting](#booting)
+    - [UAN boot issues](#uan-boot-issues)
+    - [Compute node boot issues](#compute-node-boot-issues)
+  - [Configuration management](#configuration-management)
+  - [ConMan](#conman)
+  - [Customer Management Network (CMN)](#customer-management-network-cmn)
+  - [Grafana dashboards](#grafana-dashboards)
+  - [Domain Name Service (DNS)](#domain-name-service-dns)
+  - [Kubernetes](#kubernetes)
+  - [MetalLB](#metallb)
+  - [Node management](#node-management)
+  - [Security and authentication](#security-and-authentication)
+  - [Spire](#spire)
+  - [User Access service UAS](#user-access-service-uas)
+  - [Utility storage](#utility-storage)
 
 ## Helpful tips for navigating the CSM repository
 
@@ -45,6 +46,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Software Management Services health check](known_issues/sms_health_check.md)
 * [QLogic driver crash on storage nodes](known_issues/qlogic_driver_crash.md)
 * [Nexus Fails Authentication with Keycloak Users](known_issues/Nexus_Fail_Authentication_with_Keycloak_Users.md)
+* [RTS fails to start after worker node is restarted](known_issues/rts_fails_to_start_after_worker_node_restart.md)
 
 ## Booting
 
