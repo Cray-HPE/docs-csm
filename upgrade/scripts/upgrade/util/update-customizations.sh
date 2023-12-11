@@ -172,40 +172,37 @@ else
   yq4 eval 'del(.spec.kubernetes.services.cray-hms-bss.cray-service)' -i $c
   tmpfile="/tmp/cray-hms-bss-customizations.yaml"
   cat << EOF > $tmpfile
-cray-service:
-  containers:
-    cray-bss:
-      env:
-        - name: HSM_URL
-          value: http://cray-smd
-        - name: NFD_URL
-          value: http://cray-hmnfd
-        - name: SPIRE_TOKEN_URL
-          value: https://cray-spire-tokens.spire:54440
-        - name: S3_ENDPOINT
-          valueFrom:
-            secretKeyRef:
-              key: http_s3_endpoint
-              name: bss-s3-credentials
-        - name: S3_BUCKET
-          value: boot-image
-        - name: S3_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              key: access_key
-              name: bss-s3-credentials
-        - name: S3_SECRET_KEY
-          valueFrom:
-            secretKeyRef:
-              key: secret_key
-              name: bss-s3-credentials
-        - name: BSS_ADVERTISE_ADDRESS
-          valueFrom:
-            configMapKeyRef:
-              key: addvertisAddress
-              name: bss-env-config
+env:
+  - name: HSM_URL
+    value: http://cray-smd
+  - name: NFD_URL
+    value: http://cray-hmnfd
+  - name: SPIRE_TOKEN_URL
+    value: https://cray-spire-tokens.spire:54440
+  - name: S3_ENDPOINT
+    valueFrom:
+      secretKeyRef:
+        key: http_s3_endpoint
+        name: bss-s3-credentials
+  - name: S3_BUCKET
+    value: boot-image
+  - name: S3_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        key: access_key
+        name: bss-s3-credentials
+  - name: S3_SECRET_KEY
+    valueFrom:
+      secretKeyRef:
+        key: secret_key
+        name: bss-s3-credentials
+  - name: BSS_ADVERTISE_ADDRESS
+    valueFrom:
+      configMapKeyRef:
+        key: addvertisAddress
+        name: bss-env-config
 EOF
-  yq4 eval-all 'select(fileIndex==0).spec.kubernetes.services.cray-hms-bss.cray-service = select(fileIndex==1) | select(fileIndex==0)' -i $c $tmpfile
+  yq4 eval-all 'select(fileIndex==0).spec.kubernetes.services.cray-hms-bss.cray-service.containers.cray-bss = select(fileIndex==1) | select(fileIndex==0)' -i $c $tmpfile
   rm $tmpfile
 fi
 
