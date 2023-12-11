@@ -487,9 +487,9 @@ Before rebooting NCNs:
 
     1. If RTS was running on the worker node and it has not started Running, then see [RTS fails to start after worker node is restarted](../../troubleshooting/known_issues/rts_fails_to_start_after_worker_node_restart.md)
 
-    2. Disconnect from the console.
+    1. Disconnect from the console.
 
-    3. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number, until all worker nodes have successfully rebooted.
+    1. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number, until all worker nodes have successfully rebooted.
 
 2. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an `ESTABLISHED` state.
 

@@ -20,11 +20,11 @@ examples) to inform internal users and customers about our process.
 
 ## Prepare for resiliency testing
 
-* Confirm the component name (xname) mapping for each node on the system by running the `/opt/cray/platform-utils/ncnGetXnames.sh` script on each node.
+- Confirm the component name (xname) mapping for each node on the system by running the `/opt/cray/platform-utils/ncnGetXnames.sh` script on each node.
 
-* Verify that `metal.no-wipe=1` is set for each of the NCNs using output from running the `ncnGetXnames.sh` script.
+- Verify that `metal.no-wipe=1` is set for each of the NCNs using output from running the `ncnGetXnames.sh` script.
 
-* (`ncn-mw#`) Ensure the user account in use is an authorized user on the Cray CLI.
+- (`ncn-mw#`) Ensure the user account in use is an authorized user on the Cray CLI.
 
   Log in as a user account where the credentials are known:
 
@@ -34,20 +34,20 @@ examples) to inform internal users and customers about our process.
 
    Then, validate the authorization by executing the `cray uas list` command, for example. For more information, see the `Validate UAI Creation` section of [Validate CSM Health](../validate_csm_health.md).
 
-* (`ncn-mw#`) Verify that `kubectl get nodes` reports all master and worker nodes are `Ready`.
+- (`ncn-mw#`) Verify that `kubectl get nodes` reports all master and worker nodes are `Ready`.
 
    ```bash
    kubectl get nodes -o wide
    ```
 
-* (`ncn-mw#`) Get a current list of pods that have a status of anything other than `Running` or `Completed`. Investigate any of concern.
+- (`ncn-mw#`) Get a current list of pods that have a status of anything other than `Running` or `Completed`. Investigate any of concern.
   Save the list of pods for comparison once resiliency testing is completed and the system has been restored.
 
    ```bash
    kubectl get pods -o wide -A | grep -Ev 'Running|Completed'
    ```
 
-* (`ncn-mw#`) Note which pods are running on an NCN that will be taken down (as well as the total number of pods running). The following is an example that shows the listing of pods running on `ncn-w001`:
+- (`ncn-mw#`) Note which pods are running on an NCN that will be taken down (as well as the total number of pods running). The following is an example that shows the listing of pods running on `ncn-w001`:
 
    ```bash
    kubectl get pods -o wide -A | grep ncn-w001 | awk '{print $2}'
@@ -55,7 +55,7 @@ examples) to inform internal users and customers about our process.
 
    Note that the above would only apply to Kubernetes nodes, such as master and worker nodes.
 
-* (`linux#`) Verify `ipmitool` can report power status for the NCN to be shut down.
+- (`linux#`) Verify `ipmitool` can report power status for the NCN to be shut down.
 
    ```bash
    ipmitool -I lanplus -U root -P <password> -H <ncn-node-name> chassis power status
@@ -64,10 +64,10 @@ examples) to inform internal users and customers about our process.
    If `ncn-m001` is the node to be brought down, then note that it has the external network connection. Therefore it is important to establish that `ipmitool` commands are able to be run from a node external to the system, in
    order to get the power status of `ncn-m001`.
 
-* If `ncn-m001` is the node to be brought down, then establish Customer Access Network (CAN) links to bypass `ncn-m001` (because it will be down) in order to enable an external connection to one of the other master NCNs before,
+- If `ncn-m001` is the node to be brought down, then establish Customer Access Network (CAN) links to bypass `ncn-m001` (because it will be down) in order to enable an external connection to one of the other master NCNs before,
   during, and after `ncn-m001` is brought down.
 
-* Verify Boot Orchestration Service (BOS) templates and create a new one if needed (to be set-up for booting a specific compute nodes after the targeted NCN has been shutdown).
+- Verify Boot Orchestration Service (BOS) templates and create a new one if needed (to be set-up for booting a specific compute nodes after the targeted NCN has been shutdown).
 
    Before shutting down the NCN and beginning resiliency testing, verify that compute nodes identified for reboot validation can be successfully rebooted and configured.
 
@@ -79,7 +79,7 @@ examples) to inform internal users and customers about our process.
 
    For more information regarding management of BOS session templates, refer to [Manage a Session Template](../boot_orchestration/Manage_a_Session_Template.md).
 
-* If a UAN is present on the system, log onto it and verify that the workload manager (WLM) is configured by running a command.
+- If a UAN is present on the system, log onto it and verify that the workload manager (WLM) is configured by running a command.
 
    (`uan#`) The following is an example for Slurm:
 
@@ -349,9 +349,9 @@ a healthy state.
 
 1. If the target node for shutdown was a worker NCN, verify that the UAI launched on that node still exists. It should be running on another worker NCN.
 
-   * Any prior SSH session established with the UAI while it was running on the downed NCN worker node will be unresponsive. A new SSH session will need to be established once the UAI pods has been successfully relocated to
+   - Any prior SSH session established with the UAI while it was running on the downed NCN worker node will be unresponsive. A new SSH session will need to be established once the UAI pods has been successfully relocated to
      another worker NCN.
-   * Log back into the UAI and verify that the WLM batch job is still running and streaming output. The log file created with the kick-off of the batch job should still be accessible and the `squeue` command can be used to
+   - Log back into the UAI and verify that the WLM batch job is still running and streaming output. The log file created with the kick-off of the batch job should still be accessible and the `squeue` command can be used to
      verify that the job continues to run (for Slurm).
 
 1. If the WLM batch job was launched on a UAN, log back into it and verify that the batch job is still running and streaming output via the log file created with the batch job and/or the `squeue` command (if Slurm is used as
@@ -390,8 +390,8 @@ a healthy state.
 
    Check the following depending on the NCN type powered on:
 
-   * If the NCN being powered on is a master or worker, verify that `Terminating` pods on that NCN clear up. It may take several minutes. Watch the command prompt, previously set-up, that is displaying the `Terminating` pod list.
-   * If the NCN being powered on is a storage node, wait for Ceph to recover and again report a `HEALTH_OK` status. It may take several minutes for Ceph to resolve clock skew. This can be noted in the previously set-up window
+   - If the NCN being powered on is a master or worker, verify that `Terminating` pods on that NCN clear up. It may take several minutes. Watch the command prompt, previously set-up, that is displaying the `Terminating` pod list.
+   - If the NCN being powered on is a storage node, wait for Ceph to recover and again report a `HEALTH_OK` status. It may take several minutes for Ceph to resolve clock skew. This can be noted in the previously set-up window
      to watch Ceph status.
 
 1. Check that pod statuses have returned to the state that they were in at the beginning of this procedure, paying particular attention to any pods that were previously noted to be in a bad state while the NCN was down.
@@ -409,4 +409,4 @@ a healthy state.
 
    > **IMPORTANT:** Do not forget to remove the labels after the UAI has been created. Once the UAI has been created, log into it and ensure a new workload manager job can be launched.
 
-3. Ensure tickets have been opened for any unexpected behavior along with associated logs and notes on workarounds, if any were executed.
+1. Ensure tickets have been opened for any unexpected behavior along with associated logs and notes on workarounds, if any were executed.
