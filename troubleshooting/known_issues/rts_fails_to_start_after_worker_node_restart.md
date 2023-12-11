@@ -8,6 +8,7 @@ failure, any RTS pod that is running on that worker node may not properly start 
 ```bash
 kubectl get pods -n services | egrep rts | egrep -v Running
 ```
+
 ```text
 services         cray-hms-rts-744577c9b5-fs287                 0/3     Init:0/2           0                 45m
 services         cray-hms-rts-snmp-776695546-thxlb             0/3     Init:0/2           0                 45m
