@@ -56,7 +56,7 @@ Example output
 }
 ```
 
-## Update a CFS configuration
+## Update a CFS source
 
 (`ncn-mw#`) Use the `cray cfs v3 sources update` command.
 
