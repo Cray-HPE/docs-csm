@@ -26,7 +26,7 @@ Currently, only `smf` includes a quota.
 
     Example output:
 
-    ```
+    ```bash
     RAW STORAGE:
       CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED
       ssd       21 TiB     21 TiB     122 GiB      134 GiB          0.62
@@ -71,7 +71,7 @@ Currently, only `smf` includes a quota.
 
     Example ceph-pool-quotas.yml:
 
-    ```
+    ```bash
     ceph_pool_quotas:
       - pool_name: smf
         percent_of_total: .71 <-- Change this to desired percentage
@@ -94,7 +94,7 @@ Currently, only `smf` includes a quota.
 
     Example output:
 
-    ```
+    ```bash
     RAW STORAGE:
       CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED
       ssd       21 TiB     21 TiB     122 GiB      134 GiB          0.62
