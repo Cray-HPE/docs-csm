@@ -49,7 +49,7 @@ Currently, only `smf` includes a quota.
 
 1. Determine the maximum quota percentage.
 
-    6TiB must be left for Kubernetes, Ceph RGW, and other services. To calculate the quota percentage, use the following equation:
+    `6TiB` must be left for Kubernetes, Ceph RGW, and other services. To calculate the quota percentage, use the following equation:
 
     ```bash
     (TOTAL_SIZE-6)/TOTAL_SIZE
@@ -78,7 +78,7 @@ Currently, only `smf` includes a quota.
         replication_factor: 2.0
     ```
 
-1. Run the ceph-pool-quotas.yml playbook from `ncn-s001`.
+1. Run the `ceph-pool-quotas.yml` playbook from `ncn-s001`.
 
     ```bash
     ansible-playbook /etc/ansible/ceph-rgw-users/ceph-pool-quotas.yml
