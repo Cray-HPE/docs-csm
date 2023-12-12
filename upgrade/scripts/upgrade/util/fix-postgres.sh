@@ -71,13 +71,13 @@ function postgres_clusters_running() {
 }
 
 function wait_for() {
-  local command="${1}"
-  local message="${2}"
+  local message="${1}"
+  shift
   local count=0
   local total=120
   local sleep=5
   while true; do
-    if ${command}; then
+    if "$@"; then
       echo "${message}" | awk '{print toupper(substr($0, 1, 1)) substr($0, 2)}'
       break
     else
@@ -96,19 +96,20 @@ echo "Waiting for 60 seconds for cray-postgres-operator pod to settle after upgr
 sleep 60
 echo "Restarting cray-postgres-operator pod ..."
 kubectl -n services delete pod -l app.kubernetes.io/name=postgres-operator
-wait_for postgres_operator_running "postgres-operator pod running"
-wait_for postgres_crd_updated "postgresqls.acid.zalan.do CRD updated to support PostgreSQL 14"
+wait_for "postgres-operator pod running" postgres_operator_running
+wait_for "postgresqls.acid.zalan.do CRD updated to support PostgreSQL 14" postgres_crd_updated
 # Only restart postgres clusters in argo, services, spire namespaces - but wait for all clusters (such as sma) to be healthy, as
 # preflight checks at the end of prerequisites script will need all clusters anyway.
-kubectl get sts -A -l application=spilo -o json \
+kubectl get postgresql -A -o json \
   | jq -r '.items[] | select(.metadata.namespace == "argo" or .metadata.namespace == "services" or .metadata.namespace == "spire") | (.metadata.namespace + ":" + .metadata.name)' \
   | while IFS=: read -r namespace sts; do
     echo "Rolling restart ${sts} in namespace ${namespace} ..."
-    kubectl rollout restart -n "${namespace}" statefulset "${sts}"
+    # sts restart may fail, if operator is re-creating sts at the same time
+    wait_for "restarted statefulset ${sts}" kubectl rollout restart -n "${namespace}" statefulset "${sts}"
   done
 echo "Waiting for 300 seconds for postgres statefulsets rolling restart to commence ..."
 sleep 300
-wait_for postgres_pods_running "all postgres pods running"
-wait_for postgres_clusters_running "all postgres clusters in state Running"
+wait_for "all postgres pods running" postgres_pods_running
+wait_for "all postgres clusters in state Running" postgres_clusters_running
 echo "State of postgres clusters after operator upgrade:"
 kubectl get postgresql -A
