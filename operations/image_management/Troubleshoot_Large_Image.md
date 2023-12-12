@@ -234,47 +234,47 @@ Events:
   Warning  PolicyViolation   18m   admission-controller  Rule(s) 'adding-capabilities' of policy 'disallow-capabilities' failed to apply on the resource
 ```
 
-This is indicating all 4 of the worker nodes do not have sufficient free memory to start these jobs.
+This is indicating all four of the worker nodes do not have sufficient free memory to start these jobs.
 
 There are a couple of ways to resolve this and free up resources for new jobs.
 
 1. (`ncn-mw#`) Clear out old running jobs.
 
-Every IMS job that is still in a `Running` state is consuming resources on the system. Sometimes
-old jobs are not being used any more, but may be left in a `Running` state.
+    Every IMS job that is still in a `Running` state is consuming resources on the system. Sometimes
+    old jobs are not being used any more, but may be left in a `Running` state.
 
-Check for `Running` IMS jobs:
+    Check for `Running` IMS jobs:
 
-```bash
-kubectl get pod -A | grep ims | grep Running
-```
+    ```bash
+    kubectl get pod -A | grep ims | grep Running
+    ```
 
-Example output:
+    Example output:
 
-```text
-ims                 cray-ims-067c3358-afaa-470f-8812-f050208a93fb-customize-47m9w     2/2     Running      0          4d17h
-ims                 cray-ims-4fc9d843-ad20-46c5-aabb-df2454a2d2d6-customize-g52fq     2/2     Running      0          17h
-ims                 cray-ims-806a85b1-425d-46dd-badd-7d035b4fb432-customize-hl4f6     2/2     Running      0          17h
-ims                 cray-ims-82c2bac9-6a57-404e-b50d-2a1f3d51afb5-customize-bcc8h     2/2     Running      0          42h
-ims                 cray-ims-90d1136f-3531-4294-86c9-a1507649747b-customize-wjxpg     2/2     Running      0          9d
-ims                 cray-ims-aee7443f-83e6-4e66-bb37-a78cf0cf59b5-customize-4lqt4     2/2     Running      0          42h
-ims                 cray-ims-ba44f475-f739-49a5-b996-9077e764f717-customize-6b9lh     2/2     Running      0          5d11h
-ims                 cray-ims-bbb31a07-8642-4b82-bb01-2ab6f3e4e08e-customize-5g6gc     2/2     Running      0          8d
-ims                 cray-ims-ca5ef71e-1df7-4f26-adc7-d0a306cf8700-customize-bxlv9     2/2     Running      0          8d
-ims                 cray-ims-d1af1713-238b-4d94-9f9c-fdb95bce96ec-customize-pb6xm     2/2     Running      0          17h
-ims                 cray-ims-ebf91c30-0a16-4099-bf0e-2d711ee8ceb7-customize-czrjv     2/2     Running      0          25h
-ims                 cray-ims-fdd02cc6-dc44-4748-a12c-5cfab9699c25-customize-9zlmr     2/2     Running      0          17h
-```
+    ```text
+    ims                 cray-ims-067c3358-afaa-470f-8812-f050208a93fb-customize-47m9w     2/2     Running      0          4d17h
+    ims                 cray-ims-4fc9d843-ad20-46c5-aabb-df2454a2d2d6-customize-g52fq     2/2     Running      0          17h
+    ims                 cray-ims-806a85b1-425d-46dd-badd-7d035b4fb432-customize-hl4f6     2/2     Running      0          17h
+    ims                 cray-ims-82c2bac9-6a57-404e-b50d-2a1f3d51afb5-customize-bcc8h     2/2     Running      0          42h
+    ims                 cray-ims-90d1136f-3531-4294-86c9-a1507649747b-customize-wjxpg     2/2     Running      0          9d
+    ims                 cray-ims-aee7443f-83e6-4e66-bb37-a78cf0cf59b5-customize-4lqt4     2/2     Running      0          42h
+    ims                 cray-ims-ba44f475-f739-49a5-b996-9077e764f717-customize-6b9lh     2/2     Running      0          5d11h
+    ims                 cray-ims-bbb31a07-8642-4b82-bb01-2ab6f3e4e08e-customize-5g6gc     2/2     Running      0          8d
+    ims                 cray-ims-ca5ef71e-1df7-4f26-adc7-d0a306cf8700-customize-bxlv9     2/2     Running      0          8d
+    ims                 cray-ims-d1af1713-238b-4d94-9f9c-fdb95bce96ec-customize-pb6xm     2/2     Running      0          17h
+    ims                 cray-ims-ebf91c30-0a16-4099-bf0e-2d711ee8ceb7-customize-czrjv     2/2     Running      0          25h
+    ims                 cray-ims-fdd02cc6-dc44-4748-a12c-5cfab9699c25-customize-9zlmr     2/2     Running      0          17h
+    ```
 
-Each of these running IMS jobs is consuming resources and will not release the resources until they are complete
-or deleted. An attempt should be made to determine how these jobs were created and why they were not cleaned
-up. When enough of the existing jobs are finished, the `Pending` jobs should automatically transition to `Running`
-but be aware that if they are running through CFS or SAT there may be automatic timeouts that will no longer have
-sufficient time to complete the intended tasks if they were stuck in `Pending` for too long.
+    Each of these running IMS jobs is consuming resources and will not release the resources until they are complete
+    or deleted. An attempt should be made to determine how these jobs were created and why they were not cleaned
+    up. When enough of the existing jobs are finished, the `Pending` jobs should automatically transition to `Running`
+    but be aware that if they are running through CFS or SAT there may be automatic timeouts that will no longer have
+    sufficient time to complete the intended tasks if they were stuck in `Pending` for too long.
 
 1. Reduce the resource requirements for the jobs.
 
-If the images being produced are not too large, the configuration maps may be altered to reduce the resource
-requirements. Be aware that if the resources are reduced too far, the jobs will fail with the errors described above.
+    If the images being produced are not too large, the configuration maps may be altered to reduce the resource
+    requirements. Be aware that if the resources are reduced too far, the jobs will fail with the errors described above.
 
-In this case reduce the value of `DEFAULT_IMS_JOB_MEM_SIZE`
+    In this case reduce the value of `DEFAULT_IMS_JOB_MEM_SIZE`
