@@ -26,7 +26,7 @@ Currently, only `smf` includes a quota.
 
     Example output:
 
-    ```
+    ```bash
     RAW STORAGE:
       CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED
       ssd       21 TiB     21 TiB     122 GiB      134 GiB          0.62
@@ -49,7 +49,7 @@ Currently, only `smf` includes a quota.
 
 1. Determine the maximum quota percentage.
 
-    6TiB must be left for Kubernetes, Ceph RGW, and other services. To calculate the quota percentage, use the following equation:
+    `6TiB` must be left for Kubernetes, Ceph RGW, and other services. To calculate the quota percentage, use the following equation:
 
     ```bash
     (TOTAL_SIZE-6)/TOTAL_SIZE
@@ -66,19 +66,19 @@ Currently, only `smf` includes a quota.
     Do not exceed the percentage determined in the previous step.
 
     ```bash
-    vim /etc/ansible/ceph-rgw-users/ceph-pool-quotas.yml
+    vim /etc/ansible/ceph-rgw-users/roles/ceph-pool-quotas/defaults/main.yml
     ```
 
     Example ceph-pool-quotas.yml:
 
-    ```
+    ```bash
     ceph_pool_quotas:
       - pool_name: smf
         percent_of_total: .71 <-- Change this to desired percentage
         replication_factor: 2.0
     ```
 
-1. Run the ceph-pool-quotas.yml playbook from `ncn-s001`.
+1. Run the `ceph-pool-quotas.yml` playbook from `ncn-s001`.
 
     ```bash
     ansible-playbook /etc/ansible/ceph-rgw-users/ceph-pool-quotas.yml
@@ -94,7 +94,7 @@ Currently, only `smf` includes a quota.
 
     Example output:
 
-    ```
+    ```bash
     RAW STORAGE:
       CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED
       ssd       21 TiB     21 TiB     122 GiB      134 GiB          0.62
@@ -114,4 +114,3 @@ Currently, only `smf` includes a quota.
       smf                            10      19 TiB       7.88k      28 GiB      0.14       9.9 TiB     N/A               **7.4 TiB**           7.88k        9.4 GiB          19 GiB
       default.rgw.buckets.non-ec     11         0 B           0         0 B         0       9.9 TiB     N/A               N/A                   0            0 B             0 B
     ```
-
