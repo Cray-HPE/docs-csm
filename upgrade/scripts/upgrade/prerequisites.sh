@@ -1378,7 +1378,7 @@ done
 
 # Ensure kata containers hypervisor file has the list of annotations required for CSM 1.5 CASMTRIAGE-6414
 for node in $(kubectl get nodes | grep -E "^ncn-w[0-9]" | awk '{ print $1 }'); do
-  ssh "${node}" "sed -i 's/\[\"enable_iommu\"\]/[\"enable_iommu\", \"virtio_fs_extra_args\", \"default_memory\", \"kernel_params\", \"cpu_features\"]/ /opt/kata/share/defaults/kata-containers/configuration-qemu.toml'"
+  ssh "${node}" "sed -i 's/\[\"enable_iommu\"\]/[\"enable_iommu\", \"virtio_fs_extra_args\", \"default_memory\", \"kernel_params\", \"cpu_features\"]/' /opt/kata/share/defaults/kata-containers/configuration-qemu.toml"
 done
 
 state_name="PREFLIGHT_CHECK"
