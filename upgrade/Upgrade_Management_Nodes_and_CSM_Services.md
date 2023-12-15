@@ -157,7 +157,7 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
 
   See [`Helm Chart Timeouts` known issues](../troubleshooting/known_issues/helm_chart_deploy_timeouts.md) for steps to increase the timeout for a chart that is taking longer than five minutes to deploy.
 
-- rsync error
+- `rsync` error
 
   When executing command `/usr/share/doc/csm/upgrade/scripts/upgrade/prerequisites.sh --csm-version ${CSM_RELEASE}`, if `rsync` error is displayed in console after stage `REPAIR_AND_VERIFY_CHRONY_CONFIG` or in 
   `output.log` as shown in example below, then ensure latest version of `libcsm` and `docs-csm` RPMs are successfully installed and then re-execute the same command.
