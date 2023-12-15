@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -136,7 +136,7 @@ wipefs --all --force /dev/mapper/metalvg*
 echo 'Disabling the bootloader by removing it'
 rm -rf /metal/recovery/*
 echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
-to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*')"
+to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' || true)"
 if [ "${to_delete}" ]; then
     for item in ${to_delete}; do
         efibootmgr # print before
@@ -180,7 +180,7 @@ umount -v /var/lib/etcd /var/lib/sdu || true
 echo 'Disabling the bootloader by removing it'
 rm -rf /metal/recovery/*
 echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
-to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*')"
+to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' || true)"
 if [ "${to_delete}" ]; then
     for item in ${to_delete}; do
         efibootmgr # print before
@@ -213,7 +213,7 @@ fi
 echo 'Disabling the bootloader by removing it'
 rm -rf /metal/recovery/*
 echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
-to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*')"
+to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' || true)"
 if [ "${to_delete}" ]; then
     for item in ${to_delete}; do
         efibootmgr # print before

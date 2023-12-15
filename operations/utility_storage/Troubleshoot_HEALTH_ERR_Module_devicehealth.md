@@ -38,7 +38,7 @@ Error Message:
    3. Delete pool
 
       ```bash
-      ncn-s001:~ # ceph osd pool rm .mgr .mgr --yes-i-really-really-meant-it
+      ncn-s001:~ # ceph osd pool rm .mgr .mgr --yes-i-really-really-mean-it
       ```
 
       The output should contain `pool '.mgr' removed`.
