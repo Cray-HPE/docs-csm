@@ -90,6 +90,8 @@ spec:
             templateRef:
               name: ssh-template
               template: shell-script
+            dependencies:
+              - update-ssh-keys
             arguments:
               parameters:
                 - name: dryRun
