@@ -136,7 +136,7 @@ wipefs --all --force /dev/mapper/metalvg*
 echo 'Disabling the bootloader by removing it'
 rm -rf /metal/recovery/*
 echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
-to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*')"
+to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' || true)"
 if [ "${to_delete}" ]; then
     for item in ${to_delete}; do
         efibootmgr # print before
@@ -176,7 +176,7 @@ umount -v /var/lib/etcd /var/lib/sdu || true
 echo 'Disabling the bootloader by removing it'
 rm -rf /metal/recovery/*
 echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
-to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*')"
+to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' || true)"
 if [ "${to_delete}" ]; then
     for item in ${to_delete}; do
         efibootmgr # print before
@@ -209,7 +209,7 @@ fi
 echo 'Disabling the bootloader by removing it'
 rm -rf /metal/recovery/*
 echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
-to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*')"
+to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' || true)"
 if [ "${to_delete}" ]; then
     for item in ${to_delete}; do
         efibootmgr # print before

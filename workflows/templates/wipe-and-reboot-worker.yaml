@@ -39,7 +39,41 @@ spec:
           - name: bootTimeoutInSeconds
       dag:
         tasks:
+        - name: wait-for-keycloak
+          templateRef:
+            name: kubectl-and-curl-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)
+                  echo "Sleeping for 60 seconds to let keycloak settle after node drain"
+                  sleep 60
+                  count=0
+                  total=120
+                  sleep=5
+                  while true; do
+                    http_code=$(curl -k -s -S -o /dev/null -w '%{http_code}' -d grant_type=client_credentials -d client_id=admin-client \
+                        -d client_secret="$client_secret" https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token || true)
+                    if [ "${http_code}" == "200" ]; then
+                      echo "keycloak is up"
+                      break
+                    else
+                      if [ "${count}" == "${total}" ]; then
+                          echo "keycloak is down after ${total} checks, giving up ..."
+                          exit 1
+                      fi
+                      count=$(($count + 1))
+                      echo "keycloak is down, sleeping for $sleep seconds and retry, attempt $count/$total ..."
+                      sleep $sleep
+                    fi
+                  done
         - name: "validate-bss-ntp"
+          dependencies:
+          - wait-for-keycloak
           templateRef:
             name: ssh-template
             template: shell-script
@@ -49,10 +83,12 @@ spec:
                 value: "{{inputs.parameters.dryRun}}"
               - name: scriptContent
                 value: |
-                  TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
-                    -d client_id=admin-client \
-                    -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-                    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                  curl -k -s -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret="$(kubectl get secrets admin-client-auth -ojsonpath='{.data.client-secret}' | base64 -d)" \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token > /tmp/setup-token.json
+                  export CRAY_CREDENTIALS=/tmp/setup-token.json
+                  TOKEN=$(jq -r '.access_token' /tmp/setup-token.json)
                   TARGET_NCN={{inputs.parameters.targetNcn}}
                   TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                       jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
@@ -179,6 +215,8 @@ spec:
                   TARGET_NCN={{inputs.parameters.targetNcn}}
                   TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                       jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                  TARGET_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Parent")
                   TARGET_NCN_mgmt_host="${TARGET_NCN}-mgmt"
                   export IPMI_USERNAME=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Username")
                   export IPMI_PASSWORD=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Password")

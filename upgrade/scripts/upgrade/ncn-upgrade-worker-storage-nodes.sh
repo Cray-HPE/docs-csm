@@ -44,7 +44,7 @@ labels=""
 function usage() {
   echo "CSM ncn worker and storage upgrade script"
   echo
-  echo "Syntax: /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh [COMMA_SEPARATED_NCN_HOSTNAMES] [-f|--force|--retry|--base-url|--dry-run|--upgrade|--rebuild]"
+  echo "Syntax: /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh [COMMA_SEPARATED_NCN_HOSTNAMES] [-f|--force|--no-retry|--base-url|--dry-run|--upgrade|--rebuild]"
   echo "options:"
   echo "--no-retry          Do not automatically retry  (default: false)"
   echo "-f|--force          Remove failed worker or storage rebuild/upgrade workflow and create a new one  (default: ${force})"
@@ -379,15 +379,25 @@ while true; do
     fi
 
     if [[ ${phase} == "Failed" ]]; then
-      echo "WARNING - Workflow in Failed state, Retry ..."
-      retryRebuildWorkflow "$workflow"
-      continue
+      if $retry; then
+        echo "WARNING - Workflow in Failed state, Retry ..."
+        retryRebuildWorkflow "$workflow"
+        continue
+      else
+        echo "ERROR - Workflow ${workflow} is in Failed state"
+        exit 1
+      fi
     fi
 
     if [[ ${phase} == "Error" ]]; then
-      echo "WARNING - Workflow in Error state, Retry ..."
-      retryRebuildWorkflow "$workflow"
-      continue
+      if $retry; then
+        echo "WARNING - Workflow in Error state, Retry ..."
+        retryRebuildWorkflow "$workflow"
+        continue
+      else
+        echo "ERROR - Workflow ${workflow} is in Error state"
+        exit 1
+      fi
     fi
     runningSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Running\")  | .name + \"\n  \" " < "${res_file}")
     succeededSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Succeeded\")  | .name +\"\n  \" " < "${res_file}")

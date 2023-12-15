@@ -826,7 +826,7 @@ done
 
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta} == "false" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
     artdir=${CSM_ARTI_DIR}/images
@@ -852,12 +852,20 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta}
     if [[ ${k8s_done} == 1 && ${ceph_done} == 1 ]]; then
       echo "Already ran ${NCN_IMAGE_MOD_SCRIPT}, skipping re-run."
     else
-      rm -f "${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs" "${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs"
+      # ${artdir} is mounted on top of CephFS. Running mksquashfs against it is very slow. We will copy squashfs files to temporary dir
+      # instead, and run NCN modification script there.
+      tmpdir_kubernetes=$(mktemp -d)
+      tmpdir_storage=$(mktemp -d)
+      cp "${artdir}/kubernetes/kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs" "${tmpdir_kubernetes}/"
+      cp "${artdir}/storage-ceph/storage-ceph-${CEPH_VERSION}-${arch}.squashfs" "${tmpdir_storage}/"
       DEBUG=1 "${NCN_IMAGE_MOD_SCRIPT}" \
         -d /root/.ssh \
-        -k "${artdir}/kubernetes/kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs" \
-        -s "${artdir}/storage-ceph/storage-ceph-${CEPH_VERSION}-${arch}.squashfs" \
+        -k "${tmpdir_kubernetes}/kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs" \
+        -s "${tmpdir_storage}/storage-ceph-${CEPH_VERSION}-${arch}.squashfs" \
         -p
+      mv "${tmpdir_kubernetes}/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs" "${artdir}/kubernetes/"
+      mv "${tmpdir_storage}/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs" "${artdir}/storage-ceph/"
+      rm -Rf "${tmpdir_kubernetes}" "${tmpdir_storage}"
     fi
 
     set -o pipefail
