@@ -26,20 +26,30 @@
 * For Birfurcated CAN update gitea-vcs-external to use CMN Only Istio Gateway
 * Improved logging in cray-nls based on StageOutput
 * IMS - created an arm64 version of the barebones recipe
-* Support for large system ARP configuration for first boot and DHCP    
+* Support for large system ARP configuration for first boot and DHCP
+* Hardware Discovery Process populates a nodes's architecture
+* Argo-driven Upgrade Automation for K8s Storage Nodes
+* An arm64 version of the barebones recipe has been created
+* SLS: Added caching to improve performance and robustness
+* Added support for specifying IMS Image and Recipe architecture in IUF
+* Upgraded node-images to SLES15SP5
+* Updated Spire Server to work with TPM
 
 ### Monitoring
+
 * Removed cleartext switch passwords from the cray-sysmgmt-health-canu-test pod log
 
 ### Networking
 
 ### Miscellaneous functionality
+
 * Ceph nodes run user facing docker registry that is writable anonymously
 
 ### New hardware support
 * Add switches in HSM to PCS and allow for power reset actions
 * Updated HMS discovery process to populate a node's architecture when making the information available via Redfish
 * Update to ilorest 4.1.0.0 for Gen11 Support
+* Support for arm64 added in metal-ipxe 
 
 ### Automation improvements
 
@@ -48,7 +58,7 @@
 * Add a test to check taints on master nodes
 * Augment `postgres` backup `goss` test to also check for `cronjob`
 * Argo-driven Upgrade Automation for K8s Storage Nodes
-* ceph upgrade added to automated storage upgrade    
+* ceph upgrade added to automated storage upgrade  
 
 ### Base platform component upgrades
 
@@ -74,6 +84,7 @@
 | `cray-certmanager`           | 1.5.5          |
 | `argo-workflows`             | 3.3.6          |
 | `argo workflow-controller`   | 3.4.5          |
+| `ceph`                       | 16.2.13        |
 
 ### Security improvements
 
@@ -86,11 +97,16 @@
 * cf-gitea-import: Use CSM-provided alpine base image to resolve vulnerabilities
 * Updated metacontroller:v4.4.0 to address CVE's
 * Fixed CVE-2023-0386 in CSM 1.5 NCN Images
-* Fixed CVE-2023-32233 in CSM 1.5 NCN Images 
+* Fixed CVE-2023-32233 in CSM 1.5 NCN Images
 * Developed OPA Policy to force Keycloak admin operations through CMN
 * Updated cfs-ara:1.0.2 to address CVE's
 * Updated hms-shcd-parser:1.8.0 to address CVE's
 * Moved istio-ingressgateway-cmn service to use the customer-admin-gateway
+* Kyverno Upgrade Needed for N-2 Support Policy
+* Fixed Improper Certificate Validation CVE in cfs-operator
+* Fixed Regular Expression DoS CVE in cfs-ara
+* Addressed Zenbleed CVE on NCNs
+* Addressed CVE-2023-38545 (curl & libcurl) on NCNs
   
 ### Customer-requested enhancements
 
@@ -111,7 +127,9 @@
 * Added SNMP setup for all switches to Install/Update instructions
 * Updated Keycloak documentation to use CMN LB for administrative tasks
 * Updated screenshots and documentation steps for LDAP in upgraded Keycloak
-* Updated IUF management-nodes-rollout documentation   
+* Updated IUF management-nodes-rollout documentation
+* Updated screenshots and doc steps for LDAP in upgraded Keycloak
+* Updated IUF management-nodes-rollout docs
 
 ## Bug fixes
 
@@ -132,12 +150,18 @@
 * Fixed an incorrectly written Network Policy in cray-drydock for mqtt/spire communication
 * Fixed an issue where restarting kea on large systems wipes DNS records from configmap
 * Updated Unbound to not forward .hsn queries to the site DNS
-* Fxed for cray-externaldns-manager crashes when used with external-dns 0.13  
+* Fxed for cray-externaldns-manager crashes when used with external-dns 0.13
+* Fixed Unbound to not forward .hsn queries to the site DNS
+* Fixed an issue where Weave pods were not starting after upgrading to CSM V1.4 content
+* Fixed PowerDNS server TLD is missing NS delegation records for subdomains
+* fixed an issue where FRU Tracking doesn't create a detected event after a removed event
   
 ## Deprecations
 
 * The `ipv4-resolvers` option has been removed for `CSI` as it is not used
 * [CAPMC](glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
+* Removed ARS from Cray CLI and BSS API spec
+* Removed deprecated BOS v1 cfs fields from session templates
 
 For a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
 
@@ -149,7 +173,9 @@ For a list of all deprecated CSM features, see [Deprecations](introduction/depre
 * [CRUS](glossary.md#compute-rolling-upgrade-service-crus)
 * Deprecated [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos)
   v1 session template and boot set fields are no longer stored in BOS. For more information, see
-  [Deprecated fields](operations/boot_orchestration/Session_Templates.md#deprecated-fields).
+  [Deprecated fields](operations/boot_orchestration/Session_Templates.md#deprecated-fields)
+*  Removed -P option from cray-dhcp-kea startup options
+*  Stopped using skopeo images < 1.13.2
 
 For a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals).
 
