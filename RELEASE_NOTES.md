@@ -34,6 +34,14 @@
 * Added support for specifying IMS Image and Recipe architecture in IUF
 * Upgraded node-images to SLES15SP5
 * Updated Spire Server to work with TPM
+* Added Improved error logging for cray bos command
+* Added a method to stop CFS/Batcher and cancel configuration for in-flight customizations
+* Added support for git submodules in cfs runs
+* Added support for ARM 64 based builds through emulation
+* Enhanced Multi-Tenancy Phase II support
+* Improved IUF Logging
+* Created Networking Red Light / Green Light Dashboard
+* Implemented highly available Prometheus setup with long term storage capabilities with Thanos
 
 ### Monitoring
 
@@ -46,10 +54,14 @@
 * Ceph nodes run user facing docker registry that is writable anonymously
 
 ### New hardware support
+
 * Add switches in HSM to PCS and allow for power reset actions
 * Updated HMS discovery process to populate a node's architecture when making the information available via Redfish
 * Update to ilorest 4.1.0.0 for Gen11 Support
-* Support for arm64 added in metal-ipxe 
+* Support for arm64 added in metal-ipxe
+* Hardware vailidation of the EX2500 Cabinet
+* Support JL627A switches as an edge router for BI-CAN
+* 
 
 ### Automation improvements
 
@@ -107,6 +119,7 @@
 * Fixed Regular Expression DoS CVE in cfs-ara
 * Addressed Zenbleed CVE on NCNs
 * Addressed CVE-2023-38545 (curl & libcurl) on NCNs
+* Added Default RBAC Role for Telemetry API
   
 ### Customer-requested enhancements
 
