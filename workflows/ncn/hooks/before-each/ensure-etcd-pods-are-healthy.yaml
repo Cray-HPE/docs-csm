@@ -28,11 +28,16 @@ metadata:
   labels:
     before-each: "true"
 spec:
+  # sort out kube-etcd-defrag-cray-hbtd-bitnami-etcd-*
   scriptContent: |
     #!/bin/sh
-    while [[ "$(kubectl get po -A  | grep -E "bitnami-etcd-[0-9]" | grep -v "Running"| wc -l)" != "0" ]]; do
+    while true; do
+        pods=$(kubectl get po -A  -o json | jq -r '.items[] | select(.metadata.annotations."kubectl.kubernetes.io/default-container"=="etcd") | (.metadata.name + " " + .status.phase)')
+        if [ "$(echo "${pods}" | awk '{ print $2 }' | sort -u)" == Running ]; then
+            break
+        fi
         echo "Some etcd pods are not in running state, wait for 5s ..."
-        kubectl get po -A  | grep -E "bitnami-etcd-[0-9]" | grep -v "Running"
+        echo "${pods}" | grep -v Running
         sleep 5
     done
   templateRefName: ssh-template
