@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -53,7 +53,7 @@ spec:
                   if [[ $res -eq 0 ]]; then
                     csi automate ncn kubernetes --action delete-ncn --ncn {{inputs.parameters.targetNcn}} --kubeconfig mykubeconfig/admin.conf
                   fi
-        - name: wait-for-postgres-operator
+        - name: wait-for-pods
           dependencies:
             - drain
           templateRef:
@@ -65,18 +65,23 @@ spec:
                 value: "{{inputs.parameters.dryRun}}"
               - name: scriptContent
                 value: |
-                  while true; do
-                    numOfRunningPgOperatorPod=$(kubectl get pods -n services -l app.kubernetes.io/name=postgres-operator | grep "Running" | wc -l)
-                    if [[ $numOfRunningPgOperatorPod -ne 1 ]];then
-                      echo "ERROR - Postgres Operator is not running yet"
-                      sleep 5
-                      continue
-                    else
-                      echo "Postgres Operator is running"
-                      break
-                    fi
-                  done
+                  echo "Waiting for nexus ..."
+                  kubectl wait --for=condition=ready pod -l app=nexus -n nexus --timeout=30m
+                  echo "Waiting for keycloak ..."
+                  kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=keycloak -n services --timeout=30m
+                  echo "Waiting for postgresql-operator ..."
+                  kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=postgres-operator -n services --timeout=30m
+                  echo "Waiting for cray-sls ..."
+                  kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=cray-sls -n services --timeout=30m
+                  echo "Waiting for cray-tftp ..."
+                  kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=cray-tftp -n services --timeout=30m
+                  echo "Waiting for cray-scsd ..."
+                  kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=cray-scsd -n services --timeout=30m
+                  echo "Waiting for cray-smd ..."
+                  kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=cray-smd -n services --timeout=30m
         - name: update-bss
+          dependencies:
+          - wait-for-pods
           templateRef:
             name: kubectl-and-curl-template
             template: shell-script
