@@ -70,8 +70,8 @@ fi
 ###################
 #Test Case: Telemetry access test
 echo "Verify access to Telemetry API"
-DN=$(kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | grep "external:" | awk '{print $2}')
-USER_TOKEN=$(curl -s -d 'client_id=shasta' -d 'username=ro-test-user' -d 'password=ro-test-pass' -d 'grant_type=password' https://auth.cmn.$DN/keycloak/realms/shasta/protocol/openid-connect/token)
+# DN=$(kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | grep "external:" | awk '{print $2}')
+USER_TOKEN=$(curl -s -d 'client_id=shasta' -d 'username=ro-test-user' -d 'password=ro-test-pass' -d 'grant_type=password' https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token)
 ACCESS_TOKEN=$(echo ${USER_TOKEN}|jq -r .access_token)
 TELEMETRY_API_URL="https://api-gw-service-nmn.local/apis/sma-telemetry-api"
 STREAMS=$(curl -k -s ${TELEMETRY_API_URL} -H "Authorization: Bearer ${ACCESS_TOKEN}" ${TELEMETRY_API_URL}/v1|jq | grep api_endpoints)
