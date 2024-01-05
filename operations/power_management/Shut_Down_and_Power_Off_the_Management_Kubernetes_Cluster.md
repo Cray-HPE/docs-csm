@@ -2,6 +2,8 @@
 
 Shut down management services and power off the HPE Cray EX management Kubernetes cluster.
 
+**Important:** When performing a complete system shutdown, do NOT start with this page. Refer to [System Power Off Procedures](System_Power_Off_Procedures.md) for the expected shutdown sequence.
+
 - [Overview](#overview)
 - [Prerequisites](#prerequisites)
 - [Check health of the management cluster](#check-health-of-the-management-cluster)
