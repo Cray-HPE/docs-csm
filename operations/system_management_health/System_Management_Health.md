@@ -15,7 +15,7 @@ include support for the Prometheus API. The System Management Health service rel
   open source community
 - The `stable/kube-prometheus-stack` Helm chart integrates the Prometheus operator, Prometheus, Alertmanager, Grafana,
   node exporters \(DaemonSet\), and `kube-state-metrics` to provide a monitoring solution for Kubernetes clusters
-- Istio supports service mesh tracing and observability using Jaeger and Kiali, respectively
+- Istio supports service mesh observability using Kiali
 
 The System Management Health service is intended to complement the System Monitoring Application \(SMA\) Framework, but
 the two are currently not integrated. The System Management Health metrics are not available using the Telemetry API.
@@ -28,5 +28,5 @@ This service scrapes metrics from system components like Ceph, Kubernetes, and t
   retains metrics for ten days at the top level and four hours at intermediate levels
 - Component-specific tooling for more detailed visibility:
   - Grafana dashboards for Kubernetes
-  - Grafana dashboards, Kiali, and Jaeger for Istio
+  - Grafana dashboards and Kiali for Istio
   - Grafana dashboards for Ceph
