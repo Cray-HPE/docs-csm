@@ -61,7 +61,7 @@ namespace. Also, notice that the `VirtualService` for `prometheus.cmn.SYSTEM_DOM
 
 ## Secure Ingress via OAuth2 Proxy
 
-Web apps intended to be accessed via the browser, such as Prometheus, Alertmanager, Grafana, Kiali, Jaeger, Kibana, Elasticsearch, should go through the OAuth2 Proxy reverse proxy. Browser sessions are
+Web apps intended to be accessed via the browser, such as Prometheus, Alertmanager, Grafana, Kiali, Kibana, Elasticsearch, should go through the OAuth2 Proxy reverse proxy. Browser sessions are
 automatically configured to use a JSON Web Token \(JWT\) for authorization to Istio's ingress gateway, enabling a central enforcement point of Open Policy Agent \(OPA\) policies for system management traffic.
 
 The OAuth2 Proxy will inject HTTP headers so that an upstream endpoint can identify the user and customize access as needed. To enable ingress via OAuth2 Proxy external hostnames, web apps need to be added to

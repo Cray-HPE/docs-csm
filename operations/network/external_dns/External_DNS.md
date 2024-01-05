@@ -16,7 +16,6 @@ The following services are currently available:
 - System Management Health Grafana \(redirects to OAuth2 Proxy for SSO\)
 - System Management Health Alertmanager \(redirects to OAuth2 Proxy for SSO\)
 - Kiali, for Istio service mesh visibility \(redirects to OAuth2 Proxy for SSO\)
-- Jaeger, for Istio tracing \(redirects to OAuth2 Proxy for SSO\)
 
 In general, external hostnames should resolve to a external IP address for one of the following services:
 
