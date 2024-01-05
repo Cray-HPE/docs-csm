@@ -24,7 +24,6 @@ Use this procedure to resolve any external DNS routing issues with backend servi
     ```text
     NAMESPACE        NAME                              GATEWAYS                       HOSTS                                                          AGE
     istio-system     kiali                             [services/services-gateway]    [kiali-istio.cmn.SYSTEM_DOMAIN_NAME]                           2d16h
-    istio-system     tracing                           [services/services-gateway]    [jaeger-istio.cmn.SYSTEM_DOMAIN_NAME]                          2d16h
     nexus            nexus                             [services/services-gateway]    [packages.local registry.local nexus.cmn.SYSTEM_DOMAIN_NAME]   2d16h
     services         gitea-vcs-external                [services/services-gateway]    [vcs.cmn.SYSTEM_DOMAIN_NAME]                                   2d16h
     services         sma-grafana                       [services-gateway]             [sma-grafana.cmn.SYSTEM_DOMAIN_NAME]                           2d16h
