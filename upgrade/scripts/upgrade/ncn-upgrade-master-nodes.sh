@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -212,6 +212,7 @@ cat << EOF
 NOTE:
     If below test failed, try to fix it based on test output. Then run current script again
 EOF
+
 state_name="RUN_GOSS_TESTS"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
@@ -222,7 +223,7 @@ if [[ $state_recorded == "0" ]]; then
     while read line; do
       if [[ -n $(echo $line | grep 'Title\|desc') ]]; then
         echo "ERROR failed goss test: $line"
-	      return_code=1
+        return_code=1
       else
         echo -e "$line"
       fi
