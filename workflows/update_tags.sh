@@ -1,7 +1,7 @@
 #!/bin/bash
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -70,7 +70,7 @@ function get_latest_tag_for_image() {
             | capture("^(?<v>[^-]+)(?:-(?<p>.*))?$") | [.v, .p // empty]
             | map(split(".") | map(opt(tonumber)))
             | .[1] |= (. // {});
-    .[0].Tags | sort_by(.|semver_cmp) | last'
+    .[0].Tags | sort_by(.|semver_cmp) | map(select(. != "csm-latest")) | last'
 }
 
 function get_filenames_referring_to_image() {
