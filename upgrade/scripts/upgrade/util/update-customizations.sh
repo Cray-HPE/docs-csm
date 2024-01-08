@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -159,10 +159,12 @@ if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-opera
 fi
 
 # sma-pcim
-yq4 eval '.spec.proxiedWebAppExternalHostnames.customerManagement += [ "sma-pcim.cmn.{{network.dns.external}}" ]' -i $c
-yq4 eval '.spec.kubernetes.services.sma-pcim.externalAuthority = "sma-pcim.cmn.{{ network.dns.external }}"' -i $c
-yq4 eval '.spec.kubernetes.services.sma-pcim.cray-service.containers.sma-pcim.resources.requests.cpu = "1"' -i $c
-yq4 eval '.spec.kubernetes.services.sma-pcim.cray-service.containers.sma-pcim.resources.requests.memory = "2Gi"' -i $c
+if [ "$(yq4 eval '.spec.kubernetes.services.sma-pcim' $c)" == null ]; then
+  yq4 eval '.spec.proxiedWebAppExternalHostnames.customerManagement += [ "sma-pcim.cmn.{{network.dns.external}}" ]' -i $c
+  yq4 eval '.spec.kubernetes.services.sma-pcim.externalAuthority = "sma-pcim.cmn.{{ network.dns.external }}"' -i $c
+  yq4 eval '.spec.kubernetes.services.sma-pcim.cray-service.containers.sma-pcim.resources.requests.cpu = "1"' -i $c
+  yq4 eval '.spec.kubernetes.services.sma-pcim.cray-service.containers.sma-pcim.resources.requests.memory = "2Gi"' -i $c
+fi
 
 # cray-hms-bss (CASMPET-6786)
 if [ "$(yq4 eval '.spec.kubernetes.services.cray-hms-bss.cray-service.containers.cray-bss.env' $c)" != null ]; then
