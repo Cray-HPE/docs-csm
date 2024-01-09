@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -26,6 +26,8 @@
 """
 This module takes a JSON file containing session templates and reports their BOS versions.
 A template name can be specified to filter the results to just the specified template.
+If a template name is specified, it assumes that there is no tenant, since otherwise that
+necessarily implies BOS v2.
 """
 
 import argparse
@@ -33,11 +35,9 @@ import json
 import sys
 from typing import List, Union
 
-from python_lib.bos_session_templates import BosSessionTemplate, \
-                                             InvalidBosSessionTemplate, \
-                                             get_session_template_version
+from python_lib.bos import BosError, BosSessionTemplate
 
-def print_names_versions(session_template_list: List[BosSessionTemplate],
+def print_names_versions(session_template_list: List[dict],
                          template_name_filter: Union[str, None]) -> bool:
     """
     If name not specified, print the name and version of every template in the list.
@@ -46,23 +46,23 @@ def print_names_versions(session_template_list: List[BosSessionTemplate],
     """
     match_count=0
     error_count=0
-    for session_template in session_template_list:
+    for session_template_dict in session_template_list:
         try:
-            template_name = session_template["name"]
-        except KeyError:
-            print("ERROR: No 'name' field found in session template. Skipping")
-            error_count+=1
-            continue
-        if template_name_filter is not None and template_name_filter != template_name:
-            # Skip this one since it does not match the name we were given
-            continue
-        match_count+=1
-        try:
-            template_version = get_session_template_version(session_template)
-            print(f"Template '{template_name}' is BOS version {template_version}")
-        except InvalidBosSessionTemplate as exc:
+            template = BosSessionTemplate(session_template_dict)
+        except BosError as exc:
             print(f"ERROR: {exc}")
             error_count+=1
+            continue
+        if template_name_filter is not None:
+            if template_name_filter != template.name:
+                # Skip this one since it does not match the name we were given
+                continue
+            if template.tenant is not None:
+                # Skip this one because if we are looking for a specific template, we assume it
+                # does not belong to a tenant
+                continue
+        match_count+=1
+        print(f"Template {template.name_tenant} is BOS version {template.version}")
     return match_count > 0 and error_count == 0
 
 def main() -> bool:
