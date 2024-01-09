@@ -36,12 +36,11 @@ import sys
 from typing import Dict, List
 
 from python_lib.bos import BosError, BosOptions, BosSessionTemplate, \
-                           delete_v1_session, delete_v2_session, delete_v2_session_template, \
-                           list_options, list_v1_session_names, list_v2_sessions, \
-                           list_v2_session_templates, update_options
+                           delete_session, delete_session_template, \
+                           list_options, list_sessions, \
+                           list_session_templates, update_options
 from python_lib.bos import BosSessionTemplateUniqueId as TemplateUniqueId
-from python_lib.bos import BosV1SessionUniqueId as V1SessionUniqueId
-from python_lib.bos import BosV2SessionUniqueId as V2SessionUniqueId
+from python_lib.bos import BosSessionUniqueId as SessionUniqueId
 from python_lib.bos_cli import create_session_template
 
 # Mapping from template name to associated session template record
@@ -198,7 +197,7 @@ def load_current_templates() -> SessionTemplateMap:
     to each template
     """
     template_map = {}
-    for template in list_v2_session_templates():
+    for template in list_session_templates():
         template_id = template.unique_id
         if template_id in template_map:
             raise BosError("BOS session template listing includes multiple templates with "
@@ -243,34 +242,19 @@ def load_templates_from_import_data(file_or_dir: str) -> SessionTemplateMap:
         raise BosError(f"Contents of {json_file} not a session template or list of templates")
     return template_map
 
-def delete_all_v1_sessions(v1_session_ids: List[V1SessionUniqueId]) -> None:
+def delete_all_sessions(session_ids: List[SessionUniqueId]) -> None:
     """
-    Deletes the specified list of v1 sessions, and then verifies that none remain
+    Deletes the specified list of sessions, and then verifies that none remain
     """
-    if not v1_session_ids:
+    if not session_ids:
         return
 
-    for session_id in v1_session_ids:
-        print(f"Deleting v1 session '{session_id}'")
-        delete_v1_session(session_id)
+    for session_id in session_ids:
+        print(f"Deleting session {session_id}")
+        delete_session(session_id)
 
-    # Make sure they are now gone
-    if list_v1_session_names():
-        raise BosError("V1 sessions still exist after deleting all of them")
-
-def delete_all_v2_sessions(v2_session_ids: List[V2SessionUniqueId]) -> None:
-    """
-    Deletes the specified list of v2 sessions, and then verifies that none remain
-    """
-    if not v2_session_ids:
-        return
-
-    for session_id in v2_session_ids:
-        print(f"Deleting v2 session {session_id}")
-        delete_v2_session(session_id)
-
-    if list_v2_sessions():
-        raise BosError("V2 sessions still exist after deleting all of them")
+    if list_sessions():
+        raise BosError("Sessions still exist after deleting all of them")
 
 def delete_all_templates(template_ids: List[TemplateUniqueId]) -> None:
     """
@@ -281,23 +265,21 @@ def delete_all_templates(template_ids: List[TemplateUniqueId]) -> None:
 
     for template_id in template_ids:
         print(f"Deleting session template {template_id}")
-        delete_v2_session_template(template_id)
+        delete_session_template(template_id)
 
-    if list_v2_session_templates():
+    if list_session_templates():
         raise BosError("Session templates still exist after deleting all of them")
 
 def delete_all_sessions_and_templates(current_template_map: SessionTemplateMap) -> None:
     """
-    Deletes all BOS v1 sessions, BOS v2 sessions, and session templates.
+    Deletes all BOS sessions and session templates.
     Then queries BOS to confirm that none remain.
     """
-    v1_session_ids = list_v1_session_names()
-    v2_session_ids = [ session.unique_id for session in list_v2_sessions() ]
+    session_ids = [ session.unique_id for session in list_sessions() ]
 
     print("Deleting all BOS sessions and session templates")
 
-    delete_all_v1_sessions(v1_session_ids)
-    delete_all_v2_sessions(v2_session_ids)
+    delete_all_sessions(session_ids)
     delete_all_templates(list(current_template_map))
 
 def main() -> None:
@@ -311,7 +293,7 @@ def main() -> None:
 
     - If --clear-bos is specified, all BOS sessions and session templates will be deleted before
       the import.
-    - If options-file is specified, the BOS v2 options in that file are imported onto the system
+    - If options-file is specified, the BOS options in that file are imported onto the system
       (for those that differ from the current options)
     - If a JSON file for a single session template is specified, then that session template
       will be created in BOS.

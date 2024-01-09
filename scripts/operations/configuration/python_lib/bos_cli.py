@@ -112,7 +112,6 @@ def run_bos_cli_command(args: List[str], tenant: Tenant = None,
 def create_session_template(session_template: BosSessionTemplate) -> None:
     """
     Wrapper for calling the CLI to create the specified BOS session template.
-    BOS v2 is used unless the template is in v1 format.
     Returns nothing.
     Raises BosCliError on error.
     """
@@ -124,12 +123,13 @@ def create_session_template(session_template: BosSessionTemplate) -> None:
         json.dump(session_template.contents, tmp)
         # Make sure the data has been written to the file so the CLI command can read it.
         tmp.flush()
-        if bos_version == 1:
-            create_command = [f"v{bos_version}", "sessiontemplate", "create",
-                              "--file", tmp.name, "--name", name_tenant.name, "--format", "json"]
-        else:
-            create_command = [f"v{bos_version}", "sessiontemplates", "create",
-                              "--file", tmp.name, name_tenant.name, "--format", "json"]
+
+        # As of CSM 1.6, there should only be BOS v2
+        if bos_version != 2:
+            raise BosCliError(f"Invalid BOS version: {bos_version}; Failed to create template {name_tenant}")
+
+        create_command = [f"v{bos_version}", "sessiontemplates", "create",
+                          "--file", tmp.name, name_tenant.name, "--format", "json"]
         try:
             run_bos_cli_command(create_command, tenant=name_tenant.tenant, stdout=subprocess.PIPE,
                                 check=True)
@@ -140,7 +140,6 @@ def create_session_template(session_template: BosSessionTemplate) -> None:
 def delete_session_template(template_id: BosSessionTemplateUniqueId) -> None:
     """
     Wrapper for calling the CLI to delete the specified BOS session template.
-    Uses BOS v2 since the version makes no difference to the results in this case.
     Returns nothing.
     Raises BosCliError on error.
     """
@@ -155,8 +154,6 @@ def delete_session_template(template_id: BosSessionTemplateUniqueId) -> None:
 def get_session_template(template_id: BosSessionTemplateUniqueId) -> BosSessionTemplate:
     """
     Wrapper for calling the CLI to describe the specified BOS session template.
-    Uses BOS v2 since the version makes no difference to the results in this case (despite
-    what the API spec says).
     Returns the session template.
     Raises BosCliError on error.
     """
@@ -186,8 +183,6 @@ def list_options() -> BosOptions:
 def list_session_templates(tenant: Tenant = None) -> List[BosSessionTemplate]:
     """
     Wrapper for calling the CLI to list all BOS session templates.
-    Uses BOS v2 since the version makes no difference to the results in this case (despite
-    what the API spec says).
     Returns the list.
     Raises BosCliError on error.
     """
