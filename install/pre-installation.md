@@ -701,7 +701,7 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
    >
    > - This will also set all the BMCs to DHCP.
    > - Changing into the `$HOME` directory ensures the proper operation of the script.
-   > - The script may emit a message about mismatched kernels. This message can be safely ignored.
+   > - **For CSM 1.4, the script will emit a message about mismatching kernels. This message can be safely ignored.**
 
    ```bash
    cd $HOME && /root/bin/set-sqfs-links.sh
