@@ -148,8 +148,17 @@ spec:
                   TARGET_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                     jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Parent")
                   TARGET_NCN_mgmt_host="${TARGET_NCN}-mgmt"
-                  export IPMI_USERNAME=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Username")
-                  export IPMI_PASSWORD=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Password")
+
+                  export SCSD_CREDS=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds")
+
+                  export IPMI_USERNAME=$(echo "${SCSD_CREDS}" | jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Username")
+                  export IPMI_PASSWORD=$(echo "${SCSD_CREDS}" | jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Password")
+
+                  export SCSD_STATUS_CODE=$(echo "${SCSD_CREDS}" | jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .StatusCode")
+                  if [[ "${SCSD_STATUS_CODE}" != "200" ]]; then
+                      echo "BMC credentials are not currently available for ${TARGET_MGMT_XNAME} in SCSD. The returned username was ${IPMI_USERNAME}"
+                      exit 1
+                  fi
                                     
                   # Set ncn to pxe boot
                   ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis bootdev pxe options=efiboot
@@ -184,8 +193,17 @@ spec:
                   TARGET_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                       jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Parent")
                   TARGET_NCN_mgmt_host="${TARGET_NCN}-mgmt"
-                  export IPMI_USERNAME=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Username")
-                  export IPMI_PASSWORD=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Password")
+
+                  export SCSD_CREDS=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds")
+
+                  export IPMI_USERNAME=$(echo "${SCSD_CREDS}" | jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Username")
+                  export IPMI_PASSWORD=$(echo "${SCSD_CREDS}" | jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Password")
+
+                  export SCSD_STATUS_CODE=$(echo "${SCSD_CREDS}" | jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .StatusCode")
+                  if [[ "${SCSD_STATUS_CODE}" != "200" ]]; then
+                      echo "BMC credentials are not currently available for ${TARGET_MGMT_XNAME} in SCSD. The returned username was ${IPMI_USERNAME}"
+                      exit 1
+                  fi
 
                   bootscript_last_epoch="{{tasks.get-bootscript-last-access-timestamp.outputs.result}}"
                   # wait for boot
