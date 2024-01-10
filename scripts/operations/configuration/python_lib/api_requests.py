@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -28,13 +28,13 @@ import copy
 import logging
 import time
 import traceback
-from typing import Callable, Container, Union
+from typing import Callable, Container, Tuple, Union
 
 import requests
 
 from . import common
 from . import k8s
-from .types import JsonObject, JSONDecodeError
+from .types import JsonDict, JsonObject, JSONDecodeError
 
 
 ADMIN_CLIENT_SECRET_NAME = "admin-client-auth"
@@ -80,10 +80,9 @@ def get_admin_client_token(k8s_client: k8s.CoreV1API) -> str:
         log_error_raise_exception(
             f"Error decoding token in {secret_label}", exc)
 
-
-def get_api_token(k8s_client: k8s.CoreV1API = None) -> str:
+def get_full_api_token(k8s_client: k8s.CoreV1API = None) -> Tuple[str, JsonDict]:
     """
-    Return the token needed for API calls
+    Returns text string and JSON object of the full API auth token
     """
     if k8s_client is None:
         k8s_client = k8s.Client()
@@ -99,12 +98,19 @@ def get_api_token(k8s_client: k8s.CoreV1API = None) -> str:
         log_error_raise_exception(
             "Keycloak request for API token succeeded but got empty response")
     try:
-        resp_body = resp.json()
+        return resp.text, resp.json()
     except JSONDecodeError as exc:
         log_error_raise_exception(
             "Error decoding JSON in keycloak API token response", exc)
+
+
+def get_api_token(k8s_client: k8s.CoreV1API = None) -> str:
+    """
+    Return the token needed for API calls
+    """
+    _, resp_json = get_full_api_token(k8s_client)
     try:
-        return resp_body["access_token"]
+        return resp_json["access_token"]
     except (KeyError, TypeError) as exc:
         log_error_raise_exception(
             "Keycloak API token request response in unexpected format", exc)

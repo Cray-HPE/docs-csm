@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -33,19 +33,19 @@ import json
 import os
 import subprocess
 import sys
-from typing import Dict, List, Union
+from typing import Dict, List
 
-from python_lib.bos import BosError, BosOptions, delete_v1_session, delete_v2_session, \
-                           delete_v2_session_template, list_options, list_v1_session_names, \
-                           list_v2_sessions, list_v2_session_templates, update_options
+from python_lib.bos import BosError, BosOptions, BosSessionTemplate, \
+                           delete_session, delete_session_template, \
+                           list_options, list_sessions, \
+                           list_session_templates, update_options
+from python_lib.bos import BosSessionTemplateUniqueId as TemplateUniqueId
+from python_lib.bos import BosSessionUniqueId as SessionUniqueId
 from python_lib.bos_cli import create_session_template
-from python_lib.bos_session_templates import BosSessionTemplate, \
-                                             InvalidBosSessionTemplate, \
-                                             get_session_template_name, \
-                                             get_session_template_version
 
 # Mapping from template name to associated session template record
-SessionTemplateMap = Dict[str, BosSessionTemplate]
+
+SessionTemplateMap = Dict[TemplateUniqueId, BosSessionTemplate]
 
 BOS_EXPORT_TOOL = "/usr/share/doc/csm/scripts/operations/configuration/export_bos_data.sh"
 
@@ -67,45 +67,36 @@ def snapshot_bos_data() -> None:
     """
     subprocess.check_call(BOS_EXPORT_TOOL)
 
-def get_template_to_import(template_name: str, template_to_create: BosSessionTemplate,
-                           current_templates: List[BosSessionTemplate]) -> Union[BosSessionTemplate,
-                                                                                 None]:
+def should_import_template(template_to_create: BosSessionTemplate,
+                           current_template_map: SessionTemplateMap) -> bool:
     """
-    Determines what session template should be created based on the specified template from the
-    import data.
-    If a BOS session template already exists with the same name, the import will not happen
+    Determines whether or not this template should be created, based on the specified template from
+    the import data.
+    If a BOS session template already exists with the same name/tenant, the import will not happen
     and a message will be printed to that effect.
     """
-    print(f"Processing session template '{template_name}'")
+    template_id = template_to_create.unique_id
+    print(f"Processing session template {template_id}")
+    if template_id not in current_template_map:
+        return True
 
-    for template in current_templates:
-        if template_name != template["name"]:
-            continue
-        if template == template_to_create:
-            print(f"Session template with name '{template_name}' and identical contents already "
-                  "exists in BOS -- skipping import.")
-        else:
-            print(f"Session template with name '{template_name}' but DIFFERENT contents already "
-                  "exists in BOS -- skipping import.")
-        return None
+    if template_to_create.contents == current_template_map[template_id].contents:
+        print("Session template with identical contents already exists in BOS -- skipping import "
+              f"({template_id})")
+    else:
+        print("Session template already exists in BOS with DIFFERENT contents -- skipping import "
+              f"({template_id})")
+    return False
 
-    return template_to_create
-
-def get_templates_to_import(template_name_map: SessionTemplateMap,
-                            current_templates: List[BosSessionTemplate]) -> SessionTemplateMap:
+def get_templates_to_import(exported_template_map: SessionTemplateMap,
+                            current_template_map: SessionTemplateMap) -> SessionTemplateMap:
     """
     Returns all of the session templates that should be created on the system based on the templates
-    in the imported data and the current session templates on the system.
+    in the exported data and the current session templates on the system.
     """
-    template_import_map = {}
-    for template_name, template in template_name_map.items():
-        template_to_import = get_template_to_import(template_name, template, current_templates)
-        if not template_to_import:
-            continue
-        # Add this to the import list.
-        template_name_to_import = template_to_import["name"]
-        template_import_map[template_name_to_import] = template_to_import
-    return template_import_map
+    return { template.unique_id: template
+             for template in exported_template_map.values()
+             if should_import_template(template, current_template_map) }
 
 def get_options_to_change(options_to_import: BosOptions, current_options: BosOptions) -> List[str]:
     """
@@ -142,37 +133,34 @@ def change_options(option_data: BosOptions, option_names_to_change: List[str]) -
         print(f"{opt_name} = {option_updates[opt_name]}")
     update_options(option_updates)
 
-def validate_and_record_template(name_template_map: SessionTemplateMap,
-                                 template_source_map: Dict[str, str],
-                                 session_template: BosSessionTemplate, source_file: str) -> None:
+def validate_and_record_template(template_map: SessionTemplateMap,
+                                 source_map: Dict[TemplateUniqueId, str],
+                                 template_dict: dict, source_file: str) -> None:
     """
-    Helper function which parses a would-be session template, adding it to name_template_map
+    Helper function which parses a would-be session template, adding it to name_tenant_template_map
     mapping if it looks good. Also adds a corresponding entry in the template_source_map.
     Raises BosError if there are any problems.
     """
     try:
-        template_name = get_session_template_name(session_template)
-    except InvalidBosSessionTemplate as exc:
-        raise BosError(f"Error with session template in {source_file}: {exc}") from exc
-    if template_name in name_template_map:
-        # We already have a template with this name. The only way this isn't a problem
+        template = BosSessionTemplate(template_dict)
+    except BosError as exc:
+        print(f"Error with session template in {source_file}: {exc}")
+        raise
+
+    template_id = template.unique_id
+
+    if template_id in template_map:
+        # We already have a template with this name/tenant. The only way this isn't a problem
         # is if the two templates are identical
-        if name_template_map[template_name] == session_template:
+        if template_map[template_id].contents == template.contents:
             # They are identical, so just skip it.
             return
-        raise BosError(f"Two different session templates in {source_file} and"
-            f" {template_source_map[template_name]} both named '{template_name}'")
-    # Make sure the BOS version of this template can be determined. We don't care what the version
-    # is yet -- this is just validating that the template isn't so malformed that making this call
-    # provokes an error.
-    try:
-        get_session_template_version(session_template)
-    except InvalidBosSessionTemplate as exc:
-        raise BosError(f"{source_file} contains invalid template '{template_name}': {exc}") from exc
+        raise BosError(f"Two different session templates in {source_file} and "
+                       f"{source_map[template_id]}, both with {template_id}")
 
     # Add this template to our records
-    name_template_map[template_name] = session_template
-    template_source_map[template_name] = source_file
+    template_map[template_id] = template
+    source_map[template_id] = source_file
 
 def list_json_files_in_directory(dir_name: str) -> List[str]:
     """
@@ -203,6 +191,21 @@ def validate_json_file(file_name: str) -> None:
         raise BosError(f"Argument exists but is not a regular file: '{file_name}'")
     raise BosError(f"File does not exist: '{file_name}'")
 
+def load_current_templates() -> SessionTemplateMap:
+    """
+    Load current BOS session templates and return a mapping from session template name/tenant
+    to each template
+    """
+    template_map = {}
+    for template in list_session_templates():
+        template_id = template.unique_id
+        if template_id in template_map:
+            raise BosError("BOS session template listing includes multiple templates with "
+                           f"{template_id}")
+        template_map[template_id] = template
+
+    return template_map
+
 def load_templates_from_import_data(file_or_dir: str) -> SessionTemplateMap:
     """
     Loads session templates from JSON file or directory specified on the command line.
@@ -219,27 +222,65 @@ def load_templates_from_import_data(file_or_dir: str) -> SessionTemplateMap:
 
     # Dict mapping template name to the JSON file from which the template was loaded.
     # Used to provide information in case the same template is found in multiple files.
-    template_source_map = {}
+    source_map = {}
 
-    # Dict mapping template name to the session template
-    name_template_map = {}
+    # Dict mapping template name & tenant to the session template
+    template_map = {}
 
     for json_file in json_files:
         print(f"Reading session templates from {json_file}")
         with open(json_file, "rt") as jfile:
             file_contents = json.load(jfile)
         if isinstance(file_contents, dict):
-            validate_and_record_template(name_template_map, template_source_map, file_contents,
-                                         json_file)
+            validate_and_record_template(template_map, source_map, file_contents, json_file)
             continue
         if isinstance(file_contents, list):
             for template in file_contents:
-                validate_and_record_template(name_template_map, template_source_map, template,
-                                             json_file)
+                validate_and_record_template(template_map, source_map, template, json_file)
             continue
         # Not a list or a dict
         raise BosError(f"Contents of {json_file} not a session template or list of templates")
-    return name_template_map
+    return template_map
+
+def delete_all_sessions(session_ids: List[SessionUniqueId]) -> None:
+    """
+    Deletes the specified list of sessions, and then verifies that none remain
+    """
+    if not session_ids:
+        return
+
+    for session_id in session_ids:
+        print(f"Deleting session {session_id}")
+        delete_session(session_id)
+
+    if list_sessions():
+        raise BosError("Sessions still exist after deleting all of them")
+
+def delete_all_templates(template_ids: List[TemplateUniqueId]) -> None:
+    """
+    Deletes the specified list of session templates, and then verifies that none remain
+    """
+    if not template_ids:
+        return
+
+    for template_id in template_ids:
+        print(f"Deleting session template {template_id}")
+        delete_session_template(template_id)
+
+    if list_session_templates():
+        raise BosError("Session templates still exist after deleting all of them")
+
+def delete_all_sessions_and_templates(current_template_map: SessionTemplateMap) -> None:
+    """
+    Deletes all BOS sessions and session templates.
+    Then queries BOS to confirm that none remain.
+    """
+    session_ids = [ session.unique_id for session in list_sessions() ]
+
+    print("Deleting all BOS sessions and session templates")
+
+    delete_all_sessions(session_ids)
+    delete_all_templates(list(current_template_map))
 
 def main() -> None:
     """
@@ -250,8 +291,9 @@ def main() -> None:
     [--options-file <options_file.json>]
     {<session_template_directory> | <session_template_list.json> }
 
-    - If --clear-bos is specified, all BOS sessions and session templates will be deleted before the import.
-    - If options-file is specified, the BOS v2 options in that file are imported onto the system
+    - If --clear-bos is specified, all BOS sessions and session templates will be deleted before
+      the import.
+    - If options-file is specified, the BOS options in that file are imported onto the system
       (for those that differ from the current options)
     - If a JSON file for a single session template is specified, then that session template
       will be created in BOS.
@@ -261,15 +303,16 @@ def main() -> None:
       in that directory.
 
     No existing session templates on the system will be overwritten -- in the case that this would
-    happen, a message is printed and that template is skipped (keeping in mind that if --clear-bos is
-    specified, all templates are first deleted, so some templates may essentially be overwritten in
-    that case)
+    happen, a message is printed and that template is skipped (keeping in mind that if --clear-bos
+    is specified, all templates are first deleted, so some templates may essentially be overwritten
+    in that case)
 
     Raises BosError if there is an error.
     """
     parser = argparse.ArgumentParser(
         description="Reads BOS session templates and options from files and creates them in BOS")
-    parser.add_argument("--clear-bos", action='store_true', help="Delete BOS sessions and session templates before importing")
+    parser.add_argument("--clear-bos", action='store_true',
+                        help="Delete BOS sessions and session templates before importing")
     parser.add_argument("--options-file", type=argparse.FileType('r'), required=False,
                         help="JSON file of BOS options")
     parser.add_argument("file_or_directory",
@@ -277,7 +320,7 @@ def main() -> None:
                              "such JSON files")
     parsed_args = parser.parse_args()
 
-    template_name_map = load_templates_from_import_data(parsed_args.file_or_directory)
+    exported_template_map = load_templates_from_import_data(parsed_args.file_or_directory)
 
     if parsed_args.options_file is not None:
         print("Reading in BOS options from JSON file")
@@ -291,7 +334,7 @@ def main() -> None:
         options_to_change = None
 
     # Get list of current BOS session templates on system
-    current_session_templates = list_v2_session_templates()
+    current_template_map = load_current_templates()
 
     if parsed_args.clear_bos:
         # Take a snapshot of the BOS data before we begin.
@@ -299,36 +342,10 @@ def main() -> None:
         snapshot_bos_data()
         print("")
 
-        v1_session_names = list_v1_session_names()
-        v2_session_names = [ session["name"] for session in list_v2_sessions() ]
-        template_names = [ template["name"] for template in current_session_templates ]
+        delete_all_sessions_and_templates(current_template_map)
+        current_template_map = {}
 
-        print("Deleting all BOS sessions and session templates")
-        for session in v1_session_names:
-            print(f"Deleting v1 session '{session}'")
-            delete_v1_session(session)
-
-        # If we deleted any, make sure they are now gone
-        if v1_session_names and list_v1_session_names():
-            raise BosError("V1 sessions still exist after deleting all of them")
-
-        for session in v2_session_names:
-            print(f"Deleting v2 session '{session}'")
-            delete_v2_session(session)
-
-        if v2_session_names and list_v2_sessions():
-            raise BosError("V2 sessions still exist after deleting all of them")
-
-        for template in template_names:
-            print(f"Deleting session template '{template}'")
-            delete_v2_session_template(template)
-
-        if current_session_templates:
-            current_session_templates = list_v2_session_templates()
-            if current_session_templates:
-                raise BosError("Session templates still exist after deleting all of them")
-
-    template_import_map = get_templates_to_import(template_name_map, current_session_templates)
+    template_import_map = get_templates_to_import(exported_template_map, current_template_map)
 
     print("")
     # If there are no changes to make, we are already done
@@ -347,10 +364,9 @@ def main() -> None:
         change_options(imported_bos_options, options_to_change)
         print("")
 
-    for template_name, template in template_import_map.items():
-        bos_version = get_session_template_version(template)
-        print(f"Importing BOS v{bos_version} session template '{template_name}'")
-        create_session_template(template, bos_version)
+    for template_id, template in template_import_map.items():
+        print(f"Importing BOS v{template.version} session template {template_id}")
+        create_session_template(template)
 
     print("")
     # Take a snapshot of the BOS data after we're done
