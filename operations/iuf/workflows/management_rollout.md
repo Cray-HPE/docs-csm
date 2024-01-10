@@ -76,7 +76,7 @@ Refer to that table and any corresponding product documents before continuing to
 
         ```bash
         XNAME=x3000c0s13b0n0
-        cray cfs v3 components describe "${XNAME}"
+        cray cfs components describe "${XNAME}"
         ```
 
         The desired value for `configuration_status` is `configured`. If it is `pending`, then wait for the status to change to `configured`.
