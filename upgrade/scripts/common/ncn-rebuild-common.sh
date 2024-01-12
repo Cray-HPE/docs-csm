@@ -150,26 +150,30 @@ EOF
         elif [[ ${target_ncn} == ncn-m* ]]; then
             cat << 'EOF' > "${basedir}/standdown.sh"
 #!/bin/bash
-set -ou pipefail
+set -eou pipefail
 echo 'unmounting USB(s) ... '
-usb_device_path=$(lsblk -b -l -o TRAN,PATH | awk /usb/'{print $2}')
-usb_rc=$?
-set -e
-if [[ "$usb_rc" -eq 0 ]]; then
-  if blkid -p ${usb_device_path}; then
-    have_mnt=0
-    echo 'unmounting discovered USB mountpoints ... '
-    for mnt_point in /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata; do
-      if mountpoint "${mnt_point}"; then
-        have_mnt=1
-        umount -v "${mnt_point}"
+if IFS=$'\n' read -rd '' -a usb_device_paths; then
+  :
+fi <<< "$(lsblk -b -l -o TRAN,PATH | awk /usb/'{print $2}')"
+if [[ "${#usb_device_paths[@]}" -ne 0 ]]; then
+  echo 'unmounting discovered USB mountpoints ... '
+  for usb_device_path in "${usb_device_paths[@]}"; do
+    if blkid -p ${usb_device_path}; then
+      have_mnt=0
+      for mnt_point in /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata; do
+        if mountpoint "${mnt_point}"; then
+          have_mnt=1
+          umount -v "${mnt_point}"
+        fi
+      done
+      if [[ ${have_mnt} -eq 1 ]]; then
+        echo "ejecting discovered USB: [${usb_device_path}]"
+        if ! eject ${usb_device_path}; then
+          echo >&2 "Warning: Unable to eject ${usb_device_path}"
+        fi
       fi
-    done
-    if [[ ${have_mnt} -eq 1 ]]; then
-      echo "ejecting discovered USB: [${usb_device_path}]"
-      eject ${usb_device_path}
     fi
-  fi
+  done
 fi
 umount -v /var/lib/etcd /var/lib/sdu || true
 
@@ -283,13 +287,13 @@ if [[ ${state_recorded} == "0" ]]; then
                                 -o custom-columns=:.metadata.name | grep -E "^cray-vault-(0|[1-9][0-9]*)$") ; do
                 IPMI_USERNAME=$(kubectl exec -it -n vault -c vault "${VAULT_POD}" -- sh -c \
                     "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo ${VAULT_TOKEN}`; \
-                    vault kv get -format=json secret/hms-creds/${TARGET_MGMT_XNAME}" | 
+                    vault kv get -format=json secret/hms-creds/${TARGET_MGMT_XNAME}" |
                     jq -r '.data.Username')
                 # If we are not able to get the username, no need to try and get the password.
                 [[ -n ${IPMI_USERNAME} ]] || continue
                 IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault "${VAULT_POD}" -- sh -c \
                     "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo ${VAULT_TOKEN}`; \
-                    vault kv get -format=json secret/hms-creds/${TARGET_MGMT_XNAME}" | 
+                    vault kv get -format=json secret/hms-creds/${TARGET_MGMT_XNAME}" |
                     jq -r '.data.Password')
                 export IPMI_PASSWORD
                 break
@@ -360,7 +364,7 @@ EOF
         sleep 1
     done
     printf "\n%s\n" "$target_ncn is booted and online"
-    
+
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -370,7 +374,7 @@ state_name="WAIT_FOR_CLOUD_INIT"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    
+
     sleep 60
     # wait for cloud-init
     # ssh commands are expected to fail for a while, so we temporarily disable set -e
@@ -387,7 +391,7 @@ if [[ $state_recorded == "0" ]]; then
     # Restore set -e
     set -e
     printf "\n%s\n"  "$target_ncn finished cloud-init"
-    
+
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -414,7 +418,7 @@ if [[ ${state_recorded} == "0" ]]; then
     check_sls_health
 
     set +e
-    while true ; do 
+    while true ; do
         csi handoff bss-update-param --set metal.no-wipe=1 --limit "${TARGET_XNAME}"
         wipe_return=$?
         csi handoff bss-update-param --delete rd.live.overlay.reset --limit "${TARGET_XNAME}"

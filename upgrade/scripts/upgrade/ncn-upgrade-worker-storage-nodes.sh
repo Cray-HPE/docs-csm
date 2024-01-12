@@ -155,7 +155,7 @@ if $retry && $force; then
 fi
 
 if [[ $nodeType == "storage" ]]; then
-    if $upgrade; then 
+    if $upgrade; then
         workflowType="upgrade"
     elif $rebuild; then
         echo "Error: --rebuild flag was used for storage rebuild. This rebuild must be done manually. Follow instructions at /operations/node_management/Rebuild_NCNs/Rebuild_NCNs.md"
@@ -194,7 +194,7 @@ function uploadWorkflowTemplates() {
 
 function createWorkflowPayload() {
     if [[ ${nodeType} == "worker" ]]
-    then    
+    then
         # ask for switch password if it's not set
         if [[ -z "${SW_ADMIN_PASSWORD}" ]]; then
         read -r -s -p "Switch password:" SW_ADMIN_PASSWORD
@@ -211,7 +211,7 @@ function createWorkflowPayload() {
 EOF
     fi
     if [[ ${nodeType} == "storage" ]]
-    then    
+    then
         echo
         cat << EOF
 {
@@ -280,10 +280,10 @@ function deleteRebuildWorkflow() {
     if [[ ${http_code} -ne 200 ]]; then
         echo "Request Failed, Response code: ${http_code}"
         cat "${res_file}"
-        rm -f "${res_file}" > /dev/null 2>&1 || true 
+        rm -f "${res_file}" > /dev/null 2>&1 || true
         exit 1
     fi
-    rm -f "${res_file}" > /dev/null 2>&1 || true 
+    rm -f "${res_file}" > /dev/null 2>&1 || true
 }
 
 function retryRebuildWorkflow() {
@@ -293,7 +293,7 @@ function retryRebuildWorkflow() {
         echo "Request Failed, Response code: ${http_code}"
         cat "${res_file}"
     fi
-    rm -f "${res_file}" > /dev/null 2>&1 || true 
+    rm -f "${res_file}" > /dev/null 2>&1 || true
 }
 
 printCmdArgs
@@ -333,7 +333,7 @@ fi
 if [[ -z "${workflow}" ]]; then
     echo
     echo "ERROR - No workflow to pull, something is wrong"
-else 
+else
     echo
     echo "DEBUG - Poll status of: ${workflow}"
 fi
