@@ -30,7 +30,7 @@ function deployNLS() {
     manifestgen -i "${CSM_ARTI_DIR}/manifests/platform.yaml" -c "${BUILDDIR}/customizations.yaml" -o "${BUILDDIR}/iufnls.yaml"
     charts="$(yq r $BUILDDIR/iufnls.yaml 'spec.charts[*].name')"
     for chart in $charts; do
-        if [[ $chart != "cray-iuf" ]] && [[ $chart != "cray-nls" ]] && [[ $chart != "cray-postgres-operator" ]]; then 
+        if [[ $chart != "cray-iuf" ]] && [[ $chart != "cray-nls" ]] && [[ $chart != "cray-postgres-operator" ]]; then
             yq d -i ${BUILDDIR}/iufnls.yaml "spec.charts.(name==$chart)"
         fi
     done

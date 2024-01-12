@@ -287,13 +287,13 @@ if [[ ${state_recorded} == "0" ]]; then
                                 -o custom-columns=:.metadata.name | grep -E "^cray-vault-(0|[1-9][0-9]*)$") ; do
                 IPMI_USERNAME=$(kubectl exec -it -n vault -c vault "${VAULT_POD}" -- sh -c \
                     "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo ${VAULT_TOKEN}`; \
-                    vault kv get -format=json secret/hms-creds/${TARGET_MGMT_XNAME}" | 
+                    vault kv get -format=json secret/hms-creds/${TARGET_MGMT_XNAME}" |
                     jq -r '.data.Username')
                 # If we are not able to get the username, no need to try and get the password.
                 [[ -n ${IPMI_USERNAME} ]] || continue
                 IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault "${VAULT_POD}" -- sh -c \
                     "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo ${VAULT_TOKEN}`; \
-                    vault kv get -format=json secret/hms-creds/${TARGET_MGMT_XNAME}" | 
+                    vault kv get -format=json secret/hms-creds/${TARGET_MGMT_XNAME}" |
                     jq -r '.data.Password')
                 export IPMI_PASSWORD
                 break
@@ -364,7 +364,7 @@ EOF
         sleep 1
     done
     printf "\n%s\n" "$target_ncn is booted and online"
-    
+
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -374,7 +374,7 @@ state_name="WAIT_FOR_CLOUD_INIT"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    
+
     sleep 60
     # wait for cloud-init
     # ssh commands are expected to fail for a while, so we temporarily disable set -e
@@ -391,7 +391,7 @@ if [[ $state_recorded == "0" ]]; then
     # Restore set -e
     set -e
     printf "\n%s\n"  "$target_ncn finished cloud-init"
-    
+
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -418,7 +418,7 @@ if [[ ${state_recorded} == "0" ]]; then
     check_sls_health
 
     set +e
-    while true ; do 
+    while true ; do
         csi handoff bss-update-param --set metal.no-wipe=1 --limit "${TARGET_XNAME}"
         wipe_return=$?
         csi handoff bss-update-param --delete rd.live.overlay.reset --limit "${TARGET_XNAME}"

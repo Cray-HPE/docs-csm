@@ -141,9 +141,9 @@ if [[ $state_recorded == "0" ]]; then
     csi automate ncn etcd --action remove-member --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf
     ssh $target_ncn 'systemctl daemon-reload'
     ssh $target_ncn 'systemctl stop etcd.service'
-    
+
     set +e
-    while true ; do    
+    while true ; do
         csi automate ncn etcd --action add-member --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf
         if [[ $? -eq 0 ]]; then
             break
@@ -165,7 +165,7 @@ drain_node $target_ncn
 check_sls_health
 
 set +e
-while true ; do    
+while true ; do
     csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
     if [[ $? -eq 0 ]]; then
         break

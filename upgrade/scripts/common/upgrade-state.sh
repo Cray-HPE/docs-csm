@@ -77,7 +77,7 @@ function move_state_file () {
     # it also leaves a trace of what happened before
     local target_ncn=$1
     local state_dir="/etc/cray/upgrade/csm/${CSM_REL_NAME}/${target_ncn}"
-    
+
     mv "${state_dir}/state" "${state_dir}/state.bak"
 }
 
@@ -114,12 +114,12 @@ function err_report() {
     if [[ ${shouldIgnore} -eq 1 ]]; then
         return 0
     fi
-    
+
     # check if /dev/tty is available, it is not available when using argo workflows
     if sh -c ": >/dev/tty" >/dev/null 2>/dev/null; then
         # /dev/tty is available and usable
         # force output to console regardless of redirection
-        echo >/dev/tty 
+        echo >/dev/tty
         echo "[ERROR] - Unexpected errors, check logs: ${LOG_FILE}" >/dev/tty
     else
         # /dev/tty is not available
@@ -135,7 +135,7 @@ function ok_report() {
     if sh -c ": >/dev/tty" >/dev/null 2>/dev/null; then
         # /dev/tty is available and usable
         # force output to console regardless of redirection
-        echo >/dev/tty 
+        echo >/dev/tty
         echo "[OK] - Successfully completed" >/dev/tty
     else
         # /dev/tty is not available
