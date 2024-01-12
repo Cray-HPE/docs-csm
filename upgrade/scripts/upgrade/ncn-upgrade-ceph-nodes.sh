@@ -93,7 +93,7 @@ if [[ $state_recorded == "0" ]]; then
         ssh_keygen_keyscan "${target_ncn}"
         ssh_keys_done=1
     fi
-    scp /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
+    scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
     ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
