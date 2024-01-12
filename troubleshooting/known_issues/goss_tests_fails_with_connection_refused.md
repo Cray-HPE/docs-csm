@@ -14,7 +14,7 @@ Follow this procedure when a Goss test fails with `Failed to establish a new con
 
 ## Example Error
 
-An example of this error can be seen below.
+The following is an example of this error.
 
 ```bash
 ERROR: Error encountered running http://ncn-s003.hmn:8997/ncn-healthcheck-storage tests: Unexpected error attempting GET request to http://ncn-s003.hmn:8997/ncn-healthcheck-storage:
@@ -29,7 +29,7 @@ ERROR: Skipping http://ncn-s003.hmn:8999/ncn-afterpitreboot-healthcheck-storage 
 
 This error means that not all Goss tests on the NCN are available via the Goss servers. This can be seen by comparing the output from
 `systemctl status goss-servers` on multiple nodes of the same type (i.e. storage, master, worker). The node with the error will
-have less entries under `CGroup`. An example of output from a node with and without this error can be seen below.
+have less entries under `CGroup`. The following is an example of output from a node with and without this error.
 
 If the error is on `ncn-s003`, the following might be seen when running `systemctl status goss-servers` on `ncn-s003`.
 
