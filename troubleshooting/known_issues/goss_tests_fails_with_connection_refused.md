@@ -10,7 +10,7 @@
 
 ## Introduction
 
-Follow this procedure when a goss-test fails with `Failed to establish a new connection: [Errno 111] Connection refused`.
+Follow this procedure when a Goss test fails with `Failed to establish a new connection: [Errno 111] Connection refused`.
 
 ## Example Error
 
@@ -27,7 +27,7 @@ ERROR: Skipping http://ncn-s003.hmn:8999/ncn-afterpitreboot-healthcheck-storage 
 
 ## Examining the problem
 
-This error means that not all goss tests on the NCN are available via the goss servers. This can be seen by comparing the output from
+This error means that not all Goss tests on the NCN are available via the Goss servers. This can be seen by comparing the output from
 `systemctl status goss-servers` on multiple nodes of the same type (i.e. storage, master, worker). The node with the error will
 have less entries under `CGroup`. An example of output from a node with and without this error can be seen below.
 
@@ -69,13 +69,13 @@ ncn-s001:~ # systemctl status goss-servers
 
 ## Resolution
 
-To resolve this problem, simply restart goss-servers **on the node with the error**.
+To resolve this problem, simply restart `goss-servers` **on the node with the error**.
 
 ```bash
 systemctl restart goss-servers
 ```
 
-After restarting goss-servers, rerun `systemctl status goss-servers` to make sure there are the same number entries in `CGroup`
+After restarting `goss-servers`, rerun `systemctl status goss-servers` to make sure there are the same number entries in `CGroup`
 as seen on a node without this problem.
 
 ## Other possible causes of this error
@@ -84,7 +84,7 @@ If the above resolution did not fix the problem, there are two other possible ca
 
 1. There is a `yaml` error in the test that is trying to be run. Evaluate the `yaml` file that is being run for any errors.
 
-1. The goss tests were not able to load which can indicate a downlevel csm-testing RPM. Make sure that the correct versions of `csm-testing` and `goss-servers` rpm are installed on all NCNs. Run the following command on all NCNs.
+1. The Goss tests were not able to load which can indicate the incorrect version of the `csm-testing` RPM is installed. Make sure that the correct versions of `csm-testing` and `goss-servers` rpm are installed on all NCNs. Run the following command on all NCNs.
 
     ```bash
     rpm -qa goss-servers csm-testing
