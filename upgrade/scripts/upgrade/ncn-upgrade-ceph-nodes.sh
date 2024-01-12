@@ -47,7 +47,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     csi handoff bss-update-cloud-init --set meta-data.wipe-ceph-osds=no --limit Global
-    
+
     csi handoff bss-update-param \
         --set metal.no-wipe=1 \
         --limit $TARGET_XNAME
@@ -305,7 +305,7 @@ if [[ $ssh_keys_done == "0" ]]; then
     ssh_keys_done=1
 fi
 sleep 30
-ssh $target_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-storage.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate' 
+ssh $target_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-storage.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
 
 move_state_file ${target_ncn}
 

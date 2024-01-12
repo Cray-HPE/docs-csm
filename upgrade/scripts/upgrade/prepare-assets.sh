@@ -36,7 +36,7 @@ do
 
     case $key in
         --csm-version)
-        CSM_RELEASE="$2"        
+        CSM_RELEASE="$2"
         shift # past argument
         shift # past value
         ;;
@@ -120,7 +120,7 @@ if [[ -z ${TARBALL_FILE} ]]; then
     if [[ $state_recorded == "0" ]]; then
         # Because we are getting a new tarball
         # this has to be a new upgrade
-        # clean up myenv 
+        # clean up myenv
         rm -rf /etc/cray/upgrade/csm/myenv || true
         touch /etc/cray/upgrade/csm/myenv
         echo "====> ${state_name} ..."
@@ -145,7 +145,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     mkdir -p /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball
-    tar -xzf ${TARBALL_FILE} -C /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball    
+    tar -xzf ${TARBALL_FILE} -C /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball
     if [[ "${DELETE_TARBALL_FILE}" != N ]]; then
         rm -rf "${TARBALL_FILE}"
     fi
@@ -170,7 +170,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     #shellcheck disable=SC2046
-    rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "cray-site-init*.rpm") 
+    rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "cray-site-init*.rpm")
 
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
@@ -186,7 +186,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     #shellcheck disable=SC2046
-    rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "canu*.rpm") 
+    rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "canu*.rpm")
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)

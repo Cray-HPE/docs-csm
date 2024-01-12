@@ -32,7 +32,7 @@ function deploySpire() {
     manifestgen -i "${CSM_ARTI_DIR}/manifests/sysmgmt.yaml" -c "${BUILDDIR}/customizations.yaml" -o "${BUILDDIR}/spireupgrade.yaml"
     charts="$(yq r $BUILDDIR/spireupgrade.yaml 'spec.charts[*].name')"
     for chart in $charts; do
-        if [[ $chart != "spire" ]]; then 
+        if [[ $chart != "spire" ]]; then
             yq d -i $BUILDDIR/spireupgrade.yaml "spec.charts.(name==$chart)"
         fi
     done
