@@ -150,26 +150,30 @@ EOF
         elif [[ ${target_ncn} == ncn-m* ]]; then
             cat << 'EOF' > "${basedir}/standdown.sh"
 #!/bin/bash
-set -ou pipefail
+set -eou pipefail
 echo 'unmounting USB(s) ... '
-usb_device_path=$(lsblk -b -l -o TRAN,PATH | awk /usb/'{print $2}')
-usb_rc=$?
-set -e
-if [[ "$usb_rc" -eq 0 ]]; then
-  if blkid -p ${usb_device_path}; then
-    have_mnt=0
-    echo 'unmounting discovered USB mountpoints ... '
-    for mnt_point in /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata; do
-      if mountpoint "${mnt_point}"; then
-        have_mnt=1
-        umount -v "${mnt_point}"
+if IFS=$'\n' read -rd '' -a usb_device_paths; then
+  :
+fi <<< "$(lsblk -b -l -o TRAN,PATH | awk /usb/'{print $2}')"
+if [[ "${#usb_device_paths[@]}" -ne 0 ]]; then
+  echo 'unmounting discovered USB mountpoints ... '
+  for usb_device_path in "${usb_device_paths[@]}"; do
+    if blkid -p ${usb_device_path}; then
+      have_mnt=0
+      for mnt_point in /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata; do
+        if mountpoint "${mnt_point}"; then
+          have_mnt=1
+          umount -v "${mnt_point}"
+        fi
+      done
+      if [[ ${have_mnt} -eq 1 ]]; then
+        echo "ejecting discovered USB: [${usb_device_path}]"
+        if ! eject ${usb_device_path}; then
+          echo >&2 "Warning: Unable to eject ${usb_device_path}"
+        fi
       fi
-    done
-    if [[ ${have_mnt} -eq 1 ]]; then
-      echo "ejecting discovered USB: [${usb_device_path}]"
-      eject ${usb_device_path}
     fi
-  fi
+  done
 fi
 umount -v /var/lib/etcd /var/lib/sdu || true
 
