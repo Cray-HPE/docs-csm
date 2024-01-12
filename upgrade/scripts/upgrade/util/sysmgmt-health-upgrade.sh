@@ -92,7 +92,7 @@ function sysmgmt_health() {
        echo >&2 "Exiting"
        exit
     fi
-    
+
      # Remove current spec.claimRef values to change the PV's status from Released to Available.
     if [ "$alert_pv_phase" == Released ] && [ "$prom_pv_phase" == Released ]; then
         kubectl patch pv/$prom_pv --type json -p='[{"op": "remove", "path": "/spec/claimRef"}]'
@@ -122,4 +122,4 @@ fi
 
 sysmgmt_health
 
-                                         
+

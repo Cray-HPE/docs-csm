@@ -73,7 +73,7 @@ function update_bss_storage_run_cmd_verify_nonblank() {
         update_bss_storage_cmd_blank "$@"
         return 1
     fi
-    
+
     return 0
 }
 
