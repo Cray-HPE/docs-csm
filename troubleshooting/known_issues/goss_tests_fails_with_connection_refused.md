@@ -84,7 +84,8 @@ If the above resolution did not fix the problem, there are two other possible ca
 
 1. There is a `yaml` error in the test that is trying to be run. Evaluate the `yaml` file that is being run for any errors.
 
-1. The Goss tests were not able to load which can indicate the incorrect version of the `csm-testing` RPM is installed. Make sure that the correct versions of `csm-testing` and `goss-servers` rpm are installed on all NCNs. Run the following command on all NCNs.
+1. The Goss tests were not able to load which can indicate the incorrect version of the `csm-testing` RPM is installed.
+Make sure that the correct versions of `csm-testing` and `goss-servers` rpm are installed on all NCNs. Run the following command on all NCNs.
 
     ```bash
     rpm -qa goss-servers csm-testing
