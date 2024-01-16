@@ -2,6 +2,32 @@
 
 A number of tools can be used to analyze and debug issues encountered during the compute node boot process. The underlying issue and symptoms dictate the type of tool required.
 
+## `BOS`
+
+Boot orchestration services offers records of actions that have been applied to a node through their component records.
+A history of applied actions and future actions can be used to determine corrective actions and controlling actions that
+enables administrators to introspect issues on a per node level.
+
+```bash
+cray bos components describe x3000c0s19b4n0
+```
+
+Additionally, nodes that are unable to boot may also be disabled to prevent further BOS power actions from being applied
+to a node. This is helpful if BOS is currently retrying power operations on a specific node, and you need to introspect
+the node environment interactively.
+
+```bash
+cray bos components disable x3000c0s19b4n0
+```
+
+Once the problem has been isolated and fixed, you can return the node back over to BOS so that it may resume its boot
+session. Note: when re-enabling a node, BOS may first power cycle it to return it to working order depending on elapsed
+time and BOS options.
+
+```bash
+cray bos components enable x3000c0s19b4n0
+```
+
 ## `nmap`
 
 Use `nmap` to send out DHCP discover requests to test DHCP. `nmap` can be installed using the following command:
