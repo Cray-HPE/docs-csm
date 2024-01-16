@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -123,7 +123,7 @@ if [[ ${first_master_hostname} == ${target_ncn} ]]; then
     # it relies on SLS
     check_sls_health
 
-    scp /-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root/docs-csm-latest.noarch.rpm $promotingMaster:/root/docs-csm-latest.noarch.rpm
+    scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /root/docs-csm-latest.noarch.rpm $promotingMaster:/root/docs-csm-latest.noarch.rpm
     ssh $promotingMaster "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
     ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/usr/share/doc/csm/upgrade/scripts/k8s/promote-initial-master.sh"
     VERBOSE=1 csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster --limit Global
@@ -178,7 +178,7 @@ state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
   echo "====> ${state_name} ..."
   record_state "${state_name}" ${target_ncn}
-  scp /-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
+  scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
   ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
 else
   echo "====> ${state_name} has been completed"
