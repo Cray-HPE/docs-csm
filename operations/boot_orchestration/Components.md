@@ -41,11 +41,7 @@ Stores information on the eventual desired boot artifacts and configuration for 
 
 ### `enabled`
 
-<<<<<<< HEAD
-If the node is enabled (enabled == True), BOS will take action to make the actual state match the desired state.
-=======
-     If the node is enabled (enabled == True), BOS will take action to make the actual state match the desired state. Components can be disabled at any time; disabled components will not have power actions applied to them.
->>>>>>> c2995d917 (Allow further granularity for controlling the boot progression for individual components.)
+If the node is enabled (enabled == True), BOS will take action to make the actual state match the desired state. Disabled nodes may receive status updates from booted nodes, but BOS will not issue power commands to the nodes while they're disabled.
 
 ### `error`
 

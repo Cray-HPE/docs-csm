@@ -17,7 +17,7 @@ to a node. This is helpful if BOS is currently retrying power operations on a sp
 the node environment interactively.
 
 ```bash
-cray bos components disable x3000c0s19b4n0
+cray bos components update --enabled False x3000c0s19b4n0
 ```
 
 Once the problem has been isolated and fixed, you can return the node back over to BOS so that it may resume its boot
@@ -25,7 +25,7 @@ session. Note: when re-enabling a node, BOS may first power cycle it to return i
 time and BOS options.
 
 ```bash
-cray bos components enable x3000c0s19b4n0
+cray bos components update --enabled True x3000c0s19b4n0
 ```
 
 ## `nmap`
