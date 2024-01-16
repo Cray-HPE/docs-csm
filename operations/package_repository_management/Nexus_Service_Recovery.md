@@ -26,6 +26,43 @@ The following covers redeploying the Nexus service and restoring the data.
       nexus-bak    Bound    pvc-f058bf3b-97c0-4d7e-ab60-7294eaa18788   1000Gi     RWX            ceph-cephfs-external   6d
       ```
 
+1. (`ncn-mw#`) Download the `cray-nexus` chart from Nexus.
+
+   This step can only be performed if Nexus is available and healthy. If Nexus is unavailable it will be necessary to download the CSM release tarball
+   and extract the Helm chart from it.
+
+   1. Configure Nexus as a Helm repository.
+
+      ```bash
+      helm repo add nexus https://packages.local/repository/charts
+      ```
+
+      Example output:
+
+      ```text
+      "nexus" has been added to your repositories
+      ```
+
+   1. Create a directory for the Helm chart.
+
+      ```bash
+      mkdir helm
+      ```
+
+   1. Download the `cray-nexus` chart.
+
+      ```bash
+      helm pull nexus/cray-nexus -d ./helm
+      ```
+
+      This command produces no output however the chart tar file should exist in the `helm` directory.
+
+      Example output:
+
+      ```text
+      cray-nexus-0.11.1.tgz
+      ```
+
 1. (`ncn-mw#`) Uninstall the chart and wait for the resources to terminate.
 
    1. Note the version of the chart that is currently deployed.
@@ -83,12 +120,12 @@ The following covers redeploying the Nexus service and restoring the data.
 
    - Name of chart to be redeployed: `cray-nexus`
    - Base name of manifest: `nexus`
-   - Chart files are located in Nexus.
+   - Chart files are located in the `./helm` directory.
    - When reaching the step to update customizations, no edits need to be made to the customizations file.
    - When running the `loftsman ship` command, use the following command:
 
       ```bash
-      loftsman ship --charts-repo https://csm-algol60.net/artifactory/csm-helm-charts/ --manifest-path "${CUSTOMIZED_CHART_FILE}"
+      loftsman ship --charts-path ./helm --manifest-path "${CUSTOMIZED_CHART_FILE}"
       ```
 
    - When reaching the step to validate that the redeploy was successful, perform the following step:
