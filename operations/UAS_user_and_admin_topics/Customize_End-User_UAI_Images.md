@@ -57,7 +57,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
       name: wlm-sessiontemplate-0.1.0
     ```
 
-    Alternatively, collect the session template name used during the [Cray Operating System (COS)](../../glossary.md#cray-operating-system-cos) install.
+    Alternatively, collect the session template name used during the [Cray Operating System Base (COS Base)](../../glossary.md#cray-operating-system-base-cos-base) install.
     Refer to the "Boot COS" procedure in the COS product stream documentation.
     Near the end of that procedure, the step to create a BOS session to boot the compute nodes should contain the name.
 

@@ -29,9 +29,9 @@ product, product version, and branch values used by IUF when executing stages su
 
 | Term                     | Example              | Meaning                                                                                              |
 |--------------------------|----------------------|------------------------------------------------------------------------------------------------------|
-| Pristine branch          | `cray/cos/2.4.79`    | The branch provided by HPE for a given product                                                       |
-| Customer branch          | `integration-2.4.79` | The customer's working branch for a given product                                                    |
-| Previous customer branch | `integration-2.3.50` | The latest existing customer branch for a given product which predates the specified customer branch |
+| Pristine branch          | `cray/uss/1.0.1`    | The branch provided by HPE for a given product                                                       |
+| Customer branch          | `integration-1.0.1` | The customer's working branch for a given product                                                    |
+| Previous customer branch | `integration-1.0.0` | The latest existing customer branch for a given product which predates the specified customer branch |
 
 ## Branch creation and modification
 
@@ -69,12 +69,12 @@ default:
 Each product that utilizes a working branch will contain a `working_branch` entry in `product_vars.yaml`, for example:
 
 ```yaml
-cos:
-  version: 2.4.86
+uss:
+  version: 1.0.0
   working_branch: "{{ working_branch }}"
 ```
 
-In this example, the COS reference to `{{ working_branch}}` will be substituted with the value specified in the default section for `working_branch`. Thus, the COS value for `working_branch` will be `integration-{{version_x_y_z}}`,
+In this example, the USS reference to `{{ working_branch}}` will be substituted with the value specified in the default section for `working_branch`. Thus, the USS value for `working_branch` will be `integration-{{version_x_y_z}}`,
 which will in turn be substituted with the actual product value, resulting in the final value `integration-2.4.86`.
 
 ### Site variables
@@ -93,7 +93,7 @@ default:
 In a similar fashion, product-specific entries can be made in `site_vars.yaml` to override individual products, for example:
 
 ```yaml
-cos:
+uss:
   working_branch: "test-{{ version_x_y_z }}"
 ```
 

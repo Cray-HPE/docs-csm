@@ -65,7 +65,7 @@ The `system-pxe` persona is authorized to make `GET`, `HEAD`, or `POST` calls to
 
 ## `system-compute`
 
-Authorized for endpoints required by the [Cray Operating System (COS)](../../glossary.md#cray-operating-system-cos) to manage compute nodes and NCN services.
+Authorized for endpoints required by the [User Services Software (USS)](../../glossary.md#user-services-software-uss) to manage compute nodes and NCN services.
 
 The `system-compute` persona is authorized to make:
 
