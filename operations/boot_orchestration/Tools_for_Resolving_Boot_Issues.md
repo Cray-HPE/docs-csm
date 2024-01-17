@@ -4,7 +4,7 @@ A number of tools can be used to analyze and debug issues encountered during the
 
 ## BOS
 
-Boot orchestration services offers records of actions that have been applied to a node through their component records.
+BOS component records offer a history of operations that have been applied to a node.
 A history of applied actions and future actions can be used to determine corrective actions and controlling actions that
 enables administrators to introspect issues on a per node level.
 
