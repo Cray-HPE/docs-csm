@@ -5,8 +5,6 @@ A number of tools can be used to analyze and debug issues encountered during the
 ## BOS
 
 BOS component records offer a history of operations that have been applied to a node.
-A history of applied actions and future actions can be used to determine corrective actions and controlling actions that
-enables administrators to introspect issues on a per node level.
 
 ```bash
 cray bos components describe x3000c0s19b4n0
