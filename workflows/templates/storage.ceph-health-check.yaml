@@ -53,6 +53,9 @@ spec:
                       if ! /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true; then
                         attempt=$(( attempt + 1 ))
                         sleep $sleep_time
+                        # Archive new crash events to avoid them affecting overall Ceph health status
+                        # Crashes can still be investigated with ceph crash ls/ceph crash info.
+                        ceph crash archive-all
                       else
                         exit 0
                       fi
