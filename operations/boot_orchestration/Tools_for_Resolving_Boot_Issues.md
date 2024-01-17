@@ -10,9 +10,8 @@ BOS component records offer a history of operations that have been applied to a 
 cray bos components describe x3000c0s19b4n0
 ```
 
-Additionally, nodes that are unable to boot may also be disabled to prevent further BOS power actions from being applied
-to a node. This is helpful if BOS is currently retrying power operations on a specific node, and you need to introspect
-the node environment interactively.
+Additionally, nodes that are unable to boot may also be disabled. BOS will not apply power actions to disabled nodes,
+allowing an administrator to debug the node environment interactively.
 
 ```bash
 cray bos components update --enabled False x3000c0s19b4n0
