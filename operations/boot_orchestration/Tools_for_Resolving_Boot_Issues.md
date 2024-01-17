@@ -17,9 +17,7 @@ allowing an administrator to debug the node environment interactively.
 cray bos components update --enabled False x3000c0s19b4n0
 ```
 
-Once the problem has been isolated and fixed, you can return the node back over to BOS so that it may resume its boot
-session. Note: when re-enabling a node, BOS may first power cycle it to return it to working order depending on elapsed
-time and BOS options.
+Once the problem has been isolated and fixed, re-enable the node in BOS. Note: when re-enabling a node, BOS may first power cycle it to return it to working order, depending on elapsed time and BOS options.
 
 ```bash
 cray bos components update --enabled True x3000c0s19b4n0
