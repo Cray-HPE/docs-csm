@@ -184,7 +184,7 @@ configuration, if any. Major changes may also be documented in the _HPE Cray Sup
 The following highlights some of the areas that require manual configuration changes **but is not intended to be a comprehensive list.** Note that many of the configuration changes are only
 required for initial installation scenarios.
 
-- USS 
+- USS
   - Configure DVS and LNet with appropriate Slingshot settings
   - Configure DVS and LNet for use on application nodes
   - Enable site-specific file system mounts

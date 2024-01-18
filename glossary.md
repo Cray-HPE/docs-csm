@@ -747,7 +747,7 @@ gateway services.
 
 ## User Services Software (USS)
 
-The User Service Software (USS) is a collection of user space packages, kernel modules, microservices, configuration content, and other components.
+The User Services Software (USS) is a collection of user space packages, kernel modules, microservices, configuration content, and other components.
 
 ## Version Control Service (VCS)
 

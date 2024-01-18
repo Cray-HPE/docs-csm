@@ -29,9 +29,9 @@ product, product version, and branch values used by IUF when executing stages su
 
 | Term                     | Example              | Meaning                                                                                              |
 |--------------------------|----------------------|------------------------------------------------------------------------------------------------------|
-| Pristine branch          | `cray/uss/1.0.1`    | The branch provided by HPE for a given product                                                       |
-| Customer branch          | `integration-1.0.1` | The customer's working branch for a given product                                                    |
-| Previous customer branch | `integration-1.0.0` | The latest existing customer branch for a given product which predates the specified customer branch |
+| Pristine branch          | `cray/uss/1.0.1`     | The branch provided by HPE for a given product                                                       |
+| Customer branch          | `integration-1.0.1`  | The customer's working branch for a given product                                                    |
+| Previous customer branch | `integration-1.0.0`  | The latest existing customer branch for a given product which predates the specified customer branch |
 
 ## Branch creation and modification
 
