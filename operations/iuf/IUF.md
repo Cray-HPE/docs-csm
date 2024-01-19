@@ -619,7 +619,6 @@ INFO [extract-release-distributions                            ] BEG list-tar-fi
 INFO [extract-release-distributions                            ] END list-tar-files [Succeeded]
 INFO [extract-tar-files                                        ] BEG extract-tar-files
 INFO [extract-tar-files(0:analytics-1.4.22.tar.gz)             ] BEG extract-tar-files(0:analytics-1.4.22.tar.gz)
-INFO [extract-tar-files(1:uss-1.0.0-61-cos-base-3.0.tar.gz)    ] BEG extract-tar-files(1:cos-2.5.91.tar.gz)
 INFO [extract-tar-files(0:analytics-1.4.22.tar.gz)             ] Extracting product tarball /etc/cray/upgrade/csm/admin.05-15/analytics-1.4.22.tar.gz
 INFO [extract-tar-files(1:uss-1.0.0-61-cos-base-3.0.tar.gz)    ] Extracting product tarball /etc/cray/upgrade/csm/admin.05-15/uss-1.0.0-61-cos-base-3.0.tar.gz
 INFO [extract-tar-files                                        ] END extract-tar-files [Succeeded]
