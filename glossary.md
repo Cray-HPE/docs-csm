@@ -267,11 +267,12 @@ REST APIs into easily usable commands.
 
 ## Cray Operating System (COS)
 
-The Cray Operating System is a Cray product.
+The Cray Operating System is a Cray product that may be installed on CSM systems.
+COS is comprised of [COS Base](#cray-operating-system-base-cos-base) and [User Services Software](#user-services-software-uss) components.
 
 ## Cray Operating System Base (COS Base)
 
-The Cray Operating System Base (COS Base) is a Cray product that may be installed on CSM systems. Previously, COS Base and [USS](#user-services-software-uss) were packaged as one product named [COS](#cray-operating-system-cos).
+COS Base software consists of the COS modified kernel and dependent packages.
 
 ## Cray Programming Environment (CPE)
 
@@ -747,7 +748,8 @@ gateway services.
 
 ## User Services Software (USS)
 
-The User Services Software (USS) is a collection of user space packages, kernel modules, microservices, configuration content, and other components.
+HPE Cray Supercomputing User Services Software (or USS) contains user space packages, kernel modules, microservices, configuration content, and other components.
+USS adds content on top of [COS Base](#cray-operating-system-base-cos-base) (the modified COS kernel) without modifying the kernel directly.
 
 ## Version Control Service (VCS)
 
