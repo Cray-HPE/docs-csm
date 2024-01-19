@@ -56,7 +56,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     ${basedir}/../cps/snapshot-cps-deployment.sh
-    
+
     #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
