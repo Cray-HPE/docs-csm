@@ -88,15 +88,17 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
     1. (`uan01#`) Verify that the DVS RPM versions match what exists in the `1.4.0-p2/rpms` directory.
 
         ```bash
-        rpm -qa | grep 'cray-dvs.*2.12' | sort
+        rpm -qa | grep 'cray-dvs.*' | sort
         ```
 
         Example output:
 
         ```text
-        cray-dvs-compute-2.12_4.0.102-7.0.1.0_8.1__g30d29e7a.x86_64
-        cray-dvs-devel-2.12_4.0.102-7.0.1.0_8.1__g30d29e7a.x86_64
-        cray-dvs-kmp-cray_shasta_c-2.12_4.0.102_k4.12.14_197.78_9.1.58-7.0.1.0_8.1__g30d29e7a.x86_64
+        cray-dvs-common-<version>.x86_64
+        cray-dvs-csm-<version>.x86_64
+        cray-dvs-devel-<version>.x86_64
+        cray-dvs-dkms-<version>.noarch
+        ...
         ```
 
     1. (`uan01#`) Log out of the UAN.
