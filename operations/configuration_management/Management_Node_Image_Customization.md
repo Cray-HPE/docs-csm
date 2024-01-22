@@ -458,7 +458,6 @@ new customized image.
             ```bash
             PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | \
                 sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
-                sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
                 tr -d \")
             echo "${PARAMS}"
             ```
