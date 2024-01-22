@@ -10,7 +10,7 @@ when CSM itself is not being upgraded. See
 
 This procedure streamlines the rollout of new images to management nodes. These images are based
 on the new images provided by the CSM product and customized by the additional HPE Cray EX software
-products, including the [Cray Operating System (COS)](../../../glossary.md#cray-operating-system-cos)
+products, including the [User Services Software (USS)](../../../glossary.md#user-services-software-uss)
 and [Slingshot Host Software (SHS)](../../../glossary.md#slingshot-host-software-shs).
 
 The steps in this procedure alternate between CSM upgrade instructions that do not utilize the IUF
