@@ -127,7 +127,7 @@ fi
       # it relies on SLS
       check_sls_health
 
-      scp /root/docs-csm-latest.noarch.rpm $promotingMaster:/root/docs-csm-latest.noarch.rpm
+      scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /root/docs-csm-latest.noarch.rpm $promotingMaster:/root/docs-csm-latest.noarch.rpm
       ssh $promotingMaster "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
       ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/usr/share/doc/csm/upgrade/scripts/k8s/promote-initial-master.sh"
       VERBOSE=1 csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster --limit Global
@@ -188,7 +188,7 @@ if [[ $state_recorded == "0" ]]; then
   echo "====> ${state_name} ..."
   {
     record_state "${state_name}" ${target_ncn}
-    scp /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
+    scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
     ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
   } >> ${LOG_FILE} 2>&1
   record_state "${state_name}" ${target_ncn}

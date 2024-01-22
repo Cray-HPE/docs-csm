@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -93,7 +93,7 @@ if [[ $state_recorded == "0" ]]; then
         ssh_keygen_keyscan "${target_ncn}"
         ssh_keys_done=1
     fi
-    scp /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
+    scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
     ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}

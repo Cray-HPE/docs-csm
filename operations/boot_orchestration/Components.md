@@ -39,7 +39,7 @@ Stores information on the eventual desired boot artifacts and configuration for 
 
 ### `enabled`
 
-If the node is enabled (enabled == True), BOS will take action to make the actual state match the desired state.
+If the node is enabled (enabled == True), BOS will take action to make the actual state match the desired state. Disabled nodes may receive status updates from booted nodes, but BOS will not issue power commands to the nodes while they are disabled.
 
 ### `error`
 
