@@ -78,9 +78,9 @@ Some products provide instructions for delivering third-party content to the sys
 with the workflow.
 
 - **Content:** Third-party GPU software
-  - **Description:** The Cray Operating System (COS) provides the `gpu-nexus-tool` script to upload third-party GPU software to Nexus. The GPU software is used later in the workflow when creating CFS configurations and building
-    compute and application node images.
-  - **Instructions:** See the "IUF Stage Details for COS" section of _HPE Cray Operating System Installation Guide CSM on HPE Cray EX Systems (S-8025)_ for references to the installation procedures.
+  - **Description:** [User Services Software (USS)](../../../glossary.md#user-services-software-uss) provides the `gpu-nexus-tool` script to upload third-party GPU software to Nexus.
+    The GPU software is used later in the workflow when creating CFS configurations and building compute and application node images.
+  - **Instructions:** See the "IUF Stage Details for USS" section of _HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray EX Systems_ for references to the installation procedures.
 - **Content:** Third-party programming environment software
   - **Description:** The Cray Programming Environment (CPE) provides the `install-3p.sh` and `cpe-custom-img.sh` scripts to upload third-party programming environment software to Nexus and build images. The programming environment
     software is used later in the workflow when creating CPE configurations.

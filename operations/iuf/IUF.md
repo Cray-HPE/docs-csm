@@ -619,16 +619,12 @@ INFO [extract-release-distributions                            ] BEG list-tar-fi
 INFO [extract-release-distributions                            ] END list-tar-files [Succeeded]
 INFO [extract-tar-files                                        ] BEG extract-tar-files
 INFO [extract-tar-files(0:analytics-1.4.22.tar.gz)             ] BEG extract-tar-files(0:analytics-1.4.22.tar.gz)
-INFO [extract-tar-files(1:cos-2.5.91.tar.gz)                   ] BEG extract-tar-files(1:cos-2.5.91.tar.gz)
-INFO [extract-tar-files(2:slingshot-host-software-2.0.2-102-cos] BEG extract-tar-files(2:slingshot-host-software-2.0.2-102-cos-2.5.tar.gz)
-INFO [extract-tar-files(0:analytics-1.4.22.tar.gz)             ]       Extracting product tarball /etc/cray/upgrade/csm/admin.05-15/analytics-1.4.22.tar.gz
-INFO [extract-tar-files(1:cos-2.5.91.tar.gz)                   ]       Extracting product tarball /etc/cray/upgrade/csm/admin.05-15/cos-2.5.91.tar.gz
-INFO [extract-tar-files(2:slingshot-host-software-2.0.2-102-cos]       Extracting product tarball /etc/cray/upgrade/csm/admin.05-15/slingshot-host-software-2.0.2-102-cos-2.5.tar.gz
-INFO [extract-tar-files(2:slingshot-host-software-2.0.2-102-cos] END extract-tar-files(2:slingshot-host-software-2.0.2-102-cos-2.5.tar.gz) [Succeeded]
+INFO [extract-tar-files(0:analytics-1.4.22.tar.gz)             ] Extracting product tarball /etc/cray/upgrade/csm/admin.05-15/analytics-1.4.22.tar.gz
+INFO [extract-tar-files(1:uss-1.0.0-61-cos-base-3.0.tar.gz)    ] Extracting product tarball /etc/cray/upgrade/csm/admin.05-15/uss-1.0.0-61-cos-base-3.0.tar.gz
 INFO [extract-tar-files                                        ] END extract-tar-files [Succeeded]
 INFO [extract-tar-files(0:analytics-1.4.22.tar.gz)             ] END extract-tar-files(0:analytics-1.4.22.tar.gz) [Succeeded]
 INFO [extract-release-distributions                            ] BEG end-operation
-INFO [extract-tar-files(1:cos-2.5.91.tar.gz)                   ] END extract-tar-files(1:cos-2.5.91.tar.gz) [Succeeded]
+INFO [extract-tar-files(1:uss-1.0.0-61-cos-base-3.0.tar.gz)    ] END extract-tar-files(1:uss-1.0.0-61-cos-base-3.0.tar.gz) [Succeeded]
 INFO [extract-release-distributions                            ] END end-operation [Succeeded]
 INFO [extract-release-distributions                            ] BEG prom-metrics
 INFO [extract-release-distributions                            ] END extract-release-distributions [Succeeded]
@@ -724,19 +720,19 @@ variables, and the values used are provided by the recipe variables and/or site 
 # The following images are required only on systems with aarch64 (ARM) nodes.
 # Uncomment the lines below if ARM images are needed.
 #- name: "{{default.note}}{{base.name}}{{default.suffix}}"
-#  ref_name: base_cos_image.aarch64
+#  ref_name: base_uss_image.aarch64
 #  base:
 #    product:
-#      name: cos
+#      name: uss
 #      type: recipe
-#      version: "{{cos.version}}"
+#      version: "{{uss.version}}"
 #      filter:
 #        arch: aarch64
 #
 #- name: "compute-{{base.name}}"
 #  ref_name: compute_image.aarch64
 #  base:
-#    image_ref: base_cos_image.aarch64
+#    image_ref: base_uss_image.aarch64
 #  configuration: "{{default.note}}compute-{{recipe.version}}{{default.suffix}}"
 #  configuration_group_names:
 #  - Compute
@@ -744,7 +740,7 @@ variables, and the values used are provided by the recipe variables and/or site 
 #- name: "uan-{{base.name}}"
 #  ref_name: uan_image.aarch64
 #  base:
-#    image_ref: base_cos_image.aarch64
+#    image_ref: base_uss_image.aarch64
 #  configuration: "{{default.note}}uan-{{recipe.version}}{{default.suffix}}"
 #  configuration_group_names:
 #  - Application
@@ -837,11 +833,11 @@ product versions or other products):
 Finally, the product entry is also deleted from the cray-product-catalog
 ConfigMap.
 
-An example of launching the `prodmgr` for cleaning a `cos` version
-`1.25.31` is shown below:
+An example of launching the `prodmgr` for cleaning a `uss` version
+`1.0.0` is shown below:
 
 ```bash
-prodmgr delete cos 1.25.31 --container-registry-hostname arti.hpc.amslabs.hpecorp.net/csm-docker/stable --deletion-image-name product-deletion-utility --deletion-image-version 1.0.0
+prodmgr delete uss 1.0.0 --container-registry-hostname arti.hpc.amslabs.hpecorp.net/csm-docker/stable --deletion-image-name product-deletion-utility --deletion-image-version 1.0.0
 ```
 
 The `prodmgr` is installed as an `rpm` and has a well documented

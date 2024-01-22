@@ -22,6 +22,7 @@ Glossary of terms used in CSM documentation.
 * [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control-capmc)
 * [Cray CLI (`cray`)](#cray-cli-cray)
 * [Cray Operating System (COS)](#cray-operating-system-cos)
+* [Cray Operating System Base (COS Base)](#cray-operating-system-base-cos-base)
 * [Cray Programming Environment (CPE)](#cray-programming-environment-cpe)
 * [Cray Security Token Service (STS)](#cray-security-token-service-sts)
 * [Cray Site Init (CSI)](#cray-site-init-csi)
@@ -87,6 +88,7 @@ Glossary of terms used in CSM documentation.
 * [User Access Instance (UAI)](#user-access-instance-uai)
 * [User Access Node (UAN)](#user-access-node-uan)
 * [User Access Service (UAS)](#user-access-service-uas)
+* [User Services Software (USS)](#user-services-software-uss)
 * [Version Control Service (VCS)](#version-control-service-vcs)
 * [Virtual Network Identifier Daemon (VNID)](#virtual-network-identifier-daemon-vnid)
 * [xname](#xname)
@@ -267,6 +269,11 @@ REST APIs into easily usable commands.
 ## Cray Operating System (COS)
 
 The Cray Operating System is a Cray product that may be installed on CSM systems.
+COS is comprised of [COS Base](#cray-operating-system-base-cos-base) and [User Services Software](#user-services-software-uss) components.
+
+## Cray Operating System Base (COS Base)
+
+COS Base software consists of the COS modified kernel and dependent packages.
 
 ## Cray Programming Environment (CPE)
 
@@ -744,6 +751,11 @@ gateway services.
 
 * For more information on UAS, see [User Access Service](operations/UAS_user_and_admin_topics/README.md).
 * For more information on the UAS API, see [UAS API](api/uas-mgr.md).
+
+## User Services Software (USS)
+
+HPE Cray Supercomputing User Services Software (or USS) contains user space packages, kernel modules, microservices, configuration content, and other components.
+USS adds content on top of [COS Base](#cray-operating-system-base-cos-base) (the modified COS kernel) without modifying the kernel directly.
 
 ## Version Control Service (VCS)
 
