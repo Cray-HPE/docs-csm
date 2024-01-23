@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -126,13 +126,9 @@ spec:
             templateRef:
               name: set-no-wipe
               template: set-bss-no-wipe-1-no-wipe-osds
-            dependencies: 
-              {{ if eq $index 0 }}
-              - before-all
-              {{ end }}
-              {{ if ne $index 0 }}
-              - run-storage-goss-tests-{{ index $.TargetNcns (add $index -1) }}
-              {{ end }}
+            dependencies:
+              # this is after before-each because of possible race condition if bss command in before-each runs at the same time as this step
+              - before-each-{{$value}}
             arguments:
               parameters:
                 - name: dryRun
@@ -144,12 +140,7 @@ spec:
               name: rd-live-dir-rd-live-overlay-reset
               template: set-rd-live-overlay-reset
             dependencies: 
-              {{ if eq $index 0 }}
-              - before-all
-              {{ end }}
-              {{ if ne $index 0 }}
-              - run-storage-goss-tests-{{ index $.TargetNcns (add $index -1) }}
-              {{ end }}
+              - set-bss-no-wipe-to-1-{{$value}}
             arguments:
               parameters:
                 - name: dryRun
@@ -179,9 +170,7 @@ spec:
               template: main
             dependencies: 
               - backup-ceph-data-{{$value}}
-              - set-bss-no-wipe-to-1-{{$value}}
               - set-overlay-reset-{{$value}}
-              - before-each-{{$value}}
             arguments:
               parameters:
                 - name: dryRun
