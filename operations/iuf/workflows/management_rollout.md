@@ -236,7 +236,7 @@ for details on how to query the images and CFS configurations and see the [updat
 **`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN worker nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI,
 remember to include these workflows.
 
-**`NOTE`** If upgrading from CSM-1.4 to CSM-1.5 with a COS release prior to 2.5.146 currently installed, a workaround is needed to roll out the management nodes.  See the later subsection [2.3.1 DVS workaround upgrading from COS prior to
+**`NOTE`** If upgrading from CSM 1.4 to CSM 1.5 with a COS release prior to 2.5.146 currently installed, a workaround is needed to roll out the management nodes.  See the later subsection [2.3.1 DVS workaround upgrading from COS prior to
 2.5.146](#231-DVS-workaround-upgrading-from-COS-prior-to-25146).  If the installed COS version is 2.5.146 or later, this is not needed.
 
 1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
@@ -294,13 +294,13 @@ Return to the procedure that was being followed for `management-nodes-rollout` t
 
 #### 2.3.1 DVS workaround upgrading from COS prior to 2.5.146
 
-If COS prior to 2.5.146 is installed prior to upgrading to CSM-1.5, the management rollout in this step may hang.  There is a workaround for this, copying the new version of the DVS
-prechecks_for_worker_reboots script to all NCN worker nodes as /opt/cray/shasta/cos/bin/prechecks_for_worker_reboots
+If COS prior to 2.5.146 is installed prior to upgrading to CSM 1.5, the management rollout in this step may hang.  There is a workaround for this, copying the new version of the DVS
+`prechecks_for_worker_reboots` script to all NCN worker nodes as `/opt/cray/shasta/cos/bin/prechecks_for_worker_reboots`
 
 This is to be run on the `ncn-m001` node during this step 2.3 NCN worker nodes.
 
 The new version of the script may be found in the `cray-dvs-csm` rpm in
-the uss csm tar file in the upgrade's media directory.  The workaround
+the USS CSM tar file in the upgrade's media directory.  The workaround
 is to extract the script from the rpm to a temporary directory and
 then copy it to the worker nodes.
 
@@ -322,7 +322,7 @@ in which to extract the new version of the script.
     cd /tmp/upgrade-prechecks_WAR
     ```
 
-3. (`ncn-m001#`) Extract the `cray-dvs-csm` rpm that's included in the uss image:
+3. (`ncn-m001#`) Extract the `cray-dvs-csm` rpm that's included in the USS image:
 
     ```bash
     rpm2cpio < $MEDIADIR/uss-*-csm-1.5/rpms/uss-*-csm-1.5/x86_64/cray-dvs-csm-*.x86_64.rpm | cpio -i --make-directories --no-absolute-filenames
