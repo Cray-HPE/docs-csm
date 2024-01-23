@@ -7,7 +7,7 @@ This section updates the software running on management NCNs.
   - [2.1 `management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
   - [2.2 `management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
   - [2.3 NCN worker nodes](#23-ncn-worker-nodes)
-    - [2.3.1 DVS workaround upgrading from COS prior to 2.5.146](#231-DVS-workaround-upgrading-from-COS-prior-to-25146)
+    - [2.3.1 DVS workaround upgrading from COS prior to 2.5.146](#231-dvs-workaround-upgrading-from-cos-prior-to-25146)
 - [3. Update management host Slingshot NIC firmware](#3-update-management-host-slingshot-nic-firmware)
 - [4. Next steps](#4-next-steps)
 
@@ -237,7 +237,7 @@ for details on how to query the images and CFS configurations and see the [updat
 remember to include these workflows.
 
 **`NOTE`** If upgrading from CSM 1.4 to CSM 1.5 with a COS release prior to 2.5.146 currently installed, a workaround is needed to roll out the management nodes.  See the later subsection [2.3.1 DVS workaround upgrading from COS prior to
-2.5.146](#231-DVS-workaround-upgrading-from-COS-prior-to-25146).  If the installed COS version is 2.5.146 or later, this is not needed.
+2.5.146](#231-dvs-workaround-upgrading-from-cos-prior-to-25146).  If the installed COS version is 2.5.146 or later, this is not needed.
 
 1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
