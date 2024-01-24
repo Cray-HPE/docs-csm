@@ -14,7 +14,7 @@ This section ensures the product content is loaded onto the system and available
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `process-media` or `pre-install-check` stages.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. Run `upload-rebuild-tempaltes.sh` to update all `WorkflowTemplates` that will be used by Argo and to ensure the correct CSM product versions will be used by Argo.
+1. Run `upload-rebuild-tempaltes.sh` to update all the workflows that will be used by IUF and to ensure the correct CSM product versions will be used by IUF.
 
     (`ncn-m001#`) Execute the `upload-rebuild-tempaltes.sh` script.
 
