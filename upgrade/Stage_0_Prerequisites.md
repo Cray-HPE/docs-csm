@@ -444,7 +444,7 @@ example showing how to find the IUF activity.
    +-----------------------------+--------------------------------------+--------------------------------------+-----------------------------+----------------------------+
    | master-secure-kubernetes    | c1bcaf00-109d-470f-b665-e7b37dedb62f | a22fb912-22be-449b-a51b-081af2d7aff6 | management-22.4.0-csm-x.y.z | Management_Master          |
    | worker-secure-kubernetes    | 8b1343c4-1c39-4389-96cb-ccb2b7fb4305 | 241822c3-c7dd-44f8-98ca-0e7c7c6426d5 | management-22.4.0-csm-x.y.z | Management_Worker          |
-   | storage-secure-storage-ceph | f3dd7492-c4e5-4bb2-9f6f-8cfc9f60526c | 79ab3d85-274d-4d01-9e2b-7c25f7e108ca | management-22.4.0-csm-x.y.z | Management_Storage         |
+   | storage-secure-storage-ceph | f3dd7492-c4e5-4bb2-9f6f-8cfc9f60526c | 79ab3d85-274d-4d01-9e2b-7c25f7e108ca | storage-22.4.0-csm-x.y.z | Management_Storage         |
    +-----------------------------+--------------------------------------+--------------------------------------+-----------------------------+----------------------------+
    ```
 
@@ -452,6 +452,7 @@ example showing how to find the IUF activity.
 
    ```bash
    export CFS_CONFIG_NAME="management-22.4.0-csm-x.y.z"
+   export STORAGE_CFS_CONFIG_NAME="storage-22.4.0-csm-x.y.z"
    ```
 
    Save the name of the IMS images from the `final_image_id` column:
@@ -480,17 +481,46 @@ example showing how to find the IUF activity.
    disables the components and does not clear their configuration states or error counts. When the
    nodes are rebooted to their new images later in the CSM upgrade, they will automatically be
    enabled in CFS, and node personalization will occur.
+  
+    1. `(ncn-m001)` Update CFS on worker nodes and master nodes.
 
-   ```bash
-   /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-       --no-config-change --config-name "${CFS_CONFIG_NAME}" --no-enable --no-clear-err
-   ```
+        ```bash
+        XNAME_WORKERS=$(cray hsm state components list --role Management --subrole Worker --type Node --format json |
+          jq -r '.Components | map(.ID) | join(",")')
+        XNAME_MASTERS=$(cray hsm state components list --role Management --subrole Master --type Node --format json |
+          jq -r '.Components | map(.ID) | join(",")')
+        echo "${XNAME_MASTERS},${XNAME_WORKERS}"
+        ```
 
-   Successful output will end with the following:
+        ```bash
+        /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+            --no-config-change --config-name "${CFS_CONFIG_NAME}" --no-enable --no-clear-err --xnames ${XNAME_MASTERS},${XNAME_WORKERS}
+        ```
 
-   ```text
-   All components updated successfully.
-   ```
+        Successful output will end with the following:
+
+        ```text
+        All components updated successfully.
+        ```
+
+    1. `(ncn-m001)` Update CFS on storage nodes.
+
+        ```bash
+        XNAME_STORAGE=$(cray hsm state components list --role Management --subrole Storage --type Node --format json |
+          jq -r '.Components | map(.ID) | join(",")')
+        echo $XNAME_STORAGE
+        ```
+
+        ```bash
+        /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+            --no-config-change --config-name "${STORAGE_CFS_CONFIG_NAME}" --no-enable --no-clear-err --xnames ${XNAME_STORAGE}
+        ```
+
+        Successful output will end with the following:
+
+        ```text
+        All components updated successfully.
+        ```
 
 Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data).
 
