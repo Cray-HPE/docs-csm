@@ -426,6 +426,8 @@ example showing how to find the IUF activity.
   
     1. `(ncn-m001)` Update CFS on worker nodes and master nodes.
 
+        Get master nodes' and worker nodes' xnames.
+
         ```bash
         XNAME_WORKERS=$(cray hsm state components list --role Management --subrole Worker --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")')
@@ -434,9 +436,12 @@ example showing how to find the IUF activity.
         echo "${XNAME_MASTERS},${XNAME_WORKERS}"
         ```
 
+        Set CFS on master nodes and worker nodes using the xnames found in the previous step.
+
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-            --no-config-change --config-name "${CFS_CONFIG_NAME}" --no-enable --no-clear-err --xnames ${XNAME_MASTERS},${XNAME_WORKERS}
+            --no-config-change --config-name "${CFS_CONFIG_NAME}" --no-enable --no-clear-err \
+            --xnames ${XNAME_MASTERS},${XNAME_WORKERS}
         ```
 
         Successful output will end with the following:
@@ -447,15 +452,21 @@ example showing how to find the IUF activity.
 
     1. `(ncn-m001)` Update CFS on storage nodes.
 
+        Get storage nodes' xnames.
+
         ```bash
         XNAME_STORAGE=$(cray hsm state components list --role Management --subrole Storage --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")')
         echo $XNAME_STORAGE
         ```
 
+        Set CFS on storage nodes using the xnames found in the previous step.
+
+
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-            --no-config-change --config-name "${STORAGE_CFS_CONFIG_NAME}" --no-enable --no-clear-err --xnames ${XNAME_STORAGE}
+            --no-config-change --config-name "${STORAGE_CFS_CONFIG_NAME}" --no-enable --no-clear-err \
+            --xnames ${XNAME_STORAGE}
         ```
 
         Successful output will end with the following:
