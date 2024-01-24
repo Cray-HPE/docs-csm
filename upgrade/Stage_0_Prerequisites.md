@@ -390,10 +390,10 @@ example showing how to find the IUF activity.
    +-----------------------------+--------------------------------------+--------------------------------------+-----------------------------+----------------------------+
    ```
 
-   Save the name of the CFS configuration:
+   Save the name of the CFS configurations:
 
    ```bash
-   export CFS_CONFIG_NAME="management-22.4.0-csm-x.y.z"
+   export KUBERNETES_CFS_CONFIG_NAME="management-22.4.0-csm-x.y.z"
    export STORAGE_CFS_CONFIG_NAME="storage-22.4.0-csm-x.y.z"
    ```
 
@@ -427,24 +427,24 @@ example showing how to find the IUF activity.
    nodes are rebooted to their new images later in the CSM upgrade, they will automatically be
    enabled in CFS, and node personalization will occur.
   
-    1. `(ncn-m001)` Update CFS on worker nodes and master nodes.
+    1. `(ncn-m001)` Apply the appropriate CFS configuration to worker nodes and master nodes.
 
         Get master nodes' and worker nodes' xnames.
 
         ```bash
-        XNAME_WORKERS=$(cray hsm state components list --role Management --subrole Worker --type Node --format json |
+        WORKER_XNAMES=$(cray hsm state components list --role Management --subrole Worker --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")')
-        XNAME_MASTERS=$(cray hsm state components list --role Management --subrole Master --type Node --format json |
+        MASTER_XNAMES=$(cray hsm state components list --role Management --subrole Master --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")')
-        echo "${XNAME_MASTERS},${XNAME_WORKERS}"
+        echo "${MASTER_XNAMES},${WORKER_XNAMES}"
         ```
 
-        Set CFS on master nodes and worker nodes using the xnames found in the previous step.
+        Apply the CFS configuration to master nodes and worker nodes using the xnames and CFS configuration name found in the previous steps.
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-            --no-config-change --config-name "${CFS_CONFIG_NAME}" --no-enable --no-clear-err \
-            --xnames ${XNAME_MASTERS},${XNAME_WORKERS}
+            --no-config-change --config-name "${KUBERNETES_CFS_CONFIG_NAME}" --no-enable --no-clear-err \
+            --xnames ${MASTER_XNAMES},${WORKER_XNAMES}
         ```
 
         Successful output will end with the following:
@@ -453,23 +453,23 @@ example showing how to find the IUF activity.
         All components updated successfully.
         ```
 
-    1. `(ncn-m001)` Update CFS on storage nodes.
+    1. `(ncn-m001)` Apply the appropriate CFS configuration to storage nodes.
 
         Get storage nodes' xnames.
 
         ```bash
-        XNAME_STORAGE=$(cray hsm state components list --role Management --subrole Storage --type Node --format json |
+        STORAGE_XNAMES=$(cray hsm state components list --role Management --subrole Storage --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")')
-        echo $XNAME_STORAGE
+        echo $STORAGE_XNAMES
         ```
 
-        Set CFS on storage nodes using the xnames found in the previous step.
+        Apply the CFS configuration to storage nodes using the xnames and CFS configuration name found in the previous steps.
 
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
             --no-config-change --config-name "${STORAGE_CFS_CONFIG_NAME}" --no-enable --no-clear-err \
-            --xnames ${XNAME_STORAGE}
+            --xnames ${STORAGE_XNAMES}
         ```
 
         Successful output will end with the following:
