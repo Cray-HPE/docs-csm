@@ -455,7 +455,6 @@ example showing how to find the IUF activity.
 
         Apply the CFS configuration to storage nodes using the xnames and CFS configuration name found in the previous steps.
 
-
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
             --no-config-change --config-name "${STORAGE_CFS_CONFIG_NAME}" --no-enable --no-clear-err \
