@@ -38,7 +38,7 @@
 * Added support for git `submodules` in CFS runs
 * Added support for `ARM 64` based builds through emulation
 * Enhanced Multi-Tenancy Phase II support
-* Improved `IUF Logging
+* Improved IUF Logging
 * Created Networking Red Light / Green Light Dashboard
 * Implemented highly available Prometheus setup with long term storage capabilities using Thanos
 
@@ -149,11 +149,11 @@
 * Fixed an issue on upgrade of master NCNs due to not generating the `admin-tools` keyring
 * Fix for a case where `bootprep` files are missing when `prepare-images` stage is run in IUF with one argument
 * Fix IUF issue with SHS error in `update-vcs-config` stage
-* Ensure IU` stage for `management-node-rollout` is aborted, also abort `ncn-rebuild`
+* Ensure IUF stage for `management-node-rollout` is aborted, also abort `ncn-rebuild`
 * Fixed issue with Nexus failing to move to another NCN on upgrade
 * Fixed procedure to change root password and SSH keys so it would also work on image customization
 * Update `tds_lower_cpu_requests.sh` script for `opensearch-masters` due to CPU it eats
-* Removed `subPath volumeMount` in the `multus daemonset` to avoid being stuck in termination
+* Removed `subPath-volumeMount` in the `multus-daemonset` to avoid being stuck in termination
 * Improve existing image check logic for `ims-python-helper`
 * Fix issue with `etcd_cluster_balance.sh` reporting failure when 3 pods are healthy and 4th is terminating
 * Fixed issue where upgrading the `cray-dns-unbound` Helm chart should not wipe the DNS records
