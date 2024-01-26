@@ -20,32 +20,32 @@
 * Upgrade `argo` version to pick up bug-fixes
 * BOS implement OPA policies for Multi-Tenancy
 * Create DNAME records in PowerDNS
-* For Bifurcated CAN update kiali to use the new API Gateways
-* For Bifurcated CAN update cray-sysmgmt-health to use the new API Gateways
-* For Bifurcated CAN update gitea-vcs-web to use CMN Only Istio Gateway
-* For Bifurcated CAN update gitea-vcs-external to use CMN Only Istio Gateway
-* Improved logging in cray-nls based on StageOutput
-* IMS - created an arm64 version of the barebones recipe
-* Support for large system ARP configuration for first boot and DHCP
+* For Bifurcated CAN update `kiali` to use the new API Gateways
+* For Bifurcated CAN update `cray-sysmgmt-health` to use the new API Gateways
+* For Bifurcated CAN update `gitea-vcs-web` to use CMN Only Istio Gateway
+* For Bifurcated CAN update `gitea-vcs-external` to use CMN Only Istio Gateway
+* Improved logging in `cray-nls` based on StageOutput
+* IMS - created an `arm64` version of the barebones recipe
+* Support for large system `ARP` configuration for first boot and DHCP
 * Hardware Discovery Process populates a nodes's architecture
-* Argo-driven Upgrade Automation for K8s Storage Nodes
-* An arm64 version of the barebones recipe has been created
+* Argo-driven Upgrade Automation for `K8s` Storage Nodes
+* An `arm64` version of the barebones recipe has been created
 * SLS: Added caching to improve performance and robustness
-* Added support for specifying IMS Image and Recipe architecture in IUF
+* Added support for specifying `IMS` Image and Recipe architecture in IUF
 * Upgraded node-images to SLES15SP5
 * Updated Spire Server to work with TPM
-* Added Improved error logging for cray bos command
-* Added a method to stop CFS/Batcher and cancel configuration for in-flight customizations
-* Added support for git submodules in cfs runs
-* Added support for ARM 64 based builds through emulation
+* Added Improved error logging for cray `bos` command
+* Added a method to stop `CFS/Batcher` and cancel configuration for in-flight customizations
+* Added support for git submodules in `cfs` runs
+* Added support for `ARM 64` based builds through emulation
 * Enhanced Multi-Tenancy Phase II support
-* Improved IUF Logging
+* Improved `IUF` Logging
 * Created Networking Red Light / Green Light Dashboard
 * Implemented highly available Prometheus setup with long term storage capabilities with Thanos
 
 ### Monitoring
 
-* Removed clear text switch passwords from the cray-sysmgmt-health-canu-test pod log
+* Removed clear text switch passwords from the `cray-sysmgmt-health-canu-test` pod log
 
 ### Networking
 
@@ -57,19 +57,19 @@
 
 * Add switches in HSM to PCS and allow for power reset actions
 * Updated HMS discovery process to populate a node's architecture when making the information available via Redfish
-* Update to ilorest 4.1.0.0 for Gen11 Support
-* Support for arm64 added in metal-ipxe
+* Update to `ilorest 4.1.0.0` for Gen11 Support
+* Support for `arm64` added in metal-ipxe
 * Hardware validation of the EX2500 Cabinet
-* Support JL627A switches as an edge router for BI-CAN
+* Support `JL627A` switches as an edge router for BI-CAN
 
 ### Automation improvements
 
-* Updates to etcd health checks due to replacement of `etcd` vendor to `bitnami-etcd`
+* Updates to `etcd` health checks due to replacement of `etcd` vendor to `bitnami-etcd`
 * `IUF` stage for `management-nodes-rollout` consumes logs from `ncn-rebuild`
 * Add a test to check taints on master nodes
 * Augment `postgres` backup `goss` test to also check for `cronjob`
-* Argo-driven Upgrade Automation for K8s Storage Nodes
-* ceph upgrade added to automated storage upgrade  
+* Argo-driven Upgrade Automation for `K8s` Storage Nodes
+* `ceph` upgrade added to automated storage upgrade  
 
 ### Base platform component upgrades
 
@@ -107,23 +107,23 @@
 * Additional of `kyverno` and network policies to ensure some secure controls over `mqtt` namespace
 * cf-gitea-import: Use CSM-provided alpine base image to resolve vulnerabilities
 * Updated metacontroller:v4.4.0 to address CVE's
-* Fixed CVE-2023-0386 in CSM 1.5 NCN Images
-* Fixed CVE-2023-32233 in CSM 1.5 NCN Images
+* Fixed `CVE-2023-0386` in CSM 1.5 NCN Images
+* Fixed `CVE-2023-32233` in CSM 1.5 NCN Images
 * Developed OPA Policy to force Keycloak admin operations through CMN
-* Updated cfs-ara:1.0.2 to address CVE's
-* Updated hms-shcd-parser:1.8.0 to address CVE's
-* Moved istio-ingressgateway-cmn service to use the customer-admin-gateway
-* Kyverno Upgrade Needed for N-2 Support Policy
-* Fixed Improper Certificate Validation CVE in cfs-operator
+* Updated `cfs-ara:1.0.2` to address CVE's
+* Updated `hms-shcd-parser:1.8.0` to address CVE's
+* Moved `istio-ingressgateway-cmn` service to use the customer-admin-gateway
+* Kyverno Upgrade Needed for `N-2` Support Policy
+* Fixed Improper Certificate Validation CVE in `cfs-operator`
 * Fixed Regular Expression DoS CVE in cfs-ara
-* Addressed Zenbleed CVE on NCNs
-* Addressed CVE-2023-38545 (curl & libcurl) on NCNs
+* Addressed `Zenbleed` CVE on NCNs
+* Addressed `CVE-2023-38545` (curl & `libcurl`) on NCNs
 * Added Default RBAC Role for Telemetry API
   
 ### Customer-requested enhancements
 
 * Keycloak upgrade for CVE fixes
-* Enable bonded NMN connections for the UANs
+* Enable bonded `NMN` connections for the UANs
 
 ### Documentation enhancements
 
@@ -156,24 +156,22 @@
 * Update `tds_lower_cpu_requests.sh` script for `opensearch-masters` due to CPU it eats
 * Fixed bug where `PCS` can become out of sync with `etcd`
 * Removed `subPath` `volumeMount` in the `multus` `daemonset` to avoid being stuck in termination
-* Improve existing image check logic for ims-python-helper
-* Fix issue with etcd_cluster_balance.sh reporting failure when 3 pods are healthy and 4th is terminating
-* Fixed issue where upgrading the cray-dns-unbound Helm chart should not wipe the DNS records
-* Fixed an incorrectly written Network Policy in cray-drydock for mqtt/spire communication
-* Fixed an issue where restarting kea on large systems wipes DNS records from configmap
-* Updated Unbound to not forward .hsn queries to the site DNS
-* Fixed when cray-externaldns-manager crashes when used with external-dns 0.13
-* Fixed Unbound to not forward .hsn queries to the site DNS
+* Improve existing image check logic for `ims-python-helper`
+* Fix issue with `etcd_cluster_balance.sh` reporting failure when 3 pods are healthy and 4th is terminating
+* Fixed issue where upgrading the `cray-dns-unbound` Helm chart should not wipe the DNS records
+* Fixed an incorrectly written Network Policy in `cray-drydock` for `mqtt/spire` communication
+* Fixed an issue where restarting `kea` on large systems wipes DNS records from configmap
+* Updated Unbound to not forward `.hsn` queries to the site DNS
+* Fixed when `cray-externaldns-manager` crashes when used with external-dns 0.13
 * Fixed an issue where Weave pods were not starting after upgrading to CSM V1.4 content
-* Fixed PowerDNS server TLD is missing NS delegation records for subdomains
-* fixed an issue where FRU Tracking doesn't create a detected event after a removed event
+* Fixed `PowerDNS` server `TLD` is missing `NS` delegation records for subdomains
+* Fixed an issue where FRU Tracking doesn't create a detected event after a removed event
   
 ## Deprecations
 
 * The `ipv4-resolvers` option has been removed for `CSI` as it is not used
-* [CAPMC](glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
-* Removed ARS from Cray CLI and BSS API spec
-* Removed deprecated BOS v1 cfs fields from session templates
+* Removed `ARS from Cray CLI and BSS API spec
+* Removed deprecated `BOS v1 cfs` fields from session templates
 
 For a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
 
@@ -183,11 +181,9 @@ For a list of all deprecated CSM features, see [Deprecations](introduction/depre
 * Remove `metal-net` scripts as they are no longer used
 * Remove `etcd-operator` as a result of migration to use `bitnami-etcd`
 * [CRUS](glossary.md#compute-rolling-upgrade-service-crus)
-* Deprecated [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos)
-  v1 session template and boot set fields are no longer stored in BOS. For more information, see
-  [Deprecated fields](operations/boot_orchestration/Session_Templates.md#deprecated-fields)
-*  Removed -P option from cray-dhcp-kea startup options
-*  Stopped using skopeo images < 1.13.2
+* Deprecated [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos)v1 session template and boot set fields are no longer stored in BOS. For more information, see [Deprecated fields](operations/boot_orchestration/Session_Templates.md#deprecated-fields)
+*  Removed -P option from `cray-dhcp-kea` startup options
+*  Stopped using `skopeo` images < 1.13.2
 
 For a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals)
 
