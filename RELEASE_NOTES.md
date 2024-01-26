@@ -40,7 +40,6 @@
 * Enhanced Multi-Tenancy Phase II support
 * Improved IUF Logging
 * Created Networking Red Light / Green Light Dashboard
-* Used Thanos to Implement a highly available Prometheus setup with long term storage capabilities
 
 * ### Monitoring
 
@@ -169,7 +168,7 @@
 
 * The `ipv4-resolvers` option has been removed for CSI as it is not used
 * CAPMC](glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
-* Removed ARS from Cray CLI and BSS API spec
+* Removed ARS from Cray CLI and BSS API specification
 * Removed deprecated BOS V1 CFS fields from session templates
 
 For a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
