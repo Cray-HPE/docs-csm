@@ -40,9 +40,9 @@
 * Enhanced Multi-Tenancy Phase II support
 * Improved IUF Logging
 * Created Networking Red Light / Green Light Dashboard
-* Implemented highly available Prometheus setup with long term storage capabilities using Thanos
+* Used Thanos to Implement a highly available Prometheus setup with long term storage capabilities
 
-### Monitoring
+* ### Monitoring
 
 * Removed clear text switch passwords from the `cray-sysmgmt-health-canu-test` pod log
 
@@ -67,7 +67,7 @@
 * IUF stage for `management-nodes-rollout` consumes logs from `ncn-rebuild`
 * Add a test to check taints on master nodes
 * Augment `postgres` backup `goss` test to also check for `cronjob`
-* Argo-driven Upgrade Automation for K8s Storage Nodes
+* Argo-driven Upgrade Automation for Kubernetes Storage Nodes
 * Ceph upgrade added to automated storage upgrade  
 
 ### Base platform component upgrades
@@ -98,7 +98,7 @@
 
 ### Security improvements
 
-* CVE 'kernel-5.14.21-150400.24.46.1` for `mozilla-nss`
+* CVE Kernel 5.14.21-150400.24.46.1 for `mozilla-nss`
 * Removed `postgresql` from NCNs to fix CVEs
 * Updates to `bind-utils`, `curl`, `git-core`, `java-1_8_0-ibm`, and `less` in `NCN` image for `CVEs`
 * Updates to `libfreebl3-hmac`, `libfreebl3`, `tar`, and `wireshark` in `NCN` image for `CVEs`
@@ -160,7 +160,7 @@
 * Fixed an incorrectly written Network Policy in `cray-drydock` for `mqtt/spire` communication
 * Fixed an issue where restarting `kea` on large systems wipes DNS records from `configmap`
 * Updated Unbound to not forward `.hsn` queries to the site DNS
-* Fixed when `cray-externaldns-manager` crashes when used with `external-dns 0.13`
+* Fixed when `cray-externaldns-manager` crashes when used with `external-dns-0.13`
 * Fixed an issue where Weave pods were not starting after upgrading to CSM V1.4 content
 * Fixed PowerDNS server TLD is missing NS delegation records for subdomains
 * Fixed an issue where FRU Tracking doesn't create a detected event after a removed event
