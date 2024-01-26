@@ -65,7 +65,7 @@
 
 * Updates to `etcd` health checks due to replacement of `etcd` vendor to `bitnami-etcd`
 * IUF stage for `management-nodes-rollout` consumes logs from `ncn-rebuild`
-* Add a test to check taints on master nodes
+* Add a test to check master node taints
 * Augment `postgres` backup `goss` test to also check for `cronjob`
 * Argo-driven Upgrade Automation for Kubernetes Storage Nodes
 * Ceph upgrade added to automated storage upgrade  
