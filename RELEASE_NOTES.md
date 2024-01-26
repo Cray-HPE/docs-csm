@@ -20,10 +20,10 @@
 * Upgrade `argo` version to pick up bug-fixes
 * BOS implement OPA policies for Multi-Tenancy
 * Create DNAME records in PowerDNS
-* For Birfurcated CAN update kiali to use the new API Gateways
-* For Birfurcated CAN update cray-sysmgmt-health to use the new API Gateways
-* For Birfurcated CAN update gitea-vcs-web to use CMN Only Istio Gateway
-* For Birfurcated CAN update gitea-vcs-external to use CMN Only Istio Gateway
+* For Bifurcated CAN update kiali to use the new API Gateways
+* For Bifurcated CAN update cray-sysmgmt-health to use the new API Gateways
+* For Bifurcated CAN update gitea-vcs-web to use CMN Only Istio Gateway
+* For Bifurcated CAN update gitea-vcs-external to use CMN Only Istio Gateway
 * Improved logging in cray-nls based on StageOutput
 * IMS - created an arm64 version of the barebones recipe
 * Support for large system ARP configuration for first boot and DHCP
@@ -45,7 +45,7 @@
 
 ### Monitoring
 
-* Removed cleartext switch passwords from the cray-sysmgmt-health-canu-test pod log
+* Removed clear text switch passwords from the cray-sysmgmt-health-canu-test pod log
 
 ### Networking
 
@@ -59,9 +59,8 @@
 * Updated HMS discovery process to populate a node's architecture when making the information available via Redfish
 * Update to ilorest 4.1.0.0 for Gen11 Support
 * Support for arm64 added in metal-ipxe
-* Hardware vailidation of the EX2500 Cabinet
+* Hardware validation of the EX2500 Cabinet
 * Support JL627A switches as an edge router for BI-CAN
-* 
 
 ### Automation improvements
 
@@ -163,7 +162,7 @@
 * Fixed an incorrectly written Network Policy in cray-drydock for mqtt/spire communication
 * Fixed an issue where restarting kea on large systems wipes DNS records from configmap
 * Updated Unbound to not forward .hsn queries to the site DNS
-* Fxed for cray-externaldns-manager crashes when used with external-dns 0.13
+* Fixed when cray-externaldns-manager crashes when used with external-dns 0.13
 * Fixed Unbound to not forward .hsn queries to the site DNS
 * Fixed an issue where Weave pods were not starting after upgrading to CSM V1.4 content
 * Fixed PowerDNS server TLD is missing NS delegation records for subdomains
@@ -190,7 +189,7 @@ For a list of all deprecated CSM features, see [Deprecations](introduction/depre
 *  Removed -P option from cray-dhcp-kea startup options
 *  Stopped using skopeo images < 1.13.2
 
-For a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals).
+For a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals)
 
 ## Known issues
 
