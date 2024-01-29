@@ -262,6 +262,7 @@ restartk8s() {
       return $?
     fi
   else
+    apiserver="kube-apiserver-$(uname -n)"
     printf "fatal: kubectl delete on %s timed out\n" "${apiserver}" >&2
     return $?
   fi
