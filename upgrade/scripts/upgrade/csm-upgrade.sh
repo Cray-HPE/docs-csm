@@ -31,14 +31,14 @@ trap 'err_report' ERR
 . /etc/cray/upgrade/csm/myenv
 
 if [[ -z ${CSM_REL_NAME} ]]; then
-    echo "ERROR: CSM_REL_NAME environment variable is not set and must be present in /etc/cray/upgrade/csm/myenv."
-    exit 1
+  echo "ERROR: CSM_REL_NAME environment variable is not set and must be present in /etc/cray/upgrade/csm/myenv."
+  exit 1
 fi
 
 if [[ ! -f ${PREREQS_DONE_FILE} ]]; then
-    echo "ERROR: prerequisites.sh script was not completed successfully."
-    echo "To fix the error, please re-run the prerequisites.sh script successfully before upgrading."
-    exit 1
+  echo "ERROR: prerequisites.sh script was not completed successfully."
+  echo "To fix the error, please re-run the prerequisites.sh script successfully before upgrading."
+  exit 1
 fi
 
 if [[ -z ${LOG_FILE} ]]; then

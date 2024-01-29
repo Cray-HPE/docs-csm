@@ -46,11 +46,9 @@ fi
 
 echo "Enabling Ceph services to start on boot and starting if stopped"
 #shellcheck disable=SC2046
-for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));
-do
+for service in $(cephadm ls | jq -r .[].systemd_unit | grep $(ceph status -f json-pretty | jq -r .fsid)); do
   systemctl enable $service
-  if [[ $(systemctl is-active $service) != "active" ]]
-  then
+  if [[ $(systemctl is-active $service) != "active" ]]; then
     systemctl restart $service
   fi
 done

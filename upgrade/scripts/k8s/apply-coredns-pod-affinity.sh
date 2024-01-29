@@ -25,7 +25,7 @@
 
 echo "Applying pod anti-affinity to coredns pods"
 
-cat > /tmp/coredns-affinity.yaml <<EOF
+cat > /tmp/coredns-affinity.yaml << EOF
 spec:
   template:
     spec:

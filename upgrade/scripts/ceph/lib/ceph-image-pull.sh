@@ -23,10 +23,10 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-function pre_pull_ceph_images () {
+function pre_pull_ceph_images() {
   #shellcheck disable=SC2154
   IMAGE="$registry/ceph/ceph:v15.2.8"
-  for host in $(ceph node ls| jq -r '.osd|keys[]'); do
+  for host in $(ceph node ls | jq -r '.osd|keys[]'); do
     echo "Pre-pulling $IMAGE image on $host"
     ssh "$host" "cephadm --image $IMAGE pull"
     echo "Verify the image on present on $host"

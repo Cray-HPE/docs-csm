@@ -26,7 +26,7 @@
 pod_name=$1
 target_node=$2
 
-if [ "$pod_name" == "" ] ||  [ "$target_node" == "" ]; then
+if [ "$pod_name" == "" ] || [ "$target_node" == "" ]; then
   echo "Usage: $0 <pod_name> <target_node>"
 fi
 
