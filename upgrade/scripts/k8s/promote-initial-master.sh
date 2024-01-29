@@ -26,7 +26,7 @@
 echo "Ensuring cloud-init is healthy"
 cloud-init query -a > /dev/null 2>&1
 rc=$?
-if [[ "$rc" -ne 0 ]]; then
+if [[ $rc -ne 0 ]]; then
   echo "cloud-init is not healthy -- re-running 'cloud-init init' to repair cached data"
   cloud-init init > /dev/null 2>&1
 fi
@@ -54,11 +54,11 @@ if [ -f "${k8syaml}" ]; then
 fi
 envsubst < "${k8scfg}" > /etc/cray/kubernetes/kubeadm.yaml
 
-kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
+kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2> /dev/null
 echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key $(cat /etc/cray/kubernetes/certificate-key)" > /etc/cray/kubernetes/join-command-control-plane
 
 mkdir -p /srv/cray/scripts/kubernetes
-cat > /srv/cray/scripts/kubernetes/token-certs-refresh.sh <<'EOF'
+cat > /srv/cray/scripts/kubernetes/token-certs-refresh.sh << 'EOF'
 #!/bin/bash
 
 export KUBECONFIG=/etc/kubernetes/admin.conf
