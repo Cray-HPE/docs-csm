@@ -58,8 +58,7 @@ masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u)
 #       so we can query "next" version here
 k8sVersionUpgradeTo=$(kubeadm version -o json | jq -r '.clientVersion.gitVersion')
 
-for master in $masters
-do
+for master in $masters; do
   echo "Upgrading kube-system pods for $master:"
   echo ""
   pdsh -b -S -w $master "kubeadm upgrade apply ${k8sVersionUpgradeTo} -y"

@@ -26,21 +26,21 @@
 set -eu
 
 function deploySpire() {
-    BUILDDIR="/tmp/build"
-    mkdir -p "$BUILDDIR"
-    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${BUILDDIR}/customizations.yaml"
-    manifestgen -i "${CSM_ARTI_DIR}/manifests/sysmgmt.yaml" -c "${BUILDDIR}/customizations.yaml" -o "${BUILDDIR}/spireupgrade.yaml"
-    charts="$(yq r $BUILDDIR/spireupgrade.yaml 'spec.charts[*].name')"
-    for chart in $charts; do
-        if [[ $chart != "spire" ]]; then
-            yq d -i $BUILDDIR/spireupgrade.yaml "spec.charts.(name==$chart)"
-        fi
-    done
+  BUILDDIR="/tmp/build"
+  mkdir -p "$BUILDDIR"
+  kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${BUILDDIR}/customizations.yaml"
+  manifestgen -i "${CSM_ARTI_DIR}/manifests/sysmgmt.yaml" -c "${BUILDDIR}/customizations.yaml" -o "${BUILDDIR}/spireupgrade.yaml"
+  charts="$(yq r $BUILDDIR/spireupgrade.yaml 'spec.charts[*].name')"
+  for chart in $charts; do
+    if [[ $chart != "spire" ]]; then
+      yq d -i $BUILDDIR/spireupgrade.yaml "spec.charts.(name==$chart)"
+    fi
+  done
 
-    yq w -i $BUILDDIR/spireupgrade.yaml "metadata.name" "spireupgrade"
-    yq d -i $BUILDDIR/spireupgrade.yaml "spec.sources"
+  yq w -i $BUILDDIR/spireupgrade.yaml "metadata.name" "spireupgrade"
+  yq d -i $BUILDDIR/spireupgrade.yaml "spec.sources"
 
-    loftsman ship --charts-path "${CSM_ARTI_DIR}/helm/" --manifest-path $BUILDDIR/spireupgrade.yaml
+  loftsman ship --charts-path "${CSM_ARTI_DIR}/helm/" --manifest-path $BUILDDIR/spireupgrade.yaml
 }
 
 deploySpire

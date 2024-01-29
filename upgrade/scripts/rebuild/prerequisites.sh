@@ -24,7 +24,7 @@
 #
 
 set -e
-basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+basedir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 . ${basedir}/../common/upgrade-state.sh
 #shellcheck disable=SC2046
 . ${basedir}/../common/ncn-common.sh $(hostname)
@@ -33,34 +33,33 @@ trap 'err_report' ERR
 #shellcheck disable=SC2034
 declare -a UNMOUNTS=()
 
-
 state_name="CHECK_DOC_RPM"
 #shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-    if [[ ! -f /root/docs-csm-latest.noarch.rpm ]]; then
-        echo "ERROR: docs-csm-latest.noarch.rpm is missing under: /root -- halting..."
-        exit 1
-    fi
-    rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
-    #shellcheck disable=SC2046
-    record_state ${state_name} $(hostname)
+  echo "====> ${state_name} ..."
+  if [[ ! -f /root/docs-csm-latest.noarch.rpm ]]; then
+    echo "ERROR: docs-csm-latest.noarch.rpm is missing under: /root -- halting..."
+    exit 1
+  fi
+  rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+  #shellcheck disable=SC2046
+  record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has been completed"
+  echo "====> ${state_name} has been completed"
 fi
 
 state_name="SNAPSHOT_CPS_DEPLOYMENT"
 #shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-    ${basedir}/../cps/snapshot-cps-deployment.sh
+  echo "====> ${state_name} ..."
+  ${basedir}/../cps/snapshot-cps-deployment.sh
 
-    #shellcheck disable=SC2046
-    record_state ${state_name} $(hostname)
+  #shellcheck disable=SC2046
+  record_state ${state_name} $(hostname)
 else
-    echo "====> ${state_name} has been completed"
+  echo "====> ${state_name} has been completed"
 fi
 
 ok_report

@@ -41,13 +41,12 @@ export upgrade_rgws_file="/etc/cray/ceph/rgws_upgraded"
 export registry="${1:-registry.local}"
 num_storage_nodes=$(craysys metadata get num-storage-nodes)
 
-if [[ $? != 0 ]]
-then
+if [[ $? != 0 ]]; then
   echo "Cloud init data not present. Exiting upgrade.."
   exit 1
 fi
 
-if ceph orch ps >  /dev/null 2>&1; then
+if ceph orch ps > /dev/null 2>&1; then
   echo "Ceph as already been upgraded"
   exit 0
 fi
@@ -72,7 +71,7 @@ if [ ! -d "/etc/cray" ]; then
 fi
 
 if [ ! -d "/etc/cray/ceph" ]; then
- mkdir /etc/cray/ceph
+  mkdir /etc/cray/ceph
 fi
 
 function retry_enable_service() {
@@ -82,7 +81,7 @@ function retry_enable_service() {
   rc=1
   local cnt=0
   until [ "$rc" -eq 0 ]; do
-    cnt=$((cnt+1))
+    cnt=$((cnt + 1))
     if [ "$cnt" -eq 5 ]; then
       echo "ERROR: Unable to enable $service on $host, halting upgrade until this is repaired."
       exit 1
@@ -99,13 +98,13 @@ function retry_enable_service() {
 }
 
 for node in $(seq 1 "$num_storage_nodes"); do
- nodename=$(printf "ncn-s%03d" "$node")
- ssh-keyscan -H "$nodename" >> ~/.ssh/known_hosts
+  nodename=$(printf "ncn-s%03d" "$node")
+  ssh-keyscan -H "$nodename" >> ~/.ssh/known_hosts
 done
 
 for node in $(seq 1 "$num_storage_nodes"); do
- nodename=$(printf "ncn-s%03d.nmn" "$node")
- ssh-keyscan -H "$nodename" >> ~/.ssh/known_hosts
+  nodename=$(printf "ncn-s%03d.nmn" "$node")
+  ssh-keyscan -H "$nodename" >> ~/.ssh/known_hosts
 done
 
 if [ ! -f "$upgrade_mons_file" ] && [ -f "$convert_rgw_file" ]; then
@@ -158,7 +157,6 @@ else
   mark_initialized $upgrade_mons_file
 fi
 
-
 if [ -f "$upgrade_mgrs_file" ]; then
   echo "The Ceph mgr daemons have been upgraded"
 else
@@ -167,7 +165,6 @@ else
   #Add check for mgrs here (find else repeat)
   mark_initialized $upgrade_mgrs_file
 fi
-
 
 ### End run on each mon/mgr
 
@@ -231,8 +228,8 @@ else
 fi
 
 echo "Enable Ceph orch to manage all services"
-ceph orch apply mon --placement="3 $(ceph node ls|jq -r '.mon|keys| join(" ")')"
-ceph orch apply mgr --placement="3 $(ceph node ls|jq -r '.mon|keys| join(" ")')"
+ceph orch apply mon --placement="3 $(ceph node ls | jq -r '.mon|keys| join(" ")')"
+ceph orch apply mgr --placement="3 $(ceph node ls | jq -r '.mon|keys| join(" ")')"
 
 echo "Enable stray host warnings"
 ceph config set mgr mgr/cephadm/warn_on_stray_hosts true
@@ -244,20 +241,20 @@ echo "Scaling up cephfs clients"
 scale_up_cephfs_clients
 
 echo "Enabling all Ceph services to start on boot"
-for host in $(ceph node ls| jq -r '.osd|keys[]'); do
+for host in $(ceph node ls | jq -r '.osd|keys[]'); do
   echo "Enabling services on host: $host"
   ssh "$host" 'for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));do echo "Enabling service $service on $(hostname)"; systemctl enable $service; done'
   echo "Verifying services on host: $host"
   output=$(ssh "$host" 'for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));do echo $service; systemctl is-enabled $service; done')
   cnt=0
   #shellcheck disable=SC2206
-  client_array=( $output )
+  client_array=($output)
   array_length=${#client_array[@]}
-  while [[ "$cnt" -lt "$array_length" ]]; do
+  while [[ $cnt -lt $array_length ]]; do
     service="${client_array[$cnt]}"
-    cnt=$((cnt+1))
+    cnt=$((cnt + 1))
     status="${client_array[$cnt]}"
-    cnt=$((cnt+1))
+    cnt=$((cnt + 1))
     echo "${service}: $status"
     if [ "$status" == "disabled" ]; then
       retry_enable_service $host $service

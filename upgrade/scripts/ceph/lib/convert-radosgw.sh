@@ -23,7 +23,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-function convert_radosgw () {
+function convert_radosgw() {
   echo "Converting radosgw to support Ceph 15.x requirements"
   echo "Verifying that a realm does not exist"
   radosgw-admin realm list
@@ -48,11 +48,10 @@ function convert_radosgw () {
   echo "Completed the conversion"
 }
 
-function restart_radosgw_daemons () {
-  for host in $(ceph node ls| jq -r '.osd|keys[]')
-   do
+function restart_radosgw_daemons() {
+  for host in $(ceph node ls | jq -r '.osd|keys[]'); do
     echo "Restarting ceph-radosgw@rgw.$host.rgw0.service"
     ssh "$host" 'systemctl restart ceph-radosgw@rgw.$hostname.rgw0.service'
     echo "ceph-radosgw@rgw.$host.rgw0.service restarted"
-   done
+  done
 }

@@ -30,7 +30,7 @@
 set -euo pipefail
 if [[ $# -eq 0 ]]; then
 
-  ncns=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',')
+  ncns=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | tr -t '\n' ',')
 
   echo "Installing updated versions of hpe-csm-goss-package csm-testing goss-servers craycli RPMs"
   pdsh -S -b -w ${ncns} 'zypper install -y hpe-csm-goss-package csm-testing goss-servers craycli'

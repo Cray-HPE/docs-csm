@@ -1,13 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
-
 if [ -z "$CSM_RELEASE_VERSION" ]; then
   echo "Set CSM_RELEASE_VERSION before running this script"
   exit 1
 fi
 
-COMMIT=$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' 2>/dev/null | yq r -j - 2>/dev/null | jq --arg version "$CSM_RELEASE_VERSION" '. [$version].configuration.commit' | tr -d '"')
+COMMIT=$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' 2> /dev/null | yq r -j - 2> /dev/null | jq --arg version "$CSM_RELEASE_VERSION" '. [$version].configuration.commit' | tr -d '"')
 echo "Found commit: $COMMIT"
 echo "{
   \"layers\": [

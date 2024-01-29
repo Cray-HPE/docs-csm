@@ -30,15 +30,15 @@ CSM_RELEASE=${CSM_RELEASE_VERSION:-''}
 
 # CSM_ARTI_DIR and CSM_RELEASE are required for ncn-ims-image-upload.sh script used below
 if [[ -z ${CSM_ARTI_DIR} ]]; then
-    echo "CSM_DISTDIR environment variable needs to be set and exported. It should be set to the path \
+  echo "CSM_DISTDIR environment variable needs to be set and exported. It should be set to the path \
 of the extracted CSM product release."
-    exit 1
+  exit 1
 fi
 
 if [[ -z ${CSM_RELEASE} ]]; then
-    echo "CSM_RELEASE_VERSION environment variable needs to be set and exported. It should be set to the \
+  echo "CSM_RELEASE_VERSION environment variable needs to be set and exported. It should be set to the \
 version of CSM being patched. For example 'export CSM_RELEASE_VERSION=\"1.4.1\"'"
-    exit 1
+  exit 1
 fi
 
 export CSM_ARTI_DIR
@@ -58,21 +58,21 @@ k8s_done=0
 ceph_done=0
 arch="$(uname -i)"
 if [[ -f ${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs ]]; then
-    k8s_done=1
+  k8s_done=1
 fi
 if [[ -f ${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs ]]; then
-    ceph_done=1
+  ceph_done=1
 fi
 
-if [[ ${k8s_done} = 1 && ${ceph_done} = 1 ]]; then
-    echo "Already ran ${NCN_IMAGE_MOD_SCRIPT}, skipping re-run."
+if [[ ${k8s_done} == 1 && ${ceph_done} == 1 ]]; then
+  echo "Already ran ${NCN_IMAGE_MOD_SCRIPT}, skipping re-run."
 else
-    rm -f "${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs" "${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs"
-    DEBUG=1 "${NCN_IMAGE_MOD_SCRIPT}" \
-        -d /root/.ssh \
-        -k "${artdir}/kubernetes/kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs" \
-        -s "${artdir}/storage-ceph/storage-ceph-${CEPH_VERSION}-${arch}.squashfs" \
-        -p
+  rm -f "${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs" "${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs"
+  DEBUG=1 "${NCN_IMAGE_MOD_SCRIPT}" \
+    -d /root/.ssh \
+    -k "${artdir}/kubernetes/kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs" \
+    -s "${artdir}/storage-ceph/storage-ceph-${CEPH_VERSION}-${arch}.squashfs" \
+    -p
 fi
 
 set -o pipefail
