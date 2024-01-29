@@ -46,7 +46,7 @@ spec:
                 - name: scriptContent
                   value: |
                     sleep_time=15
-                    max_retries=45
+                    max_retries=60
                     attempt=1
                     while [[ $attempt -le $max_retries ]]; do
                       echo -e "\nChecking Ceph health status. Attempt ${attempt}/${max_retries}..."
