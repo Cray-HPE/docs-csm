@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -31,6 +31,28 @@ spec:
   scriptContent: |
     #!/bin/sh
     source /srv/cray/scripts/metal/metal-lib.sh
+
+    echo "Sleeping for 60 seconds to let nexus to start after move of singleton pod"
+    sleep 60
+    count=0
+    total=120
+    sleep=5
+    while true; do
+      http_code=$(curl -k -s -S -o /dev/null -w '%{http_code}' https://packages.local/service/rest/v1/status || true)
+      if [ "${http_code}" == "200" ]; then
+        echo "nexus is up"
+        break
+      else
+        if [ "${count}" == "${total}" ]; then
+          echo "nexus is down after ${total} checks, giving up ..."
+          exit 1
+        fi
+        count=$(($count + 1))
+        echo "nexus is down, sleeping for $sleep seconds and retry, attempt $count/$total ..."
+        sleep $sleep
+      fi
+    done
+
     csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-noos" \
       | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
     if [[ -z $csi_url ]]; then
