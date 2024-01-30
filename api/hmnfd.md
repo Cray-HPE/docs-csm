@@ -53,8 +53,6 @@ Base URLs:
 
 * <a href="https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2">https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2</a>
 
-* <a href="http://cray-hmnfd/hmi/v2">http://cray-hmnfd/hmi/v2</a>
-
 # Authentication
 
 - HTTP Authentication, scheme: bearer 

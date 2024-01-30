@@ -8,7 +8,11 @@ Read-Only APIs to Retrieve Tenant Status
 
 Base URLs:
 
-* <a href="//cray-tapms/apis/tapms/">//cray-tapms/apis/tapms/</a>
+* <a href="https://api-gw-service-nmn.local/apis/tapms/">https://api-gw-service-nmn.local/apis/tapms/</a>
+
+# Authentication
+
+- HTTP Authentication, scheme: bearer 
 
 <h1 id="tapms-tenant-status-api-tenant-and-partition-management-system">Tenant and Partition Management System</h1>
 
@@ -17,26 +21,28 @@ Base URLs:
 > Code samples
 
 ```http
-GET /cray-tapms/apis/tapms/v1alpha3/tenants HTTP/1.1
-
+GET https://api-gw-service-nmn.local/apis/tapms/v1alpha3/tenants HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET /cray-tapms/apis/tapms/v1alpha3/tenants \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/tapms/v1alpha3/tenants \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('/cray-tapms/apis/tapms/v1alpha3/tenants', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/tapms/v1alpha3/tenants', headers = headers)
 
 print(r.json())
 
@@ -54,10 +60,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/cray-tapms/apis/tapms/v1alpha3/tenants", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/tapms/v1alpha3/tenants", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -211,8 +218,9 @@ Status Code **200**
 |»» tenantresources|[[TenantResource](#schematenantresource)]|false|none|The desired resources for the Tenant|
 |»» uuid|string(uuid)|false|none|none|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post__v1alpha3_tenants
@@ -220,8 +228,8 @@ This operation does not require authentication
 > Code samples
 
 ```http
-POST /cray-tapms/apis/tapms/v1alpha3/tenants HTTP/1.1
-
+POST https://api-gw-service-nmn.local/apis/tapms/v1alpha3/tenants HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
 
@@ -229,9 +237,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST /cray-tapms/apis/tapms/v1alpha3/tenants \
+curl -X POST https://api-gw-service-nmn.local/apis/tapms/v1alpha3/tenants \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -239,10 +248,11 @@ curl -X POST /cray-tapms/apis/tapms/v1alpha3/tenants \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('/cray-tapms/apis/tapms/v1alpha3/tenants', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/tapms/v1alpha3/tenants', headers = headers)
 
 print(r.json())
 
@@ -261,10 +271,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "/cray-tapms/apis/tapms/v1alpha3/tenants", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/tapms/v1alpha3/tenants", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -430,8 +441,9 @@ Status Code **200**
 |»» tenantresources|[[TenantResource](#schematenantresource)]|false|none|The desired resources for the Tenant|
 |»» uuid|string(uuid)|false|none|none|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__v1alpha3_tenants_{id}
@@ -439,26 +451,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET /cray-tapms/apis/tapms/v1alpha3/tenants/{id} HTTP/1.1
-
+GET https://api-gw-service-nmn.local/apis/tapms/v1alpha3/tenants/{id} HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET /cray-tapms/apis/tapms/v1alpha3/tenants/{id} \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/tapms/v1alpha3/tenants/{id} \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('/cray-tapms/apis/tapms/v1alpha3/tenants/{id}', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/tapms/v1alpha3/tenants/{id}', headers = headers)
 
 print(r.json())
 
@@ -476,10 +490,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/cray-tapms/apis/tapms/v1alpha3/tenants/{id}", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/tapms/v1alpha3/tenants/{id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -597,8 +612,9 @@ func main() {
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 # Schemas

@@ -98,8 +98,6 @@ Base URLs:
 
 * <a href="https://api-gw-service-nmn.local/apis/bos">https://api-gw-service-nmn.local/apis/bos</a>
 
-* <a href="https://cray-bos">https://cray-bos</a>
-
 # Authentication
 
 - HTTP Authentication, scheme: bearer 

@@ -64,11 +64,7 @@ FAS receives information from the Hardware State Manager (HSM) for each xname.
 
 Base URLs:
 
-* <a href="https://rocket-ncn-w001.us.cray.com/apis/fas/v1">https://rocket-ncn-w001.us.cray.com/apis/fas/v1</a>
-
-* <a href="http://localhost:28800/v1">http://localhost:28800/v1</a>
-
-* <a href="http://localhost:28800">http://localhost:28800</a>
+* <a href="https://api-gw-service-nmn.local/apis/fas/v1">https://api-gw-service-nmn.local/apis/fas/v1</a>
 
 # Authentication
 
@@ -81,15 +77,15 @@ Base URLs:
 > Code samples
 
 ```http
-GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+GET https://api-gw-service-nmn.local/apis/fas/v1/actions HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions \
+curl -X GET https://api-gw-service-nmn.local/apis/fas/v1/actions \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -102,7 +98,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/fas/v1/actions', headers = headers)
 
 print(r.json())
 
@@ -124,7 +120,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/fas/v1/actions", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -198,8 +194,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+POST https://api-gw-service-nmn.local/apis/fas/v1/actions HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
 
@@ -207,7 +203,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions \
+curl -X POST https://api-gw-service-nmn.local/apis/fas/v1/actions \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
@@ -222,7 +218,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/fas/v1/actions', headers = headers)
 
 print(r.json())
 
@@ -245,7 +241,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/fas/v1/actions", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -389,15 +385,15 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID} HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+GET https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID} HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID} \
+curl -X GET https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID} \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -410,7 +406,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}', headers = headers)
 
 print(r.json())
 
@@ -432,7 +428,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -658,15 +654,15 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID} HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+DELETE https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID} HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/error
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID} \
+curl -X DELETE https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID} \
   -H 'Accept: application/error' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -679,7 +675,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.delete('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}', headers = headers)
+r = requests.delete('https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}', headers = headers)
 
 print(r.json())
 
@@ -701,7 +697,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}", data)
+    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -745,15 +741,15 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/instance HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+DELETE https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/instance HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/instance \
+curl -X DELETE https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/instance \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -766,7 +762,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.delete('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/instance', headers = headers)
+r = requests.delete('https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/instance', headers = headers)
 
 print(r.json())
 
@@ -788,7 +784,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/instance", data)
+    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/instance", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -842,15 +838,15 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/status HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+GET https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/status HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/status \
+curl -X GET https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/status \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -863,7 +859,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/status', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/status', headers = headers)
 
 print(r.json())
 
@@ -885,7 +881,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/status", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/status", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -963,15 +959,15 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/operations HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+GET https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/operations HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/operations \
+curl -X GET https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/operations \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -984,7 +980,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/operations', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/operations', headers = headers)
 
 print(r.json())
 
@@ -1006,7 +1002,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/operations", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/operations", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1412,15 +1408,15 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/operations/{operationID} HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+GET https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/operations/{operationID} HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/operations/{operationID} \
+curl -X GET https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/operations/{operationID} \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -1433,7 +1429,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/operations/{operationID}', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/operations/{operationID}', headers = headers)
 
 print(r.json())
 
@@ -1455,7 +1451,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/actions/{actionID}/operations/{operationID}", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/fas/v1/actions/{actionID}/operations/{operationID}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1527,15 +1523,15 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/operations/{operationID} HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+GET https://api-gw-service-nmn.local/apis/fas/v1/operations/{operationID} HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/operations/{operationID} \
+curl -X GET https://api-gw-service-nmn.local/apis/fas/v1/operations/{operationID} \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -1548,7 +1544,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/operations/{operationID}', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/fas/v1/operations/{operationID}', headers = headers)
 
 print(r.json())
 
@@ -1570,7 +1566,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/operations/{operationID}", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/fas/v1/operations/{operationID}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1643,8 +1639,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+POST https://api-gw-service-nmn.local/apis/fas/v1/images HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
 
@@ -1652,7 +1648,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images \
+curl -X POST https://api-gw-service-nmn.local/apis/fas/v1/images \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
@@ -1667,7 +1663,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/fas/v1/images', headers = headers)
 
 print(r.json())
 
@@ -1690,7 +1686,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/fas/v1/images", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1779,15 +1775,15 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+GET https://api-gw-service-nmn.local/apis/fas/v1/images HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images \
+curl -X GET https://api-gw-service-nmn.local/apis/fas/v1/images \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -1800,7 +1796,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/fas/v1/images', headers = headers)
 
 print(r.json())
 
@@ -1822,7 +1818,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/fas/v1/images", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1896,8 +1892,8 @@ bearerAuth
 > Code samples
 
 ```http
-PUT https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images/{imageID} HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+PUT https://api-gw-service-nmn.local/apis/fas/v1/images/{imageID} HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/error
 
@@ -1905,7 +1901,7 @@ Accept: application/error
 
 ```shell
 # You can also use wget
-curl -X PUT https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images/{imageID} \
+curl -X PUT https://api-gw-service-nmn.local/apis/fas/v1/images/{imageID} \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/error' \
   -H 'Authorization: Bearer {access-token}'
@@ -1920,7 +1916,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.put('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images/{imageID}', headers = headers)
+r = requests.put('https://api-gw-service-nmn.local/apis/fas/v1/images/{imageID}', headers = headers)
 
 print(r.json())
 
@@ -1943,7 +1939,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PUT", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images/{imageID}", data)
+    req, err := http.NewRequest("PUT", "https://api-gw-service-nmn.local/apis/fas/v1/images/{imageID}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2025,15 +2021,15 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images/{imageID} HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+GET https://api-gw-service-nmn.local/apis/fas/v1/images/{imageID} HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images/{imageID} \
+curl -X GET https://api-gw-service-nmn.local/apis/fas/v1/images/{imageID} \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -2046,7 +2042,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images/{imageID}', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/fas/v1/images/{imageID}', headers = headers)
 
 print(r.json())
 
@@ -2068,7 +2064,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images/{imageID}", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/fas/v1/images/{imageID}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2147,15 +2143,15 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images/{imageID} HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+DELETE https://api-gw-service-nmn.local/apis/fas/v1/images/{imageID} HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/error
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images/{imageID} \
+curl -X DELETE https://api-gw-service-nmn.local/apis/fas/v1/images/{imageID} \
   -H 'Accept: application/error' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -2168,7 +2164,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.delete('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images/{imageID}', headers = headers)
+r = requests.delete('https://api-gw-service-nmn.local/apis/fas/v1/images/{imageID}', headers = headers)
 
 print(r.json())
 
@@ -2190,7 +2186,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/images/{imageID}", data)
+    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/fas/v1/images/{imageID}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2235,15 +2231,15 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/service/status HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+GET https://api-gw-service-nmn.local/apis/fas/v1/service/status HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/service/status \
+curl -X GET https://api-gw-service-nmn.local/apis/fas/v1/service/status \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -2256,7 +2252,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/service/status', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/fas/v1/service/status', headers = headers)
 
 print(r.json())
 
@@ -2278,7 +2274,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/service/status", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/fas/v1/service/status", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2323,15 +2319,15 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/service/status/details HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+GET https://api-gw-service-nmn.local/apis/fas/v1/service/status/details HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/service/status/details \
+curl -X GET https://api-gw-service-nmn.local/apis/fas/v1/service/status/details \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -2344,7 +2340,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/service/status/details', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/fas/v1/service/status/details', headers = headers)
 
 print(r.json())
 
@@ -2366,7 +2362,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/service/status/details", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/fas/v1/service/status/details", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2414,15 +2410,15 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/service/version HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+GET https://api-gw-service-nmn.local/apis/fas/v1/service/version HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/service/version \
+curl -X GET https://api-gw-service-nmn.local/apis/fas/v1/service/version \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -2435,7 +2431,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/service/version', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/fas/v1/service/version', headers = headers)
 
 print(r.json())
 
@@ -2457,7 +2453,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/service/version", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/fas/v1/service/version", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2504,15 +2500,15 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+GET https://api-gw-service-nmn.local/apis/fas/v1/snapshots HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots \
+curl -X GET https://api-gw-service-nmn.local/apis/fas/v1/snapshots \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -2525,7 +2521,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/fas/v1/snapshots', headers = headers)
 
 print(r.json())
 
@@ -2547,7 +2543,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/fas/v1/snapshots", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2608,8 +2604,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+POST https://api-gw-service-nmn.local/apis/fas/v1/snapshots HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
 
@@ -2617,7 +2613,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots \
+curl -X POST https://api-gw-service-nmn.local/apis/fas/v1/snapshots \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
@@ -2632,7 +2628,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/fas/v1/snapshots', headers = headers)
 
 print(r.json())
 
@@ -2655,7 +2651,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/fas/v1/snapshots", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2747,15 +2743,15 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots/{snapshotName} HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+GET https://api-gw-service-nmn.local/apis/fas/v1/snapshots/{snapshotName} HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots/{snapshotName} \
+curl -X GET https://api-gw-service-nmn.local/apis/fas/v1/snapshots/{snapshotName} \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -2768,7 +2764,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots/{snapshotName}', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/fas/v1/snapshots/{snapshotName}', headers = headers)
 
 print(r.json())
 
@@ -2790,7 +2786,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots/{snapshotName}", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/fas/v1/snapshots/{snapshotName}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2899,15 +2895,15 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots/{snapshotName} HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+DELETE https://api-gw-service-nmn.local/apis/fas/v1/snapshots/{snapshotName} HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/error
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots/{snapshotName} \
+curl -X DELETE https://api-gw-service-nmn.local/apis/fas/v1/snapshots/{snapshotName} \
   -H 'Accept: application/error' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -2920,7 +2916,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.delete('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots/{snapshotName}', headers = headers)
+r = requests.delete('https://api-gw-service-nmn.local/apis/fas/v1/snapshots/{snapshotName}', headers = headers)
 
 print(r.json())
 
@@ -2942,7 +2938,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots/{snapshotName}", data)
+    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/fas/v1/snapshots/{snapshotName}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2985,15 +2981,15 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots/{snapshotName}/restore?confirm=yes HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+POST https://api-gw-service-nmn.local/apis/fas/v1/snapshots/{snapshotName}/restore?confirm=yes HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X POST https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots/{snapshotName}/restore?confirm=yes \
+curl -X POST https://api-gw-service-nmn.local/apis/fas/v1/snapshots/{snapshotName}/restore?confirm=yes \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -3006,7 +3002,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots/{snapshotName}/restore', params={
+r = requests.post('https://api-gw-service-nmn.local/apis/fas/v1/snapshots/{snapshotName}/restore', params={
   'confirm': 'yes'
 }, headers = headers)
 
@@ -3030,7 +3026,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/snapshots/{snapshotName}/restore", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/fas/v1/snapshots/{snapshotName}/restore", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3094,8 +3090,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+POST https://api-gw-service-nmn.local/apis/fas/v1/loader HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/octet-stream
 Accept: application/json
 
@@ -3103,7 +3099,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader \
+curl -X POST https://api-gw-service-nmn.local/apis/fas/v1/loader \
   -H 'Content-Type: application/octet-stream' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
@@ -3118,7 +3114,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/fas/v1/loader', headers = headers)
 
 print(r.json())
 
@@ -3141,7 +3137,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/fas/v1/loader", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3202,15 +3198,15 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+GET https://api-gw-service-nmn.local/apis/fas/v1/loader HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader \
+curl -X GET https://api-gw-service-nmn.local/apis/fas/v1/loader \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -3223,7 +3219,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/fas/v1/loader', headers = headers)
 
 print(r.json())
 
@@ -3245,7 +3241,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/fas/v1/loader", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3290,15 +3286,15 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader/{loaderRunID} HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+GET https://api-gw-service-nmn.local/apis/fas/v1/loader/{loaderRunID} HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader/{loaderRunID} \
+curl -X GET https://api-gw-service-nmn.local/apis/fas/v1/loader/{loaderRunID} \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -3311,7 +3307,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader/{loaderRunID}', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/fas/v1/loader/{loaderRunID}', headers = headers)
 
 print(r.json())
 
@@ -3333,7 +3329,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader/{loaderRunID}", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/fas/v1/loader/{loaderRunID}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3386,15 +3382,15 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader/{loaderRunID} HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+DELETE https://api-gw-service-nmn.local/apis/fas/v1/loader/{loaderRunID} HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/error
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader/{loaderRunID} \
+curl -X DELETE https://api-gw-service-nmn.local/apis/fas/v1/loader/{loaderRunID} \
   -H 'Accept: application/error' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -3407,7 +3403,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.delete('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader/{loaderRunID}', headers = headers)
+r = requests.delete('https://api-gw-service-nmn.local/apis/fas/v1/loader/{loaderRunID}', headers = headers)
 
 print(r.json())
 
@@ -3429,7 +3425,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader/{loaderRunID}", data)
+    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/fas/v1/loader/{loaderRunID}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3472,15 +3468,15 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader/nexus HTTP/1.1
-Host: rocket-ncn-w001.us.cray.com
+POST https://api-gw-service-nmn.local/apis/fas/v1/loader/nexus HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X POST https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader/nexus \
+curl -X POST https://api-gw-service-nmn.local/apis/fas/v1/loader/nexus \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -3493,7 +3489,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader/nexus', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/fas/v1/loader/nexus', headers = headers)
 
 print(r.json())
 
@@ -3515,7 +3511,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://rocket-ncn-w001.us.cray.com/apis/fas/v1/loader/nexus", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/fas/v1/loader/nexus", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3680,7 +3676,7 @@ bearerAuth
 |overrideDryrun|boolean|false|none|none|
 |startTime|string(date-time)|false|none|none|
 |endTime|string(date-time)|false|none|none|
-|state|string|false|none|The state of the action -<br><br><br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
+|state|string|false|none|The state of the action -<br><br><br><br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
 |operationCounts|[OperationCounts](#schemaoperationcounts)|false|none|none|
 |description|string|false|none|none|
 |blockedBy|[string]|false|none|none|
@@ -3946,7 +3942,7 @@ bearerAuth
 |snapshotID|string(uuid)|false|none|none|
 |startTime|string(date-time)|false|none|none|
 |endTime|string(date-time)|false|none|none|
-|state|string|false|none|The state of the action -<br><br><br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
+|state|string|false|none|The state of the action -<br><br><br><br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
 |description|string|false|none|none|
 |operationSummary|[OperationSummary](#schemaoperationsummary)|false|none|none|
 |overrideDryrun|boolean|false|none|none|
@@ -4343,7 +4339,7 @@ bearerAuth
 |snapshotID|string(uuid)|false|none|none|
 |startTime|string(date-time)|false|none|none|
 |endTime|string(date-time)|false|none|none|
-|state|string|false|none|The state of the action -<br><br><br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
+|state|string|false|none|The state of the action -<br><br><br><br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
 |description|string|false|none|none|
 |operationSummary|[OperationDetail](#schemaoperationdetail)|false|none|none|
 |overrideDryrun|boolean|false|none|none|
@@ -4864,7 +4860,7 @@ bearerAuth
 |actionID|string(uuid)|false|none|none|
 |startTime|string(date-time)|false|none|none|
 |endTime|string(date-time)|false|none|none|
-|state|string|false|none|The state of the operation -<br><br><br><br>  *initial* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - cannot run because another operation is blocking this<br>  *inProgress* - operation started - sent update command<br>  *needsVerified* - operation was sent update command, waiting for finish to verify<br>  *verifying* - operation verifying operation<br>  *aborted* - operation was aborted<br>  *noOperation* - operation has nothing to do - already at firmware level<br>  *noSolution* - operation could not find a firmware to flash<br>  *succeeded* - operation completed successfully<br>  *failed* - operation failed|
+|state|string|false|none|The state of the operation -<br><br><br><br><br>  *initial* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - cannot run because another operation is blocking this<br>  *inProgress* - operation started - sent update command<br>  *needsVerified* - operation was sent update command, waiting for finish to verify<br>  *verifying* - operation verifying operation<br>  *aborted* - operation was aborted<br>  *noOperation* - operation has nothing to do - already at firmware level<br>  *noSolution* - operation could not find a firmware to flash<br>  *succeeded* - operation completed successfully<br>  *failed* - operation failed|
 |error|string|false|none|none|
 |xname|string|false|none|none|
 |deviceType|string|false|none|none|
@@ -5506,7 +5502,7 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 |actionID|string(uuid)|false|none|none|
 |startTime|string(date-time)|false|none|none|
 |endTime|string(date-time)|false|none|none|
-|state|string|false|none|The state of the action -<br><br><br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
+|state|string|false|none|The state of the action -<br><br><br><br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
 
 #### Enumerated Values
 

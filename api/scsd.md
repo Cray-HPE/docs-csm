@@ -71,9 +71,7 @@ Set TPM State in the BIOS settings.
 
 Base URLs:
 
-* <a href="http://api-gw-service-nmn.local/apis/scsd/v1">http://api-gw-service-nmn.local/apis/scsd/v1</a>
-
-* <a href="http://cray-scsd/v1">http://cray-scsd/v1</a>
+* <a href="https://api-gw-service-nmn.local/apis/scsd/v1">https://api-gw-service-nmn.local/apis/scsd/v1</a>
 
  License: Cray Proprietary
 
@@ -90,7 +88,7 @@ Endpoints that set or get Redfish Network Protocol information
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -99,7 +97,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
@@ -114,7 +112,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg', headers = headers)
 
 print(r.json())
 
@@ -137,7 +135,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -220,7 +218,7 @@ bearerAuth
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -229,7 +227,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
@@ -244,7 +242,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg', headers = headers)
 
 print(r.json())
 
@@ -267,7 +265,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -350,7 +348,7 @@ bearerAuth
 > Code samples
 
 ```http
-GET http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} HTTP/1.1
+GET https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
 
@@ -358,7 +356,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X GET http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} \
+curl -X GET https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -371,7 +369,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}', headers = headers)
 
 print(r.json())
 
@@ -393,7 +391,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -458,7 +456,7 @@ bearerAuth
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -467,7 +465,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
@@ -482,7 +480,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}', headers = headers)
 
 print(r.json())
 
@@ -505,7 +503,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -585,7 +583,7 @@ Endpoints that set Redfish access credentials
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -594,7 +592,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
@@ -609,7 +607,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds', headers = headers)
 
 print(r.json())
 
@@ -632,7 +630,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -707,7 +705,7 @@ bearerAuth
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname} HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname} HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -716,7 +714,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname} \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname} \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
@@ -731,7 +729,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname}', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname}', headers = headers)
 
 print(r.json())
 
@@ -754,7 +752,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname}", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -819,7 +817,7 @@ bearerAuth
 > Code samples
 
 ```http
-GET http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds HTTP/1.1
+GET https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
 
@@ -827,7 +825,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X GET http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds \
+curl -X GET https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -840,7 +838,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds', headers = headers)
 
 print(r.json())
 
@@ -862,7 +860,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -919,7 +917,7 @@ bearerAuth
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -928,7 +926,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
@@ -943,7 +941,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds', headers = headers)
 
 print(r.json())
 
@@ -966,7 +964,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1041,7 +1039,7 @@ Endpoints that set or get BIOS information
 > Code samples
 
 ```http
-GET http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} HTTP/1.1
+GET https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
 
@@ -1049,7 +1047,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X GET http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} \
+curl -X GET https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -1062,7 +1060,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}', headers = headers)
 
 print(r.json())
 
@@ -1084,7 +1082,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1143,7 +1141,7 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} HTTP/1.1
+PATCH https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -1152,7 +1150,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} \
+curl -X PATCH https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
@@ -1167,7 +1165,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.patch('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}', headers = headers)
+r = requests.patch('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}', headers = headers)
 
 print(r.json())
 
@@ -1190,7 +1188,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}", data)
+    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1265,7 +1263,7 @@ Endpoints that perform health and version checks
 > Code samples
 
 ```http
-GET http://api-gw-service-nmn.local/apis/scsd/v1/version HTTP/1.1
+GET https://api-gw-service-nmn.local/apis/scsd/v1/version HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
 
@@ -1273,7 +1271,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X GET http://api-gw-service-nmn.local/apis/scsd/v1/version \
+curl -X GET https://api-gw-service-nmn.local/apis/scsd/v1/version \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -1286,7 +1284,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://api-gw-service-nmn.local/apis/scsd/v1/version', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/scsd/v1/version', headers = headers)
 
 print(r.json())
 
@@ -1308,7 +1306,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/scsd/v1/version", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/scsd/v1/version", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1356,7 +1354,7 @@ Endpoints that create, delete, fetch, and apply TLS certs
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -1365,7 +1363,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
@@ -1380,7 +1378,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts', headers = headers)
 
 print(r.json())
 
@@ -1403,7 +1401,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1470,7 +1468,7 @@ bearerAuth
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -1479,7 +1477,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
@@ -1494,7 +1492,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts', headers = headers)
 
 print(r.json())
 
@@ -1517,7 +1515,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1584,7 +1582,7 @@ bearerAuth
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -1593,7 +1591,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
@@ -1608,7 +1606,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts', headers = headers)
 
 print(r.json())
 
@@ -1631,7 +1629,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1702,7 +1700,7 @@ bearerAuth
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -1711,7 +1709,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
@@ -1726,7 +1724,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts', headers = headers)
 
 print(r.json())
 
@@ -1749,7 +1747,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1817,14 +1815,14 @@ bearerAuth
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname} HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname} HTTP/1.1
 Host: api-gw-service-nmn.local
 
 ```
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname} \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname} \
   -H 'Authorization: Bearer {access-token}'
 
 ```
@@ -1835,7 +1833,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname}', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname}', headers = headers)
 
 print(r.json())
 
@@ -1856,7 +1854,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname}", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1900,14 +1898,14 @@ bearerAuth
 > Code samples
 
 ```http
-GET http://api-gw-service-nmn.local/apis/scsd/v1/liveness HTTP/1.1
+GET https://api-gw-service-nmn.local/apis/scsd/v1/liveness HTTP/1.1
 Host: api-gw-service-nmn.local
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://api-gw-service-nmn.local/apis/scsd/v1/liveness \
+curl -X GET https://api-gw-service-nmn.local/apis/scsd/v1/liveness \
   -H 'Authorization: Bearer {access-token}'
 
 ```
@@ -1918,7 +1916,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://api-gw-service-nmn.local/apis/scsd/v1/liveness', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/scsd/v1/liveness', headers = headers)
 
 print(r.json())
 
@@ -1939,7 +1937,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/scsd/v1/liveness", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/scsd/v1/liveness", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1972,14 +1970,14 @@ bearerAuth
 > Code samples
 
 ```http
-GET http://api-gw-service-nmn.local/apis/scsd/v1/readiness HTTP/1.1
+GET https://api-gw-service-nmn.local/apis/scsd/v1/readiness HTTP/1.1
 Host: api-gw-service-nmn.local
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://api-gw-service-nmn.local/apis/scsd/v1/readiness \
+curl -X GET https://api-gw-service-nmn.local/apis/scsd/v1/readiness \
   -H 'Authorization: Bearer {access-token}'
 
 ```
@@ -1990,7 +1988,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://api-gw-service-nmn.local/apis/scsd/v1/readiness', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/scsd/v1/readiness', headers = headers)
 
 print(r.json())
 
@@ -2011,7 +2009,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/scsd/v1/readiness", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/scsd/v1/readiness", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2044,7 +2042,7 @@ bearerAuth
 > Code samples
 
 ```http
-GET http://api-gw-service-nmn.local/apis/scsd/v1/health HTTP/1.1
+GET https://api-gw-service-nmn.local/apis/scsd/v1/health HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
 
@@ -2052,7 +2050,7 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X GET http://api-gw-service-nmn.local/apis/scsd/v1/health \
+curl -X GET https://api-gw-service-nmn.local/apis/scsd/v1/health \
   -H 'Accept: application/json' \
   -H 'Authorization: Bearer {access-token}'
 
@@ -2065,7 +2063,7 @@ headers = {
   'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://api-gw-service-nmn.local/apis/scsd/v1/health', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/scsd/v1/health', headers = headers)
 
 print(r.json())
 
@@ -2087,7 +2085,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/scsd/v1/health", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/scsd/v1/health", data)
     req.Header = headers
 
     client := &http.Client{}

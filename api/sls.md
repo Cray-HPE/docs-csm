@@ -121,8 +121,6 @@ Base URLs:
 
 * <a href="https://api-gw-service-nmn.local/apis/sls/v1">https://api-gw-service-nmn.local/apis/sls/v1</a>
 
-* <a href="http://cray-sls">http://cray-sls</a>
-
  License: Cray Proprietary
 
 # Authentication

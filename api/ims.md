@@ -106,8 +106,6 @@ Base URLs:
 
 * <a href="https://api-gw-service-nmn.local/apis/ims">https://api-gw-service-nmn.local/apis/ims</a>
 
-* <a href="cray-ims.services.svc.cluster.local">cray-ims.services.svc.cluster.local</a>
-
 License: <a href="http://www.hpe.com/">Hewlett Packard Enterprise Development LP</a>
 
 # Authentication

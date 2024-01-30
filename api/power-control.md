@@ -38,12 +38,6 @@ Base URLs:
 
 * <a href="https://api-gw-service-nmn.local/apis/power-control/v1">https://api-gw-service-nmn.local/apis/power-control/v1</a>
 
-* <a href="http://cray-power-control/v1">http://cray-power-control/v1</a>
-
-* <a href="https://loki-ncn-m001.us.cray.com/apis/power-control/v1">https://loki-ncn-m001.us.cray.com/apis/power-control/v1</a>
-
-* <a href="http://localhost:26970">http://localhost:26970</a>
-
  License: MIT
 
 # Authentication
