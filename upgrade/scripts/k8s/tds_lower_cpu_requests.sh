@@ -117,7 +117,7 @@ if [[ $smaKibanaDeployed -ne 0 ]]; then
 fi
 
 smaDashboardsDeployed=$(kubectl get pods -n services | grep sma-dashboards | wc -l)
-if [[ $smaKibanaDeployed -ne 0 ]]; then
+if [[ $smaDashboardsDeployed -ne 0 ]]; then
   if [ ! -z $sma_dashboards_new_cpu_request ]; then
     current_req=$(kubectl get deployment sma-dashboards -n services -o json | jq -r '.spec.template.spec.containers[] | select(.name== "sma-dashboards") | .resources.requests.cpu')
     echo "Patching sma-dashboards deployment with new cpu request of $sma_dashboards_new_cpu_request (from $current_req)"
