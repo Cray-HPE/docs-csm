@@ -395,22 +395,25 @@ new customized image.
     * Get a comma-separated list of all worker NCN xnames:
 
         ```bash
-        cray hsm state components list --role Management --subrole Worker --type Node --format json |
-          jq -r '.Components | map(.ID) | join(",")'
+        if IFS=$'\n' read -rd '' -a XNAMES; then
+          :
+        fi <<< "$(cray hsm state components list --role Management --subrole Worker --type Node --format json | jq -r '.Components | map(.ID) | join("\n")')"
         ```
 
     * Get a comma-separated list of all master NCN xnames:
 
         ```bash
-        cray hsm state components list --role Management --subrole Master --type Node --format json |
-          jq -r '.Components | map(.ID) | join(",")'
+        if IFS=$'\n' read -rd '' -a XNAMES; then
+          :
+        fi <<< "$(cray hsm state components list --role Management --subrole Master --type Node --format json | jq -r '.Components | map(.ID) | join("\n")')"
         ```
 
     * Get a comma-separated list of all storage NCN xnames:
 
         ```bash
-        cray hsm state components list --role Management --subrole Storage --type Node --format json |
-          jq -r '.Components | map(.ID) | join(",")'
+        if IFS=$'\n' read -rd '' -a XNAMES; then
+          :
+        fi <<< "$(cray hsm state components list --role Management --subrole Storage --type Node --format json | jq -r '.Components | map(.ID) | join("\n")')"
         ```
 
     * Get the xname for a specific NCN:
@@ -423,57 +426,80 @@ new customized image.
 
 1. (`ncn-mw#`) Update boot parameters for a management node.
 
-    Perform the following procedure **for each xname** identified in the previous step.
-
-    1. Get the existing `metal.server` setting for the component name (xname) of the node of interest.
+    1. When working with a group of `XNAMES` (use the previous step to collect the group of `XNAMES`).
 
         ```bash
-        XNAME=<node-xname>
-        METAL_SERVER=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' \
+        for XNAME in "${XNAMES[@]}"; do
+          echo "--- $XNAME ---"
+          METAL_SERVER=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' \
             | awk -F 'metal.server=' '{print $2}' \
             | awk -F ' ' '{print $1}')
-        echo "${METAL_SERVER}"
-        ```
-
-    1. Create updated boot parameters that point to the new artifacts.
-
-        1. Set the path to the artifacts in S3.
-
-            **NOTE:** This uses the `NEW_IMS_IMAGE_ID` variable set in an earlier step.
-
-            ```bash
-            S3_ARTIFACT_PATH="boot-images/${NEW_IMS_IMAGE_ID}"
-            echo "${S3_ARTIFACT_PATH}"
-            ```
-
-        1. Set the new `metal.server` value.
-
-            ```bash
-            NEW_METAL_SERVER="s3://${S3_ARTIFACT_PATH}/rootfs"
-            echo "${NEW_METAL_SERVER}"
-            ```
-
-        1. Determine the modified boot parameters for the node.
-
-            ```bash
-            PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | \
-                sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
-                sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
-                tr -d \")
-            echo "${PARAMS}"
-            ```
-
-            In the output of the `echo` command, verify that the value of `metal.server` is
-            correctly set to the value of `${NEW_METAL_SERVER}`.
-
-    1. Update BSS with the new boot parameters.
-
-        ```bash
-        cray bss bootparameters update --hosts "${XNAME}" \
+          echo "current metal.server: ${METAL_SERVER}"
+          S3_ARTIFACT_PATH="boot-images/${NEW_IMS_IMAGE_ID}"
+          NEW_METAL_SERVER="s3://${S3_ARTIFACT_PATH}/rootfs"
+          echo "    new metal.server: ${NEW_METAL_SERVER}"
+          PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | \
+            sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
+            sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
+            tr -d \")
+          cray bss bootparameters update --hosts "${XNAME}" \
             --kernel "s3://${S3_ARTIFACT_PATH}/kernel" \
             --initrd "s3://${S3_ARTIFACT_PATH}/initrd" \
             --params "${PARAMS}"
+        done
         ```
+
+    1. When working on one node at a time.
+
+        1. Get the existing `metal.server` setting for the component name (xname) of the node of interest.
+
+            ```bash
+            XNAME=<node-xname>
+            METAL_SERVER=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' \
+                | awk -F 'metal.server=' '{print $2}' \
+                | awk -F ' ' '{print $1}')
+            echo "${METAL_SERVER}"
+            ```
+
+        1. Create updated boot parameters that point to the new artifacts.
+
+            1. Set the path to the artifacts in S3.
+
+               **NOTE:** This uses the `NEW_IMS_IMAGE_ID` variable set in an earlier step.
+
+                ```bash
+                S3_ARTIFACT_PATH="boot-images/${NEW_IMS_IMAGE_ID}"
+                echo "${S3_ARTIFACT_PATH}"
+                ```
+
+            1. Set the new `metal.server` value.
+
+                ```bash
+                NEW_METAL_SERVER="s3://${S3_ARTIFACT_PATH}/rootfs"
+                echo "${NEW_METAL_SERVER}"
+                ```
+
+            1. Determine the modified boot parameters for the node.
+
+                ```bash
+                PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | \
+                    sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
+                    sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
+                    tr -d \")
+                echo "${PARAMS}"
+                ```
+
+                In the output of the `echo` command, verify that the value of `metal.server` is
+                correctly set to the value of `${NEW_METAL_SERVER}`.
+
+        1. Update BSS with the new boot parameters.
+
+            ```bash
+            cray bss bootparameters update --hosts "${XNAME}" \
+                --kernel "s3://${S3_ARTIFACT_PATH}/kernel" \
+                --initrd "s3://${S3_ARTIFACT_PATH}/initrd" \
+                --params "${PARAMS}"
+            ```
 
 ## Next steps
 
