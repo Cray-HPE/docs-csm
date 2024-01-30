@@ -262,6 +262,13 @@ In lieu of rebuilding the storage nodes, they will be live patched.
 
 ##### Kubernetes nodes rolling rebuild
 
+1. Set environment variables
+
+  ```bash
+  export CSM_REL_NAME="csm-${CSM_RELEASE}"
+  export CSM_ARTI_DIR="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}"
+  ```
+
 1. Proceed with the following sections from Stage 1:
 
   - [1.0](../Stage_1.md#start-typescript-on-ncn-m001)
