@@ -94,7 +94,9 @@ if [[ -z ${TARBALL_FILE} ]]; then
 
   if [[ -z ${ENDPOINT} ]]; then
     # default endpoint to release.algol60.net
-    ENDPOINT=https://release.algol60.net/csm-1.4/csm/
+    # Example input: CSM_RELEASE=1.4.0-alpha.3
+    # Example output: ENDPOINT=https://release.algol60.net/csm-1.4/csm/
+    ENDPOINT=https://release.algol60.net/csm-$(echo ${CSM_RELEASE} | cut -d'.' -f1,2)/csm/
     echo "Use internal endpoint: ${ENDPOINT}"
   fi
 
