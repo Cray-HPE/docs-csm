@@ -320,10 +320,10 @@ example showing how to find the IUF activity.
    ```
 
    This will output a list of IUF activity names. For example, if only a single install has been
-   performed on this system of the 22.04 recipe, the output may show a single line like this:
+   performed on this system of the 24.01 recipe, the output may show a single line like this:
 
    ```text
-   22.04-recipe-install
+   24.01-recipe-install
    ```
 
 1. (`ncn-m001#`) Record the most recent IUF activity name and directory in environment variables.
@@ -346,7 +346,7 @@ example showing how to find the IUF activity.
    This should display a path to a media directory. For example:
 
    ```text
-   /etc/cray/upgrade/csm/media/22.04-recipe-install
+   /etc/cray/upgrade/csm/media/24.01-recipe-install
    ```
 
 1. (`ncn-m001#`) Create a directory for the `sat bootprep` input files and the `session_vars.yaml` file.
@@ -454,8 +454,11 @@ example showing how to find the IUF activity.
    Save the name of the CFS configurations:
 
    ```bash
-   export KUBERNETES_CFS_CONFIG_NAME="management-22.4.0-csm-x.y.z"
-   export STORAGE_CFS_CONFIG_NAME="storage-22.4.0-csm-x.y.z"
+   export KUBERNETES_CFS_CONFIG_NAME=""
+   ```
+
+   ```bash
+   export STORAGE_CFS_CONFIG_NAME=""
    ```
 
    Note that the storage node configuration might also be titled `minimal-management` depending on the value
@@ -464,9 +467,15 @@ example showing how to find the IUF activity.
    Save the name of the IMS images from the `final_image_id` column:
 
    ```bash
-   export MASTER_IMAGE_ID="a22fb912-22be-449b-a51b-081af2d7aff6"
-   export WORKER_IMAGE_ID="241822c3-c7dd-44f8-98ca-0e7c7c6426d5"
-   export STORAGE_IMAGE_ID="79ab3d85-274d-4d01-9e2b-7c25f7e108ca"
+   export MASTER_IMAGE_ID=""
+   ```
+
+   ```bash
+   export WORKER_IMAGE_ID=""
+   ```
+ 
+   ```bash
+   export STORAGE_IMAGE_ID=""
    ```
 
 1. Assign the images to the management nodes in BSS.
