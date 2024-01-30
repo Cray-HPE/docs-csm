@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -26,7 +26,7 @@
 pod_name=$1
 target_node=$2
 
-if [ "$pod_name" == "" ] ||  [ "$target_node" == "" ]; then
+if [ "$pod_name" == "" ] || [ "$target_node" == "" ]; then
   echo "Usage: $0 <pod_name> <target_node>"
 fi
 

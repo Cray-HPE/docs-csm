@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -28,7 +28,7 @@
 
 . ./lib/ceph-health.sh
 
-function repair_cephfs () {
+function repair_cephfs() {
   echo "Beginning repair process for cephfs"
 
   echo "Running cephfs-journal-tool event recover_dentries summary"
@@ -41,7 +41,7 @@ function repair_cephfs () {
   ceph mds repaired cephfs:0
 }
 
-function upgrade_mds () {
+function upgrade_mds() {
 
   ceph fs ls
   ceph orch ps --daemon-type mds
@@ -50,14 +50,13 @@ function upgrade_mds () {
   date=$(date +%m%d%y.%H%M)
 
   echo "Backing up the Ceph MDS Journal"
-  for mds_node in $(ceph mds metadata -f json-pretty|jq -r '.[].name'|cut -d . -f 2)
-  do
+  for mds_node in $(ceph mds metadata -f json-pretty | jq -r '.[].name' | cut -d . -f 2); do
     pdsh -w $mds_node cephfs-journal-tool --rank cephfs:all journal export /root/backup."$date".bin
   done
   #shellcheck disable=SC2155
-  export standby_mdss=$(ceph fs dump -f json-pretty|jq -r '.standbys|map(.name)|join(" ")')
+  export standby_mdss=$(ceph fs dump -f json-pretty | jq -r '.standbys|map(.name)|join(" ")')
   #shellcheck disable=SC2155
-  export active_mds=$(ceph fs status -f json-pretty|jq -r '.mdsmap[]|select(.state=="active")|.name')
+  export active_mds=$(ceph fs status -f json-pretty | jq -r '.mdsmap[]|select(.state=="active")|.name')
   export mds_cluster="$active_mds $standby_mdss"
 
   ceph fs set cephfs max_mds 1
@@ -67,24 +66,23 @@ function upgrade_mds () {
   echo "Active MDS is: $active_mds"
   echo "Standby MDS(s) are: $standby_mdss"
 
-  ceph orch apply mds cephfs --placement="3 $(ceph node ls |jq -r '.mon|map(.[])|join(" ")')"
+  ceph orch apply mds cephfs --placement="3 $(ceph node ls | jq -r '.mon|map(.[])|join(" ")')"
 
   wait_for_running_daemons mds 3
 
-  for host in $mds_cluster
-  do
-   echo "Stopping mds service on $host"
-   ssh "$host" "systemctl stop ceph-mds.target"
-   echo "Cleaning up /var/lib/ceph/mds/ceph-* on $host"
-   ssh "$host" "rm -rf /var/lib/ceph/mds/ceph-*"
+  for host in $mds_cluster; do
+    echo "Stopping mds service on $host"
+    ssh "$host" "systemctl stop ceph-mds.target"
+    echo "Cleaning up /var/lib/ceph/mds/ceph-* on $host"
+    ssh "$host" "rm -rf /var/lib/ceph/mds/ceph-*"
   done
 
   ceph fs set cephfs standby_count_wanted 2
   ceph fs set cephfs allow_standby_replay true
   wait_for_health_ok
 
-  fsmap_in=$(ceph status -f json-pretty |jq '.fsmap.in')
-  fsmap_up=$(ceph status -f json-pretty |jq '.fsmap.up')
+  fsmap_in=$(ceph status -f json-pretty | jq '.fsmap.in')
+  fsmap_up=$(ceph status -f json-pretty | jq '.fsmap.up')
 
   echo "Checking to see if mds file system is healthy"
   if [[ $fsmap_in -ne $fsmap_up ]]; then
