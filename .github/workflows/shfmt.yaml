@@ -21,26 +21,26 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: shellcheck
+name: shfmt
 on:
   pull_request:
 
 jobs:
-  shellcheck:
+  shfmt:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
 
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v42
+      uses: tj-actions/changed-files@v37
       with:
         files: "**/*.sh"
         files_ignore: |
           .github/**/*
           api/*
 
-    - uses: docker://koalaman/shellcheck:stable
+    - uses: docker://mvdan/shfmt:v3
       if: ${{ steps.changed-files.outputs.all_changed_files }}
       with:
-        args: --severity=warning --color=always ${{ steps.changed-files.outputs.all_changed_files }}
+        args: -ci -s -i 2 -bn -sr -d ${{ steps.changed-files.outputs.all_changed_files }}
