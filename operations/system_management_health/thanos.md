@@ -116,6 +116,31 @@ thanos query \
 --endpoint         "<store-api2>:<grpc-port>"
 ```
 
+To access Querier GUI, use `ssh` port-forwarding.
+
+1. Use `kubectl` command to get the `SERVICE-IP` of `cray-sysmgmt-health-thanos-query` service.
+
+    ```yaml
+    kubectl get service -n sysmgmt-health cray-sysmgmt-health-thanos-query
+    ```
+  
+   Expected output looks similar to the following:
+
+    ```text
+    NAME                               TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)              AGE
+    cray-sysmgmt-health-thanos-query   ClusterIP   10.11.12.13   <none>        9090/TCP,10901/TCP   122d
+    ```
+
+1. Use `ssh` port-forwarding using the service IP.
+
+    ```text
+    ssh root@SYSTEM-IP -L 9090:SERVICE-IP:9090
+    ```
+
+1. Open `localhost:9090` in the browser to access the GUI.
+
+NOTE: In this case `SERVICE-IP` is `10.11.12.13` and `SYSTEM-IP` is the IP Address of the host system.
+
 ### Thanos Store
 
 The `thanos store` command (also known as Store Gateway) implements the Store API on top of historical data in an object storage bucket. It acts primarily as an API gateway and therefore does not need significant amounts of local disk space.
