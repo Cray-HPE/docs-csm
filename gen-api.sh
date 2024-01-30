@@ -69,6 +69,16 @@ find "${manifest_dir}" -name "*.yaml" | while read -r manifest_file; do
     if [ -n "${endpoint_version}" ]; then
       ${yq} e -i ".info.version=\"${endpoint_version}\"" "/swagger/${endpoint_name}.yaml"
     fi
+    if [ "${endpoint_name}" != bss ] \
+      && [ "${endpoint_name}" != hbtd ] \
+      && [ "${endpoint_name}" != nls ] \
+      && [ "${endpoint_name}" != smd ] \
+      && [ "${endpoint_name}" != sts ] \
+      && [ "${endpoint_name}" != tapms-operator ] \
+      && [ "${endpoint_name}" != uas-mgr ]; then
+      ${yq} e -i '.components.securitySchemes.bearerAuth={"type": "http", "scheme": "bearer"}' "/swagger/${endpoint_name}.yaml"
+      ${yq} e -i '.security=[{"bearerAuth": []}]' "/swagger/${endpoint_name}.yaml"
+    fi
     echo "Producing markdown for ${endpoint_name} out of ${endpoint_url} ..."
     docker exec widdershins widdershins "/swagger/${endpoint_name}.yaml" -o "/api/${endpoint_name}.md" --omitHeader --language_tabs http shell python go
   done < <(${yq} e '.spec.charts[].swagger[] | (.name + "|" + .url + "|" + (.version // "") + "|" + (.title // ""))' "/manifests/$(basename "${manifest_file}")")

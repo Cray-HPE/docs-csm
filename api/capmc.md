@@ -218,8 +218,9 @@ Status Code **200**
 |» ready|[string]|false|none|Optional, list of booted components by xname. Operating system is fully booted and sending heartbeats.|
 |» standby|[string]|false|none|Optional, list of components in standby by xname. Components that were previously booted and but are no longer sending heartbeat.|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None
 </aside>
 
 ## post__xname_reinit
@@ -362,8 +363,9 @@ Status Code **200**
 |»» err_msg|string|true|none|Message indicating any error encountered.|
 |»» xname|string|true|none|Component ID failing power restart attempt.|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None
 </aside>
 
 ## post__xname_on
@@ -510,8 +512,9 @@ Status Code **200**
 |»» err_msg|string|true|none|Message indicating any error encountered.|
 |»» xname|string|true|none|Component ID failing power up attempt.|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None
 </aside>
 
 ## post__xname_off
@@ -658,8 +661,9 @@ Status Code **200**
 |»» e|integer(int32)|true|none|Non-zero status code for failed request.|
 |»» err_msg|string|true|none|Message indicating any error encountered.|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None
 </aside>
 
 <h1 id="cray-advanced-platform-monitoring-and-control-capmc--power-capping">power capping</h1>
@@ -816,8 +820,9 @@ Status Code **200**
 |»»» name|string|true|none|Unique control or status object identifier.|
 |»»» val|integer(int32)|true|none|Control object setting, or zero to indicate control is unconstrained, units are dependent upon control type.|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None
 </aside>
 
 ## post__get_power_cap_capabilities
@@ -996,8 +1001,9 @@ Status Code **200**
 |»»» min|integer(int32)|true|none|Minimum value which may be assigned to the control object, units are dependent upon control type.|
 |»»» max|integer(int32)|true|none|Maximum value which may be assigned to the control object, units are dependent upon control type.|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None
 </aside>
 
 ## post__set_power_cap
@@ -1156,8 +1162,9 @@ Status Code **200**
 |»» e|integer(int32)|true|none|Error status, non-zero indicates operation failed on this node.|
 |»» err_msg|string|true|none|Message indicating any error encountered.|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None
 </aside>
 
 <h1 id="cray-advanced-platform-monitoring-and-control-capmc--utilities">utilities</h1>
@@ -1259,8 +1266,9 @@ Status Code **200**
 |» vault|string|true|none|Description of the connection to the credentials vault.  If there is an error returned when attempting to access the vault that will be included here.|
 |» hsm|string|true|none|Status of the connection to the Hardware State Manager (HSM).  Any error reported by an attempt to access the HSM will be included in this description.|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None
 </aside>
 
 ## get__liveness
@@ -1344,8 +1352,9 @@ This is primarily an endpoint for the automated Kubernetes system.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|[Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)|[httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None
 </aside>
 
 ## get__readiness
@@ -1429,8 +1438,9 @@ This is primarily an endpoint for the automated Kubernetes system.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|[Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)|[httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+None
 </aside>
 
 # Schemas

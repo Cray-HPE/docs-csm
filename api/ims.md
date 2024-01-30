@@ -110,6 +110,10 @@ Base URLs:
 
 License: <a href="http://www.hpe.com/">Hewlett Packard Enterprise Development LP</a>
 
+# Authentication
+
+- HTTP Authentication, scheme: bearer 
+
 <h1 id="image-management-service-images">images</h1>
 
 Interact with image records
@@ -130,14 +134,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/v3/images \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/v3/images', headers = headers)
@@ -158,6 +164,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -227,8 +234,9 @@ Status Code **200**
 |arch|aarch64|
 |arch|x86_64|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post_v3_image
@@ -249,7 +257,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/ims/v3/images \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -257,7 +266,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/ims/v3/images \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/ims/v3/images', headers = headers)
@@ -279,6 +289,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -345,8 +356,9 @@ Create a new ImageRecord and register the new image with IMS.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_all_v3_images
@@ -365,14 +377,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/v3/images \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/v3/images', headers = headers)
@@ -393,6 +407,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -434,8 +449,9 @@ Delete all ImageRecords. Deleted images are soft deleted and added to the /delet
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Image records deleted successfully|None|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v3_image
@@ -454,14 +470,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/v3/images/{image_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/v3/images/{image_id}', headers = headers)
@@ -482,6 +500,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -533,8 +552,9 @@ Retrieve an image by image_id.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_v3_image
@@ -555,7 +575,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/images/{image_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -563,7 +584,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/images/{image_id} \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/ims/v3/images/{image_id}', headers = headers)
@@ -585,6 +607,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -653,8 +676,9 @@ Update an ImageRecord in IMS.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v3_image
@@ -673,14 +697,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/v3/images/{image_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/v3/images/{image_id}', headers = headers)
@@ -701,6 +727,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -749,8 +776,9 @@ Delete an ImageRecord by ID. Deleted images are soft deleted and added to the /d
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_all_v3_deleted_images
@@ -769,14 +797,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/v3/deleted/images \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/v3/deleted/images', headers = headers)
@@ -797,6 +827,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -868,8 +899,9 @@ Status Code **200**
 |arch|aarch64|
 |arch|x86_64|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_all_v3_deleted_images
@@ -888,14 +920,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/v3/deleted/images \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/v3/deleted/images', headers = headers)
@@ -916,6 +950,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -957,8 +992,9 @@ Permanently delete all DeletedImageRecords. Associated artifacts are permanently
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Image records were permanently deleted|None|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_all_v3_deleted_images
@@ -979,7 +1015,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/deleted/images \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -987,7 +1024,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/deleted/images \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/ims/v3/deleted/images', headers = headers)
@@ -1009,6 +1047,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1068,8 +1107,9 @@ Restore all DeletedImageRecords in IMS.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v3_deleted_image
@@ -1088,14 +1128,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/v3/deleted/images/{deleted_image_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/v3/deleted/images/{deleted_image_id}', headers = headers)
@@ -1116,6 +1158,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1168,8 +1211,9 @@ Retrieve deleted image details by using deleted_image_id.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v3_deleted_image
@@ -1188,14 +1232,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/v3/deleted/images/{deleted_image_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/v3/deleted/images/{deleted_image_id}', headers = headers)
@@ -1216,6 +1262,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1264,8 +1311,9 @@ Permanently delete image record associated with deleted_image_id. Associated art
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_v3_deleted_image
@@ -1286,7 +1334,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/deleted/images/{deleted_image_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1294,7 +1343,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/deleted/images/{delet
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/ims/v3/deleted/images/{deleted_image_id}', headers = headers)
@@ -1316,6 +1366,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1376,8 +1427,9 @@ Restore a DeletedImageRecord in IMS.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_all_v2_images
@@ -1396,14 +1448,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/images \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/images', headers = headers)
@@ -1424,6 +1478,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1493,8 +1548,9 @@ Status Code **200**
 |arch|aarch64|
 |arch|x86_64|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post_v2_image
@@ -1515,7 +1571,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/ims/images \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1523,7 +1580,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/ims/images \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/ims/images', headers = headers)
@@ -1545,6 +1603,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1612,8 +1671,9 @@ Create a new ImageRecord and register the new image with IMS.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_all_v2_images
@@ -1632,14 +1692,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/images \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/images', headers = headers)
@@ -1660,6 +1722,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1707,8 +1770,9 @@ Delete all ImageRecords.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Image records deleted successfully|None|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v2_image
@@ -1727,14 +1791,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/images/{image_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/images/{image_id}', headers = headers)
@@ -1755,6 +1821,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1806,8 +1873,9 @@ Retrieve an image by image_id.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_v2_image
@@ -1828,7 +1896,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/ims/images/{image_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1836,7 +1905,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/ims/images/{image_id} \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/ims/images/{image_id}', headers = headers)
@@ -1858,6 +1928,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1926,8 +1997,9 @@ Update an ImageRecord in IMS.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v2_image
@@ -1946,14 +2018,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/images/{image_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/images/{image_id}', headers = headers)
@@ -1974,6 +2048,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2023,8 +2098,9 @@ Delete an ImageRecord by image_id.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="image-management-service-healthz">healthz</h1>
@@ -2047,14 +2123,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/healthz/ready \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/healthz/ready', headers = headers)
@@ -2075,6 +2153,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2105,8 +2184,9 @@ Readiness probe for IMS. This is used by Kubernetes to determine if IMS is ready
 
 <h3 id="get_healthz_ready-responseschema">Response Schema</h3>
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_healthz_live
@@ -2125,14 +2205,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/healthz/live \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/healthz/live', headers = headers)
@@ -2153,6 +2235,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2183,8 +2266,9 @@ Liveness probe for IMS. This is used by Kubernetes to determine if IMS is respon
 
 <h3 id="get_healthz_live-responseschema">Response Schema</h3>
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="image-management-service-jobs">jobs</h1>
@@ -2207,14 +2291,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/v3/jobs \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/v3/jobs', headers = headers)
@@ -2235,6 +2321,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2360,8 +2447,9 @@ Status Code **200**
 |arch|aarch64|
 |arch|x86_64|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post_v3_job
@@ -2382,7 +2470,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/ims/v3/jobs \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -2390,7 +2479,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/ims/v3/jobs \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/ims/v3/jobs', headers = headers)
@@ -2412,6 +2502,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2552,8 +2643,9 @@ depending on request body parameter, job_type.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_all_v3_jobs
@@ -2572,14 +2664,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/v3/jobs \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/v3/jobs', headers = headers)
@@ -2600,6 +2694,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2664,8 +2759,9 @@ Delete all job records.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Job records deleted successfully|None|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v3_job
@@ -2684,14 +2780,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/v3/jobs/{job_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/v3/jobs/{job_id}', headers = headers)
@@ -2712,6 +2810,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2789,8 +2888,9 @@ Retrieve JobRecord by job_id
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A job record|[JobRecord](#schemajobrecord)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_v3_job
@@ -2811,7 +2911,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/jobs/{job_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -2819,7 +2920,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/jobs/{job_id} \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/ims/v3/jobs/{job_id}', headers = headers)
@@ -2841,6 +2943,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2931,8 +3034,9 @@ Update a job record. Internal use only. Not for API consumers.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v3_job
@@ -2951,14 +3055,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/v3/jobs/{job_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/v3/jobs/{job_id}', headers = headers)
@@ -2979,6 +3085,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3027,8 +3134,9 @@ Delete a job record by job_id. This also deletes the underlying Kubernetes resou
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_all_v2_jobs
@@ -3047,14 +3155,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/jobs \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/jobs', headers = headers)
@@ -3075,6 +3185,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3200,8 +3311,9 @@ Status Code **200**
 |arch|aarch64|
 |arch|x86_64|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post_v2_job
@@ -3222,7 +3334,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/ims/jobs \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -3230,7 +3343,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/ims/jobs \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/ims/jobs', headers = headers)
@@ -3252,6 +3366,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3392,8 +3507,9 @@ depending on request body parameter, job_type.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_all_v2_jobs
@@ -3412,14 +3528,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/jobs \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/jobs', headers = headers)
@@ -3440,6 +3558,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3504,8 +3623,9 @@ Delete all job records.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Job records deleted successfully|None|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v2_job
@@ -3524,14 +3644,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/jobs/{job_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/jobs/{job_id}', headers = headers)
@@ -3552,6 +3674,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3629,8 +3752,9 @@ Retrieve JobRecord by job_id
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A job record|[JobRecord](#schemajobrecord)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_v2_job
@@ -3651,7 +3775,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/ims/jobs/{job_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -3659,7 +3784,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/ims/jobs/{job_id} \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/ims/jobs/{job_id}', headers = headers)
@@ -3681,6 +3807,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3771,8 +3898,9 @@ Update a job record. Internal use only. Not for API consumers.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v2_job
@@ -3791,14 +3919,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/jobs/{job_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/jobs/{job_id}', headers = headers)
@@ -3819,6 +3949,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3867,8 +3998,9 @@ Delete a job record by job_id. This also deletes the underlying Kubernetes resou
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="image-management-service-recipes">recipes</h1>
@@ -3891,14 +4023,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/v3/recipes \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/v3/recipes', headers = headers)
@@ -3919,6 +4053,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4008,8 +4143,9 @@ Status Code **200**
 |arch|aarch64|
 |arch|x86_64|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post_v3_recipes
@@ -4030,7 +4166,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/ims/v3/recipes \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -4038,7 +4175,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/ims/v3/recipes \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/ims/v3/recipes', headers = headers)
@@ -4060,6 +4198,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4145,8 +4284,9 @@ A compressed Kiwi-NG image description is actually stored in the artifact reposi
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_all_v3_recipes
@@ -4165,14 +4305,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/v3/recipes \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/v3/recipes', headers = headers)
@@ -4193,6 +4335,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4234,8 +4377,9 @@ Delete all RecipeRecords. Deleted recipes are soft deleted and added to the /del
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Recipe records deleted successfully|None|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v3_recipe
@@ -4254,14 +4398,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/v3/recipes/{recipe_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/v3/recipes/{recipe_id}', headers = headers)
@@ -4282,6 +4428,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4341,8 +4488,9 @@ Retrieve a RecipeRecord by ID
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A recipe record|[RecipeRecord](#schemareciperecord)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_v3_recipe
@@ -4363,7 +4511,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/recipes/{recipe_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -4371,7 +4520,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/recipes/{recipe_id} \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/ims/v3/recipes/{recipe_id}', headers = headers)
@@ -4393,6 +4543,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4477,8 +4628,9 @@ Update a RecipeRecord in IMS.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v3_recipe
@@ -4497,14 +4649,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/v3/recipes/{recipe_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/v3/recipes/{recipe_id}', headers = headers)
@@ -4525,6 +4679,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4573,8 +4728,9 @@ Delete a RecipeRecord by ID. The deleted recipes are soft deleted and added to t
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_all_v3_deleted_recipes
@@ -4593,14 +4749,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/v3/deleted/recipes \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/v3/deleted/recipes', headers = headers)
@@ -4621,6 +4779,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4703,8 +4862,9 @@ Status Code **200**
 |linux_distribution|sles15|
 |linux_distribution|centos7|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_all_v3_deleted_recipes
@@ -4723,14 +4883,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/v3/deleted/recipes \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/v3/deleted/recipes', headers = headers)
@@ -4751,6 +4913,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4792,8 +4955,9 @@ Permanently delete all DeletedRecipeRecords. Associated artifacts are permanentl
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Recipe records were permanently deleted|None|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_all_v3_deleted_recipes
@@ -4814,7 +4978,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/deleted/recipes \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -4822,7 +4987,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/deleted/recipes \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/ims/v3/deleted/recipes', headers = headers)
@@ -4844,6 +5010,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4903,8 +5070,9 @@ Restore all DeletedRecipeRecords in IMS.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v3_deleted_recipe
@@ -4923,14 +5091,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/v3/deleted/recipes/{recipe_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/v3/deleted/recipes/{recipe_id}', headers = headers)
@@ -4951,6 +5121,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5005,8 +5176,9 @@ Retrieve a DeletedRecipeRecord by ID
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A deleted recipe record|[DeletedRecipeRecord](#schemadeletedreciperecord)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v3_deleted_recipe
@@ -5025,14 +5197,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/v3/deleted/recipes/{recipe_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/v3/deleted/recipes/{recipe_id}', headers = headers)
@@ -5053,6 +5227,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5101,8 +5276,9 @@ Permanently delete a DeletedRecipeRecord by ID. Associated artifacts are permane
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_v3_deleted_recipe
@@ -5123,7 +5299,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/deleted/recipes/{recipe_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -5131,7 +5308,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/deleted/recipes/{reci
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/ims/v3/deleted/recipes/{recipe_id}', headers = headers)
@@ -5153,6 +5331,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5213,8 +5392,9 @@ Restore a DeletedRecipeRecord in IMS.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_all_v2_recipes
@@ -5233,14 +5413,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/recipes \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/recipes', headers = headers)
@@ -5261,6 +5443,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5350,8 +5533,9 @@ Status Code **200**
 |arch|aarch64|
 |arch|x86_64|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post_v3_recipe
@@ -5372,7 +5556,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/ims/recipes \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -5380,7 +5565,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/ims/recipes \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/ims/recipes', headers = headers)
@@ -5402,6 +5588,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5487,8 +5674,9 @@ A compressed Kiwi-NG image description is actually stored in the artifact reposi
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_all_v2_recipes
@@ -5507,14 +5695,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/recipes \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/recipes', headers = headers)
@@ -5535,6 +5725,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5582,8 +5773,9 @@ Delete all RecipeRecords.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Recipe records deleted successfully|None|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v2_recipe
@@ -5602,14 +5794,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/recipes/{recipe_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/recipes/{recipe_id}', headers = headers)
@@ -5630,6 +5824,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5689,8 +5884,9 @@ Retrieve a RecipeRecord by ID
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A recipe record|[RecipeRecord](#schemareciperecord)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_v2_recipe
@@ -5711,7 +5907,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/ims/recipes/{recipe_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -5719,7 +5916,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/ims/recipes/{recipe_id} \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/ims/recipes/{recipe_id}', headers = headers)
@@ -5741,6 +5939,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5825,8 +6024,9 @@ Update a RecipeRecord in IMS.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v2_recipe
@@ -5845,14 +6045,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/recipes/{recipe_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/recipes/{recipe_id}', headers = headers)
@@ -5873,6 +6075,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5922,8 +6125,9 @@ Delete a recipe by ID.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="image-management-service-public-keys">public keys</h1>
@@ -5946,14 +6150,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/v3/public-keys \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/v3/public-keys', headers = headers)
@@ -5974,6 +6180,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6027,8 +6234,9 @@ Status Code **200**
 |» name|string|true|none|Name of the public key|
 |» public_key|string|true|none|The raw public key|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post_v3_public_key
@@ -6049,7 +6257,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/ims/v3/public-keys \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -6057,7 +6266,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/ims/v3/public-keys \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/ims/v3/public-keys', headers = headers)
@@ -6079,6 +6289,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6135,8 +6346,9 @@ Create a new public SSH key record. Uploaded by administrator to allow them to a
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_all_v3_public_keys
@@ -6155,14 +6367,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/v3/public-keys \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/v3/public-keys', headers = headers)
@@ -6183,6 +6397,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6224,8 +6439,9 @@ Delete all public key-records. Deleted public-keys are soft deleted and added to
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Public key records deleted successfully|None|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v3_public_key
@@ -6244,14 +6460,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/v3/public-keys/{public_key_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/v3/public-keys/{public_key_id}', headers = headers)
@@ -6272,6 +6490,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6318,8 +6537,9 @@ Retrieve a public key by public_key_id
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v3_public_key
@@ -6338,14 +6558,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/v3/public-keys/{public_key_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/v3/public-keys/{public_key_id}', headers = headers)
@@ -6366,6 +6588,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6414,8 +6637,9 @@ Delete a PublicKeyRecord by ID. Deleted public-keys are soft deleted and added t
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_all_v3_deleted_public_keys
@@ -6434,14 +6658,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/v3/deleted/public-keys \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/v3/deleted/public-keys', headers = headers)
@@ -6462,6 +6688,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6517,8 +6744,9 @@ Status Code **200**
 |» name|string|true|none|Name of the public key|
 |» public_key|string|true|none|The raw public key|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_all_v3_deleted_public_keys
@@ -6537,14 +6765,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/v3/deleted/public-keys \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/v3/deleted/public-keys', headers = headers)
@@ -6565,6 +6795,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6606,8 +6837,9 @@ Permanently delete all public key-records.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|PublicKey records were permanently deleted|None|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_all_v3_deleted_public_keys
@@ -6628,7 +6860,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/deleted/public-keys \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -6636,7 +6869,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/deleted/public-keys \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/ims/v3/deleted/public-keys', headers = headers)
@@ -6658,6 +6892,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6717,8 +6952,9 @@ Restore all DeletedPublicKeyRecord in IMS.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v3_deleted_public_key
@@ -6737,14 +6973,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/v3/deleted/public-keys/{deleted_public_key_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/v3/deleted/public-keys/{deleted_public_key_id}', headers = headers)
@@ -6765,6 +7003,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6812,8 +7051,9 @@ Retrieve a deleted public key by deleted_public_key_id
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v3_deleted_public_key
@@ -6832,14 +7072,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/v3/deleted/public-keys/{deleted_public_key_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/v3/deleted/public-keys/{deleted_public_key_id}', headers = headers)
@@ -6860,6 +7102,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6908,8 +7151,9 @@ Permanently delete a DeletedPublicKeyRecord by ID.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_v3_deleted_public_key
@@ -6930,7 +7174,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/deleted/public-keys/{deleted_public_key_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -6938,7 +7183,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/ims/v3/deleted/public-keys/{
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/ims/v3/deleted/public-keys/{deleted_public_key_id}', headers = headers)
@@ -6960,6 +7206,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -7020,8 +7267,9 @@ Restore a DeletedPublicKeyRecord in IMS.
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_all_v2_public_keys
@@ -7040,14 +7288,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/public-keys \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/public-keys', headers = headers)
@@ -7068,6 +7318,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -7121,8 +7372,9 @@ Status Code **200**
 |» name|string|true|none|Name of the public key|
 |» public_key|string|true|none|The raw public key|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post_v2_public_key
@@ -7143,7 +7395,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/ims/public-keys \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -7151,7 +7404,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/ims/public-keys \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/ims/public-keys', headers = headers)
@@ -7173,6 +7427,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -7229,8 +7484,9 @@ Create a new public SSH key record. Uploaded by administrator to allow them to a
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_all_v2_public_keys
@@ -7249,14 +7505,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/public-keys \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/public-keys', headers = headers)
@@ -7277,6 +7535,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -7318,8 +7577,9 @@ Delete all public key records.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Public key records deleted successfully|None|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v2_public_key
@@ -7338,14 +7598,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/public-keys/{public_key_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/public-keys/{public_key_id}', headers = headers)
@@ -7366,6 +7628,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -7412,8 +7675,9 @@ Retrieve a public key by public_key_id
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v2_public_key
@@ -7432,14 +7696,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/ims/public-keys/{public_key_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/ims/public-keys/{public_key_id}', headers = headers)
@@ -7460,6 +7726,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -7508,8 +7775,9 @@ Delete a public key by public_key_id.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="image-management-service-version">version</h1>
@@ -7532,14 +7800,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/ims/version \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/ims/version', headers = headers)
@@ -7560,6 +7830,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -7594,8 +7865,9 @@ Retrieve the version of the IMS Service
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|IMS Version|string|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 # Schemas
