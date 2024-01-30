@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -95,7 +95,9 @@ if [[ -z ${TARBALL_FILE} ]]; then
 
     if [[ -z ${ENDPOINT} ]]; then
         # default endpoint to release.algol60.net
-        ENDPOINT=https://release.algol60.net/csm-1.3/csm/
+        # Example input: CSM_RELEASE=1.3.0-alpha.3
+        # Example output: ENDPOINT=https://release.algol60.net/csm-1.3/csm/
+        ENDPOINT=https://release.algol60.net/csm-$(echo ${CSM_RELEASE} | cut -d'.' -f1,2)/csm/
         echo "Use internal endpoint: ${ENDPOINT}"
     fi
 
