@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -23,14 +23,13 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-function ceph_upgrade_init () {
- echo "Starting upgrade with initial tasks"
- for host in $(ceph node ls| jq -r '.osd|keys[]')
-  do
-   ssh $host 'cephadm prepare-host' >> /etc/cray/ceph/cephadm_upgrade_$host.log
+function ceph_upgrade_init() {
+  echo "Starting upgrade with initial tasks"
+  for host in $(ceph node ls | jq -r '.osd|keys[]'); do
+    ssh $host 'cephadm prepare-host' >> /etc/cray/ceph/cephadm_upgrade_$host.log
   done
- cephadm ls >> /etc/cray/ceph/cephadm_upgrade.log
- echo "assimilating ceph.conf.."
- ceph config assimilate-conf -i /etc/ceph/ceph.conf
- ceph node ls
+  cephadm ls >> /etc/cray/ceph/cephadm_upgrade.log
+  echo "assimilating ceph.conf.."
+  ceph config assimilate-conf -i /etc/ceph/ceph.conf
+  ceph node ls
 }

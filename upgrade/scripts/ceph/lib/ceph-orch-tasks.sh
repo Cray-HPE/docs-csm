@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -23,12 +23,11 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-function ceph_orch_tasks () {
- for host in $(ceph node ls| jq -r '.osd|keys[]')
-  do
-   echo "Adding $host to the Ceph orchestrator"
-   ceph orch host add $host
+function ceph_orch_tasks() {
+  for host in $(ceph node ls | jq -r '.osd|keys[]'); do
+    echo "Adding $host to the Ceph orchestrator"
+    ceph orch host add $host
   done
- ceph orch ps
- ceph orch host ls
+  ceph orch ps
+  ceph orch host ls
 }

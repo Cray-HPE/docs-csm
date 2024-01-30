@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -45,32 +45,27 @@ sma_postgres_cluster_new_cpu_request=500m
 nexus_new_cpu_request=2
 cray_metallb_speaker_new_cpu_request=1
 
-
 if [ ! -z $spire_postgres_new_request ]; then
   current_req=$(kubectl get postgresql -n spire spire-postgres -o json | jq -r '.spec.resources.requests.cpu')
   echo "Patching spire-postgres cluster with new cpu request of $spire_postgres_new_request (from $current_req)"
   kubectl patch postgresql spire-postgres -n spire --type=json -p="[{'op' : 'replace', 'path':'/spec/resources/requests/cpu', 'value' : \"$spire_postgres_new_request\" }]"
-  until [[ $(kubectl get postgresql -n spire spire-postgres -o json | jq -r '.status.PostgresClusterStatus') == "Running" ]]
-  do
+  until [[ $(kubectl get postgresql -n spire spire-postgres -o json | jq -r '.status.PostgresClusterStatus') == "Running" ]]; do
     echo "Waiting for spire-postgres cluster to reach running state..."
     sleep 30
   done
   echo ""
 fi
 
-
 if [ ! -z $cray_smd_postgres_new_cpu_request ]; then
   current_req=$(kubectl get postgresql cray-smd-postgres -n services -o json | jq -r '.spec.resources.requests.cpu')
   echo "Patching cray-smd-postgres cluster with new cpu request of $cray_smd_postgres_new_cpu_request (from $current_req)"
   kubectl patch postgresql cray-smd-postgres -n services --type=json -p="[{'op' : 'replace', 'path':'/spec/resources/requests/cpu', 'value' : \"$cray_smd_postgres_new_cpu_request\" }]"
-  until [[ $(kubectl get postgresqls.acid.zalan.do -n services cray-smd-postgres -o json | jq -r '.status.PostgresClusterStatus') == "Running" ]]
-  do
+  until [[ $(kubectl get postgresqls.acid.zalan.do -n services cray-smd-postgres -o json | jq -r '.status.PostgresClusterStatus') == "Running" ]]; do
     echo "Waiting for cray-smd-postgres cluster to reach running state..."
     sleep 30
   done
   echo ""
 fi
-
 
 if [ ! -z $cray_smd_new_cpu_request ]; then
   current_req=$(kubectl get deployment -n services cray-smd -o json | jq -r '.spec.template.spec.containers[] | select(.name== "cray-smd") | .resources.requests.cpu')
@@ -79,7 +74,6 @@ if [ ! -z $cray_smd_new_cpu_request ]; then
   kubectl rollout status deployment -n services cray-smd
   echo ""
 fi
-
 
 if [ ! -z $cray_capmc_new_cpu_request ]; then
   current_req=$(kubectl get deployment -n services cray-capmc -o json | jq -r '.spec.template.spec.containers[] | select(.name== "cray-capmc") | .resources.requests.cpu')
@@ -123,7 +117,7 @@ if [[ $smaKibanaDeployed -ne 0 ]]; then
 fi
 
 smaDashboardsDeployed=$(kubectl get pods -n services | grep sma-dashboards | wc -l)
-if [[ $smaKibanaDeployed -ne 0 ]]; then
+if [[ $smaDashboardsDeployed -ne 0 ]]; then
   if [ ! -z $sma_dashboards_new_cpu_request ]; then
     current_req=$(kubectl get deployment sma-dashboards -n services -o json | jq -r '.spec.template.spec.containers[] | select(.name== "sma-dashboards") | .resources.requests.cpu')
     echo "Patching sma-dashboards deployment with new cpu request of $sma_dashboards_new_cpu_request (from $current_req)"
@@ -140,8 +134,7 @@ if [[ $kafkaDeployed -ne 0 ]]; then
     echo "Patching cluster-kafka with new cpu request of $cluster_kafka_new_cpu_request (from $current_req)"
     kubectl patch kafkas cluster -n sma --type=json -p="[{'op' : 'replace', 'path':'/spec/kafka/resources/requests/cpu', 'value' : \"$cluster_kafka_new_cpu_request\" }]"
     sleep 10
-    until [[ $(kubectl -n sma get statefulset cluster-kafka -o json | jq -r '.status.updatedReplicas') -eq 3 ]]
-    do
+    until [[ $(kubectl -n sma get statefulset cluster-kafka -o json | jq -r '.status.updatedReplicas') -eq 3 ]]; do
       echo "Waiting for cluster-kafka cluster to have three updated replicas..."
       sleep 30
     done
@@ -153,8 +146,7 @@ if [[ $kafkaDeployed -ne 0 ]]; then
     echo "Patching cluster-zookeeper statefulset with new cpu request of $cluster_zookeeper_new_cpu_request (from $current_req)"
     kubectl patch kafkas cluster -n sma --type=json -p="[{'op' : 'replace', 'path':'/spec/zookeeper/resources/requests/cpu', 'value' : \"$cluster_zookeeper_new_cpu_request\" }]"
     sleep 10
-    until [[ $(kubectl -n sma get statefulset cluster-zookeeper -o json | jq -r '.status.updatedReplicas') -eq 3 ]]
-    do
+    until [[ $(kubectl -n sma get statefulset cluster-zookeeper -o json | jq -r '.status.updatedReplicas') -eq 3 ]]; do
       echo "Waiting for cluster-zookeeper cluster to have three updated replicas..."
       sleep 30
     done
@@ -162,22 +154,19 @@ if [[ $kafkaDeployed -ne 0 ]]; then
   fi
 fi
 
-
 smaPgDeployed=$(kubectl get pods -n sma | grep sma-postgres-cluster | wc -l)
 if [[ $smaPgDeployed -ne 0 ]]; then
   if [ ! -z $sma_postgres_cluster_new_cpu_request ]; then
     current_req=$(kubectl get postgresql -n sma sma-postgres-cluster -o json | jq -r '.spec.resources.requests.cpu')
     echo "Patching sma-postgres-cluster statefulset with new cpu request of $sma_postgres_cluster_new_cpu_request (from $current_req)"
     kubectl patch postgresql -n sma sma-postgres-cluster --type=json -p="[{'op' : 'replace', 'path':'/spec/resources/requests/cpu', 'value' : \"$sma_postgres_cluster_new_cpu_request\" }]"
-    until [[ $(kubectl get postgresql -n sma sma-postgres-cluster -o json | jq -r '.status.PostgresClusterStatus') == "Running" ]]
-    do
+    until [[ $(kubectl get postgresql -n sma sma-postgres-cluster -o json | jq -r '.status.PostgresClusterStatus') == "Running" ]]; do
       echo "Waiting for sma-postgres-cluster cluster to reach running state..."
       sleep 30
     done
     echo ""
   fi
 fi
-
 
 if [ ! -z $nexus_new_cpu_request ]; then
   current_req=$(kubectl get deployment -n nexus nexus -o json | jq -r '.spec.template.spec.containers[] | select(.name== "nexus") | .resources.requests.cpu')

@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -58,8 +58,7 @@ masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u)
 #       so we can query "next" version here
 k8sVersionUpgradeTo=$(kubeadm version -o json | jq -r '.clientVersion.gitVersion')
 
-for master in $masters
-do
+for master in $masters; do
   echo "Upgrading kube-system pods for $master:"
   echo ""
   pdsh -b -S -w $master "kubeadm upgrade apply ${k8sVersionUpgradeTo} -y"

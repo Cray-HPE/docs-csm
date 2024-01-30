@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -24,28 +24,27 @@
 #
 
 function deployNLS() {
-    BUILDDIR="/tmp/build"
-    mkdir -p "$BUILDDIR"
-    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${BUILDDIR}/customizations.yaml"
-    manifestgen -i "${CSM_ARTI_DIR}/manifests/platform.yaml" -c "${BUILDDIR}/customizations.yaml" -o "${BUILDDIR}/iufnls.yaml"
-    charts="$(yq r $BUILDDIR/iufnls.yaml 'spec.charts[*].name')"
-    for chart in $charts; do
-        if [[ $chart != "cray-iuf" ]] && [[ $chart != "cray-nls" ]] && [[ $chart != "cray-postgres-operator" ]]; then
-            yq d -i ${BUILDDIR}/iufnls.yaml "spec.charts.(name==$chart)"
-        fi
-    done
+  BUILDDIR="/tmp/build"
+  mkdir -p "$BUILDDIR"
+  kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${BUILDDIR}/customizations.yaml"
+  manifestgen -i "${CSM_ARTI_DIR}/manifests/platform.yaml" -c "${BUILDDIR}/customizations.yaml" -o "${BUILDDIR}/iufnls.yaml"
+  charts="$(yq r $BUILDDIR/iufnls.yaml 'spec.charts[*].name')"
+  for chart in $charts; do
+    if [[ $chart != "cray-iuf" ]] && [[ $chart != "cray-nls" ]] && [[ $chart != "cray-postgres-operator" ]]; then
+      yq d -i ${BUILDDIR}/iufnls.yaml "spec.charts.(name==$chart)"
+    fi
+  done
 
-    yq w -i ${BUILDDIR}/iufnls.yaml "metadata.name" "iufnls"
-    yq d -i ${BUILDDIR}/iufnls.yaml "spec.sources"
+  yq w -i ${BUILDDIR}/iufnls.yaml "metadata.name" "iufnls"
+  yq d -i ${BUILDDIR}/iufnls.yaml "spec.sources"
 
-    for c in $(kubectl get crd |grep argo | cut -d' ' -f1)
-    do
-      kubectl label --overwrite crd $c app.kubernetes.io/managed-by="Helm"
-      kubectl annotate --overwrite crd $c meta.helm.sh/release-name="cray-nls"
-      kubectl annotate --overwrite crd $c meta.helm.sh/release-namespace="argo"
-    done
+  for c in $(kubectl get crd | grep argo | cut -d' ' -f1); do
+    kubectl label --overwrite crd $c app.kubernetes.io/managed-by="Helm"
+    kubectl annotate --overwrite crd $c meta.helm.sh/release-name="cray-nls"
+    kubectl annotate --overwrite crd $c meta.helm.sh/release-namespace="argo"
+  done
 
-    loftsman ship --charts-path "${CSM_ARTI_DIR}/helm/" --manifest-path ${BUILDDIR}/iufnls.yaml
+  loftsman ship --charts-path "${CSM_ARTI_DIR}/helm/" --manifest-path ${BUILDDIR}/iufnls.yaml
 }
 
 deployNLS

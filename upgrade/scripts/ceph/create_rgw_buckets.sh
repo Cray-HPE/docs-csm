@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -24,21 +24,21 @@
 #
 
 function ssh_keygen_keyscan() {
-    local target_ncn ncn_ip known_hosts
-    known_hosts="/root/.ssh/known_hosts"
-    sed -i 's@pdsh.*@@' $known_hosts
-    target_ncn="$1"
-    ncn_ip=$(host ${target_ncn} | awk '{ print $NF }')
-    [ -n "${ncn_ip}" ]
-    # Because we may be called without set -e, we should check return codes after running commands
-    [ $? -ne 0 ] && return 1
-    echo "${target_ncn} IP address is ${ncn_ip}"
-    ssh-keygen -R "${target_ncn}" -f "${known_hosts}"
-    [ $? -ne 0 ] && return 1
-    ssh-keygen -R "${ncn_ip}" -f "${known_hosts}"
-    [ $? -ne 0 ] && return 1
-    ssh-keyscan -H "${target_ncn},${ncn_ip}" >> "${known_hosts}"
-    return $?
+  local target_ncn ncn_ip known_hosts
+  known_hosts="/root/.ssh/known_hosts"
+  sed -i 's@pdsh.*@@' $known_hosts
+  target_ncn="$1"
+  ncn_ip=$(host ${target_ncn} | awk '{ print $NF }')
+  [ -n "${ncn_ip}" ]
+  # Because we may be called without set -e, we should check return codes after running commands
+  [ $? -ne 0 ] && return 1
+  echo "${target_ncn} IP address is ${ncn_ip}"
+  ssh-keygen -R "${target_ncn}" -f "${known_hosts}"
+  [ $? -ne 0 ] && return 1
+  ssh-keygen -R "${ncn_ip}" -f "${known_hosts}"
+  [ $? -ne 0 ] && return 1
+  ssh-keyscan -H "${target_ncn},${ncn_ip}" >> "${known_hosts}"
+  return $?
 }
 
 #shellcheck disable=SC2046
@@ -69,7 +69,7 @@ done
 source /etc/ansible/boto3_ansible/bin/activate
 
 playbook=/etc/ansible/ceph-rgw-users/ceph-rgw-users.yaml
-cat > $playbook <<EOF
+cat > $playbook << EOF
 #!/usr/bin/env ansible-playbook
 ---
 

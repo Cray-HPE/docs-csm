@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -29,10 +29,9 @@ upgrade_ntp_timezone_metadata() {
   local timezone_payload
   local upgrade_file
   # jq -r '.["b8:59:9f:fe:49:f1"]["user-data"]["ntp"]' ntp.json
-  for k in $(jq -r 'to_entries[] | "\(.key)"' data.json)
-  do
+  for k in $(jq -r 'to_entries[] | "\(.key)"' data.json); do
     # if it is not the global key, it is one of the host records we need to manipulate
-    if ! [[ "$k" == "Global" ]]; then
+    if ! [[ $k == "Global" ]]; then
       # shellcheck disable=SC2089
       ntp_query=".[\"$k\"][\"user-data\"][\"ntp\"]"
       # shellcheck disable=SC2090
@@ -44,8 +43,8 @@ upgrade_ntp_timezone_metadata() {
       timezone_payload="$(jq $timezone_query data.json)"
 
       # save the payload to a unique file
-      upgrade_file="upgrade-metadata-${k//:}.json"
-      cat <<EOF>"$upgrade_file"
+      upgrade_file="upgrade-metadata-${k//:/}.json"
+      cat << EOF > "$upgrade_file"
 {
   "user-data": {
     "ntp": $ntp_payload,
