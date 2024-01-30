@@ -230,7 +230,7 @@ advised to take backups of their local, site files.
 
 #### Image Customization
 
-1. Follow option 1, 2, or 3 in [Stage 0.3](../Stage_0_Prerequisites.md#stage-03---update-management-node-cfs-configuration-and-customize-worker-node-image).  
+1. Follow option 2 in [Stage 0.3](../Stage_0_Prerequisites.md#option-2-upgrade-of-csm-on-system-with-additional-products).  
 1. Follow the directions in [Stage 0.4](../Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data).
 
 ##### Storage nodes in-place update

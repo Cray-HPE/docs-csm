@@ -364,13 +364,13 @@ example showing how to find the IUF activity.
    file was used during the IUF activity.
 
    ```bash
-   cp -v "${MEDIA_DIR}/.bootprep-${ACTIVITY_NAME}/management-bootprep.yaml" "${BOOTPREP_DIR}"
+   cp -pv "${MEDIA_DIR}/.bootprep-${ACTIVITY_NAME}/management-bootprep.yaml" "${BOOTPREP_DIR}"
    ```
 
 1. (`ncn-m001#`) Copy the `session_vars.yaml` file into the directory.
 
    ```bash
-   cp -v "${ACTIVITY_DIR}/state/session_vars.yaml" "${BOOTPREP_DIR}"
+   cp -pv "${ACTIVITY_DIR}/state/session_vars.yaml" "${BOOTPREP_DIR}"
    ```
 
 1. (`ncn-m001#`) Modify the CSM version in the copied `session_vars.yaml`:
