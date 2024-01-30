@@ -4,6 +4,8 @@
 
 ## New
 
+### New Software Support
+
 * Highly available `prometheus` through integration of `thanos`
 * Support and migration to `bitnami-etcd`
 * Updates to all services using `etcd` cluster to migrate to use of `bitnami-etcd`
@@ -40,18 +42,10 @@
 * Enhanced Multi-Tenancy Phase II support
 * Improved IUF Logging
 * Created Networking Red Light / Green Light Dashboard
-
-* ### Monitoring
-
 * Removed clear text switch passwords from the `cray-sysmgmt-health-canu-test` pod log
-
-### Networking
-
-### Miscellaneous functionality
-
 * Ceph nodes run user facing docker registry that is writable anonymously
 
-### New hardware support
+### New Hardware Support
 
 * Add switches in HSM to PCS and allow for power reset actions
 * Updated HMS discovery process to populate a node's architecture when making the information available via Redfish
@@ -60,7 +54,9 @@
 * Hardware validation of the EX2500 Cabinet
 * Support JL627A switches as an edge router for BI-CAN
 
-### Automation improvements
+## Improvements
+
+### Automation Improvements
 
 * Updates to `etcd` health checks due to replacement of `etcd` vendor to `bitnami-etcd`
 * IUF stage for `management-nodes-rollout` consumes logs from `ncn-rebuild`
@@ -69,7 +65,7 @@
 * Argo-driven Upgrade Automation for Kubernetes Storage Nodes
 * Ceph upgrade added to automated storage upgrade  
 
-### Base platform component upgrades
+### Base Platform Component Upgrades
 
 | Platform Component           | Version        |
 |------------------------------|----------------|
@@ -95,7 +91,7 @@
 | `argo-workflow-controller`   | 3.4.5          |
 | `ceph`                       | 16.2.13        |
 
-### Security improvements
+### Security Improvements
 
 * CVE Kernel 5.14.21-150400.24.46.1 for `mozilla-nss`
 * Removed `postgresql` from NCNs to fix CVEs
@@ -118,7 +114,7 @@
 * Addressed `CVE-2023-38545` (curl & `libcurl`) on NCNs
 * Added Default RBAC Role for Telemetry API
   
-### Customer-requested enhancements
+### Customer-Requested Enhancements
 
 * Keycloak upgrade for CVE fixes
 * Enable bonded `NMN` connections for the UANs
@@ -141,13 +137,13 @@
 * Updated screenshots and doc steps for LDAP in upgraded Keycloak
 * Updated IUF management-nodes-rollout docs
 
-## Bug fixes
+## Bug Fixes
 
 * Fix for when QLogic adapter firmware stops responding then fails recovery causing the node to crash.
     * Fixes
         * QLogic/Marvel Driver Update - RPM: `qlgc-fastlinq-kmp-default-8.74.1.0_k5.14.21_150500.53-1.sles15sp5.x86_64.rpm`
         * SUSE Kernel Update: Version: `5.14.21-150400.24.92.1.27088.1.PTF.1215587`
-* Fix for invalid `preinstall` `VCS` check in IUF in the event of a fresh install
+* Fix for invalid `preinstall` VCS check in IUF in the event of a fresh install
 * Fix deployment failure due to DNS timeouts when `max_fails=0` is set in `coredns`
 * Fixed an issue on upgrade of master NCNs due to not generating the `admin-tools` keyring
 * Fix for a case where `bootprep` files are missing when `prepare-images` stage is run in IUF with one argument
@@ -171,7 +167,7 @@
 ## Deprecations
 
 * The `ipv4-resolvers` option has been removed for CSI as it is not used
-* CAPMC](glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
+* [CAPMC](glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
 * Removed ARS from Cray CLI and BSS API specification
 * Removed deprecated BOS V1 CFS fields from session templates
 
@@ -183,7 +179,8 @@ For a list of all deprecated CSM features, see [Deprecations](introduction/depre
 * Remove `metal-net` scripts as they are no longer used
 * Remove `etcd-operator` as a result of migration to use `bitnami-etcd`
 * [CRUS](glossary.md#compute-rolling-upgrade-service-crus)
-* Deprecated [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos)v1 session template and boot set fields are no longer stored in BOS. For more information, see [Deprecated fields](operations/boot_orchestration/Session_Templates.md#deprecated-fields)
+* Deprecated [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos) v1 session template and boot set fields are no longer stored in BOS.
+    * For more information, see [Deprecated fields](operations/boot_orchestration/Session_Templates.md#deprecated-fields)
 * Removed -P option from `cray-dhcp-kea` startup options
 * Stopped using `skopeo` images < 1.13.2
 
