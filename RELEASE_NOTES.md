@@ -145,8 +145,8 @@
 
 * Fix for when QLogic adapter firmware stops responding then fails recovery causing the node to crash.
 ** Fixes
-*** QLogic/Marvel Driver Update - RPM: qlgc-fastlinq-kmp-default-8.74.1.0_k5.14.21_150500.53-1.sles15sp5.x86_64.rpm
-*** SUSE Kernel Update: Version: 5.14.21-150400.24.92.1.27088.1.PTF.1215587
+*** QLogic/Marvel Driver Update - RPM: `qlgc-fastlinq-kmp-default-8.74.1.0_k5.14.21_150500.53-1.sles15sp5.x86_64.rpm`
+*** SUSE Kernel Update: Version: `5.14.21-150400.24.92.1.27088.1.PTF.1215587`
 * Fix for invalid `preinstall` `VCS` check in IUF in the event of a fresh install
 * Fix deployment failure due to DNS timeouts when `max_fails=0` is set in `coredns`
 * Fixed an issue on upgrade of master NCNs due to not generating the `admin-tools` keyring
