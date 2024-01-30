@@ -6,8 +6,8 @@
 
 ## Introduction
 
-This document guides an administrator through the patch update to Cray Systems Management `v1.4.3` from `v1.4.0`, `v1.4.1`,
-or `1.4.2`. If upgrading from CSM `v1.3.x` directly to `v1.4.4`, follow the procedures described
+This document guides an administrator through the patch update to Cray Systems Management `v1.4.4` from `v1.4.0`, `v1.4.1`,
+`1.4.2`, or `1.4.3`. If upgrading from CSM `v1.3.x` directly to `v1.4.4`, follow the procedures described
 in [Upgrade CSM](../README.md) instead.
 
 ## Bug fixes and improvements
@@ -120,7 +120,7 @@ products with IUF. If this step is skipped, IUF will fail when updating or upgra
 
 ### Upgrade Ceph and stop local Docker registries
 
-**Note:** This step is not be necessary if it was already completed by the CSM `v1.3.5` patch or `v1.4.2` patch. If it was already run,
+**Note:** This step is not necessary if it was already completed by the CSM `v1.3.5` patch, CSM `v1.4.2` patch, or CSM `V1.4.3` patch. If it was already run,
 the following steps can be re-executed to verify that Ceph daemons are using images in Nexus and the local Docker
 registries have been stopped.
 
