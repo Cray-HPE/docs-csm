@@ -329,7 +329,10 @@ example showing how to find the IUF activity.
 1. (`ncn-m001#`) Record the most recent IUF activity name and directory in environment variables.
 
    ```bash
-   export ACTIVITY_NAME="22.04-recipe-install"
+   export ACTIVITY_NAME=
+   ```
+
+   ```bash
    export ACTIVITY_DIR="/etc/cray/upgrade/csm/iuf/${ACTIVITY_NAME}"
    ```
 
