@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -25,29 +25,25 @@
 
 # Begin run on each mon/mgr
 
-function upgrade_ceph_mons () {
-for host in $(ceph node ls| jq -r '.mon|keys[]')
- do
-  #shellcheck disable=SC2154
-  ssh "$host" "cephadm --image $registry/ceph/ceph:v15.2.8 adopt --style legacy --name mon.$host" --skip-pull
-  (( counter=0 ))
-  #while [ $(ceph -f json-pretty orch ps|jq -r '.[]|select(.daemon_type|test("mon"))|select(.hostname|test("ncn-s001"))'|jq -r .status_desc) != "running" ]
-  while [[ $(ceph health -f json-pretty|jq -r .status) != "HEALTH_OK" ]]
-  do
-   echo "sleeping 5 seconds to allow services to start on $host"
-   sleep 5
-   ((counter++))
-   if [ "$counter" -gt 120 ]
-   then
-   break
-   fi
+function upgrade_ceph_mons() {
+  for host in $(ceph node ls | jq -r '.mon|keys[]'); do
+    #shellcheck disable=SC2154
+    ssh "$host" "cephadm --image $registry/ceph/ceph:v15.2.8 adopt --style legacy --name mon.$host" --skip-pull
+    ((counter = 0))
+    #while [ $(ceph -f json-pretty orch ps|jq -r '.[]|select(.daemon_type|test("mon"))|select(.hostname|test("ncn-s001"))'|jq -r .status_desc) != "running" ]
+    while [[ $(ceph health -f json-pretty | jq -r .status) != "HEALTH_OK" ]]; do
+      echo "sleeping 5 seconds to allow services to start on $host"
+      sleep 5
+      ((counter++))
+      if [ "$counter" -gt 120 ]; then
+        break
+      fi
+    done
+    echo "Confirming the MON daemon is bootstrapped by cephadm"
+    #shellcheck disable=SC2155
+    export verify_mon=$(cephadm ls | jq '.[]|select(.name=="mon.ncn-s001")|.name')
+    if [[ "mon.$host" == "$verify_mon" ]]; then
+      echo "Confirmed that $host is running $verify_mon via cephadm"
+    fi
   done
-  echo "Confirming the MON daemon is bootstrapped by cephadm"
-  #shellcheck disable=SC2155
-  export verify_mon=$(cephadm ls|jq '.[]|select(.name=="mon.ncn-s001")|.name')
-  if [[ "mon.$host" == "$verify_mon" ]]
-  then
-  echo "Confirmed that $host is running $verify_mon via cephadm"
-  fi
- done
 }

@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -44,8 +44,3 @@ jobs:
       if: ${{ steps.changed-files.outputs.all_changed_files }}
       with:
         args: --severity=warning --color=always ${{ steps.changed-files.outputs.all_changed_files }}
-
-    - uses: docker://mvdan/shfmt:v3
-      if: ${{ steps.changed-files.outputs.all_changed_files }}
-      with:
-        args: -ci -s -i 2 -bn -sr -d ${{ steps.changed-files.outputs.all_changed_files }}
