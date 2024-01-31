@@ -52,16 +52,16 @@ function wait_for_health_ok() {
   cnt=0
   cnt2=0
   while true; do
-    if [[ -n "$node" ]] && [[ "$cnt" -eq 300 ]] ; then
+    if [[ -n $node ]] && [[ $cnt -eq 300 ]]; then
       check_mon_daemon "${node}"
     else
-      if [[ "$cnt" -eq 360 ]]; then
+      if [[ $cnt -eq 360 ]]; then
         echo "ERROR: Giving up on waiting for Ceph to become healthy..."
         break
       fi
-      if [[ $(ceph crash ls-new -f json|jq -r '.|map(.crash_id)|length') -gt 0 ]]; then
+      if [[ $(ceph crash ls-new -f json | jq -r '.|map(.crash_id)|length') -gt 0 ]]; then
         echo "archiving ceph crashes that may have been caused by restarts."
-	ceph crash archive-all
+        ceph crash archive-all
       fi
       ceph_status=$(ceph health -f json-pretty | jq -r .status)
       if [[ $ceph_status == "HEALTH_OK" ]]; then
@@ -71,7 +71,7 @@ function wait_for_health_ok() {
     fi
     sleep 5
     echo "Sleeping for five seconds waiting for Ceph to be healthy..."
-    cnt2=$((cnt2+1))
+    cnt2=$((cnt2 + 1))
     if [[ $cnt2 -ge 10 ]]; then
       echo "Failing Ceph mgr daemon over to clear any stuck messages and sleeping 20 seconds."
       ceph mgr fail
@@ -86,32 +86,32 @@ function wait_for_running_daemons() {
   num_daemons=$2
   cnt=0
   while true; do
-    if [[ "$cnt" -eq 60 ]]; then
+    if [[ $cnt -eq 60 ]]; then
       echo "ERROR: Giving up on waiting for $num_daemons $daemon_type daemons to be running..."
       break
     fi
     output=$(ceph orch ps --daemon-type "$daemon_type" -f json-pretty | jq -r '.[] | select(.status_desc=="running") | .daemon_id')
-    if [[ -n "$output" ]]; then
+    if [[ -n $output ]]; then
       num_active=$(echo "$output" | wc -l)
-      if [[ "$num_active" -eq $num_daemons ]]; then
+      if [[ $num_active -eq $num_daemons ]]; then
         echo "Found $num_daemons running $daemon_type daemons -- continuing..."
         break
       fi
     fi
     sleep 5
     echo "Sleeping for five seconds waiting for $num_daemons running $daemon_type daemons..."
-    cnt=$((cnt+1))
+    cnt=$((cnt + 1))
   done
 }
 
 function wait_for_orch_hosts() {
-  for host in $(ceph node ls| jq -r '.osd|keys[]'); do
+  for host in $(ceph node ls | jq -r '.osd|keys[]'); do
     echo "Verifying $host is in ceph orch host output..."
     cnt=0
     until ceph orch host ls -f json-pretty | jq -r '.[].hostname' | grep -q "$host"; do
       echo "Sleeping five seconds to wait for $host to appear in ceph orch host output..."
       sleep 5
-      cnt=$((cnt+1))
+      cnt=$((cnt + 1))
       if [ "$cnt" -eq 120 ]; then
         echo "ERROR: Giving up waiting for $host to appear in ceph orch host output!"
         break
@@ -129,19 +129,19 @@ function wait_for_osd() {
     # here yet (after 30 seconds of the 5 minutes), let us kick the
     # active mgr.
     #
-    if [[ "$cnt" -eq 6 ]]; then
+    if [[ $cnt -eq 6 ]]; then
       echo "INFO: Restarting active mgr daemon to kick things along..."
       # shellcheck disable=SC2046
       ceph mgr fail $(ceph mgr dump | jq -r .active_name)
-      cnt=$((cnt+1))
+      cnt=$((cnt + 1))
       continue
     fi
-    if [[ "$cnt" -eq 60 ]]; then
+    if [[ $cnt -eq 60 ]]; then
       echo "ERROR: Giving up on waiting for osd.$osd daemon to be running..."
       exit 1
     fi
     output=$(ceph orch ps --daemon-type osd -f json-pretty | jq -r '.[] | select(.status_desc=="running") | .daemon_id')
-    if [[ -n "$output" ]]; then
+    if [[ -n $output ]]; then
       echo "$output" | grep -q "$osd"
       if echo "$output" | grep -q "$osd"; then
         echo "Found osd.$osd daemon running -- continuing..."
@@ -150,21 +150,21 @@ function wait_for_osd() {
     fi
     sleep 5
     echo "Sleeping for five seconds waiting for osd.$osd running daemon..."
-    cnt=$((cnt+1))
+    cnt=$((cnt + 1))
   done
 } # end wait_for_osd()
 
 function wait_for_osds() {
-  for host in $(ceph node ls| jq -r '.osd|keys[]'); do
-    for osd in $(ceph node ls| jq --arg host_key "$host" -r '.osd[$host_key]|values|tostring|ltrimstr("[")|rtrimstr("]")'| sed "s/,/ /g"); do
+  for host in $(ceph node ls | jq -r '.osd|keys[]'); do
+    for osd in $(ceph node ls | jq --arg host_key "$host" -r '.osd[$host_key]|values|tostring|ltrimstr("[")|rtrimstr("]")' | sed "s/,/ /g"); do
       wait_for_osd "$osd"
-   done
- done
+    done
+  done
 }
 
 function get_ip_from_metadata() {
   host=$1
-  ip=$(cloud-init query ds | jq -r ".meta_data[].host_records[] | select(.aliases[]? == \"$host\") | .ip" 2>/dev/null)
+  ip=$(cloud-init query ds | jq -r ".meta_data[].host_records[] | select(.aliases[]? == \"$host\") | .ip" 2> /dev/null)
   echo "$ip"
 }
 
@@ -172,16 +172,16 @@ function wait_for_mon_stat() {
   node=$1
   cnt=0
   while true; do
-    if [[ "$cnt" -eq 60 ]]; then
+    if [[ $cnt -eq 60 ]]; then
       echo "ERROR: Giving up waiting for mon process to start on $node..."
       break
     fi
-    if [[ "$cnt" -eq 30 ]]; then
+    if [[ $cnt -eq 30 ]]; then
       echo "Manually adding mon process for $node..."
       ip=$(get_ip_from_metadata "${node}.nmn")
       ceph mon add "$node" "$ip"
     else
-      state_name=$(ceph mon stat -f json-pretty | jq --arg node "$node" -r '.quorum[] | select(.name==$node) | .name' )
+      state_name=$(ceph mon stat -f json-pretty | jq --arg node "$node" -r '.quorum[] | select(.name==$node) | .name')
       if [ "$state_name" == "$node" ]; then
         echo "Found mon process on $node..."
         break
@@ -189,13 +189,13 @@ function wait_for_mon_stat() {
     fi
     sleep 5
     echo "Sleeping for five seconds waiting for mon process to start on $node..."
-    cnt=$((cnt+1))
+    cnt=$((cnt + 1))
   done
 }
 
 function check_mon_daemon() {
   node=$1
-  state_name=$(ceph mon stat -f json-pretty | jq --arg node "$node" -r '.quorum[] | select(.name==$node) | .name' )
+  state_name=$(ceph mon stat -f json-pretty | jq --arg node "$node" -r '.quorum[] | select(.name==$node) | .name')
   if [ "$state_name" == "$node" ]; then
     echo "Found ${node} in ceph mon stat command, continuing..."
   else
@@ -217,8 +217,8 @@ function check_currently_running_nexus_image() {
   node=$1
   nexus_sha=$(cat ${ceph_nexus_digest_file})
   for daemon in "mon" "mgr" "osd" "mds" "crash" "rgw"; do
-    for each in $(ssh ${node} ${ssh_options} "podman ps --filter name=$daemon --format {{.Image}}" ); do
-      if [[ -z $(echo $each | grep "$nexus_sha" ) && -z $(echo $each | grep $nexus_location) ]]; then
+    for each in $(ssh ${node} ${ssh_options} "podman ps --filter name=$daemon --format {{.Image}}"); do
+      if [[ -z $(echo $each | grep "$nexus_sha") && -z $(echo $each | grep $nexus_location) ]]; then
         echo "false"
         return 0
       fi
@@ -228,64 +228,64 @@ function check_currently_running_nexus_image() {
 }
 
 function redeploy_monitoring_stack() {
-# restart daemons
-for daemon in "prometheus" "node-exporter" "alertmanager" "grafana"; do
-  daemons_to_restart=$(ceph --name client.ro orch ps | awk '{print $1}' | grep $daemon)
-  for each in $daemons_to_restart; do
-    for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
+  # restart daemons
+  for daemon in "prometheus" "node-exporter" "alertmanager" "grafana"; do
+    daemons_to_restart=$(ceph --name client.ro orch ps | awk '{print $1}' | grep $daemon)
+    for each in $daemons_to_restart; do
+      for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
         # shellcheck disable=SC2086
         # shellcheck disable=SC2029
         if ssh ${storage_node} ${ssh_options} "ceph orch daemon redeploy $each"; then
           break
         fi
       done
+    done
   done
-done
 }
 
 function upload_image() {
-    # get local image and nexus image location
-    name=$1
-    prefix=$2
-    to_configure=$3
-    local_image=$(ceph --name client.ro orch ps --format json | jq --arg DAEMON "$name" '.[] | select(.daemon_type == $DAEMON) | .container_image_name' | tr -d '"' | sort -u | tail -1)
-    # if sha in image then remove and use version
-    if [[ $local_image == *"@sha"* ]]; then
-        without_sha=${local_image%"@sha"*}
-        version=$(ceph --name client.ro orch ps --format json | jq --arg DAEMON "$name" '.[] | select(.daemon_type == $DAEMON) | .version' | tr -d '"' | sort -u)
-        if [[ $version != "v"* ]]; then version="v""$version"; fi
-        local_image="$without_sha"":""$version"
-    fi
-    nexus_location="${prefix}""$(echo "$local_image" | rev | cut -d "/" -f1 | rev)"
+  # get local image and nexus image location
+  name=$1
+  prefix=$2
+  to_configure=$3
+  local_image=$(ceph --name client.ro orch ps --format json | jq --arg DAEMON "$name" '.[] | select(.daemon_type == $DAEMON) | .container_image_name' | tr -d '"' | sort -u | tail -1)
+  # if sha in image then remove and use version
+  if [[ $local_image == *"@sha"* ]]; then
+    without_sha=${local_image%"@sha"*}
+    version=$(ceph --name client.ro orch ps --format json | jq --arg DAEMON "$name" '.[] | select(.daemon_type == $DAEMON) | .version' | tr -d '"' | sort -u)
+    if [[ $version != "v"* ]]; then version="v""$version"; fi
+    local_image="$without_sha"":""$version"
+  fi
+  nexus_location="${prefix}""$(echo "$local_image" | rev | cut -d "/" -f1 | rev)"
 
-    # push images to nexus, point to nexus and run upgrade
-    echo "Pushing image: $local_image to $nexus_location"
-    podman pull "$local_image"
-    podman tag "$local_image" "$nexus_location"
-    if [[ $name == "mgr" ]]; then
-      # save the digestfile of the mgr image, this contains the sha in nexus
-      podman push --creds "$nexus_username":"$nexus_password" "$nexus_location" --digestfile=${ceph_nexus_digest_file}
-    else
-      podman push --creds "$nexus_username":"$nexus_password" "$nexus_location"
+  # push images to nexus, point to nexus and run upgrade
+  echo "Pushing image: $local_image to $nexus_location"
+  podman pull "$local_image"
+  podman tag "$local_image" "$nexus_location"
+  if [[ $name == "mgr" ]]; then
+    # save the digestfile of the mgr image, this contains the sha in nexus
+    podman push --creds "$nexus_username":"$nexus_password" "$nexus_location" --digestfile=${ceph_nexus_digest_file}
+  else
+    podman push --creds "$nexus_username":"$nexus_password" "$nexus_location"
+  fi
+  for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
+    # shellcheck disable=SC2086
+    # shellcheck disable=SC2029
+    if [[ $(ssh ${storage_node} ${ssh_options} "ceph config set mgr $to_configure $nexus_location") ]]; then
+      break
     fi
-    for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
-        # shellcheck disable=SC2086
-        # shellcheck disable=SC2029
-        if [[ $(ssh ${storage_node} ${ssh_options} "ceph config set mgr $to_configure $nexus_location") ]]; then
-          break
-        fi
-    done
-    for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
-        # shellcheck disable=SC2086
-        if [[ $(ssh ${storage_node} ${ssh_options} "ceph config rm mgr mgr/cephadm/container_image_base ") ]]; then
-          break
-        fi
-    done
+  done
+  for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
+    # shellcheck disable=SC2086
+    if [[ $(ssh ${storage_node} ${ssh_options} "ceph config rm mgr mgr/cephadm/container_image_base ") ]]; then
+      break
+    fi
+  done
 } # end of upload_image()
 
-function redeploy_ceph_services(){
+function redeploy_ceph_services() {
   # restart daemons
-  for node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
+  for node in $(ceph orch host ls -f json | jq -r '.[].hostname'); do
     running_nexus_image=$(check_currently_running_nexus_image $node)
     if ! $running_nexus_image; then
       echo "$node is not running all ceph services using the image in nexus. Redeploying these daemons using the nexus image."
@@ -294,10 +294,10 @@ function redeploy_ceph_services(){
       ssh ${node} ${ssh_options} "podman rmi --all --force"
       exit_maintenance_mode
       for daemon in "mon" "mgr" "osd" "mds" "crash" "rgw"; do
-        daemons_to_restart=$(ceph --name client.ro orch ps "$node"| awk '{print $1}' | grep $daemon)
+        daemons_to_restart=$(ceph --name client.ro orch ps "$node" | awk '{print $1}' | grep $daemon)
         for each in $daemons_to_restart; do
           #shellcheck disable=SC2086
-          if [[ $(hostname) = @("ncn-s001"|"ncn-s002"|"ncn-s003") ]]; then
+          if [[ $(hostname) == @("ncn-s001"|"ncn-s002"|"ncn-s003") ]]; then
             ceph config set global container_image ${nexus_location}
             ceph orch daemon redeploy "$each" --image "$nexus_location"
           else
@@ -315,12 +315,12 @@ function redeploy_ceph_services(){
 
 function enter_maintenance_mode() {
   # shellcheck disable=SC2076
-  if [[ $(ceph mgr stat|jq -r '.active_name') =~ "$node" ]]; then
+  if [[ $(ceph mgr stat | jq -r '.active_name') =~ $node ]]; then
     echo "Active Ceph mgr process detected on $node.  Failing the Ceph mgr process to another node."
     ceph mgr fail
   fi
   # shellcheck disable=SC2076
-  until [[ ! "$(ceph mgr stat|jq -r '.active_name')" =~ "$node" ]]; do
+  until [[ ! "$(ceph mgr stat | jq -r '.active_name')" =~ $node ]]; do
     echo "waiting for mgr to fail over"
     sleep 10
   done
@@ -328,9 +328,9 @@ function enter_maintenance_mode() {
   ceph orch host maintenance enter "$node" --force
   counter=0
   # shellcheck disable=SC2086
-  until [[ "$(ceph orch host ls --host_pattern $node --format json-pretty|jq -r '.[].status')" == "maintenance" ]]; do
+  until [[ "$(ceph orch host ls --host_pattern $node --format json-pretty | jq -r '.[].status')" == "maintenance" ]]; do
     echo "Waiting for node $node to enter maintenance mode."
-    (( counter ++ ))
+    ((counter++))
     if [[ $counter -ge 5 ]]; then
       echo "First Attempt to enter maintenance mode on $node was not possible due to cluster recovery. Attempting to enter mainenance mode for $node again."
       ceph orch host maintenance enter "$node" --force
@@ -345,10 +345,10 @@ function exit_maintenance_mode() {
   if [[ "$(ceph orch host maintenance exit $node)" ]]; then
     # shellcheck disable=SC2086
     counter=0
-    until [[ "$(ceph orch host ls --host_pattern $node --format json-pretty|jq -r '.[].status')" != "maintenance" ]]; do
+    until [[ "$(ceph orch host ls --host_pattern $node --format json-pretty | jq -r '.[].status')" != "maintenance" ]]; do
       echo "Waiting for node $node to exit maintenance mode."
       sleep 15
-      counter=$(( counter + 1 ))
+      counter=$((counter + 1))
       if [[ $counter -ge 5 ]]; then
         echo "$node is still in maintenance mode. Failing the Ceph mgr process to another node to force $node to exit maintenance mode."
         ceph mgr fail
@@ -364,19 +364,19 @@ function disable_local_registries() {
   echo "Disabling local docker registries"
   systemctl_force="--now"
 
-  for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
+  for storage_node in $(ceph orch host ls -f json | jq -r '.[].hostname'); do
     #shellcheck disable=SC2029
     if ssh "${storage_node}" "${ssh_options}" "systemctl disable registry.container.service ${systemctl_force}"; then
-       if ! ssh "${storage_node}" "${ssh_options}" "systemctl is-enabled registry.container.service"; then
-         echo "Docker registry service on ${storage_node} has been disabled"
-       fi
+      if ! ssh "${storage_node}" "${ssh_options}" "systemctl is-enabled registry.container.service"; then
+        echo "Docker registry service on ${storage_node} has been disabled"
+      fi
     fi
   done
 }
 
 function fix_registries_conf() {
   HEREFILE=$(mktemp)
-  cat > "${HEREFILE}" <<'EOF'
+  cat > "${HEREFILE}" << 'EOF'
 # For more information on this configuration file, see containers-registries.conf(5).
 #
 # Registries to search for images that are not fully-qualified.
@@ -433,7 +433,7 @@ insecure = true
 
 EOF
 
-  for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
+  for storage_node in $(ceph orch host ls -f json | jq -r '.[].hostname'); do
     scp "${ssh_options}" "${HEREFILE}" "${storage_node}":/etc/containers/registries.conf
   done
 } #end fix_registries_conf()
@@ -443,7 +443,6 @@ if ! oneshot_health_check; then
   echo "Ceph is not healthy.  Please check ceph status and try again."
   exit 1
 fi
-
 
 # Begin upload of local images into nexus
 #prometheus, node-exporter, and alertmanager have this prefix

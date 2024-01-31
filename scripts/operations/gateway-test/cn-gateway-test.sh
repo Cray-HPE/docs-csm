@@ -39,7 +39,7 @@ CN_NAME=$1
 # Make sure we can resolve the CN Name
 #shellcheck disable=SC2046
 if [ $(dig +short ${CN_NAME} | wc -l) -lt 1 ]; then
-    error "Unknown CN ${CN_NAME}"
+  error "Unknown CN ${CN_NAME}"
 fi
 
 # Make sure the cray, craysys, kubectl, and jq commands are available
@@ -62,7 +62,7 @@ fi
 # Get the Base Directory
 BASEDIR=$(dirname $0)
 
-# Get the SYSTEM_DOMAIN from cloud-init 
+# Get the SYSTEM_DOMAIN from cloud-init
 SYSTEM_NAME=$(craysys metadata get system-name)
 SITE_DOMAIN=$(craysys metadata get site-domain)
 
@@ -80,7 +80,7 @@ echo "System domain is ${SYSTEM_DOMAIN}"
 # Get a token to talk to SLS
 #shellcheck disable=SC2155
 #shellcheck disable=SC2046
-export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 
 if [ -z ${TOKEN} ]; then
   error "Failure retrieving token from https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token"
@@ -98,12 +98,12 @@ echo "User Network on ${SYSTEM_NAME} is ${USER_NETWORK}"
 # Get the ADMIN_SECRET
 ADMIN_SECRET=$(kubectl get secrets admin-client-auth -ojsonpath='{.data.client-secret}' | base64 -d)
 if [[ -z ${ADMIN_SECRET} ]]; then
-    error "Failed to retrieve admin client secret"
+  error "Failed to retrieve admin client secret"
 fi
 echo "Got admin client secret"
 
 # Prepare the run script
-cat > /tmp/run-gateway-test-${CN_NAME}.sh <<EOF
+cat > /tmp/run-gateway-test-${CN_NAME}.sh << EOF
 #!/bin/bash
     
 export ADMIN_CLIENT_SECRET=$ADMIN_SECRET
@@ -122,7 +122,7 @@ if [ $? -ne 0 ]; then
   error "Failed to transfer files to CN ${CN_NAME}"
 fi
 
-# Running tests on the CN and cleaning up 
+# Running tests on the CN and cleaning up
 printf "\nRunning tests on the CN\n"
 #shellcheck disable=SC2088
 ssh ${CN_NAME} "~/run-gateway-test-${CN_NAME}.sh;rm gateway-test.py gateway-test-defn.yaml run-gateway-test-${CN_NAME}.sh;exit 0"

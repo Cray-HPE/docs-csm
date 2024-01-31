@@ -24,7 +24,7 @@
 #
 
 usage() {
-        echo "
+  echo "
 Usage:
 
 $0 context
@@ -50,8 +50,8 @@ backup_clusters() {
 }
 
 if [ "$#" -lt 1 ]; then
-        usage
-        exit 1
+  usage
+  exit 1
 fi
 
 context=$1
