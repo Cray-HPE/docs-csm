@@ -39,9 +39,11 @@ To change a parameter, perform a PATCH operation with a JSON-formatted payload c
 
 Base URLs:
 
-* <a href="http://cray-hbtd/hmi/v1">http://cray-hbtd/hmi/v1</a>
-
 * <a href="https://api-gw-service-nmn.local/apis/hbtd/hmi/v1">https://api-gw-service-nmn.local/apis/hbtd/hmi/v1</a>
+
+# Authentication
+
+- HTTP Authentication, scheme: bearer 
 
 <h1 id="heartbeat-tracker-service-heartbeat">heartbeat</h1>
 
@@ -52,8 +54,8 @@ Base URLs:
 > Code samples
 
 ```http
-POST http://cray-hbtd/hmi/v1/heartbeat/{xname} HTTP/1.1
-Host: cray-hbtd
+POST https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat/{xname} HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: */*
 
@@ -61,9 +63,10 @@ Accept: */*
 
 ```shell
 # You can also use wget
-curl -X POST http://cray-hbtd/hmi/v1/heartbeat/{xname} \
+curl -X POST https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat/{xname} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: */*'
+  -H 'Accept: */*' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -71,10 +74,11 @@ curl -X POST http://cray-hbtd/hmi/v1/heartbeat/{xname} \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': '*/*'
+  'Accept': '*/*',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://cray-hbtd/hmi/v1/heartbeat/{xname}', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat/{xname}', headers = headers)
 
 print(r.json())
 
@@ -93,10 +97,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"*/*"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://cray-hbtd/hmi/v1/heartbeat/{xname}", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -143,8 +148,9 @@ Send a heartbeat message from a managed component like compute node to the heart
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation not permitted.  For /heartbeat, only POST operations are allowed.|[Error](#schemaerror)|
 |default|Default|Unexpected error|[Error](#schemaerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## TrackHeartbeat
@@ -154,8 +160,8 @@ This operation does not require authentication
 > Code samples
 
 ```http
-POST http://cray-hbtd/hmi/v1/heartbeat HTTP/1.1
-Host: cray-hbtd
+POST https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: */*
 
@@ -163,9 +169,10 @@ Accept: */*
 
 ```shell
 # You can also use wget
-curl -X POST http://cray-hbtd/hmi/v1/heartbeat \
+curl -X POST https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat \
   -H 'Content-Type: application/json' \
-  -H 'Accept: */*'
+  -H 'Accept: */*' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -173,10 +180,11 @@ curl -X POST http://cray-hbtd/hmi/v1/heartbeat \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': '*/*'
+  'Accept': '*/*',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://cray-hbtd/hmi/v1/heartbeat', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat', headers = headers)
 
 print(r.json())
 
@@ -195,10 +203,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"*/*"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://cray-hbtd/hmi/v1/heartbeat", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -247,8 +256,9 @@ Send a heartbeat message from a managed component like compute node to the heart
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation not permitted.  For /heartbeat, only POST operations are allowed.|[Error](#schemaerror)|
 |default|Default|Unexpected error|[Error](#schemaerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="heartbeat-tracker-service-hbstates">hbstates</h1>
@@ -260,8 +270,8 @@ This operation does not require authentication
 > Code samples
 
 ```http
-POST http://cray-hbtd/hmi/v1/hbstates HTTP/1.1
-Host: cray-hbtd
+POST https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/hbstates HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
 
@@ -269,9 +279,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://cray-hbtd/hmi/v1/hbstates \
+curl -X POST https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/hbstates \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -279,10 +290,11 @@ curl -X POST http://cray-hbtd/hmi/v1/hbstates \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://cray-hbtd/hmi/v1/hbstates', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/hbstates', headers = headers)
 
 print(r.json())
 
@@ -301,10 +313,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://cray-hbtd/hmi/v1/hbstates", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/hbstates", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -364,8 +377,9 @@ Sends a list of components to the service in a JSON formatted payload. The servi
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation not permitted.  For /hbstates, only POST operations are allowed.|[Error](#schemaerror)|
 |default|Default|Unexpected error|[Error](#schemaerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__hbstate_{xname}
@@ -373,26 +387,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://cray-hbtd/hmi/v1/hbstate/{xname} HTTP/1.1
-Host: cray-hbtd
+GET https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/hbstate/{xname} HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://cray-hbtd/hmi/v1/hbstate/{xname} \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/hbstate/{xname} \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://cray-hbtd/hmi/v1/hbstate/{xname}', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/hbstate/{xname}', headers = headers)
 
 print(r.json())
 
@@ -410,10 +426,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://cray-hbtd/hmi/v1/hbstate/{xname}", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/hbstate/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -456,8 +473,9 @@ Query the service for the heartbeat status of a single component.  The service w
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found. Endpoint not available. Check IP routing between managed and management plane. Check that any SMS node services are running on management plane. Check that SMS node API gateway service is running on management plane. Check that SMS node HMI service is running on management plane.|[Error](#schemaerror)|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation not permitted.  For /hbstate/{xname}, only GET operations are allowed.|[Error](#schemaerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="heartbeat-tracker-service-params">params</h1>
@@ -467,26 +485,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://cray-hbtd/hmi/v1/params HTTP/1.1
-Host: cray-hbtd
+GET https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/params HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: */*
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://cray-hbtd/hmi/v1/params \
-  -H 'Accept: */*'
+curl -X GET https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/params \
+  -H 'Accept: */*' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': '*/*'
+  'Accept': '*/*',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://cray-hbtd/hmi/v1/params', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/params', headers = headers)
 
 print(r.json())
 
@@ -504,10 +524,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"*/*"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://cray-hbtd/hmi/v1/params", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/params", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -551,8 +572,9 @@ Fetch current heartbeat tracker configurable parameters.
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|None|
 |default|Default|Unexpected error|[Error](#schemaerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch__params
@@ -560,8 +582,8 @@ This operation does not require authentication
 > Code samples
 
 ```http
-PATCH http://cray-hbtd/hmi/v1/params HTTP/1.1
-Host: cray-hbtd
+PATCH https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/params HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: */*
 
@@ -569,9 +591,10 @@ Accept: */*
 
 ```shell
 # You can also use wget
-curl -X PATCH http://cray-hbtd/hmi/v1/params \
+curl -X PATCH https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/params \
   -H 'Content-Type: application/json' \
-  -H 'Accept: */*'
+  -H 'Accept: */*' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -579,10 +602,11 @@ curl -X PATCH http://cray-hbtd/hmi/v1/params \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': '*/*'
+  'Accept': '*/*',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.patch('http://cray-hbtd/hmi/v1/params', headers = headers)
+r = requests.patch('https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/params', headers = headers)
 
 print(r.json())
 
@@ -601,10 +625,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"*/*"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "http://cray-hbtd/hmi/v1/params", data)
+    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/params", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -672,8 +697,9 @@ Set one or more configurable parameters for the heartbeat tracker service and ha
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|None|
 |default|Default|Unexpected error|[Error](#schemaerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="heartbeat-tracker-service-health">health</h1>
@@ -683,26 +709,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://cray-hbtd/hmi/v1/health HTTP/1.1
-Host: cray-hbtd
+GET https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/health HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://cray-hbtd/hmi/v1/health \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/health \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://cray-hbtd/hmi/v1/health', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/health', headers = headers)
 
 print(r.json())
 
@@ -720,10 +748,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://cray-hbtd/hmi/v1/health", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/health", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -774,8 +803,9 @@ Status Code **200**
 |» MsgBus|string|true|none|Status of the connection with the message bus.|
 |» HsmStatus|string|true|none|Status of the connection to the Hardware State Manager (HSM).  Any error reported by an attempt to access the HSM will be included here.|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__liveness
@@ -783,26 +813,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://cray-hbtd/hmi/v1/liveness HTTP/1.1
-Host: cray-hbtd
+GET https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/liveness HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://cray-hbtd/hmi/v1/liveness \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/liveness \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://cray-hbtd/hmi/v1/liveness', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/liveness', headers = headers)
 
 print(r.json())
 
@@ -820,10 +852,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://cray-hbtd/hmi/v1/liveness", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/liveness", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -862,8 +895,9 @@ This is primarily an endpoint for the automated Kubernetes system.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /liveness, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__readiness
@@ -871,26 +905,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://cray-hbtd/hmi/v1/readiness HTTP/1.1
-Host: cray-hbtd
+GET https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/readiness HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://cray-hbtd/hmi/v1/readiness \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/readiness \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://cray-hbtd/hmi/v1/readiness', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/readiness', headers = headers)
 
 print(r.json())
 
@@ -908,10 +944,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://cray-hbtd/hmi/v1/readiness", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/readiness", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -950,8 +987,9 @@ This is primarily an endpoint for the automated Kubernetes system.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /readiness, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 # Schemas
