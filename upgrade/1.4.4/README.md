@@ -230,7 +230,14 @@ advised to take backups of their local, site files.
 
 #### Image customization
 
-1. Follow option 2 in [Stage 0.3](../Stage_0_Prerequisites.md#option-2-upgrade-of-csm-on-system-with-additional-products).  
+1. Follow option one of the following options based on your use case:
+
+  * [Option 2: Upgrade of CSM on system with additional products](../Stage_0_Prerequisites.md#option-2-upgrade-of-csm-on-system-with-additional-products)
+  * [Option 3: Upgrade of CSM on CSM-only system](../Stage_0_Prerequisites.md#option-3-upgrade-of-csm-on-csm-only-system)
+
+  > ***NOTE*** If [Option 1: Upgrade of CSM and additional products](../Stage_0_Prerequisites.md#option-1-upgrade-of-csm-and-additional-products) is better suiting, then
+  > do a full IUF run upgrading all products including CSM.
+   
 1. Follow the directions in [Stage 0.4](../Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data).
 
 ##### Storage nodes in-place update
