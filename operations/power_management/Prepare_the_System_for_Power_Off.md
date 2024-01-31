@@ -186,9 +186,29 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
         > *Note:* The switch host names depend on the system configuration.
 
-        1. Look in `/etc/hosts` for the management network switches on this system. The names of
-        all spine switches, leaf switches, leaf BMC switches, and CDU switches need to be used in
-        the next step.
+
+        1. Use CANU to confirm that all switches are reachable. Reachable switches will have their
+           version information populated in the network version report.
+
+           ```bash
+           canu report network version
+           ```
+
+           Example output:
+
+           ```text
+           SWITCH            CANU VERSION      CSM VERSION
+           sw-spine-001      1.6.20             1.4
+           sw-spine-002      1.6.20             1.4
+           sw-leaf-bmc-001   1.6.20             1.4
+           sw-leaf-bmc-002   1.6.20             1.4
+           sw-cdu-001        1.6.20             1.4
+           sw-cdu-002        1.6.20             1.4
+           ```
+
+        1. (Optional) If CANU is not available, look in `/etc/hosts` for the management network
+           switches on this system. The names of all spine switches, leaf switches, leaf BMC
+           switches, and CDU switches need to be used in the next step.
 
            ```bash
            ncn# grep sw- /etc/hosts
@@ -205,17 +225,13 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
            10.100.0.3      sw-cdu-002
            ```
 
-        1. Ping all switches using the proper list of hostnames in the index of the for loop.
+        1. Ping the switches obtained in the previous step to determine if they are reachable.
 
            ```bash
-           ncn# for switch in sw-leaf-00{1,2} sw-leaf-bmc-00{1-2} sw-spine-00{1,2} sw-cdu-00{1,2}l; do
-                   while true; do
-                        ping -c 1 $switch > /dev/null && break
-                        echo "switch $switch is not yet up"
-                        sleep 5
-                    done
-                    echo "switch $switch is up"
-                done | tee switches
+           for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do
+               echo -n "switch ${switch} is "
+               ping -c 1 -W 10 $switch > /dev/null && echo "up" || echo "not up"
+           done | tee switches
            ```
 
     1. Check Lustre server health.
