@@ -39,11 +39,15 @@
 * Added a method to stop `CFS/Batcher` and cancel configuration for in-flight customizations
 * Added support for git `submodules` in CFS runs
 * Added support for `ARM 64` based builds through emulation
-* Enhanced Multi-Tenancy Phase II support
 * Improved IUF Logging
 * Created Networking Red Light / Green Light Dashboard
 * Removed clear text switch passwords from the `cray-sysmgmt-health-canu-test` pod log
 * Ceph nodes run user facing docker registry that is writable anonymously
+* Added support for NID allocation defragmentation
+* Multi-tenancy: Vault Transit (KMS) Support for Encrypted Secrets in VCS
+* Multi-tenancy: Enable Tenant ID + Tenant Admin AuthZ Awareness for API Ingress (OPA policy)
+* Multitenancy: Enable Tenant ID + Tenant Admin AuthZ Awareness for API Ingress
+* Multitenancy: BOS Support for boot, reboot, node power on and off in tenant
 
 ### New Hardware Support
 
