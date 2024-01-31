@@ -237,13 +237,13 @@ advised to take backups of their local, site files.
 
 In lieu of rebuilding the storage nodes, they will be live patched.
 
-1. Unload and blacklist the QLogic RDMA `qedr` driver.
+1. (`ncn-m001#`) Unload and blacklist the QLogic RDMA `qedr` driver.
 
   ```bash
   /usr/share/doc/csm/upgrade/1.4.4/scripts/storage-in-place-patch.sh
   ```
 
-1. Verify that `qedr` is no longer loaded.
+1. (`ncn-m001#`) Verify that `qedr` is no longer loaded.
 
   ```bash
   pdsh -b -w $(grep -oP 'ncn-s\d+' /etc/hosts | sort -u | tr -t '\n' ',') '
@@ -262,7 +262,7 @@ In lieu of rebuilding the storage nodes, they will be live patched.
 
 ##### Kubernetes nodes rolling rebuild
 
-1. Set environment variables
+1. (`ncn-m001#`) Set environment variables
 
   ```bash
   export CSM_REL_NAME="csm-${CSM_RELEASE}"
@@ -276,7 +276,7 @@ In lieu of rebuilding the storage nodes, they will be live patched.
   - [1.2](../Stage_1.md#stage-12---worker-node-image-upgrade)
   - [1.3](../Stage_1.md#stage-13---ncn-m001-upgrade)
 
-1. Verify the booted images match the expected output.
+1. (`ncn-m001#`) Verify the booted images match the expected output.
 
   ```bash
   pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | tr -t '\n' ',') '
