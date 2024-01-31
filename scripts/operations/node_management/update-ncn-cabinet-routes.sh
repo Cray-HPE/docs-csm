@@ -24,43 +24,43 @@
 URL="https://api-gw-service-nmn.local/apis/sls/v1/networks"
 
 function on_error() {
-    echo "Error: $1. Exiting"
-    exit 1
+  echo "Error: $1. Exiting"
+  exit 1
 }
 
 [[ -n ${TOKEN} ]] || on_error "Environment varaible TOKEN is not set"
 
 # Collect network information from SLS
 echo "Collecting networking information from SLS"
-nmn_hmn_networks=$(curl -k -H "Authorization: Bearer ${TOKEN}" ${URL} 2>/dev/null | jq ".[] | {NetworkName: .Name, Subnets: .ExtraProperties.Subnets[]} | { NetworkName: .NetworkName, SubnetName: .Subnets.Name, SubnetCIDR: .Subnets.CIDR, Gateway: .Subnets.Gateway} | select(.SubnetName==\"network_hardware\") ")
+nmn_hmn_networks=$(curl -k -H "Authorization: Bearer ${TOKEN}" ${URL} 2> /dev/null | jq '.[] | {NetworkName: .Name, Subnets: .ExtraProperties.Subnets[]} | { NetworkName: .NetworkName, SubnetName: .Subnets.Name, SubnetCIDR: .Subnets.CIDR, Gateway: .Subnets.Gateway} | select(.SubnetName=="network_hardware") ')
 [[ -n ${nmn_hmn_networks} ]] || on_error "Cannot retrieve HMN and NMN networks from SLS. Check SLS connectivity."
 
-cabinet_networks=$(curl -k -H "Authorization: Bearer ${TOKEN}" ${URL} 2>/dev/null | jq ".[] | {NetworkName: .Name, Subnets: .ExtraProperties.Subnets[]} | { NetworkName: .NetworkName, SubnetName: .Subnets.Name, SubnetCIDR: .Subnets.CIDR} | select(.SubnetName | startswith(\"cabinet_\")) ")
+cabinet_networks=$(curl -k -H "Authorization: Bearer ${TOKEN}" ${URL} 2> /dev/null | jq '.[] | {NetworkName: .Name, Subnets: .ExtraProperties.Subnets[]} | { NetworkName: .NetworkName, SubnetName: .Subnets.Name, SubnetCIDR: .Subnets.CIDR} | select(.SubnetName | startswith("cabinet_")) ')
 [[ -n ${cabinet_networks} ]] || on_error "Cannot retrieve cabinet networks from SLS. Check SLS connectivity."
 
 # NMN
-nmnlb=$(curl -k -H "Authorization: Bearer ${TOKEN}" ${URL} 2>/dev/null | jq ".[] | {NetworkName: .Name, Subnets: .ExtraProperties.Subnets[]} | { NetworkName: .NetworkName, SubnetCIDR: .Subnets.CIDR} | select(.NetworkName==\"NMNLB\")")
+nmnlb=$(curl -k -H "Authorization: Bearer ${TOKEN}" ${URL} 2> /dev/null | jq '.[] | {NetworkName: .Name, Subnets: .ExtraProperties.Subnets[]} | { NetworkName: .NetworkName, SubnetCIDR: .Subnets.CIDR} | select(.NetworkName=="NMNLB")')
 
 nmnlb_cidr=$(echo $nmnlb | jq -r .SubnetCIDR)
 [[ -n ${nmnlb_cidr} ]] || on_error "NMN LB CIDR not found"
 
-nmn_gateway=$(echo "${nmn_hmn_networks}" | jq -r ". | select(.NetworkName==\"NMN\") | .Gateway")
+nmn_gateway=$(echo "${nmn_hmn_networks}" | jq -r '. | select(.NetworkName=="NMN") | .Gateway')
 [[ -n ${nmn_gateway} ]] || on_error "NMN gateway not found"
 
-nmn_cabinet_subnets=$(echo "${cabinet_networks}" | jq -r ". | select(.NetworkName==\"NMN\" or .NetworkName==\"NMN_RVR\" or .NetworkName==\"NMN_MTN\") | .SubnetCIDR")
+nmn_cabinet_subnets=$(echo "${cabinet_networks}" | jq -r '. | select(.NetworkName=="NMN" or .NetworkName=="NMN_RVR" or .NetworkName=="NMN_MTN") | .SubnetCIDR')
 [[ -n ${nmn_cabinet_subnets} ]] || on_error "NMN cabinet subnets not found"
 
 # HMN
-hmnlb=$(curl -k -H "Authorization: Bearer ${TOKEN}" ${URL} 2>/dev/null | jq ".[] | {NetworkName: .Name, Subnets: .ExtraProperties.Subnets[]} | { NetworkName: .NetworkName, SubnetCIDR: .Subnets.CIDR} | select(.NetworkName==\"HMNLB\")")
+hmnlb=$(curl -k -H "Authorization: Bearer ${TOKEN}" ${URL} 2> /dev/null | jq '.[] | {NetworkName: .Name, Subnets: .ExtraProperties.Subnets[]} | { NetworkName: .NetworkName, SubnetCIDR: .Subnets.CIDR} | select(.NetworkName=="HMNLB")')
 hmnlb_cidr=$(echo $hmnlb | jq -r .SubnetCIDR)
 [[ -n ${hmnlb_cidr} ]] || on_error "HMN LB CIDR not found"
-hmn_gateway=$(echo "${nmn_hmn_networks}" | jq -r ". | select(.NetworkName==\"HMN\") | .Gateway")
+hmn_gateway=$(echo "${nmn_hmn_networks}" | jq -r '. | select(.NetworkName=="HMN") | .Gateway')
 [[ -n ${hmn_gateway} ]] || on_error "HMN gateway not found"
-hmn_cabinet_subnets=$(echo "${cabinet_networks}" | jq -r ". | select(.NetworkName==\"HMN\" or .NetworkName==\"HMN_RVR\" or .NetworkName==\"HMN_MTN\") | .SubnetCIDR")
+hmn_cabinet_subnets=$(echo "${cabinet_networks}" | jq -r '. | select(.NetworkName=="HMN" or .NetworkName=="HMN_RVR" or .NetworkName=="HMN_MTN") | .SubnetCIDR')
 [[ -n ${hmn_cabinet_subnets} ]] || on_error "HMN cabinet subnets not found"
 
 # MTL
-mtl_cidr=$(echo "${nmn_hmn_networks}" | jq -r ". | select(.NetworkName==\"MTL\") | .SubnetCIDR")
+mtl_cidr=$(echo "${nmn_hmn_networks}" | jq -r '. | select(.NetworkName=="MTL") | .SubnetCIDR')
 [[ -n ${mtl_cidr} ]] || on_error "MTL CIDR not found"
 
 # Create the routing files first so we can fan it out to all the NCNs later.
@@ -74,14 +74,14 @@ touch $local_hmn_route_file
 # Format for ifroute-<interface> syntax
 nmn_routes=()
 for rt in $nmn_cabinet_subnets; do
-    nmn_routes+=("$rt $nmn_gateway - bond0.nmn0")
+  nmn_routes+=("$rt $nmn_gateway - bond0.nmn0")
 done
 nmn_routes+=("$mtl_cidr $nmn_gateway - bond0.nmn0")
 nmn_routes+=("$nmnlb_cidr $nmn_gateway - bond0.nmn0")
 
 hmn_routes=()
 for rt in $hmn_cabinet_subnets; do
-    hmn_routes+=("$rt $hmn_gateway - bond0.hmn0")
+  hmn_routes+=("$rt $hmn_gateway - bond0.hmn0")
 done
 hmn_routes+=("$hmnlb_cidr $hmn_gateway - bond0.hmn0")
 

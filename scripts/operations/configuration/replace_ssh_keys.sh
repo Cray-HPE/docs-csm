@@ -23,20 +23,19 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-usage()
-{
-   # Display Help
-   echo "Replaces the SSH keys in Kubernetes"
-   echo "At least one option must be specified"
-   echo "NOTE: This does not update deployed keys"
-   echo
-   echo "Usage: replace_ssh_keys.sh [ --public-key-file file ]"
-   echo "                           [ --private-key-file file ]"
-   echo
-   echo "Options:"
-   echo "public-key-file      File path for a public key."
-   echo "private-key-file     File path for a private key."
-   echo
+usage() {
+  # Display Help
+  echo "Replaces the SSH keys in Kubernetes"
+  echo "At least one option must be specified"
+  echo "NOTE: This does not update deployed keys"
+  echo
+  echo "Usage: replace_ssh_keys.sh [ --public-key-file file ]"
+  echo "                           [ --private-key-file file ]"
+  echo
+  echo "Options:"
+  echo "public-key-file      File path for a public key."
+  echo "private-key-file     File path for a private key."
+  echo
 }
 
 if [[ $# -eq 0 ]]; then
@@ -57,7 +56,7 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       shift # past value
       ;;
-    -h|--help) # help option
+    -h | --help) # help option
       usage
       exit 0
       ;;
@@ -68,33 +67,33 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -n "${PUBLIC_KEY_FILE}" ]]; then
+if [[ -n ${PUBLIC_KEY_FILE} ]]; then
   PUBLIC_KEY=$(cat $PUBLIC_KEY_FILE)
-  if [[ -z "${PUBLIC_KEY}" ]]; then
+  if [[ -z ${PUBLIC_KEY} ]]; then
     echo "Public key not found in specified file"
     exit 1
   fi
 fi
 
-if [[ -n "${PRIVATE_KEY_FILE}" ]]; then
+if [[ -n ${PRIVATE_KEY_FILE} ]]; then
   PRIVATE_KEY=$(cat $PRIVATE_KEY_FILE)
-  if [[ -z "${PRIVATE_KEY}" ]]; then
+  if [[ -z ${PRIVATE_KEY} ]]; then
     echo "Private key not found in specified file"
     exit 1
   fi
 fi
 
-if [[ -n "${PUBLIC_KEY}" ]]; then
+if [[ -n ${PUBLIC_KEY} ]]; then
   echo "Updating public key..."
   kubectl delete configmap -n services csm-public-key
-  cat ${PUBLIC_KEY_FILE} | \
-    base64 > ./value && kubectl create configmap --from-file \
+  cat ${PUBLIC_KEY_FILE} \
+    | base64 > ./value && kubectl create configmap --from-file \
     value csm-public-key --namespace services && rm ./value
 fi
 
-if [[ -n "${PRIVATE_KEY}" ]]; then
+if [[ -n ${PRIVATE_KEY} ]]; then
   echo "Updating private key..."
-  kubectl get secret -n services csm-private-key -o json | \
-    jq --arg value "$(cat ${PRIVATE_KEY_FILE} | base64)" \
-    '.data["value"]=$value' | kubectl apply -f -
+  kubectl get secret -n services csm-private-key -o json \
+    | jq --arg value "$(cat ${PRIVATE_KEY_FILE} | base64)" \
+      '.data["value"]=$value' | kubectl apply -f -
 fi
