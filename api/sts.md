@@ -6,7 +6,11 @@
 
 Base URLs:
 
-* <a href="http://localhost:9090/">http://localhost:9090/</a>
+* <a href="https://api-gw-service-nmn.local/apis/sts">https://api-gw-service-nmn.local/apis/sts</a>
+
+# Authentication
+
+- HTTP Authentication, scheme: bearer 
 
 <h1 id="cray-sts-token-generator-default">Default</h1>
 
@@ -17,26 +21,28 @@ Base URLs:
 > Code samples
 
 ```http
-PUT http://localhost:9090/token HTTP/1.1
-Host: localhost:9090
+PUT https://api-gw-service-nmn.local/apis/sts/token HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X PUT http://localhost:9090/token \
-  -H 'Accept: application/json'
+curl -X PUT https://api-gw-service-nmn.local/apis/sts/token \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.put('http://localhost:9090/token', headers = headers)
+r = requests.put('https://api-gw-service-nmn.local/apis/sts/token', headers = headers)
 
 print(r.json())
 
@@ -54,10 +60,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PUT", "http://localhost:9090/token", data)
+    req, err := http.NewRequest("PUT", "https://api-gw-service-nmn.local/apis/sts/token", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -95,8 +102,9 @@ Generates a STS Token.
 |---|---|---|---|
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|A generated STS Token|[Token](#schematoken)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="cray-sts-token-generator-cli_ignore">cli_ignore</h1>
@@ -108,26 +116,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://localhost:9090/healthz HTTP/1.1
-Host: localhost:9090
+GET https://api-gw-service-nmn.local/apis/sts/healthz HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://localhost:9090/healthz \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/sts/healthz \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://localhost:9090/healthz', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/sts/healthz', headers = headers)
 
 print(r.json())
 
@@ -145,10 +155,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://localhost:9090/healthz", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/sts/healthz", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -188,8 +199,9 @@ Status Code **200**
 |---|---|---|---|---|
 |» Status|string|false|read-only|none|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 # Schemas
