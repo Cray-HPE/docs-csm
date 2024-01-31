@@ -186,7 +186,6 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
         > *Note:* The switch host names depend on the system configuration.
 
-
         1. Use CANU to confirm that all switches are reachable. Reachable switches will have their
            version information populated in the network version report.
 
