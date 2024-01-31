@@ -429,7 +429,7 @@ new customized image.
 
 1. (`ncn-mw#`) Update boot parameters for a management node.
 
-    * When working with a group of `XNAMES` (use the previous step to collect the group of `XNAMES`).
+    * When working with a group of xnames (use the previous step to collect the xnames in the `$XNAME` variable).
 
         ```bash
         for XNAME in "${XNAMES[@]}"; do
@@ -501,7 +501,7 @@ new customized image.
             cray bss bootparameters update --hosts "${XNAME}" \
                 --kernel "s3://${S3_ARTIFACT_PATH}/kernel" \
                 --initrd "s3://${S3_ARTIFACT_PATH}/initrd" \
-                --params "${PARAMS}"
+                --params "${PARAMS}" && echo SUCCESS || echo ERROR
             ```
 
 ## Next steps

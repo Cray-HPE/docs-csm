@@ -7,7 +7,7 @@
 ## Introduction
 
 This document guides an administrator through the patch update to Cray Systems Management `v1.4.4` from `v1.4.0`, `v1.4.1`,
-`1.4.2`, or `1.4.3`. If upgrading from CSM `v1.3.x` directly to `v1.4.4`, follow the procedures described
+`v1.4.2`, or `v1.4.3`. If upgrading from CSM `v1.3.x` directly to `v1.4.4`, follow the procedures described
 in [Upgrade CSM](../README.md) instead.
 
 ## Bug fixes and improvements
@@ -94,10 +94,14 @@ and exits with status code `0`.
 (`ncn-m001#`) Run the following script in preparation for 1.4.4 patch upgrade:
 
 ```bash
+function run_cmd {
+  "$@" && return 0 || echo "ERROR: Command failed with rc $?: $*" >&2 ; return 1
+}
+
 for c in $(kubectl get crd | grep argo | cut -d' ' -f1); do
-   kubectl label --overwrite crd $c app.kubernetes.io/managed-by="Helm"
-   kubectl annotate --overwrite crd $c meta.helm.sh/release-name="cray-nls"
-   kubectl annotate --overwrite crd $c meta.helm.sh/release-namespace="argo"
+   run_cmd kubectl label --overwrite crd $c app.kubernetes.io/managed-by="Helm" || break
+   run_cmd kubectl annotate --overwrite crd $c meta.helm.sh/release-name="cray-nls" || break
+   run_cmd kubectl annotate --overwrite crd $c meta.helm.sh/release-namespace="argo" || break
 done
 ```
 
@@ -141,7 +145,7 @@ stops the local Docker registry on all storage nodes.
 
    ```bash
    scp /usr/share/doc/csm/scripts/operations/ceph/redeploy_monitoring_stack_to_nexus.sh ncn-s001:/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh
-   ssh ncn-s001 "/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh"
+   ssh ncn-s001 /srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh
    ```
 
 1. (`ncn-m001#`) Stop the local Docker registries on all storage nodes.
