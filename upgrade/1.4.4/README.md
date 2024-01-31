@@ -156,11 +156,11 @@ stops the local Docker registry on all storage nodes.
 This step will install the `smart-mon` rpm on storage nodes, and reconfigure the `node-exporter` to provide `smartmon`
 metrics.
 
-1. (`ncn-m001#`) Execute the following script.
+(`ncn-m001#`) Execute the following script.
 
-   ```bash
-   /usr/share/doc/csm/scripts/operations/ceph/enable-smart-mon-storage-nodes.sh
-   ```
+ ```bash
+ /usr/share/doc/csm/scripts/operations/ceph/enable-smart-mon-storage-nodes.sh
+ ```
 
 ### Update management node CFS configuration
 
@@ -168,44 +168,44 @@ This step updates the CFS configuration which is set as the desired configuratio
 nodes (NCNs). It ensures that the CFS configuration layers reference the correct commit hash for the
 version of CSM being installed. It then waits for the components to reach a configured state in CFS.
 
-1. (`ncn-m001#`)
+(`ncn-m001#`) Update CFS configuration.
 
-   ```bash
-   cd "$CSM_DISTDIR"
-   ./update-mgmt-ncn-cfs-config.sh --base-query role=management \
-       --save --create-backups --clear-error
-   ```
+```bash
+cd "$CSM_DISTDIR"
+./update-mgmt-ncn-cfs-config.sh --base-query role=management \
+   --save --create-backups --clear-error
+```
 
-   The output will look similar to the truncated output shown below.
+The output will look similar to the truncated output shown below.
 
-   ```text
-   INFO: Querying CFS configurations for the following NCNs: x3000c0s5b0n0, ...
-   INFO: Found configuration "management-csm-1.4.0" for component x3000c0s5b0n0
-   ...
-   INFO: Updating existing layer with repo path /vcs/cray/csm-config-management.git and playbook site.yml
-   INFO: Property "commit" of layer with repo path /vcs/cray/csm-config-management.git and playbook site.yml updated ...
-   INFO: Property "name" of layer with repo path /vcs/cray/csm-config-management.git and playbook site.yml updated ...
-   INFO: No layer with repo path /vcs/cray/csm-config-management.git and playbook ncn-initrd.yml found.
-   INFO: Adding a layer with repo path /vcs/cray/csm-config-management.git and playbook ncn-initrd.yml to the end.
-   INFO: Successfully saved CFS configuration "management-csm-1.4.0-backup-20230918T205149"
-   INFO: Successfully saved CFS configuration "management-csm-1.4.0"
-   INFO: Successfully saved 1 changed CFS configuration(s) to CFS.
-   INFO: Updated 9 CFS components.
-   INFO: Waiting for 9 component(s) to finish configuration
-   INFO: Summary of number of components in each status: pending: 9
-   INFO: Waiting for 9 pending component(s)
-   INFO: Sleeping for 30 seconds before checking status of 9 pending component(s).
-   ...
-   INFO: Sleeping for 30 seconds before checking status of 9 pending component(s).
-   INFO: 9 pending components transitioned to status configured: x3000c0s5b0n0, ...
-   INFO: Finished waiting for 9 component(s) to finish configuration.
-   INFO: Summary of number of components in each status: configured: 9
-   ====> Completed update of CFS configuration(s)
-   ====> Cleaning up install dependencies
-   ```
+```text
+INFO: Querying CFS configurations for the following NCNs: x3000c0s5b0n0, ...
+INFO: Found configuration "management-csm-1.4.0" for component x3000c0s5b0n0
+...
+INFO: Updating existing layer with repo path /vcs/cray/csm-config-management.git and playbook site.yml
+INFO: Property "commit" of layer with repo path /vcs/cray/csm-config-management.git and playbook site.yml updated ...
+INFO: Property "name" of layer with repo path /vcs/cray/csm-config-management.git and playbook site.yml updated ...
+INFO: No layer with repo path /vcs/cray/csm-config-management.git and playbook ncn-initrd.yml found.
+INFO: Adding a layer with repo path /vcs/cray/csm-config-management.git and playbook ncn-initrd.yml to the end.
+INFO: Successfully saved CFS configuration "management-csm-1.4.0-backup-20230918T205149"
+INFO: Successfully saved CFS configuration "management-csm-1.4.0"
+INFO: Successfully saved 1 changed CFS configuration(s) to CFS.
+INFO: Updated 9 CFS components.
+INFO: Waiting for 9 component(s) to finish configuration
+INFO: Summary of number of components in each status: pending: 9
+INFO: Waiting for 9 pending component(s)
+INFO: Sleeping for 30 seconds before checking status of 9 pending component(s).
+...
+INFO: Sleeping for 30 seconds before checking status of 9 pending component(s).
+INFO: 9 pending components transitioned to status configured: x3000c0s5b0n0, ...
+INFO: Finished waiting for 9 component(s) to finish configuration.
+INFO: Summary of number of components in each status: configured: 9
+====> Completed update of CFS configuration(s)
+====> Cleaning up install dependencies
+```
 
-   When configuration of all components is successful, the summary line will show all components
-   with status "configured".
+When configuration of all components is successful, the summary line will show all components
+with status "configured".
 
 ### Update NCN images
 
