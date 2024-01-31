@@ -4,23 +4,6 @@ Switches must be powered on and operating. This procedure is optional if switch 
 
 **Optional Task:** Save management network switch configurations before removing power from cabinets or the CDU. Management switch names are listed in the `/etc/hosts` file.
 
-## Obtain the list of switches
-
-From the command line on any NCN run:
-
-```bash
-grep 'sw-' /etc/hosts
-```
-
-Example output:
-
-```bash
-10.254.0.2 sw-spine-001
-10.254.0.3 sw-spine-002
-10.254.0.4 sw-leaf-001
-ncn-m001:~ #
-```
-
 ## Save switch configs
 
 ### Aruba Switch and HPE Server Systems
@@ -28,45 +11,29 @@ ncn-m001:~ #
 On Aruba-based systems all management network switches will be Aruba and the following procedure.
 For each switch:
 
-1. `ssh` to the switch
+1. Run the command below
 1. Execute the `write memory` command
 1. Exit the switch shell
 
 Example:
 
  ```bash
- ssh admin@sw-spine-001.hmn
- admin@sw-spine-001 password:
- write memory
- exit
+for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do echo  "switch ${switch}:" ; ssh admin@$switch; done
  ```
 
 ### Dell and Mellanox Switch and Gigabyte/Intel Server Systems
 
 On Dell and Mellanox based systems, all spine and any leaf switches will be Mellanox. Any leaf-bmc and cdu switches will be Dell. The overall procedure is the same but the specifics of execution are slightly different.
 
-1. `ssh` to the switch
-1. Enter `enable` mode (Mellanox only)
-1. Execute the `write memory` command
-1. Exit the switch shell
+1. Run the command below
+2. Enter `enable` mode (Mellanox only)
+3. Execute the `write memory` command
+4. Exit the switch shell
 
-Mellanox Example:
-
- ```bash
- ssh admin@sw-spine-001.hmn
- admin@sw-spine-001 password:
- enable
- write memory
- exit
- ```
-
-Dell Example:
+Example:
 
  ```bash
- ssh admin@sw-leaf-bmc-001
- admin@sw-leaf-bmc-001s password:
- write memory
- exit
+for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do echo  "switch ${switch}:" ; ssh admin@$switch; done
  ```
 
 ### Edge Routers and Storage Switches
