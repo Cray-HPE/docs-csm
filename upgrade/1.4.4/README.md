@@ -271,10 +271,10 @@ In lieu of rebuilding the storage nodes, they will be live patched.
 
 1. Proceed with the following sections from Stage 1:
 
-  - [1.0](../Stage_1.md#start-typescript-on-ncn-m001)
-  - [1.1](../Stage_1.md#stage-11---master-node-image-upgrade)
-  - [1.2](../Stage_1.md#stage-12---worker-node-image-upgrade)
-  - [1.3](../Stage_1.md#stage-13---ncn-m001-upgrade)
+  - [Start typescript on `ncn-m001`](../Stage_1.md#start-typescript-on-ncn-m001)
+  - [Stage 1.1 - Master node image upgrade](../Stage_1.md#stage-11---master-node-image-upgrade)
+  - [Stage 1.2 - Worker node image upgrade](../Stage_1.md#stage-12---worker-node-image-upgrade)
+  - [Stage 1.3 - `ncn-m001` upgrade](../Stage_1.md#stage-13---ncn-m001-upgrade)
 
 1. (`ncn-m001#`) Verify the booted images match the expected output.
 
