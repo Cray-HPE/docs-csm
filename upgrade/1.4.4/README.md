@@ -228,7 +228,7 @@ advised to take backups of their local, site files.
 > - `/root/.ssh/config`
 
 
-#### Image Customization
+#### Image customization
 
 1. Follow option 2 in [Stage 0.3](../Stage_0_Prerequisites.md#option-2-upgrade-of-csm-on-system-with-additional-products).  
 1. Follow the directions in [Stage 0.4](../Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data).
