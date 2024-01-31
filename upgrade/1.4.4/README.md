@@ -13,8 +13,8 @@ in [Upgrade CSM](../README.md) instead.
 ## Bug fixes and improvements
 
 * Security patch `CVE-2023-48795` for SAT
-* NCN Kernel panic remediation for SuSE networking driver via new Kernel
-* NCN Network connectivity remediation for Marvell/QLogic FastLinq Ethernet adapters via new QLogic driver
+* NCN kernel panic remediation for SuSE networking driver via new kernel
+* NCN network connectivity remediation for Marvell/QLogic FastLinq Ethernet adapters via new QLogic driver
 * Blacklisting of QLogic RDMA driver (`qedr`) for increased NCN stability when using Marvell/QLogic FastLinq Ethernet adapters
 * Kernel panic remediation for Marvell/QLogic Fastlinq Ethernet adapters
 * Broadcom PCIe support for NCNs (`metal-ipxe`)
