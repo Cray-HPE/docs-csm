@@ -146,7 +146,7 @@ stops the local Docker registry on all storage nodes.
 
    ```bash
    scp /usr/share/doc/csm/scripts/operations/ceph/disable_local_registry.sh ncn-s001:/srv/cray/scripts/common/disable_local_registry.sh
-   ssh ncn-s001 "/srv/cray/scripts/common/disable_local_registry.sh"
+   ssh ncn-s001 /srv/cray/scripts/common/disable_local_registry.sh
    ```
 
 ### Enable `smartmon` metrics on storage NCNs
