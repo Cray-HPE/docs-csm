@@ -117,6 +117,7 @@
 * Addressed `Zenbleed` CVE on NCNs
 * Addressed `CVE-2023-38545` (curl & `libcurl`) on NCNs
 * Added Default RBAC Role for Telemetry API
+* In SAT upgradeded paramiko to resolve CVE-2023-48795 
   
 ### Customer-Requested Enhancements
 
