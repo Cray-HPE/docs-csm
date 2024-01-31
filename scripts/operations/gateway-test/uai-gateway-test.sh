@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -31,22 +31,22 @@ function error() {
 while [[ $# -gt 0 ]]; do
   key="$1"
 
-   case $key in
-       --imagename)
-         GATEWAY_IMAGE_NAME="$2"
-         shift # past argument
-         shift # past value
-         ;;
-       --publickey)
-         PUBKEY="$2"
-         shift # past argument
-         shift # past value
-         ;;
-       *)    # unknown option
-         echo "[ERROR] - unknown options"
-         echo "usage: $0 [--imagename <image-name>] [--publickey <path-to-key>]"
-         exit 1
-         ;;
+  case $key in
+    --imagename)
+      GATEWAY_IMAGE_NAME="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    --publickey)
+      PUBKEY="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    *) # unknown option
+      echo "[ERROR] - unknown options"
+      echo "usage: $0 [--imagename <image-name>] [--publickey <path-to-key>]"
+      exit 1
+      ;;
   esac
 done
 
@@ -72,11 +72,10 @@ if [ $? -ne 0 ]; then
   error "jq command is not available"
 fi
 
-
 # Find gateway image if one was not specified
 if [[ -z ${GATEWAY_IMAGE_NAME} ]]; then
   # We will filter out the 1.6.0 image because we know that will not work with this version of the script
-  GATEWAY_IMAGE_NAME=$(cray uas images list --format json | jq '.image_list' | jq .[] | grep gateway |  sed -e 's/"//g' | grep -v "1.6.0" | sort | tail -1)
+  GATEWAY_IMAGE_NAME=$(cray uas images list --format json | jq '.image_list' | jq .[] | grep gateway | sed -e 's/"//g' | grep -v "1.6.0" | sort | tail -1)
   if [[ -z ${GATEWAY_IMAGE_NAME} ]]; then
     error "Could not find a valid cray-gateway-test image"
   fi
@@ -99,7 +98,7 @@ fi
 # Get a token to talk to SLS
 #shellcheck disable=SC2155
 #shellcheck disable=SC2046
-export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 
 if [ -z ${TOKEN} ]; then
   error "Failure retrieving token from https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token"
@@ -147,7 +146,7 @@ fi
 echo "Waiting for ${UAI_NAME} to be ready"
 UAI_READY=0
 #shellcheck disable=SC2034
-for i in `seq 1 10`;do 
+for i in $(seq 1 10); do
   UAI_STATUS=$(cray uas list --format json | jq --arg n "${UAI_NAME}" '.[] | select(.uai_name == $n) | .uai_status' | sed -e 's/"//g')
   echo "status = $UAI_STATUS"
   if [ "$UAI_STATUS" == "Running: Ready" ]; then
@@ -167,7 +166,7 @@ if [[ -z ${UAI_POD} ]]; then
   error "Could not find pod for UAI ${UAI_NAME}"
 fi
 
-# Set the variables in the UAI 
+# Set the variables in the UAI
 kubectl -n user exec ${UAI_POD} -- sh -c "echo 'export ADMIN_CLIENT_SECRET=$ADMIN_CLIENT_SECRET' > /test/vars.sh"
 kubectl -n user exec ${UAI_POD} -- sh -c "echo 'export SYSTEM_DOMAIN=$SYSTEM_DOMAIN' >> /test/vars.sh"
 kubectl -n user exec ${UAI_POD} -- sh -c "echo 'export USER_NETWORK=$USER_NETWORK' >> /test/vars.sh"
