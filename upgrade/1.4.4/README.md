@@ -47,7 +47,7 @@ in [Upgrade CSM](../README.md) instead.
 
 1. (`ncn-m001#`) Set `CSM_DISTDIR` to the directory of the extracted files.
 
-   **IMPORTANT**: If necessary, change this command to match the actual location of the extracted files.
+   ***IMPORTANT*** If necessary, change this command to match the actual location of the extracted files.
 
    ```bash
    export CSM_DISTDIR="$(pwd)/csm-1.4.4"
@@ -71,8 +71,8 @@ in [Upgrade CSM](../README.md) instead.
 Helm charts:
 
 ```bash
-cd "$CSM_DISTDIR"
-./lib/setup-nexus.sh ; echo "RC=$?"
+cd "$CSM_DISTDIR" && ./lib/setup-nexus.sh
+echo "RC=$?"
 ```
 
 On success, the output should end with the following:
@@ -94,8 +94,7 @@ and exits with status code `0`.
 (`ncn-m001#`) Run the following script in preparation for 1.4.4 patch upgrade:
 
 ```bash
-for c in $(kubectl get crd | grep argo | cut -d' ' -f1)
-do
+for c in $(kubectl get crd | grep argo | cut -d' ' -f1); do
    kubectl label --overwrite crd $c app.kubernetes.io/managed-by="Helm"
    kubectl annotate --overwrite crd $c meta.helm.sh/release-name="cray-nls"
    kubectl annotate --overwrite crd $c meta.helm.sh/release-namespace="argo"
@@ -107,8 +106,7 @@ done
 (`ncn-m001#`) Run `upgrade.sh` to deploy upgraded CSM applications and services:
 
 ```bash
-cd "$CSM_DISTDIR"
-./upgrade.sh
+cd "$CSM_DISTDIR" && ./upgrade.sh
 ```
 
 ### Upload NCN images
@@ -225,22 +223,23 @@ system administration data living on masters and workers **will be wiped** durin
 advised to take backups of their local, site files.
 
 > Examples:
-> - ` ~/.config/sat/sat`
-> - `/etc/motd`
-> - `/etc/sudoers`
-> - `/home`
-> - `/root/.ssh/config`
+>
+> * ` ~/.config/sat/sat`
+> * `/etc/motd`
+> * `/etc/sudoers`
+> * `/home`
+> * `/root/.ssh/config`
 
 
 #### Image customization
 
 1. Follow option one of the following options based on your use case:
 
-    * [Option 2: Upgrade of CSM on system with additional products](../Stage_0_Prerequisites.md#option-2-upgrade-of-csm-on-system-with-additional-products)
-    * [Option 3: Upgrade of CSM on CSM-only system](../Stage_0_Prerequisites.md#option-3-upgrade-of-csm-on-csm-only-system)
+   * [Option 2: Upgrade of CSM on system with additional products](../Stage_0_Prerequisites.md#option-2-upgrade-of-csm-on-system-with-additional-products)
+   * [Option 3: Upgrade of CSM on CSM-only system](../Stage_0_Prerequisites.md#option-3-upgrade-of-csm-on-csm-only-system)
 
-    > ***NOTE*** If [Option 1: Upgrade of CSM and additional products](../Stage_0_Prerequisites.md#option-1-upgrade-of-csm-and-additional-products) is better suiting, then
-    > do a full IUF run upgrading all products including CSM.
+   > ***NOTE*** If [Option 1: Upgrade of CSM and additional products](../Stage_0_Prerequisites.md#option-1-upgrade-of-csm-and-additional-products) is better suiting, then
+   > do a full IUF run upgrading all products including CSM.
    
 1. Follow the directions in [Stage 0.4](../Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data).
 
@@ -250,78 +249,78 @@ In lieu of rebuilding the storage nodes, they will be live patched.
 
 1. (`ncn-m001#`) Unload and blacklist the QLogic RDMA `qedr` driver.
 
-  ```bash
-  /usr/share/doc/csm/upgrade/1.4.4/scripts/storage-in-place-patch.sh
-  ```
+   ```bash
+   /usr/share/doc/csm/upgrade/1.4.4/scripts/storage-in-place-patch.sh
+   ```
 
 1. (`ncn-m001#`) Verify that `qedr` is no longer loaded.
 
-  ```bash
-  pdsh -b -w $(grep -oP 'ncn-s\d+' /etc/hosts | sort -u | tr -t '\n' ',') '
-  lsmod | grep -Eo '\''^qedr'\'' || echo OK
-  ' | dshbak -c
-  ```
+   ```bash
+   pdsh -b -w $(grep -oP 'ncn-s\d+' /etc/hosts | sort -u | tr -t '\n' ',') '
+   lsmod | grep -Eo '\''^qedr'\'' || echo OK
+   ' | dshbak -c
+   ```
 
-  Expected output:
+   Expected output:
 
-  ```text
-  ----------------
-  ncn-s[001-003]
-  ----------------
-  OK
-  ```
+   ```text
+   ----------------
+   ncn-s[001-003]
+   ----------------
+   OK
+   ```
 
 ### Kubernetes nodes rolling rebuild
 
 1. (`ncn-m001#`) Set environment variables
 
-  ```bash
-  export CSM_REL_NAME="csm-${CSM_RELEASE}"
-  export CSM_ARTI_DIR="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}"
-  ```
+   ```bash
+   export CSM_REL_NAME="csm-${CSM_RELEASE}"
+   export CSM_ARTI_DIR="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}"
+   ```
 
 1. Proceed with the following sections from Stage 1:
 
-    * [Start typescript on `ncn-m001`](../Stage_1.md#start-typescript-on-ncn-m001)
-    * [Stage 1.1 - Master node image upgrade](../Stage_1.md#stage-11---master-node-image-upgrade)
-    * [Stage 1.2 - Worker node image upgrade](../Stage_1.md#stage-12---worker-node-image-upgrade)
-    * [Stage 1.3 - `ncn-m001` upgrade](../Stage_1.md#stage-13---ncn-m001-upgrade)
+   * [Start typescript on `ncn-m001`](../Stage_1.md#start-typescript-on-ncn-m001)
+   * [Stage 1.1 - Master node image upgrade](../Stage_1.md#stage-11---master-node-image-upgrade)
+   * [Stage 1.2 - Worker node image upgrade](../Stage_1.md#stage-12---worker-node-image-upgrade)
+   * [Stage 1.3 - `ncn-m001` upgrade](../Stage_1.md#stage-13---ncn-m001-upgrade)
 
 1. (`ncn-m001#`) Verify the booted images match the expected output.
 
-  ```bash
-  pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | tr -t '\n' ',') '
-  rpm -q kernel-default
-  rpm -q qlgc-fastlinq-kmp-default
-  grep -q qedr /etc/modprobe.d/disabled-modules.conf 2>/dev/null && echo "OK - rootfs blacklist" || echo "NOT OK - rootfs blacklist"
-  grep -q qedr /etc/dracut.conf.d/99-csm-ansible.conf 2>/dev/null && echo "OK - initrd blacklist" || echo "NOT OK - initrd blacklist"
-  lsmod | grep -qoE '\''^qedr'\'' && echo "NOT OK - qedr loaded" || echo "OK - no qedr"
-  lsinitrd /metal/recovery/boot/initrd.img.xz | grep -q '\''qedr'\'' && echo "NOT OK - initrd has qedr" || echo "OK - initrd no qedr"
-  ' | dshbak -c
-  ```
+   ```bash
+   pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | tr -t '\n' ',') '
+   rpm -q kernel-default
+   rpm -q qlgc-fastlinq-kmp-default
+   grep -q qedr /etc/modprobe.d/disabled-modules.conf 2>/dev/null && echo "OK - rootfs blacklist" || echo "NOT OK - rootfs blacklist"
+   grep -q qedr /etc/dracut.conf.d/99-csm-ansible.conf 2>/dev/null && echo "OK - initrd blacklist" || echo "NOT OK - initrd blacklist"
+   lsmod | grep -qoE '\''^qedr'\'' && echo "NOT OK - qedr loaded" || echo "OK - no qedr"
+   lsinitrd /metal/recovery/boot/initrd.img.xz | grep -q '\''qedr'\'' && echo "NOT OK - initrd has qedr" || echo "OK - initrd no qedr"
+   ' | dshbak -c
+   ```
 
-  Expected output
+   Expected output
   
-  ```text
-  ----------------
-  ncn-m[001-003],ncn-w[001-005]
-  ----------------
-  kernel-default-5.14.21-150400.24.100.2.27359.1.PTF.1215587.x86_64
-  qlgc-fastlinq-kmp-default-8.74.1.0_k5.14.21_150400.22-1.sles15sp4.x86_64
-  OK - rootfs blacklist
-  OK - initrd blacklistt
-  OK - no qedr
-  OK - initrd no qedr
-  ----------------
-  ncn-s[001-003]
-  ----------------
-  kernel-default-5.3.18-150300.59.87.1.x86_64
-  package qlgc-fastlinq-kmp-default is not installed
-  OK - rootfs blacklist
-  OK - initrd blacklist
-  OK - no qedr
-  OK - initrd no qedr
-  ```
+   ```text
+   ----------------
+   ncn-m[001-003],ncn-w[001-005]
+   ----------------
+   kernel-default-5.14.21-150400.24.100.2.27359.1.PTF.1215587.x86_64
+   qlgc-fastlinq-kmp-default-8.74.1.0_k5.14.21_150400.22-1.sles15sp4.x86_64
+   OK - rootfs blacklist
+   OK - initrd blacklistt
+   OK - no qedr
+   OK - initrd no qedr
+   ----------------
+   ncn-s[001-003]
+   ----------------
+   kernel-default-5.3.18-150300.59.87.1.x86_64
+   package qlgc-fastlinq-kmp-default is not installed
+   OK - rootfs blacklist
+   OK - initrd blacklist
+   OK - no qedr
+   OK - initrd no qedr
+   ```
 
 ### Update test suite packages
 
@@ -390,4 +389,4 @@ enables restoring from backup later in this process if needed.
 exit
 ```
 
-It is recommended to save the typescript file for later reference.
+> ***NOTE*** It is recommended to save the typescript file for later reference.
