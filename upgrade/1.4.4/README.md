@@ -236,11 +236,11 @@ advised to take backups of their local, site files.
 
 1. Follow option one of the following options based on your use case:
 
-  * [Option 2: Upgrade of CSM on system with additional products](../Stage_0_Prerequisites.md#option-2-upgrade-of-csm-on-system-with-additional-products)
-  * [Option 3: Upgrade of CSM on CSM-only system](../Stage_0_Prerequisites.md#option-3-upgrade-of-csm-on-csm-only-system)
+    * [Option 2: Upgrade of CSM on system with additional products](../Stage_0_Prerequisites.md#option-2-upgrade-of-csm-on-system-with-additional-products)
+    * [Option 3: Upgrade of CSM on CSM-only system](../Stage_0_Prerequisites.md#option-3-upgrade-of-csm-on-csm-only-system)
 
-  > ***NOTE*** If [Option 1: Upgrade of CSM and additional products](../Stage_0_Prerequisites.md#option-1-upgrade-of-csm-and-additional-products) is better suiting, then
-  > do a full IUF run upgrading all products including CSM.
+    > ***NOTE*** If [Option 1: Upgrade of CSM and additional products](../Stage_0_Prerequisites.md#option-1-upgrade-of-csm-and-additional-products) is better suiting, then
+    > do a full IUF run upgrading all products including CSM.
    
 1. Follow the directions in [Stage 0.4](../Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data).
 
@@ -282,10 +282,10 @@ In lieu of rebuilding the storage nodes, they will be live patched.
 
 1. Proceed with the following sections from Stage 1:
 
-  - [Start typescript on `ncn-m001`](../Stage_1.md#start-typescript-on-ncn-m001)
-  - [Stage 1.1 - Master node image upgrade](../Stage_1.md#stage-11---master-node-image-upgrade)
-  - [Stage 1.2 - Worker node image upgrade](../Stage_1.md#stage-12---worker-node-image-upgrade)
-  - [Stage 1.3 - `ncn-m001` upgrade](../Stage_1.md#stage-13---ncn-m001-upgrade)
+    * [Start typescript on `ncn-m001`](../Stage_1.md#start-typescript-on-ncn-m001)
+    * [Stage 1.1 - Master node image upgrade](../Stage_1.md#stage-11---master-node-image-upgrade)
+    * [Stage 1.2 - Worker node image upgrade](../Stage_1.md#stage-12---worker-node-image-upgrade)
+    * [Stage 1.3 - `ncn-m001` upgrade](../Stage_1.md#stage-13---ncn-m001-upgrade)
 
 1. (`ncn-m001#`) Verify the booted images match the expected output.
 
