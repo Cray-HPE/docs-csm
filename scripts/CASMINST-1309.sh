@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -46,8 +46,7 @@ for bmc in $bmcs; do
     id=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces?IPAddress=$ip" | jq -r '.[] | ."ID"')
 
     # Make sure ID isn't blank.
-    if [ -z "$id" ]
-    then
+    if [ -z "$id" ]; then
       echo "$id blank when trying to find an owner for IP $ip!"
     else
       echo "Deleting $id from EthernetInterfaces"...

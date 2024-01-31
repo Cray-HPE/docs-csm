@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -26,11 +26,11 @@
 set -exo pipefail
 
 if [[ "Bound" != $(kubectl get pvc -n nexus nexus-bak -o jsonpath='{.status.phase}') ]]; then
-echo "Error no backup PVC was found\nPlease run nexus-backup.sh before trying to restore"
-exit 1
+  echo "Error no backup PVC was found\nPlease run nexus-backup.sh before trying to restore"
+  exit 1
 fi
 
-kubectl -n nexus scale deployment nexus --replicas=0;
+kubectl -n nexus scale deployment nexus --replicas=0
 
 cat << EOF | kubectl -n nexus apply -f -
 apiVersion: batch/v1
@@ -66,9 +66,9 @@ spec:
 EOF
 
 while [[ -z $(kubectl get job nexus-restore -n nexus -o jsonpath='{.status.succeeded}') ]]; do
-    echo  "Waiting for the restore to finish for another 10 seconds."
-    sleep 10
+  echo "Waiting for the restore to finish for another 10 seconds."
+  sleep 10
 done
 
 kubectl -n nexus delete job nexus-restore
-kubectl -n nexus scale deployment nexus --replicas=1;
+kubectl -n nexus scale deployment nexus --replicas=1
