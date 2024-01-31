@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -168,25 +168,31 @@ function run_on_pit {
   for ncn in ${STORAGE_NCNS}; do
     echo "Installing RPMs on ${ncn}"
     scp ${STORAGE_RPM_PATHS} ${ncn}:/tmp/
+    # CASMINST-6779: Use rpm instead of zypper to avoid problems caused by inaccessible Zypper repos, since we are
+    # installing from local files anyway.
     # shellcheck disable=SC2029
-    ssh ${ncn} "cd /tmp && zypper --non-interactive in ${STORAGE_RPM_BASENAMES} && systemctl enable goss-servers && systemctl restart goss-servers && systemctl daemon-reload && echo systemctl daemon-reload has been run && rm -f ${STORAGE_RPM_BASENAMES}"
+    ssh ${ncn} "cd /tmp && rpm -Uvh --force ${STORAGE_RPM_BASENAMES} && systemctl enable goss-servers && systemctl restart goss-servers && systemctl daemon-reload && echo systemctl daemon-reload has been run && rm -f ${STORAGE_RPM_BASENAMES}"
   done
 
   for ncn in ${K8S_NCNS}; do
     echo "Installing RPMs on ${ncn}"
     scp ${K8S_RPM_PATHS} ${ncn}:/tmp/
+    # CASMINST-6779: Use rpm instead of zypper to avoid problems caused by inaccessible Zypper repos, since we are
+    # installing from local files anyway.
     # shellcheck disable=SC2029
-    ssh ${ncn} "cd /tmp && zypper --non-interactive in ${K8S_RPM_BASENAMES} && systemctl enable goss-servers && systemctl restart goss-servers && systemctl daemon-reload && echo systemctl daemon-reload has been run && rm -f ${K8S_RPM_BASENAMES}"
+    ssh ${ncn} "cd /tmp && rpm -Uvh --force ${K8S_RPM_BASENAMES} && systemctl enable goss-servers && systemctl restart goss-servers && systemctl daemon-reload && echo systemctl daemon-reload has been run && rm -f ${K8S_RPM_BASENAMES}"
   done
 
   # The RPMs should have been installed on the PIT at the same time csi was installed. Trust, but verify:
   echo "Installing RPMs on PIT if needed"
-  rpm -q canu || zypper install -y canu
-  rpm -q hpe-csm-goss-package || zypper install -y ${HPE_GOSS_RPM}
-  rpm -q csm-testing || zypper install -y ${CSM_TESTING_RPM}
-  rpm -q goss-servers || (zypper install -y ${GOSS_SERVERS_RPM} && systemctl enable goss-servers && systemctl restart goss-servers)
-  rpm -q platform-utils || zypper install -y ${PLATFORM_UTILS_RPM}
-  rpm -q iuf-cli || zypper install -y ${IUF_CLI_RPM}
+  # CASMINST-6779: Use rpm instead of zypper to avoid problems caused by inaccessible Zypper repos, since we are
+  # installing from local files anyway.
+  rpm -q canu || rpm -Uvh --force ${CANU_RPM}
+  rpm -q hpe-csm-goss-package || rpm -Uvh --force ${HPE_GOSS_RPM}
+  rpm -q csm-testing || rpm -Uvh --force ${CSM_TESTING_RPM}
+  rpm -q goss-servers || (rpm -Uvh --force ${GOSS_SERVERS_RPM} && systemctl enable goss-servers && systemctl restart goss-servers)
+  rpm -q platform-utils || rpm -Uvh --force ${PLATFORM_UTILS_RPM}
+  rpm -q iuf-cli || rpm -Uvh --force ${IUF_CLI_RPM}
   systemctl daemon-reload && echo "systemctl daemon-reload has been run"
 }
 
