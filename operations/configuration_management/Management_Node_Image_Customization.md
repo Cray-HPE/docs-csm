@@ -429,7 +429,7 @@ new customized image.
 
 1. (`ncn-mw#`) Update boot parameters for a management node.
 
-    1. When working with a group of `XNAMES` (use the previous step to collect the group of `XNAMES`).
+    * When working with a group of `XNAMES` (use the previous step to collect the group of `XNAMES`).
 
         ```bash
         for XNAME in "${XNAMES[@]}"; do
@@ -452,7 +452,7 @@ new customized image.
         done
         ```
 
-    1. When working on one node at a time.
+    * When working on one node at a time.
 
         1. Get the existing `metal.server` setting for the component name (xname) of the node of interest.
 
