@@ -22,7 +22,11 @@ in [Upgrade CSM](../README.md) instead.
 1. [Upgrade Ceph and stop local Docker registries](#upgrade-ceph-and-stop-local-docker-registries)
 1. [Enable `smartmon` metrics on storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
 1. [Update management node CFS configuration](#update-management-node-cfs-configuration)
-1. [Update NCN images and reboot](#update-ncn-images-and-reboot) 
+1. [Update NCN images](#update-ncn-images)
+    1. [Warnings](#warnings)   
+    1. [Image customization](#image-customization)
+1. [Storage nodes in-place update](#storage-nodes-in-place-update)   
+1. [Kubernetes nodes rolling rebuild](#kubernetes-nodes-rolling-rebuild)   
 1. [Update test suite packages](#update-test-suite-packages)
 1. [Verification](#verification)
 1. [Take Etcd manual backup](#take-etcd-manual-backup)
@@ -240,7 +244,7 @@ advised to take backups of their local, site files.
    
 1. Follow the directions in [Stage 0.4](../Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data).
 
-##### Storage nodes in-place update
+### Storage nodes in-place update
 
 In lieu of rebuilding the storage nodes, they will be live patched.
 
@@ -267,7 +271,7 @@ In lieu of rebuilding the storage nodes, they will be live patched.
   OK
   ```
 
-##### Kubernetes nodes rolling rebuild
+### Kubernetes nodes rolling rebuild
 
 1. (`ncn-m001#`) Set environment variables
 
