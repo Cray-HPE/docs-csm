@@ -25,48 +25,48 @@ set -u
 
 # For each redfish endpoint
 for endpoint in $(cray hsm inventory redfishEndpoints list --laststatus HTTPsGetFailed --format json | jq .RedfishEndpoints[].ID -r); do
-    echo
-    echo "------------------------------------------------------------"
-    echo "Redfish Endpoint $endpoint has discovery state HTTPsGetFailed"
-    # Ignore the failure if it is a master node    
-    mgmtSwitchConnectorCount=$(cray sls search hardware list --node-nics "$endpoint" --format json  | jq -s 'if . == [] then null else .[0] end | length')
-    if [[ "$mgmtSwitchConnectorCount" == "0" ]]; then
-        echo "Has no connection to HMN, ignoring"
-        continue
-    fi
+  echo
+  echo "------------------------------------------------------------"
+  echo "Redfish Endpoint $endpoint has discovery state HTTPsGetFailed"
+  # Ignore the failure if it is a master node
+  mgmtSwitchConnectorCount=$(cray sls search hardware list --node-nics "$endpoint" --format json | jq -s 'if . == [] then null else .[0] end | length')
+  if [[ $mgmtSwitchConnectorCount == "0" ]]; then
+    echo "Has no connection to HMN, ignoring"
+    continue
+  fi
 
-    # See if the BMC resolvable in DNS
-    echo "Checking to see if $endpoint resolves in DNS"
-    if ! nslookup "$endpoint" > /dev/null; then
-        echo "  Hostname does not resolve"
-        continue
-    else 
-        echo "  Hostname resolves"
-    fi
+  # See if the BMC resolvable in DNS
+  echo "Checking to see if $endpoint resolves in DNS"
+  if ! nslookup "$endpoint" > /dev/null; then
+    echo "  Hostname does not resolve"
+    continue
+  else
+    echo "  Hostname resolves"
+  fi
 
-    # Check the BMC creds against what is in vault
-    echo "Retrieving BMC credentials for $endpoint from SCSD/Vault"
-    results=$(cray scsd bmc creds list --targets "$endpoint" --format json | jq .Targets -c)
-    if [[ "$results" == "null" ]]; then
-        echo "BMC Credentials are missing from vault"
-        continue
-    fi
+  # Check the BMC creds against what is in vault
+  echo "Retrieving BMC credentials for $endpoint from SCSD/Vault"
+  results=$(cray scsd bmc creds list --targets "$endpoint" --format json | jq .Targets -c)
+  if [[ $results == "null" ]]; then
+    echo "BMC Credentials are missing from vault"
+    continue
+  fi
 
-    username=$(echo "$results" | jq .[0].Username -r)
-    password=$(echo "$results" | jq .[0].Password -r)
+  username=$(echo "$results" | jq .[0].Username -r)
+  password=$(echo "$results" | jq .[0].Password -r)
 
-    echo "Testing stored BMC credentials against the BMC"
-    curl_result=$(curl -k -s -u "$username:$password" "https://${endpoint}/redfish/v1/Managers" -i | head -n 1)
-    
-    if echo "$curl_result" | grep "200" > /dev/null; then
-        echo "  BMC credentials are OK."
-        echo "  ERROR Additional investigation is required!"
+  echo "Testing stored BMC credentials against the BMC"
+  curl_result=$(curl -k -s -u "$username:$password" "https://${endpoint}/redfish/v1/Managers" -i | head -n 1)
+
+  if echo "$curl_result" | grep "200" > /dev/null; then
+    echo "  BMC credentials are OK."
+    echo "  ERROR Additional investigation is required!"
+  else
+    if echo "$curl_result" | grep "401" > /dev/null; then
+      echo "  ERROR Received 401 Unauthorized. BMC credentials in Vault do not match current BMC credentials."
     else
-        if echo "$curl_result" | grep "401" > /dev/null; then
-            echo "  ERROR Received 401 Unauthorized. BMC credentials in Vault do not match current BMC credentials."
-        else
-        echo " ERROR Unexpected HTTP Status code: $curl_result"
-        fi
+      echo " ERROR Unexpected HTTP Status code: $curl_result"
     fi
+  fi
 
 done

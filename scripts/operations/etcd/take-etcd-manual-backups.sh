@@ -24,7 +24,7 @@
 #
 
 usage() {
-        echo "
+  echo "
 Usage:
 
 $0 context
@@ -41,8 +41,7 @@ context - Description of when the backups are being taken (e.g. 'post_install').
 backup_clusters() {
   context=$1
   etcd_clusters_to_backup=$(kubectl get configmap -n operators etcd-backup-restore-config -o json | jq -r '.data."clusters.txt"' | awk -F "." '{print $1}')
-  for cluster in $etcd_clusters_to_backup
-  do
+  for cluster in $etcd_clusters_to_backup; do
     backup_name=$(echo "$context.backup_$(date +%Y-%m-%d-%H:%M:%S)")
     echo "Creating manual etcd backup for '$cluster' named '$backup_name'."
     kubectl exec -it -n operators "$(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}')" -c util -- create_backup $cluster $backup_name
@@ -50,8 +49,8 @@ backup_clusters() {
 }
 
 if [ "$#" -lt 1 ]; then
-        usage
-        exit 1
+  usage
+  exit 1
 fi
 
 context=$1

@@ -43,7 +43,7 @@ fi
 # Get the Base Directory
 BASEDIR=$(dirname $0)
 
-# Get the SYSTEM_DOMAIN from cloud-init 
+# Get the SYSTEM_DOMAIN from cloud-init
 SYSTEM_NAME=$(craysys metadata get system-name)
 SITE_DOMAIN=$(craysys metadata get site-domain)
 

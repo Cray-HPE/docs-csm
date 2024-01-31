@@ -34,7 +34,7 @@ function move-rbd-mount {
     if mountpoint ${upgrade_dir} > /dev/null 2>&1; then
       echo "Unmounting ${upgrade_dir}..."
       umount ${upgrade_dir}
-      if [[ "$?" -ne 0 ]]; then
+      if [[ $? -ne 0 ]]; then
         echo "ERROR: CSM rbd device failed to unmount! The above error should be"
         echo "       investigated/addressed, then re-run this script."
         exit 1
@@ -73,26 +73,26 @@ function wait_for_running_daemons() {
   num_daemons=$2
   cnt=0
   while true; do
-    if [[ "$cnt" -eq 60 ]]; then
+    if [[ $cnt -eq 60 ]]; then
       echo "ERROR: Giving up on waiting for $num_daemons $daemon_type daemons to be running..."
       break
     fi
     output=$(ceph orch ps --service_name $daemon_type -f json-pretty | jq -r '.[] | select(.status_desc=="running") | .service_name')
-    if [[ "$?" -eq 0 ]]; then
+    if [[ $? -eq 0 ]]; then
       num_active=$(echo "$output" | wc -l)
-      if [[ "$num_active" -eq $num_daemons ]]; then
+      if [[ $num_active -eq $num_daemons ]]; then
         echo "Found $num_daemons running $daemon_type daemons -- continuing..."
         break
       fi
     fi
     sleep 5
     echo "Sleeping for five seconds waiting for $num_daemons running $daemon_type daemons..."
-    cnt=$((cnt+1))
+    cnt=$((cnt + 1))
   done
 }
 
 function create-admin-tools-cephfs-share {
-  if [[ "$(ceph fs status admin-tools --format json-pretty 2>/dev/null|jq -r .clients[].fs)" != "admin-tools" ]]; then
+  if [[ "$(ceph fs status admin-tools --format json-pretty 2> /dev/null | jq -r .clients[].fs)" != "admin-tools" ]]; then
     echo "Setting cephfs 'enable_multiple' flag to true..."
     ceph fs flag set enable_multiple true
     echo "Creating admin-tools ceph fs share..."
@@ -110,7 +110,7 @@ function create-admin-tools-cephfs-share {
 
   if ! grep "mds_namespace=admin-tools" ${fstab} > /dev/null; then
     echo "Adding fstab entry for cephfs share..."
-    mon_ips=$(ceph mon dump -f json-pretty 2>/dev/null|jq -r '[.mons[].public_addrs.addrvec[] | select(.type == "v1") | .addr] | join(",")')
+    mon_ips=$(ceph mon dump -f json-pretty 2> /dev/null | jq -r '[.mons[].public_addrs.addrvec[] | select(.type == "v1") | .addr] | join(",")')
     echo "" >> ${fstab}
     echo "${mon_ips}:/ /etc/cray/upgrade/csm ceph _netdev,name=admin-tools,relatime,defaults,mount_timeout=60,noauto,mds_namespace=admin-tools 1 1" >> ${fstab}
   else
@@ -124,7 +124,7 @@ function create-admin-tools-cephfs-share {
   mkdir -p ${upgrade_dir} > /dev/null 2>&1
   mount ${upgrade_dir}
 
-  if [[ "$?" -ne 0 ]]; then
+  if [[ $? -ne 0 ]]; then
     echo "ERROR: CSM share failed to mount!"
     exit 1
   fi
