@@ -53,7 +53,9 @@ Base URLs:
 
 * <a href="https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2">https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2</a>
 
-* <a href="http://cray-hmnfd/hmi/v2">http://cray-hmnfd/hmi/v2</a>
+# Authentication
+
+- HTTP Authentication, scheme: bearer 
 
 <h1 id="hms-notification-fanout-daemon-subscriptions">subscriptions</h1>
 
@@ -75,14 +77,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions', headers = headers)
@@ -103,6 +107,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -163,8 +168,9 @@ Retrieve all information on currently held State Change Notification subscriptio
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## doGetSubscriptionInfoXName
@@ -183,14 +189,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions/{xname} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions/{xname}', headers = headers)
@@ -211,6 +219,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -277,8 +286,9 @@ Retrieve currently held State Change Notification subscriptions for a component.
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## doSubscriptionDeleteXName
@@ -297,14 +307,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions/{xname}/agents \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions/{xname}/agents', headers = headers)
@@ -325,6 +337,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -375,8 +388,9 @@ Delete all state change notification subscriptions for a component.
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## doSubscriptionPOSTV2
@@ -397,7 +411,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions/{xname}/agents/{agent} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -405,7 +420,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions/{x
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions/{xname}/agents/{agent}', headers = headers)
@@ -427,6 +443,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -501,8 +518,9 @@ Subscribe to state change notifications for a set of components. Once this is do
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## doSubscriptionPATCHV2
@@ -523,7 +541,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions/{xname}/agents/{agent} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -531,7 +550,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions/{
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions/{xname}/agents/{agent}', headers = headers)
@@ -553,6 +573,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -627,8 +648,9 @@ Modify an existing subscription to state change notifications for a  component a
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## doSubscriptionDeleteXNameAgentV2
@@ -647,14 +669,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions/{xname}/agents/{agent} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions/{xname}/agents/{agent}', headers = headers)
@@ -675,6 +699,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -726,8 +751,9 @@ Delete a specific state change notification subscription associated  with a targ
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="hms-notification-fanout-daemon-scn">scn</h1>
@@ -752,7 +778,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/scn \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -760,7 +787,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/scn \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/scn', headers = headers)
@@ -782,6 +810,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -847,8 +876,9 @@ Send a state change notification for fanout to subscribers. This is the API endp
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="hms-notification-fanout-daemon-params">params</h1>
@@ -869,14 +899,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/params \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/params', headers = headers)
@@ -897,6 +929,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -947,8 +980,9 @@ Retrieve a JSON-formatted list of current configurable parameters.
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## doParamsPatch
@@ -969,7 +1003,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/params \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -977,7 +1012,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/params \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/params', headers = headers)
@@ -999,6 +1035,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1068,8 +1105,9 @@ Change the value of one or more configurable parameters.
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="hms-notification-fanout-daemon-health">health</h1>
@@ -1088,14 +1126,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/health \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/health', headers = headers)
@@ -1116,6 +1156,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1174,8 +1215,9 @@ Status Code **200**
 |» PruneMap|string|true|none|Status of the list of subscriptions to be pruned.|
 |» WorkerPool|string|true|none|Status of the worker pool servicing the notifications.|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__liveness
@@ -1192,14 +1234,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/liveness \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/liveness', headers = headers)
@@ -1220,6 +1264,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1262,8 +1307,9 @@ This is primarily an endpoint for the automated Kubernetes system.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /liveness, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__readiness
@@ -1280,14 +1326,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/readiness \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/readiness', headers = headers)
@@ -1308,6 +1356,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1350,8 +1399,9 @@ This is primarily an endpoint for the automated Kubernetes system.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /readiness, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 # Schemas

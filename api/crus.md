@@ -76,7 +76,9 @@ Base URLs:
 
 * <a href="https://api-gw-service-nmn.local/apis/crus">https://api-gw-service-nmn.local/apis/crus</a>
 
-* <a href="https://cray-crus/">https://cray-crus/</a>
+# Authentication
+
+- HTTP Authentication, scheme: bearer 
 
 <h1 id="compute-rolling-upgrade-service-default">Default</h1>
 
@@ -96,7 +98,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/crus/session \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -104,7 +107,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/crus/session \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/crus/session', headers = headers)
@@ -126,6 +130,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -197,8 +202,9 @@ specified in the starting group.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|None|
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Unprocessable Entity|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__session
@@ -215,14 +221,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/crus/session \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/crus/session', headers = headers)
@@ -243,6 +251,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -324,8 +333,9 @@ Status Code **200**
 |state|UPDATING|
 |workload_manager_type|slurm|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__session_{upgrade_id}
@@ -342,14 +352,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/crus/session/{upgrade_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/crus/session/{upgrade_id}', headers = headers)
@@ -370,6 +382,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -425,8 +438,9 @@ Retrieve session details by upgrade_id.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|The status of the CRUS session.|[SessionStatus](#schemasessionstatus)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete__session_{upgrade_id}
@@ -443,14 +457,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/crus/session/{upgrade_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/crus/session/{upgrade_id}', headers = headers)
@@ -471,6 +487,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -526,8 +543,9 @@ Delete session by upgrade_id.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|The status of the CRUS session.|[SessionStatus](#schemasessionstatus)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 # Schemas
