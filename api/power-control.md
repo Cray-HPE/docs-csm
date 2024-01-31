@@ -38,13 +38,11 @@ Base URLs:
 
 * <a href="https://api-gw-service-nmn.local/apis/power-control/v1">https://api-gw-service-nmn.local/apis/power-control/v1</a>
 
-* <a href="http://cray-power-control/v1">http://cray-power-control/v1</a>
-
-* <a href="https://loki-ncn-m001.us.cray.com/apis/power-control/v1">https://loki-ncn-m001.us.cray.com/apis/power-control/v1</a>
-
-* <a href="http://localhost:26970">http://localhost:26970</a>
-
  License: MIT
+
+# Authentication
+
+- HTTP Authentication, scheme: bearer 
 
 <h1 id="power-control-service-pcs--transitions">transitions</h1>
 
@@ -66,7 +64,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/power-control/v1/transitions \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -74,7 +73,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/power-control/v1/transitions 
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/power-control/v1/transitions', headers = headers)
@@ -96,6 +96,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -157,8 +158,9 @@ Request to perform power transitions.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error prevented starting the transition|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__transitions
@@ -175,14 +177,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/power-control/v1/transitions \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/power-control/v1/transitions', headers = headers)
@@ -203,6 +207,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -259,8 +264,9 @@ are automatically deleted.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[transitions_getAll](#schematransitions_getall)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error prevented getting the transitions|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__transitions_{transitionID}
@@ -277,14 +283,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/power-control/v1/transitions/{transitionID} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/power-control/v1/transitions/{transitionID}', headers = headers)
@@ -305,6 +313,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -371,8 +380,9 @@ transitionID.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error prevented getting the transition|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete__transitions_{transitionID}
@@ -389,14 +399,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/power-control/v1/transitions/{transitionID} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/power-control/v1/transitions/{transitionID}', headers = headers)
@@ -417,6 +429,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -463,8 +476,9 @@ Attempt to abort an in-progress transition by transitionID
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|TransitionID not found|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error prevented abort signaling|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="power-control-service-pcs--power-status">power-status</h1>
@@ -485,14 +499,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/power-control/v1/power-status \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/power-control/v1/power-status', headers = headers)
@@ -513,6 +529,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -581,8 +598,9 @@ Retrieve the power state of the component specified by xname.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="power-control-service-pcs--power-cap">power-cap</h1>
@@ -605,7 +623,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/power-control/v1/power-cap/snapshot \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -613,7 +632,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/power-control/v1/power-cap/sn
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/power-control/v1/power-cap/snapshot', headers = headers)
@@ -635,6 +655,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -690,8 +711,9 @@ Get power cap snapshot for a set of targets.  This operation returns a taskID to
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch__power-cap
@@ -710,7 +732,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/power-control/v1/power-cap \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -718,7 +741,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/power-control/v1/power-cap \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/power-control/v1/power-cap', headers = headers)
@@ -740,6 +764,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -803,8 +828,9 @@ Set power cap parameters for a list of targets.  The PATCH payload contains the 
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__power-cap
@@ -821,14 +847,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/power-control/v1/power-cap \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/power-control/v1/power-cap', headers = headers)
@@ -849,6 +877,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -901,8 +930,9 @@ func main() {
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK. The data was successfully retrieved|[power_cap_task_list](#schemapower_cap_task_list)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__power-cap_{taskID}
@@ -919,14 +949,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/power-control/v1/power-cap/{taskID} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/power-control/v1/power-cap/{taskID}', headers = headers)
@@ -947,6 +979,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1023,8 +1056,9 @@ Queries the current status for the specified taskID. Use the taskID returned fro
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|TaskID not found|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="power-control-service-pcs--cli_ignore">cli_ignore</h1>
@@ -1041,14 +1075,18 @@ Host: api-gw-service-nmn.local
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/power-control/v1/liveness
+curl -X GET https://api-gw-service-nmn.local/apis/power-control/v1/liveness \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
+headers = {
+  'Authorization': 'Bearer {access-token}'
+}
 
-r = requests.get('https://api-gw-service-nmn.local/apis/power-control/v1/liveness')
+r = requests.get('https://api-gw-service-nmn.local/apis/power-control/v1/liveness', headers = headers)
 
 print(r.json())
 
@@ -1063,6 +1101,10 @@ import (
 )
 
 func main() {
+
+    headers := map[string][]string{
+        "Authorization": []string{"Bearer {access-token}"},
+    }
 
     data := bytes.NewBuffer([]byte{jsonReq})
     req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/power-control/v1/liveness", data)
@@ -1088,8 +1130,9 @@ Get liveness status of the service
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
 |503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|The service is not taking HTTP requests|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__readiness
@@ -1104,14 +1147,18 @@ Host: api-gw-service-nmn.local
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/power-control/v1/readiness
+curl -X GET https://api-gw-service-nmn.local/apis/power-control/v1/readiness \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
+headers = {
+  'Authorization': 'Bearer {access-token}'
+}
 
-r = requests.get('https://api-gw-service-nmn.local/apis/power-control/v1/readiness')
+r = requests.get('https://api-gw-service-nmn.local/apis/power-control/v1/readiness', headers = headers)
 
 print(r.json())
 
@@ -1126,6 +1173,10 @@ import (
 )
 
 func main() {
+
+    headers := map[string][]string{
+        "Authorization": []string{"Bearer {access-token}"},
+    }
 
     data := bytes.NewBuffer([]byte{jsonReq})
     req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/power-control/v1/readiness", data)
@@ -1151,8 +1202,9 @@ Get readiness status of the service
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
 |503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|The service is not taking HTTP requests|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__health
@@ -1169,14 +1221,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/power-control/v1/health \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/power-control/v1/health', headers = headers)
@@ -1197,6 +1251,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1245,8 +1300,9 @@ This is primarily intended as a diagnostic tool to investigate the functioning o
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|[OK](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1) Network API call success|[health_rsp](#schemahealth_rsp)|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted. For /health, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 # Schemas

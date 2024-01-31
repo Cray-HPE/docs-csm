@@ -98,7 +98,9 @@ Base URLs:
 
 * <a href="https://api-gw-service-nmn.local/apis/bos">https://api-gw-service-nmn.local/apis/bos</a>
 
-* <a href="https://cray-bos">https://cray-bos</a>
+# Authentication
+
+- HTTP Authentication, scheme: bearer 
 
 <h1 id="boot-orchestration-service-version">version</h1>
 
@@ -116,14 +118,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/ \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/', headers = headers)
@@ -144,6 +148,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -203,8 +208,9 @@ Status Code **200**
 |»» href|string|false|none|none|
 |»» rel|string|false|none|none|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## v1_get
@@ -223,14 +229,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v1 \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1', headers = headers)
@@ -251,6 +259,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -299,8 +308,9 @@ The versioning system uses [semver](https://semver.org/).
 * versions : Link back to the versions resource|[Version](#schemaversion)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## v1_get_version
@@ -319,14 +329,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/version \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/version', headers = headers)
@@ -347,6 +359,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -395,8 +408,9 @@ The versioning system uses [semver](https://semver.org/).
 * versions : Link back to the versions resource|[Version](#schemaversion)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="boot-orchestration-service-healthz">healthz</h1>
@@ -417,14 +431,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/healthz \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/healthz', headers = headers)
@@ -445,6 +461,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -483,8 +500,9 @@ Get BOS health details.
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|Service Unavailable|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="boot-orchestration-service-sessiontemplate">sessiontemplate</h1>
@@ -509,7 +527,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 curl -X POST https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -518,7 +537,8 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate', headers = headers)
@@ -541,6 +561,7 @@ func main() {
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -658,8 +679,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.
 If no tenant was specified, then the request was bad for another reason.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v1_sessiontemplates
@@ -680,7 +702,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -688,7 +711,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate \
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate', headers = headers)
@@ -710,6 +734,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -821,8 +846,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details array|[V2SessionTemplateArray](#schemav2sessiontemplatearray)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v1_sessiontemplate
@@ -843,7 +869,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate/{session_template_id} \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -851,7 +878,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate/{sessio
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate/{session_template_id}', headers = headers)
@@ -873,6 +901,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -986,8 +1015,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v1_sessiontemplate
@@ -1008,7 +1038,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate/{session_template_id} \
   -H 'Accept: application/problem+json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1016,7 +1047,8 @@ curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate/{ses
 import requests
 headers = {
   'Accept': 'application/problem+json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate/{session_template_id}', headers = headers)
@@ -1038,6 +1070,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1091,8 +1124,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v1_sessiontemplatetemplate
@@ -1111,14 +1145,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplatetemplate \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplatetemplate', headers = headers)
@@ -1139,6 +1175,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1238,8 +1275,9 @@ Session Templates.
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="boot-orchestration-service-session">session</h1>
@@ -1264,7 +1302,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 curl -X POST https://api-gw-service-nmn.local/apis/bos/v1/session \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1273,7 +1312,8 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/bos/v1/session', headers = headers)
@@ -1296,6 +1336,7 @@ func main() {
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1370,8 +1411,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 If no tenant was specified, then the request was bad for another reason.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v1_sessions
@@ -1392,7 +1434,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1400,7 +1443,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session \
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/session', headers = headers)
@@ -1422,6 +1466,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1477,8 +1522,9 @@ Status Code **200**
 |---|---|---|---|---|
 |*anonymous*|[[V1SessionId](#schemav1sessionid)]|false|none|[Unique BOS v1 Session identifier.]|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v1_session
@@ -1499,7 +1545,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id} \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1507,7 +1554,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id} \
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}', headers = headers)
@@ -1529,6 +1577,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1588,8 +1637,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 
 <h3 id="get_v1_session-responseschema">Response Schema</h3>
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v1_session
@@ -1610,7 +1660,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id} \
   -H 'Accept: application/problem+json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1618,7 +1669,8 @@ curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}
 import requests
 headers = {
   'Accept': 'application/problem+json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}', headers = headers)
@@ -1640,6 +1692,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1693,8 +1746,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v1_session_status
@@ -1715,7 +1769,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1723,7 +1778,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/st
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status', headers = headers)
@@ -1745,6 +1801,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1810,8 +1867,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## create_v1_session_status
@@ -1834,7 +1892,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 curl -X POST https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1843,7 +1902,8 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status', headers = headers)
@@ -1866,6 +1926,7 @@ func main() {
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1957,8 +2018,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 If no tenant was specified, then the request was bad for another reason.|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|The resource to be created already exists|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## update_v1_session_status
@@ -1981,7 +2043,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 curl -X PATCH https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1990,7 +2053,8 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status', headers = headers)
@@ -2013,6 +2077,7 @@ func main() {
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2091,8 +2156,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v1_session_status
@@ -2113,7 +2179,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status \
   -H 'Accept: application/problem+json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -2121,7 +2188,8 @@ curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}
 import requests
 headers = {
   'Accept': 'application/problem+json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status', headers = headers)
@@ -2143,6 +2211,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2197,8 +2266,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 If no tenant was specified, then the request was bad for another reason.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v1_session_status_by_bootset
@@ -2219,7 +2289,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name} \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -2227,7 +2298,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/st
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}', headers = headers)
@@ -2249,6 +2321,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2344,8 +2417,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## create_v1_boot_set_status
@@ -2368,7 +2442,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 curl -X POST https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name} \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -2377,7 +2452,8 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}', headers = headers)
@@ -2400,6 +2476,7 @@ func main() {
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2549,8 +2626,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|The resource to be created already exists|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## update_v1_session_status_by_bootset
@@ -2573,7 +2651,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 curl -X PATCH https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name} \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -2582,7 +2661,8 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}', headers = headers)
@@ -2605,6 +2685,7 @@ func main() {
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2722,8 +2803,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v1_boot_set_status
@@ -2744,7 +2826,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name} \
   -H 'Accept: application/problem+json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -2752,7 +2835,8 @@ curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}
 import requests
 headers = {
   'Accept': 'application/problem+json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}', headers = headers)
@@ -2774,6 +2858,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2828,8 +2913,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.
 If no tenant was specified, then the request was bad for another reason.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v1_session_status_by_bootset_and_phase
@@ -2850,7 +2936,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}/{phase_name} \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -2858,7 +2945,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/st
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}/{phase_name}', headers = headers)
@@ -2880,6 +2968,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2957,8 +3046,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v1_session_status_by_bootset_and_phase_and_category
@@ -2979,7 +3069,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}/{phase_name}/{category_name} \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -2987,7 +3078,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/st
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}/{phase_name}/{category_name}', headers = headers)
@@ -3009,6 +3101,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3065,8 +3158,9 @@ If this parameter is set to a non-empty string, the request will be rejected.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="boot-orchestration-service-v2">v2</h1>
@@ -3087,14 +3181,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v2 \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v2', headers = headers)
@@ -3115,6 +3211,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3163,8 +3260,9 @@ The versioning system uses [semver](https://semver.org/).
 * versions : Link back to the versions resource|[Version](#schemaversion)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v2_healthz
@@ -3183,14 +3281,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/healthz \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v2/healthz', headers = headers)
@@ -3211,6 +3311,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3249,8 +3350,9 @@ Get BOS health details.
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|Service Unavailable|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v2_sessiontemplates
@@ -3271,7 +3373,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplates \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -3279,7 +3382,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplates \
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplates', headers = headers)
@@ -3301,6 +3405,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3414,8 +3519,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details array|[V2SessionTemplateArray](#schemav2sessiontemplatearray)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## validate_v2_sessiontemplate
@@ -3436,7 +3542,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplatesvalid/{session_template_id} \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -3444,7 +3551,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplatesvalid/{
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplatesvalid/{session_template_id}', headers = headers)
@@ -3466,6 +3574,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3517,8 +3626,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template validity details|[V2SessionTemplateValidation](#schemav2sessiontemplatevalidation)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v2_sessiontemplate
@@ -3539,7 +3649,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplates/{session_template_id} \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -3547,7 +3658,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplates/{sessi
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplates/{session_template_id}', headers = headers)
@@ -3569,6 +3681,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3684,8 +3797,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## put_v2_sessiontemplate
@@ -3708,7 +3822,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 curl -X PUT https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplates/{session_template_id} \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -3717,7 +3832,8 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.put('https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplates/{session_template_id}', headers = headers)
@@ -3740,6 +3856,7 @@ func main() {
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3916,8 +4033,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_v2_sessiontemplate
@@ -3940,7 +4058,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 curl -X PATCH https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplates/{session_template_id} \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -3949,7 +4068,8 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplates/{session_template_id}', headers = headers)
@@ -3972,6 +4092,7 @@ func main() {
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4149,8 +4270,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v2_sessiontemplate
@@ -4171,7 +4293,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplates/{session_template_id} \
   -H 'Accept: application/problem+json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -4179,7 +4302,8 @@ curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplates/{se
 import requests
 headers = {
   'Accept': 'application/problem+json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplates/{session_template_id}', headers = headers)
@@ -4201,6 +4325,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4256,8 +4381,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v2_sessiontemplatetemplate
@@ -4276,14 +4402,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplatetemplate \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v2/sessiontemplatetemplate', headers = headers)
@@ -4304,6 +4432,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4403,8 +4532,9 @@ Session Templates.
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post_v2_session
@@ -4427,7 +4557,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 curl -X POST https://api-gw-service-nmn.local/apis/bos/v2/sessions \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -4436,7 +4567,8 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/bos/v2/sessions', headers = headers)
@@ -4459,6 +4591,7 @@ func main() {
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4538,8 +4671,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Session details|[V2Session](#schemav2session)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v2_sessions
@@ -4560,7 +4694,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/sessions \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -4568,7 +4703,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/sessions \
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v2/sessions', headers = headers)
@@ -4590,6 +4726,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4665,8 +4802,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details array|[V2SessionArray](#schemav2sessionarray)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v2_sessions
@@ -4687,7 +4825,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v2/sessions \
   -H 'Accept: application/problem+json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -4695,7 +4834,8 @@ curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v2/sessions \
 import requests
 headers = {
   'Accept': 'application/problem+json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/bos/v2/sessions', headers = headers)
@@ -4717,6 +4857,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4783,8 +4924,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v2_session
@@ -4805,7 +4947,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/sessions/{session_id} \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -4813,7 +4956,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/sessions/{session_id} \
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v2/sessions/{session_id}', headers = headers)
@@ -4835,6 +4979,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4899,8 +5044,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details|[V2Session](#schemav2session)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_v2_session
@@ -4923,7 +5069,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 curl -X PATCH https://api-gw-service-nmn.local/apis/bos/v2/sessions/{session_id} \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -4932,7 +5079,8 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/bos/v2/sessions/{session_id}', headers = headers)
@@ -4955,6 +5103,7 @@ func main() {
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5041,8 +5190,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v2_session
@@ -5063,7 +5213,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v2/sessions/{session_id} \
   -H 'Accept: application/problem+json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -5071,7 +5222,8 @@ curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v2/sessions/{session_id
 import requests
 headers = {
   'Accept': 'application/problem+json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/bos/v2/sessions/{session_id}', headers = headers)
@@ -5093,6 +5245,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5148,8 +5301,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v2_session_status
@@ -5170,7 +5324,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/sessions/{session_id}/status \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -5178,7 +5333,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/sessions/{session_id}/s
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v2/sessions/{session_id}/status', headers = headers)
@@ -5200,6 +5356,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5267,8 +5424,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session status details|[V2SessionExtendedStatus](#schemav2sessionextendedstatus)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## save_v2_session_status
@@ -5289,7 +5447,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/bos/v2/sessions/{session_id}/status \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -5297,7 +5456,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/bos/v2/sessions/{session_id}/
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/bos/v2/sessions/{session_id}/status', headers = headers)
@@ -5319,6 +5479,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5383,8 +5544,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details|[V2Session](#schemav2session)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v2_components
@@ -5405,7 +5567,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/components \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -5413,7 +5576,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/components \
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v2/components', headers = headers)
@@ -5435,6 +5599,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5550,8 +5715,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Component states|[V2ComponentArray](#schemav2componentarray)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## put_v2_components
@@ -5574,7 +5740,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 curl -X PUT https://api-gw-service-nmn.local/apis/bos/v2/components \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -5583,7 +5750,8 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.put('https://api-gw-service-nmn.local/apis/bos/v2/components', headers = headers)
@@ -5606,6 +5774,7 @@ func main() {
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5760,8 +5929,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Component states|[V2ComponentArray](#schemav2componentarray)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_v2_components
@@ -5784,7 +5954,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 curl -X PATCH https://api-gw-service-nmn.local/apis/bos/v2/components \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -5793,7 +5964,8 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/bos/v2/components', headers = headers)
@@ -5816,6 +5988,7 @@ func main() {
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5975,8 +6148,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_v2_component
@@ -5997,7 +6171,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/components/{component_id} \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -6005,7 +6180,8 @@ curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/components/{component_i
 import requests
 headers = {
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v2/components/{component_id}', headers = headers)
@@ -6027,6 +6203,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6127,8 +6304,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## put_v2_component
@@ -6151,7 +6329,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 curl -X PUT https://api-gw-service-nmn.local/apis/bos/v2/components/{component_id} \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -6160,7 +6339,8 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.put('https://api-gw-service-nmn.local/apis/bos/v2/components/{component_id}', headers = headers)
@@ -6183,6 +6363,7 @@ func main() {
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6334,8 +6515,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single Component state|[V2Component](#schemav2component)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_v2_component
@@ -6358,7 +6540,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 curl -X PATCH https://api-gw-service-nmn.local/apis/bos/v2/components/{component_id} \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -6367,7 +6550,8 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/bos/v2/components/{component_id}', headers = headers)
@@ -6390,6 +6574,7 @@ func main() {
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6543,8 +6728,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|The update was not allowed due to a conflict.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_v2_component
@@ -6565,7 +6751,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v2/components/{component_id} \
   -H 'Accept: application/problem+json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -6573,7 +6760,8 @@ curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v2/components/{componen
 import requests
 headers = {
   'Accept': 'application/problem+json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/bos/v2/components/{component_id}', headers = headers)
@@ -6595,6 +6783,7 @@ func main() {
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6650,8 +6839,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post_v2_apply_staged
@@ -6674,7 +6864,8 @@ Cray-Tenant-Name: vcluster-my-tenant1
 curl -X POST https://api-gw-service-nmn.local/apis/bos/v2/applystaged \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
-  -H 'Cray-Tenant-Name: vcluster-my-tenant1'
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -6683,7 +6874,8 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
-  'Cray-Tenant-Name': 'vcluster-my-tenant1'
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/bos/v2/applystaged', headers = headers)
@@ -6706,6 +6898,7 @@ func main() {
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
         "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6778,8 +6971,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of xnames that should have their staged Session applied.|[V2ApplyStagedStatus](#schemav2applystagedstatus)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_v2_options
@@ -6800,7 +6994,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/bos/v2/options \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -6808,7 +7003,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/bos/v2/options \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/bos/v2/options', headers = headers)
@@ -6830,6 +7026,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6900,8 +7097,9 @@ Update one or more of the BOS service options.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of service-wide options|[V2Options](#schemav2options)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_version_v2
@@ -6920,14 +7118,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/version \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v2/version', headers = headers)
@@ -6948,6 +7148,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6996,8 +7197,9 @@ The versioning system uses [semver](https://semver.org/).
 * versions : Link back to the versions resource|[Version](#schemaversion)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="boot-orchestration-service-options">options</h1>
@@ -7018,14 +7220,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/bos/v2/options \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/bos/v2/options', headers = headers)
@@ -7046,6 +7250,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -7091,8 +7296,9 @@ Retrieve the list of BOS service options.
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of service-wide options|[V2Options](#schemav2options)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 # Schemas
