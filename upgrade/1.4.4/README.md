@@ -276,7 +276,7 @@ In lieu of rebuilding the storage nodes, they will be live patched.
 
 ### Kubernetes nodes rolling rebuild
 
-1. (`ncn-m001#`) Set environment variables
+1. (`ncn-m001#`) Set environment variables.
 
    ```bash
    export CSM_REL_NAME="csm-${CSM_RELEASE}"
@@ -303,7 +303,7 @@ In lieu of rebuilding the storage nodes, they will be live patched.
    ' | dshbak -c
    ```
 
-   Expected output
+   Expected output:
   
    ```text
    ----------------
