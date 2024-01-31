@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -43,7 +43,7 @@ fi
 # Get the Base Directory
 BASEDIR=$(dirname $0)
 
-# Get the SYSTEM_DOMAIN from cloud-init 
+# Get the SYSTEM_DOMAIN from cloud-init
 SYSTEM_NAME=$(craysys metadata get system-name)
 SITE_DOMAIN=$(craysys metadata get site-domain)
 
