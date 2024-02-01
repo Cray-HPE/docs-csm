@@ -25,6 +25,37 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
    See the "SAT Authentication" section in the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
 
+1. Ensure `/root/.bashrc` has proper handling of `kubectl` commands on all master and worker nodes.
+
+   **Important:** During the process of shutting down the system, there will be a point when `kubelet` will be stopped on all the master and worker
+   nodes. Once `kubelet` has been stopped, any `kubectl` command on any master or worker node will not work as expected and may have a long timeout before
+   failing. 
+
+   This issue can cause a slowdown for these `sat` commands which `ssh` from the `sat` pod to `ncn-m001` and the
+   other nodes because the `ssh` will execute commands from `/root/.bashrc`.
+
+      * Commands affected during the power down
+         * `sat bootsys shutdown --stage platform-services`
+         * `sat bootsys shutdown --stage ncn-power`
+
+      * Commands affected during the power up
+         * `sat bootsys boot --stage ncn-power`
+         * `sat bootsys boot --stage platform-services`
+
+      1. Here is a sample command in `/root/.bashrc` which sets an environment variable using the output from `kubectl` which has the problem.
+
+         ```bash
+         export DOMAIN=$(kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}'|base64 -d | grep "external:")
+         ```
+
+      1. This shows one way to correct that sample command so the environment variable will be set when `kubelet` is available and will skip setting the variable when `kubelet` is not available.
+
+         ```bash
+         if [ ! `systemctl is-active kubelet | grep inactive` ] ; then
+                 export DOMAIN=$(kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}'|base64 -d | grep "external:")
+         fi
+         ```
+
 1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
 
    There will be separate session templates for UANs and computes nodes.
