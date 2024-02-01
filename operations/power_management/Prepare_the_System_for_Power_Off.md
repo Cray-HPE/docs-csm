@@ -277,6 +277,21 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     If active sessions are running, either wait for them to complete or cancel the session. See the following step.
 
+    **`NOTE`** If the Compute Rolling Upgrade Service (CRUS) is not being used to manage compute rolling upgrades, then this error can be ignored. If `cray-crus` pods have failed to initialize, the `GET request` will fail. A system using PBS Pro or Slurm where the workload manager scheduler is not running in a pod on a worker node can lead to this failure to initialize. CRUS will be removed in a future release.
+
+    ```text
+    INFO: Checking for active CRUS upgrades.
+ERROR: Unable to get active CRUS upgrades: GET request to URL 'https://api-gw-service-nmn.local/apis/crus/session' failed with status code 503: Service Unavailable
+    ```
+
+    **`NOTE`** If the System Diagnostic Utility (SDU) has not been configured on master nodes, message like this will appear for the master nodes which are not configured for SDU. If the warning appears for all master nodes, then to enable this after the system has been powered up again, see the Configure section of the HPE Cray EX with CSM System Diagnostic Utility (SDU) Installation Guide to configure SDU and the optional RDA.
+    
+    ```text
+    WARNING: The cray-sdu-rda container is not running on ncn-m001.
+    WARNING: The cray-sdu-rda container is not running on ncn-m002.
+    WARNING: The cray-sdu-rda container is not running on ncn-m003.
+    ```
+
 1. (`ncn-mw#`) Cancel the running BOS sessions.
 
     1. Identify the BOS Sessions and associated BOA Kubernetes jobs to delete.
