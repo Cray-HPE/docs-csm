@@ -266,16 +266,28 @@ Verify that the Lustre file system is available from the management cluster.
 
     To resolve the space issue, see [Troubleshoot Ceph OSDs Reporting Full](../utility_storage/Troubleshoot_Ceph_OSDs_Reporting_Full.md).
 
-1. (`ncn-m001#`) Manually mount S3 filesystems on the master and worker nodes. The workers try
+1. (`ncn-m001#`) Manually mount S3 filesystems on the master and worker nodes. These nodes try
     to mount several S3 filesystems when they are booted, but Ceph is not available yet at that
     time, so this workaround is required. The `boot-images` S3 filesystem is required for CPS pods
-    to successfully start on workers.
+    to successfully start on worker nodes.
 
     ```bash
-    pdsh -w ncn-m00[1-3],ncn-w00[1-3] "awk '{ if (\$3 == \"fuse.s3fs\") { print \$2; }}' /etc/fstab | xargs -I {} -n 1 sh -c \"mountpoint {} || mount {}\""
+    pdsh -w $(kubectl get nodes | grep -v NAME | awk '{print $1}' | xargs | sed 's/ /,/g') "awk '{ if (\$3 == \"fuse.s3fs\") { print \$2; }}' /etc/fstab | xargs -I {} -n 1 sh -c \"mountpoint {} || mount {}\"" | dshbak -c
     ```
 
-    Ensure all masters and workers are included in the host list for this `pdsh` command.
+    Example output:
+
+    ```text
+    ----------------
+    ncn-m[001-003]
+    ----------------
+    /var/opt/cray/sdu/collection-mount is a mountpoint
+    /var/opt/cray/config-data is a mountpoint
+    ----------------
+    ncn-w[001-003]
+    ----------------
+    /var/lib/cps-local/boot-images is a mountpoint
+    ```
 
 1. (`ncn-m001#`) Monitor the status of the management cluster and which pods are restarting (as indicated by either a `Running` or `Completed` state).
 
