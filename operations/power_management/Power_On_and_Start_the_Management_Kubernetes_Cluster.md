@@ -434,31 +434,13 @@ Verify that the Lustre file system is available from the management cluster.
 1. (`ncn-m001#`) Determine whether the `cfs-state-reporter` service is failing to start on each manager/master and worker NCN while trying to contact CFS.
 
     ```bash
-    pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
+    pdsh -w $(kubectl get nodes | grep -v NAME | awk '{print $1}' | xargs | sed 's/ /,/g') systemctl status cfs-state-reporter | grep "Active: activating"
     ```
 
     Example output:
 
     ```text
-    ncn-w001:  cfs-state-reporter.service - cfs-state-reporter reports configuration level of the system
-    ncn-w001:    Loaded: loaded (/usr/lib/systemd/system/cfs-state-reporter.service; enabled; vendor preset: disabled)
     ncn-w001:    Active: activating (start) since Thu 2021-03-18 22:29:15 UTC; 21h ago
-    ncn-w001:  Main PID: 5192 (python3)
-    ncn-w001:     Tasks: 1
-    ncn-w001:    CGroup: /system.slice/cfs-state-reporter.service
-    ncn-w001:            └─5192 /usr/bin/python3 -m cfs.status_reporter
-    ncn-w001:
-    ncn-w001: Mar 19 19:33:19 ncn-w001 python3[5192]: Expecting value: line 1 column 1 (char 0)
-    ncn-w001: Mar 19 19:33:49 ncn-w001 python3[5192]: Attempt 2482 of contacting CFS...
-    ncn-w001: Mar 19 19:33:49 ncn-w001 python3[5192]: Unable to contact CFS to report component status: CFS returned a non-json response: Unauthorized Request
-    ncn-w001: Mar 19 19:33:49 ncn-w001 python3[5192]: Expecting value: line 1 column 1 (char 0)
-    ncn-w001: Mar 19 19:34:19 ncn-w001 python3[5192]: Attempt 2483 of contacting CFS...
-    ncn-w001: Mar 19 19:34:20 ncn-w001 python3[5192]: Unable to contact CFS to report component status: CFS returned a non-json response: Unauthorized Request
-    ncn-w001: Mar 19 19:34:20 ncn-w001 python3[5192]: Expecting value: line 1 column 1 (char 0)
-    ncn-w001: Mar 19 19:34:50 ncn-w001 python3[5192]: Attempt 2484 of contacting CFS...
-    ncn-w001: Mar 19 19:34:50 ncn-w001 python3[5192]: Unable to contact CFS to report component status: CFS returned a non-json response: Unauthorized Request
-    ncn-w001: Mar 19 19:34:50 ncn-w001 python3[5192]: Expecting value: line 1 column 1 (char 0)
-    pdsh@ncn-m001: ncn-w001: ssh exited with exit code 3
     ```
 
     1. (`ncn#`) On each NCN where `cfs-state-reporter` is stuck in `activating` as shown in the preceding error messages, restart the `cfs-state-reporter` service.
@@ -472,7 +454,7 @@ Verify that the Lustre file system is available from the management cluster.
     1. (`ncn-m001#`) Check the status again.
 
         ```bash
-        pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
+        pdsh -w $(kubectl get nodes | grep -v NAME | awk '{print $1}' | xargs | sed 's/ /,/g') systemctl status cfs-state-reporter | grep "Active: activating"
         ```
 
 ### Verify BGP peering sessions
