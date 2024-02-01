@@ -6,7 +6,8 @@
 
 ## Introduction
 
-This document guides an administrator through the patch update to Cray Systems Management `v1.4.4` from `v1.4.0`, `v1.4.1`,
+This document guides an administrator through the patch update to Cray Systems Management `v1.4.4`
+from `v1.4.0`, `v1.4.1`,
 `v1.4.2`, or `v1.4.3`. If upgrading from CSM `v1.3.x` directly to `v1.4.4`, follow the procedures described
 in [Upgrade CSM](../README.md) instead.
 
@@ -14,11 +15,12 @@ in [Upgrade CSM](../README.md) instead.
 
 * Security patch `CVE-2023-48795` for SAT
 * NCN kernel panic remediation for SuSE networking driver via new kernel
-* NCN network connectivity remediation for Marvell/QLogic FastLinq Ethernet adapters via new QLogic driver
-* Blacklisting of QLogic RDMA driver (`qedr`) for increased NCN stability when using Marvell/QLogic FastLinq Ethernet adapters
-* Kernel panic remediation for Marvell/QLogic Fastlinq Ethernet adapters
+* NCN network connectivity remediation for Marvell/QLogic FastLinQ Ethernet adapters via new QLogic driver
+* Blacklisting of QLogic RDMA driver (`qedr`) for increased NCN stability when using Marvell/QLogic FastLinQ Ethernet
+  adapters
+* Kernel panic remediation for Marvell/QLogic FastLinQ Ethernet adapters
 * Broadcom PCIe support for NCNs (`metal-ipxe`)
-* `cray-dns-unbound` fix for leaving existing configuration in place if new configuration fails to load 
+* `cray-dns-unbound` fix for leaving existing configuration in place if new configuration fails to load
 * CPU limit removal for OPA
 
 ## Steps
@@ -32,10 +34,10 @@ in [Upgrade CSM](../README.md) instead.
 1. [Enable `smartmon` metrics on storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
 1. [Update management node CFS configuration](#update-management-node-cfs-configuration)
 1. [Update NCN images](#update-ncn-images)
-    1. [Warnings](#warnings)   
+    1. [Warnings](#warnings)
     1. [Image customization](#image-customization)
-1. [Storage nodes in-place update](#storage-nodes-in-place-update)   
-1. [Kubernetes nodes rolling rebuild](#kubernetes-nodes-rolling-rebuild)   
+1. [Storage nodes in-place update](#storage-nodes-in-place-update)
+1. [Kubernetes nodes rolling rebuild](#kubernetes-nodes-rolling-rebuild)
 1. [Update test suite packages](#update-test-suite-packages)
 1. [Verification](#verification)
 1. [Take Etcd manual backup](#take-etcd-manual-backup)
@@ -135,9 +137,9 @@ products with IUF. If this step is skipped, IUF will fail when updating or upgra
 
 ### Upgrade Ceph and stop local Docker registries
 
-**Note:** This step is not necessary if it was already completed by the CSM `v1.3.5` patch, CSM `v1.4.2` patch, or CSM `V1.4.3` patch. If it was already run,
-the following steps can be re-executed to verify that Ceph daemons are using images in Nexus and the local Docker
-registries have been stopped.
+**Note:** This step is not necessary if it was already completed by the CSM `v1.3.5` patch, CSM `v1.4.2` patch, or
+CSM `V1.4.3` patch. If it was already run, the following steps can be re-executed to verify that Ceph daemons are using
+images in Nexus and the local Docker registries have been stopped.
 
 These steps will upgrade Ceph to `v16.2.13`. Then the Ceph monitoring daemons' images will be pushed to Nexus and the
 monitoring daemons will be redeployed so that they use these images in Nexus. Once this is complete, all Ceph daemons
@@ -177,9 +179,9 @@ metrics.
 
 ### Update management node CFS configuration
 
-This step updates the CFS configuration which is set as the desired configuration for the management
-nodes (NCNs). It ensures that the CFS configuration layers reference the correct commit hash for the
-version of CSM being installed. It then waits for the components to reach a configured state in CFS.
+This step updates the CFS configuration which is set as the desired configuration for the management nodes (NCNs). It
+ensures that the CFS configuration layers reference the correct commit hash for the version of CSM being installed. It
+then waits for the components to reach a configured state in CFS.
 
 (`ncn-m001#`) Update CFS configuration.
 
@@ -217,8 +219,7 @@ INFO: Summary of number of components in each status: configured: 9
 ====> Cleaning up install dependencies
 ```
 
-When configuration of all components is successful, the summary line will show all components
-with status "configured".
+When configuration of all components is successful, the summary line will show all components with status "configured".
 
 ### Update NCN images
 
@@ -231,29 +232,30 @@ Storage CEPH nodes will receive an in-place modification, and do not need to be 
 
 #### Warnings
 
-***IMPORTANT*** This minor version bump has an unprecedented rolling rebuild. This is a friendly reminder that any 
+***IMPORTANT*** This minor version bump has an unprecedented rolling rebuild. This is a friendly reminder that any
 system administration data living on masters and workers **will be wiped** during the rebuild. Administrators are
 advised to take backups of their local, site files.
 
 > Examples:
 >
-> * ` ~/.config/sat/sat`
+> * `~/.config/sat/sat`
 > * `/etc/motd`
 > * `/etc/sudoers`
 > * `/home`
 > * `/root/.ssh/config`
 
-
 #### Image customization
 
 1. Follow option one of the following options based on your use case:
 
-   * [Option 2: Upgrade of CSM on system with additional products](../Stage_0_Prerequisites.md#option-2-upgrade-of-csm-on-system-with-additional-products)
-   * [Option 3: Upgrade of CSM on CSM-only system](../Stage_0_Prerequisites.md#option-3-upgrade-of-csm-on-csm-only-system)
+    * [Option 2: Upgrade of CSM on system with additional products](../Stage_0_Prerequisites.md#option-2-upgrade-of-csm-on-system-with-additional-products)
+    * [Option 3: Upgrade of CSM on CSM-only system](../Stage_0_Prerequisites.md#option-3-upgrade-of-csm-on-csm-only-system)
 
-   > ***NOTE*** If [Option 1: Upgrade of CSM and additional products](../Stage_0_Prerequisites.md#option-1-upgrade-of-csm-and-additional-products) is better suiting, then
+   > ***NOTE***
+   If [Option 1: Upgrade of CSM and additional products](../Stage_0_Prerequisites.md#option-1-upgrade-of-csm-and-additional-products)
+   is better suiting, then
    > do a full IUF run upgrading all products including CSM.
-   
+
 1. Follow the directions in [Stage 0.4](../Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data).
 
 ### Storage nodes in-place update
@@ -294,10 +296,10 @@ In lieu of rebuilding the storage nodes, they will be live patched.
 
 1. Proceed with the following sections from Stage 1:
 
-   * [Start typescript on `ncn-m001`](../Stage_1.md#start-typescript-on-ncn-m001)
-   * [Stage 1.1 - Master node image upgrade](../Stage_1.md#stage-11---master-node-image-upgrade)
-   * [Stage 1.2 - Worker node image upgrade](../Stage_1.md#stage-12---worker-node-image-upgrade)
-   * [Stage 1.3 - `ncn-m001` upgrade](../Stage_1.md#stage-13---ncn-m001-upgrade)
+    * [Start typescript on `ncn-m001`](../Stage_1.md#start-typescript-on-ncn-m001)
+    * [Stage 1.1 - Master node image upgrade](../Stage_1.md#stage-11---master-node-image-upgrade)
+    * [Stage 1.2 - Worker node image upgrade](../Stage_1.md#stage-12---worker-node-image-upgrade)
+    * [Stage 1.3 - `ncn-m001` upgrade](../Stage_1.md#stage-13---ncn-m001-upgrade)
 
 1. (`ncn-m001#`) Verify the booted images match the expected output.
 
@@ -313,7 +315,7 @@ In lieu of rebuilding the storage nodes, they will be live patched.
    ```
 
    Expected output:
-  
+
    ```text
    ----------------
    ncn-m[001-003],ncn-w[001-005]

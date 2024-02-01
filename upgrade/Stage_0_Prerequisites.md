@@ -462,7 +462,7 @@ example showing how to find the IUF activity.
    ```
 
    Note that the storage node configuration might also be titled `minimal-management` depending on the value
-   set in the sat bootprep file.
+   set in the sat `bootprep` file.
 
    Save the name of the IMS images from the `final_image_id` column:
 
@@ -473,7 +473,7 @@ example showing how to find the IUF activity.
    ```bash
    export WORKER_IMAGE_ID=""
    ```
- 
+
    ```bash
    export STORAGE_IMAGE_ID=""
    ```
@@ -583,7 +583,7 @@ If performing an upgrade of CSM and additional HPE Cray EX software products usi
 return to the [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
 procedure. Otherwise, if performing an upgrade of only CSM, proceed to the next step.
 
-> ***CSM V1.4.x -> CSM V1.4.4 Patch*** If you arrived here by following the CSM V1.4.x -> CSM V1.4.4 patch directions, then move onto [Storage nodes in-place update](./1.4.4/README.md#storage-nodes-in-place-update).
+> ***CSM V1.4.x -> CSM v1.4.4 Patch*** If you arrived here by following the CSM V1.4.x -> CSM v1.4.4 patch directions, then move onto [Storage nodes in-place update](./1.4.4/README.md#storage-nodes-in-place-update).
 > Users that arrived here while upgrading from CSM 1.3.X or earlier, continue onto [Stage 0.5](#stage-05---upgrade-ceph-and-stop-local-docker-registries).
 
 ## Stage 0.5 - Upgrade Ceph and stop local Docker registries
