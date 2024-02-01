@@ -106,6 +106,8 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    The following Non-compute Nodes (NCNs) will be included in this operation:
    managers:
    - ncn-m001
+   - ncn-m002
+   - ncn-m003
    storage:
    - ncn-s001
    - ncn-s002
