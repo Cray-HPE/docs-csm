@@ -461,7 +461,7 @@ example showing how to find the IUF activity.
    export STORAGE_CFS_CONFIG_NAME=""
    ```
 
-   Note that the storage node configuration might also be titled `minimal-management` depending on the value
+   Note that the storage node configuration might be titled `minimal-management-` or `storage-` depending on the value
    set in the sat `bootprep` file.
 
    Save the name of the IMS images from the `final_image_id` column:
