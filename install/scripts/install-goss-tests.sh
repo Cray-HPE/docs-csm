@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -52,26 +52,33 @@ function find_latest_rpm {
   # $1 - RPM name prefix (e.g. csm-testing, goss-servers, etc)
   local name vpattern rpm_regex1 rpm_regex2 filepath
   name="$1"
-  vpattern="[0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*"                # The first part of the version will be three
-                                                                    # .-separated numbers
-                                                                    # After the name and version, there are two
-                                                                    # ways our RPM may be named:
-  rpm_regex1="${name}-${vpattern}-[^/]*[.]rpm"                      # It could have a -, followed by characters we
-                                                                    # do not care about, ending in .rpm
-  rpm_regex2="${name}-${vpattern}[.]rpm"                            # Or it could just have .rpm after the name
-                                                                    # and version
-  filepath=$(find "$RPMDIR" -type f -name \*.rpm |                  # List all RPM files in the rpm directory
-             grep -E "/(${rpm_regex1}|${rpm_regex2})$" |            # Select only names fitting one of our patterns
-             sed -e "s#^${RPMDIR}.*/\(${rpm_regex1}\)\$#\1 \0#" \
-                 -e "s#^${RPMDIR}.*/\(${rpm_regex2}\)\$#\1 \0#" |   # Change each line so first it shows just the
-                                                                    # RPM filename, followed by a blank space,
-                                                                    # followed by the original full path and filename
-             sort -k1V |                                            # Sort the first field (the RPM filename without
-                                                                    # path) by version
-             tail -1 |                                              # Choose the last one listed (the one with the
-                                                                    # highest version)
-             sed 's/^[^ ]* //')                                     # Change the line, removing the RPM filename and
-                                                                    # space, leaving only the full path and filename
+  # The first part of the version will be three .-separated numbers
+  vpattern="[0-9][0-9]*[.][0-9][0-9]*[.][0-9][0-9]*"
+
+  # After the name and version, there are two ways our RPM may be named:
+  # * It could have a -, followed by characters we do not care about, ending in .rpm
+  rpm_regex1="${name}-${vpattern}-[^/]*[.]rpm"
+  # * Or it could just have .rpm after the name and version
+  rpm_regex2="${name}-${vpattern}[.]rpm"
+
+  # List all RPM files in the rpm directory
+  filepath=$(find "$RPMDIR" -type f -name \*.rpm \
+    |
+    # Select only names fitting one of our patterns
+    grep -E "/(${rpm_regex1}|${rpm_regex2})$" \
+    |
+    # Change each line so first it shows just the RPM filename, followed by a blank space,
+    # followed by the original full path and filename
+    sed -e "s#^${RPMDIR}.*/\(${rpm_regex1}\)\$#\1 \0#" -e "s#^${RPMDIR}.*/\(${rpm_regex2}\)\$#\1 \0#" \
+    |
+    # Sort the first field (the RPM filename without path) by version
+    sort -k1V \
+    |
+    # Choose the last one listed (the one with the highest version)
+    tail -1 \
+    |
+    # Change the line, removing the RPM filename and space, leaving only the full path and filename
+    sed 's/^[^ ]* //')
   if [[ -z ${filepath} ]]; then
     echo "The ${name} RPM was not found at the expected location. Ensure this RPM exists under the '$RPMDIR' directory" >&2
     return 1
@@ -99,7 +106,7 @@ function err_exit {
 }
 
 function run_on_pit {
-  [[ -n ${CSM_RELEASE} ]] || err_exit "Please set and export \$CSM_RELEASE and try again"
+  [[ -n ${CSM_RELEASE} ]] || err_exit 'Please set and export $CSM_RELEASE and try again'
 
   local MTOKEN STOKEN WTOKEN PREPDIR STORAGE_NCNS K8S_NCNS PREP_RPM_DIR ncn
   local STORAGE_RPM_PATHS K8S_RPM_PATHS STORAGE_RPM_BASENAMES K8S_RPM_BASENAMES
@@ -118,12 +125,12 @@ function run_on_pit {
 
   [[ -d ${CSM_PATH} ]] \
     || err_exit "The csm-${CSM_RELEASE} directory was not found at the expected location." \
-                "Please set \$CSM_DIRNAME to the absolute path containing the csm-$CSM_RELEASE directory"
+      "Please set \$CSM_DIRNAME to the absolute path containing the csm-$CSM_RELEASE directory"
 
   [[ -d ${RPMDIR} ]] \
     || err_exit "The 'rpm' directory was not found in the base directory of the expanded CSM tarball: ${CSM_PATH}" \
-                "Please set \$CSM_PATH to the path of the base directory of the expanded CSM tarball, and verify that it contains the 'rpm' directory."
-    
+      "Please set \$CSM_PATH to the path of the base directory of the expanded CSM tarball, and verify that it contains the 'rpm' directory."
+
   [[ -d ${PREPDIR} ]] || err_exit "The 'prep' directory was not found in its expected location: '${PREPDIR}'"
 
   # It's okay if our RPM prep subdirectory already exists (we'll just delete and recreate it), but if it exists
@@ -168,25 +175,31 @@ function run_on_pit {
   for ncn in ${STORAGE_NCNS}; do
     echo "Installing RPMs on ${ncn}"
     scp ${STORAGE_RPM_PATHS} ${ncn}:/tmp/
+    # CASMINST-6779: Use rpm instead of zypper to avoid problems caused by inaccessible Zypper repos, since we are
+    # installing from local files anyway.
     # shellcheck disable=SC2029
-    ssh ${ncn} "cd /tmp && zypper --non-interactive in ${STORAGE_RPM_BASENAMES} && systemctl enable goss-servers && systemctl restart goss-servers && systemctl daemon-reload && echo systemctl daemon-reload has been run && rm -f ${STORAGE_RPM_BASENAMES}"
+    ssh ${ncn} "cd /tmp && rpm -Uvh --force ${STORAGE_RPM_BASENAMES} && systemctl enable goss-servers && systemctl restart goss-servers && systemctl daemon-reload && echo systemctl daemon-reload has been run && rm -f ${STORAGE_RPM_BASENAMES}"
   done
 
   for ncn in ${K8S_NCNS}; do
     echo "Installing RPMs on ${ncn}"
     scp ${K8S_RPM_PATHS} ${ncn}:/tmp/
+    # CASMINST-6779: Use rpm instead of zypper to avoid problems caused by inaccessible Zypper repos, since we are
+    # installing from local files anyway.
     # shellcheck disable=SC2029
-    ssh ${ncn} "cd /tmp && zypper --non-interactive in ${K8S_RPM_BASENAMES} && systemctl enable goss-servers && systemctl restart goss-servers && systemctl daemon-reload && echo systemctl daemon-reload has been run && rm -f ${K8S_RPM_BASENAMES}"
+    ssh ${ncn} "cd /tmp && rpm -Uvh --force ${K8S_RPM_BASENAMES} && systemctl enable goss-servers && systemctl restart goss-servers && systemctl daemon-reload && echo systemctl daemon-reload has been run && rm -f ${K8S_RPM_BASENAMES}"
   done
 
   # The RPMs should have been installed on the PIT at the same time csi was installed. Trust, but verify:
   echo "Installing RPMs on PIT if needed"
-  rpm -q canu || zypper install -y canu
-  rpm -q hpe-csm-goss-package || zypper install -y ${HPE_GOSS_RPM}
-  rpm -q csm-testing || zypper install -y ${CSM_TESTING_RPM}
-  rpm -q goss-servers || (zypper install -y ${GOSS_SERVERS_RPM} && systemctl enable goss-servers && systemctl restart goss-servers)
-  rpm -q platform-utils || zypper install -y ${PLATFORM_UTILS_RPM}
-  rpm -q iuf-cli || zypper install -y ${IUF_CLI_RPM}
+  # CASMINST-6779: Use rpm instead of zypper to avoid problems caused by inaccessible Zypper repos, since we are
+  # installing from local files anyway.
+  rpm -q canu || rpm -Uvh --force ${CANU_RPM}
+  rpm -q hpe-csm-goss-package || rpm -Uvh --force ${HPE_GOSS_RPM}
+  rpm -q csm-testing || rpm -Uvh --force ${CSM_TESTING_RPM}
+  rpm -q goss-servers || (rpm -Uvh --force ${GOSS_SERVERS_RPM} && systemctl enable goss-servers && systemctl restart goss-servers)
+  rpm -q platform-utils || rpm -Uvh --force ${PLATFORM_UTILS_RPM}
+  rpm -q iuf-cli || rpm -Uvh --force ${IUF_CLI_RPM}
   systemctl daemon-reload && echo "systemctl daemon-reload has been run"
 }
 
