@@ -29,7 +29,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
    **Important:** During the process of shutting down the system, there will be a point when `kubelet` will be stopped on all the master and worker
    nodes. Once `kubelet` has been stopped, any `kubectl` command on any master or worker node will not work as expected and may have a long timeout before
-   failing. 
+   failing.
 
    This issue can cause a slowdown for these `sat` commands which `ssh` from the `sat` pod to `ncn-m001` and the
    other nodes because the `ssh` will execute commands from `/root/.bashrc`.
