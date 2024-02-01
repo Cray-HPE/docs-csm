@@ -233,11 +233,15 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
            done | tee switches
            ```
 
-    1. Check Lustre server health.
+    1. (`ncn-mw#`) Check Lustre server health. 
+
+       See Lustre documentation for other health commands to run.  
 
         ```bash
         ssh admin@cls01234n00.us.cray.com
-        admin@cscli show_nodes
+        cscli csinfo
+        cscli show_nodes
+        cscli fs_info
         ```
 
     1. From a node which has the Lustre file system mounted.
