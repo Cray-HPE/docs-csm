@@ -87,7 +87,7 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
 ## Shut down the Kubernetes management cluster
 
-1. (`ncn-m001#`) Set variables for the three types of management NCNs as comma-separated lists.
+1. (`ncn-m001#`) Set variables as comma-separated lists for the three types of management NCNs.
 
    ```bash
    MASTERS="ncn-m002,ncn-m003"
@@ -200,7 +200,7 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
 1. (`ncn-m001#`) Shut down and power off all management NCNs except `ncn-m001`.
 
-    This command will ask for the IPMI username and password for the management nodes.
+    This command requires input for the IPMI username and password for the management nodes.
 
     **Important:** The default timeout for the `sat bootsys shutdown --stage ncn-power` command is 300 seconds. If it is known that
     the nodes take longer than this amount of time for a graceful shutdown, then a different value

@@ -217,7 +217,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
         > *Note:* The switch host names depend on the system configuration.
 
-        1. Use CANU to confirm that all switches are reachable. Reachable switches will have their
+        1. (`ncn-mw#`) Use CANU to confirm that all switches are reachable. Reachable switches have their
            version information populated in the network version report.
 
            ```bash
@@ -236,12 +236,12 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
            sw-cdu-002        1.6.20             1.4
            ```
 
-        1. (Optional) If CANU is not available, look in `/etc/hosts` for the management network
+        1. (Optional) (`ncn-mw#`) If CANU is not available, look in `/etc/hosts` for the management network
            switches on this system. The names of all spine switches, leaf switches, leaf BMC
            switches, and CDU switches need to be used in the next step.
 
            ```bash
-           ncn# grep sw- /etc/hosts
+           grep sw- /etc/hosts
            ```
 
            Example output:
@@ -255,7 +255,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
            10.100.0.3      sw-cdu-002
            ```
 
-        1. Ping the switches obtained in the previous step to determine if they are reachable.
+        1. (`ncn-mw#`) Ping the switches obtained in the previous step to determine if they are reachable.
 
            ```bash
            for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do
@@ -307,8 +307,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     If active sessions are running, either wait for them to complete or cancel the session. See the following step.
 
     **`NOTE`** If the Compute Rolling Upgrade Service (CRUS) is not being used to manage compute rolling upgrades, then this error can be ignored.
-    If `cray-crus` pods have failed to initialize, the `GET request` will fail. A system using PBS Pro or Slurm where the workload manager scheduler
-    is not running in a pod on a worker node can lead to this failure to initialize. CRUS will be removed in a future release.
+    If `cray-crus` pods have failed to initialize, the `GET request` will fail. A system using PBS Pro or Slurm in which the workload manager scheduler
+    is not running in a pod on a worker node, will fail to initialize. CRUS will be removed in a future release.
 
     ```text
     INFO: Checking for active CRUS upgrades.

@@ -91,7 +91,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
 1. (`ncn-m001#`) Power on and boot other management NCNs.
 
-    This command will ask for the IPMI username and password for the management nodes.
+    This command requires input for the IPMI username and password for the management nodes.
 
     **Important:** The default timeout for booting each group of NCNs is 300 seconds, which is reasonable for smaller systems.
     To avoid needing to re-run the command in the event of a timeout, increase the timeout using the `--ncn-boot-timeout` option.
@@ -270,8 +270,8 @@ Verify that the Lustre file system is available from the management cluster.
     To resolve the space issue, see [Troubleshoot Ceph OSDs Reporting Full](../utility_storage/Troubleshoot_Ceph_OSDs_Reporting_Full.md).
 
 1. (`ncn-m001#`) Manually mount S3 filesystems on the master and worker nodes. These nodes try
-    to mount several S3 filesystems when they are booted, but Ceph is not available yet at that
-    time, so this workaround is required. The `boot-images` S3 filesystem is required for CPS pods
+    to mount several S3 filesystems when they are booted. Since Ceph is not available during boot
+    time, this workaround is required. The `boot-images` S3 filesystem is required for CPS pods
     to successfully start on worker nodes.
 
     ```bash
