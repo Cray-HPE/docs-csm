@@ -12,29 +12,27 @@ On Aruba-based systems all management network switches will be Aruba and the fol
 For each switch:
 
 1. Run the command below
-1. Execute the `write memory` command
-1. Exit the switch shell
 
-Example:
+    ```bash
+    for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do echo  "switch ${switch}:" ; ssh admin@$switch; done
+    ```
 
- ```bash
-for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do echo  "switch ${switch}:" ; ssh admin@$switch; done
- ```
+2. Execute the `write memory` command
+3. Exit the switch shell
 
 ### Dell and Mellanox Switch and Gigabyte/Intel Server Systems
 
 On Dell and Mellanox based systems, all spine and any leaf switches will be Mellanox. Any leaf-bmc and cdu switches will be Dell. The overall procedure is the same but the specifics of execution are slightly different.
 
 1. Run the command below
+
+    ```bash
+    for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do echo  "switch ${switch}:" ; ssh admin@$switch; done
+    ```
+
 2. Enter `enable` mode (Mellanox only)
 3. Execute the `write memory` command
 4. Exit the switch shell
-
-Example:
-
- ```bash
-for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do echo  "switch ${switch}:" ; ssh admin@$switch; done
- ```
 
 ### Edge Routers and Storage Switches
 
