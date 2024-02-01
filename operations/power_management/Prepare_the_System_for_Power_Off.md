@@ -284,7 +284,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     ERROR: Unable to get active CRUS upgrades: GET request to URL 'https://api-gw-service-nmn.local/apis/crus/session' failed with status code 503: Service Unavailable
     ```
 
-    **`NOTE`** If the System Diagnostic Utility (SDU) has not been configured on master nodes, message like this will appear for the master nodes 
+    **`NOTE`** If the System Diagnostic Utility (SDU) has not been configured on master nodes, message like this will appear for the master nodes
     which are not configured for SDU. If the warning appears for all master nodes, then to enable this after the system has been powered up again,
     see the Configure section of the HPE Cray EX with CSM System Diagnostic Utility (SDU) Installation Guide to configure SDU and the optional RDA.
 
