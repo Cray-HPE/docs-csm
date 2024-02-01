@@ -161,5 +161,27 @@ ls -la
 
 ```bash
 cd ..
+cp $BACKUPDIR/sls_input_file.json .
 tar -czvf $BACKUPDIR.tar.gz $BACKUPDIR
+```
+
+## Upload to backup disk (if available)
+
+```bash
+bucket=hms
+aws s3api create-bucket --bucket $bucket --endpoint-url http://ncn-m001.nmn:8000
+file=$BACKUPDIR.tar.gz
+aws s3api put-object --key $file --body $file --bucket $bucket --endpoint-url http://ncn-m001.nmn:8000
+file=sls_input_file.json
+aws s3api put-object --key $file --body $file --bucket $bucket --endpoint-url http://ncn-m001.nmn:8000
+aws s3api list-objects --bucket $bucket --endpoint-url http://ncn-m001.nmn:8000
+```
+
+To retrieve files from backup disk
+```bash
+bucket=hms
+file=$BACKUPDIR.tar.gz
+aws s3api get-object --bucket $bucket --key $file $file --endpoint-url http://ncn-m001.nmn:8000
+file=sls_input_file.json
+aws s3api get-object --bucket $bucket --key $file $file --endpoint-url http://ncn-m001.nmn:8000
 ```

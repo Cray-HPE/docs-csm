@@ -87,4 +87,13 @@
     curl -k -s -H "Authorization: Bearer ${TOKEN}" $PARTITION_URL | jq
     ```
 
-1. Repeat the earlier `verifymembership.py` step to confirm that no differences are reported.
+1. ('ncn-mw#') Repeat the earlier `verifymembership.py` step to confirm that no differences are reported.
+
+    ```bash
+    $DOCS_DIR/operations/hardware_state_manager/verifymembership.py cray-smd-memberships-dump_$BACKUP_FILE.json
+    ```
+1. ('ncn-mw#') Restore Boot Parameters.
+
+    ```bash
+    $DOCS_DIR/operations/boot_script_service/bss-restore-bootparameters.sh cray-bss-boot-parameters-dump_hms-backup_$BACKUP_FILE.json
+    ```
