@@ -199,6 +199,8 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
 1. (`ncn-m001#`) Shut down and power off all management NCNs except `ncn-m001`.
 
+    This command will ask for the IPMI username and password for the management nodes.
+
     **Important:** The default timeout for the `sat bootsys shutdown --stage ncn-power` command is 300 seconds. If it is known that
     the nodes take longer than this amount of time for a graceful shutdown, then a different value
     can be set using `--ncn-shutdown-timeout NCN_SHUTDOWN_TIMEOUT` with a value other than 300

@@ -90,12 +90,14 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
 1. (`ncn-m001#`) Power on and boot other management NCNs.
 
-    Note that the default timeout for booting each group of NCNs is 300 seconds, which is reasonable for smaller systems.
+    This command will ask for the IPMI username and password for the management nodes.
+
+    **Important:** The default timeout for booting each group of NCNs is 300 seconds, which is reasonable for smaller systems.
     To avoid needing to re-run the command in the event of a timeout, increase the timeout using the `--ncn-boot-timeout` option.
     See `sat bootsys boot --help` for additional information and options.
 
    ```bash
-   sat bootsys boot --stage ncn-power
+   sat bootsys boot --stage ncn-power --ncn-boot-timeout 900
    ```
 
    Example output:
