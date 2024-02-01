@@ -233,9 +233,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
            done | tee switches
            ```
 
-    1. (`ncn-mw#`) Check Lustre server health. 
-
-       See Lustre documentation for other health commands to run.  
+    1. (`ncn-mw#`) Check Lustre server health.  See Lustre documentation for other health commands to run.  
 
         ```bash
         ssh admin@cls01234n00.us.cray.com
@@ -277,7 +275,9 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     If active sessions are running, either wait for them to complete or cancel the session. See the following step.
 
-    **`NOTE`** If the Compute Rolling Upgrade Service (CRUS) is not being used to manage compute rolling upgrades, then this error can be ignored. If `cray-crus` pods have failed to initialize, the `GET request` will fail. A system using PBS Pro or Slurm where the workload manager scheduler is not running in a pod on a worker node can lead to this failure to initialize. CRUS will be removed in a future release.
+    **`NOTE`** If the Compute Rolling Upgrade Service (CRUS) is not being used to manage compute rolling upgrades, then this error can be ignored.
+    If `cray-crus` pods have failed to initialize, the `GET request` will fail. A system using PBS Pro or Slurm where the workload manager scheduler
+    is not running in a pod on a worker node can lead to this failure to initialize. CRUS will be removed in a future release.
 
     ```text
     INFO: Checking for active CRUS upgrades.

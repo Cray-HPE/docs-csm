@@ -205,7 +205,6 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
     for `NCN_SHUTDOWN_TIMEOUT`. Once this timeout has been exceeded, the node will be forcefully
     powered down.
 
-
    1. Shutdown worker nodes first by excluding master and storage nodes from the `sat bootsys shutdown --stage ncn-power` command.
 
       ```bash
