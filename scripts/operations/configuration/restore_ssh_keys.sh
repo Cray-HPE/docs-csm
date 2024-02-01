@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -22,21 +22,20 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-usage()
-{
-   # Display Help
-   echo "Removes the SSH keys in Kubernetes to restore their value from vault"
-   echo "NOTE: This does not update deployed keys"
-   echo
-   echo "Usage: restore_ssh_keys.sh"
-   echo
+usage() {
+  # Display Help
+  echo "Removes the SSH keys in Kubernetes to restore their value from vault"
+  echo "NOTE: This does not update deployed keys"
+  echo
+  echo "Usage: restore_ssh_keys.sh"
+  echo
 }
 
 while [[ $# -gt 0 ]]; do
   key="$1"
 
   case $key in
-    -h|--help) # help option
+    -h | --help) # help option
       usage
       exit 0
       ;;
@@ -47,15 +46,14 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-
 kubectl delete configmap -n services csm-public-key
 kubectl delete secret -n services csm-private-key
 echo "Keys removed.  Waiting for defaults to be populated."
 echo "csm-ssh-keys will be restarted to force the keys to be restored sooner."
 kubectl -n services rollout restart deployment csm-ssh-keys
 
-until kubectl get configmap -n services csm-public-key >/dev/null 2>&1 && \
-      kubectl get secret -n services csm-private-key >/dev/null 2>&1; do
+until kubectl get configmap -n services csm-public-key > /dev/null 2>&1 \
+  && kubectl get secret -n services csm-private-key > /dev/null 2>&1; do
   echo "Waiting for defaults to be populated..."
   sleep 10
 done

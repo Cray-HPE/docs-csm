@@ -25,7 +25,9 @@
 # This is necessary since a new docs-csm version could land before or after a CSM update.
 
 set -e
-THIS_REGISTRY_NAME="registry.local"
+DEFAULT_REGISTRY_NAME="registry.local"
+DEFAULT_REGISTRY_REGEX="registry[.]local"
+THIS_REGISTRY_NAME="${DEFAULT_REGISTRY_NAME}"
 THIS_REGISTRY_PROTOCOL="https"
 THIS_PODMAN_TLS=""
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
@@ -61,7 +63,18 @@ function get_list_of_images_to_update() {
 
 function get_latest_tag_for_image() {
   THIS_IMAGE=$1
-  THIS_PREFIX=$([[ $(echo $THIS_IMAGE | grep -e "^${THIS_REGISTRY_NAME}/") ]] && echo "" || echo "${THIS_REGISTRY_NAME}/")
+  # Handle the case where the image already begins with registry.local
+  if [[ ${DEFAULT_REGISTRY_NAME} == "${THIS_REGISTRY_NAME}" ]]; then
+    # If the image is already prefixed with registry.local, we do not need to add it as a prefix
+    THIS_PREFIX=$([[ $(echo $THIS_IMAGE | grep -e "^${THIS_REGISTRY_NAME}/") ]] && echo "" || echo "${THIS_REGISTRY_NAME}/")
+  else
+    # CASMINST-6778
+    # The above code does not work on the PIT node, since the value of THIS_REGISTRY_NAME has changed.
+    # On the PIT node, we always want to use the PIT node prefix, but we still need to strip the registry.local
+    # prefix, if present.
+    THIS_PREFIX="${THIS_REGISTRY_NAME}/"
+    THIS_IMAGE=$(echo "${THIS_IMAGE}" | sed "s#^${DEFAULT_REGISTRY_REGEX}/##")
+  fi
   podman search $THIS_PODMAN_TLS $THIS_PREFIX$THIS_IMAGE --list-tags --format=json | jq -r '
     def opt(f):
       . as $in | try f catch $in;
