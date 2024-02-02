@@ -367,7 +367,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         cray bos sessions delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
         ```
 
-1. Coordinate with the site system administators to prevent new sessions from starting in the services listed.
+1. Coordinate with the site system administrators to prevent new sessions from starting in the services listed.
 
     There is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 

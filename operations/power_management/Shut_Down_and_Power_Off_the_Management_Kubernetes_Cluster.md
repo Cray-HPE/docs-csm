@@ -335,9 +335,6 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
       There are screens on:
       26745.SAT-console-ncn-m003-mgmt (Detached)
       26706.SAT-console-ncn-m002-mgmt (Detached)
-      26552.SAT-console-ncn-w003-mgmt (Detached)
-      26514.SAT-console-ncn-w002-mgmt (Detached)
-      26444.SAT-console-ncn-w001-mgmt (Detached)
       ```
 
       ```bash
@@ -411,14 +408,9 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
       ```text
       There are screens on:
-      26745.SAT-console-ncn-m003-mgmt (Detached)
-      26706.SAT-console-ncn-m002-mgmt (Detached)
       26666.SAT-console-ncn-s003-mgmt (Detached)
       26627.SAT-console-ncn-s002-mgmt (Detached)
       26589.SAT-console-ncn-s001-mgmt (Detached)
-      26552.SAT-console-ncn-w003-mgmt (Detached)
-      26514.SAT-console-ncn-w002-mgmt (Detached)
-      26444.SAT-console-ncn-w001-mgmt (Detached)
       ```
 
       ```bash

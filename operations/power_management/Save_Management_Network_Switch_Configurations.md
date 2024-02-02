@@ -54,7 +54,7 @@ On Aruba-based systems, all management network switches will be Aruba.
    Copying configuration: [Success]
    sw-spine-002# exit
    Connection to sw-spine-002 closed.
-   etc.
+   ...
     ```
 
 ### Dell and Mellanox Switch and Gigabyte/Intel Server Systems
