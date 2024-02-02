@@ -330,7 +330,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     **`NOTE`** If the Compute Rolling Upgrade Service (CRUS) is not being used to manage compute rolling upgrades, then this error can be ignored.
     If `cray-crus` pods have failed to initialize, the `GET request` will fail. A system using PBS Pro or Slurm in which the workload manager scheduler
-    is not running in a pod on a worker node, will fail to initialize. CRUS will be removed in a future release.
+    is not running in a pod on a worker node will fail to initialize. CRUS will be removed in a future release.
 
     ```text
     INFO: Checking for active CRUS upgrades.

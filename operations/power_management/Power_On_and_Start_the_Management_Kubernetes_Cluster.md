@@ -7,7 +7,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 * All management rack PDUs are connected to facility power and facility power is on.
 * An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT)
   product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
-* To avoid slow `sat` commands, ensure `/root/.bashrc` has proper handling of `kubectl` commands on all master and worker nodes.  See [Prepare the System for Power Off](Prepare_the_System_for_Power_Off.md)
+* To avoid slow `sat` commands, ensure `/root/.bashrc` has proper handling of `kubectl` commands on all master and worker nodes. See [Prepare the System for Power Off](Prepare_the_System_for_Power_Off.md).
 
 ## Procedure
 

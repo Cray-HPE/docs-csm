@@ -184,7 +184,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
    1. (`ncn-m001#`) Use the BOS session ID to monitor the progress of the compute node boot session.
 
-      In the example above the compute node BOS session had the ID `76d4d98e-814d-4235-b756-4bdfaf3a2cb3`
+      In the example above the compute node BOS session had the ID `76d4d98e-814d-4235-b756-4bdfaf3a2cb3`.
 
       ```bash
       cray bos sessions status list --format json 76d4d98e-814d-4235-b756-4bdfaf3a2cb3
@@ -216,7 +216,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
    1. (`ncn-m001#`) In another shell window, use a similar command to monitor the UAN boot session.
 
-      In the example above the UAN BOS session had the ID `dacad888-e077-41f3-9ab0-65a5a45c64e5`
+      In the example above the UAN BOS session had the ID `dacad888-e077-41f3-9ab0-65a5a45c64e5`.
 
       ```bash
       cray bos sessions status list --format json dacad888-e077-41f3-9ab0-65a5a45c64e5

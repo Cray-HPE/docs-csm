@@ -10,7 +10,7 @@ Switches must be powered on and operating. This procedure is optional if switch 
 
 On Aruba-based systems, all management network switches will be Aruba.
 
-1. (`ncn-m#`) Connect to all management network switches
+1. (`ncn-m#`) Connect to all management network switches.
 
    This loop will login to each switch as the admin username. Provide the password for that username. While logged in to each switch, some commands will be issued.  Then after typing `exit`, the loop will login to the next switch.
 
@@ -18,7 +18,7 @@ On Aruba-based systems, all management network switches will be Aruba.
     for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do echo  "switch ${switch}:" ; ssh admin@$switch; done
     ```
 
-   Commands to issue on each switch
+   Commands to issue on each switch:
 
    ```bash
    write memory
@@ -61,7 +61,7 @@ On Aruba-based systems, all management network switches will be Aruba.
 
 On Dell and Mellanox based systems, all spine and any leaf switches will be Mellanox. Any Leaf-BMC and CDU switches will be Dell.
 
-1. (`ncn-m#`) Connect to all management network switches
+1. (`ncn-m#`) Connect to all management network switches.
 
    This loop will login to each switch as the admin username. Provide the password for that username. While logged in to each switch, some commands will be issued.  Then after typing `exit`, the loop will login to the next switch.
 

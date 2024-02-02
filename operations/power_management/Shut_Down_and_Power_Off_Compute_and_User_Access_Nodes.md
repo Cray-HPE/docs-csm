@@ -92,7 +92,7 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
 
    1. (`ncn-m001#`) Use the BOS session ID to monitor the progress of the compute node shutdown session.
 
-      In the example above the compute node BOS session had the ID `e477aeb4-0038-4a11-ac55-1e359e2e243c`
+      In the example above the compute node BOS session had the ID `e477aeb4-0038-4a11-ac55-1e359e2e243c`.
 
       ```bash
       cray bos sessions status list --format json e477aeb4-0038-4a11-ac55-1e359e2e243c
@@ -123,7 +123,7 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
 
    1. (`ncn-m001#`) In another shell window, use a similar command to monitor the UAN boot session.
 
-      In the example above the UAN BOS session had the ID `f657296c-762e-42ce-9388-d79a723d42a1`
+      In the example above the UAN BOS session had the ID `f657296c-762e-42ce-9388-d79a723d42a1`.
 
       ```bash
       cray bos sessions status list --format json f657296c-762e-42ce-9388-d79a723d42a1
