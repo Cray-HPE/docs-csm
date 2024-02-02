@@ -359,13 +359,16 @@ join_arr() {
 # Break up the XNAMES into chunks of XNAME_LIMIT size because the CFS operator
 # cannot handle more than XNAME_LIMIT query parameters.
 XNAME_LIMIT=20
+# shellcheck disable=SC2206
 XNAME_ARRAY=(${XNAME_LIST})
 NUMBER_XNAMES=${#XNAME_ARRAY[@]}
 
 # Wait for nodes to configure
 INDEX=0
 while [[ $INDEX -lt $NUMBER_XNAMES ]]; do
+    # shellcheck disable=SC2124
     SHORT_XNAMES_LIST=${XNAME_ARRAY[@]:$INDEX:$XNAME_LIMIT}
+    # shellcheck disable=SC2068
     SHORT_XNAMES=$(join_arr , ${SHORT_XNAMES_LIST[@]})
     INDEX=$((INDEX + XNAME_LIMIT))
     while true; do
@@ -383,7 +386,9 @@ INDEX=0
 CONFIGURED=0
 FAILED=0
 while [[ $INDEX -lt $NUMBER_XNAMES ]]; do
+    # shellcheck disable=SC2124
     SHORT_XNAMES_LIST=${XNAME_ARRAY[@]:$INDEX:$XNAME_LIMIT}
+    # shellcheck disable=SC2068
     SHORT_XNAMES=$(join_arr , ${SHORT_XNAMES_LIST[@]})
     INDEX=$((INDEX + XNAME_LIMIT))
     NEW_CONFIGURED=$(cray cfs components list --status configured --ids ${SHORT_XNAMES} --format json | jq length)
@@ -398,7 +403,9 @@ if [ "${FAILED}" -ne "0" ]; then
     INDEX=0
     FAILED_NODES=""
     while [[ $INDEX -lt $NUMBER_XNAMES ]]; do
+        # shellcheck disable=SC2124
         SHORT_XNAMES_LIST=${XNAME_ARRAY[@]:$INDEX:$XNAME_LIMIT}
+        # shellcheck disable=SC2068
         SHORT_XNAMES=$(join_arr , ${SHORT_XNAMES_LIST[@]})
         INDEX=$((INDEX + XNAME_LIMIT))
         FAILED_NODES+=$(cray cfs components list --status failed --ids ${SHORT_XNAMES} --format json | jq -r '. | map(.id) | join(",")')
