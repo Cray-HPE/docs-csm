@@ -110,9 +110,10 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     Example output excerpts:
 
     ```text
-    [[results]]
     name = "compute-23.7.0"
-    . . .
+
+    [...]
+
     name = "uan-23.7.0"
     ```
 
@@ -173,7 +174,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     ERROR: Boot failed or timed out for session templates: compute-23.7.0, uan-23.7.0
     ```
 
-    The BOS operation can still proceed even with these error. However, the warnings
+    The BOS operation can still proceed even with these errors. However, the warnings
     may result in the `bos-operations` stage of the `sat bootsys` command exiting before the BOS
     operation is complete. Because of this, it is important to check the status reported by BOS in order to monitor the
     boot and to verify that the nodes reached the expected state using `sat status` commands. Both of these recommendations are shown
@@ -186,7 +187,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
       In the example above the compute node BOS session had the ID `76d4d98e-814d-4235-b756-4bdfaf3a2cb3`
 
       ```bash
-      cray bos sessions status list 76d4d98e-814d-4235-b756-4bdfaf3a2cb3
+      cray bos sessions status list --format json 76d4d98e-814d-4235-b756-4bdfaf3a2cb3
       ```
 
       Example output:
@@ -218,7 +219,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
       In the example above the UAN BOS session had the ID `dacad888-e077-41f3-9ab0-65a5a45c64e5`
 
       ```bash
-      cray bos sessions status list dacad888-e077-41f3-9ab0-65a5a45c64e5
+      cray bos sessions status list --format json dacad888-e077-41f3-9ab0-65a5a45c64e5
       {
         "error_summary": {
           "The retry limit has been hit for this component, but no services have reported specific errors": {
@@ -248,7 +249,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
       In this example, 33% of the 6 nodes had an issue and stayed in the powering_off phase of the boot. See
       below for another way to determine which nodes had this issue.
 
-   1. Check the HSM state from `sat status`of the compute and application nodes, but not the management nodes.
+   1. (`ncn-m001#`) Check the HSM state from `sat status`of the compute and application nodes, but not the management nodes.
 
       A node will progress through HSM states in this order: `Off`, `On`, `Ready`. If a node fails to leave `Off` state or
       moves from `On` to `Off` state, it needs to be investigated.  If nodes are in `Standby`, that means they had been in `Ready`,
