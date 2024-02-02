@@ -42,7 +42,7 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
 
    **Important:** The default timeout for the `sat bootsys boot --stage bos-operations` command is 600 seconds. If it is known that
    the nodes take longer than this amount of time to shutdown, then a different value can be set using `--bos-shutdown-timeout BOS_SHUTDOWN_TIMEOUT`
-   with a value larger than 600 for BOS_SHUTDOWN_TIMEOUT. Once this timeout has been exceeded, `sat` will no longer watch the BOS sessions
+   with a value larger than 600 for `BOS_SHUTDOWN_TIMEOUT`. Once this timeout has been exceeded, `sat` will no longer watch the BOS sessions
    even if they are still in progress.
 
    ```bash
@@ -120,6 +120,7 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
         }
       }
       ```
+
    1. (`ncn-m001#`) In another shell window, use a similar command to monitor the UAN boot session.
 
       In the example above the UAN BOS session had the ID `f657296c-762e-42ce-9388-d79a723d42a1`
@@ -148,7 +149,7 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
 
    1. (`ncn-m001#`) Check the HSM state from `sat status`of the compute and application nodes, but not the management nodes.
 
-      A node will progress through HSM states in this order: `Ready`, `Standby`, `Off`. 
+      A node will progress through HSM states in this order: `Ready`, `Standby`, `Off`.
 
       ```bash
       sat status --filter role!=management --hsm-fields
