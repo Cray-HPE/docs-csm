@@ -28,7 +28,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 1. Ensure `/root/.bashrc` has proper handling of `kubectl` commands on all master and worker nodes.
 
    **Important:** During the process of shutting down the system, there will be a point when `kubelet` will be stopped on all the master and worker
-   nodes. Once `kubelet` has been stopped, any `kubectl` command on any master or worker node will not work as expected and may have a long timeout before
+   nodes. Once `kubelet` has been stopped, any `kubectl` command on any master or worker node may not work as expected and may have a long timeout before
    failing.
 
    This issue can cause a slowdown for these `sat` commands which `ssh` from the `sat` pod to `ncn-m001` and the
@@ -60,58 +60,60 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
    There will be separate session templates for UANs and computes nodes.
 
-    1. List all the session templates.
+    1. List all the BOS session templates.
 
-       If it is unclear what session template is in use, proceed to the next substep.
+       If it is unclear what BOS session template is in use, proceed to the next substep.
 
        ```bash
-       cray bos v1 sessiontemplate list
+       cray bos sessiontemplates list | grep name | sort
        ```
 
-    1. Find the xname with `sat status`.
+    1. Find the BOS session templates used most recently to boot nodes.
 
        ```bash
-       sat status | grep "Compute\|Application"
+       sat status --filter role!=management --fields xname,"most recent session template"
        ```
 
        Example output:
 
        ```text
-       | x3000c0s19b1n0 | Node | 1        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-       | x3000c0s19b2n0 | Node | 2        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-       | x3000c0s19b3n0 | Node | 3        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-       | x3000c0s19b4n0 | Node | 4        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-       | x3000c0s27b0n0 | Node | 49169248 | On    | OK   | True    | X86  | River | Application | Sling    |
+       +----------------+-------------+-----------+------------------------------+
+       | xname          | Role        | SubRole   | Most Recent Session Template |
+       +----------------+-------------+-----------+------------------------------+
+       | x3209c0s13b0n0 | Application | UAN       | uan-23.7.0                   |
+       | x3209c0s15b0n0 | Application | UAN       | uan-23.7.0                   |
+       | x3209c0s17b0n0 | Application | UAN       | uan-23.7.0                   |
+       | x3209c0s19b0n0 | Application | UAN       | uan-23.7.0                   |
+       | x3209c0s22b0n0 | Application | Gateway   | MISSING                      |
+       | x3209c0s23b0n0 | Application | Gateway   | MISSING                      |
+       | x9002c1s0b0n0  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s0b0n1  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s0b1n0  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s0b1n1  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s1b0n0  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s1b0n1  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s1b1n0  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s1b1n1  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s2b0n0  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s2b0n1  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s2b1n0  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s2b1n1  | Compute     | Compute   | compute-23.7.0               |
+       +----------------+-------------+-----------+------------------------------+
        ```
 
-    1. Find the `bos_session` value via the Configuration Framework Service (CFS).
+       **`NOTE`** When the `Most Recent Session Template` shows `MISSING`, it means the BOS session information was removed.
+       Old BOS sessions are cleaned up based on the numbers of days in `cleanup_completed_session_ttl`.  The default value is seven days.
 
-       ```bash
-       cray cfs components describe XNAME --format toml | grep bos_session
-       ```
+       1. Check the current setting for `cleanup_completed_session_ttl`.
 
-       Example output:
-
-       ```toml
-       bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
-       ```
-
-    1. Find the required `templateName` value with BOS.
-
-       ```bash
-       cray bos v1 session describe BOS_SESSION --format toml | grep templateName
-       ```
-
-       Example output:
-
-       ```toml
-       templateName = "compute-nid1-4-sessiontemplate"
-       ```
+          ```bash
+          cray bos options list | grep cleanup_completed_session_ttl
+          ```
 
     1. Determine the list of xnames associated with the desired boot session template.
 
        ```bash
-       cray bos v1 sessiontemplate describe SESSION_TEMPLATE_NAME | egrep "node_list|node_roles_groups|node_groups"
+       cray bos sessiontemplates describe SESSION_TEMPLATE_NAME | egrep "node_list|node_roles_groups|node_groups"
        ```
 
        Example outputs:
@@ -159,16 +161,19 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         sat status --filter State=Off | tee -a sat.status.off
         ```
 
-    1. Capture the state of nodes in the workload manager. For example, if the system uses Slurm:
+    1. Capture the state of nodes in the workload manager.
+
+        For example, if the system uses Slurm:
 
         ```bash
         ssh uan01 sinfo | tee -a uan01.sinfo
+        ssh uan01 sinfo --list-reasons | tee -a sinfo.reasons
         ```
 
-    1. Capture the list of down nodes in the workload manager and the reason.
+        For example, if the system uses PBS Pro:
 
         ```bash
-        ssh uan01 sinfo --list-reasons | tee -a sinfo.reasons
+        ssh uan01 pbsnodes -aS | tee -a pbsnodes.aS
         ```
 
     1. Check Ceph status.
@@ -327,115 +332,43 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
 1. (`ncn-mw#`) Cancel the running BOS sessions.
 
-    1. Identify the BOS Sessions and associated BOA Kubernetes jobs to delete.
-
-        Determine which BOS sessions to cancel. To cancel a BOS session, kill
-        its associated Boot Orchestration Agent (BOA) Kubernetes job.
-
-        To find a list of BOA jobs that are still running:
+    1. Identify the BOS Sessions to delete.
 
         ```bash
-        kubectl -n services get jobs|egrep -i "boa|Name"
+        cray bos sessions list --format json
         ```
 
-        Output similar to the following will be returned:
-
-        ```text
-        NAME                                       COMPLETIONS   DURATION   AGE
-        boa-0216d2d9-b2bc-41b0-960d-165d2af7a742   0/1           36m        36m
-        boa-0dbd7adb-fe53-4cda-bf0b-c47b0c111c9f   1/1           36m        3d5h
-        boa-4274b117-826a-4d8b-ac20-800fcac9afcc   1/1           36m        3d7h
-        boa-504dd626-d566-4f58-9974-3c50573146d6   1/1           8m47s      3d5h
-        boa-bae3fc19-7d91-44fc-a1ad-999e03f1daef   1/1           36m        3d7h
-        boa-bd95dc0b-8cb2-4ad4-8673-bb4cc8cae9b0   1/1           36m        3d7h
-        boa-ccdd1c29-cbd2-45df-8e7f-540d0c9cf453   1/1           35m        3d5h
-        boa-e0543eb5-3445-4ee0-93ec-c53e3d1832ce   1/1           36m        3d5h
-        boa-e0fca5e3-b671-4184-aa21-84feba50e85f   1/1           36m        3d5h
-        ```
-
-        Any job with a `0/1` `COMPLETIONS` column is still running and is a candidate to be forcibly deleted.
-        The BOA Job ID appears in the NAME column.
-
-    1. Clean up prior to BOA job deletion.
-
-        The BOA pod mounts a ConfigMap under the name `boot-session` at the directory `/mnt/boot_session` inside the pod. This ConfigMap has a random UUID name like `e0543eb5-3445-4ee0-93ec-c53e3d1832ce`.
-        Prior to deleting a BOA job, delete its ConfigMap.
-        Find the BOA job's ConfigMap with the following command:
+    1. Delete each running BOS session.
 
         ```bash
-        kubectl -n services describe job <BOA Job ID> |grep ConfigMap -A 1 -B 1
+        cray bos sessions delete <session ID>
         ```
 
         Example:
 
         ```bash
-        kubectl -n services describe job boa-0216d2d9-b2bc-41b0-960d-165d2af7a742 |grep ConfigMap -A 1 -B 1
-           boot-session:
-            Type:      ConfigMap (a volume populated by a ConfigMap)
-            Name:      e0543eb5-3445-4ee0-93ec-c53e3d1832ce    <<< ConfigMap name. Delete this one.
-        --
-           ca-pubkey:
-            Type:      ConfigMap (a volume populated by a ConfigMap)
-            Name:      cray-configmap-ca-public-key
+        cray bos sessions delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
         ```
 
-        Delete the ConfigMap associated with the `boot-session`, not the `ca-pubkey`.
-
-        To delete the ConfigMap:
-
-        ```bash
-        kubectl -n services delete cm <ConfigMap name>
-        ```
-
-        Example:
-
-        ```bash
-        kubectl -n services delete cm e0543eb5-3445-4ee0-93ec-c53e3d1832ce
-        configmap "e0543eb5-3445-4ee0-93ec-c53e3d1832ce" deleted
-        ```
-
-    1. Delete the BOA jobs.
-
-        ```bash
-        kubectl -n services delete job <boa-job-id>
-        ```
-
-        This will kill the BOA job and the BOS session associated with it.
-
-        When a job is killed, BOA will no longer attempt to execute the operation it was attempting to perform. This does not mean that
-        nothing continues to happen. If BOA has instructed a node to power on, the node will continue to power even after the BOA job
-        has been killed.
-
-    1. Delete the BOS session.
-        BOS keeps track of sessions in its database. These entries need to be deleted.
-        The BOS Session ID is the same as the BOA Job ID minus the prepended `boa-`
-        string. Use the following command to delete the BOS database entry.
-
-        ```bash
-        cray bos v1 session delete <session ID>
-        ```
-
-        Example:
-
-        ```bash
-        cray bos v1 session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
-        ```
-
-1. Coordinate with the site to prevent new sessions from starting in the services listed.
+1. Coordinate with the site system administators to prevent new sessions from starting in the services listed.
 
     There is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
-1. Follow the vendor workload manager documentation to drain processes running on compute nodes. For Slurm, see the `scontrol` man page. For PBS Professional, see the `pbsnodes` man page.
+1. Follow the vendor workload manager documentation to drain processes running on compute nodes.
 
-    Below are examples of how to drain nodes using `slurm`. The list of nodes can be copy/pasted from the `sinfo` command for nodes in an `idle` state:
+    1. For Slurm, see the `scontrol` man page.
 
-    ```bash
-    scontrol update NodeName=nid[001001-001003,001005] State=DRAIN Reason="Shutdown"
-    ```
+       Below are examples of how to drain nodes using `slurm`. The list of nodes can be copy/pasted from the `sinfo` command for nodes in an `idle` state:
 
-    ```bash
-    scontrol update NodeName=ALL State=DRAIN Reason="Shutdown"
-    ```
+       ```bash
+       scontrol update NodeName=nid[001001-001003,001005] State=DRAIN Reason="Shutdown"
+       ```
+
+       ```bash
+       scontrol update NodeName=ALL State=DRAIN Reason="Shutdown"
+       ```
+
+    1. For PBS Professional, see the `pbsnodes` man page.
 
 ## Next step
 
