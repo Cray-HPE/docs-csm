@@ -56,6 +56,23 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
          fi
          ```
 
+1. Ensure `/root/.ssh/known_hosts` does not have ssh stale host key entries for any of the management nodes.
+
+   **Important:** Many of the `sat` commands use ssh from a `sat` Kubernetes pod to execute commands on the management nodes. This `sat` pod
+   uses the `paramiko` Python library for ssh and it will access `/root/.ssh/known_hosts`. If `/root/.ssh/config` or `/etc/ssh/config` has
+   been configured to set `UserKnownHostsfile` to `/dev/null` or some other file and there are ssh host key mismatches in `/root/.ssh/known_hosts`, then
+   when a `sat` command tries to use ssh with `paramiko`, it will fail even though an interactive ssh command by the root user might succeed.
+
+   For example, the `sat bootsys shutdown --stage platform-services` command would show this type of error and fail.
+
+   ```text
+   INFO: Executing step: Stop and disable kubelet on all Kubernetes NCNs.
+   ERROR: Host key for server 'ncn-w003' does not match: got 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCGNgIUTU7+o/+c5bD84u7/1S3xNNOd5+c/0l4vpVEehWGrjuC6IRC/KAImozzznXHhdBL7yQF2Dnh3FHGQDyko=', expected 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBL9bwo5gmW/vX3kUQyXIDgJa4EVtCYDyntmNt43BHTM7YKn6yFe1dV59Ervi13V20OxdVECxg2hTyeTueVKvwj4='
+   ERROR: Fatal error in step "Stop and disable kubelet on all Kubernetes NCNs." of platform services stop: Failed to ensure kubelet is inactive and disabled on all hosts.
+   ```
+
+   To prevent this issue from happening, remove stale ssh host keys from `/root/.ssh/known_hosts` before running the `sat` command.
+
 1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
 
    There will be separate session templates for UANs and computes nodes.
