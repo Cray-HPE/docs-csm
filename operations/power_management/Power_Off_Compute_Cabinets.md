@@ -1,6 +1,6 @@
 # Power Off Compute Cabinets
 
-Power off HPE Cray EX liquid-cooled and standard racks.
+Power off HPE Cray EX liquid-cooled cabinets and managed nodes in standard racks.  This procedure does not power off management nodes.
 
 ## Cabinet/rack types
 
@@ -28,80 +28,21 @@ HPE Cray standard EIA racks typically include two redundant PDUs. Some PDU model
 
 ## Procedure
 
-If the system does not include HPE Cray EX liquid-cooled cabinets, then skip the next section and proceed to
-[Power off standard rack PDU circuit breakers](#power-off-standard-rack-pdu-circuit-breakers).
-
-### Power off HPE Cray EX liquid-cooled cabinets
+### Check power status before shutdown
 
 1. Check CDU control panel for alerts or warnings and resolve any issues before continuing.
 
-1. (`ncn-m#`) Check the power status before shutdown.
+   If coolant levels are on the verge of being too low, there may be a fault upon power up due to not enough coolant.
 
-    This example shows cabinets 1000 - 1003.
+1. (`ncn-m#`) Check the power status in liquid-cooled cabinets before shutdown.
 
-    ```bash
-    cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
-    ```
-
-1. (`ncn-m#`) Shut down services and power off liquid-cooled cabinets.
-
-    ```bash
-    sat bootsys shutdown --stage cabinet-power
-    ```
-
-    This command suspends the `hms-discovery` cron job and recursively powers off the liquid-cooled cabinet chassis.
-
-    The `sat bootsys shutdown` command may fail to power off some cabinets and indicate that requests to CAPMC have timed out. In this case, the `sat` command may be run with an increased `--api-timeout` option:
-
-    ```bash
-    sat --api-timeout 180 bootsys shutdown --stage cabinet-power
-    ```
-
-1. (`ncn-m#`) Verify that the `hms-discovery` cron job has been suspended.
-
-    If that is the case, then the `SUSPEND` column should be `True` in the output of the following command:
-
-    ```bash
-    kubectl get cronjobs -n services hms-discovery
-    ```
-
-    Example output:
-
-    ```text
-    NAME            SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE^M
-    hms-discovery   */3 * * * *   True      0        117s            15d
-    ```
-
-1. (`ncn-m#`) Check the power off status.
-
-    This example shows cabinets 1000 - 1003.
+    This example shows liquid-cooled cabinets 1000 - 1003.
 
     ```bash
     cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
     ```
 
-    Rectifiers \(PSUs\) should indicate that DC power is `OFF` \(`AC OK` means the power is on\).
-
-1. Set the cabinet PDU circuit breakers to `OFF` for each shelf.
-
-    The `AC OK` LED on each PSU will remain amber for about 30 seconds \(`AC lost`\) until the system de-energizes, then it will extinguish.
-
-    ![Liquid-cooled Cabinet PDU](../../img/operations/Liquid_Cooled_Cabinet_PDU.svg)
-
-    **`NOTE`** If the TDS cabinet rack-mounted coolant distribution unit \(MCDU\) is receiving power from the PDUs in the management cabinet, then the MCDU may stay on after the TDS cabinet PDU
-    circuit breakers are set to `OFF`. This is expected.
-
-    ![Liquid-cooled TDS Cabinet PDU](../../img/operations/Liquid_Cooled_TDS_Cabinet_PDU.svg)
-
-    **CAUTION:** Do not power off the CDU if it is actively cooling other equipment.
-
-1. If other systems are **not** being cooled by the floor-standing CDU, then open the CDU rear door to access the control panel and set the circuit breakers to `OFF`.
-
-    ![CDU Circuit Breakers](../../img/operations/CDU_Circuit_Breakers.png)
-
-### Power off standard rack PDU circuit breakers
-
-1. (`ncn-m#`) Check the power status before shutdown.
+1. (`ncn-m#`) Check the power status for nodes in the standard racks before shutdown.
 
     This example shows nodes in cabinets 3001 - 3003.
 
@@ -147,21 +88,71 @@ If the system does not include HPE Cray EX liquid-cooled cabinets, then skip the
     }
     ```
 
-1. (`ncn-m#`) Use CAPMC to power off HPE Cray standard racks for **non-management** nodes.
+### Shut down cabinet power
 
-    **CAUTION: Do not power off the management cabinet**. Verify that the components names \(xnames\) specified in the following command line do not accidentally power off management cabinets.
+The `sat bootsys shutdown --stage cabinet-power`  command suspends the `hms-discovery` cron job, recursively powers off all
+liquid-cooled cabinet chassis, compute modules, and router modules, then powers off non-management nodes in the air-cooled racks.
 
-    This example shuts down racks 3001 - 3003.
+1. (`ncn-m#`) Shut down cabinet power
+
+    **Important:** The default timeout for the call to CAPMC is 120 seconds.  If the `sat bootsys shutdown` command fails
+    to power off some cabinets and indicate that requests to CAPMC have timed out, the `sat` command may be run with an increased `--capmc-timeout` value.
 
     ```bash
-    cray capmc xname_off create --xnames x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0
+    sat bootsys shutdown --stage cabinet-power --capmc-timeout 240
     ```
 
-1. (`ncn-m#`) Check the status of the CAPMC power off command.
+1. (`ncn-m#`) Verify that the `hms-discovery` cron job has been suspended.
+
+    If it has been suspended, then the `SUSPEND` column should be `True` in the output of the following command:
+
+    ```bash
+    kubectl get cronjobs -n services hms-discovery
+    ```
+
+    Example output:
+
+    ```text
+    NAME            SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE^M
+    hms-discovery   */3 * * * *   True      0        117s            15d
+    ```
+
+1. (`ncn-m#`) Check the power status for liquid-cooled cabinets after shutdown.
+
+    This example shows cabinets 1000 - 1003.
+
+    ```bash
+    cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
+    ```
+
+1. Rectifiers \(PSUs\) in the liquid-cooled cabinets should indicate that DC power is `OFF` \(`AC OK` means the power is on\).
+
+1. (`ncn-m#`) Check the power status for nodes in the standard racks after shutdown.
 
     ```bash
     cray capmc get_xname_status create --xnames x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0 --format json
     ```
+
+### Power off liquid-cooled cabinet PDU circuit breakers
+
+1. Set the cabinet PDU circuit breakers to `OFF` for each shelf.
+
+    The `AC OK` LED on each PSU will remain amber for about 30 seconds \(`AC lost`\) until the system de-energizes, then it will extinguish.
+
+    ![Liquid-cooled Cabinet PDU](../../img/operations/Liquid_Cooled_Cabinet_PDU.svg)
+
+    **`NOTE`** If the TDS cabinet rack-mounted coolant distribution unit \(MCDU\) is receiving power from the PDUs in the management cabinet, then the MCDU may stay on after the TDS cabinet PDU
+    circuit breakers are set to `OFF`. This is expected.
+
+    ![Liquid-cooled TDS Cabinet PDU](../../img/operations/Liquid_Cooled_TDS_Cabinet_PDU.svg)
+
+    **CAUTION:** Do not power off the CDU if it is actively cooling other equipment.
+
+1. If other systems are **not** being cooled by the floor-standing CDU, then open the CDU rear door to access the control panel and set the circuit breakers to `OFF`.
+
+    ![CDU Circuit Breakers](../../img/operations/CDU_Circuit_Breakers.png)
+
+### Power off standard rack PDU circuit breakers
 
 1. Set each cabinet PDU circuit breaker to `OFF`.
 
