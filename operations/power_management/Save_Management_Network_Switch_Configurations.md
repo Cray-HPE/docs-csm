@@ -17,8 +17,8 @@ For each switch:
     for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do echo  "switch ${switch}:" ; ssh admin@$switch; done
     ```
 
-2. Execute the `write memory` command
-3. Exit the switch shell
+1. Execute the `write memory` command
+1. Exit the switch shell
 
 ### Dell and Mellanox Switch and Gigabyte/Intel Server Systems
 
@@ -30,9 +30,9 @@ On Dell and Mellanox based systems, all spine and any leaf switches will be Mell
     for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do echo  "switch ${switch}:" ; ssh admin@$switch; done
     ```
 
-2. Enter `enable` mode (Mellanox only)
-3. Execute the `write memory` command
-4. Exit the switch shell
+1. Enter `enable` mode (Mellanox only)
+1. Execute the `write memory` command
+1. Exit the switch shell
 
 ### Edge Routers and Storage Switches
 
