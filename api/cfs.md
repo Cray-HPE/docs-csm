@@ -1158,6 +1158,7 @@ Retrieve all the configuration framework sessions on the system.
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of configuration sessions|[V2SessionArray](#schemav2sessionarray)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -1279,7 +1280,7 @@ Create a new configuration session. A configuration session stages Ansible inven
 
 > Example responses
 
-> 201 Response
+> 200 Response
 
 ```json
 {
@@ -1340,7 +1341,7 @@ Create a new configuration session. A configuration session stages Ansible inven
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|A single configuration session|[V2Session](#schemav2session)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration session|[V2Session](#schemav2session)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|A session with the same name already exists.|[ProblemDetails](#schemaproblemdetails)|
 
@@ -2018,6 +2019,7 @@ Retrieve all the configuration framework sessions on the system.
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of configuration sessions|[V3SessionDataCollection](#schemav3sessiondatacollection)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -5319,6 +5321,7 @@ Updates the commits for all layers that specify a branch
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration|[V2Configuration](#schemav2configuration)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -5911,6 +5914,7 @@ Updates the commits for all layers that specify a branch
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration|[V3ConfigurationData](#schemav3configurationdata)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -6230,7 +6234,7 @@ Add a source to CFS
 
 > Example responses
 
-> 200 Response
+> 201 Response
 
 ```json
 {
@@ -6253,7 +6257,7 @@ Add a source to CFS
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single source|[V3SourceData](#schemav3sourcedata)|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|A single source|[V3SourceData](#schemav3sourcedata)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|A source with the same name already exists|[ProblemDetails](#schemaproblemdetails)|
 
@@ -6489,6 +6493,7 @@ Updates a CFS source
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single source|[V3SourceData](#schemav3sourcedata)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
