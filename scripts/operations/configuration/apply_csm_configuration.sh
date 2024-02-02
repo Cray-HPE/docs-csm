@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2022, 2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -282,7 +282,9 @@ if [[ ${CONFIG_CHANGE} == true ]]; then
         rm -r "${TEMP_DIR}" || echo "WARNING: Unable to delete temporary directory '${TEMP_DIR}'" 1>&2
     fi
 
-    CONFIG="{ \"layers\": [ { \"name\": \"csm-${VERSION}\", \"cloneUrl\": \"${CLONE_URL}\", \"commit\": \"${COMMIT}\", \"playbook\": \"site.yml\" } ] }"
+    NCN_NODES_LAYER="{ \"name\": \"csm-ncn-nodes-${VERSION}\", \"cloneUrl\": \"${CLONE_URL}\", \"commit\": \"${COMMIT}\", \"playbook\": \"site.yml\" }"
+    NCN_INITRD_LAYER="{ \"name\": \"csm-ncn-initrd-${VERSION}\", \"cloneUrl\": \"${CLONE_URL}\", \"commit\": \"${COMMIT}\", \"playbook\": \"ncn-initrd.yml\" }"
+    CONFIG="{ \"layers\": [ ${NCN_NODES_LAYER}, ${NCN_INITRD_LAYER} ] }"
 
     echo "Creating the configuration file ${CSM_CONFIG_FILE}"
     echo "${CONFIG}" | jq > "${CSM_CONFIG_FILE}" || err_exit "Unexpected error parsing JSON or writing to '${CSM_CONFIG_FILE}'"
@@ -357,13 +359,16 @@ join_arr() {
 # Break up the XNAMES into chunks of XNAME_LIMIT size because the CFS operator
 # cannot handle more than XNAME_LIMIT query parameters.
 XNAME_LIMIT=20
+# shellcheck disable=SC2206
 XNAME_ARRAY=(${XNAME_LIST})
 NUMBER_XNAMES=${#XNAME_ARRAY[@]}
 
 # Wait for nodes to configure
 INDEX=0
 while [[ $INDEX -lt $NUMBER_XNAMES ]]; do
+    # shellcheck disable=SC2124
     SHORT_XNAMES_LIST=${XNAME_ARRAY[@]:$INDEX:$XNAME_LIMIT}
+    # shellcheck disable=SC2068
     SHORT_XNAMES=$(join_arr , ${SHORT_XNAMES_LIST[@]})
     INDEX=$((INDEX + XNAME_LIMIT))
     while true; do
@@ -381,7 +386,9 @@ INDEX=0
 CONFIGURED=0
 FAILED=0
 while [[ $INDEX -lt $NUMBER_XNAMES ]]; do
+    # shellcheck disable=SC2124
     SHORT_XNAMES_LIST=${XNAME_ARRAY[@]:$INDEX:$XNAME_LIMIT}
+    # shellcheck disable=SC2068
     SHORT_XNAMES=$(join_arr , ${SHORT_XNAMES_LIST[@]})
     INDEX=$((INDEX + XNAME_LIMIT))
     NEW_CONFIGURED=$(cray cfs components list --status configured --ids ${SHORT_XNAMES} --format json | jq length)
@@ -396,7 +403,9 @@ if [ "${FAILED}" -ne "0" ]; then
     INDEX=0
     FAILED_NODES=""
     while [[ $INDEX -lt $NUMBER_XNAMES ]]; do
+        # shellcheck disable=SC2124
         SHORT_XNAMES_LIST=${XNAME_ARRAY[@]:$INDEX:$XNAME_LIMIT}
+        # shellcheck disable=SC2068
         SHORT_XNAMES=$(join_arr , ${SHORT_XNAMES_LIST[@]})
         INDEX=$((INDEX + XNAME_LIMIT))
         FAILED_NODES+=$(cray cfs components list --status failed --ids ${SHORT_XNAMES} --format json | jq -r '. | map(.id) | join(",")')
