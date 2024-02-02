@@ -44,9 +44,9 @@
 * Removed clear text switch passwords from the `cray-sysmgmt-health-canu-test` pod log
 * Ceph nodes run user facing docker registry that is writable anonymously
 * Added support for NID allocation defragmentation
-* Multi-tenancy: Vault Transit (KMS) Support for Encrypted Secrets in VCS
-* Multi-tenancy: Enable Tenant ID + Tenant Admin AuthZ Awareness for API Ingress (OPA policy)
-* Multitenancy: Enable Tenant ID + Tenant Admin AuthZ Awareness for API Ingress
+* Multitenancy: Vault Transit (KMS) Support for Encrypted Secrets in VCS
+* Multitenancy: Enable Tenant ID + Tenant Admin `AuthZ` Awareness for API Ingress (OPA policy)
+* Multitenancy: Enable Tenant ID + Tenant Admin `AuthZ` Awareness for API Ingress
 * Multitenancy: BOS Support for boot, reboot, node power on and off in tenant
 
 ### New Hardware Support
@@ -117,7 +117,7 @@
 * Addressed `Zenbleed` CVE on NCNs
 * Addressed `CVE-2023-38545` (curl & `libcurl`) on NCNs
 * Added Default RBAC Role for Telemetry API
-* In SAT upgradeded paramiko to resolve CVE-2023-48795 
+* In SAT upgraded `paramiko` to resolve `CVE-2023-48795` 
   
 ### Customer-Requested Enhancements
 
