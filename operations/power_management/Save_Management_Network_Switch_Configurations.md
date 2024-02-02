@@ -59,7 +59,7 @@ On Aruba-based systems, all management network switches will be Aruba.
 
 ### Dell and Mellanox Switch and Gigabyte/Intel Server Systems
 
-On Dell and Mellanox based systems, all spine and any leaf switches will be Mellanox. Any leaf-bmc and cdu switches will be Dell.
+On Dell and Mellanox based systems, all spine and any leaf switches will be Mellanox. Any Leaf-BMC and CDU switches will be Dell.
 
 1. (`ncn-m#`) Connect to all management network switches
 
@@ -71,7 +71,7 @@ On Dell and Mellanox based systems, all spine and any leaf switches will be Mell
 
    For a Mellanox switch:
 
-   **Note:** Depending on the firmware version, some Mellanox switchs will identify themselves as "NVIDIA Onyx".
+   **Note:** Depending on the firmware version, some Mellanox switches may identify themselves as "NVIDIA Onyx".
 
    ```bash
    enable
