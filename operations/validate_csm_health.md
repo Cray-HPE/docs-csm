@@ -501,10 +501,10 @@ being tested as this will cause some tests to fail.
 This test is **very important to run**, particularly during the CSM install prior to rebooting the PIT node,
 because it validates all of the services required for nodes to PXE boot from the cluster.
 
-By default the test automatically chooses an enabled compute node and a barebones IMS image to use
-for the test. This default behavior can be overridden, however. For additional information and troubleshooting
-related to the barebones image or the test, see
-[Troubleshoot the CMS Barebones Image Boot Test](../troubleshooting/cms_barebones_image_boot.md).
+By default the test automatically chooses an enabled x86 compute node and an x86 barebones compute image.
+This image is customized and used to boot the chosen node. This default behavior can be overridden, however.
+For additional details and troubleshooting information, see
+[Barebones Image Boot Test](../troubleshooting/cms_barebones_image_boot.md).
 
 ### 5.1 Run the test script
 
@@ -514,17 +514,12 @@ This test can be run on any master or worker NCN, but not the PIT node.
 non-zero on failure.
 
 ```bash
-/opt/cray/tests/integration/csm/barebonesImageTest
+/opt/cray/tests/integration/csm/barebones_image_test
 ```
 
-Successful output looks similar to the following:
+The end of successful test output will resemble the following:
 
 ```text
-cray.barebones-boot-test: INFO     Barebones image boot test starting
-cray.barebones-boot-test: INFO       For complete logs look in the file /tmp/cray.barebones-boot-test.log
-cray.barebones-boot-test: INFO     Creating bos session with template:csm-barebones-image-test, on node:x3000c0s10b1n0
-cray.barebones-boot-test: INFO     Starting boot on compute node: x3000c0s10b1n0
-cray.barebones-boot-test: INFO     Found dracut message in console output - success!!!
 cray.barebones-boot-test: INFO     Successfully completed barebones image boot test.
 ```
 

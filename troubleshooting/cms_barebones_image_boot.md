@@ -1,94 +1,165 @@
-# Troubleshoot the CMS Barebones Image Boot Test
+# Barebones Image Boot Test
 
 The CSM barebones image boot test verifies that the CSM services needed to boot a node are available and working properly.
-This test is **very important to run**, particularly during the CSM install prior to rebooting the PIT node,
-because it validates all of the services required for nodes to PXE boot from the cluster.
+This test is **very important to run**, particularly during the CSM install prior to rebooting the
+[PIT](../glossary.md#pre-install-toolkit-pit) node, because it validates all of the services required for nodes to
+PXE boot from the cluster.
 
-This page gives some information about the CSM barebones image, describes how the `barebonesImageTest` script works, explains
-how to interpret the results of the script, and provides a procedure to manually perform the test, if needed.
+This page gives some information about the CSM barebones image and describes how the test script works.
 
-* [Notes on the CSM barebones image](#notes-on-the-csm-barebones-image)
+* [Notes on the CSM barebones images](#notes-on-the-csm-barebones-images)
+  * [Compute barebones images](#compute-barebones-images)
+  * [Minimal barebones image](#minimal-barebones-image)
 * [Test prerequisites](#test-prerequisites)
-* [Test script](#test-script)
-  * [Steps the script performs](#steps-the-script-performs)
+* [Test overview](#test-overview)
+* [Test options](#test-options)
   * [Controlling which node is used](#controlling-which-node-is-used)
   * [Controlling which image is used](#controlling-which-image-is-used)
+  * [Controlling how the image is customized](#controlling-how-the-image-is-customized)
+  * [Controlling which product catalog entry is used](#controlling-which-product-catalog-entry-is-used)
+  * [Controlling which architecture is used](#controlling-which-architecture-is-used)
   * [Controlling test script output level](#controlling-test-script-output-level)
-* [Manual test procedure](#manual-test-procedure)
-   1. [Locate CSM barebones image in IMS](#1-locate-csm-barebones-image-in-ims)
-   1. [Create a BOS session template for the CSM barebones image](#2-create-a-bos-session-template-for-the-csm-barebones-image)
-   1. [Find an available compute node](#3-find-an-available-compute-node)
-   1. [Reboot the node using a BOS session template](#4-reboot-the-node-using-a-bos-session-template)
-   1. [Connect to the node's console and watch the boot](#5-connect-to-the-nodes-console-and-watch-the-boot)
+  * [Preventing resource deletion](#preventing-resource-deletion)
 
-## Notes on the CSM barebones image
+## Notes on the CSM barebones images
 
-The CSM barebones image is a pre-built node image included with the CSM release. The CSM barebones
-image contains only the minimal set of RPMs and configuration required to boot an image, and is not
-suitable for production usage. To run production work loads, it is suggested that an image from
-the Cray OS (COS) product, or similar, be used.
+Every CSM release includes a few different pre-build barebones node images.
+They are listed in the Cray Product Catalog entry for that CSM release.
 
-The CSM barebones image included with the release will not successfully complete a boot
-beyond the `dracut` stage of the boot process. However, if the `dracut` stage is reached, then the
-boot can be considered successful, because this demonstrates that the necessary CSM services needed to
-boot a node are up and available.
+(`ncn-mw#`) To view all of the CSM release entries in the Cray Product Catalog, run the following command.
 
-In addition to the CSM barebones image, the release also includes an IMS recipe that
+```bash
+kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
+```
+
+Here is an example of what the images stanza looks like for a CSM release entry in the Cray Product Catalog.
+
+```yaml
+  images:
+    compute-csm-1.5-5.2.52-aarch64:
+      id: a836494a-0a50-4e26-96de-db8b4b9f75f2
+    compute-csm-1.5-5.2.52-x86_64:
+      id: 66eb3319-c0fb-4086-9b62-71347ccb6b8d
+    cray-shasta-csm-sles15sp5-barebones-csm-1.5:
+      id: a6d0611b-1993-4ecb-93dc-e49888ca1844
+    secure-kubernetes-5.2.52-x86_64.squashfs:
+      id: fcbaf6a2-3c82-4532-97da-efee21e8d861
+    secure-storage-ceph-5.2.52-x86_64.squashfs:
+      id: 2a1b5a95-7f15-4d74-847b-eeb46200bf3b
+```
+
+* [Compute barebones images](#compute-barebones-images)
+* [Minimal barebones image](#minimal-barebones-image)
+
+### Compute barebones images
+
+In the example Cray Product Catalog output above, the two compute barebones images are
+`compute-csm-1.5-5.2.52-aarch64` (ARM architecture) and `compute-csm-1.5-5.2.52-x86_64` (x86 architecture).
+These images include everything necessary to fully boot a compute node to a login prompt. However,
+[Boot Orchestration Service (BOS)](../glossary.md#boot-orchestration-service-bos) sessions used to boot them
+**will never report success**. This is because they do not have the necessary credentials built-in to allow the
+BOS state reporter to notify BOS of the successful boot.
+These credentials can be added by customizing the image using the
+[Configuration Framework Service (CFS)](../glossary.md#configuration-framework-service-cfs)
+(the `compute_nodes.yaml` playbook from the CSM
+[Version Control Service (VCS)](../glossary.md#version-control-service-vcs) repository will work for this).
+
+### Minimal barebones image
+
+In the example Cray Product Catalog output above, `cray-shasta-csm-sles15sp5-barebones-csm-1.5` is
+the minimal barebones image.
+
+This image contains only the minimal set of RPMs and configuration required to boot a compute node, and is not
+suitable for production usage. To run production work loads, it is suggested that an image from the
+[Cray Operating System (COS)](../glossary.md#cray-operating-system-cos) product, or similar, be used.
+
+Unlike the [compute barebones images](#compute-barebones-images),
+this image **will not successfully complete a boot** beyond the `dracut` stage of the boot process.
+However, if the `dracut` stage is reached, then the boot can be considered successful, because this
+demonstrates that the necessary CSM services needed to boot a node are up and available.
+
+In addition to the minimal barebones image, the CSM release also includes an
+[Image Management Service (IMS)](../glossary.md#image-management-service-ims) recipe that
 can be used to build the CSM barebones image. However, the CSM barebones recipe currently requires
 RPMs that are not installed with the CSM product. The CSM barebones recipe can be built after the
 COS product stream is installed on the system.
 
 ## Test prerequisites
 
-* This test can be run on any master or worker NCN, but not the PIT node.
-  * This is true both for the test script and for the [Manual test procedure](#manual-test-procedure).
+* This test can be run on any master or worker [NCN](../glossary.md#non-compute-node-ncn), but not the PIT node.
 * The test script uses the Kubernetes API gateway to access CSM services. The gateway must be properly configured to allow an access token to be generated by the script.
-* The manual procedure uses the Cray CLI. The CLI must be configured and authenticated on the node where the manual steps are being performed.
-  * See [Configure the Cray CLI](../operations/configure_cray_cli.md).
 * The test script is installed as part of the `cray-cmstools-crayctldeploy` RPM.
 
-## Test script
+## Test overview
 
-The script file location is `/opt/cray/tests/integration/csm/barebonesImageTest`.
+The script file location is `/opt/cray/tests/integration/csm/barebones_image_test`.
 Review the [Test prerequisites](#test-prerequisites) before proceeding.
 
-* [Steps the script performs](#steps-the-script-performs)
-* [Controlling which node is used](#controlling-which-node-is-used)
-* [Controlling which image is used](#controlling-which-image-is-used)
-* [Controlling test script output level](#controlling-test-script-output-level)
-
-### Steps the script performs
-
-This script automates the following steps:
+If no parameters are specified, this script does the following steps:
 
 1. Obtain the Kubernetes API gateway access token.
-1. Find the existing barebones boot image using IMS.
-1. Create a BOS session template for the barebones boot image.
-1. Find an enabled compute node using HSM.
-1. Watch the console log for the target compute node using console services.
-1. Create a BOS session to reboot the target compute node.
-1. Wait for the console output to show an error or successfully reach `dracut`.
+1. Reads the CSM entries in the Cray Product Catalog and finds the entry for the most
+   recent CSM version. From this entry, it gets the following information:
 
-If the script fails, then investigate the underlying service to ensure that it is operating correctly;
-examine the detailed test log file to find information on the exact error and cause of failure.
+   * The IMS ID of the x86 [compute barebones image](#compute-barebones-images)
+   * The `clone_url` and `commit` from the `configuration` stanza.
 
-The boot may take up to 10 or 15 minutes. The image being booted does not support a complete boot,
-so the node will not boot fully into an operating system. This test is merely to verify that the
-CSM services needed to boot a node are available and working properly. This boot test is considered
-successful if the boot reaches the `dracut` stage.
+1. Queries [Hardware State Manager (HSM)](../glossary.md#hardware-state-manager-hsm) to find an enabled x86 compute node.
+1. Creates a single-layer CFS configuration to run the `compute_nodes.yml` playbook,
+   using the Git commit and clone URL found earlier.
+1. Creates a CFS session to customize the barebones image using the new CFS configuration.
+   Waits for the session to complete successfully.
+1. Creates a BOS session template to boot the resulting customized IMS image.
+1. Creates a BOS session to restart the chosen compute note using the new BOS session template.
+   Waits for the session to complete successfully.
+1. If the test passed, it deletes the resources it created during execution (CFS configuration,
+   CFS session, customized IMS image, BOS session template, and BOS session).
+
+The script provides output along the way to report progress, and also provides a link to a log
+file with more detailed information. If the test fails, the place to begin the investigation is
+whatever service was being used at the time of the failure.
+
+The image customization step may take up to 10 or 15 minutes, as may the boot step.
+
+## Test options
+
+(`ncn-mw#`) The script usage message can be displayed by running it with the `--help` argument.
+
+```bash
+/opt/cray/tests/integration/csm/barebones_image_test --help
+```
+
+The following sections cover some of the most commonly used options.
+
+* [Controlling which node is used](#controlling-which-node-is-used)
+* [Controlling which image is used](#controlling-which-image-is-used)
+* [Controlling how the image is customized](#controlling-how-the-image-is-customized)
+* [Controlling which product catalog entry is used](#controlling-which-product-catalog-entry-is-used)
+* [Controlling which architecture is used](#controlling-which-architecture-is-used)
+* [Controlling test script output level](#controlling-test-script-output-level)
+* [Preventing resource deletion](#preventing-resource-deletion)
 
 ### Controlling which node is used
 
-By default, the script will list all enabled compute nodes in HSM and use the first one
+By default, the script will list all enabled x86 compute nodes in HSM and use the first one
 as the target for the test. This may be overridden by using the `--xname` command line argument
 to specify the component name (xname) of the target compute node. The target
-compute node must be enabled and present in HSM. If the specified compute node is
-not available, then the test will fail with an appropriate error message.
+compute node must be enabled and present in HSM.
+
+If an ARM node is specified, then the test will choose the ARM
+[compute barebones image](#compute-barebones-images) from the product catalog.
+
+When specifying a node, the test can fail if:
+
+* The specified node is not found in HSM
+* The specified node is not enabled in HSM
+* The specified node is not marked as a compute node in HSM
+* An image with non-matching architecture has also been specified
 
 (`ncn-mw#`) An example of specifying the target node:
 
 ```bash
-/opt/cray/tests/integration/csm/barebonesImageTest --xname x3000c0s10b1n0
+/opt/cray/tests/integration/csm/barebones_image_test --xname x3000c0s10b1n0
 ```
 
 > Troubleshooting: If any compute nodes are missing from HSM database, then refer to
@@ -97,18 +168,24 @@ not available, then the test will fail with an appropriate error message.
 
 ### Controlling which image is used
 
-By default, the script will list all IMS images with `barebones` in their names, and use the first
-one as the boot image for the test. This may be overridden using the `--id` command line argument
-to specify the ID of the desired IMS image. If the specified image is not found, then the test
-will fail with an appropriate error message.
+By default, the script will customize the [compute barebones image](#compute-barebones-images) from
+the product catalog.
 
-The most common reason that this option may be needed is if some other IMS image has `barebones` in its name,
-and the test is choosing it instead of the regular CSM barebones image.
+The `--base-id` argument can be used to specify a different IMS image to be customized.
+Or the customization can be skipped entirely by specifying an image with the `--id` argument.
+In either case, the image is specified using its IMS ID.
+
+When specifying an image, the test can fail if:
+
+* The specified image is not found in IMS
+* The specified IMS image does not have a linked S3 artifact
+* No compute node can be found with an architecture that matches the specified image
+* A node with non-matching architecture has also been specified
 
 (`ncn-mw#`) An example of specifying the image for the test:
 
 ```bash
-/opt/cray/tests/integration/csm/barebonesImageTest --id 0eacdcaa-74ad-40d6-b2b3-801f244ef868
+/opt/cray/tests/integration/csm/barebones_image_test --id 0eacdcaa-74ad-40d6-b2b3-801f244ef868
 ```
 
 (`ncn-mw#`) Available IMS images on the system can be listed using the Cray Command Line Interface (CLI)
@@ -119,6 +196,35 @@ cray ims images list --format json
 ```
 
 For help configuring the Cray CLI, see [Configure the Cray CLI](../operations/configure_cray_cli.md).
+
+Another way to change which image is used is to specify a different CSM version to use in the product catalog.
+See [Controlling which product catalog entry is used](#controlling-which-product-catalog-entry-is-used).
+
+### Controlling how the image is customized
+
+By default, the script creates a CFS configuration to customize the image, using the Git
+commit and clone URL from the latest CSM version in the product catalog.
+This can be altered in a few different ways.
+
+* A pre-existing CFS configuration can be used by specified its name with the `--cfs-config` argument.
+* A Git commit can be specified with the `--git-commit` argument.
+* A clone URL can be specified with the `--vcs-url` argument.
+* An Ansible playbook (to override the default `compute_nodes.yml`) can be specified with the `--playbook` argument.
+* A different CSM version in the product catalog can be specified.
+  See [Controlling which product catalog entry is used](#controlling-which-product-catalog-entry-is-used).
+
+### Controlling which product catalog entry is used
+
+By default the test will get information from the latest CSM version in the product catalog.
+A different CSM version in the product catalog can be used by specifying the alternate version
+using the `--csm-version` argument.
+
+### Controlling which architecture is used
+
+If an image or node is specified to the test, then those will be used to determine the architecture for the test.
+If neither is specified, then the test default to x86 architecture. However, the test can be run using its default
+behavior but on ARM architecture instead by specifying `--arch arm`. In this case, it will follow the default
+procedure (documented in [Test overview](#test-overview)), except for ARM architecture.
 
 ### Controlling test script output level
 
@@ -138,215 +244,11 @@ the log file is `DEBUG`.
 during the execution of the test:
 
 ```bash
-CONSOLE_LOG_LEVEL=DEBUG /opt/cray/tests/integration/csm/barebonesImageTest
+CONSOLE_LOG_LEVEL=DEBUG /opt/cray/tests/integration/csm/barebones_image_test
 ```
 
-Example output excerpt:
+### Preventing resource deletion
 
-```text
-cray.barebones-boot-test: INFO     barebones image boot test starting
-cray.barebones-boot-test: INFO       For complete logs look in the file /tmp/cray.barebones-boot-test.log
-cray.barebones-boot-test: DEBUG    Found boot image: cray-shasta-csm-sles15sp2-barebones.x86_64-shasta-1.5
-cray.barebones-boot-test: DEBUG    Creating bos session template with etag:bc390772fbe67107cd58b3c7c08ed92d, path:s3://boot-images/e360fae1-7926-4dee-85bb-f2b4eb216d9c/manifest.json
-```
-
-## Manual test procedure
-
-The following manual steps may be performed to reproduce the actions of this script.
-Review the [Test prerequisites](#test-prerequisites) before beginning.
-
-1. [Locate CSM barebones image in IMS](#1-locate-csm-barebones-image-in-ims)
-1. [Create a BOS session template for the CSM barebones image](#2-create-a-bos-session-template-for-the-csm-barebones-image)
-1. [Find an available compute node](#3-find-an-available-compute-node)
-1. [Reboot the node using a BOS session template](#4-reboot-the-node-using-a-bos-session-template)
-1. [Connect to the node's console and watch the boot](#5-connect-to-the-nodes-console-and-watch-the-boot)
-
-### 1. Locate CSM barebones image in IMS
-
-(`ncn-mw#`) Locate the CSM barebones image and note the `etag` and `path` fields in the output.
-
-```bash
-cray ims images list --format json | jq '.[] | select(.name | contains("barebones"))'
-```
-
-Expected output is similar to the following:
-
-```json
-{
-  "created": "2021-01-14T03:15:55.146962+00:00",
-  "id": "293b1e9c-2bc4-4225-b235-147d1d611eef",
-  "link": {
-    "etag": "6d04c3a4546888ee740d7149eaecea68",
-    "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",
-    "type": "s3"
-  },
-  "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4"
-}
-```
-
-### 2. Create a BOS session template for the CSM barebones image
-
-The session template below can be copied and used as the basis for the BOS session template.
-As noted below, make sure the S3 path for the manifest matches the S3 path shown in the Image Management Service (IMS).
-
-1. Create the `sessiontemplate.json` file.
-
-   ```bash
-   vi sessiontemplate.json
-   ```
-
-   The session template should contain the following:
-
-   ```json
-   {
-     "boot_sets": {
-       "compute": {
-         "boot_ordinal": 2,
-         "etag": "etag_value_from_cray_ims_command",
-         "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-         "network": "nmn",
-         "node_roles_groups": [
-           "Compute"
-         ],
-         "path": "path_value_from_cray_ims_command",
-         "rootfs_provider": "cpss3",
-         "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-         "type": "s3"
-       }
-     },
-     "cfs": {
-       "configuration": "none"
-     },
-     "enable_cfs": false,
-     "name": "shasta-csm-bare-bones-image"
-   }
-   ```
-
-  > **`NOTE`**: Be sure to replace the values of the `etag` and `path` fields with the ones noted earlier in the `cray ims images list` command.
-
-1. Create the BOS session template using the following file as input:
-
-   ```bash
-   cray bos v1 sessiontemplate create --file sessiontemplate.json --name shasta-csm-bare-bones-image
-   ```
-
-   The expected output is:
-
-   ```text
-   /sessionTemplate/shasta-csm-bare-bones-image
-   ```
-
-### 3. Find an available compute node
-
-1. (`ncn-mw#`) List the compute nodes managed by HSM.
-
-   ```bash
-   cray hsm state components list --role Compute --enabled true --format toml
-   ```
-
-   Example output:
-
-   ```toml
-   [[Components]]
-   ID = "x3000c0s17b1n0"
-   Type = "Node"
-   State = "On"
-   Flag = "OK"
-   Enabled = true
-   Role = "Compute"
-   NID = 1
-   NetType = "Sling"
-   Arch = "X86"
-   Class = "River"
-
-   [[Components]]
-   ID = "x3000c0s17b2n0"
-   Type = "Node"
-   State = "On"
-   Flag = "OK"
-   Enabled = true
-   Role = "Compute"
-   NID = 2
-   NetType = "Sling"
-   Arch = "X86"
-   Class = "River"
-   ```
-
-   > Troubleshooting: If any compute nodes are missing from HSM database, then refer to
-   > [2.2.2 Known issues with HSM discovery validation](../operations/validate_csm_health.md#222-known-issues-with-hsm-discovery-validation)
-   > in order to troubleshoot any node BMCs that have not been discovered.
-
-1. (`ncn-mw#`) Choose a node.
-
-   Choose a node from those listed and set `XNAME` to its component name (xname). In this example, `x3000c0s17b2n0` is used.
-
-   ```bash
-   XNAME=x3000c0s17b2n0
-   ```
-
-### 4. Reboot the node using a BOS session template
-
-(`ncn-mw#`) Create a BOS session to reboot the chosen node using the BOS session template that was just created.
-
-```bash
-cray bos v1 session create --template-name shasta-csm-bare-bones-image --operation reboot --limit "${XNAME}" --format toml
-```
-
-Expected output looks similar to the following:
-
-```toml
-limit = "x3000c0s17b2n0"
-operation = "reboot"
-templateUuid = "shasta-csm-bare-bones-image"
-[[links]]
-href = "/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
-jobId = "boa-8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
-rel = "session"
-type = "GET"
-
-[[links]]
-href = "/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1/status"
-rel = "status"
-type = "GET"
-```
-
-### 5. Connect to the node's console and watch the boot
-
-The boot may take up to 10 or 15 minutes. The image being booted does not support a complete boot,
-so the node will not boot fully into an operating system. This test is merely to verify that the
-CSM services needed to boot a node are available and working properly.
-
-1. Connect to the node's console.
-
-   See [Manage Node Consoles](../operations/conman/Manage_Node_Consoles.md)
-   for information on how to connect to the node's console (and for instructions on how to close it later).
-
-1. Monitor the boot.
-
-   This boot test is considered successful if the boot reaches the `dracut` stage. The indication that this
-   has happened is that the console output has something similar to the following somewhere within the final
-   20 lines of its output:
-
-   ```text
-   [    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
-   [    7.898169] dracut: Refusing to continue
-   ```
-
-   > **`NOTE`**: As long as the preceding text is found near the end of the console output, then the test is
-   > considered successful. It is normal (and **not** indicative of a test failure) to see something
-   > similar to the following at the very end of the console output:
-
-   ```text
-            Starting Dracut Emergency Shell...
-   [   11.591948] device-mapper: uevent: version 1.0.3
-   [   11.596657] device-mapper: ioctl: 4.40.0-ioctl (2019-01-18) initialised: dm-devel@redhat.com
-   Warning: dracut: FATAL: Don't know how to handle
-   Press Enter for maintenance
-   (or press Control-D to continue):
-   ```
-
-1. Exit the console.
-
-    Do this by typing `&.`.
-
-The test is complete.
+By default, when the test passes, it deletes all of the resources that it created during its execution.
+This behavior can be overridden by specifying the `--no-cleanup` argument. In that case,
+it will never delete the resources that it creates.
