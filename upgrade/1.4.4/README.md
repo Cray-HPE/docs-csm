@@ -36,6 +36,7 @@ in [Upgrade CSM](../README.md) instead.
 1. [Update NCN images](#update-ncn-images)
     1. [Warnings](#warnings)
     1. [Image customization](#image-customization)
+    1. [WLM backup](#wlm-backup)
 1. [Storage nodes in-place update](#storage-nodes-in-place-update)
 1. [Kubernetes nodes rolling rebuild](#kubernetes-nodes-rolling-rebuild)
 1. [Update test suite packages](#update-test-suite-packages)
@@ -248,13 +249,10 @@ advised to take backups of their local, site files.
 
 1. Follow option one of the following options based on your use case:
 
-    * [Option 2: Upgrade of CSM on system with additional products](../Stage_0_Prerequisites.md#option-2-upgrade-of-csm-on-system-with-additional-products)
-    * [Option 3: Upgrade of CSM on CSM-only system](../Stage_0_Prerequisites.md#option-3-upgrade-of-csm-on-csm-only-system)
+    * [Upgrade of CSM on system with additional products](../Stage_0_Prerequisites.md#option-2-upgrade-of-csm-on-system-with-additional-products)
+    * [Upgrade of CSM on CSM-only system](./CSM-Only.md#steps)
 
-   > ***NOTE***
-   If [Option 1: Upgrade of CSM and additional products](../Stage_0_Prerequisites.md#option-1-upgrade-of-csm-and-additional-products)
-   is better suiting, then
-   > do a full IUF run upgrading all products including CSM.
+#### WLM backup
 
 1. Follow the directions in [Stage 0.4](../Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data).
 
