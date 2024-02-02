@@ -39,6 +39,9 @@ fi
 if ! grep -A3 '    scheduler:' /tmp/kubeadm-config.yaml | grep -q bind-address; then
   sed -i 's/    scheduler: {}/    scheduler:\n      extraArgs:\n        bind-address: 0.0.0.0/' /tmp/kubeadm-config.yaml
 fi
+if ! grep -q 'enable-admission-plugins:' /tmp/kubeadm-config.yaml; then
+  sed -i '/      runtime-config/a\        enable-admission-plugins: NodeRestriction,PodSecurityPolicy' /tmp/kubeadm-config.yaml
+fi
 
 grep -q '/var/log/audit' /etc/kubernetes/manifests/kube-apiserver.yaml
 manifest_auditing_enabled=$?
