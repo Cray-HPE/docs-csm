@@ -33,17 +33,25 @@ choose option 2.**
 
 1. Set the IMS IDs for each Management node sub-role.
 
-   ```bash
-   export MASTER_IMAGE_ID=""
-   ```
+    * Kubernetes ID
 
-   ```bash
-   export WORKER_IMAGE_ID=""
-   ```
+      ```bash
+      KUBERNETES_IMAGE_ID="$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' \
+        | yq r -j - '"'${CSM_RELEASE}'".images' \
+        | jq -r '. as $o | keys_unsorted[] | select(startswith("secure-kubernetes")) | $o[.].id')"
+      export KUBERNETES_IMAGE_ID
+      echo "KUBERNETES_IMAGE_ID=$KUBERNETES_IMAGE_ID"
+      ```
 
-   ```bash
-   export STORAGE_IMAGE_ID=""
-   ```
+    * Storage-CEPH ID
+
+      ```bash
+      STORAGE_IMAGE_ID="$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' \
+        | yq r -j - '"'${CSM_RELEASE}'".images' \
+        | jq -r '. as $o | keys_unsorted[] | select(startswith("secure-storage")) | $o[.].id')"
+      export STORAGE_IMAGE_ID
+      echo "STORAGE_IMAGE_ID=$STORAGE_IMAGE_ID"
+      ```
 
 1. Create new CFS sessions for both Kubernetes and Storage nodes.
 
@@ -52,11 +60,11 @@ choose option 2.**
        ```bash
        cray cfs sessions create \
            --target-group Management_Master \
-           "$MASTER_IMAGE_ID" \
+           "$KUBERNETES_IMAGE_ID" \
            --target-definition image \
-           --target-image-map "$MASTER_IMAGE_ID" "" \
+           --target-image-map "$KUBERNETES_IMAGE_ID" "" \
            --configuration-name "management-${CSM_RELEASE}" \
-           --name "management-master-${CSM_RELEASE}-upgrade" \
+           --name "management-kubernetes-${CSM_RELEASE}-upgrade" \
            --format json
        ```
 
@@ -73,43 +81,48 @@ choose option 2.**
            --format json
        ```
 
-    1. Build worker images.
-
-       ```bash
-       cray cfs sessions create \
-           --target-group Management_Worker \
-           "$WORKER_IMAGE_ID" \
-           --target-definition image \
-           --target-image-map"$WORKER_IMAGE_ID" "" \
-           --configuration-name "management-${CSM_RELEASE}" \
-           --name "management-worker-${CSM_RELEASE}-upgrade" \
-           --format json
-       ```
-
-1. Wait forever for images to build.
-
-1. Set the new IMS Image IDs
+1. Wait for the image builds to complete successfully
 
    ```bash
-   export NEW_MASTER_IMAGE_ID=""
+   watch '
+   cray cfs sessions describe "management-kubernetes-${CSM_RELEASE}-upgrade" --format json | jq -r ".status.session.succeeded"
+   cray cfs sessions describe "management-storage-${CSM_RELEASE}-upgrade" --format json | jq -r ".status.session.succeeded"
+   '
    ```
 
-   ```bash
-   export NEW_WORKER_IMAGE_ID=""
+   Expected results:
+
+   ```text
+   true
+   true
    ```
 
-   ```bash
-   export NEW_STORAGE_IMAGE_ID=""
-   ```
+1. Set the image ID
+
+    * Kubernetes ID
+
+      ```bash
+      NEW_KUBERNETES_IMAGE_ID="$(cray cfs sessions describe "management-kubernetes-${CSM_RELEASE}-upgrade" --format json | jq -r '.status.artifacts[].image_id')"
+      export NEW_KUBERNETES_IMAGE_ID
+      echo "NEW_KUBERNETES_IMAGE_ID=$NEW_KUBERNETES_IMAGE_ID"
+      ```
+
+    * Storage-CEPH
+
+      ```bash
+      NEW_STORAGE_IMAGE_ID="$(cray cfs sessions describe "management-storage-${CSM_RELEASE}-upgrade" --format json | jq -r '.status.artifacts[].image_id')"
+      export NEW_STORAGE_IMAGE_ID
+      echo "NEW_STORAGE_IMAGE_ID=$NEW_STORAGE_IMAGE_ID"
+      ```
 
 1. Assign images in BSS
 
-    1. Update master management nodes:
+    1. Update Kubernetes management nodes:
 
        ```bash
        /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
-           -m \
-           -p "$NEW_MASTER_IMAGE_ID"
+           -mw \
+           -p "$NEW_KUBERNETES_IMAGE_ID"
        ```
 
     1. Update storage management nodes:
@@ -118,14 +131,6 @@ choose option 2.**
        /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
            -s \
            -p "$NEW_STORAGE_IMAGE_ID"
-       ```
-
-    1. Update worker management nodes:
-
-       ```bash
-       /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
-           -w \
-           -p "$NEW_WORKER_IMAGE_ID"
        ```
 
 1. Return to [](./README.md#wlm-backup)
