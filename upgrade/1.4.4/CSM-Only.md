@@ -22,7 +22,7 @@ choose option 2.**
 
    ```bash
    /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-       --no-enable --config-name management-${CSM_RELEASE}
+       --no-enable --config-name "management-${CSM_RELEASE}"
    ```
 
    Successful output should end with the following line:
@@ -31,7 +31,7 @@ choose option 2.**
    All components updated successfully.
    ```
 
-1. Set the IMS IDs for each Management node subrole.
+1. Set the IMS IDs for each Management node sub-role.
 
    ```bash
    export MASTER_IMAGE_ID=""
@@ -127,22 +127,5 @@ choose option 2.**
            -w \
            -p "$NEW_WORKER_IMAGE_ID"
        ```
-
-1. (`ncn-m001#`) Generate a new CFS configuration for the management nodes.
-
-   This script creates a new CFS configuration that includes the CSM version in its name and applies it to the
-   management nodes. This leaves the management node components in CFS disabled. They will be automatically enabled when
-   they are rebooted at a later stage in the upgrade.
-
-   ```bash
-   /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-       --no-enable --config-name management-${CSM_RELEASE}
-   ```
-
-   Successful output should end with the following line:
-
-   ```text
-   All components updated successfully.
-   ```
 
 1. Return to [](./README.md#wlm-backup)
