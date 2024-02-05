@@ -27,7 +27,7 @@ Configure the same access credentials for multiple BMCs or controllers.
 ### /bmc/createcerts
 Create BMC TLS cert/key pairs and store securely for later use.
 ### /bmc/deletecerts
-Delet BMC TLS cert/key pairs and store securely for later use.
+Delete BMC TLS cert/key pairs and store securely for later use.
 ### /bmc/fetchcerts
 Fetch previously created BMC TLS certs for viewing.
 ### /bmc/setcerts
@@ -204,7 +204,7 @@ Get the Redfish Network Protocol data (NTP server, syslog server, SSH key) for a
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was succesfully retrieved|[bmc_dumpcfg_response](#schemabmc_dumpcfg_response)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was successfully retrieved|[bmc_dumpcfg_response](#schemabmc_dumpcfg_response)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST is allowed|None|
 
@@ -334,7 +334,7 @@ The Force field is optional. If present, and set to 'true', the Redfish operatio
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was succesfully retrieved|[multi_post_response](#schemamulti_post_response)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was successfully retrieved|[multi_post_response](#schemamulti_post_response)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST is allowed|None|
 
@@ -442,7 +442,7 @@ Retrieve selected Redfish network protocol data for a single target. You can sel
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was succesfully retrieved|[cfg_get_single](#schemacfg_get_single)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was successfully retrieved|[cfg_get_single](#schemacfg_get_single)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only GET,POST is allowed|None|
 
@@ -565,7 +565,7 @@ The Force field is optional. If present, and set to 'true', the Redfish operatio
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was succesfully set|[cfg_rsp_status](#schemacfg_rsp_status)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was successfully set|[cfg_rsp_status](#schemacfg_rsp_status)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only GET,POST is allowed|None|
 
@@ -691,7 +691,7 @@ The Force field is optional. If present, and set to 'true', the Redfish operatio
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was succesfully set|[multi_post_response](#schemamulti_post_response)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was successfully set|[multi_post_response](#schemamulti_post_response)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST is allowed|None|
 
@@ -803,7 +803,7 @@ The Force field is optional. If present, and set to 'true', the Redfish operatio
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was succesfully set|[cfg_rsp_status](#schemacfg_rsp_status)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was successfully set|[cfg_rsp_status](#schemacfg_rsp_status)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only GET,POST is allowed|None|
 
@@ -880,7 +880,7 @@ Fetch controller login credentials for a specified targets.  Targets are specifi
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|targets|query|[xname_list](#schemaxname_list)|false|Comma separated list of XNames.  No query string results in fetching creds for all known BMCs.|
+|targets|query|[xname_list](#schemaxname_list)|false|Comma-separated list of xnames.  No query string results in fetching creds for all known BMCs.|
 |type|query|string|false|Target component type.  A maximum of one type is allowed.  If no type is specified, all known BMC types are returned.|
 
 > Example responses
@@ -903,7 +903,7 @@ Fetch controller login credentials for a specified targets.  Targets are specifi
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was succesfully set|[creds_fetch_rsp](#schemacreds_fetch_rsp)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was successfully set|[creds_fetch_rsp](#schemacreds_fetch_rsp)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only GET, POST is allowed|None|
 
@@ -1021,7 +1021,7 @@ The Force field is optional. If present, and set to 'true', the Redfish operatio
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was succesfully set|[multi_post_response](#schemamulti_post_response)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was successfully set|[multi_post_response](#schemamulti_post_response)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST is allowed|None|
 
@@ -1128,7 +1128,7 @@ Fetch the current BIOS setting for the TPM State.
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.|[bmc_bios_tpm_state](#schemabmc_bios_tpm_state)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request.|[Problem7807](#schemaproblem7807)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Xname was not for a bmc.|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Xname was not for a BMC.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal server error including failures communicating with the server.|[Problem7807](#schemaproblem7807)|
 
 <aside class="warning">
@@ -1246,7 +1246,7 @@ Set the TPM State in the BIOS settings.
 |---|---|---|---|
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|OK. The value was set.|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request.|[Problem7807](#schemaproblem7807)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Xname was not for a bmc.|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Xname was not for a BMC.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal server error including failures communicating with the server.|[Problem7807](#schemaproblem7807)|
 
 <aside class="warning">
@@ -1454,7 +1454,7 @@ Create TLS cert/key pairs for a set of BMC targets.  A TLS cert/key is created p
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was succesfully retrieved|[bmc_managecerts_response](#schemabmc_managecerts_response)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was successfully retrieved|[bmc_managecerts_response](#schemabmc_managecerts_response)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST or DELETE is allowed|None|
 
@@ -1568,7 +1568,7 @@ Delete TLS cert/key information for domain-level TLS certs based on the given ta
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was succesfully retrieved|[bmc_managecerts_response](#schemabmc_managecerts_response)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was successfully retrieved|[bmc_managecerts_response](#schemabmc_managecerts_response)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST or DELETE is allowed|None|
 
@@ -1686,7 +1686,7 @@ Fetches BMC TLS certs previously created using the /bmc/createcerts endpoint and
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was succesfully retrieved|[bmc_fetchcerts_response](#schemabmc_fetchcerts_response)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was successfully retrieved|[bmc_fetchcerts_response](#schemabmc_fetchcerts_response)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST is allowed|None|
 
@@ -1801,7 +1801,7 @@ Apply TLS cert/key pairs, previously generated using the /bmc/createcerts endpoi
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was succesfully retrieved|[bmc_rfcerts_response](#schemabmc_rfcerts_response)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The data was successfully retrieved|[bmc_rfcerts_response](#schemabmc_rfcerts_response)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST is allowed|None|
 
@@ -1882,7 +1882,7 @@ Apply a TLS cert/key pairs previously generated using the /bmc/createcerts endpo
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The cert was succesfully applied to BMC target|None|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK.  The cert was successfully applied to BMC target|None|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST is allowed|None|
 
@@ -2180,13 +2180,13 @@ The xname of this piece of hardware
 
 ```
 
-Comma separated list of xnames
+Comma-separated list of xnames
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|Comma separated list of xnames|
+|*anonymous*|string|false|none|Comma-separated list of xnames|
 
 <h2 id="tocS_bios_field">bios_field</h2>
 <!-- backwards compatibility -->
