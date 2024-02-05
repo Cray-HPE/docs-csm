@@ -8,11 +8,7 @@ Read-Only APIs to Retrieve Tenant Status
 
 Base URLs:
 
-* <a href="https://api-gw-service-nmn.local/apis/tapms-operator">https://api-gw-service-nmn.local/apis/tapms-operator</a>
-
-# Authentication
-
-- HTTP Authentication, scheme: bearer 
+* <a href="/">/</a>
 
 <h1 id="tapms-tenant-status-api-tenant-and-partition-management-system">Tenant and Partition Management System</h1>
 
@@ -21,28 +17,26 @@ Base URLs:
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/tapms-operator/apis/tapms/v1/tenant/{id} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/tapms/v1/tenant/{id} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/tapms-operator/apis/tapms/v1/tenant/{id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/tapms/v1/tenant/{id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/tapms-operator/apis/tapms/v1/tenant/{id}', headers = headers)
+r = requests.get('/apis/tapms/v1/tenant/{id}', headers = headers)
 
 print(r.json())
 
@@ -60,11 +54,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/tapms-operator/apis/tapms/v1/tenant/{id}", data)
+    req, err := http.NewRequest("GET", "/apis/tapms/v1/tenant/{id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -139,9 +132,8 @@ func main() {
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get__apis_tapms_v1_tenants
@@ -149,28 +141,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/tapms-operator/apis/tapms/v1/tenants HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/tapms/v1/tenants HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/tapms-operator/apis/tapms/v1/tenants \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/tapms/v1/tenants \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/tapms-operator/apis/tapms/v1/tenants', headers = headers)
+r = requests.get('/apis/tapms/v1/tenants', headers = headers)
 
 print(r.json())
 
@@ -188,11 +178,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/tapms-operator/apis/tapms/v1/tenants", data)
+    req, err := http.NewRequest("GET", "/apis/tapms/v1/tenants", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -285,9 +274,8 @@ Status Code **200**
 |»» tenantresources|[[TenantResource](#schematenantresource)]|false|none|The desired resources for the Tenant|
 |»» uuid|string(uuid)|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 # Schemas

@@ -6,11 +6,7 @@
 
 Base URLs:
 
-* <a href="https://api-gw-service-nmn.local/apis">https://api-gw-service-nmn.local/apis</a>
-
-# Authentication
-
-- HTTP Authentication, scheme: bearer 
+* <a href="/apis">/apis</a>
 
 <h1 id="ncn-lifecycle-service-ncn-lifecycle-events">NCN Lifecycle Events</h1>
 
@@ -19,8 +15,8 @@ Base URLs:
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/nls/v1/ncns/reboot HTTP/1.1
-Host: api-gw-service-nmn.local
+POST /apis/nls/v1/ncns/reboot HTTP/1.1
+
 Content-Type: application/json
 Accept: application/json
 
@@ -28,10 +24,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/nls/v1/ncns/reboot \
+curl -X POST /apis/nls/v1/ncns/reboot \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -39,11 +34,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/nls/v1/ncns/reboot \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/nls/v1/ncns/reboot', headers = headers)
+r = requests.post('/apis/nls/v1/ncns/reboot', headers = headers)
 
 print(r.json())
 
@@ -62,11 +56,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/nls/v1/ncns/reboot", data)
+    req, err := http.NewRequest("POST", "/apis/nls/v1/ncns/reboot", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -121,9 +114,8 @@ func main() {
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__nls_v1_ncns_rebuild
@@ -131,8 +123,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/nls/v1/ncns/rebuild HTTP/1.1
-Host: api-gw-service-nmn.local
+POST /apis/nls/v1/ncns/rebuild HTTP/1.1
+
 Content-Type: application/json
 Accept: application/json
 
@@ -140,10 +132,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/nls/v1/ncns/rebuild \
+curl -X POST /apis/nls/v1/ncns/rebuild \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -151,11 +142,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/nls/v1/ncns/rebuild \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/nls/v1/ncns/rebuild', headers = headers)
+r = requests.post('/apis/nls/v1/ncns/rebuild', headers = headers)
 
 print(r.json())
 
@@ -174,11 +164,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/nls/v1/ncns/rebuild", data)
+    req, err := http.NewRequest("POST", "/apis/nls/v1/ncns/rebuild", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -240,9 +229,8 @@ func main() {
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="ncn-lifecycle-service-workflow-management">Workflow Management</h1>
@@ -252,28 +240,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/nls/v1/workflows HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/nls/v1/workflows HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/nls/v1/workflows \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/nls/v1/workflows \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/nls/v1/workflows', headers = headers)
+r = requests.get('/apis/nls/v1/workflows', headers = headers)
 
 print(r.json())
 
@@ -291,11 +277,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/nls/v1/workflows", data)
+    req, err := http.NewRequest("GET", "/apis/nls/v1/workflows", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -349,9 +334,8 @@ Status Code **200**
 |» name|string|false|none|none|
 |» status|object|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## delete__nls_v1_workflows_{name}
@@ -359,28 +343,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/nls/v1/workflows/{name} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE /apis/nls/v1/workflows/{name} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/nls/v1/workflows/{name} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE /apis/nls/v1/workflows/{name} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/nls/v1/workflows/{name}', headers = headers)
+r = requests.delete('/apis/nls/v1/workflows/{name}', headers = headers)
 
 print(r.json())
 
@@ -398,11 +380,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/nls/v1/workflows/{name}", data)
+    req, err := http.NewRequest("DELETE", "/apis/nls/v1/workflows/{name}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -441,9 +422,8 @@ func main() {
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## put__nls_v1_workflows_{name}_rerun
@@ -451,28 +431,26 @@ bearerAuth
 > Code samples
 
 ```http
-PUT https://api-gw-service-nmn.local/apis/nls/v1/workflows/{name}/rerun HTTP/1.1
-Host: api-gw-service-nmn.local
+PUT /apis/nls/v1/workflows/{name}/rerun HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X PUT https://api-gw-service-nmn.local/apis/nls/v1/workflows/{name}/rerun \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X PUT /apis/nls/v1/workflows/{name}/rerun \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.put('https://api-gw-service-nmn.local/apis/nls/v1/workflows/{name}/rerun', headers = headers)
+r = requests.put('/apis/nls/v1/workflows/{name}/rerun', headers = headers)
 
 print(r.json())
 
@@ -490,11 +468,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PUT", "https://api-gw-service-nmn.local/apis/nls/v1/workflows/{name}/rerun", data)
+    req, err := http.NewRequest("PUT", "/apis/nls/v1/workflows/{name}/rerun", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -533,9 +510,8 @@ func main() {
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## put__nls_v1_workflows_{name}_retry
@@ -543,8 +519,8 @@ bearerAuth
 > Code samples
 
 ```http
-PUT https://api-gw-service-nmn.local/apis/nls/v1/workflows/{name}/retry HTTP/1.1
-Host: api-gw-service-nmn.local
+PUT /apis/nls/v1/workflows/{name}/retry HTTP/1.1
+
 Content-Type: application/json
 Accept: application/json
 
@@ -552,10 +528,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PUT https://api-gw-service-nmn.local/apis/nls/v1/workflows/{name}/retry \
+curl -X PUT /apis/nls/v1/workflows/{name}/retry \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -563,11 +538,10 @@ curl -X PUT https://api-gw-service-nmn.local/apis/nls/v1/workflows/{name}/retry 
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.put('https://api-gw-service-nmn.local/apis/nls/v1/workflows/{name}/retry', headers = headers)
+r = requests.put('/apis/nls/v1/workflows/{name}/retry', headers = headers)
 
 print(r.json())
 
@@ -586,11 +560,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PUT", "https://api-gw-service-nmn.local/apis/nls/v1/workflows/{name}/retry", data)
+    req, err := http.NewRequest("PUT", "/apis/nls/v1/workflows/{name}/retry", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -639,9 +612,8 @@ func main() {
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 # Schemas

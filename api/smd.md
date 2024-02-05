@@ -107,11 +107,7 @@ Generally, nodes transition 'Off' -> 'On' -> 'Ready' when going from 'Off' to bo
 
 Base URLs:
 
-* <a href="https://api-gw-service-nmn.local/apis/smd/hsm/v2">https://api-gw-service-nmn.local/apis/smd/hsm/v2</a>
-
-# Authentication
-
-- HTTP Authentication, scheme: bearer 
+* <a href="https://sms/apis/smd/hsm/v2">https://sms/apis/smd/hsm/v2</a>
 
 <h1 id="hardware-state-manager-api-service-info">Service Info</h1>
 
@@ -124,28 +120,26 @@ Service information APIs for getting information on the HSM service such as read
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/ready HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/service/ready HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/ready \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/service/ready \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/ready', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/service/ready', headers = headers)
 
 print(r.json())
 
@@ -163,11 +157,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/ready", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/service/ready", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -204,9 +197,8 @@ This is primarily an endpoint for the automated Kubernetes system.
 |503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|The service is unhealthy and not ready|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doLivenessGet
@@ -216,28 +208,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/liveness HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/service/liveness HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/liveness \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/service/liveness \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/liveness', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/service/liveness', headers = headers)
 
 print(r.json())
 
@@ -255,11 +245,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/liveness", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/service/liveness", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -299,9 +288,8 @@ This is primarily an endpoint for the automated Kubernetes system.
 |503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|The service is not taking HTTP requests|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doValuesGet
@@ -311,28 +299,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/service/values HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/service/values \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/service/values', headers = headers)
 
 print(r.json())
 
@@ -350,11 +336,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/service/values", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -385,9 +370,8 @@ null
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|An array of parameters and their valid values.|[Values.1.0.0_Values](#schemavalues.1.0.0_values)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doArchValuesGet
@@ -397,28 +381,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/arch HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/service/values/arch HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/arch \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/service/values/arch \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/arch', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/service/values/arch', headers = headers)
 
 print(r.json())
 
@@ -436,11 +418,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/arch", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/service/values/arch", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -475,9 +456,8 @@ Retrieve all valid values for use with the 'arch' (component architecture) param
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|An array of valid values for the 'arch' parameter.|[Values.1.0.0_ArchArray](#schemavalues.1.0.0_archarray)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doClassValuesGet
@@ -487,28 +467,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/class HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/service/values/class HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/class \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/service/values/class \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/class', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/service/values/class', headers = headers)
 
 print(r.json())
 
@@ -526,11 +504,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/class", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/service/values/class", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -565,9 +542,8 @@ Retrieve all valid values for use with the 'class' (hardware class) parameter.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|An array of valid values for the 'class' parameter.|[Values.1.0.0_ClassArray](#schemavalues.1.0.0_classarray)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doFlagValuesGet
@@ -577,28 +553,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/flag HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/service/values/flag HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/flag \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/service/values/flag \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/flag', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/service/values/flag', headers = headers)
 
 print(r.json())
 
@@ -616,11 +590,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/flag", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/service/values/flag", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -655,9 +628,8 @@ Retrieve all valid values for use with the 'flag' (component flag) parameter.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|An array of valid values for the 'flag' parameter.|[Values.1.0.0_FlagArray](#schemavalues.1.0.0_flagarray)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doNetTypeValuesGet
@@ -667,28 +639,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/nettype HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/service/values/nettype HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/nettype \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/service/values/nettype \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/nettype', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/service/values/nettype', headers = headers)
 
 print(r.json())
 
@@ -706,11 +676,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/nettype", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/service/values/nettype", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -745,9 +714,8 @@ Retrieve all valid values for use with the 'nettype' (component network type) pa
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|An array of valid values for the 'nettype' parameter.|[Values.1.0.0_NetTypeArray](#schemavalues.1.0.0_nettypearray)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doRoleValuesGet
@@ -757,28 +725,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/role HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/service/values/role HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/role \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/service/values/role \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/role', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/service/values/role', headers = headers)
 
 print(r.json())
 
@@ -796,11 +762,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/role", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/service/values/role", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -835,9 +800,8 @@ Retrieve all valid values for use with the 'role' (component role) parameter.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|An array of valid values for the 'role' parameter.|[Values.1.0.0_RoleArray](#schemavalues.1.0.0_rolearray)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doSubRoleValuesGet
@@ -847,28 +811,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/subrole HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/service/values/subrole HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/subrole \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/service/values/subrole \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/subrole', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/service/values/subrole', headers = headers)
 
 print(r.json())
 
@@ -886,11 +848,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/subrole", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/service/values/subrole", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -925,9 +886,8 @@ Retrieve all valid values for use with the 'subrole' (component subrole) paramet
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|An array of valid values for the 'subrole' parameter.|[Values.1.0.0_SubRoleArray](#schemavalues.1.0.0_subrolearray)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doStateValuesGet
@@ -937,28 +897,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/state HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/service/values/state HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/state \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/service/values/state \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/state', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/service/values/state', headers = headers)
 
 print(r.json())
 
@@ -976,11 +934,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/state", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/service/values/state", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1015,9 +972,8 @@ Retrieve all valid values for use with the 'state' (component state) parameter.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|An array of valid values for the 'state' parameter.|[Values.1.0.0_StateArray](#schemavalues.1.0.0_statearray)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doTypeValuesGet
@@ -1027,28 +983,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/type HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/service/values/type HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/type \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/service/values/type \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/type', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/service/values/type', headers = headers)
 
 print(r.json())
 
@@ -1066,11 +1020,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/values/type", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/service/values/type", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1105,9 +1058,8 @@ Retrieve all valid values for use with the 'type' (component HMSType) parameter.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|An array of valid values for the 'type' parameter.|[Values.1.0.0_TypeArray](#schemavalues.1.0.0_typearray)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-component">Component</h1>
@@ -1121,28 +1073,26 @@ High-level component information by xname: state, flag, NID, role, etc.
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/State/Components HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/State/Components \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/State/Components', headers = headers)
 
 print(r.json())
 
@@ -1160,11 +1110,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/State/Components", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1316,9 +1265,8 @@ Additional valid values may be added via configuration file. See the results of 
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request such as invalid argument for filter|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doComponentsPost
@@ -1328,8 +1276,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/State/Components HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -1337,10 +1285,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components \
+curl -X POST https://sms/apis/smd/hsm/v2/State/Components \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -1348,11 +1295,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/State/Components', headers = headers)
 
 print(r.json())
 
@@ -1371,11 +1317,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/State/Components", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1443,9 +1388,8 @@ Create/Update a collection of state/components. If the component already exists 
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request such as invalid argument for a component field|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doComponentsDeleteAll
@@ -1455,28 +1399,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/State/Components HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/State/Components \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/State/Components', headers = headers)
 
 print(r.json())
 
@@ -1494,11 +1436,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/State/Components", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1534,9 +1475,8 @@ Delete all entries in the components collection.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Collection is empty|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doComponentGet
@@ -1546,28 +1486,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/State/Components/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/State/Components/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/State/Components/{xname}', headers = headers)
 
 print(r.json())
 
@@ -1585,11 +1523,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/State/Components/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1644,9 +1581,8 @@ Retrieve state or components by xname.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doComponentPut
@@ -1656,8 +1592,8 @@ bearerAuth
 > Code samples
 
 ```http
-PUT https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+PUT https://sms/apis/smd/hsm/v2/State/Components/{xname} HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -1665,10 +1601,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PUT https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname} \
+curl -X PUT https://sms/apis/smd/hsm/v2/State/Components/{xname} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -1676,11 +1611,10 @@ curl -X PUT https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{x
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.put('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}', headers = headers)
+r = requests.put('https://sms/apis/smd/hsm/v2/State/Components/{xname}', headers = headers)
 
 print(r.json())
 
@@ -1699,11 +1633,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PUT", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}", data)
+    req, err := http.NewRequest("PUT", "https://sms/apis/smd/hsm/v2/State/Components/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1770,9 +1703,8 @@ Create/Update a state/component. If the component already exists it will not be 
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request such as invalid argument for a component field|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doComponentDelete
@@ -1782,28 +1714,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/State/Components/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/State/Components/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/State/Components/{xname}', headers = headers)
 
 print(r.json())
 
@@ -1821,11 +1751,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/State/Components/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1867,9 +1796,8 @@ Delete a component by xname.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|XName does Not Exist - no matching ID to delete|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doComponentByNIDGet
@@ -1879,28 +1807,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/ByNID/{nid} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/State/Components/ByNID/{nid} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/ByNID/{nid} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/State/Components/ByNID/{nid} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/ByNID/{nid}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/State/Components/ByNID/{nid}', headers = headers)
 
 print(r.json())
 
@@ -1918,11 +1844,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/ByNID/{nid}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/State/Components/ByNID/{nid}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1977,9 +1902,8 @@ Retrieve a component by NID.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompBulkStateDataPatch
@@ -1989,8 +1913,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkStateData HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/State/Components/BulkStateData HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -1998,10 +1922,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkStateData \
+curl -X PATCH https://sms/apis/smd/hsm/v2/State/Components/BulkStateData \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -2009,11 +1932,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkStateData', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/State/Components/BulkStateData', headers = headers)
 
 print(r.json())
 
@@ -2032,11 +1954,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkStateData", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/State/Components/BulkStateData", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2099,9 +2020,8 @@ Specify a list of xnames to update the State and Flag fields. If the Flag field 
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompStatePatch
@@ -2111,8 +2031,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/StateData HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/State/Components/{xname}/StateData HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -2120,10 +2040,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/StateData \
+curl -X PATCH https://sms/apis/smd/hsm/v2/State/Components/{xname}/StateData \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -2131,11 +2050,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/StateData', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/State/Components/{xname}/StateData', headers = headers)
 
 print(r.json())
 
@@ -2154,11 +2072,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/StateData", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/State/Components/{xname}/StateData", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2219,9 +2136,8 @@ Update the component's state and flag fields only. If Flag field is omitted, the
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompBulkFlagOnlyPatch
@@ -2231,8 +2147,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkFlagOnly HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/State/Components/BulkFlagOnly HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -2240,10 +2156,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkFlagOnly \
+curl -X PATCH https://sms/apis/smd/hsm/v2/State/Components/BulkFlagOnly \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -2251,11 +2166,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkFlagOnly', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/State/Components/BulkFlagOnly', headers = headers)
 
 print(r.json())
 
@@ -2274,11 +2188,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkFlagOnly", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/State/Components/BulkFlagOnly", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2339,9 +2252,8 @@ Specify a list of xnames to update the Flag field and specify the value. The lis
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompFlagOnlyPatch
@@ -2351,8 +2263,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/FlagOnly HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/State/Components/{xname}/FlagOnly HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -2360,10 +2272,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/FlagOnly \
+curl -X PATCH https://sms/apis/smd/hsm/v2/State/Components/{xname}/FlagOnly \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -2371,11 +2282,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/FlagOnly', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/State/Components/{xname}/FlagOnly', headers = headers)
 
 print(r.json())
 
@@ -2394,11 +2304,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/FlagOnly", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/State/Components/{xname}/FlagOnly", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2457,9 +2366,8 @@ The State is not modified. Only the Flag is updated.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompBulkEnabledPatch
@@ -2469,8 +2377,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkEnabled HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/State/Components/BulkEnabled HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -2478,10 +2386,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkEnabled \
+curl -X PATCH https://sms/apis/smd/hsm/v2/State/Components/BulkEnabled \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -2489,11 +2396,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkEnabled', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/State/Components/BulkEnabled', headers = headers)
 
 print(r.json())
 
@@ -2512,11 +2418,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkEnabled", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/State/Components/BulkEnabled", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2577,9 +2482,8 @@ Update the Enabled field for a list of xnames. Specify a single value for Enable
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompEnabledPatch
@@ -2589,8 +2493,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/Enabled HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/State/Components/{xname}/Enabled HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -2598,10 +2502,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/Enabled \
+curl -X PATCH https://sms/apis/smd/hsm/v2/State/Components/{xname}/Enabled \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -2609,11 +2512,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/Enabled', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/State/Components/{xname}/Enabled', headers = headers)
 
 print(r.json())
 
@@ -2632,11 +2534,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/Enabled", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/State/Components/{xname}/Enabled", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2695,9 +2596,8 @@ Update the component's Enabled field only. The State and other fields are not mo
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompBulkSwStatusPatch
@@ -2707,8 +2607,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkSoftwareStatus HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/State/Components/BulkSoftwareStatus HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -2716,10 +2616,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkSoftwareStatus \
+curl -X PATCH https://sms/apis/smd/hsm/v2/State/Components/BulkSoftwareStatus \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -2727,11 +2626,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkSoftwareStatus', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/State/Components/BulkSoftwareStatus', headers = headers)
 
 print(r.json())
 
@@ -2750,11 +2648,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkSoftwareStatus", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/State/Components/BulkSoftwareStatus", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2815,9 +2712,8 @@ Update the SoftwareStatus field for a list of xnames. Specify a single new value
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompSwStatusPatch
@@ -2827,8 +2723,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/SoftwareStatus HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/State/Components/{xname}/SoftwareStatus HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -2836,10 +2732,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/SoftwareStatus \
+curl -X PATCH https://sms/apis/smd/hsm/v2/State/Components/{xname}/SoftwareStatus \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -2847,11 +2742,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/SoftwareStatus', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/State/Components/{xname}/SoftwareStatus', headers = headers)
 
 print(r.json())
 
@@ -2870,11 +2764,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/SoftwareStatus", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/State/Components/{xname}/SoftwareStatus", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2933,9 +2826,8 @@ Update the component's SoftwareStatus field only. The State and other fields are
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompBulkRolePatch
@@ -2945,8 +2837,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkRole HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/State/Components/BulkRole HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -2954,10 +2846,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkRole \
+curl -X PATCH https://sms/apis/smd/hsm/v2/State/Components/BulkRole \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -2965,11 +2856,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkRole', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/State/Components/BulkRole', headers = headers)
 
 print(r.json())
 
@@ -2988,11 +2878,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkRole", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/State/Components/BulkRole", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3054,9 +2943,8 @@ Update the Role and SubRole field for a list of xnames. Specify the Role and Sub
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompRolePatch
@@ -3066,8 +2954,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/Role HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/State/Components/{xname}/Role HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -3075,10 +2963,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/Role \
+curl -X PATCH https://sms/apis/smd/hsm/v2/State/Components/{xname}/Role \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -3086,11 +2973,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/Role', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/State/Components/{xname}/Role', headers = headers)
 
 print(r.json())
 
@@ -3109,11 +2995,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/Role", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/State/Components/{xname}/Role", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3173,9 +3058,8 @@ Update the component's Role and SubRole fields only. Valid only for nodes. The S
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompArrayNIDPatch
@@ -3185,8 +3069,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkNID HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/State/Components/BulkNID HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -3194,10 +3078,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkNID \
+curl -X PATCH https://sms/apis/smd/hsm/v2/State/Components/BulkNID \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -3205,11 +3088,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkNID', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/State/Components/BulkNID', headers = headers)
 
 print(r.json())
 
@@ -3228,11 +3110,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkNID", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/State/Components/BulkNID", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3295,9 +3176,8 @@ Modify the submitted ComponentArray and update the corresponding NID value for e
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompNIDPatch
@@ -3307,8 +3187,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/NID HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/State/Components/{xname}/NID HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -3316,10 +3196,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/NID \
+curl -X PATCH https://sms/apis/smd/hsm/v2/State/Components/{xname}/NID \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -3327,11 +3206,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/NID', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/State/Components/{xname}/NID', headers = headers)
 
 print(r.json())
 
@@ -3350,11 +3228,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/{xname}/NID", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/State/Components/{xname}/NID", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3413,9 +3290,8 @@ Update the component's NID field only. Valid only for nodes. State and other fie
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doComponentsQueryPost
@@ -3425,8 +3301,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/Query HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/State/Components/Query HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -3434,10 +3310,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/Query \
+curl -X POST https://sms/apis/smd/hsm/v2/State/Components/Query \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -3445,11 +3320,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/Q
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/Query', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/State/Components/Query', headers = headers)
 
 print(r.json())
 
@@ -3468,11 +3342,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/Query", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/State/Components/Query", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3586,9 +3459,8 @@ Retrieve the targeted entries in the form of a ComponentArray by providing a pay
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doComponentByNIDQueryPost
@@ -3598,8 +3470,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/ByNID/Query HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/State/Components/ByNID/Query HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -3607,10 +3479,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/ByNID/Query \
+curl -X POST https://sms/apis/smd/hsm/v2/State/Components/ByNID/Query \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -3618,11 +3489,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/B
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/ByNID/Query', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/State/Components/ByNID/Query', headers = headers)
 
 print(r.json())
 
@@ -3641,11 +3511,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/ByNID/Query", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/State/Components/ByNID/Query", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3719,9 +3588,8 @@ Retrieve the targeted entries in the form of a ComponentArray by providing a pay
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doComponentQueryGet
@@ -3731,28 +3599,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/Query/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/State/Components/Query/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/Query/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/State/Components/Query/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/Query/{xname}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/State/Components/Query/{xname}', headers = headers)
 
 print(r.json())
 
@@ -3770,11 +3636,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/Query/{xname}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/State/Components/Query/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3927,9 +3792,8 @@ Additional valid values may be added via configuration file. See the results of 
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-nodemap">NodeMap</h1>
@@ -3943,28 +3807,26 @@ Given a node xname ID, provide defaults for NID, Role, etc. to be used when the 
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Defaults/NodeMaps HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Defaults/NodeMaps \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Defaults/NodeMaps', headers = headers)
 
 print(r.json())
 
@@ -3982,11 +3844,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Defaults/NodeMaps", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -4027,9 +3888,8 @@ Retrieve all Node map entries as a named array, or an empty array if the collect
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doNodeMapPost
@@ -4039,8 +3899,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/Defaults/NodeMaps HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -4048,10 +3908,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps \
+curl -X POST https://sms/apis/smd/hsm/v2/Defaults/NodeMaps \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -4059,11 +3918,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps 
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/Defaults/NodeMaps', headers = headers)
 
 print(r.json())
 
@@ -4082,11 +3940,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/Defaults/NodeMaps", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -4155,9 +4012,8 @@ Note the following points:
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Conflict. Duplicate resource (NID) would be created.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doNodeMapsDeleteAll
@@ -4167,28 +4023,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Defaults/NodeMaps HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Defaults/NodeMaps \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Defaults/NodeMaps', headers = headers)
 
 print(r.json())
 
@@ -4206,11 +4060,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Defaults/NodeMaps", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -4246,9 +4099,8 @@ Delete all entries in the NodeMaps collection.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Collection is empty|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doNodeMapGet
@@ -4258,28 +4110,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Defaults/NodeMaps/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Defaults/NodeMaps/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps/{xname}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Defaults/NodeMaps/{xname}', headers = headers)
 
 print(r.json())
 
@@ -4297,11 +4147,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps/{xname}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Defaults/NodeMaps/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -4345,9 +4194,8 @@ Retrieve NodeMap, i.e. defaults NID/Role/etc. for node located at physical locat
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doNodeMapDelete
@@ -4357,28 +4205,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Defaults/NodeMaps/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Defaults/NodeMaps/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps/{xname}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Defaults/NodeMaps/{xname}', headers = headers)
 
 print(r.json())
 
@@ -4396,11 +4242,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps/{xname}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Defaults/NodeMaps/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -4442,9 +4287,8 @@ Delete NodeMap entry for a specific node {xname}.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|XName does Not Exist - no matching ID to delete|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doNodeMapPut
@@ -4454,8 +4298,8 @@ bearerAuth
 > Code samples
 
 ```http
-PUT https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+PUT https://sms/apis/smd/hsm/v2/Defaults/NodeMaps/{xname} HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -4463,10 +4307,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PUT https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps/{xname} \
+curl -X PUT https://sms/apis/smd/hsm/v2/Defaults/NodeMaps/{xname} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -4474,11 +4317,10 @@ curl -X PUT https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps/{
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.put('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps/{xname}', headers = headers)
+r = requests.put('https://sms/apis/smd/hsm/v2/Defaults/NodeMaps/{xname}', headers = headers)
 
 print(r.json())
 
@@ -4497,11 +4339,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PUT", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Defaults/NodeMaps/{xname}", data)
+    req, err := http.NewRequest("PUT", "https://sms/apis/smd/hsm/v2/Defaults/NodeMaps/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -4559,9 +4400,8 @@ Update or create an entry for an individual node xname using PUT. Note the follo
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Conflict. Duplicate resource (NID) would be created.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-hwinventory">HWInventory</h1>
@@ -4575,28 +4415,26 @@ HWInventoryByLocation collection containing all components matching the query th
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/Query/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/Hardware/Query/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/Query/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/Hardware/Query/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/Query/{xname}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/Hardware/Query/{xname}', headers = headers)
 
 print(r.json())
 
@@ -4614,11 +4452,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/Query/{xname}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/Hardware/Query/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -5234,9 +5071,8 @@ Default is NestNodesOnly.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-hwinventorybylocation">HWInventoryByLocation</h1>
@@ -5250,28 +5086,26 @@ Hardware inventory information for the given system location/xname
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/Hardware HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/Hardware \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/Hardware', headers = headers)
 
 print(r.json())
 
@@ -5289,11 +5123,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/Hardware", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -5506,9 +5339,8 @@ Status Code **200**
 |HWInventoryByFRUType|HWInvByFRURouterBMC|
 |HWInventoryByFRUType|HWIncByFRUHSNNIC|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doHWInvByLocationPost
@@ -5518,8 +5350,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/Inventory/Hardware HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -5527,10 +5359,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware \
+curl -X POST https://sms/apis/smd/hsm/v2/Inventory/Hardware \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -5538,11 +5369,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/Inventory/Hardware', headers = headers)
 
 print(r.json())
 
@@ -5561,11 +5391,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/Inventory/Hardware", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -5754,9 +5583,8 @@ Create/Update hardware inventory entries
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doHWInvByLocationDeleteAll
@@ -5766,28 +5594,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/Hardware HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/Hardware \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/Hardware', headers = headers)
 
 print(r.json())
 
@@ -5805,11 +5631,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/Hardware", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -5845,9 +5670,8 @@ Delete all entries in the HWInventoryByLocation collection. Note that this does 
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Collection is empty|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doHWInvByLocationGet
@@ -5857,28 +5681,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/Hardware/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/Hardware/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/{xname}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/Hardware/{xname}', headers = headers)
 
 print(r.json())
 
@@ -5896,11 +5718,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/{xname}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/Hardware/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -6169,9 +5990,8 @@ null
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doHWInvByLocationDelete
@@ -6181,28 +6001,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/Hardware/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/Hardware/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/{xname}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/Hardware/{xname}', headers = headers)
 
 print(r.json())
 
@@ -6220,11 +6038,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/{xname}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/Hardware/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -6266,9 +6083,8 @@ Delete HWInventoryByLocation entry for a specific xname.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|XName does Not Exist - no matching ID to delete|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-hwinventorybyfru">HWInventoryByFRU</h1>
@@ -6282,28 +6098,26 @@ This represents a physical piece of hardware with properties specific to a uniqu
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU', headers = headers)
 
 print(r.json())
 
@@ -6321,11 +6135,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -6493,9 +6306,8 @@ Status Code **200**
 |HWInventoryByFRUType|HWInvByFRURouterBMC|
 |HWInventoryByFRUType|HWIncByFRUHSNNIC|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doHWInvByFRUDeleteAll
@@ -6505,28 +6317,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU', headers = headers)
 
 print(r.json())
 
@@ -6544,11 +6354,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -6584,9 +6393,8 @@ Delete all entries in the HWInventoryByFRU collection. Note that this does not d
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Collection is empty|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doHWInvByFRUGet
@@ -6596,28 +6404,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid}', headers = headers)
 
 print(r.json())
 
@@ -6635,11 +6441,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -6694,9 +6499,8 @@ Retrieve HWInventoryByFRU for a specific fruID.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doHWInvByFRUDelete
@@ -6706,28 +6510,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid}', headers = headers)
 
 print(r.json())
 
@@ -6745,11 +6547,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/{fruid}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -6791,9 +6592,8 @@ Delete an entry in the HWInventoryByFRU collection. Note that this does not dele
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|FRU ID does Not Exist - no matching entry to delete|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-hwinventoryhistory">HWInventoryHistory</h1>
@@ -6807,28 +6607,26 @@ Hardware inventory historical information for the given system location/xname/FR
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/Hardware/History HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/Hardware/History \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/Hardware/History', headers = headers)
 
 print(r.json())
 
@@ -6846,11 +6644,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/Hardware/History", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -6906,9 +6703,8 @@ Retrieve the history entries for all HWInventoryByLocation entries.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doHWInvHistByLocationDeleteAll
@@ -6918,28 +6714,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/Hardware/History HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/Hardware/History \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/Hardware/History', headers = headers)
 
 print(r.json())
 
@@ -6957,11 +6751,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/Hardware/History", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -6997,9 +6790,8 @@ Delete all HWInventory history entries. Note that this also deletes history for 
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Collection is empty|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doHWInvHistByLocationGet
@@ -7009,28 +6801,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/Hardware/History/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/Hardware/History/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History/{xname}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/Hardware/History/{xname}', headers = headers)
 
 print(r.json())
 
@@ -7048,11 +6838,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History/{xname}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/Hardware/History/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -7104,9 +6893,8 @@ Retrieve the history entries for a HWInventoryByLocation entry with a specific x
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doHWInvHistByLocationDelete
@@ -7116,28 +6904,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/Hardware/History/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/Hardware/History/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History/{xname}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/Hardware/History/{xname}', headers = headers)
 
 print(r.json())
 
@@ -7155,11 +6941,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Hardware/History/{xname}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/Hardware/History/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -7201,9 +6986,8 @@ Delete history for the HWInventoryByLocation entry for a specific xname.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|XName does Not Exist - no matching ID to delete|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doHWInvHistByFRUsGet
@@ -7213,28 +6997,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/History HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/History HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/History \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/History \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/History', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/History', headers = headers)
 
 print(r.json())
 
@@ -7252,11 +7034,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/History", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/History", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -7312,9 +7093,8 @@ Retrieve the history entries for all HWInventoryByFRU entries. Sorted by FRU.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doHWInvHistByFRUGet
@@ -7324,28 +7104,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid}', headers = headers)
 
 print(r.json())
 
@@ -7363,11 +7141,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -7419,9 +7196,8 @@ Retrieve the history entries for the HWInventoryByFRU for a specific fruID.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doHWInvHistByFRUDelete
@@ -7431,28 +7207,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid}', headers = headers)
 
 print(r.json())
 
@@ -7470,11 +7244,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/HardwareByFRU/History/{fruid}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -7516,9 +7289,8 @@ Delete history for an entry in the HWInventoryByFRU collection.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|FRU ID does Not Exist - no matching entry to delete|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-redfishendpoint">RedfishEndpoint</h1>
@@ -7532,28 +7304,26 @@ This is a BMC or other Redfish controller that has a Redfish entry point and Red
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints', headers = headers)
 
 print(r.json())
 
@@ -7571,11 +7341,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -7684,9 +7453,8 @@ Retrieve all Redfish endpoint entries as a named array, optionally filtering it.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doRedfishEndpointsPost
@@ -7696,8 +7464,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -7705,10 +7473,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints \
+curl -X POST https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -7716,11 +7483,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishE
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints', headers = headers)
 
 print(r.json())
 
@@ -7739,11 +7505,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -7829,9 +7594,8 @@ Status Code **201**
 |*anonymous*|[[ResourceURI.1.0.0](#schemaresourceuri.1.0.0)]|false|none|[A ResourceURI is like an odata.id, it provides a path to a resource from the API root, such that when a GET is performed, the corresponding object is returned.  It does not imply other odata functionality.]|
 |» ResourceURI|string|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doRedfishEndpointsDeleteAll
@@ -7841,28 +7605,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints', headers = headers)
 
 print(r.json())
 
@@ -7880,11 +7642,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -7920,9 +7681,8 @@ Delete all entries in the RedfishEndpoint collection.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Collection is empty|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doRedfishEndpointGet
@@ -7932,28 +7692,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}', headers = headers)
 
 print(r.json())
 
@@ -7971,11 +7729,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -8036,9 +7793,8 @@ Retrieve RedfishEndpoint, located at physical location {xname}.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doRedfishEndpointDelete
@@ -8048,28 +7804,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}', headers = headers)
 
 print(r.json())
 
@@ -8087,11 +7841,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -8133,9 +7886,8 @@ Delete RedfishEndpoint record for a specific xname.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|XName does Not Exist - no matching ID to delete|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doRedfishEndpointPut
@@ -8145,8 +7897,8 @@ bearerAuth
 > Code samples
 
 ```http
-PUT https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+PUT https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -8154,10 +7906,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PUT https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} \
+curl -X PUT https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -8165,11 +7916,10 @@ curl -X PUT https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEn
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.put('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}', headers = headers)
+r = requests.put('https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}', headers = headers)
 
 print(r.json())
 
@@ -8188,11 +7938,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PUT", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}", data)
+    req, err := http.NewRequest("PUT", "https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -8275,9 +8024,8 @@ Create or update RedfishEndpoint record for a specific xname.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|XName does Not Exist - no matching ID to update|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doRedfishEndpointPatch
@@ -8287,8 +8035,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -8296,10 +8044,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} \
+curl -X PATCH https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -8307,11 +8054,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Redfish
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}', headers = headers)
 
 print(r.json())
 
@@ -8330,11 +8076,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -8417,9 +8162,8 @@ Update (PATCH) RedfishEndpoint record for a specific xname.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|XName does Not Exist - no matching ID to update|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doRedfishEndpointQueryGet
@@ -8429,28 +8173,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/Query/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/Query/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/Query/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/Query/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/Query/{xname}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/Query/{xname}', headers = headers)
 
 print(r.json())
 
@@ -8468,11 +8210,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/Query/{xname}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/RedfishEndpoints/Query/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -8537,9 +8278,8 @@ Given xname and modifiers in query string, retrieve zero or more RedfishEndpoint
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - no matches|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-componentendpoint">ComponentEndpoint</h1>
@@ -8553,28 +8293,26 @@ The Redfish-discovered properties for a component discovered through, and manage
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints', headers = headers)
 
 print(r.json())
 
@@ -8592,11 +8330,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -8748,9 +8485,8 @@ Retrieve the full collection of ComponentEndpoints in the form of a ComponentEnd
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doComponentEndpointsDeleteAll
@@ -8760,28 +8496,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints', headers = headers)
 
 print(r.json())
 
@@ -8799,11 +8533,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -8839,9 +8572,8 @@ Delete all entries in the ComponentEndpoint collection.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Collection is empty|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doComponentEndpointGet
@@ -8851,28 +8583,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname}', headers = headers)
 
 print(r.json())
 
@@ -8890,11 +8620,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -8998,9 +8727,8 @@ Retrieve ComponentEndpoint record for a specific xname.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doComponentEndpointDelete
@@ -9010,28 +8738,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname}', headers = headers)
 
 print(r.json())
 
@@ -9049,11 +8775,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/ComponentEndpoints/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -9095,9 +8820,8 @@ Delete ComponentEndpoint for a specific xname.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|XName does Not Exist - no matching ID to delete|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-serviceendpoint">ServiceEndpoint</h1>
@@ -9111,28 +8835,26 @@ The Redfish-discovered properties for a service discovered through, and managed 
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints', headers = headers)
 
 print(r.json())
 
@@ -9150,11 +8872,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -9244,9 +8965,8 @@ Retrieve the full collection of ServiceEndpoints in the form of a ServiceEndpoin
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doServiceEndpointsDeleteAll
@@ -9256,28 +8976,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints', headers = headers)
 
 print(r.json())
 
@@ -9295,11 +9013,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -9335,9 +9052,8 @@ Delete all entries in the ServiceEndpoint collection.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Collection is empty|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doServiceEndpointsGet
@@ -9347,28 +9063,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}', headers = headers)
 
 print(r.json())
 
@@ -9386,11 +9100,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -9481,9 +9194,8 @@ Retrieve all ServiceEndpoint records for the Redfish service.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Service does not exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doServiceEndpointGet
@@ -9493,28 +9205,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname}', headers = headers)
 
 print(r.json())
 
@@ -9532,11 +9242,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -9621,9 +9330,8 @@ Retrieve the ServiceEndpoint for a Redfish service that is managed by xname.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doServiceEndpointDelete
@@ -9633,28 +9341,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname}', headers = headers)
 
 print(r.json())
 
@@ -9672,11 +9378,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/ServiceEndpoints/{service}/RedfishEndpoints/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -9719,9 +9424,8 @@ Delete the {service} ServiceEndpoint managed by {xname}
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - no matching ServiceEndpoint to delete|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-componentethernetinterfaces">ComponentEthernetInterfaces</h1>
@@ -9735,28 +9439,26 @@ The MAC address to IP address relation for components in the system. If the comp
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces', headers = headers)
 
 print(r.json())
 
@@ -9774,11 +9476,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -9892,9 +9593,8 @@ Status Code **200**
 |Type|HSNConnector|
 |Type|INVALID|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompEthInterfacePostV2
@@ -9904,8 +9604,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -9913,10 +9613,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces \
+curl -X POST https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -9924,11 +9623,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Ethernet
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces', headers = headers)
 
 print(r.json())
 
@@ -9947,11 +9645,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -10016,9 +9713,8 @@ Create a new component ethernet interface.
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Conflict. Duplicate component ethernet interface would be created.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompEthInterfaceDeleteAllV2
@@ -10028,28 +9724,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces', headers = headers)
 
 print(r.json())
 
@@ -10067,11 +9761,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -10107,9 +9800,8 @@ Delete all component ethernet interface entries.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Collection is empty|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompEthInterfaceGetV2
@@ -10119,28 +9811,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}', headers = headers)
 
 print(r.json())
 
@@ -10158,11 +9848,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -10214,9 +9903,8 @@ Retrieve the component ethernet interface which was created with the given {ethI
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompEthInterfaceDeleteV2
@@ -10226,28 +9914,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}', headers = headers)
 
 print(r.json())
 
@@ -10265,11 +9951,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -10311,9 +9996,8 @@ Delete the given component ethernet interface with {ethInterfaceID}.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - No component ethernet interface with ethInterfaceID.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompEthInterfacePatchV2
@@ -10323,8 +10007,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID} HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID} HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -10332,10 +10016,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID} \
+curl -X PATCH https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -10343,11 +10026,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Etherne
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}', headers = headers)
 
 print(r.json())
 
@@ -10366,11 +10048,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -10431,9 +10112,8 @@ To update the IP address, CompID, and/or description of a component ethernet int
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The component ethernet interface with this ethInterfaceID does not exist.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompEthInterfaceIPAddressesGetV2
@@ -10443,28 +10123,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses', headers = headers)
 
 print(r.json())
 
@@ -10482,11 +10160,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -10540,9 +10217,8 @@ Status Code **200**
 |» IPAddress|string|true|none|The IP address associated with the MAC address for this component ethernet interface on for this particular network.|
 |» Network|string|false|none|The network that this IP Addresses is associated with.|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompEthInterfaceIPAddressesPostV2
@@ -10552,8 +10228,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -10561,10 +10237,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses \
+curl -X POST https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -10572,11 +10247,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Ethernet
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses', headers = headers)
 
 print(r.json())
 
@@ -10595,11 +10269,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -10650,9 +10323,8 @@ Create a new IP address mapping in a component ethernet interface {ethInterfaceI
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Conflict. Duplicate IP address in component ethernet interface would be created.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompEthInterfaceIPAddressPatchV2
@@ -10662,8 +10334,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress} HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress} HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -10671,10 +10343,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress} \
+curl -X PATCH https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -10682,11 +10353,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Etherne
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress}', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress}', headers = headers)
 
 print(r.json())
 
@@ -10705,11 +10375,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress}", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -10764,9 +10433,8 @@ func main() {
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - No IP address with ipAddress exists on the specified component ethernet interface.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doCompEthInterfaceIPAddressDeleteV2
@@ -10776,28 +10444,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress}', headers = headers)
 
 print(r.json())
 
@@ -10815,11 +10481,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Inventory/EthernetInterfaces/{ethInterfaceID}/IPAddresses/{ipAddress}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -10862,9 +10527,8 @@ Delete the given IP Address mapping with {ipAddress} from a component ethernet i
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - No IP address with ipAddress exists on the specified component ethernet interface|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-group">Group</h1>
@@ -10878,28 +10542,26 @@ A group is an informal, possibly overlapping division of the system that groups 
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/groups HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/groups \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/groups', headers = headers)
 
 print(r.json())
 
@@ -10917,11 +10579,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/groups", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -10992,9 +10653,8 @@ Status Code **200**
 |» members|[Members.1.0.0](#schemamembers.1.0.0)|false|none|The members are a fully enumerated (i.e. no implied members besides those explicitly provided) representation of the components a partition or group|
 |»» ids|[[XNameRW.1.0.0](#schemaxnamerw.1.0.0)]|false|none|Set of Component XName IDs that represent the membership of the group or partition.|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doGroupsPost
@@ -11004,8 +10664,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/groups HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -11013,10 +10673,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups \
+curl -X POST https://sms/apis/smd/hsm/v2/groups \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -11024,11 +10683,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/groups', headers = headers)
 
 print(r.json())
 
@@ -11047,11 +10705,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/groups", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -11137,9 +10794,8 @@ Status Code **201**
 |*anonymous*|[[ResourceURI.1.0.0](#schemaresourceuri.1.0.0)]|false|none|[A ResourceURI is like an odata.id, it provides a path to a resource from the API root, such that when a GET is performed, the corresponding object is returned.  It does not imply other odata functionality.]|
 |» ResourceURI|string|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doGroupGet
@@ -11149,28 +10805,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/groups/{group_label} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/groups/{group_label} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/groups/{group_label}', headers = headers)
 
 print(r.json())
 
@@ -11188,11 +10842,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/groups/{group_label}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -11248,9 +10901,8 @@ Retrieve the group which was created with the given {group_label}.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doGroupDelete
@@ -11260,28 +10912,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/groups/{group_label} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/groups/{group_label} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/groups/{group_label}', headers = headers)
 
 print(r.json())
 
@@ -11299,11 +10949,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/groups/{group_label}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -11345,9 +10994,8 @@ Delete the given group with {group_label}. Any members previously in the group w
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - No group matches label.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doGroupPatch
@@ -11357,8 +11005,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label} HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/groups/{group_label} HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -11366,10 +11014,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label} \
+curl -X PATCH https://sms/apis/smd/hsm/v2/groups/{group_label} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -11377,11 +11024,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_lab
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/groups/{group_label}', headers = headers)
 
 print(r.json())
 
@@ -11400,11 +11046,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/groups/{group_label}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -11462,9 +11107,8 @@ To update the tags array and/or description, a PATCH operation can be used.  Omi
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The group with this label did not exist.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doGroupLabelsGet
@@ -11474,28 +11118,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/labels HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/groups/labels HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/labels \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/groups/labels \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/labels', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/groups/labels', headers = headers)
 
 print(r.json())
 
@@ -11513,11 +11155,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/labels", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/groups/labels", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -11564,9 +11205,8 @@ Retrieve a string array of all group labels (i.e. group names) that currently ex
 
 <h3 id="dogrouplabelsget-responseschema">Response Schema</h3>
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doGroupMembersGet
@@ -11576,28 +11216,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}/members HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/groups/{group_label}/members HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}/members \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/groups/{group_label}/members \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}/members', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/groups/{group_label}/members', headers = headers)
 
 print(r.json())
 
@@ -11615,11 +11253,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}/members", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/groups/{group_label}/members", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -11666,9 +11303,8 @@ Retrieve members of an existing group {group_label}, optionally filtering the se
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does not exist - No such group {group_label}|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doGroupMembersPost
@@ -11678,8 +11314,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}/members HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/groups/{group_label}/members HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -11687,10 +11323,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}/members \
+curl -X POST https://sms/apis/smd/hsm/v2/groups/{group_label}/members \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -11698,11 +11333,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_labe
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}/members', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/groups/{group_label}/members', headers = headers)
 
 print(r.json())
 
@@ -11721,11 +11355,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}/members", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/groups/{group_label}/members", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -11797,9 +11430,8 @@ Status Code **201**
 |*anonymous*|[[ResourceURI.1.0.0](#schemaresourceuri.1.0.0)]|false|none|[A ResourceURI is like an odata.id, it provides a path to a resource from the API root, such that when a GET is performed, the corresponding object is returned.  It does not imply other odata functionality.]|
 |» ResourceURI|string|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doGroupMemberDelete
@@ -11809,28 +11441,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}/members/{xname_id} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/groups/{group_label}/members/{xname_id} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}/members/{xname_id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/groups/{group_label}/members/{xname_id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}/members/{xname_id}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/groups/{group_label}/members/{xname_id}', headers = headers)
 
 print(r.json())
 
@@ -11848,11 +11478,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups/{group_label}/members/{xname_id}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/groups/{group_label}/members/{xname_id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -11895,9 +11524,8 @@ Delete component {xname_id} from the members of group {group_label}.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - no such member or group.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-partition">Partition</h1>
@@ -11911,28 +11539,26 @@ A partition is a formal, non-overlapping division of the system that forms an ad
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/partitions HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/partitions \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/partitions', headers = headers)
 
 print(r.json())
 
@@ -11950,11 +11576,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/partitions", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -12023,9 +11648,8 @@ Status Code **200**
 |» members|[Members.1.0.0](#schemamembers.1.0.0)|false|none|The members are a fully enumerated (i.e. no implied members besides those explicitly provided) representation of the components a partition or group|
 |»» ids|[[XNameRW.1.0.0](#schemaxnamerw.1.0.0)]|false|none|Set of Component XName IDs that represent the membership of the group or partition.|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doPartitionsPost
@@ -12035,8 +11659,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/partitions HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -12044,10 +11668,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions \
+curl -X POST https://sms/apis/smd/hsm/v2/partitions \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -12055,11 +11678,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/partitions', headers = headers)
 
 print(r.json())
 
@@ -12078,11 +11700,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/partitions", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -12165,9 +11786,8 @@ Status Code **201**
 |*anonymous*|[[ResourceURI.1.0.0](#schemaresourceuri.1.0.0)]|false|none|[A ResourceURI is like an odata.id, it provides a path to a resource from the API root, such that when a GET is performed, the corresponding object is returned.  It does not imply other odata functionality.]|
 |» ResourceURI|string|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doPartitionGet
@@ -12177,28 +11797,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/partitions/{partition_name} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/partitions/{partition_name} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/partitions/{partition_name}', headers = headers)
 
 print(r.json())
 
@@ -12216,11 +11834,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/partitions/{partition_name}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -12274,9 +11891,8 @@ Retrieve the partition which was created with the given {partition_name}.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doPartitionDelete
@@ -12286,28 +11902,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/partitions/{partition_name} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/partitions/{partition_name} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/partitions/{partition_name}', headers = headers)
 
 print(r.json())
 
@@ -12325,11 +11939,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/partitions/{partition_name}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -12371,9 +11984,8 @@ Delete partition {partition_name}. Any members previously in the partition will 
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - No partition matches partition_name.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doPartitionPatch
@@ -12383,8 +11995,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name} HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/partitions/{partition_name} HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -12392,10 +12004,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name} \
+curl -X PATCH https://sms/apis/smd/hsm/v2/partitions/{partition_name} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -12403,11 +12014,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{parti
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/partitions/{partition_name}', headers = headers)
 
 print(r.json())
 
@@ -12426,11 +12036,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/partitions/{partition_name}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -12488,9 +12097,8 @@ Update the tags array and/or description by using PATCH. Omitted fields are not 
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The partition with this partition_name did not exist.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doPartitionNamesGet
@@ -12500,28 +12108,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/names HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/partitions/names HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/names \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/partitions/names \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/names', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/partitions/names', headers = headers)
 
 print(r.json())
 
@@ -12539,11 +12145,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/names", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/partitions/names", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -12588,9 +12193,8 @@ Retrieve a string array of all partition names that currently exist in HSM. Thes
 
 <h3 id="dopartitionnamesget-responseschema">Response Schema</h3>
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doPartitionMembersGet
@@ -12600,28 +12204,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}/members HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/partitions/{partition_name}/members HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}/members \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/partitions/{partition_name}/members \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}/members', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/partitions/{partition_name}/members', headers = headers)
 
 print(r.json())
 
@@ -12639,11 +12241,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}/members", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/partitions/{partition_name}/members", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -12689,9 +12290,8 @@ Retrieve all members of existing partition {partition_name}, optionally filterin
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does not exist - No such partition {partition_name}|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doPartitionMembersPost
@@ -12701,8 +12301,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}/members HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/partitions/{partition_name}/members HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -12710,10 +12310,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}/members \
+curl -X POST https://sms/apis/smd/hsm/v2/partitions/{partition_name}/members \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -12721,11 +12320,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partit
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}/members', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/partitions/{partition_name}/members', headers = headers)
 
 print(r.json())
 
@@ -12744,11 +12342,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}/members", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/partitions/{partition_name}/members", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -12820,9 +12417,8 @@ Status Code **201**
 |*anonymous*|[[ResourceURI.1.0.0](#schemaresourceuri.1.0.0)]|false|none|[A ResourceURI is like an odata.id, it provides a path to a resource from the API root, such that when a GET is performed, the corresponding object is returned.  It does not imply other odata functionality.]|
 |» ResourceURI|string|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doPartitionMemberDelete
@@ -12832,28 +12428,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}/members/{xname_id} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/partitions/{partition_name}/members/{xname_id} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}/members/{xname_id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/partitions/{partition_name}/members/{xname_id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}/members/{xname_id}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/partitions/{partition_name}/members/{xname_id}', headers = headers)
 
 print(r.json())
 
@@ -12871,11 +12465,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions/{partition_name}/members/{xname_id}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/partitions/{partition_name}/members/{xname_id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -12918,9 +12511,8 @@ Delete component {xname_id} from the members of partition {partition_name}.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - no such member or partition.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-membership">Membership</h1>
@@ -12934,28 +12526,26 @@ A membership is a mapping of a component xname to its set of group labels and pa
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/memberships HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/memberships HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/memberships \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/memberships \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/memberships', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/memberships', headers = headers)
 
 print(r.json())
 
@@ -12973,11 +12563,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/memberships", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/memberships", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -13126,9 +12715,8 @@ Status Code **200**
 |» partitionName|string|false|none|The name is a human-readable identifier for the partition and uniquely identifies it.|
 |» groupLabels|[string]|false|none|An array with all group labels the component is associated with The label is the human-readable identifier for a group and uniquely identifies it.|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doMembershipGet
@@ -13138,28 +12726,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/memberships/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/memberships/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/memberships/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/memberships/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/memberships/{xname}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/memberships/{xname}', headers = headers)
 
 print(r.json())
 
@@ -13177,11 +12763,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/memberships/{xname}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/memberships/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -13228,9 +12813,8 @@ Display group labels and partition names for a given component xname id.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found - no such xname.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-discoverystatus">DiscoveryStatus</h1>
@@ -13244,28 +12828,26 @@ Contains status information about the discovery operation for clients to query. 
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/DiscoveryStatus HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/DiscoveryStatus HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/DiscoveryStatus \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/DiscoveryStatus \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/DiscoveryStatus', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/DiscoveryStatus', headers = headers)
 
 print(r.json())
 
@@ -13283,11 +12865,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/DiscoveryStatus", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/DiscoveryStatus", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -13346,9 +12927,8 @@ Status Code **200**
 |Status|InProgress|
 |Status|Complete|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doDiscoveryStatusGet
@@ -13358,28 +12938,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/DiscoveryStatus/{id} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Inventory/DiscoveryStatus/{id} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/DiscoveryStatus/{id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Inventory/DiscoveryStatus/{id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/DiscoveryStatus/{id}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Inventory/DiscoveryStatus/{id}', headers = headers)
 
 print(r.json())
 
@@ -13397,11 +12975,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/DiscoveryStatus/{id}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Inventory/DiscoveryStatus/{id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -13445,9 +13022,8 @@ Retrieve DiscoveryStatus entry with the specific id.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not found (no such ID)|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-discover">Discover</h1>
@@ -13461,8 +13037,8 @@ Trigger a discovery of system component data by interrogating all, or a subset, 
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Discover HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/Inventory/Discover HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -13470,10 +13046,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Discover \
+curl -X POST https://sms/apis/smd/hsm/v2/Inventory/Discover \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -13481,11 +13056,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Discover
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Discover', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/Inventory/Discover', headers = headers)
 
 print(r.json())
 
@@ -13504,11 +13078,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/Discover", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/Inventory/Discover", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -13582,9 +13155,8 @@ Status Code **200**
 |*anonymous*|[[ResourceURI.1.0.0](#schemaresourceuri.1.0.0)]|false|none|[A ResourceURI is like an odata.id, it provides a path to a resource from the API root, such that when a GET is performed, the corresponding object is returned.  It does not imply other odata functionality.]|
 |» ResourceURI|string|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-scn">SCN</h1>
@@ -13598,8 +13170,8 @@ Manage subscriptions to state change notifications (SCNs) from HSM.
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/Subscriptions/SCN HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -13607,10 +13179,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN \
+curl -X POST https://sms/apis/smd/hsm/v2/Subscriptions/SCN \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -13618,11 +13189,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN 
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/Subscriptions/SCN', headers = headers)
 
 print(r.json())
 
@@ -13641,11 +13211,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/Subscriptions/SCN", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -13724,9 +13293,8 @@ Request a subscription for state change notifications for a set of component sta
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doDeleteSCNSubscriptionsAll
@@ -13736,28 +13304,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Subscriptions/SCN HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Subscriptions/SCN \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Subscriptions/SCN', headers = headers)
 
 print(r.json())
 
@@ -13775,11 +13341,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Subscriptions/SCN", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -13817,9 +13382,8 @@ Delete all subscriptions.
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doGetSCNSubscriptionsAll
@@ -13829,28 +13393,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Subscriptions/SCN HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Subscriptions/SCN \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Subscriptions/SCN', headers = headers)
 
 print(r.json())
 
@@ -13868,11 +13430,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Subscriptions/SCN", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -13925,9 +13486,8 @@ Retrieve all information on currently held state change notification subscriptio
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doPutSCNSubscription
@@ -13937,8 +13497,8 @@ bearerAuth
 > Code samples
 
 ```http
-PUT https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id} HTTP/1.1
-Host: api-gw-service-nmn.local
+PUT https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id} HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -13946,10 +13506,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PUT https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id} \
+curl -X PUT https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -13957,11 +13516,10 @@ curl -X PUT https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.put('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id}', headers = headers)
+r = requests.put('https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id}', headers = headers)
 
 print(r.json())
 
@@ -13980,11 +13538,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PUT", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id}", data)
+    req, err := http.NewRequest("PUT", "https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -14053,9 +13610,8 @@ Update an existing state change notification subscription in whole. This will ov
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doPatchSCNSubscription
@@ -14065,8 +13621,8 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id} HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id} HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -14074,10 +13630,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id} \
+curl -X PATCH https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -14085,11 +13640,10 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id}', headers = headers)
+r = requests.patch('https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id}', headers = headers)
 
 print(r.json())
 
@@ -14108,11 +13662,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id}", data)
+    req, err := http.NewRequest("PATCH", "https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -14180,9 +13733,8 @@ Update a subscription for state change notifications to add or remove triggers.
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal server error. Database error.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doDeleteSCNSubscription
@@ -14192,28 +13744,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id}', headers = headers)
 
 print(r.json())
 
@@ -14231,11 +13781,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -14280,9 +13829,8 @@ Delete a state change notification subscription.
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doGetSCNSubscription
@@ -14292,28 +13840,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id}', headers = headers)
 
 print(r.json())
 
@@ -14331,11 +13877,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Subscriptions/SCN/{id}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/Subscriptions/SCN/{id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -14389,9 +13934,8 @@ Return the information on a currently held state change notification subscriptio
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-locking">Locking</h1>
@@ -14403,8 +13947,8 @@ Manage locks and reservations on components.
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/reservations/remove HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/locks/reservations/remove HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -14412,10 +13956,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/reservations/remove \
+curl -X POST https://sms/apis/smd/hsm/v2/locks/reservations/remove \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -14423,11 +13966,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/reservations
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/reservations/remove', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/locks/reservations/remove', headers = headers)
 
 print(r.json())
 
@@ -14446,11 +13988,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/reservations/remove", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/locks/reservations/remove", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -14555,9 +14096,8 @@ Given a list of components, forcibly deletes any existing reservation. Does not 
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request; something is wrong with the structure received. Will not be used to represent failure to accomplish the operation, that will be returned in the standard payload.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Server error, could not delete reservations|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__locks_reservations_release
@@ -14565,8 +14105,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/reservations/release HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/locks/reservations/release HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -14574,10 +14114,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/reservations/release \
+curl -X POST https://sms/apis/smd/hsm/v2/locks/reservations/release \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -14585,11 +14124,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/reservations
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/reservations/release', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/locks/reservations/release', headers = headers)
 
 print(r.json())
 
@@ -14608,11 +14146,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/reservations/release", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/locks/reservations/release", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -14681,9 +14218,8 @@ Given a list of {xname & reservation key}, releases the associated reservations.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request; something is wrong with the structure received. Will not be used to represent failure to accomplish the operation, that will be returned in the standard payload.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Server error, could not delete reservations|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__locks_reservations
@@ -14691,8 +14227,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/reservations HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/locks/reservations HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -14700,10 +14236,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/reservations \
+curl -X POST https://sms/apis/smd/hsm/v2/locks/reservations \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -14711,11 +14246,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/reservations
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/reservations', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/locks/reservations', headers = headers)
 
 print(r.json())
 
@@ -14734,11 +14268,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/reservations", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/locks/reservations", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -14840,9 +14373,8 @@ Creates reservations on a set of xnames of infinite duration.  Component must be
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request; something is wrong with the structure received. Will not be used to represent failure to accomplish the operation, that will be returned in the standard payload.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Server error, could not accept reservations|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__locks_service_reservations_release
@@ -14850,8 +14382,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations/release HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/locks/service/reservations/release HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -14859,10 +14391,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations/release \
+curl -X POST https://sms/apis/smd/hsm/v2/locks/service/reservations/release \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -14870,11 +14401,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/rese
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations/release', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/locks/service/reservations/release', headers = headers)
 
 print(r.json())
 
@@ -14893,11 +14423,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations/release", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/locks/service/reservations/release", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -14966,9 +14495,8 @@ Given a list of {xname & reservation key}, releases the associated reservations.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request; something is wrong with the structure received. Will not be used to represent failure to accomplish the operation, that will be returned in the standard payload.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Server error, could not delete reservations|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__locks_service_reservations
@@ -14976,8 +14504,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/locks/service/reservations HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -14985,10 +14513,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations \
+curl -X POST https://sms/apis/smd/hsm/v2/locks/service/reservations \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -14996,11 +14523,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/rese
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/locks/service/reservations', headers = headers)
 
 print(r.json())
 
@@ -15019,11 +14545,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/locks/service/reservations", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -15127,9 +14652,8 @@ Creates reservations on a set of xnames of finite duration.  Component must be u
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request; something is wrong with the structure received. Will not be used to represent failure to accomplish the operation, that will be returned in the standard payload.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Server error, could not accept reservations|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__locks_service_reservations_renew
@@ -15137,8 +14661,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations/renew HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/locks/service/reservations/renew HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -15146,10 +14670,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations/renew \
+curl -X POST https://sms/apis/smd/hsm/v2/locks/service/reservations/renew \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -15157,11 +14680,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/rese
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations/renew', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/locks/service/reservations/renew', headers = headers)
 
 print(r.json())
 
@@ -15180,11 +14702,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations/renew", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/locks/service/reservations/renew", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -15254,9 +14775,8 @@ Given a list of {xname & reservation key}, renews the associated reservations.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request; something is wrong with the structure received. Will not be used to represent failure to accomplish the operation, that will be returned in the standard payload.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Server error, could not delete reservations|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__locks_service_reservations_check
@@ -15264,8 +14784,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations/check HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/locks/service/reservations/check HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -15273,10 +14793,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations/check \
+curl -X POST https://sms/apis/smd/hsm/v2/locks/service/reservations/check \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -15284,11 +14803,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/rese
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations/check', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/locks/service/reservations/check', headers = headers)
 
 print(r.json())
 
@@ -15307,11 +14825,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/service/reservations/check", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/locks/service/reservations/check", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -15376,9 +14893,8 @@ Using xname + reservation key check on the validity of reservations.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Server error, could not check reservations.|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__locks_status
@@ -15386,8 +14902,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/status HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/locks/status HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -15395,10 +14911,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/status \
+curl -X POST https://sms/apis/smd/hsm/v2/locks/status \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -15406,11 +14921,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/status \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/status', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/locks/status', headers = headers)
 
 print(r.json())
 
@@ -15429,11 +14943,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/status", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/locks/status", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -15495,9 +15008,8 @@ Using component ID retrieve the status of any lock and/or reservation.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Server error, could not get lock status.|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get__locks_status
@@ -15505,28 +15017,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/status HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/locks/status HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/status \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/locks/status \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/status', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/locks/status', headers = headers)
 
 print(r.json())
 
@@ -15544,11 +15054,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/status", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/locks/status", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -15669,9 +15178,8 @@ Additional valid values may be added via configuration file. See the results of 
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Server error, could not get lock status.|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__locks_lock
@@ -15679,8 +15187,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/lock HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/locks/lock HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -15688,10 +15196,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/lock \
+curl -X POST https://sms/apis/smd/hsm/v2/locks/lock \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -15699,11 +15206,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/lock \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/lock', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/locks/lock', headers = headers)
 
 print(r.json())
 
@@ -15722,11 +15228,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/lock", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/locks/lock", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -15831,9 +15336,8 @@ Using a component create a lock.  Cannot be locked if already locked, or if ther
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Server error, could not lock lock.|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__locks_unlock
@@ -15841,8 +15345,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/unlock HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/locks/unlock HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -15850,10 +15354,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/unlock \
+curl -X POST https://sms/apis/smd/hsm/v2/locks/unlock \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -15861,11 +15364,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/unlock \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/unlock', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/locks/unlock', headers = headers)
 
 print(r.json())
 
@@ -15884,11 +15386,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/unlock", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/locks/unlock", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -15993,9 +15494,8 @@ Using a component unlock a lock.  Cannot be unlocked if already unlocked.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Server error, could not unlock lock.|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__locks_repair
@@ -16003,8 +15503,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/repair HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/locks/repair HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -16012,10 +15512,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/repair \
+curl -X POST https://sms/apis/smd/hsm/v2/locks/repair \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -16023,11 +15522,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/repair \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/repair', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/locks/repair', headers = headers)
 
 print(r.json())
 
@@ -16046,11 +15544,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/repair", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/locks/repair", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -16155,9 +15652,8 @@ Repairs the disabled status of an xname allowing new reservations to be created.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Server error, could not repair lock.|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__locks_disable
@@ -16165,8 +15661,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/disable HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/locks/disable HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -16174,10 +15670,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/disable \
+curl -X POST https://sms/apis/smd/hsm/v2/locks/disable \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -16185,11 +15680,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/disable \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/disable', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/locks/disable', headers = headers)
 
 print(r.json())
 
@@ -16208,11 +15702,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/disable", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/locks/disable", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -16317,9 +15810,8 @@ Disables the ability to create a reservation on components, deletes any existing
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Server error, could not disable lock.|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="hardware-state-manager-api-powermap">PowerMap</h1>
@@ -16333,28 +15825,26 @@ Power mapping of components to the components supplying them power. This may con
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/sysinfo/powermaps HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/sysinfo/powermaps \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/sysinfo/powermaps', headers = headers)
 
 print(r.json())
 
@@ -16372,11 +15862,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/sysinfo/powermaps", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -16416,9 +15905,8 @@ Retrieve all power map entries as a named array, or an empty array if the collec
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doPowerMapsPost
@@ -16428,8 +15916,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps HTTP/1.1
-Host: api-gw-service-nmn.local
+POST https://sms/apis/smd/hsm/v2/sysinfo/powermaps HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -16437,10 +15925,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps \
+curl -X POST https://sms/apis/smd/hsm/v2/sysinfo/powermaps \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -16448,11 +15935,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps 
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps', headers = headers)
+r = requests.post('https://sms/apis/smd/hsm/v2/sysinfo/powermaps', headers = headers)
 
 print(r.json())
 
@@ -16471,11 +15957,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps", data)
+    req, err := http.NewRequest("POST", "https://sms/apis/smd/hsm/v2/sysinfo/powermaps", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -16530,9 +16015,8 @@ Create or update the given set of PowerMaps whose ID fields are each a valid xna
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doPowerMapsDeleteAll
@@ -16542,28 +16026,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/sysinfo/powermaps HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/sysinfo/powermaps \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/sysinfo/powermaps', headers = headers)
 
 print(r.json())
 
@@ -16581,11 +16063,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/sysinfo/powermaps", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -16621,9 +16102,8 @@ Delete all entries in the PowerMaps collection.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Collection is empty|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doPowerMapGet
@@ -16633,28 +16113,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET https://sms/apis/smd/hsm/v2/sysinfo/powermaps/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET https://sms/apis/smd/hsm/v2/sysinfo/powermaps/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps/{xname}', headers = headers)
+r = requests.get('https://sms/apis/smd/hsm/v2/sysinfo/powermaps/{xname}', headers = headers)
 
 print(r.json())
 
@@ -16672,11 +16150,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps/{xname}", data)
+    req, err := http.NewRequest("GET", "https://sms/apis/smd/hsm/v2/sysinfo/powermaps/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -16721,9 +16198,8 @@ Retrieve PowerMap for a component located at physical location {xname}.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doPowerMapDelete
@@ -16733,28 +16209,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE https://sms/apis/smd/hsm/v2/sysinfo/powermaps/{xname} HTTP/1.1
+Host: sms
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://sms/apis/smd/hsm/v2/sysinfo/powermaps/{xname} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps/{xname}', headers = headers)
+r = requests.delete('https://sms/apis/smd/hsm/v2/sysinfo/powermaps/{xname}', headers = headers)
 
 print(r.json())
 
@@ -16772,11 +16246,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps/{xname}", data)
+    req, err := http.NewRequest("DELETE", "https://sms/apis/smd/hsm/v2/sysinfo/powermaps/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -16818,9 +16291,8 @@ Delete PowerMap entry for a specific component {xname}.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|XName does Not Exist - no matching ID to delete|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## doPowerMapPut
@@ -16830,8 +16302,8 @@ bearerAuth
 > Code samples
 
 ```http
-PUT https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps/{xname} HTTP/1.1
-Host: api-gw-service-nmn.local
+PUT https://sms/apis/smd/hsm/v2/sysinfo/powermaps/{xname} HTTP/1.1
+Host: sms
 Content-Type: application/json
 Accept: application/json
 
@@ -16839,10 +16311,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PUT https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps/{xname} \
+curl -X PUT https://sms/apis/smd/hsm/v2/sysinfo/powermaps/{xname} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -16850,11 +16321,10 @@ curl -X PUT https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps/{
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.put('https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps/{xname}', headers = headers)
+r = requests.put('https://sms/apis/smd/hsm/v2/sysinfo/powermaps/{xname}', headers = headers)
 
 print(r.json())
 
@@ -16873,11 +16343,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PUT", "https://api-gw-service-nmn.local/apis/smd/hsm/v2/sysinfo/powermaps/{xname}", data)
+    req, err := http.NewRequest("PUT", "https://sms/apis/smd/hsm/v2/sysinfo/powermaps/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -16931,9 +16400,8 @@ Update or create an entry for an individual component xname using PUT. If the PU
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 # Schemas
@@ -19159,7 +18627,7 @@ Either way, the 'Target' field is the parent component, partition or system that
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |XName|[XName.1.0.0](#schemaxname.1.0.0)|false|none|Uniquely identifies the component by its physical location (xname). There are formatting rules depending on the matching HMSType.|
-|Format|string|false|none|How results are displayed<br><br><br><br><br><br>  FullyFlat      All component types listed in their own<br>                 arrays only.  No nesting of any children<br>  Hierarchical   All subcomponents listed as children up to<br>                 top level component (or set of cabinets)<br>  NestNodesOnly  Flat except that node subcomponents are nested<br>                 hierarchically.<br>Default is NestNodesOnly.|
+|Format|string|false|none|How results are displayed<br><br>  FullyFlat      All component types listed in their own<br>                 arrays only.  No nesting of any children<br>  Hierarchical   All subcomponents listed as children up to<br>                 top level component (or set of cabinets)<br>  NestNodesOnly  Flat except that node subcomponents are nested<br>                 hierarchically.<br>Default is NestNodesOnly.|
 |Cabinets|[[HWInvByLocCabinet](#schemahwinvbyloccabinet)]|false|read-only|All components with HMS type 'Cabinet' appropriate given Target component/partition and query type.|
 |Chassis|[[HWInvByLocChassis](#schemahwinvbylocchassis)]|false|read-only|All appropriate components with HMS type 'Chassis' given Target component/partition and query type.|
 |ComputeModules|[[HWInvByLocComputeModule](#schemahwinvbyloccomputemodule)]|false|read-only|All appropriate components with HMS type 'ComputeModule' given Target component/partition and query type.|

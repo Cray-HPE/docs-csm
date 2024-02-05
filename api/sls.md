@@ -121,11 +121,9 @@ Base URLs:
 
 * <a href="https://api-gw-service-nmn.local/apis/sls/v1">https://api-gw-service-nmn.local/apis/sls/v1</a>
 
+* <a href="http://cray-sls">http://cray-sls</a>
+
  License: Cray Proprietary
-
-# Authentication
-
-- HTTP Authentication, scheme: bearer 
 
 <h1 id="system-layout-service-hardware">hardware</h1>
 
@@ -145,16 +143,14 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/sls/v1/hardware \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/sls/v1/hardware', headers = headers)
@@ -175,7 +171,6 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -350,9 +345,8 @@ Status Code **200**
 |NodeType|Storage|
 |NodeType|Management|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__hardware
@@ -371,8 +365,7 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/sls/v1/hardware \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -380,8 +373,7 @@ curl -X POST https://api-gw-service-nmn.local/apis/sls/v1/hardware \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/sls/v1/hardware', headers = headers)
@@ -403,7 +395,6 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -476,9 +467,8 @@ Create a new hardware object.
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Conflict. The requested resource already exists|None|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Unexpected error. See body for details|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get__hardware_{xname}
@@ -495,16 +485,14 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/sls/v1/hardware/{xname} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/sls/v1/hardware/{xname}', headers = headers)
@@ -525,7 +513,6 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -581,9 +568,8 @@ Retrieve information about the requested xname. All properties are returned as a
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request successful|[hardware](#schemahardware)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## put__hardware_{xname}
@@ -602,8 +588,7 @@ Accept: application/json
 # You can also use wget
 curl -X PUT https://api-gw-service-nmn.local/apis/sls/v1/hardware/{xname} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -611,8 +596,7 @@ curl -X PUT https://api-gw-service-nmn.local/apis/sls/v1/hardware/{xname} \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
 r = requests.put('https://api-gw-service-nmn.local/apis/sls/v1/hardware/{xname}', headers = headers)
@@ -634,7 +618,6 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -707,9 +690,8 @@ Update a hardware object.  Parent objects will be created, if possible.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request. See body for details|None|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Unexpected error. See body for details|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## delete__hardware_{xname}
@@ -724,18 +706,14 @@ Host: api-gw-service-nmn.local
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/sls/v1/hardware/{xname} \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://api-gw-service-nmn.local/apis/sls/v1/hardware/{xname}
 
 ```
 
 ```python
 import requests
-headers = {
-  'Authorization': 'Bearer {access-token}'
-}
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/sls/v1/hardware/{xname}', headers = headers)
+r = requests.delete('https://api-gw-service-nmn.local/apis/sls/v1/hardware/{xname}')
 
 print(r.json())
 
@@ -750,10 +728,6 @@ import (
 )
 
 func main() {
-
-    headers := map[string][]string{
-        "Authorization": []string{"Bearer {access-token}"},
-    }
 
     data := bytes.NewBuffer([]byte{jsonReq})
     req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/sls/v1/hardware/{xname}", data)
@@ -786,9 +760,8 @@ Delete the requested xname from SLS. Note that if you delete a parent object, th
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Xname not found|None|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Conflict. The xname probably still had children.|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="system-layout-service-search">search</h1>
@@ -809,16 +782,14 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/sls/v1/search/hardware \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/sls/v1/search/hardware', headers = headers)
@@ -839,7 +810,6 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1039,9 +1009,8 @@ Status Code **200**
 |NodeType|Storage|
 |NodeType|Management|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get__search_networks
@@ -1058,16 +1027,14 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/sls/v1/search/networks \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/sls/v1/search/networks', headers = headers)
@@ -1088,7 +1055,6 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1206,9 +1172,8 @@ Status Code **200**
 |»»» Comment|string|false|none|none|
 |»» Comment|string|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="system-layout-service-dumpstate">dumpstate</h1>
@@ -1229,16 +1194,14 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/sls/v1/dumpstate \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/sls/v1/dumpstate', headers = headers)
@@ -1259,7 +1222,6 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1413,9 +1375,8 @@ Get a dump of current service state. The format of this is implementation-specif
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|State dumped successfully|[slsState](#schemaslsstate)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An error occurred in state dumping.  See body for details|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__loadstate
@@ -1432,16 +1393,14 @@ Content-Type: multipart/form-data
 ```shell
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/sls/v1/loadstate \
-  -H 'Content-Type: multipart/form-data' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Content-Type: multipart/form-data'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Content-Type': 'multipart/form-data',
-  'Authorization': 'Bearer {access-token}'
+  'Content-Type': 'multipart/form-data'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/sls/v1/loadstate', headers = headers)
@@ -1462,7 +1421,6 @@ func main() {
 
     headers := map[string][]string{
         "Content-Type": []string{"multipart/form-data"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1655,9 +1613,8 @@ sls_dump:
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|State loaded successfully|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Loading state failed.  See body for error|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="system-layout-service-misc">misc</h1>
@@ -1678,16 +1635,14 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/sls/v1/health \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/sls/v1/health', headers = headers)
@@ -1708,7 +1663,6 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1760,9 +1714,8 @@ Status Code **200**
 |» Vault|string|true|none|Status of the Vault.|
 |» DBConnection|string|true|none|Status of the connection with the database.|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get__liveness
@@ -1779,16 +1732,14 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/sls/v1/liveness \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/sls/v1/liveness', headers = headers)
@@ -1809,7 +1760,6 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1852,9 +1802,8 @@ This is primarily an endpoint for the automated Kubernetes system.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /liveness, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get__readiness
@@ -1871,16 +1820,14 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/sls/v1/readiness \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/sls/v1/readiness', headers = headers)
@@ -1901,7 +1848,6 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1944,9 +1890,8 @@ This is primarily an endpoint for the automated Kubernetes system.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /readiness, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get__version
@@ -1963,16 +1908,14 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/sls/v1/version \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/sls/v1/version', headers = headers)
@@ -1993,7 +1936,6 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2035,9 +1977,8 @@ Retrieve the current version of the SLS mapping. Information returned is a JSON 
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Information retrieved successfully|[versionResponse](#schemaversionresponse)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An error occurred, see text of response for more information|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="system-layout-service-network">network</h1>
@@ -2056,16 +1997,14 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/sls/v1/networks \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/sls/v1/networks', headers = headers)
@@ -2086,7 +2025,6 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2195,9 +2133,8 @@ Status Code **200**
 |»»» Comment|string|false|none|none|
 |»» Comment|string|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__networks
@@ -2214,16 +2151,14 @@ Content-Type: application/json
 ```shell
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/sls/v1/networks \
-  -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Content-Type: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Content-Type': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Content-Type': 'application/json'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/sls/v1/networks', headers = headers)
@@ -2244,7 +2179,6 @@ func main() {
 
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2321,9 +2255,8 @@ Create a new network. Must include all fields at the time of upload.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request. See body for details|None|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Network with that name already exists|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get__networks_{network}
@@ -2340,16 +2273,14 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/sls/v1/networks/{network} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/sls/v1/networks/{network}', headers = headers)
@@ -2370,7 +2301,6 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2450,9 +2380,8 @@ Retrieve the specific network.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Request successful|[network](#schemanetwork)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|No network item found with requested name|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## put__networks_{network}
@@ -2471,8 +2400,7 @@ Accept: application/json
 # You can also use wget
 curl -X PUT https://api-gw-service-nmn.local/apis/sls/v1/networks/{network} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -2480,8 +2408,7 @@ curl -X PUT https://api-gw-service-nmn.local/apis/sls/v1/networks/{network} \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
 r = requests.put('https://api-gw-service-nmn.local/apis/sls/v1/networks/{network}', headers = headers)
@@ -2503,7 +2430,6 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2628,9 +2554,8 @@ Update a network object. Parent objects will be created, if possible.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad request. See body for details|None|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Conflict. The requested resource already exists|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## delete__networks_{network}
@@ -2645,18 +2570,14 @@ Host: api-gw-service-nmn.local
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/sls/v1/networks/{network} \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE https://api-gw-service-nmn.local/apis/sls/v1/networks/{network}
 
 ```
 
 ```python
 import requests
-headers = {
-  'Authorization': 'Bearer {access-token}'
-}
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/sls/v1/networks/{network}', headers = headers)
+r = requests.delete('https://api-gw-service-nmn.local/apis/sls/v1/networks/{network}')
 
 print(r.json())
 
@@ -2671,10 +2592,6 @@ import (
 )
 
 func main() {
-
-    headers := map[string][]string{
-        "Authorization": []string{"Bearer {access-token}"},
-    }
 
     data := bytes.NewBuffer([]byte{jsonReq})
     req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/sls/v1/networks/{network}", data)
@@ -2706,9 +2623,8 @@ Delete the specific network from SLS.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK. Network removed|None|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Network not found|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 # Schemas

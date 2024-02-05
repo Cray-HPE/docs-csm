@@ -288,11 +288,7 @@ list of available choices.
 
 Base URLs:
 
-* <a href="https://api-gw-service-nmn.local/apis/uas-mgr/v1">https://api-gw-service-nmn.local/apis/uas-mgr/v1</a>
-
-# Authentication
-
-- HTTP Authentication, scheme: bearer 
+* <a href="/apis/uas-mgr/v1">/apis/uas-mgr/v1</a>
 
 <h1 id="user-access-service-versions">versions</h1>
 
@@ -303,25 +299,20 @@ Base URLs:
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/ HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/uas-mgr/v1/ HTTP/1.1
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/ \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/uas-mgr/v1/
 
 ```
 
 ```python
 import requests
-headers = {
-  'Authorization': 'Bearer {access-token}'
-}
 
-r = requests.get('https://api-gw-service-nmn.local/apis/uas-mgr/v1/', headers = headers)
+r = requests.get('/apis/uas-mgr/v1/')
 
 print(r.json())
 
@@ -337,12 +328,8 @@ import (
 
 func main() {
 
-    headers := map[string][]string{
-        "Authorization": []string{"Bearer {access-token}"},
-    }
-
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/", data)
+    req, err := http.NewRequest("GET", "/apis/uas-mgr/v1/", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -364,9 +351,8 @@ Return supported UAS API versions.
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Version response|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="user-access-service-uas">uas</h1>
@@ -378,28 +364,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/uas HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/uas-mgr/v1/uas HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/uas \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/uas-mgr/v1/uas \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/uas-mgr/v1/uas', headers = headers)
+r = requests.get('/apis/uas-mgr/v1/uas', headers = headers)
 
 print(r.json())
 
@@ -417,11 +401,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/uas", data)
+    req, err := http.NewRequest("GET", "/apis/uas-mgr/v1/uas", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -489,9 +472,8 @@ Status Code **200**
 |» uai_host|string|false|none|none|
 |» uai_age|string|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## create_uai
@@ -501,8 +483,8 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/uas-mgr/v1/uas HTTP/1.1
-Host: api-gw-service-nmn.local
+POST /apis/uas-mgr/v1/uas HTTP/1.1
+
 Content-Type: multipart/form-data
 Accept: application/json
 
@@ -510,10 +492,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/uas-mgr/v1/uas \
+curl -X POST /apis/uas-mgr/v1/uas \
   -H 'Content-Type: multipart/form-data' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -521,11 +502,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/uas-mgr/v1/uas \
 import requests
 headers = {
   'Content-Type': 'multipart/form-data',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/uas-mgr/v1/uas', headers = headers)
+r = requests.post('/apis/uas-mgr/v1/uas', headers = headers)
 
 print(r.json())
 
@@ -544,11 +524,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"multipart/form-data"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/uas", data)
+    req, err := http.NewRequest("POST", "/apis/uas-mgr/v1/uas", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -603,9 +582,8 @@ to ports 80, 443, and 8888.
 
 <h3 id="create_uai-responseschema">Response Schema</h3>
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## delete_uai_by_name
@@ -615,30 +593,25 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/uas?uai_list=uai-asdfgh098,uai-qwerty123 HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE /apis/uas-mgr/v1/uas?uai_list=uai-asdfgh098,uai-qwerty123 HTTP/1.1
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/uas?uai_list=uai-asdfgh098,uai-qwerty123 \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE /apis/uas-mgr/v1/uas?uai_list=uai-asdfgh098,uai-qwerty123
 
 ```
 
 ```python
 import requests
-headers = {
-  'Authorization': 'Bearer {access-token}'
-}
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/uas-mgr/v1/uas', params={
+r = requests.delete('/apis/uas-mgr/v1/uas', params={
   'uai_list': [
   "uai-asdfgh098",
   "uai-qwerty123"
 ]
-}, headers = headers)
+})
 
 print(r.json())
 
@@ -654,12 +627,8 @@ import (
 
 func main() {
 
-    headers := map[string][]string{
-        "Authorization": []string{"Bearer {access-token}"},
-    }
-
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/uas", data)
+    req, err := http.NewRequest("DELETE", "/apis/uas-mgr/v1/uas", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -689,9 +658,8 @@ associated UAI(s).
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAIs deleted|None|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Failed to delete UAI with {uai_id}|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="user-access-service-images">images</h1>
@@ -703,28 +671,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/images HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/uas-mgr/v1/images HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/images \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/uas-mgr/v1/images \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/uas-mgr/v1/images', headers = headers)
+r = requests.get('/apis/uas-mgr/v1/images', headers = headers)
 
 print(r.json())
 
@@ -742,11 +708,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/images", data)
+    req, err := http.NewRequest("GET", "/apis/uas-mgr/v1/images", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -782,9 +747,8 @@ List all available UAS images.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAS Image List|[Image_list](#schemaimage_list)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|UAS Images not found|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## create_uas_image_admin
@@ -794,28 +758,26 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images?imagename=docker.local%2Fcray%2Fcray-uas-sles15sp1%3Alatest HTTP/1.1
-Host: api-gw-service-nmn.local
+POST /apis/uas-mgr/v1/admin/config/images?imagename=docker.local%2Fcray%2Fcray-uas-sles15sp1%3Alatest HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images?imagename=docker.local%2Fcray%2Fcray-uas-sles15sp1%3Alatest \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X POST /apis/uas-mgr/v1/admin/config/images?imagename=docker.local%2Fcray%2Fcray-uas-sles15sp1%3Alatest \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images', params={
+r = requests.post('/apis/uas-mgr/v1/admin/config/images', params={
   'imagename': 'docker.local/cray/cray-uas-sles15sp1:latest'
 }, headers = headers)
 
@@ -835,11 +797,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images", data)
+    req, err := http.NewRequest("POST", "/apis/uas-mgr/v1/admin/config/images", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -882,9 +843,8 @@ upload container image.  Optionally, set default.
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Image added|[Image](#schemaimage)|
 |304|[Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1)|Image not added|string|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get_uas_images_admin
@@ -894,28 +854,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/uas-mgr/v1/admin/config/images HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/uas-mgr/v1/admin/config/images \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images', headers = headers)
+r = requests.get('/apis/uas-mgr/v1/admin/config/images', headers = headers)
 
 print(r.json())
 
@@ -933,11 +891,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images", data)
+    req, err := http.NewRequest("GET", "/apis/uas-mgr/v1/admin/config/images", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -985,9 +942,8 @@ Status Code **200**
 |» imagename|string|false|none|none|
 |» default|boolean|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get_uas_image_admin
@@ -997,28 +953,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images/{image_id} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/uas-mgr/v1/admin/config/images/{image_id} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images/{image_id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/uas-mgr/v1/admin/config/images/{image_id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images/{image_id}', headers = headers)
+r = requests.get('/apis/uas-mgr/v1/admin/config/images/{image_id}', headers = headers)
 
 print(r.json())
 
@@ -1036,11 +990,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images/{image_id}", data)
+    req, err := http.NewRequest("GET", "/apis/uas-mgr/v1/admin/config/images/{image_id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1086,9 +1039,8 @@ configuration.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAS Image|[Image](#schemaimage)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|UAS Image {image_id} not found|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## update_uas_image_admin
@@ -1098,28 +1050,26 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images/{image_id} HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH /apis/uas-mgr/v1/admin/config/images/{image_id} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images/{image_id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X PATCH /apis/uas-mgr/v1/admin/config/images/{image_id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images/{image_id}', headers = headers)
+r = requests.patch('/apis/uas-mgr/v1/admin/config/images/{image_id}', headers = headers)
 
 print(r.json())
 
@@ -1137,11 +1087,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images/{image_id}", data)
+    req, err := http.NewRequest("PATCH", "/apis/uas-mgr/v1/admin/config/images/{image_id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1192,9 +1141,8 @@ instance.
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Image updated|[Image](#schemaimage)|
 |304|[Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1)|No changes made|[Image](#schemaimage)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## delete_uas_image_admin
@@ -1204,28 +1152,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images/{image_id} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE /apis/uas-mgr/v1/admin/config/images/{image_id} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images/{image_id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE /apis/uas-mgr/v1/admin/config/images/{image_id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images/{image_id}', headers = headers)
+r = requests.delete('/apis/uas-mgr/v1/admin/config/images/{image_id}', headers = headers)
 
 print(r.json())
 
@@ -1243,11 +1189,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/images/{image_id}", data)
+    req, err := http.NewRequest("DELETE", "/apis/uas-mgr/v1/admin/config/images/{image_id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1293,9 +1238,8 @@ configuration.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Image removed|[Image](#schemaimage)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Failed to delete image {image_id}|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="user-access-service-mgr-info">mgr-info</h1>
@@ -1307,28 +1251,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/mgr-info HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/uas-mgr/v1/mgr-info HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/mgr-info \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/uas-mgr/v1/mgr-info \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/uas-mgr/v1/mgr-info', headers = headers)
+r = requests.get('/apis/uas-mgr/v1/mgr-info', headers = headers)
 
 print(r.json())
 
@@ -1346,11 +1288,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/mgr-info", data)
+    req, err := http.NewRequest("GET", "/apis/uas-mgr/v1/mgr-info", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1386,9 +1327,8 @@ Return User Access Service information.
 
 <h3 id="get_uas_mgr_info-responseschema">Response Schema</h3>
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="user-access-service-uais">uais</h1>
@@ -1400,28 +1340,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/uais HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/uas-mgr/v1/uais HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/uais \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/uas-mgr/v1/uais \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/uas-mgr/v1/uais', headers = headers)
+r = requests.get('/apis/uas-mgr/v1/uais', headers = headers)
 
 print(r.json())
 
@@ -1439,11 +1377,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/uais", data)
+    req, err := http.NewRequest("GET", "/apis/uas-mgr/v1/uais", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1485,9 +1422,8 @@ list UAIs that implements a superset of this functionality under the
 
 <h3 id="get_all_uais-responseschema">Response Schema</h3>
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## delete_all_uais
@@ -1497,25 +1433,20 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/uais HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE /apis/uas-mgr/v1/uais HTTP/1.1
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/uais \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE /apis/uas-mgr/v1/uais
 
 ```
 
 ```python
 import requests
-headers = {
-  'Authorization': 'Bearer {access-token}'
-}
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/uas-mgr/v1/uais', headers = headers)
+r = requests.delete('/apis/uas-mgr/v1/uais')
 
 print(r.json())
 
@@ -1531,12 +1462,8 @@ import (
 
 func main() {
 
-    headers := map[string][]string{
-        "Authorization": []string{"Bearer {access-token}"},
-    }
-
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/uais", data)
+    req, err := http.NewRequest("DELETE", "/apis/uas-mgr/v1/uais", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1568,9 +1495,8 @@ of the functionality found here.  This path is deprecated in favor of
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|All UAIs Deleted|None|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|No UAIs found|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="user-access-service-admin">admin</h1>
@@ -1582,28 +1508,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/uas-mgr/v1/admin/uais HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/uas-mgr/v1/admin/uais \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais', headers = headers)
+r = requests.get('/apis/uas-mgr/v1/admin/uais', headers = headers)
 
 print(r.json())
 
@@ -1621,11 +1545,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais", data)
+    req, err := http.NewRequest("GET", "/apis/uas-mgr/v1/admin/uais", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1711,9 +1634,8 @@ Status Code **200**
 |» uai_host|string|false|none|none|
 |» uai_age|string|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## create_uai_admin
@@ -1723,28 +1645,26 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais HTTP/1.1
-Host: api-gw-service-nmn.local
+POST /apis/uas-mgr/v1/admin/uais HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X POST /apis/uas-mgr/v1/admin/uais \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais', headers = headers)
+r = requests.post('/apis/uas-mgr/v1/admin/uais', headers = headers)
 
 print(r.json())
 
@@ -1762,11 +1682,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais", data)
+    req, err := http.NewRequest("POST", "/apis/uas-mgr/v1/admin/uais", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1861,9 +1780,8 @@ character.
 |---|---|---|---|
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|UAI Created|[UAI](#schemauai)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## delete_uais_admin
@@ -1873,28 +1791,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE /apis/uas-mgr/v1/admin/uais HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE /apis/uas-mgr/v1/admin/uais \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais', headers = headers)
+r = requests.delete('/apis/uas-mgr/v1/admin/uais', headers = headers)
 
 print(r.json())
 
@@ -1912,11 +1828,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais", data)
+    req, err := http.NewRequest("DELETE", "/apis/uas-mgr/v1/admin/uais", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2010,9 +1925,8 @@ Status Code **200**
 |» uai_host|string|false|none|none|
 |» uai_age|string|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get_uai_admin
@@ -2022,28 +1936,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais/{uai_name} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/uas-mgr/v1/admin/uais/{uai_name} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais/{uai_name} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/uas-mgr/v1/admin/uais/{uai_name} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais/{uai_name}', headers = headers)
+r = requests.get('/apis/uas-mgr/v1/admin/uais/{uai_name}', headers = headers)
 
 print(r.json())
 
@@ -2061,11 +1973,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/uais/{uai_name}", data)
+    req, err := http.NewRequest("GET", "/apis/uas-mgr/v1/admin/uais/{uai_name}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2119,9 +2030,8 @@ Retrieve information on the specified UAI.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAI Description|[UAI](#schemauai)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|UAI not found|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="user-access-service-config">config</h1>
@@ -2133,25 +2043,20 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE /apis/uas-mgr/v1/admin/config HTTP/1.1
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE /apis/uas-mgr/v1/admin/config
 
 ```
 
 ```python
 import requests
-headers = {
-  'Authorization': 'Bearer {access-token}'
-}
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config', headers = headers)
+r = requests.delete('/apis/uas-mgr/v1/admin/config')
 
 print(r.json())
 
@@ -2167,12 +2072,8 @@ import (
 
 func main() {
 
-    headers := map[string][]string{
-        "Authorization": []string{"Bearer {access-token}"},
-    }
-
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config", data)
+    req, err := http.NewRequest("DELETE", "/apis/uas-mgr/v1/admin/config", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2199,9 +2100,8 @@ with this request.
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Local configuration reset to defaults|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="user-access-service-volumes">volumes</h1>
@@ -2213,28 +2113,26 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes?volumename=my-mount&mount_path=%2Fmnt%2Ftest&volume_description=%7B%20%22config_map%22%3A%20%7B%20%22name%22%3A%20%22my-configmap%22%20%7D%20%7D HTTP/1.1
-Host: api-gw-service-nmn.local
+POST /apis/uas-mgr/v1/admin/config/volumes?volumename=my-mount&mount_path=%2Fmnt%2Ftest&volume_description=%7B%20%22config_map%22%3A%20%7B%20%22name%22%3A%20%22my-configmap%22%20%7D%20%7D HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes?volumename=my-mount&mount_path=%2Fmnt%2Ftest&volume_description=%7B%20%22config_map%22%3A%20%7B%20%22name%22%3A%20%22my-configmap%22%20%7D%20%7D \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X POST /apis/uas-mgr/v1/admin/config/volumes?volumename=my-mount&mount_path=%2Fmnt%2Ftest&volume_description=%7B%20%22config_map%22%3A%20%7B%20%22name%22%3A%20%22my-configmap%22%20%7D%20%7D \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes', params={
+r = requests.post('/apis/uas-mgr/v1/admin/config/volumes', params={
   'volumename': 'my-mount',  'mount_path': '/mnt/test',  'volume_description': '{ "config_map": { "name": "my-configmap" } }'
 }, headers = headers)
 
@@ -2254,11 +2152,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes", data)
+    req, err := http.NewRequest("POST", "/apis/uas-mgr/v1/admin/config/volumes", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2338,9 +2235,8 @@ or
 |304|[Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1)|Volume not added|string|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid type for host, volume not added|string|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get_uas_volumes_admin
@@ -2350,28 +2246,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/uas-mgr/v1/admin/config/volumes HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/uas-mgr/v1/admin/config/volumes \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes', headers = headers)
+r = requests.get('/apis/uas-mgr/v1/admin/config/volumes', headers = headers)
 
 print(r.json())
 
@@ -2389,11 +2283,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes", data)
+    req, err := http.NewRequest("GET", "/apis/uas-mgr/v1/admin/config/volumes", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2445,9 +2338,8 @@ Status Code **200**
 |» mount_path|string|false|none|none|
 |» volume_description|object|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get_uas_volume_admin
@@ -2457,28 +2349,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes/{volume_id} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/uas-mgr/v1/admin/config/volumes/{volume_id} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes/{volume_id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/uas-mgr/v1/admin/config/volumes/{volume_id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes/{volume_id}', headers = headers)
+r = requests.get('/apis/uas-mgr/v1/admin/config/volumes/{volume_id}', headers = headers)
 
 print(r.json())
 
@@ -2496,11 +2386,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes/{volume_id}", data)
+    req, err := http.NewRequest("GET", "/apis/uas-mgr/v1/admin/config/volumes/{volume_id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2547,9 +2436,8 @@ from the configuration.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAS Volume|[Volume](#schemavolume)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|UAS Volume {volumename} not found|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## update_uas_volume_admin
@@ -2559,28 +2447,26 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes/{volume_id} HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH /apis/uas-mgr/v1/admin/config/volumes/{volume_id} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes/{volume_id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X PATCH /apis/uas-mgr/v1/admin/config/volumes/{volume_id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes/{volume_id}', headers = headers)
+r = requests.patch('/apis/uas-mgr/v1/admin/config/volumes/{volume_id}', headers = headers)
 
 print(r.json())
 
@@ -2598,11 +2484,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes/{volume_id}", data)
+    req, err := http.NewRequest("PATCH", "/apis/uas-mgr/v1/admin/config/volumes/{volume_id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2691,9 +2576,8 @@ or
 |304|[Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1)|No changes made|[Volume](#schemavolume)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid type for host, volume not updated|string|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## delete_uas_volume_admin
@@ -2703,28 +2587,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes/{volume_id} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE /apis/uas-mgr/v1/admin/config/volumes/{volume_id} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes/{volume_id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE /apis/uas-mgr/v1/admin/config/volumes/{volume_id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes/{volume_id}', headers = headers)
+r = requests.delete('/apis/uas-mgr/v1/admin/config/volumes/{volume_id}', headers = headers)
 
 print(r.json())
 
@@ -2742,11 +2624,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/volumes/{volume_id}", data)
+    req, err := http.NewRequest("DELETE", "/apis/uas-mgr/v1/admin/config/volumes/{volume_id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2795,9 +2676,8 @@ from the configuration.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Volume removed from list|[Volume](#schemavolume)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Failed to delete volume {volume_id}|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="user-access-service-resources">resources</h1>
@@ -2809,28 +2689,26 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources HTTP/1.1
-Host: api-gw-service-nmn.local
+POST /apis/uas-mgr/v1/admin/config/resources HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X POST /apis/uas-mgr/v1/admin/config/resources \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources', headers = headers)
+r = requests.post('/apis/uas-mgr/v1/admin/config/resources', headers = headers)
 
 print(r.json())
 
@@ -2848,11 +2726,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources", data)
+    req, err := http.NewRequest("POST", "/apis/uas-mgr/v1/admin/config/resources", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2918,9 +2795,8 @@ Millicpus and 250 Mibibytes of memory:
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Resource configuration added|[Resource](#schemaresource)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid limit or request specified|string|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get_uas_resources_admin
@@ -2930,28 +2806,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/uas-mgr/v1/admin/config/resources HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/uas-mgr/v1/admin/config/resources \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources', headers = headers)
+r = requests.get('/apis/uas-mgr/v1/admin/config/resources', headers = headers)
 
 print(r.json())
 
@@ -2969,11 +2843,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources", data)
+    req, err := http.NewRequest("GET", "/apis/uas-mgr/v1/admin/config/resources", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3023,9 +2896,8 @@ Status Code **200**
 |» limit|string|false|none|none|
 |» request|string|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get_uas_resource_admin
@@ -3035,28 +2907,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources/{resource_id} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/uas-mgr/v1/admin/config/resources/{resource_id} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources/{resource_id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/uas-mgr/v1/admin/config/resources/{resource_id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources/{resource_id}', headers = headers)
+r = requests.get('/apis/uas-mgr/v1/admin/config/resources/{resource_id}', headers = headers)
 
 print(r.json())
 
@@ -3074,11 +2944,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources/{resource_id}", data)
+    req, err := http.NewRequest("GET", "/apis/uas-mgr/v1/admin/config/resources/{resource_id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3126,9 +2995,8 @@ config to be retrieved from the configuration.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Resource Limit / Request Configuration Item|[Resource](#schemaresource)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Resource Configuration {resource_id} not found|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## update_uas_resource_admin
@@ -3138,28 +3006,26 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources/{resource_id} HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH /apis/uas-mgr/v1/admin/config/resources/{resource_id} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources/{resource_id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X PATCH /apis/uas-mgr/v1/admin/config/resources/{resource_id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources/{resource_id}', headers = headers)
+r = requests.patch('/apis/uas-mgr/v1/admin/config/resources/{resource_id}', headers = headers)
 
 print(r.json())
 
@@ -3177,11 +3043,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources/{resource_id}", data)
+    req, err := http.NewRequest("PATCH", "/apis/uas-mgr/v1/admin/config/resources/{resource_id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3249,9 +3114,8 @@ Millicpus and 250 Mibibytes of memory:
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Resource updated|[Resource](#schemaresource)|
 |304|[Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1)|No changes made|[Resource](#schemaresource)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## delete_uas_resource_admin
@@ -3261,28 +3125,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources/{resource_id} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE /apis/uas-mgr/v1/admin/config/resources/{resource_id} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources/{resource_id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE /apis/uas-mgr/v1/admin/config/resources/{resource_id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources/{resource_id}', headers = headers)
+r = requests.delete('/apis/uas-mgr/v1/admin/config/resources/{resource_id}', headers = headers)
 
 print(r.json())
 
@@ -3300,11 +3162,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/resources/{resource_id}", data)
+    req, err := http.NewRequest("DELETE", "/apis/uas-mgr/v1/admin/config/resources/{resource_id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3352,9 +3213,8 @@ configuration to be removed from the configuration.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Resource configuration removed|[Resource](#schemaresource)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Failed to delete resource configuration {resource_id}|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="user-access-service-classes">classes</h1>
@@ -3366,28 +3226,26 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes?image_id=af4e59ab-6275-47f9-8f4a-90911eba3f9c HTTP/1.1
-Host: api-gw-service-nmn.local
+POST /apis/uas-mgr/v1/admin/config/classes?image_id=af4e59ab-6275-47f9-8f4a-90911eba3f9c HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes?image_id=af4e59ab-6275-47f9-8f4a-90911eba3f9c \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X POST /apis/uas-mgr/v1/admin/config/classes?image_id=af4e59ab-6275-47f9-8f4a-90911eba3f9c \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes', params={
+r = requests.post('/apis/uas-mgr/v1/admin/config/classes', params={
   'image_id': 'af4e59ab-6275-47f9-8f4a-90911eba3f9c'
 }, headers = headers)
 
@@ -3407,11 +3265,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes", data)
+    req, err := http.NewRequest("POST", "/apis/uas-mgr/v1/admin/config/classes", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3621,9 +3478,8 @@ connections.
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|UAI / Broker Class added|[UAIClass](#schemauaiclass)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Invalid UAI / Broker Class specified|string|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get_uas_classes_admin
@@ -3633,28 +3489,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/uas-mgr/v1/admin/config/classes HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/uas-mgr/v1/admin/config/classes \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes', headers = headers)
+r = requests.get('/apis/uas-mgr/v1/admin/config/classes', headers = headers)
 
 print(r.json())
 
@@ -3672,11 +3526,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes", data)
+    req, err := http.NewRequest("GET", "/apis/uas-mgr/v1/admin/config/classes", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3780,9 +3633,8 @@ Status Code **200**
 |»»» mount_path|string|false|none|none|
 |»»» volume_description|object|false|none|none|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get_uas_class_admin
@@ -3792,28 +3644,26 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes/{class_id} HTTP/1.1
-Host: api-gw-service-nmn.local
+GET /apis/uas-mgr/v1/admin/config/classes/{class_id} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes/{class_id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET /apis/uas-mgr/v1/admin/config/classes/{class_id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes/{class_id}', headers = headers)
+r = requests.get('/apis/uas-mgr/v1/admin/config/classes/{class_id}', headers = headers)
 
 print(r.json())
 
@@ -3831,11 +3681,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes/{class_id}", data)
+    req, err := http.NewRequest("GET", "/apis/uas-mgr/v1/admin/config/classes/{class_id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -3913,9 +3762,8 @@ from the configuration.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|UAI / Broker Class|[UAIClass](#schemauaiclass)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|UAI / Broker Class {class_id} not found|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## update_uas_class_admin
@@ -3925,28 +3773,26 @@ bearerAuth
 > Code samples
 
 ```http
-PATCH https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes/{class_id} HTTP/1.1
-Host: api-gw-service-nmn.local
+PATCH /apis/uas-mgr/v1/admin/config/classes/{class_id} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X PATCH https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes/{class_id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X PATCH /apis/uas-mgr/v1/admin/config/classes/{class_id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.patch('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes/{class_id}', headers = headers)
+r = requests.patch('/apis/uas-mgr/v1/admin/config/classes/{class_id}', headers = headers)
 
 print(r.json())
 
@@ -3964,11 +3810,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes/{class_id}", data)
+    req, err := http.NewRequest("PATCH", "/apis/uas-mgr/v1/admin/config/classes/{class_id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -4176,9 +4021,8 @@ connections.
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|UAI / Broker Class updated|[UAIClass](#schemauaiclass)|
 |304|[Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1)|No changes made|[UAIClass](#schemauaiclass)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## delete_uas_class_admin
@@ -4188,28 +4032,26 @@ bearerAuth
 > Code samples
 
 ```http
-DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes/{class_id} HTTP/1.1
-Host: api-gw-service-nmn.local
+DELETE /apis/uas-mgr/v1/admin/config/classes/{class_id} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X DELETE https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes/{class_id} \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X DELETE /apis/uas-mgr/v1/admin/config/classes/{class_id} \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.delete('https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes/{class_id}', headers = headers)
+r = requests.delete('/apis/uas-mgr/v1/admin/config/classes/{class_id}', headers = headers)
 
 print(r.json())
 
@@ -4227,11 +4069,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/uas-mgr/v1/admin/config/classes/{class_id}", data)
+    req, err := http.NewRequest("DELETE", "/apis/uas-mgr/v1/admin/config/classes/{class_id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -4278,9 +4119,8 @@ removed from the configuration.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Resource configuration removed|[Resource](#schemaresource)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Failed to delete resource configuration {resource_id}|None|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 # Schemas

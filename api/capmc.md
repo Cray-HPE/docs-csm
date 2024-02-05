@@ -63,11 +63,7 @@ This implementation of CAPMC uses Redfish APIs to communicate directly with the 
 
 Base URLs:
 
-* <a href="https://api-gw-service-nmn.local/apis/capmc/capmc/v1">https://api-gw-service-nmn.local/apis/capmc/capmc/v1</a>
-
-# Authentication
-
-- HTTP Authentication, scheme: bearer 
+* <a href="http://api-gw-service-nmn.local/apis/capmc/capmc/v1">http://api-gw-service-nmn.local/apis/capmc/capmc/v1</a>
 
 <h1 id="cray-advanced-platform-monitoring-and-control-capmc--component-control">component control</h1>
 
@@ -76,7 +72,7 @@ Base URLs:
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_xname_status HTTP/1.1
+POST http://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_xname_status HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -85,10 +81,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_xname_status \
+curl -X POST http://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_xname_status \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -96,11 +91,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_xname_stat
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_xname_status', headers = headers)
+r = requests.post('http://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_xname_status', headers = headers)
 
 print(r.json())
 
@@ -119,11 +113,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_xname_status", data)
+    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_xname_status", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -225,9 +218,8 @@ Status Code **200**
 |» ready|[string]|false|none|Optional, list of booted components by xname. Operating system is fully booted and sending heartbeats.|
 |» standby|[string]|false|none|Optional, list of components in standby by xname. Components that were previously booted and but are no longer sending heartbeat.|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__xname_reinit
@@ -235,7 +227,7 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_reinit HTTP/1.1
+POST http://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_reinit HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -244,10 +236,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_reinit \
+curl -X POST http://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_reinit \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -255,11 +246,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_reinit \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_reinit', headers = headers)
+r = requests.post('http://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_reinit', headers = headers)
 
 print(r.json())
 
@@ -278,11 +268,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_reinit", data)
+    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_reinit", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -373,9 +362,8 @@ Status Code **200**
 |»» err_msg|string|true|none|Message indicating any error encountered.|
 |»» xname|string|true|none|Component ID failing power restart attempt.|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__xname_on
@@ -383,7 +371,7 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_on HTTP/1.1
+POST http://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_on HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -392,10 +380,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_on \
+curl -X POST http://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_on \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -403,11 +390,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_on \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_on', headers = headers)
+r = requests.post('http://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_on', headers = headers)
 
 print(r.json())
 
@@ -426,11 +412,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_on", data)
+    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_on", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -525,9 +510,8 @@ Status Code **200**
 |»» err_msg|string|true|none|Message indicating any error encountered.|
 |»» xname|string|true|none|Component ID failing power up attempt.|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__xname_off
@@ -535,7 +519,7 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_off HTTP/1.1
+POST http://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_off HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -544,10 +528,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_off \
+curl -X POST http://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_off \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -555,11 +538,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_off \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_off', headers = headers)
+r = requests.post('http://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_off', headers = headers)
 
 print(r.json())
 
@@ -578,11 +560,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_off", data)
+    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/capmc/capmc/v1/xname_off", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -677,9 +658,8 @@ Status Code **200**
 |»» e|integer(int32)|true|none|Non-zero status code for failed request.|
 |»» err_msg|string|true|none|Message indicating any error encountered.|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="cray-advanced-platform-monitoring-and-control-capmc--power-capping">power capping</h1>
@@ -689,7 +669,7 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap HTTP/1.1
+POST http://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -698,10 +678,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap \
+curl -X POST http://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -709,11 +688,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap 
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap', headers = headers)
+r = requests.post('http://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap', headers = headers)
 
 print(r.json())
 
@@ -732,11 +710,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap", data)
+    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -839,9 +816,8 @@ Status Code **200**
 |»»» name|string|true|none|Unique control or status object identifier.|
 |»»» val|integer(int32)|true|none|Control object setting, or zero to indicate control is unconstrained, units are dependent upon control type.|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__get_power_cap_capabilities
@@ -849,7 +825,7 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap_capabilities HTTP/1.1
+POST http://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap_capabilities HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -858,10 +834,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap_capabilities \
+curl -X POST http://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap_capabilities \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -869,11 +844,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap_
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap_capabilities', headers = headers)
+r = requests.post('http://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap_capabilities', headers = headers)
 
 print(r.json())
 
@@ -892,11 +866,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap_capabilities", data)
+    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/capmc/capmc/v1/get_power_cap_capabilities", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1023,9 +996,8 @@ Status Code **200**
 |»»» min|integer(int32)|true|none|Minimum value which may be assigned to the control object, units are dependent upon control type.|
 |»»» max|integer(int32)|true|none|Maximum value which may be assigned to the control object, units are dependent upon control type.|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## post__set_power_cap
@@ -1033,7 +1005,7 @@ bearerAuth
 > Code samples
 
 ```http
-POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/set_power_cap HTTP/1.1
+POST http://api-gw-service-nmn.local/apis/capmc/capmc/v1/set_power_cap HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -1042,10 +1014,9 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/set_power_cap \
+curl -X POST http://api-gw-service-nmn.local/apis/capmc/capmc/v1/set_power_cap \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+  -H 'Accept: application/json'
 
 ```
 
@@ -1053,11 +1024,10 @@ curl -X POST https://api-gw-service-nmn.local/apis/capmc/capmc/v1/set_power_cap 
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.post('https://api-gw-service-nmn.local/apis/capmc/capmc/v1/set_power_cap', headers = headers)
+r = requests.post('http://api-gw-service-nmn.local/apis/capmc/capmc/v1/set_power_cap', headers = headers)
 
 print(r.json())
 
@@ -1076,11 +1046,10 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/capmc/capmc/v1/set_power_cap", data)
+    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/capmc/capmc/v1/set_power_cap", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1187,9 +1156,8 @@ Status Code **200**
 |»» e|integer(int32)|true|none|Error status, non-zero indicates operation failed on this node.|
 |»» err_msg|string|true|none|Message indicating any error encountered.|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 <h1 id="cray-advanced-platform-monitoring-and-control-capmc--utilities">utilities</h1>
@@ -1199,7 +1167,7 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/capmc/capmc/v1/health HTTP/1.1
+GET http://api-gw-service-nmn.local/apis/capmc/capmc/v1/health HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
 
@@ -1207,20 +1175,18 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/capmc/capmc/v1/health \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET http://api-gw-service-nmn.local/apis/capmc/capmc/v1/health \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/capmc/capmc/v1/health', headers = headers)
+r = requests.get('http://api-gw-service-nmn.local/apis/capmc/capmc/v1/health', headers = headers)
 
 print(r.json())
 
@@ -1238,11 +1204,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/capmc/capmc/v1/health", data)
+    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/capmc/capmc/v1/health", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1294,9 +1259,8 @@ Status Code **200**
 |» vault|string|true|none|Description of the connection to the credentials vault.  If there is an error returned when attempting to access the vault that will be included here.|
 |» hsm|string|true|none|Status of the connection to the Hardware State Manager (HSM).  Any error reported by an attempt to access the HSM will be included in this description.|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get__liveness
@@ -1304,7 +1268,7 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/capmc/capmc/v1/liveness HTTP/1.1
+GET http://api-gw-service-nmn.local/apis/capmc/capmc/v1/liveness HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
 
@@ -1312,20 +1276,18 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/capmc/capmc/v1/liveness \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET http://api-gw-service-nmn.local/apis/capmc/capmc/v1/liveness \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/capmc/capmc/v1/liveness', headers = headers)
+r = requests.get('http://api-gw-service-nmn.local/apis/capmc/capmc/v1/liveness', headers = headers)
 
 print(r.json())
 
@@ -1343,11 +1305,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/capmc/capmc/v1/liveness", data)
+    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/capmc/capmc/v1/liveness", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1383,9 +1344,8 @@ This is primarily an endpoint for the automated Kubernetes system.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|[Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)|[httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 ## get__readiness
@@ -1393,7 +1353,7 @@ bearerAuth
 > Code samples
 
 ```http
-GET https://api-gw-service-nmn.local/apis/capmc/capmc/v1/readiness HTTP/1.1
+GET http://api-gw-service-nmn.local/apis/capmc/capmc/v1/readiness HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
 
@@ -1401,20 +1361,18 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X GET https://api-gw-service-nmn.local/apis/capmc/capmc/v1/readiness \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
+curl -X GET http://api-gw-service-nmn.local/apis/capmc/capmc/v1/readiness \
+  -H 'Accept: application/json'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
+  'Accept': 'application/json'
 }
 
-r = requests.get('https://api-gw-service-nmn.local/apis/capmc/capmc/v1/readiness', headers = headers)
+r = requests.get('http://api-gw-service-nmn.local/apis/capmc/capmc/v1/readiness', headers = headers)
 
 print(r.json())
 
@@ -1432,11 +1390,10 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/capmc/capmc/v1/readiness", data)
+    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/capmc/capmc/v1/readiness", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1472,9 +1429,8 @@ This is primarily an endpoint for the automated Kubernetes system.
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|[Method Not Allowed](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.6)|[httpError405_MethodNotAllowed](#schemahttperror405_methodnotallowed)|
 
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
+<aside class="success">
+This operation does not require authentication
 </aside>
 
 # Schemas
