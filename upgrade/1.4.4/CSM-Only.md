@@ -60,7 +60,7 @@ choose option 2.**
        ```bash
        TSTAMP=$(date "+%Y%m%d%H%M%S")
        K8S_CFS_SESSION_NAME="management-kubernetes-${CSM_RELEASE}-${TSTAMP}"
-       STOR_CFS_SESSION_NAME="management-storage-${CSM_RELEASE}-${TSTAMP}"
+       CEPH_CFS_SESSION_NAME="management-storage-${CSM_RELEASE}-${TSTAMP}"
        ```
 
     1. Build customized master node images.
@@ -85,7 +85,7 @@ choose option 2.**
            --target-definition image \
            --target-image-map "$STORAGE_IMAGE_ID" "management-storage-${CSM_RELEASE}" \
            --configuration-name "management-${CSM_RELEASE}" \
-           --name "${STOR_CFS_SESSION_NAME}" \
+           --name "${CEPH_CFS_SESSION_NAME}" \
            --format json
        ```
 
@@ -96,7 +96,7 @@ choose option 2.**
    ```bash
    watch '
    cray cfs sessions describe "${K8S_CFS_SESSION_NAME}" --format json | jq -r ".status.session.succeeded"
-   cray cfs sessions describe "${STOR_CFS_SESSION_NAME}" --format json | jq -r ".status.session.succeeded"
+   cray cfs sessions describe "${CEPH_CFS_SESSION_NAME}" --format json | jq -r ".status.session.succeeded"
    '
    ```
 
@@ -120,7 +120,7 @@ choose option 2.**
     * Storage image IMS ID
 
       ```bash
-      NEW_STORAGE_IMAGE_ID="$(cray cfs sessions describe "${STOR_CFS_SESSION_NAME}" --format json | jq -r '.status.artifacts[].image_id')"
+      NEW_STORAGE_IMAGE_ID="$(cray cfs sessions describe "${CEPH_CFS_SESSION_NAME}" --format json | jq -r '.status.artifacts[].image_id')"
       export NEW_STORAGE_IMAGE_ID
       echo "NEW_STORAGE_IMAGE_ID=$NEW_STORAGE_IMAGE_ID"
       ```
