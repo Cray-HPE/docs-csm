@@ -156,7 +156,6 @@ for xname in "${xnames[@]}"; do
   fi
   params=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' \
     | sed "/metal.server/ s|${current_rootfs_url}|${rootfs_url}|" \
-    | sed "s/metal.no-wipe=1/metal.no-wipe=0/" \
     | tr -d \")
   if [ -z "$params" ]; then
     echo "ERROR - Failed to create new boot parameters for $xname! Skipping ... "
