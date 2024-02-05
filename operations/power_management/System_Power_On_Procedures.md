@@ -41,3 +41,8 @@ To power on and boot compute nodes and UANs, refer to [Power On and Boot Compute
 ## Run system health checks
 
 After power on, refer to [Validate CSM Health](../validate_csm_health.md) to check system health and status.
+
+## Make nodes available to user 
+
+Make nodes available to customers once system health and any other post-system maintenance checkes have completed..
+

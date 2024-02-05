@@ -376,8 +376,6 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
       kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible
       ```
 
-1. Make nodes available to customers and refer to [Validate CSM Health](../validate_csm_health.md) to check system health and status.
-
 ## Next step
 
 Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.

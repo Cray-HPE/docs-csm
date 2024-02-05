@@ -104,6 +104,8 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    Example output:
 
    ```text
+   Proceed with stopping platform services? [yes,no] yes
+   Proceeding with stopping platform services.
    The following Non-compute Nodes (NCNs) will be included in this operation:
    managers:
    - ncn-m001
@@ -136,7 +138,7 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    ```
 
    In the preceding example, the commands to stop containers timed out on all the worker nodes and reported `WARNING` and `ERROR` messages.
-   A summary of the issue displays and prompts the user to continue or stop. Respond `no` stop the shutdown. Then review the containers running on the nodes.
+   A summary of the issue displays and prompts the user to continue or stop. Respond `no` to stop the shutdown. Then review the containers running on the nodes.
 
    ```bash
    for ncn in $(echo $WORKERS | sed 's/,/ /g'); do echo "${ncn}"; ssh "${ncn}" "crictl ps"; echo; done
