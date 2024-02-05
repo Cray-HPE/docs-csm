@@ -62,20 +62,20 @@ choose option 2.**
            --target-group Management_Master \
            "$KUBERNETES_IMAGE_ID" \
            --target-definition image \
-           --target-image-map "$KUBERNETES_IMAGE_ID" "" \
+           --target-image-map "$KUBERNETES_IMAGE_ID" "management-kubernetes-${CSM_RELEASE}" \
            --configuration-name "management-${CSM_RELEASE}" \
            --name "management-kubernetes-${CSM_RELEASE}-upgrade" \
            --format json
        ```
 
-    1. Build storage images.
+    1. Build customized storage node images.
 
        ```bash
        cray cfs sessions create \
            --target-group Management_Storage \
            "$STORAGE_IMAGE_ID" \
            --target-definition image \
-           --target-image-map "$STORAGE_IMAGE_ID" "" \
+           --target-image-map "$STORAGE_IMAGE_ID" "management-storage-${CSM_RELEASE}" \
            --configuration-name "management-${CSM_RELEASE}" \
            --name "management-storage-${CSM_RELEASE}-upgrade" \
            --format json
