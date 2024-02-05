@@ -82,13 +82,13 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
        If it is unclear what BOS session template is in use, proceed to the next substep.
 
        ```bash
-       cray bos sessiontemplates list | grep name | sort
+       cray bos sessiontemplates list --format json | jq -r '.[].name' | sort
        ```
 
     1. Find the BOS session templates used most recently to boot nodes.
 
        ```bash
-       sat status --filter role!=management --fields xname,"most recent session template"
+       sat status --filter role!=management --fields xname,role,subrole,"most recent session template"
        ```
 
        Example output:
@@ -208,9 +208,9 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         Additional Kubernetes status check examples:
 
         ```bash
-        kubectl get pods -o wide -A | egrep  "CrashLoopBackOff" > k8s.pods.CLBO
-        kubectl get pods -o wide -A | egrep  "ContainerCreating" > k8s.pods.CC
-        kubectl get pods -o wide -A | egrep -v "Run|Completed" > k8s.pods.errors
+        kubectl get pods -o wide -A | egrep  "CrashLoopBackOff" | tee -a k8s.pods.CLBO
+        kubectl get pods -o wide -A | egrep  "ContainerCreating" | tee -a k8s.pods.CC
+        kubectl get pods -o wide -A | egrep -v "Run|Completed" | tee -a k8s.pods.errors
         ```
 
     1. Check HSN status.
@@ -242,6 +242,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         1. (`ncn-mw#`) Use CANU to confirm that all switches are reachable. Reachable switches have their
            version information populated in the network version report.
 
+           Provide the password for the admin username on the management network switches.
+
            ```bash
            canu report network version
            ```
@@ -249,6 +251,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
            Example output:
 
            ```text
+           Password:
            SWITCH            CANU VERSION      CSM VERSION
            sw-spine-001      1.6.20             1.4
            sw-spine-002      1.6.20             1.4

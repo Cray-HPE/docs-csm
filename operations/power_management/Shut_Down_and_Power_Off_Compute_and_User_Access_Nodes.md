@@ -15,17 +15,15 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
    Identify the BOS session template names such as `compute-23.7.0` and `uan-23.7.0`, and choose the appropriate compute and UAN node templates for the shutdown.
 
    ```bash
-   cray bos sessiontemplates list --format toml | grep name
+   cray bos sessiontemplates list --format json | jq -r '.[].name' | sort
    ```
 
    Example output excerpts:
 
    ```text
-   name = "compute-23.7.0"
-
+   compute-23.7.0
    [...]
-
-   name = "uan-23.7.0"
+   uan-23.7.0
    ```
 
 1. (`ncn-mw#`) To display more information about a session template, for example `compute-23.7.0`, use the `describe` option.

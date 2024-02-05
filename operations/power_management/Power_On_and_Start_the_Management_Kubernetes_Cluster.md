@@ -126,8 +126,10 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
    workers: []
 
    Are the above NCN groupings and exclusions correct? [yes,no] yes
-
-   Powering on NCNs and waiting up to 300 seconds for them to be reachable via SSH: ncn-m002, ncn-m003
+   INFO: Starting console logging on ncn-s003,ncn-s001,ncn-w002,ncn-m003,ncn-w004,ncn-m002,ncn-s002,ncn-w001,ncn-w003.
+   Powering on NCNs and waiting up to 900 seconds for them to be reachable via SSH: ncn-m002, ncn-m003
+   INFO: Sending IPMI power on command to host ncn-m003
+   INFO: Sending IPMI power on command to host ncn-m002
    Waiting for condition "Hosts accessible via SSH" timed out after 300 seconds
    ERROR: Unable to reach the following NCNs via SSH after powering them on: ncn-m003, ncn-s002.. Troubleshoot the issue and then try again.
    ```

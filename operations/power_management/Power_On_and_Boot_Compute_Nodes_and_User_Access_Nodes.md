@@ -104,7 +104,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     Identify the BOS session template names (such as `"compute-23.7.0"` or `uan-23.7.0`), and choose the appropriate compute and UAN node templates for the power on and boot.
 
     ```bash
-    cray bos sessiontemplates list --format json | jq -r '.[].name'
+    cray bos sessiontemplates list --format json | jq -r '.[].name' | sort
     ```
 
     Example output excerpts:

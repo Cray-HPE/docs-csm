@@ -362,7 +362,7 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    1. Shutdown storage nodes third by excluding master and storage nodes from the `sat bootsys shutdown --stage ncn-power` command.
 
       ```bash
-      sat bootsys shutdown --stage ncn-power --excluded-ncns "${MASTERS},${STORAGE}" --ncn-shutdown-timeout 900
+      sat bootsys shutdown --stage ncn-power --excluded-ncns "${MASTERS},${WORKERS}" --ncn-shutdown-timeout 900
       ```
 
       Example output:
@@ -438,6 +438,12 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 1. (`external#`) From a remote system, activate the serial console for `ncn-m001`.
 
     ```bash
+    USERNAME=root
+    read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
+    ```
+
+    ```bash
+    export IPMI_PASSWORD
     ipmitool -I lanplus -U "${USERNAME}" -E -H NCN-M001_BMC_HOSTNAME sol activate
     ```
 
@@ -457,11 +463,13 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
     ipmitool -I lanplus -U "${USERNAME}" -E -H NCN-M001_BMC_HOSTNAME chassis power status
     ```
 
+1. (Optional) Power down Modular coolant distribution unit (MDCU) in a liquid-cooled HPE Cray EX20000 cabinet.
+
     **CAUTION:** The modular coolant distribution unit \(MDCU\) in a liquid-cooled HPE Cray EX2000 cabinet (also referred to as a Hill or TDS cabinet) typically receives power from its management
     cabinet PDUs. If the system includes an EX2000 cabinet, then **do not power off** the management cabinet PDUs. Powering off the MDCU will cause an emergency power off \(EPO\) of the cabinet and
     may result in data loss or equipment damage.
 
-1. (Optional) If a liquid-cooled EX2000 cabinet is not receiving MCDU power from this management cabinet, then power off the PDU circuit breakers or disconnect the PDUs from facility power and
+    1. (Optional) If a liquid-cooled EX2000 cabinet is not receiving MCDU power from this management cabinet, then power off the PDU circuit breakers or disconnect the PDUs from facility power and
    follow lock out/tag out procedures for the site.
 
 ## Next step
