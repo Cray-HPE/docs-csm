@@ -438,6 +438,8 @@ Verify that the Lustre file system is available from the management cluster.
 
 1. (`ncn-m001#`) Determine whether the `cfs-state-reporter` service is failing to start on each manager/master and worker NCN while trying to contact CFS.
 
+    **Note:** The `systemctl` command run on each node may have `exit code 3` reported, this does not indicate a problem with `cfs-state-reporter` on that node..
+
     ```bash
     pdsh -w $(kubectl get nodes | grep -v NAME | awk '{print $1}' | xargs | sed 's/ /,/g') systemctl status cfs-state-reporter | grep "Active: activating"
     ```
@@ -445,6 +447,13 @@ Verify that the Lustre file system is available from the management cluster.
     Example output:
 
     ```text
+    pdsh@ncn-m001: ncn-m002: ssh exited with exit code 3
+    pdsh@ncn-m001: ncn-m003: ssh exited with exit code 3
+    pdsh@ncn-m001: ncn-w001: ssh exited with exit code 3
+    pdsh@ncn-m001: ncn-w002: ssh exited with exit code 3
+    pdsh@ncn-m001: ncn-w004: ssh exited with exit code 3
+    pdsh@ncn-m001: ncn-w003: ssh exited with exit code 3
+    pdsh@ncn-m001: ncn-m001: ssh exited with exit code 3
     ncn-w001:    Active: activating (start) since Thu 2021-03-18 22:29:15 UTC; 21h ago
     ```
 
@@ -491,7 +500,7 @@ Verify that the Lustre file system is available from the management cluster.
     operators     kube-etcd-defrag-cray-hbtd-etcd   0 */4 * * *    False     0        178m            29d
     operators     kube-etcd-periodic-backup-cron    0 * * * *      False     0        58m             29d
     services      cray-dns-unbound-manager          */3 * * * *    False     0        63s             18h
-    services      hms-discovery                     */3 * * * *    False     1        63s             18h
+    services      hms-discovery                     */3 * * * *    True      1        63s             18h
     services      hms-postgresql-pruner             */5 * * * *    False     0        3m3s            18h
     services      sonar-sync                        */1 * * * *    False     0        63s             18h
     sma           sma-pgdb-cron                     10 4 * * *     False     0        14h             27d

@@ -170,6 +170,8 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    The following Non-compute Nodes (NCNs) will be included in this operation:
    managers:
    - ncn-m001
+   - ncn-m002
+   - ncn-m003
    storage:
    - ncn-s001
    - ncn-s002
@@ -208,86 +210,10 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
     for `NCN_SHUTDOWN_TIMEOUT`. Once this timeout has been exceeded, the node will be forcefully
     powered down.
 
-   1. Shutdown worker nodes first by excluding master and storage nodes from the `sat bootsys shutdown --stage ncn-power` command.
+   1. Shutdown management NCNs.
 
       ```bash
-      sat bootsys shutdown --stage ncn-power --excluded-ncns "${MASTERS},${STORAGE}" --ncn-shutdown-timeout 900
-      ```
-
-      Example output:
-
-      ```text
-      Proceed with shutdown of other management NCNs? [yes,no] yes
-      Proceeding with shutdown of other management NCNs.
-      IPMI username: root
-      IPMI password:
-      The following Non-compute Nodes (NCNs) will be included in this operation:
-      managers: []
-      storage: []
-      workers:
-      - ncn-w001
-      - ncn-w002
-      - ncn-w003
-
-      The following Non-compute Nodes (NCNs) will be excluded from this operation:
-      managers:
-      - ncn-m001
-      - ncn-m002
-      - ncn-m003
-      storage:
-      - ncn-s001
-      - ncn-s002
-      - ncn-s003
-      workers: []
-
-      Are the above NCN groupings and exclusions correct? [yes,no] yes
-      ```
-
-   1. (`ncn-m001#`) Monitor the consoles for each NCN.
-
-      Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
-
-      Alternately attach to the screen session \(screen sessions real time, but not saved\):
-
-      ```bash
-      screen -ls
-      ```
-
-      Example output:
-
-      ```text
-      There are screens on:
-      26552.SAT-console-ncn-w003-mgmt (Detached)
-      26514.SAT-console-ncn-w002-mgmt (Detached)
-      26444.SAT-console-ncn-w001-mgmt (Detached)
-      ```
-
-      ```bash
-      screen -x 26745.SAT-console-ncn-w003-mgmt
-      ```
-
-   1. (`ncn-m001#`) Check the power off status of management NCNs.
-
-       > NOTE: `read -s` is used to read the password in order to prevent it from being
-       > echoed to the screen or preserved in the shell history.
-
-       ```bash
-       USERNAME=root
-       read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
-       ```
-
-       ```bash
-       export IPMI_PASSWORD
-       for ncn in $(echo "$MASTERS,$STORAGE,$WORKERS" | sed 's/,/ /g'); do
-           echo -n "${ncn}: "
-           ipmitool -U "${USERNAME}" -H "${ncn}-mgmt" -E -I lanplus chassis power status
-       done
-       ```
-
-   1. Shutdown master nodes second by excluding worker (already shutdown) and storage nodes from the `sat bootsys shutdown --stage ncn-power` command.
-
-      ```bash
-      sat bootsys shutdown --stage ncn-power --excluded-ncns "${WORKERS},${STORAGE}" --ncn-shutdown-timeout 900
+      sat bootsys shutdown --stage ncn-power --ncn-shutdown-timeout 900
       ```
 
       Example output:
@@ -301,13 +227,7 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
       managers:
       - ncn-m002
       - ncn-m003
-      storage: []
-      workers: []
-
-      The following Non-compute Nodes (NCNs) will be excluded from this operation:
-      managers:
-      - ncn-m001
-      storage:
+      storage: 
       - ncn-s001
       - ncn-s002
       - ncn-s003
@@ -315,6 +235,12 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
       - ncn-w001
       - ncn-w002
       - ncn-w003
+
+      The following Non-compute Nodes (NCNs) will be excluded from this operation:
+      managers:
+      - ncn-m001
+      storage: []
+      workers: []
 
       Are the above NCN groupings and exclusions correct? [yes,no] yes
       ```
@@ -335,86 +261,16 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
       There are screens on:
       26745.SAT-console-ncn-m003-mgmt (Detached)
       26706.SAT-console-ncn-m002-mgmt (Detached)
-      ```
-
-      ```bash
-      screen -x 26745.SAT-console-ncn-m003-mgmt
-      ```
-
-   1. (`ncn-m001#`) Check the power off status of management NCNs.
-
-       > NOTE: `read -s` is used to read the password in order to prevent it from being
-       > echoed to the screen or preserved in the shell history.
-
-       ```bash
-       USERNAME=root
-       read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
-       ```
-
-       ```bash
-       export IPMI_PASSWORD
-       for ncn in $(echo "$MASTERS,$STORAGE,$WORKERS" | sed 's/,/ /g'); do
-           echo -n "${ncn}: "
-           ipmitool -U "${USERNAME}" -H "${ncn}-mgmt" -E -I lanplus chassis power status
-       done
-       ```
-
-   1. Shutdown storage nodes third by excluding master and storage nodes from the `sat bootsys shutdown --stage ncn-power` command.
-
-      ```bash
-      sat bootsys shutdown --stage ncn-power --excluded-ncns "${MASTERS},${WORKERS}" --ncn-shutdown-timeout 900
-      ```
-
-      Example output:
-
-      ```text
-      Proceed with shutdown of other management NCNs? [yes,no] yes
-      Proceeding with shutdown of other management NCNs.
-      IPMI username: root
-      IPMI password:
-      The following Non-compute Nodes (NCNs) will be included in this operation:
-      managers: []
-      storage:
-      - ncn-s001
-      - ncn-s002
-      - ncn-s003
-      workers: []
-
-      The following Non-compute Nodes (NCNs) will be excluded from this operation:
-      managers:
-      - ncn-m001
-      - ncn-m002
-      - ncn-m003
-      storage: []
-      workers:
-      - ncn-w001
-      - ncn-w002
-      - ncn-w003
-
-      Are the above NCN groupings and exclusions correct? [yes,no] yes
-      ```
-
-   1. (`ncn-m001#`) Monitor the consoles for each NCN.
-
-      Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
-
-      Alternately attach to the screen session \(screen sessions real time, but not saved\):
-
-      ```bash
-      screen -ls
-      ```
-
-      Example output:
-
-      ```text
-      There are screens on:
       26666.SAT-console-ncn-s003-mgmt (Detached)
       26627.SAT-console-ncn-s002-mgmt (Detached)
       26589.SAT-console-ncn-s001-mgmt (Detached)
+      26552.SAT-console-ncn-w003-mgmt (Detached)
+      26514.SAT-console-ncn-w002-mgmt (Detached)
+      26444.SAT-console-ncn-w001-mgmt (Detached)
       ```
 
       ```bash
-      screen -x 26745.SAT-console-ncn-s003-mgmt
+      screen -x 26745.SAT-console-ncn-w003-mgmt
       ```
 
    1. (`ncn-m001#`) Check the power off status of management NCNs.
