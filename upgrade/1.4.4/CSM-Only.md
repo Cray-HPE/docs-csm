@@ -1,8 +1,8 @@
 # CSM Only Upgrade
 
-This page provides guidance exclusively for systems upgrading CSM v1.4.X to CSM v1.4.4.
+This page provides guidance for systems with exclusively CSM installed that are performing an upgrade from version CSM v1.4.X to CSM v1.4.4.
 
-The [v1.4.4](../1.4.4/README.md) upgrade page will refer to this page
+The [v1.4.4 upgrade page](../1.4.4/README.md) will refer to this page
 during [Update NCN images](../1.4.4/README.md#update-ncn-images).
 
 **If other products are installed on the system, return to [Update NCN images](../1.4.4/README.md#update-ncn-images) and
@@ -10,11 +10,11 @@ choose option 2.**
 
 ## Requirements
 
-* `CSM_RELEASE` is set in the shell environment on `ncn-m001`.
+* `CSM_RELEASE` is set in the shell environment on `ncn-m001`. See [Preparation](README.md#preparation) for details on how it should be set.
 
 ## Steps
 
-1. (`ncn-m001#`) Generate a new CFS configuration for the management nodes.
+1. (`ncn-m001#`) Generate a new [CFS](../../glossary.md#configuration-framework-service-cfs) configuration for the management nodes.
 
    This script creates a new CFS configuration that includes the CSM version in its name and applies it to the
    management nodes. This leaves the management node components in CFS disabled. They will be automatically enabled when
@@ -31,7 +31,7 @@ choose option 2.**
    All components updated successfully.
    ```
 
-1. Set the IMS IDs for each Management node sub-role.
+1. (`ncn-m001#`) Set the [IMS](../../glossary.md#image-management-service-ims) IDs for each Management node sub-role.
 
     * Kubernetes ID
 
@@ -53,9 +53,9 @@ choose option 2.**
       echo "STORAGE_IMAGE_ID=$STORAGE_IMAGE_ID"
       ```
 
-1. Create new CFS sessions for both Kubernetes and Storage nodes.
+1. (`ncn-m001#`) Create CFS sessions for both Kubernetes and Storage nodes.
 
-    1. Build master images.
+    1. Build customized master node images.
 
        ```bash
        cray cfs sessions create \
@@ -81,7 +81,9 @@ choose option 2.**
            --format json
        ```
 
-1. Wait for the image builds to complete successfully
+1. (`ncn-m001#`) Wait for the image builds to complete successfully.
+
+   > This may take over 20 minutes to complete.
 
    ```bash
    watch '
@@ -97,9 +99,9 @@ choose option 2.**
    true
    ```
 
-1. Set the image ID
+1. (`ncn-m001#`) Set environment variables with the IMS image IDs.
 
-    * Kubernetes ID
+    * Kubernetes image IMS ID
 
       ```bash
       NEW_KUBERNETES_IMAGE_ID="$(cray cfs sessions describe "management-kubernetes-${CSM_RELEASE}-upgrade" --format json | jq -r '.status.artifacts[].image_id')"
@@ -107,7 +109,7 @@ choose option 2.**
       echo "NEW_KUBERNETES_IMAGE_ID=$NEW_KUBERNETES_IMAGE_ID"
       ```
 
-    * Storage-CEPH
+    * Storage image IMS ID
 
       ```bash
       NEW_STORAGE_IMAGE_ID="$(cray cfs sessions describe "management-storage-${CSM_RELEASE}-upgrade" --format json | jq -r '.status.artifacts[].image_id')"
@@ -115,7 +117,7 @@ choose option 2.**
       echo "NEW_STORAGE_IMAGE_ID=$NEW_STORAGE_IMAGE_ID"
       ```
 
-1. Assign images in BSS
+1. (`ncn-m001#`) Assign images in [BSS](../../glossary.md#boot-script-service-bss).
 
     1. Update Kubernetes management nodes:
 
