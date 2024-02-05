@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -239,7 +239,9 @@ if [[ ${CONFIG_CHANGE} == true ]]; then
     rm -r "${TEMP_DIR}" || err "WARNING: Unable to delete temporary directory '${TEMP_DIR}'"
   fi
 
-  CONFIG="{ \"layers\": [ { \"name\": \"csm-${VERSION}\", \"cloneUrl\": \"${CLONE_URL}\", \"commit\": \"${COMMIT}\", \"playbook\": \"site.yml\" } ] }"
+  NCN_NODES_LAYER="{ \"name\": \"csm-ncn-nodes-${VERSION}\", \"cloneUrl\": \"${CLONE_URL}\", \"commit\": \"${COMMIT}\", \"playbook\": \"ncn_nodes.yml\" }"
+  NCN_INITRD_LAYER="{ \"name\": \"csm-ncn-initrd-${VERSION}\", \"cloneUrl\": \"${CLONE_URL}\", \"commit\": \"${COMMIT}\", \"playbook\": \"ncn-initrd.yml\" }"
+  CONFIG="{ \"layers\": [ ${NCN_NODES_LAYER}, ${NCN_INITRD_LAYER} ] }"
 
   echo "Creating the configuration file ${CSM_CONFIG_FILE}"
   echo "${CONFIG}" | jq > "${CSM_CONFIG_FILE}" || err_exit "Unexpected error parsing JSON or writing to '${CSM_CONFIG_FILE}'"
