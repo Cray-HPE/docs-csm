@@ -45,4 +45,3 @@ After power on, refer to [Validate CSM Health](../validate_csm_health.md) to che
 ## Make nodes available to users
 
 Make nodes available to users once system health and any other post-system maintenance checks have completed.
-
