@@ -1,6 +1,6 @@
 # CSM Only Upgrade
 
-This page provides guidance for systems with exclusively CSM installed that are performing an upgrade from version CSM v1.4.X to CSM v1.4.4.
+This page provides guidance for systems with exclusively CSM installed that are performing an upgrade from a CSM v1.4.X release to the CSM v1.4.4 release.
 
 The [v1.4.4 upgrade page](../1.4.4/README.md) will refer to this page
 during [Update NCN images](../1.4.4/README.md#update-ncn-images).
@@ -55,6 +55,14 @@ choose option 2.**
 
 1. (`ncn-m001#`) Create CFS sessions for both Kubernetes and Storage nodes.
 
+    1. Set variables with unique names for the CFS sessions to be created.
+
+       ```bash
+       TSTAMP=$(date "+%Y%m%d%H%M%S")
+       K8S_CFS_SESSION_NAME="management-kubernetes-${CSM_RELEASE}-${TSTAMP}"
+       STOR_CFS_SESSION_NAME="management-storage-${CSM_RELEASE}-${TSTAMP}"
+       ```
+
     1. Build customized master node images.
 
        ```bash
@@ -64,7 +72,7 @@ choose option 2.**
            --target-definition image \
            --target-image-map "$KUBERNETES_IMAGE_ID" "management-kubernetes-${CSM_RELEASE}" \
            --configuration-name "management-${CSM_RELEASE}" \
-           --name "management-kubernetes-${CSM_RELEASE}-upgrade" \
+           --name "${K8S_CFS_SESSION_NAME}" \
            --format json
        ```
 
@@ -77,7 +85,7 @@ choose option 2.**
            --target-definition image \
            --target-image-map "$STORAGE_IMAGE_ID" "management-storage-${CSM_RELEASE}" \
            --configuration-name "management-${CSM_RELEASE}" \
-           --name "management-storage-${CSM_RELEASE}-upgrade" \
+           --name "${STOR_CFS_SESSION_NAME}" \
            --format json
        ```
 
@@ -87,8 +95,8 @@ choose option 2.**
 
    ```bash
    watch '
-   cray cfs sessions describe "management-kubernetes-${CSM_RELEASE}-upgrade" --format json | jq -r ".status.session.succeeded"
-   cray cfs sessions describe "management-storage-${CSM_RELEASE}-upgrade" --format json | jq -r ".status.session.succeeded"
+   cray cfs sessions describe "${K8S_CFS_SESSION_NAME}" --format json | jq -r ".status.session.succeeded"
+   cray cfs sessions describe "${STOR_CFS_SESSION_NAME}" --format json | jq -r ".status.session.succeeded"
    '
    ```
 
@@ -104,7 +112,7 @@ choose option 2.**
     * Kubernetes image IMS ID
 
       ```bash
-      NEW_KUBERNETES_IMAGE_ID="$(cray cfs sessions describe "management-kubernetes-${CSM_RELEASE}-upgrade" --format json | jq -r '.status.artifacts[].image_id')"
+      NEW_KUBERNETES_IMAGE_ID="$(cray cfs sessions describe "${K8S_CFS_SESSION_NAME}" --format json | jq -r '.status.artifacts[].image_id')"
       export NEW_KUBERNETES_IMAGE_ID
       echo "NEW_KUBERNETES_IMAGE_ID=$NEW_KUBERNETES_IMAGE_ID"
       ```
@@ -112,7 +120,7 @@ choose option 2.**
     * Storage image IMS ID
 
       ```bash
-      NEW_STORAGE_IMAGE_ID="$(cray cfs sessions describe "management-storage-${CSM_RELEASE}-upgrade" --format json | jq -r '.status.artifacts[].image_id')"
+      NEW_STORAGE_IMAGE_ID="$(cray cfs sessions describe "${STOR_CFS_SESSION_NAME}" --format json | jq -r '.status.artifacts[].image_id')"
       export NEW_STORAGE_IMAGE_ID
       echo "NEW_STORAGE_IMAGE_ID=$NEW_STORAGE_IMAGE_ID"
       ```
