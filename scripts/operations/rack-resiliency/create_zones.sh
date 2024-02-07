@@ -23,10 +23,19 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-# Create 3 rack zone config with 3 masters and 9 workers
-# 1 master and 3 workers per rack/ zone
-kubectl label nodes ncn-m001 ncn-w001 ncn-w002 ncn-w003 topology.kubernetes.io/zone=rack-1 --overwrite
-
-kubectl label nodes ncn-m002 ncn-w004 ncn-w005 ncn-w006 topology.kubernetes.io/zone=rack-2 --overwrite
-
-kubectl label nodes ncn-m003 ncn-w007 ncn-w008 ncn-w009 topology.kubernetes.io/zone=rack-3 --overwrite
+# Create k8s topology zone(s) with the given k8s ncn nodes
+rack_id=1
+while true; do
+    read -p "Do you want to create new k8 zone? " yn
+    case $yn in
+        [Yy]* )
+	        echo "Enter ncn nodes to be zoned under rack-$rack_id:"
+		read ncn_nodes
+		echo "$ncn_nodes"
+		kubectl label nodes $ncn_nodes topology.kubernetes.io/zone=rack-$rack_id --overwrite
+		rack_id=$((rack_id +1)) 
+		continue;;
+        [Nn]* ) exit;;
+        * ) echo "Do you want to create another k8 zone? Please answer yes or no.";;
+    esac
+done
