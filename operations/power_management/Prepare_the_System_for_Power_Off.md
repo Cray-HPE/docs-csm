@@ -172,7 +172,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     1. Use the System Diagnostic Utility (SDU) to capture current state of system before the shutdown.
 
-        **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
+        **Important:** SDU may take about 45 minutes to run on a small system \(longer for large systems\).
 
         ```bash
         sdu --scenario triage --start_time '-4 hours' \
