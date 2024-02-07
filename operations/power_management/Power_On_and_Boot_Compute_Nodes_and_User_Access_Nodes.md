@@ -247,7 +247,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
       In this example, 33% of the 6 nodes had an issue and stayed in the powering_off phase of the boot. See
       below for another way to determine which nodes had this issue.
 
-   1. (`ncn-m001#`) Check the HSM state from `sat status`of the compute and application nodes, but not the management nodes.
+   1. (`ncn-m001#`) Check the HSM state from `sat status` of the compute and application nodes, but not the management nodes.
 
       A node will progress through HSM states in this order: `Off`, `On`, `Ready`. If a node fails to leave `Off` state or
       moves from `On` to `Off` state, it needs to be investigated.  If nodes are in `Standby`, that means they had been in `Ready`,
@@ -285,7 +285,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
       In this example, two of the application Gateway nodes have a `State` of `Off` which means that they did not power on.
 
-   1. Check the BOS fields from `sat status`, but exclude the management nodes which are never booted with BOS.
+   1. (`ncn-m001#`) Check the BOS fields from `sat status`, but exclude the management nodes which are never booted with BOS.
 
       ```bash
       sat status --bos-fields --filter '"Most Recent BOS Session"!=MISSING'
@@ -320,7 +320,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
       In this example, two of the application nodes have a `Most Recent Image` of `MISSING` which means that they did not boot Linux.
 
-   1. Check the CFS fields from `sat status`, but exclude the management nodes which have CFS configurations assigned which include the string `management`.
+   1. (`ncn-m001#`) Check the CFS fields from `sat status`, but exclude the management nodes which have CFS configurations assigned which include the string `management`.
 
       ```bash
       sat status --cfs-fields --filter '"Desired Config"!=*management*'
@@ -355,7 +355,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
       In this example, two of the application nodes have an older `Desired Config` version than the other UANs and have a last reported `Configuration Status` of pending, meaning they have not begun their CFS configuration.
 
-   1. For any compute nodes or UANs which booted but failed the CFS configuration, check the CFS Ansible log for errors.
+   1. (`ncn-m001#`) For any compute nodes or UANs which booted but failed the CFS configuration, check the CFS Ansible log for errors.
 
       ```bash
       kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
@@ -370,7 +370,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
       CFS sessions which are in `Not Ready` status are still in progress. CFS sessions with status `Error` had a failure in one of the layers.
 
-   1. Inspect the Ansible logs to find a failed layer.
+   1. (`ncn-m001#`) Inspect the Ansible logs to find a failed layer. The following example follows the logs for the session from the previous step which was in an error state.
 
       ```bash
       kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible

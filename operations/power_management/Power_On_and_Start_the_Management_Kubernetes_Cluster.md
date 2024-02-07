@@ -360,11 +360,11 @@ Verify that the Lustre file system is available from the management cluster.
        kubectl rollout status -n spire daemonset request-ncn-join-token
        ```
 
-1. (`ncn-m001#`) Rejoin Spire on the storage NCNs, to avoid issues with Spire tokens.
+   1. (`ncn-m001#`) Rejoin Spire on the storage NCNs, to avoid issues with Spire tokens.
 
-    ```bash
-    /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
-    ```
+       ```bash
+       /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
+       ```
 
 1. (`ncn-m001#`) Check if any pods are in `CrashLoopBackOff` state because of errors connecting to Vault.
 

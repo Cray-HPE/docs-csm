@@ -130,17 +130,36 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     1. Determine the list of xnames associated with the desired boot session template.
 
        ```bash
-       cray bos sessiontemplates describe SESSION_TEMPLATE_NAME | egrep "node_list|node_roles_groups|node_groups"
+       cray bos sessiontemplates describe SESSION_TEMPLATE_NAME --format json } jq '.boot_sets | map({node_list, node_roles_groups, node_groups})'
        ```
 
        Example outputs:
 
-       ```toml
-       node_list = [ "x3000c0s19b1n0", "x3000c0s19b2n0", "x3000c0s19b3n0", "x3000c0s19b4n0",]
+       ```json
+       [
+         {
+           "node_list": [
+             "x3000c0s19b1n0",
+             "x3000c0s19b2n0",
+             "x3000c0s19b3n0",
+             "x3000c0s19b4n0"
+           ],
+           "node_roles_groups": null,
+           "node_groups": null
+         }
+       ]
        ```
 
-       ```toml
-       node_roles_groups = [ "Compute",]
+       ```json
+       [
+         {
+           "node_list": null,
+           "node_roles_groups": [
+             "Compute"
+           ],
+           "node_groups": null
+         }
+       ]
        ```
 
 1. (`ncn-mw#`) Use SAT to capture state of the system before the shutdown.
