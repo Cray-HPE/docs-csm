@@ -7,6 +7,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 * All management rack PDUs are connected to facility power and facility power is on.
 * An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT)
   product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
+* To avoid slow `sat` commands, ensure `/root/.bashrc` has proper handling of `kubectl` commands on all master and worker nodes. See [Prepare the System for Power Off](Prepare_the_System_for_Power_Off.md).
 
 ## Procedure
 
@@ -96,12 +97,14 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
 1. (`ncn-m001#`) Power on and boot other management NCNs.
 
-    Note that the default timeout for booting each group of NCNs is 300 seconds, which is reasonable for smaller systems.
+    This command requires input for the IPMI username and password for the management nodes.
+
+    **Important:** The default timeout for booting each group of NCNs is 300 seconds, which is reasonable for smaller systems.
     To avoid needing to re-run the command in the event of a timeout, increase the timeout using the `--ncn-boot-timeout` option.
     See `sat bootsys boot --help` for additional information and options.
 
    ```bash
-   sat bootsys boot --stage ncn-power
+   sat bootsys boot --stage ncn-power --ncn-boot-timeout 900
    ```
 
    Example output:
@@ -129,8 +132,10 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
    workers: []
 
    Are the above NCN groupings and exclusions correct? [yes,no] yes
-
-   Powering on NCNs and waiting up to 300 seconds for them to be reachable via SSH: ncn-m002, ncn-m003
+   INFO: Starting console logging on ncn-s003,ncn-s001,ncn-w002,ncn-m003,ncn-w004,ncn-m002,ncn-s002,ncn-w001,ncn-w003.
+   Powering on NCNs and waiting up to 900 seconds for them to be reachable via SSH: ncn-m002, ncn-m003
+   INFO: Sending IPMI power on command to host ncn-m003
+   INFO: Sending IPMI power on command to host ncn-m002
    Waiting for condition "Hosts accessible via SSH" timed out after 300 seconds
    ERROR: Unable to reach the following NCNs via SSH after powering them on: ncn-m003, ncn-s002.. Troubleshoot the issue and then try again.
    ```
@@ -274,16 +279,28 @@ Verify that the Lustre file system is available from the management cluster.
 
     To resolve the space issue, see [Troubleshoot Ceph OSDs Reporting Full](../utility_storage/Troubleshoot_Ceph_OSDs_Reporting_Full.md).
 
-1. (`ncn-m001#`) Manually mount S3 filesystems on the master and worker nodes. The workers try
-    to mount several S3 filesystems when they are booted, but Ceph is not available yet at that
-    time, so this workaround is required. The `boot-images` S3 filesystem is required for CPS pods
-    to successfully start on workers.
+1. (`ncn-m001#`) Manually mount S3 filesystems on the master and worker nodes. These nodes try
+    to mount several S3 filesystems when they are booted. Since Ceph is not available during boot
+    time, this workaround is required. The `boot-images` S3 filesystem is required for CPS pods
+    to successfully start on worker nodes.
 
     ```bash
-    pdsh -w ncn-m00[1-3],ncn-w00[1-3] "awk '{ if (\$3 == \"fuse.s3fs\") { print \$2; }}' /etc/fstab | xargs -I {} -n 1 sh -c \"mountpoint {} || mount {}\""
+    pdsh -w $(kubectl get nodes | grep -v NAME | awk '{print $1}' | xargs | sed 's/ /,/g') "awk '{ if (\$3 == \"fuse.s3fs\") { print \$2; }}' /etc/fstab | xargs -I {} -n 1 sh -c \"mountpoint {} || mount {}\"" | dshbak -c
     ```
 
-    Ensure all masters and workers are included in the host list for this `pdsh` command.
+    Example output:
+
+    ```text
+    ----------------
+    ncn-m[001-003]
+    ----------------
+    /var/opt/cray/sdu/collection-mount is a mountpoint
+    /var/opt/cray/config-data is a mountpoint
+    ----------------
+    ncn-w[001-003]
+    ----------------
+    /var/lib/cps-local/boot-images is a mountpoint
+    ```
 
 1. (`ncn-m001#`) Monitor the status of the management cluster and which pods are restarting (as indicated by either a `Running` or `Completed` state).
 
@@ -351,11 +368,11 @@ Verify that the Lustre file system is available from the management cluster.
        kubectl rollout status -n spire daemonset request-ncn-join-token
        ```
 
-1. (`ncn-m001#`) Rejoin Spire on the storage NCNs, to avoid issues with Spire tokens.
+   1. (`ncn-m001#`) Rejoin Spire on the storage NCNs, to avoid issues with Spire tokens.
 
-    ```bash
-    /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
-    ```
+       ```bash
+       /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
+       ```
 
 1. (`ncn-m001#`) Check if any pods are in `CrashLoopBackOff` state because of errors connecting to Vault.
 
@@ -429,32 +446,23 @@ Verify that the Lustre file system is available from the management cluster.
 
 1. (`ncn-m001#`) Determine whether the `cfs-state-reporter` service is failing to start on each manager/master and worker NCN while trying to contact CFS.
 
+    **Note:** The `systemctl` command run on each node may have `exit code 3` reported, this does not indicate a problem with `cfs-state-reporter` on that node..
+
     ```bash
-    pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
+    pdsh -w $(kubectl get nodes | grep -v NAME | awk '{print $1}' | xargs | sed 's/ /,/g') systemctl status cfs-state-reporter | grep "Active: activating"
     ```
 
     Example output:
 
     ```text
-    ncn-w001:  cfs-state-reporter.service - cfs-state-reporter reports configuration level of the system
-    ncn-w001:    Loaded: loaded (/usr/lib/systemd/system/cfs-state-reporter.service; enabled; vendor preset: disabled)
-    ncn-w001:    Active: activating (start) since Thu 2021-03-18 22:29:15 UTC; 21h ago
-    ncn-w001:  Main PID: 5192 (python3)
-    ncn-w001:     Tasks: 1
-    ncn-w001:    CGroup: /system.slice/cfs-state-reporter.service
-    ncn-w001:            └─5192 /usr/bin/python3 -m cfs.status_reporter
-    ncn-w001:
-    ncn-w001: Mar 19 19:33:19 ncn-w001 python3[5192]: Expecting value: line 1 column 1 (char 0)
-    ncn-w001: Mar 19 19:33:49 ncn-w001 python3[5192]: Attempt 2482 of contacting CFS...
-    ncn-w001: Mar 19 19:33:49 ncn-w001 python3[5192]: Unable to contact CFS to report component status: CFS returned a non-json response: Unauthorized Request
-    ncn-w001: Mar 19 19:33:49 ncn-w001 python3[5192]: Expecting value: line 1 column 1 (char 0)
-    ncn-w001: Mar 19 19:34:19 ncn-w001 python3[5192]: Attempt 2483 of contacting CFS...
-    ncn-w001: Mar 19 19:34:20 ncn-w001 python3[5192]: Unable to contact CFS to report component status: CFS returned a non-json response: Unauthorized Request
-    ncn-w001: Mar 19 19:34:20 ncn-w001 python3[5192]: Expecting value: line 1 column 1 (char 0)
-    ncn-w001: Mar 19 19:34:50 ncn-w001 python3[5192]: Attempt 2484 of contacting CFS...
-    ncn-w001: Mar 19 19:34:50 ncn-w001 python3[5192]: Unable to contact CFS to report component status: CFS returned a non-json response: Unauthorized Request
-    ncn-w001: Mar 19 19:34:50 ncn-w001 python3[5192]: Expecting value: line 1 column 1 (char 0)
+    pdsh@ncn-m001: ncn-m002: ssh exited with exit code 3
+    pdsh@ncn-m001: ncn-m003: ssh exited with exit code 3
     pdsh@ncn-m001: ncn-w001: ssh exited with exit code 3
+    pdsh@ncn-m001: ncn-w002: ssh exited with exit code 3
+    pdsh@ncn-m001: ncn-w004: ssh exited with exit code 3
+    pdsh@ncn-m001: ncn-w003: ssh exited with exit code 3
+    pdsh@ncn-m001: ncn-m001: ssh exited with exit code 3
+    ncn-w001:    Active: activating (start) since Thu 2021-03-18 22:29:15 UTC; 21h ago
     ```
 
     1. (`ncn#`) On each NCN where `cfs-state-reporter` is stuck in `activating` as shown in the preceding error messages, restart the `cfs-state-reporter` service.
@@ -468,7 +476,7 @@ Verify that the Lustre file system is available from the management cluster.
     1. (`ncn-m001#`) Check the status again.
 
         ```bash
-        pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
+        pdsh -w $(kubectl get nodes | grep -v NAME | awk '{print $1}' | xargs | sed 's/ /,/g') systemctl status cfs-state-reporter | grep "Active: activating"
         ```
 
 ### Verify BGP peering sessions
@@ -505,7 +513,7 @@ all cronjobs are being scheduled on time after running `sat bootsys boot --stage
     operators     kube-etcd-defrag-cray-hbtd-etcd   0 */4 * * *    False     0        178m            29d
     operators     kube-etcd-periodic-backup-cron    0 * * * *      False     0        58m             29d
     services      cray-dns-unbound-manager          */3 * * * *    False     0        63s             18h
-    services      hms-discovery                     */3 * * * *    False     1        63s             18h
+    services      hms-discovery                     */3 * * * *    True      1        63s             18h
     services      hms-postgresql-pruner             */5 * * * *    False     0        3m3s            18h
     services      sonar-sync                        */1 * * * *    False     0        63s             18h
     sma           sma-pgdb-cron                     10 4 * * *     False     0        14h             27d
