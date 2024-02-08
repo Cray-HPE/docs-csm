@@ -305,6 +305,16 @@ In lieu of rebuilding the storage nodes, they will be live patched.
    export CSM_ARTI_DIR="${CSM_DISTDIR}"
    ```
 
+1. (`ncn-m001#`) Set/update re-usable environment variables.
+
+   ```bash
+   if grep -q '^export CSM_ARTI_DIR=' /etc/cray/upgrade/csm/myenv ; then
+     sed -i 's/^export CSM_ARTI_DIR=.*/export CSM_ARTI_DIR='"$CSM_ARTI_DIR"'/' /etc/cray/upgrade/csm/myenv
+   else
+     echo "export CSM_ARTI_DIR=$CSM_ARTI_DIR" >>/etc/cray/upgrade/csm/myenv
+   fi
+   ```
+
 1. Proceed with the following sections from Stage 1:
 
     * [Start typescript on `ncn-m001`](../Stage_1.md#start-typescript-on-ncn-m001)
