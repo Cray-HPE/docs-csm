@@ -53,6 +53,10 @@ in [Upgrade CSM](../README.md) instead.
    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
+1. Download and install/upgrade the **latest** documentation on `ncn-m001`.
+
+   See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+
 1. (`ncn-m001#`) Run the script to create a `cephfs` file share at `/etc/cray/upgrade/csm`.
 
     * This script creates a new `cephfs` file share, and  will unmount the `rbd` device that may have been used in a previous version of CSM (if detected).
@@ -83,10 +87,6 @@ in [Upgrade CSM](../README.md) instead.
    export CSM_DISTDIR="$(pwd)/csm-${CSM_RELEASE}"
    echo "${CSM_DISTDIR}"
    ```
-
-1. Download and install/upgrade the **latest** documentation on `ncn-m001`.
-
-   See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 ### Setup Nexus
 
