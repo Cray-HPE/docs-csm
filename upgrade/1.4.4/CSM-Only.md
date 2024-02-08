@@ -130,7 +130,7 @@ choose option 2.**
     1. Update Kubernetes management nodes:
 
        ```bash
-       /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
            -mw \
            -p "$NEW_KUBERNETES_IMAGE_ID"
        ```
@@ -138,7 +138,7 @@ choose option 2.**
     1. Update storage management nodes:
 
        ```bash
-       /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
            -s \
            -p "$NEW_STORAGE_IMAGE_ID"
        ```
