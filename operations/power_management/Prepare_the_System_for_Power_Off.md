@@ -25,72 +25,141 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
    See the "SAT Authentication" section in the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
 
+1. Ensure `/root/.bashrc` has proper handling of `kubectl` commands on all master and worker nodes.
+
+   **Important:** During the process of shutting down the system, there will be a point when `kubelet` will be stopped on all the master and worker
+   nodes. Once `kubelet` has been stopped, any `kubectl` command on any master or worker node may not work as expected and may have a long timeout before
+   failing.
+
+   This issue can cause a slowdown for these `sat` commands which `ssh` from the `sat` pod to `ncn-m001` and the
+   other nodes because the `ssh` will execute commands from `/root/.bashrc`.
+
+      * Commands affected during the power down
+         * `sat bootsys shutdown --stage platform-services`
+         * `sat bootsys shutdown --stage ncn-power`
+
+      * Commands affected during the power up
+         * `sat bootsys boot --stage ncn-power`
+         * `sat bootsys boot --stage platform-services`
+
+      1. Here is a sample command in `/root/.bashrc` which sets an environment variable using the output from `kubectl` which has the problem.
+
+         ```bash
+         export DOMAIN=$(kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}'|base64 -d | grep "external:")
+         ```
+
+      1. This shows one way to correct that sample command so the environment variable will be set when `kubelet` is available and will skip setting the variable when `kubelet` is not available.
+
+         ```bash
+         if [ systemctl is-active -q kubelet ; then
+                 export DOMAIN=$(kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}'|base64 -d | grep "external:")
+         fi
+         ```
+
+1. Ensure `/root/.ssh/known_hosts` does not have `ssh` stale host key entries for any of the management nodes.
+
+   **Important:** Many of the `sat` commands use `ssh` from a `sat` Kubernetes pod to execute commands on the management nodes. This `sat` pod
+   uses the `paramiko` Python library for `ssh` and it will access `/root/.ssh/known_hosts`. If `/root/.ssh/config` or `/etc/ssh/config` has
+   been configured to set `UserKnownHostsfile` to `/dev/null` or some other file and there are `ssh` host key mismatches in `/root/.ssh/known_hosts`, then
+   when a `sat` command tries to use `ssh` with `paramiko`, it will fail even though an interactive `ssh` command by the root user might succeed.
+
+   For example, the `sat bootsys shutdown --stage platform-services` command would show this type of error and fail.
+
+   ```text
+   INFO: Executing step: Stop and disable kubelet on all Kubernetes NCNs.
+   ERROR: Host key for server 'ncn-w003' does not match: got 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCGNgIUTU7+o/+c5bD84u7/1S3xNNOd5+c/0l4vpVEehWGrjuC6IRC/KAImozzznXHhdBL7yQF2Dnh3FHGQDyko=', expected 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBL9bwo5gmW/vX3kUQyXIDgJa4EVtCYDyntmNt43BHTM7YKn6yFe1dV59Ervi13V20OxdVECxg2hTyeTueVKvwj4='
+   ERROR: Fatal error in step "Stop and disable kubelet on all Kubernetes NCNs." of platform services stop: Failed to ensure kubelet is inactive and disabled on all hosts.
+   ```
+
+   To prevent this issue from happening, remove stale `ssh` host keys from `/root/.ssh/known_hosts` before running the `sat` command.
+
 1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
 
    There will be separate session templates for UANs and computes nodes.
 
-    1. List all the session templates.
+    1. List all the BOS session templates.
 
-       If it is unclear what session template is in use, proceed to the next substep.
+       If it is unclear what BOS session template is in use, proceed to the next substep.
 
        ```bash
-       cray bos v2 sessiontemplates list
+       cray bos sessiontemplates list --format json | jq -r '.[].name' | sort
        ```
 
-    1. Find the xname with `sat status`.
+    1. Find the BOS session templates used most recently to boot nodes.
 
        ```bash
-       sat status | grep "Compute\|Application"
+       sat status --filter role!=management --fields xname,role,subrole,"most recent session template"
        ```
 
        Example output:
 
        ```text
-       | x3000c0s19b1n0 | Node | 1        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-       | x3000c0s19b2n0 | Node | 2        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-       | x3000c0s19b3n0 | Node | 3        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-       | x3000c0s19b4n0 | Node | 4        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-       | x3000c0s27b0n0 | Node | 49169248 | On    | OK   | True    | X86  | River | Application | Sling    |
+       +----------------+-------------+-----------+------------------------------+
+       | xname          | Role        | SubRole   | Most Recent Session Template |
+       +----------------+-------------+-----------+------------------------------+
+       | x3209c0s13b0n0 | Application | UAN       | uan-23.7.0                   |
+       | x3209c0s15b0n0 | Application | UAN       | uan-23.7.0                   |
+       | x3209c0s17b0n0 | Application | UAN       | uan-23.7.0                   |
+       | x3209c0s19b0n0 | Application | UAN       | uan-23.7.0                   |
+       | x3209c0s22b0n0 | Application | Gateway   | MISSING                      |
+       | x3209c0s23b0n0 | Application | Gateway   | MISSING                      |
+       | x9002c1s0b0n0  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s0b0n1  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s0b1n0  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s0b1n1  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s1b0n0  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s1b0n1  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s1b1n0  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s1b1n1  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s2b0n0  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s2b0n1  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s2b1n0  | Compute     | Compute   | compute-23.7.0               |
+       | x9002c1s2b1n1  | Compute     | Compute   | compute-23.7.0               |
+       +----------------+-------------+-----------+------------------------------+
        ```
 
-    1. Find the `bos_session` value via the Configuration Framework Service (CFS).
+       **`NOTE`** When the `Most Recent Session Template` shows `MISSING`, it means the BOS session information was removed.
+       Old BOS sessions are cleaned up based on the numbers of days in `cleanup_completed_session_ttl`.  The default value is seven days.
 
-       ```bash
-       cray cfs v3 components describe XNAME --format toml | grep bos_session
-       ```
+       1. Check the current setting for `cleanup_completed_session_ttl`.
 
-       Example output:
-
-       ```toml
-       bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
-       ```
-
-    1. Find the required `templateName` value with BOS.
-
-       ```bash
-       cray bos v2 sessions describe BOS_SESSION --format toml | grep templateName
-       ```
-
-       Example output:
-
-       ```toml
-       templateName = "compute-nid1-4-sessiontemplate"
-       ```
+          ```bash
+          cray bos options list | grep cleanup_completed_session_ttl
+          ```
 
     1. Determine the list of xnames associated with the desired boot session template.
 
        ```bash
-       cray bos v2 sessiontemplates describe SESSION_TEMPLATE_NAME | egrep "node_list|node_roles_groups|node_groups"
+       cray bos sessiontemplates describe SESSION_TEMPLATE_NAME --format json } jq '.boot_sets | map({node_list, node_roles_groups, node_groups})'
        ```
 
        Example outputs:
 
-       ```toml
-       node_list = [ "x3000c0s19b1n0", "x3000c0s19b2n0", "x3000c0s19b3n0", "x3000c0s19b4n0",]
+       ```json
+       [
+         {
+           "node_list": [
+             "x3000c0s19b1n0",
+             "x3000c0s19b2n0",
+             "x3000c0s19b3n0",
+             "x3000c0s19b4n0"
+           ],
+           "node_roles_groups": null,
+           "node_groups": null
+         }
+       ]
        ```
 
-       ```toml
-       node_roles_groups = [ "Compute",]
+       ```json
+       [
+         {
+           "node_list": null,
+           "node_roles_groups": [
+             "Compute"
+           ],
+           "node_groups": null
+         }
+       ]
        ```
 
 1. (`ncn-mw#`) Use SAT to capture state of the system before the shutdown.
@@ -103,7 +172,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     1. Use the System Diagnostic Utility (SDU) to capture current state of system before the shutdown.
 
-        **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
+        **Important:** SDU may take about 45 minutes to run on a small system \(longer for large systems\).
 
         ```bash
         sdu --scenario triage --start_time '-4 hours' \
@@ -128,16 +197,19 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         sat status --filter State=Off | tee -a sat.status.off
         ```
 
-    1. Capture the state of nodes in the workload manager. For example, if the system uses Slurm:
+    1. Capture the state of nodes in the workload manager.
+
+        For example, if the system uses Slurm:
 
         ```bash
         ssh uan01 sinfo | tee -a uan01.sinfo
+        ssh uan01 sinfo --list-reasons | tee -a sinfo.reasons
         ```
 
-    1. Capture the list of down nodes in the workload manager and the reason.
+        For example, if the system uses PBS Pro:
 
         ```bash
-        ssh uan01 sinfo --list-reasons | tee -a sinfo.reasons
+        ssh uan01 pbsnodes -aS | tee -a pbsnodes.aS
         ```
 
     1. Check Ceph status.
@@ -155,9 +227,9 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         Additional Kubernetes status check examples:
 
         ```bash
-        kubectl get pods -o wide -A | egrep  "CrashLoopBackOff" > k8s.pods.CLBO
-        kubectl get pods -o wide -A | egrep  "ContainerCreating" > k8s.pods.CC
-        kubectl get pods -o wide -A | egrep -v "Run|Completed" > k8s.pods.errors
+        kubectl get pods -o wide -A | egrep  "CrashLoopBackOff" | tee -a k8s.pods.CLBO
+        kubectl get pods -o wide -A | egrep  "ContainerCreating" | tee -a k8s.pods.CC
+        kubectl get pods -o wide -A | egrep -v "Run|Completed" | tee -a k8s.pods.errors
         ```
 
     1. Check HSN status.
@@ -186,8 +258,10 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
         > *Note:* The switch host names depend on the system configuration.
 
-        1. Use CANU to confirm that all switches are reachable. Reachable switches will have their
+        1. (`ncn-mw#`) Use CANU to confirm that all switches are reachable. Reachable switches have their
            version information populated in the network version report.
+
+           Provide the password for the admin username on the management network switches.
 
            ```bash
            canu report network version
@@ -205,7 +279,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
            sw-cdu-002        1.7.1.post1       1.5
            ```
 
-        1. (Optional) If CANU is not available, look in `/etc/hosts` for the management network
+        1. (Optional) (`ncn-mw#`) If CANU is not available, look in `/etc/hosts` for the management network
            switches on this system. The names of all spine switches, leaf switches, leaf BMC
            switches, and CDU switches need to be used in the next step.
 
@@ -224,7 +298,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
            10.100.0.3      sw-cdu-002
            ```
 
-        1. Ping the switches obtained in the previous step to determine if they are reachable.
+        1. (`ncn-mw#`) Ping the switches obtained in the previous step to determine if they are reachable.
 
            ```bash
            for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do
@@ -233,11 +307,13 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
            done | tee -a switches
            ```
 
-    1. Check Lustre server health.
+    1. (`ncn-mw#`) Check Lustre server health.  See Lustre documentation for other health commands to run.  
 
         ```bash
         ssh admin@cls01234n00.us.cray.com
-        admin@cscli show_nodes
+        cscli csinfo
+        cscli show_nodes
+        cscli fs_info
         ```
 
     1. From a node which has the Lustre file system mounted.
@@ -271,41 +347,55 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     If active sessions are running, either wait for them to complete or cancel the session. See the following step.
 
+    **`NOTE`** If the System Diagnostic Utility (SDU) has not been configured on master nodes, message like this will appear for the master nodes
+    which are not configured for SDU. If the warning appears for all master nodes, then to enable this after the system has been powered up again,
+    see the Configure section of the HPE Cray EX with CSM System Diagnostic Utility (SDU) Installation Guide to configure SDU and the optional RDA.
+
+    ```text
+    WARNING: The cray-sdu-rda container is not running on ncn-m001.
+    WARNING: The cray-sdu-rda container is not running on ncn-m002.
+    WARNING: The cray-sdu-rda container is not running on ncn-m003.
+    ```
+
 1. (`ncn-mw#`) Cancel the running BOS sessions.
 
     1. Identify the BOS sessions to delete.
 
         ```bash
-        cray bos v2 sessions list --format json
+        cray bos sessions list --format json
         ```
 
     1. Delete each running BOS session.
 
         ```bash
-        cray bos v2 sessions delete <session ID>
+        cray bos sessions delete <session ID>
         ```
 
         Example:
 
         ```bash
-        cray bos v2 sessions delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
+        cray bos sessions delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
         ```
 
-1. Coordinate with the site to prevent new sessions from starting in the services listed.
+1. Coordinate with the site system administrators to prevent new sessions from starting in the services listed.
 
     There is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
-1. Follow the vendor workload manager documentation to drain processes running on compute nodes. For Slurm, see the `scontrol` man page. For PBS Professional, see the `pbsnodes` man page.
+1. Follow the vendor workload manager documentation to drain processes running on compute nodes.
 
-    Below are examples of how to drain nodes using `slurm`. The list of nodes can be copy/pasted from the `sinfo` command for nodes in an `idle` state:
+    1. For Slurm, see the `scontrol` man page.
 
-    ```bash
-    scontrol update NodeName=nid[001001-001003,001005] State=DRAIN Reason="Shutdown"
-    ```
+       Below are examples of how to drain nodes using `slurm`. The list of nodes can be copy/pasted from the `sinfo` command for nodes in an `idle` state:
 
-    ```bash
-    scontrol update NodeName=ALL State=DRAIN Reason="Shutdown"
-    ```
+       ```bash
+       scontrol update NodeName=nid[001001-001003,001005] State=DRAIN Reason="Shutdown"
+       ```
+
+       ```bash
+       scontrol update NodeName=ALL State=DRAIN Reason="Shutdown"
+       ```
+
+    1. For PBS Professional, see the `pbsnodes` man page.
 
 ## Next step
 
