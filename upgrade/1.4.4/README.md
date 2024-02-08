@@ -77,16 +77,11 @@ in [Upgrade CSM](../README.md) instead.
 
    ***IMPORTANT*** If necessary, change this command to match the actual location of the extracted files.
 
+   > ***NOTE*** `CSM_RELEASE` is set during the [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract-csm-product-release) guide.
+
    ```bash
-   export CSM_DISTDIR="$(pwd)/csm-1.4.4"
+   export CSM_DISTDIR="$(pwd)/csm-${CSM_RELEASE}"
    echo "${CSM_DISTDIR}"
-   ```
-
-1. (`ncn-m001#`) Set `CSM_RELEASE_VERSION` to the CSM release version.
-
-   ```bash
-   export CSM_RELEASE_VERSION="$(${CSM_DISTDIR}/lib/version.sh --version)"
-   echo "${CSM_RELEASE_VERSION}"
    ```
 
 1. Download and install/upgrade the **latest** documentation on `ncn-m001`.
