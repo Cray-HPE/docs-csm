@@ -298,6 +298,8 @@ In lieu of rebuilding the storage nodes, they will be live patched.
 
 1. (`ncn-m001#`) Set environment variables.
 
+   > ***NOTE*** This relies on variables set during [preparation](#preparation).
+
    ```bash
    export CSM_REL_NAME="csm-${CSM_RELEASE}"
    export CSM_ARTI_DIR="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}"
