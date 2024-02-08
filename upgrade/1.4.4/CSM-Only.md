@@ -112,7 +112,7 @@ choose option 2.**
     * Kubernetes image IMS ID
 
       ```bash
-      NEW_KUBERNETES_IMAGE_ID="$(cray cfs sessions describe "${K8S_CFS_SESSION_NAME}" --format json | jq -r '.status.artifacts[].image_id')"
+      NEW_KUBERNETES_IMAGE_ID="$(cray cfs sessions describe "${K8S_CFS_SESSION_NAME}" --format json | jq -r '.status.artifacts[].result_id')"
       export NEW_KUBERNETES_IMAGE_ID
       echo "NEW_KUBERNETES_IMAGE_ID=$NEW_KUBERNETES_IMAGE_ID"
       ```
@@ -120,7 +120,7 @@ choose option 2.**
     * Storage image IMS ID
 
       ```bash
-      NEW_STORAGE_IMAGE_ID="$(cray cfs sessions describe "${CEPH_CFS_SESSION_NAME}" --format json | jq -r '.status.artifacts[].image_id')"
+      NEW_STORAGE_IMAGE_ID="$(cray cfs sessions describe "${CEPH_CFS_SESSION_NAME}" --format json | jq -r '.status.artifacts[].result_id')"
       export NEW_STORAGE_IMAGE_ID
       echo "NEW_STORAGE_IMAGE_ID=$NEW_STORAGE_IMAGE_ID"
       ```
