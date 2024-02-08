@@ -5119,21 +5119,16 @@ func main() {
 
 `PATCH /v2/sessions/{session_id}`
 
-*Update a single Session*
+*Update status of a single Session*
 
-Update the state for a given Session in the BOS database
+Update the state for a given Session in the BOS database.
+This is intended only for internal use by the BOS service.
 
 > Body parameter
 
 ```json
 {
-  "name": "session-20190728032600",
-  "operation": "boot",
-  "template_name": "cle-1.0.0",
-  "limit": "string",
-  "stage": true,
   "components": "string",
-  "include_disabled": true,
   "status": {
     "start_time": "string",
     "end_time": "string",
@@ -5147,7 +5142,7 @@ Update the state for a given Session in the BOS database
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V2Session](#schemav2session)|true|The state for a single Session|
+|body|body|[V2SessionUpdate](#schemav2sessionupdate)|true|The state for a single Session|
 |session_id|path|string|true|Session ID|
 |Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 
@@ -9817,6 +9812,39 @@ A Session object
 |stage|boolean|false|none|Set to stage a Session which will not immediately change the state of any Components.<br>The "applystaged" endpoint can be called at a later time to trigger the start of this Session.|
 |components|string|false|none|A comma-separated list of nodes, representing the initial list of nodes<br>the Session should operate against.  The list will remain even if<br>other Sessions have taken over management of the nodes.|
 |include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM).|
+|status|[V2SessionStatus](#schemav2sessionstatus)|false|none|Information on the status of a Session.|
+
+<h2 id="tocS_V2SessionUpdate">V2SessionUpdate</h2>
+<!-- backwards compatibility -->
+<a id="schemav2sessionupdate"></a>
+<a id="schema_V2SessionUpdate"></a>
+<a id="tocSv2sessionupdate"></a>
+<a id="tocsv2sessionupdate"></a>
+
+```json
+{
+  "components": "string",
+  "status": {
+    "start_time": "string",
+    "end_time": "string",
+    "status": "pending",
+    "error": "string"
+  }
+}
+
+```
+
+A Session update object
+
+## Link Relationships
+
+* self : The Session object
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|components|string|false|none|A comma-separated list of nodes, representing the initial list of nodes<br>the Session should operate against.  The list will remain even if<br>other Sessions have taken over management of the nodes.|
 |status|[V2SessionStatus](#schemav2sessionstatus)|false|none|Information on the status of a Session.|
 
 <h2 id="tocS_V2SessionArray">V2SessionArray</h2>
