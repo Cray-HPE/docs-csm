@@ -15,54 +15,34 @@ For example, a cluster's database `NOSPACE` alarm is set when database storage s
 
     An empty list will be returned if no alarms are set.
 
-    - Check if any etcd alarms are set for etcd clusters in the services namespace.
+    Check if any etcd alarms are set for any etcd clusters.
 
-        ```bash
-        for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
-                             -n services -o jsonpath='{.items[*].metadata.name}')
-        do
-            echo "### ${pod} Alarms Set: ###"
-            kubectl -n services exec ${pod} -c etcd -- /bin/sh -c "ETCDCTL_API=3 etcdctl alarm list"
-        done
-        ```
+    ```bash
+    /opt/cray/platform-utils/ncnHealthChecks.sh -s etcd_alarm_check
 
-        Example output:
+    ```
 
-        ```text
-        ### cray-bos-etcd-7cxq6qrhz5 Alarms Set: ###
-        ### cray-bos-etcd-b9m4k5qfrd Alarms Set: ###
-        ### cray-bos-etcd-tnpv8x6cxv Alarms Set: ###
-        ### cray-bss-etcd-q4k54rbbfj Alarms Set: ###
-        ### cray-bss-etcd-r75mlv6ffd Alarms Set: ###
-        ### cray-bss-etcd-xprv5ht5d4 Alarms Set: ###
-        ### cray-cps-etcd-8hpztfkjdp Alarms Set: ###
-        ### cray-cps-etcd-fp4kfsf799 Alarms Set: ###
-        ### cray-cps-etcd-g6gz9vmmdn Alarms Set: ###
-        ### cray-crus-etcd-6z9zskl6cr Alarms Set: ###
-        ### cray-crus-etcd-krp255f97q Alarms Set: ###
-        ### cray-crus-etcd-tpclqfln67 Alarms Set: ###
+    Example output:
 
-        [...]
-        ```
+    ```text
+    **************************************************************************
 
-    - Check if any etcd alarms are set for a particular etcd cluster in the services namespace.
+    === Check if any "alarms" are set for any of the Etcd Clusters in the Services Namespace. ===
+    === An empty list is returned if no alarms are set ===
+    ### cray-bos-etcd-4jzztgq6r2 Alarms Set: ###
+    ### cray-bos-etcd-65g79k7lwn Alarms Set: ###
+    ### cray-bos-etcd-cxf2j9mc2h Alarms Set: ###
+    ### cray-bss-etcd-7nqbkzv8cm Alarms Set: ###
+    ### cray-bss-etcd-qxdjlbh2gf Alarms Set: ###
+    ### cray-bss-etcd-vrhlrxs2bd Alarms Set: ###
+    ### cray-cps-etcd-fqmgpbfddn Alarms Set: ###
+    ### cray-cps-etcd-fs9tkqsd8q Alarms Set: ###
+    ### cray-cps-etcd-qs9zps8p4d Alarms Set: ###
 
-        ```bash
-        for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
-                             -n services -o jsonpath='{.items[*].metadata.name}')
-        do
-            echo "### ${pod} Alarms Set: ###"
-            kubectl -n services exec ${pod} -c etcd -- /bin/sh -c "ETCDCTL_API=3 etcdctl alarm list"
-        done
-        ```
+    [...]
 
-        Example output:
-
-        ```text
-        ### cray-bos-etcd-7cxq6qrhz5 Alarms Set: ###
-        ### cray-bos-etcd-b9m4k5qfrd Alarms Set: ###
-        ### cray-bos-etcd-tnpv8x6cxv Alarms Set: ###
-        ```
+     --- PASSED --- 
+    ```
 
 1. (`ncn-mw#`) Clear any etcd cluster alarms.
 
