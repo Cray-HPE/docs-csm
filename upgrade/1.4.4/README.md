@@ -53,6 +53,16 @@ in [Upgrade CSM](../README.md) instead.
    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
+1. (`ncn-m001#`) Run the script to create a `cephfs` file share at `/etc/cray/upgrade/csm`.
+
+    * This script creates a new `cephfs` file share, and  will unmount the `rbd` device that may have been used in a previous version of CSM (if detected).
+      Running this script is a one time step needed only on the master node the upgrade is being initiated on (`ncn-m001`).
+      If a previous `rbd` mount is detected at `/etc/cray/upgrade/csm`, that content will be remounted and available at `/mnt/csm-1.3-rbd`.
+
+      ```bash
+      /usr/share/doc/csm/scripts/mount-cephfs-share.sh
+      ```
+
 1. Download and extract the CSM `v1.4.4` release to `ncn-m001`.
 
    See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract-csm-product-release).
