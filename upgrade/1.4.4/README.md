@@ -315,6 +315,12 @@ In lieu of rebuilding the storage nodes, they will be live patched.
    fi
    ```
 
+1. (`ncn-m001#`) Ensure `cray-site-init` is installed, use the latest one provided by the CSM tarball.
+
+   ```bash
+   zypper install -y cray-site-init
+   ```
+
 1. Proceed with the following sections from Stage 1:
 
     * [Start typescript on `ncn-m001`](../Stage_1.md#start-typescript-on-ncn-m001)
