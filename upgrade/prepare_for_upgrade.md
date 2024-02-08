@@ -132,6 +132,8 @@ Return here after verifying that SNMP is properly configured on the management n
 
    > This [System Admin Toolkit (SAT)](../glossary.md#system-admin-toolkit-sat) command has `shutdown` as one of the command line options,
    > but it will **not** start a shutdown process on the system.
+   >
+   > **Note:** This step may take a longer time if there are many BOS sessions. It is recommended to keep the sessions count minimal to reduce the overall time taken.
 
    ```bash
    sat bootsys shutdown --stage session-checks
