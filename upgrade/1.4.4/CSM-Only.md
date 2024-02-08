@@ -59,8 +59,8 @@ choose option 2.**
 
        ```bash
        TSTAMP=$(date "+%Y%m%d%H%M%S")
-       K8S_CFS_SESSION_NAME="management-kubernetes-${CSM_RELEASE}-${TSTAMP}"
-       CEPH_CFS_SESSION_NAME="management-storage-${CSM_RELEASE}-${TSTAMP}"
+       K8S_CFS_SESSION_NAME="management-k8s-${CSM_RELEASE}-${TSTAMP}"
+       CEPH_CFS_SESSION_NAME="management-ceph-${CSM_RELEASE}-${TSTAMP}"
        ```
 
     1. Build customized master node images.
