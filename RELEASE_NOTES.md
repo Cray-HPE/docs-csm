@@ -191,4 +191,4 @@ For a list of all deprecated CSM features, see [Deprecations](introduction/depre
 
 For a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals)
 
-## Known issues
+## Known Issues
