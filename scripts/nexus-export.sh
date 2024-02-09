@@ -77,8 +77,8 @@ spec:
       storage: $backupSpaceNeeded
 EOF
   else
-    echo "Exiting script."
-    return
+    echo "A nexus backup cannot be taken because the the Backup PVC size does not match the nexus-data PVC. Exiting script."
+    return 1
   fi
 fi
 
