@@ -4,28 +4,43 @@ Perform a manual backup of the contents of the SLS Postgres database. This backu
 
 ## Prerequisites
 - Healthy SLS Postgres Cluster.
-    > Use `patronictl list` on the SLS Postgres cluster to determine the current state of the cluster, and a healthy cluster will look similar to the following:
-    > ```
-    > kubectl exec cray-sls-postgres-0 -n services -c postgres -it -- patronictl list
-    > + Cluster: cray-sls-postgres (6975238790569058381) ---+----+-----------+
-    > |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
-    > +---------------------+------------+--------+---------+----+-----------+
-    > | cray-sls-postgres-0 | 10.44.0.40 | Leader | running |  1 |           |
-    > | cray-sls-postgres-1 | 10.36.0.37 |        | running |  1 |         0 |
-    > | cray-sls-postgres-2 | 10.42.0.42 |        | running |  1 |         0 |
-    > +---------------------+------------+--------+---------+----+-----------+
-    > ```
+
+  Use `patronictl list` on the SLS Postgres cluster to determine the current state of the cluster, and a healthy cluster will look similar to the following:
+
+  ```bash
+  kubectl exec cray-sls-postgres-0 -n services -c postgres -it -- patronictl list
+  ```
+
+  Example output:
+
+  ```
+  + Cluster: cray-sls-postgres (6975238790569058381) ---+----+-----------+
+  |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
+  +---------------------+------------+--------+---------+----+-----------+
+  | cray-sls-postgres-0 | 10.44.0.40 | Leader | running |  1 |           |
+  | cray-sls-postgres-1 | 10.36.0.37 |        | running |  1 |         0 |
+  | cray-sls-postgres-2 | 10.42.0.42 |        | running |  1 |         0 |
+  +---------------------+------------+--------+---------+----+-----------+
+  ```
+
 - Healthy SLS Service.
-    > Verify all 3 SLS replicas are up and running:
-    > ```
-    > kubectl -n services get pods -l cluster-name=cray-sls-postgres
-    > NAME                  READY   STATUS    RESTARTS   AGE
-    > cray-sls-postgres-0   3/3     Running   0          18d
-    > cray-sls-postgres-1   3/3     Running   0          18d
-    > cray-sls-postgres-2   3/3     Running   0          18d
-    > ```
+  Verify all 3 SLS replicas are up and running:
+
+  ```bash
+  kubectl -n services get pods -l cluster-name=cray-sls-postgres
+  ```
+
+  Example output:
+
+  ```
+  NAME                  READY   STATUS    RESTARTS   AGE
+  cray-sls-postgres-0   3/3     Running   0          18d
+  cray-sls-postgres-1   3/3     Running   0          18d
+  cray-sls-postgres-2   3/3     Running   0          18d
+  ```
 
 ## Procedure
+
 1. Create a directory to store the SLS backup files in:
 
     ```bash
@@ -44,7 +59,7 @@ Perform a manual backup of the contents of the SLS Postgres database. This backu
 
 2. Run the `backup_sls_postgres.sh` script to take a backup of the SLS Postgres:
 
-    ```
+    ```bash
     /usr/share/doc/csm/scripts/operations/system_layout_service/backup_sls_postgres.sh
     ```
 
