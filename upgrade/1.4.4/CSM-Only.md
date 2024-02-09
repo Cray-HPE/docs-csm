@@ -59,8 +59,8 @@ choose option 2.**
 
        ```bash
        TSTAMP=$(date "+%Y%m%d%H%M%S")
-       K8S_CFS_SESSION_NAME="management-kubernetes-${CSM_RELEASE}-${TSTAMP}"
-       CEPH_CFS_SESSION_NAME="management-storage-${CSM_RELEASE}-${TSTAMP}"
+       K8S_CFS_SESSION_NAME="management-k8s-${CSM_RELEASE}-${TSTAMP}"
+       CEPH_CFS_SESSION_NAME="management-ceph-${CSM_RELEASE}-${TSTAMP}"
        ```
 
     1. Build customized master node images.
@@ -112,7 +112,7 @@ choose option 2.**
     * Kubernetes image IMS ID
 
       ```bash
-      NEW_KUBERNETES_IMAGE_ID="$(cray cfs sessions describe "${K8S_CFS_SESSION_NAME}" --format json | jq -r '.status.artifacts[].image_id')"
+      NEW_KUBERNETES_IMAGE_ID="$(cray cfs sessions describe "${K8S_CFS_SESSION_NAME}" --format json | jq -r '.status.artifacts[].result_id')"
       export NEW_KUBERNETES_IMAGE_ID
       echo "NEW_KUBERNETES_IMAGE_ID=$NEW_KUBERNETES_IMAGE_ID"
       ```
@@ -120,7 +120,7 @@ choose option 2.**
     * Storage image IMS ID
 
       ```bash
-      NEW_STORAGE_IMAGE_ID="$(cray cfs sessions describe "${CEPH_CFS_SESSION_NAME}" --format json | jq -r '.status.artifacts[].image_id')"
+      NEW_STORAGE_IMAGE_ID="$(cray cfs sessions describe "${CEPH_CFS_SESSION_NAME}" --format json | jq -r '.status.artifacts[].result_id')"
       export NEW_STORAGE_IMAGE_ID
       echo "NEW_STORAGE_IMAGE_ID=$NEW_STORAGE_IMAGE_ID"
       ```
@@ -130,7 +130,7 @@ choose option 2.**
     1. Update Kubernetes management nodes:
 
        ```bash
-       /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
            -mw \
            -p "$NEW_KUBERNETES_IMAGE_ID"
        ```
@@ -138,9 +138,9 @@ choose option 2.**
     1. Update storage management nodes:
 
        ```bash
-       /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
            -s \
            -p "$NEW_STORAGE_IMAGE_ID"
        ```
 
-1. Return to [](./README.md#wlm-backup)
+1. Return to [WLM backup](./README.md#wlm-backup)

@@ -53,29 +53,40 @@ in [Upgrade CSM](../README.md) instead.
    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
+1. Download and install/upgrade the **latest** documentation on `ncn-m001`.
+
+   See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+
+1. (`ncn-m001#`) Run the script to create a `cephfs` file share at `/etc/cray/upgrade/csm`.
+
+    * This script creates a new `cephfs` file share, and  will unmount the `rbd` device that may have been used in a previous version of CSM (if detected).
+      Running this script is a one time step needed only on the master node the upgrade is being initiated on (`ncn-m001`).
+      If a previous `rbd` mount is detected at `/etc/cray/upgrade/csm`, that content will be remounted and available at `/mnt/csm-1.3-rbd`.
+
+      ```bash
+      /usr/share/doc/csm/scripts/mount-cephfs-share.sh
+      ```
+
 1. Download and extract the CSM `v1.4.4` release to `ncn-m001`.
 
-   See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract-csm-product-release).
+    1. Change into the `cephfs` file share.
+
+       ```bash
+       cd /etc/cray/upgrade/csm/
+       ```
+
+    1. Follow the directions for [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract-csm-product-release).
 
 1. (`ncn-m001#`) Set `CSM_DISTDIR` to the directory of the extracted files.
 
    ***IMPORTANT*** If necessary, change this command to match the actual location of the extracted files.
 
+   > ***NOTE*** `CSM_RELEASE` is set during the [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract-csm-product-release) guide.
+
    ```bash
-   export CSM_DISTDIR="$(pwd)/csm-1.4.4"
+   export CSM_DISTDIR="$(pwd)/csm-${CSM_RELEASE}"
    echo "${CSM_DISTDIR}"
    ```
-
-1. (`ncn-m001#`) Set `CSM_RELEASE_VERSION` to the CSM release version.
-
-   ```bash
-   export CSM_RELEASE_VERSION="$(${CSM_DISTDIR}/lib/version.sh --version)"
-   echo "${CSM_RELEASE_VERSION}"
-   ```
-
-1. Download and install/upgrade the **latest** documentation on `ncn-m001`.
-
-   See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 ### Setup Nexus
 
@@ -287,14 +298,31 @@ In lieu of rebuilding the storage nodes, they will be live patched.
 
 1. (`ncn-m001#`) Set environment variables.
 
+   > ***NOTE*** This relies on variables set during [preparation](#preparation).
+
    ```bash
    export CSM_REL_NAME="csm-${CSM_RELEASE}"
-   export CSM_ARTI_DIR="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}"
+   export CSM_ARTI_DIR="${CSM_DISTDIR}"
+   ```
+
+1. (`ncn-m001#`) Set/update re-usable environment variables.
+
+   ```bash
+   if grep -q '^export CSM_ARTI_DIR=' /etc/cray/upgrade/csm/myenv ; then
+     sed -i 's/^export CSM_ARTI_DIR=.*/export CSM_ARTI_DIR='"$CSM_ARTI_DIR"'/' /etc/cray/upgrade/csm/myenv
+   else
+     echo "export CSM_ARTI_DIR=$CSM_ARTI_DIR" >>/etc/cray/upgrade/csm/myenv
+   fi
+   ```
+
+1. (`ncn-m001#`) Ensure `cray-site-init` is installed, use the latest one provided by the CSM tarball.
+
+   ```bash
+   zypper install -y cray-site-init
    ```
 
 1. Proceed with the following sections from Stage 1:
 
-    * [Start typescript on `ncn-m001`](../Stage_1.md#start-typescript-on-ncn-m001)
     * [Stage 1.1 - Master node image upgrade](../Stage_1.md#stage-11---master-node-image-upgrade)
     * [Stage 1.2 - Worker node image upgrade](../Stage_1.md#stage-12---worker-node-image-upgrade)
     * [Stage 1.3 - `ncn-m001` upgrade](../Stage_1.md#stage-13---ncn-m001-upgrade)

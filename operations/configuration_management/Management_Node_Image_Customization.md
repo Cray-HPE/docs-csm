@@ -373,7 +373,7 @@ new customized image.
      1. Update master management nodes:
 
        ```bash
-       /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
            -m \
            -p "$MASTER_IMAGE_ID"
        ```
@@ -381,7 +381,7 @@ new customized image.
      1. Update storage management nodes:
 
        ```bash
-       /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
            -s \
            -p "$STORAGE_IMAGE_ID"
        ```
@@ -389,7 +389,7 @@ new customized image.
      1. Update worker management nodes:
 
        ```bash
-       /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
            -w \
            -p "$WORKER_IMAGE_ID"
        ```
