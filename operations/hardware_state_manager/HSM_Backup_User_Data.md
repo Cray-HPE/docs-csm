@@ -74,7 +74,7 @@ GROUP_URL=https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups
 curl -k -s -H "Authorization: Bearer ${TOKEN}" $GROUP_URL | jq > $GROUPS_FILE
 ```
 
-### Restore Groups from json file
+### Restore Groups from `json` file
 
 1. (`ncn-mw#`) Set groups filename with dump file.
 
@@ -121,7 +121,7 @@ PARTITION_URL=https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions
 curl -k -s -H "Authorization: Bearer ${TOKEN}" $PARTITION_URL | jq > $PARTITIONS_FILE
 ```
 
-### Restoreotore Partitions from `json` file
+### Restore Partitions from `json` file
 
 1. (`ncn-mw#`) Set partition filename with dump file.
 
