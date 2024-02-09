@@ -92,7 +92,7 @@
     ```bash
     $DOCS_DIR/operations/hardware_state_manager/verifymembership.py cray-smd-memberships-dump_$BACKUP_FILE.json
     ```
-    
+
 1. (`ncn-mw#`) Restore Boot Parameters.
 
     ```bash
