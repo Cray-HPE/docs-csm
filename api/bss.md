@@ -35,7 +35,11 @@ Verify the boot parameters for the specific host.
 
 Base URLs:
 
-* <a href="http://bootscriptserver:27778/apis/bss">http://bootscriptserver:27778/apis/bss</a>
+* <a href="https://api-gw-service-nmn.local/apis/bss">https://api-gw-service-nmn.local/apis/bss</a>
+
+# Authentication
+
+- HTTP Authentication, scheme: bearer 
 
 <h1 id="boot-script-service-cli_ignore">cli_ignore</h1>
 
@@ -46,26 +50,28 @@ Base URLs:
 > Code samples
 
 ```http
-GET http://bootscriptserver:27778/apis/bss/meta-data HTTP/1.1
-Host: bootscriptserver:27778
+GET https://api-gw-service-nmn.local/apis/bss/meta-data HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://bootscriptserver:27778/apis/bss/meta-data \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/bss/meta-data \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://bootscriptserver:27778/apis/bss/meta-data', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/bss/meta-data', headers = headers)
 
 print(r.json())
 
@@ -83,10 +89,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://bootscriptserver:27778/apis/bss/meta-data", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bss/meta-data", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -125,8 +132,9 @@ func main() {
 
 <h3 id="meta_data_get-responseschema">Response Schema</h3>
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## user_data_get
@@ -136,26 +144,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://bootscriptserver:27778/apis/bss/user-data HTTP/1.1
-Host: bootscriptserver:27778
+GET https://api-gw-service-nmn.local/apis/bss/user-data HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: text/yaml
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://bootscriptserver:27778/apis/bss/user-data \
-  -H 'Accept: text/yaml'
+curl -X GET https://api-gw-service-nmn.local/apis/bss/user-data \
+  -H 'Accept: text/yaml' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'text/yaml'
+  'Accept': 'text/yaml',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://bootscriptserver:27778/apis/bss/user-data', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/bss/user-data', headers = headers)
 
 print(r.json())
 
@@ -173,10 +183,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"text/yaml"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://bootscriptserver:27778/apis/bss/user-data", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bss/user-data", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -205,8 +216,9 @@ func main() {
 
 <h3 id="user_data_get-responseschema">Response Schema</h3>
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## phone_home_post
@@ -216,8 +228,8 @@ This operation does not require authentication
 > Code samples
 
 ```http
-POST http://bootscriptserver:27778/apis/bss/phone-home HTTP/1.1
-Host: bootscriptserver:27778
+POST https://api-gw-service-nmn.local/apis/bss/phone-home HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
 
@@ -225,9 +237,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://bootscriptserver:27778/apis/bss/phone-home \
+curl -X POST https://api-gw-service-nmn.local/apis/bss/phone-home \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -235,10 +248,11 @@ curl -X POST http://bootscriptserver:27778/apis/bss/phone-home \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://bootscriptserver:27778/apis/bss/phone-home', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/bss/phone-home', headers = headers)
 
 print(r.json())
 
@@ -257,10 +271,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://bootscriptserver:27778/apis/bss/phone-home", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/bss/phone-home", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -338,8 +353,9 @@ func main() {
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Either the host, MAC or nid are unknown and there is no Default, or the existing entry does not specify a kernel image for boot.|[Error](#schemaerror)|
 |default|Default|Unexpected error|[Error](#schemaerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="boot-script-service-bootscript">bootscript</h1>
@@ -351,26 +367,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://bootscriptserver:27778/apis/bss/boot/v1/bootscript HTTP/1.1
-Host: bootscriptserver:27778
+GET https://api-gw-service-nmn.local/apis/bss/boot/v1/bootscript HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: text/plain
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://bootscriptserver:27778/apis/bss/boot/v1/bootscript \
-  -H 'Accept: text/plain'
+curl -X GET https://api-gw-service-nmn.local/apis/bss/boot/v1/bootscript \
+  -H 'Accept: text/plain' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'text/plain'
+  'Accept': 'text/plain',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://bootscriptserver:27778/apis/bss/boot/v1/bootscript', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/bss/boot/v1/bootscript', headers = headers)
 
 print(r.json())
 
@@ -388,10 +406,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"text/plain"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://bootscriptserver:27778/apis/bss/boot/v1/bootscript", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootscript", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -435,8 +454,9 @@ Retrieve iPXE boot script for the host specified by the MAC parameter. Alternati
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Either the host, MAC or nid are unknown and there is no Default, or the existing entry does not specify a kernel image for boot.|[Error](#schemaerror)|
 |default|Default|Unexpected error|[Error](#schemaerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="boot-script-service-bootparameters">bootparameters</h1>
@@ -446,8 +466,8 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters HTTP/1.1
-Host: bootscriptserver:27778
+GET https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
 
@@ -455,9 +475,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X GET http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters \
+curl -X GET https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -465,10 +486,11 @@ curl -X GET http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters', headers = headers)
 
 print(r.json())
 
@@ -487,10 +509,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -620,8 +643,9 @@ Status Code **200**
 |»»» hostname|string|false|none|none|
 |»»» fqdn|string|false|none|none|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post__boot_v1_bootparameters
@@ -629,8 +653,8 @@ This operation does not require authentication
 > Code samples
 
 ```http
-POST http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters HTTP/1.1
-Host: bootscriptserver:27778
+POST https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
 
@@ -638,9 +662,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters \
+curl -X POST https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -648,10 +673,11 @@ curl -X POST http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters', headers = headers)
 
 print(r.json())
 
@@ -670,10 +696,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -762,8 +789,9 @@ Special entries for HSM roles like 'Compute', 'Storage' and 'Application' can al
 |---|---|---|---|---|
 |201|BSS-Referral-Token|string||The UUID that will be included in the boot script. A new UUID is generated on each POST and PUT request.|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## put__boot_v1_bootparameters
@@ -771,8 +799,8 @@ This operation does not require authentication
 > Code samples
 
 ```http
-PUT http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters HTTP/1.1
-Host: bootscriptserver:27778
+PUT https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
 
@@ -780,9 +808,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PUT http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters \
+curl -X PUT https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -790,10 +819,11 @@ curl -X PUT http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.put('http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters', headers = headers)
+r = requests.put('https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters', headers = headers)
 
 print(r.json())
 
@@ -812,10 +842,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PUT", "http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters", data)
+    req, err := http.NewRequest("PUT", "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -904,8 +935,9 @@ Along with the hosts, there must be a kernel image reference in order for the bo
 |---|---|---|---|---|
 |200|BSS-Referral-Token|string||The UUID that will be included in the boot script. A new UUID is generated on each POST and PUT request.|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch__boot_v1_bootparameters
@@ -913,8 +945,8 @@ This operation does not require authentication
 > Code samples
 
 ```http
-PATCH http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters HTTP/1.1
-Host: bootscriptserver:27778
+PATCH https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
 
@@ -922,9 +954,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters \
+curl -X PATCH https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -932,10 +965,11 @@ curl -X PATCH http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.patch('http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters', headers = headers)
+r = requests.patch('https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters', headers = headers)
 
 print(r.json())
 
@@ -954,10 +988,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters", data)
+    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1035,8 +1070,9 @@ Update an existing entry with new boot parameters while retaining existing setti
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Cannot find entry for specified host, mac, or nid|[Error](#schemaerror)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Error](#schemaerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete__boot_v1_bootparameters
@@ -1044,8 +1080,8 @@ This operation does not require authentication
 > Code samples
 
 ```http
-DELETE http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters HTTP/1.1
-Host: bootscriptserver:27778
+DELETE https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters HTTP/1.1
+Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
 
@@ -1053,9 +1089,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X DELETE http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters \
+curl -X DELETE https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1063,10 +1100,11 @@ curl -X DELETE http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.delete('http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters', headers = headers)
+r = requests.delete('https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters', headers = headers)
 
 print(r.json())
 
@@ -1085,10 +1123,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("DELETE", "http://bootscriptserver:27778/apis/bss/boot/v1/bootparameters", data)
+    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1166,8 +1205,9 @@ Remove an existing boot parameter settings for one or more hosts, as specified b
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist - Cannot find specified host, mac, or nid|[Error](#schemaerror)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Error](#schemaerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="boot-script-service-hosts">hosts</h1>
@@ -1177,26 +1217,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://bootscriptserver:27778/apis/bss/boot/v1/hosts HTTP/1.1
-Host: bootscriptserver:27778
+GET https://api-gw-service-nmn.local/apis/bss/boot/v1/hosts HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://bootscriptserver:27778/apis/bss/boot/v1/hosts \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/bss/boot/v1/hosts \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://bootscriptserver:27778/apis/bss/boot/v1/hosts', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/bss/boot/v1/hosts', headers = headers)
 
 print(r.json())
 
@@ -1214,10 +1256,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://bootscriptserver:27778/apis/bss/boot/v1/hosts", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bss/boot/v1/hosts", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1278,8 +1321,9 @@ Retrieve list of known hosts obtained from HSM. This list can be filtered by spe
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Return list of hosts and associated attributes known to BSS|[HostInfo](#schemahostinfo)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post__boot_v1_hosts
@@ -1287,26 +1331,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-POST http://bootscriptserver:27778/apis/bss/boot/v1/hosts HTTP/1.1
-Host: bootscriptserver:27778
+POST https://api-gw-service-nmn.local/apis/bss/boot/v1/hosts HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X POST http://bootscriptserver:27778/apis/bss/boot/v1/hosts \
-  -H 'Accept: application/json'
+curl -X POST https://api-gw-service-nmn.local/apis/bss/boot/v1/hosts \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://bootscriptserver:27778/apis/bss/boot/v1/hosts', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/bss/boot/v1/hosts', headers = headers)
 
 print(r.json())
 
@@ -1324,10 +1370,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://bootscriptserver:27778/apis/bss/boot/v1/hosts", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/bss/boot/v1/hosts", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1365,8 +1412,9 @@ Retrieve the latest host information from HSM.
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Error](#schemaerror)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Error](#schemaerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="boot-script-service-dumpstate">dumpstate</h1>
@@ -1376,26 +1424,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://bootscriptserver:27778/apis/bss/boot/v1/dumpstate HTTP/1.1
-Host: bootscriptserver:27778
+GET https://api-gw-service-nmn.local/apis/bss/boot/v1/dumpstate HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://bootscriptserver:27778/apis/bss/boot/v1/dumpstate \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/bss/boot/v1/dumpstate \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://bootscriptserver:27778/apis/bss/boot/v1/dumpstate', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/bss/boot/v1/dumpstate', headers = headers)
 
 print(r.json())
 
@@ -1413,10 +1463,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://bootscriptserver:27778/apis/bss/boot/v1/dumpstate", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bss/boot/v1/dumpstate", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1507,8 +1558,9 @@ Dump internal state of boot script service for debugging purposes. Return known 
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Error](#schemaerror)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[Error](#schemaerror)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="boot-script-service-endpoint-history">endpoint-history</h1>
@@ -1518,26 +1570,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://bootscriptserver:27778/apis/bss/boot/v1/endpoint-history HTTP/1.1
-Host: bootscriptserver:27778
+GET https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://bootscriptserver:27778/apis/bss/boot/v1/endpoint-history \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://bootscriptserver:27778/apis/bss/boot/v1/endpoint-history', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history', headers = headers)
 
 print(r.json())
 
@@ -1555,10 +1609,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://bootscriptserver:27778/apis/bss/boot/v1/endpoint-history", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1626,8 +1681,9 @@ Status Code **200**
 |endpoint|bootscript|
 |endpoint|user-data|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="boot-script-service-service-status">service-status</h1>
@@ -1637,26 +1693,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://bootscriptserver:27778/apis/bss/boot/v1/service/status HTTP/1.1
-Host: bootscriptserver:27778
+GET https://api-gw-service-nmn.local/apis/bss/boot/v1/service/status HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://bootscriptserver:27778/apis/bss/boot/v1/service/status \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/bss/boot/v1/service/status \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://bootscriptserver:27778/apis/bss/boot/v1/service/status', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/bss/boot/v1/service/status', headers = headers)
 
 print(r.json())
 
@@ -1674,10 +1732,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://bootscriptserver:27778/apis/bss/boot/v1/service/status", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bss/boot/v1/service/status", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1726,8 +1785,9 @@ Status Code **200**
 |---|---|
 |bss-status|running|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__boot_v1_service_etcd
@@ -1735,26 +1795,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://bootscriptserver:27778/apis/bss/boot/v1/service/etcd HTTP/1.1
-Host: bootscriptserver:27778
+GET https://api-gw-service-nmn.local/apis/bss/boot/v1/service/etcd HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://bootscriptserver:27778/apis/bss/boot/v1/service/etcd \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/bss/boot/v1/service/etcd \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://bootscriptserver:27778/apis/bss/boot/v1/service/etcd', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/bss/boot/v1/service/etcd', headers = headers)
 
 print(r.json())
 
@@ -1772,10 +1834,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://bootscriptserver:27778/apis/bss/boot/v1/service/etcd", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bss/boot/v1/service/etcd", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1839,8 +1902,9 @@ Status Code **500**
 |---|---|
 |bss-status-etcd|error|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__boot_v1_service_hsm
@@ -1848,26 +1912,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://bootscriptserver:27778/apis/bss/boot/v1/service/hsm HTTP/1.1
-Host: bootscriptserver:27778
+GET https://api-gw-service-nmn.local/apis/bss/boot/v1/service/hsm HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://bootscriptserver:27778/apis/bss/boot/v1/service/hsm \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/bss/boot/v1/service/hsm \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://bootscriptserver:27778/apis/bss/boot/v1/service/hsm', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/bss/boot/v1/service/hsm', headers = headers)
 
 print(r.json())
 
@@ -1885,10 +1951,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://bootscriptserver:27778/apis/bss/boot/v1/service/hsm", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bss/boot/v1/service/hsm", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1950,8 +2017,9 @@ Status Code **500**
 |---|---|
 |bss-status-hsm|error|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__boot_v1_service_version
@@ -1959,26 +2027,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://bootscriptserver:27778/apis/bss/boot/v1/service/version HTTP/1.1
-Host: bootscriptserver:27778
+GET https://api-gw-service-nmn.local/apis/bss/boot/v1/service/version HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://bootscriptserver:27778/apis/bss/boot/v1/service/version \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/bss/boot/v1/service/version \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://bootscriptserver:27778/apis/bss/boot/v1/service/version', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/bss/boot/v1/service/version', headers = headers)
 
 print(r.json())
 
@@ -1996,10 +2066,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://bootscriptserver:27778/apis/bss/boot/v1/service/version", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bss/boot/v1/service/version", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2052,8 +2123,9 @@ Status Code **500**
 |---|---|
 |bss-version|error|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__boot_v1_service_status_all
@@ -2061,26 +2133,28 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://bootscriptserver:27778/apis/bss/boot/v1/service/status/all HTTP/1.1
-Host: bootscriptserver:27778
+GET https://api-gw-service-nmn.local/apis/bss/boot/v1/service/status/all HTTP/1.1
+Host: api-gw-service-nmn.local
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://bootscriptserver:27778/apis/bss/boot/v1/service/status/all \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/bss/boot/v1/service/status/all \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://bootscriptserver:27778/apis/bss/boot/v1/service/status/all', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/bss/boot/v1/service/status/all', headers = headers)
 
 print(r.json())
 
@@ -2098,10 +2172,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://bootscriptserver:27778/apis/bss/boot/v1/service/status/all", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bss/boot/v1/service/status/all", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2178,8 +2253,9 @@ Status Code **500**
 |bss-status-hsm|connected|
 |bss-status-hsm|error|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 # Schemas
