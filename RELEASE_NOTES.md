@@ -11,10 +11,10 @@
 * Updates to all services using `etcd` cluster to migrate to use of `bitnami-etcd`
 * Support for old and new `spire` versions running simultaneously toward zero downtime upgrades
 * Technical Preview Support for `spire` `TPM-based` remote node attestation
-* v1 of Power Control Service (PCS) is active.
-* The v3 CFS API is now available, including support for paging, external repository "sources", and new options for debugging.
+* V1 of Power Control Service (PCS) is released
+* The V3 CFS API is now available, including support for paging, external repository "sources", and new options for debugging.
 * Update of all services using `postgres` to support new versions of `postgres` and `postgres-operator`
-* Required changes in multiple places to make `bosV2` the default
+* `BOS V2` is the default
 * Update `spire` version
 * Update version of `cert-manager`
 * Upgrade to `Kubernetes` version 1.22
@@ -35,7 +35,7 @@
 * Added support for specifying IMS Image and Recipe architecture in IUF
 * Upgraded node-images to SLES15SP5
 * Updated Spire Server to work with TPM
-* Added Improved error logging for`bos` command
+* Added improved error logging for`bos` command
 * Added a method to stop `CFS/Batcher` and cancel configuration for in-flight customizations
 * Added support for git `submodules` in CFS runs
 * Added support for `ARM 64` based builds through emulation
@@ -54,7 +54,7 @@
 * Add switches in HSM to PCS and allow for power reset actions
 * Updated HMS discovery process to populate a node's architecture when making the information available via Redfish
 * Update to `ilorest-4.1.0.0` for `Gen11` Support
-* Support for ARM64 added in `metal-ipxe`
+* Support for ARM64 added
 * Hardware validation of the EX2500 Cabinet
 * Support JL627A switches as an edge router for BI-CAN
 
@@ -130,10 +130,10 @@
 * Addition of a CSM cabling page for the management and edge network
 * Added system recovery procedure for `keycloak`
 * Updates in several places as a result of migration to `bitnami-etcd`
-* Updates to BOS documentation to replace CAPMC references
+* Update to BOS documentation to replace CAPMC references
 * Update to IUF upgrade with CSM workflow diagram and documentation
-* Updates to `postgres` backup procedures
-* Updates to NCN Customization and Personalization documentation to use `sat-bootprep`
+* Update to `postgres` backup procedures
+* Update to NCN Customization and Personalization documentation to use `sat-bootprep`
 * Remove known issue about restored etcd clusters missing PVC
 * Added SNMP setup for all switches to Install/Update instructions
 * Updated Keycloak documentation to use CMN LB for administrative tasks
@@ -192,5 +192,3 @@ For a list of all deprecated CSM features, see [Deprecations](introduction/depre
 For a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals)
 
 ## Known issues
-
-### Security vulnerability exceptions in CSM 1.5
