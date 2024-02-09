@@ -84,6 +84,7 @@ in [Upgrade CSM](../README.md) instead.
    > ***NOTE*** `CSM_RELEASE` is set during the [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract-csm-product-release) guide.
 
    ```bash
+   export CSM_RELEASE_VERSION="$CSM_RELEASE"
    export CSM_DISTDIR="$(pwd)/csm-${CSM_RELEASE}"
    echo "${CSM_DISTDIR}"
    ```
