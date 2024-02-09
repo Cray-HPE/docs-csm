@@ -1,6 +1,6 @@
 # Backup/Restore HSM User Data (Locks, Groups, and Partitions)
 
-## Backup locks to json file
+## Backup locks to `json` file
 
 1. (`ncn-mw#`) Set locks dump filename (can be anything you would like, suggested format below).
 
@@ -22,7 +22,7 @@ LOCK_URL=https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/status
 curl -k -s -H "Authorization: Bearer ${TOKEN}" $LOCK_URL | jq > $LOCKS_FILE
 ```
 
-### Restore Locks from json file
+### Restore Locks from `json` file
 
 1. (`ncn-mw#`) Set locks dump filename.
 
@@ -52,7 +52,7 @@ You may receive errors which just indicates the xname was already locked/unlocke
 {"type":"about:blank","title":"Bad Request","detail":"Component is Unlocked","status":400}
 ```
 
-## Backup groups to json file
+## Backup groups to `json` file
 
 1. (`ncn-mw#`) Set group dump filename (can be anything you would like, suggested format below).
 
@@ -99,8 +99,7 @@ IFS=$IFS_SAVE
 curl -k -s -H "Authorization: Bearer ${TOKEN}" $GROUP_URL | jq
 ```
 
-## Backup partitions to json file
-
+## Backup partitions to `json` file
 
 1. (`ncn-mw#`) Set partition dump filename (can be anything you would like, suggested format below).
 
@@ -122,7 +121,7 @@ PARTITION_URL=https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions
 curl -k -s -H "Authorization: Bearer ${TOKEN}" $PARTITION_URL | jq > $PARTITIONS_FILE
 ```
 
-### Resotre Partitions from json file
+### Restoreotore Partitions from `json` file
 
 1. (`ncn-mw#`) Set partition filename with dump file.
 

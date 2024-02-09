@@ -10,7 +10,7 @@
   cd $BACKUPDIR
   ```
 
-1. (`ncn-mw#`) Create backup of HSM postgres database.
+1. (`ncn-mw#`) Create backup of HSM `postgres` database.
 
   ```bash
   BACKUP_LOCATION=`pwd`
@@ -41,7 +41,7 @@
   ls -la
   ```
 
-1. (`ncn-mw#`) Create backup of roles, sub-roles, and cray-hms-base-config.
+1. (`ncn-mw#`) Create backup of roles, sub-roles, and `cray-hms-base-config`.
 
   ```bash
   kubectl -n services get configmap cray-hms-base-config -o yaml | sed '/resourceVersion:/d' | sed '/uid:/d' > cray-hms-base-config_$BACKUPDIR.yaml
@@ -49,7 +49,7 @@
   ls -la
   ```
 
-1. (`ncn-mw#`) Create backup of SLS postgres database.
+1. (`ncn-mw#`) Create backup of SLS `postgres` database.
 
   ```bash
   BACKUP_LOCATION=`pwd`

@@ -14,7 +14,10 @@ A healthy etcd cluster is available on the system. See [Check the Health and Bal
 
 1. Create a backup for the desired etcd cluster.
 
-    Create variables which will be used throughout this procedure.  In this example we are making a backup of the Boot Orchestration Service \(BOS\) etcd cluster which will be named cray-bos-etcd-backup_DATE_TIME.  NOTE: backup name can be anything you would like.
+    Create variables which will be used throughout this procedure.
+    In this example we are making a backup of the Boot Orchestration Service \(BOS\) etcd cluster
+    which will be named `cray-bos-etcd-backup_DATE_TIME`.
+    NOTE: backup name can be anything you would like.
 
     ```bash
     SERVICE=cray-bos
