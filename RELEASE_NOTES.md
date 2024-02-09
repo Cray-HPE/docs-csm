@@ -11,7 +11,7 @@
 * Updates to all services using `etcd` cluster to migrate to use of `bitnami-etcd`
 * Support for old and new `spire` versions running simultaneously toward zero downtime upgrades
 * Technical Preview Support for `spire` `TPM-based` remote node attestation
-* V1 of Power Control Service (PCS) is released
+* Power Control Service (PCS) is released
 * The V3 CFS API is now available, including support for paging, external repository "sources", and new options for debugging.
 * Update of all services using `postgres` to support new versions of `postgres` and `postgres-operator`
 * `BOS V2` is the default
