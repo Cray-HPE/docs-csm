@@ -1,37 +1,34 @@
 # Create a Session Template to Boot Compute Nodes with CPS
 
 When [compute nodes](../../glossary.md#compute-node-cn) are booted, the [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and
-[Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) project the root file system \(`rootfs`\) over the network to the compute nodes by default.
+[Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) project the root file system (`rootfs`) over the network to the compute nodes by default.
 
 Another option when compute nodes are booted is to download their `rootfs` into RAM.
 
 This page covers the appropriate contents for a BOS session template in order to use CPS and DVS.
 
+- [Boot set `rootfs_provider` parameter](#boot-set-rootfs_provider-parameter)
+- [Boot set `rootfs_provider_passthrough` parameters](#boot-set-rootfs_provider_passthrough-parameters)
+    - [`<transport>`](#transport)
+    - [`<api_gateway>`](#api_gateway)
+    - [`<timeout>`](#timeout)
+    - [`<interface>[,<interface>][,<interface>]...`](#interfaceinterfaceinterface)
+    - [`<ramroot>`](#ramroot)
+    - [Example `rootfs_provider_passthrough`](#example-rootfs_provider_passthrough)
 - [Boot set S3 parameters](#boot-set-s3-parameters)
-- [Boot set `rootfs_provider` parameters](#boot-set-rootfs_provider-parameters)
-  - [`<transport>`](#transport)
-  - [`<api_gateway>`](#api_gateway)
-  - [`<timeout>`](#timeout)
-  - [`<etag>`](#etag)
-  - [`<interface>[,<interface>][,<interface>]...`](#interfaceinterfaceinterface)
-  - [`<ramroot>`](#ramroot)
-  - [Example `rootfs_provider_passthrough`](#example-rootfs_provider_passthrough)
-- [`root=` kernel parameter](#root-kernel-parameter)
 - [Example session template input file](#example-session-template-input-file)
 - [Creating a BOS session using the new template](#creating-a-bos-session-using-the-new-template)
+- [Appendix: `root=` kernel parameter](#appendix-root-kernel-parameter)
 
-## Boot set S3 parameters
+The Content Projection Service (CPS) is an optional provider for `rootfs` on compute nodes.
 
-The session template boot set contains several [Simple Storage Service (S3)](../../glossary.md#simple-storage-service-s3) parameters.
-These are listed below, along with the appropriate values to use.
+## Boot set `rootfs_provider` parameter
 
-- `type`: Set to `s3`
-- `path`: Set to `s3://<BUCKET_NAME>/<KEY_NAME>`
-- `etag`: Set to `<etag\>`
+The following value needs to be set in the boot set of the session template in order to make CPS the `rootfs` provider:
 
-## Boot set `rootfs_provider` parameters
+- `"rootfs_provider":` Set to `"cpss3"`
 
-The Content Projection Service \(CPS\) is an optional provider for `rootfs` on compute nodes.
+## Boot set `rootfs_provider_passthrough` parameters
 
 The `rootfs_provider_passthrough` boot set parameter is customized according to the following format:
 
@@ -41,7 +38,6 @@ rootfs_provider_passthrough=<transport>:<api_gateway>:<timeout>:<interface>[,<in
 
 The following values need to be set in the boot set of the session template in order to make CPS the `rootfs` provider:
 
-- `"rootfs_provider":` Set to `"cpss3"`
 - `"rootfs_provider_passthrough":` Set to `"dvs:api-gw-service-nmn.local:300:eth0"`
 
 The variables used in this parameter represent the following:
@@ -64,10 +60,6 @@ The timeout, in seconds, for attempting to mount the `netroot` via CPS.
 
 Can be left as an empty string to use the default value of 300 seconds.
 
-### `<etag>`
-
-Lists the syntax in use. BOS fills in the S3 path and `etag` values, so the user does not need to fill in any data.
-
 ### `<interface>[,<interface>][,<interface>]...`
 
 A comma-separated list of interfaces to support. A minimum of one interface must be specified.
@@ -78,7 +70,7 @@ The first interface specified will be passed to the CPS mount command to identif
 
 ### `<ramroot>`
 
-Indicates that the specified S3 path should be copied to RAM \(`tmpfs`\) and mounted locally instead of persisting as a remote file system mount.
+Indicates that the specified S3 path should be copied to RAM (`tmpfs`) and mounted locally instead of persisting as a remote file system mount.
 
 Can be left empty. Any string except `"0"` is interpreted as true.
 
@@ -88,18 +80,16 @@ Can be left empty. Any string except `"0"` is interpreted as true.
 rootfs_provider_passthrough=dvs:api-gw-service-nmn.local:300:eth0
 ```
 
-## `root=` kernel parameter
+## Boot set S3 parameters
 
-BOS will construct the `root=` kernel parameter, which will be used by the node when it boots, based on the `rootfs_provider` and `rootfs_provider_passthrough` values.
+The session template boot set contains several [Simple Storage Service (S3)](../../glossary.md#simple-storage-service-s3) parameters.
+These are listed below, along with the appropriate values to use.
 
-For CPS, BOS supplies a protocol `craycps-s3`, the S3 path to the `rootfs`, and the `etag` value \(if it exists\).
-The rest of the parameters are supplied from the `rootfs_provider_passthrough` values as specified above.
-
-BOS will construct it in the following format:
-
-```text
-root=craycps-s3:s3-path:<etag>:<transport>:<api_gateway>:<timeout>:interface[,<interface>[,<interface>]...]:<ramroot>
-```
+- `type`: Set to `s3`
+- `path`: Set to `s3://<BUCKET_NAME>/<KEY_NAME>/manifest.json`
+    - `<BUCKET_NAME>` is set to `boot-images`
+    - `<KEY_NAME>` is set to the image ID that the [Image Management Service (IMS)](../../glossary.md#image-management-service-ims) created when it generated the boot artifacts.
+- `etag`: set to the `etag` of the `manifest.json` file in S3 as stored by the [Image Management Service (IMS)](../../glossary.md#image-management-service-ims)
 
 ## Example session template input file
 
@@ -112,14 +102,14 @@ The following is an example of an input file to use with the [Cray CLI](../../gl
   "boot_sets": {
     "computes": {
       "rootfs_provider": "cpss3",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:eth0",
+      "kernel_parameters": "ip=dhcp quiet spire_join_token=${SPIRE_JOIN_TOKEN}",
       "node_roles_groups": [
         "Compute"
       ],
-      "etag": "b0ace28163302e18b68cf04dd64f2e01",
+      "type": "s3",
       "path": "s3://boot-images/ef97d3c4-6f10-4d58-b4aa-7b70fcaf41ba/manifest.json",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:eth0",
-      "type": "s3"
+      "etag": "b0ace28163302e18b68cf04dd64f2e01"
     }
   },
   "cfs": {
@@ -136,4 +126,26 @@ Refer to [Manage a Session Template](Manage_a_Session_Template.md) for more info
 
 ```bash
 cray bos v2 sessions create --template-name cps_rootfs_template --operation Reboot
+```
+
+## Appendix: `root=` kernel parameter
+
+This section supplies additional information about how BOS constructs the `root=` kernel parameter. This section does not require any
+action to be taken. It is merely supplemental information.
+
+BOS will construct the `root=` kernel parameter, which will be used by the node when it boots, based on the `rootfs_provider` and `rootfs_provider_passthrough` values.
+
+For CPS, BOS supplies a protocol `craycps-s3`, the S3 path to the `rootfs`, and the `etag` value (if it exists).
+The rest of the parameters are supplied from the `rootfs_provider_passthrough` values as specified above.
+
+BOS will construct it in the following format:
+
+```text
+root=craycps-s3:s3-path:<etag>:<transport>:<api_gateway>:<timeout>:interface[,<interface>[,<interface>]...]:<ramroot>
+```
+
+### Example kernel parameter
+
+```text
+root=craycps-s3:s3://boot-images/079f6bce-d902-438a-8db7-bcb06a21d3de/rootfs:727f630b5a0953c21026eeca6db7e49f-1792:dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0
 ```
