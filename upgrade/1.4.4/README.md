@@ -265,6 +265,8 @@ advised to take backups of their local, site files.
 
 #### WLM backup
 
+> ***NOTE*** For CSM-only systems, skip this step and continue onto [Storage nodes in-place update](#storage-nodes-in-place-update)
+
 1. Follow the directions in [Stage 0.4](../Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data).
 
 ### Storage nodes in-place update
