@@ -49,6 +49,7 @@ after a break, always be sure that a typescript is running before proceeding.
    ```
 
    > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
+   > Ensure file `/etc/cray/upgrade/csm/myenv` has entries for `STORAGE_IMS_IMAGE_ID`, `K8S_IMS_IMAGE_ID`, `CSM_ARTI_DIR` and `CSM_RELEASE`.
 
 1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
