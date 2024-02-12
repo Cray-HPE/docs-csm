@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -23,13 +23,64 @@
 #
 """Shared Python function library: S3"""
 
+import base64
 import json
+import logging
 import os
 from typing import Dict
 from urllib.parse import urlparse
+import warnings
+
+import boto3
 
 from . import common
+from . import k8s
 from .types import JsonDict
+
+S3_CREDS_SECRET_NAME = "ims-s3-credentials"
+
+# Mapping from the boto3 client kwargs field names to the Kubernetes secret field names
+S3_CREDS_SECRET_FIELDS = {
+    "endpoint_url": "s3_endpoint",
+    "aws_access_key_id": "access_key",
+    "aws_secret_access_key": "secret_key",
+    "verify": "ssl_validate" }
+
+
+def s3_client_kwargs() -> JsonDict:
+    """
+    Decode the S3 credentials from the Kubernetes secret, and return
+    the kwargs needed to initialize the boto3 client.
+    """
+    secret_data = k8s.Client().get_secret_data(name=S3_CREDS_SECRET_NAME, namespace="default")
+    logging.debug("Reading fields from Kubernetes secret '%s'", S3_CREDS_SECRET_NAME)
+    encoded_s3_secret_fields = { field: secret_data[secret_field]
+                                 for field, secret_field in S3_CREDS_SECRET_FIELDS.items() }
+    logging.debug("Decoding fields from Kubernetes secret '%s'", S3_CREDS_SECRET_NAME)
+    kwargs = { field: base64.b64decode(encoded_field).decode()
+               for field, encoded_field in encoded_s3_secret_fields.items() }
+    # Need to convert the 'verify' field to boolean if it is false
+    if not kwargs["verify"] or kwargs["verify"].lower() in ('false', 'off', 'no', 'f', '0'):
+        kwargs["verify"] = False
+
+    # And if Verify is false, then we need to make sure that our endpoint isn't https, since
+    # it will use SSL verification regardless if the endpoint is https
+    if kwargs["verify"] is False and kwargs["endpoint_url"][:6] == "https:":
+        kwargs["endpoint_url"] = f"http:{kwargs['endpoint_url'][6:]}"
+
+    return kwargs
+
+
+def s3_client():
+    """
+    Initialize the boto3 client and return it
+    """
+    client_kwargs = s3_client_kwargs()
+    logging.debug("Getting boto3 S3 client")
+    with warnings.catch_warnings():
+        warnings.filterwarnings('ignore', category=boto3.compat.PythonDeprecationWarning)
+        bclient = boto3.client('s3', **client_kwargs)
+    return bclient
 
 
 class S3Url(str):
@@ -85,8 +136,24 @@ def list_artifacts(bucket_name: str) -> JsonDict:
     """
     Queries S3 to list contents of the specified bucket and returns the response
     """
-    command = ['cray', 'artifacts', 'list', bucket_name, '--format', 'json']
-    return json.loads(common.run_command(command))
+    s3_cli = s3_client()
+    logging.debug("Quering S3 for contents of '%s' bucket", bucket_name)
+    resp = s3_cli.list_objects_v2(Bucket=bucket_name)
+    logging.debug("S3 returned list of %d artifacts in '%s' bucket", len(resp["Contents"]),
+                  bucket_name)
+    artifact_list = resp["Contents"]
+    page_num=1
+    while resp["IsTruncated"]:
+        page_num+=1
+        logging.debug("Quering S3 for contents of '%s' bucket (page %d)", bucket_name, page_num)
+        resp = s3_cli.list_objects_v2(Bucket=bucket_name,
+                                      ContinuationToken=resp["NextContinuationToken"])
+        logging.debug("S3 returned list of %d artifacts in '%s' bucket", len(resp["Contents"]),
+                      bucket_name)
+        artifact_list.extend(resp["Contents"])
+
+    # Return a response in the same format as the Cray CLI would
+    return { "artifacts": artifact_list }
 
 
 def bucket_artifact_map(list_artifacts_response: JsonDict) -> Dict[str, JsonDict]:
