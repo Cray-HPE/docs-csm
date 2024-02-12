@@ -146,6 +146,10 @@ products with IUF. If this step is skipped, IUF will fail when updating or upgra
 ```bash
 /usr/share/doc/csm/upgrade/scripts/upgrade/upload-ncn-images.sh
 ```
+**Note:** Ensure the parameter `CSM_RELEASE_VERSION` is initialized before running the above script.
+```bash
+export CSM_RELEASE_VERSION="1.4.4"
+```
 
 ### Upgrade Ceph and stop local Docker registries
 
