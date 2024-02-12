@@ -94,10 +94,10 @@ choose option 2.**
    > This may take over 20 minutes to complete.
 
    ```bash
-   watch '
-   cray cfs sessions describe "${K8S_CFS_SESSION_NAME}" --format json | jq -r ".status.session.succeeded"
+   watch "
+   cray cfs sessions describe "${K8S_CFS_SESSION_NAME}" --format json | jq -r ".status.session.succeeded";
    cray cfs sessions describe "${CEPH_CFS_SESSION_NAME}" --format json | jq -r ".status.session.succeeded"
-   '
+   "
    ```
 
    Expected results:
