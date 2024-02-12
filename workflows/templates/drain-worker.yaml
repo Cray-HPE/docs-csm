@@ -65,6 +65,8 @@ spec:
                 value: "{{inputs.parameters.dryRun}}"
               - name: scriptContent
                 value: |
+                  echo "Sleeping for 60 seconds to allow pod migration to commence"
+                  sleep 60
                   echo "Waiting for nexus ..."
                   kubectl wait --for=condition=ready pod -l app=nexus -n nexus --timeout=30m
                   echo "Waiting for keycloak ..."
