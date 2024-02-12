@@ -231,23 +231,23 @@ error: no objects passed to replace
 
 1. (`pit#`) Verify there is no `cray-spire-update-bss` pod in the `spire` namespace.
 
-```bash
-kubectl get pods -n spire | grep cray-spire-update-bss
-```
+    ```bash
+    kubectl get pods -n spire | grep cray-spire-update-bss
+    ```
 
 1. (`pit#`) Get the `cray-spire-update-bss` job from the helm chart and apply it.
 
-```bash
-helm get manifest -n spire cray-spire | grep -A 68 'Source: cray-spire/templates/update-bss/job.yaml' \
-   | kubectl apply -n spire -f -
-```
+    ```bash
+    helm get manifest -n spire cray-spire | grep -A 68 'Source: cray-spire/templates/update-bss/job.yaml' \
+       | kubectl apply -n spire -f -
+    ```
 
 1. Wait for the job to complete.
 
-```bash
-SPIRE_JOB=$(kubectl -n spire get jobs -l app.kubernetes.io/name=cray-spire-update-bss -o name)
-kubectl -n spire wait "${SPIRE_JOB}" --for=condition=complete --timeout=5m
-```
+    ```bash
+    SPIRE_JOB=$(kubectl -n spire get jobs -l app.kubernetes.io/name=cray-spire-update-bss -o name)
+    kubectl -n spire wait "${SPIRE_JOB}" --for=condition=complete --timeout=5m
+    ```
 
 1. Restart the `Create base BSS global boot parameters` step from the beginning.
 
