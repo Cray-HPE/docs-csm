@@ -51,7 +51,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
       1. This shows one way to correct that sample command so the environment variable will be set when `kubelet` is available and will skip setting the variable when `kubelet` is not available.
 
          ```bash
-         if [ systemctl is-active -q kubelet ; then
+         if systemctl is-active -q kubelet ; then
                  export DOMAIN=$(kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}'|base64 -d | grep "external:")
          fi
          ```
