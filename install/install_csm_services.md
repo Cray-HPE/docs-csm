@@ -218,16 +218,16 @@ The following error may occur during the `Deploy CSM Applications and Services` 
 
 1. Running the `yapl` command again is expected to succeed.
 
-The Following error may occur during `Create base BSS global boot parameters` step:
+     The Following error may occur during `Create base BSS global boot parameters` step:
 
-```text
-kubectl -n spire get "${SPIRE_JOB}" -o json | jq 'del(.spec.selector)' \
->     | jq 'del(.spec.template.metadata.labels."controller-uid")' \
->     | kubectl replace --force -f -
-error: the server doesn't have a resource type ""
-No resources found
-error: no objects passed to replace
-```
+     ```text
+     kubectl -n spire get "${SPIRE_JOB}" -o json | jq 'del(.spec.selector)' \
+     >     | jq 'del(.spec.template.metadata.labels."controller-uid")' \
+     >     | kubectl replace --force -f -
+     error: the server doesn't have a resource type ""
+     No resources found
+     error: no objects passed to replace
+     ```
 
 1. (`pit#`) Verify there is no `cray-spire-update-bss` pod in the `spire` namespace.
 
