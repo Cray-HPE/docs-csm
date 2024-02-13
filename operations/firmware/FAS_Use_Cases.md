@@ -426,7 +426,7 @@ Use the file `cray_chassisBMC_BMC.json` for Chassis BMC updates.
         This command powers off all the node cards, then all the compute blades,
         then all the Slingshot switch modules, and finally all the chassis
         enclosures in cabinets 1000-1003.
-        
+
         When power is removed from a chassis, the high-voltage DC rectifiers
         that support the chassis are powered off.
 

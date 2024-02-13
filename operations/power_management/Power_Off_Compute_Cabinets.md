@@ -114,7 +114,7 @@ If the system does not include HPE Cray EX liquid-cooled cabinets, then skip the
     The command does not filter nonexistent component names \(xnames\) and
     displays an error when invalid component names are specified. Use `power statu slist`
     with no `--xnames` option to show everything.
-    
+
     ```bash
     cray power status list --format json
     ```
