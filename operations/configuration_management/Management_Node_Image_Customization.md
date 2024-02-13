@@ -319,9 +319,9 @@ The following procedure describes how to create a CFS configuration that contain
     git clone "https://${VCS_USER}:${VCS_PASS}@api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
     ```
 
-   A Git commit hash from this repository is needed in the following step. After cloning repo, verify that the "yaml"
+   A Git commit hash from this repository is needed in the following step. After cloning repo, verify that the YAML
    files used in image customization are present. If not, check the other branches in cloned repo and switch to correct
-   branch which has the required "yaml" files.
+   branch which has the required YAML files.
 
    ```bash
     git branch -a
