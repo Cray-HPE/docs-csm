@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -244,8 +244,6 @@ Kibana
 Kubernetes
 Kyverno
 LAN
-LAN
-LANs
 LANs
 LNet
 LVM
@@ -275,6 +273,7 @@ MetalLB's
 Mi100
 Motivair
 Multus
+Multitenancy
 MyMellanox
 NCN
 NCN-UAN
