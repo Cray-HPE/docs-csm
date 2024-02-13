@@ -57,6 +57,7 @@
 * Support for ARM64 added
 * Hardware validation of the EX2500 Cabinet
 * Support JL627A switches as an edge router for BI-CAN
+* Support for Broadcom PXE boots, and interface naming
 
 ## Improvements
 
