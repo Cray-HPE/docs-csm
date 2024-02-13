@@ -358,121 +358,110 @@ new customized image.
 
 1. (`ncn-mw#`) Set an environment variable for the IMS image ID.
 
-    * If executing this step in the context of
-      [Stage 0.3 - Update management node CFS configuration and customize worker node image](../../upgrade/Stage_0_Prerequisites.md#stage-03---update-management-node-cfs-configuration-and-customize-worker-node-image)
-      of the CSM upgrade procedure, use the appropriate IMS image ID environment variable set in that procedure.
+   * If executing this step in the context of
+     [Stage 0.3 - Update management node CFS configuration and customize worker node image](../../upgrade/Stage_0_Prerequisites.md#stage-03---update-management-node-cfs-configuration-and-customize-worker-node-image)
+     of the CSM upgrade procedure, use the appropriate IMS image ID environment variable set in that procedure.
 
-      * For worker management nodes:
+     > ***NOTE*** To target both master and worker nodes at the same time, use the following:
+     >
+     > ```bash
+     > /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+     >     -mw \
+     >     -p "$MASTER_IMAGE_ID"
+     > ```
 
-        ```bash
-        NEW_IMS_IMAGE_ID="${WORKER_IMAGE_ID}"
-        ```
+     1. Update master management nodes:
 
-      * For master management nodes:
+       ```bash
+       /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+           -m \
+           -p "$MASTER_IMAGE_ID"
+       ```
 
-        ```bash
-        NEW_IMS_IMAGE_ID="${MASTER_IMAGE_ID}"
-        ```
+     1. Update storage management nodes:
 
-      * For storage management nodes:
+       ```bash
+       /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+           -s \
+           -p "$STORAGE_IMAGE_ID"
+       ```
 
-        ```bash
-        NEW_IMS_IMAGE_ID="${STORAGE_IMAGE_ID}"
-        ```
+     1. Update worker management nodes:
 
-    * If executing this step in the context of the entire procedure on this page, then use the
-      `IMS_RESULTANT_IMAGE_ID` set in the previous step,
-      [3. Run the CFS image customization session](#3-run-the-cfs-image-customization-session).
+       ```bash
+       /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+           -w \
+           -p "$WORKER_IMAGE_ID"
+       ```
 
-      ```bash
-      NEW_IMS_IMAGE_ID="${IMS_RESULTANT_IMAGE_ID}"
-      ```
+     1. Return to [Stage 0.3 - Update management node CFS configuration and customize worker node image](../../upgrade/Stage_0_Prerequisites.md#stage-03---update-management-node-cfs-configuration-and-customize-worker-node-image)
+
+   * If executing this step in the context of the entire procedure on this page, then use the
+     `IMS_RESULTANT_IMAGE_ID` set in the previous step,
+     [3. Run the CFS image customization session](#3-run-the-cfs-image-customization-session).
+
+     ```bash
+     NEW_IMS_IMAGE_ID="${IMS_RESULTANT_IMAGE_ID}"
+     ```
 
 1. (`ncn-mw#`) Determine the component names (xnames) for the management nodes which will boot from the new image.
 
-    Options to determine node xnames:
+   > In this example, the xname for `ncn-w001` is being found.
 
-    * Get a comma-separated list of all worker NCN xnames:
-
-        ```bash
-        cray hsm state components list --role Management --subrole Worker --type Node --format json |
-          jq -r '.Components | map(.ID) | join(",")'
-        ```
-
-    * Get a comma-separated list of all master NCN xnames:
-
-        ```bash
-        cray hsm state components list --role Management --subrole Master --type Node --format json |
-          jq -r '.Components | map(.ID) | join(",")'
-        ```
-
-    * Get a comma-separated list of all storage NCN xnames:
-
-        ```bash
-        cray hsm state components list --role Management --subrole Storage --type Node --format json |
-          jq -r '.Components | map(.ID) | join(",")'
-        ```
-
-    * Get the xname for a specific NCN:
-
-        > In this example, the xname for `ncn-w001` is being found.
-
-        ```bash
-        ssh ncn-w001 cat /etc/cray/xname
-        ```
+   ```bash
+   ssh ncn-w001 cat /etc/cray/xname
+   ```
 
 1. (`ncn-mw#`) Update boot parameters for a management node.
 
-    Perform the following procedure **for each xname** identified in the previous step.
-
     1. Get the existing `metal.server` setting for the component name (xname) of the node of interest.
 
-        ```bash
-        XNAME=<node-xname>
-        METAL_SERVER=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' \
-            | awk -F 'metal.server=' '{print $2}' \
-            | awk -F ' ' '{print $1}')
-        echo "${METAL_SERVER}"
-        ```
+       ```bash
+       XNAME=<node-xname>
+       METAL_SERVER=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' \
+           | awk -F 'metal.server=' '{print $2}' \
+           | awk -F ' ' '{print $1}')
+       echo "${METAL_SERVER}"
+       ```
 
     1. Create updated boot parameters that point to the new artifacts.
 
-        1. Set the path to the artifacts in S3.
+       1. Set the path to the artifacts in S3.
 
-            **NOTE:** This uses the `NEW_IMS_IMAGE_ID` variable set in an earlier step.
+          ***NOTE*** This uses the `NEW_IMS_IMAGE_ID` variable set in an earlier step.
 
-            ```bash
-            S3_ARTIFACT_PATH="boot-images/${NEW_IMS_IMAGE_ID}"
-            echo "${S3_ARTIFACT_PATH}"
-            ```
+          ```bash
+          S3_ARTIFACT_PATH="boot-images/${NEW_IMS_IMAGE_ID}"
+          echo "${S3_ARTIFACT_PATH}"
+          ```
 
-        1. Set the new `metal.server` value.
+       1. Set the new `metal.server` value.
 
-            ```bash
-            NEW_METAL_SERVER="s3://${S3_ARTIFACT_PATH}/rootfs"
-            echo "${NEW_METAL_SERVER}"
-            ```
+          ```bash
+          NEW_METAL_SERVER="s3://${S3_ARTIFACT_PATH}/rootfs"
+          echo "${NEW_METAL_SERVER}"
+          ```
 
-        1. Determine the modified boot parameters for the node.
+       1. Determine the modified boot parameters for the node.
 
-            ```bash
-            PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | \
-                sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
-                tr -d \")
-            echo "${PARAMS}"
-            ```
+          ```bash
+          PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | \
+              sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
+              tr -d \")
+          echo "${PARAMS}"
+          ```
 
-            In the output of the `echo` command, verify that the value of `metal.server` is
-            correctly set to the value of `${NEW_METAL_SERVER}`.
+          In the output of the `echo` command, verify that the value of `metal.server` is
+          correctly set to the value of `${NEW_METAL_SERVER}`.
 
     1. Update BSS with the new boot parameters.
 
-        ```bash
-        cray bss bootparameters update --hosts "${XNAME}" \
-            --kernel "s3://${S3_ARTIFACT_PATH}/kernel" \
-            --initrd "s3://${S3_ARTIFACT_PATH}/initrd" \
-            --params "${PARAMS}"
-        ```
+       ```bash
+       cray bss bootparameters update --hosts "${XNAME}" \
+           --kernel "s3://${S3_ARTIFACT_PATH}/kernel" \
+           --initrd "s3://${S3_ARTIFACT_PATH}/initrd" \
+           --params "${PARAMS}" && echo SUCCESS || echo ERROR
+       ```
 
 ## Next steps
 
