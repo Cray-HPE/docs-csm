@@ -457,38 +457,38 @@ updating the management nodes' boot parameters in BSS to use the artifacts from 
 
       > ***NOTE*** To target both master and worker nodes at the same time, use the following:
       >
-      > ```bash
-   > /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
-   >     -mw \
-   >     -p "$MASTER_IMAGE_ID"
-   > ```
+      >```bash
+      > /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh 
+      >     -mw \
+      >     -p "$MASTER_IMAGE_ID"
+      > ```
 
         1. Update master management nodes:
 
-        ```bash
-        /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
-            -m \
-            -p "$MASTER_IMAGE_ID"
-        ```
+            ```bash
+            /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+                -m \
+                -p "$MASTER_IMAGE_ID"
+            ```
 
         1. Update storage management nodes:
 
-        ```bash
-        /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
-            -s \
-            -p "$STORAGE_IMAGE_ID"
-        ```
+            ```bash
+            /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+                -s \
+                -p "$STORAGE_IMAGE_ID"
+            ```
 
         1. Update worker management nodes:
 
-        ```bash
-        /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
-            -w \
-            -p "$WORKER_IMAGE_ID"
-        ```
+           ```bash
+           /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+               -w \
+               -p "$WORKER_IMAGE_ID"
+           ```
 
         1. Return
-           to [Stage 0.3 - Update management node CFS configuration and customize worker node image](../../upgrade/Stage_0_Prerequisites.md#stage-03---update-management-node-cfs-configuration-and-customize-worker-node-image)
+           to [Stage 0.3 - Update management node CFS configuration and customize worker node image](../../upgrade/Stage_0_Prerequisites.md#stage-03---update-management-node-cfs-configuration-and-customize-worker-node-image).
 
     * If executing this step in the context of the entire procedure on this page, then use the
       `IMS_RESULTANT_IMAGE_ID` set in the previous step,
@@ -522,7 +522,7 @@ updating the management nodes' boot parameters in BSS to use the artifacts from 
 
         1. Set the path to the artifacts in S3.
 
-           ***NOTE*** This uses the `NEW_IMS_IMAGE_ID` variable set in an earlier step.
+           > ***NOTE*** This uses the `NEW_IMS_IMAGE_ID` variable set in an earlier step.
 
             ```bash
             S3_ARTIFACT_PATH="boot-images/${NEW_IMS_IMAGE_ID}"
