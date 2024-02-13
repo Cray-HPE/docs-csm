@@ -54,12 +54,25 @@ function postgres_crd_updated() {
   fi
 }
 
-function postgres_pods_running() {
-  if [ "$(kubectl get pod -l application=spilo -A --no-headers | awk '{ print $3 ":" $4 }' | sort -u)" == "3/3:Running" ]; then
-    return 0
-  else
-    return 1
-  fi
+# Query the statefulsets status, replicas = goal, readyReplicas = how many pods
+# are receiving traffic.
+#
+# Iff replicas != readyReplicas the cluster isn't ready.
+#
+# We do this so as not to hard code expectations on how many replicas might be
+# configured for the pg cluster.
+function postgres_statefulsets_ready() {
+  ok=0
+  # for <<< quoting this is unnecessary
+  #shellcheck disable=SC2046
+  while read -r ns ss ready replicas; do
+    if [ "${replicas}" -ne "${ready}" ]; then
+      ok=$((ok + 1))
+      printf "statefulset %s in namespace %s ready %d != replicas %d\n" "${ss}" "${ns}" "${ready}" "${replicas}" >&2
+    fi
+  done <<< $(kubectl get statefulset -l application=spilo -A -o jsonpath='{range .items[*]}{.metadata.namespace} {.metadata.name} {.status.readyReplicas} {.status.replicas}{"\n"}{end}' | sort)
+
+  return ${ok}
 }
 
 function postgres_clusters_running() {
@@ -109,7 +122,7 @@ kubectl get postgresql -A -o json \
   done
 echo "Waiting for 300 seconds for postgres statefulsets rolling restart to commence ..."
 sleep 300
-wait_for "all postgres pods running" postgres_pods_running
+wait_for "all postgres statefulsets in ready state" postgres_statefulsets_ready
 wait_for "all postgres clusters in state Running" postgres_clusters_running
 echo "State of postgres clusters after operator upgrade:"
 kubectl get postgresql -A

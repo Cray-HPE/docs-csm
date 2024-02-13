@@ -76,6 +76,10 @@ Base URLs:
 
 * <a href="https://api-gw-service-nmn.local/apis/cfs">https://api-gw-service-nmn.local/apis/cfs</a>
 
+# Authentication
+
+- HTTP Authentication, scheme: bearer 
+
 <h1 id="configuration-framework-service-version">version</h1>
 
 ## get_version
@@ -94,14 +98,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/ \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/', headers = headers)
@@ -122,6 +128,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -159,8 +166,9 @@ Return list of versions currently running.
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Version information for the service|[Version](#schemaversion)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_versions
@@ -179,14 +187,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/versions \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/versions', headers = headers)
@@ -207,6 +217,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -244,8 +255,9 @@ Return list of versions currently running.
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Version information for the service|[Version](#schemaversion)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_versions_v2
@@ -264,14 +276,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v2 \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v2', headers = headers)
@@ -292,6 +306,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -329,8 +344,9 @@ Return list of versions currently running.
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Version information for the service|[Version](#schemaversion)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_versions_v3
@@ -349,14 +365,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3 \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v3', headers = headers)
@@ -377,6 +395,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -414,8 +433,9 @@ Return list of versions currently running.
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Version information for the service|[Version](#schemaversion)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="configuration-framework-service-healthz">healthz</h1>
@@ -436,14 +456,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/healthz \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/healthz', headers = headers)
@@ -464,6 +486,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -501,8 +524,9 @@ Get cfs-api health details.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Status information for the service|[Healthz](#schemahealthz)|
 |503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|Status information for the service|[Healthz](#schemahealthz)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="configuration-framework-service-options">options</h1>
@@ -523,14 +547,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v2/options \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v2/options', headers = headers)
@@ -551,6 +577,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -598,8 +625,9 @@ Retrieve the list of configuration service options.
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of service-wide configuration options|[V2Options](#schemav2options)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_options_v2
@@ -620,7 +648,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v2/options \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -628,7 +657,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v2/options \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/cfs/v2/options', headers = headers)
@@ -650,6 +680,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -724,8 +755,9 @@ Update one or more of the configuration service options.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of service-wide configuration options|[V2Options](#schemav2options)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_options_v3
@@ -744,14 +776,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3/options \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v3/options', headers = headers)
@@ -772,6 +806,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -823,8 +858,9 @@ Retrieve the list of configuration service options.
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of service-wide configuration options|[V3Options](#schemav3options)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_options_v3
@@ -845,7 +881,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v3/options \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -853,7 +890,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v3/options \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/cfs/v3/options', headers = headers)
@@ -875,6 +913,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -956,8 +995,9 @@ Update one or more of the configuration service options.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of service-wide configuration options|[V3Options](#schemav3options)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="configuration-framework-service-sessions">sessions</h1>
@@ -978,14 +1018,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v2/sessions \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v2/sessions', headers = headers)
@@ -1006,6 +1048,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1117,8 +1160,9 @@ Retrieve all the configuration framework sessions on the system.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of configuration sessions|[V2SessionArray](#schemav2sessionarray)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## create_session_v2
@@ -1139,7 +1183,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/cfs/v2/sessions \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1147,7 +1192,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/cfs/v2/sessions \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/cfs/v2/sessions', headers = headers)
@@ -1169,6 +1215,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1298,8 +1345,9 @@ Create a new configuration session. A configuration session stages Ansible inven
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|A session with the same name already exists.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_sessions_v2
@@ -1318,14 +1366,16 @@ Accept: application/problem+json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/cfs/v2/sessions \
-  -H 'Accept: application/problem+json'
+  -H 'Accept: application/problem+json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/problem+json'
+  'Accept': 'application/problem+json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/cfs/v2/sessions', headers = headers)
@@ -1346,6 +1396,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1410,8 +1461,9 @@ Delete multiple configuration sessions.  If filters are provided, only sessions 
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_session_v2
@@ -1430,14 +1482,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v2/sessions/{session_name} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v2/sessions/{session_name}', headers = headers)
@@ -1458,6 +1512,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1549,8 +1604,9 @@ View details about a specific configuration session. This allows you to track th
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration session|[V2Session](#schemav2session)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_session_v2
@@ -1569,14 +1625,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v2/sessions/{session_name} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/cfs/v2/sessions/{session_name}', headers = headers)
@@ -1597,6 +1655,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1689,8 +1748,9 @@ Update the status of an existing configuration framework session
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_session_v2
@@ -1709,14 +1769,16 @@ Accept: application/problem+json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/cfs/v2/sessions/{session_name} \
-  -H 'Accept: application/problem+json'
+  -H 'Accept: application/problem+json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/problem+json'
+  'Accept': 'application/problem+json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/cfs/v2/sessions/{session_name}', headers = headers)
@@ -1737,6 +1799,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1783,8 +1846,9 @@ Deleting a configuration session deletes the Kubernetes objects associated with 
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_sessions_v3
@@ -1803,14 +1867,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3/sessions \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v3/sessions', headers = headers)
@@ -1831,6 +1897,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -1954,8 +2021,9 @@ Retrieve all the configuration framework sessions on the system.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of configuration sessions|[V3SessionDataCollection](#schemav3sessiondatacollection)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## create_session_v3
@@ -1976,7 +2044,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/cfs/v3/sessions \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1984,7 +2053,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/cfs/v3/sessions \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/cfs/v3/sessions', headers = headers)
@@ -2006,6 +2076,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2139,8 +2210,9 @@ Create a new configuration session. A configuration session stages Ansible inven
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|A session with the same name already exists.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_sessions_v3
@@ -2159,14 +2231,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/cfs/v3/sessions \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/cfs/v3/sessions', headers = headers)
@@ -2187,6 +2261,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2304,8 +2379,9 @@ Delete multiple configuration sessions.  If filters are provided, only sessions 
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of configuration sessions|[V3SessionIdCollection](#schemav3sessionidcollection)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_session_v3
@@ -2324,14 +2400,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3/sessions/{session_name} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v3/sessions/{session_name}', headers = headers)
@@ -2352,6 +2430,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2446,8 +2525,9 @@ View details about a specific configuration session. This allows you to track th
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration session|[V3SessionData](#schemav3sessiondata)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_session_v3
@@ -2466,14 +2546,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v3/sessions/{session_name} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/cfs/v3/sessions/{session_name}', headers = headers)
@@ -2494,6 +2576,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2589,8 +2672,9 @@ Update the status of an existing configuration framework session
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_session_v3
@@ -2609,14 +2693,16 @@ Accept: application/problem+json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/cfs/v3/sessions/{session_name} \
-  -H 'Accept: application/problem+json'
+  -H 'Accept: application/problem+json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/problem+json'
+  'Accept': 'application/problem+json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/cfs/v3/sessions/{session_name}', headers = headers)
@@ -2637,6 +2723,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2683,8 +2770,9 @@ Deleting a configuration session deletes the Kubernetes objects associated with 
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="configuration-framework-service-components">components</h1>
@@ -2705,14 +2793,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v2/components \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v2/components', headers = headers)
@@ -2733,6 +2823,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2825,8 +2916,9 @@ Retrieve the full collection of components in the form of a ComponentArray. Full
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of component states|[V2ComponentStateArray](#schemav2componentstatearray)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## put_components_v2
@@ -2847,7 +2939,8 @@ Accept: application/json
 # You can also use wget
 curl -X PUT https://api-gw-service-nmn.local/apis/cfs/v2/components \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -2855,7 +2948,8 @@ curl -X PUT https://api-gw-service-nmn.local/apis/cfs/v2/components \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.put('https://api-gw-service-nmn.local/apis/cfs/v2/components', headers = headers)
@@ -2877,6 +2971,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -2994,8 +3089,9 @@ Update the state for a collection of components in the cfs database
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of component states|[V2ComponentStateArray](#schemav2componentstatearray)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_components_v2
@@ -3016,7 +3112,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v2/components \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -3024,7 +3121,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v2/components \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/cfs/v2/components', headers = headers)
@@ -3046,6 +3144,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3164,8 +3263,9 @@ Update the state for a collection of components in the cfs database
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_component_v2
@@ -3184,14 +3284,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v2/components/{component_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v2/components/{component_id}', headers = headers)
@@ -3212,6 +3314,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3290,8 +3393,9 @@ Retrieve the configuration and current state of a single component
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## put_component_v2
@@ -3312,7 +3416,8 @@ Accept: application/json
 # You can also use wget
 curl -X PUT https://api-gw-service-nmn.local/apis/cfs/v2/components/{component_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -3320,7 +3425,8 @@ curl -X PUT https://api-gw-service-nmn.local/apis/cfs/v2/components/{component_i
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.put('https://api-gw-service-nmn.local/apis/cfs/v2/components/{component_id}', headers = headers)
@@ -3342,6 +3448,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3449,8 +3556,9 @@ Update the state for a given component in the cfs database
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single component state|[V2ComponentState](#schemav2componentstate)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_component_v2
@@ -3471,7 +3579,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v2/components/{component_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -3479,7 +3588,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v2/components/{component
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/cfs/v2/components/{component_id}', headers = headers)
@@ -3501,6 +3611,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3609,8 +3720,9 @@ Update the state for a given component in the cfs database
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_component_v2
@@ -3629,14 +3741,16 @@ Accept: application/problem+json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/cfs/v2/components/{component_id} \
-  -H 'Accept: application/problem+json'
+  -H 'Accept: application/problem+json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/problem+json'
+  'Accept': 'application/problem+json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/cfs/v2/components/{component_id}', headers = headers)
@@ -3657,6 +3771,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3703,8 +3818,9 @@ Delete the given component
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_components_v3
@@ -3723,14 +3839,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3/components \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v3/components', headers = headers)
@@ -3751,6 +3869,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3857,8 +3976,9 @@ Retrieve the full collection of components in the form of a ComponentArray. Full
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of component states|[V3ComponentDataCollection](#schemav3componentdatacollection)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## put_components_v3
@@ -3879,7 +3999,8 @@ Accept: application/json
 # You can also use wget
 curl -X PUT https://api-gw-service-nmn.local/apis/cfs/v3/components \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -3887,7 +4008,8 @@ curl -X PUT https://api-gw-service-nmn.local/apis/cfs/v3/components \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.put('https://api-gw-service-nmn.local/apis/cfs/v3/components', headers = headers)
@@ -3909,6 +4031,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -3994,8 +4117,9 @@ Update the state for a collection of components in the cfs database
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of component ids|[V3ComponentIdCollection](#schemav3componentidcollection)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_components_v3
@@ -4016,7 +4140,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v3/components \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -4024,7 +4149,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v3/components \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/cfs/v3/components', headers = headers)
@@ -4046,6 +4172,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4132,8 +4259,9 @@ Update the state for a collection of components in the cfs database
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_component_v3
@@ -4152,14 +4280,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3/components/{component_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v3/components/{component_id}', headers = headers)
@@ -4180,6 +4310,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4263,8 +4394,9 @@ Retrieve the configuration and current state of a single component
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## put_component_v3
@@ -4285,7 +4417,8 @@ Accept: application/json
 # You can also use wget
 curl -X PUT https://api-gw-service-nmn.local/apis/cfs/v3/components/{component_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -4293,7 +4426,8 @@ curl -X PUT https://api-gw-service-nmn.local/apis/cfs/v3/components/{component_i
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.put('https://api-gw-service-nmn.local/apis/cfs/v3/components/{component_id}', headers = headers)
@@ -4315,6 +4449,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4428,8 +4563,9 @@ Update the state for a given component in the cfs database
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single component state|[V3ComponentData](#schemav3componentdata)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_component_v3
@@ -4450,7 +4586,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v3/components/{component_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -4458,7 +4595,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v3/components/{component
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/cfs/v3/components/{component_id}', headers = headers)
@@ -4480,6 +4618,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4594,8 +4733,9 @@ Update the state for a given component in the cfs database
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_component_v3
@@ -4614,14 +4754,16 @@ Accept: application/problem+json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/cfs/v3/components/{component_id} \
-  -H 'Accept: application/problem+json'
+  -H 'Accept: application/problem+json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/problem+json'
+  'Accept': 'application/problem+json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/cfs/v3/components/{component_id}', headers = headers)
@@ -4642,6 +4784,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4688,8 +4831,9 @@ Delete the given component
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="configuration-framework-service-configurations">configurations</h1>
@@ -4710,14 +4854,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v2/configurations \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v2/configurations', headers = headers)
@@ -4738,6 +4884,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4802,8 +4949,9 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of configurations|[V2ConfigurationArray](#schemav2configurationarray)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_configuration_v2
@@ -4822,14 +4970,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v2/configurations/{configuration_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v2/configurations/{configuration_id}', headers = headers)
@@ -4850,6 +5000,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -4912,8 +5063,9 @@ Retrieve the given configuration
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration|[V2Configuration](#schemav2configuration)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## put_configuration_v2
@@ -4934,7 +5086,8 @@ Accept: application/json
 # You can also use wget
 curl -X PUT https://api-gw-service-nmn.local/apis/cfs/v2/configurations/{configuration_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -4942,7 +5095,8 @@ curl -X PUT https://api-gw-service-nmn.local/apis/cfs/v2/configurations/{configu
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.put('https://api-gw-service-nmn.local/apis/cfs/v2/configurations/{configuration_id}', headers = headers)
@@ -4964,6 +5118,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5053,8 +5208,9 @@ Add a configuration to CFS or replace an existing configuration.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration|[V2Configuration](#schemav2configuration)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_configuration_v2
@@ -5073,14 +5229,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v2/configurations/{configuration_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/cfs/v2/configurations/{configuration_id}', headers = headers)
@@ -5101,6 +5259,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5164,8 +5323,9 @@ Updates the commits for all layers that specify a branch
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_configuration_v2
@@ -5184,14 +5344,16 @@ Accept: application/problem+json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/cfs/v2/configurations/{configuration_id} \
-  -H 'Accept: application/problem+json'
+  -H 'Accept: application/problem+json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/problem+json'
+  'Accept': 'application/problem+json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/cfs/v2/configurations/{configuration_id}', headers = headers)
@@ -5212,6 +5374,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5259,8 +5422,9 @@ Delete the given configuration. This will fail in any components are using the s
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_configurations_v3
@@ -5279,14 +5443,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3/configurations \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v3/configurations', headers = headers)
@@ -5307,6 +5473,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5378,8 +5545,9 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of configurations|[V3ConfigurationDataCollection](#schemav3configurationdatacollection)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_configuration_v3
@@ -5398,14 +5566,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_id}', headers = headers)
@@ -5426,6 +5596,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5487,8 +5658,9 @@ Retrieve the given configuration
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration|[V3ConfigurationData](#schemav3configurationdata)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## put_configuration_v3
@@ -5509,7 +5681,8 @@ Accept: application/json
 # You can also use wget
 curl -X PUT https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -5517,7 +5690,8 @@ curl -X PUT https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configu
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.put('https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_id}', headers = headers)
@@ -5539,6 +5713,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5627,8 +5802,9 @@ Add a configuration to CFS or replace an existing configuration.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration|[V3ConfigurationData](#schemav3configurationdata)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_configuration_v3
@@ -5647,14 +5823,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_id}', headers = headers)
@@ -5675,6 +5853,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5737,8 +5916,9 @@ Updates the commits for all layers that specify a branch
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_configuration_v3
@@ -5757,14 +5937,16 @@ Accept: application/problem+json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_id} \
-  -H 'Accept: application/problem+json'
+  -H 'Accept: application/problem+json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/problem+json'
+  'Accept': 'application/problem+json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_id}', headers = headers)
@@ -5785,6 +5967,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5832,8 +6015,9 @@ Delete the given configuration. This will fail in any components are using the s
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="configuration-framework-service-sources">sources</h1>
@@ -5854,14 +6038,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3/sources \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v3/sources', headers = headers)
@@ -5882,6 +6068,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -5945,8 +6132,9 @@ Retrieve the full collection of sources in the form of a SourceArray.
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of sources|[V3SourceDataCollection](#schemav3sourcedatacollection)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post_source_v3
@@ -5967,7 +6155,8 @@ Accept: application/json
 # You can also use wget
 curl -X POST https://api-gw-service-nmn.local/apis/cfs/v3/sources \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -5975,7 +6164,8 @@ curl -X POST https://api-gw-service-nmn.local/apis/cfs/v3/sources \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.post('https://api-gw-service-nmn.local/apis/cfs/v3/sources', headers = headers)
@@ -5997,6 +6187,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6070,8 +6261,9 @@ Add a source to CFS
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|A source with the same name already exists|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get_source_v3
@@ -6090,14 +6282,16 @@ Accept: application/json
 ```shell
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id} \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.get('https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id}', headers = headers)
@@ -6118,6 +6312,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6171,8 +6366,9 @@ Retrieve the given source
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single source|[V3SourceData](#schemav3sourcedata)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch_source_v3
@@ -6193,7 +6389,8 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -6201,7 +6398,8 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id} \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.patch('https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id}', headers = headers)
@@ -6223,6 +6421,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6296,8 +6495,9 @@ Updates a CFS source
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## delete_source_v3
@@ -6316,14 +6516,16 @@ Accept: application/problem+json
 ```shell
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id} \
-  -H 'Accept: application/problem+json'
+  -H 'Accept: application/problem+json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/problem+json'
+  'Accept': 'application/problem+json',
+  'Authorization': 'Bearer {access-token}'
 }
 
 r = requests.delete('https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id}', headers = headers)
@@ -6344,6 +6546,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
@@ -6391,8 +6594,9 @@ Delete the given source. This will fail in any components are using the specifie
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 # Schemas

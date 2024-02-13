@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -35,33 +35,30 @@
 #
 ################################################################################
 
-err_exit()
-{
-    echo "ERROR: $*" >&2
-    exit 1
+err_exit() {
+  echo "ERROR: $*" >&2
+  exit 1
 }
 
-usage()
-{
-    echo "Usage: export_cfs_data.sh [directory_to_create_archive_in]"
-    echo
-    err_exit "$@"
+usage() {
+  echo "Usage: export_cfs_data.sh [directory_to_create_archive_in]"
+  echo
+  err_exit "$@"
 }
 
-run_cmd()
-{
-    "$@" || err_exit "Command failed with return code $?: $*"
+run_cmd() {
+  "$@" || err_exit "Command failed with return code $?: $*"
 }
 
 INCLUDE_LIST="components configurations options sessions"
 
 if [[ $# -eq 0 ]]; then
-    OUTPUT_DIRECTORY=$(pwd)
+  OUTPUT_DIRECTORY=$(pwd)
 else
-    [[ -n $1 ]] || usage "Directory name is optional, but if specified it may not be blank"
-    [[ -e $1 ]] || usage "Target directory does not exist: '$1'"
-    [[ -d $1 ]] || usage "Target exists but is not a directory: '$1'"
-    OUTPUT_DIRECTORY=$1
+  [[ -n $1 ]] || usage "Directory name is optional, but if specified it may not be blank"
+  [[ -e $1 ]] || usage "Target directory does not exist: '$1'"
+  [[ -d $1 ]] || usage "Target exists but is not a directory: '$1'"
+  OUTPUT_DIRECTORY=$1
 fi
 
 ARCHIVE_PREFIX="cfs-export-$(date +%Y%m%d%H%M%S)"
@@ -70,9 +67,9 @@ ARCHIVE_DIR=$(run_cmd mktemp -p "${OUTPUT_DIRECTORY}" -d "${ARCHIVE_PREFIX}-XXX"
 # Export the CFS components, configurations, options, and sessions
 # The session data is not likely to be something that would be restored from a backup,
 # but retaining the historical data may be useful in some situations.
-for OBJECT in ${INCLUDE_LIST} ; do
-    echo "Exporting CFS ${OBJECT}..."
-    run_cmd cray cfs "${OBJECT}" list --format json > "${ARCHIVE_DIR}/${OBJECT}.json"
+for OBJECT in ${INCLUDE_LIST}; do
+  echo "Exporting CFS ${OBJECT}..."
+  run_cmd cray cfs "${OBJECT}" list --format json > "${ARCHIVE_DIR}/${OBJECT}.json"
 done
 
 # Compress the results

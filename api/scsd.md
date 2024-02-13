@@ -71,11 +71,13 @@ Set TPM State in the BIOS settings.
 
 Base URLs:
 
-* <a href="http://api-gw-service-nmn.local/apis/scsd/v1">http://api-gw-service-nmn.local/apis/scsd/v1</a>
-
-* <a href="http://cray-scsd/v1">http://cray-scsd/v1</a>
+* <a href="https://api-gw-service-nmn.local/apis/scsd/v1">https://api-gw-service-nmn.local/apis/scsd/v1</a>
 
  License: Cray Proprietary
+
+# Authentication
+
+- HTTP Authentication, scheme: bearer 
 
 <h1 id="system-configuration-service-nwp">nwp</h1>
 
@@ -86,7 +88,7 @@ Endpoints that set or get Redfish Network Protocol information
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -95,9 +97,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -105,10 +108,11 @@ curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg', headers = headers)
 
 print(r.json())
 
@@ -127,10 +131,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/dumpcfg", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -203,8 +208,9 @@ Get the Redfish Network Protocol data (NTP server, syslog server, SSH key) for a
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST is allowed|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post__bmc_loadcfg
@@ -212,7 +218,7 @@ This operation does not require authentication
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -221,9 +227,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -231,10 +238,11 @@ curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg', headers = headers)
 
 print(r.json())
 
@@ -253,10 +261,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/loadcfg", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -329,8 +338,9 @@ The Force field is optional. If present, and set to 'true', the Redfish operatio
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST is allowed|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__bmc_cfg_{xname}
@@ -338,7 +348,7 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} HTTP/1.1
+GET https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
 
@@ -346,18 +356,20 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X GET http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}', headers = headers)
 
 print(r.json())
 
@@ -375,10 +387,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -433,8 +446,9 @@ Retrieve selected Redfish network protocol data for a single target. You can sel
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only GET,POST is allowed|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post__bmc_cfg_{xname}
@@ -442,7 +456,7 @@ This operation does not require authentication
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -451,9 +465,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -461,10 +476,11 @@ curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname} \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}', headers = headers)
 
 print(r.json())
 
@@ -483,10 +499,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/cfg/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -552,8 +569,9 @@ The Force field is optional. If present, and set to 'true', the Redfish operatio
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only GET,POST is allowed|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="system-configuration-service-creds">creds</h1>
@@ -565,7 +583,7 @@ Endpoints that set Redfish access credentials
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -574,9 +592,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -584,10 +603,11 @@ curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds', headers = headers)
 
 print(r.json())
 
@@ -606,10 +626,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/discreetcreds", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -674,8 +695,9 @@ The Force field is optional. If present, and set to 'true', the Redfish operatio
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST is allowed|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post__bmc_creds_{xname}
@@ -683,7 +705,7 @@ This operation does not require authentication
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname} HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname} HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -692,9 +714,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname} \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -702,10 +725,11 @@ curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname} \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname}', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname}', headers = headers)
 
 print(r.json())
 
@@ -724,10 +748,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname}", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -782,8 +807,9 @@ The Force field is optional. If present, and set to 'true', the Redfish operatio
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only GET,POST is allowed|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__bmc_creds
@@ -791,7 +817,7 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds HTTP/1.1
+GET https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
 
@@ -799,18 +825,20 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X GET http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds', headers = headers)
 
 print(r.json())
 
@@ -828,10 +856,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -878,8 +907,9 @@ Fetch controller login credentials for a specified targets.  Targets are specifi
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only GET, POST is allowed|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post__bmc_globalcreds
@@ -887,7 +917,7 @@ This operation does not require authentication
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -896,9 +926,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -906,10 +937,11 @@ curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds', headers = headers)
 
 print(r.json())
 
@@ -928,10 +960,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/globalcreds", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -992,8 +1025,9 @@ The Force field is optional. If present, and set to 'true', the Redfish operatio
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST is allowed|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="system-configuration-service-bios">bios</h1>
@@ -1005,7 +1039,7 @@ Endpoints that set or get BIOS information
 > Code samples
 
 ```http
-GET http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} HTTP/1.1
+GET https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
 
@@ -1013,18 +1047,20 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X GET http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}', headers = headers)
 
 print(r.json())
 
@@ -1042,10 +1078,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1094,8 +1131,9 @@ Fetch the current BIOS setting for the TPM State.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Xname was not for a bmc.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal server error including failures communicating with the server.|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## patch__bmc_bios_{xname}_{bios_field}
@@ -1103,7 +1141,7 @@ This operation does not require authentication
 > Code samples
 
 ```http
-PATCH http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} HTTP/1.1
+PATCH https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -1112,9 +1150,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X PATCH http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} \
+curl -X PATCH https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field} \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1122,10 +1161,11 @@ curl -X PATCH http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bio
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.patch('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}', headers = headers)
+r = requests.patch('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}', headers = headers)
 
 print(r.json())
 
@@ -1144,10 +1184,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("PATCH", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}", data)
+    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/bios/{xname}/{bios_field}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1208,8 +1249,9 @@ Set the TPM State in the BIOS settings.
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Xname was not for a bmc.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal server error including failures communicating with the server.|[Problem7807](#schemaproblem7807)|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="system-configuration-service-version">version</h1>
@@ -1221,7 +1263,7 @@ Endpoints that perform health and version checks
 > Code samples
 
 ```http
-GET http://api-gw-service-nmn.local/apis/scsd/v1/version HTTP/1.1
+GET https://api-gw-service-nmn.local/apis/scsd/v1/version HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
 
@@ -1229,18 +1271,20 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X GET http://api-gw-service-nmn.local/apis/scsd/v1/version \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/scsd/v1/version \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://api-gw-service-nmn.local/apis/scsd/v1/version', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/scsd/v1/version', headers = headers)
 
 print(r.json())
 
@@ -1258,10 +1302,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/scsd/v1/version", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/scsd/v1/version", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1295,8 +1340,9 @@ Retrieve service version information.  Version is returned in vmaj.min.bld forma
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only GET,POST is allowed|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="system-configuration-service-certs">certs</h1>
@@ -1308,7 +1354,7 @@ Endpoints that create, delete, fetch, and apply TLS certs
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -1317,9 +1363,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1327,10 +1374,11 @@ curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts', headers = headers)
 
 print(r.json())
 
@@ -1349,10 +1397,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/createcerts", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1409,8 +1458,9 @@ Create TLS cert/key pairs for a set of BMC targets.  A TLS cert/key is created p
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST or DELETE is allowed|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post__bmc_deletecerts
@@ -1418,7 +1468,7 @@ This operation does not require authentication
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -1427,9 +1477,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1437,10 +1488,11 @@ curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts', headers = headers)
 
 print(r.json())
 
@@ -1459,10 +1511,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/deletecerts", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1519,8 +1572,9 @@ Delete TLS cert/key information for domain-level TLS certs based on the given ta
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST or DELETE is allowed|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post__bmc_fetchcerts
@@ -1528,7 +1582,7 @@ This operation does not require authentication
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -1537,9 +1591,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1547,10 +1602,11 @@ curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts', headers = headers)
 
 print(r.json())
 
@@ -1569,10 +1625,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/fetchcerts", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1633,8 +1690,9 @@ Fetches BMC TLS certs previously created using the /bmc/createcerts endpoint and
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST is allowed|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post__bmc_setcerts
@@ -1642,7 +1700,7 @@ This operation does not require authentication
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts HTTP/1.1
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
@@ -1651,9 +1709,10 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts \
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
@@ -1661,10 +1720,11 @@ curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts \
 import requests
 headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts', headers = headers)
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts', headers = headers)
 
 print(r.json())
 
@@ -1683,10 +1743,11 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcerts", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1744,8 +1805,9 @@ Apply TLS cert/key pairs, previously generated using the /bmc/createcerts endpoi
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST is allowed|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## post__bmc_setcert_{xname}
@@ -1753,21 +1815,25 @@ This operation does not require authentication
 > Code samples
 
 ```http
-POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname} HTTP/1.1
+POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname} HTTP/1.1
 Host: api-gw-service-nmn.local
 
 ```
 
 ```shell
 # You can also use wget
-curl -X POST http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname}
+curl -X POST https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname} \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
+headers = {
+  'Authorization': 'Bearer {access-token}'
+}
 
-r = requests.post('http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname}')
+r = requests.post('https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname}', headers = headers)
 
 print(r.json())
 
@@ -1783,8 +1849,12 @@ import (
 
 func main() {
 
+    headers := map[string][]string{
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "http://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname}", data)
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/setcert/{xname}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1816,8 +1886,9 @@ Apply a TLS cert/key pairs previously generated using the /bmc/createcerts endpo
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Endpoint not found|None|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Invalid method, only POST is allowed|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 <h1 id="system-configuration-service-cli_ignore">cli_ignore</h1>
@@ -1827,21 +1898,25 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://api-gw-service-nmn.local/apis/scsd/v1/liveness HTTP/1.1
+GET https://api-gw-service-nmn.local/apis/scsd/v1/liveness HTTP/1.1
 Host: api-gw-service-nmn.local
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://api-gw-service-nmn.local/apis/scsd/v1/liveness
+curl -X GET https://api-gw-service-nmn.local/apis/scsd/v1/liveness \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
+headers = {
+  'Authorization': 'Bearer {access-token}'
+}
 
-r = requests.get('http://api-gw-service-nmn.local/apis/scsd/v1/liveness')
+r = requests.get('https://api-gw-service-nmn.local/apis/scsd/v1/liveness', headers = headers)
 
 print(r.json())
 
@@ -1857,8 +1932,12 @@ import (
 
 func main() {
 
+    headers := map[string][]string{
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/scsd/v1/liveness", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/scsd/v1/liveness", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1881,8 +1960,9 @@ Get liveness status of the service
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
 |503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|The service is not taking HTTP requests|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__readiness
@@ -1890,21 +1970,25 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://api-gw-service-nmn.local/apis/scsd/v1/readiness HTTP/1.1
+GET https://api-gw-service-nmn.local/apis/scsd/v1/readiness HTTP/1.1
 Host: api-gw-service-nmn.local
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://api-gw-service-nmn.local/apis/scsd/v1/readiness
+curl -X GET https://api-gw-service-nmn.local/apis/scsd/v1/readiness \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
+headers = {
+  'Authorization': 'Bearer {access-token}'
+}
 
-r = requests.get('http://api-gw-service-nmn.local/apis/scsd/v1/readiness')
+r = requests.get('https://api-gw-service-nmn.local/apis/scsd/v1/readiness', headers = headers)
 
 print(r.json())
 
@@ -1920,8 +2004,12 @@ import (
 
 func main() {
 
+    headers := map[string][]string{
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/scsd/v1/readiness", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/scsd/v1/readiness", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -1944,8 +2032,9 @@ Get readiness status of the service
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|[No Content](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) Network API call success|None|
 |503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|The service is not taking HTTP requests|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 ## get__health
@@ -1953,7 +2042,7 @@ This operation does not require authentication
 > Code samples
 
 ```http
-GET http://api-gw-service-nmn.local/apis/scsd/v1/health HTTP/1.1
+GET https://api-gw-service-nmn.local/apis/scsd/v1/health HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
 
@@ -1961,18 +2050,20 @@ Accept: application/json
 
 ```shell
 # You can also use wget
-curl -X GET http://api-gw-service-nmn.local/apis/scsd/v1/health \
-  -H 'Accept: application/json'
+curl -X GET https://api-gw-service-nmn.local/apis/scsd/v1/health \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
 
 ```
 
 ```python
 import requests
 headers = {
-  'Accept': 'application/json'
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
 }
 
-r = requests.get('http://api-gw-service-nmn.local/apis/scsd/v1/health', headers = headers)
+r = requests.get('https://api-gw-service-nmn.local/apis/scsd/v1/health', headers = headers)
 
 print(r.json())
 
@@ -1990,10 +2081,11 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://api-gw-service-nmn.local/apis/scsd/v1/health", data)
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/scsd/v1/health", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -2029,8 +2121,9 @@ Get readiness status of the service
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|The service encountered an error when gathering health information|None|
 |503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|The service is not taking HTTP requests|None|
 
-<aside class="success">
-This operation does not require authentication
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
 </aside>
 
 # Schemas

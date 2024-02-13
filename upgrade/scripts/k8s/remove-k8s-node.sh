@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -23,15 +23,14 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-if [ "$1" == "" ]
-then
+if [ "$1" == "" ]; then
   echo "Usage: $0 <ncn-?00?>"
   exit 1
 fi
 
 rebuild_node=$1
 
-if [[ "$rebuild_node" =~ ^ncn-w ]]; then
+if [[ $rebuild_node =~ ^ncn-w ]]; then
 
   echo "Tainting worker node $rebuild_node so nothing gets scheduled on it"
   kubectl taint nodes $rebuild_node key=value:NoSchedule
@@ -41,16 +40,13 @@ if [[ "$rebuild_node" =~ ^ncn-w ]]; then
     exit 1
   fi
 
-  for ns in $(kubectl get namespace | grep -v NAME | awk '{print $1}')
-  do
-    for pdr in $(kubectl get poddisruptionbudgets -n $ns 2>/dev/null | grep -v NAME | awk '{print $1}')
-    do
+  for ns in $(kubectl get namespace | grep -v NAME | awk '{print $1}'); do
+    for pdr in $(kubectl get poddisruptionbudgets -n $ns 2> /dev/null | grep -v NAME | awk '{print $1}'); do
       match_labels=$(kubectl get poddisruptionbudgets -n $ns $pdr -o json | jq -r '.spec.selector.matchLabels' | sed 's/[{}]//g')
       #shellcheck disable=SC2066
-      for match_label in "$match_labels"
-      do
+      for match_label in "$match_labels"; do
         label=$(echo $match_label | sed 's/ //g' | sed 's/"//g' | sed 's/:/=/g')
-        output=$(kubectl get po -o wide -n $ns -l $label 2>/dev/null)
+        output=$(kubectl get po -o wide -n $ns -l $label 2> /dev/null)
         rc=$?
         if [ "$rc" -ne 0 ]; then
           continue
@@ -59,8 +55,7 @@ if [[ "$rebuild_node" =~ ^ncn-w ]]; then
         if [ -z "$pods" ]; then
           continue
         fi
-        for pod in $pods
-        do
+        for pod in $pods; do
           echo "Deleting pod: $pod in namespace: $ns from pod distribution budget: $pdr"
           kubectl delete po -n $ns $pod
           rc=$?

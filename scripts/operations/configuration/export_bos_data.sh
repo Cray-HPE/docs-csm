@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -35,45 +35,40 @@
 #
 ################################################################################
 
-err_exit()
-{
-    echo "ERROR: $*" >&2
-    exit 1
+err_exit() {
+  echo "ERROR: $*" >&2
+  exit 1
 }
 
-usage()
-{
-    echo "Usage: export_bos_data.sh [directory_to_create_archive_in]"
-    echo
-    err_exit "$@"
+usage() {
+  echo "Usage: export_bos_data.sh [directory_to_create_archive_in]"
+  echo
+  err_exit "$@"
 }
 
-run_cmd()
-{
-    "$@" || err_exit "Command failed with return code $?: $*"
+run_cmd() {
+  "$@" || err_exit "Command failed with return code $?: $*"
 }
 
-bos_cli()
-{
-    # Expands to: run_cmd cray bos <args to bos_cli> --format json
-    # e.g. bos_cli v1 session list
-    #      bos_cli v2 sessiontemplates  list
-    run_cmd cray bos "$@" --format json
+bos_cli() {
+  # Expands to: run_cmd cray bos <args to bos_cli> --format json
+  # e.g. bos_cli v1 session list
+  #      bos_cli v2 sessiontemplates  list
+  run_cmd cray bos "$@" --format json
 }
 
-bos_list()
-{
-    # Wrapper for bos_cli for list actions
-    bos_cli "$@" list
+bos_list() {
+  # Wrapper for bos_cli for list actions
+  bos_cli "$@" list
 }
 
 if [[ $# -eq 0 ]]; then
-    OUTPUT_DIRECTORY=$(pwd)
+  OUTPUT_DIRECTORY=$(pwd)
 else
-    [[ -n $1 ]] || usage "Directory name is optional, but if specified it may not be blank"
-    [[ -e $1 ]] || usage "Target directory does not exist: '$1'"
-    [[ -d $1 ]] || usage "Target exists but is not a directory: '$1'"
-    OUTPUT_DIRECTORY=$1
+  [[ -n $1 ]] || usage "Directory name is optional, but if specified it may not be blank"
+  [[ -e $1 ]] || usage "Target directory does not exist: '$1'"
+  [[ -d $1 ]] || usage "Target exists but is not a directory: '$1'"
+  OUTPUT_DIRECTORY=$1
 fi
 
 ARCHIVE_PREFIX="bos-export-$(date +%Y%m%d%H%M%S)"
@@ -90,7 +85,7 @@ run_cmd mkdir -p "${V1_DIR}"
 
 echo "Exporting BOS v1 sessions..."
 V1_SESSION_LIST_JSON="${V1_DIR}/session.json"
-bos_list v1 session  > "${V1_SESSION_LIST_JSON}"
+bos_list v1 session > "${V1_SESSION_LIST_JSON}"
 
 # For v1 sessions, we will also describe each, since in BOS v1, just listing them
 # does not show information about them.
@@ -98,8 +93,8 @@ bos_list v1 session  > "${V1_SESSION_LIST_JSON}"
 V1_SESSION_DIR="${V1_DIR}/session"
 run_cmd mkdir -p "${V1_SESSION_DIR}"
 
-for SESSION_ID in $(jq -r '.[] | .' "${V1_SESSION_LIST_JSON}") ; do
-    bos_cli v1 session describe "${SESSION_ID}" > "${V1_SESSION_DIR}/${SESSION_ID}.json"
+for SESSION_ID in $(jq -r '.[] | .' "${V1_SESSION_LIST_JSON}"); do
+  bos_cli v1 session describe "${SESSION_ID}" > "${V1_SESSION_DIR}/${SESSION_ID}.json"
 done
 
 # For v2, listing is all we need for all of the types.
@@ -107,9 +102,9 @@ done
 V2_DIR="${ARCHIVE_DIR}/v2"
 run_cmd mkdir -p "${V2_DIR}"
 
-for OBJECT in components options sessions sessiontemplates version ; do
-    echo "Exporting BOS v2 ${OBJECT}..."
-    bos_list v2 "${OBJECT}" > "${V2_DIR}/${OBJECT}.json"
+for OBJECT in components options sessions sessiontemplates version; do
+  echo "Exporting BOS v2 ${OBJECT}..."
+  bos_list v2 "${OBJECT}" > "${V2_DIR}/${OBJECT}.json"
 done
 
 # Compress the results

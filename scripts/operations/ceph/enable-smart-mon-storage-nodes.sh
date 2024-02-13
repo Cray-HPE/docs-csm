@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -112,4 +112,4 @@ for storage_node in "${ORCH_HOSTS[@]}"; do
 done
 
 echo "Reconfiguring node-exporter to publish smartmon data"
-ssh ncn-s001 ${ssh_options} "cephadm shell --mount /etc/cray/ceph/ -- ceph orch apply -i /mnt/node-exporter.yml" 
+ssh ncn-s001 ${ssh_options} "cephadm shell --mount /etc/cray/ceph/ -- ceph orch apply -i /mnt/node-exporter.yml"
