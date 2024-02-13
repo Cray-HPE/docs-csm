@@ -365,7 +365,7 @@ new customized image.
      > ***NOTE*** To target both master and worker nodes at the same time, use the following:
      >
      > ```bash
-     > /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+     > /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
      >     -mw \
      >     -p "$MASTER_IMAGE_ID"
      > ```
