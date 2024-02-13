@@ -458,7 +458,7 @@ updating the management nodes' boot parameters in BSS to use the artifacts from 
       > ***NOTE*** To target both master and worker nodes at the same time, use the following:
       >
       >```bash
-      > /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh 
+      > /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh 
       >     -mw \
       >     -p "$MASTER_IMAGE_ID"
       > ```
@@ -466,7 +466,7 @@ updating the management nodes' boot parameters in BSS to use the artifacts from 
         1. Update master management nodes:
 
             ```bash
-            /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+            /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
                 -m \
                 -p "$MASTER_IMAGE_ID"
             ```
@@ -474,7 +474,7 @@ updating the management nodes' boot parameters in BSS to use the artifacts from 
         1. Update storage management nodes:
 
             ```bash
-            /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+            /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
                 -s \
                 -p "$STORAGE_IMAGE_ID"
             ```
@@ -482,7 +482,7 @@ updating the management nodes' boot parameters in BSS to use the artifacts from 
         1. Update worker management nodes:
 
            ```bash
-           /usr/share/doc/csm/scripts/operations/configuration/node_management/assign-ncn-images.sh \
+           /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
                -w \
                -p "$WORKER_IMAGE_ID"
            ```
