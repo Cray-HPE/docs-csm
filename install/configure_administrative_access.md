@@ -1,22 +1,26 @@
 # Configure Administrative Access
 
 There are several operations which configure administrative access to different parts of the system.
-Ensuring that the `cray` CLI can be used with administrative credentials enables use of many management
-services via commands. The management nodes can be locked from accidental manipulation by the
-`cray power` (or `cray capmc`) and `cray fas` commands when the intent is to work on the entire system
-except the management nodes. The `cray scsd` command can change the SSH keys, NTP server, `syslog` server,
-and BMC/controller passwords.
+Ensuring that the `cray` CLI can be used with administrative credentials enables use of many
+management services via commands. The management nodes can be locked from accidental manipulation by
+the `cray power` and `cray fas` commands when the intent is to work on the entire system except the
+management nodes. The `cray scsd` command can change the SSH keys, NTP server, `syslog` server, and
+BMC/controller passwords.
 
 ## Topics
 
-1. [Configure the Cray command line interface](#1-configure-the-cray-command-line-interface)
-1. [Set `Management` role on the BMCs of management nodes](#2-set-management-role-on-the-bmcs-of-management-nodes)
-1. [Lock management nodes](#3-lock-management-nodes)
-1. [Configure BMC and controller parameters with SCSD](#4-configure-bmc-and-controller-parameters-with-scsd)
-1. [Set up passwordless SSH](#5-set-up-passwordless-ssh)
-1. [Configure the root password and SSH keys in Vault](#6-configure-the-root-password-and-ssh-keys-in-vault)
-1. [Configure management nodes with CFS](#7-configure-management-nodes-with-cfs)
-1. [Proceed to next topic](#8-proceed-to-next-topic)
+- [Configure Administrative Access](#configure-administrative-access)
+  - [Topics](#topics)
+  - [1. Configure the Cray command line interface](#1-configure-the-cray-command-line-interface)
+    - [Automatic configuration using temporary Keycloak account](#automatic-configuration-using-temporary-keycloak-account)
+    - [Manual configuration](#manual-configuration)
+  - [2. Set `Management` role on the BMCs of management nodes](#2-set-management-role-on-the-bmcs-of-management-nodes)
+  - [3. Lock management nodes](#3-lock-management-nodes)
+  - [4. Configure BMC and controller parameters with SCSD](#4-configure-bmc-and-controller-parameters-with-scsd)
+  - [5. Set up passwordless SSH](#5-set-up-passwordless-ssh)
+  - [6. Configure the root password and SSH keys in Vault](#6-configure-the-root-password-and-ssh-keys-in-vault)
+  - [7. Configure management nodes with CFS](#7-configure-management-nodes-with-cfs)
+  - [8. Proceed to next topic](#8-proceed-to-next-topic)
 
 > **`NOTE`** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
 > administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
@@ -62,7 +66,7 @@ Manually configure the `cray` CLI with a valid Keycloak account using the follow
 
 The BMCs that control management nodes will not have been marked with the `Management` role in HSM. It is important
 to mark them with the `Management` role so that they can be easily included in the locking/unlocking operations required
-as protections for FAS and PCS/CAPMC actions.
+as protections for FAS and PCS actions.
 
 **Set BMC `Management` roles now!**
 
@@ -71,7 +75,7 @@ See [Set BMC `Management` Role](../operations/hardware_state_manager/Set_BMC_Man
 ## 3. Lock management nodes
 
 The management nodes are unlocked at this point in the installation. Locking the management nodes and their BMCs will
-prevent actions from FAS to update their firmware or PCS/CAPMC to power off or do a power reset. Doing any of these by
+prevent actions from FAS to update their firmware or PCS to power off or do a power reset. Doing any of these by
 accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have
 serious negative effects on system operation.
 

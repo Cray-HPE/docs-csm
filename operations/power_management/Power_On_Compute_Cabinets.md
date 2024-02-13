@@ -57,13 +57,14 @@ power-on command from Cray System Management \(CSM\) software.
    within the time expected based on its cron schedule, execute the `sat bootsys boot --stage
    cabinet-power` command again.
 
-   If `sat bootsys` fails to power on the cabinets through `hms-discovery`, then use CAPMC to manually power on the cabinet chassis,
-   compute blade slots, and all populated switch blade slots \(1, 3, 5, and 7\). This example shows cabinets 1000-1003.
+   If `sat bootsys` fails to power on the cabinets through `hms-discovery`, then use PCS to
+   manually power on the cabinet chassis, compute blade slots, and all populated switch blade
+   slots \(1, 3, 5, and 7\). This example shows cabinets 1000-1003.
 
    ```bash
-   cray capmc xname_on create --xnames x[1000-1003]c[0-7] --format json
-   cray capmc xname_on create --xnames x[1000-1003]c[0-7]s[0-7] --format json
-   cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[1,3,5,7] --format json
+   cray power transition on --xnames x[1000-1003]c[0-7] --format json
+   cray power transition on --xnames x[1000-1003]c[0-7]s[0-7] --format json
+   cray power transition on --xnames x[1000-1003]c[0-7]r[1,3,5,7] --format json
    ```
 
 ### Power On Standard Rack PDU Circuit Breakers

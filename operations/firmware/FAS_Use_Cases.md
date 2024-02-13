@@ -420,12 +420,15 @@ Use the file `cray_chassisBMC_BMC.json` for Chassis BMC updates.
     1. Power off all the components. For example, in chassis 0-7, cabinets 1000-1003:
 
         ```bash
-        cray capmc xname_off create --xnames x[1000-1003]c[0-7] --recursive true --continue true
+        cray power transition off --xnames x[1000-1003]c[0-7] --include children
         ```
 
-        This command powers off all the node cards, then all the compute blades, then all the Slingshot switch ASICS, then all the Slingshot switch enclosures, and finally all the chassis enclosures in cabinets 1000-1003.
-
-        When power is removed from a chassis, the high-voltage DC rectifiers that support the chassis are powered off. If a component is not populated, the `--continue` option enables the command to continue instead of returning error messages.
+        This command powers off all the node cards, then all the compute blades,
+        then all the Slingshot switch modules, and finally all the chassis
+        enclosures in cabinets 1000-1003.
+        
+        When power is removed from a chassis, the high-voltage DC rectifiers
+        that support the chassis are powered off.
 
 1. Create a JSON file using the example recipe above with the command parameters required for updating the CMM firmware.
 
@@ -536,10 +539,10 @@ Use the file `cray_chassisBMC_BMC.json` for Chassis BMC updates.
     The `hms-discovery` cronjob will run within 5 minutes of being unsuspended and start powering on the chassis enclosures, switches, and compute blades. If components are not being powered back on, then power them on manually:
 
     ```bash
-    cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
+    cray power transition on --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --include parents
     ```
 
-    The `--prereq` option ensures all required components are powered on first. The `--continue` option allows the command to complete in systems without fully populated hardware.
+    The `--include parents` option ensures all required components are powered on first.
 
 1. After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 

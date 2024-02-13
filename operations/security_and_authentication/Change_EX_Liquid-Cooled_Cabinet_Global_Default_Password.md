@@ -28,13 +28,13 @@ This procedure changes the global default `root` credential on HPE Cray EX liqui
    Example showing fully populated cabinets 1000-1003:
 
    ```screen
-   cray capmc xname_off create --xnames x[1000-1003]c[0-7]s[0-7] --format json
+   cray power transition off --xnames x[1000-1003]c[0-7]s[0-7]
    ```
 
    Check the power status:
 
    ```screen
-   cray capmc get_xname_status create --xnames x[1000-1003]c[0-7]s[0-7] --format json
+   cray power status list --xnames x[1000-1003]c[0-7]s[0-7]
    ```
 
    Continue when all compute slots are `Off`.

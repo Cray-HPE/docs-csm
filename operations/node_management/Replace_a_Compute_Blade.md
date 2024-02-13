@@ -49,7 +49,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    ```
 
    Disabling the slot prevents `hms-discovery` from attempting to automatically power on slots. If the slot
-   automatically powers on after using CAPMC to power the slot off, then temporarily suspend the `hms-discovery` cronjob in Kubernetes:
+   automatically powers on after using PCS to power the slot off, then temporarily suspend the `hms-discovery` cronjob in Kubernetes:
 
    1. Suspend the `hms-discovery` cron job to prevent slot power on.
 
@@ -70,10 +70,10 @@ Replace an HPE Cray EX liquid-cooled compute blade.
       hms-discovery */3 * * * * True 0 117s 15d
       ```
 
-1. (`ncn-mw#`) Use CAPMC to power off slot 0 in chassis 3.
+1. (`ncn-mw#`) Use PCS to power off slot 0 in chassis 3.
 
    ```bash
-   cray capmc xname_off create --xnames x1000c3s0 --recursive true --format json
+   cray power transition off x1000c3s0 --include children
    ```
 
 ## Delete the HSM entries

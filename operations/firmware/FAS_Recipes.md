@@ -40,24 +40,24 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 >     kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":false}}'
 >     ```
 >
-> - Use CAPMC to make sure all chassis rectifier power is off.
+> - Use PCS to make sure all chassis rectifier power is off.
 >   1. Check power status of the chassis.
 >
 >      (`ncn-mw#`) If the chassis power is off, then everything else is off, and it is safe to proceed.
 >
 >      ```bash
->      cray capmc get_xname_status create --xnames x[1000-1008]c[0-7]
+>      cray power status list --xnames x[1000-1008]c[0-7]
 >      ```
 >
->   1. If the chassis are still powered on, then use CAPMC to make sure everything is off.
+>   1. If the chassis are still powered on, then use PCS to make sure everything is off.
 >
 >      1. (`ncn-mw#`) Issue power off command.
 >
->         This command may produce a large list of errors when talking to BMCs. This is expected if the hardware
->         has been partially powered down.
+>         This command may produce a large list of errors when talking to BMCs. This is expected
+>         if the hardware has been partially powered down.
 >
 >         ```bash
->         cray capmc xname_off create --xnames x[1000-1008]c[0-7] --force true --continue true --recursive true
+>         cray pcs transition off --xnames x[1000-1008]c[0-7] --include children
 >         ```
 >
 >      1. Verify that chassis power is off.

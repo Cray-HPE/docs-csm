@@ -120,21 +120,25 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
     **Skip this step if the chassis slot is unpopulated**.
 
     ```bash
-    cray capmc get_xname_status create --xnames x1005c3s0 --format toml
+    cray power status describe x1005c3s0 --format toml
     ```
 
     Example output:
 
     ```toml
-    e = 0
-    err_msg = ""
-    off = [ "x1005c3s0",]
+    [[status]]
+    xname = "x1005c3s0"
+    powerState = "on"
+    managementState = "available"
+    error = ""
+    supportedPowerTransitions = [ "On", "Force-Off", "Soft-Off", "Off", "Init", "Hard-Restart", "Soft-Restart",]
+    lastUpdated = "2024-02-04T01:48:48.3156272Z"
     ```
 
     If the slot is powered on, then power the chassis slot off.
 
     ```bash
-    cray capmc xname_off create --xnames x1005c3s0 --recursive true
+    cray power transition off --xnames x1005c3s0 --include children
     ```
 
 1. Install the blade into the system into the desired location.
@@ -245,8 +249,9 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
 
 1. (`ncn-mw#`) Rediscover the `ChassisBMC` (the example shows cabinet 1005, chassis 3).
 
-   Rediscovering the `ChassisBMC` will update HSM to become aware of the newly populated slot and allow
-   [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) to perform power actions on the slot.
+   Rediscovering the `ChassisBMC` will update HSM to become aware of the newly populated slot and
+   allow [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs) to perform
+   power actions on the slot.
 
     ```bash
     cray hsm inventory discover create --xnames x1005c3b0
@@ -318,7 +323,7 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
     The example powers on slot 0, chassis 3, in cabinet 1005.
 
     ```bash
-    cray capmc xname_on create --xnames x1005c3s0 --recursive true
+    cray power transition on --xnames x1005c3s0 --include children
     ```
 
 1. Wait at least three minutes for the blade to power on and the [node controllers](../../glossary.md#node-controller-nc)
@@ -374,7 +379,7 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
         1. (`ncn-mw#`) If the BMC is not pingable, then verify that the chassis slot has power.
 
             ```bash
-            cray capmc get_xname_status create --xnames x1005c3s0
+            cray power status describe x1005c3s0
             ```
 
     * If the Redfish endpoint is in `HTTPsGetFailed`:

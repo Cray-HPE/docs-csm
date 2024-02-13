@@ -13,15 +13,27 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 2. From `ncn-m001`, check the status of the chassis.
 
     ```bash
-    cray capmc get_xname_status create --xnames x9000c[1,3]
+    cray power status list --xnames x9000c[1,3] --format toml
     ```
 
     Example output:
 
     ```text
-    e = 0
-    err_msg = ""
-    off = [ "x9000c1", "x9000c3",]
+    [[status]]
+    xname = "x9000c1"
+    powerState = "on"
+    managementState = "available"
+    error = ""
+    supportedPowerTransitions = [ "On", "Force-Off", "Soft-Off", "Off", "Init", "Hard-Restart", "Soft-Restart",]
+    lastUpdated = "2024-02-04T01:48:47.839347547Z"
+
+    [[status]]
+    xname = "x9000c3"
+    powerState = "on"
+    managementState = "available"
+    error = ""
+    supportedPowerTransitions = [ "On", "Force-Off", "Soft-Off", "Off", "Init", "Hard-Restart", "Soft-Restart",]
+    lastUpdated = "2024-02-04T01:48:48.240138908Z"
     ```
 
 3. Check the Chassis Controller Module \(CCM\) log for `Critical` messages and the EPO event.
@@ -57,27 +69,13 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     All chassis in cabinets 1000-1003 are forced off in this example. Power off all chassis in a cooling group simultaneously, or the EPO condition may persist.
 
     ```bash
-    cray capmc xname_off create --xnames x[1000-1003]c[0-7] --force true
-    ```
-
-    Example output:
-
-    ```text
-    e = 0
-    err_msg = ""
+    cray power transition force-off --xnames x[1000-1003]c[0-7]
     ```
 
     The HPE Cray EX EX TDS cabinet contains only two chassis: 1 \(bottom\) and 3 \(top\).
 
     ```bash
-    cray capmc xname_off create --xnames x9000c[1,3] --force true
-    ```
-
-    Example output:
-
-    ```text
-    e = 0
-    err_msg = ""
+    cray power transition force-off --xnames x9000c[1,3]
     ```
 
 6. Restart the hms-discovery cron job.
@@ -89,15 +87,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     About 5 minutes after hms-discovery restarts, the service will power on the chassis enclosures, switches, and compute blades. If components are not being powered back on, then power them on manually.
 
     ```bash
-    cray capmc xname_on create \
-    --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
-    ```
-
-    Example output:
-
-    ```text
-    e = 0
-    err_msg = ""
+    cray power transition on -xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --include parents
     ```
 
 7. Verify the Slingshot fabric is up and healthy.

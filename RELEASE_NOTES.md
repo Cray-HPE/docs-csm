@@ -32,8 +32,6 @@
 
 ## Deprecations
 
-* [CAPMC](glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
-
 For a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
 
 ## Removals
