@@ -1,6 +1,7 @@
 # Cray System Management (CSM) - Release Notes
 
-[CSM](glossary.md#cray-system-management-csm) 1.5 contains many changes spanning bug fixes, new feature development, and documentation improvements. This page lists some of the highlights.
+[CSM](glossary.md#cray-system-management-csm) 1.5 contains many changes spanning bug fixes, new feature development, and
+documentation improvements. This page lists some of the highlights.
 
 ## New
 
@@ -12,7 +13,8 @@
 * Support for old and new `spire` versions running simultaneously toward zero downtime upgrades
 * Technical Preview Support for `spire` `TPM-based` remote node attestation
 * Power Control Service (PCS) is released
-* The V3 CFS API is now available, including support for paging, external repository "sources", and new options for debugging.
+* The V3 CFS API is now available, including support for paging, external repository "sources", and new options for
+  debugging.
 * Update of all services using `postgres` to support new versions of `postgres` and `postgres-operator`
 * `BOS V2` is the default
 * Update `spire` version
@@ -68,33 +70,33 @@
 * Add a test to check master node taints
 * Augment `postgres` backup `goss` test to also check for `cronjob`
 * Argo-driven Upgrade Automation for Kubernetes Storage Nodes
-* Ceph upgrade added to automated storage upgrade  
+* Ceph upgrade added to automated storage upgrade
 
 ### Base Platform Component Upgrades
 
-| Platform Component           | Version        |
-|------------------------------|----------------|
-| `Kubernetes`                 | 1.22.13        |
-| `containerd`                 | 1.5.16         |
-| `istio`                      | 1.11.8         |
-| `thanos`                     | 0.31.0         |
-| `prometheus-operator`        | 0.63.0         |
-| `grafterm`                   | 1.0.3          |
-| `keycloak`                   | 21.1.1         |
-| `bitnami-etcd` on `ncn-mxxx` | 3.5.0          |
-| `bitnami-etcd` for clusters  | 3.5.9          |
-| `coredns`                    | 1.8.4          |
-| `helm`                       | 3.11.2         |
-| `postgresql`                 | 14.8           |
-| `postgres-operator`          | 1.8.2          |
-| `spire`                      | 0.12.2         |
-| `spire-intermediate`         | 1.0.0          |
-| `cray-spire`                 | 1.5.5          |
-| `metrics-server`             | 0.6.3          |
-| `cray-certmanager`           | 1.5.5          |
-| `argo-workflows`             | 3.3.6          |
-| `argo-workflow-controller`   | 3.4.5          |
-| `ceph`                       | 16.2.13        |
+| Platform Component           | Version |
+|------------------------------|---------|
+| `Kubernetes`                 | 1.22.13 |
+| `containerd`                 | 1.5.16  |
+| `istio`                      | 1.11.8  |
+| `thanos`                     | 0.31.0  |
+| `prometheus-operator`        | 0.63.0  |
+| `grafterm`                   | 1.0.3   |
+| `keycloak`                   | 21.1.1  |
+| `bitnami-etcd` on `ncn-mxxx` | 3.5.0   |
+| `bitnami-etcd` for clusters  | 3.5.9   |
+| `coredns`                    | 1.8.4   |
+| `helm`                       | 3.11.2  |
+| `postgresql`                 | 14.8    |
+| `postgres-operator`          | 1.8.2   |
+| `spire`                      | 0.12.2  |
+| `spire-intermediate`         | 1.0.0   |
+| `cray-spire`                 | 1.5.5   |
+| `metrics-server`             | 0.6.3   |
+| `cray-certmanager`           | 1.5.5   |
+| `argo-workflows`             | 3.3.6   |
+| `argo-workflow-controller`   | 3.4.5   |
+| `ceph`                       | 16.2.13 |
 
 ### Security Improvements
 
@@ -118,8 +120,8 @@
 * Addressed `Zenbleed` CVE on NCNs
 * Addressed `CVE-2023-38545` (curl & `libcurl`) on NCNs
 * Added Default RBAC Role for Telemetry API
-* In SAT upgraded `paramiko` to resolve `CVE-2023-48795` 
-  
+* In SAT upgraded `paramiko` to resolve `CVE-2023-48795`
+
 ### Customer-Requested Enhancements
 
 * Keycloak upgrade for CVE fixes
@@ -147,7 +149,8 @@
 
 * Fix for when QLogic adapter firmware stops responding then fails recovery causing the node to crash.
     * Fixes
-        * QLogic/Marvel Driver Update - RPM: `qlgc-fastlinq-kmp-default-8.74.1.0_k5.14.21_150500.53-1.sles15sp5.x86_64.rpm`
+        * QLogic/Marvel Driver Update -
+          RPM: `qlgc-fastlinq-kmp-default-8.74.1.0_k5.14.21_150500.53-1.sles15sp5.x86_64.rpm`
         * SUSE Kernel Update: Version: `5.14.21-150500.55.39.1.27360.1.PTF.1215587`
 * Fix for invalid `preinstall` VCS check in IUF in the event of a fresh install
 * Fix deployment failure due to DNS timeouts when `max_fails=0` is set in `coredns`
@@ -169,7 +172,7 @@
 * Fixed an issue where Weave pods were not starting after upgrading to CSM V1.4 content
 * Fixed PowerDNS server TLD is missing NS delegation records for subdomains
 * Fixed an issue where FRU Tracking doesn't create a detected event after a removed event
-  
+
 ## Deprecations
 
 * The `ipv4-resolvers` option has been removed for CSI as it is not used
@@ -185,11 +188,14 @@ For a list of all deprecated CSM features, see [Deprecations](introduction/depre
 * Remove `metal-net` scripts as they are no longer used
 * Remove `etcd-operator` as a result of migration to use `bitnami-etcd`
 * [CRUS](glossary.md#compute-rolling-upgrade-service-crus)
-* Deprecated [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos) v1 session template and boot set fields are no longer stored in BOS.
-    * For more information, see [Deprecated fields](operations/boot_orchestration/Session_Templates.md#deprecated-fields)
+* Deprecated [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos) v1 session template and boot
+  set fields are no longer stored in BOS.
+    * For more information,
+      see [Deprecated fields](operations/boot_orchestration/Session_Templates.md#deprecated-fields)
 * Removed -P option from `cray-dhcp-kea` startup options
 * Stopped using `skopeo` images < 1.13.2
 
-For a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals)
+For a list of all features with an announced removal target,
+see [Removals](introduction/deprecated_features/README.md#removals)
 
 ## Known Issues
