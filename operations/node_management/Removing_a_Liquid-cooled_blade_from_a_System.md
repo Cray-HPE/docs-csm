@@ -118,7 +118,7 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
     This examples powers off slot 0, chassis 3, in cabinet 9000.
 
     ```bash
-    cray capmc xname_off create --xnames x9000c3s0 --recursive true
+    cray power transition off --xnames x9000c3s0 --include children
     ```
 
 ### 6. Disable the chassis slot

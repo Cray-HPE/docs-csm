@@ -56,15 +56,19 @@ This procedure is applicable for the following types of standard rack nodes:
 1. (`ncn-mw#`) Verify the node to be removed is powered off:
 
     ```bash
-    cray capmc get_xname_status create --xnames "${NODE_XNAME}" --format toml
+    cray power status describe ${NODE_XNAME} --format toml
     ```
 
     Expected output:
 
     ```toml
-    e = 0
-    err_msg = ""
-    off = [ "x3000c0s19b0n0",]
+    [[status]]
+    xname = "x3000c0s19b0n0"
+    powerState = "on"
+    managementState = "available"
+    error = ""
+    supportedPowerTransitions = [ "Soft-Off", "Off", "On", "Force-Off", "Init", "Hard-Restart", "Soft-Restart",]
+    lastUpdated = "2024-02-05T22:42:33.331124704Z"
     ```
 
 1. (`ncn-mw#`) **If the node being removed is an UAN**, then remove the IP address reservation for the node in the `CAN` or `CHN` networks.
