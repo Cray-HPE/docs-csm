@@ -24,6 +24,7 @@
 """Shared Python function library: S3"""
 
 import base64
+import datetime
 import json
 import logging
 import os
@@ -151,6 +152,18 @@ def list_artifacts(bucket_name: str) -> JsonDict:
         logging.debug("S3 returned list of %d artifacts in '%s' bucket", len(resp["Contents"]),
                       bucket_name)
         artifact_list.extend(resp["Contents"])
+
+    # Convert the datetime fields in the artifacts to strings, since we need them to be
+    # JSON serializable
+    for art in artifact_list:
+        if "LastModified" in art and isinstance(art["LastModified"], datetime.datetime):
+            art["LastModified"] = str(art["LastModified"])
+        if "RestoreStatus" not in art:
+            continue
+        if "RestoreExpiryDate" not in art["RestoreStatus"]:
+            continue
+        if isinstance(art["RestoreStatus"]["RestoreExpiryDate"], datetime.datetime):
+            art["RestoreStatus"]["RestoreExpiryDate"] = str(art["RestoreStatus"]["RestoreExpiryDate"])
 
     # Return a response in the same format as the Cray CLI would
     return { "artifacts": artifact_list }
