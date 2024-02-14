@@ -38,7 +38,7 @@ spec:
     total=120
     sleep=5
     while true; do
-      http_code=$(curl -k -s -S -o /dev/null -w '%{http_code}' https://packages.local/service/rest/v1/status || true)
+      http_code=$(curl -k -s -S -o /dev/null -w '%{http_code}' -m 10 "https://packages.local/service/rest/v1/components?repository=csm-noos" || true)
       if [ "${http_code}" == "200" ]; then
         echo "nexus is up"
         break
