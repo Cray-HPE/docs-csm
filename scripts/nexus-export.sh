@@ -61,7 +61,12 @@ fi
 echo "Scaling Nexus deployment to 0"
 kubectl -n nexus scale deployment nexus --replicas=0
 
-echo "Starting backup"
+hoursBackup=$((usedNexus / 60))
+minBackup=$((usedNexus % 60))
+
+echo "Starting backup, do not exit this script."
+echo "Should be done around $(date -d "+$hoursBackup hours +$minBackup min") ($hoursBackup:$minBackup from now)"
+
 cat << EOF | kubectl -n nexus apply -f -
 apiVersion: batch/v1
 kind: Job
@@ -93,10 +98,12 @@ spec:
           claimName: nexus-bak
 EOF
 
+echo "Waiting for the backup to finish."
 while [[ -z $(kubectl get job nexus-backup -n nexus -o jsonpath='{.status.succeeded}') ]]; do
-  echo "Waiting for the backup to finish for another 10 seconds."
-  sleep 10
+  echo -n "."
+  sleep 30
 done
+echo "Backup has completed."
 
 echo "Scaling Nexus back up to 1"
 kubectl -n nexus scale deployment nexus --replicas=1
