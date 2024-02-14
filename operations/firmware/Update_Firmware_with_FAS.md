@@ -113,6 +113,8 @@ After identifying which hardware is in the system, start with the top item on th
       1. [BMC](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-bmc)
       1. [`NodeBIOS`](FAS_Use_Cases.md#manufacturer-cray--device-type--nodebmc--target--nodebios)
       1. [Redstone FPGA](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-redstone-fpga)
+      1. [Management Ethernet](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-management-ethernet)
+      1. [`AccVBIOS`](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-accvbios)
 1. [Gigabyte](FAS_Use_Cases.md#gigabyte)
    1. [BMC](FAS_Use_Cases.md#manufacturer-gigabyte--device-type-nodebmc--target-bmc)
    1. [BIOS](FAS_Use_Cases.md#manufacturer-gigabyte--device-type--nodebmc--target--bios)
