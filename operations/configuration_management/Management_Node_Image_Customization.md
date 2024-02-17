@@ -400,21 +400,21 @@ The following procedure describes how to create a CFS configuration that contain
 
         * For worker nodes:
 
-          ```bash
-          TARGET_GROUP=Management_Worker
-          ```
+            ```bash
+            TARGET_GROUP=Management_Worker
+            ```
 
         * For master nodes:
 
-        ```bash
-        TARGET_GROUP=Management_Master
-        ```
+            ```bash
+            TARGET_GROUP=Management_Master
+            ```
 
         * For storage nodes:
 
-        ```bash
-        TARGET_GROUP=Management_Storage
-        ```
+            ```bash
+            TARGET_GROUP=Management_Storage
+            ```
 
     1. Create the session.
 
