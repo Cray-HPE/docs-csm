@@ -43,47 +43,52 @@ If the Prometheus SNMP Exporter or REDS hardware discovery emit errors related t
 
 In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must be configured with a list of management network switches to scrape metrics from.
 
-> **`NOTE`** All variables used within this page depend on the `/etc/environment` setup done in [Pre-installation](../../../install/pre-installation.md).
+> ***NOTE*** All variables used within this page depend on the `/etc/environment` setup done in [Pre-installation](../../../install/pre-installation.md).
 
-1. (`pit#`) Obtain the list of switches to use as targets using CANU.
+1. (`pit#`) Obtain the list of switch names and their IP addresses in a format to use with copy/paste in the next command.
 
     ```bash
-    canu init --sls-file ${PITDATA}/prep/${SYSTEM_NAME}/sls_input_file.json --out -
+    jq '.Networks.NMN.ExtraProperties.Subnets | .[] | select(.FullName=="NMN Management Network Infrastructure").IPReservations | map( {name: .Name, target: .IPAddress })' \
+    "${PITDATA}/prep/${SYSTEM_NAME}/sls_input_file.json"
     ```
 
     Expected output looks similar to the following:
 
-    ```text
-    10.254.0.2
-    10.254.0.3
-    10.254.0.4
-    10.254.0.5
-    4 IP addresses saved to <stdout>
+    ```json
+    [
+      {
+        "name": "sw-spine-001",
+        "target": "10.252.0.2"
+      },
+      {
+        "name": "sw-spine-002",
+        "target": "10.252.0.3"
+      },
+      {
+        "name": "sw-leaf-bmc-001",
+        "target": "10.252.0.4"
+      }
+    ]
     ```
 
-1. (`pit#`) Update `customizations.yaml` with the list of switches.
+1. (`pit#`) Update `customizations.yaml` with the list of switches by copying and pasting the output from the previous command.
 
-    ```bash
-    yq write -s - -i ${PITDATA}/prep/site-init/customizations.yaml <<EOF
-    - command: update
-      path: spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter
-      value:
-              serviceMonitor:
-                enabled: true
-                params:
-                - name: snmp1
-                  target: 10.252.0.2
-                - name: snmp2
-                  target: 10.252.0.3
-                - name: snmp3
-                  target: 10.252.0.4
-    EOF
-    ```
+    * Create the new `prometheus-snmp-exporter` key.
+
+        ```bash
+        yq4 eval -i '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter = {"serviceMonitor" : {"enabled": true, "params": []}}' "${PITDATA}/prep/site-init/customizations.yaml"
+        ```
+
+    * Merge `sls_input_file.json`'s switches into `customizations.yaml`.
+
+        ```bash
+        yq4 eval -i '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.params |= '"$(jq '.Networks.NMN.ExtraProperties.Subnets | .[] | select(.FullName=="NMN Management Network Infrastructure").IPReservations | map( {name: .Name, target: .IPAddress })' "${PITDATA}/prep/${SYSTEM_NAME}/sls_input_file.json")"'' "${PITDATA}/prep/site-init/customizations.yaml"
+        ```
 
 1. (`pit#`) Review the SNMP Exporter configuration.
 
     ```bash
-    yq r ${PITDATA}/prep/site-init/customizations.yaml spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter
+    yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter' "${PITDATA}/prep/site-init/customizations.yaml"
     ```
 
     The expected output looks similar to:
@@ -91,13 +96,7 @@ In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must 
     ```yaml
     serviceMonitor:
       enabled: true
-      params:
-      - name: snmp1
-        target: 10.252.0.2
-      - name: snmp2
-        target: 10.252.0.3
-      - name: snmp3
-        target: 10.252.0.4
+      params: [{name: sw-spine-001, target: 10.252.0.2}, {name: sw-spine-002, target: 10.252.0.3}, {name: sw-leaf-bmc-001, target: 10.252.0.4}]
     ```
 
 The most common configuration parameters are specified in the following table. They must be set in the `customizations.yaml` file
