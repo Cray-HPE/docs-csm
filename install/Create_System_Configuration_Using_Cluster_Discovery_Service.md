@@ -159,9 +159,24 @@ The following steps will verify if IP addresses are assigned to the BMC nodes an
 
 1. Verify that all the required nodes are listed.
 
-   Example output:
+    Example output:
 
-   ![List the BMC nodes](../img/install/List_BMC_nodes.png)
+    ```text
+    ncn-m001:/opt/src/cluster-config-verification-tool/cds # ./discover_start.py -u root -l
+    Enter the password:
+    File /var/lib/misc/dnsmasq.leases exists and has contents.
+    
+    ===== Detected BMC MAC info:
+    IP: A.B.C.D BMC_MAC: AA-BB-CC-DD-EE-FF
+    
+    ==== Count check:
+    No of BMC Detected: 1
+    
+    ====================================================================================
+    
+    If BMC count matches the expected river node count, proceed with rebooting the nodes
+    ./discovery_start.py --bmc_username <username> --bmc_passwprd <password> --reset
+    ```
 
 1. (`pit#`) Reset the listed BMC nodes.
 
@@ -204,7 +219,11 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 
       Example output:
 
-      ![Bond0 Network Interface](../img/install/create_bond0.png)
+        ```text
+        pit:/var/www/ephemeral/prep/cds # pdsh -w^nodelist -x localhost "sh "${CVT_PATH}"/scripts/create_bond0.sh"
+        ncn-w002: Network restarted successfully
+        // more nodes to follow - output truncated
+        ```
 
 1. (`pit#`) Verify the status and list the IP addresses of the fabric switches.
 
@@ -216,7 +235,17 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 
    Example output:
 
-   ![Fabric switchlist example](../img/install/fabric_switch_list_output.png)
+    ```text
+    ncn-m001:/opt/src/cluster-config-verification-tool/cds # ./discover_status.py fabric --username root --out
+    Enter the password for fabric:
+    File /var/lib/misc/dnsmasq.leases exists and has contents.
+    
+    fabricswlist:
+    A.B.C.D
+    
+    ===== Save list components in a file:
+    Created fabricswlist file: /opt/src/cluster-config-verification-tool/cds/fabricswlist
+    ```
 
 1. (`pit#`) Verify the status and list the IP addresses of the PDUs.
 
