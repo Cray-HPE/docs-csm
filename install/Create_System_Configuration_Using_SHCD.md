@@ -95,10 +95,14 @@ this step may be skipped.
 
 1. (`pit#`) Edit the `system_config.yaml` file with the appropriate values.
 
-   > **NOTE**:
+   > ***NOTES***
    >
    > - For a short description of each key in the file, run `csi config init --help`.
-   > - For more description of these settings and the default values, see
+   >   ***IMPORTANT*** `install-ncn-bond-members` have many possibilities but are typically:
+   >      - `p1p1,p10p1` for HPE nodes.
+   >      - `p1p1,p1p2` for Gigabyte nodes.
+   >      - `p801p1,p801p2` for Intel nodes.
+   > - For more details on these settings and the default values, see
    >   [Default IP Address Ranges](../introduction/csm_overview.md#2-default-ip-address-ranges) and the other topics in
    >   [CSM Overview](../introduction/csm_overview.md).
    > - To enable or disable audit logging, refer to [Audit Logs](../operations/security_and_authentication/Audit_Logs.md)
