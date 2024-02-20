@@ -39,7 +39,7 @@ echo "HSM postgres backup file will land in ${BACKUP_FOLDER}"
 
 # Determine the postgres leader
 echo "Determining the postgres leader..."
-POSTGRES_LEADER=$(kubectl exec cray-smd-postgres-0 -n services -c postgres -t -- patronictl list -f json | jq  -r '.[] | select(.Role == "Leader").Member')
+POSTGRES_LEADER=$(kubectl exec cray-smd-postgres-0 -n services -c postgres -t -- patronictl list -f json | jq -r '.[] | select(.Role == "Leader").Member')
 echo "The HSM postgres leader is $POSTGRES_LEADER"
 
 # Create PSQL dump of the HSM database

@@ -14,32 +14,49 @@ A healthy etcd cluster is available on the system. See [Check the Health and Bal
 
 1. Create a backup for the desired etcd cluster.
 
-    The example below is backing up the etcd cluster for the Boot Orchestration Service \(BOS\). The returned backup name (`cray-bos-etcd-cluster-manual-backup-25847`) will be used in the next step.
+    Create variables which will be used throughout this procedure.
+    In this example we are making a backup of the Boot Orchestration Service \(BOS\) etcd cluster
+    which will be named `cray-bos-etcd-backup_DATE_TIME`.
+    NOTE: backup name can be anything you would like.
 
     ```bash
-    kubectl exec -it -n operators \
-                $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
-                -c util -- create_backup cray-bos wednesday-manual-backup
+    SERVICE=cray-bos
+    BACKUP_NAME=$SERVICE-etcd-backup_`date '+%Y-%m-%d_%H-%M-%S'`
+    ```
+
+    ```bash
+    JOB=$(kubectl exec -it -n operators \
+          $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
+          -c util -- create_backup $SERVICE $BACKUP_NAME | cut -d " " -f 1); echo $JOB
     ```
 
     Example output:
 
     ```text
-    etcdbackup.etcd.database.coreos.com/cray-bos-etcd-cluster-manual-backup-25847 created
+    etcdbackup.etcd.database.coreos.com/cray-bos-etcd-cluster-manual-backup-25847
     ```
 
-1. Check the status of the backup using the name returned in the output of the previous step.
+1. Check the status of the backup.
 
     ```bash
-    kubectl -n services get BACKUP_NAME -o yaml
+    kubectl -n services get $JOB -o json | jq '.spec.s3.path, .status'
     ```
 
     Example output:
 
-    ```yaml
-      status:
-        etcdRevision: 1
-        etcdVersion: 3.3.8
-        lastSuccessDate: "2020-01-13T21:38:47Z"
-        succeeded: true
+    ```json
+    "etcd-backup/cray-bos/cray-bos-etcd-backup_2023-03-08_20-08-07"
+    {
+      "etcdRevision": 405927,
+      "etcdVersion": "3.3.22",
+      "lastExecutionDate": "2023-03-08T19:57:42Z",
+      "lastSuccessDate": "2023-03-08T19:57:42Z",
+      "succeeded": true
+    }
+    ```
+
+1. To retrieve the created backup use the following command:
+
+    ```bash
+    cray artifacts get etcd-backup $SERVICE/$BACKUP_NAME $BACKUP_NAME
     ```
