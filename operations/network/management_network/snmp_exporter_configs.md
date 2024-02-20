@@ -45,7 +45,7 @@ In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must 
 
 > ***NOTE*** All variables used within this page depend on the `/etc/environment` setup done in [Pre-installation](../../../install/pre-installation.md).
 
-1. (`pit#`) Obtain the list of switch names and their IP addresses in a format that be used with copy/paste into the next command.
+1. (`pit#`) Obtain the list of switch names and their IP addresses in a format to use with copy/paste in the next command.
 
     ```bash
     jq '.Networks.NMN.ExtraProperties.Subnets | .[] | select(.FullName=="NMN Management Network Infrastructure").IPReservations | map( {name: .Name, target: .IPAddress })' \
@@ -71,7 +71,7 @@ In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must 
     ]
     ```
 
-1. (`pit#`) Update `customizations.yaml` with the list of switches, copy and paste the output from the previous command
+1. (`pit#`) Update `customizations.yaml` with the list of switches by copying and pasting the output from the previous command.
 
     * Create the new `prometheus-snmp-exporter` key.
 
