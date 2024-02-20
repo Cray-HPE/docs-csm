@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -26,17 +26,17 @@
 set -eo pipefail
 
 availRGW=$(ceph df -f json | jq '.stats.total_avail_bytes' | awk '{printf "%.0f", ($1/1024/1024/1024)}')
-echo  "Gibibytes available in cluster: $availRGW"
+echo "Gibibytes available in cluster: $availRGW"
 
 usedNexus=$(kubectl exec -n nexus deploy/nexus -c nexus -- df -P /nexus-data | grep '/nexus-data' | awk '{printf "%.0f", ($3/1024/1024)}')
-echo  "Gibibytes used in nexus-data: $usedNexus"
+echo "Gibibytes used in nexus-data: $usedNexus"
 
 availNexus=$(kubectl exec -n nexus deploy/nexus -c nexus -- df -P /nexus-data | grep '/nexus-data' | awk '{printf "%.0f", ($4/1024/1024)}')
-echo  "Gibibytes available in nexus-data: $availNexus"
+echo "Gibibytes available in nexus-data: $availNexus"
 
 echo $usedNexus | awk '{print "Space to be used from backup: ", ($1 * 3)}'
 
-if (( $usedNexus*3 > $availRGW )); then
+if ((usedNexus * 3 > availRGW)); then
   echo "Not Enough Space on the Cluster for the Export."
   exit 1
 fi
@@ -44,7 +44,7 @@ fi
 echo "Creating PVC for Nexus backup, if needed"
 backupSpaceNeeded=$(kubectl get pvc -n nexus nexus-data -o jsonpath='{.status.capacity.storage}')
 if [[ "Bound" != $(kubectl get pvc -n nexus nexus-bak -o jsonpath='{.status.phase}') ]]; then
-cat << EOF | kubectl -n nexus create -f -
+  cat << EOF | kubectl -n nexus create -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -85,7 +85,12 @@ fi
 echo "Scaling Nexus deployment to 0"
 kubectl -n nexus scale deployment nexus --replicas=0
 
-echo "Starting backup"
+hoursBackup=$((usedNexus / 60))
+minBackup=$((usedNexus % 60))
+
+echo "Starting backup, do not exit this script."
+echo "Should be done around $(date -d "+$hoursBackup hours +$minBackup min") ($hoursBackup:$minBackup from now)"
+
 cat << EOF | kubectl -n nexus apply -f -
 apiVersion: batch/v1
 kind: Job
@@ -117,10 +122,12 @@ spec:
           claimName: nexus-bak
 EOF
 
+echo "Waiting for the backup to finish."
 while [[ -z $(kubectl get job nexus-backup -n nexus -o jsonpath='{.status.succeeded}') ]]; do
-    echo  "Waiting for the backup to finish for another 10 seconds."
-    sleep 10
+  echo -n "."
+  sleep 30
 done
+echo "Backup has completed."
 
 echo "Scaling Nexus back up to 1"
 kubectl -n nexus scale deployment nexus --replicas=1
