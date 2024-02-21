@@ -25,7 +25,7 @@ The Scalable Boot Projection Service (SBPS) is an optional provider for the `roo
 
 The following value needs to be set in the boot set of the session template in order to make SBPS the `rootfs` provider:
 
-- `"rootfs_provider":` Set to `"sbps"`
+`"rootfs_provider":` Set to `"sbps"`
 
 ## Boot set `rootfs_provider_passthrough` parameters
 
@@ -37,7 +37,7 @@ rootfs_provider_passthrough=<transport>:<schema version>:<IQN Domain>:<DNS SRV r
 
 The following values need to be set in the boot set of the session template in order to make SBPS the `rootfs` provider.
 The DNS SRV record should contain the system's DNS domain.
-Note, in this example, the `system-name` is `my-system` and the site domain name is `my-site-domain.net`. These need to be
+In this example, the `system-name` is `my-system` and the site domain name is `my-site-domain.net`. These need to be
 replaced with the system's _actual_ system name and site DNS Domain.
 
 - `"rootfs_provider":` Set to `"sbps"`
@@ -75,7 +75,7 @@ In this example:
 - `iqn.2023-06.csm.iscsi` is the IQN domain.
 - `ncn-w002` is a unique identifier for the storage device.
 
-The IQN Domain helps in ensuring unique identification of iSCSI targets within a given namespace, allowing for proper routing and management of storage resources over the network
+The IQN domain helps in ensuring unique identification of iSCSI targets within a given namespace, allowing for proper routing and management of storage resources over the network
 
 For SBPS, only the domain portion of the IQN needs to be supplied, not the entire IQN.
 
@@ -83,7 +83,7 @@ For SBPS, only the domain portion of the IQN needs to be supplied, not the entir
 
 A DNS SRV (Service) record is a type of Domain Name System (DNS) resource record used to specify information about services offered by a particular domain.
 
-Here's how a DNS SRV record is structured:
+A DNS SRV record is structured as follows:
 
 - Service: Specifies the symbolic name of the service.
 - Protocol: Specifies the transport protocol of the service, such as TCP or UDP.
@@ -96,10 +96,10 @@ For example, DNS SRV record might look like this:
 _sbps-hsn._tcp.my-system.my-site-domain.net
 ```
 
-In this example,
+The following is an explanation of the values used in this example:
 
-- `_sbps-hsn` is the symbolic name of the service
-- `_tcp` is the transport protocol
+- `_sbps-hsn` is the symbolic name of the service.
+- `_tcp` is the transport protocol.
 - `my-system.my-site-domain.net` is the domain name for which the record is valid. The domain name includes the system name `my-system` and the site domain name `my-site-domain.net`.
 
 ### `<client discovery timeout in seconds>`
