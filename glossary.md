@@ -59,14 +59,15 @@ Glossary of terms used in CSM documentation.
 * [Power Control Service (PCS)](#power-control-service-pcs)
 * [Power Distribution Unit (PDU)](#power-distribution-unit-pdu)
 * [Pre-Install Toolkit (PIT)](#pre-install-toolkit-pit)
-  * [LiveCD](#livecd)
-  * [RemoteISO](#remoteiso)
+    * [LiveCD](#livecd)
+    * [RemoteISO](#remoteiso)
 * [Public Key Infrastructure (PKI)](operations/security_and_authentication/Public_Key_Infrastructure_PKI.md)
 * [Rack-Mounted CDU](#rack-mounted-cdu)
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
 * [Redfish Translation Service (RTS)](#redfish-translation-service-rts)
 * [River Cabinet](#river-cabinet)
 * [Rosetta ASIC](#rosetta-asic)
+* [Scalable Boot Projection Service](#scalable-boot-projection-service-sbps)
 * [Service/IO Cabinet](#serviceio-cabinet)
 * [Shasta Cabling Diagram (SHCD)](#shasta-cabling-diagram-shcd)
 * [Simple Storage Service (S3)](#simple-storage-service-s3)
@@ -313,12 +314,12 @@ The Customer Access Network (CAN) provides access from outside the customer netw
 and [User Access Nodes (UANs)](#user-access-node-uan) in the system. This allows for the following:
 
 * Clients outside of the system:
-  * Log in to each of the NCNs and UANs.
-  * Access web UIs within the system (e.g. Prometheus, Grafana, and more).
-  * Access the Rest APIs within the system.
-  * Access a DNS server within the system for resolution of names for the webUI and REST API services.
-  * Run [Cray CLI](#cray-cli-cray) commands from outside the system.
-  * Access the [User Access Instances (UAIs)](#user-access-instance-uai).
+    * Log in to each of the NCNs and UANs.
+    * Access web UIs within the system (e.g. Prometheus, Grafana, and more).
+    * Access the Rest APIs within the system.
+    * Access a DNS server within the system for resolution of names for the webUI and REST API services.
+    * Run [Cray CLI](#cray-cli-cray) commands from outside the system.
+    * Access the [User Access Instances (UAIs)](#user-access-instance-uai).
 * NCNs and UANs to access systems outside the cluster (e.g. LDAP, license servers, and more).
 * Services within the cluster to access systems outside the cluster.
 
@@ -578,6 +579,14 @@ The Rosetta ASIC is a 64-port switch chip that forms the foundation for the [Sli
 network. Each port can operate at either 100G or 200G. Each network edge port supports
 IEEE 802.3 Ethernet, optimized-IP based protocols, and portals (an enhanced frame format
 that supports higher rates of small messages).
+
+## Scalable Boot Projection Service (SBPS)
+
+The Scalable Boot Projection Service (SBPS) provides the root filesystem for compute nodes and
+application nodes using iSCSI. In addition, the HPE Cray Programming Environment (CPE) and
+Analytics products leverage SBPS to provide content to compute nodes, application nodes
+(such as UANs), and worker nodes hosting UAI pods. CPE and Analytics are provided
+as separately mounted filesystems that are mounted alongside the root filesystem.
 
 ## Service/IO Cabinet
 

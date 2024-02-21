@@ -6,14 +6,14 @@ Session templates can be created via the API by providing JSON data or via the C
 
 * [Session template structure](#session-template-structure)
 * [Boot sets](#boot-sets)
-  * [Boot artifacts](#boot-artifacts)
-  * [Specifying nodes](#specifying-nodes)
-    * [Node list](#node-list)
-    * [Node groups](#node-groups)
-    * [Node roles groups](#node-roles-groups)
-  * [`rootfs` providers](#rootfs-providers)
-    * [`root` kernel parameter example](#root-kernel-parameter-example)
-  * [Overriding configuration](#overriding-configuration)
+    * [Boot artifacts](#boot-artifacts)
+    * [Specifying nodes](#specifying-nodes)
+        * [Node list](#node-list)
+        * [Node groups](#node-groups)
+        * [Node roles groups](#node-roles-groups)
+    * [`rootfs` providers](#rootfs-providers)
+        * [`root` kernel parameter example](#root-kernel-parameter-example)
+    * [Overriding configuration](#overriding-configuration)
 
 ## Session template structure
 
@@ -72,13 +72,20 @@ Optionally, configuration information can also be overwritten on a per boot set 
 
 ### Boot artifacts
 
+Boot artifacts allow a node to boot. They consist of a kernel, an `initrd`, and a root file system (`rootfs`). These three artifacts are
+listed in a `manifest.json` file.
+
 Boot sets specify a set of parameters that point to a `manifest.json` file stored in the
 [Simple Storage Service (S3)](../../glossary.md#simple-storage-service-s3).
 This file is created by the [Image Management Service (IMS)](../../glossary.md#image-management-service-ims)
-and contains links to all of the boot artifacts. The following S3 parameters are used to specify this file:
+and contains links to all of the boot artifacts.
+
+The following S3 parameters are used to specify this file:
 
 * type: This is the type of storage used. Currently, the only allowable value is `s3`.
 * path: This is the path to the `manifest.json` file in S3. The path will follow the `s3://<BUCKET_NAME>/<KEY_NAME>` format.
+    * `<BUCKET_NAME>` is set to `boot-images`
+    * `<KEY_NAME>` is set to the image ID that the [Image Management Service (IMS)](../../glossary.md#image-management-service-ims) created when it generated the boot artifacts.
 * `etag`: This entity tag helps identify the version of the `manifest.json` file. Currently, it issues a warning if the manifest's `etag` does not match. This can be an empty string, but cannot be left blank.
 
 This boot artifact information from the files stored in S3 is then written to the
