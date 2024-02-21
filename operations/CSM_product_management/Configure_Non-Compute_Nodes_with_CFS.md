@@ -235,7 +235,7 @@ written to Vault, and this script provides an easy way to do that.
 
 Specifically, the `write_root_secrets_to_vault.py` script reads the following from the NCN where it is run:
 
-- The `root` user password hash from the `/etc/shadows` file.
+- The `root` user password hash from the `/etc/shadow` file.
 - The private SSH key from `/root/.ssh/id_rsa`.
 - The public SSH key from `/root/.ssh/id_rsa.pub`.
 
