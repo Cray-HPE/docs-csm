@@ -159,7 +159,7 @@ then applies that configuration to the management nodes.
     Configuration complete. 9 component(s) completed successfully.  0 component(s) failed.
     ```
 
-    The number reported should match the number of management nodes in the system. If there are failures, see [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md).
+    The number reported should match the number of management nodes in the system. If there are failures, see [Troubleshoot Ansible Play Failures in CFS Sessions](../operations/configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md).
 
 ## 8. Proceed to next topic
 

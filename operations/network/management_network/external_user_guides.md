@@ -12,4 +12,4 @@ Refer to the following vendor-specific user guides for more information on Aruba
 
 ## Mellanox
 
-- https://docs.nvidia.com/networking/spaces/viewspace.action?key=Onyxv393210
+- https://docs.nvidia.com/networking/display/mlnxosv3104100

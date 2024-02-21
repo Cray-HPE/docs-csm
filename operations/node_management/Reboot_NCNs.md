@@ -690,7 +690,7 @@ Before rebooting NCNs:
        * If the `configurationStatus` is `failed`, then this means the failed CFS job `configurationStatus` should be addressed now for this node.
        * If the `configurationStatus` is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, then this can be ignored.
        * If the `configurationStatus` is `failed`, then see
-         [Troubleshoot Failed CFS Sessions](../configuration_management/Troubleshoot_CFS_Session_Failed.md)
+         [Troubleshoot Ansible Play Failures in CFS Sessions](../../operations/configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
          for how to analyze the pod logs from `cray-cfs` in order to determine why the configuration may not have completed.
 
     1. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).

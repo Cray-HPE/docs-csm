@@ -92,7 +92,7 @@ The following actions are described in this section:
 
 ### Pagination
 
-Various API endpoints use the external [pagination](https://help.sonatype.com/repomanager3/rest-and-integration-api/pagination) tool to return results. When a
+Various API endpoints use the external [pagination](https://help.sonatype.com/en/pagination.html) tool to return results. When a
 `continuationToken` is included in the results and is non-null, it indicates additional items are available.
 
 The following is some example output:
