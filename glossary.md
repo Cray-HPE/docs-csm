@@ -513,7 +513,7 @@ on/off [compute nodes](#compute-node-cn) and [application nodes](#application-no
 external software to more intelligently manage system-wide power consumption. PCS is the
 replacement for [CAPMC](#cray-advanced-platform-monitoring-and-control-capmc).
 
-* For more information on PCS, see [Power Control Service](operations/power_management/Power_Control_Service/Power_Control_Service_PCS.md).
+* For more information on PCS, see [Power Control Service](operations/power_management/power_control_service/Power_Control_Service_PCS.md).
 * For more information on the PCS API, see [PCS API](api/power-control.md).
 
 ## Power Distribution Unit (PDU)

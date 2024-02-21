@@ -155,7 +155,7 @@ Additional links to power off sub-procedures provided for reference. Refer to th
 - [Shut Down and Power Off Compute and User Access Nodes](power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md)
 - [Save Management Network Switch Configuration Settings](power_management/Save_Management_Network_Switch_Configurations.md)
 - Power Off Compute Cabinets
-  - [Power Off Compute Cabinets](power_management/Power_Control_Service/Power_Off_Compute_Cabinets.md) using PCS
+  - [Power Off Compute Cabinets](power_management/power_control_service/Power_Off_Compute_Cabinets.md) using PCS
 - [Shut Down and Power Off the Management Kubernetes Cluster](power_management/Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md)
 - [Power Off the External Lustre File System](power_management/Power_Off_the_External_Lustre_File_System.md)
 
@@ -169,11 +169,11 @@ Additional links to power on sub-procedures provided for reference. Refer to the
 
 - [Power On and Start the Management Kubernetes Cluster](power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
 - Power On Compute Cabinets
-  - [Power On Compute Cabinets](power_management/Power_Control_Service/Power_On_Compute_Cabinets.md) using PCS
+  - [Power On Compute Cabinets](power_management/power_control_service/Power_On_Compute_Cabinets.md) using PCS
 - [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
 - [Power On and Boot Compute and User Access Nodes](power_management/Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md)
 - Recover from a Liquid Cooled Cabinet EPO Event
-  - [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Power_Control_Service/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md) using PCS
+  - [Recover from a Liquid Cooled Cabinet EPO Event](power_management/power_control_service/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md) using PCS
 
 ## Power management
 
@@ -181,11 +181,11 @@ HPE Cray System Management (CSM) software manages and controls power out-of-band
 
 - [Power Management](power_management/power_management.md)
 - [Cray Advanced Platform Monitoring and Control (CAPMC)](power_management/Cray_Advanced_Platform_Monitoring_and_Control_CAPMC.md)
-- [Power Control Service (PCS)](power_management/Power_Control_Service/Power_Control_Service_PCS.md)
+- [Power Control Service (PCS)](power_management/power_control_service/Power_Control_Service_PCS.md)
 - [Liquid Cooled Node Power Management](power_management/Liquid_Cooled_Node_Card_Power_Management.md)
   - [User Access to Compute Node Power Data](power_management/User_Access_to_Compute_Node_Power_Data.md)
 - [Standard Rack Node Power Management](power_management/Standard_Rack_Node_Power_Management.md)
-- [Node Card Power Management](power_management/Power_Control_Service/Node_Card_Power_Management.md)
+- [Node Card Power Management](power_management/power_control_service/Node_Card_Power_Management.md)
 - [Ignore Nodes with CAPMC](power_management/Ignore_Nodes_with_CAPMC.md)
 - [Set the Turbo Boost Limit](power_management/Set_the_Turbo_Boost_Limit.md)
 - [CAPMC API](../api/capmc.md)
