@@ -130,7 +130,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     1. Determine the list of xnames associated with the desired boot session template.
 
        ```bash
-       cray bos sessiontemplates describe SESSION_TEMPLATE_NAME --format json } jq '.boot_sets | map({node_list, node_roles_groups, node_groups})'
+       cray bos sessiontemplates describe SESSION_TEMPLATE_NAME --format json | jq '.boot_sets | map({node_list, node_roles_groups, node_groups})'
        ```
 
        Example outputs:
