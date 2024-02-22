@@ -6055,7 +6055,7 @@ Update the state for a collection of Components in the BOS database
   },
   "filters": {
     "ids": "string",
-    "session": "session-20190728032600"
+    "session": ""
   }
 }
 ```
@@ -7580,6 +7580,32 @@ targeted to start being enforced in an upcoming BOS version.
 <a id="schema_EmptyString"></a>
 <a id="tocSemptystring"></a>
 <a id="tocsemptystring"></a>
+
+```json
+""
+
+```
+
+An empty string value.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|An empty string value.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|*anonymous*||
+
+<h2 id="tocS_EmptyStringNullable">EmptyStringNullable</h2>
+<!-- backwards compatibility -->
+<a id="schemaemptystringnullable"></a>
+<a id="schema_EmptyStringNullable"></a>
+<a id="tocSemptystringnullable"></a>
+<a id="tocsemptystringnullable"></a>
 
 ```json
 ""
@@ -10457,30 +10483,54 @@ An array of Component states.
 |---|---|---|---|---|
 |*anonymous*|[[V2Component](#schemav2component)]|false|none|An array of Component states.|
 
-<h2 id="tocS_V2ComponentsFilter">V2ComponentsFilter</h2>
+<h2 id="tocS_V2ComponentsFilterByIds">V2ComponentsFilterByIds</h2>
 <!-- backwards compatibility -->
-<a id="schemav2componentsfilter"></a>
-<a id="schema_V2ComponentsFilter"></a>
-<a id="tocSv2componentsfilter"></a>
-<a id="tocsv2componentsfilter"></a>
+<a id="schemav2componentsfilterbyids"></a>
+<a id="schema_V2ComponentsFilterByIds"></a>
+<a id="tocSv2componentsfilterbyids"></a>
+<a id="tocsv2componentsfilterbyids"></a>
 
 ```json
 {
   "ids": "string",
-  "session": "session-20190728032600"
+  "session": ""
 }
 
 ```
 
-Information for patching multiple Components.
-If a Session name is specified, then all Components part of this Session will be patched.
+Information for patching multiple Components by listing their IDs.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|ids|string|false|none|A comma-separated list of Component IDs.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|session|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+|ids|string|true|none|A comma-separated list of Component IDs.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|session|[EmptyStringNullable](#schemaemptystringnullable)|false|none|An empty string value.|
+
+<h2 id="tocS_V2ComponentsFilterBySession">V2ComponentsFilterBySession</h2>
+<!-- backwards compatibility -->
+<a id="schemav2componentsfilterbysession"></a>
+<a id="schema_V2ComponentsFilterBySession"></a>
+<a id="tocSv2componentsfilterbysession"></a>
+<a id="tocsv2componentsfilterbysession"></a>
+
+```json
+{
+  "ids": "",
+  "session": "session-20190728032600"
+}
+
+```
+
+Information for patching multiple Components by Session name.
+All Components part of this Session will be patched.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|ids|[EmptyStringNullable](#schemaemptystringnullable)|false|none|An empty string value.|
+|session|[V2SessionName](#schemav2sessionname)|true|none|Name of the Session.|
 
 <h2 id="tocS_V2ComponentsUpdate">V2ComponentsUpdate</h2>
 <!-- backwards compatibility -->
@@ -10544,7 +10594,7 @@ If a Session name is specified, then all Components part of this Session will be
   },
   "filters": {
     "ids": "string",
-    "session": "session-20190728032600"
+    "session": ""
   }
 }
 
@@ -10557,7 +10607,19 @@ Information for patching multiple Components.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |patch|[V2Component](#schemav2component)|true|none|The current and desired artifacts state for a Component, and<br>the Session responsible for the Component's current state.|
-|filters|[V2ComponentsFilter](#schemav2componentsfilter)|true|none|Information for patching multiple Components.<br>If a Session name is specified, then all Components part of this Session will be patched.|
+|filters|any|true|none|none|
+
+oneOf
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[V2ComponentsFilterByIds](#schemav2componentsfilterbyids)|false|none|Information for patching multiple Components by listing their IDs.|
+
+xor
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[V2ComponentsFilterBySession](#schemav2componentsfilterbysession)|false|none|Information for patching multiple Components by Session name.<br>All Components part of this Session will be patched.|
 
 <h2 id="tocS_V2ApplyStagedComponents">V2ApplyStagedComponents</h2>
 <!-- backwards compatibility -->
