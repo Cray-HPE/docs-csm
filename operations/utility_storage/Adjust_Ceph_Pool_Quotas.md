@@ -81,7 +81,7 @@ Currently, only `smf` includes a quota.
 1. Run the `ceph-pool-quotas.yml` playbook from `ncn-s001`.
 
     ```bash
-    ansible-playbook /etc/ansible/ceph-rgw-users/ceph-pool-quotas.yml
+    /etc/ansible/boto3_ansible/bin/ansible-playbook /etc/ansible/ceph-rgw-users/ceph-pool-quotas.yml
     ```
 
 1. View the quota/pool usage.
