@@ -563,6 +563,20 @@ successfully.
    (for example, editing configuration or CSI inputs), then restart from the beginning of the
    [Initialize the LiveCD](Create_System_Configuration_Using_SHCD.md#6-initialize-the-livecd) procedure.
 
+   The following test failure may be ignored if the management network switches have not been configured.
+   This is often the case when the system is being installed with CSM for the first time.
+   Configuring switches is covered in the next topic.
+
+   ```text
+   Result: FAIL
+   Source: /opt/cray/tests/install/livecd/suites/livecd-preflight-tests.yaml
+   Test Name: sls_input.json IPs Correct
+   Description: Extracts the switch IP addresses from sls_input.json and pings them to ensure they are accurate.
+   Test Summary: check_sls_file_ips: exit-status: Error: Command execution timed out (20s)
+   Execution Time: 0.000002214 seconds
+   Node: eniac-pit
+   ```
+
 1. Save the `prep` directory for re-use.
 
    This needs to be copied off the system and either stored in a secure location or in a secured Git repository.
