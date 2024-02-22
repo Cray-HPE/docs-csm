@@ -66,7 +66,7 @@ This procedure requires admin privileges.
     1. View the system time.
 
         ```bash
-        ansible ceph_all -m shell -a date
+        /etc/ansible/boto3_ansible/bin/ansible ceph_all -m shell -a date
         ```
 
 1. Sync the clocks to fix the issue.
