@@ -10,10 +10,10 @@ The following covers restoring Slurm data.
 
 ## Service recovery for Slurm
 
-To restore Slurm data from backup, follow sections
-*10.3.11 Restore Slurm Accounting Database from Backup* and
-*10.3.13 Restore Slurm Spool Directory from Backup* in the
-**HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)**.
+To restore Slurm data from a backup, see
+*Restore Slurm accounting database from a backup* and
+*Restore Slurm spool directory from a backup* in the
+**HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray EX Systems (S-8063)**.
 
 After restoring Slurm data from backup, check that the procedure was successful.
 
