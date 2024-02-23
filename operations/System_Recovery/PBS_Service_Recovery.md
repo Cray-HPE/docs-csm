@@ -10,9 +10,8 @@ The following covers restoring PBS data.
 
 ## Service recovery for PBS
 
-To restore PBS Professional data from backup, follow section
-*10.7.7 Restore PBS home directory from backup* in the
-**HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)**.
+To restore Portable Batch System data from a backup, see *Restore PBS home directory from a backup* in the
+**HPE Portable Batch System Installation Guide: CSM on HPE Cray EX Systems (S-8055)**.
 
 After restoring PBS data from backup, check that the procedure was successful.
 
