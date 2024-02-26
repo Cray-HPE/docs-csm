@@ -30,7 +30,7 @@ kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yam
 Example output:
 
 ```text
-system..hpc.amslabs.hpecorp.net
+system.hpc.amslabs.hpecorp.net
 ```
 
 Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME` with the actual value found using the above command.
