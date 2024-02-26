@@ -139,6 +139,11 @@ if [[ "$(yq r "$c" "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp
   done
 fi
 
+# Cray-sysmgmt-health
+yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.thanosCompactor.resolutionraw = "15d"' -i $c
+yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.thanosCompactor.resolution5m = "15d"' -i $c
+yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.thanosCompactor.resolution1h = "15d"' -i $c
+
 # Kube-prometheus-stack
 if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator' $c)" != null ]; then
   if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack' $c)" != null ]; then
