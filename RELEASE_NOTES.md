@@ -50,6 +50,7 @@ documentation improvements. This page lists some of the highlights.
 * Multitenancy: Enable Tenant ID + Tenant Admin `AuthZ` Awareness for API Ingress (OPA policy)
 * Multitenancy: Enable Tenant ID + Tenant Admin `AuthZ` Awareness for API Ingress
 * Multitenancy: BOS Support for boot, reboot, node power on and off in tenant
+* Transitioned from `cray-heartbeat` to `csm-node-heartbeat`
 
 ### New Hardware Support
 
