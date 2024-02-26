@@ -311,11 +311,8 @@ In lieu of rebuilding the storage nodes, they will be live patched.
 1. (`ncn-m001#`) Set/update re-usable environment variables.
 
    ```bash
-   if grep -q '^export CSM_ARTI_DIR=' /etc/cray/upgrade/csm/myenv ; then
-     sed -i 's/^export CSM_ARTI_DIR=.*/export CSM_ARTI_DIR='"$CSM_ARTI_DIR"'/' /etc/cray/upgrade/csm/myenv
-   else
-     echo "export CSM_ARTI_DIR=$CSM_ARTI_DIR" >>/etc/cray/upgrade/csm/myenv
-   fi
+   sed -i '/^export CSM_ARTI_DIR=.*/d' /etc/cray/upgrade/csm/myenv
+   echo "export CSM_ARTI_DIR=$CSM_ARTI_DIR" >>/etc/cray/upgrade/csm/myenv
    ```
 
 1. (`ncn-m001#`) Ensure `cray-site-init` is installed, use the latest one provided by the CSM tarball.
