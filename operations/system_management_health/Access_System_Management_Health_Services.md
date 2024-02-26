@@ -6,10 +6,10 @@ to access these services are available on any system with CMN, BGP, MetalLB, and
 - [Prerequisites](#prerequisites)
 - [System domain name](#system-domain-name)
 - [System Management Health service links](#system-management-health-service-links)
-  - [Prometheus](#prometheus)
-  - [Alertmanager](#alertmanager)
-  - [Grafana](#grafana)
-  - [Kiali](#kiali)
+    - [Prometheus](#prometheus)
+    - [Alertmanager](#alertmanager)
+    - [Grafana](#grafana)
+    - [Kiali](#kiali)
 
 ## Prerequisites
 
