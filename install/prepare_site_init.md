@@ -396,6 +396,45 @@ with system-specific customizations.
 
    - If DNSSEC is to be used, then add the desired keys into the `dnssec` SealedSecret.
 
+1. Set storage limit for `Thanos` S3 bucket
+
+   By default, there is NO retention set for `thanos` object storage data.
+   This means that you store data forever. We can configure retention by using `--retention.resolution-raw` , `--retention.resolution-5m` and `--retention.resolution-1h` flag.
+   Not setting them or setting to 0 second means no retention.
+
+   The `thanos` object storage is deployed by the `cray-sysmgmt-health` chart to the `sysmgmt-health` namespace.
+   In order to set the storage limits for `thanos s3` bucket, configure the `thanosCompactor` settings for the  `cray-sysmgmt-health` chart in `customizations.yaml`.
+
+   1. (`pit#`) Set `thanosCompactor` in `customization.yaml`.
+
+      ```bash
+      yq write -s - -i "${SITE_INIT}/customizations.yaml" <<EOF
+      - command: update
+        path: spec.kubernetes.services.cray-sysmgmt-health.thanosCompactor
+        value:
+           resolutionraw: 15d
+           resolution5m: 15d
+           resolution1h: 15d
+      EOF
+      ```
+
+   1. (`pit#`) Review the `thanosCompactor` values.
+
+      ```bash
+      yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-sysmgmt-health.thanosCompactor
+      ```
+
+      Example output is:
+
+      ```text
+      resolutionraw: 15d
+      resolution5m: 15d
+      resolution1h: 15d
+      ```
+
+   NOTE: The recommended storage limit to configure for `thanos` is `15d - 30d` for all the resolutions.
+          As a rule of thumb retention for each downsampling level should be the same, and should be greater than the maximum date range (10 days for `5m to 1h` downsampling).
+
 1. Configure Prometheus SNMP Exporter.
 
    The Prometheus SNMP exporter needs to be configured with a list of management network switches to scrape metrics from in
