@@ -199,3 +199,8 @@ For a list of all features with an announced removal target,
 see [Removals](introduction/deprecated_features/README.md#removals)
 
 ## Known Issues
+
+* FAS Loader / HFP script `post-deliver-product.sh`
+  * Loading firmware from Nexus using the FAS Loader will intermittently crash with HFP release 23.12 or later. Rerunning the FAS Loader will be required.
+  * This affects the HFP script `post-deliver-product.sh` which will hang when the FAS Loader crashes. Rerunning the script will be required.
+  * IUF procedure calls the `post-deliver-product.sh` script and may require restarting that IUF process.
