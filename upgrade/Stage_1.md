@@ -83,4 +83,7 @@ For any typescripts that were started during this stage, stop them with the `exi
 
 ## Stage completed
 
-This stage is completed. Continue to [Stage 2](Stage_2.md).
+This stage is completed. There are two different upgrade paths moving forward:
+
+- Path 1: If performing a CSM only upgrade without IUF, continue to [Stage 2](Stage_2.md).
+- Path 2: If performing an upgrade with IUF that includes upgrading CSM, return to [upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md) workflow to continue the upgrade.
