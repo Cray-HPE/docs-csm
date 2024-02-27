@@ -25,6 +25,7 @@
 
 set -e
 basedir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+. /etc/cray/upgrade/csm/myenv
 . ${basedir}/../common/upgrade-state.sh
 trap 'err_report' ERR
 
