@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -27,6 +27,7 @@ Import IMS data (and optionally linked S3 artifacts) from a tar archive.
 """
 
 import argparse
+import datetime
 import logging
 import os
 import shutil
@@ -37,11 +38,11 @@ from python_lib import common
 from python_lib import ims_export
 from python_lib import ims_import
 from python_lib import ims_import_export
+from python_lib import logger
 
-LOGGER = logging.getLogger(__name__)
-ch = logging.StreamHandler()
-ch.setLevel(logging.ERROR)
-LOGGER.addHandler(ch)
+
+LOG_DIR = "/var/log/import_ims_data"
+os.makedirs(LOG_DIR, exist_ok=True)
 
 
 def parse_args() -> argparse.Namespace:
@@ -66,12 +67,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--ignore-running-jobs', action='store_true',
                         help=('Perform update/overwrite import even if there are IMS jobs in progress '
                               '(this flag has no effect on add imports)'))
-
-    parser.add_argument(
-        '--log-level', type=str, default='INFO',
-        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
-        help='Set the logging level'
-    )
 
     parser.add_argument(
         '-w', '--work-dir', type=args.readable_directory, default=os.getcwd(),
@@ -114,10 +109,13 @@ def do_import(script_args: argparse.Namespace) -> None:
     exported_data = ims_import_export.ExportedData.load_from_directory(tarfile_dir)
 
     # Backup current IMS data
-    LOGGER.info("Performing pre-import backup of IMS data to directory '%s'", script_args.backup_dir)
-    current_data, _ = ims_export.do_export(ignore_running_jobs=script_args.ignore_running_jobs, include_deleted=True,
-                                           exclude_linked_artifacts=True, no_tar=True,
-                                           target_directory=script_args.backup_dir)
+    logging.info("Performing pre-import backup of IMS data to directory '%s'", script_args.backup_dir)
+    current_data, _ = ims_export.do_export(ims_export.ExportOptions(
+                        ignore_running_jobs=script_args.ignore_running_jobs,
+                        include_deleted=True,
+                        exclude_linked_artifacts=True,
+                        no_tar=True,
+                        target_directory=script_args.backup_dir))
 
     # We pass ignore_running_jobs = True here because we have already checked this above, if applicable
     import_options = ims_import.ImportOptions(tarfile_dir=tarfile_dir,
@@ -131,31 +129,31 @@ def do_import(script_args: argparse.Namespace) -> None:
     # Cleanup, if applicable
     if script_args.expanded_tarfile_directory is None and script_args.cleanup == 'on_success':
         # Delete the contents of the extracted tarfile directory created earlier
-        LOGGER.info("Script successful: removing directory '%s'", tarfile_dir)
+        logging.info("Script successful: removing directory '%s'", tarfile_dir)
         shutil.rmtree(tarfile_dir)
 
 
 def main():
     """ Main function """
     script_args = parse_args()
-    logging.basicConfig(level=script_args.log_level,
-                        format='%(asctime)s %(levelname)-8s %(message)s',
-                        datefmt='%Y-%m-%d %H:%M:%S')
+
+    logfile=os.path.join(LOG_DIR, datetime.datetime.now().strftime("%Y%m%d%H%M%S.log"))
+    print(f"Detailed logging will be recorded to: {logfile}")
+    logger.configure_logging(filename=logfile)
 
     try:
         do_import(script_args)
-        LOGGER.info("DONE!")
+        logging.info("DONE!")
         return
     except common.InsufficientSpace as exc:
-        LOGGER.info("An alternate location to use for tarfile expansion can be specified with the '--work-dir' argument")
-        common.print_err_exit(exc)
+        logging.info("An alternate location to use for tarfile expansion can be specified with the '--work-dir' argument")
+        logging.error(exc)
     except ims_import_export.ImsJobsRunning:
-        LOGGER.info("Wait until jobs are completed or see script usage for override option")
-        common.print_err_exit("Aborted import due to incomplete jobs")
+        logging.info("Wait until jobs are completed or see script usage for override option")
+        logging.error("Aborted import due to incomplete jobs")
     except common.ScriptException as exc:
-        common.print_err_exit(exc)
+        logging.error(exc)
 
-    # The above code should also end the script, but just in case
     sys.exit(1)
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -27,6 +27,7 @@ Export IMS data (and optionally linked S3 artifacts) to a tar archive.
 """
 
 import argparse
+import datetime
 import logging
 import os
 import sys
@@ -35,32 +36,42 @@ from python_lib import args
 from python_lib import common
 from python_lib import ims_export
 from python_lib import ims_import_export
+from python_lib import logger
 
-LOGGER = logging.getLogger(__name__)
-ch = logging.StreamHandler()
-ch.setLevel(logging.ERROR)
-LOGGER.addHandler(ch)
+LOG_DIR = "/var/log/export_ims_data"
+os.makedirs(LOG_DIR, exist_ok=True)
 
 
 def parse_args() -> argparse.Namespace:
     """
     Parses command-line arguments
-
-    Returns a tuple: <log level>, <include_deleted>, <include_linked_artifacts>, <target_directory>
     """
     parser = argparse.ArgumentParser()
 
-    parser.add_argument(
-        '--log-level', type=str, default="INFO", choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
-        help='Set the logging level'
-    )
-
     parser.add_argument('--ignore-running-jobs', action='store_true',
-                        help=('Perform export even if there are IMS jobs in progress'))
+                        help='Perform export even if there are IMS jobs in progress')
 
     parser.add_argument(
         '--include-deleted', action='store_true',
         help="Include deleted IMS recipe and image records (not included by default)"
+    )
+
+    parser.add_argument(
+        '--exclude-links-from-bos', action='store_true',
+        help="Exclude S3 artifacts found in BOS session templates (included by default, unless "
+        "--exclude-linked-artifacts is specified)."
+    )
+
+    parser.add_argument(
+        '--exclude-links-from-bss', action='store_true',
+        help="Exclude S3 artifacts found in BSS boot parameters (included by default, unless "
+        "--exclude-linked-artifacts is specified)."
+    )
+
+    parser.add_argument(
+        '--exclude-links-from-product-catalog', action='store_true',
+        help="Exclude S3 artifacts found in Cray product catalog (included by default, unless "
+        "--exclude-linked-artifacts is specified)."
     )
 
     parser.add_argument(
@@ -82,26 +93,31 @@ def parse_args() -> argparse.Namespace:
 
     return parser.parse_args()
 
-
 def main():
     """ Main function """
     parsed_args = parse_args()
-    logging.basicConfig(level=parsed_args.log_level,
-                        format='%(asctime)s %(levelname)-8s %(message)s',
-                        datefmt='%Y-%m-%d %H:%M:%S')
+    logfile=os.path.join(LOG_DIR, datetime.datetime.now().strftime("%Y%m%d%H%M%S.log"))
+    print(f"Detailed logging will be recorded to: {logfile}")
+    logger.configure_logging(filename=logfile)
+
     try:
-        ims_export.do_export(ignore_running_jobs=parsed_args.ignore_running_jobs,
-                             include_deleted=parsed_args.include_deleted,
-                             exclude_linked_artifacts=parsed_args.exclude_linked_artifacts, no_tar=parsed_args.no_tar,
-                             target_directory=parsed_args.target_directory)
+        ims_export.do_export(ims_export.ExportOptions(
+            ignore_running_jobs=parsed_args.ignore_running_jobs,
+            include_deleted=parsed_args.include_deleted,
+            exclude_linked_artifacts=parsed_args.exclude_linked_artifacts,
+            no_tar=parsed_args.no_tar,
+            target_directory=parsed_args.target_directory,
+            exclude_links_from_bos=parsed_args.exclude_links_from_bos,
+            exclude_links_from_bss=parsed_args.exclude_links_from_bss,
+            exclude_links_from_product_catalog=parsed_args.exclude_links_from_product_catalog))
+        logging.info('DONE!')
+        return
     except ims_import_export.ImsJobsRunning:
-        LOGGER.info("Wait until jobs are completed or see script usage for override option")
-        common.print_err_exit("Aborted export due to incomplete jobs")
+        logging.info("Wait until jobs are completed or see script usage for override option")
+        logging.error("Aborted export due to incomplete jobs")
     except common.ScriptException as exc:
-        common.print_err_exit(exc)
-        # The above function should also end the script, but just in case
-        sys.exit(1)
-    LOGGER.info('DONE!')
+        logging.error(exc)
+    sys.exit(1)
 
 
 if __name__ == "__main__":
