@@ -11,19 +11,19 @@ Different values may be be needed for systems as they scale.
 * [`kubectl` events `OOMKilled`](#kubectl-events-oomkilled)
 * [Prometheus `CPUThrottlingHigh` alerts](#prometheus-cputhrottlinghigh-alerts)
 * [Grafana "Kubernetes / Compute Resources / Pod" dashboard](#grafana-kubernetes--compute-resources--pod-dashboard)
-  * [CPU throttling](#cpu-throttling)
-  * [Memory usage](#memory-usage)
+    * [CPU throttling](#cpu-throttling)
+    * [Memory usage](#memory-usage)
 * [Common customization scenarios](#common-customization-scenarios)
-  * [Prerequisites](#prerequisites)
-  * [Prometheus pod is `OOMKilled` or CPU throttled](#prometheus-pod-is-oomkilled-or-cpu-throttled)
-  * [Postgres pods are `OOMKilled` or CPU throttled](#postgres-pods-are-oomkilled-or-cpu-throttled)
-  * [Scale `cray-bss` service](#scale-cray-bss-service)
-  * [Scale `cray-dns-unbound` service](#scale-cray-dns-unbound-service)
-  * [Postgres PVC resize](#postgres-pvc-resize)
-  * [Prometheus PVC resize](#prometheus-pvc-resize)
-  * [`cray-hms-hmcollector` pods are `OOMKilled`](#cray-hms-hmcollector-pods-are-oomkilled)
-  * [`cray-cfs-api` pods are `OOMKilled`](#cray-cfs-api-pods-are-oomkilled)
-  * [References](#references)
+    * [Prerequisites](#prerequisites)
+    * [Prometheus pod is `OOMKilled` or CPU throttled](#prometheus-pod-is-oomkilled-or-cpu-throttled)
+    * [Postgres pods are `OOMKilled` or CPU throttled](#postgres-pods-are-oomkilled-or-cpu-throttled)
+    * [Scale `cray-bss` service](#scale-cray-bss-service)
+    * [Scale `cray-dns-unbound` service](#scale-cray-dns-unbound-service)
+    * [Postgres PVC resize](#postgres-pvc-resize)
+    * [Prometheus PVC resize](#prometheus-pvc-resize)
+    * [`cray-hms-hmcollector` pods are `OOMKilled`](#cray-hms-hmcollector-pods-are-oomkilled)
+    * [`cray-cfs-api` pods are `OOMKilled`](#cray-cfs-api-pods-are-oomkilled)
+    * [References](#references)
 
 ## System domain name
 
@@ -38,7 +38,7 @@ kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yam
 Example output:
 
 ```text
-system..hpc.amslabs.hpecorp.net
+system.hpc.amslabs.hpecorp.net
 ```
 
 Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME` with the actual value found using the above command.
