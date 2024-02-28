@@ -5,8 +5,8 @@ This document provides links to troubleshooting information for services and fun
 * [Helpful tips for navigating the CSM repository](#helpful-tips-for-navigating-the-csm-repository)
 * [Known issues](#known-issues)
 * [Booting](#booting)
-  * [UAN boot issues](#uan-boot-issues)
-  * [Compute node boot issues](#compute-node-boot-issues)
+    * [UAN boot issues](#uan-boot-issues)
+    * [Compute node boot issues](#compute-node-boot-issues)
 * [Configuration management](#configuration-management)
 * [ConMan](#conman)
 * [Customer Management Network (CMN)](#customer-management-network-cmn)
@@ -133,6 +133,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Restore Spire Postgres without a Backup](../operations/spire/Restore_Spire_Postgres_without_a_Backup.md)
 * [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
 * [Spire Failing to Start on NCNs](../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
+* [Spire Server Report Database is in Recovery](known_issues/spire_server_database_recovery.md)
 
 ## User Access service UAS
 
