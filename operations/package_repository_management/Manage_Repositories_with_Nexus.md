@@ -7,16 +7,16 @@ This section describes how to connect to Nexus with the Web UI, as well as how t
 - [Use Keycloak to create and manage accounts](#use-keycloak-to-create-and-manage-accounts)
 - [Use the local Nexus admin account](#use-the-local-nexus-admin-account)
 - [Access Nexus with the REST API](#access-nexus-with-the-rest-api)
-  - [Pagination](#pagination)
-  - [Check the status of Nexus](#check-the-status-of-nexus)
-  - [List repositories](#list-repositories)
-  - [List assets](#list-assets)
-  - [Create a repository](#create-a-repository)
-  - [Update a repository](#update-a-repository)
-  - [Delete a repository](#delete-a-repository)
-  - [Create a blob store](#create-a-blob-store)
-  - [Delete a blob store](#delete-a-blob-store)
-  - [Authenticate to access the Rest API](#authenticate-to-access-the-rest-api)
+    - [Pagination](#pagination)
+    - [Check the status of Nexus](#check-the-status-of-nexus)
+    - [List repositories](#list-repositories)
+    - [List assets](#list-assets)
+    - [Create a repository](#create-a-repository)
+    - [Update a repository](#update-a-repository)
+    - [Delete a repository](#delete-a-repository)
+    - [Create a blob store](#create-a-blob-store)
+    - [Delete a blob store](#delete-a-blob-store)
+    - [Authenticate to access the Rest API](#authenticate-to-access-the-rest-api)
 
 ## System domain name
 
@@ -31,7 +31,7 @@ kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yam
 Example output:
 
 ```text
-system..hpc.amslabs.hpecorp.net
+system.hpc.amslabs.hpecorp.net
 ```
 
 Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME` with the actual value found using the above command.

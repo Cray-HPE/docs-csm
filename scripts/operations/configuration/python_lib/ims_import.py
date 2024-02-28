@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -249,6 +249,11 @@ def do_import(tarfile_dir: str,
     """
     if not exported_data.ims_data.any_images_keys_recipes:
         logging.info("No IMS data to import")
+
+        # But there may be S3 artifacts to upload
+        logging.info("Uploading S3 artifacts (if any)")
+        exported_data.update_s3(tarfile_dir)
+
         return
 
     # Update current IMS data with exported IMS data
