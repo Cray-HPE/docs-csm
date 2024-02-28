@@ -23,29 +23,29 @@
 #
 """Shared Python function library: S3"""
 
-import base64
 import datetime
 import json
 import logging
-import os
-from typing import Dict
+from typing import Dict, List
 from urllib.parse import urlparse
 import warnings
 
 import boto3
+import botocore.exceptions
 
+from . import api_requests
 from . import common
-from . import k8s
 from .types import JsonDict
 
-S3_CREDS_SECRET_NAME = "ims-s3-credentials"
 
-# Mapping from the boto3 client kwargs field names to the Kubernetes secret field names
-S3_CREDS_SECRET_FIELDS = {
-    "endpoint_url": "s3_endpoint",
-    "aws_access_key_id": "access_key",
-    "aws_secret_access_key": "secret_key",
-    "verify": "ssl_validate" }
+STS_TOKEN_URL = f"{api_requests.API_GW_BASE_URL}/apis/sts/token"
+
+# Mapping from the STS Credentials field names to the boto3 client kwargs names
+CREDS_TO_KWARGS = {
+    "AccessKeyId": "aws_access_key_id",
+    "SecretAccessKey": "aws_secret_access_key",
+    "SessionToken": "aws_session_token",
+    "EndpointURL": "endpoint_url" }
 
 
 def s3_client_kwargs() -> JsonDict:
@@ -53,35 +53,15 @@ def s3_client_kwargs() -> JsonDict:
     Decode the S3 credentials from the Kubernetes secret, and return
     the kwargs needed to initialize the boto3 client.
     """
-    secret_data = k8s.Client().get_secret_data(name=S3_CREDS_SECRET_NAME, namespace="default")
-    logging.debug("Reading fields from Kubernetes secret '%s'", S3_CREDS_SECRET_NAME)
-    encoded_s3_secret_fields = { field: secret_data[secret_field]
-                                 for field, secret_field in S3_CREDS_SECRET_FIELDS.items() }
-    logging.debug("Decoding fields from Kubernetes secret '%s'", S3_CREDS_SECRET_NAME)
-    kwargs = { field: base64.b64decode(encoded_field).decode()
-               for field, encoded_field in encoded_s3_secret_fields.items() }
-    # Need to convert the 'verify' field to boolean if it is false
-    if not kwargs["verify"] or kwargs["verify"].lower() in ('false', 'off', 'no', 'f', '0'):
-        kwargs["verify"] = False
-
-    # And if Verify is false, then we need to make sure that our endpoint isn't https, since
-    # it will use SSL verification regardless if the endpoint is https
-    if kwargs["verify"] is False and kwargs["endpoint_url"][:6] == "https:":
-        kwargs["endpoint_url"] = f"http:{kwargs['endpoint_url'][6:]}"
-
+    logging.debug("Contacting STS to obtain S3 credentials")
+    resp = api_requests.put_retry_validate_return_json(url=STS_TOKEN_URL, expected_status_codes=201,
+                                                       add_api_token=True)
+    creds = resp["Credentials"]
+    kwargs = { kname: creds[cname] for cname, kname in CREDS_TO_KWARGS.items() }
+    # The Cray CLI sets the following field to an empty string, and if it's good enough for the
+    # Cray CLI, then it's good enough for me
+    kwargs["region_name"] = ""
     return kwargs
-
-
-def s3_client():
-    """
-    Initialize the boto3 client and return it
-    """
-    client_kwargs = s3_client_kwargs()
-    logging.debug("Getting boto3 S3 client")
-    with warnings.catch_warnings():
-        warnings.filterwarnings('ignore', category=boto3.compat.PythonDeprecationWarning)
-        bclient = boto3.client('s3', **client_kwargs)
-    return bclient
 
 
 class S3Url(str):
@@ -100,12 +80,86 @@ class S3Url(str):
         self.key = parsed.path.lstrip('/') + '?' + parsed.query if parsed.query else parsed.path.lstrip('/')
         self.bucket = parsed.netloc
 
+    @classmethod
+    def from_bucket_and_key(cls, bucket: str, key: str) -> "S3Url":
+        """
+        Create a new S3 URL object from the bucket and key
+        """
+        return cls(f"s3://{bucket}/{key}")
+
+
+class S3Client:
+    """
+    Wrapper for the boto3 S3 client
+    """
+
+    def __init__(self):
+        client_kwargs = s3_client_kwargs()
+        logging.debug("Getting boto3 S3 client")
+        with warnings.catch_warnings():
+            warnings.filterwarnings('ignore', category=boto3.compat.PythonDeprecationWarning)
+            self.s3_cli = boto3.client('s3', **client_kwargs)
+
+
+    def list_artifacts(self, bucket_name: str) -> list:
+        """
+        Queries S3 to list contents of the specified bucket. Makes additional queries if
+        response is truncated. Returns a combined list of the artifacts.
+        """
+        logging.debug("Quering S3 for contents of '%s' bucket", bucket_name)
+        resp = self.s3_cli.list_objects_v2(Bucket=bucket_name)
+        logging.debug("S3 returned list of %d artifacts in '%s' bucket", resp["KeyCount"],
+                      bucket_name)
+        artifact_list = []
+        if resp["KeyCount"] > 0:
+            artifact_list.extend(resp["Contents"])
+        page_num=1
+        while resp["IsTruncated"]:
+            page_num+=1
+            logging.debug("Quering S3 for contents of '%s' bucket (page %d)", bucket_name, page_num)
+            resp = self.s3_cli.list_objects_v2(Bucket=bucket_name,
+                                               ContinuationToken=resp["NextContinuationToken"])
+            logging.debug("S3 returned list of %d artifacts in '%s' bucket", resp["KeyCount"],
+                          bucket_name)
+            if resp["KeyCount"] > 0:
+                artifact_list.extend(resp["Contents"])
+
+        logging.debug("Returning combined list of %d artifacts", len(artifact_list))
+        return artifact_list
+
+
+    def list_buckets(self) -> list:
+        """
+        Queries S3 for a list of all buckets, and returns this list.
+        
+        Technically this is all of the buckets belonging to the authenticated user.
+        In the case of CSM, all buckets should be created by this user. If any other
+        buckets exist, they are not our concern.
+        """
+        logging.debug("Quering S3 for list of buckets")
+        resp = self.s3_cli.list_buckets()
+        logging.debug("S3 returned list of %d buckets", len(resp["Buckets"]))
+        return resp["Buckets"]
+
+
+    def artifact_exists(self, bucket_name: str, key: str) -> bool:
+        """
+        Returns True if the artifact exists in S3 and we have access to it.
+        Returns False otherwise
+        """
+        try:
+            self.s3_cli.head_object(Bucket=bucket_name, Key=key)
+        except botocore.exceptions.ClientError:
+            return False
+        return True
+
 
 def create_artifact(s3_url: S3Url, source_path: str) -> JsonDict:
     """
     Uploads the specified S3 artifact from the specified path
     """
-    command = ['cray', 'artifacts', 'create', s3_url.bucket, s3_url.key, source_path, '--format', 'json']
+    command = ['cray', 'artifacts', 'create', s3_url.bucket, s3_url.key, source_path, '--format',
+               'json']
     return json.loads(common.run_command(command))
 
 
@@ -137,21 +191,7 @@ def list_artifacts(bucket_name: str) -> JsonDict:
     """
     Queries S3 to list contents of the specified bucket and returns the response
     """
-    s3_cli = s3_client()
-    logging.debug("Quering S3 for contents of '%s' bucket", bucket_name)
-    resp = s3_cli.list_objects_v2(Bucket=bucket_name)
-    logging.debug("S3 returned list of %d artifacts in '%s' bucket", len(resp["Contents"]),
-                  bucket_name)
-    artifact_list = resp["Contents"]
-    page_num=1
-    while resp["IsTruncated"]:
-        page_num+=1
-        logging.debug("Quering S3 for contents of '%s' bucket (page %d)", bucket_name, page_num)
-        resp = s3_cli.list_objects_v2(Bucket=bucket_name,
-                                      ContinuationToken=resp["NextContinuationToken"])
-        logging.debug("S3 returned list of %d artifacts in '%s' bucket", len(resp["Contents"]),
-                      bucket_name)
-        artifact_list.extend(resp["Contents"])
+    artifact_list = S3Client().list_artifacts(bucket_name)
 
     # Convert the datetime fields in the artifacts to strings, since we need them to be
     # JSON serializable
@@ -162,11 +202,20 @@ def list_artifacts(bucket_name: str) -> JsonDict:
             continue
         if "RestoreExpiryDate" not in art["RestoreStatus"]:
             continue
-        if isinstance(art["RestoreStatus"]["RestoreExpiryDate"], datetime.datetime):
-            art["RestoreStatus"]["RestoreExpiryDate"] = str(art["RestoreStatus"]["RestoreExpiryDate"])
+        if not isinstance(art["RestoreStatus"]["RestoreExpiryDate"], datetime.datetime):
+            continue
+        art["RestoreStatus"]["RestoreExpiryDate"] = str(art["RestoreStatus"]["RestoreExpiryDate"])
 
     # Return a response in the same format as the Cray CLI would
     return { "artifacts": artifact_list }
+
+
+def list_buckets() -> List[str]:
+    """
+    Return the list of names of all S3 buckets.
+    """
+    # Generate the bucket list. Sadly, it will not include skydiving.
+    return [ bucket["Name"] for bucket in S3Client().list_buckets() ]
 
 
 def bucket_artifact_map(list_artifacts_response: JsonDict) -> Dict[str, JsonDict]:

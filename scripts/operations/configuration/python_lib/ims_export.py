@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -29,15 +29,102 @@ import logging
 import os
 import tarfile
 import tempfile
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 from . import common
 
 from .ims_import_export import ExportedData, EXPORTED_DATA_FILENAME
 
+class ExportOptions:
+    def __init__(self,
+                 target_directory: str,
+                 ignore_running_jobs: bool = False,
+                 include_deleted: bool = False,
+                 exclude_linked_artifacts: bool = False,
+                 exclude_links_from_bos: Union[bool, None] = None,
+                 exclude_links_from_bss: Union[bool, None] = None,
+                 exclude_links_from_product_catalog: Union[bool, None] = None,
+                 no_tar: Union[bool, None] = None):
+        self.__target_directory = target_directory
+        self.__ignore_running_jobs = ignore_running_jobs
+        self.__include_deleted = include_deleted
+        self.__exclude_linked_artifacts = exclude_linked_artifacts
+        if exclude_linked_artifacts:
+            if exclude_links_from_bos is not True:
+                logging.debug("Excluding linked artifacts -> also exclude S3 links from BOS")
+            self.__include_bos = False
 
-def do_export(ignore_running_jobs: bool, include_deleted: bool, exclude_linked_artifacts: bool, no_tar: bool,
-              target_directory: str) -> Tuple[ExportedData, str]:
+            if exclude_links_from_bss is not True:
+                logging.debug("Excluding linked artifacts -> also exclude S3 links from BSS")
+            self.__include_bss = False
+
+            if exclude_links_from_product_catalog is not True:
+                logging.debug("Excluding linked artifacts -> also exclude S3 links from product catalog")
+            self.__include_product_catalog = False
+
+            if no_tar is not True:
+                logging.debug("Excluding linked artifacts -> will not create tar file")
+            self.__create_tarfile = False
+            return
+
+        if exclude_links_from_bos is not None:
+            self.__include_bos = not exclude_links_from_bos
+        else:
+            logging.debug("Including linked artifacts -> also include S3 links from BOS")
+            self.__include_bos = True
+
+        if exclude_links_from_bss is not None:
+            self.__include_bss = not exclude_links_from_bss
+        else:
+            logging.debug("Including linked artifacts -> also include S3 links from BSS")
+            self.__include_bss = True
+
+        if exclude_links_from_product_catalog is not None:
+            self.__include_product_catalog = not exclude_links_from_product_catalog
+        else:
+            logging.debug("Including linked artifacts -> also include S3 links from product_catalog")
+            self.__include_product_catalog = True
+
+        if no_tar is not None:
+            self.__create_tarfile = not no_tar
+        else:
+            logging.debug("Including linked artifacts -> also create tar file of exported data")
+            self.__create_tarfile = True
+
+    @property
+    def ignore_running_jobs(self) -> bool:
+        return self.__ignore_running_jobs
+
+    @property
+    def include_deleted(self) -> bool:
+        return self.__include_deleted
+
+    @property
+    def exclude_linked_artifacts(self) -> bool:
+        return self.__exclude_linked_artifacts
+
+    @property
+    def target_directory(self) -> str:
+        return self.__target_directory
+
+    @property
+    def include_bos(self) -> bool:
+        return self.__include_bos
+
+    @property
+    def include_bss(self) -> bool:
+        return self.__include_bss
+
+    @property
+    def include_product_catalog(self) -> bool:
+        return self.__include_product_catalog
+
+    @property
+    def create_tarfile(self) -> bool:
+        return self.__create_tarfile
+
+
+def do_export(options: ExportOptions) -> Tuple[ExportedData, str]:
     """
     1. Creates a directory for the exported data
     2. Collects current IMS data and writes it to a file (including data for the deleted resources, if specified)
@@ -48,31 +135,30 @@ def do_export(ignore_running_jobs: bool, include_deleted: bool, exclude_linked_a
     """
     # Create output directory
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S.%f")
-    outdir = tempfile.mkdtemp(prefix=f"export-ims-data-{timestamp}-", dir=target_directory)
+    outdir = tempfile.mkdtemp(prefix=f"export-ims-data-{timestamp}-", dir=options.target_directory)
 
-    # Do not create a tar archive if explicitly told not to, or if we are omitting linked artifacts.
-    create_tarfile = not no_tar and not exclude_linked_artifacts
-
-    if create_tarfile:
-        file_list = []
-    if exclude_linked_artifacts:
-        exported_data = ExportedData.load_from_system(ignore_running_jobs=ignore_running_jobs,
-                                                      include_deleted=include_deleted, s3_directory=None)
+    load_from_system_kwargs = {
+        "ignore_running_jobs": options.ignore_running_jobs,
+        "include_bos": options.include_bos,
+        "include_bss": options.include_bss,
+        "include_product_catalog": options.include_product_catalog,
+        "include_deleted": options.include_deleted }
+    if options.exclude_linked_artifacts:
+        exported_data = ExportedData.load_from_system(s3_directory=None, **load_from_system_kwargs)
     else:
-        exported_data = ExportedData.load_from_system(ignore_running_jobs=ignore_running_jobs,
-                                                      include_deleted=include_deleted, s3_directory=outdir)
-        if create_tarfile:
-            file_list.extend(exported_data.s3_data.downloaded_artifact_relpaths)
+        exported_data = ExportedData.load_from_system(s3_directory=outdir, **load_from_system_kwargs)
+        if options.create_tarfile:
+            file_list = list(exported_data.s3_data.downloaded_artifact_relpaths)
 
     # Write exported data to a file
     exported_data_file = os.path.join(outdir, EXPORTED_DATA_FILENAME)
     with open(exported_data_file, "wt") as jsonfile:
         json.dump(exported_data.jsondict, jsonfile)
 
-    if create_tarfile:
+    if options.create_tarfile:
         file_list.append(EXPORTED_DATA_FILENAME)
 
-        tarfile_path = tempfile.mkstemp(prefix=f"export-ims-data-{timestamp}-", suffix=".tar", dir=target_directory)[1]
+        tarfile_path = tempfile.mkstemp(prefix=f"export-ims-data-{timestamp}-", suffix=".tar", dir=options.target_directory)[1]
         # Create tar archive of all files
         write_tarfile(tarfile_path, outdir, file_list)
 
