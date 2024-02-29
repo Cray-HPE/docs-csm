@@ -128,7 +128,7 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 ### (Cray) Device Type: `NodeBMC` | Target: Redstone FPGA (`AccFPGA0`)
 
-**`NOTE`**: Redstone FPGAs requires HPF release 23.12 or later.
+**`NOTE`**: Redstone FPGAs requires HFP release 23.12 or later.
 Previous versions did not contain the Redstone FPGA firmware.
 
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.

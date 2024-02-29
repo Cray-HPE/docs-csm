@@ -36,7 +36,7 @@ All of the example JSON files below are set to run a dry-run. Update the `overri
 
 This procedure updates node controller \(nC\) firmware.
 
-**NOTE:**: `AccFPGA0` and  `AccUC` updates requires HPF release 23.12 or later.
+**NOTE:**: `AccFPGA0` and  `AccUC` updates requires HFP release 23.12 or later.
 Previous versions did not contain these firmware.
 
 ### Liquid-Cooled Nodes Update Procedures
@@ -75,7 +75,7 @@ If the nodes are not off when the update command is issued, the update will get 
 
 #### Manufacturer: Cray | Device Type: `NodeBMC` | Target: Redstone FPGA `AccFPGA0`
 
-**NOTE:** Redstone FPGAs requires HPF release 23.12 or later.
+**NOTE:** Redstone FPGAs requires HFP release 23.12 or later.
 Previous versions did not contain the Redstone FPGA firmware.
 
 > **IMPORTANT:** The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
@@ -109,7 +109,7 @@ Previous versions did not contain the Redstone FPGA firmware.
 
 #### Manufacturer: Cray | Device Type: `NodeBMC` | Target: `AccUC`
 
-**NOTE:** `AccUC` requires HPF release 23.12 or later.
+**NOTE:** `AccUC` requires HFP release 23.12 or later.
 Previous versions did not contain the this firmware.
 
 ```json
