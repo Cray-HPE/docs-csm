@@ -4,7 +4,7 @@ Use the Firmware Action Service (FAS) to update the firmware on supported hardwa
 
 When updating an entire system, walk down the device hierarchy component type by component type, starting first with Routers (switches), proceeding to Chassis, and then finally to Nodes. While this is not strictly necessary, it does help eliminate confusion.
 
-**NOTE**: Any node that is locked remains in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
+**NOTE:** Any node that is locked remains in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
 If the action is timed out, these nodes report as `failed` with the `stateHelper` message of `"time expired; could not complete update"`.
 This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
 
@@ -25,7 +25,7 @@ The following procedures are included in this section:
 1. [Update NCN BIOS and BMC Firmware with FAS](#update-non-compute-node-ncn-bios-and-bmc-firmware)
 1. [Compute Node BIOS Workaround for HPE CRAY EX425](#compute-node-bios-workaround-for-hpe-cray-ex425)
 
-> **`NOTE`** To update Switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta Documentation.
+> **NOTE:** To update Switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta Documentation.
 
 ## Update Liquid-Cooled Nodes BMC, `AccFPGA0`, Management Ethernet, `AccVBIOS`, `AccUC` and Node BIOS
 
@@ -36,7 +36,7 @@ All of the example JSON files below are set to run a dry-run. Update the `overri
 
 This procedure updates node controller \(nC\) firmware.
 
-**`NOTE`** `AccFPGA0` and  `AccUC` updates requires HPF release 23.12 or later.
+**NOTE:**: `AccFPGA0` and  `AccUC` updates requires HPF release 23.12 or later.
 Previous versions did not contain these firmware.
 
 ### Liquid-Cooled Nodes Update Procedures
@@ -75,7 +75,7 @@ If the nodes are not off when the update command is issued, the update will get 
 
 #### Manufacturer: Cray | Device Type: `NodeBMC` | Target: Redstone FPGA `AccFPGA0`
 
-**`NOTE`** Redstone FPGAs requires HPF release 23.12 or later.
+**NOTE:** Redstone FPGAs requires HPF release 23.12 or later.
 Previous versions did not contain the Redstone FPGA firmware.
 
 > **IMPORTANT:** The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
@@ -109,7 +109,7 @@ Previous versions did not contain the Redstone FPGA firmware.
 
 #### Manufacturer: Cray | Device Type: `NodeBMC` | Target: `AccUC`
 
-**`NOTE`** `AccUC` requires HPF release 23.12 or later.
+**NOTE:** `AccUC` requires HPF release 23.12 or later.
 Previous versions did not contain the this firmware.
 
 ```json
@@ -1110,7 +1110,7 @@ the file `gigabyte_nodeBMC_BIOS.json` for Gigabyte Node BIOS updates,
 the file `hpe_nodeBMC_iLO5.json` for HPE Node iLO 5 updates,
 or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
 The script flag `--xnames x1,x2` can be used to limit the updates to certain xnames.
-**NOTE** Use the xname of the BMC not the node.
+**NOTE:** Use the xname of the BMC not the node.
 
 (`ncn#`) To get a list of NCNs on a system:
 
@@ -1119,7 +1119,7 @@ cray bss bootparameters list --format=json | jq -c '.[] | { "hostname" : ."cloud
 ```
 
 This can be used with the `FASUpdate.py --xnames` script to limit the `xnames` to just the NCNs.
-**NOTE** Use the xname of the BMC not the node.
+**NOTE:** Use the xname of the BMC not the node.
 Example output:
 
 ```text
@@ -1132,7 +1132,7 @@ Example output:
 1. Run a `dryrun` for all NCNs first to determine which NCNs and targets need updating.
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
-   > **`NOTE`** Update of `BMC` and `iLO 5` will not affect the nodes.
+   > **NOTE:** Update of `BMC` and `iLO 5` will not affect the nodes.
 
 1. For each NCN requiring updates to target `BMC` or `iLO 5`:
    1. Unlock the NCN BMC.
@@ -1161,8 +1161,8 @@ Prerequisites:
 
 * The system is running HPE Cray EX release v1.4 or higher.
 * A firmware upgrade has been done following [Update Liquid-Cooled Compute Node BIOS Firmware](#update-liquid-cooled-nodes-bmc-fpga-and-node-bios).
-  * The result of the upgrade is that the `NodeX.BIOS` has failed as `noSolution` and the `stateHelper` field for the operation states is `"No Image Available"`.
-  * The BIOS in question is running a version less than or equal to `1.2.5` as reported by Redfish or described by the `noSolution` operation in FAS.
+    * The result of the upgrade is that the `NodeX.BIOS` has failed as `noSolution` and the `stateHelper` field for the operation states is `"No Image Available"`.
+    * The BIOS in question is running a version less than or equal to `1.2.5` as reported by Redfish or described by the `noSolution` operation in FAS.
 * The hardware model reported by Redfish is `wnc-rome`, which is now designated as `HPE CRAY EX425`.
 
   (`ncn#`) If the Redfish model is different \(ignoring casing\) and the blades in question are not `Windom`, contact customer support. To find the model reported by Redfish, run the following:

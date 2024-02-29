@@ -49,7 +49,7 @@ To exclude one or more nodes the following options are available:
    Refer to [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
    Make sure to unlock these nodes once the update is complete.
 
-1. Use the `xname` filter to only include the nodes that you wish to update.  **NOTE** When using FAS, the xname refers to the BMC, not the node.
+1. Use the `xname` filter to only include the nodes that you wish to update.  **NOTE**: When using FAS, the xname refers to the BMC, not the node.
    See [`stateComponentFilter`](FAS_Filters.md#statecomponentfilter) for more information.
 
 ## Ignore management nodes within FAS

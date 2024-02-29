@@ -26,7 +26,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 > **IMPORTANT:** Before updating a CMM, make sure all slot and rectifier power is off and the discovery job is stopped.
-See [Update Chassis Management Module (CMM) Firmware](FAS_Use_Cases#update-chassis-management-module-firmware) for the detailed procedure.
+See [Update Chassis Management Module (CMM) Firmware](FAS_Use_Cases.md#update-chassis-management-module-firmware) for the detailed procedure.
 
 ```json
 {
@@ -128,7 +128,7 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 ### (Cray) Device Type: `NodeBMC` | Target: Redstone FPGA (`AccFPGA0`)
 
-**`NOTE`** Redstone FPGAs requires HPF release 23.12 or later.
+**`NOTE`**: Redstone FPGAs requires HPF release 23.12 or later.
 Previous versions did not contain the Redstone FPGA firmware.
 
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.

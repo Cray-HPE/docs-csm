@@ -43,7 +43,7 @@ Set `overrideDryrun` to true to do an actual update instead of a dryrun.
 `FASUpdate.py --file {filename} --recipedir {dir}` : Use recipe {`filename`} in directory {`dir`} to do an update on the system.
 
 `FASUpdate.py --file {filename} --xnames x1,x2,x3` : Use recipe {`filename`} to do an update only on `x1`, `x2`, and `x3`
-**NOTE** xnames are the BMC xnames not the node xnames.
+**NOTE**: xnames are the BMC xnames not the node xnames.
 
 `FASUpdate.py --file {filename} --watchtime {sec} --description {des}` : Use recipe {`filename`} to do an update, output summary every {`sec`} seconds (default 30) and overwrite the description with {`des`}.
 
