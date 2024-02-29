@@ -34,7 +34,6 @@ import sys
 
 from python_lib import args
 from python_lib import common
-from python_lib import ims_export
 from python_lib import ims_import_export
 from python_lib import logger
 
@@ -48,8 +47,13 @@ def parse_args() -> argparse.Namespace:
     """
     parser = argparse.ArgumentParser()
 
+    parser.add_argument('--estimate-size',  action='store_true',
+                        help="Instead of performing an export, show the estimated total size of "
+                        "the exported data. Because of how IMS images are stored in S3, this will "
+                        "involve temporarily downloading some number of artifacts from S3.")
+
     parser.add_argument('--ignore-running-jobs', action='store_true',
-                        help='Perform export even if there are IMS jobs in progress')
+                        help="Do not abort if there are IMS jobs in progress")
 
     parser.add_argument(
         '--include-deleted', action='store_true',
@@ -88,7 +92,7 @@ def parse_args() -> argparse.Namespace:
 
     parser.add_argument(
         'target_directory', nargs='?', default=os.getcwd(), type=args.readable_directory,
-        help='Directory in which to create IMS export'
+        help='Directory in which to create IMS export (defaults to current directory)'
     )
 
     return parser.parse_args()
@@ -101,7 +105,7 @@ def main():
     logger.configure_logging(filename=logfile)
 
     try:
-        ims_export.do_export(ims_export.ExportOptions(
+        export_options = ims_import_export.ExportOptions(
             ignore_running_jobs=parsed_args.ignore_running_jobs,
             include_deleted=parsed_args.include_deleted,
             exclude_linked_artifacts=parsed_args.exclude_linked_artifacts,
@@ -109,12 +113,16 @@ def main():
             target_directory=parsed_args.target_directory,
             exclude_links_from_bos=parsed_args.exclude_links_from_bos,
             exclude_links_from_bss=parsed_args.exclude_links_from_bss,
-            exclude_links_from_product_catalog=parsed_args.exclude_links_from_product_catalog))
+            exclude_links_from_product_catalog=parsed_args.exclude_links_from_product_catalog)
+        if parsed_args.estimate_size:
+            ims_import_export.estimate_export_size(export_options)
+            return
+        ims_import_export.do_export(export_options)
         logging.info('DONE!')
         return
     except ims_import_export.ImsJobsRunning:
         logging.info("Wait until jobs are completed or see script usage for override option")
-        logging.error("Aborted export due to incomplete jobs")
+        logging.error("Aborted due to incomplete jobs")
     except common.ScriptException as exc:
         logging.error(exc)
     sys.exit(1)

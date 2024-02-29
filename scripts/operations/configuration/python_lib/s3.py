@@ -26,7 +26,7 @@
 import datetime
 import json
 import logging
-from typing import Dict, List
+from typing import Dict, List, Set
 from urllib.parse import urlparse
 import warnings
 
@@ -86,6 +86,10 @@ class S3Url(str):
         Create a new S3 URL object from the bucket and key
         """
         return cls(f"s3://{bucket}/{key}")
+
+
+S3UrlList = List[S3Url]
+S3UrlSet = Set[S3Url]
 
 
 class S3Client:
