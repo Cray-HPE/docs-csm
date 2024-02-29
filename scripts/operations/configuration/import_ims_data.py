@@ -35,8 +35,6 @@ import sys
 
 from python_lib import args
 from python_lib import common
-from python_lib import ims_export
-from python_lib import ims_import
 from python_lib import ims_import_export
 from python_lib import logger
 
@@ -79,9 +77,9 @@ def parse_args() -> argparse.Namespace:
     import_source.add_argument('-f', dest="tarfile_path", type=lambda s: args.readable_file_with_ext(s, '.tar'),
                                help="Path to IMS export tar archive")
 
-    parser.add_argument('import_type', type=str, choices=list(ims_import.IMPORT_FUNCTIONS),
+    parser.add_argument('import_type', type=str, choices=list(ims_import_export.IMPORT_FUNCTIONS),
                         help=". ".join([ f"{itype}: {ifunc.__doc__}"
-                                         for itype, ifunc in ims_import.IMPORT_FUNCTIONS.items() ]))
+                                         for itype, ifunc in ims_import_export.IMPORT_FUNCTIONS.items() ]))
 
     return parser.parse_args()
 
@@ -98,19 +96,19 @@ def do_import(script_args: argparse.Namespace) -> None:
     """
     # Try some Kubernetes and other checks up front because if it doesn't work, we'd rather know that before
     # we clear anything in IMS/S3
-    ims_import.get_ims_pod_name()
-    common.validate_file_readable(ims_import.ImsPodImportToolPath)
+    ims_import_export.get_ims_pod_name()
+    common.validate_file_readable(ims_import_export.ImsPodImportToolPath)
 
     tarfile_dir = script_args.expanded_tarfile_directory
     if tarfile_dir is None:
         # This means we need to expand it
-        tarfile_dir = ims_import.expand_tarfile(script_args.tarfile_path, script_args.work_dir)
+        tarfile_dir = ims_import_export.expand_tarfile(script_args.tarfile_path, script_args.work_dir)
 
     exported_data = ims_import_export.ExportedData.load_from_directory(tarfile_dir)
 
     # Backup current IMS data
     logging.info("Performing pre-import backup of IMS data to directory '%s'", script_args.backup_dir)
-    current_data, _ = ims_export.do_export(ims_export.ExportOptions(
+    current_data, _ = ims_import_export.do_export(ims_import_export.ExportOptions(
                         ignore_running_jobs=script_args.ignore_running_jobs,
                         include_deleted=True,
                         exclude_linked_artifacts=True,
@@ -118,13 +116,13 @@ def do_import(script_args: argparse.Namespace) -> None:
                         target_directory=script_args.backup_dir))
 
     # We pass ignore_running_jobs = True here because we have already checked this above, if applicable
-    import_options = ims_import.ImportOptions(tarfile_dir=tarfile_dir,
+    import_options = ims_import_export.ImportOptions(tarfile_dir=tarfile_dir,
                                               ignore_running_jobs=True,
                                               current_ims_data=current_data.ims_data,
                                               exported_data=exported_data)
 
     # Do import
-    ims_import.IMPORT_FUNCTIONS[script_args.import_type](import_options)
+    ims_import_export.IMPORT_FUNCTIONS[script_args.import_type](import_options)
 
     # Cleanup, if applicable
     if script_args.expanded_tarfile_directory is None and script_args.cleanup == 'on_success':

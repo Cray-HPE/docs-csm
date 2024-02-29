@@ -29,100 +29,13 @@ import logging
 import os
 import tarfile
 import tempfile
-from typing import List, Tuple, Union
+from typing import List, Tuple
 
-from . import common
+from python_lib import common
 
-from .ims_import_export import ExportedData, EXPORTED_DATA_FILENAME
-
-class ExportOptions:
-    def __init__(self,
-                 target_directory: str,
-                 ignore_running_jobs: bool = False,
-                 include_deleted: bool = False,
-                 exclude_linked_artifacts: bool = False,
-                 exclude_links_from_bos: Union[bool, None] = None,
-                 exclude_links_from_bss: Union[bool, None] = None,
-                 exclude_links_from_product_catalog: Union[bool, None] = None,
-                 no_tar: Union[bool, None] = None):
-        self.__target_directory = target_directory
-        self.__ignore_running_jobs = ignore_running_jobs
-        self.__include_deleted = include_deleted
-        self.__exclude_linked_artifacts = exclude_linked_artifacts
-        if exclude_linked_artifacts:
-            if exclude_links_from_bos is not True:
-                logging.debug("Excluding linked artifacts -> also exclude S3 links from BOS")
-            self.__include_bos = False
-
-            if exclude_links_from_bss is not True:
-                logging.debug("Excluding linked artifacts -> also exclude S3 links from BSS")
-            self.__include_bss = False
-
-            if exclude_links_from_product_catalog is not True:
-                logging.debug("Excluding linked artifacts -> also exclude S3 links from product catalog")
-            self.__include_product_catalog = False
-
-            if no_tar is not True:
-                logging.debug("Excluding linked artifacts -> will not create tar file")
-            self.__create_tarfile = False
-            return
-
-        if exclude_links_from_bos is not None:
-            self.__include_bos = not exclude_links_from_bos
-        else:
-            logging.debug("Including linked artifacts -> also include S3 links from BOS")
-            self.__include_bos = True
-
-        if exclude_links_from_bss is not None:
-            self.__include_bss = not exclude_links_from_bss
-        else:
-            logging.debug("Including linked artifacts -> also include S3 links from BSS")
-            self.__include_bss = True
-
-        if exclude_links_from_product_catalog is not None:
-            self.__include_product_catalog = not exclude_links_from_product_catalog
-        else:
-            logging.debug("Including linked artifacts -> also include S3 links from product_catalog")
-            self.__include_product_catalog = True
-
-        if no_tar is not None:
-            self.__create_tarfile = not no_tar
-        else:
-            logging.debug("Including linked artifacts -> also create tar file of exported data")
-            self.__create_tarfile = True
-
-    @property
-    def ignore_running_jobs(self) -> bool:
-        return self.__ignore_running_jobs
-
-    @property
-    def include_deleted(self) -> bool:
-        return self.__include_deleted
-
-    @property
-    def exclude_linked_artifacts(self) -> bool:
-        return self.__exclude_linked_artifacts
-
-    @property
-    def target_directory(self) -> str:
-        return self.__target_directory
-
-    @property
-    def include_bos(self) -> bool:
-        return self.__include_bos
-
-    @property
-    def include_bss(self) -> bool:
-        return self.__include_bss
-
-    @property
-    def include_product_catalog(self) -> bool:
-        return self.__include_product_catalog
-
-    @property
-    def create_tarfile(self) -> bool:
-        return self.__create_tarfile
-
+from .defs import EXPORTED_DATA_FILENAME
+from .export_options import ExportOptions
+from .exported_data import ExportedData
 
 def do_export(options: ExportOptions) -> Tuple[ExportedData, str]:
     """
@@ -138,6 +51,7 @@ def do_export(options: ExportOptions) -> Tuple[ExportedData, str]:
     outdir = tempfile.mkdtemp(prefix=f"export-ims-data-{timestamp}-", dir=options.target_directory)
 
     load_from_system_kwargs = {
+        "create_tarfile": options.create_tarfile,
         "ignore_running_jobs": options.ignore_running_jobs,
         "include_bos": options.include_bos,
         "include_bss": options.include_bss,
@@ -171,6 +85,31 @@ def do_export(options: ExportOptions) -> Tuple[ExportedData, str]:
 
     logging.info("Data saved in directory: %s", outdir)
     return exported_data, outdir
+
+
+def estimate_export_size(options: ExportOptions) -> None:
+    """
+    Does basically the same thing as do_export, up to the point where it knows the total size of the S3
+    artifacts to be included in the export. At that point, print out the estimated total size of the exported
+    data, and then return.
+    """
+    # Create output directory
+    load_from_system_kwargs = {
+        "create_tarfile": options.create_tarfile,
+        "ignore_running_jobs": options.ignore_running_jobs,
+        "include_bos": options.include_bos,
+        "include_bss": options.include_bss,
+        "include_product_catalog": options.include_product_catalog,
+        "include_deleted": options.include_deleted }
+
+    if options.exclude_linked_artifacts:
+        estimated_size_bytes = ExportedData.estimate_size(s3_directory=None, **load_from_system_kwargs)
+    else:
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S.%f")
+        with tempfile.TemporaryDirectory(prefix=f"estimate-size-export-ims-data-{timestamp}-", dir=options.target_directory) as outdir:
+            estimated_size_bytes = ExportedData.estimate_size(s3_directory=outdir, **load_from_system_kwargs)
+
+    logging.info("With specified export options, estimated total export size is: %s", common.sizeof_fmt(estimated_size_bytes))
 
 
 def write_tarfile(tarfile_path: str, basedir: str, file_list: List[str]) -> None:
