@@ -43,6 +43,7 @@ Set `overrideDryrun` to true to do an actual update instead of a dryrun.
 `FASUpdate.py --file {filename} --recipedir {dir}` : Use recipe {`filename`} in directory {`dir`} to do an update on the system.
 
 `FASUpdate.py --file {filename} --xnames x1,x2,x3` : Use recipe {`filename`} to do an update only on `x1`, `x2`, and `x3`
+**NOTE** xnames are the BMC xnames not the node xnames.
 
 `FASUpdate.py --file {filename} --watchtime {sec} --description {des}` : Use recipe {`filename`} to do an update, output summary every {`sec`} seconds (default 30) and overwrite the description with {`des`}.
 
@@ -51,7 +52,7 @@ Set `overrideDryrun` to true to do an actual update instead of a dryrun.
 * `--file filename` : Name of the action recipe file (required for update).
 * `--list` : List the available action recipe files in the default or specified directory.
 * `--recipedir dir` : Directory containing the action recipe file (if not using the default directory).
-* `--xnames xname1,xname2` : List of xnames to be updated. If not present, FAS will check all xnames.
+* `--xnames xname1,xname2` : List of BMC xnames to be updated. If not present, FAS will check all xnames.
 * `--overrideDryrun {true/false}` : Default false - Set to true to do an actual update run instead of a dryrun.
 * `--imageID imageID` : Update nodes to `imageID` instead of the latest firmware available.
 * `--watchtime sec` : Number of seconds to wait before outputting the summary status (default 30).

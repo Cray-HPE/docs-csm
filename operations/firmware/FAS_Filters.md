@@ -22,7 +22,7 @@ The state component filter allows users to select hardware to update. Hardware c
 
 #### Parameters
 
-* `xnames` - A list of component names (xnames) to target.
+* `xnames` - A list of component names (xnames) to target.  **NOTE** Use the xname of the BMC not the node.
 * `partitions` - A partition to target.
 * `groups`- A group to target.
 * `deviceTypes` Set to NodeBMC, RouterBMC, or ChassisBMC. These are the ONLY three allowed types and come from the Hardware State Manager (HSM).

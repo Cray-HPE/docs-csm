@@ -5,6 +5,8 @@
 This section describes the basic capabilities of the Firmware Action Service (FAS) CLI commands. These commands can be used to manage firmware for system hardware supported by FAS. Refer to the
 prerequisites section before proceeding to any of the sections for the supported operations.
 
+**NOTE** When using FAS, the xname refers to the BMC, not the node.
+
 The following CLI operations are described:
 
 - [Prerequisites](#prerequisites)
