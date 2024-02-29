@@ -25,18 +25,18 @@ This leads to clients not able to transact with the cluster leading to errors.
 
 ## Solution
 
-1. (`ncn-mw#`) Restart the Postgres cluster
+1. (`ncn-mw#`) Restart the Postgres cluster.
 
-    * If the `spire-server` has the errors, restart the `spire-postgres` `statefulset`
+    * If the `spire-server` has the errors, restart the `spire-postgres` `statefulset`.
 
       ```bash
       kubectl -n spire rollout restart statefulset spire-postgres
       ```
 
-    * If the `cray-spire-server` has the errors, restart the `cray-spire-postgres` `statefulset`
+    * If the `cray-spire-server` has the errors, restart the `cray-spire-postgres` `statefulset`.
 
       ```bash
       kubectl -n spire rollout restart statefulset cray-spire-postgres
       ```
 
-1. (`ncn-mw#`) Wait for the cluster to restart and check the logs to ensure there is no more errors
+1. (`ncn-mw#`) Wait for the cluster to restart and check the logs to ensure that there is no more errors.
