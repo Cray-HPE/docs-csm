@@ -52,7 +52,9 @@ The image filter is a way to specify an explicit image that should be used.
 When included with other filters, the image filter reduces the devices considered to only those devices where the image can be applied.
 
 For example, consider if a user specifies an image that only applies to Gigabyte `nodeBMC` BIOS targets.
-If all hardware in the system is targeted with an empty `stateComponentFilter`, FAS would find all devices in the system that can be updated via Redfish, and then the image filter would remove all component name (xname)/ targets that this image could not be applied to.
+If all hardware in the system is targeted with an empty `stateComponentFilter`,
+FAS would find all devices in the system that can be updated via Redfish,
+and then the image filter would remove all component name (xname)/ targets that this image could not be applied to.
 In this example, FAS would remove any device that is not a Gigabyte `nodeBMC`, as well as any target that is not BIOS.
 
 #### `imageFilter` Parameters
