@@ -400,7 +400,8 @@ WARNING  tavern.util.dict_util:dict_util.py:46 Formatting 'node_xname' will resu
 FAILED test_components.tavern.yaml::Ensure that we can conduct a variety of queries on the Components collection
 FAILED test_hardware.tavern.yaml::Query the Hardware collection for Node information
 ```
-See the [Test Failures Due To No Discovered Compute Nodes In HSM](./known_issues/test_failures_no_discovered_computes_in_hsm.md) documentation for further troubleshooting.
+
+If these failures occur, see the [Test Failures Due To No Discovered Compute Nodes In HSM](./known_issues/test_failures_no_discovered_computes_in_hsm.md) documentation for further troubleshooting.
 
 ##### `test_components.tavern.yaml`
 
@@ -584,7 +585,7 @@ FAILED api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status f
 FAILED api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for a Node using a managementStateFilter
 ```
 
-See the [Test Failures Due To No Discovered Compute Nodes In HSM](./known_issues/test_failures_no_discovered_computes_in_hsm.md) documentation for further troubleshooting.
+If these failures occur, see the [Test Failures Due To No Discovered Compute Nodes In HSM](./known_issues/test_failures_no_discovered_computes_in_hsm.md) documentation for further troubleshooting.
 
 The following is an example of a failed test execution due to PCS not having
 any data in its ETCD storage:
