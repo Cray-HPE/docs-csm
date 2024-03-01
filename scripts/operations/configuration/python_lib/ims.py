@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -26,7 +26,7 @@
 import json
 import logging
 
-from typing import List, NewType, Set, Union
+from typing import List, NewType, Union
 
 from . import api_requests
 from . import s3
@@ -100,7 +100,7 @@ class ImsObjectMap(dict):
         return ImsObjectMap(ims_object_map)
 
 
-    def get_s3_urls(self) -> Set[s3.S3Url]:
+    def get_s3_urls(self) -> s3.S3UrlSet:
         """
         Extract the S3 URLs from all of the objects, and return the set of these URLs
         """
@@ -158,7 +158,7 @@ def get_s3_url(ims_obj: JsonDict) -> Union[None, s3.S3Url]:
     return None
 
 
-def get_child_urls_from_manifest_file(manifest_file_path: str) -> List[s3.S3Url]:
+def get_child_urls_from_manifest_file(manifest_file_path: str) -> s3.S3UrlList:
     """
     Return list of unique S3 URLs in manifest file
     """
