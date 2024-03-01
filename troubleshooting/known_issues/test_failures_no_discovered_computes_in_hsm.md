@@ -76,4 +76,3 @@ Otherwise, missing compute nodes in HSM with no discovery failures may indicate 
     ```
 
 Restoring connectivity, resolving configuration issues, or restarting the relevant ports on the `leaf-bmc` switch should allow the compute hardware to issue DHCP requests and be discovered successfully.
-
