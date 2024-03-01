@@ -225,6 +225,8 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
         // more nodes to follow - output truncated
         ```
 
+      > **NOTE**: If there is a failure in creating the `bond0` network on any nodes listed in the `nodelist`, make sure to run the script again on only those particular nodes to create the `bond0` network.
+
 1. (`pit#`) Verify the status and list the IP addresses of the fabric switches.
 
    ```bash

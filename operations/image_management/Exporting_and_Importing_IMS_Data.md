@@ -1,6 +1,7 @@
 # Exporting and Importing IMS Data
 
-IMS public keys, images, and recipes, including associated artifacts stored in Ceph S3, can be exported and imported
+IMS public keys, images, and recipes, including associated artifacts stored in Ceph
+[Simple Storage Service (S3)](../../glossary.md#simple-storage-service-s3), can be exported and imported
 using an automated script.
 
 - [Prerequisites](#prerequisites)
@@ -9,15 +10,17 @@ using an automated script.
 
 ## Prerequisites
 
-- Ensure that the `cray` command line interface (CLI) is authenticated and configured to talk to system management services.
-  - See [Configure the Cray CLI](../configure_cray_cli.md).
+- Ensure that the [Cray CLI (`cray`)](../../glossary.md#cray-cli-cray) is authenticated and configured to talk to system management services.
+    - See [Configure the Cray CLI](../configure_cray_cli.md).
 - The latest CSM documentation RPM must be installed on the node where the procedure is being performed.
-  - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+    - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 ## Export
 
 (`ncn-mw#`) The `export_ims_data.py` script will create a tar file backup of the contents of IMS and
-the associated S3 artifacts.
+the associated S3 artifacts. In addition, it backs up any S3 artifacts whose links are found in
+[Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) session templates,
+[Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss) boot parameters, or the Cray product catalog.
 
 > - This tar file may be very large, depending on how many images are in IMS. By default the script
 >   will create the tar file in the current directory. If desired, an alternative directory may be
@@ -31,13 +34,14 @@ the associated S3 artifacts.
 On success, the final lines of output will resemble the following:
 
 ```text
-2023-10-13 16:30:27 INFO     Data saved to tar archive: /root/export-ims-data-20231013161618.084854-naswhadt.tar
-2023-10-13 16:30:27 INFO     DONE!
+Data saved to tar archive: /root/export-ims-data-20231013161618.084854-naswhadt.tar
+DONE!
 ```
 
 ## Import
 
 The `import_ims_data.py` script can be used to import the previously exported IMS public keys, images, and recipes.
+It also imports the backed up S3 artifacts.
 
 There are three types of imports possible:
 
@@ -77,6 +81,6 @@ There are three types of imports possible:
 On success, the final lines of output will resemble the following:
 
 ```text
-2023-10-13 16:58:47 INFO     Waiting for rolling restart to complete (this may take a few minutes)
-2023-10-13 17:00:11 INFO     DONE!
+Waiting for rolling restart to complete (this may take a few minutes)
+DONE!
 ```

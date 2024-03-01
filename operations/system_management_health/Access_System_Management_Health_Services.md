@@ -6,11 +6,11 @@ to access these services are available on any system with CMN, BGP, MetalLB, and
 - [Prerequisites](#prerequisites)
 - [System domain name](#system-domain-name)
 - [System Management Health service links](#system-management-health-service-links)
-  - [Prometheus](#prometheus)
-  - [Thanos] (#thanos)
-  - [Alertmanager](#alertmanager)
-  - [Grafana](#grafana)
-  - [Kiali](#kiali)
+    - [Prometheus](#prometheus)
+    - [Thanos] (#thanos)
+    - [Alertmanager](#alertmanager)
+    - [Grafana](#grafana)
+    - [Kiali](#kiali)
 
 ## Prerequisites
 
@@ -31,7 +31,7 @@ kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yam
 Example output:
 
 ```text
-system..hpc.amslabs.hpecorp.net
+system.hpc.amslabs.hpecorp.net
 ```
 
 Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME` with the actual value found using the above command.
