@@ -19,7 +19,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
 
 The following procedures are included in this section:
 
-1. [Update Liquid-Cooled Compute Node BMC, FPGA, Management Ethernet, `AccVBIOS` and BIOS](#liquid-cooled-nodes-update-procedures)
+1. [Update Liquid-Cooled Compute Node BMC, FPGA, Management Ethernet, `AccVBIOS`, `AccUC` and BIOS](#liquid-cooled-nodes-update-procedures)
 1. [Update Air-Cooled Compute Node BMC, BIOS, iLO 5, and System ROM](#update-air-cooled-compute-node-bmc-bios-ilo-5-and-system-rom)
 1. [Update Chassis Management Module (CMM) Firmware](#update-chassis-management-module-firmware)
 1. [Update NCN BIOS and BMC Firmware with FAS](#update-non-compute-node-ncn-bios-and-bmc-firmware)
