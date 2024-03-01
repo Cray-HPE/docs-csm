@@ -298,6 +298,18 @@ spec:
                       fi
                       sleep 5
                   done
+        - name: wait-for-sls
+          dependencies:
+            - wait-for-k8s
+          templateRef:
+            name: wait-for-sls
+            template: wait-for-sls
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: targetNcn
+                value: "{{inputs.parameters.targetNcn}}"
         - name: "cray-cli-init"
           dependencies:
             - wait-for-cloud-init
