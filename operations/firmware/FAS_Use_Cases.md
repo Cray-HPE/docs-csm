@@ -202,7 +202,7 @@ The targets can be run in the same action (as shown in the example) or run separ
 On larger systems, it is recommended to run as separate actions one after each other as the output will be shorter.
 
 > **IMPORTANT:** The Cray `nodeBMC` device needs to be updated before the `nodeBIOS` because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require.
-See [Update Liquid-Cooled Node Firmware](#update-liquid-cooled-nodes-bmc-fpga-and-node-bios) for more information.
+See [Update Liquid-Cooled Node Firmware](#liquid-cooled-nodes-update-procedures) for more information.
 > **IMPORTANT:** The nodes themselves must be powered **off** in order to update the BIOS on the nodes.
 The BMC will still have power and will perform the update.
 If nodes are not off when the update command is issued, it will report as a failed update.
@@ -1160,7 +1160,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 Prerequisites:
 
 * The system is running HPE Cray EX release v1.4 or higher.
-* A firmware upgrade has been done following [Update Liquid-Cooled Compute Node BIOS Firmware](#update-liquid-cooled-nodes-bmc-fpga-and-node-bios).
+* A firmware upgrade has been done following [Update Liquid-Cooled Compute Node BIOS Firmware](#liquid-cooled-nodes-update-procedures).
     * The result of the upgrade is that the `NodeX.BIOS` has failed as `noSolution` and the `stateHelper` field for the operation states is `"No Image Available"`.
     * The BIOS in question is running a version less than or equal to `1.2.5` as reported by Redfish or described by the `noSolution` operation in FAS.
 * The hardware model reported by Redfish is `wnc-rome`, which is now designated as `HPE CRAY EX425`.
