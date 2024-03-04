@@ -62,6 +62,8 @@ Refer to that table and any corresponding product documents before continuing to
     iuf -a ${ACTIVITY_NAME} run -r deliver-product
     ```
 
+> **WARNING:** If you are using CSM 1.5.0 (and not CSM 1.5.1+), there is a bug that prevents the `deliver-product` stage from completing on large number of products being delivered. This bug is addressed in the 1.5.0 hotfix titled `CASMINST-6799`. You are encouraged to apply that hotfix for 1.5.0 (see [Check for field notices about hotfixes](../../../update_product_stream/index.md#check-for-field-notices-about-hotfixes)). If you have not applied the hotfix and you run across this issue, you can abort IUF-CLI and try running the stage again, but this doesn't guarantee that the issue will not happen again as it is a race condition. Note again that this does not affect CSM 1.5.1+.  
+
 Once this step has completed:
 
 - Product content for all products found in `${MEDIA_DIR}` has been uploaded to the system
