@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -30,7 +30,7 @@ from typing import Dict, List, Union
 
 from . import api_requests
 from . import common
-from .types import JsonObject, JSONDecodeError
+from .types import JsonDict, JsonObject, JSONDecodeError
 
 CFS_BASE_URL = f"{api_requests.API_GW_BASE_URL}/apis/cfs"
 CFS_V2_BASE_URL = f"{CFS_BASE_URL}/v2"
@@ -59,14 +59,19 @@ def log_error_raise_exception(msg: str, parent_exception: Union[Exception, None]
 # CFS component functions
 
 
-def list_components() -> List[JsonObject]:
+def list_components(id_list: Union[None, List[str], str]=None) -> List[JsonObject]:
     """
     Queries CFS to list all components, and returns the list.
+    If an id_list is specified, query CFS for just those components.
     """
     request_kwargs = {"url": CFS_V2_COMPS_URL,
                       "add_api_token": True,
                       "expected_status_codes": {200}}
-    return api_requests.get_retry_validate_return_json(**request_kwargs)
+    if id_list is None:
+        return api_requests.get_retry_validate_return_json(**request_kwargs)
+    else:
+        params = { "ids": id_list if isinstance(id_list, str) else ",".join(id_list) }
+        return api_requests.get_retry_validate_return_json(params=params, **request_kwargs)
 
 
 def update_component(comp_id: str, **update_data: JsonObject) -> JsonObject:
