@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -59,14 +59,29 @@ def log_error_raise_exception(msg: str, parent_exception: Union[Exception, None]
 # CFS component functions
 
 
+def __list_and_merge(object_field_name: str, url: str) -> List[JsonObject]:
+    """
+    For paginated CFS list endpoints, this repeatedly queries them until all items
+    are found, then returns the list.
+    """
+    request_kwargs = { "url": url,
+                       "add_api_token": True,
+                       "expected_status_codes": {200} }
+    resp_json = api_requests.get_retry_validate_return_json(**request_kwargs)
+    obj_list = resp_json[object_field_name]
+    while resp_json["next"] is not None:
+        resp_json = api_requests.get_retry_validate_return_json(params=resp_json["next"],
+                                                                **request_kwargs)
+        obj_list.extend(resp_json[object_field_name])
+    return obj_list
+
+
 def list_components() -> List[JsonObject]:
     """
     Queries CFS to list all components, and returns the list.
+    Merges paged responses together
     """
-    request_kwargs = {"url": CFS_V3_COMPS_URL,
-                      "add_api_token": True,
-                      "expected_status_codes": {200}}
-    return api_requests.get_retry_validate_return_json(**request_kwargs)
+    return __list_and_merge("components", CFS_V3_COMPS_URL)
 
 
 def update_component(comp_id: str, **update_data: JsonObject) -> JsonObject:
@@ -153,10 +168,7 @@ def list_configurations() -> List[JsonObject]:
     """
     Queries CFS to list all configurations, and returns the list.
     """
-    request_kwargs = {"url": CFS_V3_CONFIGS_URL,
-                      "add_api_token": True,
-                      "expected_status_codes": {200}}
-    return api_requests.get_retry_validate_return_json(**request_kwargs)
+    return __list_and_merge("configurations", CFS_V3_CONFIGS_URL)
 
 
 # CFS options functions

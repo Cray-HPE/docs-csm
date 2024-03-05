@@ -189,6 +189,7 @@ if [[ -z ${XNAMES} ]]; then
   [[ -n ${XNAMES} ]] || err_exit "No management nodes found in HSM"
 fi
 XNAME_LIST=${XNAMES//,/ }
+echo "Target xnames: ${XNAME_LIST}"
 
 ## CONFIGURATION SETUP ##
 if [[ ${CONFIG_CHANGE} == true ]]; then
@@ -258,7 +259,7 @@ if [[ ${CONFIG_CHANGE} == true ]]; then
 
   ## UPDATING CFS ##
 
-  echo "Disabling configuration for all listed components"
+  echo "Disabling all listed components in CFS"
   for xname in ${XNAME_LIST}; do
     run_cmd cray cfs v3 components update ${xname} --enabled false
   done
