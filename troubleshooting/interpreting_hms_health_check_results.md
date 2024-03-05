@@ -1,31 +1,31 @@
 # Interpreting HMS Health Check Results
 
 - [Interpreting HMS Health Check Results](#interpreting-hms-health-check-results)
-  - [Introduction](#introduction)
-  - [Prerequisites](#prerequisites)
-  - [Overview](#overview)
-  - [Execution](#execution)
-    - [Test all HMS services](#test-all-hms-services)
-    - [Test specific HMS service](#test-specific-hms-service)
-    - [Example output](#example-output)
-  - [Failure analysis](#failure-analysis)
-    - [Smoke test failure](#smoke-test-failure)
-    - [Functional test failure](#functional-test-failure)
-  - [Tavern output](#tavern-output)
-  - [Additional troubleshooting](#additional-troubleshooting)
-    - [`run_hms_ct_tests.sh`](#run_hms_ct_testssh)
-      - [`cray-hms-smd-test-functional`](#cray-hms-smd-test-functional)
-        - [`test_components.tavern.yaml` and `test_hardware.tavern.yaml`](#test_componentstavernyaml-and-test_hardwaretavernyaml)
-        - [`test_components.tavern.yaml`](#test_componentstavernyaml)
-      - [`cray-hms-firmware-action-test-functional`](#cray-hms-firmware-action-test-functional)
-        - [`test_actions.tavern.yaml`](#test_actionstavernyaml)
-      - [`cray-power-control-test-functional`](#cray-power-control-test-functional)
-        - [`test_power-status.tavern.yaml`](#test_power-statustavernyaml)
-    - [`hsm_discovery_status_test.sh`](#hsm_discovery_status_testsh)
-      - [`HTTPsGetFailed`](#httpsgetfailed)
-      - [`ChildVerificationFailed`](#childverificationfailed)
-      - [`DiscoveryStarted`](#discoverystarted)
-  - [Install blocking vs. Non-blocking failures](#install-blocking-vs-non-blocking-failures)
+    - [Introduction](#introduction)
+    - [Prerequisites](#prerequisites)
+    - [Overview](#overview)
+    - [Execution](#execution)
+        - [Test all HMS services](#test-all-hms-services)
+        - [Test specific HMS service](#test-specific-hms-service)
+        - [Example output](#example-output)
+    - [Failure analysis](#failure-analysis)
+        - [Smoke test failure](#smoke-test-failure)
+        - [Functional test failure](#functional-test-failure)
+    - [Tavern output](#tavern-output)
+    - [Additional troubleshooting](#additional-troubleshooting)
+        - [`run_hms_ct_tests.sh`](#run_hms_ct_testssh)
+            - [`cray-hms-smd-test-functional`](#cray-hms-smd-test-functional)
+                - [`test_components.tavern.yaml` and `test_hardware.tavern.yaml`](#test_componentstavernyaml-and-test_hardwaretavernyaml)
+                - [`test_components.tavern.yaml`](#test_componentstavernyaml)
+            - [`cray-hms-firmware-action-test-functional`](#cray-hms-firmware-action-test-functional)
+                - [`test_actions.tavern.yaml`](#test_actionstavernyaml)
+            - [`cray-power-control-test-functional`](#cray-power-control-test-functional)
+                - [`test_power-status.tavern.yaml`](#test_power-statustavernyaml)
+        - [`hsm_discovery_status_test.sh`](#hsm_discovery_status_testsh)
+            - [`HTTPsGetFailed`](#httpsgetfailed)
+            - [`ChildVerificationFailed`](#childverificationfailed)
+            - [`DiscoveryStarted`](#discoverystarted)
+    - [Install blocking vs. Non-blocking failures](#install-blocking-vs-non-blocking-failures)
 
 ## Introduction
 
@@ -401,68 +401,7 @@ FAILED test_components.tavern.yaml::Ensure that we can conduct a variety of quer
 FAILED test_hardware.tavern.yaml::Query the Hardware collection for Node information
 ```
 
-(`ncn-mw#`) If these failures occur, confirm that there are no discovered compute nodes in HSM.
-
-```bash
-cray hsm state components list --type Node --role compute --format json
-```
-
-Example output:
-
-```text
-{
-  "Components": []
-}
-```
-
-There are several reasons why there may be no discovered compute nodes in HSM.
-
-The following situations do not warrant additional troubleshooting and the test failures can be safely ignored if:
-
-- There is no compute hardware physically connected to the system
-- All compute hardware in the system is powered off
-
-If none of the above cases are applicable, then the failures warrant additional troubleshooting:
-
-(`ncn-mw#`) Run the `hsm_discovery_status_test.sh` script.
-
-```bash
-/opt/cray/csm/scripts/hms_verification/hsm_discovery_status_test.sh
-```
-
-If the script fails, this indicates a discovery issue and further troubleshooting steps to take are printed.
-
-Otherwise, missing compute nodes in HSM with no discovery failures may indicate a problem with a `leaf-bmc` switch.
-
-(`ncn-mw#`) Check to see if the `leaf-bmc` switch resolves using the `nslookup` command.
-
-```bash
-nslookup <leaf-bmc-switch>
-```
-
-Example output:
-
-```text
-Server:     10.92.100.225
-Address:    10.92.100.225#53
-
-Name:   sw-leaf-bmc-001.nmn
-Address: 10.252.0.4
-```
-
-(`ncn-mw#`) Verify connectivity to the `leaf-bmc` switch.
-
-```bash
-ssh admin@<leaf-bmc-switch>
-```
-
-Example output:
-
-```text
-ssh: connect to host sw-leaf-bmc-001 port 22: Connection timed out
-```
-
-Restoring connectivity, resolving configuration issues, or restarting the relevant ports on the `leaf-bmc` switch should allow the compute hardware to issue DHCP requests and be discovered successfully.
+If these failures occur, see the [Test Failures Due To No Discovered Compute Nodes In HSM](./known_issues/test_failures_no_discovered_computes_in_hsm.md) documentation for further troubleshooting.
 
 ##### `test_components.tavern.yaml`
 
@@ -548,6 +487,105 @@ Test failures due to no healthy BMCs in HSM can be safely ignored if the BMCs in
 This job executes the tests for the Power Control Service (PCS).
 
 ##### `test_power-status.tavern.yaml`
+
+These tests require compute nodes to be discovered in HSM.
+
+The following is an example of a failed test execution due to no discovered compute nodes in HSM:
+
+```text
+Running tavern tests...
+============================= test session starts ==============================
+platform linux -- Python 3.9.18, pytest-7.1.2, pluggy-1.4.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /src/app, configfile: pytest.ini
+plugins: allure-pytest-2.12.0, tavern-1.23.1
+collecting ... collected 31 items
+
+...
+
+test_power-status.tavern.yaml::Verify power-status for a Node FAILED [ 38%]
+
+...
+
+test_power-status.tavern.yaml::Verify power-status for multiple components FAILED [ 45%]
+
+...
+
+test_power-status.tavern.yaml::Verify power-status for a Node using a powerStateFilter FAILED [ 48%]
+
+...
+
+test_power-status.tavern.yaml::Verify power-status for a Node using a managementStateFilter FAILED [ 51%]
+
+...
+
+=================================== FAILURES ===================================
+_ /src/app/api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for a Node
+
+...
+
+------------------------------ Captured log call -------------------------------
+WARNING  tavern.util.dict_util:dict_util.py:46 Formatting 'node_xname' will result in it being coerced to a string (it is a <class 'NoneType'>)
+
+...
+
+ERROR    tavern.response.base:base.py:43 Status code was 400, expected 200:
+    {"type": "about:blank", "detail": "invalid xnames detected: None", "status": 400, "title": "Bad Request"}
+
+...
+
+_ /src/app/api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for multiple components
+
+...
+
+------------------------------ Captured log call -------------------------------
+WARNING  tavern.util.dict_util:dict_util.py:46 Formatting 'node1_xname' will result in it being coerced to a string (it is a <class 'NoneType'>)
+WARNING  tavern.util.dict_util:dict_util.py:46 Formatting 'node2_xname' will result in it being coerced to a string (it is a <class 'NoneType'>)
+WARNING  tavern.util.dict_util:dict_util.py:46 Formatting 'node3_xname' will result in it being coerced to a string (it is a <class 'NoneType'>)
+
+...
+
+ERROR    tavern.response.base:base.py:43 Status code was 400, expected 200:
+    {"type": "about:blank", "detail": "invalid xnames detected: None", "status": 400, "title": "Bad Request"}
+
+...
+
+_ /src/app/api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for a Node using a powerStateFilter
+
+...
+
+------------------------------ Captured log call -------------------------------
+WARNING  tavern.util.dict_util:dict_util.py:46 Formatting 'node_xname' will result in it being coerced to a string (it is a <class 'NoneType'>)
+
+...
+
+ERROR    tavern.response.base:base.py:43 Status code was 400, expected 200:
+    {"type": "about:blank", "detail": "invalid xnames detected: None", "status": 400, "title": "Bad Request"}
+
+...
+
+_ /src/app/api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for a Node using a managementStateFilter
+
+...
+
+------------------------------ Captured log call -------------------------------
+WARNING  tavern.util.dict_util:dict_util.py:46 Formatting 'node_xname' will result in it being coerced to a string (it is a <class 'NoneType'>)
+
+...
+
+ERROR    tavern.response.base:base.py:43 Status code was 400, expected 200:
+    {"type": "about:blank", "detail": "invalid xnames detected: None", "status": 400, "title": "Bad Request"}
+
+...
+
+=========================== short test summary info ============================
+FAILED api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for a Node
+FAILED api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for multiple components
+FAILED api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for a Node using a powerStateFilter
+FAILED api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for a Node using a managementStateFilter
+```
+
+If these failures occur, see the [Test Failures Due To No Discovered Compute Nodes In HSM](./known_issues/test_failures_no_discovered_computes_in_hsm.md) documentation for further troubleshooting.
 
 The following is an example of a failed test execution due to PCS not having
 any data in its ETCD storage:
