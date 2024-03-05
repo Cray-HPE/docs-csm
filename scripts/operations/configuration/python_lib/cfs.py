@@ -30,7 +30,7 @@ from typing import Dict, List, Union
 
 from . import api_requests
 from . import common
-from .types import JsonObject, JSONDecodeError
+from .types import JsonDict, JsonObject, JSONDecodeError
 
 CFS_BASE_URL = f"{api_requests.API_GW_BASE_URL}/apis/cfs"
 CFS_V3_BASE_URL = f"{CFS_BASE_URL}/v3"
@@ -59,7 +59,8 @@ def log_error_raise_exception(msg: str, parent_exception: Union[Exception, None]
 # CFS component functions
 
 
-def __list_and_merge(object_field_name: str, url: str) -> List[JsonObject]:
+def __list_and_merge(object_field_name: str, url: str,
+                     params: Union[JsonDict, None]=None) -> List[JsonObject]:
     """
     For paginated CFS list endpoints, this repeatedly queries them until all items
     are found, then returns the list.
@@ -67,7 +68,10 @@ def __list_and_merge(object_field_name: str, url: str) -> List[JsonObject]:
     request_kwargs = { "url": url,
                        "add_api_token": True,
                        "expected_status_codes": {200} }
-    resp_json = api_requests.get_retry_validate_return_json(**request_kwargs)
+    if params is None:
+        resp_json = api_requests.get_retry_validate_return_json(**request_kwargs)
+    else:
+        resp_json = api_requests.get_retry_validate_return_json(params=params, **request_kwargs)
     obj_list = resp_json[object_field_name]
     while resp_json["next"] is not None:
         resp_json = api_requests.get_retry_validate_return_json(params=resp_json["next"],
@@ -76,12 +80,17 @@ def __list_and_merge(object_field_name: str, url: str) -> List[JsonObject]:
     return obj_list
 
 
-def list_components() -> List[JsonObject]:
+def list_components(id_list: Union[None, List[str], str]=None) -> List[JsonObject]:
     """
     Queries CFS to list all components, and returns the list.
+    If an id_list is specified, query CFS for just those components.
     Merges paged responses together
     """
-    return __list_and_merge("components", CFS_V3_COMPS_URL)
+    if id_list is None:
+        params = None
+    else:
+        params = { "ids": id_list if isinstance(id_list, str) else ",".join(id_list) }
+    return __list_and_merge("components", CFS_V3_COMPS_URL, params=params)
 
 
 def update_component(comp_id: str, **update_data: JsonObject) -> JsonObject:
