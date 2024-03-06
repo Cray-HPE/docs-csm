@@ -4,9 +4,10 @@ This section updates the software running on management NCNs.
 
 - [1. Update management host firmware (FAS)](#1-update-management-host-firmware-fas)
 - [2. Execute the IUF `management-nodes-rollout` stage](#2-execute-the-iuf-management-nodes-rollout-stage)
-  - [2.1 `management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
-  - [2.2 `management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
-  - [2.3 NCN worker nodes](#23-ncn-worker-nodes)
+    - [2.1 `management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
+    - [2.2 `management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
+    - [2.3 NCN worker nodes](#23-ncn-worker-nodes)
+        - [2.3.1 DVS workaround upgrading from COS prior to 2.5.146](#231-dvs-workaround-upgrading-from-cos-prior-to-25146)
 - [3. Update management host Slingshot NIC firmware](#3-update-management-host-slingshot-nic-firmware)
 - [4. Next steps](#4-next-steps)
 
@@ -235,6 +236,9 @@ for details on how to query the images and CFS configurations and see the [updat
 **`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN worker nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI,
 remember to include these workflows.
 
+**`NOTE`** If upgrading from CSM 1.4 to CSM 1.5 with a COS release prior to 2.5.146 currently installed, a workaround is needed to roll out the management nodes.  See the later subsection [2.3.1 DVS workaround upgrading from COS prior to
+2.5.146](#231-dvs-workaround-upgrading-from-cos-prior-to-25146).  If the installed COS version is 2.5.146 or later, this is not needed.
+
 1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
@@ -287,6 +291,65 @@ Once this step has completed:
 
 Return to the procedure that was being followed for `management-nodes-rollout` to complete the next step, either [Management-nodes-rollout with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade) or
 [Management-nodes-rollout without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade).
+
+#### 2.3.1 DVS workaround upgrading from COS prior to 2.5.146
+
+If COS prior to 2.5.146 is installed prior to upgrading to CSM 1.5, the management rollout in this step may hang.  There is a workaround for this, copying the new version of the DVS
+`prechecks_for_worker_reboots` script to all NCN worker nodes as `/opt/cray/shasta/cos/bin/prechecks_for_worker_reboots`
+
+This is to be run on the `ncn-m001` node during this step 2.3 NCN worker nodes.
+
+The new version of the script may be found in the `cray-dvs-csm` rpm in
+the USS CSM tar file in the upgrade's media directory.  The workaround
+is to extract the script from the rpm to a temporary directory and
+then copy it to the worker nodes.
+
+It should be copied to the canary node when that node is being
+rebuilt, and to the remaining worker nodes after the canary node boot
+has succeeded.
+
+1. (`ncn-m001#`) Optionally, set an environment variable to the media directory:
+
+    ```bash
+    MEDIADIR=/etc/cray/upgrade/csm/media/<directory>
+    ```
+
+2. (`ncn-m001#`) Optionally, create and `cd` to a temporary directory.
+in which to extract the new version of the script.
+
+    ```bash
+    mkdir /tmp/upgrade-prechecks_WAR
+    cd /tmp/upgrade-prechecks_WAR
+    ```
+
+3. (`ncn-m001#`) Extract the `cray-dvs-csm` rpm that's included in the USS image:
+
+    ```bash
+    rpm2cpio < $MEDIADIR/uss-*-csm-1.5/rpms/uss-*-csm-1.5/x86_64/cray-dvs-csm-*.x86_64.rpm | cpio -i --make-directories --no-absolute-filenames
+    ```
+
+4. (`ncn-m001#`) Install the new version of the script onto the canary node.
+
+    ```bash
+    SSH_OPTIONS='-o StrictHostKeyChecking=no -o ConnectTimeout=15 -o LogLevel=ERROR -o UserKnownHostsFile=/dev/null'
+    scp $SSH_OPTIONS opt/cray/shasta/cne/bin/prechecks_for_worker_reboots $WORKER_CANARY:/opt/cray/shasta/cos/bin/prechecks_for_worker_reboots
+    ```
+
+5. (`ncn-m001#`) After the canary node has booted successfully, install the new version of the script onto the other worker nodes. This is one way to do that:
+
+    ```bash
+    for name in $(kubectl get node | grep -P 'ncn-w\d+' | awk '{print $1}'); do
+        xname=$(nslookup $(dig +short ${name}.nmn) | grep -P "x\d+c\d+s\d+b\dn\d.$" | sed -e 's/.* = //' -e 's/\.$//')
+        scp $SSH_OPTIONS opt/cray/shasta/cne/bin/prechecks_for_worker_reboots $xname:/opt/cray/shasta/cos/bin/prechecks_for_worker_reboots
+    done
+    ```
+
+6. (`ncn-m001#`) Optionally, remove the temporary directory.
+
+    ```bash
+    cd ..
+    rm -rf upgrade-prechecks_WAR
+    ```
 
 ## 3. Update management host Slingshot NIC firmware
 
