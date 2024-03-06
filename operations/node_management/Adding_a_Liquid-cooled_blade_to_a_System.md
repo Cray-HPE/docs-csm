@@ -67,8 +67,8 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
     ```
 
 * The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
-  * Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*.
-  * Review the *HPE Cray EX Hand Pump User Guide H-6200*.
+    * Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*.
+    * Review the *HPE Cray EX Hand Pump User Guide H-6200*.
 
 ## Procedure
 
