@@ -11,8 +11,8 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
 
 - [1. Populate admin directory with files defining site preferences](#1-populate-admin-directory-with-files-defining-site-preferences)
 - [2. Execute the IUF `update-vcs-config` stage](#2-execute-the-iuf-update-vcs-config-stage)
-  - [2.1 Prerequisites](#21-prerequisites)
-  - [2.2 Procedure](#22-procedure)
+    - [2.1 Prerequisites](#21-prerequisites)
+    - [2.2 Procedure](#22-procedure)
 - [3. Perform manual product configuration operations](#3-perform-manual-product-configuration-operations)
 - [4. Next steps](#4-next-steps)
 
@@ -185,24 +185,24 @@ The following highlights some of the areas that require manual configuration cha
 required for initial installation scenarios.
 
 - USS
-  - Configure DVS and LNet with appropriate Slingshot settings
-  - Configure DVS and LNet for use on application nodes
-  - Enable site-specific file system mounts
-  - Set the USS root password in HashiCorp Vault
+    - Configure DVS and LNet with appropriate Slingshot settings
+    - Configure DVS and LNet for use on application nodes
+    - Enable site-specific file system mounts
+    - Set the USS root password in HashiCorp Vault
 - UAN
-  - Enable CAN, LDAP, and set MOTD
-  - Move DVS and LNet settings to USS branch
-  - Set the UAN root password in HashiCorp Vault
+    - Enable CAN, LDAP, and set MOTD
+    - Move DVS and LNet settings to USS branch
+    - Set the UAN root password in HashiCorp Vault
 - SHS
-  - Update release information in `group_vars` (done for each product release)
+    - Update release information in `group_vars` (done for each product release)
 - CPE
-  - Enable previous CPE versions or alternate 3rd party products (optional, done for each product release)
+    - Enable previous CPE versions or alternate 3rd party products (optional, done for each product release)
 - SDU
-  - Configure SDU via `sdu setup`
+    - Configure SDU via `sdu setup`
 - SAT
-  - Configure SAT authentication via `sat auth`
-  - Generate SAT S3 credentials
-  - Configure system revision information via `sat setrev`
+    - Configure SAT authentication via `sat auth`
+    - Generate SAT S3 credentials
+    - Configure system revision information via `sat setrev`
 
 Once this step has completed:
 
