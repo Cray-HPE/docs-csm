@@ -4,13 +4,13 @@ This page is designed to cover various issues that arise when trying to PXE boot
 
 - [Configuration required for PXE booting](#configuration-required-for-pxe-booting)
 - [Switch configuration](#switch-configuration)
-  - [Aruba configuration](#aruba-configuration)
-  - [Mellanox configuration](#mellanox-configuration)
+    - [Aruba configuration](#aruba-configuration)
+    - [Mellanox configuration](#mellanox-configuration)
 - [Next steps](#next-steps)
-  - [Node iPXE retries and NIC order](#node-ipxe-retries-and-nic-order)
-  - [Restart BSS](#restart-bss)
-  - [Restart Kea](#restart-kea)
-  - [Missing BSS data](#missing-bss-data)
+    - [Node iPXE retries and NIC order](#node-ipxe-retries-and-nic-order)
+    - [Restart BSS](#restart-bss)
+    - [Restart Kea](#restart-kea)
+    - [Missing BSS data](#missing-bss-data)
 
 In order for PXE booting to work successfully, the management network switches need to be configured correctly.
 
