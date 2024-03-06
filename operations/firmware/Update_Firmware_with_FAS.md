@@ -55,7 +55,7 @@ Table 1. Upgradable Firmware Items
 
 | **Manufacturer** | **Type**     | **Target**                                                                          |
 | ---------------- | ------------ | -------------------------------------------------------------------------------------------------------------|
-| Cray             | `nodeBMC`    | `BMC`, `Node[0-3].BIOS`,  `Recovery`, `Node[0-1].AccFPGA0`, `Node0.AccVBIOS`, `Node[0-3].ManagementEthernet` |
+| Cray             | `nodeBMC`    | `BMC`, `Node[0-3].BIOS`,  `Recovery`, `Node[0-1].AccFPGA0`, `Node0.AccVBIOS`, `Node[0-3].ManagementEthernet`, `Node0.AccUC`|
 | Cray             | `chassisBMC` | `BMC`, `Recovery`                                                                                            |
 | Cray             | `routerBMC`  | `BMC`, `Recovery`                                                                                            |
 | Gigabyte         | `nodeBMC`    | `BMC`, `BIOS`                                                                                                |
@@ -115,6 +115,7 @@ After identifying which hardware is in the system, start with the top item on th
       1. [Redstone FPGA](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-redstone-fpga)
       1. [Management Ethernet](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-management-ethernet)
       1. [`AccVBIOS`](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-accvbios)
+      1. [`AccUC`](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-accuc)
 1. [Gigabyte](FAS_Use_Cases.md#gigabyte)
    1. [BMC](FAS_Use_Cases.md#manufacturer-gigabyte--device-type-nodebmc--target-bmc)
    1. [BIOS](FAS_Use_Cases.md#manufacturer-gigabyte--device-type--nodebmc--target--bios)
