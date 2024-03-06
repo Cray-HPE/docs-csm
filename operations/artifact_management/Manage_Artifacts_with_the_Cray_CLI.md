@@ -44,7 +44,7 @@ cray artifacts buckets list --format toml
 Example output:
 
 ```toml
-results = [ "alc", "badger", "benji-backups", "boot-images", "etcd-backup", "fw-update", "ims", "nmd", "sds", "ssm", "vbis", "wlm",]
+results = [ "admin-tools", "badger", "boot-images", "config-data", "etcd-backup", "fw-update", "ims", "install-artifacts", "nmd", "postgres-backup", "sat", "sds", "sls", "sma", "ssd", "ssm", "thanos", "user", "velero", "wlm",]
 ```
 
 ## List artifacts
@@ -53,6 +53,12 @@ results = [ "alc", "badger", "benji-backups", "boot-images", "etcd-backup", "fw-
 
 ```bash
 cray artifacts list S3_BUCKET --format toml
+```
+
+For example:
+
+```bash
+cray artifacts list boot-images --format toml
 ```
 
 Example output:
@@ -79,6 +85,12 @@ The output of this command provides information about the size of the artifact a
 
 ```bash
 cray artifacts describe S3_BUCKET S3_OBJECT_KEY --format toml
+```
+
+For example:
+
+```bash
+cray artifacts describe boot-images 138cd9e3-a855-4485-a067-87a3f4ff991e/initrd --format toml
 ```
 
 Example output:
