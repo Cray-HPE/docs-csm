@@ -92,7 +92,7 @@ The command group is the most important part of an action command and controls i
 It also determines whether or not to override an operation that would normally not be executed if there is no way to return the component name (xname)/target to the previous firmware version.
 This happens if an image does not exist in the image repository.
 
-These filters are then applied; and then `command` parameter applies settings for the overall action.
+These filters are then applied; and then the `command` parameter applies settings for the overall action.
 The swagger file is a great reference.
 
 #### `command` Parameters
