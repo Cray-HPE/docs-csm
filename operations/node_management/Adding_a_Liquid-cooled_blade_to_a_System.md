@@ -67,8 +67,8 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
     ```
 
 * The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
-  * Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*.
-  * Review the *HPE Cray EX Hand Pump User Guide H-6200*.
+    * Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*.
+    * Review the *HPE Cray EX Hand Pump User Guide H-6200*.
 
 ## Procedure
 
@@ -158,7 +158,7 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
 
    When DVS is operating over the NMN and a blade is being replaced, the mapping of node component name (xname) to node IP address must be preserved.
    Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes).
-   To prevent Kea from automatically adding MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
+   To prevent from Kea from automatically adding MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
 
     1. Create an `eth_interfaces` file that contains the interface IDs for the `Node Maintenance Network` entries for the destination blade location.
         If there has not been a blade previously in the destination location there may not be any Ethernet Interfaces to delete from HSM.
@@ -180,15 +180,11 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
 
     1. Run the following commands in succession to remove the interfaces if any.
 
-        (`ncn-mw#`) Stop the `cray-dhcp-kea-helper` job to prevent the interfaces from being re-created.
+       Delete the `cray-dhcp-kea` pod to prevent the interfaces from being re-created.
 
         ```bash
-        kubectl -n services patch cronjobs cray-dhcp-kea-helper -p '{"spec":{"suspend":true}}'
-        ```
-
-        (`ncn-mw#`) Remove the interfaces from HSM.
-
-        ```bash
+        kubectl get pods -Ao wide | grep kea
+        kubectl delete -n services pod CRAY_DHCP_KEA_PODNAME
         for ETH in $(cat eth_interfaces); do cray hsm inventory ethernetInterfaces delete $ETH --format json ; done
         ```
 
@@ -223,10 +219,10 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
         }"
         ```
 
-        **`NOTE`** Kea must be restarted when the `curl` command is issued.
+        **`NOTE`** Kea may must be restarted when the `curl` command is issued.
 
         ```bash
-        kubectl rollout restart deployment -n services cray-dhcp-kea
+        kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
         ```
 
         To change or correct a curl command that has been entered, use a PATCH request, for example:
@@ -238,12 +234,6 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
         ```
 
     1. Repeat the preceding command for each node in the blade.
-
-    1. (`ncn-mw#`) Re-enable the `cray-dhcp-kea-helper` job.
-
-        ```bash
-        kubectl -n services patch cronjobs cray-dhcp-kea-helper -p '{"spec":{"suspend":false}}'
-        ```
 
 #### Re-enable `hms-discovery` cron job
 

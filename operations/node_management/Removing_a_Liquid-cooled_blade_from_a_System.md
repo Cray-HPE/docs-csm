@@ -15,8 +15,8 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 - Check the status of the HSN and record link status before the procedure.
 
 - The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
-  - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
-  - Review the *HPE Cray EX Hand Pump User Guide H-6200*
+    - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
+    - Review the *HPE Cray EX Hand Pump User Guide H-6200*
 
 ## Procedure
 
@@ -225,7 +225,7 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
 1. (`ncn-mw#`) Restart Kea.
 
     ```bash
-    kubectl rollout restart deployment -n services cray-dhcp-kea
+    ncn-mw# kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
     ```
 
 ### 9. Remove the blade
