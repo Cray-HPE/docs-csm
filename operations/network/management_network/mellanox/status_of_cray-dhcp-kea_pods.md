@@ -30,9 +30,6 @@ You should get a list of the following pods as output:
 ```
 kubectl get pods -n services -o wide | grep kea
 cray-dhcp-kea-788b4c899b-x6ltd 3/3 Running 0 36h 10.40.3.183 ncn-w002 <none> <none>
-cray-dhcp-kea-postgres-0 2/2 Running 0 5d23h 10.40.3.121 ncn-w002 <none> <none>
-cray-dhcp-kea-postgres-1 2/2 Running 0 5d23h 10.42.2.181 ncn-w003 <none> <none>
-cray-dhcp-kea-postgres-2 2/2 Running 0 5d23h 10.39.0.208 ncn-w001 <none> <none>
 ```
 
 This output will also show which worker node the kea-dhcp pod is currently on.

@@ -225,7 +225,7 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
 1. (`ncn-mw#`) Restart Kea.
 
     ```bash
-    kubectl rollout restart deployment -n services cray-dhcp-kea
+    ncn-mw# kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
     ```
 
 ### 9. Remove the blade
