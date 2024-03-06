@@ -28,6 +28,8 @@ locOfScript=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 # shellcheck source=./bash_lib/common.sh
 . "${locOfScript}/bash_lib/common.sh"
 
+MONITOR_COMPS="${locOfScript}/monitor_comp_cfs_config_status.py"
+
 CONFIG_NAME=""
 CONFIG_CHANGE=""
 RELEASE=""
@@ -176,6 +178,14 @@ done
 [[ -z ${CONFIG_NAME} ]] && usage_err_exit "Configuration name must be specified with --config-name argument"
 [[ -z ${CONFIG_CHANGE} ]] && CONFIG_CHANGE="true"
 
+if [[ -z ${NO_ENABLE} ]]; then
+  # verify that our helper script exists
+  [[ -n ${MONITOR_COMPS} ]] || err_exit "Programming logic error: MONITOR_COMPS variable not set"
+  [[ -e ${MONITOR_COMPS} ]] || err_exit "Helper script does not exist: ${MONITOR_COMPS}"
+  [[ -f ${MONITOR_COMPS} ]] || err_exit "Helper script exists but is not a regular file: ${MONITOR_COMPS}"
+  [[ -x ${MONITOR_COMPS} ]] || err_exit "Helper script is not executable: ${MONITOR_COMPS}"
+fi
+
 # The script will keep all relevant files in a temporary directory. During
 # CSM upgrades, this directory will be backed up, in case it is needed for
 # future reference.
@@ -307,19 +317,6 @@ else
   exit 0
 fi
 
-while true; do
-  RESULT=$(cray cfs components list --status pending --ids ${XNAMES} --format json | jq length)
-  if [[ ${RESULT} -eq 0 ]]; then
-    break
-  fi
-  echo "Waiting for configuration to complete. ${RESULT} components remaining."
-  sleep 60
-done
-
-CONFIGURED=$(cray cfs components list --status configured --ids ${XNAMES} --format json | jq length)
-FAILED=$(cray cfs components list --status failed --ids ${XNAMES} --format json | jq length)
-echo "Configuration complete. ${CONFIGURED} component(s) completed successfully.  ${FAILED} component(s) failed."
-if [[ ${FAILED} -ne 0 ]]; then
-  echo "The following components failed: $(cray cfs components list --status failed --ids ${XNAMES} --format json | jq -r '. | map(.id) | join(",")')"
-  exit 1
-fi
+# Call a helper script to monitor the components until they are configured
+"${MONITOR_COMPS}" ${XNAME_LIST} && echo "Configuration completed successfully for all components" && exit 0
+err_exit "Configuration did not complete successfully for all components"
