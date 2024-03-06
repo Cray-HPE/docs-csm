@@ -297,16 +297,22 @@ HTTP 0x6d35da88 status 404 Not Found
 
 In some cases, rebooting the Kea pod has resolved PXE issues.
 
-1. (`ncn-mw#`) Restart Kea.
+1. (`ncn-mw#`) Get the Kea pod.
 
     ```bash
-    kubectl rollout restart deployment -n services cray-dhcp-kea
+    kubectl get pods -n services | grep kea
     ```
 
-1. (`ncn-mw#`) Wait for deployment to restart.
+    Example output:
+
+    ```text
+    cray-dhcp-kea-6bd8cfc9c5-m6bgw                                 3/3     Running     0          20h
+    ```
+
+1. (`ncn-mw#`) Delete the Kea pod.
 
     ```bash
-    kubectl rollout status deployment -n services cray-dhcp-kea
+    kubectl delete pods -n services cray-dhcp-kea-6bd8cfc9c5-m6bgw
     ```
 
 ### Missing BSS data
