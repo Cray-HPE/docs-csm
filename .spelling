@@ -49,6 +49,7 @@ StatefulSets
 15kw
 1GiB
 1TiB
+6TiB
 2-chassis
 2.0.0.L
 200Gbps
