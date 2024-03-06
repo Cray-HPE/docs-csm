@@ -66,7 +66,7 @@ Currently, only `smf` includes a quota.
     Do not exceed the percentage determined in the previous step.
 
     ```bash
-    vim /etc/ansible/ceph-rgw-users/ceph-pool-quotas.yml
+    vim /etc/ansible/ceph-rgw-users/roles/ceph-pool-quotas/defaults/main.yml
     ```
 
     Example ceph-pool-quotas.yml:
