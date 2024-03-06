@@ -259,14 +259,76 @@ advised to take backups of their local, site files.
 
 #### Image customization
 
-1. Follow option one of the following options based on your use case:
+1. Print the product catalog `ConfigMap`.
+
+    ```bash
+    kubectl -n services get cm cray-product-catalog -o jsonpath='{.data}' | jq '. | keys'
+    ```
+
+   Example outputs:
+
+    * CSM running with additional products:
+
+        ```json
+        [
+            "HFP-firmware",
+            "analytics",
+            "cos",
+            "cos-base",
+            "cpe",
+            "cpe-aarch64",
+            "cray-sdu-rda",
+            "csm",
+            "csm-diags",
+            "hfp",
+            "hpc-csm-software-recipe",
+            "pbs",
+            "sat",
+            "sle-os-backports-15-sp3",
+            "sle-os-backports-15-sp4",
+            "sle-os-backports-sle-15-sp3-x86_64",
+            "sle-os-backports-sle-15-sp4-x86_64",
+            "sle-os-backports-sle-15-sp5-aarch64",
+            "sle-os-backports-sle-15-sp5-x86_64",
+            "sle-os-products-15-sp3",
+            "sle-os-products-15-sp3-x86_64",
+            "sle-os-products-15-sp4",
+            "sle-os-products-15-sp4-x86_64",
+            "sle-os-products-15-sp5-aarch64",
+            "sle-os-products-15-sp5-x86_64",
+            "sle-os-updates-15-sp3",
+            "sle-os-updates-15-sp3-x86_64",
+            "sle-os-updates-15-sp4",
+            "sle-os-updates-15-sp4-x86_64",
+            "sle-os-updates-15-sp5-aarch64",
+            "sle-os-updates-15-sp5-x86_64",
+            "slingshot",
+            "slingshot-host-software",
+            "slurm",
+            "sma",
+            "uan",
+            "uss"
+        ]
+        ```
+
+    * CSM on a CSM-only system:
+
+        ```json
+        [
+          "csm"
+        ]
+        ```
+
+1. Choose one of the following options based on the output from the previous step.
 
     * [Upgrade of CSM on system with additional products](../Stage_0_Prerequisites.md#option-2-upgrade-of-csm-on-system-with-additional-products)
-    * [Upgrade of CSM on CSM-only system](./CSM-Only.md#steps)
+    * [Upgrade of CSM on CSM-only system](./CSM-Only.md#steps) \(***Do not use this procedure if more than CSM is
+      installed on the system.***\)
 
 #### WLM backup
 
-> ***NOTE*** For CSM-only systems, skip this step and continue onto [Storage nodes in-place update](#storage-nodes-in-place-update)
+> ***NOTE*** For CSM-only systems, skip this step and continue
+> onto [Storage nodes in-place update](#storage-nodes-in-place-update)
 
 1. Follow the directions in [Stage 0.4](../Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data).
 
