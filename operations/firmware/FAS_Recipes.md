@@ -25,44 +25,8 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 **`NOTE`** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
-> **IMPORTANT:** Before updating a CMM:
->
-> - Stop the `hms-discovery` job before updates are done, and then restart it after updates are complete.
->   1. (`ncn-mw#`) Stop the `hms-discovery` job.
->
->     ```bash
->     kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'
->     ```
->
->   1. (`ncn-mw#`) Start the `hms-discovery` job.
->
->     ```bash
->     kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":false}}'
->     ```
->
-> - Use PCS to make sure all chassis rectifier power is off.
->   1. Check power status of the chassis.
->
->      (`ncn-mw#`) If the chassis power is off, then everything else is off, and it is safe to proceed.
->
->      ```bash
->      cray power status list --xnames x[1000-1008]c[0-7]
->      ```
->
->   1. If the chassis are still powered on, then use PCS to make sure everything is off.
->
->      1. (`ncn-mw#`) Issue power off command.
->
->         This command may produce a large list of errors when talking to BMCs. This is expected
->         if the hardware has been partially powered down.
->
->         ```bash
->         cray pcs transition off --xnames x[1000-1008]c[0-7] --include children
->         ```
->
->      1. Verify that chassis power is off.
->
->         Repeat the earlier check of the chassis power.
+> **IMPORTANT:** Before updating a CMM, make sure all slot and rectifier power is off and the discovery job is stopped.
+See [Update Chassis Management Module (CMM) Firmware](FAS_Use_Cases.md#update-chassis-management-module-firmware) for the detailed procedure.
 
 ```json
 {
@@ -164,6 +128,9 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 ### (Cray) Device Type: `NodeBMC` | Target: Redstone FPGA (`AccFPGA0`)
 
+**`NOTE`**: Redstone FPGAs requires HFP release 23.12 or later.
+Previous versions did not contain the Redstone FPGA firmware.
+
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
 **`NOTE`** This is a collection of various FAS recipes for performing updates.
@@ -172,12 +139,6 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 > **IMPORTANT:**
 >
 > - The nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
-> - If updating FPGAs fails because of `No Image available`, update using the "Override an Image for an Update" procedure in [FAS Admin Procedures](FAS_Admin_Procedures.md):
->   - (`ncn-mw#`) Find the `imageID` using the following command:
->
->     ```bash
->     cray fas images list --format json | jq '.[] | .[] | select(.target=="Node0.AccFPGA0")'
->     ```
 
 ```json
 {
