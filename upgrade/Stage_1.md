@@ -7,17 +7,17 @@
 - [Stage 1.1 - Master node image upgrade](#stage-11---master-node-image-upgrade)
 - [Argo workflows](#argo-workflows)
 - [Stage 1.2 - Worker node image upgrade](#stage-12---worker-node-image-upgrade)
-  - [Option 1 - Serial upgrade](#option-1---serial-upgrade)
-  - [Option 2 - Parallel upgrade (Tech preview)](#option-2---parallel-upgrade-tech-preview)
-    - [Restrictions](#restrictions)
-    - [Example](#example)
+    - [Option 1 - Serial upgrade](#option-1---serial-upgrade)
+    - [Option 2 - Parallel upgrade (Tech preview)](#option-2---parallel-upgrade-tech-preview)
+        - [Restrictions](#restrictions)
+        - [Example](#example)
 - [Stage 1.3 - `ncn-m001` upgrade](#stage-13---ncn-m001-upgrade)
-  - [Stop typescript on `ncn-m001`](#stop-typescript-on-ncn-m001)
-  - [Backup artifacts on `ncn-m001`](#backup-artifacts-on-ncn-m001)
-  - [Move to `ncn-m002`](#move-to-ncn-m002)
-  - [Start typescript on `ncn-m002`](#start-typescript-on-ncn-m002)
-  - [Prepare `ncn-m002`](#prepare-ncn-m002)
-  - [Upgrade `ncn-m001`](#upgrade-ncn-m001)
+    - [Stop typescript on `ncn-m001`](#stop-typescript-on-ncn-m001)
+    - [Backup artifacts on `ncn-m001`](#backup-artifacts-on-ncn-m001)
+    - [Move to `ncn-m002`](#move-to-ncn-m002)
+    - [Start typescript on `ncn-m002`](#start-typescript-on-ncn-m002)
+    - [Prepare `ncn-m002`](#prepare-ncn-m002)
+    - [Upgrade `ncn-m001`](#upgrade-ncn-m001)
 - [Stage 1.4 - Upgrade `weave` and `multus`](#stage-14---upgrade-weave-and-multus)
 - [Stage 1.5 - `coredns` anti-affinity](#stage-15---coredns-anti-affinity)
 - [Stage 1.6 - Complete Kubernetes upgrade](#stage-16---complete-kubernetes-upgrade)
@@ -49,7 +49,7 @@ after a break, always be sure that a typescript is running before proceeding.
    ```
 
    > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
-   > Ensure file `/etc/cray/upgrade/csm/myenv` has entries for `STORAGE_IMS_IMAGE_ID`, `K8S_IMS_IMAGE_ID`, `CSM_ARTI_DIR` and `CSM_RELEASE`.
+   > Ensure file `/etc/cray/upgrade/csm/myenv` has entries for `CSM_ARTI_DIR` and `CSM_RELEASE`.
 
 1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
@@ -63,7 +63,7 @@ For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_
 > **`NOTE`** One of the Argo steps (`wait-for-cfs`) will prevent the upgrade of a worker node from proceeding if the CFS component status for that worker is in an `Error` state, and this must be fixed in order for the upgrade to continue.
 The following steps can be used to reset the component state in CFS (replace `XNAME` below with the `XNAME` for the worker node:
 
-```text
+```bash
 cray cfs components update --error-count 0 <XNAME>
 cray cfs components update --state '[]' <XNAME>
 ```
