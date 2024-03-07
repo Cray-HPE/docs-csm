@@ -206,6 +206,7 @@ see [Removals](introduction/deprecated_features/README.md#removals)
     * This is expected to be fixed in CSM 1.5.1.
 
 * `cray-tftp-upload`
-    * The `cray-tftp-upload` script errors out because of a change to the ipxe pods and the TFTP repository.
+    * The `cray-tftp-upload` script errors out because of a change to the `ipxe` pods and the TFTP repository.
+    * This error affects the `cray-upload-recovery-images` script.
     * This is expected to be fixed in CSM 1.5.1.
-    * A workaround is presented in [Upload BMC Recovery Firmware into TFTP Server](operations/firmware/upload_olympus_bmc_recovery_firmware_into_tftp_server.md)
+    * A workaround is presented in [Upload BMC Recovery Firmware into TFTP Server](operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
