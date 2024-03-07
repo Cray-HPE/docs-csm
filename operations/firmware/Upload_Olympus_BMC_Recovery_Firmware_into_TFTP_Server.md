@@ -14,10 +14,13 @@ This is expected to be fixed in CSM 1.5.1.
   >***Workaround:*** Edit the script `/usr/local/bin/cray-tftp-upload`
 
   >Change this line:
+
   ```bash
   PVC_HOST=`kubectl get pods -n services -l app.kubernetes.io/instance=cms-ipxe -o custom-columns=NS:.metadata.name --no-headers`
   ```
+
   >To:
+
   ```bash
   PVC_HOST=`kubectl get pods -n services -l app.kubernetes.io/instance=cms-ipxe -o custom-columns=NS:.metadata.name --no-headers | head -1`
   ```
