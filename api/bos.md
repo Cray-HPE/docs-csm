@@ -10143,7 +10143,7 @@ The date/time when the state was last updated in RFC 3339 format.
 
 ```
 
-The desired boot artifacts and configuration for a Component
+The actual boot artifacts and configuration for a Component
 
 ### Properties
 
@@ -10206,7 +10206,7 @@ The desired boot artifacts and configuration for a Component
 
 ```
 
-The desired boot artifacts and configuration for a Component. Optionally, a Session
+The staged boot artifacts and configuration for a Component. Optionally, a Session
 may be set which can be triggered at a later time against this Component.
 
 ### Properties
@@ -10383,9 +10383,9 @@ the Session responsible for the Component's current state.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |id|[V2ComponentId](#schemav2componentid)|false|none|The Component's ID. (e.g. xname for hardware Components)<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|actual_state|[V2ComponentActualState](#schemav2componentactualstate)|false|none|The desired boot artifacts and configuration for a Component|
+|actual_state|[V2ComponentActualState](#schemav2componentactualstate)|false|none|The actual boot artifacts and configuration for a Component|
 |desired_state|[V2ComponentDesiredState](#schemav2componentdesiredstate)|false|none|The desired boot artifacts and configuration for a Component|
-|staged_state|[V2ComponentStagedState](#schemav2componentstagedstate)|false|none|The desired boot artifacts and configuration for a Component. Optionally, a Session<br>may be set which can be triggered at a later time against this Component.|
+|staged_state|[V2ComponentStagedState](#schemav2componentstagedstate)|false|none|The staged boot artifacts and configuration for a Component. Optionally, a Session<br>may be set which can be triggered at a later time against this Component.|
 |last_action|[V2ComponentLastAction](#schemav2componentlastaction)|false|none|Information on the most recent action taken against the node.|
 |event_stats|[V2ComponentEventStats](#schemav2componenteventstats)|false|none|Information on the most recent attempt to return the node to its desired state.|
 |status|[V2ComponentStatus](#schemav2componentstatus)|false|none|Status information for the Component|
