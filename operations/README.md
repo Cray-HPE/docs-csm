@@ -78,12 +78,22 @@ Build and customize image recipes with the Image Management Service (IMS).
 - [Import External Image to IMS](image_management/Import_External_Image_to_IMS.md)
 - [Import NCN Image to IMS](image_management/Import_NCN_Image_to_IMS.md)
 - [Customize an Image Root Using IMS](image_management/Customize_an_Image_Root_Using_IMS.md)
+<<<<<<< HEAD
     - [Create UAN Boot Images](image_management/Create_UAN_Boot_Images.md)
     - [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
+=======
+      - [Create UAN Boot Images](image_management/Create_UAN_Boot_Images.md)
+      - [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
+- [Configure a Remote Build Node](image_management/Configure_a_Remote_Build_Node.md)
+>>>>>>> 191e7da6b (CASMCMS-8742 - IMS remote build node configuration)
 - [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
 - [Configure IMS to Use DKMS](image_management/Configure_IMS_to_Use_DKMS.md)
 - [Configure IMS to Validate RPMs](image_management/Configure_IMS_to_validate_rpms.md)
 - [Exporting and Importing IMS Data](image_management/Exporting_and_Importing_IMS_Data.md)
+- [Working With `aarch64` Images](image_management/Working_With_aarch64_Images.md)
+- [Troubleshoot Large Image](image_management/Troubleshoot_Large_Image.md)
+- [Troubleshoot Remote Build Node](image_management/Troubleshoot_Remote_Build_Node.md)
+- [Troubleshoot zypper interaction](image_management/Troubleshoot_zypper_interaction.md)
 - [IMS API](../api/ims.md)
 
 ## Boot orchestration
