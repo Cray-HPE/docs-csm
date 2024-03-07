@@ -80,8 +80,8 @@ This image is identified by examining the management node's boot parameters in t
 
    ```bash
    IMS_IMAGE_ID=$(cray bss bootparameters list --name "${NODE_XNAME}" --format json | \
-                        jq -r '.[0].params' | \
-                        sed 's#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#')
+                     jq -r '.[0].params' | \
+                     sed 's#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#')
    echo "${IMS_IMAGE_ID}"
    ```
 
@@ -120,8 +120,8 @@ image is identified by examining the kernel command-line parameters on the boote
 
    ```bash
    IMS_IMAGE_ID=$(ssh "${BOOTED_NODE}" sed \
-                            "'s#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#'" \
-                            /proc/cmdline)
+                    "'s#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#'" \
+                    /proc/cmdline)
    echo "${IMS_IMAGE_ID}"
    ```
 
@@ -451,117 +451,68 @@ updating the management nodes' boot parameters in BSS to use the artifacts from 
 
 1. (`ncn-mw#`) Set an environment variable for the IMS image ID.
 
-    * If executing this step in the context of
-      [Stage 0.3 - Update management node CFS configuration and customize worker node image](../../upgrade/Stage_0_Prerequisites.md#stage-03---update-management-node-cfs-configuration-and-customize-worker-node-image)
-      of the CSM upgrade procedure, use the appropriate IMS image ID environment variable set in that procedure.
-
-      > ***NOTE*** To target both master and worker nodes at the same time, use the following:
-      >
-      >```bash
-      > /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh 
-      >     -mw \
-      >     -p "$MASTER_IMAGE_ID"
-      > ```
-
-        1. Update master management nodes:
-
-            ```bash
-            /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
-                -m \
-                -p "$MASTER_IMAGE_ID"
-            ```
-
-        1. Update storage management nodes:
-
-            ```bash
-            /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
-                -s \
-                -p "$STORAGE_IMAGE_ID"
-            ```
-
-        1. Update worker management nodes:
-
-           ```bash
-           /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
-               -w \
-               -p "$WORKER_IMAGE_ID"
-           ```
-
-        1. Return
-           to [Stage 0.3 - Update management node CFS configuration and customize worker node image](../../upgrade/Stage_0_Prerequisites.md#stage-03---update-management-node-cfs-configuration-and-customize-worker-node-image).
-
-    * If executing this step in the context of the entire procedure on this page, then use the
-      `IMS_RESULTANT_IMAGE_ID` set in the previous step,
-      [3. Run the CFS image customization session](#3-run-the-cfs-image-customization-session).
-
-      ```bash
-      NEW_IMS_IMAGE_ID="${IMS_RESULTANT_IMAGE_ID}"
-      ```
-
-1. (`ncn-mw#`) Determine the component names (xnames) for the management nodes which will boot from the new image.
-
-   > In this example, the xname for `ncn-w001` is being found.
+   > If executing this step in the context of the entire procedure on this page, then use the
+   > `IMS_RESULTANT_IMAGE_ID` set in the previous step,
+   > [3. Run the CFS image customization session](#3-run-the-cfs-image-customization-session).
 
    ```bash
-   ssh ncn-w001 cat /etc/cray/xname
+   NEW_IMS_IMAGE_ID="${IMS_RESULTANT_IMAGE_ID}"
    ```
 
-1. (`ncn-mw#`) Update boot parameters for a management node.
+1. Update the boot parameters of the management nodes using the `assign-ncn-images.sh` script. It can
+   be used to update the boot parameters for all management nodes in particular categories (master, worker,
+   or storage), or it can be used to update the boot parameters for specific management nodes.
 
-    1. Get the existing `metal.server` setting for the component name (xname) of the node of interest.
+   * Update the boot parameters for all master and worker nodes
 
-       ```bash
-       XNAME=<node-xname>
-       METAL_SERVER=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' \
-           | awk -F 'metal.server=' '{print $2}' \
-           | awk -F ' ' '{print $1}')
-       echo "${METAL_SERVER}"
-       ```
+      ```bash
+      /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
+         -mw -p "${NEW_IMS_IMAGE_ID}"
+      ```
 
-    1. Create updated boot parameters that point to the new artifacts.
+   * Update the boot parameters for all master nodes
 
-        1. Set the path to the artifacts in S3.
+      ```bash
+      /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
+         -m -p "${NEW_IMS_IMAGE_ID}"
+      ```
 
-           > ***NOTE*** This uses the `NEW_IMS_IMAGE_ID` variable set in an earlier step.
+   * Update the boot parameters for all worker nodes
 
-            ```bash
-            S3_ARTIFACT_PATH="boot-images/${NEW_IMS_IMAGE_ID}"
-            echo "${S3_ARTIFACT_PATH}"
-            ```
+      ```bash
+      /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
+         -w -p "${NEW_IMS_IMAGE_ID}"
+      ```
 
-        1. Set the new `metal.server` value.
+   * Update the boot parameters for all storage nodes
 
-           ```bash
-           NEW_METAL_SERVER="s3://${S3_ARTIFACT_PATH}/rootfs"
-           echo "${NEW_METAL_SERVER}"
-           ```
+      ```bash
+      /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
+         -s -p "${NEW_IMS_IMAGE_ID}"
+      ```
 
-        1. Determine the modified boot parameters for the node.
+   * Update the boot parameters for specific management nodes
 
-           ```bash
-           PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | \
-               sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
-               tr -d \")
-           echo "${PARAMS}"
-           ```
+      1. Determine the component names (xnames) of the management nodes whose boot parameters are to be updated.
 
-           In the output of the `echo` command, verify that the value of `metal.server` is correctly set to the value
-           of `${NEW_METAL_SERVER}`.
+         One option to determine the xname of a node is to read the `/etc/cray/xname` file on it:
 
-    1. Update BSS with the new boot parameters.
+         ```bash
+         ssh ncn-w001 cat /etc/cray/xname
+         ```
 
-       ```bash
-       cray bss bootparameters update --hosts "${XNAME}" \
-           --kernel "s3://${S3_ARTIFACT_PATH}/kernel" \
-           --initrd "s3://${S3_ARTIFACT_PATH}/initrd" \
-           --params "${PARAMS}" && echo SUCCESS || echo ERROR
-       ```
+      1. Run the script to update their boot parameters.
+
+         > In the following example, be sure to replace the `<xname>` placeholder strings with the actual xnames of the
+         > management nodes whose boot parameters are to be updated.
+
+         ```bash
+         /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
+            -p "${NEW_IMS_IMAGE_ID}" <xname1> <xname2> ...
+         ```
 
 ## Next steps
 
-If a particular step of this procedure is being performed as part of a CSM upgrade, then return
-to [Stage 0.3 - Update management node CFS configuration and customize worker node image](../../upgrade/Stage_0_Prerequisites.md#stage-03---update-management-node-cfs-configuration-and-customize-worker-node-image).
-
-If this procedure is being performed as an operational task outside the context of an install or upgrade, then proceed
-to [Rebuild NCNs](../node_management/Rebuild_NCNs/Rebuild_NCNs.md)
+If this procedure is being performed as an operational task outside the context of an install or upgrade,
+then proceed to [Rebuild NCNs](../node_management/Rebuild_NCNs/Rebuild_NCNs.md)
 when ready to reboot the management nodes to their new images.
