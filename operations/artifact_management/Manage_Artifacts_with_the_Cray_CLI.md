@@ -115,7 +115,7 @@ md5sum = "3e9bfd34f94bce3bac938b011af82840"
 cray artifacts create S3_BUCKET S3_OBJECT_KEY UPLOAD_FILEPATH
 ```
 
-For example: 
+For example:
 
 ```bash
 cray artifacts create boot-images 138cd9e3-a855-4485-a067-87a3f4ff991e/initrd initrd
