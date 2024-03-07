@@ -2,7 +2,6 @@
 
 **CSM v1.5 Issue:** In CSM 1.5.0 the `cray-tftp-upload` script errors out because of a change to the `ipxe` pods and the TFTP repository.
 This is expected to be fixed in CSM 1.5.1.
-
   >If you receive the following type of error please apply the workaround:
 
   ```text
