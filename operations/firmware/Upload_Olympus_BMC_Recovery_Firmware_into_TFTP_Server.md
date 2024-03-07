@@ -10,15 +10,13 @@ This is expected to be fixed in CSM 1.5.1.
   Failed to upload curr.json - error code = 0
   ```
 
-  >***Workaround:*** Edit the script `/usr/local/bin/cray-tftp-upload`
-
-  >Change this line:
+> ***Workaround:*** Edit the script `/usr/local/bin/cray-tftp-upload` Changing this line:
 
   ```bash
   PVC_HOST=`kubectl get pods -n services -l app.kubernetes.io/instance=cms-ipxe -o custom-columns=NS:.metadata.name --no-headers`
   ```
 
-  >To:
+> To:
 
   ```bash
   PVC_HOST=`kubectl get pods -n services -l app.kubernetes.io/instance=cms-ipxe -o custom-columns=NS:.metadata.name --no-headers | head -1`
