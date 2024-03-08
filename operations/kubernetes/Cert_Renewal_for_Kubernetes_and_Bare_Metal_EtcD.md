@@ -288,6 +288,8 @@ Run the following steps on each master node.
    - As noted in the above output, all certificates including those for Etcd were updated. Note that `apiserver-etcd-client.crt` is critical as it is the cert that allows the Kubernetes API server to talk to the bare-metal etcd cluster.
      Also, the `/var/lib/kubelet/pki/` certificates will be updated in the Kubernetes client section that follows.
 
+Repeat the steps in this section on the next master node, until they have been performed on every master node.
+
 1. Restart `etcd`.
 
    Once the steps to renew the needed certificates have been completed on all the master nodes, log into each master node one at a time and run the following:
@@ -296,11 +298,9 @@ Run the following steps on each master node.
    systemctl restart etcd.service
    ```
 
-**Run the remaining steps on both master and worker nodes.**
+Repeat the above step on every master node.
 
-1. Restart `kubelet`.
-
-   Run the following command on each Kubernetes node.
+1. Restart `kubelet` for all Kubernetes nodes.
 
    **IMPORTANT:** The following example will need to be adjusted to reflect the correct amount of master and worker nodes in the environment being used.
 
@@ -308,7 +308,7 @@ Run the following steps on each master node.
    pdsh -w ncn-m00[1-3] -w ncn-w00[1-3] systemctl restart kubelet.service
    ```
 
-1. Fix `kubectl` command access.
+1. Fix `kubectl` command access on the first master node `ncn-m001`.
 
    **`NOTE`** The following command will only respond with `Unauthorized` if certificates have expired. In any case, the new client certificates will need to be distributed in the following steps.
 
@@ -353,9 +353,7 @@ Run the following steps on each master node.
    **`NOTE`** There may be errors when copying files. The target may or may not exist depending on the version of CSM.
 
    - **DO NOT** copy this to the master node where this work is being performed.
-   - Copy `/etc/kubernetes/admin.conf` to all master and worker nodes, as well as the first storage node `ncn-s001`.
-
-   Client access:
+   - Copy `/etc/kubernetes/admin.conf` to the other master and worker nodes, as well as the first storage node `ncn-s001`.
 
    **`NOTE`** Update the following command with the appropriate range of worker nodes.
 
@@ -363,7 +361,15 @@ Run the following steps on each master node.
    pdcp -w ncn-m00[2-3] -w ncn-w00[1-3] -w ncn-s001 /etc/kubernetes/admin.conf /etc/kubernetes/
    ```
 
+   **IMPORTANT:** You are now done renewing all certificates. Do NOT perform the next section unless your kubelet client certificate also expired. Use the following command to check:
+
+   ```bash
+   pdsh -w ncn-m00[1-3] -w ncn-w00[1-3] openssl x509 -enddate -noout -in /var/lib/kubelet/pki/kubelet-client-current.pem
+   ```
+
 ### Regenerate `kubelet` `.pem` Certificates
+
+**`NOTE`** This section is typically not necessary unless your kubelet client certificate expired (see above section).
 
 1. Backup certificates for `kubelet` on each master and worker node:
 
@@ -443,11 +449,23 @@ Run the following steps on each master node.
 
 6. Perform a rolling reboot of master nodes.
 
+   **IMPORTANT:** Make sure the current time on the master node to be rebooted falls within the validity period of its kubelet client certificate before rebooting it. Pay attention to the time zone difference when checking it:
+
+   ```bash
+   date; openssl x509 -startdate -enddate -noout -in /var/lib/kubelet/pki/kubelet-client-current.pem
+   ```
+
    Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) process.
 
    **IMPORTANT:** Verify pods are running on the master node that was rebooted before proceeding to the next node.
 
 7. Perform a rolling reboot of worker nodes.
+
+   **IMPORTANT:** Make sure the current time on the worker node to be rebooted falls within the validity period of its kubelet client certificate before rebooting it. Pay attention to the time zone difference when checking it:
+
+   ```bash
+   date; openssl x509 -startdate -enddate -noout -in /var/lib/kubelet/pki/kubelet-client-current.pem
+   ```
 
    Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) process.
 
