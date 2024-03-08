@@ -123,7 +123,9 @@ Safely disabling encryption requires two steps to ensure no access to Kubernetes
     ncn-m001 configuration updated ensure all control plane nodes run this same command
     ```
 
-1. Fully disable all encryption by removing all keys from the control plane nodes.
+> **`NOTE`** Ensure above command is executed successfully on every control plane node in the cluster before proceeding further. Wait for atleast ten minutes and then see [Encryption status](#encryption-status) for details on how to check this.
+
+2. Fully disable all encryption by removing all keys from the control plane nodes.
 
     1. Verify that the `current` encryption is reported as `identity`.
 
@@ -142,6 +144,8 @@ Safely disabling encryption requires two steps to ensure no access to Kubernetes
         ```
 
         At this point, encryption of `etcd` secrets will be back to default.
+
+> **`NOTE`** Ensure above command is executed successfully on every control plane node in the cluster before proceeding further. Wait for atleast ten minutes and then see [Encryption status](#encryption-status) for details on how to check this.
 
 ## Encryption status
 
@@ -231,3 +235,6 @@ If necessary, a forced rewrite of secret data can be performed. Generally unnece
     Waiting for daemon set "cray-k8s-encryption" rollout to finish: 2 of 3 updated pods are available...
     daemon set "cray-k8s-encryption" successfully rolled out
     ```
+
+> **`NOTE`** Ensure above command is executed only if all control plane nodes have successfully completed encryption / decryption i.e. status is same on every control plane node in the cluster before proceeding further. See [Encryption status](#encryption-status) for details on how to check this.
+    
