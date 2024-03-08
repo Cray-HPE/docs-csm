@@ -123,7 +123,7 @@ Safely disabling encryption requires two steps to ensure no access to Kubernetes
     ncn-m001 configuration updated ensure all control plane nodes run this same command
     ```
 
-> **`NOTE`** Ensure above command is executed successfully on every control plane node in the cluster before proceeding further. Wait for atleast ten minutes and then see [Encryption status](#encryption-status) for details on how to check this.
+> **`NOTE`** Ensure above command is executed successfully on every control plane node in the cluster before proceeding further. Wait for minimum ten minutes and then see [Encryption status](#encryption-status) for details on how to check this.
 
 2. Fully disable all encryption by removing all keys from the control plane nodes.
 
@@ -145,7 +145,7 @@ Safely disabling encryption requires two steps to ensure no access to Kubernetes
 
         At this point, encryption of `etcd` secrets will be back to default.
 
-> **`NOTE`** Ensure above command is executed successfully on every control plane node in the cluster before proceeding further. Wait for atleast ten minutes and then see [Encryption status](#encryption-status) for details on how to check this.
+> **`NOTE`** Ensure above command is executed successfully on every control plane node in the cluster before proceeding further. Wait for minimum ten minutes and then see [Encryption status](#encryption-status) for details on how to check this.
 
 ## Encryption status
 
