@@ -236,5 +236,5 @@ If necessary, a forced rewrite of secret data can be performed. Generally unnece
     daemon set "cray-k8s-encryption" successfully rolled out
     ```
 
-> **`NOTE`** Ensure above command is executed only if all control plane nodes have successfully completed encryption / decryption i.e. status is same on every control plane node in the cluster before proceeding further. 
+> **`NOTE`** Ensure above command is executed only if all control plane nodes have successfully completed encryption / decryption i.e. status is same on every control plane node in the cluster before proceeding further.
 See [Encryption status](#encryption-status) for details on how to check this.
