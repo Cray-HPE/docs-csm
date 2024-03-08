@@ -115,7 +115,7 @@ fi
       check_sls_health
 
       scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /root/docs-csm-latest.noarch.rpm $promotingMaster:/root/docs-csm-latest.noarch.rpm
-      ssh $promotingMaster "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
+      ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
       ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/usr/share/doc/csm/upgrade/scripts/k8s/promote-initial-master.sh"
       VERBOSE=1 csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster --limit Global
 
