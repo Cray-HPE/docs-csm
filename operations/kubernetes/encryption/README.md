@@ -125,7 +125,7 @@ Safely disabling encryption requires two steps to ensure no access to Kubernetes
 
 > **`NOTE`** Ensure above command is executed successfully on every control plane node in the cluster before proceeding further. Wait for minimum ten minutes and then see [Encryption status](#encryption-status) for details on how to check this.
 
-2. Fully disable all encryption by removing all keys from the control plane nodes.
+1. Fully disable all encryption by removing all keys from the control plane nodes.
 
     1. Verify that the `current` encryption is reported as `identity`.
 
@@ -236,5 +236,5 @@ If necessary, a forced rewrite of secret data can be performed. Generally unnece
     daemon set "cray-k8s-encryption" successfully rolled out
     ```
 
-> **`NOTE`** Ensure above command is executed only if all control plane nodes have successfully completed encryption / decryption i.e. status is same on every control plane node in the cluster before proceeding further. See [Encryption status](#encryption-status) for details on how to check this.
-    
+> **`NOTE`** Ensure above command is executed only if all control plane nodes have successfully completed encryption / decryption i.e. status is same on every control plane node in the cluster before proceeding further. 
+See [Encryption status](#encryption-status) for details on how to check this.
