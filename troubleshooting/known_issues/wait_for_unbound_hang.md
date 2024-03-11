@@ -26,14 +26,14 @@
 
     for job in $unbound_manager_jobs; do
         job_entry=$(kubectl get jobs -n services $job|sed 1d)
-            echo $job_entry
+        echo $job_entry
         job_id=$(echo $job_entry| awk '{ print $1 }')
-            echo $job_id
-            job_status=$(echo $job_entry| awk '{ print $2 }')
-            echo $job_status
+        echo $job_id
+        job_status=$(echo $job_entry| awk '{ print $2 }')
+        echo $job_status
         if [[ "$job_status" -eq "0/1" ]];then
             echo "deleting stale job"
-        kubectl delete jobs -n services $job_id
+            kubectl delete jobs -n services $job_id
             echo "kubectl delete jobs -n services $job_id"
         fi
     done
