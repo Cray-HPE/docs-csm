@@ -642,11 +642,11 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
         --template={{.data.vcs_password}} | base64 --decode
       ```
 
-   1. Check out content from the `cos-config-management` VCS repository.
+   1. Check out content from the `uss-config-management` VCS repository.
 
       ```bash
-      git clone https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git
-      cd cos-config-management
+      git clone https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git
+      cd uss-config-management
       git checkout integration
       ```
 
