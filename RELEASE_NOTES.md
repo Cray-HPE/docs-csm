@@ -204,5 +204,5 @@ see [Removals](introduction/deprecated_features/README.md#removals)
     * This affects the HFP script `post-deliver-product.sh` which will hang when the FAS Loader crashes. Rerunning the script will be required.
     * IUF procedure calls the `post-deliver-product.sh` script and may require restarting that IUF process.
 * PCS (Power Control Service) is unable to place power caps on Blanca Peak (ex254n) and Parry Peak (ex255a) compute nodes
-    * To workaround this issue, use capmc to place power caps on these node types
+    * To workaround this issue, use CAPMC to place power caps on these node types
     * Issue is fixed in CSM 1.5.1

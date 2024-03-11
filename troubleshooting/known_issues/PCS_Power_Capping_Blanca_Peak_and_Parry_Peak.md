@@ -13,9 +13,10 @@ Example equivalents of PCS and CAPMC commands are given below.
 ### PCS:
 
 * `cray power cap snapshot --xnames $XNAME`
-* `cray power cap describe $POWERCAPID
+* `cray power cap describe $POWERCAPID`
 
 XNAME is the compute node xname you want to snapshot
+
 POWERCAPID comes from the `cray power cap snapshot --xnames $XNAME` output
 
 ### CAPMC: 
@@ -32,7 +33,9 @@ NID is the NID of the compute node you want to snapshot
 * `cray power cap set --xnames $XNAME --control "${CONTROLNAME}" $VALUE`
 
 XNAME is the compute node xname you want to set a power cap on
+
 CONTROLNAME is the power cap control name you want to target
+
 VALUE is the new power cap value you want to set
 
 ### CAPMC:
@@ -40,5 +43,8 @@ VALUE is the new power cap value you want to set
 * `cray capmc set_power_cap create --nids NID --control "${CONTROLNAME}" $VALUE`
 
 NID is the NID of the compute node you want to set a power cap on
+
 CONTROLNAME is the power cap control name you want to target
+
 VALUE is the new power cap value you want to set
+
