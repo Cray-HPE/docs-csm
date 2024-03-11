@@ -203,3 +203,10 @@ see [Removals](introduction/deprecated_features/README.md#removals)
     * Loading firmware from Nexus using the FAS Loader will intermittently crash with HFP release 23.12 or later. Rerunning the FAS Loader will be required.
     * This affects the HFP script `post-deliver-product.sh` which will hang when the FAS Loader crashes. Rerunning the script will be required.
     * IUF procedure calls the `post-deliver-product.sh` script and may require restarting that IUF process.
+    * This is expected to be fixed in CSM 1.5.1.
+
+* `cray-tftp-upload`
+    * The `cray-tftp-upload` script errors out because of a change to the `ipxe` pods and the TFTP repository.
+    * This error affects the `cray-upload-recovery-images` script.
+    * This is expected to be fixed in CSM 1.5.1.
+    * A workaround is presented in [Upload BMC Recovery Firmware into TFTP Server](operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
