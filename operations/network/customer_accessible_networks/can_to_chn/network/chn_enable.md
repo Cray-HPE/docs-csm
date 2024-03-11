@@ -329,13 +329,13 @@ Add CHN to `customizations.yaml`
          "playbook": "sat-ncn.yml"
        },
        {
-         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
+         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git",
          "commit": "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7",
          "name": "cos-integration-2.3.75",
          "playbook": "ncn.yml"
        },
        {
-         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
+         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git",
          "commit": "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7",
          "name": "cos-integration-2.3.75",
          "playbook": "ncn-final.yml"
@@ -392,13 +392,13 @@ Add CHN to `customizations.yaml`
    playbook = "sat-ncn.yml"
 
    [[layers]]
-   clone_url = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git"
    commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
    name = "cos-integration-2.3.75"
    playbook = "ncn.yml"
 
    [[layers]]
-   clone_url = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git"
    commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
    name = "cos-integration-2.3.75"
    playbook = "ncn-final.yml"
@@ -684,7 +684,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    playbook = "site.yml"
 
    [[layers]]
-   clone_url = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git"
    commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
    name = "cos-compute-integration-2.3.75"
    playbook = "cos-compute.yml"
@@ -720,7 +720,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    playbook = "site.yml"
 
    [[layers]]
-   clone_url = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git"
    commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
    name = "cos-compute-last-integration-2.3.75"
    playbook = "cos-compute-last.yml"

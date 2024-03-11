@@ -386,7 +386,7 @@ Adjust the repository list as necessary, if any additional repositories are pres
 ```bash
 VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
 VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
-REPOS="analytics-config-management cos-config-management cpe-config-management slurm-config-management sma-config-management uan-config-management csm-config-management"
+REPOS="analytics-config-management uss-config-management cpe-config-management slurm-config-management sma-config-management uan-config-management csm-config-management"
 for repo in $REPOS ; do
     curl -X POST https://api-gw-service-nmn.local/vcs/api/v1/orgs/cray/repos -u ${VCS_USER}:${VCS_PASSWORD} -d name=${repo}
 done
