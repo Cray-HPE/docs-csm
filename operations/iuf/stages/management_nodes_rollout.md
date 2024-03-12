@@ -157,7 +157,7 @@ Only follow the below steps for the nodes being upgraded, for `ncn-m001` or NCN 
 [`prepare-images` Artifacts created](prepare_images.md#artifacts-created) documentation to get the values for `final_image_id` and `configuration` with a
 `configuration_group_name` value matching `Management_Master` or `Management_Storage`, whichever node type is being upgraded. These values will be used in the following steps.
 
-  1. (`ncn-mw#`) To update ncn-m001, set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in the previous step, then update the boot parameters in BSS.
+  1. (`ncn-mw#`) To update `ncn-m001`, set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in the previous step, then update the boot parameters in BSS.
 
       ```bash
       IMS_RESULTANT_IMAGE_ID=<value of final_image_id>
