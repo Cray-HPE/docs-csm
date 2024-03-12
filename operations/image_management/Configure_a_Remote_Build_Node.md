@@ -1,22 +1,57 @@
 # IMS Remote Builds 
 
-While IMS comes shipped with a method of generating arm64 image builds via emulation, this method is best suited for minimal or barebones image builds
-due to the speed limitations that are imposed when trying to translate x86 instructions to the arm64 instruction set via QEMU namespace translation.
-This is where IMS remote builds come into play. By leveraging arm hardware at your disposal, a 10x speed increase can be observed by performing image builds and customization as opposed to emulation.
+Typically IMS jobs are run within Kubernetes (K8S) pods on the cluster's worker nodes. With csm-1.5.1,
+IMS now has the ability to run these jobs on a dedicated, repurposed compute node rather than within
+the K8S pods. There are two primary reasons to choose to run jobs on a remote build node.
+
+1. Resources available to the K8S workers.
+
+The IMS jobs creating and customizing images can consume a lot of resources within the K8S cluster,
+particularly as the image sizes get larger. If the jobs are offloaded to remote nodes, most of that
+resource pressure can be shifted to the remote node. This can be particularly important if the
+workers in the cluster are already under load stress.
+
+1. Performance due to cross archetecture builds.
+
+All K8S worker nodes are running on x86_64 hardware. While IMS is installed with a method of generating
+aarch64 image builds via emulation, this method is best suited for minimal or barebones image builds. The
+emulation is done through a Kata VM running a QEMU translator. The process of translating x86_64
+to aarch64 instructions has a serious performance impact. When running the job on a remote node, it will
+run on the native archetecture of the remote node. Running aarch64 image builds on an aarch64 remote node
+can see over a 10x performance increase versus running the same job under emulation.
 
 ## Prerequisites 
-- arm based compute node
-- ceph storage space 
-- metal compute image 
-- CSM 1.5.1
+- Available compute node
+- CSM 1.5.1 or higher
 
-## Configuration 
+## Configuring a Remote Build Node
 
-### IMS Builder Image
+There are only two requirements for using a compute node as a remote build node:
+- Have podman installed and configured
+- Allow IMS access via ssh key
 
-In order for a compute node to be able to execute remote IMS builds, they must first be configured. After logging into a management node in your system,
-retrieve the image id of the metal compute node shipped with CSM 1.5.1.
+### Use an Existing Compute Node
 
+This will add processes to the node being used as a remote build node. The system administrator
+will need to decide if this compute node needs to be removed from the workload manager while being
+used to work with images, or if it can still run compute jobs while building images.
+
+1. Install or varify podman is installed
+
+** HERE - link to podman instructions
+
+1. Install the IMS ssh key
+
+** HERE - fill in the details / instructions on how to do this
+- get ssh key from K8S secrets
+- copy into node's ~/.ssh/autorized_keys file
+
+### Create a Barebones IMS Builder Image
+
+If there is no existing compute image to boot a node with, one can be created based on the barebones
+image that is installed with CSM.
+
+1. Find the appropriate barebones image.
 ```
 ncn-m001:~ # cray ims images list | grep -B 5 compute-csm.*aarch64
 [[results]]
@@ -25,6 +60,8 @@ created = "2024-01-10T22:48:48.277640+00:00"
 id = "f9de6a5b-b49d-4e7a-b78f-18599a8e61f9"
 name = "compute-csm-1.5-5.2.47-aarch64"
 ```
+
+1. Create a CFS configuration to customize the barebones image.
 
 Store that id and create a cfs configuration resembling the following. 
 
@@ -41,11 +78,16 @@ Store that id and create a cfs configuration resembling the following.
     "name": "ims-config"
 }
 ```
+
+1. Use CFS to customize the barebones image.
+
 After posting your cfs configuration you will use it to customize the image id retrieved in the previous step.
 
 ```
 cray cfs sessions create --target-group Application <IMS ID of your image> --target-image-map <IMS ID of your image> <name you want your new image to have in IMS> --target-definition image --name <pick a name for your CFS session> --configuration-name <name of the CFS configuration you created in the previous step>
 ```
+
+1. Boot the compute node with the customized image
 
 Once the cfs customization is finished, the image is ready to be booted. Create a bos session template referencing that image and use it to boot an arm node.
 
@@ -65,6 +107,9 @@ Once the cfs customization is finished, the image is ready to be booted. Create 
     }
 }
 ```
+
+1. Optionally lock the compute node to prevent unintended reboots of the compute node.
+
 Once the image is booted and operational you may also possibly look into the possiblity of adding an HSM lock to that node. This will prevent unwanted or accidental reboots or poweroffs.
 
 ```
@@ -76,7 +121,7 @@ The lock can be removed at anytime via
 cray hsm locks unlock create --component-ids <compute node XNAME>
 ```
 
-### Storage 
+1. Add storage to the remote build node.
 
 By default compute nodes have limited storage. While executing small image builds may be possible, you will not be able to build larger images without additonal
 storage being available to the ims builder node. We can achieve this by mounting ceph storage into the ims builder node.
@@ -110,13 +155,14 @@ nid001030:~ # mount /dev/rbd1 /mnt/cache
 
 nid001030:~ # mkdir /mnt/cache/tmp
 nid001030:~ # mount --bind /mnt/cache/tmp /tmp
-nid001030:~ # mkdir -p /mnt/cache//var/lib/containers/storage/overlay/
+nid001030:~ # mkdir -p /mnt/cache/var/lib/containers/storage/overlay/
 nid001030:~ # mount --bind /mnt/cache/var/lib/containers/storage/overlay/ /var/lib/containers/storage/overlay/
 ```
 
 ### Adding and Removing Remote Build Nodes to IMS 
 
-Once your node has been configured with all of the above steps, the final step is to register that node with IMS so that it knows that it can be used for image builds.
+Once your node has been configured with all of the above steps, the final step is to register that node with IMS so
+that it knows that it can be used for image builds.
 
 Register a remote build node for ims
 ```
@@ -131,9 +177,7 @@ List available remote build nodes
 cray ims remote-build-nodes list
 ```
 
-Once complete you are all set to go. IMS will automatically use a remote build node for arm builds if one is made available so there will be no change to
-previous commands for either create or customize jobs.
-
-
+Once complete you are all set to go. IMS will automatically use a remote build node for arm builds if one is made
+available so there will be no change to previous commands for either create or customize jobs.
 
 
