@@ -119,7 +119,8 @@ spec:
                     fi
 
                     TARGET_NCN=ncn-m002
-                    limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
+                    echo '{{inputs.parameters.global_params}}' > global.params.data
+                    limit_management_nodes=$(cat global.params.data | jq -r '.input_params.limit_management_nodes[]')
                     if [[ -z $(echo $limit_management_nodes | grep 'Management_Master') ]]; then
                       if [[ -z $(echo $limit_management_nodes | grep "$TARGET_NCN" ) ]]; then
                          echo "NOTICE ${TARGET_NCN} was not included in --limit-management-rollout. Not rebuilding ${TARGET_NCN}."
@@ -134,7 +135,7 @@ spec:
 
                     TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                       jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-                    prepare_images_output=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                    prepare_images_output=$(cat global.params.data | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
                     config=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration' | tr -d '"')
 
                     echo "DEBUG Updating CFS config $config on $TARGET_NCN ($TARGET_XNAME)"
@@ -230,7 +231,8 @@ spec:
                     fi
 
                     TARGET_NCN=ncn-m003
-                    limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
+                    echo '{{inputs.parameters.global_params}}' > global.params.data
+                    limit_management_nodes=$(cat global.params.data | jq -r '.input_params.limit_management_nodes[]')
                     if [[ -z $(echo $limit_management_nodes | grep 'Management_Master') ]]; then
                       if [[ -z $(echo $limit_management_nodes | grep "$TARGET_NCN" ) ]]; then
                          echo "NOTICE ${TARGET_NCN} was not included in --limit-management-rollout. Not rebuilding ${TARGET_NCN}."
@@ -245,7 +247,7 @@ spec:
 
                     TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                       jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-                    prepare_images_output=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                    prepare_images_output=$(cat global.params.data | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
                     config=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration' | tr -d '"')
 
                     echo "DEBUG Updating CFS config $config on $TARGET_NCN ($TARGET_XNAME)"
