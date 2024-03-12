@@ -201,4 +201,4 @@ or [Upgrade CSM and additional products with IUF](../workflows/upgrade_csm_and_a
       echo $XNAME
       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
           -p $IMS_RESULTANT_IMAGE_ID $XNAME
-
+      ```
