@@ -107,8 +107,9 @@ spec:
                   value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                  
                 - name: scriptContent
                   value: |
-                    limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
-                    percent_rollout=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.concurrent_management_rollout_percentage')
+                    echo '{{inputs.parameters.global_params}}' > global.params.data
+                    limit_management_nodes=$(cat global.params.data | jq -r '.input_params.limit_management_nodes[]')
+                    percent_rollout=$(cat global.params.data | jq -r '.input_params.concurrent_management_rollout_percentage')
                     total_worker_nodes=$(kubectl get node --selector='!node-role.kubernetes.io/master' --no-headers=true | awk '{print $1}' | tr "\n", " ")
                     array_total_worker_nodes=($total_worker_nodes)
                     num_total_worker_nodes=${#array_total_worker_nodes[@]}
