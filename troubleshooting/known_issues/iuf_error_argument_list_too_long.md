@@ -1,4 +1,4 @@
-# IUF Error: 'exec /usr/local/bin/argoexec: argument list too long'
+# IUF Error: `exec /usr/local/bin/argoexec: argument list too long`
 
 Follow this procedure if an IUF step fails with the error: `exec /usr/local/bin/argoexec: argument list too long`.
 
@@ -47,7 +47,7 @@ reference the file.
 
 If the error happened in the `s3-upload` step, then edit the `/usr/share/doc/csm/workflows/iuf/operations/s3-upload/s3-upload-template.yaml`.
 
-Before making changes, the template will have the following script content. 
+Before making changes, the template will have the following script content.
 
 ```bash
 ...
