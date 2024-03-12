@@ -10,8 +10,8 @@ Follow this procedure if an IUF step fails with the error: `exec /usr/local/bin/
     2024-03-11T20:41:03.980113Z ERR  [cpe-23-12-3-s3-upload          ] END s3-upload(0) [Failed]
     ```
 
-1. This error is due to the script in that template being too long. This can be fixed by not echoing 
-'{{inputs.parameters.global_params}}' in the template. Instead, write `global_params` to a file and then
+1. This error is due to the script in that template being too long. This can be fixed by not echoing
+`{{inputs.parameters.global_params}}` in the template. Instead, write `{{inputs.parameters.global_params}}` to a file and then
 reference the file.
 
     1. `(ncn-m001#)` Navigate to where the workflow templates files are located.
