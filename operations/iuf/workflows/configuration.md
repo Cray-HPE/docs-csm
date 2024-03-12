@@ -11,8 +11,8 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
 
 - [1. Populate admin directory with files defining site preferences](#1-populate-admin-directory-with-files-defining-site-preferences)
 - [2. Execute the IUF `update-vcs-config` stage](#2-execute-the-iuf-update-vcs-config-stage)
-  - [2.1 Prerequisites](#21-prerequisites)
-  - [2.2 Procedure](#22-procedure)
+    - [2.1 Prerequisites](#21-prerequisites)
+    - [2.2 Procedure](#22-procedure)
 - [3. Perform manual product configuration operations](#3-perform-manual-product-configuration-operations)
 - [4. Next steps](#4-next-steps)
 
@@ -180,29 +180,29 @@ Once this step has completed:
 ## 3. Perform manual product configuration operations
 
 Some products must be manually configured prior to the creation of CFS configurations and images. The "Install and Upgrade Framework" section of each individual product's installation documentation contains instructions for product-specific
-configuration, if any. Major changes may also be documented in the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_.
+configuration, if any. Major changes may also be documented in the _HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray EX Systems_.
 The following highlights some of the areas that require manual configuration changes **but is not intended to be a comprehensive list.** Note that many of the configuration changes are only
 required for initial installation scenarios.
 
-- COS
-  - Configure DVS and LNet with appropriate Slingshot settings
-  - Configure DVS and LNet for use on application nodes
-  - Enable site-specific file system mounts
-  - Set the COS root password in HashiCorp Vault
+- USS
+    - Configure DVS and LNet with appropriate Slingshot settings
+    - Configure DVS and LNet for use on application nodes
+    - Enable site-specific file system mounts
+    - Set the USS root password in HashiCorp Vault
 - UAN
-  - Enable CAN, LDAP, and set MOTD
-  - Move DVS and LNet settings to COS branch
-  - Set the UAN root password in HashiCorp Vault
+    - Enable CAN, LDAP, and set MOTD
+    - Move DVS and LNet settings to USS branch
+    - Set the UAN root password in HashiCorp Vault
 - SHS
-  - Update release information in `group_vars` (done for each product release)
+    - Update release information in `group_vars` (done for each product release)
 - CPE
-  - Enable previous CPE versions or alternate 3rd party products (optional, done for each product release)
+    - Enable previous CPE versions or alternate 3rd party products (optional, done for each product release)
 - SDU
-  - Configure SDU via `sdu setup`
+    - Configure SDU via `sdu setup`
 - SAT
-  - Configure SAT authentication via `sat auth`
-  - Generate SAT S3 credentials
-  - Configure system revision information via `sat setrev`
+    - Configure SAT authentication via `sat auth`
+    - Generate SAT S3 credentials
+    - Configure system revision information via `sat setrev`
 
 Once this step has completed:
 
