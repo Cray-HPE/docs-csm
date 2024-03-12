@@ -82,7 +82,7 @@ def get_comp_status_map(id_list: List[str]) -> JsonDict:
     their config status
     """
     return {
-        comp["id"]: comp["configuration_status"] for comp in cfs.list_components(id_list=id_list) }
+        comp["id"]: comp["configurationStatus"] for comp in cfs.list_components(id_list=id_list) }
 
 
 class ComponentStatus:
