@@ -193,7 +193,7 @@ when following the procedures in
 or [Upgrade CSM and additional products with IUF](../workflows/upgrade_csm_and_additional_products_with_iuf.md).
 
   1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found
-    in [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade). Then update the BSS parameters for ncn-m001.
+    in [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade). Then update the BSS parameters for `ncn-m001`.
 
       ```bash
       IMS_RESULTANT_IMAGE_ID=<value of final_image_id>
