@@ -2,7 +2,7 @@
 
 Follow this procedure if an IUF step fails with the error: `exec /usr/local/bin/argoexec: argument list too long`.
 
-1. Get the name of the template that failed. For example, in the error below the `s3-upload` template failed.
+1. Get the name of the template that failed. For example, the `s3-upload` template failed in the following error.
 
     ```bash
     2024-03-11T20:40:54.348210Z INFO [cpe-23-12-3-s3-upload          ] BEG s3-upload(0)
@@ -10,9 +10,8 @@ Follow this procedure if an IUF step fails with the error: `exec /usr/local/bin/
     2024-03-11T20:41:03.980113Z ERR  [cpe-23-12-3-s3-upload          ] END s3-upload(0) [Failed]
     ```
 
-1. This error is due to the script in that template being too long. This can be fixed by not echoing
-`{{inputs.parameters.global_params}}` in the template. Instead, write `{{inputs.parameters.global_params}}` to a file and then
-reference the file.
+1. Resolve the error by not echoing`{{inputs.parameters.global_params}}` in the template.
+    Instead, write `{{inputs.parameters.global_params}}` to a file and then reference the file.
 
     1. `(ncn-m001#)` Navigate to where the workflow templates files are located.
 
@@ -22,7 +21,7 @@ reference the file.
 
     1. `(ncn-m001#)` Edit the template where this error occured in the following way.
 
-        1. Search for where `echo '{{inputs.parameters.global_params}}'` is in the template. Below is an example of how it is used.
+        1. Search for where `echo '{{inputs.parameters.global_params}}'` is in the template. The following is an example of how it is used.
 
             ```bash
             CONTENT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest')
@@ -45,7 +44,7 @@ reference the file.
 
 ## Example of editing a template
 
-If the error happened in the `s3-upload` step, then edit the `/usr/share/doc/csm/workflows/iuf/operations/s3-upload/s3-upload-template.yaml`.
+If the error happened in the `s3-upload` step, then edit the `/usr/share/doc/csm/workflows/iuf/operations/s3-upload/s3-upload-template.yaml` file.
 
 Before making changes, the template will have the following script content.
 
