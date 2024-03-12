@@ -1,6 +1,6 @@
 # IUF Error: 'exec /usr/local/bin/argoexec: argument list too long'
 
-Follow this procedure if an IUF step fails with the error 'exec /usr/local/bin/argoexec: argument list too long'.
+Follow this procedure if an IUF step fails with the error: `exec /usr/local/bin/argoexec: argument list too long`.
 
 1. Get the name of the template that failed. For example, in the error below the `s3-upload` template failed.
 
@@ -11,7 +11,7 @@ Follow this procedure if an IUF step fails with the error 'exec /usr/local/bin/a
     ```
 
 1. This error is due to the script in that template being too long. This can be fixed by not echoing 
-'{{inputs.parameters.global_params}}' in the template. Instead, write global params to a file and then
+'{{inputs.parameters.global_params}}' in the template. Instead, write `global_params` to a file and then
 reference the file.
 
     1. `(ncn-m001#)` Navigate to where the workflow templates files are located.
@@ -21,9 +21,9 @@ reference the file.
         ```
 
     1. `(ncn-m001#)` Edit the template where this error occured in the following way.
-        
+
         1. Search for where `echo '{{inputs.parameters.global_params}}'` is in the template. Below is an example of how it is used.
-        
+
             ```bash
             CONTENT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest')
             PARENT_DIR=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params."process-media".current_product.parent_directory')
@@ -50,6 +50,7 @@ If the error happened in the `s3-upload` step, then edit the `/usr/share/doc/csm
 Before making changes, the template will have the following script content. 
 
 ```bash
+...
 - - name: s3-upload
       templateRef:
         name: iuf-base-template
@@ -64,11 +65,13 @@ Before making changes, the template will have the following script content.
               PARENT_DIR=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params."process-media".current_product.parent_directory')
               PRODUCT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest.name')
               VERSION=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest.version')
+              ...
 ```
 
 After making the changes above, the resulting template should have the following script content.
 
 ```bash
+...
 - - name: s3-upload
       templateRef:
         name: iuf-base-template
@@ -84,4 +87,5 @@ After making the changes above, the resulting template should have the following
               PARENT_DIR=$(cat global.params.data | jq -r '.stage_params."process-media".current_product.parent_directory')
               PRODUCT=$(cat global.params.data | jq -r '.product_manifest.current_product.manifest.name')
               VERSION=$(cat global.params.data | jq -r '.product_manifest.current_product.manifest.version')
+              ...
 ```
