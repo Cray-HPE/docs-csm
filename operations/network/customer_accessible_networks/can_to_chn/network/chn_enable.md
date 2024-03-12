@@ -3,32 +3,32 @@
 - [Process overview and warnings](#process-overview-and-warnings)
 - [Prerequisites](#prerequisites)
 - [Backup phase](#backup-phase)
-  - [Preparation](#preparation)
-  - [Create system backups](#create-system-backups)
+    - [Preparation](#preparation)
+    - [Create system backups](#create-system-backups)
 - [Update phase](#update-phase)
-  - [Disable CFS for UAN](#disable-cfs-for-uan)
-  - [Update SLS](#update-sls)
-  - [Update customizations](#update-customizations)
-  - [Update CSM service endpoint data (MetalLB)](#update-csm-service-endpoint-data-metallb)
+    - [Disable CFS for UAN](#disable-cfs-for-uan)
+    - [Update SLS](#update-sls)
+    - [Update customizations](#update-customizations)
+    - [Update CSM service endpoint data (MetalLB)](#update-csm-service-endpoint-data-metallb)
 - [Migrate phase](#migrate-phase)
-  - [Migrate NCN workers](#migrate-ncn-workers)
-  - [Migrate CSM services (MetalLB)](#migrate-csm-services-metallb)
-  - [Migrate UAN](#migrate-uan)
-  - [Minimizing UAN downtime](#minimizing-uan-downtime)
-    - [Enable CFS for UAN](#enable-cfs-for-uan)
-    - [Notify UAN users](#notify-uan-users)
-  - [Migrate UAI](#migrate-uai)
-  - [Migrate computes (optional)](#migrate-computes-optional)
-    - [Add compute IP addresses to CHN SLS data](#add-compute-ip-addresses-to-chn-sls-data)
-    - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
-    - [Enable CFS layer](#enable-cfs-layer)
+    - [Migrate NCN workers](#migrate-ncn-workers)
+    - [Migrate CSM services (MetalLB)](#migrate-csm-services-metallb)
+    - [Migrate UAN](#migrate-uan)
+    - [Minimizing UAN downtime](#minimizing-uan-downtime)
+        - [Enable CFS for UAN](#enable-cfs-for-uan)
+        - [Notify UAN users](#notify-uan-users)
+    - [Migrate UAI](#migrate-uai)
+    - [Migrate computes (optional)](#migrate-computes-optional)
+        - [Add compute IP addresses to CHN SLS data](#add-compute-ip-addresses-to-chn-sls-data)
+        - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
+        - [Enable CFS layer](#enable-cfs-layer)
 - [Cleanup phase](#cleanup-phase)
-  - [Remove CAN from SLS](#remove-can-from-sls)
-  - [Remove CAN from customizations](#remove-can-from-customizations)
-  - [Remove CAN from BSS](#remove-can-from-bss)
-  - [Remove CAN from CSM services](#remove-can-from-csm-services)
-  - [Remove CAN interfaces from NCNs](#remove-can-interfaces-from-ncns)
-  - [Remove CAN names from NCN hosts files](#remove-can-names-from-ncn-hosts-files)
+    - [Remove CAN from SLS](#remove-can-from-sls)
+    - [Remove CAN from customizations](#remove-can-from-customizations)
+    - [Remove CAN from BSS](#remove-can-from-bss)
+    - [Remove CAN from CSM services](#remove-can-from-csm-services)
+    - [Remove CAN interfaces from NCNs](#remove-can-interfaces-from-ncns)
+    - [Remove CAN names from NCN hosts files](#remove-can-names-from-ncn-hosts-files)
 - [Update the management network](#update-the-management-network)
 - [Testing](#testing)
 
@@ -329,13 +329,13 @@ Add CHN to `customizations.yaml`
          "playbook": "sat-ncn.yml"
        },
        {
-         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
+         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git",
          "commit": "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7",
          "name": "cos-integration-2.3.75",
          "playbook": "ncn.yml"
        },
        {
-         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
+         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git",
          "commit": "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7",
          "name": "cos-integration-2.3.75",
          "playbook": "ncn-final.yml"
@@ -392,13 +392,13 @@ Add CHN to `customizations.yaml`
    playbook = "sat-ncn.yml"
 
    [[layers]]
-   clone_url = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git"
    commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
    name = "cos-integration-2.3.75"
    playbook = "ncn.yml"
 
    [[layers]]
-   clone_url = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git"
    commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
    name = "cos-integration-2.3.75"
    playbook = "ncn-final.yml"
@@ -684,7 +684,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    playbook = "site.yml"
 
    [[layers]]
-   clone_url = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git"
    commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
    name = "cos-compute-integration-2.3.75"
    playbook = "cos-compute.yml"
@@ -720,7 +720,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    playbook = "site.yml"
 
    [[layers]]
-   clone_url = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
+   clone_url = "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git"
    commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
    name = "cos-compute-last-integration-2.3.75"
    playbook = "cos-compute-last.yml"

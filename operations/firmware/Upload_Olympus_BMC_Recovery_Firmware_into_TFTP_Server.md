@@ -1,8 +1,33 @@
 # Upload BMC Recovery Firmware into TFTP Server
 
-`cray-upload-recovery-images` is a utility for uploading the BMC recovery files for ChassisBMCs, NodeBMCs, and RouterBMCs to be served by the `cray-tftp` service.
+`cray-upload-recovery-images` is a utility for uploading the BMC recovery files for `ChassisBMCs`, `NodeBMCs`, and `RouterBMCs` to be served by the `cray-tftp` service.
 The tool uses the `cray` CLI (`fas`, `artifacts`) and `cray-tftp` to download the S3 recovery images (as remembered by FAS), then upload them into the PVC that is used by `cray-tftp`.
 `cray-upload-recovery-images` should be run on every system.
+
+## CSM v1.5 Issue
+
+In CSM 1.5.0 the `cray-tftp-upload` script errors out because of a change to the `ipxe` pods and the TFTP repository.
+This is expected to be fixed in CSM 1.5.1.
+
+If you receive the following type of error please apply the workaround:
+
+```text
+Uploading file: curr.json
+error: source and destination are required
+Failed to upload curr.json - error code = 0
+```
+
+***Workaround:*** Edit the script `/usr/local/bin/cray-tftp-upload` Changing this line:
+
+```bash
+PVC_HOST=`kubectl get pods -n services -l app.kubernetes.io/instance=cms-ipxe -o custom-columns=NS:.metadata.name --no-headers`
+```
+
+To:
+
+```bash
+PVC_HOST=`kubectl get pods -n services -l app.kubernetes.io/instance=cms-ipxe -o custom-columns=NS:.metadata.name --no-headers | head -1`
+```
 
 ## Prerequisites
 

@@ -62,7 +62,10 @@ Refer to that table and any corresponding product documents before continuing to
     iuf -a ${ACTIVITY_NAME} run -r deliver-product
     ```
 
-> **WARNING:** If you are using CSM 1.5.0 (and not CSM 1.5.1+), there is a bug that prevents the `deliver-product` stage from completing on large number of products being delivered. This bug is addressed in the 1.5.0 hotfix titled `CASMINST-6799`. You are encouraged to apply that hotfix for 1.5.0 (see [Check for field notices about hotfixes](../../../update_product_stream/index.md#check-for-field-notices-about-hotfixes)). If you have not applied the hotfix and you run across this issue, you can abort IUF-CLI and try running the stage again, but this doesn't guarantee that the issue will not happen again as it is a race condition. Note again that this does not affect CSM 1.5.1+.  
+> **WARNING:** If you are using CSM 1.5.0 (and not CSM 1.5.1+), there is a bug that prevents the `deliver-product` stage from completing on large number of products being delivered. This bug is addressed in the 1.5.0 hotfix titled `CASMINST-6799`.
+> You are encouraged to apply that hotfix for 1.5.0 (see [Check for field notices about hotfixes](../../../update_product_stream/index.md#check-for-field-notices-about-hotfixes)).
+> If you have not applied the hotfix and you run across this issue, you can abort IUF-CLI and try running the stage again, but this doesn't guarantee that the issue will not happen again as it is a race condition.
+> Note again that this does not affect CSM 1.5.1+.  
 
 Once this step has completed:
 
@@ -78,13 +81,13 @@ Some products provide instructions for delivering third-party content to the sys
 with the workflow.
 
 - **Content:** Third-party GPU software
-  - **Description:** The Cray Operating System (COS) provides the `gpu-nexus-tool` script to upload third-party GPU software to Nexus. The GPU software is used later in the workflow when creating CFS configurations and building
-    compute and application node images.
-  - **Instructions:** See the "IUF Stage Details for COS" section of _HPE Cray Operating System Installation Guide CSM on HPE Cray EX Systems (S-8025)_ for references to the installation procedures.
+    - **Description:** [User Services Software (USS)](../../../glossary.md#user-services-software-uss) provides the `gpu-nexus-tool` script to upload third-party GPU software to Nexus.
+    The GPU software is used later in the workflow when creating CFS configurations and building compute and application node images.
+    - **Instructions:** See the "IUF Stage Details for USS" section of _HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray EX Systems_ for references to the installation procedures.
 - **Content:** Third-party programming environment software
-  - **Description:** The Cray Programming Environment (CPE) provides the `install-3p.sh` and `cpe-custom-img.sh` scripts to upload third-party programming environment software to Nexus and build images. The programming environment
+    - **Description:** The Cray Programming Environment (CPE) provides the `install-3p.sh` and `cpe-custom-img.sh` scripts to upload third-party programming environment software to Nexus and build images. The programming environment
     software is used later in the workflow when creating CPE configurations.
-  - **Instructions:** See the "CPE Install and Upgrade Framework usage" section of _HPE CPE Installation Guide CSM on HPE Cray EX Systems (S-8003)_ for references to the installation procedures.
+    - **Instructions:** See the "CPE Install and Upgrade Framework usage" section of _HPE CPE Installation Guide CSM on HPE Cray EX Systems (S-8003)_ for references to the installation procedures.
 
 Once this step has completed:
 

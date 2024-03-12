@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -108,11 +108,12 @@ spec:
                 - name: scriptContent
                   value: |
                     echo "INFO This stage will start a new Argo workflow with a name containing 'ncn-lifecycle-rebuild'."
-                    prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                    echo '{{inputs.parameters.global_params}}' > global.params.data
+                    prepare_images_ouput=$(cat global.params.data | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
                     image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Storage")) | .[].final_image_id' | tr -d '"')
                     configuration=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Storage")) | .[].configuration' | tr -d '"')
 
-                    limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
+                    limit_management_nodes=$(cat global.params.data | jq -r '.input_params.limit_management_nodes[]')
                     rebuild_set=""
                     if [[ -n $(echo $limit_management_nodes | grep 'Management_Storage') ]]; then
                       for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
