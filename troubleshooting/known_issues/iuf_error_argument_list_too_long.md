@@ -37,11 +37,11 @@ reference the file.
 
         1. Replace all instances of `echo '{{inputs.parameters.global_params}}'` with `cat global.params.data`.
 
-        1. Save the file and update the argo templates by running the following command.
+    1. `(ncn-m001#)` Save the file and update the argo templates by running the following command.
 
-            ```bash
-            /usr/share/doc/csm/workflows/scripts/upload-rebuild-templates.sh
-            ```
+        ```bash
+        /usr/share/doc/csm/workflows/scripts/upload-rebuild-templates.sh
+        ```
 
 ## Example of editing a template
 
