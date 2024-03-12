@@ -47,8 +47,8 @@ If the `update-vcs-config` stage of IUF fails due to git merge conflicts, they m
 1. (`ncn-mw#`) Clone the VCS repository. This example uses the COS repo, but this procedure can be applied for any VCS repo.
 
     ```bash
-    git clone https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git
-    cd cos-config-management
+    git clone https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git
+    cd uss-config-management
     ```
 
 1. (`ncn-mw#`) Get the name of the previous integration branch, new integration branch, and pristine branch (e.g. `integration-2.4.109`, `integration-2.4.118`, `origin/cray/cos/2.5.132`).

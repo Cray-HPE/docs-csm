@@ -31,11 +31,11 @@ Execute the rolling NCN reboot procedure steps for the particular node type bein
 
 * The `kubectl` command is installed.
 * The Cray command line interface is configured on at least one NCN.
-  * See [Configure the Cray CLI](../configure_cray_cli.md).
+    * See [Configure the Cray CLI](../configure_cray_cli.md).
 * The latest CSM documentation is installed, if rebooting `ncn-m001` or any worker nodes.
-  * If rebooting `ncn-m001`, then the latest CSM documentation must be installed on `ncn-m001`.
-  * If rebooting a worker node, then the latest CSM documentation must be installed on some master or worker node.
-  * See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+    * If rebooting `ncn-m001`, then the latest CSM documentation must be installed on `ncn-m001`.
+    * If rebooting a worker node, then the latest CSM documentation must be installed on some master or worker node.
+    * See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 ## NCN pre-reboot health checks
 
@@ -373,10 +373,10 @@ Before rebooting NCNs:
 
     1. If booting from disk is desired, then [set the boot order](../../background/ncn_boot_workflow.md#setting-boot-order).
 
-    1. (`ncn-w#`) Reboot the selected node.
+    1. (`ncn-mw#`) Reboot the selected node.
 
          ```bash
-        shutdown -r now
+        pdsh -w <node to be rebooted> 'shutdown -r now'
         ```
 
         **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below.
