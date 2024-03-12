@@ -157,77 +157,24 @@ Only follow the below steps for the nodes being upgraded, for `ncn-m001` or NCN 
 [`prepare-images` Artifacts created](prepare_images.md#artifacts-created) documentation to get the values for `final_image_id` and `configuration` with a
 `configuration_group_name` value matching `Management_Master` or `Management_Storage`, whichever node type is being upgraded. These values will be used in the following steps.
 
-1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in the previous step.
+  1. (`ncn-mw#`) To update ncn-m001, set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in the previous step, then update the boot parameters in BSS.
 
-    ```bash
-    IMS_RESULTANT_IMAGE_ID=<value of final_image_id>
-    ```
+      ```bash
+      IMS_RESULTANT_IMAGE_ID=<value of final_image_id>
+      XNAME=$(ssh ncn-m001 cat /etc/cray/xname)
+      echo $XNAME
+      /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
+          -p $IMS_RESULTANT_IMAGE_ID $XNAME
+      ```
 
-1. (`ncn-mw#`) Determine the xnames for the NCNs which are being upgraded. These will be used in the next step.
+  1. (`ncn-mw#`) To update the NCN storage nodes, set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in the previous step, then update the boot parameters in BSS.
 
-    - Get the xname for `ncn-m001`:
+      ```bash
+      IMS_RESULTANT_IMAGE_ID=<value of final_image_id>
+      /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
+          -p $IMS_RESULTANT_IMAGE_ID -s
+      ```
 
-        ```bash
-        ssh ncn-m001 cat /etc/cray/xname
-        ```
-
-    - Get a comma-separated list of all storage NCN xnames:
-
-        ```bash
-        cray hsm state components list --role Management --subrole Storage --type Node --format json |
-          jq -r '.Components | map(.ID) | join(",")'
-        ```
-
-1. (`ncn-mw#`) Update boot parameters for an NCN. Perform the following procedure **for each xname** being upgraded
-(each xname identified in the previous step).
-
-    1. Get the existing `metal.server` setting for the xname of the node of interest.
-
-        ```bash
-        XNAME=<node-xname>
-        METAL_SERVER=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' \
-            | awk -F 'metal.server=' '{print $2}' \
-            | awk -F ' ' '{print $1}')
-        echo "${METAL_SERVER}"
-        ```
-
-    1. Create updated boot parameters that point to the new artifacts.
-
-        1. Set the path to the artifacts in S3.
-
-            **NOTE** This uses the `IMS_RESULTANT_IMAGE_ID` variable set in an earlier step.
-
-            ```bash
-            S3_ARTIFACT_PATH="boot-images/${IMS_RESULTANT_IMAGE_ID}"
-            echo "${S3_ARTIFACT_PATH}"
-            ```
-
-        1. Set the new `metal.server` value.
-
-            ```bash
-            NEW_METAL_SERVER="s3://${S3_ARTIFACT_PATH}/rootfs"
-            echo "${NEW_METAL_SERVER}"
-            ```
-
-        1. Determine the modified boot parameters for the node.
-
-            ```bash
-            PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | \
-                sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
-                tr -d \")
-            echo "${PARAMS}"
-            ```
-
-            In the output of the `echo` command, verify that the value of `metal.server` is correctly set to the value of `${NEW_METAL_SERVER}`.
-
-    1. Update BSS with the new boot parameters.
-
-        ```bash
-        cray bss bootparameters update --hosts "${XNAME}" \
-            --kernel "s3://${S3_ARTIFACT_PATH}/kernel" \
-            --initrd "s3://${S3_ARTIFACT_PATH}/initrd" \
-            --params "${PARAMS}"
-        ```
 
 ## Upgrade NCN storage nodes into the customized image
 
