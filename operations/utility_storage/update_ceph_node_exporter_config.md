@@ -47,7 +47,7 @@ The SNMP counters for e.g are `Udp MemError`, `Udp IgnoredMulti`, `Tcp ActiveOpe
   
    Example Output:
   
-   ```text
+   ```yaml
    service_type: node-exporter
    service_name: node-exporter
    placement:
