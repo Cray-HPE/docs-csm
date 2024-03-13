@@ -103,7 +103,7 @@ image that is installed with CSM.
 
     Store the id of the arm compute image in the previous step and create a cfs configuration resembling the following. 
 
-    ```text
+    ```json
     {
         "last_updated": "2020-09-22T19:56:32Z",
         "layers": [
@@ -130,7 +130,7 @@ image that is installed with CSM.
 
     Once the cfs customization is finished, the image is ready to be booted. Create a bos session template referencing that image and use it to boot an arm node.
 
-    ```text
+    ```json
     {
         "boot_sets": {
             "compute": {
