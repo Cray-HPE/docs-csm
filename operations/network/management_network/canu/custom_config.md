@@ -107,7 +107,7 @@ To generate switch configuration with custom config injection.
 * The `--architecture / -a` flag is used to set the architecture of the system, either **TDS**, **Full**, or **V1**..
 * Use the `--tabs` flag to select which tabs on the spreadsheet will be included.
     * These are commonly named `10G_25G_100G`, `NMN`, `HMN`, `Mountain-Management`
-* The `--corners` flag is used to input the upper left and lower right corners of the table on each tab of the worksheet. 
+* The `--corners` flag is used to input the upper left and lower right corners of the table on each tab of the worksheet.
     * The table should contain the 11 headers: **Source, Rack, Location, Slot, (Blank), Port, Destination, Rack, Location, (Blank), Port**. If the corners are not specified, you will be prompted to enter them for each tab.
 
 ```bash
