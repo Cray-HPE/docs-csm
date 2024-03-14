@@ -19,6 +19,7 @@ This top level procedure outlines the process for adding additional liquid-coole
 
     1. Validate SHCD with CANU.
     1. Validate cabling with CANU.
+    1. Update switch firmware.
     1. Generate new switch configurations with CANU and updated SLS.
     1. Review generated switch configurations.
     1. Apply switch configurations.
