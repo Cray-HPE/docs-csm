@@ -83,7 +83,7 @@ Available platform health checks:
 
 These checks require that the [Cray CLI is configured](#cray-command-line-interface) on all worker NCNs.
 
-If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise run them from any NCN.
+If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise run them from any master NCN.
 
 1. Specify the `admin` user password for the management switches in the system.
 
@@ -92,32 +92,32 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
     > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
     ```bash
-    ncn/pit# read -s SW_ADMIN_PASSWORD
-    ncn/pit# export SW_ADMIN_PASSWORD
+    ncn-m/pit# read -s SW_ADMIN_PASSWORD
+    ncn-m/pit# export SW_ADMIN_PASSWORD
     ```
 
 1. Run the NCN health checks.
 
     ```bash
-    ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck | tee ncn-healthcheck.log
+    ncn-m/pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck | tee ncn-healthcheck.log
     ```
 
     The following command will extract the test totals for the various nodes:
 
     ```bash
-    ncn/pit# grep "Total Test" ncn-healthcheck.log
+    ncn-m/pit# grep "Total Test" ncn-healthcheck.log
     ```
 
 1. Run the Kubernetes checks.
 
     ```bash
-    ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks | tee ncn-kubernetes-checks.log
+    ncn-m/pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks | tee ncn-kubernetes-checks.log
     ```
 
     The following command will extract the test totals for the various nodes:
 
     ```bash
-    ncn/pit# grep "Total Test" ncn-kubernetes-checks.log
+    ncn-m/pit# grep "Total Test" ncn-kubernetes-checks.log
     ```
 
 1. Review results.
@@ -142,7 +142,7 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
      1. Find the failed backup.
 
         ```bash
-        ncn/pit# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
+        ncn-mw/pit# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
         ```
 
      1. Delete the backup.
@@ -152,7 +152,7 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
         > This command will not work on the PIT node.
 
         ```bash
-        ncn# velero backup delete <backup> --confirm
+        ncn-mw# velero backup delete <backup> --confirm
         ```
 
 - `Verify spire-agent is enabled and running`
@@ -165,7 +165,7 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
      1. Define the following function
 
         ```bash
-        ncn/pit# function renewncnjoin() {
+        ncn-mw/pit# function renewncnjoin() {
             for pod in $(kubectl get pods -n spire |grep request-ncn-join-token | awk '{print $1}'); do
                 if kubectl describe -n spire pods $pod | grep -q "Node:.*$1"; then
                     echo "Restarting $pod running on $1"
@@ -177,7 +177,7 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
      1. Run the function as follows (substituting the name of the impacted NCN):
 
         ```bash
-        ncn/pit# renewncnjoin ncn-xxxx
+        ncn-mw/pit# renewncnjoin ncn-xxxx
         ```
 
   - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens expired. If this happens, then delete
@@ -241,12 +241,13 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
 
 ### 1.2 NCN resource checks (optional)
 
-To dump the NCN uptimes, the node resource consumptions, and/or the list of pods not in a running state, run the following:
+These optional checks display the NCN uptimes, the node resource consumptions, and/or the list of pods not in a running state.
+If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise run them from any master NCN.
 
 ```bash
-ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s ncn_uptimes
-ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s node_resource_consumption
-ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
+ncn-m/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s ncn_uptimes
+ncn-m/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s node_resource_consumption
+ncn-m/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
 ```
 
 <a name="pet-resource-checks-known-issues"></a>
@@ -261,28 +262,29 @@ ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
     Listing the top 10 files that are 1024M or larger is one way to start the analysis.
 
     ```bash
-    ncn# df -h /
+    ncn-mw# df -h /
     Filesystem      Size  Used Avail Use% Mounted on
     LiveOS_rootfs   280G  245G   35G  88% /
     ```
 
     ```bash
-    ncn# du -h -s /root/
+    ncn-mw# du -h -s /root/
     225G  /root/
     ```
 
     ```bash
-    ncn# du -ah -B 1024M /root | sort -n -r | head -n 10
+    ncn-mw# du -ah -B 1024M /root | sort -n -r | head -n 10
     ```
 
   - The `cray-crus-` pod is expected to be in the `Init` state until Slurm and MUNGE
-are installed. In particular, this will be the case if executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
-If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, do not worry about the `cray-crus-` pod state.
+    are installed. In particular, this will be the case if executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
+    If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, do not worry about the `cray-crus-` pod state.
 
-  - The `hmn-discovery` and `cray-dns-unbound-manager` cronjob pods may be in a `NotReady` state. This is expected as these pods are periodically started and transition to the completed state.
+  - The `hmn-discovery` and `cray-dns-unbound-manager` cronjob pods may be in various transitional states such as `Pending`, `Init`, `PodInitializing`,
+    `NotReady`, or `Terminating`. This is expected because these pods are periodically started and often can be caught in intermediate states.
 
   - If some `*postgresql-db-backup` cronjob pods are in `Error` state, they can be ignored if the most recent pod `Completed`.
-The `Error` pods are cleaned up over time but are left to troubleshoot issues in the case that all retries for the `postgresql-db-backup` job fail.
+    The `Error` pods are cleaned up over time but are left to troubleshoot issues in the case that all retries for the `postgresql-db-backup` job fail.
 
 <a name="check-of-system-management-monitoring-tools"></a>
 
