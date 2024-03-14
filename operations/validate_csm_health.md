@@ -103,7 +103,8 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
 
 ### 1.2 NCN resource checks (optional)
 
-To dump the NCN uptimes, the node resource consumptions, and/or the list of pods not in a running state, run the following:
+(`ncn-m#` or `pit#`) These optional checks display the NCN uptimes, the node resource consumptions, and/or the list of pods not in a running state.
+If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise run them from any master NCN.
 
 ```bash
 /opt/cray/platform-utils/ncnHealthChecks.sh -s ncn_uptimes
