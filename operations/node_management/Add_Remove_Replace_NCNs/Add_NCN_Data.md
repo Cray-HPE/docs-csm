@@ -229,7 +229,7 @@ Scenarios where this procedure is applicable:
 
     ```bash
     NODE=ncn-w004
-    . "/metal/recovery/scratch/${NODE}-env.vars.sh"
+    . "/metal/recovery/scratch/${NODE}-env-vars.sh"
     ```
 
 ### Collect MAC addresses from the NCN
