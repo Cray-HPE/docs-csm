@@ -212,3 +212,9 @@ see [Removals](introduction/deprecated_features/README.md#removals)
     * This error affects the `cray-upload-recovery-images` script.
     * This is expected to be fixed in CSM 1.5.1.
     * A workaround is presented in [Upload BMC Recovery Firmware into TFTP Server](operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
+* `check_bios_firmware_versions.sh` script does not report valid expected firmware versions.
+    * Correct firmware versions are:
+        * 1.53, 2.78 or 2.98 for DL325 / DL385 firmware.
+        * v1.48, v1.50, v1.69 or v2.84 for DL325 / DL385 BIOS.
+        * C38 for Gigabyte BIOS.
+    * Update will be in CSM 1.5.1.

@@ -98,6 +98,19 @@ Use one of the following commands to find the model name for the node type in us
         -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'
     ```
 
+    Wait for the BMC to update and reboot
+
+    ```bash
+    sleep 200
+    ping ipaddressOfBMC
+    ```
+
+    When the `ping` returns that the node has rebooted, check that the firmware version is at the expected value:
+
+    ```bash
+    curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/FirmwareInventory/BMC
+    ```
+
 1. (`ncn-m001#`) Update BIOS.
 
     Be sure to substitute the correct values for the following strings in the example command:
@@ -111,6 +124,30 @@ Use one of the following commands to find the model name for the node type in us
     curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -H 'Content-Type: application/json' \
         -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BIOS"}'
     ```
+
+    This will return a json packet simular to:
+
+    ```json
+    {"@odata.type":"#UpdateService.v1_5_0.UpdateService","Messages":[{"@odata.type":"#Message.v1_0_7.Message","Message":"A new task /redfish/v1/TaskService/Tasks/596 was created.","MessageArgs":["/redfish/v1/TaskService/Tasks/596"],"MessageId":"Task.1.0.New","Resolution":"None","Severity":"OK"},{"@odata.type":"#Message.v1_0_7.Message","Message":"Device is prepareing flash firmware for action SimpleUpdate.","MessageArgs":["SimpleUpdate"],"MessageId":"UpdateService.1.0.PrepareUpdate","Resolution":"None","Severity":"OK"}]}
+    ```
+
+    When updating the Gigabyte BIOS, the BIOS version number will not change until the node is rebooted.
+    To verify a successful update, check the task that was created.
+    Using the return json packet, find the line:
+
+    ```text
+    "A new task /redfish/v1/TaskService/Tasks/596 was created."  
+    ```
+
+    Using the task number (596 in the above example), check the state of the task:
+
+    ```bash
+    curl -sku root:password https://ipaddressOfBMC/redfish/v1/TaskService/Tasks/596 | jq .TaskState
+    ```
+
+    State should be "Running" until BIOS update is finished.
+    Once finished, the state will be "Completed".
+    If you receive a state other than "Running" or "Completed", check the task for other messages.
 
     > After updating BIOS, `ncn-m001` will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot `ncn-m001`.
 
