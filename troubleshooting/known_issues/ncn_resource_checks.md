@@ -8,23 +8,23 @@
   install and documentation files may have been downloaded. It may be necessary to clean up space in the `/` directory if this is the
   root cause of pod evictions.
 
-   - (`ncn-mw#`) View the free space in the root file system.
+    - (`ncn-mw#`) View the free space in the root file system.
 
-      ```bash
-      df -h /
-      ```
+        ```bash
+        df -h /
+        ```
 
-   - (`ncn-mw#`) See how much space is being used in `/root/`.
+    - (`ncn-mw#`) See how much space is being used in `/root/`.
 
-      ```bash
-      du -h -s /root/
-      ```
+        ```bash
+        du -h -s /root/
+        ```
 
-   - (`ncn-mw#`) List the top 10 files in `/root/` that are 1024M or larger.
+    - (`ncn-mw#`) List the top 10 files in `/root/` that are 1024M or larger.
 
-      ```bash
-      du -ah -B 1024M /root | sort -n -r | head -n 10
-      ```
+        ```bash
+        du -ah -B 1024M /root | sort -n -r | head -n 10
+        ```
 
 - The `cray-crus-` pod is expected to be in the `Init` state until Slurm and MUNGE
   are installed. In particular, this will be the case if executing this as part of the validation after completing the
