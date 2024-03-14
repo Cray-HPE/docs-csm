@@ -106,44 +106,46 @@ The `ncnHealthChecks` script reports the following health information:
 
 Execute the `ncnHealthChecks` script and analyze the output of each individual check.
 
-**IMPORTANT:** When the PIT node is booted the NCN node `metal.no-wipe` status is not available and is correctly reported as 'unavailable'. Once `ncn-m001` has been booted,
-the NCN `metal.no-wipe` status is expected to be reported as `metal.no-wipe=1`.
+#### Important notes about `ncnHealthChecks`
 
-**IMPORTANT:** Only when `ncn-m001` has been booted, if the output of the `ncnHealthChecks.sh` script shows that there are nodes that do not have the `metal.no-wipe=1` status, then do the following:
+- When the PIT node is booted the NCN node `metal.no-wipe` status is not available and is correctly reported as 'unavailable'. Once `ncn-m001` has been booted,
+  the NCN `metal.no-wipe` status is expected to be reported as `metal.no-wipe=1`.
 
-```bash
-ncn-mw# csi handoff bss-update-param --set metal.no-wipe=1 --limit <SERVER_XNAME>
-```
+- Only when `ncn-m001` has been booted, if the output of the `ncnHealthChecks.sh` script shows that there are nodes that do not have the `metal.no-wipe=1` status, then do the following:
 
-**IMPORTANT:** If the output of pod statuses indicates that there are pods in the `Evicted` state, it may be due to the `/root` file system being filled up on the Kubernetes
-node in question. Kubernetes will begin evicting pods once the root file system space is at 85% until it is back under 80%. This may commonly happen on `ncn-m001` as it is a
-location that install and documentation files may be downloaded to. It may be necessary to clean-up space in the `/root` directory if this is the cause of pod evictions. The
-following commands can be used to determine if analysis of files under `/root` is needed to free-up space.
+   ```bash
+   ncn-mw# csi handoff bss-update-param --set metal.no-wipe=1 --limit <SERVER_XNAME>
+   ```
 
-```bash
-ncn# df -h /root
-Filesystem      Size  Used Avail Use% Mounted on
-LiveOS_rootfs   280G  245G   35G  88% /
-```
+- If `ncn-s001` is down when running the `ncnHealthChecks` script, status from the `ceph -s` command will be unavailable. In this case, the `ceph -s` command can
+  be executed on any available master or storage node to determine the status of the Ceph cluster.
 
-```bash
-ncn# du -h -s /root/
-225G  /root/
-```
+- If the output of pod statuses indicates that there are pods in the `Evicted` state, it may be due to the `/root` file system being filled up on the Kubernetes
+  node in question. Kubernetes will begin evicting pods once the root file system space is at 85% until it is back under 80%. This may commonly happen on `ncn-m001` as it is a
+  location that install and documentation files may be downloaded to. It may be necessary to clean-up space in the `/root` directory if this is the cause of pod evictions. The
+  following commands can be used to determine if analysis of files under `/root` is needed to free-up space.
 
-```bash
-ncn# du -ah -B 1024M /root | sort -n -r | head -n 10
-```
+   ```bash
+   ncn-mw# df -h /root
+   Filesystem      Size  Used Avail Use% Mounted on
+   LiveOS_rootfs   280G  245G   35G  88% /
+   ```
 
-**Note**: The `cray-crus-` pod is expected to be in the `Init` state until Slurm and `munge`
-are installed. In particular, this will be the case if executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
-If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, do not worry about the `cray-crus-` pod state.
+   ```bash
+   ncn-mw# du -h -s /root/
+   225G  /root/
+   ```
 
-Additionally, `hms-discovery` and `cray-dns-unbound-manager` `cronjob` pods may be in a `NotReady` state. This is expected as these pods are periodically started and should
-eventually transition to the `Completed` state.
+   ```bash
+   ncn-mw# du -ah -B 1024M /root | sort -n -r | head -n 10
+   ```
 
-**IMPORTANT:** If `ncn-s001` is down when running the `ncnHealthChecks` script, status from the `ceph -s` command will be unavailable. In this case, the `ceph -s` command can
-be executed on any available master or storage node to determine the status of the Ceph cluster.
+- The `cray-crus-` pod is expected to be in the `Init` state until Slurm and `munge`
+  are installed. In particular, this will be the case if executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
+  If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, do not worry about the `cray-crus-` pod state.
+
+- The `hmn-discovery` and `cray-dns-unbound-manager` cronjob pods may be in various transitional states such as `Pending`, `Init`, `PodInitializing`,
+  `NotReady`, or `Terminating`. This is expected because these pods are periodically started and often can be caught in intermediate states.
 
 <a name="pet-ncnpostgreshealthchecks"></a>
 
