@@ -195,7 +195,7 @@ Refer to that table and any corresponding product documents before continuing to
         ```
 
     1. Get the CFS configuration created for management nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created)
-       documentation to get the value for `configuration` for any image with a `configuration_group_name` value matching `Management_Storage`,`Management_Storage`, or `Management_Storage` (since `configuration` is the same for all
+       documentation to get the value for `configuration` for any image with a `configuration_group_name` value matching `Management_Master`,`Management_Worker`, or `Management_Storage` (since `configuration` is the same for all
        management nodes).
 
     1. (`ncn-m#`) Set `CFS_CONFIG_NAME` to the value for `configuration` found in the previous step.
