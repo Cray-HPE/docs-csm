@@ -11,8 +11,8 @@ Retrieve the model name and firmware image required to update an HPE or Gigabyte
 - [Find the model name](#find-the-model-name)
 - [Get the firmware images](#get-the-firmware-images)
 - [Flash the firmware](#flash-the-firmware)
-  - [Flash Gigabyte `ncn-m001`](#flash-gigabyte-ncn-m001)
-  - [Flash HPE `ncn-m001`](#flash-hpe-ncn-m001)
+    - [Flash Gigabyte `ncn-m001`](#flash-gigabyte-ncn-m001)
+    - [Flash HPE `ncn-m001`](#flash-hpe-ncn-m001)
 
 ## Prerequisites
 
@@ -28,9 +28,6 @@ The following information is needed:
 ## Find the model name
 
 Use one of the following commands to find the model name for the node type in use.
-
-- [Find HPE model name](#find-hpe-model-name)
-- [Find Gigabyte model name](#find-gigabyte-model-name)
 
 - (`ncn-m001#`) Find HPE model name.
 
