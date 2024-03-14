@@ -11,8 +11,8 @@ files can be substituted with values found in the recipe variables (`-rv`) and/o
 - [Impact](#impact)
 - [Input](#input)
 - [Artifacts created](#input)
-  - [Management node artifacts](#management-node-artifacts)
-  - [Managed node artifacts](#managed-node-artifacts)
+    - [Management node artifacts](#management-node-artifacts)
+    - [Managed node artifacts](#managed-node-artifacts)
 - [Execution details](#execution-details)
 - [Example](#example)
 
