@@ -13,10 +13,10 @@ files can be substituted with values found in the recipe variables (`-rv`) and/o
 
 - [Impact](#impact)
 - [Input](#input)
-  - [ARM images](#arm-images)
+    - [ARM images](#arm-images)
 - [Artifacts created](#input)
-  - [Management node artifacts](#management-node-artifacts)
-  - [Managed node artifacts](#managed-node-artifacts)
+    - [Management node artifacts](#management-node-artifacts)
+    - [Managed node artifacts](#managed-node-artifacts)
 - [Execution details](#execution-details)
 - [Example](#example)
 
