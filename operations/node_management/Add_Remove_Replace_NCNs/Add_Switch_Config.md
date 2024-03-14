@@ -21,7 +21,7 @@ Site administrators and support teams are responsible for knowing the customizat
 
 See examples of using CANU custom switch configurations and examples of other CSM features that require custom configurations in the following documentation:
 
-- [Manual Switch Configuration Example](../network/management_network/manual_switch_config.md)
+- [Manual Switch Configuration Example](../../../operations/network/management_network/manual_switch_config.md)
 - [Custom Switch Configuration Example](https://github.com/Cray-HPE/canu/blob/7e0cb58b6253b4c02be1bd420a619befab1f33ca/docs/network_configuration_and_upgrade/custom_config.md)
 
 ## Next Step
