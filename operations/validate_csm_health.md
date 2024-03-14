@@ -19,34 +19,34 @@ Each section of this health check document provides links to relevant troublesho
 
 - [0. Cray command line interface](#0-cray-command-line-interface)
 - [1. Platform health checks](#1-platform-health-checks)
-  - [1.1 NCN health checks](#11-ncn-health-checks)
-  - [1.2 NCN resource checks (optional)](#12-ncn-resource-checks-optional)
-  - [1.3 Check of system management monitoring tools](#13-check-of-system-management-monitoring-tools)
+    - [1.1 NCN health checks](#11-ncn-health-checks)
+    - [1.2 NCN resource checks (optional)](#12-ncn-resource-checks-optional)
+    - [1.3 Check of system management monitoring tools](#13-check-of-system-management-monitoring-tools)
 - [2. Hardware Management Services health checks](#2-hardware-management-services-health-checks)
-  - [2.1 HMS CT test execution](#21-hms-ct-test-execution)
-  - [2.2 Hardware State Manager discovery validation](#22-hardware-state-manager-discovery-validation)
-    - [2.2.1 Interpreting HSM discovery results](#221-interpreting-hsm-discovery-results)
-    - [2.2.2 Known issues with HSM discovery validation](#222-known-issues-with-hsm-discovery-validation)
-  - [2.3 Hardware checks (optional)](#23-hardware-checks-optional)
+    - [2.1 HMS CT test execution](#21-hms-ct-test-execution)
+    - [2.2 Hardware State Manager discovery validation](#22-hardware-state-manager-discovery-validation)
+        - [2.2.1 Interpreting HSM discovery results](#221-interpreting-hsm-discovery-results)
+        - [2.2.2 Known issues with HSM discovery validation](#222-known-issues-with-hsm-discovery-validation)
+    - [2.3 Hardware checks (optional)](#23-hardware-checks-optional)
 - [3. Software Management Services health checks](#3-software-management-services-sms-health-checks)
 - [4. Gateway health and SSH access checks](#4-gateway-health-and-ssh-access-checks)
-  - [4.1 Gateway health tests](#41-gateway-health-tests)
-    - [4.1.1 Gateway health tests overview](#411-gateway-health-tests-overview)
-    - [4.1.2 Gateway health tests on an NCN](#412-gateway-health-tests-on-an-ncn)
-    - [4.1.3 Gateway health tests from outside the system](#413-gateway-health-tests-from-outside-the-system)
-  - [4.2 Internal SSH access test execution](#42-internal-ssh-access-test-execution)
-  - [4.3 External SSH access test execution](#43-external-ssh-access-test-execution)
+    - [4.1 Gateway health tests](#41-gateway-health-tests)
+        - [4.1.1 Gateway health tests overview](#411-gateway-health-tests-overview)
+        - [4.1.2 Gateway health tests on an NCN](#412-gateway-health-tests-on-an-ncn)
+        - [4.1.3 Gateway health tests from outside the system](#413-gateway-health-tests-from-outside-the-system)
+    - [4.2 Internal SSH access test execution](#42-internal-ssh-access-test-execution)
+    - [4.3 External SSH access test execution](#43-external-ssh-access-test-execution)
 - [5. Booting CSM `barebones` image](#5-booting-csm-barebones-image)
-  - [5.1 Run the test script](#51-run-the-test-script)
+    - [5.1 Run the test script](#51-run-the-test-script)
 - [6. UAS/UAI tests](#6-uasuai-tests)
-  - [6.1 Validate the basic UAS installation](#61-validate-the-basic-uas-installation)
-  - [6.2 Validate UAI creation](#62-validate-uai-creation)
-  - [6.3 Test UAI gateway health](#63-test-uai-gateway-health)
-  - [6.4 UAS/UAI troubleshooting](#64-uasuai-troubleshooting)
-    - [6.4.1 Authorization issues](#641-authorization-issues)
-    - [6.4.2 UAS cannot access Keycloak](#642-uas-cannot-access-keycloak)
-    - [6.4.3 UAI images not in registry](#643-uai-images-not-in-registry)
-    - [6.4.4 Missing volumes and other container startup issues](#644-missing-volumes-and-other-container-startup-issues)
+    - [6.1 Validate the basic UAS installation](#61-validate-the-basic-uas-installation)
+    - [6.2 Validate UAI creation](#62-validate-uai-creation)
+    - [6.3 Test UAI gateway health](#63-test-uai-gateway-health)
+    - [6.4 UAS/UAI troubleshooting](#64-uasuai-troubleshooting)
+        - [6.4.1 Authorization issues](#641-authorization-issues)
+        - [6.4.2 UAS cannot access Keycloak](#642-uas-cannot-access-keycloak)
+        - [6.4.3 UAI images not in registry](#643-uai-images-not-in-registry)
+        - [6.4.4 Missing volumes and other container startup issues](#644-missing-volumes-and-other-container-startup-issues)
 
 ## 0. Cray command line interface
 
@@ -113,7 +113,8 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
 
 ### 1.2 NCN resource checks (optional)
 
-To dump the NCN uptimes, the node resource consumptions, and/or the list of pods not in a running state, run the following:
+(`ncn-m#` or `pit#`) These optional checks display the NCN uptimes, the node resource consumptions, and/or the list of pods not in a running state.
+If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise run them from any master NCN.
 
 ```bash
 /opt/cray/platform-utils/ncnHealthChecks.sh -s ncn_uptimes
@@ -305,38 +306,38 @@ BMC can be safely ignored or needs to be addressed before proceeding.
 
 - Cabinet PDU Controllers have component names (xnames) in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
 
-   Example mismatch for a PDU:
+    Example mismatch for a PDU:
 
-   ```text
-     CabinetPDUControllers: WARNING
-       - x3000m0 - Not found in HSM Components ; Not found in HSM Redfish Endpoints
-   ```
+    ```text
+      CabinetPDUControllers: WARNING
+        - x3000m0 - Not found in HSM Components ; Not found in HSM Redfish Endpoints
+    ```
 
-   (`ncn#`) If the PDU is accessible over the network, the following can be used to determine the vendor of the PDU.
+    (`ncn#`) If the PDU is accessible over the network, the following can be used to determine the vendor of the PDU.
 
     ```bash
-   PDU=x3000m0
-   curl -k -s --compressed  https://$PDU -i | grep Server:
-   ```
+    PDU=x3000m0
+    curl -k -s --compressed  https://$PDU -i | grep Server:
+    ```
 
-  - Example ServerTech output:
+    - Example ServerTech output:
 
-     ```text
-     Server: ServerTech-AWS/v8.0v
-     ```
+        ```text
+        Server: ServerTech-AWS/v8.0v
+        ```
 
-  - Example HPE output:
+    - Example HPE output:
 
-     ```text
-     Server: HPE/1.4.0
-     ```
+        ```text
+        Server: HPE/1.4.0
+        ```
 
-  - ServerTech PDUs may need passwords changed from their defaults to become functional. See [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md).
+    - ServerTech PDUs may need passwords changed from their defaults to become functional. See [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md).
 
-  - HPE PDUs are supported and should show up as being found in HSM.
-   If they are not, they should be investigated since that may indicate that configuration steps have not yet been executed which are required for the PDUs to be discovered.
-   Refer to [HPE PDU Admin Procedures](hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU.
-   The steps to run will depend on if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
+    - HPE PDUs are supported and should show up as being found in HSM.
+      If they are not, they should be investigated since that may indicate that configuration steps have not yet been executed which are required for the PDUs to be discovered.
+      Refer to [HPE PDU Admin Procedures](hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU.
+      The steps to run will depend on if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
 
 - River BMCs having no association with a management switch port will be annotated as such, and should be investigated.
 
