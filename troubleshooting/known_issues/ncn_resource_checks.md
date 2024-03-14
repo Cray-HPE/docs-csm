@@ -8,23 +8,23 @@
   install and documentation files may have been downloaded. It may be necessary to clean up space in the `/` directory if this is the
   root cause of pod evictions.
 
-   - (`ncn-mw#`) View the free space in the root file system.
+    - (`ncn-mw#`) View the free space in the root file system.
 
-      ```bash
-      df -h /
-      ```
+        ```bash
+        df -h /
+        ```
 
-   - (`ncn-mw#`) See how much space is being used in `/root/`.
+    - (`ncn-mw#`) See how much space is being used in `/root/`.
 
-      ```bash
-      du -h -s /root/
-      ```
+        ```bash
+        du -h -s /root/
+        ```
 
-   - (`ncn-mw#`) List the top 10 files in `/root/` that are 1024M or larger.
+    - (`ncn-mw#`) List the top 10 files in `/root/` that are 1024M or larger.
 
-      ```bash
-      du -ah -B 1024M /root | sort -n -r | head -n 10
-      ```
+        ```bash
+        du -ah -B 1024M /root | sort -n -r | head -n 10
+        ```
 
 - If some `*postgresql-db-backup` cronjob pods are in `Error` state, they can be ignored if the most recent pod `Completed`.
   The `Error` pods are cleaned up over time but are left to troubleshoot issues in the case that all retries for the `postgresql-db-backup` job fail.
