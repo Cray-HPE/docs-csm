@@ -219,7 +219,7 @@ Refer to that table and any corresponding product documents before continuing to
         --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $MASTER_STORAGE_XNAMES --clear-state
         ```
 
-        The sample output for a management node is:
+        Sample output for configuring multiple management nodes is:
 
           ```bash
           Taking snapshot of existing management-23.11.0 configuration to /root/apply_csm_configuration.20240305_173700.vKxhqC backup-management-23.11.0.json
