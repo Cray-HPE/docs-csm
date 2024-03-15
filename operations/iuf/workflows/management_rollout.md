@@ -214,7 +214,7 @@ Refer to that table and any corresponding product documents before continuing to
         The sample output for a management node is:
 
           ```bash
-          Taking snapshot of existing management-23.11.0 configuration to /root/apply_csm_configuration.20240305_173700.vKxhqC/backup-managemen-23.11.0.json
+          Taking snapshot of existing management-23.11.0 configuration to /root/apply_csm_configuration.20240305_173700.vKxhqC backup-management-23.11.0.json
           Setting desired configuration, clearing state, clearing error count, enabling components in CFS
           desiredConfig = "management-23.11.0"
           enabled = true
