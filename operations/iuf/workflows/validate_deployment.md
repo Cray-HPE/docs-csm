@@ -15,7 +15,7 @@ Refer to that table and any corresponding product documents before continuing to
     (`ncn-m001#`) Execute the `post-install-service-check` stage.
 
     ```bash
-    iuf -a "${ACTIVITY_NAME}" run -r post-install-service-check
+    iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r post-install-service-check
     ```
 
 Once this step has completed:
