@@ -104,12 +104,18 @@ To generate switch configuration with custom config injection.
 > ***NOTE*** The `--corners` and `--tabs` arguments are often provided in the SHCD Excel file. The example below uses
 > example values.
 
+* The `--architecture / -a` flag is used to set the architecture of the system, either **TDS**, **Full**, or **V1**..
+* Use the `--tabs` flag to select which tabs on the spreadsheet will be included.
+    * These are commonly named `10G_25G_100G`, `NMN`, `HMN`, `Mountain-Management`
+* The `--corners` flag is used to input the upper left and lower right corners of the table on each tab of the worksheet.
+    * The table should contain the 11 headers: **Source, Rack, Location, Slot, (Blank), Port, Destination, Rack, Location, (Blank), Port**. If the corners are not specified, you will be prompted to enter them for each tab.
+
 ```bash
 canu generate switch config \
     --csm CSM_VERSION \
     -a full \
     --shcd FILENAME.xlsx \
-    --tabs INTER_SWITCH_LINKS,NON_COMPUTE_NODES,HARDWARE_MANAGEMENT,COMPUTE_NODES \
+    --tabs 10G_25G_100G,Mountain-Management,HMN,NMN \
     --corners J14,T44,J14,T48,J14,T24,J14,T23 \
     --sls-file SLS_FILE \
     --name sw-spine-001 \
