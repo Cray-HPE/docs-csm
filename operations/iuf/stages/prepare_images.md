@@ -13,8 +13,10 @@ files can be substituted with values found in the recipe variables (`-rv`) and/o
 
 - [Impact](#impact)
 - [Input](#input)
-  - [ARM images](#arm-images)
+    - [ARM images](#arm-images)
 - [Artifacts created](#input)
+    - [Management node artifacts](#management-node-artifacts)
+    - [Managed node artifacts](#managed-node-artifacts)
 - [Execution details](#execution-details)
 - [Example](#example)
 
@@ -48,36 +50,45 @@ The artifacts created by the `prepare-images` stage can found by examining the o
 Kubernetes ConfigMap associated with the IUF activity specified when executing the `prepare-images` stage. The following
 examples show how to find the management node and managed node artifacts from the ConfigMap.
 
-(`ncn-m001#`) Examine the activity ConfigMap to identify the management node images and CFS configurations created
+### Management node artifacts
+
+(`ncn-mw#`) Examine the activity ConfigMap to identify the management node images and CFS configurations created
 by `prepare-images`.
 
 ```bash
-kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' | jq '.operation_outputs.stage_params["prepare-images"]["prepare-management-images"]["sat-bootprep-run"].script_stdout' | xargs -0 echo -e
+kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' \
+    | jq '.operation_outputs.stage_params["prepare-images"]["prepare-management-images"]["sat-bootprep-run"].script_stdout' \
+    | xargs -0 echo -e
+```
+
+Example output:
+
+```text
 "{
     \"images\": [
         {
-            \"name\": \"storage-secure-storage-ceph-0.4.41-x86_64.squashfs\",
+            \"name\": \"storage-secure-storage-ceph-5.2.54-x86_64.squashfs\",
             \"preconfigured_image_id\": null,
-            \"final_image_id\": \"54afa7b2-e71b-448c-880f-b439e3464e82\",
-            \"configuration\": \"management-23.2.10\",
+            \"final_image_id\": \"e732edda-cd6a-427c-881b-8d1708f9a02e\",
+            \"configuration\": \"minimal-management-23.11.0\",
             \"configuration_group_names\": [
                 \"Management_Storage\"
             ]
         },
         {
-            \"name\": \"worker-secure-kubernetes-0.4.41-x86_64.squashfs\",
+            \"name\": \"worker-secure-kubernetes-5.2.54-x86_64.squashfs\",
             \"preconfigured_image_id\": null,
-            \"final_image_id\": \"ab2db83a-7523-4225-a464-ecb8d847d8db\",
-            \"configuration\": \"management-23.2.10\",
+            \"final_image_id\": \"26325680-ff2a-4a32-8a88-9c4e16a9e215\",
+            \"configuration\": \"management-23.11.0\",
             \"configuration_group_names\": [
                 \"Management_Worker\"
             ]
         },
         {
-            \"name\": \"master-secure-kubernetes-0.4.41-x86_64.squashfs\",
+            \"name\": \"master-secure-kubernetes-5.2.54-x86_64.squashfs\",
             \"preconfigured_image_id\": null,
-            \"final_image_id\": \"8df09e9f-e676-42c4-9006-99746f705d55\",
-            \"configuration\": \"management-23.2.10\",
+            \"final_image_id\": \"e5d6254d-57b6-4aa7-a971-7d7e371c94c7\",
+            \"configuration\": \"management-23.11.0\",
             \"configuration_group_names\": [
                 \"Management_Master\"
             ]
@@ -86,11 +97,20 @@ kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activi
 }"
 ```
 
-(`ncn-m001#`) Examine the activity ConfigMap to identify the managed node images, CFS configurations, and BOS session
+### Managed node artifacts
+
+(`ncn-mw#`) Examine the activity ConfigMap to identify the managed node images, CFS configurations, and BOS session
 templates created by `prepare-images`.
 
 ```bash
-kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' | jq '.operation_outputs.stage_params["prepare-images"]["prepare-managed-images"]["sat-bootprep-run"].script_stdout' | xargs -0 echo -e
+kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' \
+    | jq '.operation_outputs.stage_params["prepare-images"]["prepare-managed-images"]["sat-bootprep-run"].script_stdout' \
+    | xargs -0 echo -e
+```
+
+Example output:
+
+```text
 "{
     \"images\": [
         {
