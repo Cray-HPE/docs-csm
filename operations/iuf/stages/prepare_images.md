@@ -11,6 +11,8 @@ files can be substituted with values found in the recipe variables (`-rv`) and/o
 - [Impact](#impact)
 - [Input](#input)
 - [Artifacts created](#input)
+    - [Management node artifacts](#management-node-artifacts)
+    - [Managed node artifacts](#managed-node-artifacts)
 - [Execution details](#execution-details)
 - [Example](#example)
 
@@ -37,10 +39,20 @@ The following arguments are most often used with the `prepare-images` stage. See
 The artifacts created by the `prepare-images` stage can found by examining the output from `iuf run` or by examining a Kubernetes ConfigMap associated with the IUF activity specified when executing the `prepare-images` stage.
 The following examples show how to find the management node and managed node artifacts from the ConfigMap.
 
-(`ncn-m001#`) Examine the activity ConfigMap to identify the management node images and CFS configurations created by `prepare-images`.
+### Management node artifacts
+
+(`ncn-mw#`) Examine the activity ConfigMap to identify the management node images and CFS configurations created
+by `prepare-images`.
 
 ```bash
-kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' | jq '.operation_outputs.stage_params["prepare-images"]["prepare-management-images"]["sat-bootprep-run"].script_stdout' | xargs -0 echo -e
+kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' \
+    | jq '.operation_outputs.stage_params["prepare-images"]["prepare-management-images"]["sat-bootprep-run"].script_stdout' \
+    | xargs -0 echo -e
+```
+
+Example output:
+
+```text
 "{
     \"images\": [
         {
@@ -74,10 +86,20 @@ kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activi
 }"
 ```
 
-(`ncn-m001#`) Examine the activity ConfigMap to identify the managed node images, CFS configurations, and BOS session templates created by `prepare-images`.
+### Managed node artifacts
+
+(`ncn-mw#`) Examine the activity ConfigMap to identify the managed node images, CFS configurations, and BOS session
+templates created by `prepare-images`.
 
 ```bash
-kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' | jq '.operation_outputs.stage_params["prepare-images"]["prepare-managed-images"]["sat-bootprep-run"].script_stdout' | xargs -0 echo -e
+kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' \
+    | jq '.operation_outputs.stage_params["prepare-images"]["prepare-managed-images"]["sat-bootprep-run"].script_stdout' \
+    | xargs -0 echo -e
+```
+
+Example output:
+
+```text
 "{
     \"images\": [
         {
