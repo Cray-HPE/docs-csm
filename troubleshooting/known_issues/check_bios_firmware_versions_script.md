@@ -1,4 +1,4 @@
-# `check_bios_firmware_versions.sh` script does not report valid expected firmware versions
+# Known Issue: `check_bios_firmware_versions.sh` script does not report valid expected firmware versions
 
 * Correct firmware versions are:
     * `1.53`, `2.78` or `2.98` for `DL325` / `DL385` firmware.
