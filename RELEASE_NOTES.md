@@ -215,10 +215,6 @@ see [Removals](introduction/deprecated_features/README.md#removals)
 * `check_bios_firmware_versions.sh` script does not report valid expected firmware versions.
     * Correct firmware versions are:
         * 1.53, 2.78 or 2.98 for DL325 / DL385 firmware.
-<<<<<<< HEAD
-        * v1.48, v1.50, v1.69 or v2.84 for DL325 / DL385 BIOS.
-=======
         * `v1.48`, `v1.50`, `v1.69` or `v2.84` for DL325 / DL385 BIOS.
->>>>>>> de0c2374270a89baee7e462b55e75515a61d2a56
         * C38 for Gigabyte BIOS.
     * Update will be in CSM 1.5.1.

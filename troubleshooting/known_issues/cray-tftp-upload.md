@@ -1,9 +1,5 @@
 
-<<<<<<< HEAD
-# `cray-tftp-upload` errors
-=======
 # Known Issue: `cray-tftp-upload` errors
->>>>>>> de0c2374270a89baee7e462b55e75515a61d2a56
 
 * The `cray-tftp-upload` script errors out because of a change to the `ipxe` pods and the TFTP repository.
 * This error affects the `cray-upload-recovery-images` script.
