@@ -3,7 +3,7 @@
 This section describes procedures that back up critical state in case it becomes necessary to fall back to previous configurations and software.
 
 - [1. Backup](#1-backup)
-  - [1.1 Slingshot Fabric Manager](#11-slingshot-fabric-manager)
+    - [1.1 Slingshot Fabric Manager](#11-slingshot-fabric-manager)
 - [2. Next steps](#2-next-steps)
 
 ## 1. Backup
