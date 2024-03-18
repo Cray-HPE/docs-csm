@@ -204,7 +204,7 @@ see [Removals](introduction/deprecated_features/README.md#removals)
     * This affects the HFP script `post-deliver-product.sh` which will hang when the FAS Loader crashes. Rerunning the script will be required.
     * IUF procedure calls the `post-deliver-product.sh` script and may require restarting that IUF process.
     * This is expected to be fixed in CSM 1.5.1.
-* PCS (Power Control Service) is unable to place power caps on Blanca Peak (ex254n) and Parry Peak (ex255a) compute nodes
+* PCS (Power Control Service) is unable to place power caps on `Blanca Peak` (`ex254n`) and Parry Peak (`ex255a`) compute nodes
     * To workaround this issue, use CAPMC to place power caps on these node types
     * Issue is fixed in CSM 1.5.1
 * `cray-tftp-upload`
@@ -215,6 +215,10 @@ see [Removals](introduction/deprecated_features/README.md#removals)
 * `check_bios_firmware_versions.sh` script does not report valid expected firmware versions.
     * Correct firmware versions are:
         * 1.53, 2.78 or 2.98 for DL325 / DL385 firmware.
+<<<<<<< HEAD
         * v1.48, v1.50, v1.69 or v2.84 for DL325 / DL385 BIOS.
+=======
+        * `v1.48`, `v1.50`, `v1.69` or `v2.84` for DL325 / DL385 BIOS.
+>>>>>>> de0c2374270a89baee7e462b55e75515a61d2a56
         * C38 for Gigabyte BIOS.
     * Update will be in CSM 1.5.1.
