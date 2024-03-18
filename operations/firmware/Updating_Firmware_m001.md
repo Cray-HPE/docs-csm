@@ -139,7 +139,7 @@ Use one of the following commands to find the model name for the node type in us
     Using the task number (596 in the above example), check the state of the task:
 
     ```bash
-    curl -sku root:initial0 https://ipaddressOfBMC/redfish/v1/TaskService/Tasks/596 | jq .TaskState
+    curl -sku root:password https://ipaddressOfBMC/redfish/v1/TaskService/Tasks/596 | jq .TaskState
     ```
 
     State should be "Running" until BIOS update is finished.
