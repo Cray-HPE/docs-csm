@@ -47,6 +47,8 @@ The `-G` option is used in this example to disable GPG checks. However, if the n
 
 This section will create a new repo called `sample-repo` in Nexus and add a single rpm `example.rpm` to it.  
 
+#### Authenticating to Nexus
+
 (`ncn-mw#`) Use the following function to get the Nexus local admin account after a fresh install:
 
 ```bash
@@ -70,94 +72,128 @@ function nexus-get-credential() {
 }
 ```
 
-(`ncn-mw#`) Create and export the repository name:
+#### Creating a repo
+
+1. (`ncn-mw#`) Create and export the repository name:
+
+   ```bash
+   export REPO=sample-repo
+   ```
+
+1. (`ncn-mw#`) Create a Nexus Zypper repository on the Nexus system that will contain the content necessary content:
+
+   ```bash
+   nexus-get-credential
+   
+   curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD \
+   https://packages.local/service/rest/v1/repositories/yum/hosted \
+   --header "Content-Type: application/json" --request POST --data-binary \
+   @- << EOF
+   {
+     "name": "$REPO",
+     "online": true ,
+     "storage": {
+       "blobStoreName": "default",
+       "strictContentTypeValidation": true ,
+       "writePolicy": "ALLOW"
+     },
+     "cleanup": null ,
+     "yum": {
+       "repodataDepth": 0,
+       "deployPolicy": "STRICT"
+     },
+     "format": "yum",
+     "type": "hosted"
+   }
+   EOF
+   ```
+
+1. (`ncn-mw#`) Verify the new repository is available:
+
+   ```bash
+   REPOURL=https://packages.local/service/rest/v1/repositories
+   curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD ${REPOURL} -s --header "Content -type: application/json"  \
+   --http1.1 | grep $REPO
+   ```
+
+1. (`ncn-mw#`) Upload the `example` rpm to the new repo:
+
+   ```bash
+   curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD -v --upload-file ./example*.rpm --max-time 600 \
+   https://packages.local/repository/$REPO/
+   ```
+
+1. (`ncn-mw#`) Build the repository index:
+
+   ```bash
+   NEXUSRI=https://packages.local/service/rest/v1
+   NEXUSRI=${NEXUSRI}/repositories/$REPO/rebuild-index
+   curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --request POST $NEXUSRI
+   ```
+
+#### Adding/Removing a repo from Zypper
+
+1. (`ncn-mw#`) Add the repository with the Zypper command to the current node:
+
+   ```bash
+   NXSREPO=https://packages.local/repository/$REPO
+   zypper ar --no-gpgcheck $NXSREPO $REPO
+   ```
+
+1. (`ncn-mw#`) List the defined Zypper repositories filtered by the new Nexus repo:
+
+   ```bash
+   zypper lr -u | grep $REPO
+   ```
+
+1. (`ncn-mw#`) Refresh the Zypper repository cache:
+
+   ```bash
+   zypper ref
+   ```
+
+1. (`ncn-mw#`) Confirm the new rpm can be found by Zypper:
+
+   ```bash
+   zypper pa $REPO
+   ```
+
+1. (`ncn-mw#`) Remove the Zypper repo from the current node:
+
+   ```bash
+   zypper rr $REPO
+   ```
+
+#### Removing a Repo from Nexus
+
+(`ncn-mw#`) Use the following function to remove a repo from Nexus:
 
 ```bash
-export REPO=sample-repo
-```
-
-(`ncn-mw#`) Create a Nexus Zypper repository on the Nexus system that will contain the content necessary content:
-
-```bash
-nexus-get-credential
-
-curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD \
-https://packages.local/service/rest/v1/repositories/yum/hosted \
---header "Content-Type: application/json" --request POST --data-binary \
-@- << EOF
-{
-  "name": "$REPO",
-  "online": true ,
-  "storage": {
-    "blobStoreName": "default",
-    "strictContentTypeValidation": true ,
-    "writePolicy": "ALLOW"
-  },
-  "cleanup": null ,
-  "yum": {
-    "repodataDepth": 0,
-    "deployPolicy": "STRICT"
-  },
-  "format": "yum",
-  "type": "hosted"
+function nexus-delete-repo() {
+    local name="${1:-}"
+    local error
+    echo >&2 "Deleting $name ..."
+    if ! curl \
+    -f \
+    -L \
+    -v \
+    -u "${NEXUS_USERNAME}":"${NEXUS_PASSWORD}" \
+    -X DELETE \
+    "${NEXUS_URL}/service/rest/v1/repositories/${name}" ; then
+        error=1
+    fi
+    if [ "$error" -ne 0 ]; then
+        echo >&2 'Errors found.'
+    else
+        echo 'Done'
+    fi
+    return "$error"
 }
-EOF
 ```
 
-(`ncn-mw#`) Verify the new repository is available:
-
 ```bash
-REPOURL=https://packages.local/service/rest/v1/repositories
-curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD ${REPOURL} -s --header "Content -type: application/json"  \
---http1.1 | grep $REPO
-```
-
-(`ncn-mw#`) Upload the `example` rpm to the new repo:
-
-```bash
-curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD -v --upload-file ./example*.rpm --max-time 600 \
-https://packages.local/repository/$REPO/
-```
-
-(`ncn-mw#`) Build the repository index:
-
-```bash
-NEXUSRI=https://packages.local/service/rest/v1
-NEXUSRI=${NEXUSRI}/repositories/$REPO/rebuild-index
-curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --request POST $NEXUSRI
-```
-
-Verify the new Nexus repo is available for standard Zypper commands.
-
-(`ncn-mw#`) Add the repository with the Zypper command to the current node:
-
-```bash
-NXSREPO=https://packages.local/repository/$REPO
-zypper ar --no-gpgcheck $NXSREPO $REPO
-```
-
-(`ncn-mw#`) List the defined Zypper repositories filtered by the new Nexus repo:
-
-```bash
-zypper lr -u | grep $REPO
-```
-
-(`ncn-mw#`)Refresh the Zypper repository cache:
-
-```bash
-zypper ref
-```
-
-(`ncn-mw#`) Confirm the new rpm can be found by Zypper:
-
-```bash
-zypper pa $REPO
-```
-
-(`ncn-mw#`) Remove the Zypper repo from the current node:
-
-```bash
-zypper rr $REPO
+NEXUS_URL=https://packages.local
+nexus-delete-repo sample-repo
 ```
 
 ## Container registry
