@@ -6,7 +6,8 @@
 
 ## FIX
 
-If you receive the following type of error please apply the workaround:
+If you receive the following type of error, then apply the workaround:
+
 
 ```text
 Uploading file: curr.json
@@ -14,7 +15,8 @@ error: source and destination are required
 Failed to upload curr.json - error code = 0
 ```
 
-***Workaround:*** Edit the script `/usr/local/bin/cray-tftp-upload` Changing this line:
+***Workaround:*** Edit the script `/usr/local/bin/cray-tftp-upload`, changing the following line:
+
 
 ```bash
 PVC_HOST=`kubectl get pods -n services -l app.kubernetes.io/instance=cms-ipxe -o custom-columns=NS:.metadata.name --no-headers`

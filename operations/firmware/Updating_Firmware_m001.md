@@ -95,7 +95,7 @@ Use one of the following commands to find the model name for the node type in us
         -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'
     ```
 
-    Wait for the BMC to update and reboot
+    Wait for the BMC to update and reboot:
 
     ```bash
     sleep 200
