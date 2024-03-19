@@ -32,6 +32,17 @@ IMS creates and customizes existing boot images and maintains metadata about the
     artifact repository. Recipes themselves define how an image is to be created, including the
     RPMs that will be installed, the RPM repositories to use, etc.
 
+  ### /remote-build-nodes
+
+    Manage the set of nodes set up for running remote jobs. These are jobs that are
+    run on nodes outside of the set of Kubernetes worker nodes. They can be used to
+    offload work from the worker nodes, or match the archetecture of the images
+    being created or customized.
+
+    The remote node must be fully configured and booted into the 'remote-node-image'
+    by the site-admin prior to registration in IMS. It will be tested prior to job
+    launch and if it is not accessible or correctly configured it will not be used.
+
 ## Workflows
 
   There are two main workflows using the IMS - image creation and image customization.
@@ -7868,6 +7879,503 @@ To perform this operation, you must be authenticated by means of one of the foll
 bearerAuth
 </aside>
 
+<h1 id="image-management-service-remote-build-node">remote build node</h1>
+
+## get_all_v3_remote_build_nodes
+
+<a id="opIdget_all_v3_remote_build_nodes"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/ims/remote-build-nodes HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/ims/remote-build-nodes \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/ims/remote-build-nodes', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/ims/remote-build-nodes", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /remote-build-nodes`
+
+*List remote build nodes*
+
+Retrieve a list of remote build nodes that are registered with IMS.
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "xname": "x3000c1s10b1n0"
+  }
+]
+```
+
+<h3 id="get_all_v3_remote_build_nodes-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of remote build nodes|Inline|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
+
+<h3 id="get_all_v3_remote_build_nodes-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[RemoteBuildNodeRecord](#schemaremotebuildnoderecord)]|false|none|[A Remote Build Node Record]|
+|» xname|string|true|none|Xname of the remote build node|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## post_v3_remote_build_node
+
+<a id="opIdpost_v3_remote_build_node"></a>
+
+> Code samples
+
+```http
+POST https://api-gw-service-nmn.local/apis/ims/remote-build-nodes HTTP/1.1
+Host: api-gw-service-nmn.local
+Content-Type: application/json
+Accept: application/json
+
+```
+
+```shell
+# You can also use wget
+curl -X POST https://api-gw-service-nmn.local/apis/ims/remote-build-nodes \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.post('https://api-gw-service-nmn.local/apis/ims/remote-build-nodes', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/ims/remote-build-nodes", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /remote-build-nodes`
+
+*Create a new remote built node record*
+
+Create a new remote build node record. Updated by administrator to allow them to run jobs on a remote build node.
+
+> Body parameter
+
+```json
+{
+  "xname": "x3000c1s10b1n0"
+}
+```
+
+<h3 id="post_v3_remote_build_node-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[RemoteBuildNodeRecord](#schemaremotebuildnoderecord)|true|Remote build node record to create|
+
+> Example responses
+
+> 201 Response
+
+```json
+{
+  "xname": "x3000c1s10b1n0"
+}
+```
+
+<h3 id="post_v3_remote_build_node-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New RemoteBuildNode|[RemoteBuildNodeRecord](#schemaremotebuildnoderecord)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
+|422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## delete_all_v3_remote_build_nodes
+
+<a id="opIddelete_all_v3_remote_build_nodes"></a>
+
+> Code samples
+
+```http
+DELETE https://api-gw-service-nmn.local/apis/ims/remote-build-nodes HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+
+```
+
+```shell
+# You can also use wget
+curl -X DELETE https://api-gw-service-nmn.local/apis/ims/remote-build-nodes \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.delete('https://api-gw-service-nmn.local/apis/ims/remote-build-nodes', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/ims/remote-build-nodes", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`DELETE /remote-build-nodes`
+
+*Delete all RemoteBuildNodeRecords*
+
+Delete all remote build node records.
+
+> Example responses
+
+> 500 Response
+
+```json
+{
+  "detail": "string",
+  "errors": {},
+  "instance": "http://example.com",
+  "status": 400,
+  "title": "string",
+  "type": "about:blank"
+}
+```
+
+<h3 id="delete_all_v3_remote_build_nodes-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Remote build node records deleted successfully|None|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## get_v3_remote_build_node
+
+<a id="opIdget_v3_remote_build_node"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/ims/remote-build-nodes/{remote_build_node_xname} HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/ims/remote-build-nodes/{remote_build_node_xname} \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/ims/remote-build-nodes/{remote_build_node_xname}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/ims/remote-build-nodes/{remote_build_node_xname}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /remote-build-nodes/{remote_build_node_xname}`
+
+*Retrieve a remote build node by remote_build_node_xname*
+
+Retrieve a remote build node by remote_build_node_xname
+
+<h3 id="get_v3_remote_build_node-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|remote_build_node_xname|path|string|true|The unique xname of a remote build node|
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "xname": "x3000c1s10b1n0"
+}
+```
+
+<h3 id="get_v3_remote_build_node-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A remote build node record|[RemoteBuildNodeRecord](#schemaremotebuildnoderecord)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## delete_v3_remote_build_node
+
+<a id="opIddelete_v3_remote_build_node"></a>
+
+> Code samples
+
+```http
+DELETE https://api-gw-service-nmn.local/apis/ims/remote-build-nodes/{remote_build_node_xname} HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+
+```
+
+```shell
+# You can also use wget
+curl -X DELETE https://api-gw-service-nmn.local/apis/ims/remote-build-nodes/{remote_build_node_xname} \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.delete('https://api-gw-service-nmn.local/apis/ims/remote-build-nodes/{remote_build_node_xname}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/ims/remote-build-nodes/{remote_build_node_xname}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`DELETE /remote-build-nodes/{remote_build_node_xname}`
+
+*Delete remote build node by remote_build_node_xname*
+
+Delete a RemoteBuildNodeRecord by Xname.
+
+<h3 id="delete_v3_remote_build_node-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|remote_build_node_xname|path|string|true|The unique xname of a remote build node|
+
+> Example responses
+
+> 404 Response
+
+```json
+{
+  "detail": "string",
+  "errors": {},
+  "instance": "http://example.com",
+  "status": 400,
+  "title": "string",
+  "type": "about:blank"
+}
+```
+
+<h3 id="delete_v3_remote_build_node-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Remote build node record deleted successfully|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
 # Schemas
 
 <h2 id="tocS_SSHConnectionInfo">SSHConnectionInfo</h2>
@@ -8043,6 +8551,28 @@ A Deleted Keypair Record
 |deleted|string(date-time)|false|read-only|Time the image record was deleted|
 |name|string|true|none|Name of the public key|
 |public_key|string|true|none|The raw public key|
+
+<h2 id="tocS_RemoteBuildNodeRecord">RemoteBuildNodeRecord</h2>
+<!-- backwards compatibility -->
+<a id="schemaremotebuildnoderecord"></a>
+<a id="schema_RemoteBuildNodeRecord"></a>
+<a id="tocSremotebuildnoderecord"></a>
+<a id="tocsremotebuildnoderecord"></a>
+
+```json
+{
+  "xname": "x3000c1s10b1n0"
+}
+
+```
+
+A Remote Build Node Record
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|xname|string|true|none|Xname of the remote build node|
 
 <h2 id="tocS_ArtifactLinkRecord">ArtifactLinkRecord</h2>
 <!-- backwards compatibility -->
