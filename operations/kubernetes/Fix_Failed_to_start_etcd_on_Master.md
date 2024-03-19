@@ -52,7 +52,7 @@ This procedure provides steps to recover from this issue.
        member id                 name          peer-urls
     ```
 
-    Using the values above, remove and re-add the member:
+    Using the values above, remove the member:
 
     ```bash
     etcdctl --endpoints https://127.0.0.1:2379 --cert /etc/kubernetes/pki/etcd/peer.crt --key /etc/kubernetes/pki/etcd/peer.key --cacert /etc/kubernetes/pki/etcd/ca.crt member remove 60a0d077eb0db20f
@@ -63,6 +63,8 @@ This procedure provides steps to recover from this issue.
     ```text
     Member 60a0d077eb0db20f removed from cluster f1c6e6ee71e931c3
     ```
+
+    Then re-add the member:
 
     ```bash
     etcdctl --endpoints https://127.0.0.1:2379 --cert /etc/kubernetes/pki/etcd/peer.crt --key /etc/kubernetes/pki/etcd/peer.key --cacert /etc/kubernetes/pki/etcd/ca.crt member add ncn-m001 --peer-urls=https://10.252.1.4:2380
