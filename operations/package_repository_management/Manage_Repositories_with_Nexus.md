@@ -397,8 +397,10 @@ image to facilitate creation.
 (`ncn-mw#`) If you are creating a new repository and want to add it to Zypper on the current node you can run (replacing `REPO_NAME` as appropriate):
 
 ```bash
-zypper ar --no-gpgcheck https://packages.local/repositorys/REPO_NAME REPO_NAME
+zypper ar https://packages.local/repositorys/REPO_NAME REPO_NAME
 ```
+
+> Add `--no-gpgcheck` to the Zypper command if the repo is unsigned.
 
 ### Update a repository
 
