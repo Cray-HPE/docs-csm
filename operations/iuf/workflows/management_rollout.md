@@ -5,9 +5,9 @@ This section updates the software running on management NCNs.
 - [1. Perform Slingshot switch firmware updates](#1-perform-slingshot-switch-firmware-updates)
 - [2. Update management host firmware (FAS)](#2-update-management-host-firmware-fas)
 - [3. Execute the IUF `management-nodes-rollout` stage](#3-execute-the-iuf-management-nodes-rollout-stage)
-  - [3.1 `management-nodes-rollout` with CSM upgrade](#31-management-nodes-rollout-with-csm-upgrade)
-  - [3.2 `management-nodes-rollout` without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade)
-  - [3.3 NCN worker nodes](#33-ncn-worker-nodes)
+    - [3.1 `management-nodes-rollout` with CSM upgrade](#31-management-nodes-rollout-with-csm-upgrade)
+    - [3.2 `management-nodes-rollout` without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade)
+    - [3.3 NCN worker nodes](#33-ncn-worker-nodes)
 - [4. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware)
 - [5. Next steps](#5-next-steps)
 
