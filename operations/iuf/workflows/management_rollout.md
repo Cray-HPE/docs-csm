@@ -355,6 +355,9 @@ in which to extract the new version of the script.
 
 If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the  _Slingshot Operations Guide for Customers_ for details on how to update NIC firmware on management nodes.
 
+After updating management host Slingshot NIC firmware, all nodes where the firmware was updated must be power cycled.
+Follow the [reboot NCNs procedure](../../node_management/Reboot_NCNs.md#ncn-worker-nodes) for all nodes where the firmware was updated.
+
 Once this step has completed:
 
 - New versions of product microservices have been deployed
