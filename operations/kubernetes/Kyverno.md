@@ -397,7 +397,7 @@ Example output:
 * [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)
 * [No event is generated in case of mutation policy being applied to a resource](https://github.com/kyverno/kyverno/issues/2160)
 * [Inaccurate annotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
-* Upgrade of kyverno-policy following cray-kyverno fails with Webhook timeout error 
+* Upgrade of kyverno-policy following cray-kyverno fails with Webhook timeout error
 
   Kyverno-policy chart upgrade fails with webhook timeout errors due to default timeout value of 10 seconds.
   
@@ -415,7 +415,7 @@ Example output:
   
   The code snippet below can be used to increase the timeout value for all the Kyverno policies.
   
-  ```bash 
+  ```bash
   while read -r namespace resource_name; do
       echo "Patching policies.kyverno.io $namespace/$resource_name ..."
       kubectl -n "$namespace" patch "policies.kyverno.io/$resource_name" --type json -p="[{\"op\": \"replace\", \"path\": \"/spec/webhookTimeoutSeconds\", \"value\": 30}]" || true
