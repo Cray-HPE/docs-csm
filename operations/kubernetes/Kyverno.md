@@ -397,9 +397,9 @@ Example output:
 * [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)
 * [No event is generated in case of mutation policy being applied to a resource](https://github.com/kyverno/kyverno/issues/2160)
 * [Inaccurate annotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
-* Webhook timeout during Kyverno policies upgrade 
+* Upgrade of kyverno-policy following cray-kyverno fails with Webhook timeout error 
 
-  Kyverno policies upgrade will be unsuccessful with webhook timeout errors due to default timeout value of 10 second.
+  Kyverno-policy chart upgrade fails with webhook timeout errors due to default timeout value of 10 seconds.
   
   Error message snippet
   
