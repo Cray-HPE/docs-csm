@@ -219,10 +219,37 @@ Refer to that table and any corresponding product documents before continuing to
         --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $MASTER_STORAGE_XNAMES --clear-state
         ```
 
-        The expected output is:
+        Sample output for configuring multiple management nodes is:
 
           ```bash
-          Configuration complete. 9 component(s) completed successfully.  0 component(s) failed.
+          Taking snapshot of existing management-23.11.0 configuration to /root/apply_csm_configuration.20240305_173700.vKxhqC backup-management-23.11.0.json
+          Setting desired configuration, clearing state, clearing error count, enabling components in CFS
+          desiredConfig = "management-23.11.0"
+          enabled = true
+          errorCount = 0
+          id = "x3700c0s16b0n0"
+          state = []
+
+          [tags]
+
+          desiredConfig = "management-23.11.0"
+          enabled = true
+          errorCount = 0
+          id = "x3701c0s16b0n0"
+          state = []
+
+          [tags]
+
+          desiredConfig = "management-23.11.0"
+          enabled = true
+          errorCount = 0
+          id = "x3702c0s16b0n0"
+          state = []
+
+          [tags]
+
+          Waiting for configuration to complete. 3 components remaining.
+          Configuration complete. 3 component(s) completed successfully.  0 component(s) failed.
           ```
 
 Once this step has completed:
