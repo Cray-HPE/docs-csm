@@ -11,6 +11,7 @@ This section describes how to connect to Nexus with the Web UI, as well as how t
     - [Check the status of Nexus](#check-the-status-of-nexus)
     - [List repositories](#list-repositories)
     - [List assets](#list-assets)
+    - [Add assets to a repository](#add-assets-to-a-repository)
     - [Create a repository](#create-a-repository)
     - [Update a repository](#update-a-repository)
     - [Delete a repository](#delete-a-repository)
@@ -92,7 +93,7 @@ The following actions are described in this section:
 
 ### Pagination
 
-Various API endpoints use the external [pagination](https://help.sonatype.com/repomanager3/rest-and-integration-api/pagination) tool to return results. When a
+Various API endpoints use the external [pagination](https://help.sonatype.com/en/pagination.html) tool to return results. When a
 `continuationToken` is included in the results and is non-null, it indicates additional items are available.
 
 The following is some example output:
@@ -305,6 +306,29 @@ https://packages.local/repository/csm-sle-15sp2/x86_64/cfs-trust-1.0.2-202012161
 ...
 ```
 
+### Add assets to a repository
+
+Assets are added to a repository by an HTTP request with a file to upload to repository endpoint.
+In Nexus you can upload to any repository but are only able to update `repodata` on some repository types.
+To upload a file to a raw repository you must also manually rebuild the `repodata` and upload that.
+Uploading to a raw repository is not covered in this section only uploading to yum repositories.
+You will need to authenticate with Nexus to add assets see [Authenticate to access the Rest API](#authenticate-to-access-the-rest-api)
+
+(`ncn-mw#`) For example, to upload a RPM to a `hosted` `yum` repository named `test-repo` (replacing `RPM_NAME` as appropriate):
+
+```bash
+curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD -v --upload-file ./RPM_NAME.rpm --max-time 600 \
+https://packages.local/repository/test-repo/
+```
+
+Then you can tell Nexus to rebuild the repository index by sending a HTTP `POST` request to `/service/rest/v1/repository/<repo-name>/rebuild-index`
+
+(`ncn-mw#`) For example, to rebuild the index of a repository named `test-repo`:
+
+```bash
+curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --request POST https://pacakages.local/service/rest/v1/repository/test-repo/rebuild-index
+```
+
 ### Create a repository
 
 Repositories are created by an HTTP `POST` request to the `/service/rest/beta/repositories/<format>/<type>` endpoint with an appropriate body that defines the repository settings.
@@ -369,6 +393,14 @@ The `proxy`, `httpClient`, and `negativeCache` options impact the proxy behavior
 
 Installers typically define Nexus repositories in `nexus-repositories.yaml` and rely on the `nexus-repositories-create` helper script included in the `cray/cray-nexus-setup` container
 image to facilitate creation.
+
+(`ncn-mw#`) If you are creating a new repository and want to add it to Zypper on the current node you can run (replacing `REPO_NAME` as appropriate):
+
+```bash
+zypper ar https://packages.local/repositorys/REPO_NAME REPO_NAME
+```
+
+> Add `--no-gpgcheck` to the Zypper command if the repo is unsigned.
 
 ### Update a repository
 
