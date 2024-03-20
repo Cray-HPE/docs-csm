@@ -3,12 +3,13 @@
 Overview of RPM repositories and container registry in Nexus.
 
 - [RPM repositories](#rpm-repositories)
+    - [Creating a new RPM repository](#creating-a-new-rpm-repository)
 - [Container registry](#container-registry)
-  - [Adding images](#adding-images)
-  - [Registry mirror configuration](#registry-mirror-configuration)
-  - [Pull example using CRI](#pull-example-using-cri)
-  - [Pull example using `containerd`](#pull-example-using-containerd)
-  - [Pull example using Podman](#pull-example-using-podman)
+    - [Adding images](#adding-images)
+    - [Registry mirror configuration](#registry-mirror-configuration)
+    - [Pull example using CRI](#pull-example-using-cri)
+    - [Pull example using `containerd`](#pull-example-using-containerd)
+    - [Pull example using Podman](#pull-example-using-podman)
 
 ## RPM repositories
 
@@ -41,6 +42,159 @@ Specified repositories have been refreshed.
 
 The `-G` option is used in this example to disable GPG checks. However, if the named repository is properly signed, it is not recommended to use the
 `-G` option.
+
+### Creating a new RPM repository
+
+This section will create a new repo called `sample-repo` in Nexus and add a single rpm `example.rpm` to it.  
+
+#### Authenticating to Nexus
+
+(`ncn-mw#`) Use the following function to get the Nexus local admin account after a fresh install:
+
+```bash
+function nexus-get-credential() {
+
+    if ! command -v kubectl 1>&2 >/dev/null; then
+      echo "Requires kubectl"
+      return 1
+    fi
+    if ! command -v base64 1>&2 >/dev/null ; then
+      echo "Requires base64"
+      return 1
+    fi
+
+    [[ $# -gt 0 ]] || set -- -n nexus nexus-admin-credential
+
+    kubectl get secret "${@}" >/dev/null || return $?
+
+    NEXUS_USERNAME="$(kubectl get secret "${@}" --template {{.data.username}} | base64 -d)"
+    NEXUS_PASSWORD="$(kubectl get secret "${@}" --template {{.data.password}} | base64 -d)"
+}
+```
+
+#### Creating a repo
+
+1. (`ncn-mw#`) Create and export the repository name:
+
+   ```bash
+   export REPO=sample-repo
+   ```
+
+1. (`ncn-mw#`) Create a Nexus Zypper repository on the Nexus system that will contain the content necessary content:
+
+   ```bash
+   nexus-get-credential
+   
+   curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD \
+   https://packages.local/service/rest/v1/repositories/yum/hosted \
+   --header "Content-Type: application/json" --request POST --data-binary \
+   @- << EOF
+   {
+     "name": "$REPO",
+     "online": true ,
+     "storage": {
+       "blobStoreName": "default",
+       "strictContentTypeValidation": true ,
+       "writePolicy": "ALLOW"
+     },
+     "cleanup": null ,
+     "yum": {
+       "repodataDepth": 0,
+       "deployPolicy": "STRICT"
+     },
+     "format": "yum",
+     "type": "hosted"
+   }
+   EOF
+   ```
+
+1. (`ncn-mw#`) Verify the new repository is available:
+
+   ```bash
+   REPOURL=https://packages.local/service/rest/v1/repositories
+   curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD ${REPOURL} -s --header "Content -type: application/json"  \
+   --http1.1 | grep $REPO
+   ```
+
+1. (`ncn-mw#`) Upload the `example` rpm to the new repo:
+
+   ```bash
+   curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD -v --upload-file ./example*.rpm --max-time 600 \
+   https://packages.local/repository/$REPO/
+   ```
+
+1. (`ncn-mw#`) Build the repository index:
+
+   ```bash
+   NEXUSRI=https://packages.local/service/rest/v1
+   NEXUSRI=${NEXUSRI}/repositories/$REPO/rebuild-index
+   curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --request POST $NEXUSRI
+   ```
+
+#### Adding/Removing a repo from Zypper
+
+1. (`ncn-mw#`) Add the repository with the Zypper command to the current node:
+
+   ```bash
+   NXSREPO=https://packages.local/repository/$REPO
+   zypper ar --no-gpgcheck $NXSREPO $REPO
+   ```
+
+1. (`ncn-mw#`) List the defined Zypper repositories filtered by the new Nexus repo:
+
+   ```bash
+   zypper lr -u | grep $REPO
+   ```
+
+1. (`ncn-mw#`) Refresh the Zypper repository cache:
+
+   ```bash
+   zypper ref
+   ```
+
+1. (`ncn-mw#`) Confirm the new rpm can be found by Zypper:
+
+   ```bash
+   zypper pa $REPO
+   ```
+
+1. (`ncn-mw#`) Remove the Zypper repo from the current node:
+
+   ```bash
+   zypper rr $REPO
+   ```
+
+#### Removing a Repo from Nexus
+
+(`ncn-mw#`) Use the following function to remove a repo from Nexus:
+
+```bash
+function nexus-delete-repo() {
+    local name="${1:-}"
+    local error
+    echo >&2 "Deleting $name ..."
+    if ! curl \
+    -f \
+    -L \
+    -v \
+    -u "${NEXUS_USERNAME}":"${NEXUS_PASSWORD}" \
+    -X DELETE \
+    "${NEXUS_URL}/service/rest/v1/repositories/${name}" ; then
+        error=1
+    fi
+    if [ "$error" -ne 0 ]; then
+        echo >&2 'Errors found.'
+    else
+        echo 'Done'
+    fi
+    return "$error"
+}
+```
+
+```bash
+NEXUS_URL=https://packages.local
+nexus-delete-repo sample-repo
+```
 
 ## Container registry
 
