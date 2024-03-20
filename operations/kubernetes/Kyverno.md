@@ -397,3 +397,32 @@ Example output:
 * [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)
 * [No event is generated in case of mutation policy being applied to a resource](https://github.com/kyverno/kyverno/issues/2160)
 * [Inaccurate annotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
+* Webhook timeout during after Kyverno policies upgrade 
+
+  Kyverno policies upgrade will be unsuccessful with webhook timeout errors due to default timeout value of 10 second.
+  
+  Error message snippet
+  
+  ```bash
+  Error: UPGRADE FAILED: cannot patch "pod-sec-ctxt-customer-access-ingress" with kind Policy: Internal error occurred: failed calling webhook 
+  "validate-policy.kyverno.svc": Post "https://cray-kyverno-svc.kyverno.svc:443/policyvalidate?timeout=10s": dial tcp 10.16.255.149:443: connect: 
+  connection refused chart=kyverno-policy command=ship namespace=kyverno version=1.4.3
+  ```
+  
+  Workaround
+  
+  The solution for timeout issue is to increase the webhook timeout value to 30 seconds from 10 seconds for all the Kyverno policies on the system.
+  
+  The code snippet below can be used to increase the timeout value for all the Kyverno policies.
+  
+  ```bash 
+  while read -r namespace resource_name; do
+      echo "Patching policies.kyverno.io $namespace/$resource_name ..."
+      kubectl -n "$namespace" patch "policies.kyverno.io/$resource_name" --type json -p="[{\"op\": \"replace\", \"path\": \"/spec/webhookTimeoutSeconds\", \"value\": 30}]" || true
+  done < <(kubectl get policies.kyverno.io -A --output=go-template --template="{{ range .items }}{{ .metadata.namespace }} {{ .metadata.name }}{{ \"\n\" }}{{ end }}")
+  
+  while read -r resource_name; do
+      echo "Patching clusterpolicies.kyverno.io $resource_name ..."
+      kubectl -n "$namespace" patch "clusterpolicies.kyverno.io/$resource_name" --type json -p="[{\"op\": \"replace\", \"path\": \"/spec/webhookTimeoutSeconds\", \"value\": 30}]" || true
+  done < <(kubectl get clusterpolicies.kyverno.io -A --output=go-template --template="{{ range .items }}{{ .metadata.name }}{{ \"\n\" }}{{ end }}")
+  ```
