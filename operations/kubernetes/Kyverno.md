@@ -397,7 +397,7 @@ Example output:
 * [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)
 * [No event is generated in case of mutation policy being applied to a resource](https://github.com/kyverno/kyverno/issues/2160)
 * [Inaccurate annotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
-* Webhook timeout during after Kyverno policies upgrade 
+* Webhook timeout during Kyverno policies upgrade 
 
   Kyverno policies upgrade will be unsuccessful with webhook timeout errors due to default timeout value of 10 second.
   
@@ -411,7 +411,7 @@ Example output:
   
   Workaround
   
-  The solution for timeout issue is to increase the webhook timeout value to 30 seconds from 10 seconds for all the Kyverno policies on the system.
+  The solution for timeout issue is, to increase the webhook timeout value to 30 seconds from 10 seconds for all the Kyverno policies on the system.
   
   The code snippet below can be used to increase the timeout value for all the Kyverno policies.
   
