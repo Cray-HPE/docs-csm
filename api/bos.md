@@ -40,11 +40,11 @@ A BOS Session applies a provided action to the nodes defined in a Session Templa
 
   a. List available Session Templates.
 
-    GET /v2/sessiontemplates
+    GET /v1/sessiontemplate or /v2/sessiontemplates
 
   b. Create a new Session Template if desired.
 
-    PUT /v2/sessiontemplate/{template_name}
+    POST /v1/sessiontemplate or PUT /v2/sessiontemplate/{template_name}
 
     If no Session Template exists that satisfies requirements,
     then create a new Session Template.
@@ -52,7 +52,7 @@ A BOS Session applies a provided action to the nodes defined in a Session Templa
 
 2. Create the Session.
 
-  POST /v2/sessions
+  POST /v1/session or /v2/sessions
 
   Specify template_name and an operation to create a new Session.
   The template_name corresponds to the Session Template *name*.
@@ -73,14 +73,17 @@ A BOS Session applies a provided action to the nodes defined in a Session Templa
 
 3. Get details on the Session.
 
-  GET /v2/sessions/{session_id}
+  GET /v1/session/{session_id} or /v2/sessions/{session_id}
 
 ## Interactions with Other APIs
 
 ### Configuration Framework Service (CFS)
 
 If *enable_cfs* is true in a Session Template, then BOS will invoke CFS to
-configure the target nodes during *boot* or *reboot* operations.
+configure the target nodes during *boot*, *reboot*, or *configure*
+operations. The *configure* operation is only available in BOS v1 Sessions;
+if desiring to only perform a CFS configuration on a set of nodes, it is
+recommended to use CFS directly.
 
 ### Hardware State Manager (HSM)
 
@@ -204,6 +207,2956 @@ Status Code **200**
 |» links|[[Link](#schemalink)]|false|none|List of links to other resources|
 |»» href|string|false|none|none|
 |»» rel|string|false|none|none|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## v1_get
+
+<a id="opIdv1_get"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/bos/v1 HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/bos/v1 \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bos/v1", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /v1`
+
+*Get API version*
+
+Return the API version
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "major": "string",
+  "minor": "string",
+  "patch": "string",
+  "links": [
+    {
+      "href": "string",
+      "rel": "string"
+    }
+  ]
+}
+```
+
+<h3 id="v1_get-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Get version details
+The versioning system uses [semver](https://semver.org/).
+## Link Relationships
+* self : Link to itself
+* versions : Link back to the versions resource|[Version](#schemaversion)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## v1_get_version
+
+<a id="opIdv1_get_version"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/bos/v1/version HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/version \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/version', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bos/v1/version", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /v1/version`
+
+*Get API version*
+
+Return the API version
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "major": "string",
+  "minor": "string",
+  "patch": "string",
+  "links": [
+    {
+      "href": "string",
+      "rel": "string"
+    }
+  ]
+}
+```
+
+<h3 id="v1_get_version-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Get version details
+The versioning system uses [semver](https://semver.org/).
+## Link Relationships
+* self : Link to itself
+* versions : Link back to the versions resource|[Version](#schemaversion)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+<h1 id="boot-orchestration-service-healthz">healthz</h1>
+
+## v1_get_healthz
+
+<a id="opIdv1_get_healthz"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/bos/v1/healthz HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/healthz \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/healthz', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bos/v1/healthz", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /v1/healthz`
+
+*Get service health details*
+
+Get BOS health details.
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "dbStatus": "string",
+  "apiStatus": "string"
+}
+```
+
+<h3 id="v1_get_healthz-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Service Health information|[Healthz](#schemahealthz)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|Service Unavailable|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+<h1 id="boot-orchestration-service-sessiontemplate">sessiontemplate</h1>
+
+## create_v1_sessiontemplate
+
+<a id="opIdcreate_v1_sessiontemplate"></a>
+
+> Code samples
+
+```http
+POST https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate HTTP/1.1
+Host: api-gw-service-nmn.local
+Content-Type: application/json
+Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X POST https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.post('https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+        "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /v1/sessiontemplate`
+
+*Create Session Template*
+
+Create a new Session Template.
+
+The created template will be modified if necessary to follow the BOS v2 session template format.
+
+> Body parameter
+
+```json
+{
+  "name": "cle-1.0.0",
+  "description": "string",
+  "cfs_url": "string",
+  "cfs_branch": "string",
+  "enable_cfs": true,
+  "cfs": {
+    "clone_url": "string",
+    "branch": "string",
+    "commit": "string",
+    "playbook": "string",
+    "configuration": "compute-23.4.0"
+  },
+  "partition": "string",
+  "boot_sets": {
+    "property1": {
+      "name": "compute",
+      "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "type": "s3",
+      "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "node_list": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ],
+      "node_roles_groups": [
+        "Compute",
+        "Application"
+      ],
+      "node_groups": [
+        "string"
+      ],
+      "rootfs_provider": "cpss3",
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
+      "network": "string",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0
+    },
+    "property2": {
+      "name": "compute",
+      "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "type": "s3",
+      "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "node_list": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ],
+      "node_roles_groups": [
+        "Compute",
+        "Application"
+      ],
+      "node_groups": [
+        "string"
+      ],
+      "rootfs_provider": "cpss3",
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
+      "network": "string",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0
+    }
+  }
+}
+```
+
+<h3 id="create_v1_sessiontemplate-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[V1SessionTemplate](#schemav1sessiontemplate)|true|A JSON object for creating a Session Template|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 201 Response
+
+```json
+"cle-1.0.0"
+```
+
+<h3 id="create_v1_sessiontemplate-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Session Template name|[SessionTemplateName](#schemasessiontemplatename)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.
+If no tenant was specified, then the request was bad for another reason.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## get_v1_sessiontemplates
+
+<a id="opIdget_v1_sessiontemplates"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate \
+  -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /v1/sessiontemplate`
+
+*List Session Templates*
+
+List all Session Templates.
+
+<h3 id="get_v1_sessiontemplates-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "name": "cle-1.0.0",
+    "tenant": "string",
+    "description": "string",
+    "enable_cfs": true,
+    "cfs": {
+      "configuration": "compute-23.4.0"
+    },
+    "boot_sets": {
+      "property1": {
+        "name": "compute",
+        "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+        "cfs": {
+          "configuration": "compute-23.4.0"
+        },
+        "type": "s3",
+        "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "node_list": [
+          "x3000c0s19b1n0",
+          "x3000c0s19b2n0"
+        ],
+        "node_roles_groups": [
+          "Compute",
+          "Application"
+        ],
+        "node_groups": [
+          "string"
+        ],
+        "arch": "X86",
+        "rootfs_provider": "cpss3",
+        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      },
+      "property2": {
+        "name": "compute",
+        "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+        "cfs": {
+          "configuration": "compute-23.4.0"
+        },
+        "type": "s3",
+        "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "node_list": [
+          "x3000c0s19b1n0",
+          "x3000c0s19b2n0"
+        ],
+        "node_roles_groups": [
+          "Compute",
+          "Application"
+        ],
+        "node_groups": [
+          "string"
+        ],
+        "arch": "X86",
+        "rootfs_provider": "cpss3",
+        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      }
+    },
+    "links": [
+      {
+        "href": "string",
+        "rel": "string"
+      }
+    ]
+  }
+]
+```
+
+<h3 id="get_v1_sessiontemplates-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details array|[V2SessionTemplateArray](#schemav2sessiontemplatearray)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## get_v1_sessiontemplate
+
+<a id="opIdget_v1_sessiontemplate"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate/{session_template_id} HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate/{session_template_id} \
+  -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate/{session_template_id}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate/{session_template_id}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /v1/sessiontemplate/{session_template_id}`
+
+*Get Session Template by ID*
+
+Get Session Template by Session Template ID.
+The Session Template ID corresponds to the *name*
+of the Session Template.
+
+<h3 id="get_v1_sessiontemplate-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "name": "cle-1.0.0",
+  "tenant": "string",
+  "description": "string",
+  "enable_cfs": true,
+  "cfs": {
+    "configuration": "compute-23.4.0"
+  },
+  "boot_sets": {
+    "property1": {
+      "name": "compute",
+      "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "cfs": {
+        "configuration": "compute-23.4.0"
+      },
+      "type": "s3",
+      "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "node_list": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ],
+      "node_roles_groups": [
+        "Compute",
+        "Application"
+      ],
+      "node_groups": [
+        "string"
+      ],
+      "arch": "X86",
+      "rootfs_provider": "cpss3",
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+    },
+    "property2": {
+      "name": "compute",
+      "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "cfs": {
+        "configuration": "compute-23.4.0"
+      },
+      "type": "s3",
+      "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "node_list": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ],
+      "node_roles_groups": [
+        "Compute",
+        "Application"
+      ],
+      "node_groups": [
+        "string"
+      ],
+      "arch": "X86",
+      "rootfs_provider": "cpss3",
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+    }
+  },
+  "links": [
+    {
+      "href": "string",
+      "rel": "string"
+    }
+  ]
+}
+```
+
+<h3 id="get_v1_sessiontemplate-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## delete_v1_sessiontemplate
+
+<a id="opIddelete_v1_sessiontemplate"></a>
+
+> Code samples
+
+```http
+DELETE https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate/{session_template_id} HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/problem+json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate/{session_template_id} \
+  -H 'Accept: application/problem+json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/problem+json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.delete('https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate/{session_template_id}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/problem+json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate/{session_template_id}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`DELETE /v1/sessiontemplate/{session_template_id}`
+
+*Delete a Session Template*
+
+Delete a Session Template.
+
+<h3 id="delete_v1_sessiontemplate-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 400 Response
+
+```json
+{
+  "type": "about:blank",
+  "title": "string",
+  "status": 400,
+  "instance": "http://example.com",
+  "detail": "string"
+}
+```
+
+<h3 id="delete_v1_sessiontemplate-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## get_v1_sessiontemplatetemplate
+
+<a id="opIdget_v1_sessiontemplatetemplate"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplatetemplate HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplatetemplate \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplatetemplate', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplatetemplate", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /v1/sessiontemplatetemplate`
+
+*Get an example Session Template.*
+
+Returns a skeleton of a Session Template, which can be
+used as a starting point for users creating their own
+Session Templates.
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "name": "cle-1.0.0",
+  "tenant": "string",
+  "description": "string",
+  "enable_cfs": true,
+  "cfs": {
+    "configuration": "compute-23.4.0"
+  },
+  "boot_sets": {
+    "property1": {
+      "name": "compute",
+      "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "cfs": {
+        "configuration": "compute-23.4.0"
+      },
+      "type": "s3",
+      "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "node_list": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ],
+      "node_roles_groups": [
+        "Compute",
+        "Application"
+      ],
+      "node_groups": [
+        "string"
+      ],
+      "arch": "X86",
+      "rootfs_provider": "cpss3",
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+    },
+    "property2": {
+      "name": "compute",
+      "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "cfs": {
+        "configuration": "compute-23.4.0"
+      },
+      "type": "s3",
+      "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "node_list": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ],
+      "node_roles_groups": [
+        "Compute",
+        "Application"
+      ],
+      "node_groups": [
+        "string"
+      ],
+      "arch": "X86",
+      "rootfs_provider": "cpss3",
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+    }
+  },
+  "links": [
+    {
+      "href": "string",
+      "rel": "string"
+    }
+  ]
+}
+```
+
+<h3 id="get_v1_sessiontemplatetemplate-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+<h1 id="boot-orchestration-service-session">session</h1>
+
+## create_v1_session
+
+<a id="opIdcreate_v1_session"></a>
+
+> Code samples
+
+```http
+POST https://api-gw-service-nmn.local/apis/bos/v1/session HTTP/1.1
+Host: api-gw-service-nmn.local
+Content-Type: application/json
+Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X POST https://api-gw-service-nmn.local/apis/bos/v1/session \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.post('https://api-gw-service-nmn.local/apis/bos/v1/session', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+        "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/bos/v1/session", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /v1/session`
+
+*Create a Session*
+
+The creation of a Session performs the operation
+specified in the SessionCreateRequest
+on the Boot Sets defined in the Session Template.
+
+> Body parameter
+
+```json
+{
+  "operation": "boot",
+  "templateUuid": "my-session-template",
+  "templateName": "cle-1.0.0",
+  "limit": "string"
+}
+```
+
+<h3 id="create_v1_session-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|any|true|A JSON object for creating a Session|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 201 Response
+
+```json
+{
+  "operation": "boot",
+  "templateName": "cle-1.0.0",
+  "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+  "limit": "string",
+  "links": [
+    {
+      "href": "string",
+      "jobId": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+      "rel": "session",
+      "type": "GET"
+    }
+  ]
+}
+```
+
+<h3 id="create_v1_session-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Session|[V1Session](#schemav1session)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.
+If no tenant was specified, then the request was bad for another reason.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## get_v1_sessions
+
+<a id="opIdget_v1_sessions"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/bos/v1/session HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session \
+  -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/session', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bos/v1/session", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /v1/session`
+
+*List Session IDs*
+
+List IDs of all Sessions, including those in progress and those complete.
+
+<h3 id="get_v1_sessions-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  "8deb0746-b18c-427c-84a8-72ec6a28642c"
+]
+```
+
+<h3 id="get_v1_sessions-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Session IDs|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
+
+<h3 id="get_v1_sessions-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[V1SessionId](#schemav1sessionid)]|false|none|[Unique BOS v1 Session identifier.]|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## get_v1_session
+
+<a id="opIdget_v1_session"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id} HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id} \
+  -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /v1/session/{session_id}`
+
+*Get Session details by ID*
+
+Get Session details by Session ID.
+
+<h3 id="get_v1_session-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|session_id|path|string|true|Session ID|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "complete": true,
+  "error_count": 0,
+  "in_progress": false,
+  "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+  "operation": "boot",
+  "start_time": "2020-04-24T12:00",
+  "status_link": "/v1/session/90730844-094d-45a5-9b90-d661d14d9444/status",
+  "stop_time": "2020-04-24T12:00",
+  "templateName": "cle-1.0.0"
+}
+```
+
+<h3 id="get_v1_session-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+
+<h3 id="get_v1_session-responseschema">Response Schema</h3>
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## delete_v1_session
+
+<a id="opIddelete_v1_session"></a>
+
+> Code samples
+
+```http
+DELETE https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id} HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/problem+json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id} \
+  -H 'Accept: application/problem+json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/problem+json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.delete('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/problem+json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`DELETE /v1/session/{session_id}`
+
+*Delete Session by ID*
+
+Delete Session by Session ID.
+
+<h3 id="delete_v1_session-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|session_id|path|string|true|Session ID|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 400 Response
+
+```json
+{
+  "type": "about:blank",
+  "title": "string",
+  "status": 400,
+  "instance": "http://example.com",
+  "detail": "string"
+}
+```
+
+<h3 id="delete_v1_session-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## get_v1_session_status
+
+<a id="opIdget_v1_session_status"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status \
+  -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /v1/session/{session_id}/status`
+
+*A list of the statuses for the different Boot Sets.*
+
+A list of the statuses for the different Boot Sets.
+
+<h3 id="get_v1_session_status-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|session_id|path|string|true|Session ID|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "metadata": {
+    "complete": true,
+    "error_count": 0,
+    "in_progress": false,
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
+  },
+  "boot_sets": [
+    "compute"
+  ],
+  "id": "8deb0746-b18c-427c-84a8-72ec6a28642c",
+  "links": [
+    {
+      "href": "string",
+      "rel": "string"
+    }
+  ]
+}
+```
+
+<h3 id="get_v1_session_status-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of Boot Set Statuses and metadata|[V1SessionStatus](#schemav1sessionstatus)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## create_v1_session_status
+
+<a id="opIdcreate_v1_session_status"></a>
+
+> Code samples
+
+```http
+POST https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status HTTP/1.1
+Host: api-gw-service-nmn.local
+Content-Type: application/json
+Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X POST https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.post('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+        "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /v1/session/{session_id}/status`
+
+*Create the initial Session status*
+
+Creates the initial Session status.
+
+> Body parameter
+
+```json
+{
+  "metadata": {
+    "complete": true,
+    "error_count": 0,
+    "in_progress": false,
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
+  },
+  "boot_sets": [
+    "compute"
+  ],
+  "id": "8deb0746-b18c-427c-84a8-72ec6a28642c",
+  "links": [
+    {
+      "href": "string",
+      "rel": "string"
+    }
+  ]
+}
+```
+
+<h3 id="create_v1_session_status-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[V1SessionStatus](#schemav1sessionstatus)|true|A JSON object for creating the status for a Session|
+|session_id|path|string|true|Session ID|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "metadata": {
+    "complete": true,
+    "error_count": 0,
+    "in_progress": false,
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
+  },
+  "boot_sets": [
+    "compute"
+  ],
+  "id": "8deb0746-b18c-427c-84a8-72ec6a28642c",
+  "links": [
+    {
+      "href": "string",
+      "rel": "string"
+    }
+  ]
+}
+```
+
+<h3 id="create_v1_session_status-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of Boot Set Statuses and metadata|[V1SessionStatus](#schemav1sessionstatus)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.
+If no tenant was specified, then the request was bad for another reason.|[ProblemDetails](#schemaproblemdetails)|
+|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|The resource to be created already exists|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## update_v1_session_status
+
+<a id="opIdupdate_v1_session_status"></a>
+
+> Code samples
+
+```http
+PATCH https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status HTTP/1.1
+Host: api-gw-service-nmn.local
+Content-Type: application/json
+Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X PATCH https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.patch('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+        "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`PATCH /v1/session/{session_id}/status`
+
+*Update the Session status*
+
+Update the Session status. You can update the start or stop times.
+
+> Body parameter
+
+```json
+{
+  "complete": true,
+  "error_count": 0,
+  "in_progress": false,
+  "start_time": "2020-04-24T12:00",
+  "stop_time": "2020-04-24T12:00"
+}
+```
+
+<h3 id="update_v1_session_status-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[V1GenericMetadata](#schemav1genericmetadata)|true|A JSON object for updating the status for a Session|
+|session_id|path|string|true|Session ID|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "metadata": {
+    "complete": true,
+    "error_count": 0,
+    "in_progress": false,
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
+  },
+  "boot_sets": [
+    "compute"
+  ],
+  "id": "8deb0746-b18c-427c-84a8-72ec6a28642c",
+  "links": [
+    {
+      "href": "string",
+      "rel": "string"
+    }
+  ]
+}
+```
+
+<h3 id="update_v1_session_status-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of Boot Set Statuses and metadata|[V1SessionStatus](#schemav1sessionstatus)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## delete_v1_session_status
+
+<a id="opIddelete_v1_session_status"></a>
+
+> Code samples
+
+```http
+DELETE https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/problem+json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status \
+  -H 'Accept: application/problem+json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/problem+json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.delete('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/problem+json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`DELETE /v1/session/{session_id}/status`
+
+*Delete the Session status*
+
+Deletes an existing Session status
+
+<h3 id="delete_v1_session_status-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|session_id|path|string|true|Session ID|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 400 Response
+
+```json
+{
+  "type": "about:blank",
+  "title": "string",
+  "status": 400,
+  "instance": "http://example.com",
+  "detail": "string"
+}
+```
+
+<h3 id="delete_v1_session_status-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.
+If no tenant was specified, then the request was bad for another reason.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## get_v1_session_status_by_bootset
+
+<a id="opIdget_v1_session_status_by_bootset"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name} HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name} \
+  -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /v1/session/{session_id}/status/{boot_set_name}`
+
+*Get the status for a Boot Set.*
+
+Get the status for a Boot Set.
+
+<h3 id="get_v1_session_status_by_bootset-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|session_id|path|string|true|Session ID|
+|boot_set_name|path|string|true|Boot Set name|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "name": "compute",
+  "session": "8deb0746-b18c-427c-84a8-72ec6a28642c",
+  "metadata": {
+    "complete": true,
+    "error_count": 0,
+    "in_progress": false,
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
+  },
+  "phases": [
+    {
+      "name": "Boot",
+      "metadata": {
+        "complete": true,
+        "error_count": 0,
+        "in_progress": false,
+        "start_time": "2020-04-24T12:00",
+        "stop_time": "2020-04-24T12:00"
+      },
+      "categories": [
+        {
+          "name": "Succeeded",
+          "node_list": [
+            "x3000c0s19b1n0",
+            "x3000c0s19b2n0"
+          ]
+        }
+      ],
+      "errors": {
+        "property1": [
+          "x3000c0s19b1n0",
+          "x3000c0s19b2n0"
+        ],
+        "property2": [
+          "x3000c0s19b1n0",
+          "x3000c0s19b2n0"
+        ]
+      }
+    }
+  ],
+  "links": [
+    {
+      "href": "string",
+      "rel": "string"
+    }
+  ]
+}
+```
+
+<h3 id="get_v1_session_status_by_bootset-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Metadata and a list of the Phase Statuses for the Boot Set|[V1BootSetStatus](#schemav1bootsetstatus)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## create_v1_boot_set_status
+
+<a id="opIdcreate_v1_boot_set_status"></a>
+
+> Code samples
+
+```http
+POST https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name} HTTP/1.1
+Host: api-gw-service-nmn.local
+Content-Type: application/json
+Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X POST https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name} \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.post('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+        "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /v1/session/{session_id}/status/{boot_set_name}`
+
+*Create a Boot Set Status*
+
+Create a status for a Boot Set
+
+> Body parameter
+
+```json
+{
+  "name": "compute",
+  "session": "8deb0746-b18c-427c-84a8-72ec6a28642c",
+  "metadata": {
+    "complete": true,
+    "error_count": 0,
+    "in_progress": false,
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
+  },
+  "phases": [
+    {
+      "name": "Boot",
+      "metadata": {
+        "complete": true,
+        "error_count": 0,
+        "in_progress": false,
+        "start_time": "2020-04-24T12:00",
+        "stop_time": "2020-04-24T12:00"
+      },
+      "categories": [
+        {
+          "name": "Succeeded",
+          "node_list": [
+            "x3000c0s19b1n0",
+            "x3000c0s19b2n0"
+          ]
+        }
+      ],
+      "errors": {
+        "property1": [
+          "x3000c0s19b1n0",
+          "x3000c0s19b2n0"
+        ],
+        "property2": [
+          "x3000c0s19b1n0",
+          "x3000c0s19b2n0"
+        ]
+      }
+    }
+  ],
+  "links": [
+    {
+      "href": "string",
+      "rel": "string"
+    }
+  ]
+}
+```
+
+<h3 id="create_v1_boot_set_status-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[V1BootSetStatus](#schemav1bootsetstatus)|true|A JSON object for creating a status for a Boot Set|
+|session_id|path|string|true|Session ID|
+|boot_set_name|path|string|true|Boot Set name|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 201 Response
+
+```json
+{
+  "name": "compute",
+  "session": "8deb0746-b18c-427c-84a8-72ec6a28642c",
+  "metadata": {
+    "complete": true,
+    "error_count": 0,
+    "in_progress": false,
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
+  },
+  "phases": [
+    {
+      "name": "Boot",
+      "metadata": {
+        "complete": true,
+        "error_count": 0,
+        "in_progress": false,
+        "start_time": "2020-04-24T12:00",
+        "stop_time": "2020-04-24T12:00"
+      },
+      "categories": [
+        {
+          "name": "Succeeded",
+          "node_list": [
+            "x3000c0s19b1n0",
+            "x3000c0s19b2n0"
+          ]
+        }
+      ],
+      "errors": {
+        "property1": [
+          "x3000c0s19b1n0",
+          "x3000c0s19b2n0"
+        ],
+        "property2": [
+          "x3000c0s19b1n0",
+          "x3000c0s19b2n0"
+        ]
+      }
+    }
+  ],
+  "links": [
+    {
+      "href": "string",
+      "rel": "string"
+    }
+  ]
+}
+```
+
+<h3 id="create_v1_boot_set_status-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|The created Boot Set status|[V1BootSetStatus](#schemav1bootsetstatus)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
+|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|The resource to be created already exists|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## update_v1_session_status_by_bootset
+
+<a id="opIdupdate_v1_session_status_by_bootset"></a>
+
+> Code samples
+
+```http
+PATCH https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name} HTTP/1.1
+Host: api-gw-service-nmn.local
+Content-Type: application/json
+Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X PATCH https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name} \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.patch('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+        "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("PATCH", "https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`PATCH /v1/session/{session_id}/status/{boot_set_name}`
+
+*Update the status.*
+
+This will change the status for one or more nodes within
+the Boot Set.
+
+> Body parameter
+
+```json
+[
+  {
+    "update_type": "NodeChangeList",
+    "phase": "Boot",
+    "data": {
+      "phase": "Boot",
+      "source": "Succeeded",
+      "destination": "Succeeded",
+      "node_list": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ]
+    }
+  }
+]
+```
+
+<h3 id="update_v1_session_status_by_bootset-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[V1UpdateRequestList](#schemav1updaterequestlist)|true|A JSON object for updating the status for a Session|
+|session_id|path|string|true|Session ID|
+|boot_set_name|path|string|true|Boot Set name|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "name": "compute",
+  "session": "8deb0746-b18c-427c-84a8-72ec6a28642c",
+  "metadata": {
+    "complete": true,
+    "error_count": 0,
+    "in_progress": false,
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
+  },
+  "phases": [
+    {
+      "name": "Boot",
+      "metadata": {
+        "complete": true,
+        "error_count": 0,
+        "in_progress": false,
+        "start_time": "2020-04-24T12:00",
+        "stop_time": "2020-04-24T12:00"
+      },
+      "categories": [
+        {
+          "name": "Succeeded",
+          "node_list": [
+            "x3000c0s19b1n0",
+            "x3000c0s19b2n0"
+          ]
+        }
+      ],
+      "errors": {
+        "property1": [
+          "x3000c0s19b1n0",
+          "x3000c0s19b2n0"
+        ],
+        "property2": [
+          "x3000c0s19b1n0",
+          "x3000c0s19b2n0"
+        ]
+      }
+    }
+  ],
+  "links": [
+    {
+      "href": "string",
+      "rel": "string"
+    }
+  ]
+}
+```
+
+<h3 id="update_v1_session_status_by_bootset-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of Boot Set Statuses and metadata|[V1BootSetStatus](#schemav1bootsetstatus)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## delete_v1_boot_set_status
+
+<a id="opIddelete_v1_boot_set_status"></a>
+
+> Code samples
+
+```http
+DELETE https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name} HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/problem+json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X DELETE https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name} \
+  -H 'Accept: application/problem+json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/problem+json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.delete('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/problem+json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("DELETE", "https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`DELETE /v1/session/{session_id}/status/{boot_set_name}`
+
+*Delete the Boot Set status*
+
+Deletes an existing Boot Set status
+
+<h3 id="delete_v1_boot_set_status-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|session_id|path|string|true|Session ID|
+|boot_set_name|path|string|true|Boot Set name|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 400 Response
+
+```json
+{
+  "type": "about:blank",
+  "title": "string",
+  "status": 400,
+  "instance": "http://example.com",
+  "detail": "string"
+}
+```
+
+<h3 id="delete_v1_boot_set_status-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.
+If no tenant was specified, then the request was bad for another reason.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## get_v1_session_status_by_bootset_and_phase
+
+<a id="opIdget_v1_session_status_by_bootset_and_phase"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}/{phase_name} HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}/{phase_name} \
+  -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}/{phase_name}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}/{phase_name}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /v1/session/{session_id}/status/{boot_set_name}/{phase_name}`
+
+*Get the status for a specific Boot Set and phase.*
+
+Get the status for a specific Boot Set and phase.
+
+<h3 id="get_v1_session_status_by_bootset_and_phase-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|session_id|path|string|true|Session ID|
+|boot_set_name|path|string|true|Boot Set name|
+|phase_name|path|string|true|The phase name|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "name": "Boot",
+  "metadata": {
+    "complete": true,
+    "error_count": 0,
+    "in_progress": false,
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
+  },
+  "categories": [
+    {
+      "name": "Succeeded",
+      "node_list": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ]
+    }
+  ],
+  "errors": {
+    "property1": [
+      "x3000c0s19b1n0",
+      "x3000c0s19b2n0"
+    ],
+    "property2": [
+      "x3000c0s19b1n0",
+      "x3000c0s19b2n0"
+    ]
+  }
+}
+```
+
+<h3 id="get_v1_session_status_by_bootset_and_phase-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of the nodes in the Phase and Category|[V1PhaseStatus](#schemav1phasestatus)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
+## get_v1_session_status_by_bootset_and_phase_and_category
+
+<a id="opIdget_v1_session_status_by_bootset_and_phase_and_category"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}/{phase_name}/{category_name} HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}/{phase_name}/{category_name} \
+  -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}/{phase_name}/{category_name}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/bos/v1/session/{session_id}/status/{boot_set_name}/{phase_name}/{category_name}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /v1/session/{session_id}/status/{boot_set_name}/{phase_name}/{category_name}`
+
+*Get the status for a specific Boot Set, phase, and category.*
+
+Get the status for a specific Boot Set, phase, and category.
+
+<h3 id="get_v1_session_status_by_bootset_and_phase_and_category-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|session_id|path|string|true|Session ID|
+|boot_set_name|path|string|true|Boot Set name|
+|phase_name|path|string|true|The phase name|
+|category_name|path|string|true|The category name|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name. Multi-tenancy is not supported for most BOS v1 endpoints.
+If this parameter is set to a non-empty string, the request will be rejected.
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "name": "Succeeded",
+  "node_list": [
+    "x3000c0s19b1n0",
+    "x3000c0s19b2n0"
+  ]
+}
+```
+
+<h3 id="get_v1_session_status_by_bootset_and_phase_and_category-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of the nodes in the Phase and Category|[V1PhaseCategoryStatus](#schemav1phasecategorystatus)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Multi-tenancy is not supported for this BOS v1 request.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -4844,6 +7797,34 @@ targeted to start being enforced in an upcoming BOS version.
 |---|---|---|---|---|
 |*anonymous*|[[HardwareComponentName](#schemahardwarecomponentname)]|false|none|A node list that is required to have at least one node.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 
+<h2 id="tocS_NodeListEmptyOk">NodeListEmptyOk</h2>
+<!-- backwards compatibility -->
+<a id="schemanodelistemptyok"></a>
+<a id="schema_NodeListEmptyOk"></a>
+<a id="tocSnodelistemptyok"></a>
+<a id="tocsnodelistemptyok"></a>
+
+```json
+[
+  "x3000c0s19b1n0",
+  "x3000c0s19b2n0"
+]
+
+```
+
+A node list that is allowed to be empty.
+
+It is recommended that this list should be no more than 65535 items in length.
+
+This restriction is not enforced in this version of BOS, but it is
+targeted to start being enforced in an upcoming BOS version.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[HardwareComponentName](#schemahardwarecomponentname)]|false|none|A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+
 <h2 id="tocS_NodeGroupList">NodeGroupList</h2>
 <!-- backwards compatibility -->
 <a id="schemanodegrouplist"></a>
@@ -5062,6 +8043,1255 @@ Version data
 |minor|string|false|none|none|
 |patch|string|false|none|none|
 |links|[LinkList](#schemalinklist)|false|none|List of links to other resources|
+
+<h2 id="tocS_V1CfsBranch">V1CfsBranch</h2>
+<!-- backwards compatibility -->
+<a id="schemav1cfsbranch"></a>
+<a id="schema_V1CfsBranch"></a>
+<a id="tocSv1cfsbranch"></a>
+<a id="tocsv1cfsbranch"></a>
+
+```json
+"string"
+
+```
+
+The name of the branch containing the configuration that you want to
+apply to the nodes. Mutually exclusive with commit. (DEPRECATED)
+
+It is recommended that this should be 1-1023 characters in length.
+
+When upgrading to this version of BOS, all existing V1 session
+templates will automatically have this deprecated field removed from them.
+
+When a V1 session template is created, this deprecated field is
+automatically removed from it before storing it in BOS.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|The name of the branch containing the configuration that you want to<br>apply to the nodes. Mutually exclusive with commit. (DEPRECATED)<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
+
+<h2 id="tocS_V1CfsUrl">V1CfsUrl</h2>
+<!-- backwards compatibility -->
+<a id="schemav1cfsurl"></a>
+<a id="schema_V1CfsUrl"></a>
+<a id="tocSv1cfsurl"></a>
+<a id="tocsv1cfsurl"></a>
+
+```json
+"string"
+
+```
+
+The clone URL for the repository providing the configuration. (DEPRECATED)
+
+It is recommended that this should be 1-4096 characters in length.
+
+When upgrading to this version of BOS, all existing V1 session
+templates will automatically have this deprecated field removed from them.
+
+When a V1 session template is created, this deprecated field is
+automatically removed from it before storing it in BOS.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|The clone URL for the repository providing the configuration. (DEPRECATED)<br><br>It is recommended that this should be 1-4096 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
+
+<h2 id="tocS_V1CfsParameters">V1CfsParameters</h2>
+<!-- backwards compatibility -->
+<a id="schemav1cfsparameters"></a>
+<a id="schema_V1CfsParameters"></a>
+<a id="tocSv1cfsparameters"></a>
+<a id="tocsv1cfsparameters"></a>
+
+```json
+{
+  "clone_url": "string",
+  "branch": "string",
+  "commit": "string",
+  "playbook": "string",
+  "configuration": "compute-23.4.0"
+}
+
+```
+
+This is the collection of parameters that are passed to the Configuration
+Framework Service when configuration is enabled.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|clone_url|[V1CfsUrl](#schemav1cfsurl)|false|none|The clone URL for the repository providing the configuration. (DEPRECATED)<br><br>It is recommended that this should be 1-4096 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
+|branch|[V1CfsBranch](#schemav1cfsbranch)|false|none|The name of the branch containing the configuration that you want to<br>apply to the nodes. Mutually exclusive with commit. (DEPRECATED)<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
+|commit|string|false|none|The commit ID of the configuration that you want to<br>apply to the nodes. Mutually exclusive with branch. (DEPRECATED)<br><br>git commit hashes are hexadecimal strings with a length of 40 characters (although<br>fewer characters may be sufficient to uniquely identify a commit in some cases).<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
+|playbook|string|false|none|The name of the playbook to run for configuration. The file path must be specified<br>relative to the base directory of the config repository. (DEPRECATED)<br><br>It is recommended that this should be 1-255 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
+|configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+
+<h2 id="tocS_V1CompleteMetadata">V1CompleteMetadata</h2>
+<!-- backwards compatibility -->
+<a id="schemav1completemetadata"></a>
+<a id="schema_V1CompleteMetadata"></a>
+<a id="tocSv1completemetadata"></a>
+<a id="tocsv1completemetadata"></a>
+
+```json
+true
+
+```
+
+Is the object's status complete
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|boolean|false|none|Is the object's status complete|
+
+<h2 id="tocS_V1ErrorCountMetadata">V1ErrorCountMetadata</h2>
+<!-- backwards compatibility -->
+<a id="schemav1errorcountmetadata"></a>
+<a id="schema_V1ErrorCountMetadata"></a>
+<a id="tocSv1errorcountmetadata"></a>
+<a id="tocsv1errorcountmetadata"></a>
+
+```json
+0
+
+```
+
+How many errors were encountered
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|integer|false|none|How many errors were encountered|
+
+<h2 id="tocS_V1InProgressMetadata">V1InProgressMetadata</h2>
+<!-- backwards compatibility -->
+<a id="schemav1inprogressmetadata"></a>
+<a id="schema_V1InProgressMetadata"></a>
+<a id="tocSv1inprogressmetadata"></a>
+<a id="tocsv1inprogressmetadata"></a>
+
+```json
+false
+
+```
+
+Is the object still doing something
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|boolean|false|none|Is the object still doing something|
+
+<h2 id="tocS_V1StartTimeMetadata">V1StartTimeMetadata</h2>
+<!-- backwards compatibility -->
+<a id="schemav1starttimemetadata"></a>
+<a id="schema_V1StartTimeMetadata"></a>
+<a id="tocSv1starttimemetadata"></a>
+<a id="tocsv1starttimemetadata"></a>
+
+```json
+"2020-04-24T12:00"
+
+```
+
+The start time
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|The start time|
+
+<h2 id="tocS_V1StopTimeMetadata">V1StopTimeMetadata</h2>
+<!-- backwards compatibility -->
+<a id="schemav1stoptimemetadata"></a>
+<a id="schema_V1StopTimeMetadata"></a>
+<a id="tocSv1stoptimemetadata"></a>
+<a id="tocsv1stoptimemetadata"></a>
+
+```json
+"2020-04-24T12:00"
+
+```
+
+The stop time. In some contexts, the value may be null before the operation finishes.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string¦null|false|none|The stop time. In some contexts, the value may be null before the operation finishes.|
+
+<h2 id="tocS_V1GenericMetadata">V1GenericMetadata</h2>
+<!-- backwards compatibility -->
+<a id="schemav1genericmetadata"></a>
+<a id="schema_V1GenericMetadata"></a>
+<a id="tocSv1genericmetadata"></a>
+<a id="tocsv1genericmetadata"></a>
+
+```json
+{
+  "complete": true,
+  "error_count": 0,
+  "in_progress": false,
+  "start_time": "2020-04-24T12:00",
+  "stop_time": "2020-04-24T12:00"
+}
+
+```
+
+The status metadata
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|complete|[V1CompleteMetadata](#schemav1completemetadata)|false|none|Is the object's status complete|
+|error_count|[V1ErrorCountMetadata](#schemav1errorcountmetadata)|false|none|How many errors were encountered|
+|in_progress|[V1InProgressMetadata](#schemav1inprogressmetadata)|false|none|Is the object still doing something|
+|start_time|[V1StartTimeMetadata](#schemav1starttimemetadata)|false|none|The start time|
+|stop_time|[V1StopTimeMetadata](#schemav1stoptimemetadata)|false|none|The stop time. In some contexts, the value may be null before the operation finishes.|
+
+<h2 id="tocS_V1PhaseCategoryName">V1PhaseCategoryName</h2>
+<!-- backwards compatibility -->
+<a id="schemav1phasecategoryname"></a>
+<a id="schema_V1PhaseCategoryName"></a>
+<a id="tocSv1phasecategoryname"></a>
+<a id="tocsv1phasecategoryname"></a>
+
+```json
+"Succeeded"
+
+```
+
+Name of the Phase Category
+not_started, in_progress, succeeded, failed, or excluded
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
+
+<h2 id="tocS_V1PhaseCategoryStatus">V1PhaseCategoryStatus</h2>
+<!-- backwards compatibility -->
+<a id="schemav1phasecategorystatus"></a>
+<a id="schema_V1PhaseCategoryStatus"></a>
+<a id="tocSv1phasecategorystatus"></a>
+<a id="tocsv1phasecategorystatus"></a>
+
+```json
+{
+  "name": "Succeeded",
+  "node_list": [
+    "x3000c0s19b1n0",
+    "x3000c0s19b2n0"
+  ]
+}
+
+```
+
+A list of the nodes in a given category within a Phase.
+
+## Link Relationships
+
+* self : The phase category status object
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|[V1PhaseCategoryName](#schemav1phasecategoryname)|false|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
+|node_list|[NodeListEmptyOk](#schemanodelistemptyok)|false|none|A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+
+<h2 id="tocS_V1PhaseStatus">V1PhaseStatus</h2>
+<!-- backwards compatibility -->
+<a id="schemav1phasestatus"></a>
+<a id="schema_V1PhaseStatus"></a>
+<a id="tocSv1phasestatus"></a>
+<a id="tocsv1phasestatus"></a>
+
+```json
+{
+  "name": "Boot",
+  "metadata": {
+    "complete": true,
+    "error_count": 0,
+    "in_progress": false,
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
+  },
+  "categories": [
+    {
+      "name": "Succeeded",
+      "node_list": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ]
+    }
+  ],
+  "errors": {
+    "property1": [
+      "x3000c0s19b1n0",
+      "x3000c0s19b2n0"
+    ],
+    "property2": [
+      "x3000c0s19b1n0",
+      "x3000c0s19b2n0"
+    ]
+  }
+}
+
+```
+
+The phase's status. It is a list of all of the nodes in the phase and
+what category those nodes fall into within the phase.
+
+## Link Relationships
+
+* self : The phase status object
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|string|false|none|Name of the Phase<br>boot, configure, or shutdown|
+|metadata|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
+|categories|[[V1PhaseCategoryStatus](#schemav1phasecategorystatus)]|false|none|[A list of the nodes in a given category within a Phase.<br><br>## Link Relationships<br><br>* self : The phase category status object<br>]|
+|errors|[V1NodeErrorsList](#schemav1nodeerrorslist)|false|none|Categorizing nodes into failures by the type of error they have.<br>This is an additive characterization. Nodes will be added to existing errors.<br>This does not overwrite previously existing errors.|
+
+<h2 id="tocS_V1SessionId">V1SessionId</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessionid"></a>
+<a id="schema_V1SessionId"></a>
+<a id="tocSv1sessionid"></a>
+<a id="tocsv1sessionid"></a>
+
+```json
+"8deb0746-b18c-427c-84a8-72ec6a28642c"
+
+```
+
+Unique BOS v1 Session identifier.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string(uuid)|false|none|Unique BOS v1 Session identifier.|
+
+<h2 id="tocS_V1BootSetStatus">V1BootSetStatus</h2>
+<!-- backwards compatibility -->
+<a id="schemav1bootsetstatus"></a>
+<a id="schema_V1BootSetStatus"></a>
+<a id="tocSv1bootsetstatus"></a>
+<a id="tocsv1bootsetstatus"></a>
+
+```json
+{
+  "name": "compute",
+  "session": "8deb0746-b18c-427c-84a8-72ec6a28642c",
+  "metadata": {
+    "complete": true,
+    "error_count": 0,
+    "in_progress": false,
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
+  },
+  "phases": [
+    {
+      "name": "Boot",
+      "metadata": {
+        "complete": true,
+        "error_count": 0,
+        "in_progress": false,
+        "start_time": "2020-04-24T12:00",
+        "stop_time": "2020-04-24T12:00"
+      },
+      "categories": [
+        {
+          "name": "Succeeded",
+          "node_list": [
+            "x3000c0s19b1n0",
+            "x3000c0s19b2n0"
+          ]
+        }
+      ],
+      "errors": {
+        "property1": [
+          "x3000c0s19b1n0",
+          "x3000c0s19b2n0"
+        ],
+        "property2": [
+          "x3000c0s19b1n0",
+          "x3000c0s19b2n0"
+        ]
+      }
+    }
+  ],
+  "links": [
+    {
+      "href": "string",
+      "rel": "string"
+    }
+  ]
+}
+
+```
+
+The status for a Boot Set. It as a list of the phase statuses for the Boot Set.
+
+## Link Relationships
+
+* self : The Boot Set Status object
+* phase : A phase of the Boot Set
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|[BootSetName](#schemabootsetname)|false|none|The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+|session|[V1SessionId](#schemav1sessionid)|false|none|Unique BOS v1 Session identifier.|
+|metadata|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
+|phases|[[V1PhaseStatus](#schemav1phasestatus)]|false|none|[The phase's status. It is a list of all of the nodes in the phase and<br>what category those nodes fall into within the phase.<br><br>## Link Relationships<br><br>* self : The phase status object<br>]|
+|links|[LinkList](#schemalinklist)|false|none|List of links to other resources|
+
+<h2 id="tocS_V1SessionStatus">V1SessionStatus</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessionstatus"></a>
+<a id="schema_V1SessionStatus"></a>
+<a id="tocSv1sessionstatus"></a>
+<a id="tocsv1sessionstatus"></a>
+
+```json
+{
+  "metadata": {
+    "complete": true,
+    "error_count": 0,
+    "in_progress": false,
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
+  },
+  "boot_sets": [
+    "compute"
+  ],
+  "id": "8deb0746-b18c-427c-84a8-72ec6a28642c",
+  "links": [
+    {
+      "href": "string",
+      "rel": "string"
+    }
+  ]
+}
+
+```
+
+The status for a Session. It is a list of all of the Boot Set Statuses in the Session.
+
+## Link Relationships
+
+* self : The Session status object
+* boot sets: URL to access the Boot Set status
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|metadata|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
+|boot_sets|[[BootSetName](#schemabootsetname)]|false|none|The Boot Sets in the Session|
+|id|[V1SessionId](#schemav1sessionid)|false|none|Unique BOS v1 Session identifier.|
+|links|[LinkList](#schemalinklist)|false|none|List of links to other resources|
+
+<h2 id="tocS_V1BootSet">V1BootSet</h2>
+<!-- backwards compatibility -->
+<a id="schemav1bootset"></a>
+<a id="schema_V1BootSet"></a>
+<a id="tocSv1bootset"></a>
+<a id="tocsv1bootset"></a>
+
+```json
+{
+  "name": "compute",
+  "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+  "type": "s3",
+  "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+  "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+  "node_list": [
+    "x3000c0s19b1n0",
+    "x3000c0s19b2n0"
+  ],
+  "node_roles_groups": [
+    "Compute",
+    "Application"
+  ],
+  "node_groups": [
+    "string"
+  ],
+  "rootfs_provider": "cpss3",
+  "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
+  "network": "string",
+  "boot_ordinal": 0,
+  "shutdown_ordinal": 0
+}
+
+```
+
+A Boot Set defines a collection of nodes and the information about the
+boot artifacts and parameters to be sent to each node over the specified
+network to enable these nodes to boot. When multiple Boot Sets are used
+in a Session Template, the boot_ordinal and shutdown_ordinal indicate
+the order in which Boot Sets need to be acted upon. Boot Sets sharing
+the same ordinal number will be addressed at the same time.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|[BootSetName](#schemabootsetname)|false|none|The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+|path|[BootManifestPath](#schemabootmanifestpath)|true|none|A path identifying the metadata describing the components of the boot image.<br>This could be a URI, URL, etc, depending on the type of the Boot Set.<br><br>It is recommended that this should be 1-4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|type|[BootSetType](#schemabootsettype)|true|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|etag|[BootSetEtag](#schemabootsetetag)|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|kernel_parameters|[BootKernelParameters](#schemabootkernelparameters)|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|node_list|[NodeList](#schemanodelist)|false|none|A node list that is required to have at least one node.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|node_roles_groups|[NodeRoleList](#schemanoderolelist)|false|none|Node role list. Allows actions against nodes with associated roles.<br><br>It is recommended that this list should be 1-1023 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|node_groups|[NodeGroupList](#schemanodegrouplist)|false|none|Node group list. Allows actions against associated nodes by logical groupings.<br><br>It is recommended that this list should be 1-4095 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|rootfs_provider|[BootSetRootfsProvider](#schemabootsetrootfsprovider)|false|none|The root file system provider.<br><br>It is recommended that this should be 1-511 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|rootfs_provider_passthrough|[BootSetRootfsProviderPassthrough](#schemabootsetrootfsproviderpassthrough)|false|none|The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|network|string|false|none|The network over which the node will boot.<br>Choices:  NMN -- Node Management Network<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
+|boot_ordinal|integer|false|none|The boot ordinal. This will establish the order for Boot Set operations.<br>Boot Sets boot in order from the lowest to highest boot_ordinal.<br><br>It is recommended that this should have a maximum value of 65535.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
+|shutdown_ordinal|integer|false|none|The shutdown ordinal. This will establish the order for Boot Set<br>shutdown operations. Sets shutdown from low to high shutdown_ordinal.<br><br>It is recommended that this should have a maximum value of 65535.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
+
+<h2 id="tocS_V1SessionTemplateUuid">V1SessionTemplateUuid</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessiontemplateuuid"></a>
+<a id="schema_V1SessionTemplateUuid"></a>
+<a id="tocSv1sessiontemplateuuid"></a>
+<a id="tocsv1sessiontemplateuuid"></a>
+
+```json
+"my-session-template"
+
+```
+
+DEPRECATED - use templateName. This field is ignored if templateName is also set.
+
+Name of the Session Template.
+
+It is recommended to use names which meet the following restrictions:
+* 1-127 characters in length.
+* Use only letters, digits, periods (.), dashes (-), and underscores (_).
+* Begin and end with a letter or digit.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|DEPRECATED - use templateName. This field is ignored if templateName is also set.<br><br>Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* 1-127 characters in length.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
+
+<h2 id="tocS_V1SessionTemplate">V1SessionTemplate</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessiontemplate"></a>
+<a id="schema_V1SessionTemplate"></a>
+<a id="tocSv1sessiontemplate"></a>
+<a id="tocsv1sessiontemplate"></a>
+
+```json
+{
+  "name": "cle-1.0.0",
+  "description": "string",
+  "cfs_url": "string",
+  "cfs_branch": "string",
+  "enable_cfs": true,
+  "cfs": {
+    "clone_url": "string",
+    "branch": "string",
+    "commit": "string",
+    "playbook": "string",
+    "configuration": "compute-23.4.0"
+  },
+  "partition": "string",
+  "boot_sets": {
+    "property1": {
+      "name": "compute",
+      "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "type": "s3",
+      "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "node_list": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ],
+      "node_roles_groups": [
+        "Compute",
+        "Application"
+      ],
+      "node_groups": [
+        "string"
+      ],
+      "rootfs_provider": "cpss3",
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
+      "network": "string",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0
+    },
+    "property2": {
+      "name": "compute",
+      "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "type": "s3",
+      "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "node_list": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ],
+      "node_roles_groups": [
+        "Compute",
+        "Application"
+      ],
+      "node_groups": [
+        "string"
+      ],
+      "rootfs_provider": "cpss3",
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
+      "network": "string",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0
+    }
+  }
+}
+
+```
+
+A Session Template object represents a collection of resources and metadata.
+A Session Template is used to create a Session which when combined with an
+action (i.e. boot, configure, reboot, shutdown) will create a Kubernetes BOA job
+to complete the required tasks for the operation.
+
+When upgrading to this version of BOS, all existing V1 session templates
+will automatically have all deprecated fields removed from them.
+
+When a V1 session template is created, all deprecated fields are automatically
+removed from it before storing it in BOS.
+
+## Link Relationships
+
+* self : The Session Template object
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+|description|[SessionTemplateDescription](#schemasessiontemplatedescription)|false|none|An optional description for the Session Template.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|cfs_url|[V1CfsUrl](#schemav1cfsurl)|false|none|The clone URL for the repository providing the configuration. (DEPRECATED)<br><br>It is recommended that this should be 1-4096 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
+|cfs_branch|[V1CfsBranch](#schemav1cfsbranch)|false|none|The name of the branch containing the configuration that you want to<br>apply to the nodes. Mutually exclusive with commit. (DEPRECATED)<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
+|enable_cfs|[EnableCfs](#schemaenablecfs)|false|none|Whether to enable the Configuration Framework Service (CFS).|
+|cfs|[V1CfsParameters](#schemav1cfsparameters)|false|none|This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled.|
+|partition|string|false|none|The machine partition to operate on.<br><br>It is recommended that this should be 1-255 characters in length.<br><br>When upgrading to this version of BOS, all existing V1 session<br>templates will automatically have this deprecated field removed from them.<br><br>When a V1 session template is created, this deprecated field is<br>automatically removed from it before storing it in BOS.|
+|boot_sets|object|false|none|Mapping from Boot Set names to Boot Sets.<br><br>It is recommended that:<br>* At least one Boot Set should be defined, because a Session Template with no<br>  Boot Sets is not functional.<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.|
+|» **additionalProperties**|[V1BootSet](#schemav1bootset)|false|none|A Boot Set defines a collection of nodes and the information about the<br>boot artifacts and parameters to be sent to each node over the specified<br>network to enable these nodes to boot. When multiple Boot Sets are used<br>in a Session Template, the boot_ordinal and shutdown_ordinal indicate<br>the order in which Boot Sets need to be acted upon. Boot Sets sharing<br>the same ordinal number will be addressed at the same time.|
+
+<h2 id="tocS_V1BoaKubernetesJob">V1BoaKubernetesJob</h2>
+<!-- backwards compatibility -->
+<a id="schemav1boakubernetesjob"></a>
+<a id="schema_V1BoaKubernetesJob"></a>
+<a id="tocSv1boakubernetesjob"></a>
+<a id="tocsv1boakubernetesjob"></a>
+
+```json
+"boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0"
+
+```
+
+The identity of the Kubernetes job that is created to handle the Session.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|read-only|The identity of the Kubernetes job that is created to handle the Session.|
+
+<h2 id="tocS_V1Operation">V1Operation</h2>
+<!-- backwards compatibility -->
+<a id="schemav1operation"></a>
+<a id="schema_V1Operation"></a>
+<a id="tocSv1operation"></a>
+<a id="tocsv1operation"></a>
+
+```json
+"boot"
+
+```
+
+A Session represents an operation on a Session Template.
+The creation of a Session effectively results in the creation
+of a Kubernetes Boot Orchestration Agent (BOA) job to perform the
+duties required to complete the operation.
+
+Operation -- An operation to perform on nodes in this Session.
+
+    Boot         Boot nodes that are off.
+
+    Configure    Reconfigure the nodes using the Configuration Framework
+                 Service (CFS).
+
+    Reboot       Gracefully power down nodes that are on and then power
+                 them back up.
+
+    Shutdown     Gracefully power down nodes that are on.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+
+<h2 id="tocS_V1SessionLink">V1SessionLink</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessionlink"></a>
+<a id="schema_V1SessionLink"></a>
+<a id="tocSv1sessionlink"></a>
+<a id="tocsv1sessionlink"></a>
+
+```json
+{
+  "href": "string",
+  "jobId": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+  "rel": "session",
+  "type": "GET"
+}
+
+```
+
+Link to other resources
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|href|string|false|none|none|
+|jobId|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
+|rel|string|false|none|none|
+|type|string|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|rel|session|
+|rel|status|
+|type|GET|
+
+<h2 id="tocS_V1SessionStatusUri">V1SessionStatusUri</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessionstatusuri"></a>
+<a id="schema_V1SessionStatusUri"></a>
+<a id="tocSv1sessionstatusuri"></a>
+<a id="tocsv1sessionstatusuri"></a>
+
+```json
+"/v1/session/90730844-094d-45a5-9b90-d661d14d9444/status"
+
+```
+
+URI to the status for this Session
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string(uri)|false|none|URI to the status for this Session|
+
+<h2 id="tocS_V1SessionDetails">V1SessionDetails</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessiondetails"></a>
+<a id="schema_V1SessionDetails"></a>
+<a id="tocSv1sessiondetails"></a>
+<a id="tocsv1sessiondetails"></a>
+
+```json
+{
+  "complete": true,
+  "error_count": 0,
+  "in_progress": false,
+  "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+  "operation": "boot",
+  "start_time": "2020-04-24T12:00",
+  "status_link": "/v1/session/90730844-094d-45a5-9b90-d661d14d9444/status",
+  "stop_time": "2020-04-24T12:00",
+  "templateName": "cle-1.0.0"
+}
+
+```
+
+Details about a Session.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|complete|[V1CompleteMetadata](#schemav1completemetadata)|false|none|Is the object's status complete|
+|error_count|[V1ErrorCountMetadata](#schemav1errorcountmetadata)|false|none|How many errors were encountered|
+|in_progress|[V1InProgressMetadata](#schemav1inprogressmetadata)|false|none|Is the object still doing something|
+|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
+|operation|[V1Operation](#schemav1operation)|false|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|start_time|[V1StartTimeMetadata](#schemav1starttimemetadata)|false|none|The start time|
+|status_link|[V1SessionStatusUri](#schemav1sessionstatusuri)|false|none|URI to the status for this Session|
+|stop_time|[V1StopTimeMetadata](#schemav1stoptimemetadata)|false|none|The stop time. In some contexts, the value may be null before the operation finishes.|
+|templateName|[SessionTemplateName](#schemasessiontemplatename)|false|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+
+<h2 id="tocS_V1SessionDetailsByTemplateUuid">V1SessionDetailsByTemplateUuid</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessiondetailsbytemplateuuid"></a>
+<a id="schema_V1SessionDetailsByTemplateUuid"></a>
+<a id="tocSv1sessiondetailsbytemplateuuid"></a>
+<a id="tocsv1sessiondetailsbytemplateuuid"></a>
+
+```json
+{
+  "complete": true,
+  "error_count": 0,
+  "in_progress": false,
+  "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+  "operation": "boot",
+  "start_time": "2020-04-24T12:00",
+  "status_link": "/v1/session/90730844-094d-45a5-9b90-d661d14d9444/status",
+  "stop_time": "2020-04-24T12:00",
+  "templateName": "cle-1.0.0"
+}
+
+```
+
+Details about a Session using templateUuid instead of templateName.
+DEPRECATED -- these will only exist from Sessions created before templateUuid was deprecated.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|complete|[V1CompleteMetadata](#schemav1completemetadata)|false|none|Is the object's status complete|
+|error_count|[V1ErrorCountMetadata](#schemav1errorcountmetadata)|false|none|How many errors were encountered|
+|in_progress|[V1InProgressMetadata](#schemav1inprogressmetadata)|false|none|Is the object still doing something|
+|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
+|operation|[V1Operation](#schemav1operation)|false|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|start_time|[V1StartTimeMetadata](#schemav1starttimemetadata)|false|none|The start time|
+|status_link|[V1SessionStatusUri](#schemav1sessionstatusuri)|false|none|URI to the status for this Session|
+|stop_time|[V1StopTimeMetadata](#schemav1stoptimemetadata)|false|none|The stop time. In some contexts, the value may be null before the operation finishes.|
+|templateName|[SessionTemplateName](#schemasessiontemplatename)|false|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+
+<h2 id="tocS_V1SessionLinkList">V1SessionLinkList</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessionlinklist"></a>
+<a id="schema_V1SessionLinkList"></a>
+<a id="tocSv1sessionlinklist"></a>
+<a id="tocsv1sessionlinklist"></a>
+
+```json
+[
+  {
+    "href": "string",
+    "jobId": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+    "rel": "session",
+    "type": "GET"
+  }
+]
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[V1SessionLink](#schemav1sessionlink)]|false|read-only|[Link to other resources]|
+
+<h2 id="tocS_V1Session">V1Session</h2>
+<!-- backwards compatibility -->
+<a id="schemav1session"></a>
+<a id="schema_V1Session"></a>
+<a id="tocSv1session"></a>
+<a id="tocsv1session"></a>
+
+```json
+{
+  "operation": "boot",
+  "templateName": "cle-1.0.0",
+  "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+  "limit": "string",
+  "links": [
+    {
+      "href": "string",
+      "jobId": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+      "rel": "session",
+      "type": "GET"
+    }
+  ]
+}
+
+```
+
+A Session object
+
+## Link Relationships
+
+* self : The Session object
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|operation|[V1Operation](#schemav1operation)|true|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|templateName|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
+|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|links|[V1SessionLinkList](#schemav1sessionlinklist)|false|none|none|
+
+<h2 id="tocS_V1SessionByTemplateName">V1SessionByTemplateName</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessionbytemplatename"></a>
+<a id="schema_V1SessionByTemplateName"></a>
+<a id="tocSv1sessionbytemplatename"></a>
+<a id="tocsv1sessionbytemplatename"></a>
+
+```json
+{
+  "operation": "boot",
+  "templateUuid": "my-session-template",
+  "templateName": "cle-1.0.0",
+  "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+  "limit": "string",
+  "links": [
+    {
+      "href": "string",
+      "jobId": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+      "rel": "session",
+      "type": "GET"
+    }
+  ]
+}
+
+```
+
+A Session object specified by templateName
+
+## Link Relationships
+
+* self : The Session object
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|operation|[V1Operation](#schemav1operation)|true|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|templateUuid|[V1SessionTemplateUuid](#schemav1sessiontemplateuuid)|false|none|DEPRECATED - use templateName. This field is ignored if templateName is also set.<br><br>Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* 1-127 characters in length.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
+|templateName|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
+|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|links|[V1SessionLinkList](#schemav1sessionlinklist)|false|none|none|
+
+<h2 id="tocS_V1SessionByTemplateUuid">V1SessionByTemplateUuid</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessionbytemplateuuid"></a>
+<a id="schema_V1SessionByTemplateUuid"></a>
+<a id="tocSv1sessionbytemplateuuid"></a>
+<a id="tocsv1sessionbytemplateuuid"></a>
+
+```json
+{
+  "operation": "boot",
+  "templateUuid": "my-session-template",
+  "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+  "limit": "string",
+  "links": [
+    {
+      "href": "string",
+      "jobId": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+      "rel": "session",
+      "type": "GET"
+    }
+  ]
+}
+
+```
+
+A Session object specified by templateUuid (DEPRECATED -- use templateName)
+
+## Link Relationships
+
+* self : The Session object
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|operation|[V1Operation](#schemav1operation)|true|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|templateUuid|[V1SessionTemplateUuid](#schemav1sessiontemplateuuid)|true|none|DEPRECATED - use templateName. This field is ignored if templateName is also set.<br><br>Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* 1-127 characters in length.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
+|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
+|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|links|[V1SessionLinkList](#schemav1sessionlinklist)|false|none|none|
+
+<h2 id="tocS_V1PhaseName">V1PhaseName</h2>
+<!-- backwards compatibility -->
+<a id="schemav1phasename"></a>
+<a id="schema_V1PhaseName"></a>
+<a id="tocSv1phasename"></a>
+<a id="tocsv1phasename"></a>
+
+```json
+"Boot"
+
+```
+
+The phase that this data belongs to (boot, shutdown, or configure). If blank,
+it belongs to the Boot Set itself, which only applies to the GenericMetadata type.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+
+<h2 id="tocS_V1NodeChangeList">V1NodeChangeList</h2>
+<!-- backwards compatibility -->
+<a id="schemav1nodechangelist"></a>
+<a id="schema_V1NodeChangeList"></a>
+<a id="tocSv1nodechangelist"></a>
+<a id="tocsv1nodechangelist"></a>
+
+```json
+{
+  "phase": "Boot",
+  "source": "Succeeded",
+  "destination": "Succeeded",
+  "node_list": [
+    "x3000c0s19b1n0",
+    "x3000c0s19b2n0"
+  ]
+}
+
+```
+
+The information used to update the status of a node list. It moves nodes from
+one category to another within a phase.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|source|[V1PhaseCategoryName](#schemav1phasecategoryname)|true|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
+|destination|[V1PhaseCategoryName](#schemav1phasecategoryname)|true|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
+|node_list|[NodeListEmptyOk](#schemanodelistemptyok)|true|none|A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+
+<h2 id="tocS_V1NodeErrorsList">V1NodeErrorsList</h2>
+<!-- backwards compatibility -->
+<a id="schemav1nodeerrorslist"></a>
+<a id="schema_V1NodeErrorsList"></a>
+<a id="tocSv1nodeerrorslist"></a>
+<a id="tocsv1nodeerrorslist"></a>
+
+```json
+{
+  "property1": [
+    "x3000c0s19b1n0",
+    "x3000c0s19b2n0"
+  ],
+  "property2": [
+    "x3000c0s19b1n0",
+    "x3000c0s19b2n0"
+  ]
+}
+
+```
+
+Categorizing nodes into failures by the type of error they have.
+This is an additive characterization. Nodes will be added to existing errors.
+This does not overwrite previously existing errors.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|**additionalProperties**|[NodeListEmptyOk](#schemanodelistemptyok)|false|none|A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+
+<h2 id="tocS_V1UpdateRequestNodeChange">V1UpdateRequestNodeChange</h2>
+<!-- backwards compatibility -->
+<a id="schemav1updaterequestnodechange"></a>
+<a id="schema_V1UpdateRequestNodeChange"></a>
+<a id="tocSv1updaterequestnodechange"></a>
+<a id="tocsv1updaterequestnodechange"></a>
+
+```json
+{
+  "update_type": "NodeChangeList",
+  "phase": "Boot",
+  "data": {
+    "phase": "Boot",
+    "source": "Succeeded",
+    "destination": "Succeeded",
+    "node_list": [
+      "x3000c0s19b1n0",
+      "x3000c0s19b2n0"
+    ]
+  }
+}
+
+```
+
+This is an element of the payload sent during an update request. It contains
+updates to which categories nodes are in.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|update_type|string|true|none|The type of update data|
+|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|data|[V1NodeChangeList](#schemav1nodechangelist)|true|none|The information used to update the status of a node list. It moves nodes from<br>one category to another within a phase.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|update_type|NodeChangeList|
+
+<h2 id="tocS_V1UpdateRequestNodeErrors">V1UpdateRequestNodeErrors</h2>
+<!-- backwards compatibility -->
+<a id="schemav1updaterequestnodeerrors"></a>
+<a id="schema_V1UpdateRequestNodeErrors"></a>
+<a id="tocSv1updaterequestnodeerrors"></a>
+<a id="tocsv1updaterequestnodeerrors"></a>
+
+```json
+{
+  "update_type": "NodeErrorsList",
+  "phase": "Boot",
+  "data": {
+    "property1": [
+      "x3000c0s19b1n0",
+      "x3000c0s19b2n0"
+    ],
+    "property2": [
+      "x3000c0s19b1n0",
+      "x3000c0s19b2n0"
+    ]
+  }
+}
+
+```
+
+This is an element of the payload sent during an update request. It contains
+updates to which errors have occurred and which nodes encountered those errors
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|update_type|string|true|none|The type of update data|
+|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|data|[V1NodeErrorsList](#schemav1nodeerrorslist)|true|none|Categorizing nodes into failures by the type of error they have.<br>This is an additive characterization. Nodes will be added to existing errors.<br>This does not overwrite previously existing errors.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|update_type|NodeErrorsList|
+
+<h2 id="tocS_V1UpdateRequestGenericMetadata">V1UpdateRequestGenericMetadata</h2>
+<!-- backwards compatibility -->
+<a id="schemav1updaterequestgenericmetadata"></a>
+<a id="schema_V1UpdateRequestGenericMetadata"></a>
+<a id="tocSv1updaterequestgenericmetadata"></a>
+<a id="tocsv1updaterequestgenericmetadata"></a>
+
+```json
+{
+  "update_type": "GenericMetadata",
+  "phase": "Boot",
+  "data": {
+    "complete": true,
+    "error_count": 0,
+    "in_progress": false,
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
+  }
+}
+
+```
+
+This is an element of the payload sent during an update request. It contains
+updates to metadata, specifically start and stop times
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|update_type|string|true|none|The type of update data|
+|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|data|[V1GenericMetadata](#schemav1genericmetadata)|true|none|The status metadata|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|update_type|GenericMetadata|
+
+<h2 id="tocS_V1UpdateRequestList">V1UpdateRequestList</h2>
+<!-- backwards compatibility -->
+<a id="schemav1updaterequestlist"></a>
+<a id="schema_V1UpdateRequestList"></a>
+<a id="tocSv1updaterequestlist"></a>
+<a id="tocsv1updaterequestlist"></a>
+
+```json
+[
+  {
+    "update_type": "NodeChangeList",
+    "phase": "Boot",
+    "data": {
+      "phase": "Boot",
+      "source": "Succeeded",
+      "destination": "Succeeded",
+      "node_list": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ]
+    }
+  }
+]
+
+```
+
+This is the payload sent during an update request. It contains a list of updates.
+
+### Properties
+
+oneOf
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[V1UpdateRequestNodeChange](#schemav1updaterequestnodechange)|false|none|This is an element of the payload sent during an update request. It contains<br>updates to which categories nodes are in.|
+
+xor
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[V1UpdateRequestNodeErrors](#schemav1updaterequestnodeerrors)|false|none|This is an element of the payload sent during an update request. It contains<br>updates to which errors have occurred and which nodes encountered those errors|
+
+xor
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[V1UpdateRequestGenericMetadata](#schemav1updaterequestgenericmetadata)|false|none|This is an element of the payload sent during an update request. It contains<br>updates to metadata, specifically start and stop times|
 
 <h2 id="tocS_V2TenantName">V2TenantName</h2>
 <!-- backwards compatibility -->
