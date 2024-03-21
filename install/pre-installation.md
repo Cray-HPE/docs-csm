@@ -367,7 +367,7 @@ These variables will need to be set for many procedures within the CSM installat
    canu-1.7.6-1.x86_64
    ilorest-4.2.0.0-20.x86_64
    metal-basecamp-1.2.6-1.x86_64
-   metal-ipxe-2.4.6-1.noarch
+   metal-ipxe-2.4.7-1.noarch
    metal-init-1.4.6-1.noarch
    metal-nexus-1.3.1-3.38.0_1.x86_64
    metal-observability-1.0.9-1.x86_64
@@ -424,7 +424,7 @@ These variables will need to be set for many procedures within the CSM installat
        > - `metal-init` provides several scripts in `/root/bin` used for fresh installations.
 
        ```bash
-       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/noos" --no-gpg-checks update -y cray-site-init metal-init
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/noos" --no-gpg-checks update -y cray-site-init metal-init metal-ipxe
        ```
 
 1. (`pit#`) Get the artifact versions.
@@ -502,7 +502,7 @@ These variables will need to be set for many procedures within the CSM installat
    canu-1.7.6-1.x86_64
    ilorest-4.2.0.0-20.x86_64
    metal-basecamp-1.2.6-1.x86_64
-   metal-ipxe-2.4.6-1.noarch
+   metal-ipxe-2.4.8-1.noarch
    metal-init-1.4.6-1.noarch
    metal-nexus-1.3.1-3.38.0_1.x86_64
    metal-observability-1.0.9-1.x86_64
