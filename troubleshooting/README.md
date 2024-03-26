@@ -66,6 +66,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Test Failures Due To No Discovered Compute Nodes In HSM](known_issues/test_failures_no_discovered_computes_in_hsm.md)
 - [Velero Version Mismatch](known_issues/velero_version_mismatch.md)
 - [wait for unbound hang](known_issues/wait_for_unbound_hang.md)
+- [IUF fails with 'Not a directory: /etc/cray/upgrade/csm/media/...'](known_issues/iuf_error_not_a_directory.md)
 
 ## Booting
 
