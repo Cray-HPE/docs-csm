@@ -39,8 +39,6 @@ Once this step has completed:
 
 ## 2. Update `customizations.yaml`
 
-**`NOTE`** This section is only relevant for initial install workflows. Skip to the [next section](#3-execute-the-iuf-deliver-product-stage) if performing an upgrade.
-
 Some products require modifications to the `customizations.yaml` file before executing the `deliver-product` stage. Currently, this is limited to the Slurm and PBS Workload Manager (WLM) products and the UAN product. Refer to the
 "Install and Upgrade Framework" section of the Slurm, PBS, and UAN product documents to determine the actions that need to be performed to update `customizations.yaml`.
 
