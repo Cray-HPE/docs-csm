@@ -133,7 +133,7 @@ grep -qxF '\''install qedr /bin/true'\'' /etc/modprobe.d/disabled-modules.conf |
 omit_drivers=()
 if [ -f /etc/dracut.conf.d/99-csm-ansible.conf ]; then
   . /etc/dracut.conf.d/99-csm-ansible.conf
-  if [[ "${omit_drivers[@]}" =~ qedr ]]; then
+  if [[ "${omit_drivers[*]}" =~ qedr ]]; then
     :
   else
     sed -i -E '\''s/^omit_drivers\+=" ?/omit_drivers+=" qedr /'\'' /etc/dracut.conf.d/99-csm-ansible.conf
