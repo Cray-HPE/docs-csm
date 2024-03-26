@@ -41,8 +41,8 @@ Once this step has completed:
 
 **`NOTE`** This section is only relevant for initial install workflows. Skip to the [next section](#3-execute-the-iuf-deliver-product-stage) if performing an upgrade.
 
-Some products require modifications to the `customizations.yaml` file before executing the `deliver-product` stage. Currently, this is limited to the Slurm and PBS Workload Manager (WLM) products. Refer to the
-"Install and Upgrade Framework" section of both the Slurm and PBS product documents to determine the actions that need to be performed to update `customizations.yaml`.
+Some products require modifications to the `customizations.yaml` file before executing the `deliver-product` stage. Currently, this is limited to the Slurm and PBS Workload Manager (WLM) products and the UAN product. Refer to the
+"Install and Upgrade Framework" section of the Slurm, PBS, and UAN product documents to determine the actions that need to be performed to update `customizations.yaml`.
 
 Once this step has completed:
 
@@ -76,13 +76,13 @@ Some products provide instructions for delivering third-party content to the sys
 with the workflow.
 
 - **Content:** Third-party GPU software
-  - **Description:** [User Services Software (USS)](../../../glossary.md#user-services-software-uss) provides the `gpu-nexus-tool` script to upload third-party GPU software to Nexus.
+    - **Description:** [User Services Software (USS)](../../../glossary.md#user-services-software-uss) provides the `gpu-nexus-tool` script to upload third-party GPU software to Nexus.
     The GPU software is used later in the workflow when creating CFS configurations and building compute and application node images.
-  - **Instructions:** See the "IUF Stage Details for USS" section of _HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray EX Systems_ for references to the installation procedures.
+    - **Instructions:** See the "IUF Stage Details for USS" section of _HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray EX Systems_ for references to the installation procedures.
 - **Content:** Third-party programming environment software
-  - **Description:** The Cray Programming Environment (CPE) provides the `install-3p.sh` and `cpe-custom-img.sh` scripts to upload third-party programming environment software to Nexus and build images. The programming environment
+    - **Description:** The Cray Programming Environment (CPE) provides the `install-3p.sh` and `cpe-custom-img.sh` scripts to upload third-party programming environment software to Nexus and build images. The programming environment
     software is used later in the workflow when creating CPE configurations.
-  - **Instructions:** See the "CPE Install and Upgrade Framework usage" section of _HPE CPE Installation Guide CSM on HPE Cray EX Systems (S-8003)_ for references to the installation procedures.
+    - **Instructions:** See the "CPE Install and Upgrade Framework usage" section of _HPE CPE Installation Guide CSM on HPE Cray EX Systems (S-8003)_ for references to the installation procedures.
 
 Once this step has completed:
 
