@@ -1,4 +1,4 @@
-# IUF fails with 'Not a directory: /etc/cray/upgrade/csm/media/...'
+# IUF fails with `Not a directory: /etc/cray/upgrade/csm/media/...`
 
 ## Error
 
@@ -26,7 +26,7 @@ Error Summary:
 
 This error occurs because product documentation tar files have different structures than product tar files.
 Certain product documentation tar files extract files directly into the media directory. This can cause
-the 'NotADirectoryError' error in the IUF-CLI. This problem has been fixed in the IUF-CLI rpm version 1.5.12 which is in CSM 1.5.1 and more recent releases.
+the `NotADirectoryError` error in the IUF-CLI. This problem has been fixed in the IUF-CLI rpm version 1.5.12 which is in CSM 1.5.1 and more recent releases.
 For the fix for CSM 1.4.X and CSM 1.5.0, please refer to the work around below.
 
 ## Work Around
