@@ -6,19 +6,19 @@ the K8S pods. There are two primary reasons to choose to run jobs on a remote bu
 
 1. Resources available to the K8S workers.
 
-The IMS jobs creating and customizing images can consume a lot of resources within the K8S cluster,
-particularly as the image sizes get larger. If the jobs are offloaded to remote nodes, most of that
-resource pressure can be shifted to the remote node. This can be particularly important if the
-workers in the cluster are already under load stress.
+    The IMS jobs creating and customizing images can consume a lot of resources within the K8S cluster,
+    particularly as the image sizes get larger. If the jobs are offloaded to remote nodes, most of that
+    resource pressure can be shifted to the remote node. This can be particularly important if the
+    workers in the cluster are already under load stress.
 
-2. Performance due to cross archetecture builds.
+1. Performance due to cross architecture builds.
 
-All K8S worker nodes are running on x86_64 hardware. While IMS is installed with a method of generating
-aarch64 image builds via emulation, this method is best suited for minimal or barebones image builds. The
-emulation is done through a Kata VM running a QEMU translator. The process of translating x86_64
-to aarch64 instructions has a serious performance impact. When running the job on a remote node, it will
-run on the native archetecture of the remote node. Running aarch64 image builds on an aarch64 remote node
-can see over a 10x performance increase versus running the same job under emulation.
+    All K8S worker nodes are running on x86_64 hardware. While IMS is installed with a method of generating
+    aarch64 image builds via emulation, this method is best suited for minimal or barebones image builds. The
+    emulation is done through a Kata VM running a QEMU translator. The process of translating x86_64
+    to aarch64 instructions has a serious performance impact. When running the job on a remote node, it will
+    run on the native architecture of the remote node. Running aarch64 image builds on an aarch64 remote node
+    can see over a 10x performance increase versus running the same job under emulation.
 
 ## Prerequisites 
 - Available compute node
@@ -56,17 +56,22 @@ used to work with images, or if it can still run compute jobs while building ima
     podman [options] [command]
     ```
 
-    If the output is not as expected you will need to make sure the appropriate Nexus repositories are present on the system to facilitate the package installation.
-    ** Note fields within <> require that you modify the version based upon your service pack version and the architecture will be either x86_64 or aarch64 for the platform architecture you are targeting.
+    If the output is not as expected you will need to make sure the appropriate Nexus repositories are present on the system
+    to facilitate the package installation.
+    
+    ** Note fields within <> require that you modify the version based upon your service pack version and the architecture will
+    be either x86_64 or aarch64 for the platform architecture you are targeting.
+
     ```bash
     zypper addrepo --priority 4 https://packages.local/repository/SUSE-SLE-Module-Basesystem-15-SP<version>-<architecture>-Pool/ SUSE-SLE-Module-Basesystem-15-sp<version>-<architecture>-Pool
     zypper addrepo --priority 4 https://packages.local/repository/SUSE-SLE-Module-Containers-15-SP<version>-<architecture>-Pool/ SUSE-SLE-Module-Containers-15-sp<version>-<architecture>-Pool
     ```
+
     ```bash
     zypper in podman
     ```
 
-2. Install the IMS ssh key.
+1. Install the IMS ssh key.
 
     - get ssh key from K8S secrets
     - copy into node's ~/.ssh/autorized_keys file
@@ -99,7 +104,7 @@ image that is installed with CSM.
     name = "compute-csm-1.5-5.2.47-aarch64"
     ```
 
-2. Create a CFS configuration to customize the barebones image.
+1. Create a CFS configuration to customize the barebones image.
 
     Store the id of the arm compute image in the previous step and create a cfs configuration resembling the following. 
 
@@ -117,7 +122,7 @@ image that is installed with CSM.
     }
     ```
 
-3. Use CFS to customize the barebones image.
+1. Use CFS to customize the barebones image.
 
     After posting your cfs configuration you will use it to customize the image id retrieved in the previous step.
 
@@ -126,7 +131,7 @@ image that is installed with CSM.
     cray cfs sessions create --target-group Application <IMS ID of your image> --target-image-map <IMS ID of your image> <name you want your new image to have in IMS> --target-definition image --name <pick a name for your CFS session> --configuration-name <name of the CFS configuration you created in the previous step>
     ```
 
-4. Boot the compute node with the customized image
+1. Boot the compute node with the customized image
 
     Once the cfs customization is finished, the image is ready to be booted. Create a bos session template referencing that image and use it to boot an arm node.
 
@@ -147,7 +152,7 @@ image that is installed with CSM.
     }
     ```
 
-5. Optionally lock the compute node to prevent unintended reboots of the compute node.
+1. Optionally lock the compute node to prevent unintended reboots of the compute node.
 
     Once the image is booted and operational you may also possibly look into the possiblity of adding an HSM lock to that node. This will prevent unwanted or accidental reboots or poweroffs.
     (`ncn-mw#`)
@@ -160,7 +165,7 @@ image that is installed with CSM.
     cray hsm locks unlock create --component-ids <compute node XNAME>
     ```
 
-6. Add storage to the remote build node.
+1. Add storage to the remote build node.
 
     By default compute nodes have limited storage. While executing small image builds may be possible, you will not be able to build larger images without additonal
     storage being available to the ims builder node. We can achieve this by mounting ceph storage into the ims builder node.
