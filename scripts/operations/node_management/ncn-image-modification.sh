@@ -120,6 +120,7 @@ function usage() {
   echo "                                single quotes (') to ensure any '$' characters are not"
   echo -e "                                interpreted.\n"
   echo -e "       DEBUG                    If set, the script will be run with 'set -x'\n"
+  echo -e "       CSM_RELEASE              If set, the script will apply any and all per-release adjustments."
   echo "NOTES"
   echo "       If it is desired to not have any ssh in the image, specify -d with an empty"
   echo "       directory along with -a"
@@ -423,6 +424,114 @@ function create_new_squashfs() {
   done
 }
 
+function csm_144_patch {
+  local name
+  local rc
+  local squash
+  local kernel_version='5.14.21-150400.24.100.2.27359.1.PTF.1215587'
+  local new_drivers=(
+    'qed'
+    'qede'
+    'qedf'
+    'qedi'
+  )
+  local add_drivers=()
+  local omit_drivers=()
+  local rpms=(
+    "${CSM_PATH}/rpm/cray/csm/sle-15sp4/x86_64/qlgc-fastlinq-kmp-default-8.74.1.0_k5.14.21_150400.22-1.sles15sp4.x86_64.rpm"
+    "${CSM_PATH}/rpm/cray/csm/sle-15sp4/x86_64/kernel-default-devel-${kernel_version}.x86_64.rpm"
+    "${CSM_PATH}/rpm/cray/csm/sle-15sp4/x86_64/kernel-default-${kernel_version}.x86_64.rpm"
+    "${CSM_PATH}/rpm/cray/csm/sle-15sp4/noarch/kernel-devel-${kernel_version}.noarch.rpm"
+    "${CSM_PATH}/rpm/cray/csm/sle-15sp4/noarch/kernel-macros-${kernel_version}.noarch.rpm"
+    "${CSM_PATH}/rpm/cray/csm/sle-15sp4/x86_64/kernel-syms-${kernel_version}.x86_64.rpm"
+  )
+
+  if [ ! -d "${CSM_PATH}" ]; then
+    echo >&2 "CSM_PATH does not exist, or was not defined."
+    return 1
+  fi
+  echo "Patching images for CSM 1.4.4 ... "
+  for squash in "${SQUASH_PATHS[@]}"; do
+    (
+      pushd "$(dirname "$squash")"
+      name="$(basename "$squash")"
+
+      if [[ $name =~ 'kubernetes' ]]; then
+        # --nodeps is necessary to bypass any extra, old Kernel packages (e.g. kernel-source) throwing hands up at us upgrading their dependencies.
+        # --root is necessary for installing our packages into the extracted squashfs.
+        if rpm -Uvh --nodeps --root "$(pwd)/squashfs-root" "${rpms[@]}"; then
+          :
+        else
+          rc=$?
+          [ "$rc" -ne 127 ] && return "$rc"
+        fi
+
+        # Update the default kernel version.
+        sed -i 's/^multiversion\.kernels =.*/multiversion.kernels = '"${kernel_version}"'/g' squashfs-root/etc/zypp/zypp.conf
+
+        # Satisfy the start condition for the purge-kernels.service to clean up any left-over old kernel items.
+        touch squashfs-root/boot/do_purge_kernels
+
+        # Remove the QLogic Dracut module configuration.
+        rm -f squashfs-root/etc/dracut.conf.d/fastlinq.conf
+      fi
+
+      # Blacklist qedr from rootfs.
+      grep -qxF 'install qedr /bin/true' squashfs-root/etc/modprobe.d/disabled-modules.conf || echo 'install qedr /bin/true' >> squashfs-root/etc/modprobe.d/disabled-modules.conf
+
+      # Blacklist qedr from dracut.
+      if [ -f squashfs-root/etc/dracut.conf.d/99-csm-ansible.conf ]; then
+        . squashfs-root/etc/dracut.conf.d/99-csm-ansible.conf
+        if [[ ${omit_drivers[*]} =~ qedr ]]; then
+          :
+        else
+          sed -i -E 's/^omit_drivers\+=" ?/omit_drivers+=" qedr /' squashfs-root/etc/dracut.conf.d/99-csm-ansible.conf
+        fi
+
+        if [[ $name =~ 'kubernetes' ]]; then
+
+          for driver in "${new_drivers[@]}"; do
+            if [[ ${add_drivers[*]} =~ $driver ]]; then
+              :
+            else
+              add_drivers+=("$driver")
+            fi
+          done
+          new_add_drivers_line="$(printf 'add_drivers+=" %s "' "${add_drivers[*]}")"
+          sed -i -E 's/^add_drivers\+=.*/'"$new_add_drivers_line"'/' squashfs-root/etc/dracut.conf.d/99-csm-ansible.conf
+        fi
+
+      else
+
+        if [[ $name =~ 'kubernetes' ]]; then
+          new_add_drivers_line="$(printf 'add_drivers+=" %s "' "${new_drivers[*]}")"
+          cat << EOF > squashfs-root/etc/dracut.conf.d/99-csm-ansible.conf
+$new_add_drivers_line # Needs to start and end with a space to mitigate warnings.
+EOF
+        fi
+        cat << EOF >> squashfs-root/etc/dracut.conf.d/99-csm-ansible.conf
+omit_drivers+=" qedr " # Needs to start and end with a space to mitigate warnings.
+EOF
+      fi
+
+      rm squashfs-root/squashfs/*
+      if [[ $name =~ 'kubernetes' ]]; then
+        chroot squashfs-root bash -c "/srv/cray/scripts/metal/create-kis-artifacts.sh kernel-initrd-only"
+      elif [[ $name =~ 'storage-ceph' ]]; then
+        chroot squashfs-root bash -c "/srv/cray/scripts/common/create-kis-artifacts.sh kernel-initrd-only"
+      else
+        echo >&2 "Error! squashFS not of type Kubernetes or Storage-CEPH, found $name."
+        return 1
+      fi
+      mkdir -pv old
+      mv -v ./*.kernel old/
+      mv -v ./initrd* old/
+      cp -pv squashfs-root/squashfs/* .
+      popd
+    )
+  done
+}
+
 if [ "$#" -lt 2 ]; then
   usage
   exit 1
@@ -436,6 +545,9 @@ if ! tz_only; then
 fi
 
 set_timezone
+if [[ $CSM_RELEASE =~ ^1\.4\.4 ]]; then
+  csm_144_patch
+fi
 create_new_squashfs
 cleanup
 
