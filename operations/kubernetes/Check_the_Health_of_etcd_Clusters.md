@@ -31,9 +31,8 @@ This procedure requires root privileges.
     127.0.0.1:2379 is healthy: successfully committed proposal: took = 4.697124ms
     ### cray-bos-bitnami-etcd-2 ###
     127.0.0.1:2379 is healthy: successfully committed proposal: took = 4.119712ms
-    --- PASSED ---
-
     [...]
+     --- PASSED ---
     ```
 
     If any of the etcd clusters are not healthy, refer to [Restore an etcd Cluster from a Backup](Restore_an_etcd_Cluster_from_a_Backup.md).
@@ -58,35 +57,36 @@ This procedure requires root privileges.
     cray-bos-bitnami-etcd-0                                           2/2     Running     0          22h     10.32.0.76    ncn-w002   <none>           <none>
     cray-bos-bitnami-etcd-1                                           2/2     Running     0          22h     10.40.0.8     ncn-w003   <none>           <none>
     cray-bos-bitnami-etcd-2                                           2/2     Running     0          22h     10.44.0.58    ncn-w001   <none>           <none>
-    
+    [...]
      --- PASSED ---
     ```
 
     If the etcd clusters have fewer than three pods in a 'Running' state, see [Restore an etcd Cluster from a Backup](Restore_an_etcd_Cluster_from_a_Backup.md).
 
-    - To check the health of all of the etcd clusters` databases:
+1. (`ncn-mw#`) Check the health of all etcd clusters' databases:
 
-        ```bash
-        /opt/cray/platform-utils/ncnHealthChecks.sh -s etcd_database_health
-        ```
+   ```bash
+   /opt/cray/platform-utils/ncnHealthChecks.sh -s etcd_database_health
+   ```
 
-        Example output:
+   Example output:
 
-        ```text
-        **************************************************************************
+   ```text
+   **************************************************************************
 
-        === Check the health of Etcd Cluster's database in the Services Namespace. ===
-        === PASS or FAIL status returned. ===
-        ### cray-bos-bitnami-etcd-0 Etcd Database Check: ###
-        PASS: OK foo fooCheck 1
-        ### cray-bos-bitnami-etcd-1 Etcd Database Check: ###
-        PASS: OK foo fooCheck 1
-        ### cray-bos-bitnami-etcd-2 Etcd Database Check: ###
-        PASS: OK foo fooCheck 1
-        [...]
-        ```
+   === Check the health of Etcd Cluster's database in the Services Namespace. ===
+   === PASS or FAIL status returned. ===
+   ### cray-bos-bitnami-etcd-0 Etcd Database Check: ###
+   PASS: OK foo fooCheck 1
+   ### cray-bos-bitnami-etcd-1 Etcd Database Check: ###
+   PASS: OK foo fooCheck 1
+   ### cray-bos-bitnami-etcd-2 Etcd Database Check: ###
+   PASS: OK foo fooCheck 1
+   [...]
+    --- PASSED ---
+   ```
 
-    If any of the etcd cluster databases are not healthy, then refer to the following procedures:
+   If any of the etcd cluster databases are not healthy, then refer to the following procedures:
 
-    - [Check for and Clear etcd Cluster Alarms](Check_for_and_Clear_etcd_Cluster_Alarms.md)
-    - [Clear Space in an etcd Cluster Database](Clear_Space_in_an_etcd_Cluster_Database.md)
+   - [Check for and Clear etcd Cluster Alarms](Check_for_and_Clear_etcd_Cluster_Alarms.md)
+   - [Clear Space in an etcd Cluster Database](Clear_Space_in_an_etcd_Cluster_Database.md)

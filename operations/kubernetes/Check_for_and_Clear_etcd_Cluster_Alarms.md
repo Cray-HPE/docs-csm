@@ -15,24 +15,30 @@ For example, a cluster's database `NOSPACE` alarm is set when database storage s
 
     An empty list will be returned if no alarms are set.
 
-    - Check if any etcd alarms are set for any etcd clusters.
+    Check if any etcd alarms are set for any etcd clusters.
 
-        ```bash
-        /opt/cray/platform-utils/ncnHealthChecks.sh -s etcd_alarm_check
-        ```
+    ```bash
+    /opt/cray/platform-utils/ncnHealthChecks.sh -s etcd_alarm_check
+    ```
 
-        Example output:
+    Example output:
 
-        ```text
-        **************************************************************************
+    ```text
+    **************************************************************************
 
-        === Check if any "alarms" are set for any of the Etcd Clusters in all Namespaces. ===
-        === An empty list is returned if no alarms are set ===
-        ### cray-bos-bitnami-etcd-0 Alarms Set: ###
-        ### cray-bos-bitnami-etcd-1 Alarms Set: ###
-        ### cray-bos-bitnami-etcd-2 Alarms Set: ###
-         --- PASSED ---
-        ```
+    === Check if any "alarms" are set for any of the Etcd Clusters in all Namespaces. ===
+    === An empty list is returned if no alarms are set ===
+    ### cray-bos-bitnami-etcd-1 Alarms Set: ###
+    ### cray-bos-bitnami-etcd-2 Alarms Set: ###
+    ### cray-bos-bitnami-etcd-0 Alarms Set: ###
+    ### cray-bss-bitnami-etcd-1 Alarms Set: ###
+    ### cray-bss-bitnami-etcd-2 Alarms Set: ###
+    ### cray-bss-bitnami-etcd-0 Alarms Set: ###
+
+    [...]
+
+     --- PASSED ---
+    ```
 
 1. (`ncn-mw#`) Clear any etcd cluster alarms.
 
