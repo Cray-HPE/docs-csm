@@ -12,48 +12,38 @@ On Aruba-based systems, all management network switches will be Aruba.
 
 1. (`ncn-m#`) Connect to all management network switches.
 
-   This loop will login to each switch as the admin username. Provide the password for that username. While logged in to each switch, some commands will be issued.  Then after typing `exit`, the loop will login to the next switch.
-
-    ```bash
-    for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do echo  "switch ${switch}:" ; ssh admin@$switch; done
-    ```
-
-   Commands to issue on each switch:
+   This loop will login to each switch as the admin username. Provide the password for that
+   username. The `write mem` command will be executed on each switch.
 
    ```bash
-   write memory
-   exit
+   for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do
+     echo "switch ${switch}:"
+     fping -r0 ${switch}
+     if [ $? -eq 0 ]; then
+       ssh admin@$switch write mem
+     fi
+   done
    ```
 
-   Example output:
+   The following example output shows the results of each `fping`, the password prompt, and the
+   output from the `write mem` command for two spine switches. Other output is omitted for brevity.
 
    ```bash
    switch sw-spine-001:
-   admin@sw-spine-001's password: 
-   ###############################################################################
-   # CSM version:  1.3
-   # CANU version: 1.6.20
-   ###############################################################################
+   sw-spine-001 is alive
 
-   Last login: 2024-01-29 00:58:44 from 100.113.129.22
-   User "admin" has logged in 2 times in the past 30 days
-   sw-spine-001# write memory
+   ...
+
+   admin@sw-spine-001's password:
    Copying configuration: [Success]
-   sw-spine-001# exit
-   Connection to sw-spine-001 closed.
    switch sw-spine-002:
-   admin@sw-spine-002's password: 
-   ###############################################################################
-   # CSM version:  1.3
-   # CANU version: 1.6.20
-   ###############################################################################
+   sw-spine-002 is alive
 
-   Last login: 2024-01-29 01:01:44 from 100.113.129.22
-   User "admin" has logged in 1 times in the past 30 days
-   sw-spine-002# write memory
+   ...
+
+   admin@sw-spine-002's password:
    Copying configuration: [Success]
-   sw-spine-002# exit
-   Connection to sw-spine-002 closed.
+
    ...
     ```
 
