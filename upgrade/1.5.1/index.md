@@ -15,7 +15,7 @@ in [Upgrade CSM](../README.md) instead.
    * Updated IMS to allow for remote node builds
    * Support for Paradise hardware
    * Fixed an issue where hms-discovery would put default creds into vault disabling non default credentials
-   * Fixed an issue where crap-ipxe generated scripts would cause boot errors
+   * Fixed an issue where cray-ipxe generated scripts would cause boot errors
    * Fixed an issue where BOS v2 would send large queries to CFS resulting 503 and 431 responses
    * Fixed an issue where PCS was adding invalid components to power operations
    * Fixed an issue where IUF would encounter a race condition and stall on transitioning to new stages
@@ -30,6 +30,14 @@ in [Upgrade CSM](../README.md) instead.
    * Fixed an issue where BOS operators would output errors when all nodes exceed retry limit
    * Fixed an issue where cray-upload-recovery-images fails to upload recovery firmware
    * Fixed an issue where "cm health report slingshot refresh" cmd was giving a traceback error
+   * Updated docs for IUF to include rolling reboots after upgrading HSN NIC firmware
+   * Updated docs to provide instructions for creating a new Nexus repo and adding rpms
+   * Updated docs for CAPMC to warn about URL character limits
+   * Fixed an issue where BOS v2 requests for too many nodes from PCS exceeding the URL character limit
+   * Updated docs script nexus_export_and_restore to add better checks for determining existence of nexus-bak PVC or nexus-backup job
+   * Updated docs for fix_failed_to_start_etcd_on_master to better specify how to add a process
+   * Fixed an issue with IUF where process-media/pre-install-check dislikes PDF file
+   * Fixed an issue where backup_smd_postgres.sh script is not executable
 
 ## Steps
 
