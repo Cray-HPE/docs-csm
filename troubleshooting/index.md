@@ -46,6 +46,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Multiple Console Node Pods on the Same Worker](known_issues/Multiple_Console_Node_Pods_on_the_Same_Worker.md)
 * [HPE nodes not properly transitioning power state](known_issues/hpe_systems_not_transitioning_power_state.md)
 * [Nexus Fails Authentication with Keycloak Users](known_issues/Nexus_Fail_Authentication_with_Keycloak_Users.md)
+* [Hang Listing BOS Sessions](known_issues/Hang_Listing_BOS_Sessions.md)
 
 ## Kubernetes
 
