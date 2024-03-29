@@ -12,7 +12,24 @@
 
    ## Bug fixes and improvements
 
-    * Update to IMS to allow for remote node builds
+    * Updated IMS to allow for remote node builds
+    * Support for Paradise hardware
+    * Fixed an issue where hms-discovery would put default creds into vault disabling non default credentials
+    * Fixed an issue where crap-ipxe generated scripts would cause boot errors
+    * Fixed an issue where BOS v2 would send large queries to CFS resulting 503 and 431 responses
+    * Fixed an issue where PCS was adding invalid components to power operations
+    * Fixed an issue where IUF would encounter a race condition and stall on transitioning to new stages
+    * Fixed an issue where Thanos service is configured without storage limits 
+    * Fixed an issue where cray-dns-unbound-manager stderr handling can corrupt configuration
+    * Fixed an issue where "sat status" unnecessarily queries BOS for session template for every component
+    * Fixed an issue where a PATCH to a BOS v2 session to change it's name results in a bad state
+    * Updated cray-hms-rts-init job to include a TTL
+    * Updated node-exporter config to monitor snmp counters
+    * Updated docs to cover switch configuration for NCNs
+    * Fixed an issue where a PATCH call to BOS v2 components with a filter and non existant component ID would result in 503 and 431 errors
+    * Fixed an issue where BOS operators would output errors when all nodes exceed retry limit
+    * Fixed an issue where cray-upload-recovery-images fails to upload recovery firmware
+    * Fixed an issue where "cm health report slingshot refresh" cmd was giving a traceback error
 
    ## Steps
 
