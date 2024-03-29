@@ -3,8 +3,8 @@
 - [SMS test execution](#sms-test-execution)
 - [Interpreting `cmsdev` Results](#interpreting-cmsdev-results)
 - [Known issues with SMS tests](#known-issues-with-sms-tests)
-  - [Cray CLI](#cray-cli)
-  - [BOS subtest hangs](#bos-subtest-hangs)
+    - [Cray CLI](#cray-cli)
+    - [BOS subtest hangs](#bos-subtest-hangs)
 
 ## SMS test execution
 
@@ -23,22 +23,22 @@ transfer subtest, as noted in the previous paragraph).
 ```
 
 - The `cmsdev` tool logs to `/opt/cray/tests/install/logs/cmsdev/cmsdev.log`
-  - This was a change in CSM 1.4. In CSM releases prior to 1.4, the log file location was `/opt/cray/tests/cmsdev.log`
+    - This was a change in CSM 1.4. In CSM releases prior to 1.4, the log file location was `/opt/cray/tests/cmsdev.log`
 - The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
-  - The same amount of data is written to the log file in either case.
+    - The same amount of data is written to the log file in either case.
 
 ## Interpreting `cmsdev` results
 
 - If all checks are passed, the following will be true:
-  - The return code will be zero.
-  - The final line of output will begin with `SUCCESS`.
-    - For example: `SUCCESS: All 6 service tests passed: bos, cfs, conman, ims, tftp, vcs`
+    - The return code will be zero.
+    - The final line of output will begin with `SUCCESS`.
+        - For example: `SUCCESS: All 6 service tests passed: bos, cfs, conman, ims, tftp, vcs`
 - If one or more checks are failed, the following will be true:
-  - The return code will be non-zero.
-  - The final line of output will begin with `FAILURE` and lists the failed checks.
-    - For example: `FAILURE: 2 service tests FAILED (conman, ims), 4 passed (bos, cfs, tftp, vcs)`
-  - After remediating a test failure for a particular service, just that single service test can be rerun by replacing
-    `all` in the `cmsdev` command line with the name of the service. For example: `/usr/local/bin/cmsdev test -q cfs`
+    - The return code will be non-zero.
+    - The final line of output will begin with `FAILURE` and lists the failed checks.
+        - For example: `FAILURE: 2 service tests FAILED (conman, ims), 4 passed (bos, cfs, tftp, vcs)`
+    - After remediating a test failure for a particular service, just that single service test can be rerun by replacing
+      `all` in the `cmsdev` command line with the name of the service. For example: `/usr/local/bin/cmsdev test -q cfs`
 
 Additional test execution details can be found in `/opt/cray/tests/install/logs/cmsdev/cmsdev.log`.
 
