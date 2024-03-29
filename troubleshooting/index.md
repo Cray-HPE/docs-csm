@@ -42,6 +42,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Common Platform CA Issues](known_issues/platform_ca_issues.md)
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
 * [Multiple Console Node Pods on the Same Worker](known_issues/Multiple_Console_Node_Pods_on_the_Same_Worker.md)
+* [Hang Listing BOS Sessions](known_issues/Hang_Listing_BOS_Sessions.md)
 
 ## Kubernetes
 
