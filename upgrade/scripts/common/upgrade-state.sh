@@ -98,19 +98,19 @@ function err_report() {
 
   # ignore some internal expected errors
   local ignoreCmd="cray artifacts list config-data"
-  shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l)
+  shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l || true)
   if [[ ${shouldIgnore} -eq 1 ]]; then
     return 0
   fi
 
   ignoreCmd="https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history"
-  shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l)
+  shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l || true)
   if [[ ${shouldIgnore} -eq 1 ]]; then
     return 0
   fi
 
   ignoreCmd="csi automate ncn etcd --action add-member --ncn"
-  shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l)
+  shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l || true)
   if [[ ${shouldIgnore} -eq 1 ]]; then
     return 0
   fi
