@@ -6,6 +6,7 @@
   - [Cray CLI](#cray-cli)
   - [CRUS CLI](#crus-cli)
   - [Etcd-restores](#etcd-restores)
+  - [BOS subtest hangs](#bos-subtest-hangs)
 
 ## SMS test execution
 
@@ -78,3 +79,9 @@ ERROR (run tag 1khv7-crus): persistentvolumeclaims "cray-crus-etcd-ffmszl7bvh" n
 
 In this case, these errors can be ignored, or the pod with the same name as the PVC mentioned in the output can be restarted
 (as long as the other two Etcd pods are healthy).
+
+### BOS subtest hangs
+
+On systems where too many BOS v1 sessions exist, the `cmsdev` test will hang when trying to
+list BOS v1 sessions. See [Hang Listing BOS V1 Sessions](Hang_Listing_BOS_V1_Sessions.md) for more
+information.
