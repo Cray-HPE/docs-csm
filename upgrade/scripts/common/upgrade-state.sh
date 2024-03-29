@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -103,13 +103,13 @@ function err_report() {
 
   # ignore some internal expected errors
   local ignoreCmd="cray artifacts list config-data"
-  shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l)
+  shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l || true)
   if [[ ${shouldIgnore} -eq 1 ]]; then
     return 0
   fi
 
   ignoreCmd="https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history"
-  shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l)
+  shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l || true)
   if [[ ${shouldIgnore} -eq 1 ]]; then
     return 0
   fi
