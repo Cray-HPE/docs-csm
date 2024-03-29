@@ -85,6 +85,13 @@ Example output:
 }
 ```
 
+It is important to periodically delete completed BOS v1 sessions. If too many BOS v1 sessions
+exist, it can lead to hangs when trying to list them. This limitation does not exist in BOS v2.
+For more information, see:
+
+* [Hang Listing BOS V1 Sessions](../../troubleshooting/known_issues/Hang_Listing_BOS_V1_Sessions.md)
+* [Delete a BOS v1 session](#delete-a-bos-v1-session)
+
 ## List all sessions
 
 (`ncn-mw#`) List all BOS v2 sessions with the following command:
@@ -128,6 +135,10 @@ Example output:
   "ebe82079-2397-4e03-8e39-091a8d036146"
 ]
 ```
+
+**Troubleshooting:** There is a known limitation of BOS v1 that listing sessions will hang if too
+many sessions exist. For more information, see
+[Hang Listing BOS V1 Sessions](../../troubleshooting/known_issues/Hang_Listing_BOS_V1_Sessions.md).
 
 ## Show details for a session
 
@@ -183,11 +194,20 @@ The issue with the describe action results in a 404 error, despite the session e
 
 ## Delete a session
 
+### Delete a BOS v2 session
+
 (`ncn-mw#`) Delete a specific BOS v2 session:
 
 ```bash
 cray bos v2 sessions delete <BOS_SESSION_ID>
 ```
+
+### Delete a BOS v1 session
+
+It is important to periodically delete completed BOS v1 sessions. If too many BOS v1 sessions
+exist, it can lead to hangs when trying to list them. This limitation does not exist in BOS v2.
+For more information, see
+[Hang Listing BOS V1 Sessions](../../troubleshooting/known_issues/Hang_Listing_BOS_V1_Sessions.md).
 
 (`ncn-mw#`) Delete a specific BOS v1 session:
 
