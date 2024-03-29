@@ -6,38 +6,38 @@
 
 ## Introduction
 
-This document guides an administrator through the patch update to Cray Systems Management `v1.5.1` from `1.5.0`. 
+This document guides an administrator through the patch update to Cray Systems Management `v1.5.1` from `1.5.0`.
 If upgrading from CSM `v1.4.x` directly to `v1.5.1`, follow the procedures described
 in [Upgrade CSM](../README.md) instead.
 
 ## Bug fixes and improvements
 
-   * Updated IMS to allow for remote node builds
-   * Support for Paradise hardware
-   * Fixed an issue where `hms-discovery` would put default credetials into vault disabling non default credentials
-   * Fixed an issue where `cray-ipxe` generated scripts would cause boot errors
-   * Fixed an issue where `BOS v2` would send large queries to CFS resulting 503 and 431 responses
-   * Fixed an issue where PCS was adding invalid components to power operations
-   * Fixed an issue where IUF would encounter a race condition and stall on transitioning to new stages
-   * Fixed an issue where `Thanos` service is configured without storage limits 
-   * Fixed an issue where `cray-dns-unbound-manager` `stderr` handling can corrupt configuration
-   * Fixed an issue where "sat status" unnecessarily queries BOS for session template for every component
-   * Fixed an issue where a PATCH to a BOS v2 session to change it's name results in a bad state
-   * Updated `cray-hms-rts-init` job to include a TTL
-   * Updated node-exporter config to monitor `snmp` counters
-   * Updated docs to cover switch configuration for NCNs
-   * Fixed an issue where a PATCH call to BOS v2 components with a filter and non existent component ID would result in 503 and 431 errors
-   * Fixed an issue where BOS operators would output errors when all nodes exceed retry limit
-   * Fixed an issue where `cray-upload-recovery-images` fails to upload recovery firmware
-   * Fixed an issue where "cm health report slingshot refresh" `cmd` was giving a traceback error
-   * Updated docs for IUF to include rolling reboots after upgrading HSN NIC firmware
-   * Updated docs to provide instructions for creating a new Nexus repo and adding `rpms`
-   * Updated docs for CAPMC to warn about URL character limits
-   * Fixed an issue where BOS v2 requests for too many nodes from PCS exceeding the URL character limit
-   * Updated docs script nexus_export_and_restore to add better checks for determining existence of `nexus-bak` PVC or nexus-backup job
-   * Updated docs for `fix_failed_to_start_etcd_on_master` to better specify how to add a process
-   * Fixed an issue with IUF where process-media/pre-install-check dislikes PDF file
-   * Fixed an issue where `backup_smd_postgres.sh` script is not executable
+* Updated IMS to allow for remote node builds
+* Support for Paradise hardware
+* Fixed an issue where `hms-discovery` would put default credentials into vault disabling non default credentials
+* Fixed an issue where `cray-ipxe` generated scripts would cause boot errors
+* Fixed an issue where `BOS v2` would send large queries to CFS resulting 503 and 431 responses
+* Fixed an issue where PCS was adding invalid components to power operations
+* Fixed an issue where IUF would encounter a race condition and stall on transitioning to new stages
+* Fixed an issue where `Thanos` service is configured without storage limits 
+* Fixed an issue where `cray-dns-unbound-manager` `stderr` handling can corrupt configuration
+* Fixed an issue where "sat status" unnecessarily queries BOS for session template for every component
+* Fixed an issue where a PATCH to a BOS v2 session to change it's name results in a bad state
+* Updated `cray-hms-rts-init` job to include a TTL
+* Updated node-exporter config to monitor `snmp` counters
+* Updated docs to cover switch configuration for NCNs
+* Fixed an issue where a PATCH call to BOS v2 components with a filter and non existent component ID would result in 503 and 431 errors
+* Fixed an issue where BOS operators would output errors when all nodes exceed retry limit
+* Fixed an issue where `cray-upload-recovery-images` fails to upload recovery firmware
+* Fixed an issue where "cm health report slingshot refresh" `cmd` was giving a trace back error
+* Updated docs for IUF to include rolling reboots after upgrading HSN NIC firmware
+* Updated docs to provide instructions for creating a new Nexus repo and adding `rpms`
+* Updated docs for CAPMC to warn about URL character limits
+* Fixed an issue where BOS v2 requests for too many nodes from PCS exceeding the URL character limit
+* Updated docs script `nexus_export_and_restore` to add better checks for determining existence of `nexus-bak` PVC or nexus-backup job
+* Updated docs for `fix_failed_to_start_etcd_on_master` to better specify how to add a process
+* Fixed an issue with IUF where process-media/pre-install-check dislikes PDF file
+* Fixed an issue where `backup_smd_postgres.sh` script is not executable
 
 ## Steps
 
