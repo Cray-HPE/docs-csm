@@ -4,6 +4,7 @@
 - [Interpreting `cmsdev` Results](#interpreting-cmsdev-results)
 - [Known issues with SMS tests](#known-issues-with-sms-tests)
   - [Cray CLI](#cray-cli)
+  - [BOS subtest hangs](#bos-subtest-hangs)
 
 ## SMS test execution
 
@@ -50,3 +51,9 @@ See the following for more information:
 
 - [Cray command line interface](../../operations/validate_csm_health.md#0-cray-command-line-interface)
 - [Configure the Cray CLI](../../operations/configure_cray_cli.md)
+
+### BOS subtest hangs
+
+On systems where too many BOS v1 sessions exist, the `cmsdev` test will hang when trying to
+list BOS v1 sessions. See [Hang Listing BOS V1 Sessions](Hang_Listing_BOS_V1_Sessions.md) for more
+information.

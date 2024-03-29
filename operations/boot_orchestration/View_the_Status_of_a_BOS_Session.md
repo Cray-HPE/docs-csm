@@ -126,6 +126,10 @@ The `in_progress`, `complete`, and `error_count` fields are cumulative, meaning 
 
 (`ncn-mw#`) The BOS session ID is required to view the status of a session. To list the available sessions, use the following command:
 
+> Note: If this command fails, there may be too many BOS v1 sessions. This limitation does not
+> exist in BOS v2. For more information, see
+> [Hang Listing BOS V1 Sessions](../../troubleshooting/known_issues/Hang_Listing_BOS_V1_Sessions.md).
+
 ```bash
 cray bos v1 session list --format json
 ```
