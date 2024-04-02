@@ -5,11 +5,11 @@ Sessions provide a way to track the status of many nodes at once as they perform
 When creating a session, both the operation and session template are required parameters.
 
 * [BOS sessions in v2](#bos-sessions-in-v2)
-  * [Sessions and status](#sessions-and-status)
-  * [Known issues](#known-issues)
+    * [Sessions and status](#sessions-and-status)
+    * [Known issues](#known-issues)
 * [BOS sessions in v1](#bos-sessions-in-v1)
-  * [BOA functionality](#boa-functionality)
-  * [BOS v1 session limitations](#bos-v1-session-limitations)
+    * [BOA functionality](#boa-functionality)
+    * [BOS v1 session limitations](#bos-v1-session-limitations)
 
 ## BOS sessions in v2
 
