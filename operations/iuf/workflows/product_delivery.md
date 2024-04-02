@@ -57,7 +57,7 @@ Refer to that table and any corresponding product documents before continuing to
     (`ncn-m001#`) Execute the `deliver-product` stage.
 
     ```bash
-    iuf -a ${ACTIVITY_NAME} run -r deliver-product
+    iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run -r deliver-product
     ```
 
 > **WARNING:** If you are using CSM 1.5.0 (and not CSM 1.5.1+), there is a bug that prevents the `deliver-product` stage from completing on large number of products being delivered. This bug is addressed in the 1.5.0 hotfix titled `CASMINST-6799`.
