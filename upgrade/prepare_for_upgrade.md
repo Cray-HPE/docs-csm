@@ -6,11 +6,12 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 - [Preparation steps]
 
    1. [Start typescript](#1-start-typescript)
-   1. [Export Nexus data](#2-export-nexus-data)
-   1. [Disable encryption for upgrade if enabled](#3-disable-encryption-for-upgrade-if-enabled)
-   1. [Running sessions](#4-running-sessions)
-   1. [Health validation](#5-health-validation)
-   1. [Stop typescript](#6-stop-typescript)
+   1. [Ensure latest documentation installed](#2-ensure-latest-documentation-is-installed)
+   1. [Export Nexus data](#3-export-nexus-data)
+   1. [Disable encryption for upgrade if enabled](#4-disable-encryption-for-upgrade-if-enabled)
+   1. [Running sessions](#5-running-sessions)
+   1. [Health validation](#6-health-validation)
+   1. [Stop typescript](#7-stop-typescript)
 
 - [Preparation completed](#preparation-completed)
 
@@ -44,7 +45,14 @@ completes its upgrade, then quorum would be lost.
 If additional shells are opened during this procedure, then record those with typescripts as well.
 When resuming a procedure after a break, always be sure that a typescript is running before proceeding.
 
-### 2. Export Nexus data
+### 2. Ensure latest documentation is installed
+
+Before following the steps to prepare for the upgrade, make sure that the latest CSM documentation RPMs are
+installed on any NCNs where preparation procedures are being performed. These should be for the **`CURRENT`**
+CSM version on the system -- not the target version of the upgrade.
+See [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation) for instructions.
+
+### 3. Export Nexus data
 
 **Warning:** This process can take multiple hours where Nexus is unavailable and should be done during scheduled maintenance periods.
 
@@ -54,7 +62,7 @@ If there is no maintenance period available, then skip this step until after the
 
 Reference [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md) for details.
 
-### 3. Disable encryption for upgrade if enabled
+### 4. Disable encryption for upgrade if enabled
 
 While it is possible to upgrade with Kubernetes encryption enabled, disabling encryption is recommended for the duration of the upgrade if it has been enabled.
 
@@ -62,7 +70,7 @@ See [Kubernetes Encryption](../operations/kubernetes/encryption/README.md) for d
 
 Once the upgrade is complete, then encryption can be turned back on.
 
-### 4. Running sessions
+### 5. Running sessions
 
 [Boot Orchestration Service (BOS)](../glossary.md#boot-orchestration-service-bos),
 [Configuration Framework Service (CFS)](../glossary.md#configuration-framework-service-cfs),
@@ -100,7 +108,7 @@ Once the upgrade is complete, then encryption can be turned back on.
 
     There is currently no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
-### 5. Health validation
+### 6. Health validation
 
 1. Validate CSM health.
 
@@ -116,7 +124,7 @@ Once the upgrade is complete, then encryption can be turned back on.
 
    If a Lustre file system is being used, then see the ClusterStor documentation for details on how to validate Lustre health.
 
-### 6. Stop typescript
+### 7. Stop typescript
 
 For any typescripts that were started during this preparation stage, stop them with the `exit` command.
 
