@@ -19,7 +19,7 @@ in [Upgrade CSM](../README.md) instead.
 * Fixed an issue where `BOS v2` would send large queries to CFS resulting 503 and 431 responses
 * Fixed an issue where PCS was adding invalid components to power operations
 * Fixed an issue where IUF would encounter a race condition and stall on transitioning to new stages
-* Fixed an issue where `Thanos` service is configured without storage limits 
+* Fixed an issue where `Thanos` service is configured without storage limits
 * Fixed an issue where `cray-dns-unbound-manager` `stderr` handling can corrupt configuration
 * Fixed an issue where "sat status" unnecessarily queries BOS for session template for every component
 * Fixed an issue where a PATCH to a BOS v2 session to change it's name results in a bad state
