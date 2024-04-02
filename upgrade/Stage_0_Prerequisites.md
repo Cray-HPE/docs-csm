@@ -44,9 +44,11 @@ after a break, always be sure that a typescript is running before proceeding.
    CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
-1. Acquire the latest documentation RPM. This may include updates, corrections, and enhancements that were not available until after the software release.
+1. Acquire the latest documentation and library RPMs for the target version of the CSM upgrade.
 
-    > ***NOTE:*** CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints. Using http proxies in any way other than the following examples will cause many failures in subsequent steps.
+   These may include updates, corrections, and enhancements that were not available until after the software release.
+
+   > ***NOTE:*** CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints. Using http proxies in any way other than the following examples will cause many failures in subsequent steps.
 
    1. Check the version of the currently installed CSM documentation and CSM library.
 
