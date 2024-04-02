@@ -545,6 +545,8 @@ Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
 
 ### 3.3 Known issues with SMS tests
 
+#### `persistentvolumeclaims` not found
+
 If an Etcd restore has been performed on one of the SMS services (such as BOS or CRUS), then the first Etcd pod that
 comes up after the restore will not have a PVC (Persistent Volume Claim) attached to it (until the pod is restarted).
 The Etcd cluster is in a healthy state at this point, but the SMS health checks will detect the above condition and
@@ -557,6 +559,11 @@ ERROR (run tag 1khv7-crus): persistentvolumeclaims "cray-crus-etcd-ffmszl7bvh" n
 
 In this case, these errors can be ignored, or the pod with the same name as the PVC mentioned in the output can be restarted
 (as long as the other two Etcd pods are healthy).
+
+#### BOS subtest hangs
+
+On systems where too many BOS sessions exist, the `cmsdev` test will hang when trying to list them. See
+[Hang Listing BOS Sessions](../troubleshooting/known_issues/Hang_Listing_BOS_Sessions.md) for more information.
 
 ## 4. Gateway health and SSH access checks
 
