@@ -8,12 +8,13 @@ first.
 - [Preparation steps]
 
    1. [Start typescript](#1-start-typescript)
-   1. [Export Nexus data](#2-export-nexus-data)
-   1. [Adding switch admin password to Vault](#3-adding-switch-admin-password-to-vault)
-   1. [Ensure SNMP is configured on the management network switches](#4-ensure-snmp-is-configured-on-the-management-network-switches)
-   1. [Running sessions](#5-running-sessions)
-   1. [Health validation](#6-health-validation)
-   1. [Stop typescript](#7-stop-typescript)
+   1. [Ensure latest documentation installed](#2-ensure-latest-documentation-is-installed)
+   1. [Export Nexus data](#3-export-nexus-data)
+   1. [Adding switch admin password to Vault](#4-adding-switch-admin-password-to-vault)
+   1. [Ensure SNMP is configured on the management network switches](#5-ensure-snmp-is-configured-on-the-management-network-switches)
+   1. [Running sessions](#6-running-sessions)
+   1. [Health validation](#7-health-validation)
+   1. [Stop typescript](#8-stop-typescript)
 
 ## Reduced resiliency during upgrade
 
@@ -45,7 +46,14 @@ completes its upgrade, then quorum would be lost.
 If additional shells are opened during this procedure, then record those with typescripts as well.
 When resuming a procedure after a break, always be sure that a typescript is running before proceeding.
 
-### 2. Export Nexus data
+### 2. Ensure latest documentation is installed
+
+Before following the steps to prepare for the upgrade, make sure that the latest CSM documentation RPMs are
+installed on any NCNs where preparation procedures are being performed. These should be for the **`CURRENT`**
+CSM version on the system -- not the target version of the upgrade.
+See [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation) for instructions.
+
+### 3. Export Nexus data
 
 **Warning:** This process can take multiple hours where Nexus is unavailable and should be done
 during scheduled maintenance periods.
@@ -57,7 +65,7 @@ If there is no maintenance period available, then skip this step until after the
 Reference [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md)
 for details.
 
-### 3. Adding switch admin password to Vault
+### 4. Adding switch admin password to Vault
 
 If CSM has been installed and Vault is running, add the switch credentials into Vault. Certain
 tests (for example, `goss-switch-bgp-neighbor-aruba-or-mellanox`) use these credentials to test the
@@ -82,7 +90,7 @@ credentials being in Vault will fail until they are added.
    vault kv put secret/net-creds/switch_admin admin=$SW_ADMIN_PASSWORD
    ```
 
-### 4. Ensure SNMP is configured on the management network switches
+### 5. Ensure SNMP is configured on the management network switches
 <!-- snmp-authentication-tag -->
 <!-- When updating this information, search the docs for the snmp-authentication-tag to find related content -->
 <!-- These comments can be removed once we adopt HTTP/lw-dita/Generated docs with re-usable snippets -->
@@ -93,12 +101,12 @@ management switch availability monitoring, and the Prometheus SNMP Exporter, val
 
 - SNMP is enabled on the management network switches.
 - The SNMP credentials on the switches match the credentials stored in all of the following locations:
-  - Vault
-  - `customizations.yaml` (stored as a sealed secret)
-  - [SNMP custom configuration](../operations/network/management_network/canu/custom_config.md), if applicable. If a
-    custom configuration was used with the [CSM Automatic Network Utility (CANU)](../glossary.md#csm-automatic-network-utility-canu)
-    when generating the management network switch configurations, also check that
-    the credentials in this custom configuration match.
+    - Vault
+    - `customizations.yaml` (stored as a sealed secret)
+    - [SNMP custom configuration](../operations/network/management_network/canu/custom_config.md), if applicable. If a
+      custom configuration was used with the [CSM Automatic Network Utility (CANU)](../glossary.md#csm-automatic-network-utility-canu)
+      when generating the management network switch configurations, also check that
+      the credentials in this custom configuration match.
 
 These checks help avoid failure scenarios that can impact the ability to add new hardware to the system.
 It is not uncommon for CSM upgrades to be paired with system maintenance such as hardware layout changes, expansion,
@@ -120,7 +128,7 @@ contains the following relevant information:
 
 Return here after verifying that SNMP is properly configured on the management network switches.
 
-### 5. Running sessions
+### 6. Running sessions
 
 [Boot Orchestration Service (BOS)](../glossary.md#boot-orchestration-service-bos),
 [Configuration Framework Service (CFS)](../glossary.md#configuration-framework-service-cfs),
@@ -159,7 +167,7 @@ Return here after verifying that SNMP is properly configured on the management n
    There is currently no method to prevent new sessions from being created as long as the service
    APIs are accessible on the API gateway.
 
-### 6. Health validation
+### 7. Health validation
 
 1. Validate CSM health.
 
@@ -176,6 +184,6 @@ Return here after verifying that SNMP is properly configured on the management n
    If a Lustre file system is being used, then see the ClusterStor documentation for details on how
    to validate Lustre health.
 
-### 7. Stop typescript
+### 8. Stop typescript
 
 For any typescripts that were started during this preparation stage, stop them with the `exit` command.
