@@ -46,7 +46,8 @@ after a break, always be sure that a typescript is running before proceeding.
    export CSM_RELEASE=1.4.0
    ```
 
-1. (`ncn-m001#`) Install the latest `docs-csm` and `libcsm` RPMs. See the short procedure in
+1. (`ncn-m001#`) Install the latest `docs-csm` and `libcsm` RPMs. These should be for the target CSM version of the upgrade, not
+   the currently installed CSM version. See the short procedure in
    [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation).
 
 1. (`ncn-m001#`) Run the script to create a `cephfs` file share at `/etc/cray/upgrade/csm`.
