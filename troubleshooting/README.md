@@ -47,6 +47,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Software Management Services health check](known_issues/sms_health_check.md)
 * [QLogic driver crash on storage nodes](known_issues/qlogic_driver_crash.md)
 * [Nexus Fails Authentication with Keycloak Users](known_issues/Nexus_Fail_Authentication_with_Keycloak_Users.md)
+* [Hang Listing BOS V1 Sessions](known_issues/Hang_Listing_BOS_V1_Sessions.md)
 
 ## Booting
 
