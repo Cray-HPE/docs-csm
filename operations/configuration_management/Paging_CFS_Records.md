@@ -84,3 +84,8 @@ def iter_components(**kwargs):
         if not next_parameters:
             break
 ```
+
+## Known issues
+
+The addition of paging caused problems for some services and products in CSM 1.5.0. For more information, see
+[CFS V2 Failures On Large Systems](../../troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md).

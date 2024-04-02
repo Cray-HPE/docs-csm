@@ -218,3 +218,6 @@ see [Removals](introduction/deprecated_features/README.md#removals)
         * `v1.48`, `v1.50`, `v1.69` or `v2.84` for DL325 / DL385 BIOS.
         * C38 for Gigabyte BIOS.
     * Update will be in CSM 1.5.1.
+* On large systems, BOS v2 sessions, some CSM health checks, and SAT status may not work properly, because of a failed interaction with CFS.
+    * Most of this will be fixed in CSM 1.5.1. The remainder will be fixed in CSM 1.6.0.
+    * For more information, including a workaround, see [CFS V2 Failures On Large Systems](troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md).

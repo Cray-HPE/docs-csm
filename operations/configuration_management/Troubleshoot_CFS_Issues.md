@@ -62,3 +62,9 @@ The following playbooks are available, and can be specified as the configuration
 * `debug_fail` - This playbook immediately fails, which can be used with the `debug_on_failure` flag to create a quick debugging Ansible environment.
 * `debug_facts` - This playbook gather and prints the facts for all available targets.
 * `debug_noop` - This playbook will not gather facts or perform any tasks and is useful for skipping past the Ansible container for debugging.
+
+## Known issues
+
+Although not technically a problem with CFS itself, in CSM 1.5.0 on large systems, some products or
+services may report errors with CFS. For more details on this, see
+[CFS V2 Failures On Large Systems](../../troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md).

@@ -5,6 +5,7 @@
 - [Known issues with SMS tests](#known-issues-with-sms-tests)
     - [Cray CLI](#cray-cli)
     - [BOS subtest hangs](#bos-subtest-hangs)
+    - [CFS components errors](#cfs-components-errors)
 
 ## SMS test execution
 
@@ -57,3 +58,15 @@ See the following for more information:
 On systems where too many BOS v1 sessions exist, the `cmsdev` test will hang when trying to
 list BOS v1 sessions. See [Hang Listing BOS V1 Sessions](Hang_Listing_BOS_V1_Sessions.md) for more
 information.
+
+### CFS components errors
+
+On CSM 1.5.0 systems with a lot of nodes, the CFS subtest may report errors that look similar to
+the following:
+
+```text
+ERROR (run tag qdthp-cfs): GET https://api-gw-service-nmn.local/apis/cfs/v2/components: expected status code 200, got 400
+ERROR (run tag qdthp-cfs): CLI command (cfs components list --format json) failed with exit code 2
+```
+
+For more details, see [CFS V2 Failures On Large Systems](CFS_V2_Failures_On_Large_Systems.md).

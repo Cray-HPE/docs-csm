@@ -124,6 +124,8 @@ The following are the CFS global options:
   In this case users should switch to the v3 API to take advantage of paging.
   This number can be increased through the v3 API to allow more records to be returned through the v2 API, but this risks causing calls to fail due to memory constraints.
 
+  On CSM 1.5.0 systems, also see [CFS V2 Failures On Large Systems](../../troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md).
+
 * **`default_playbook`**
 
   > **WARNING:** This option is deprecated and read-only in the v3 CFS API. It can only be modified using CFS v2.

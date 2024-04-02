@@ -6,6 +6,7 @@ When creating a session, both the operation and session template are required pa
 
 * [BOS sessions in v2](#bos-sessions-in-v2)
   * [Sessions and status](#sessions-and-status)
+  * [Known issues](#known-issues)
 * [BOS sessions in v1](#bos-sessions-in-v1)
   * [BOA functionality](#boa-functionality)
   * [BOS v1 session limitations](#bos-v1-session-limitations)
@@ -29,6 +30,11 @@ Session in BOS v2 are constructs intended to help users track an operation acros
 A session will continue to track a component until the component reaches its desired state and is disabled or until another sessions takes over managing that component.
 Additional status information is also available for sessions to track information such as how many components are at each step in the process.
 See [View the Status of a BOS Session](View_the_Status_of_a_BOS_Session.md) for more information.
+
+### Known issues
+
+In CSM 1.5.0 on large systems, BOS v2 sessions may not work properly because of a failed interaction with CFS.
+For more information, see [CFS V2 Failures On Large Systems](../../troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md).
 
 ## BOS sessions in v1
 

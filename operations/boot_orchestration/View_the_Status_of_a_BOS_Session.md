@@ -5,6 +5,7 @@ The Boot Orchestration Service \(BOS\) supports a status endpoint that reports d
 * [BOS v2 session status](#bos-v2-session-status)
     * [View the status of a v2 session](#view-the-status-of-a-v2-session)
     * [Session status details](#session-status-details)
+    * [Known issues](#known-issues)
 * [BOS v1 session status](#bos-v1-session-status)
     * [Metadata](#metadata)
     * [View the status of a v1 session](#view-the-status-of-a-v1-session)
@@ -84,6 +85,11 @@ This timestamp will initially be `null` and will be set when the session ends.
 #### `duration`
 
 This lists the duration of the session in `h:mm:ss`. While the session is running, this will be the current duration, and the value is locked-in when the session completes.
+
+### Known issues
+
+In CSM 1.5.0 on large systems, BOS v2 sessions may not work because of a failed interaction with CFS. For more information, see
+[CFS V2 Failures On Large Systems](../../troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md).
 
 ## BOS v1 session status
 

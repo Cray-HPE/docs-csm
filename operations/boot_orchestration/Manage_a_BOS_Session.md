@@ -9,6 +9,7 @@ To find the API versions of any commands listed, add `-vvv` to the end of the CL
 * [List all sessions](#list-all-sessions)
 * [Show details for a session](#show-details-for-a-session)
 * [Delete a session](#delete-a-session)
+* [Known issues](#known-issues)
 
 ## Create a new v2 session
 
@@ -214,3 +215,8 @@ For more information, see
 ```bash
 cray bos v1 session delete <BOS_SESSION_ID>
 ```
+
+## Known issues
+
+In CSM 1.5.0 on large systems, BOS v2 sessions may not work properly because of a failed interaction with CFS.
+For more information, see [CFS V2 Failures On Large Systems](../../troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md).
