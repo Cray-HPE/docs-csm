@@ -3,9 +3,10 @@
 - [SMS test execution](#sms-test-execution)
 - [Interpreting `cmsdev` Results](#interpreting-cmsdev-results)
 - [Known issues with SMS tests](#known-issues-with-sms-tests)
-  - [Cray CLI](#cray-cli)
-  - [CRUS CLI](#crus-cli)
-  - [Etcd-restores](#etcd-restores)
+    - [Cray CLI](#cray-cli)
+    - [CRUS CLI](#crus-cli)
+    - [Etcd-restores](#etcd-restores)
+    - [BOS subtest hangs](#bos-subtest-hangs)
 
 ## SMS test execution
 
@@ -24,21 +25,21 @@ transfer subtest, as noted in the previous paragraph).
 ```
 
 - The `cmsdev` tool logs to `/opt/cray/tests/install/logs/cmsdev/cmsdev.log`
-  - This is a change in CSM 1.4. In prior CSM release, the log file location was `/opt/cray/tests/cmsdev.log`
+    - This is a change in CSM 1.4. In prior CSM release, the log file location was `/opt/cray/tests/cmsdev.log`
 - The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
-  - The same amount of data is written to the log file in either case.
+    - The same amount of data is written to the log file in either case.
 
 ## Interpreting `cmsdev` results
 
 - If all checks are passed, the following will be true:
-  - The return code will be zero.
-  - The final line of output will begin with `SUCCESS`.
-    - For example: `SUCCESS: All 7 service tests passed: bos, cfs, conman, crus, ims, tftp, vcs`
+    - The return code will be zero.
+    - The final line of output will begin with `SUCCESS`.
+        - For example: `SUCCESS: All 7 service tests passed: bos, cfs, conman, crus, ims, tftp, vcs`
 - If one or more checks are failed, the following will be true:
-  - The return code will be non-zero.
-  - The final line of output will begin with `FAILURE` and lists the failed checks.
-    - For example: `FAILURE: 2 service tests FAILED (conman, ims), 5 passed (bos, cfs, crus, tftp, vcs)`
-  - After remediating a test failure for a particular service, just that single service test can be rerun by replacing
+    - The return code will be non-zero.
+    - The final line of output will begin with `FAILURE` and lists the failed checks.
+        - For example: `FAILURE: 2 service tests FAILED (conman, ims), 5 passed (bos, cfs, crus, tftp, vcs)`
+    - After remediating a test failure for a particular service, just that single service test can be rerun by replacing
     `all` in the `cmsdev` command line with the name of the service. For example: `/usr/local/bin/cmsdev test -q cfs`
 
 Additional test execution details can be found in `/opt/cray/tests/install/logs/cmsdev/cmsdev.log`.
@@ -78,3 +79,9 @@ ERROR (run tag 1khv7-crus): persistentvolumeclaims "cray-crus-etcd-ffmszl7bvh" n
 
 In this case, these errors can be ignored, or the pod with the same name as the PVC mentioned in the output can be restarted
 (as long as the other two Etcd pods are healthy).
+
+### BOS subtest hangs
+
+On systems where too many BOS v1 sessions exist, the `cmsdev` test will hang when trying to
+list BOS v1 sessions. See [Hang Listing BOS V1 Sessions](Hang_Listing_BOS_V1_Sessions.md) for more
+information.

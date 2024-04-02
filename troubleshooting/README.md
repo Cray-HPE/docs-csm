@@ -48,6 +48,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [QLogic driver crash on storage nodes](known_issues/qlogic_driver_crash.md)
 * [Nexus Fails Authentication with Keycloak Users](known_issues/Nexus_Fail_Authentication_with_Keycloak_Users.md)
 * [IUF fails with `Not a directory: /etc/cray/upgrade/csm/media/...`](known_issues/iuf_error_not_a_directory.md)
+* [Hang Listing BOS V1 Sessions](known_issues/Hang_Listing_BOS_V1_Sessions.md)
 
 ## Booting
 
