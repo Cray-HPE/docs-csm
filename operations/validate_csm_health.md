@@ -807,6 +807,11 @@ ERROR (run tag zl7ak-vcs): Failed to create vcs organization
 
 In this case, follow the [Gitea/VCS 401 Errors](../troubleshooting/known_issues/gitea_vcs_401_errors.md) troubleshooting procedure.
 
+#### BOS subtest hangs
+
+On systems where too many BOS sessions exist, the `cmsdev` test will hang when trying to list them. See
+[Hang Listing BOS Sessions](../troubleshooting/known_issues/Hang_Listing_BOS_Sessions.md) for more information.
+
 ## 4. Booting CSM `barebones` image
 
 Included with the Cray System Management (CSM) release is a pre-built node image that can be used

@@ -33,6 +33,13 @@ rel = "session"
 type = "GET"
 ```
 
+It is important to periodically delete completed BOS v1 sessions. If too many BOS v1 sessions
+exist, it can lead to hangs when trying to list them. This limitation does not exist in BOS v2.
+For more information, see:
+
+* [Hang Listing BOS Sessions](../../troubleshooting/known_issues/Hang_Listing_BOS_Sessions.md)
+* [Delete a session](#delete-a-session)
+
 ## List all sessions
 
 List all BOS sessions with the following command:
@@ -46,6 +53,10 @@ Example output:
 ```toml
 results = [ "fc469e41-6419-4367-a571-d5fd92893398", "st3-d6730dd5-f0f8-4229-b224-24df005cae52",]
 ```
+
+**Troubleshooting:** There is a known limitation of BOS v1 that listing sessions will hang if too
+many sessions exist. For more information, see
+[Hang Listing BOS Sessions](../../troubleshooting/known_issues/Hang_Listing_BOS_Sessions.md).
 
 ## Show details for a session
 
@@ -71,6 +82,10 @@ stage = "Done"
 The issue with the describe action results in a 404 error, despite the session existing in the output of `cray bos session list` command.
 
 ## Delete a session
+
+It is important to periodically delete completed BOS sessions. If too many BOS sessions
+exist, it can lead to hangs when trying to list them. For more information, see
+[Hang Listing BOS Sessions](../../troubleshooting/known_issues/Hang_Listing_BOS_Sessions.md).
 
 Delete a specific BOS session:
 
