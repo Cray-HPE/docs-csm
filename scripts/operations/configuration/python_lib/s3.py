@@ -57,11 +57,7 @@ def s3_client_kwargs() -> JsonDict:
     resp = api_requests.put_retry_validate_return_json(url=STS_TOKEN_URL, expected_status_codes=201,
                                                        add_api_token=True)
     creds = resp["Credentials"]
-    kwargs = { kname: creds[cname] for cname, kname in CREDS_TO_KWARGS.items() }
-    # The Cray CLI sets the following field to an empty string, and if it's good enough for the
-    # Cray CLI, then it's good enough for me
-    kwargs["region_name"] = ""
-    return kwargs
+    return { kname: creds[cname] for cname, kname in CREDS_TO_KWARGS.items() }
 
 
 class S3Url(str):
