@@ -377,8 +377,8 @@ See the [Flags Set For Nodes In HSM](../troubleshooting/known_issues/flags_set_f
 The SMS health checks are run automatically by the test script run in [1.1 NCN health checks](#11-ncn-health-checks).
 If any failures occur, investigate the cause of each and take remediation steps if needed.
 
-See [Software Management Services health checks](../troubleshooting/known_issues/sms_health_check.md) for more information
-on the tests and how to interpret their results.
+See [Software Management Services health checks](../troubleshooting/known_issues/sms_health_check.md) for known issues,
+more information on the tests, and how to interpret their results.
 
 ## 4. Gateway health and SSH access checks
 

@@ -3,14 +3,14 @@
 The Boot Orchestration Service \(BOS\) supports a status endpoint that reports detailed status information for individual BOS sessions.
 
 * [BOS v2 session status](#bos-v2-session-status)
-  * [View the status of a v2 session](#view-the-status-of-a-v2-session)
-  * [Session status details](#session-status-details)
+    * [View the status of a v2 session](#view-the-status-of-a-v2-session)
+    * [Session status details](#session-status-details)
 * [BOS v1 session status](#bos-v1-session-status)
-  * [Metadata](#metadata)
-  * [View the status of a v1 session](#view-the-status-of-a-v1-session)
-  * [View the status of a boot set](#view-the-status-of-a-boot-set)
-  * [View the status for an individual phase](#view-the-status-for-an-individual-phase)
-  * [View the status for an individual category](#view-the-status-for-an-individual-category)
+    * [Metadata](#metadata)
+    * [View the status of a v1 session](#view-the-status-of-a-v1-session)
+    * [View the status of a boot set](#view-the-status-of-a-boot-set)
+    * [View the status for an individual phase](#view-the-status-for-an-individual-phase)
+    * [View the status for an individual category](#view-the-status-for-an-individual-category)
 
 ## BOS v2 session status
 
@@ -126,6 +126,10 @@ The `in_progress`, `complete`, and `error_count` fields are cumulative, meaning 
 
 (`ncn-mw#`) The BOS session ID is required to view the status of a session. To list the available sessions, use the following command:
 
+> Note: If this command fails, there may be too many BOS v1 sessions. This limitation does not
+> exist in BOS v2. For more information, see
+> [Hang Listing BOS V1 Sessions](../../troubleshooting/known_issues/Hang_Listing_BOS_V1_Sessions.md).
+
 ```bash
 cray bos v1 session list --format json
 ```
@@ -210,14 +214,14 @@ Run the following command to view the status for a specific boot set in a sessio
 For more information about retrieving the session ID and boot set name, refer to the "View the Status of a Session" section above. Descriptions of the different status sections are described below.
 
 * Boot set
-  * The `id` parameter identifies which session this status belongs to.
-  * The `name` parameter is the name of the boot set.
-  * The `links` section displays links that enable administrators to drill down into each phase of the boot set.
-  * There is `metadata` section for the boot set as a whole.
+    * The `id` parameter identifies which session this status belongs to.
+    * The `name` parameter is the name of the boot set.
+    * The `links` section displays links that enable administrators to drill down into each phase of the boot set.
+    * There is `metadata` section for the boot set as a whole.
 * Phases
-  * The `name` parameter is the name of the phase.
-  * There is a `metadata` section for each phase.
-  * Each phase contains the following categories: `not_started`, `in_progress`, `succeeded`, `failed`, and `excluded`. The nodes are listed in the category they are currently occupying.
+    * The `name` parameter is the name of the phase.
+    * There is a `metadata` section for each phase.
+    * Each phase contains the following categories: `not_started`, `in_progress`, `succeeded`, `failed`, and `excluded`. The nodes are listed in the category they are currently occupying.
 
 (`ncn-mw#`)
 

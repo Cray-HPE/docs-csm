@@ -2,24 +2,23 @@
 
 This document provides links to troubleshooting information for services and functionality provided by CSM.
 
-- [CSM Troubleshooting Information](#csm-troubleshooting-information)
-    - [Helpful tips for navigating the CSM repository](#helpful-tips-for-navigating-the-csm-repository)
-    - [Known issues](#known-issues)
-    - [Booting](#booting)
-        - [UAN boot issues](#uan-boot-issues)
-        - [Compute node boot issues](#compute-node-boot-issues)
-    - [Configuration management](#configuration-management)
-    - [ConMan](#conman)
-    - [Customer Management Network (CMN)](#customer-management-network-cmn)
-    - [Grafana dashboards](#grafana-dashboards)
-    - [Domain Name Service (DNS)](#domain-name-service-dns)
-    - [Kubernetes](#kubernetes)
-    - [MetalLB](#metallb)
-    - [Node management](#node-management)
-    - [Security and authentication](#security-and-authentication)
-    - [Spire](#spire)
-    - [User Access service UAS](#user-access-service-uas)
-    - [Utility storage](#utility-storage)
+- [Helpful tips for navigating the CSM repository](#helpful-tips-for-navigating-the-csm-repository)
+- [Known issues](#known-issues)
+- [Booting](#booting)
+    - [UAN boot issues](#uan-boot-issues)
+    - [Compute node boot issues](#compute-node-boot-issues)
+- [Configuration management](#configuration-management)
+- [ConMan](#conman)
+- [Customer Management Network (CMN)](#customer-management-network-cmn)
+- [Grafana dashboards](#grafana-dashboards)
+- [Domain Name Service (DNS)](#domain-name-service-dns)
+- [Kubernetes](#kubernetes)
+- [MetalLB](#metallb)
+- [Node management](#node-management)
+- [Security and authentication](#security-and-authentication)
+- [Spire](#spire)
+- [User Access service UAS](#user-access-service-uas)
+- [Utility storage](#utility-storage)
 
 ## Helpful tips for navigating the CSM repository
 
@@ -67,6 +66,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Velero Version Mismatch](known_issues/velero_version_mismatch.md)
 - [wait for unbound hang](known_issues/wait_for_unbound_hang.md)
 - [IUF fails with `Not a directory: /etc/cray/upgrade/csm/media/...`](known_issues/iuf_error_not_a_directory.md)
+- [Hang Listing BOS V1 Sessions](known_issues/Hang_Listing_BOS_V1_Sessions.md)
 
 ## Booting
 
