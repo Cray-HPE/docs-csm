@@ -82,12 +82,12 @@ management switch availability monitoring, and the Prometheus SNMP Exporter, val
 
 - SNMP is enabled on the management network switches.
 - The SNMP credentials on the switches match the credentials stored in all of the following locations:
-  - Vault
-  - `customizations.yaml` (stored as a sealed secret)
-  - [SNMP custom configuration](../operations/network/management_network/canu/custom_config.md), if applicable. If a
-    custom configuration was used with the [CSM Automatic Network Utility (CANU)](../glossary.md#csm-automatic-network-utility-canu)
-    when generating the management network switch configurations, also check that
-    the credentials in this custom configuration match.
+    - Vault
+    - `customizations.yaml` (stored as a sealed secret)
+    - [SNMP custom configuration](../operations/network/management_network/canu/custom_config.md), if applicable. If a
+      custom configuration was used with the [CSM Automatic Network Utility (CANU)](../glossary.md#csm-automatic-network-utility-canu)
+      when generating the management network switch configurations, also check that
+      the credentials in this custom configuration match.
 
 These checks help avoid failure scenarios that can impact the ability to add new hardware to the system.
 It is not uncommon for CSM upgrades to be paired with system maintenance such as hardware layout changes, expansion,
