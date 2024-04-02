@@ -1,4 +1,4 @@
-# CSM 1.5.1 Patch Installation Instructions
+# CSM 1.4.3 Patch Installation Instructions
 
 * [Introduction](#introduction)
 * [Bug fixes and improvements](#bug-fixes-and-improvements)
@@ -6,38 +6,47 @@
 
 ## Introduction
 
-This document guides an administrator through the patch update to Cray Systems Management `v1.5.1` from `1.5.0`.
-If upgrading from CSM `v1.4.x` directly to `v1.5.1`, follow the procedures described
+This document guides an administrator through the patch update to Cray Systems Management `v1.4.3` from `v1.4.0`, `v1.4.1`,
+or `1.4.2`. If upgrading from CSM `v1.3.x` directly to `v1.4.3`, follow the procedures described
 in [Upgrade CSM](../README.md) instead.
 
 ## Bug fixes and improvements
 
-* Updated IMS to allow for remote node builds
-* Support for Paradise hardware
-* Fixed an issue where `hms-discovery` would put default credentials into vault disabling non default credentials
-* Fixed an issue where `cray-ipxe` generated scripts would cause boot errors
-* Fixed an issue where `BOS v2` would send large queries to CFS resulting 503 and 431 responses
-* Fixed an issue where PCS was adding invalid components to power operations
-* Fixed an issue where IUF would encounter a race condition and stall on transitioning to new stages
-* Fixed an issue where `Thanos` service is configured without storage limits
-* Fixed an issue where `cray-dns-unbound-manager` `stderr` handling can corrupt configuration
-* Fixed an issue where "sat status" unnecessarily queries BOS for session template for every component
-* Fixed an issue where a PATCH to a BOS v2 session to change it's name results in a bad state
-* Updated `cray-hms-rts-init` job to include a TTL
-* Updated node-exporter config to monitor `snmp` counters
-* Updated docs to cover switch configuration for NCNs
-* Fixed an issue where a PATCH call to BOS v2 components with a filter and non existent component ID would result in 503 and 431 errors
-* Fixed an issue where BOS operators would output errors when all nodes exceed retry limit
-* Fixed an issue where `cray-upload-recovery-images` fails to upload recovery firmware
-* Fixed an issue where "cm health report slingshot refresh" `cmd` was giving a trace back error
-* Updated docs for IUF to include rolling reboots after upgrading HSN NIC firmware
-* Updated docs to provide instructions for creating a new Nexus repo and adding `rpms`
-* Updated docs for CAPMC to warn about URL character limits
-* Fixed an issue where BOS v2 requests for too many nodes from PCS exceeding the URL character limit
-* Updated docs script `nexus_export_and_restore` to add better checks for determining existence of `nexus-bak` PVC or nexus-backup job
-* Updated docs for `fix_failed_to_start_etcd_on_master` to better specify how to add a process
-* Fixed an issue with IUF where process-media/pre-install-check dislikes PDF file
-* Fixed an issue where `backup_smd_postgres.sh` script is not executable
+* Security patch `CVE-2023-20593 Zenbleed` on `NCNs`
+* Vulnerabilities addressed for `cray-sat` container
+* Vulnerabilities addressed for `SAT` product
+* Improvements to `CSM` patch install procedure to update CFS configurations
+* Update to the `goss` package version
+* Added step to enable `goss-servers` after update
+* Update `goss` tests to use `goss` hostname variable rather than `HOSTNAME` environment variable
+* Update `IMS` importer to restore missing `S3` artifacts for existing images or recipes
+* Improvement to ensure the correct test `RPMs` are installed on the correct nodes
+* Updated `BOS V1` references to `BOS V2` in documentation
+* Updated test to not require users to export switch password
+* Fix to `HMS` query handling to prevent errors when queried with an empty node list
+* Fix to race condition in `wait-for-unbound.sh`
+* Updated documentation to remove `postgresql` restore step from `spire` recovery procedure
+* Updated `NCN` reboot procedure to recommend it be used to pick up `CVE` patched container images
+* Corrected link to `NCN` reboot procedure in patch upgrade instructions
+* Added ability to configure requests and limits for `postgres pooler`
+* Fixed issue with `CANU` returning `0` exit code despite errors
+* Updated `SLS` document with procedure to retrieve an authentication token
+* Remove passwords from documentation
+* Fix issue with state manager failing to discover `HPE` nodes with four `HSN NICs`
+* Fix issue with `FRU` tracking not creating a detected event after a removed event
+* Fix syntax error with guidance given in `check_bgp_neighbors_established.sh` script
+* Fixed an error when the media and `bootprep` directories provided to `IUF` are the same
+* Fixed storage `goss` test in case where `admin keyring` is not on `ncn-s004` and above
+* Fixes to storage node rebuild procedure
+* Update to instructions for upgrade of `ceph` for enabling `smartmon` on storage nodes
+* Addition of a procedure to enable `SMART` data collection on `UANs` that support it
+* Updated `hmcollector` `kafka` topics to handle new telemetry data
+* Updated `helm` example in documentation for reset of console services
+* Improved handling of empty nodes by `BOS` to prevent live lock scenario
+* Addition of time scale `grafana` dashboard
+* Mitigation of `CVE-2023-38545` for `curl` and `libcurl` on `NCNs`
+* Fix to `OPA` to cache `spire-jwks` requests going through `Kuberenetes` network to avoid port exhaustion
+* Update to `IMS` backup and restore to preserve `IMS image IDs`
 
 ## Steps
 
@@ -64,7 +73,7 @@ in [Upgrade CSM](../README.md) instead.
    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
-1. Download and extract the CSM `v1.5.1` release to `ncn-m001`.
+1. Download and extract the CSM `v1.4.3` release to `ncn-m001`.
 
    See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract).
 
@@ -73,7 +82,7 @@ in [Upgrade CSM](../README.md) instead.
    **IMPORTANT**: If necessary, change this command to match the actual location of the extracted files.
 
    ```bash
-   export CSM_DISTDIR="$(pwd)/csm-1.5.1"
+   export CSM_DISTDIR="$(pwd)/csm-1.4.3"
    echo "${CSM_DISTDIR}"
    ```
 
@@ -114,7 +123,7 @@ and exits with status code `0`.
 
 ### Update Argo CRDs
 
-(`ncn-m001#`) Run the following script in preparation for 1.5.1 patch upgrade:
+(`ncn-m001#`) Run the following script in preparation for 1.4.3 patch upgrade:
 
 ```bash
 for c in $(kubectl get crd |grep argo | cut -d' ' -f1)
@@ -198,7 +207,7 @@ version of CSM being installed. It then waits for the components to reach a conf
    ```bash
    cd "$CSM_DISTDIR"
    ./update-mgmt-ncn-cfs-config.sh --base-query role=management \
-      --save --create-backups --clear-error
+       --save --create-backups --clear-error
    ```
 
    The output will look similar to the truncated output shown below.
@@ -250,7 +259,7 @@ version of CSM being installed. It then waits for the components to reach a conf
    kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'to_entries[] | .key' | sort -V
    ```
 
-   Example output that includes the new CSM version (`1.5.1`):
+   Example output that includes the new CSM version (`1.4.3`):
 
    ```text
    0.9.2
@@ -269,9 +278,6 @@ version of CSM being installed. It then waits for the components to reach a conf
    1.4.1
    1.4.2
    1.4.3
-   1.4.4
-   1.5.0
-   1.5.1
    ```
 
 1. Confirm that the product catalog has an accurate timestamp for the CSM upgrade.
@@ -279,7 +285,7 @@ version of CSM being installed. It then waits for the components to reach a conf
    (`ncn-m001#`) Confirm that the `import_date` reflects the timestamp of the upgrade.
 
    ```bash
-   kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.5.1".configuration.import_date'
+   kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.4.3".configuration.import_date'
    ```
 
 ### Take Etcd manual backup
