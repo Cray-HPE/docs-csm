@@ -16,8 +16,9 @@ system except the management nodes. The `cray scsd` command can change the SSH k
 1. [Configure BMC and controller parameters with SCSD](#4-configure-bmc-and-controller-parameters-with-scsd)
 1. [Set up passwordless SSH](#5-set-up-passwordless-ssh)
 1. [Configure the root password and SSH keys in Vault](#6-configure-the-root-password-and-ssh-keys-in-vault)
-1. [Configure management nodes with CFS](#7-configure-management-nodes-with-cfs)
-1. [Proceed to next topic](#8-proceed-to-next-topic)
+1. [Add switch admin password to Vault](#7-add-switch-admin-password-to-vault)
+1. [Configure management nodes with CFS](#8-configure-management-nodes-with-cfs)
+1. [Proceed to next topic](#9-proceed-to-next-topic)
 
 > **`NOTE`** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
 > administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
@@ -121,7 +122,7 @@ to managed nodes.
 
 This procedure sets up resources in Kubernetes (a Kubernetes Secret and ConfigMap) which are later
 applied to the management nodes using CFS node personalization in section
-[7. Configure management nodes with CFS](#7-configure-management-nodes-with-cfs) below.
+[7. Configure management nodes with CFS](#8-configure-management-nodes-with-cfs) below.
 
 ## 6. Configure the root password and SSH keys in Vault
 
@@ -130,9 +131,33 @@ for the procedure to configure the `root` password and SSH keys in Vault.
 
 This procedure writes the `root` password hash and SSH keys to Vault which are later
 applied to the management nodes using CFS node personalization in section
-[7. Configure management nodes with CFS](#7-configure-management-nodes-with-cfs) below.
+[7. Configure management nodes with CFS](#8-configure-management-nodes-with-cfs) below.
 
-## 7. Configure management nodes with CFS
+## 7. Add switch admin password to Vault
+
+If CSM has been installed and Vault is running, add the switch credentials into Vault. Certain
+tests, including `goss-switch-bgp-neighbor-aruba-or-mellanox` use these credentials to test the
+state of the switch. This step is not required to configure the management network. If Vault is
+unavailable, this step can be temporarily skipped. Any automated tests that depend on the switch
+credentials being in Vault will fail until they are added.
+
+(`ncn-m001#`) The following script will prompt for the password, write it to Vault, and then read it back
+to verify that it was written correctly.
+
+```bash
+/usr/share/doc/csm/scripts/operations/configuration/write_sw_admin_pw_to_vault.py
+```
+
+On success, the script will exit with return code 0 and have the following final lines
+of output:
+
+```text
+Writing switch admin password to Vault
+Password read from Vault matches what was written
+SUCCESS
+```
+
+## 8. Configure management nodes with CFS
 
 Management nodes need to be configured after booting for administrative access, security, and other
 purposes. The [Configuration Framework Service (CFS)](../operations/configuration_management/Configuration_Management.md)
@@ -171,7 +196,7 @@ then applies that configuration to the management nodes.
 
     The number reported should match the number of management nodes in the system. If there are failures, see [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md).
 
-## 8. Proceed to next topic
+## 9. Proceed to next topic
 
 After completing the operational procedures above which configure administrative access, the next
 step is to validate the health of management nodes and CSM services.
