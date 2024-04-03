@@ -406,7 +406,7 @@ This means that data is retained forever. Retention can be configured by using t
 Not setting these flags or setting them to 0 second means no retention policy is configured.
 
 The `thanos` object storage is deployed by the `cray-sysmgmt-health` chart to the `sysmgmt-health` namespace.
-In order to set the storage limits for `thanos` s3 bucket, configure the `thanosCompactor` settings for the  `cray-sysmgmt-health` chart in `customizations.yaml`.
+In order to set the storage limits for `thanos` `S3` bucket, configure the `thanosCompactor` settings for the  `cray-sysmgmt-health` chart in `customizations.yaml`.
 
 1. (`pit#`) Set `thanosCompactor` in `customization.yaml`.
 
