@@ -7,8 +7,10 @@ directory which contains important customizations for various products.
 1. [Create and Initialize `site-init` Directory](#2-create-and-initialize-site-init-directory)
 1. [Create Baseline System Customizations](#3-create-baseline-system-customizations)
     1. [Setup LDAP configuration](#setup-ldap-configuration)
-    1. [End of LDAP configuration](#end-of-ldap-configuration)
-1. [Customer-Specific Customizations](#4-customer-specific-customizations)
+    1. [Customize DNS Configuration](#customize-dns-configuration)
+    1. [Configure Prometheus SNMP Exporter](#configure-prometheus-snmp-exporter)
+1. [Encrypt secrets](#4-encrypt-secrets)
+1. [Customer-Specific Customizations](#5-customer-specific-customizations)
 
 ## 1. Background
 
@@ -46,7 +48,7 @@ installation-centric artifacts, such as:
     "${CSM_PATH}/shasta-cfg/meta/init.sh" "${SITE_INIT}"
     ```
 
-### 3. Create Baseline System Customizations
+## 3. Create Baseline System Customizations
 
 The following steps update `${SITE_INIT}/customizations.yaml`
 with system-specific customizations.
@@ -114,7 +116,7 @@ with system-specific customizations.
         > - For `vault_redfish_defaults`, the only entry used is:
         >
         >     ```json
-        >     {"Cray": {"Username": "root", "Password": "XXXX"}
+        >     {"Cray": {"Username": "root", "Password": "XXXX"}}
         >     ```
         >
         > - Ensure the `Cray` key exists. This key is not used in any of the other credential specifications.
@@ -144,9 +146,9 @@ with system-specific customizations.
 
     > **`IMPORTANT`** The CA may not be modified after install.
 
-#### Setup LDAP configuration
+### Setup LDAP configuration
 
-> **`NOTE`** Skip past LDAP configuration to [here](#end-of-ldap-configuration) if there is no LDAP configuration at this time. If LDAP should be enabled later,
+> **`NOTE`** Skip past LDAP configuration to [here](#customize-dns-configuration) if there is no LDAP configuration at this time. If LDAP should be enabled later,
 > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
 
 1. (`pit#`) Set environment variables for the LDAP server and its port.
@@ -321,7 +323,7 @@ with system-specific customizations.
        yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-keycloak-users-localize
        ```
 
-#### End of LDAP configuration
+### Customize DNS configuration
 
 1. (`pit#`) Configure the Unbound DNS resolver (if needed).
 
@@ -396,7 +398,7 @@ with system-specific customizations.
 
    - If DNSSEC is to be used, then add the desired keys into the `dnssec` SealedSecret.
 
-1. Configure Prometheus SNMP Exporter.
+### Configure Prometheus SNMP Exporter
 
    The Prometheus SNMP exporter needs to be configured with a list of management network switches to scrape metrics from in
    order to populate the System Health Service Grafana dashboards.
@@ -407,6 +409,8 @@ with system-specific customizations.
    information and review the
    [Adding SNMP Credentials to the System](../operations/network/management_network/snmp_exporter_configs.md#adding-snmp-credentials-to-the-system)
    section for links to the relevant procedures.
+
+## 4. Encrypt secrets
 
 1. (`pit#`) Load the `zeromq` container image required by Sealed Secret Generators.
 
@@ -441,7 +445,7 @@ with system-specific customizations.
 
 1. `site-init` is now prepared. Resume [Initialize the LiveCD](pre-installation.md#36-initialize-the-livecd).
 
-## 4. Customer-specific customizations
+## 5. Customer-specific customizations
 
 Customer-specific customizations are any changes on top of the baseline
 configuration to satisfy customer-specific requirements. It is recommended that
