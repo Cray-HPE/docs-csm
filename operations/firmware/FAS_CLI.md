@@ -5,35 +5,37 @@
 This section describes the basic capabilities of the Firmware Action Service (FAS) CLI commands. These commands can be used to manage firmware for system hardware supported by FAS. Refer to the
 prerequisites section before proceeding to any of the sections for the supported operations.
 
+**NOTE**: When using FAS, the xname refers to the BMC, not the node.
+
 The following CLI operations are described:
 
 - [Prerequisites](#prerequisites)
 - [Actions](#actions)
-  - [Execute an action](#execute-an-action)
-    - [Procedure](#execute-an-action-procedure)
-  - [Abort an action](#abort-an-action)
-    - [Procedure](#abort-an-action-procedure)
-  - [Describe an action](#describe-an-action)
-    - [Interpreting output](#describe-an-action-interpreting-output)
-    - [Procedure](#describe-an-action-procedure)
-      - [Get high level summary](#get-high-level-summary)
-      - [Get details of action](#get-details-of-action)
-      - [Get details of operation](#get-details-of-operation)
+    - [Execute an action](#execute-an-action)
+        - [Procedure](#execute-an-action-procedure)
+    - [Abort an action](#abort-an-action)
+        - [Procedure](#abort-an-action-procedure)
+    - [Describe an action](#describe-an-action)
+        - [Interpreting output](#describe-an-action-interpreting-output)
+        - [Procedure](#describe-an-action-procedure)
+              - [Get high level summary](#get-high-level-summary)
+              - [Get details of action](#get-details-of-action)
+              - [Get details of operation](#get-details-of-operation)
 - [Snapshots](#snapshots)
-  - [Create a snapshot](#create-a-snapshot)
-    - [Procedure](#create-a-snapshot-procedure)
-  - [List snapshots](#list-snapshots)
-    - [Procedure](#list-snapshots-procedure)
-  - [View snapshots](#view-snapshots)
-    - [Procedure](#view-snapshots-procedure)
+    - [Create a snapshot](#create-a-snapshot)
+        - [Procedure](#create-a-snapshot-procedure)
+    - [List snapshots](#list-snapshots)
+        - [Procedure](#list-snapshots-procedure)
+    - [View snapshots](#view-snapshots)
+        - [Procedure](#view-snapshots-procedure)
 - [Update a firmware image](#update-a-firmware-image)
-  - [Procedure](#update-a-firmware-image-procedure)
+    - [Procedure](#update-a-firmware-image-procedure)
 - [FAS loader commands](#fas-loader-commands)
-  - [Loader status](#loader-status)
-  - [Load firmware from Nexus](#load-firmware-from-nexus)
-  - [Load individual RPM or ZIP into FAS](#load-individual-rpm-or-zip-into-fas)
-  - [Display results of loader run](#display-results-of-loader-run)
-  - [Delete loader run data](#delete-loader-run-data)
+    - [Loader status](#loader-status)
+    - [Load firmware from Nexus](#load-firmware-from-nexus)
+    - [Load individual RPM or ZIP into FAS](#load-individual-rpm-or-zip-into-fas)
+    - [Display results of loader run](#display-results-of-loader-run)
+    - [Delete loader run data](#delete-loader-run-data)
 
 ## Prerequisites
 
@@ -128,11 +130,11 @@ For the steps below, the following returned messages will help determine if a fi
 - `NoOp`: Nothing to do, already at version.
 - `NoSol`: No image is available.
 - `succeeded`:
-  - If `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update a component name (xname) + target with the declared strategy.
-  - If `live update`: The operation succeeded, and has updated the component name (xname) + target to the identified version.
+    - If `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update a component name (xname) + target with the declared strategy.
+    - If `live update`: The operation succeeded, and has updated the component name (xname) + target to the identified version.
 - `failed`:
-  - If `dryrun`: There is something that FAS could do, but it likely would fail; most likely because the file is missing.
-  - If `live update`: The operation failed; the identified version could not be put on the component name (xname) + target.
+    - If `dryrun`: There is something that FAS could do, but it likely would fail; most likely because the file is missing.
+    - If `live update`: The operation failed; the identified version could not be put on the component name (xname) + target.
 
 **NOTE**: Any node which is locked will remain in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
 These nodes will report as `failed` with the `stateHelper` message of `"time expired; could not complete update"` if action times out.

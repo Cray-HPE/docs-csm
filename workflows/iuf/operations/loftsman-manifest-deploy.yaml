@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -68,20 +68,21 @@ spec:
               - name: scriptContent
                 value: |
                   #!/usr/bin/bash
-                  PRODUCT_NAME=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest.name')
+                  echo '{{inputs.parameters.global_params}}' > global.params.data
+                  PRODUCT_NAME=$(cat global.params.data  | jq -r '.product_manifest.current_product.manifest.name')
                   if [[ -z "$PRODUCT_NAME" ]]; then
                     echo "ERROR Product name not found in the product manifest. Rerun with valid product tarball from 'process-media' stage"
                     exit 1
                   fi
 
-                  JSON_CONTENT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest')
+                  JSON_CONTENT=$(cat global.params.data  | jq -r '.product_manifest.current_product.manifest')
                   LOFTSMAN_ENTRIES=$(echo "$JSON_CONTENT" | jq '.content.loftsman | length')
                   if [[ -z "$LOFTSMAN_ENTRIES" ]]; then
                       echo "ERROR Cannot access loftsman context for $PRODUCT. Rerun with valid product tarball from 'process-media' stage"
                       exit 1
                   fi
 
-                  PARENT_PATH=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params."process-media".current_product.parent_directory')
+                  PARENT_PATH=$(cat global.params.data  | jq -r '.stage_params."process-media".current_product.parent_directory')
                   if [ ! -d $PARENT_PATH ]; then
                       echo "ERROR Cannot access product directory for $PRODUCT. Rerun with valid product tarball from 'process-media' stage"
                       exit 1

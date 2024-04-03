@@ -80,42 +80,14 @@ spec:
           dependencies:
             - wait-for-postgres-operator
           templateRef:
-            name: kubectl-and-curl-template
-            template: shell-script
+            name: wait-for-sls
+            template: wait-for-sls
           arguments:
             parameters:
               - name: dryRun
                 value: "{{inputs.parameters.dryRun}}"
-              - name: scriptContent
-                value: |
-                  echo "Sleeping for 60s to let terminated pods start terminate ..."
-                  sleep 60
-                  count=0
-                  total=120
-                  sleep=5
-                  echo "Waiting for SLS to become operational"
-                  # SLS may not be operational due to issues with DNS resolution after worker drain
-                  while true; do
-                    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
-                      -d client_id=admin-client \
-                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-                    TARGET_NCN={{inputs.parameters.targetNcn}}
-                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-                        jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-                    if [ -n "${TARGET_XNAME}" ]; then
-                      echo "SLS is up"
-                      break
-                    else
-                      if [ "${count}" == "${total}" ]; then
-                        echo "SLS is down after ${total} checks, giving up ..."
-                        exit 1
-                      fi
-                      count=$(($count + 1))
-                      echo "SLS is down, sleeping for $sleep seconds and retry, attempt $count/$total ..."
-                      sleep $sleep
-                    fi
-                  done
+              - name: targetNcn
+                value: "{{inputs.parameters.targetNcn}}"
         - name: update-bss
           dependencies:
           - wait-for-sls

@@ -8,31 +8,109 @@ Switches must be powered on and operating. This procedure is optional if switch 
 
 ### Aruba Switch and HPE Server Systems
 
-On Aruba-based systems all management network switches will be Aruba and the following procedure.
-For each switch:
+On Aruba-based systems, all management network switches will be Aruba.
 
-1. Run the command below
+1. (`ncn-m#`) Connect to all management network switches.
 
-    ```bash
-    for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do echo  "switch ${switch}:" ; ssh admin@$switch; done
-    ```
+   This loop will login to each switch as the admin username. Provide the password for that
+   username. The `write mem` command will be executed on each switch.
 
-1. Execute the `write memory` command
-1. Exit the switch shell
+   ```bash
+   for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do
+     echo "switch ${switch}:"
+     fping -r0 ${switch}
+     if [ $? -eq 0 ]; then
+       ssh admin@$switch write mem
+     fi
+   done
+   ```
+
+   The following example output shows the results of each `fping`, the password prompt, and the
+   output from the `write mem` command for two spine switches. Other output is omitted for brevity.
+
+   ```bash
+   switch sw-spine-001:
+   sw-spine-001 is alive
+
+   ...
+
+   admin@sw-spine-001's password:
+   Copying configuration: [Success]
+   switch sw-spine-002:
+   sw-spine-002 is alive
+
+   ...
+
+   admin@sw-spine-002's password:
+   Copying configuration: [Success]
+
+   ...
+   ```
 
 ### Dell and Mellanox Switch and Gigabyte/Intel Server Systems
 
-On Dell and Mellanox based systems, all spine and any leaf switches will be Mellanox. Any leaf-bmc and cdu switches will be Dell. The overall procedure is the same but the specifics of execution are slightly different.
+On Dell and Mellanox based systems, all spine and any leaf switches will be Mellanox. Any Leaf-BMC and CDU switches will be Dell.
 
-1. Run the command below
+1. (`ncn-m#`) Connect to all management network switches.
+
+   This loop will login to each switch as the admin username. Provide the password for that username. While logged in to each switch, some commands will be issued.  Then after typing `exit`, the loop will login to the next switch.
 
     ```bash
     for switch in $(awk '{print $2}' /etc/hosts | grep 'sw-'); do echo  "switch ${switch}:" ; ssh admin@$switch; done
     ```
 
-1. Enter `enable` mode (Mellanox only)
-1. Execute the `write memory` command
-1. Exit the switch shell
+   For a Mellanox switch:
+
+   **Note:** Depending on the firmware version, some Mellanox switches may identify themselves as "NVIDIA Onyx".
+
+   ```bash
+   enable
+   write memory
+   exit
+   ```
+
+   For a Dell switch:
+
+   ```bash
+   write memory
+   exit
+   ```
+
+   Example output:
+
+   ```bash
+   switch sw-spine-001:
+   NVIDIA Onyx Switch Management
+   Password: 
+   Last login: Thu Jul 19 12:21:16 UTC 2001 from 10.254.1.14 on pts/0
+   Number of total successful connections since last 1 days: 98
+
+   ###############################################################################
+   # CSM version:  1.3
+   # CANU version: 1.6.20
+   ###############################################################################
+
+   sw-spine-001 [mlag-domain: standby] > enable
+   sw-spine-001 [mlag-domain: standby] # write memory
+   sw-spine-001 [mlag-domain: standby] # exit
+   Connection to sw-spine-001 closed.
+   ...
+   switch sw-leaf-bmc-001:
+   Debian GNU/Linux 9
+
+   Dell EMC Networking Operating System (OS10)
+   admin@sw-leaf-bmc-001's password: 
+   Linux sw-leaf-bmc-001 4.9.189 #1 SMP Debian 4.9.189-3+deb9u2 x86_64
+   ###############################################################################
+   # CSM version:  1.3
+   # CANU version: 1.6.20
+   ###############################################################################
+   sw-leaf-bmc-001# write memory
+   sw-leaf-bmc-001# exit
+   Session terminated for user admin on line vty 0 ( 10.254.1.12 )
+   Connection to sw-leaf-bmc-001 closed.
+   ...
+   ```
 
 ### Edge Routers and Storage Switches
 
@@ -41,15 +119,15 @@ Edge switches are accessible from the ClusterStor management network and the CSM
 
 Example:
 
- ```bash
- ssh admin@cls01053n00
- admin@cls01053n00 password:
+```bash
+ssh admin@cls01053n00
+admin@cls01053n00 password:
 
- ssh r0-100gb-sw01
- enable
- write memory
- exit
- ```
+ssh r0-100gb-sw01
+enable
+write memory
+exit
+```
 
 ## Next Step
 

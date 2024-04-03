@@ -24,7 +24,7 @@ The following arguments are most often used with the `post-install-check` stage.
 
 ## Execution details
 
-The code executed by this stage exists within IUF. See the `post-install-check` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding files in `/usr/share/doc/csm/workflows/iuf/operations/`
+The code executed by this stage exists within IUF. See the `post-install-check` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding files to the operations listed for the stage in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.
 
 ## Example

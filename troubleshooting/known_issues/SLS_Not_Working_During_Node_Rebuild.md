@@ -5,7 +5,7 @@ the SLS Postgres database gets into a bad state, causing SLS to become unhealthy
 
 **Note:** If encountering this during a CSM upgrade, then at this point of the upgrade process, the system has not yet upgraded the CSM services
 themselves. Because of that, the documentation for the source CSM version still applies, and this page includes links for both the current
-CSM version (1.3) and for the previous CSM version (1.2).
+CSM version (1.6) and for the previous CSM version (1.5).
 
 ## Detection
 
@@ -142,10 +142,10 @@ cray-sls-postgres   cray-sls   11        3      1Gi                             
 ```
 
 * If the `STATUS` is `SyncFailed`:
-  * If currently doing a CSM upgrade, then see
-    [(CSM 1.2) Postgres status `SyncFailed`](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/kubernetes/Troubleshoot_Postgres_Database.md#postgres-status-syncfailed).
-  * Otherwise, see [Postgres status `SyncFailed`](../../operations/kubernetes/Troubleshoot_Postgres_Database.md#postgres-status-syncfailed).
+    * If currently doing a CSM upgrade, then see
+      [(CSM 1.5) Postgres status `SyncFailed`](https://github.com/Cray-HPE/docs-csm/blob/release/1.5/operations/kubernetes/Troubleshoot_Postgres_Database.md#postgres-status-syncfailed).
+    * Otherwise, see [Postgres status `SyncFailed`](../../operations/kubernetes/Troubleshoot_Postgres_Database.md#postgres-status-syncfailed).
 * Otherwise, see the standard Postgres troubleshooting procedures for further avenues of investigation.
-  * If currently doing a CSM upgrade, then see
-    [(CSM 1.2) Troubleshoot Postgres Database](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/kubernetes/Troubleshoot_Postgres_Database.md).
-  * Otherwise, see [Troubleshoot Postgres Database](../../operations/kubernetes/Troubleshoot_Postgres_Database.md).
+    * If currently doing a CSM upgrade, then see
+      [(CSM 1.5) Troubleshoot Postgres Database](https://github.com/Cray-HPE/docs-csm/blob/release/1.5/operations/kubernetes/Troubleshoot_Postgres_Database.md).
+    * Otherwise, see [Troubleshoot Postgres Database](../../operations/kubernetes/Troubleshoot_Postgres_Database.md).

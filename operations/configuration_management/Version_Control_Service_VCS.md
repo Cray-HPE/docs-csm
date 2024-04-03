@@ -3,16 +3,16 @@
 * [VCS overview](#vcs-overview)
 * [Cloning a VCS repository](#cloning-a-vcs-repository)
 * [VCS administrative user](#vcs-administrative-user)
-  * [Change VCS administrative user password](#change-vcs-administrative-user-password)
+    * [Change VCS administrative user password](#change-vcs-administrative-user-password)
 * [Access the `cray` Gitea organization](#access-the-cray-gitea-organization)
 * [Backup and restore data](#backup-and-restore-data)
-  * [Backup Postgres data](#backup-postgres-data)
-  * [Backup PVC data](#backup-pvc-data)
-  * [Restore Postgres data](#restore-postgres-data)
-  * [Restore PVC data](#restore-pvc-data)
-  * [Alternative backup/restore strategy](#alternative-backuprestore-strategy)
-    * [Alternative export method](#alternative-export-method)
-    * [Alternative import method](#alternative-import-method)
+    * [Backup Postgres data](#backup-postgres-data)
+    * [Backup PVC data](#backup-pvc-data)
+    * [Restore Postgres data](#restore-postgres-data)
+    * [Restore PVC data](#restore-pvc-data)
+    * [Alternative backup/restore strategy](#alternative-backuprestore-strategy)
+        * [Alternative export method](#alternative-export-method)
+        * [Alternative import method](#alternative-import-method)
 
 ## VCS overview
 
@@ -386,7 +386,7 @@ Adjust the repository list as necessary, if any additional repositories are pres
 ```bash
 VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
 VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
-REPOS="analytics-config-management cos-config-management cpe-config-management slurm-config-management sma-config-management uan-config-management csm-config-management"
+REPOS="analytics-config-management uss-config-management cpe-config-management slurm-config-management sma-config-management uan-config-management csm-config-management"
 for repo in $REPOS ; do
     curl -X POST https://api-gw-service-nmn.local/vcs/api/v1/orgs/cray/repos -u ${VCS_USER}:${VCS_PASSWORD} -d name=${repo}
 done

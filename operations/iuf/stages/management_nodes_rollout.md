@@ -193,65 +193,12 @@ when following the procedures in
 or [Upgrade CSM and additional products with IUF](../workflows/upgrade_csm_and_additional_products_with_iuf.md).
 
   1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found
-    in [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade).
+    in [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade). Then update the BSS parameters for `ncn-m001`.
 
       ```bash
       IMS_RESULTANT_IMAGE_ID=<value of final_image_id>
-      ```
-
-  1. (`ncn-mw#`) Get the xname for `ncn-m001`:
-
-      ```bash
-      ssh ncn-m001 cat /etc/cray/xname
-      ```
-
-  1. (`ncn-mw#`) Update boot parameters for an NCN. Perform the following procedure for `ncn-m001`.
-
-  1. Get the existing `metal.server` setting for `ncn-m001`.
-
-      ```bash
-      XNAME=<node-xname>
-      METAL_SERVER=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' \
-          | awk -F 'metal.server=' '{print $2}' \
-          | awk -F ' ' '{print $1}')
-      echo "${METAL_SERVER}"
-      ```
-
-  1. Create updated boot parameters that point to the new artifacts.
-
-      1. Set the path to the artifacts in S3.
-
-          **NOTE** This uses the `IMS_RESULTANT_IMAGE_ID` variable set in an earlier step.
-
-          ```bash
-          S3_ARTIFACT_PATH="boot-images/${IMS_RESULTANT_IMAGE_ID}"
-          echo "${S3_ARTIFACT_PATH}"
-          ```
-
-      1. Set the new `metal.server` value.
-
-          ```bash
-          NEW_METAL_SERVER="s3://${S3_ARTIFACT_PATH}/rootfs"
-          echo "${NEW_METAL_SERVER}"
-          ```
-
-      1. Determine the modified boot parameters for the node.
-
-          ```bash
-          PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | \
-              sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
-              tr -d \")
-          echo "${PARAMS}"
-          ```
-
-        In the output of the `echo` command, verify that the value of `metal.server` is correctly set to the value
-        of `${NEW_METAL_SERVER}`.
-
-  1. Update BSS with the new boot parameters.
-
-      ```bash
-      cray bss bootparameters update --hosts "${XNAME}" \
-          --kernel "s3://${S3_ARTIFACT_PATH}/kernel" \
-          --initrd "s3://${S3_ARTIFACT_PATH}/initrd" \
-          --params "${PARAMS}"
+      XNAME=$(ssh ncn-m001 cat /etc/cray/xname)
+      echo $XNAME
+      /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
+          -p $IMS_RESULTANT_IMAGE_ID $XNAME
       ```

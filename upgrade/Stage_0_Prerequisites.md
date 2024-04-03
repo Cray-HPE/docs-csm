@@ -9,18 +9,18 @@
 Stage 0 has several critical procedures which prepare the environment and verify if the environment is ready for the upgrade.
 
 - [Stage 0 - Prerequisites and Preflight Checks](#stage-0---prerequisites-and-preflight-checks)
-  - [Start typescript](#start-typescript)
-  - [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
-    - [Direct download](#direct-download)
-    - [Manual copy](#manual-copy)
-  - [Stage 0.2 - Prerequisites](#stage-02---prerequisites)
-  - [Stage 0.3 - Update management node CFS configuration and customize worker node image](#stage-03---update-management-node-cfs-configuration-and-customize-worker-node-image)
-    - [Option 1: Upgrade of CSM and additional products](#option-1-upgrade-of-csm-and-additional-products)
-    - [Option 2: Upgrade of CSM on system with additional products](#option-2-upgrade-of-csm-on-system-with-additional-products)
-    - [Option 3: Upgrade of CSM on CSM-only system](#option-3-upgrade-of-csm-on-csm-only-system)
-  - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
-  - [Stop typescript](#stop-typescript)
-  - [Stage completed](#stage-completed)
+    - [Start typescript](#start-typescript)
+    - [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
+        - [Direct download](#direct-download)
+        - [Manual copy](#manual-copy)
+    - [Stage 0.2 - Prerequisites](#stage-02---prerequisites)
+    - [Stage 0.3 - Update management node CFS configuration and customize worker node image](#stage-03---update-management-node-cfs-configuration-and-customize-worker-node-image)
+        - [Option 1: Upgrade of CSM and additional products](#option-1-upgrade-of-csm-and-additional-products)
+        - [Option 2: Upgrade of CSM on system with additional products](#option-2-upgrade-of-csm-on-system-with-additional-products)
+        - [Option 3: Upgrade of CSM on CSM-only system](#option-3-upgrade-of-csm-on-csm-only-system)
+    - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
+    - [Stop typescript](#stop-typescript)
+    - [Stage completed](#stage-completed)
 
 ## Start typescript
 
@@ -44,7 +44,8 @@ after a break, always be sure that a typescript is running before proceeding.
    export CSM_RELEASE=1.6.0
    ```
 
-1. (`ncn-m001#`) Install the latest `docs-csm` and `libcsm` RPMs. See the short procedure in
+1. (`ncn-m001#`) Install the latest `docs-csm` and `libcsm` RPMs. These should be for the target CSM version of the upgrade, not
+   the currently installed CSM version. See the short procedure in
    [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation).
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
@@ -354,7 +355,7 @@ example showing how to find the IUF activity.
    sat bootprep run --vars-file session_vars.yaml management-bootprep.yaml
    ```
 
-1. Gather the CFS configuration name, and the IMS image names from the output of `sat bootprep`.
+1. (`ncn-m001#`) Gather the CFS configuration name, and the IMS image names from the output of `sat bootprep`.
 
    `sat bootprep` will print a report summarizing the CFS configuration and IMS images it created.
    For example:
@@ -380,92 +381,102 @@ example showing how to find the IUF activity.
    +-----------------------------+--------------------------------------+--------------------------------------+-----------------------------+----------------------------+
    ```
 
-   Save the name of the CFS configurations:
+   1. Save the names of the CFS configurations from the `configuration` column:
 
-   ```bash
-   export KUBERNETES_CFS_CONFIG_NAME="management-22.4.0-csm-x.y.z"
-   export STORAGE_CFS_CONFIG_NAME="storage-22.4.0-csm-x.y.z"
-   ```
+      > Note that the storage node configuration might be titled `minimal-management-` or `storage-` depending on the value
+      > set in the sat `bootprep` file.
+      >
+      > The following uses the values from the example output above. Be sure to modify them
+      > to match the actual values.
 
-   Note that the storage node configuration might also be titled `minimal-management` depending on the value
-   set in the sat bootprep file.
+      ```bash
+      export KUBERNETES_CFS_CONFIG_NAME="management-22.4.0-csm-x.y.z"
+      export STORAGE_CFS_CONFIG_NAME="storage-22.4.0-csm-x.y.z"
+      ```
 
-   Save the name of the IMS images from the `final_image_id` column:
+   1. Save the name of the IMS images from the `final_image_id` column:
 
-   ```bash
-   export MASTER_IMAGE_ID="a22fb912-22be-449b-a51b-081af2d7aff6"
-   export WORKER_IMAGE_ID="241822c3-c7dd-44f8-98ca-0e7c7c6426d5"
-   export STORAGE_IMAGE_ID="79ab3d85-274d-4d01-9e2b-7c25f7e108ca"
-   ```
+      > The following uses the values from the example output above. Be sure to modify them
+      > to match the actual values.
 
-1. Assign the images to the management nodes in BSS.
+      ```bash
+      export MASTER_IMAGE_ID="a22fb912-22be-449b-a51b-081af2d7aff6"
+      export WORKER_IMAGE_ID="241822c3-c7dd-44f8-98ca-0e7c7c6426d5"
+      export STORAGE_IMAGE_ID="79ab3d85-274d-4d01-9e2b-7c25f7e108ca"
+      ```
 
-   Perform the procedure in [4. Update management node boot parameters](../operations/configuration_management/Management_Node_Image_Customization.md#4-update-management-node-boot-parameters)
-   for master, worker, and storage nodes.
+1. (`ncn-m001#`) Assign the images to the management nodes in BSS.
 
-   Note that the procedure must be followed three times: once for master nodes with
-   `MASTER_IMAGE_ID`, once for worker nodes with `WORKER_IMAGE_ID`, and once for storage nodes with
-   `STORAGE_IMAGE_ID`.
+   - Master management nodes:
 
-   Do not proceed to the next steps in the linked procedure. Return here when finished with the
-   single step that updates the management node boot parameters.
+      ```bash
+      /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -m -p "$MASTER_IMAGE_ID"
+      ```
 
-1. Assign the CFS configuration to the management nodes.
+   - Storage management nodes:
 
-   This command deliberately only sets the desired configuration of the components in CFS. It
+      ```bash
+      /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -s -p "$STORAGE_IMAGE_ID"
+      ```
+
+   - Worker management nodes:
+
+      ```bash
+      /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -w -p "$WORKER_IMAGE_ID"
+      ```
+
+1. (`ncn-m001#`) Assign the CFS configuration to the management nodes.
+
+   This deliberately only sets the desired configuration of the components in CFS. It
    disables the components and does not clear their configuration states or error counts. When the
    nodes are rebooted to their new images later in the CSM upgrade, they will automatically be
    enabled in CFS, and node personalization will occur.
   
-    1. `(ncn-m001)` Apply the appropriate CFS configuration to worker nodes and master nodes.
+   1. Get the xnames of the master and worker management nodes.
 
-        Get master nodes' and worker nodes' xnames.
-
-        ```bash
-        WORKER_XNAMES=$(cray hsm state components list --role Management --subrole Worker --type Node --format json |
+      ```bash
+      WORKER_XNAMES=$(cray hsm state components list --role Management --subrole Worker --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")')
-        MASTER_XNAMES=$(cray hsm state components list --role Management --subrole Master --type Node --format json |
+      MASTER_XNAMES=$(cray hsm state components list --role Management --subrole Master --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")')
-        echo "${MASTER_XNAMES},${WORKER_XNAMES}"
-        ```
+      echo "${MASTER_XNAMES},${WORKER_XNAMES}"
+      ```
 
-        Apply the CFS configuration to master nodes and worker nodes using the xnames and CFS configuration name found in the previous steps.
+   1. Apply the CFS configuration to master nodes and worker nodes using the xnames and CFS configuration name found in the previous steps.
 
-        ```bash
-        /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-            --no-config-change --config-name "${KUBERNETES_CFS_CONFIG_NAME}" --no-enable --no-clear-err \
-            --xnames ${MASTER_XNAMES},${WORKER_XNAMES}
-        ```
+      ```bash
+      /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+          --no-config-change --config-name "${KUBERNETES_CFS_CONFIG_NAME}" --no-enable --no-clear-err \
+          --xnames ${MASTER_XNAMES},${WORKER_XNAMES}
+      ```
 
-        Successful output will end with the following:
+      Successful output will end with the following:
 
-        ```text
-        All components updated successfully.
-        ```
+      ```text
+      All components updated successfully.
+      ```
 
-    1. `(ncn-m001)` Apply the appropriate CFS configuration to storage nodes.
+   1. Get the xnames of the storage management nodes.
 
-        Get storage nodes' xnames.
-
-        ```bash
-        STORAGE_XNAMES=$(cray hsm state components list --role Management --subrole Storage --type Node --format json |
+      ```bash
+      STORAGE_XNAMES=$(cray hsm state components list --role Management --subrole Storage --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")')
-        echo $STORAGE_XNAMES
-        ```
+      echo $STORAGE_XNAMES
+      ```
 
-        Apply the CFS configuration to storage nodes using the xnames and CFS configuration name found in the previous steps.
+   1. Apply the CFS configuration to storage nodes using the xnames and CFS configuration name found in the previous steps.
 
-        ```bash
-        /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-            --no-config-change --config-name "${STORAGE_CFS_CONFIG_NAME}" --no-enable --no-clear-err \
-            --xnames ${STORAGE_XNAMES}
-        ```
+      ```bash
+      /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+          --no-config-change --config-name "${STORAGE_CFS_CONFIG_NAME}" --no-enable --no-clear-err \
+          --xnames ${STORAGE_XNAMES}
+      ```
 
-        Successful output will end with the following:
+      Successful output will end with the following:
 
-        ```text
-        All components updated successfully.
-        ```
+      ```text
+      All components updated successfully.
+      ```
 
 Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data).
 

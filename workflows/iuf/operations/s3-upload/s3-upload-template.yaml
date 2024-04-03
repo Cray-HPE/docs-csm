@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -68,10 +68,11 @@ spec:
               value: false
             - name: scriptContent
               value: |
-                CONTENT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest')
-                PARENT_DIR=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params."process-media".current_product.parent_directory')
-                PRODUCT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest.name')
-                VERSION=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest.version')
+                echo '{{inputs.parameters.global_params}}' > global.params.data
+                CONTENT=$(cat global.params.data | jq -r '.product_manifest.current_product.manifest')
+                PARENT_DIR=$(cat global.params.data | jq -r '.stage_params."process-media".current_product.parent_directory')
+                PRODUCT=$(cat global.params.data | jq -r '.product_manifest.current_product.manifest.name')
+                VERSION=$(cat global.params.data | jq -r '.product_manifest.current_product.manifest.version')
 
                 if [[ "${CONTENT,,}" == "null" ]] || [[ "$CONTENT" == "" ]]; then
                     echo "ERROR No products found. IUF requires at least one product. Please place at least one valid product tarball in {{inputs.parameters.global_params.media_dir}} and start again from the 'process-media' stage"

@@ -5,9 +5,9 @@ This section updates the software running on management NCNs.
 - [1. Perform Slingshot switch firmware updates](#1-perform-slingshot-switch-firmware-updates)
 - [2. Update management host firmware (FAS)](#2-update-management-host-firmware-fas)
 - [3. Execute the IUF `management-nodes-rollout` stage](#3-execute-the-iuf-management-nodes-rollout-stage)
-  - [3.1 `management-nodes-rollout` with CSM upgrade](#31-management-nodes-rollout-with-csm-upgrade)
-  - [3.2 `management-nodes-rollout` without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade)
-  - [3.3 NCN worker nodes](#33-ncn-worker-nodes)
+    - [3.1 `management-nodes-rollout` with CSM upgrade](#31-management-nodes-rollout-with-csm-upgrade)
+    - [3.2 `management-nodes-rollout` without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade)
+    - [3.3 NCN worker nodes](#33-ncn-worker-nodes)
 - [4. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware)
 - [5. Next steps](#5-next-steps)
 
@@ -203,7 +203,7 @@ Refer to that table and any corresponding product documents before continuing to
         ```
 
     1. Get the CFS configuration created for management nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created)
-       documentation to get the value for `configuration` for any image with a `configuration_group_name` value matching `Management_Storage`,`Management_Storage`, or `Management_Storage` (since `configuration` is the same for all
+       documentation to get the value for `configuration` for any image with a `configuration_group_name` value matching `Management_Master`,`Management_Worker`, or `Management_Storage` (since `configuration` is the same for all
        management nodes).
 
     1. (`ncn-m#`) Set `CFS_CONFIG_NAME` to the value for `configuration` found in the previous step.
@@ -219,10 +219,37 @@ Refer to that table and any corresponding product documents before continuing to
         --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $MASTER_STORAGE_XNAMES --clear-state
         ```
 
-        The expected output is:
+        Sample output for configuring multiple management nodes is:
 
           ```bash
-          Configuration complete. 9 component(s) completed successfully.  0 component(s) failed.
+          Taking snapshot of existing management-23.11.0 configuration to /root/apply_csm_configuration.20240305_173700.vKxhqC backup-management-23.11.0.json
+          Setting desired configuration, clearing state, clearing error count, enabling components in CFS
+          desiredConfig = "management-23.11.0"
+          enabled = true
+          errorCount = 0
+          id = "x3700c0s16b0n0"
+          state = []
+
+          [tags]
+
+          desiredConfig = "management-23.11.0"
+          enabled = true
+          errorCount = 0
+          id = "x3701c0s16b0n0"
+          state = []
+
+          [tags]
+
+          desiredConfig = "management-23.11.0"
+          enabled = true
+          errorCount = 0
+          id = "x3702c0s16b0n0"
+          state = []
+
+          [tags]
+
+          Waiting for configuration to complete. 3 components remaining.
+          Configuration complete. 3 component(s) completed successfully.  0 component(s) failed.
           ```
 
 Once this step has completed:
@@ -300,6 +327,9 @@ Return to the procedure that was being followed for `management-nodes-rollout` t
 ## 4. Update management host Slingshot NIC firmware
 
 If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the  _Slingshot Operations Guide for Customers_ for details on how to update NIC firmware on management nodes.
+
+After updating management host Slingshot NIC firmware, all nodes where the firmware was updated must be power cycled.
+Follow the [reboot NCNs procedure](../../node_management/Reboot_NCNs.md#ncn-worker-nodes) for all nodes where the firmware was updated.
 
 Once this step has completed:
 
