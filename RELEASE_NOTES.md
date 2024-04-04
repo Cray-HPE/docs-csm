@@ -6,10 +6,9 @@ documentation improvements. This page lists some of the highlights.
 ## New
 
 ### New Software Support
-CASTS resolved
-CAST-32797 SMA rsyslog-collector pod file descriptor leak and resource exhaustion
-CAST-32143  CSM 1.3 unbound is losing connection to upstream DNS
 
+* Fixed SMA rsyslog-collector pod file descriptor leak and resource exhaustion -CAST-32797 
+* Fixed CSM 1.3 unbound is losing connection to upstream DNS - CAST-32143 
 * Highly available `prometheus` through integration of `thanos`
 * Support and migration to `bitnami-etcd`
 * Updates to all services using `etcd` cluster to migrate to use of `bitnami-etcd`
