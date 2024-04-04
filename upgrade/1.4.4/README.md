@@ -22,8 +22,8 @@ in [Upgrade CSM](../README.md) instead.
 * Broadcom PCIe support for NCNs (`metal-ipxe`)
 * `cray-dns-unbound` fix for leaving existing configuration in place if new configuration fails to load
 * CPU limit removal for OPA
-* Fixed an issue where `cray-hms-hmcollector-ingress` would fail parsing data from `FabricHealth` `CAST-34705`
-* Fixed an issue where BOS warnings would be displayed in SAT status output `CAST-35268`
+* `CAST-34705`: Fixed an issue where `cray-hms-hmcollector-ingress` would fail parsing data from `FabricHealth`
+* `CAST-35268`: Fixed an issue where BOS warnings would be displayed in SAT status output
 
 ## Steps
 
