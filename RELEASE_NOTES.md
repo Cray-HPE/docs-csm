@@ -12,7 +12,7 @@ documentation improvements. This page lists some of the highlights.
     * `CAST-31712`: Unbound slamming DNS server with requests
     * `CAST-31867`: Fixed Unbound not publishing to Prometheus
     * `CAST-32362`: Unable to to monitor the progress of a boot of single node in the power on process when using BOS V2
-    * `CAST-32978`: `prerequisites.sh` makes DNS nonfunctional for some minutes
+    * `CAST-32978`: `prerequisites.sh` makes DNS not functional for some minutes
     * `CAST-33450`: Worker rebuild workflow: `update-bss-no-wipe`
     * `CAST-33608`: `spire` server slow to respond and crashing
     * `CAST-33719`: Missing entries in `haproxy` on storage nodes
