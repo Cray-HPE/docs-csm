@@ -38,8 +38,8 @@ in [Upgrade CSM](../README.md) instead.
 * Updated docs for `fix_failed_to_start_etcd_on_master` to better specify how to add a process
 * Fixed an issue with IUF where process-media/pre-install-check dislikes PDF file
 * Fixed an issue where `backup_smd_postgres.sh` script is not executable
-* Fixed an issue where `cray-hms-rts-snmp` would enter encounter a segmentation fault `CAST-34869`
-* Fixed an issue where the `QLogic` driver would crash the system `CAST-34141`
+* `CAST-34869`: Fixed an issue where `cray-hms-rts-snmp` would enter encounter a segmentation fault
+* `CAST-34141`: Fixed an issue where the `QLogic` driver would crash the system
 
 ## Steps
 
