@@ -38,22 +38,28 @@ in [Upgrade CSM](../README.md) instead.
 * Updated docs for `fix_failed_to_start_etcd_on_master` to better specify how to add a process
 * Fixed an issue with IUF where process-media/pre-install-check dislikes PDF file
 * Fixed an issue where `backup_smd_postgres.sh` script is not executable
+* Fixed an issue where `cray-hms-rts-snmp` would enter encounter a segmentation fault `CAST-34869`
+* Fixed an issue where the `QLogic` driver would crash the system `CAST-34141`
 
 ## Steps
 
-1. [Preparation](#preparation)
-1. [Setup Nexus](#setup-nexus)
-1. [Update Argo CRDs](#update-argo-crds)
-1. [Upgrade services](#upgrade-services)
-1. [Upload NCN images](#upload-ncn-images)
-1. [Upgrade Ceph and stop local Docker registries](#upgrade-ceph-and-stop-local-docker-registries)
-1. [Enable `smartmon` metrics on storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
-1. [Configure NCNs without restart](#update-management-node-cfs-configuration)
-1. [Update test suite packages](#update-test-suite-packages)
-1. [Verification](#verification)
-1. [Take Etcd manual backup](#take-etcd-manual-backup)
-1. [NCN reboot](#ncn-reboot)
-1. [Complete upgrade](#complete-upgrade)
+- [CSM 1.5.1 Patch Installation Instructions](#csm-151-patch-installation-instructions)
+  - [Introduction](#introduction)
+  - [Bug fixes and improvements](#bug-fixes-and-improvements)
+  - [Steps](#steps)
+    - [Preparation](#preparation)
+    - [Setup Nexus](#setup-nexus)
+    - [Update Argo CRDs](#update-argo-crds)
+    - [Upgrade services](#upgrade-services)
+    - [Upload NCN images](#upload-ncn-images)
+    - [Upgrade Ceph and stop local Docker registries](#upgrade-ceph-and-stop-local-docker-registries)
+    - [Enable `smartmon` metrics on storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
+    - [Update management node CFS configuration](#update-management-node-cfs-configuration)
+    - [Update test suite packages](#update-test-suite-packages)
+    - [Verification](#verification)
+    - [Take Etcd manual backup](#take-etcd-manual-backup)
+    - [NCN reboot](#ncn-reboot)
+    - [Complete upgrade](#complete-upgrade)
 
 ### Preparation
 
