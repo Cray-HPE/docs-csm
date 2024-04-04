@@ -22,27 +22,33 @@ in [Upgrade CSM](../README.md) instead.
 * Broadcom PCIe support for NCNs (`metal-ipxe`)
 * `cray-dns-unbound` fix for leaving existing configuration in place if new configuration fails to load
 * CPU limit removal for OPA
+* Fixed an issue where `cray-hms-hmcollector-ingress` would fail parsing data from `FabricHealth` `CAST-34705`
+* Fixed an issue where BOS warnings would be displayed in SAT status output `CAST-35268`
 
 ## Steps
 
-1. [Preparation](#preparation)
-1. [Setup Nexus](#setup-nexus)
-1. [Update Argo CRDs](#update-argo-crds)
-1. [Upgrade services](#upgrade-services)
-1. [Upload NCN images](#upload-ncn-images)
-1. [Upgrade Ceph and stop local Docker registries](#upgrade-ceph-and-stop-local-docker-registries)
-1. [Enable `smartmon` metrics on storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
-1. [Update management node CFS configuration](#update-management-node-cfs-configuration)
-1. [Update NCN images](#update-ncn-images)
-    1. [Warnings](#warnings)
-    1. [Image customization](#image-customization)
-    1. [WLM backup](#wlm-backup)
-1. [Storage nodes in-place update](#storage-nodes-in-place-update)
-1. [Kubernetes nodes rolling rebuild](#kubernetes-nodes-rolling-rebuild)
-1. [Update test suite packages](#update-test-suite-packages)
-1. [Verification](#verification)
-1. [Take Etcd manual backup](#take-etcd-manual-backup)
-1. [Complete upgrade](#complete-upgrade)
+- [CSM 1.4.4 Patch Installation Instructions](#csm-144-patch-installation-instructions)
+  - [Introduction](#introduction)
+  - [Bug fixes and improvements](#bug-fixes-and-improvements)
+  - [Steps](#steps)
+    - [Preparation](#preparation)
+    - [Setup Nexus](#setup-nexus)
+    - [Update Argo CRDs](#update-argo-crds)
+    - [Upgrade services](#upgrade-services)
+    - [Upload NCN images](#upload-ncn-images)
+    - [Upgrade Ceph and stop local Docker registries](#upgrade-ceph-and-stop-local-docker-registries)
+    - [Enable `smartmon` metrics on storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
+    - [Update management node CFS configuration](#update-management-node-cfs-configuration)
+    - [Update NCN images](#update-ncn-images)
+      - [Warnings](#warnings)
+      - [Image customization](#image-customization)
+      - [WLM backup](#wlm-backup)
+    - [Storage nodes in-place update](#storage-nodes-in-place-update)
+    - [Kubernetes nodes rolling rebuild](#kubernetes-nodes-rolling-rebuild)
+    - [Update test suite packages](#update-test-suite-packages)
+    - [Verification](#verification)
+    - [Take Etcd manual backup](#take-etcd-manual-backup)
+    - [Complete upgrade](#complete-upgrade)
 
 ### Preparation
 
