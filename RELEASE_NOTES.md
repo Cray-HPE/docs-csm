@@ -11,7 +11,6 @@ documentation improvements. This page lists some of the highlights.
     * `CAST-31486`: `cray-powerdns-manager` not adding compute nodes to external DNS
     * `CAST-33719`: Missing entries in `haproxy` on storage nodes
     * `CAST-33922`: `PXE-E18: Server response timeout`
-    
 * Highly available `prometheus` through integration of `thanos`
 * Support and migration to `bitnami-etcd`
 * Updates to all services using `etcd` cluster to migrate to use of `bitnami-etcd`
