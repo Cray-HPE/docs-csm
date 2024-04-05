@@ -45,9 +45,9 @@ Any steps run on an `external` server require that server to have the following 
 
       > Example release versions:
       >
-      > - An alpha build: `CSM_RELEASE=1.5.0-alpha.99`
-      > - A release candidate: `CSM_RELEASE=1.5.0-rc.1`
-      > - A stable release: `CSM_RELEASE=1.5.0`
+      > - An alpha build: `CSM_RELEASE=1.6.0-alpha.99`
+      > - A release candidate: `CSM_RELEASE=1.6.0-rc.1`
+      > - A stable release: `CSM_RELEASE=1.6.0`
 
       ```bash
       CSM_RELEASE=<value>
@@ -262,9 +262,9 @@ These variables will need to be set for many procedures within the CSM installat
 
       > Example release versions:
       >
-      > - An alpha build: `CSM_RELEASE=1.5.0-alpha.99`
-      > - A release candidate: `CSM_RELEASE=1.5.0-rc.1`
-      > - A stable release: `CSM_RELEASE=1.5.0`
+      > - An alpha build: `CSM_RELEASE=1.6.0-alpha.99`
+      > - A release candidate: `CSM_RELEASE=1.6.0-rc.1`
+      > - A stable release: `CSM_RELEASE=1.6.0`
 
       ```bash
       export CSM_RELEASE=<value>
@@ -355,23 +355,23 @@ These variables will need to be set for many procedures within the CSM installat
    Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors.
 
    ```text
-   = PIT Identification = COPY/CUT START =======================================
-   VERSION=a9d5138-1694719577775
-   TIMESTAMP=2023-09-14_19:26:17
-   CRAY-Site-Init build signature...
-   Build Commit   : 78867e48bc5b5f6df5df2f4e2f274f92b7476c05-heads-v1.32.2
-   Build Time     : 2023-08-18T19:34:01Z
-   Go Version     : go1.19
-   Version        : v1.32.2
-   Platform       : linux/amd64
-   canu-1.7.6-1.x86_64
-   ilorest-4.2.0.0-20.x86_64
-   metal-basecamp-1.2.6-1.x86_64
-   metal-ipxe-2.4.6-1.noarch
-   metal-init-1.4.6-1.noarch
-   metal-nexus-1.3.1-3.38.0_1.x86_64
-   metal-observability-1.0.9-1.x86_64
-   = PIT Identification = COPY/CUT END =========================================
+    = PIT Identification = COPY/CUT START =======================================
+    VERSION=ed97205-1706718622724
+    TIMESTAMP=2024-01-31_16:30:22
+    CRAY-Site-Init build signature...
+    Build Commit   : c9a07e366151a72be71d168061d08bd97da5344c-heads-v1.32.4
+    Build Time     : 2023-10-20T14:53:30Z
+    Go Version     : go1.19
+    Version        : v1.32.4
+    Platform       : linux/amd64
+    canu-1.8.0-1.x86_64
+    ilorest-4.2.0.0-20.x86_64
+    metal-basecamp-1.2.6-1.x86_64
+    metal-ipxe-2.4.7-1.noarch
+    metal-init-1.4.6-1.noarch
+    metal-nexus-1.3.1-3.38.0_1.x86_64
+    metal-observability-1.0.9-1.x86_64
+    = PIT Identification = COPY/CUT END =========================================
    ```
 
 ## 2. Download and extract the CSM Tarball
@@ -411,6 +411,11 @@ These variables will need to be set for many procedures within the CSM installat
    tar -zxvf  "${PITDATA}/csm-${CSM_RELEASE}.tar.gz" -C ${PITDATA}
    ```
 
+1. (`pit#`) ***CSM 1.6.0 Only*** At this time, the metal-ipxe 1.6.0 pre-install hotfix is required. Please review the current field notices for the hotfix.
+   This hotfix will insert a new metal-ipxe RPM into the extracted tarball.
+
+    > ***NOTE*** CSM 1.5.1 and later do NOT need to run this. The metal-ipxe RPM is already included in their tarballs.
+
 1. (`pit#`) Install/update the RPMs necessary for the CSM installation.
 
    > ***NOTE*** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
@@ -422,9 +427,10 @@ These variables will need to be set for many procedures within the CSM installat
        > - `cray-site-init` provides `csi`, a tool for creating and managing configurations, as well as
        >   orchestrating the [handoff and deploy of the final non-compute node](deploy_final_non-compute_node.md).
        > - `metal-init` provides several scripts in `/root/bin` used for fresh installations.
+       > - `metal-ipxe` provides boot parameters for the NCNs, as well as EFI binaries for PXE/iPXE/HTTP booting.
 
        ```bash
-       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/noos" --no-gpg-checks update -y cray-site-init metal-init
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/noos" --no-gpg-checks update -y cray-site-init metal-init metal-ipxe
        ```
 
 1. (`pit#`) Get the artifact versions.
@@ -490,23 +496,23 @@ These variables will need to be set for many procedures within the CSM installat
    Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors.
 
    ```text
-   = PIT Identification = COPY/CUT START =======================================
-   VERSION=a9d5138-1694719577775
-   TIMESTAMP=2023-09-14_19:26:17
-   CRAY-Site-Init build signature...
-   Build Commit   : 78867e48bc5b5f6df5df2f4e2f274f92b7476c05-heads-v1.32.2
-   Build Time     : 2023-08-18T19:34:01Z
-   Go Version     : go1.19
-   Version        : v1.32.2
-   Platform       : linux/amd64
-   canu-1.7.6-1.x86_64
-   ilorest-4.2.0.0-20.x86_64
-   metal-basecamp-1.2.6-1.x86_64
-   metal-ipxe-2.4.6-1.noarch
-   metal-init-1.4.6-1.noarch
-   metal-nexus-1.3.1-3.38.0_1.x86_64
-   metal-observability-1.0.9-1.x86_64
-   = PIT Identification = COPY/CUT END =========================================
+    = PIT Identification = COPY/CUT START =======================================
+    VERSION=ed97205-1706718622724
+    TIMESTAMP=2024-01-31_16:30:22
+    CRAY-Site-Init build signature...
+    Build Commit   : c9a07e366151a72be71d168061d08bd97da5344c-heads-v1.32.4
+    Build Time     : 2023-10-20T14:53:30Z
+    Go Version     : go1.19
+    Version        : v1.32.4
+    Platform       : linux/amd64
+    canu-1.8.0-1.x86_64
+    ilorest-4.2.0.0-20.x86_64
+    metal-basecamp-1.2.6-1.x86_64
+    metal-ipxe-2.4.8-1.noarch
+    metal-init-1.4.6-1.noarch
+    metal-nexus-1.3.1-3.38.0_1.x86_64
+    metal-observability-1.0.9-1.x86_64
+    = PIT Identification = COPY/CUT END =========================================
    ```
 
 ## 3. Create system configuration
