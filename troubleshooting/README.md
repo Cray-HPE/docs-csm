@@ -67,6 +67,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [wait for unbound hang](known_issues/wait_for_unbound_hang.md)
 - [IUF fails with `Not a directory: /etc/cray/upgrade/csm/media/...`](known_issues/iuf_error_not_a_directory.md)
 - [Hang Listing BOS V1 Sessions](known_issues/Hang_Listing_BOS_V1_Sessions.md)
+- [CFS V2 Failures On Large Systems](known_issues/CFS_V2_Failures_On_Large_Systems.md)
 
 ## Booting
 
@@ -83,11 +84,13 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Troubleshooting Using Kubernetes](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Using_Kubernetes.md)
 - [Log File Locations and Ports Used](../operations/boot_orchestration/Log_File_Locations_and_Ports_Used_in_Compute_Node_Boot_Troubleshooting.md)
 - [Issues Related to Slow Boot Times](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
+- [CFS V2 Failures On Large Systems](known_issues/CFS_V2_Failures_On_Large_Systems.md)
 
 ## Configuration management
 
 - [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md)
 - [Incrementally Configuring Images](incrementally_configuring_images.md)
+- [CFS V2 Failures On Large Systems](known_issues/CFS_V2_Failures_On_Large_Systems.md)
 
 ## ConMan
 

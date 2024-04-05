@@ -137,6 +137,7 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down col
         - [Troubleshoot Compute Node Boot Issues Using Kubernetes](boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Using_Kubernetes.md)
         - [Log File Locations and Ports Used in Compute Node Boot Troubleshooting](boot_orchestration/Log_File_Locations_and_Ports_Used_in_Compute_Node_Boot_Troubleshooting.md)
         - [Troubleshoot Compute Node Boot Issues Related to Slow Boot Times](boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
+        - [CFS V2 Failures On Large Systems](../troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md)
 - [Customize iPXE Binary Names](boot_orchestration/Customize_iPXE_Binary_Names.md)
 - [Edit the iPXE Embedded Boot Script](boot_orchestration/Edit_the_iPXE_Embedded_Boot_Script.md)
 - [Redeploy the iPXE and TFTP Services](boot_orchestration/Redeploy_the_IPXE_and_TFTP_Services.md)
@@ -247,6 +248,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
     - [Troubleshoot CFS Session Failed](configuration_management/Troubleshoot_CFS_Session_Failed.md)
     - [Troubleshoot CFS Session Failing to Complete](configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
     - [Troubleshoot CFS Sessions Failing to Start](configuration_management/Troubleshoot_CFS_Sessions_Failing_to_Start.md)
+    - [CFS V2 Failures On Large Systems](../troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md)
 - [Exporting and Importing CFS Data](configuration_management/Exporting_and_Importing_CFS_Data.md)
 - [CFS API Details](../api/cfs.md)
 - [Version Control Service \(VCS\)](configuration_management/Version_Control_Service_VCS.md)
@@ -812,6 +814,7 @@ components. In CSM 1.3 and newer, the `sat` command is available on the Kubernet
 product stream.
 
 - [System Admin Toolkit in CSM](sat/sat_in_csm.md)
+- [CFS V2 Failures On Large Systems](../troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md)
 
 ## Install and Upgrade Framework (IUF)
 

@@ -45,3 +45,8 @@ These operators monitor nodes individually, not as a group, allowing each node t
 If no version is specified, the BOS CLI defaults to the `v2` endpoints. `cray bos <command>` defaults to `cray bos v2 <command>`. This is a change from the previous release.
 To avoid compatibility issues when the CLI's default version changes, scripts using the CLI should always explicitly specify a version.
 The behavior of defaulting to a version when the version parameter is omitted is a convenience intended for interactive use and is not intended for scripts.
+
+## Known issues
+
+In CSM 1.5.0 on large systems, BOS v2 sessions may not work because of a failed interaction with CFS. For more information, see
+[CFS V2 Failures On Large Systems](../../troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md).
