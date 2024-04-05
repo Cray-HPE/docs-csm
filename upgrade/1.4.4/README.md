@@ -22,9 +22,15 @@ in [Upgrade CSM](../README.md) instead.
 * Broadcom PCIe support for NCNs (`metal-ipxe`)
 * `cray-dns-unbound` fix for leaving existing configuration in place if new configuration fails to load
 * CPU limit removal for OPA
+* `CAST-34705`: Fixed an issue where `cray-hms-hmcollector-ingress` would fail parsing data from `FabricHealth`
+* `CAST-35268`: Fixed an issue where BOS warnings would be displayed in SAT status output
 
 ## Steps
 
+1. [CSM 1.4.4 Patch Installation Instructions](#csm-144-patch-installation-instructions)
+1. [Introduction](#introduction)
+1. [Bug fixes and improvements](#bug-fixes-and-improvements)
+1. [Steps](#steps)
 1. [Preparation](#preparation)
 1. [Setup Nexus](#setup-nexus)
 1. [Update Argo CRDs](#update-argo-crds)
@@ -34,9 +40,9 @@ in [Upgrade CSM](../README.md) instead.
 1. [Enable `smartmon` metrics on storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
 1. [Update management node CFS configuration](#update-management-node-cfs-configuration)
 1. [Update NCN images](#update-ncn-images)
-    1. [Warnings](#warnings)
-    1. [Image customization](#image-customization)
-    1. [WLM backup](#wlm-backup)
+1. [Warnings](#warnings)
+1. [Image customization](#image-customization)
+1. [WLM backup](#wlm-backup)
 1. [Storage nodes in-place update](#storage-nodes-in-place-update)
 1. [Kubernetes nodes rolling rebuild](#kubernetes-nodes-rolling-rebuild)
 1. [Update test suite packages](#update-test-suite-packages)
