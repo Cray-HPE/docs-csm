@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -39,7 +39,7 @@ K8S_SECRET_NAME = "cray-vault-unseal-keys"
 K8S_SERVICE_NAME = "cray-vault"
 
 CSM_ROOT_SECRET_KEY = "csm/users/root"
-SW_ADMIN_PW_KEY = "secret/net-creds/switch_admin"
+SW_ADMIN_PW_KEY = "net-creds/switch_admin"
 SW_ADMIN_PW_FIELD = "admin"
 
 API_STATUS_OK_WITH_DATA = 200

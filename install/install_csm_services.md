@@ -7,8 +7,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 1. [Install CSM services](#1-install-csm-services)
 1. [Create base BSS global boot parameters](#2-create-base-bss-global-boot-parameters)
-1. [Adding switch admin password to Vault](#3-adding-switch-admin-password-to-vault)
-1. [Wait for everything to settle](#4-wait-for-everything-to-settle)
+1. [Wait for everything to settle](#3-wait-for-everything-to-settle)
 1. [Next topic](#next-topic)
 1. [Known issues](#known-issues)
     1. [`Deploy CSM Applications and Services` known issues](#deploy-csm-applications-and-services-known-issues)
@@ -108,31 +107,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
    kubectl -n spire wait "${SPIRE_JOB}" --for=condition=complete --timeout=5m
    ```
 
-## 3. Adding switch admin password to Vault
-
-If CSM has been installed and Vault is running, add the switch credentials into Vault. Certain
-tests, including `goss-switch-bgp-neighbor-aruba-or-mellanox` use these credentials to test the
-state of the switch. This step is not required to configure the management network. If Vault is
-unavailable, this step can be temporarily skipped. Any automated tests that depend on the switch
-credentials being in Vault will fail until they are added.
-
-(`pit#`) The following script will prompt for the password, write it to Vault, and then read it back
-to verify that it was written correctly.
-
-```bash
-/usr/share/doc/csm/scripts/operations/configuration/write_sw_admin_pw_to_vault.py
-```
-
-On success, the script will exit with return code 0 and have the following final lines
-of output:
-
-```text
-Writing switch admin password to Vault
-Password read from Vault matches what was written
-SUCCESS
-```
-
-## 4. Wait for everything to settle
+## 3. Wait for everything to settle
 
 Wait **at least 15 minutes** to let the various Kubernetes resources initialize and start before
 proceeding with the rest of the install.
