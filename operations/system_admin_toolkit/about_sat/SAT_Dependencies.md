@@ -145,9 +145,21 @@ CSM dependencies:
 
 ## `sat swap`
 
-Slingshot dependencies:
+Note: Starting in CSM v1.6.0, the `sat swap cable` and `sat swap switch`
+commands are deprecated. Use Slingshot Orchestrated Maintenance to perform
+removal and addition of Slingshot switches and cables. See the HPE Slingshot
+Operations Guide for details.
+
+The `sat swap switch` and `sat swap cable` commands have the following Slingshot
+dependencies:
 
 - Fabric Manager
+
+The `sat swap blade` command has the following CSM dependencies:
+
+- Hardware State Manager (HSM)
+- Kubernetes
+- Power Control Service (PCS)
 
 ## `sat switch`
 
