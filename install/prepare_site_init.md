@@ -7,8 +7,11 @@ directory which contains important customizations for various products.
 1. [Create and Initialize `site-init` Directory](#2-create-and-initialize-site-init-directory)
 1. [Create Baseline System Customizations](#3-create-baseline-system-customizations)
     1. [Setup LDAP configuration](#setup-ldap-configuration)
-    1. [End of LDAP configuration](#end-of-ldap-configuration)
-1. [Customer-Specific Customizations](#4-customer-specific-customizations)
+    1. [Customize DNS configuration](#customize-dns-configuration)
+    1. [Set storage limit for `Thanos` S3 bucket](#set-storage-limit-for-thanos-s3-bucket)
+    1. [Configure Prometheus SNMP Exporter](#configure-prometheus-snmp-exporter)
+1. [Encrypt secrets](#4-encrypt-secrets)
+1. [Customer-Specific Customizations](#5-customer-specific-customizations)
 
 ## 1. Background
 
@@ -46,7 +49,7 @@ installation-centric artifacts, such as:
     "${CSM_PATH}/shasta-cfg/meta/init.sh" "${SITE_INIT}"
     ```
 
-### 3. Create Baseline System Customizations
+## 3. Create Baseline System Customizations
 
 The following steps update `${SITE_INIT}/customizations.yaml`
 with system-specific customizations.
@@ -114,7 +117,7 @@ with system-specific customizations.
         > - For `vault_redfish_defaults`, the only entry used is:
         >
         >     ```json
-        >     {"Cray": {"Username": "root", "Password": "XXXX"}
+        >     {"Cray": {"Username": "root", "Password": "XXXX"}}
         >     ```
         >
         > - Ensure the `Cray` key exists. This key is not used in any of the other credential specifications.
@@ -144,9 +147,9 @@ with system-specific customizations.
 
     > **`IMPORTANT`** The CA may not be modified after install.
 
-#### Setup LDAP configuration
+### Setup LDAP configuration
 
-> **`NOTE`** Skip past LDAP configuration to [here](#end-of-ldap-configuration) if there is no LDAP configuration at this time. If LDAP should be enabled later,
+> **`NOTE`** Skip past LDAP configuration to [here](#customize-dns-configuration) if there is no LDAP configuration at this time. If LDAP should be enabled later,
 > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
 
 1. (`pit#`) Set environment variables for the LDAP server and its port.
@@ -321,7 +324,7 @@ with system-specific customizations.
        yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-keycloak-users-localize
        ```
 
-#### End of LDAP configuration
+### Customize DNS configuration
 
 1. (`pit#`) Configure the Unbound DNS resolver (if needed).
 
@@ -396,56 +399,58 @@ with system-specific customizations.
 
    - If DNSSEC is to be used, then add the desired keys into the `dnssec` SealedSecret.
 
-1. Set storage limit for `Thanos` S3 bucket
+### Set storage limit for `Thanos` S3 bucket
 
-   By default, there is NO retention set for `thanos` object storage data.
-   This means that you store data forever. We can configure retention by using `--retention.resolution-raw` , `--retention.resolution-5m` and `--retention.resolution-1h` flag.
-   Not setting them or setting to 0 second means no retention.
+By default, there is NO retention policy set for `thanos` object storage data.
+This means that data is retained forever. Retention can be configured by using the `--retention.resolution-raw` , `--retention.resolution-5m` and `--retention.resolution-1h` flags.
+Not setting these flags or setting them to 0 second means no retention policy is configured.
 
-   The `thanos` object storage is deployed by the `cray-sysmgmt-health` chart to the `sysmgmt-health` namespace.
-   In order to set the storage limits for `thanos s3` bucket, configure the `thanosCompactor` settings for the  `cray-sysmgmt-health` chart in `customizations.yaml`.
+The `thanos` object storage is deployed by the `cray-sysmgmt-health` chart to the `sysmgmt-health` namespace.
+In order to set the storage limits for `thanos` `S3` bucket, configure the `thanosCompactor` settings for the  `cray-sysmgmt-health` chart in `customizations.yaml`.
 
-   1. (`pit#`) Set `thanosCompactor` in `customization.yaml`.
+1. (`pit#`) Set `thanosCompactor` in `customization.yaml`.
 
-      ```bash
-      yq write -s - -i "${SITE_INIT}/customizations.yaml" <<EOF
-      - command: update
-        path: spec.kubernetes.services.cray-sysmgmt-health.thanosCompactor
-        value:
-           resolutionraw: 15d
-           resolution5m: 15d
-           resolution1h: 15d
-      EOF
-      ```
+   ```bash
+   yq write -s - -i "${SITE_INIT}/customizations.yaml" <<EOF
+   - command: update
+     path: spec.kubernetes.services.cray-sysmgmt-health.thanosCompactor
+     value:
+        resolutionraw: 15d
+        resolution5m: 15d
+        resolution1h: 15d
+   EOF
+   ```
 
-   1. (`pit#`) Review the `thanosCompactor` values.
+1. (`pit#`) Review the `thanosCompactor` values.
 
-      ```bash
-      yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-sysmgmt-health.thanosCompactor
-      ```
+   ```bash
+   yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-sysmgmt-health.thanosCompactor
+   ```
 
-      Example output is:
+   Example output is:
 
-      ```text
-      resolutionraw: 15d
-      resolution5m: 15d
-      resolution1h: 15d
-      ```
+   ```text
+   resolutionraw: 15d
+   resolution5m: 15d
+   resolution1h: 15d
+   ```
 
-   NOTE: The recommended storage limit to configure for `thanos` is `15d - 30d` for all the resolutions.
-          As a rule of thumb retention for each downsampling level should be the same, and should be greater than the maximum date range (10 days for `5m to 1h` downsampling).
+> ***NOTE***  The recommended storage limit to configure for `thanos` is `15d - 30d` for all resolutions.
+As a rule of thumb retention for each downsampling level should be the same, and should be greater than the maximum date range (10 days for `5m to 1h` downsampling).
 
-1. Configure Prometheus SNMP Exporter.
+### Configure Prometheus SNMP Exporter
 
-   The Prometheus SNMP exporter needs to be configured with a list of management network switches to scrape metrics from in
-   order to populate the System Health Service Grafana dashboards.
+The Prometheus SNMP exporter needs to be configured with a list of management network switches to scrape metrics from in
+order to populate the System Health Service Grafana dashboards.
 
-   > ***NOTE*** that for the Prometheus SNMP exporter to work, SNMP needs to be configured on the management switches
-   and the username and password need to match both Vault and the matching sealed secret in customizations.yaml. See
-   the [Prometheus SNMP Exporter](../operations/network/management_network/snmp_exporter_configs.md) page for more
-   information and review the
-   [Adding SNMP Credentials to the System](../operations/network/management_network/snmp_exporter_configs.md#adding-snmp-credentials-to-the-system)
-   section for links to the relevant procedures.
+> ***NOTE*** that for the Prometheus SNMP exporter to work, SNMP needs to be configured on the management switches
+and the username and password need to match both Vault and the matching sealed secret in customizations.yaml. See
+the [Prometheus SNMP Exporter](../operations/network/management_network/snmp_exporter_configs.md) page for more
+information and review the
+[Adding SNMP Credentials to the System](../operations/network/management_network/snmp_exporter_configs.md#adding-snmp-credentials-to-the-system)
+section for links to the relevant procedures.
+
+## 4. Encrypt secrets
 
 1. (`pit#`) Load the `zeromq` container image required by Sealed Secret Generators.
 
@@ -480,7 +485,7 @@ with system-specific customizations.
 
 1. `site-init` is now prepared. Resume [Initialize the LiveCD](pre-installation.md#36-initialize-the-livecd).
 
-## 4. Customer-specific customizations
+## 5. Customer-specific customizations
 
 Customer-specific customizations are any changes on top of the baseline
 configuration to satisfy customer-specific requirements. It is recommended that
