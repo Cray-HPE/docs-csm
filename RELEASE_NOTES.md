@@ -6,10 +6,20 @@ documentation improvements. This page lists some of the highlights.
 ## New
 
 ### New Software Support
-CASTS resolved
-CAST-32797 SMA rsyslog-collector pod file descriptor leak and resource exhaustion
-CAST-32143  CSM 1.3 unbound is losing connection to upstream DNS
 
+* Resolved CASTS:
+    * `CAST-31486`: `cray-powerdns-manager` not adding compute nodes to external DNS
+    * `CAST-31712`: Unbound slamming DNS server with requests
+    * `CAST-31867`: Fixed Unbound not publishing to Prometheus
+    * `CAST-32362`: Unable to to monitor the progress of a boot of single node in the power on process when using BOS V2
+    * `CAST-32978`: `prerequisites.sh` makes DNS not functional for some minutes
+    * `CAST-33450`: Worker rebuild workflow: `update-bss-no-wipe`
+    * `CAST-33608`: `spire` server slow to respond and crashing
+    * `CAST-33719`: Missing entries in `haproxy` on storage nodes
+    * `CAST-33922`: `PXE-E18: Server response timeout`
+    * `CAST-34613`: DNS has forgotten about all Compute/Application nodes
+    * `CAST-34633`: Add worker nodes to running system
+    * `CAST-34692`: Kubernetes DNS not working/will not start
 * Highly available `prometheus` through integration of `thanos`
 * Support and migration to `bitnami-etcd`
 * Updates to all services using `etcd` cluster to migrate to use of `bitnami-etcd`
