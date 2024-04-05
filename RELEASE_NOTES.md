@@ -9,7 +9,6 @@ documentation improvements. This page lists some of the highlights.
 
 * Resolved CASTS:
     * `CAST-31486`: `cray-powerdns-manager` not adding compute nodes to external DNS
-    * `CAST-32362`: Unable to to monitor the progress of a boot of single node in the power on process when using BOS V2
     * `CAST-33719`: Missing entries in `haproxy` on storage nodes
     * `CAST-33922`: `PXE-E18: Server response timeout`
     
