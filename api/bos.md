@@ -9051,14 +9051,14 @@ A Session object specified by templateUuid (DEPRECATED -- use templateName)
 
 ```
 
-The phase that this data belongs to (boot, shutdown, or configure). If blank,
-it belongs to the Boot Set itself, which only applies to the GenericMetadata type.
+The phase that this data belongs to (boot, shutdown, or configure). Or it can
+be set to "boot_set" to indicate that it belongs to the Boot Set itself.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|*anonymous*|string|false|none|The phase that this data belongs to (boot, shutdown, or configure). Or it can<br>be set to "boot_set" to indicate that it belongs to the Boot Set itself.|
 
 <h2 id="tocS_V1NodeChangeList">V1NodeChangeList</h2>
 <!-- backwards compatibility -->
@@ -9087,7 +9087,7 @@ one category to another within a phase.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). Or it can<br>be set to "boot_set" to indicate that it belongs to the Boot Set itself.|
 |source|[V1PhaseCategoryName](#schemav1phasecategoryname)|true|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
 |destination|[V1PhaseCategoryName](#schemav1phasecategoryname)|true|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
 |node_list|[NodeListEmptyOk](#schemanodelistemptyok)|true|none|A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
@@ -9155,7 +9155,7 @@ updates to which categories nodes are in.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |update_type|string|true|none|The type of update data|
-|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). Or it can<br>be set to "boot_set" to indicate that it belongs to the Boot Set itself.|
 |data|[V1NodeChangeList](#schemav1nodechangelist)|true|none|The information used to update the status of a node list. It moves nodes from<br>one category to another within a phase.|
 
 #### Enumerated Values
@@ -9197,7 +9197,7 @@ updates to which errors have occurred and which nodes encountered those errors
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |update_type|string|true|none|The type of update data|
-|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). Or it can<br>be set to "boot_set" to indicate that it belongs to the Boot Set itself.|
 |data|[V1NodeErrorsList](#schemav1nodeerrorslist)|true|none|Categorizing nodes into failures by the type of error they have.<br>This is an additive characterization. Nodes will be added to existing errors.<br>This does not overwrite previously existing errors.|
 
 #### Enumerated Values
@@ -9236,7 +9236,7 @@ updates to metadata, specifically start and stop times
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |update_type|string|true|none|The type of update data|
-|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). Or it can<br>be set to "boot_set" to indicate that it belongs to the Boot Set itself.|
 |data|[V1GenericMetadata](#schemav1genericmetadata)|true|none|The status metadata|
 
 #### Enumerated Values
