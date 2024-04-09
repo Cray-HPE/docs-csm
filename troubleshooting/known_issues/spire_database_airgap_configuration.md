@@ -25,6 +25,8 @@ Due to the way the resolver code works in certain versions of Alpine Linux, it m
 
 ## Solution
 
+### Update the `spire-postgres-pooler` deployment
+
 1. (`ncn-mw#`) Edit the `spire-postgres-pooler` deployment.
 
    Command:
@@ -55,6 +57,38 @@ Due to the way the resolver code works in certain versions of Alpine Linux, it m
 
    The `spire-postgres-pooler` pods will automatically restart to pick up the new value.
 
-**IMPORTANT:** This change will need to be reapplied if the `spire` Helm chart is re-installed.
+### Update the `cray-spire-postgres-pooler` deployment
+
+1. (`ncn-mw#`) Edit the `cray-spire-postgres-pooler` deployment.
+
+   Command:
+
+   ```bash
+   kubectl -n spire edit deployment cray-spire-postgres-pooler
+   ```
+
+1. Update the `PGHOST` environment variable to use the fully qualified domain name.
+
+   An example of the deployment before being edited:
+
+   ```yaml
+   containers:
+   - env:
+     - name: PGHOST
+       value: cray-spire-postgres
+   ```
+
+   Change `PGHOST` to:
+
+   ```yaml
+   containers:
+   - env:
+     - name: PGHOST
+       value: cray-spire-postgres.spire.svc.cluster.local
+   ```
+
+   The `cray-spire-postgres-pooler` pods will automatically restart to pick up the new value.
+
+**IMPORTANT:** This change will need to be reapplied if the `spire` or `cray-spire` Helm charts are re-installed.
 
 This will be resolved in a future CSM release when the PostgreSQL operator is upgraded to a newer version.
