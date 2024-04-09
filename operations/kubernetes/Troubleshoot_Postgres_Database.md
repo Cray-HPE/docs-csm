@@ -833,7 +833,8 @@ Kubernetes secret and update the password in the database.
 
 ## Cluster member missing
 
-Most services expect to maintain a Postgres cluster consisting of three pods for resiliency (SMA is one exception where only two pods are expected to exist).
+Most services expect to maintain a Postgres cluster consisting of three pods for resiliency
+([System Monitoring Application (SMA)](../../glossary.md#system-monitoring-application-sma) is one exception where only two pods are expected to exist).
 
 ### Determine if a cluster member is missing
 
