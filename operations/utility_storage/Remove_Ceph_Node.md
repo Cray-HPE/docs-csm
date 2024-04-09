@@ -13,8 +13,8 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 
 * Permanent removal of `ncn-s001`, `ncn-s002`, or `ncn-s003` is **NOT SUPPORTED**. They can only be rebuilt in place or replaced with new hardware. This is due to the Ceph `mon` and `mgr` processes running on them.
 * Always ensure you have the free capacity to remove the node(s) prior to performing this task.
-* When removing a node other than `ncn-s001`, `ncn-s002`, or `ncn-s003`, the SMF pools quotas must be adjusted accordingly.
-* Removal of more than one node at a time is **NOT SUPPORTED** because the SMA telemetry pool only has 2 copies.
+* When removing a node other than `ncn-s001`, `ncn-s002`, or `ncn-s003`, the [SMF](../../glossary.md#system-monitoring-framework-smf) pools quotas must be adjusted accordingly.
+* Removal of more than one node at a time is **NOT SUPPORTED** because the [SMA](../../glossary.md#system-monitoring-application-sma) telemetry pool only has 2 copies.
 
 ## Procedure
 

@@ -5,7 +5,7 @@ documentation improvements. This page lists some of the highlights.
 
 ## New
 
-### New Software Support
+### New software support
 
 * Resolved CASTS:
     * `CAST-31486`: `cray-powerdns-manager` not adding compute nodes to external DNS
@@ -17,71 +17,71 @@ documentation improvements. This page lists some of the highlights.
 * Support for old and new `spire` versions running simultaneously toward zero downtime upgrades
 * Technical Preview Support for `spire` `TPM-based` remote node attestation
 * Power Control Service (PCS) is released
-* The V3 CFS API is now available, including support for paging, external repository "sources", and new options for
-  debugging.
+* The V3 [Configuration Framework Service (CFS)](glossary.md#configuration-framework-service-cfs) API is now available,
+  including support for paging, external repository "sources", and new options for debugging
 * Update of all services using `postgres` to support new versions of `postgres` and `postgres-operator`
-* `BOS V2` is the default
+* [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos) V2 is the default
 * Update `spire` version
 * Update version of `cert-manager`
-* Upgrade to `Kubernetes` version 1.22
+* Upgrade to Kubernetes version 1.22
 * Bump `iuf-cli` version to 1.4.5
-* Upgrade Argo version to pick up bug-fixes
-* BOS implement OPA policies for Multi-Tenancy
+* Upgrade Argo version to pick up bug fixes
+* OPA policies for Multi-tenancy implemented in [BOS](glossary.md#boot-orchestration-service-bos)
 * Create DNAME records in PowerDNS
-* For Bifurcated CAN update `kiali` to use the new API Gateways
+* For [Bifurcated CAN](glossary.md#bifurcated-can-bican) update `kiali` to use the new API Gateways
 * For Bifurcated CAN update `cray-sysmgmt-health` to use the new API Gateways
-* For Bifurcated CAN update `gitea-vcs-web` to use CMN Only Istio Gateway
-* For Bifurcated CAN update `gitea-vcs-external` to use CMN Only Istio Gateway
-* Improved logging in `cray-nls` based on `StageOutput`
-* IMS - created an ARM64 version of the barebones recipe
+* For Bifurcated CAN update `gitea-vcs-web` to use [CMN](glossary.md#customer-management-network-cmn) only Istio Gateway
+* For Bifurcated CAN update `gitea-vcs-external` to use CMN only Istio Gateway
+* Improved logging in [NLS](glossary.md#ncn-lifecycle-service-nls) based on `StageOutput`
+* [Image Management Service (IMS)](glossary.md#image-management-service-ims) - created an ARM64 version of the barebones recipe
 * Support for large system ARP configuration for first boot and DHCP
-* Hardware Discovery Process populates a nodes's architecture
-* Argo-driven Upgrade Automation for Kubernetes Storage Nodes
-* SLS: Added caching to improve performance and robustness
-* Added support for specifying IMS Image and Recipe architecture in IUF
-* Upgraded node-images to SLES15SP5
-* Updated Spire Server to work with TPM
-* Added improved error logging for`bos` command
+* Hardware discovery process populates a nodes's architecture
+* [System Layout Service (SLS)](glossary.md#system-layout-service-sls): Added caching to improve performance and robustness
+* Added support for specifying IMS Image and Recipe architecture in [Install and Upgrade Framework (IUF)](glossary.md#install-and-upgrade-framework-iuf)
+* Upgraded node images to SLES15SP5
+* Updated Spire server to work with TPM
+* Added improved error logging for [BOS](glossary.md#boot-orchestration-service-bos)
 * Added a method to stop `CFS/Batcher` and cancel configuration for in-flight customizations
 * Added support for git `submodules` in CFS runs
-* Added support for `ARM 64` based builds through emulation
+* Added support for ARM64 builds through emulation
 * Improved IUF Logging
-* Created Networking Red Light / Green Light Dashboard
+* Created networking red light / green light dashboard
 * Removed clear text switch passwords from the `cray-sysmgmt-health-canu-test` pod log
-* Ceph nodes run user facing docker registry that is writable anonymously
+* Ceph nodes run user facing Docker registry that is writable anonymously
 * Added support for NID allocation defragmentation
-* Multi-tenancy: Vault Transit (KMS) Support for Encrypted Secrets in VCS
+* Multi-tenancy: Vault Transit (KMS) Support for Encrypted Secrets in [Version Control Service (VCS)](glossary.md#version-control-service-vcs)
 * Multi-tenancy: Enable Tenant ID + Tenant Admin `AuthZ` Awareness for API Ingress (OPA policy)
 * Multi-tenancy: Enable Tenant ID + Tenant Admin `AuthZ` Awareness for API Ingress
-* Multi-tenancy: BOS Support for boot, reboot, node power on and off in tenant
+* Multi-tenancy: [BOS](glossary.md#boot-orchestration-service-bos) support for boot, reboot, and shutdown in tenant
 * Transitioned from `cray-heartbeat` to `csm-node-heartbeat`
 
-### New Hardware Support
+### New hardware support
 
-* Add switches in HSM to PCS and allow for power reset actions
-* Updated HMS discovery process to populate a node's architecture when making the information available via Redfish
+* Add switches in [Hardware State Manager (HSM)](glossary.md#hardware-state-manager-hsm) to
+  [Power Control Service (PCS)](glossary.md#power-control-service-pcs) and allow for power reset actions
+* Updated HSM discovery process to populate a node's architecture when making the information available via Redfish
 * Update to `ilorest-4.1.0.0` for `Gen11` Support
 * Support for ARM64 added
 * Hardware validation of the EX2500 Cabinet
-* Support JL627A switches as an edge router for BI-CAN
-* Support for Broadcom PXE boots, and interface naming
+* Support JL627A switches as an edge router for [BICAN](glossary.md#bifurcated-can-bican)
+* Support for Broadcom PXE boots and interface naming
 
 ## Improvements
 
-### Automation Improvements
+### Automation improvements
 
 * Updates to `etcd` health checks due to replacement of `etcd` vendor to `bitnami-etcd`
 * IUF stage for `management-nodes-rollout` consumes logs from `ncn-rebuild`
 * Add a test to check master node taints
 * Augment `postgres` backup `goss` test to also check for `cronjob`
-* Argo-driven Upgrade Automation for Kubernetes Storage Nodes
+* Argo-driven upgrade automation for storage nodes
 * Ceph upgrade added to automated storage upgrade
 
-### Base Platform Component Upgrades
+### Base platform component upgrades
 
 | Platform Component           | Version |
 |------------------------------|---------|
-| `Kubernetes`                 | 1.22.13 |
+| Kubernetes                   | 1.22.13 |
 | `containerd`                 | 1.5.16  |
 | `istio`                      | 1.11.8  |
 | `thanos`                     | 0.31.0  |
@@ -103,34 +103,34 @@ documentation improvements. This page lists some of the highlights.
 | `argo-workflow-controller`   | 3.4.5   |
 | `ceph`                       | 16.2.13 |
 
-### Security Improvements
+### Security improvements
 
 * CVE Kernel 5.14.21-150400.24.46.1 for `mozilla-nss`
-* Removed `postgresql` from NCNs to fix CVEs
-* Updates to `bind-utils`, `curl`, `git-core`, `java-1_8_0-ibm`, and `less` in `NCN` image for `CVEs`
-* Updates to `libfreebl3-hmac`, `libfreebl3`, `tar`, and `wireshark` in `NCN` image for `CVEs`
-* `Metal-basecamp` and `cray-site-init` dependency updates
+* Removed `postgresql` from [NCNs](glossary.md#non-compute-node-ncn) to fix CVEs
+* Updates to `bind-utils`, `curl`, `git-core`, `java-1_8_0-ibm`, and `less` in NCN image for CVEs
+* Updates to `libfreebl3-hmac`, `libfreebl3`, `tar`, and `wireshark` in NCN image for CVEs
+* `Metal-basecamp` and [`cray-site-init`](glossary.md#cray-site-init-csi) dependency updates
 * Additional of `kyverno` and network policies to ensure some secure controls over `mqtt` namespace
-* `cf-gitea-import`: Use CSM-provided alpine base image to resolve vulnerabilities
-* Updated `metacontroller:v4.4.0` to address CVE's
+* `cf-gitea-import`: Use CSM-provided Alpine base image to resolve vulnerabilities
+* Updated `metacontroller` to `v4.4.0` to address CVEs
 * Fixed `CVE-2023-0386` in CSM 1.5 NCN Images
 * Fixed `CVE-2023-32233` in CSM 1.5 NCN Images
 * Developed OPA Policy to force Keycloak admin operations through CMN
-* Updated `cfs-ara:1.0.2` to address CVE's
-* Updated `hms-shcd-parser:1.8.0` to address CVE's
+* Updated `cfs-ara` to `1.0.2` to address CVEs
+* Updated `hms-shcd-parser` to `1.8.0` to address CVEs
 * Moved `istio-ingressgateway-cmn` service to use the customer-admin-gateway
-* Kyverno Upgrade Needed for `N-2` Support Policy
-* Fixed Improper Certificate Validation CVE in `cfs-operator`
-* Fixed Regular Expression DoS CVE in `cfs-ara`
+* Kyverno upgrade needed for `N-2` support policy
+* Fixed improper certificate validation CVE in `cfs-operator`
+* Fixed regular expression DoS CVE in `cfs-ara`
 * Addressed `Zenbleed` CVE on NCNs
 * Addressed `CVE-2023-38545` (curl & `libcurl`) on NCNs
-* Added Default RBAC Role for Telemetry API
-* In SAT upgraded `paramiko` to resolve `CVE-2023-48795`
+* Added default RBAC role for telemetry API
+* [SAT](glossary.md#system-admin-toolkit-sat): Upgraded `paramiko` to resolve `CVE-2023-48795`
 
-### Customer-Requested Enhancements
+### Customer-requested enhancements
 
 * Keycloak upgrade for CVE fixes
-* Enable bonded `NMN` connections for the UANs
+* Enable bonded [Node Management Network (NMN)](glossary.md#node-management-network-nmn) connections for the [User Access Node (UAN)](glossary.md#user-access-node-uan)
 
 ### Documentation enhancements
 
@@ -138,17 +138,17 @@ documentation improvements. This page lists some of the highlights.
 * Addition of a CSM cabling page for the management and edge network
 * Added system recovery procedure for `keycloak`
 * Updates in several places as a result of migration to `bitnami-etcd`
-* Update to BOS documentation to replace CAPMC references
+* Update to [BOS](glossary.md#boot-orchestration-service-bos) documentation to replace CAPMC references
 * Update to IUF upgrade with CSM workflow diagram and documentation
 * Update to `postgres` backup procedures
-* Update to NCN Customization and Personalization documentation to use `sat-bootprep`
+* Update to NCN customization and personalization documentation to use `sat-bootprep`
 * Remove known issue about restored etcd clusters missing PVC
 * Added SNMP setup for all switches to Install/Update instructions
-* Updated Keycloak documentation to use CMN LB for administrative tasks
+* Updated Keycloak documentation to use [CMN](glossary.md#customer-management-network-cmn) LB for administrative tasks
 * Updated screenshots and documentation steps for LDAP in upgraded Keycloak
 * Updated IUF management-nodes-rollout documentation
 
-## Bug Fixes
+## Bug fixes
 
 * Fix for when QLogic adapter firmware stops responding then fails recovery causing the node to crash.
     * Fixes
@@ -159,7 +159,7 @@ documentation improvements. This page lists some of the highlights.
 * Fix deployment failure due to DNS timeouts when `max_fails=0` is set in `coredns`
 * Fixed an issue on upgrade of master NCNs due to not generating the `admin-tools` keyring
 * Fix for a case where `bootprep` files are missing when `prepare-images` stage is run in IUF with one argument
-* Fix IUF issue with SHS error in `update-vcs-config` stage
+* Fix IUF issue with [SHS](glossary.md#slingshot-host-software-shs) error in `update-vcs-config` stage
 * Ensure IUF stage for `management-node-rollout` is aborted, also abort `ncn-rebuild`
 * Fixed issue with Nexus failing to move to another NCN on upgrade
 * Fixed procedure to change root password and SSH keys so it would also work on image customization
@@ -180,8 +180,8 @@ documentation improvements. This page lists some of the highlights.
 
 * The `ipv4-resolvers` option has been removed for CSI as it is not used
 * [CAPMC](glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
-* Removed ARS from Cray CLI and BSS API specification
-* Removed deprecated BOS V1 CFS fields from session templates
+* Removed ARS from [Cray CLI](glossary.md#cray-cli-cray) and [Boot Script Service (BSS)](glossary.md#boot-script-service-bss) API specification
+* Removed deprecated [BOS](glossary.md#boot-orchestration-service-bos) V1 CFS fields from session templates
 
 For a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
 
@@ -201,15 +201,16 @@ For a list of all deprecated CSM features, see [Deprecations](introduction/depre
 For a list of all features with an announced removal target,
 see [Removals](introduction/deprecated_features/README.md#removals)
 
-## Known Issues
+## Known issues
 
-* FAS Loader / HFP script `post-deliver-product.sh`
+* [Firmware Action Service (FAS)](glossary.md#firmware-action-service-fas) Loader / HFP script `post-deliver-product.sh`
     * Loading firmware from Nexus using the FAS Loader will intermittently crash with HFP release 23.12 or later. Rerunning the FAS Loader will be required.
     * This affects the HFP script `post-deliver-product.sh` which will hang when the FAS Loader crashes. Rerunning the script will be required.
     * IUF procedure calls the `post-deliver-product.sh` script and may require restarting that IUF process.
     * This is expected to be fixed in CSM 1.5.1.
-* PCS (Power Control Service) is unable to place power caps on `Blanca Peak` (`ex254n`) and Parry Peak (`ex255a`) compute nodes
-    * To workaround this issue, use CAPMC to place power caps on these node types
+* [Power Control Service (PCS)](glossary.md#power-control-service-pcs) is unable to place power caps on `Blanca Peak` (`ex254n`) and Parry Peak (`ex255a`) compute nodes
+    * To workaround this issue, use [Cray Advanced Platform Monitoring and Control (CAPMC)](glossary.md#cray-advanced-platform-monitoring-and-control-capmc) to place power
+      caps on these node types
     * Issue is fixed in CSM 1.5.1
 * `cray-tftp-upload`
     * The `cray-tftp-upload` script errors out because of a change to the `ipxe` pods and the TFTP repository.
@@ -222,6 +223,6 @@ see [Removals](introduction/deprecated_features/README.md#removals)
         * `v1.48`, `v1.50`, `v1.69` or `v2.84` for DL325 / DL385 BIOS.
         * C38 for Gigabyte BIOS.
     * Update will be in CSM 1.5.1.
-* On large systems, BOS v2 sessions, some CSM health checks, and SAT status may not work properly, because of a failed interaction with CFS.
+* On large systems, [BOS](glossary.md#boot-orchestration-service-bos) v2 sessions, some CSM health checks, and SAT status may not work properly, because of a failed interaction with CFS.
     * Most of this will be fixed in CSM 1.5.1. The remainder will be fixed in CSM 1.6.0.
     * For more information, including a workaround, see [CFS V2 Failures On Large Systems](troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md).
