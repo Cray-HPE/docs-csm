@@ -29,6 +29,8 @@ Glossary of terms used in CSM documentation.
 * [Cray System Management (CSM)](#cray-system-management-csm)
 * [CSM Automatic Network Utility (CANU)](#csm-automatic-network-utility-canu)
 * [Customer Access Network (CAN)](#customer-access-network-can)
+* [Customer High Speed Network (CHN)](#customer-high-speed-network-chn)
+* [Customer Management Network (CMN)](#customer-management-network-cmn)
 * [Data Virtualization Service (DVS)](#data-virtualization-service-dvs)
 * [EX Compute Cabinet](#ex-compute-cabinet)
 * [EX TDS Cabinet](#ex-tds-cabinet)
@@ -38,6 +40,7 @@ Glossary of terms used in CSM documentation.
 * [Hardware Management Network (HMN)](#hardware-management-network-hmn)
 * [Hardware Management Notification Fanout Daemon (HMNFD)](#hardware-management-notification-fanout-daemon-hmnfd)
 * [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
+* [Hardware State Manager (SMD)](#hardware-state-manager-smd)
 * [Heartbeat Tracker Daemon (HBTD)](#heartbeat-tracker-daemon-hbtd)
 * [Hierarchical Namespace Controller (HNC)](#hierarchical-namespace-controller-hnc)
 * [High Speed Network (HSN)](#high-speed-network-hsn)
@@ -83,6 +86,8 @@ Glossary of terms used in CSM documentation.
 * [System Management Network (SMNet)](#system-management-network-smnet)
 * [System Management Services (SMS)](#system-management-services-sms)
 * [System Management Services (SMS) nodes](#system-management-services-sms-nodes)
+* [System Monitoring Application (SMA)](#system-monitoring-application-sma)
+* [System Monitoring Framework (SMF)](#system-monitoring-framework-smf)
 * [Tenant and Partition Management System (TAPMS)](#tenant-and-partition-management-system-tapms)
 * [Top of Rack Switch Controller (sC-ToR)](#top-of-rack-switch-controller-sc-tor)
 * [User Access Instance (UAI)](#user-access-instance-uai)
@@ -331,6 +336,14 @@ For more information, see:
 * [Bifurcated CAN (BICAN)](#bifurcated-can-bican)
 * [Customer Accessible Networks](operations/network/customer_accessible_networks/Customer_Accessible_Networks.md).
 
+## Customer High Speed Network (CHN)
+
+For more information on the CHN, see [Customer Accessible Networks](operations/network/customer_accessible_networks/Customer_Accessible_Networks.md).
+
+## Customer Management Network (CMN)
+
+For more information on the CMN, see [Customer Accessible Networks](operations/network/customer_accessible_networks/Customer_Accessible_Networks.md).
+
 ## Data Virtualization Service (DVS)
 
 The Data Virtualization Service (DVS) is a distributed network service that projects file systems
@@ -398,6 +411,10 @@ events when changes occur.
 
 * For more information on HSM, see [Hardware State Manager](operations/hardware_state_manager/Hardware_State_Manager.md).
 * For more information on the HSM API, see [HSM API](api/smd.md).
+
+## Hardware State Manager (SMD)
+
+For historical reasons, SMD is also used to refer to the [Hardware State Manager](#hardware-state-manager-hsm).
 
 ## Heartbeat Tracker Daemon (HBTD)
 
@@ -714,6 +731,14 @@ levels of management: Level 1 HaaS, Level 2 IaaS, and Level 3 PaaS.
 ## System Management Services (SMS) nodes
 
 System Management Services (SMS) nodes provide access to the entire management cluster and Kubernetes container orchestration.
+
+## System Monitoring Application (SMA)
+
+The System Monitoring Application (SMA) is one of the services that collects CSM system data for administrators.
+
+## System Monitoring Framework (SMF)
+
+Another name for the [System Monitoring Application (SMA)](#system-monitoring-application-sma) Framework.
 
 ## Tenant and Partition Management System (TAPMS)
 
