@@ -61,8 +61,8 @@ Glossary of terms used in CSM documentation.
 * [Power Control Service (PCS)](#power-control-service-pcs)
 * [Power Distribution Unit (PDU)](#power-distribution-unit-pdu)
 * [Pre-Install Toolkit (PIT)](#pre-install-toolkit-pit)
-  * [LiveCD](#livecd)
-  * [RemoteISO](#remoteiso)
+    * [LiveCD](#livecd)
+    * [RemoteISO](#remoteiso)
 * [Public Key Infrastructure (PKI)](operations/security_and_authentication/Public_Key_Infrastructure_PKI.md)
 * [Rack-Mounted CDU](#rack-mounted-cdu)
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
@@ -224,8 +224,8 @@ required to upgrade compute nodes.
 >
 > * CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0.
 >   See the following links for more information:
->   * [Rolling Upgrades with BOS V2](operations/boot_orchestration/Rolling_Upgrades.md)
->   * [Deprecated Features](introduction/deprecated_features/README.md)
+>     * [Rolling Upgrades with BOS V2](operations/boot_orchestration/Rolling_Upgrades.md)
+>     * [Deprecated Features](introduction/deprecated_features/README.md)
 > * The CRUS subcommands are mistakenly absent from the Cray CLI in CSM 1.4.0.
 >   See [CRUS Subcommands Missing From Cray CLI](troubleshooting/known_issues/CRUS_Subcommands_Missing_From_Cray_CLI.md).
 
@@ -324,12 +324,12 @@ The Customer Access Network (CAN) provides access from outside the customer netw
 and [User Access Nodes (UANs)](#user-access-node-uan) in the system. This allows for the following:
 
 * Clients outside of the system:
-  * Log in to each of the NCNs and UANs.
-  * Access web UIs within the system (e.g. Prometheus, Grafana, and more).
-  * Access the Rest APIs within the system.
-  * Access a DNS server within the system for resolution of names for the webUI and REST API services.
-  * Run [Cray CLI](#cray-cli-cray) commands from outside the system.
-  * Access the [User Access Instances (UAIs)](#user-access-instance-uai).
+    * Log in to each of the NCNs and UANs.
+    * Access web UIs within the system (e.g. Prometheus, Grafana, and more).
+    * Access the Rest APIs within the system.
+    * Access a DNS server within the system for resolution of names for the webUI and REST API services.
+    * Run [Cray CLI](#cray-cli-cray) commands from outside the system.
+    * Access the [User Access Instances (UAIs)](#user-access-instance-uai).
 * NCNs and UANs to access systems outside the cluster (e.g. LDAP, license servers, and more).
 * Services within the cluster to access systems outside the cluster.
 
