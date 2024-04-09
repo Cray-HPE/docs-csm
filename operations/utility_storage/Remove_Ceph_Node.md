@@ -5,9 +5,9 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 ## Prerequisites
 
 * This procedure requires administrative privileges and three `ssh` sessions.
-  * One to monitor the cluster.
-  * One to perform ***cluster wide*** actions from a `ceph-mon` node.
-  * One to perform ***node only*** actions on the node being removed.
+    * One to monitor the cluster.
+    * One to perform ***cluster wide*** actions from a `ceph-mon` node.
+    * One to perform ***node only*** actions on the node being removed.
 
 ## IMPORTANT NOTES
 
