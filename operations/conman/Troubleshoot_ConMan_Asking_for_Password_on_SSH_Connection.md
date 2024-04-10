@@ -6,7 +6,8 @@ Use this procedure to renew or reinstall the SSH key on the BMCs.
 
 ## Prerequisites
 
-This procedure requires administrative privileges.
+This procedure requires administrative privileges. If checking the existing SSH key on BMCs,
+the BMC username and password are also required.
 
 ## Procedure
 

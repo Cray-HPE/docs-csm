@@ -107,7 +107,7 @@ The following procedures may not resolve the problem after just one attempt. In 
 
     1. Clear the BGP sessions.
 
-        There are two VRF's that may need to be cleared. Clear the VRF that has the `Idle` session state.
+        There are two VRFs that may need to be cleared. Clear the VRF that has the `Idle` session state.
 
         Default VRF:
 
@@ -246,7 +246,7 @@ The following procedures may not resolve the problem after just one attempt. In 
 
     1. Clear the BGP sessions.
 
-        There are two VRF's that may need to be cleared. Clear the VRF that has the `Idle` session state.
+        There are two VRFs that may need to be cleared. Clear the VRF that has the `Idle` session state.
 
         Default VRF:
 
