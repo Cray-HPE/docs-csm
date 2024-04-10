@@ -98,7 +98,7 @@ DKMS operation.
     ```
 
     Then wait until the new pod is in the `2/2 Running` status. New IMS jobs will be created in
-    Kata VM's with enhanced kernel access.
+    Kata VMs with enhanced kernel access.
 
 ## Revert back to non DKMS usage
 
