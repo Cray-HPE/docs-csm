@@ -582,7 +582,7 @@ Use the file `cray_chassisBMC_BMC.json` for Chassis BMC updates.
 
 1. After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
-## Update Air-Cooled Compute Node BMC, BIOS, iLO 5, and System ROM
+## Update Air-Cooled Compute Node BMC, BIOS, iLO 5, iLO 6, and System ROM
 
 Firmware and BIOS for Gigabyte and HPE compute nodes can be updated with FAS.
 This section includes templates for JSON files that can be used for updates, and the procedure for running the updates.
