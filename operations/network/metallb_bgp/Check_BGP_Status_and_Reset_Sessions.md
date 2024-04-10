@@ -5,8 +5,8 @@ If the state of any session in the table is Idle, then the BGP sessions must be 
 
 - [Prerequisites](#prerequisites)
 - [Procedure](#procedure)
-  - [Mellanox](#mellanox)
-  - [Aruba](#aruba)
+    - [Mellanox](#mellanox)
+    - [Aruba](#aruba)
 
 ## Prerequisites
 
