@@ -20,7 +20,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
 The following procedures are included in this section:
 
 1. [Update Liquid-Cooled Compute Node BMC, FPGA, Management Ethernet, `AccVBIOS`, `AccUC` and BIOS](#liquid-cooled-nodes-update-procedures)
-1. [Update Air-Cooled Compute Node BMC, BIOS, iLO 5, and System ROM](#update-air-cooled-compute-node-bmc-bios-ilo-5-and-system-rom)
+1. [Update Air-Cooled Compute Node BMC, BIOS, iLO 5, iLO 6, and System ROM](#update-air-cooled-compute-node-bmc-bios-ilo-5-ilo-6-and-system-rom)
 1. [Update Chassis Management Module (CMM) Firmware](#update-chassis-management-module-firmware)
 1. [Update NCN BIOS and BMC Firmware with FAS](#update-non-compute-node-ncn-bios-and-bmc-firmware)
 1. [Compute Node BIOS Workaround for HPE CRAY EX425](#compute-node-bios-workaround-for-hpe-cray-ex425)
@@ -717,6 +717,37 @@ Make sure to wait for the current firmware to be updated before starting a new F
 }
 ```
 
+#### Manufacturer: HPE | Device Type: Compute `NodeBMC` | Target: `iLO 6` aka BMC
+
+```json
+{
+"stateComponentFilter": {
+    "deviceTypes": [
+      "nodeBMC"
+    ],
+    "xnames": [
+      "x3000c0s1b0"
+    ]
+},
+"inventoryHardwareFilter": {
+    "manufacturer": "hpe"
+    },
+"targetFilter": {
+    "targets": [
+      "iLO 6"
+    ]
+  },
+"command": {
+    "version": "latest",
+    "tag": "default",
+    "overrideDryrun": false,
+    "restoreNotPossibleOverride": true,
+    "timeLimit": 1000,
+    "description": "Dryrun upgrade of HPE node iLO 6"
+  }
+}
+```
+
 #### Manufacturer: HPE | Device Type: Compute `NodeBMC` | Target: `System ROM` aka BIOS
 
 > **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored.
@@ -759,6 +790,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 Use the file `gigabyte_nodeBMC_BMC.json` for Gigabyte Node BMC updates,
 the file `gigabyte_nodeBMC_BIOS.json` for Gigabyte Node BIOS updates,
 the file `hpe_nodeBMC_iLO5.json` for HPE Node iLO 5 updates,
+the file `hpe_nodeBMC_iLO6.json` for HPE Node iLO 6 updates,
 or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
 
 > **IMPORTANT:**
@@ -865,7 +897,7 @@ or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
 
         The time it takes for a firmware action to finish varies. It can be a few minutes or over 20 minutes depending on response time.
 
-        The air-cooled node BMC automatically reboots after the BMC or iLO 5 firmware has been loaded.
+        The air-cooled node BMC automatically reboots after the BMC, iLO 5, or iLO 6 firmware has been loaded.
 
 1. Retrieve the `operationID` and verify that the update is complete.
 
@@ -1108,6 +1140,7 @@ The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NC
 Use the file `gigabyte_nodeBMC_BMC.json` for Gigabyte Node BMC updates,
 the file `gigabyte_nodeBMC_BIOS.json` for Gigabyte Node BIOS updates,
 the file `hpe_nodeBMC_iLO5.json` for HPE Node iLO 5 updates,
+the file `hpe_nodeBMC_iLO6.json` for HPE Node iLO 6 updates,
 or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
 The script flag `--xnames x1,x2` can be used to limit the updates to certain xnames.
 **NOTE:** Use the xname of the BMC not the node.
@@ -1132,9 +1165,9 @@ Example output:
 1. Run a `dryrun` for all NCNs first to determine which NCNs and targets need updating.
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
-   > **NOTE:** Update of `BMC` and `iLO 5` will not affect the nodes.
+   > **NOTE:** Update of `BMC`, `iLO 5`, and `iLO 6` will not affect the nodes.
 
-1. For each NCN requiring updates to target `BMC` or `iLO 5`:
+1. For each NCN requiring updates to target `BMC`, `iLO 5`, or `iLO 6` :
    1. Unlock the NCN BMC.
       See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
    1. Run the FAS action on the NCN. **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
