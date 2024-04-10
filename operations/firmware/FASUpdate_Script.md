@@ -91,6 +91,7 @@ cray_routerBMC_BMC.json
 gigabyte_nodeBMC_BIOS.json
 gigabyte_nodeBMC_BMC.json
 hpe_nodeBMC_iLO5.json
+hpe_nodeBMC_iLO6.json
 hpe_nodeBMC_systemRom.json
 cray_nodeBMC_node0AccVBIOS.json
 cray_nodeBMC_node0ManagementEthernet.json

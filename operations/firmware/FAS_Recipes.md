@@ -273,6 +273,39 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 }
 ```
 
+### (HPE) Device Type: `NodeBMC` | Target: iLO 6 (BMC)
+
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+
+**`NOTE`** This is a collection of various FAS recipes for performing updates.
+For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
+
+```json
+{
+"stateComponentFilter": {
+    "deviceTypes": [
+      "nodeBMC"
+    ]
+},
+"inventoryHardwareFilter": {
+    "manufacturer": "hpe"
+    },
+"targetFilter": {
+    "targets": [
+      "iLO 6"
+    ]
+  },
+"command": {
+    "version": "latest",
+    "tag": "default",
+    "overrideDryrun": false,
+    "restoreNotPossibleOverride": true,
+    "timeLimit": 1000,
+    "description": "Dryrun upgrade of HPE node iLO 6"
+  }
+}
+```
+
 ### (HPE) Device Type: `NodeBMC` | Target: System ROM (BIOS)
 
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
