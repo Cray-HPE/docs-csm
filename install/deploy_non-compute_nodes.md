@@ -160,9 +160,9 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
     >
     > - Watch the storage node consoles carefully for error messages. If any are seen, consult [Ceph-CSI Troubleshooting](troubleshooting_ceph_csi.md).
     > - If the nodes have PXE boot issues (for example, getting PXE errors, or not pulling the `ipxe.efi` binary), then see [PXE boot troubleshooting](troubleshooting_pxe_boot.md).
-    > - If ncn-s001 console has the message 'Sleeping for five seconds waiting ceph to be healthy...'
+    > - If `ncn-s001` console has the message 'Sleeping for five seconds waiting ceph to be healthy...'
     for an extended period of time, then see [Utility Storage Installation Troubleshooting](troubleshooting_utility_storage_node_installation.md).
-    > - In the deployment of Storage NCN's the console may show errors regarding `cray-heartbeat.service`. These are expected until the PIT is deployed as m001.
+    > - In the deployment of storage NCNs, the console may show errors regarding `cray-heartbeat.service`. These are expected until the PIT is deployed as `ncn-m001`.
 
 1. (`pit#`) Wait for storage nodes to output the following before booting Kubernetes master nodes and worker nodes.
 
