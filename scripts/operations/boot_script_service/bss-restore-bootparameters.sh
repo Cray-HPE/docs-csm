@@ -60,6 +60,6 @@ bss-restore() {
 
 test $# = 0 && set -- "$(jq -r '.[] | select(."cloud-init"."meta-data" != null) | .hosts[0]' < $BACKUP_FILE)"
 
-for i in "$@"; do
+for i in $@; do
   bss-restore $i
 done
