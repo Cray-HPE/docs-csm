@@ -34,7 +34,13 @@
 
     ```bash
     kubectl replace -f cray-hms-base-config_$BACKUP_FILE.yaml
-    $DOCS_DIR/operations/hardware_state_manager/restoreroles.py cray-smd-components-dump_$BACKUP_FILE.json
+    $DOCS_DIR/operations/hardware_state_manager/updateroles.py cray-smd-components-dump_$BACKUP_FILE.json
+    ```
+
+1. (`ncn-mw#`) Verify HSM roles and subroles.
+
+    ```bash
+    $DOCS_DIR/operations/hardware_state_manager/verifyroles.py cray-smd-components-dump_$BACKUP_FILE.json
     ```
 
 1. (`ncn-mw#`) Check for missing locks, groups, or partitions.
@@ -96,5 +102,5 @@
 1. (`ncn-mw#`) Restore Boot Parameters.
 
     ```bash
-    $DOCS_DIR/operations/boot_script_service/bss-restore-bootparameters.sh cray-bss-boot-parameters-dump_hms-backup_$BACKUP_FILE.json
+    $DOCS_DIR/operations/boot_script_service/bss-restore-bootparameters.sh cray-bss-boot-parameters-dump_$BACKUP_FILE.json
     ```
