@@ -2,15 +2,15 @@
 
 * [Download SPP image](#download-spp-image)
 * [Deploying individual firmware components](#deploying-individual-firmware-components)
-  * [Get the individual firmware component from SPP ISO image](#get-the-individual-firmware-component-from-spp-iso-image)
-  * [Steps to deploy individual components](#steps-to-deploy-individual-components)
+    * [Get the individual firmware component from SPP ISO image](#get-the-individual-firmware-component-from-spp-iso-image)
+    * [Steps to deploy individual components](#steps-to-deploy-individual-components)
 * [Deploy SPP ISO image as a whole](#deploy-spp-iso-image-as-a-whole)
-  * [Prerequisites](#prerequisites)
-  * [Deploying the ISO image using the local method](#deploying-the-iso-image-using-the-local-method)
-  * [Deploying the ISO image using the remote method](#deploying-the-iso-image-using-the-remote-method)
+    * [Prerequisites](#prerequisites)
+    * [Deploying the ISO image using the local method](#deploying-the-iso-image-using-the-local-method)
+    * [Deploying the ISO image using the remote method](#deploying-the-iso-image-using-the-remote-method)
 * [Notes](#notes)
-  * [High level](#high-level)
-  * [Production systems](#production-systems)
+    * [High level](#high-level)
+    * [Production systems](#production-systems)
 
 ## Download SPP image
 

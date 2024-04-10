@@ -2,15 +2,15 @@
 
 * [Usage]
 * [Validate a fresh system using CSI and CANU](#validate-a-fresh-system-using-csi-and-canu)
-  * [Preparation](#preparation)
-  * [Check network firmware](#check-network-firmware)
-  * [Check network cabling](#check-network-cabling)
-  * [Validate BGP status](#validate-bgp-status)
-  * [Validate cabling](#validate-cabling)
-  * [Validation using the system's SHCD](#validation-using-the-systems-shcd)
-    * [Validate the SHCD](#validate-the-shcd)
-    * [Validate the SHCD against network cabling](#validate-the-shcd-against-network-cabling)
-    * [Generate switch configuration for the network](#generate-switch-configuration-for-the-network)
+    * [Preparation](#preparation)
+    * [Check network firmware](#check-network-firmware)
+    * [Check network cabling](#check-network-cabling)
+    * [Validate BGP status](#validate-bgp-status)
+    * [Validate cabling](#validate-cabling)
+    * [Validation using the system's SHCD](#validation-using-the-systems-shcd)
+        * [Validate the SHCD](#validate-the-shcd)
+        * [Validate the SHCD against network cabling](#validate-the-shcd-against-network-cabling)
+        * [Generate switch configuration for the network](#generate-switch-configuration-for-the-network)
 
 ## Usage
 
