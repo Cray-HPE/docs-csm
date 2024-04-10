@@ -12,30 +12,30 @@ in [Upgrade CSM](../README.md) instead.
 
 ## Bug fixes and improvements
 
-* Updated IMS to allow for remote node builds
+* Updated [IMS](../../glossary.md#image-management-service-ims) to allow for remote node builds
 * Support for Paradise hardware
 * Fixed an issue where `hms-discovery` would put default credentials into vault disabling non default credentials
 * Fixed an issue where `cray-ipxe` generated scripts would cause boot errors
-* Fixed an issue where `BOS v2` would send large queries to CFS resulting 503 and 431 responses
-* Fixed an issue where PCS was adding invalid components to power operations
-* Fixed an issue where IUF would encounter a race condition and stall on transitioning to new stages
+* Fixed an issue where [BOS](../../glossary.md#boot-orchestration-service-bos) v2 would send large queries to [CFS](../../glossary.md#configuration-framework-service-cfs) resulting 503 and 431 responses
+* Fixed an issue where [PCS](../../glossary.md#power-control-service-pcs) was adding invalid components to power operations
+* Fixed an issue where [IUF](../../glossary.md#install-and-upgrade-framework-iuf) would encounter a race condition and stall on transitioning to new stages
 * Fixed an issue where `Thanos` service is configured without storage limits
 * Fixed an issue where `cray-dns-unbound-manager` `stderr` handling can corrupt configuration
-* Fixed an issue where "sat status" unnecessarily queries BOS for session template for every component
-* Fixed an issue where a PATCH to a BOS v2 session to change it's name results in a bad state
+* Fixed an issue where [SAT](../../glossary.md#system-admin-toolkit-sat) `status` unnecessarily queries BOS for session template for every component
+* Fixed an issue where a PATCH to a BOS v2 session to change its name results in a bad state
 * Updated `cray-hms-rts-init` job to include a TTL
-* Updated node-exporter config to monitor `snmp` counters
-* Updated docs to cover switch configuration for NCNs
+* Updated `node-exporter` configuration to monitor SNMP counters
+* Updated documentation to cover switch configuration for [NCNs](../../glossary.md#non-compute-node-ncn)
 * Fixed an issue where a PATCH call to BOS v2 components with a filter and non existent component ID would result in 503 and 431 errors
 * Fixed an issue where BOS operators would output errors when all nodes exceed retry limit
 * Fixed an issue where `cray-upload-recovery-images` fails to upload recovery firmware
-* Fixed an issue where "cm health report slingshot refresh" `cmd` was giving a trace back error
-* Updated docs for IUF to include rolling reboots after upgrading HSN NIC firmware
-* Updated docs to provide instructions for creating a new Nexus repo and adding `rpms`
-* Updated docs for CAPMC to warn about URL character limits
+* Fixed an issue where `cm health report slingshot refresh` command was giving a trace back error
+* Updated documentation for IUF to include rolling reboots after upgrading [HSN](../../glossary.md#high-speed-network-hsn) NIC firmware
+* Updated documentation to provide instructions for creating a new Nexus repository and adding RPMs
+* Updated documentation for [CAPMC](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) to warn about URL character limits
 * Fixed an issue where BOS v2 requests for too many nodes from PCS exceeding the URL character limit
-* Updated docs script `nexus_export_and_restore` to add better checks for determining existence of `nexus-bak` PVC or nexus-backup job
-* Updated docs for `fix_failed_to_start_etcd_on_master` to better specify how to add a process
+* Updated Nexus export and restore script to add better checks for determining existence of `nexus-bak` PVC or `nexus-backup` job
+* Updated documentation for `fix_failed_to_start_etcd_on_master` to better specify how to add a process
 * Fixed an issue with IUF where process-media/pre-install-check dislikes PDF file
 * Fixed an issue where `backup_smd_postgres.sh` script is not executable
 * `CAST-34869`: Fixed an issue where `cray-hms-rts-snmp` would enter encounter a segmentation fault
@@ -43,10 +43,6 @@ in [Upgrade CSM](../README.md) instead.
 
 ## Steps
 
-1. [CSM 1.5.1 Patch Installation Instructions](#csm-151-patch-installation-instructions)
-1. [Introduction](#introduction)
-1. [Bug fixes and improvements](#bug-fixes-and-improvements)
-1. [Steps](#steps)
 1. [Preparation](#preparation)
 1. [Setup Nexus](#setup-nexus)
 1. [Update Argo CRDs](#update-argo-crds)
@@ -211,15 +207,15 @@ version of CSM being installed. It then waits for the components to reach a conf
 
    ```text
    INFO: Querying CFS configurations for the following NCNs: x3000c0s5b0n0, ...
-   INFO: Found configuration "management-csm-1.4.0" for component x3000c0s5b0n0
+   INFO: Found configuration "management-csm-1.5.0" for component x3000c0s5b0n0
    ...
-   INFO: Updating existing layer with repo path /vcs/cray/csm-config-management.git and playbook site.yml
-   INFO: Property "commit" of layer with repo path /vcs/cray/csm-config-management.git and playbook site.yml updated ...
-   INFO: Property "name" of layer with repo path /vcs/cray/csm-config-management.git and playbook site.yml updated ...
+   INFO: Updating existing layer with repo path /vcs/cray/csm-config-management.git and playbook ncn_nodes.yml
+   INFO: Property "commit" of layer with repo path /vcs/cray/csm-config-management.git and playbook ncn_nodes.yml updated ...
+   INFO: Property "name" of layer with repo path /vcs/cray/csm-config-management.git and playbook ncn_nodes.yml updated ...
    INFO: No layer with repo path /vcs/cray/csm-config-management.git and playbook ncn-initrd.yml found.
    INFO: Adding a layer with repo path /vcs/cray/csm-config-management.git and playbook ncn-initrd.yml to the end.
-   INFO: Successfully saved CFS configuration "management-csm-1.4.0-backup-20230918T205149"
-   INFO: Successfully saved CFS configuration "management-csm-1.4.0"
+   INFO: Successfully saved CFS configuration "management-csm-1.5.0-backup-20240410T205149"
+   INFO: Successfully saved CFS configuration "management-csm-1.5.0"
    INFO: Successfully saved 1 changed CFS configuration(s) to CFS.
    INFO: Updated 9 CFS components.
    INFO: Waiting for 9 component(s) to finish configuration
