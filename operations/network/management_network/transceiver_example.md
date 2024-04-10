@@ -98,8 +98,8 @@ A typical CDU switch is `JL720C 8360-48XT4C v2 Switch`.
 A CDU switch typically has connections to leaf switches, and they also have connections to:
 
 * Mountain management
-  * CMM (Chassis Management Module)
-  * CEC (Cabinet Environment Controller)
+    * CMM (Chassis Management Module)
+    * CEC (Cabinet Environment Controller)
 
 Example LLDP `neighbor-info` output:
 
