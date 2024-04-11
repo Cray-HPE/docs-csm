@@ -4,20 +4,20 @@
 
 ## New
 
-* v1 of Power Control Service (PCS) is active
-* Cray CLI will default to version 2 (v2) for BOS, if a version is not specified
-* IUF workflows are created for fresh and upgrade installs
-* Singular Method for NCN image customization
-* Updates SLES SP4 Base Image
+* v1 of [Power Control Service (PCS)](glossary.md#power-control-service-pcs) is active
+* [Cray CLI](glossary.md#cray-cli-cray) will default to version 2 (v2) for [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos), if a version is not specified
+* [Install and Upgrade Framework (IUF)](glossary.md#install-and-upgrade-framework-iuf) workflows are created for fresh and upgrade installs
+* Singular method for [NCN](glossary.md#non-compute-node-ncn) image customization
+* Updates SLES SP4 base image
 
 ### Monitoring
 
-* Implemented pod monitors to scrape SMF Kafka server and zookeeper Prometheus metrics
-* Created  dashboards for Kyverno and to monitor Kyverno policy metrics with Prometheus
+* Implemented pod monitors to scrape [SMF](glossary.md#system-monitoring-framework-smf) Kafka server and zookeeper Prometheus metrics
+* Created dashboards for Kyverno and to monitor Kyverno policy metrics with Prometheus
 * Created Grafana dashboards to monitor the internals of SMF Kafka server and zookeeper
 * Created Grafana dashboard for `OpenSearch` cluster monitoring using Prometheus metrics
-* Created Prometheus Alerts for CPU and Memory usage for NCNs
-* Created Grafana dashboard to record timing data for each stage in the install/upgrade of shasta products
+* Created Prometheus Alerts for CPU and memory usage for NCNs
+* Created Grafana dashboard to record timing data for each stage in the install/upgrade of Shasta products
 * Updated Prometheus to `v2.41.0`, alert manager to `v0.25.0`, and node-exporter to `v1.5.0`
 
 ### DNS
@@ -29,7 +29,7 @@
 * Replaced weave with cilium as `default CNI`
 * Migrated CSM Ansible plays from NCN node personalization to NCN image customization where appropriate
 
-### Management Nodes (Ceph, Kubernetes Workers, and Kubernetes Managers)
+### Management nodes (Ceph, Kubernetes workers, and Kubernetes managers)
 
 * Updated `enable_chn.yml` Ansible playbook to work during image customization
 * Added `dvs-mqtt` spire workload
@@ -114,29 +114,28 @@
 ### Documentation enhancements
 
 * Added documentation for
-  * `IUF` workflows for fresh and upgrade install
-  * Increasing helm chart deploy timeout
-  
+    * `IUF` workflows for fresh and upgrade install
+    * Increasing helm chart deploy timeout
 * Updated documentation for
-  * CSM upgrade `UPGRADE_KYVERNO_POLICY` step failed due to missing "DVS" namespace
-  * System recovery procedure for Keycloak
-  * Steps to configure SNMP credentials
-  * Use BOS v2 in prepare-images stage
-  * Keycloak to use CMN LB for administrative tasks
-  * Add Cray product catalog module`scripts/operations/configuration/python_lib`
-  * Add NCN `squashfs` IMS ID/version/name to Cray product catalog
-  * Keycloak API upgrade
-  * New name for management NCN CFS configuration
-  * `docs/pit-init` to include arch when referring to artifacts
-  * Master node disk reboot test defaulted to PXE
-  * New protected S3 NCN images
-  * Stage 4 upgrade to include info on automation
-  * Procedure to find Argo logs in S3
-  * CFS usability changes
-  * "NCN Node Personalization" step that modifies CPE/Analytics layers
-  * Ceph troubleshooting page
-  * `hms_verification/verify_hsm_discovery.py` failure to reference SNMP configuration doc
-  * `write_root_secrets_to_vault.py`
+    * CSM upgrade `UPGRADE_KYVERNO_POLICY` step failed due to missing "DVS" namespace
+    * System recovery procedure for Keycloak
+    * Steps to configure SNMP credentials
+    * Use BOS v2 in prepare-images stage
+    * Keycloak to use CMN LB for administrative tasks
+    * Add Cray product catalog module`scripts/operations/configuration/python_lib`
+    * Add NCN `squashfs` IMS ID/version/name to Cray product catalog
+    * Keycloak API upgrade
+    * New name for management NCN CFS configuration
+    * `docs/pit-init` to include arch when referring to artifacts
+    * Master node disk reboot test defaulted to PXE
+    * New protected S3 NCN images
+    * Stage 4 upgrade to include info on automation
+    * Procedure to find Argo logs in S3
+    * CFS usability changes
+    * "NCN Node Personalization" step that modifies CPE/Analytics layers
+    * Ceph troubleshooting page
+    * `hms_verification/verify_hsm_discovery.py` failure to reference SNMP configuration doc
+    * `write_root_secrets_to_vault.py`
   
 ## Bug fixes
 
@@ -179,8 +178,8 @@
 * Deprecated and removed CRUS from the CSM manifests
 * Deprecated and removed `v1alpha3` Kubernetes interface
 * Eliminated use of deprecated Kubernetes APIs
+* CSI: deprecate `ipv4-resolvers` option
 
-CSI: deprecate `ipv4-resolvers` option
 For a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
 
 ## Removals
@@ -200,30 +199,27 @@ For a list of all features with an announced removal target, see [Removals](intr
 ## Known issues
 
 * UAIs use a default route that sends outbound packets over the CMN, this will be addressed in a future release so that the default route uses the CAN/CHN.
-
 * Documented known issue with Antero node NIDs
-
 * The Slurm installer released in CPE 23.03 (`cpe-slurm-23.03-sles15-1.2.10.tar.gz`) has an issue that causes failures when installed with the IUF.
-  * (`ncn-m001#`) To work around the issue, run the following commands before the IUF `process-media` stage:
+    * (`ncn-m001#`) To work around the issue, run the following commands before the IUF `process-media` stage:
 
-    ```bash
-    tar -xf cpe-slurm-23.03-sles15-1.2.10.tar.gz
-    sed -i -e 's_-cn$_-cn/_' wlm-slurm-1.2.10/iuf-product-manifest.yaml
-    tar -zcf cpe-slurm-23.03-sles15-1.2.10.tar.gz wlm-slurm-1.2.10
-    ```
+        ```bash
+        tar -xf cpe-slurm-23.03-sles15-1.2.10.tar.gz
+        sed -i -e 's_-cn$_-cn/_' wlm-slurm-1.2.10/iuf-product-manifest.yaml
+        tar -zcf cpe-slurm-23.03-sles15-1.2.10.tar.gz wlm-slurm-1.2.10
+        ```
 
-  * If a previous installation failed, apply the workaround and re-install with the `iuf run --force` option.
-
+    * If a previous installation failed, apply the workaround and re-install with the `iuf run --force` option.
 * The PBS installer released in CPE 23.03 (`cpe-pbs-23.03-sles15-1.2.10.tar.gz`) has an issue that causes failures when installed with the IUF.
-  * (`ncn-m001#`) To work around the issue, run the following commands before the IUF `process-media` stage:
+    * (`ncn-m001#`) To work around the issue, run the following commands before the IUF `process-media` stage:
 
-    ```bash
-    tar -xf cpe-pbs-23.03-sles15-1.2.10.tar.gz
-    sed -i -e 's_-cn$_-cn/_' wlm-pbs-1.2.10/iuf-product-manifest.yaml
-    tar -zcf cpe-pbs-23.03-sles15-1.2.10.tar.gz wlm-pbs-1.2.10
-    ```
+        ```bash
+        tar -xf cpe-pbs-23.03-sles15-1.2.10.tar.gz
+        sed -i -e 's_-cn$_-cn/_' wlm-pbs-1.2.10/iuf-product-manifest.yaml
+        tar -zcf cpe-pbs-23.03-sles15-1.2.10.tar.gz wlm-pbs-1.2.10
+        ```
 
-  * If a previous installation failed, apply the workaround and re-install with the `iuf run --force` option.
+    * If a previous installation failed, apply the workaround and re-install with the `iuf run --force` option.
 * The CRUS subcommands are inadvertently missing from the Cray CLI. See
   [CRUS Subcommands Missing From Cray CLI](troubleshooting/known_issues/CRUS_Subcommands_Missing_From_Cray_CLI.md).
 

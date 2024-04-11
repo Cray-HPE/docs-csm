@@ -28,6 +28,8 @@ Glossary of terms used in CSM documentation.
 * [Cray System Management (CSM)](#cray-system-management-csm)
 * [CSM Automatic Network Utility (CANU)](#csm-automatic-network-utility-canu)
 * [Customer Access Network (CAN)](#customer-access-network-can)
+* [Customer High Speed Network (CHN)](#customer-high-speed-network-chn)
+* [Customer Management Network (CMN)](#customer-management-network-cmn)
 * [Data Virtualization Service (DVS)](#data-virtualization-service-dvs)
 * [EX Compute Cabinet](#ex-compute-cabinet)
 * [EX TDS Cabinet](#ex-tds-cabinet)
@@ -37,6 +39,7 @@ Glossary of terms used in CSM documentation.
 * [Hardware Management Network (HMN)](#hardware-management-network-hmn)
 * [Hardware Management Notification Fanout Daemon (HMNFD)](#hardware-management-notification-fanout-daemon-hmnfd)
 * [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
+* [Hardware State Manager (SMD)](#hardware-state-manager-smd)
 * [Heartbeat Tracker Daemon (HBTD)](#heartbeat-tracker-daemon-hbtd)
 * [Hierarchical Namespace Controller (HNC)](#hierarchical-namespace-controller-hnc)
 * [High Speed Network (HSN)](#high-speed-network-hsn)
@@ -58,8 +61,8 @@ Glossary of terms used in CSM documentation.
 * [Power Control Service (PCS)](#power-control-service-pcs)
 * [Power Distribution Unit (PDU)](#power-distribution-unit-pdu)
 * [Pre-Install Toolkit (PIT)](#pre-install-toolkit-pit)
-  * [LiveCD](#livecd)
-  * [RemoteISO](#remoteiso)
+    * [LiveCD](#livecd)
+    * [RemoteISO](#remoteiso)
 * [Public Key Infrastructure (PKI)](operations/security_and_authentication/Public_Key_Infrastructure_PKI.md)
 * [Rack-Mounted CDU](#rack-mounted-cdu)
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
@@ -82,6 +85,8 @@ Glossary of terms used in CSM documentation.
 * [System Management Network (SMNet)](#system-management-network-smnet)
 * [System Management Services (SMS)](#system-management-services-sms)
 * [System Management Services (SMS) nodes](#system-management-services-sms-nodes)
+* [System Monitoring Application (SMA)](#system-monitoring-application-sma)
+* [System Monitoring Framework (SMF)](#system-monitoring-framework-smf)
 * [Tenant and Partition Management System (TAPMS)](#tenant-and-partition-management-system-tapms)
 * [Top of Rack Switch Controller (sC-ToR)](#top-of-rack-switch-controller-sc-tor)
 * [User Access Instance (UAI)](#user-access-instance-uai)
@@ -219,8 +224,8 @@ required to upgrade compute nodes.
 >
 > * CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0.
 >   See the following links for more information:
->   * [Rolling Upgrades with BOS V2](operations/boot_orchestration/Rolling_Upgrades.md)
->   * [Deprecated Features](introduction/deprecated_features/README.md)
+>     * [Rolling Upgrades with BOS V2](operations/boot_orchestration/Rolling_Upgrades.md)
+>     * [Deprecated Features](introduction/deprecated_features/README.md)
 > * The CRUS subcommands are mistakenly absent from the Cray CLI in CSM 1.4.0.
 >   See [CRUS Subcommands Missing From Cray CLI](troubleshooting/known_issues/CRUS_Subcommands_Missing_From_Cray_CLI.md).
 
@@ -319,12 +324,12 @@ The Customer Access Network (CAN) provides access from outside the customer netw
 and [User Access Nodes (UANs)](#user-access-node-uan) in the system. This allows for the following:
 
 * Clients outside of the system:
-  * Log in to each of the NCNs and UANs.
-  * Access web UIs within the system (e.g. Prometheus, Grafana, and more).
-  * Access the Rest APIs within the system.
-  * Access a DNS server within the system for resolution of names for the webUI and REST API services.
-  * Run [Cray CLI](#cray-cli-cray) commands from outside the system.
-  * Access the [User Access Instances (UAIs)](#user-access-instance-uai).
+    * Log in to each of the NCNs and UANs.
+    * Access web UIs within the system (e.g. Prometheus, Grafana, and more).
+    * Access the Rest APIs within the system.
+    * Access a DNS server within the system for resolution of names for the webUI and REST API services.
+    * Run [Cray CLI](#cray-cli-cray) commands from outside the system.
+    * Access the [User Access Instances (UAIs)](#user-access-instance-uai).
 * NCNs and UANs to access systems outside the cluster (e.g. LDAP, license servers, and more).
 * Services within the cluster to access systems outside the cluster.
 
@@ -335,6 +340,14 @@ For more information, see:
 
 * [Bifurcated CAN (BICAN)](#bifurcated-can-bican)
 * [Customer Accessible Networks](operations/network/customer_accessible_networks/Customer_Accessible_Networks.md).
+
+## Customer High Speed Network (CHN)
+
+For more information on the CHN, see [Customer Accessible Networks](operations/network/customer_accessible_networks/Customer_Accessible_Networks.md).
+
+## Customer Management Network (CMN)
+
+For more information on the CMN, see [Customer Accessible Networks](operations/network/customer_accessible_networks/Customer_Accessible_Networks.md).
 
 ## Data Virtualization Service (DVS)
 
@@ -403,6 +416,10 @@ events when changes occur.
 
 * For more information on HSM, see [Hardware State Manager](operations/hardware_state_manager/Hardware_State_Manager.md).
 * For more information on the HSM API, see [HSM API](api/smd.md).
+
+## Hardware State Manager (SMD)
+
+For historical reasons, SMD is also used to refer to the [Hardware State Manager](#hardware-state-manager-hsm).
 
 ## Heartbeat Tracker Daemon (HBTD)
 
@@ -716,6 +733,14 @@ levels of management: Level 1 HaaS, Level 2 IaaS, and Level 3 PaaS.
 ## System Management Services (SMS) nodes
 
 System Management Services (SMS) nodes provide access to the entire management cluster and Kubernetes container orchestration.
+
+## System Monitoring Application (SMA)
+
+The System Monitoring Application (SMA) is one of the services that collects CSM system data for administrators.
+
+## System Monitoring Framework (SMF)
+
+Another name for the [System Monitoring Application (SMA)](#system-monitoring-application-sma) Framework.
 
 ## Tenant and Partition Management System (TAPMS)
 
