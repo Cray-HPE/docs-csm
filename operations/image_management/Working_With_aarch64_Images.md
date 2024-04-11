@@ -2,7 +2,7 @@
 
 Systems may have aarch64 (arm64) compute nodes present, but the Kubernetes nodes are always going to be running
 x86 hardware. This presents a challenge in creating and modifying compute images through IMS running on the
-Kubernetes cluster. To solve this, aarch64 hardware is emulated using Kata VM's and QEMU emulation software.
+Kubernetes cluster. To solve this, aarch64 hardware is emulated using Kata VMs and QEMU emulation software.
 
 ## Kata and QEMU Emulation
 
@@ -22,7 +22,7 @@ Due to the level of kernel interaction required by QEMU and the fact that most r
 customization jobs are running as the 'root' user, this would open a fairly significant security hole
 if these Kubernetes pods were running directly on the worker nodes like normal pods.
 
-In order to keep the system secure, the emulation pods are being run inside Kata VM's with a different
+In order to keep the system secure, the emulation pods are being run inside Kata VMs with a different
 running kernel than the worker node so it is not possible through a kernel bug to get access to the
 running worker kernel. Each IMS job pod is run inside its own Kata VM so there is no possibility of
 breaking out from one job into another.
