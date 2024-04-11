@@ -1,36 +1,32 @@
 # Troubleshoot Issues with Large Images
 
 The default configuration values that IMS has are based on the assumption of a resulting
-image of 15 Gb or smaller. If the images being worked with are larger, there are a couple
-of different failures that can happen and changes to the IMS configuration settings can
-resolve these issues.
+image of 15 Gb or smaller. If the images being worked with are larger, then there are a couple
+of different failures that can happen, but these failures can be resolved by changes to the
+IMS configuration settings.
 
 These settings require a balancing act based on the size of the images being produced and
 the size of the system and what resources are available.  If these settings are too large,
 the IMS jobs will consume more resources than required and it will be more difficult to
-schedule jobs on the Kubernetes workers due to resource limitations. If they are too small,
-the IMS jobs will fail due to the job lacking the resources required for a larger image.
+schedule jobs on the Kubernetes workers because of resource limitations. If they are too small,
+then the IMS jobs will fail because the job lacks the resources required for a larger image.
 
 ## Prerequisites
 
 This page requires interactive access to the image being worked with.
 
-## (`ncn-mw#`) Modifying the IMS Configuration base on Image Size
+## Modifying the IMS configuration based on image size
 
-There are two settings in the IMS configuration map that need to be modified for larger
+(`ncn-mw#`) There are two settings in the IMS configuration map that need to be modified for larger
 images. Both are contained in the same Kubernetes config map. To open this for editing:
 
 ```bash
 kubectl -n services edit cm ims-config
 ```
 
-Expect the configuration file to look something like:
+After the commented header, expect the configuration file to look something like the following:
 
-```text
-# Please edit the object below. Lines beginning with a '#' will be ignored,
-# and an empty file will abort the edit. If an error occurs while saving this file will be
-# reopened with the relevant failures.
-#
+```yaml
 apiVersion: v1
 data:
   API_GATEWAY_HOSTNAME: istio-ingressgateway.istio-system.svc.cluster.local
@@ -70,28 +66,27 @@ memory it is allowed to consume.
 NOTE: Modifying either of these values will require a restart of the `cray-ims` service to pick up
 the changes.
 
-### (`ncn-mw#`) Procedure
+### Restarting the IMS service
 
-When editing the configuration map is complete, find the name of the current `cray-ims`
-service pod:
+1. (`ncn-mw#`) When editing the configuration map is complete, find the name of the current `cray-ims` service pod.
 
-```bash
-kubectl -n services get pods | grep cray-ims
-```
+    ```bash
+    kubectl -n services get pods | grep cray-ims
+    ```
 
-Expected output:
+    Expected output:
 
-```text
-cray-ims-64bf4d5f49-xd4rh      2/2     Running   0  20h
-```
+    ```text
+    cray-ims-64bf4d5f49-xd4rh      2/2     Running   0  20h
+    ```
 
-Delete the pod:
+1. (`ncn-mw#`) Delete the pod.
 
-```bash
-kubectl -n services delete pod cray-ims-64bf4d5f49-xd4rh
-```
+    ```bash
+    kubectl -n services delete pod cray-ims-64bf4d5f49-xd4rh
+    ```
 
-When the new pod is up and running it will use the new settings.
+When the new pod is up and running, it will use the new settings.
 
 ## Error: "FATAL ERROR: Failed to write to output filesystem"
 
@@ -121,7 +116,7 @@ determine the cause of failure.IMS response: %s', 'ac6f6ba0-f399-480b-b49f-396a1
 'port': 22}}, 'jail': True, 'name': 'gpu-2296-uan', 'status': 'pending'}], 'status': 'error'})
 ```
 
-Looking in the IMS job log for the `buildenv-sidecar` container will have the following:
+The IMS job log for the `buildenv-sidecar` container will have the following:
 
 ```text
 + time mksquashfs /mnt/image/image-root /mnt/image/uan-shs-cne-1.0.0-45-csm-1.5.x86_64-231106_cfs_gpu-2296-uan.sqsh
@@ -139,100 +134,105 @@ Error: Creating squashfs of image root return_code = 1
 
 The solution is to increase the size of `DEFAULT_IMS_IMAGE_SIZE`.
 
-## (`ncn-mw#`) Error: `OOMKilled`
+## Error: `OOMKilled`
 
-Check the IMS job logs for a 'Killed' message during the run similar to the below:
+1. (`ncn-mw#`) Check the IMS job logs for a 'Killed' message during the run, similar to the following:
 
-```bash
-kubectl logs -n ims -l job-name=cray-ims-9b2fd379-31c7-4916-a397-4fe956f744b4-create -c build-image
-```
+    ```bash
+    kubectl logs -n ims -l job-name=cray-ims-9b2fd379-31c7-4916-a397-4fe956f744b4-create -c build-image
+    ```
 
-Output:
+    Example output:
 
-```text
-[ INFO    ]: 23:46:05 | Creating XZ compressed tar archive
-[ ERROR   ]: 23:46:52 | KiwiCommandError: bash: stderr: bash: line 1: 49862 Broken pipe             tar -C /mnt/image/build/image-root --xattrs --xattrs-include=* -c --to-stdout bin boot dev etc home lib lib64 mnt opt proc root run sbin selinux srv sys tmp usr var
-     49863 Killed                  | xz -f --threads=0 > /mnt/image/Cray-shasta-compute-sles15sp5.x86_64-unknown-20231024155019-gunknown.tar.xz
-, stdout: (no output on stdout)
-ERROR: Kiwi reported a build error.
-+ rc=1
-+ '[' 1 -ne 0 ']'
-+ echo 'ERROR: Kiwi reported a build error.'
-+ touch /mnt/image/build_failed
-+ exit 0
-```
+    ```text
+    [ INFO    ]: 23:46:05 | Creating XZ compressed tar archive
+    [ ERROR   ]: 23:46:52 | KiwiCommandError: bash: stderr: bash: line 1: 49862 Broken pipe             tar -C /mnt/image/build/image-root --xattrs --xattrs-include=* -c --to-stdout bin boot dev etc home lib lib64 mnt opt proc root run sbin selinux srv sys tmp usr var
+        49863 Killed                  | xz -f --threads=0 > /mnt/image/Cray-shasta-compute-sles15sp5.x86_64-unknown-20231024155019-gunknown.tar.xz
+    , stdout: (no output on stdout)
+    ERROR: Kiwi reported a build error.
+    + rc=1
+    + '[' 1 -ne 0 ']'
+    + echo 'ERROR: Kiwi reported a build error.'
+    + touch /mnt/image/build_failed
+    + exit 0
+    ```
 
-Check the status of the `build-image` or `sshd` container of the pod:
+1. (`ncn-mw#`) Check the status of the `build-image` or `sshd` container of the pod:
 
-```bash
-kubectl describe pod -n ims cray-ims-9b2fd379-31c7-4916-a397-4fe956f744b4-create-8h47r
-```
+    ```bash
+    kubectl describe pod -n ims cray-ims-9b2fd379-31c7-4916-a397-4fe956f744b4-create-8h47r
+    ```
 
-Output:
+    Example output:
 
-```Text
-Name:         cray-ims-9b2fd379-31c7-4916-a397-4fe956f744b4-create-8h47r
-Namespace:    ims
-Priority:     0
-Node:         ncn-w004/10.252.1.13
-Start Time:   Tue, 14 Nov 2023 23:31:08 +0000
-...
-Init Containers:
-  build-image:
-    Container ID:   containerd://f57bd79b7a4b26fa22edf57001bed6e4d148df51590680b19172085e3064909d
-    Image:          artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:1.6.0
-    Image ID:       artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder@sha256:98b9417313a29f5c842769c1f679894bcf9d5d6927eef2a93f74636d4cb1f906
-    Port:           <none>
-    Host Port:      <none>
-    State:          Terminated
-      Reason:       OOMKilled
-      Exit Code:    0
-      Started:      Tue, 14 Nov 2023 23:31:39 +0000
-      Finished:     Tue, 14 Nov 2023 23:46:52 +0000
-```
+    ```text
+    Name:         cray-ims-9b2fd379-31c7-4916-a397-4fe956f744b4-create-8h47r
+    Namespace:    ims
+    Priority:     0
+    Node:         ncn-w004/10.252.1.13
+    Start Time:   Tue, 14 Nov 2023 23:31:08 +0000
+    ...
+    Init Containers:
+    build-image:
+        Container ID:   containerd://f57bd79b7a4b26fa22edf57001bed6e4d148df51590680b19172085e3064909d
+        Image:          artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:1.6.0
+        Image ID:       artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder@sha256:98b9417313a29f5c842769c1f679894bcf9d5d6927eef2a93f74636d4cb1f906
+        Port:           <none>
+        Host Port:      <none>
+        State:          Terminated
+        Reason:       OOMKilled
+        Exit Code:    0
+        Started:      Tue, 14 Nov 2023 23:31:39 +0000
+        Finished:     Tue, 14 Nov 2023 23:46:52 +0000
+    ```
 
 This shows the pod was terminated for using too much memory on the Kubernetes worker.
 
 The solution is to increase the size of `DEFAULT_IMS_JOB_MEM_SIZE`.
 
-## (`ncn-mw#`) Error: IMS Job Pod Stuck in 'Pending'
+## Error: IMS job pod stuck in `Pending`
 
-If there isn't enough free resources on the Kubernetes system, the IMS job pods can get stuck in
+If there are not enough free resources on the Kubernetes system, then the IMS job pods can get stuck in
 a `Pending` state while waiting for a worker node to have sufficient free resources to start the job.
 
-Check for jobs stuck in a `Pending` state:
+1. (`ncn-mw#`) Check for jobs stuck in a `Pending` state:
 
-```bash
-kubectl get pod -A | grep ims | grep Pending
-```
+    ```bash
+    kubectl get pod -A | grep ims | grep Pending
+    ```
 
-Example output:
+    Example output:
 
-```text
-ims                 cray-ims-3c478753-02a2-47e0-86cc-c3801a312c1d-customize-kd2rq     0/2     Pending      0          16h
-ims                 cray-ims-49422153-738e-45e8-8c73-4a0132b6da21-customize-hd77r     0/2     Pending      0          47m
-ims                 cray-ims-53ab24c2-c318-487a-9f13-9e90431430c4-customize-llkzw     0/2     Pending      0          16h
-ims                 cray-ims-92c76eeb-915e-41ac-b106-d029d60a55bf-customize-wb2rz     0/2     Pending      0          21m
-ims                 cray-ims-9a2603fd-cf7e-4cf6-bea9-5eb6f6d8e8b3-customize-rf8st     0/2     Pending      0          29m
-ims                 cray-ims-e4ea92bc-5d1c-4b94-83e8-31520e37cf5b-customize-mwxwp     0/2     Pending      0          16h
-```
+    ```text
+    ims                 cray-ims-3c478753-02a2-47e0-86cc-c3801a312c1d-customize-kd2rq     0/2     Pending      0          16h
+    ims                 cray-ims-49422153-738e-45e8-8c73-4a0132b6da21-customize-hd77r     0/2     Pending      0          47m
+    ims                 cray-ims-53ab24c2-c318-487a-9f13-9e90431430c4-customize-llkzw     0/2     Pending      0          16h
+    ims                 cray-ims-92c76eeb-915e-41ac-b106-d029d60a55bf-customize-wb2rz     0/2     Pending      0          21m
+    ims                 cray-ims-9a2603fd-cf7e-4cf6-bea9-5eb6f6d8e8b3-customize-rf8st     0/2     Pending      0          29m
+    ims                 cray-ims-e4ea92bc-5d1c-4b94-83e8-31520e37cf5b-customize-mwxwp     0/2     Pending      0          16h
+    ```
 
-Examining one of the `Pending` jobs should describe what the scarce resource is:
+1. (`ncn-mw#`) Examining one of the `Pending` jobs should describe what the scarce resource is:
 
-```bash
-kubectl -n ims describe pod cray-ims-49422153-738e-45e8-8c73-4a0132b6da21-customize-hd77r
-Name:           cray-ims-49422153-738e-45e8-8c73-4a0132b6da21-customize-hd77r
-Namespace:      ims
-Priority:       0
-...
-Events:
-  Type     Reason            Age   From                  Message
-  ----     ------            ----  ----                  -------
-  Warning  FailedScheduling  18m   default-scheduler     0/7 nodes are available: 3 node(s) had taint {node-role.kubernetes.io/master: }, that the pod didn't tolerate, 4 Insufficient memory.
-  Warning  FailedScheduling  18m   default-scheduler     0/7 nodes are available: 3 node(s) had taint {node-role.kubernetes.io/master: }, that the pod didn't tolerate, 4 Insufficient memory.
-  Warning  PolicyViolation   18m   admission-controller  Rule(s) 'privileged-containers' of policy 'disallow-privileged-containers' failed to apply on the resource
-  Warning  PolicyViolation   18m   admission-controller  Rule(s) 'adding-capabilities' of policy 'disallow-capabilities' failed to apply on the resource
-```
+    ```bash
+    kubectl -n ims describe pod cray-ims-49422153-738e-45e8-8c73-4a0132b6da21-customize-hd77r
+    ```
+
+    Example output:
+
+    ```text
+    Name:           cray-ims-49422153-738e-45e8-8c73-4a0132b6da21-customize-hd77r
+    Namespace:      ims
+    Priority:       0
+    ...
+    Events:
+      Type     Reason            Age   From                  Message
+      ----     ------            ----  ----                  -------
+      Warning  FailedScheduling  18m   default-scheduler     0/7 nodes are available: 3 node(s) had taint {node-role.kubernetes.io/master: }, that the pod didn't tolerate, 4 Insufficient memory.
+      Warning  FailedScheduling  18m   default-scheduler     0/7 nodes are available: 3 node(s) had taint {node-role.kubernetes.io/master: }, that the pod didn't tolerate, 4 Insufficient memory.
+      Warning  PolicyViolation   18m   admission-controller  Rule(s) 'privileged-containers' of policy 'disallow-privileged-containers' failed to apply on the resource
+      Warning  PolicyViolation   18m   admission-controller  Rule(s) 'adding-capabilities' of policy 'disallow-capabilities' failed to apply on the resource
+    ```
 
 This is indicating all four of the worker nodes do not have sufficient free memory to start these jobs.
 
