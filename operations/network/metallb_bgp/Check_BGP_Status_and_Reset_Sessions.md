@@ -5,8 +5,8 @@ If the state of any session in the table is Idle, then the BGP sessions must be 
 
 - [Prerequisites](#prerequisites)
 - [Procedure](#procedure)
-  - [Mellanox](#mellanox)
-  - [Aruba](#aruba)
+    - [Mellanox](#mellanox)
+    - [Aruba](#aruba)
 
 ## Prerequisites
 
@@ -105,7 +105,7 @@ The following procedures may not resolve the problem after just one attempt. In 
 
     1. (`sw-spine#`) Clear the BGP sessions.
 
-        There are two VRF's that may need to be cleared. Clear the VRF that has the `Idle` session state.
+        There are two VRFs that may need to be cleared. Clear the VRF that has the `Idle` session state.
 
         Default VRF:
 
@@ -243,7 +243,7 @@ The following procedures may not resolve the problem after just one attempt. In 
 
     1. (`sw-spine#`) Clear the BGP sessions.
 
-        There are two VRF's that may need to be cleared. Clear the VRF that has the `Idle` session state.
+        There are two VRFs that may need to be cleared. Clear the VRF that has the `Idle` session state.
 
         Default VRF:
 
