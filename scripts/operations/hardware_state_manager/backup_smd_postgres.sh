@@ -1,1 +1,0 @@
-../../../operations/hardware_state_manager/scripts/backup_smd_postgres.sh
