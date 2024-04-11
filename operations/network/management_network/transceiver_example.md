@@ -1,39 +1,37 @@
-# Example of the connections used in Shasta management network
+# Example of the Connections Used in Shasta Management Network
 
-<!-- markdownlint-disable MD013 -->
-The intent of this guide is to give you an example of which transceivers would typically be used in Shasta management network. Please note that by this example does ***not*** work in every scenario and is simply made to give you an example of typical management network connections and they may or may not match how your specific setup is specified.
+The intent of this guide is to give an example of which transceivers would typically be used in Shasta management network.
+Note that this example does ***not*** work in every scenario and is simply made to give an example of typical management network connections;
+they may or may not match how any specific setup.
 
-In this example we are going to go over what you would see in typical "full" topology setup where you have the following switches:
+This example covers a typical "full" topology setup with the following switches:
 
-* Spine
-* Leaf
-* CDU
-* Leaf-BMC
+* [Spine](#spine)
+* [Leaf](#leaf)
+* [CDU](#cdu)
+* [Leaf-BMC](#leaf-bmc)
 
 ***Warning***
 
-* The transceivers here may not fit to your specified scenario because of "speed" or "distance" between devices.
-* The LLDP neighbor-info examples under the switches are only meant to give you can example of expected connections.
+* The transceivers here may not fit all scenarios because of speed or distance between devices.
+* The LLDP neighbor-info examples under the switches are only meant to give an example of expected connections.
 
 ## Helpful links
 
-To see cabling instructions for NCN's please refer to this document:
+To see cabling instructions for NCNs, see [Cable Management Network Servers](cable_management_network_servers.md).
 
-[Cable management network servers](cable_management_network_servers.md)
-
-To get most up to date of supported transceivers, DAC cables, please go to Aruba support portal and search for "Transceiver guide":
-
-[Aruba support portal](https://asp.arubanetworks.com/downloads;products=Aruba%20Switches)
+To get most up to date information on supported transceivers and DAC cables, go to the
+[Aruba support portal](https://asp.arubanetworks.com/downloads;products=Aruba%20Switches) and search for "Transceiver guide".
 
 ## Spine
 
-Typically Spine is "JL636A Aruba 8325-32C 32p 100G Switch".
+A typical spine switch is `JL636A Aruba 8325-32C 32p 100G Switch`.
 
-Spine typically only has connections to other switches, such as "spine", "leaf and so on.
+The spine typically only has connections to other switches, such as other spines, leaf switches, and so on.
 
-Example LLDP neighbor-info output:
+Example LLDP `neighbor-info` output:
 
-```bash
+```text
 1/1/1       b8:d4:e7:d3:2d:00  1/1/53  sw-spine-001:1<==sw-leaf-002  120      sw-leaf-002
 1/1/2       b8:d4:e7:43:62:00  1/1/53  sw-spine-001:2<==sw-leaf-001  120      sw-leaf-001
 1/1/3       b8:d4:e7:40:56:00  1/1/53  sw-spine-001:3<==sw-leaf-004  120      sw-leaf-004
@@ -47,46 +45,25 @@ Example LLDP neighbor-info output:
 1/1/32      54:80:28:ff:07:00  1/1/32  vsx isl                       120      sw-spine-002
 ```
 
-***Most commonly used ports from "Spine" to other devices:***
+### Spine: Most commonly used ports to other devices
 
-* Spine to leaf
-
-    100G or 25G depending on system configuration.
-
-    ***Example of transceiver used:*** HPE Aruba 100G QSFP28-QSFP28 1m Direct Attach Copper Cable (R0Z25A)
-
-* Spine to CDU
-
-    100G or 25G depending on system configuration.
-
-    ***Example of transceiver used:*** HPE JL309A Aruba X151 100G QSFP28 MPO Sr4 Mmf Xcvr (300ft)
-
-* Spine to edge
-
-    100G or 25G depending on system configuration.
-
-    ***Example of transceiver used:*** HPE JL307A Aruba 100g QSFP28-QSFP28 3M Direct attach cable.
-
-* VSX and keep-alive connection between VSX pair of Spines
-
-    100G or 25G depending on system configuration.
-
-    ***Example of transceiver used:*** HPE R0Z25A Aruba 100G QSFP28 to QSFP28 1m Direct Attach Copper Cable
+| *Port type* | *Port description* | *Example of transceiver used* |
+|-------------|--------------------|-------------------------------|
+| Spine to leaf | 100G or 25G depending on system configuration | HPE Aruba `100G QSFP28-QSFP28 1m Direct Attach Copper Cable (R0Z25A)` |
+| Spine to CDU | 100G or 25G depending on system configuration | HPE `JL309A Aruba X151 100G QSFP28 MPO Sr4 Mmf Xcvr (300ft)` |
+| Spine to edge | 100G or 25G depending on system configuration | HPE `JL307A Aruba 100g QSFP28-QSFP28 3M` direct attach cable |
+| VSX and `keep-alive` connection between VSX pair of spines | 100G or 25G depending on system configuration | HPE `R0Z25A Aruba 100G QSFP28 to QSFP28 1m Direct Attach Copper Cable` |
 
 ## Leaf
 
-Typically Leaf is "JL635A Aruba 8325-48Y8C 48p 25G 8p 100G Switch".
+A typical leaf switch is `JL635A Aruba 8325-48Y8C 48p 25G 8p 100G Switch`.
 
-Leaf typically has connections to other switches, such as "spine" and "Leaf-BMC. Leaf switches also have connections to:
+A leaf switch typically has connections to other switches, such as spines and `Leaf-BMC`.
+Leaf switches also have connections to NCNs (masters, workers, storage, and UANs).
 
-* NCN Master Nodes
-* NCN Worker Nodes
-* NCN Storage Nodes
-* NCN UAN Nodes
+Example LLDP `neighbor-info` output:
 
-Example LLDP neighbor-info output:
-
-```bash
+```text
 1/1/1       14:02:ec:da:d4:38  lag 1  ncn-m001:ocp:1<==s...        120      ncn-m001
 1/1/2       14:02:ec:d9:7a:60  lag 2  ncn-m002:ocp:1<==s...        120      ncn-m002
 1/1/3       14:02:ec:da:d4:f8  lag 3  ncn-w001:ocp:1<==s...        120      ncn-w001
@@ -104,69 +81,29 @@ Example LLDP neighbor-info output:
 1/1/56      b8:d4:e7:d3:2d:00  1/1/56 vsx isl                      120      sw-leaf-002
 ```
 
-***Most commonly used ports from "LEAF" to other devices:***
+### Leaf: Most commonly used ports to other devices
 
-* Spine to leaf
-
-    100G or 25G depending on system configuration.
-
-    ***Example of transceiver used:*** HPE Aruba 100G QSFP28-QSFP28 1m Direct Attach Copper Cable (R0Z25A)
-
-* Leaf to Leaf-BMC
-
-    Typically 25G connection.
-
-    ***Example of transceiver used:*** HPE JL487A Aruba 25G SFP28 TO SFP28 0.65M DAC cable.
-
-* Leaf to NCN-Master
-
-    Typically 25G connection.
-
-    ***Example of transceiver used:*** HP JL488A 25g SFP28 to SFP28 3M Direct attach cable.
-
-* Leaf to NCN-Worker
-
-    Typically 25G connection.
-
-    ***Example of transceiver used:*** HP JL488A 25g SFP28 to SFP28 3M Direct attach cable.
-
-* Leaf to NCN-Storage
-
-    Typically 25G connection.
-
-    ***Example of transceiver used:*** HP JL488A 25g SFP28 to SFP28 3M Direct attach cable.
-
-* Leaf to NCN-UAN
-
-    Typically 25G connection.
-
-    ***Example of transceiver used:*** HP JL488A 25g SFP28 to SFP28 3M Direct attach cable.
-
-* VSX connection between VSX pair of leaf switches
-
-    100G or 25G depending on system configuration.
-
-    ***Example of transceiver used:*** HPE R0Z25A Aruba 100G QSFP28 to QSFP28 1m Direct Attach Copper Cable
-
-* Keep-alive connection between pair of Leaf switches.
-
-    25G or 10G depending on system configuration.
-
-    ***Example of transceiver used:*** HPE J9150D Aruba - SFP+ transceiver module - 10 GigE
+| *Port type* | *Port description* | *Example of transceiver used* |
+|-------------|--------------------|-------------------------------|
+| Spine to leaf | 100G or 25G depending on system configuration | HPE Aruba `100G QSFP28-QSFP28 1m Direct Attach Copper Cable (R0Z25A)` |
+| Leaf to `Leaf-BMC` | Typically 25G connection | HPE `JL487A Aruba 25G SFP28 TO SFP28 0.65M DAC cable` |
+| Leaf to NCN | Typically 25G connection | HPE `JL488A 25g SFP28 to SFP28 3M Direct attach cable` |
+| VSX connection between VSX pair of leaf switches | 100G or 25G depending on system configuration | HPE `R0Z25A Aruba 100G QSFP28 to QSFP28 1m Direct Attach Copper Cable` |
+| `Keep-alive` connection between pair of leaf switches | 25G or 10G depending on system configuration | HPE `J9150D Aruba - SFP+ transceiver module - 10 GigE` |
 
 ## CDU
 
-Typically CDU is "JL720C 8360-48XT4C v2 Switch".
+A typical CDU switch is `JL720C 8360-48XT4C v2 Switch`.
 
-CDU typically has connection Leaf switches and they also have connections to:
+A CDU switch typically has connections to leaf switches, and they also have connections to:
 
 * Mountain management
-  * CMM (Chassis Management Module)
-  * CEC (Cabinet Environment Controller)
+    * CMM (Chassis Management Module)
+    * CEC (Cabinet Environment Controller)
 
-Example LLDP neighbor-info output:
+Example LLDP `neighbor-info` output:
 
-```bash
+```text
 1/1/1       33:22:11:00:11:22  cmm-x1000-000:1<==...               120      cmm-x1000-000
 1/1/2       33:22:11:00:11:22  cmm-x1000-001:1<==...               120      cmm-x1000-001
 1/1/3       33:22:11:00:11:22  cmm-x1000-002:1<==...               120      cmm-x1000-002
@@ -181,53 +118,28 @@ Example LLDP neighbor-info output:
 1/1/52      44:5b:ed:83:f0:80  1/1/52 vsx isl                      120      sw-cdu-002
 ```
 
-***Most commonly used ports from "UAN" to other devices:***
+### CDU: Most commonly used ports to other devices
 
-* CDU to Spine
+| *Port type* | *Port description* | *Example of transceiver used* |
+|-------------|--------------------|-------------------------------|
+| CDU to spine | 100G or 25G depending on system configuration | HPE `JL309A Aruba X151 100G QSFP28 MPO Sr4 Mmf Xcvr (300ft)` |
+| CDU to CEC | Typically 10G connection | No transceiver used; typically a 10G copper connection |
+| CDU to CMM | Typically 10G connection | No transceiver used; typically a 10G copper connection |
+| VSX connection between VSX pair of CDU switches | 100G or 25G depending on system configuration | HPE `R0Z25A Aruba 100G QSFP28 to QSFP28 1m Direct Attach Copper Cable` |
+| `Keep-alive` connection between pair of CDU switches | Typically 10G connection | No transceiver used, typically a 10G copper connection |
 
-    100G or 25G depending on system configuration.
+## `Leaf-BMC`
 
-    ***Example of transceiver used:*** HPE JL309A Aruba X151 100G QSFP28 MPO Sr4 Mmf Xcvr (300ft)
+A typical `Leaf-BMC` switch is `JL663A 6300M 48G 4SFP56 Switch`.
 
-* CDU to CEC
+A `Leaf-BMC` switch typically has connections to leaf switches, and they also have connections to:
 
-    Typically 10G connection.
-
-    ***Example of transceiver used:*** No transceiver used, typically a 10G copper connection.
-
-* CDU to CMM
-
-    Typically 10G connection.
-
-    ***Example of transceiver used:*** No transceiver used, typically a 10G copper connection.
-
-* VSX connection between VSX pair of CDU switches
-
-    100G or 25G depending on system configuration.
-
-    ***Example of transceiver used:*** HPE R0Z25A Aruba 100G QSFP28 to QSFP28 1m Direct Attach Copper Cable
-
-* Keep-alive connection between pair of Leaf switches.
-
-    Typically 10G connection
-
-    ***Example of transceiver used:*** No transceiver used, typically a 10G copper connection.
-
-## Leaf-BMC
-
-Typically Leaf-BMC is "JL663A 6300M 48G 4SFP56 Switch".
-
-Leaf typically has connection Leaf switches and they also have connections to:
-
-* NCN Master ILO
-* NCN Worker ILO
-* NCN Storage ILO
-* NCN UAN ILO
+* NCN (master, worker, storage, and UAN) ILO
 * PDU (power strip)
 
-Example LLDP neighbor-info output:
+Example LLDP `neighbor-info` output:
 
-```bash
+```text
 1/1/34                         1/1/48  ncn-m002:bmc:1<==s...        120      ncn-m002
 1/1/35                         1/1/48  ncn-w001:bmc:1<==s...        120      ncn-w001
 1/1/36                         1/1/48  ncn-w002:bmc:1<==s...        120      ncn-w002
@@ -240,34 +152,9 @@ Example LLDP neighbor-info output:
 1/1/52      b8:d4:e7:43:62:00  1/1/48  sw-leaf-bmc-001:52<==sw-...  120      sw-leaf-001
 ```
 
-***Most commonly used port speeds from "Leaf-BMC" to other devices:***
+### `Leaf-BMC`: Most commonly used ports to other devices
 
-* Leaf-BMC to Leaf
-
-    Typically 25G connection.
-
-    ***Example of transceiver used:*** HPE JL487A Aruba 25G SFP28 TO SFP28 0.65M DAC cable.
-
-* Leaf to NCN-Master
-
-    Typically 1G connection.
-
-    ***Example of transceiver used:*** No transceiver used, typically a 1G copper connection.
-
-* Leaf to NCN-Worker
-
-    Typically 1G connection.
-
-    ***Example of transceiver used:*** No transceiver used, typically a 1G copper connection.
-
-* Leaf to NCN-Storage
-
-    Typically 1G connection.
-
-    ***Example of transceiver used:*** No transceiver used, typically a 1G copper connection.
-
-* Leaf to NCN-UAN
-
-    Typically 1G connection.
-
-    ***Example of transceiver used:*** No transceiver used, typically a 1G copper connection.
+| *Port type* | *Port description* | *Example of transceiver used* |
+|-------------|--------------------|-------------------------------|
+| `Leaf-BMC` to leaf | Typically 25G connection | HPE `JL487A Aruba 25G SFP28 TO SFP28 0.65M DAC cable` |
+| `Leaf-BMC` to NCN ILO | Typically 1G connection | No transceiver used, typically a 1G copper connection |
