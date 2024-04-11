@@ -4,7 +4,7 @@ Retrieve the model name and firmware image required to update an HPE or Gigabyte
 
 > **`NOTE`**
 >
-> - On HPE nodes, the BMC firmware is iLO 5 and BIOS is System ROM.
+> - On HPE nodes, the BMC firmware is iLO 5 or iLO 6 and BIOS is System ROM.
 > - The commands in the procedure must be run on `ncn-m001`.
 
 - [Prerequisites](#prerequisites)
@@ -150,9 +150,9 @@ Use one of the following commands to find the model name for the node type in us
 
 ### Flash HPE `ncn-m001`
 
-The web interface will be used to update iLO 5 (BMC) firmware and/or System ROM (BIOS) on the HPE `ncn-m001` node.
+The web interface will be used to update iLO 5 or iLO 6 (BMC) firmware and/or System ROM (BIOS) on the HPE `ncn-m001` node.
 
-1. (`linux#`) Copy the iLO 5 firmware and/or System ROM files to a local computer from `ncn-m001` using `scp` or other secure copy tools.
+1. (`linux#`) Copy the iLO 5 or iLO 6 firmware and/or System ROM files to a local computer from `ncn-m001` using `scp` or other secure copy tools.
 
     ```bash
     scp root@ipaddressOfM001Node:pathToFile/filename .
