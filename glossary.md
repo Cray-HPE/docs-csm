@@ -33,6 +33,7 @@ Glossary of terms used in CSM documentation.
 * [Hardware Management Network (HMN)](#hardware-management-network-hmn)
 * [Hardware Management Notification Fanout Daemon (HMNFD)](#hardware-management-notification-fanout-daemon-hmnfd)
 * [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
+* [Hardware State Manager (SMD)](#hardware-state-manager-smd)
 * [Heartbeat Tracker Daemon (HBTD)](#heartbeat-tracker-daemon-hbtd)
 * [High Speed Network (HSN)](#high-speed-network-hsn)
 * [Image Management Service (IMS)](#image-management-service-ims)
@@ -73,6 +74,8 @@ Glossary of terms used in CSM documentation.
 * [System Management Network (SMNet)](#system-management-network)
 * [System Management Services (SMS)](#system-management-services-sms)
 * [System Management Services (SMS) nodes](#system-management-services-sms-nodes)
+* [System Monitoring Application (SMA)](#system-monitoring-application-sma)
+* [System Monitoring Framework (SMF)](#system-monitoring-framework-smf)
 * [Top of Rack Switch Controller (sC-ToR)](#top-of-rack-switch-controller-sc-tor)
 * [User Access Instance (UAI)](#user-access-instance-uai)
 * [User Access Node (UAN)](#user-access-node-uan)
@@ -381,6 +384,10 @@ tracking hardware state and inventory information, and making it available via R
 events when changes occur.
 
 For more information, see [Hardware State Manager](operations/hardware_state_manager/Hardware_State_Manager.md).
+
+## Hardware State Manager (SMD)
+
+For historical reasons, SMD is also used to refer to the [Hardware State Manager](#hardware-state-manager-hsm).
 
 <a name="heartbeat-tracker-daemon"></a>
 
@@ -691,6 +698,14 @@ levels of management: Level 1 HaaS, Level 2 IaaS, and Level 3 PaaS.
 ## System Management Services (SMS) nodes
 
 System Management Services (SMS) nodes provide access to the entire management cluster and Kubernetes container orchestration.
+
+## System Monitoring Application (SMA)
+
+The System Monitoring Application (SMA) is one of the services that collects CSM system data for administrators.
+
+## System Monitoring Framework (SMF)
+
+Another name for the [System Monitoring Application (SMA)](#system-monitoring-application-sma) Framework.
 
 <a name="top-of-rack-switch-controller"></a>
 
