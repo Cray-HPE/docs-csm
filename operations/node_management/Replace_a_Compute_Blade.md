@@ -70,9 +70,9 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    blade is replaced. Their entries must be deleted from the HSM Ethernet interfaces table and be rediscovered. The BMC NIC MAC addresses for liquid-cooled blades are assigned algorithmically
    and should not be deleted from the HSM.
 
-   1. Delete the Node NIC MAC addresses from the HSM Ethernet interfaces table.
+   1. **For each** node delete the node's NIC MAC addresses from the HSM Ethernet interfaces table.
 
-      Query HSM to determine the Node NIC MAC addresses associated with the blade in cabinet 1000, chassis 3, slot 0, node card 0, node 0.
+      Query HSM to determine the node's NIC MAC addresses associated with the blade in cabinet 1000, chassis 3, slot 0, node card 0, node 0.
 
       ```bash
       ncn-mw# cray hsm inventory ethernetInterfaces list --component-id x1000c3s0b0n0 --format json
