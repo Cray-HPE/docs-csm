@@ -61,6 +61,7 @@ bss-restore() {
 test $# = 0 && set -- "$(jq -r '.[] | select(."cloud-init"."meta-data" != null) | .hosts[0]' < $BACKUP_FILE)"
 
 # Do not add quotes around $@, it causes the for loop to not work as intended!
+# shellcheck disable=SC2068
 for i in $@; do
-  bss-restore $i
+  bss-restore "$i"
 done
