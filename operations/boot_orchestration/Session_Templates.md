@@ -6,14 +6,14 @@ Session templates can be created via the API by providing JSON data or via the C
 
 * [Session template structure](#session-template-structure)
 * [Boot sets](#boot-sets)
-  * [Boot artifacts](#boot-artifacts)
-  * [Specifying nodes](#specifying-nodes)
-    * [Node list](#node-list)
-    * [Node groups](#node-groups)
-    * [Node roles groups](#node-roles-groups)
-  * [`rootfs` providers](#rootfs-providers)
-    * [`root` kernel parameter example](#root-kernel-parameter-example)
-  * [Overriding configuration (BOS v2 only)](#overriding-configuration-bos-v2-only)
+    * [Boot artifacts](#boot-artifacts)
+    * [Specifying nodes](#specifying-nodes)
+        * [Node list](#node-list)
+        * [Node groups](#node-groups)
+        * [Node roles groups](#node-roles-groups)
+    * [`rootfs` providers](#rootfs-providers)
+        * [`root` kernel parameter example](#root-kernel-parameter-example)
+    * [Overriding configuration (BOS v2 only)](#overriding-configuration-bos-v2-only)
 
 ## Session template structure
 
