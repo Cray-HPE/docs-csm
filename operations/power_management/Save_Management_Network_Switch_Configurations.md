@@ -14,16 +14,15 @@ ncn# grep 'sw-' /etc/hosts
 
 Example output:
 
-```
+```text
 10.252.0.2 sw-spine-001
 10.252.0.3 sw-spine-002
 10.252.0.4 sw-leaf-001
-ncn-m001:~ #
 ```
 
-## Save switch configs
+## Save switch configurations
 
-### Aruba Switch and HPE Server Systems
+### Aruba switch and HPE server systems
 
 On Aruba-based systems all management network switches will be Aruba and the following procedure.
 For each switch:
@@ -41,35 +40,31 @@ Example:
  sw-spine-001# exit
  ```
 
-### Dell and Mellanox Switch and Gigabyte/Intel Server Systems
+### Dell and Mellanox switch and Gigabyte/Intel server systems
 
-On Dell and Mellanox based systems, all spine and any leaf switches will be Mellanox. Any leaf-bmc and cdu switches will be Dell. The overall procedure is the same but the specifics of execution are slightly different.
+On Dell and Mellanox based systems, all spine and any leaf switches will be Mellanox. Any `Leaf-BMC` and CDU switches will be Dell. The overall procedure is the same but the specifics of execution are slightly different.
 
 1. `ssh` to the switch
 1. Enter `enable` mode (Mellanox only)
 1. Execute the `write memory` command
 1. Exit the switch shell
 
-Mellanox Example:
+Mellanox example:
 
- ```bash
- ncn# ssh admin@sw-spine-001.nmn
- admin@sw-spine-001 password:
- sw-spine-001# enable
- sw-spine-001# write memory
- sw-spine-001# exit
- ```
+```console
+sw-spine-001# enable
+sw-spine-001# write memory
+sw-spine-001# exit
+```
 
-Dell Example:
+Dell example:
 
- ```bash
- ncn# ssh admin@sw-leaf-bmc-001
- admin@sw-leaf-bmc-001s password:
- sw-leaf-001# write memory
- sw-leaf-001# exit
- ```
+```console
+sw-leaf-001# write memory
+sw-leaf-001# exit
+```
 
-### Edge Routers and Storage Switches
+### Edge routers and storage switches
 
 Save configuration settings on Edge Router switches (Arista, Aruba or Juniper) that connect customer storage networks to the Slingshot network if these switches exist in the site and the configurations have changed.
 Edge switches are accessible from the ClusterStor management network and the CSM management network.
@@ -86,6 +81,6 @@ Example:
  r0-100gb-sw01# exit
  ```
 
-## Next Step
+## Next step
 
 Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.

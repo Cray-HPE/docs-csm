@@ -12,7 +12,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
   * The *HPE Slingshot Operations Guide* PDF for HPE Cray EX systems.
   * The *HPE Slingshot Troubleshooting* PDF.
 * An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section
-  of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
+  of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
 
 ## Procedure
 
@@ -114,6 +114,6 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
 1. Make nodes available to customers and refer to [Validate CSM Health](../validate_csm_health.md) to check system health and status.
 
-## Next Step
+## Next step
 
 Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.

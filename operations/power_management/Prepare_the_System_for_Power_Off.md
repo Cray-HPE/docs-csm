@@ -6,13 +6,14 @@ The `sat bootsys shutdown` and `sat bootsys boot` commands are used to shut down
 
 ## Prerequisites
 
-An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
+An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT)
+product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
 
 ## Procedure
 
-1.  Obtain the user ID and passwords for system components:
+1. Obtain the user ID and passwords for system components:
 
-    1.  Obtain user ID and passwords for all the system management network switches. For example:
+    1. Obtain user ID and passwords for all the system management network switches. For example:
 
         ```bash
         sw-leaf-001
@@ -27,21 +28,22 @@ An authentication token is required to access the API gateway and to use the `sa
 
         Password: `PASSWORD`
 
-    1.  If necessary, obtain the user ID and password for the ClusterStor primary management node. For example, `cls01053n00`.
+    1. If necessary, obtain the user ID and password for the ClusterStor primary management node. For example, `cls01053n00`.
 
         User id: `admin`
 
         Password: `PASSWORD`
 
-    1.  If the Slingshot network includes edge switches, obtain the user ID and password for these switches.
+    1. If the Slingshot network includes edge switches, obtain the user ID and password for these switches.
 
-1.  Use `sat auth` to authenticate to the API gateway within SAT.
+1. Use `sat auth` to authenticate to the API gateway within SAT.
 
     If SAT has already been authenticated to the API gateway, this step may be skipped.
 
-    See the "SAT Authentication" section in the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
+    See the "SAT Authentication" section in the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire
+    a SAT authentication token.
 
-1.  Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
+1. Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
 
     There will be separate session template for UANs and computes nodes.
 
@@ -61,7 +63,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
        Example output:
 
-       ```
+       ```text
        | x3000c0s19b1n0 | Node | 1        | On    | OK   | True    | X86  | River | Compute     | Sling    |
        | x3000c0s19b2n0 | Node | 2        | On    | OK   | True    | X86  | River | Compute     | Sling    |
        | x3000c0s19b3n0 | Node | 3        | On    | OK   | True    | X86  | River | Compute     | Sling    |
@@ -72,47 +74,48 @@ An authentication token is required to access the API gateway and to use the `sa
     1. Find the `bos_session` value via the Configuration Framework Service (CFS).
 
        ```bash
-       ncn# cray cfs components describe XNAME | grep bos_session
+       ncn# cray cfs components describe XNAME --format toml | grep bos_session
        ```
 
        Example output:
 
-       ```
+       ```toml
        bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
        ```
 
     1. Find the required `templateUuid` value with BOS.
 
        ```bash
-       ncn# cray bos session describe BOS_SESSION | grep templateUuid
+       ncn# cray bos session describe BOS_SESSION --format toml | grep templateUuid
        ```
 
        Example output:
 
-       ```
+       ```toml
        templateUuid = "compute-nid1-4-sessiontemplate"
        ```
+
     1. Determine the list of xnames associated with the desired boot session template.
 
        ```bash
-       ncn# cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
+       ncn# cray bos sessiontemplate describe SESSION_TEMPLATE_NAME --format toml | grep node_list
        ```
 
        Example output:
 
-       ```
+       ```toml
        node_list = [ "x3000c0s19b1n0", "x3000c0s19b2n0", "x3000c0s19b3n0", "x3000c0s19b4n0",]
        ```
 
-1.  Use sat to capture state of the system before the shutdown.
+1. Use sat to capture state of the system before the shutdown.
 
     ```bash
     ncn# sat bootsys shutdown --stage capture-state
     ```
 
-1.  Optional system health checks.
+1. Optional system health checks.
 
-    1.  Use the System Dump Utility \(SDU\) to capture current state of system before the shutdown.
+    1. Use the System Dump Utility \(SDU\) to capture current state of system before the shutdown.
 
         **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
 
@@ -121,25 +124,25 @@ An authentication token is required to access the API gateway and to use the `sa
                  --reason "saving state before powerdown"
         ```
 
-    1.  Capture the state of all nodes.
+    1. Capture the state of all nodes.
 
         ```bash
         ncn# sat status | tee sat.status.off
         ```
 
-    1.  Capture the list of disabled nodes.
+    1. Capture the list of disabled nodes.
 
         ```bash
         ncn# sat status --filter Enabled=false | tee sat.status.disabled
         ```
 
-    1.  Capture the list of nodes that are `off`.
+    1. Capture the list of nodes that are `off`.
 
         ```bash
         ncn# sat status --filter State=Off | tee sat.status.off
         ```
 
-    1.  Capture the state of nodes in the workload manager.
+    1. Capture the state of nodes in the workload manager.
 
         For example, if the system uses Slurm:
 
@@ -147,7 +150,7 @@ An authentication token is required to access the API gateway and to use the `sa
         ncn# ssh uan01 sinfo | tee uan01.sinfo
         ```
 
-    1.  Capture the list of down nodes in the workload manager and the reason.
+    1. Capture the list of down nodes in the workload manager and the reason.
 
         For example, if the system uses Slurm:
 
@@ -155,13 +158,13 @@ An authentication token is required to access the API gateway and to use the `sa
         ncn# ssh nid000001-nmn sinfo --list-reasons | tee sinfo.reasons
         ```
 
-    1.  Check Ceph status.
+    1. Check Ceph status.
 
         ```bash
         ncn# ceph -s | tee ceph.status
         ```
 
-    1.  Check Kubernetes pod status for all pods.
+    1. Check Kubernetes pod status for all pods.
 
         ```bash
         ncn# kubectl get pods -o wide -A | tee k8s.pods
@@ -175,7 +178,7 @@ An authentication token is required to access the API gateway and to use the `sa
         ncn# kubectl get pods -o wide -A | egrep -v "Run|Completed" > k8s.pods.errors
         ```
 
-    1.  Check HSN status.
+    1. Check HSN status.
 
         Determine the name of the `slingshot-fabric-manager` pod:
 
@@ -185,7 +188,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
         Example output:
 
-        ```bash
+        ```text
         NAME                                        READY   STATUS    RESTARTS   AGE
         slingshot-fabric-manager-5dc448779c-d8n6q   2/2     Running   0          4d21h
         ```
@@ -224,7 +227,7 @@ An authentication token is required to access the API gateway and to use the `sa
         uan01:~ # lfs df
         ```
 
-1.  Check for running sessions.
+1. Check for running sessions.
 
     ```bash
     ncn# sat bootsys shutdown --stage session-checks | tee sat.session-checks
@@ -232,7 +235,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
     Example output:
 
-    ```
+    ```text
     Checking for active BOS sessions.
     Found no active BOS sessions.
     Checking for active CFS sessions.
@@ -250,105 +253,118 @@ An authentication token is required to access the API gateway and to use the `sa
 
 1. Cancel the running BOS sessions.
 
-    1.   Identify the BOS Sessions and associated BOA Kubernetes jobs to delete.
+    1. Identify the BOS Sessions and associated BOA Kubernetes jobs to delete.
 
-         Determine which BOS session(s) to cancel. To cancel a BOS session, kill
-         its associated Boot Orchestration Agent (BOA) Kubernetes job.
+       Determine which BOS session(s) to cancel. To cancel a BOS session, kill
+       its associated Boot Orchestration Agent (BOA) Kubernetes job.
 
-         To find a list of BOA jobs that are still running:
+       To find a list of BOA jobs that are still running:
 
-         ```bash
-         ncn# kubectl -n services get jobs|egrep -i "boa|Name"
-         ```
+       ```bash
+       ncn# kubectl -n services get jobs|egrep -i "boa|Name"
+       ```
 
-         Output similar to the following will be returned:
-         ```bash
-         NAME                                       COMPLETIONS   DURATION   AGE
-         boa-0216d2d9-b2bc-41b0-960d-165d2af7a742   0/1           36m        36m
-         boa-0dbd7adb-fe53-4cda-bf0b-c47b0c111c9f   1/1           36m        3d5h
-         boa-4274b117-826a-4d8b-ac20-800fcac9afcc   1/1           36m        3d7h
-         boa-504dd626-d566-4f58-9974-3c50573146d6   1/1           8m47s      3d5h
-         boa-bae3fc19-7d91-44fc-a1ad-999e03f1daef   1/1           36m        3d7h
-         boa-bd95dc0b-8cb2-4ad4-8673-bb4cc8cae9b0   1/1           36m        3d7h
-         boa-ccdd1c29-cbd2-45df-8e7f-540d0c9cf453   1/1           35m        3d5h
-         boa-e0543eb5-3445-4ee0-93ec-c53e3d1832ce   1/1           36m        3d5h
-         boa-e0fca5e3-b671-4184-aa21-84feba50e85f   1/1           36m        3d5h
-         ```
+       Output similar to the following will be returned:
 
-         Any job with a `0/1` `COMPLETIONS` column is still running and is a candidate to be forcibly deleted.
-         The BOA Job ID appears in the NAME column.
+       ```text
+       NAME                                       COMPLETIONS   DURATION   AGE
+       boa-0216d2d9-b2bc-41b0-960d-165d2af7a742   0/1           36m        36m
+       boa-0dbd7adb-fe53-4cda-bf0b-c47b0c111c9f   1/1           36m        3d5h
+       boa-4274b117-826a-4d8b-ac20-800fcac9afcc   1/1           36m        3d7h
+       boa-504dd626-d566-4f58-9974-3c50573146d6   1/1           8m47s      3d5h
+       boa-bae3fc19-7d91-44fc-a1ad-999e03f1daef   1/1           36m        3d7h
+       boa-bd95dc0b-8cb2-4ad4-8673-bb4cc8cae9b0   1/1           36m        3d7h
+       boa-ccdd1c29-cbd2-45df-8e7f-540d0c9cf453   1/1           35m        3d5h
+       boa-e0543eb5-3445-4ee0-93ec-c53e3d1832ce   1/1           36m        3d5h
+       boa-e0fca5e3-b671-4184-aa21-84feba50e85f   1/1           36m        3d5h
+       ```
 
-    1.   Clean up prior to BOA job deletion.
+       Any job with a `0/1` `COMPLETIONS` column is still running and is a candidate to be forcibly deleted.
+       The BOA Job ID appears in the NAME column.
 
-         The BOA pod mounts a ConfigMap under the name `boot-session` at the directory `/mnt/boot_session` inside the pod. This ConfigMap has a random UUID name like `e0543eb5-3445-4ee0-93ec-c53e3d1832ce`.
-         Prior to deleting a BOA job, delete its ConfigMap.
-         Find the BOA job's ConfigMap with the following command:
+    1. Clean up prior to BOA job deletion.
 
-         ```bash
-         ncn# kubectl -n services describe job <BOA Job ID> |grep ConfigMap -A 1 -B 1
-         ```
+       The BOA pod mounts a ConfigMap under the name `boot-session` at the directory `/mnt/boot_session` inside the pod. This ConfigMap has a random UUID name like
+       `e0543eb5-3445-4ee0-93ec-c53e3d1832ce`.
+       Prior to deleting a BOA job, delete its ConfigMap.
+       Find the BOA job's ConfigMap with the following command:
 
-         Example:
+       ```bash
+       ncn# kubectl -n services describe job <BOA Job ID> |grep ConfigMap -A 1 -B 1
+       ```
 
-         ```bash
-         ncn# kubectl -n services describe job boa-0216d2d9-b2bc-41b0-960d-165d2af7a742 |grep ConfigMap -A 1 -B 1
-            boot-session:
-             Type:      ConfigMap (a volume populated by a ConfigMap)
-             Name:      e0543eb5-3445-4ee0-93ec-c53e3d1832ce    <<< ConfigMap name. Delete this one.
-         --
-            ca-pubkey:
-             Type:      ConfigMap (a volume populated by a ConfigMap)
-             Name:      cray-configmap-ca-public-key
-         ```
+       Example:
 
-         Delete the ConfigMap associated with the boot-session, not the ca-pubkey.
+       ```bash
+       ncn# kubectl -n services describe job boa-0216d2d9-b2bc-41b0-960d-165d2af7a742 |grep ConfigMap -A 1 -B 1
+       ```
 
-         To delete the ConfigMap:
+       Example output:
 
-         ```bash
-         ncn# kubectl -n services delete cm <ConfigMap name>
-         ```
+       ```text
+          boot-session:
+           Type:      ConfigMap (a volume populated by a ConfigMap)
+           Name:      e0543eb5-3445-4ee0-93ec-c53e3d1832ce    <<< ConfigMap name. Delete this one.
+       --
+          ca-pubkey:
+           Type:      ConfigMap (a volume populated by a ConfigMap)
+           Name:      cray-configmap-ca-public-key
+       ```
 
-         Example:
+       Delete the ConfigMap associated with the boot-session, not the ca-pubkey.
 
-         ```bash
-         ncn# kubectl -n services delete cm e0543eb5-3445-4ee0-93ec-c53e3d1832ce
-         configmap "e0543eb5-3445-4ee0-93ec-c53e3d1832ce" deleted
-         ```
+       To delete the ConfigMap:
 
-    1.   Delete the BOA job(s).
+       ```bash
+       ncn# kubectl -n services delete cm <ConfigMap name>
+       ```
 
-         ```bash
-         ncn# kubectl -n services delete job <BOA JOB ID>
-         ```
+       Example:
 
-         This will kill the BOA job and the BOS session associated with it.
+       ```bash
+       ncn# kubectl -n services delete cm e0543eb5-3445-4ee0-93ec-c53e3d1832ce
+       ```
 
-         When a job is killed, BOA will no longer attempt to execute the operation it was attempting to perform. This does not mean that
-         nothing continues to happen. If BOA has instructed a node to power on, the node will continue to power even after the BOA job
-         has been killed.
+       Example output:
 
-    1.   Delete the BOS session.
-         BOS keeps track of sessions in its database. These entries need to be deleted.
-         The BOS Session ID is the same as the BOA Job ID minus the prepended 'boa-'
-         string. Use the following command to delete the BOS database entry.
+       ```text
+       configmap "e0543eb5-3445-4ee0-93ec-c53e3d1832ce" deleted
+       ```
 
-         ```bash
-         ncn# cray bos session delete <session ID>
-         ```
+    1. Delete the BOA jobs.
 
-         Example:
+       ```bash
+       ncn# kubectl -n services delete job <BOA JOB ID>
+       ```
 
-         ```bash
-         ncn# cray bos session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
-         ```
+       This will kill the BOA job and the BOS session associated with it.
 
-1.  Coordinate with the site to prevent new sessions from starting in the services listed.
+       When a job is killed, BOA will no longer attempt to execute the operation it was attempting to perform. This does not mean that
+       nothing continues to happen. If BOA has instructed a node to power on, the node will continue to power even after the BOA job
+       has been killed.
+
+    1. Delete the BOS session.
+       BOS keeps track of sessions in its database. These entries need to be deleted.
+       The BOS Session ID is the same as the BOA Job ID minus the prepended 'boa-'
+       string. Use the following command to delete the BOS database entry.
+
+       ```bash
+       ncn# cray bos session delete <session ID>
+       ```
+
+       Example:
+
+       ```bash
+       ncn# cray bos session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
+       ```
+
+1. Coordinate with the site to prevent new sessions from starting in the services listed.
 
     There is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
-1.  Follow the vendor workload manager documentation to drain processes running on compute nodes. For Slurm, the see `scontrol` man page. For PBS Professional, see the `pbsnodes` man page.
+1. Follow the vendor workload manager documentation to drain processes running on compute nodes. For Slurm, the see `scontrol` man page. For PBS Professional, see
+    the `pbsnodes` man page.
 
-## Next Step
+## Next step
 
 Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
