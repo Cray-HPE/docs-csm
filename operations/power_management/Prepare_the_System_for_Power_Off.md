@@ -119,7 +119,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
        ```
 
        **`NOTE`** When the `Most Recent Session Template` shows `MISSING`, it means the BOS session information was removed.
-       Old BOS sessions are cleaned up based on the numbers of days in `cleanup_completed_session_ttl`.  The default value is seven days.
+       Old BOS sessions are cleaned up based on the numbers of days in `cleanup_completed_session_ttl`. The default value is seven days.
 
        1. Check the current setting for `cleanup_completed_session_ttl`.
 
@@ -227,8 +227,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         Additional Kubernetes status check examples:
 
         ```bash
-        kubectl get pods -o wide -A | egrep  "CrashLoopBackOff" | tee -a k8s.pods.CLBO
-        kubectl get pods -o wide -A | egrep  "ContainerCreating" | tee -a k8s.pods.CC
+        kubectl get pods -o wide -A | egrep "CrashLoopBackOff" | tee -a k8s.pods.CLBO
+        kubectl get pods -o wide -A | egrep "ContainerCreating" | tee -a k8s.pods.CC
         kubectl get pods -o wide -A | egrep -v "Run|Completed" | tee -a k8s.pods.errors
         ```
 
@@ -308,7 +308,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
            done | tee -a switches
            ```
 
-    1. (`ncn-mw#`) Check Lustre server health.  See Lustre documentation for other health commands to run.  
+    1. (`ncn-mw#`) Check Lustre server health. See Lustre documentation for other health commands to run.
 
         ```bash
         ssh admin@cls01234n00.us.cray.com
