@@ -1733,7 +1733,6 @@ Create a new image record
   "pollingSpeedSeconds": 0,
   "forceResetType": "string",
   "s3URL": "s3://firmware/f1.1123.24.xz.iso",
-  "tftpURL": "tctp://f1.1123.24.xz.iso",
   "allowableDeviceStates": [
     "ON"
   ]
@@ -1869,7 +1868,6 @@ Retrieve a list of images that are known to the system.
       "pollingSpeedSeconds": 0,
       "forceResetType": "string",
       "s3URL": "s3://firmware/f1.1123.24.xz.iso",
-      "tftpURL": "tftp://f1.1123.24.xz.iso",
       "allowableDeviceStates": [
         "ON"
       ]
@@ -1988,7 +1986,6 @@ Modify or update an existing image record.
   "pollingSpeedSeconds": 0,
   "forceResetType": "string",
   "s3URL": "s3://firmware/f1.1123.24.xz.iso",
-  "tftpURL": "tctp://f1.1123.24.xz.iso",
   "allowableDeviceStates": [
     "ON"
   ]
@@ -2121,7 +2118,6 @@ Retrieve the image record that is associated with the imageID.
   "pollingSpeedSeconds": 0,
   "forceResetType": "string",
   "s3URL": "s3://firmware/f1.1123.24.xz.iso",
-  "tftpURL": "tftp://f1.1123.24.xz.iso",
   "allowableDeviceStates": [
     "ON"
   ]
@@ -4657,7 +4653,6 @@ bearerAuth
   "pollingSpeedSeconds": 0,
   "forceResetType": "string",
   "s3URL": "s3://firmware/f1.1123.24.xz.iso",
-  "tftpURL": "tctp://f1.1123.24.xz.iso",
   "allowableDeviceStates": [
     "ON"
   ]
@@ -4684,7 +4679,6 @@ bearerAuth
 |pollingSpeedSeconds|integer|false|none|amount of time to wait between requests to the device to avoid overloading it|
 |forceResetType|string|false|none|the command to issue to the Redfish device to force a reboot|
 |s3URL|string|true|none|none|
-|tftpURL|string|false|none|none|
 |allowableDeviceStates|[string]|false|none|none|
 
 <h2 id="tocS_ImageGet">ImageGet</h2>
@@ -4722,7 +4716,6 @@ bearerAuth
   "pollingSpeedSeconds": 0,
   "forceResetType": "string",
   "s3URL": "s3://firmware/f1.1123.24.xz.iso",
-  "tftpURL": "tftp://f1.1123.24.xz.iso",
   "allowableDeviceStates": [
     "ON"
   ]
@@ -4751,7 +4744,6 @@ bearerAuth
 |pollingSpeedSeconds|integer|false|none|amount of time to wait between requests to the device to avoid overloading it|
 |forceResetType|string|false|none|the command to issue to the Redfish device to force a reboot|
 |s3URL|string|false|none|none|
-|tftpURL|string|false|none|none|
 |allowableDeviceStates|[string]|false|none|none|
 
 <h2 id="tocS_ImageID">ImageID</h2>
@@ -4811,7 +4803,6 @@ bearerAuth
       "pollingSpeedSeconds": 0,
       "forceResetType": "string",
       "s3URL": "s3://firmware/f1.1123.24.xz.iso",
-      "tftpURL": "tftp://f1.1123.24.xz.iso",
       "allowableDeviceStates": [
         "ON"
       ]

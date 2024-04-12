@@ -547,15 +547,15 @@ func main() {
 
 *Retrieve the power state*
 
-Retrieve the power state of the components specified by xname.
+Retrieve the power state of the component specified by xname.
 
 <h3 id="get__power-status-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|xname|query|[non_empty_string_list](#schemanon_empty_string_list)|false|none|
-|powerStateFilter|query|[power_state](#schemapower_state)|false|none|
-|managementStateFilter|query|[management_state](#schemamanagement_state)|false|none|
+|xname|query|array[string]|false|none|
+|powerStateFilter|query|string|false|none|
+|managementStateFilter|query|string|false|none|
 
 #### Enumerated Values
 
@@ -564,8 +564,8 @@ Retrieve the power state of the components specified by xname.
 |powerStateFilter|on|
 |powerStateFilter|off|
 |powerStateFilter|undefined|
-|managementStateFilter|unavailable|
 |managementStateFilter|available|
+|managementStateFilter|unavailable|
 
 > Example responses
 
@@ -577,7 +577,7 @@ Retrieve the power state of the components specified by xname.
     {
       "xname": "x0c0s0b0n0",
       "powerState": "on",
-      "managementState": "available",
+      "managementState": "unavailable",
       "error": "permission denied - system credentials failed",
       "supportedPowerTransitions": [
         "soft-restart"
@@ -591,128 +591,6 @@ Retrieve the power state of the components specified by xname.
 > 400 Response
 
 <h3 id="get__power-status-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|OK|[power_status_all](#schemapower_status_all)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[Problem7807](#schemaproblem7807)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Database error|[Problem7807](#schemaproblem7807)|
-
-<aside class="warning">
-To perform this operation, you must be authenticated by means of one of the following methods:
-bearerAuth
-</aside>
-
-## post__power-status
-
-> Code samples
-
-```http
-POST https://api-gw-service-nmn.local/apis/power-control/v1/power-status HTTP/1.1
-Host: api-gw-service-nmn.local
-Content-Type: application/json
-Accept: application/json
-
-```
-
-```shell
-# You can also use wget
-curl -X POST https://api-gw-service-nmn.local/apis/power-control/v1/power-status \
-  -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer {access-token}'
-
-```
-
-```python
-import requests
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Authorization': 'Bearer {access-token}'
-}
-
-r = requests.post('https://api-gw-service-nmn.local/apis/power-control/v1/power-status', headers = headers)
-
-print(r.json())
-
-```
-
-```go
-package main
-
-import (
-       "bytes"
-       "net/http"
-)
-
-func main() {
-
-    headers := map[string][]string{
-        "Content-Type": []string{"application/json"},
-        "Accept": []string{"application/json"},
-        "Authorization": []string{"Bearer {access-token}"},
-    }
-
-    data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/power-control/v1/power-status", data)
-    req.Header = headers
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    // ...
-}
-
-```
-
-`POST /power-status`
-
-*Retrieve the power state*
-
-Retrieve the power state of the components specified by xname.
-
-> Body parameter
-
-```json
-{
-  "xname": [
-    "string"
-  ],
-  "powerStateFilter": "on",
-  "managementStateFilter": "available"
-}
-```
-
-<h3 id="post__power-status-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[power_status_get](#schemapower_status_get)|true|Node filtering parameters|
-
-> Example responses
-
-> 200 Response
-
-```json
-{
-  "status": [
-    {
-      "xname": "x0c0s0b0n0",
-      "powerState": "on",
-      "managementState": "available",
-      "error": "permission denied - system credentials failed",
-      "supportedPowerTransitions": [
-        "soft-restart"
-      ],
-      "lastUpdated": "2022-08-24T16:45:53.953811137Z"
-    }
-  ]
-}
-```
-
-> 400 Response
-
-<h3 id="post__power-status-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -1185,8 +1063,6 @@ bearerAuth
 
 <h1 id="power-control-service-pcs--cli_ignore">cli_ignore</h1>
 
-Endpoints that should not be parsed by the Cray CLI generator
-
 ## get__liveness
 
 > Code samples
@@ -1442,7 +1318,7 @@ bearerAuth
 {
   "xname": "x0c0s0b0n0",
   "powerState": "on",
-  "managementState": "available",
+  "managementState": "unavailable",
   "error": "permission denied - system credentials failed",
   "supportedPowerTransitions": [
     "soft-restart"
@@ -1457,11 +1333,21 @@ bearerAuth
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |xname|[xname](#schemaxname)|false|none|The xname of this piece of hardware|
-|powerState|[power_state](#schemapower_state)|false|none|The power state of a component.|
-|managementState|[management_state](#schemamanagement_state)|false|none|Whether the device is currently available for commands via its management controller|
+|powerState|string|false|none|What the power state was detected.|
+|managementState|string|false|none|Describes if the device is currently available for commands via its management controller|
 |error|string¦null|false|none|none|
 |supportedPowerTransitions|[string]|false|none|none|
 |lastUpdated|string(date-time)|false|read-only|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|powerState|on|
+|powerState|off|
+|powerState|undefined|
+|managementState|unavailable|
+|managementState|available|
 
 <h2 id="tocS_power_status_all">power_status_all</h2>
 <!-- backwards compatibility -->
@@ -1476,7 +1362,7 @@ bearerAuth
     {
       "xname": "x0c0s0b0n0",
       "powerState": "on",
-      "managementState": "available",
+      "managementState": "unavailable",
       "error": "permission denied - system credentials failed",
       "supportedPowerTransitions": [
         "soft-restart"
@@ -1493,34 +1379,6 @@ bearerAuth
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |status|[[power_status](#schemapower_status)]|false|none|none|
-
-<h2 id="tocS_power_status_get">power_status_get</h2>
-<!-- backwards compatibility -->
-<a id="schemapower_status_get"></a>
-<a id="schema_power_status_get"></a>
-<a id="tocSpower_status_get"></a>
-<a id="tocspower_status_get"></a>
-
-```json
-{
-  "xname": [
-    "string"
-  ],
-  "powerStateFilter": "on",
-  "managementStateFilter": "available"
-}
-
-```
-
-Filters to limit which nodes have their power status returned.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|xname|[non_empty_string_list](#schemanon_empty_string_list)|false|none|none|
-|powerStateFilter|[power_state](#schemapower_state)|false|none|The power state of a component.|
-|managementStateFilter|[management_state](#schemamanagement_state)|false|none|Whether the device is currently available for commands via its management controller|
 
 <h2 id="tocS_transitions_getID">transitions_getID</h2>
 <!-- backwards compatibility -->
@@ -1887,79 +1745,6 @@ RFC 7807 compliant error payload. All fields are optional except the 'type' fiel
 |instance|string|false|none|none|
 |statusCode|number(integer)|false|none|none|
 |title|string|false|none|none|
-
-<h2 id="tocS_power_state">power_state</h2>
-<!-- backwards compatibility -->
-<a id="schemapower_state"></a>
-<a id="schema_power_state"></a>
-<a id="tocSpower_state"></a>
-<a id="tocspower_state"></a>
-
-```json
-"on"
-
-```
-
-The power state of a component.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The power state of a component.|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|*anonymous*|on|
-|*anonymous*|off|
-|*anonymous*|undefined|
-
-<h2 id="tocS_management_state">management_state</h2>
-<!-- backwards compatibility -->
-<a id="schemamanagement_state"></a>
-<a id="schema_management_state"></a>
-<a id="tocSmanagement_state"></a>
-<a id="tocsmanagement_state"></a>
-
-```json
-"available"
-
-```
-
-Whether the device is currently available for commands via its management controller
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|Whether the device is currently available for commands via its management controller|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|*anonymous*|unavailable|
-|*anonymous*|available|
-
-<h2 id="tocS_non_empty_string_list">non_empty_string_list</h2>
-<!-- backwards compatibility -->
-<a id="schemanon_empty_string_list"></a>
-<a id="schema_non_empty_string_list"></a>
-<a id="tocSnon_empty_string_list"></a>
-<a id="tocsnon_empty_string_list"></a>
-
-```json
-[
-  "string"
-]
-
-```
-
-### Properties
-
-*None*
 
 <h2 id="tocS_xname">xname</h2>
 <!-- backwards compatibility -->

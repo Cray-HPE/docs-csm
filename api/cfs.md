@@ -144,9 +144,9 @@ func main() {
 
 `GET /`
 
-*Get CFS service version*
+*Get API versions*
 
-Return the CFS service version that is currently running.
+Return list of versions currently running.
 
 > Example responses
 
@@ -154,9 +154,9 @@ Return the CFS service version that is currently running.
 
 ```json
 {
-  "major": "1",
-  "minor": "0",
-  "patch": "10"
+  "major": 0,
+  "minor": 0,
+  "patch": 0
 }
 ```
 
@@ -233,9 +233,9 @@ func main() {
 
 `GET /versions`
 
-*Get CFS service version*
+*Get API versions*
 
-Return the CFS service version that is currently running.
+Return list of versions currently running.
 
 > Example responses
 
@@ -243,9 +243,9 @@ Return the CFS service version that is currently running.
 
 ```json
 {
-  "major": "1",
-  "minor": "0",
-  "patch": "10"
+  "major": 0,
+  "minor": 0,
+  "patch": 0
 }
 ```
 
@@ -322,9 +322,9 @@ func main() {
 
 `GET /v2`
 
-*Get CFS service version*
+*Get API versions*
 
-Return the CFS service version that is currently running.
+Return list of versions currently running.
 
 > Example responses
 
@@ -332,9 +332,9 @@ Return the CFS service version that is currently running.
 
 ```json
 {
-  "major": "1",
-  "minor": "0",
-  "patch": "10"
+  "major": 0,
+  "minor": 0,
+  "patch": 0
 }
 ```
 
@@ -411,9 +411,9 @@ func main() {
 
 `GET /v3`
 
-*Get CFS service version*
+*Get API versions*
 
-Return the CFS service version that is currently running.
+Return list of versions currently running.
 
 > Example responses
 
@@ -421,9 +421,9 @@ Return the CFS service version that is currently running.
 
 ```json
 {
-  "major": "1",
-  "minor": "0",
-  "patch": "10"
+  "major": 0,
+  "minor": 0,
+  "patch": 0
 }
 ```
 
@@ -1950,7 +1950,7 @@ Retrieve all the configuration framework sessions on the system.
 
 ```json
 {
-  "sessions": [
+  "components": [
     {
       "name": "session-20190728032600",
       "configuration": {
@@ -2313,7 +2313,61 @@ Delete multiple configuration sessions.  If filters are provided, only sessions 
 ```json
 {
   "session_ids": [
-    "string"
+    {
+      "name": "session-20190728032600",
+      "configuration": {
+        "name": "example-config",
+        "limit": "layer1,layer3"
+      },
+      "ansible": {
+        "config": "cfs-default-ansible-cfg",
+        "limit": "host1",
+        "verbosity": 0,
+        "passthrough": "string"
+      },
+      "target": {
+        "definition": "spec",
+        "groups": [
+          {
+            "name": "test-computes",
+            "members": [
+              "nid000001",
+              "nid000002",
+              "nid000003"
+            ]
+          }
+        ],
+        "image_map": [
+          {
+            "source_id": "ff287206-6ff7-4659-92ad-6e732821c6b4",
+            "result_name": "new-test-image"
+          }
+        ]
+      },
+      "status": {
+        "artifacts": [
+          {
+            "image_id": "f34ff35e-d782-4a65-a1b8-243a3cd740af",
+            "result_id": "8b782ccd-8706-4145-a6a1-724e29ed5522",
+            "type": "ims_customized_image"
+          }
+        ],
+        "session": {
+          "job": "cray-cfs-job-session-20190728032600",
+          "ims_job": "5037edd8-e9c5-437d-b54b-db4a8ad2cb15",
+          "completion_time": "2019-07-28T03:26:00Z",
+          "start_time": "2019-07-28T03:26:00Z",
+          "status": "pending",
+          "succeeded": "none"
+        }
+      },
+      "tags": {
+        "property1": "string",
+        "property2": "string"
+      },
+      "debug_on_failure": false,
+      "logs": "string"
+    }
   ]
 }
 ```
@@ -2322,7 +2376,7 @@ Delete multiple configuration sessions.  If filters are provided, only sessions 
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of configuration session IDs|[V3SessionIdCollection](#schemav3sessionidcollection)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of configuration sessions|[V3SessionIdCollection](#schemav3sessionidcollection)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="warning">
@@ -2826,6 +2880,13 @@ Retrieve the full collection of components in the form of a ComponentArray. Full
         "sessionName": "string"
       }
     ],
+    "stateAppend": {
+      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+      "playbook": "site.yml",
+      "commit": "string",
+      "lastUpdated": "2019-07-28T03:26:00Z",
+      "sessionName": "string"
+    },
     "desiredConfig": "string",
     "desiredState": [
       {
@@ -2992,6 +3053,13 @@ Update the state for a collection of components in the cfs database
         "sessionName": "string"
       }
     ],
+    "stateAppend": {
+      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+      "playbook": "site.yml",
+      "commit": "string",
+      "lastUpdated": "2019-07-28T03:26:00Z",
+      "sessionName": "string"
+    },
     "desiredConfig": "string",
     "desiredState": [
       {
@@ -3158,6 +3226,13 @@ Update the state for a collection of components in the cfs database
         "sessionName": "string"
       }
     ],
+    "stateAppend": {
+      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+      "playbook": "site.yml",
+      "commit": "string",
+      "lastUpdated": "2019-07-28T03:26:00Z",
+      "sessionName": "string"
+    },
     "desiredConfig": "string",
     "desiredState": [
       {
@@ -3282,6 +3357,13 @@ Retrieve the configuration and current state of a single component
       "sessionName": "string"
     }
   ],
+  "stateAppend": {
+    "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+    "playbook": "site.yml",
+    "commit": "string",
+    "lastUpdated": "2019-07-28T03:26:00Z",
+    "sessionName": "string"
+  },
   "desiredConfig": "string",
   "desiredState": [
     {
@@ -3439,6 +3521,13 @@ Update the state for a given component in the cfs database
       "sessionName": "string"
     }
   ],
+  "stateAppend": {
+    "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+    "playbook": "site.yml",
+    "commit": "string",
+    "lastUpdated": "2019-07-28T03:26:00Z",
+    "sessionName": "string"
+  },
   "desiredConfig": "string",
   "desiredState": [
     {
@@ -3595,6 +3684,13 @@ Update the state for a given component in the cfs database
       "sessionName": "string"
     }
   ],
+  "stateAppend": {
+    "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+    "playbook": "site.yml",
+    "commit": "string",
+    "lastUpdated": "2019-07-28T03:26:00Z",
+    "sessionName": "string"
+  },
   "desiredConfig": "string",
   "desiredState": [
     {
@@ -3836,6 +3932,15 @@ Retrieve the full collection of components in the form of a ComponentArray. Full
           "session_name": "string"
         }
       ],
+      "state_append": {
+        "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+        "playbook": "site.yml",
+        "commit": "string",
+        "status": "applied",
+        "last_updated": "2019-07-28T03:26:00Z",
+        "session_name": "string"
+      },
+      "desired_config": "string",
       "desired_state": [
         {
           "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
@@ -3846,7 +3951,6 @@ Retrieve the full collection of components in the form of a ComponentArray. Full
           "session_name": "string"
         }
       ],
-      "desired_config": "string",
       "error_count": 0,
       "retry_policy": 0,
       "enabled": true,
@@ -4251,6 +4355,15 @@ Retrieve the configuration and current state of a single component
       "session_name": "string"
     }
   ],
+  "state_append": {
+    "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+    "playbook": "site.yml",
+    "commit": "string",
+    "status": "applied",
+    "last_updated": "2019-07-28T03:26:00Z",
+    "session_name": "string"
+  },
+  "desired_config": "string",
   "desired_state": [
     {
       "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
@@ -4261,7 +4374,6 @@ Retrieve the configuration and current state of a single component
       "session_name": "string"
     }
   ],
-  "desired_config": "string",
   "error_count": 0,
   "retry_policy": 0,
   "enabled": true,
@@ -4413,6 +4525,15 @@ Update the state for a given component in the cfs database
       "session_name": "string"
     }
   ],
+  "state_append": {
+    "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+    "playbook": "site.yml",
+    "commit": "string",
+    "status": "applied",
+    "last_updated": "2019-07-28T03:26:00Z",
+    "session_name": "string"
+  },
+  "desired_config": "string",
   "desired_state": [
     {
       "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
@@ -4423,7 +4544,6 @@ Update the state for a given component in the cfs database
       "session_name": "string"
     }
   ],
-  "desired_config": "string",
   "error_count": 0,
   "retry_policy": 0,
   "enabled": true,
@@ -4574,6 +4694,15 @@ Update the state for a given component in the cfs database
       "session_name": "string"
     }
   ],
+  "state_append": {
+    "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+    "playbook": "site.yml",
+    "commit": "string",
+    "status": "applied",
+    "last_updated": "2019-07-28T03:26:00Z",
+    "session_name": "string"
+  },
+  "desired_config": "string",
   "desired_state": [
     {
       "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
@@ -4584,7 +4713,6 @@ Update the state for a given component in the cfs database
       "session_name": "string"
     }
   ],
-  "desired_config": "string",
   "error_count": 0,
   "retry_policy": 0,
   "enabled": true,
@@ -5379,7 +5507,7 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
 
 ```json
 {
-  "configurations": [
+  "components": [
     {
       "name": "sample-config",
       "description": "string",
@@ -5974,9 +6102,9 @@ Retrieve the full collection of sources in the form of a SourceArray.
 
 ```json
 {
-  "sources": [
+  "components": [
     {
-      "name": "sample-source",
+      "name": "sample-config",
       "description": "string",
       "last_updated": "2019-07-28T03:26:00Z",
       "clone_url": "string",
@@ -6083,7 +6211,7 @@ Add a source to CFS
 
 ```json
 {
-  "name": "sample-source",
+  "name": "sample-config",
   "description": "string",
   "clone_url": "string",
   "credentials": {
@@ -6110,7 +6238,7 @@ Add a source to CFS
 
 ```json
 {
-  "name": "sample-source",
+  "name": "sample-config",
   "description": "string",
   "last_updated": "2019-07-28T03:26:00Z",
   "clone_url": "string",
@@ -6216,7 +6344,7 @@ Retrieve the given source
 
 ```json
 {
-  "name": "sample-source",
+  "name": "sample-config",
   "description": "string",
   "last_updated": "2019-07-28T03:26:00Z",
   "clone_url": "string",
@@ -6344,7 +6472,7 @@ Updates a CFS source
 
 ```json
 {
-  "name": "sample-source",
+  "name": "sample-config",
   "description": "string",
   "last_updated": "2019-07-28T03:26:00Z",
   "clone_url": "string",
@@ -6482,9 +6610,9 @@ bearerAuth
 
 ```json
 {
-  "major": "1",
-  "minor": "0",
-  "patch": "10"
+  "major": 0,
+  "minor": 0,
+  "patch": 0
 }
 
 ```
@@ -6495,9 +6623,9 @@ Version data
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|major|string|false|none|none|
-|minor|string|false|none|none|
-|patch|string|false|none|none|
+|major|integer|false|none|none|
+|minor|integer|false|none|none|
+|patch|integer|false|none|none|
 
 <h2 id="tocS_Healthz">Healthz</h2>
 <!-- backwards compatibility -->
@@ -7317,7 +7445,7 @@ An array of sessions.
 
 ```json
 {
-  "sessions": [
+  "components": [
     {
       "name": "session-20190728032600",
       "configuration": {
@@ -7388,7 +7516,7 @@ A collection of session data.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|sessions|[[V3SessionData](#schemav3sessiondata)]|false|none|[An execution session for the Configuration Framework.<br>]|
+|components|[[V3SessionData](#schemav3sessiondata)]|false|none|[An execution session for the Configuration Framework.<br>]|
 |next|[V3NextData](#schemav3nextdata)|false|none|Information for requesting the next page of data|
 
 <h2 id="tocS_V3SessionIdCollection">V3SessionIdCollection</h2>
@@ -7401,7 +7529,61 @@ A collection of session data.
 ```json
 {
   "session_ids": [
-    "string"
+    {
+      "name": "session-20190728032600",
+      "configuration": {
+        "name": "example-config",
+        "limit": "layer1,layer3"
+      },
+      "ansible": {
+        "config": "cfs-default-ansible-cfg",
+        "limit": "host1",
+        "verbosity": 0,
+        "passthrough": "string"
+      },
+      "target": {
+        "definition": "spec",
+        "groups": [
+          {
+            "name": "test-computes",
+            "members": [
+              "nid000001",
+              "nid000002",
+              "nid000003"
+            ]
+          }
+        ],
+        "image_map": [
+          {
+            "source_id": "ff287206-6ff7-4659-92ad-6e732821c6b4",
+            "result_name": "new-test-image"
+          }
+        ]
+      },
+      "status": {
+        "artifacts": [
+          {
+            "image_id": "f34ff35e-d782-4a65-a1b8-243a3cd740af",
+            "result_id": "8b782ccd-8706-4145-a6a1-724e29ed5522",
+            "type": "ims_customized_image"
+          }
+        ],
+        "session": {
+          "job": "cray-cfs-job-session-20190728032600",
+          "ims_job": "5037edd8-e9c5-437d-b54b-db4a8ad2cb15",
+          "completion_time": "2019-07-28T03:26:00Z",
+          "start_time": "2019-07-28T03:26:00Z",
+          "status": "pending",
+          "succeeded": "none"
+        }
+      },
+      "tags": {
+        "property1": "string",
+        "property2": "string"
+      },
+      "debug_on_failure": false,
+      "logs": "string"
+    }
   ]
 }
 
@@ -7413,7 +7595,7 @@ A collection of session data.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|session_ids|[string]|false|none|none|
+|session_ids|[[V3SessionData](#schemav3sessiondata)]|false|none|[An execution session for the Configuration Framework.<br>]|
 
 <h2 id="tocS_V2AdditionalInventoryLayer">V2AdditionalInventoryLayer</h2>
 <!-- backwards compatibility -->
@@ -7684,7 +7866,7 @@ An array of configurations.
 
 ```json
 {
-  "configurations": [
+  "components": [
     {
       "name": "sample-config",
       "description": "string",
@@ -7722,7 +7904,7 @@ A collection of configuration data.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|configurations|[[V3ConfigurationData](#schemav3configurationdata)]|false|none|[A collection of ConfigurationLayers.]|
+|components|[[V3ConfigurationData](#schemav3configurationdata)]|false|none|[A collection of ConfigurationLayers.]|
 |next|[V3NextData](#schemav3nextdata)|false|none|Information for requesting the next page of data|
 
 <h2 id="tocS_V2ComponentsFilter">V2ComponentsFilter</h2>
@@ -7897,6 +8079,7 @@ The current configuration state for a component.
     "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
     "playbook": "site.yml",
     "commit": "string",
+    "lastUpdated": "2019-07-28T03:26:00Z",
     "sessionName": "string"
   },
   "desiredConfig": "string",
@@ -7929,11 +8112,7 @@ The configuration state and desired state for a component.
 |---|---|---|---|---|
 |id|string|false|none|The component's id. e.g. xname for hardware components|
 |state|[[V2ConfigurationStateLayer](#schemav2configurationstatelayer)]|false|none|Information about the desired config and status of the layers|
-|stateAppend|object|false|write-only|A single state that will be appended to the list of current states.|
-|» cloneUrl|string|false|none|The clone URL of the configuration content repository.|
-|» playbook|string|false|none|The Ansible playbook to run.|
-|» commit|string|false|none|The commit hash of the configuration repository when the state is set.|
-|» sessionName|string|false|none|The name of the CFS session that last configured the component.|
+|stateAppend|[V2ConfigurationStateLayer](#schemav2configurationstatelayer)|false|none|A single state that will be appended to the list of current states.|
 |desiredConfig|string|false|none|A reference to a configuration|
 |desiredState|[[V2ConfigurationStateLayer](#schemav2configurationstatelayer)]|false|read-only|Information about the desired config and status of the layers|
 |errorCount|integer|false|none|The count of failed configuration attempts.|
@@ -7977,8 +8156,10 @@ The configuration state and desired state for a component.
     "playbook": "site.yml",
     "commit": "string",
     "status": "applied",
+    "last_updated": "2019-07-28T03:26:00Z",
     "session_name": "string"
   },
+  "desired_config": "string",
   "desired_state": [
     {
       "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
@@ -7989,7 +8170,6 @@ The configuration state and desired state for a component.
       "session_name": "string"
     }
   ],
-  "desired_config": "string",
   "error_count": 0,
   "retry_policy": 0,
   "enabled": true,
@@ -8011,14 +8191,9 @@ The configuration state and desired state for a component.
 |---|---|---|---|---|
 |id|string|false|none|The component's id. e.g. xname for hardware components|
 |state|[[V3ConfigurationStateLayer](#schemav3configurationstatelayer)]|false|none|Information about the desired config and status of the layers|
-|state_append|object|false|write-only|A single state that will be appended to the list of current states.|
-|» clone_url|string|false|none|The clone URL of the configuration content repository.|
-|» playbook|string|false|none|The Ansible playbook to run.|
-|» commit|string|false|none|The commit hash of the configuration repository when the state is set.|
-|» status|string|false|none|The status of the configuration layer.|
-|» session_name|string|false|none|The name of the CFS session that last configured the component.|
-|desired_state|[[V3ConfigurationStateLayer](#schemav3configurationstatelayer)]|false|read-only|Information about the desired config and status of the layers|
+|state_append|[V3ConfigurationStateLayer](#schemav3configurationstatelayer)|false|none|A single state that will be appended to the list of current states.|
 |desired_config|string|false|none|A reference to a configuration|
+|desired_state|[[V3ConfigurationStateLayer](#schemav3configurationstatelayer)]|false|read-only|Information about the desired config and status of the layers|
 |error_count|integer|false|none|The count of failed configuration attempts.|
 |retry_policy|integer|false|none|The maximum number retries per component when configuration fails.|
 |enabled|boolean|false|none|A flag indicating if the component should be scheduled for configuration.|
@@ -8031,9 +8206,6 @@ The configuration state and desired state for a component.
 
 |Property|Value|
 |---|---|
-|status|applied|
-|status|failed|
-|status|skipped|
 |configuration_status|unconfigured|
 |configuration_status|pending|
 |configuration_status|failed|
@@ -8063,6 +8235,7 @@ The configuration state and desired state for a component.
       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "playbook": "site.yml",
       "commit": "string",
+      "lastUpdated": "2019-07-28T03:26:00Z",
       "sessionName": "string"
     },
     "desiredConfig": "string",
@@ -8122,8 +8295,10 @@ An array of component configurations.
       "playbook": "site.yml",
       "commit": "string",
       "status": "applied",
+      "last_updated": "2019-07-28T03:26:00Z",
       "session_name": "string"
     },
+    "desired_config": "string",
     "desired_state": [
       {
         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
@@ -8134,7 +8309,6 @@ An array of component configurations.
         "session_name": "string"
       }
     ],
-    "desired_config": "string",
     "error_count": 0,
     "retry_policy": 0,
     "enabled": true,
@@ -8184,8 +8358,10 @@ An array of component configurations.
         "playbook": "site.yml",
         "commit": "string",
         "status": "applied",
+        "last_updated": "2019-07-28T03:26:00Z",
         "session_name": "string"
       },
+      "desired_config": "string",
       "desired_state": [
         {
           "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
@@ -8196,7 +8372,6 @@ An array of component configurations.
           "session_name": "string"
         }
       ],
-      "desired_config": "string",
       "error_count": 0,
       "retry_policy": 0,
       "enabled": true,
@@ -8273,6 +8448,7 @@ A collection of component ids.
       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "playbook": "site.yml",
       "commit": "string",
+      "lastUpdated": "2019-07-28T03:26:00Z",
       "sessionName": "string"
     },
     "desiredConfig": "string",
@@ -8340,8 +8516,10 @@ Information for patching multiple components.
       "playbook": "site.yml",
       "commit": "string",
       "status": "applied",
+      "last_updated": "2019-07-28T03:26:00Z",
       "session_name": "string"
     },
+    "desired_config": "string",
     "desired_state": [
       {
         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
@@ -8352,7 +8530,6 @@ Information for patching multiple components.
         "session_name": "string"
       }
     ],
-    "desired_config": "string",
     "error_count": 0,
     "retry_policy": 0,
     "enabled": true,
@@ -8400,7 +8577,7 @@ Information for patching multiple components.
 
 ```
 
-Information on a secret containing the username and password for accessing the git content
+Information for retrieving the git credentials
 
 ### Properties
 
@@ -8432,7 +8609,7 @@ Information on a secret containing the username and password for accessing the g
 
 ```
 
-Information on a configmap containing a CA certificate for authenticating to git
+CA certificate info for retrieving the git credentials
 
 ### Properties
 
@@ -8450,7 +8627,7 @@ Information on a configmap containing a CA certificate for authenticating to git
 
 ```json
 {
-  "name": "sample-source",
+  "name": "sample-config",
   "description": "string",
   "last_updated": "2019-07-28T03:26:00Z",
   "clone_url": "string",
@@ -8474,7 +8651,7 @@ Information for retrieving git content from a source.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|string|false|none|The name of the source.  This field is optional and will default to the clone_url if not specified.|
+|name|string|false|none|The name of the configuration.  This field is optional and will default to the clone_url if not specified.|
 |description|string|false|none|A user-defined description. This field is not used by CFS.|
 |last_updated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
 |clone_url|string|false|none|The url to access the git content|
@@ -8490,9 +8667,9 @@ Information for retrieving git content from a source.
 
 ```json
 {
-  "sources": [
+  "components": [
     {
-      "name": "sample-source",
+      "name": "sample-config",
       "description": "string",
       "last_updated": "2019-07-28T03:26:00Z",
       "clone_url": "string",
@@ -8522,7 +8699,7 @@ A collection of source data.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|sources|[[V3SourceData](#schemav3sourcedata)]|false|none|[Information for retrieving git content from a source.]|
+|components|[[V3SourceData](#schemav3sourcedata)]|false|none|[Information for retrieving git content from a source.]|
 |next|[V3NextData](#schemav3nextdata)|false|none|Information for requesting the next page of data|
 
 <h2 id="tocS_V3SourceCreateCredentials">V3SourceCreateCredentials</h2>
@@ -8566,7 +8743,7 @@ Information for retrieving the git credentials
 
 ```json
 {
-  "name": "sample-source",
+  "name": "sample-config",
   "description": "string",
   "clone_url": "string",
   "credentials": {
@@ -8588,10 +8765,10 @@ Information for retrieving git content from a source.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|string|false|none|The name of the source.  This field is optional and will default to the clone_url if not specified.|
+|name|string|false|none|The name of the configuration.  This field is optional and will default to the clone_url if not specified.|
 |description|string|false|none|A user-defined description. This field is not used by CFS.|
 |clone_url|string|true|none|The url to access the git content|
-|credentials|[V3SourceCreateCredentials](#schemav3sourcecreatecredentials)|true|none|Information for retrieving the git credentials|
+|credentials|[V3SourceCreateCredentials](#schemav3sourcecreatecredentials)|true|none|Information on a secret containing the username and password for accessing the git content|
 |ca_cert|[V3SourceCert](#schemav3sourcecert)|false|none|Information on a configmap containing a CA certificate for authenticating to git|
 
 <h2 id="tocS_V3SourceUpdateData">V3SourceUpdateData</h2>
