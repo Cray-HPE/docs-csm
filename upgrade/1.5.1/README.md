@@ -40,6 +40,7 @@ in [Upgrade CSM](../README.md) instead.
 * Fixed an issue where `backup_smd_postgres.sh` script is not executable
 * `CAST-34869`: Fixed an issue where `cray-hms-rts-snmp` would enter encounter a segmentation fault
 * `CAST-34141`: Fixed an issue where the `QLogic` driver would crash the system
+* Fixed an issue where an old version of the spire-agent was loaded into Nexus resulting in failed ARM compute builds
 
 ## Steps
 
