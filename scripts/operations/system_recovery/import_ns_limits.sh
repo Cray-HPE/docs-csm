@@ -84,7 +84,11 @@ function import_resource {
   #
   # Compare the exported data to the current data and replace with the exported data if different
   #
-  for res in $(find $resource -maxdepth 2 -type f -print); do
+  local resources
+  if IFS=$'\n' read -rd '' -a resources; then
+    :
+  fi <<< "$(find $resource -maxdepth 2 -type f -print)"
+  for res in "${resources[@]}"; do
     diff -I 'creationTimestamp:' -I 'resourceVersion:' -I 'uid:' $res ./current/$res
     if [[ $? -ne 0 ]]; then
       read -r -p "Exported $res does not match the current values - do you want to import the $resource? (y/n) " -n 1 import
