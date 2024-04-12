@@ -470,22 +470,22 @@ input file support rendering as a Jinja2 template and thus support variables:
 - The `name` key of each configuration under the `configurations` key.
 - The following keys of each layer under the `layers` key in a
   configuration:
-  - `name`
-  - `playbook`
-  - `git.branch`
-  - `product.version`
-  - `product.branch`
+    - `name`
+    - `playbook`
+    - `git.branch`
+    - `product.version`
+    - `product.branch`
 - The following keys of each image under the `images` key:
-  - `name`
-  - `base.product.version`
-  - `base.product.filter.arch`
-  - `base.product.filter.prefix`
-  - `base.product.filter.wildcard`
-  - `configuration`
+    - `name`
+    - `base.product.version`
+    - `base.product.filter.arch`
+    - `base.product.filter.prefix`
+    - `base.product.filter.wildcard`
+    - `configuration`
 - The following keys of each session template under the
   `session_templates` key:
-  - `name`
-  - `configuration`
+    - `name`
+    - `configuration`
 
 Jinja2 built-in filters may be used in values of any of the keys listed above.
 (**Note:** When the value of a key in the bootprep input file is a Jinja2
