@@ -2,7 +2,7 @@
 
 Generate S3 credentials and write them to a local file so the SAT user can access S3 storage. In
 order to use the SAT S3 bucket, the System Administrator must generate the S3 access key and secret
-keys and write them to a local file.  This must be done on every Kubernetes control plane node where
+keys and write them to a local file. This must be done on every Kubernetes control plane node where
 SAT commands are run.
 
 SAT uses S3 storage for several purposes, most importantly to store the site-specific information
