@@ -140,8 +140,8 @@ The `rootfs` is the root file system.
 
 `rootfs_provider` identifies the mechanism that provides the root file system for the node.
 
-In the case of the [Cray Operating System (COS)](../../glossary.md#cray-operating-system-cos) image, the `rootfs_provider` is HPE’s
-[Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps), which uses HPE’s
+In the case of the [Cray Operating System (COS)](../../glossary.md#cray-operating-system-cos) image, the `rootfs_provider` is HPE's
+[Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps), which uses HPE's
 [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) to deliver the content.
 CPS projects the root file system onto the nodes as a SquashFS image. This is provided via an overlay file system which is set up in dracut.
 

@@ -2,7 +2,7 @@
 
 Use the Firmware Action Service (FAS) to update the firmware on supported hardware devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
 
-When updating an entire system, walk down the device hierarchy component type by component type, starting first with Routers (switches), proceeding to Chassis, and then finally to Nodes. While this is not strictly necessary, it does help eliminate confusion.
+When updating an entire system, walk down the device hierarchy component type by component type, starting first with routers (switches), proceeding to chassis, and then finally to nodes. While this is not strictly necessary, it does help eliminate confusion.
 
 **NOTE:** Any node that is locked remains in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
 If the action is timed out, these nodes report as `failed` with the `stateHelper` message of `"time expired; could not complete update"`.
@@ -19,15 +19,15 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
 
 The following procedures are included in this section:
 
-1. [Update Liquid-Cooled Compute Node BMC, FPGA, Management Ethernet, `AccVBIOS`, `AccUC` and BIOS](#liquid-cooled-nodes-update-procedures)
-1. [Update Air-Cooled Compute Node BMC, BIOS, iLO 5, iLO 6, and System ROM](#update-air-cooled-compute-node-bmc-bios-ilo-5-ilo-6-and-system-rom)
-1. [Update Chassis Management Module (CMM) Firmware](#update-chassis-management-module-firmware)
-1. [Update NCN BIOS and BMC Firmware with FAS](#update-non-compute-node-ncn-bios-and-bmc-firmware)
-1. [Compute Node BIOS Workaround for HPE CRAY EX425](#compute-node-bios-workaround-for-hpe-cray-ex425)
+1. [Update liquid-cooled compute node BMC, FPGA, management Ethernet, `AccVBIOS`, `AccUC` and BIOS](#liquid-cooled-nodes-update-procedures)
+1. [Update air-cooled compute node BMC, BIOS, iLO 5, iLO 6, and system ROM](#update-air-cooled-compute-node-bmc-bios-ilo-5-ilo-6-and-system-rom)
+1. [Update Chassis Management Module (CMM) firmware](#update-chassis-management-module-firmware)
+1. [Update NCN BIOS and BMC firmware with FAS](#update-non-compute-node-ncn-bios-and-bmc-firmware)
+1. [Compute node BIOS workaround for HPE CRAY EX425](#compute-node-bios-workaround-for-hpe-cray-ex425)
 
-> **NOTE:** To update Switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta Documentation.
+> **NOTE:** To update switch Controllers \(sC\) or `RouterBMCs`, refer to the Rosetta documentation.
 
-## Update Liquid-Cooled Nodes BMC, `AccFPGA0`, Management Ethernet, `AccVBIOS`, `AccUC` and Node BIOS
+## Update liquid-cooled nodes BMC, `AccFPGA0`, management Ethernet, `AccVBIOS`, `AccUC` and node BIOS
 
 Update firmware for a liquid-cooled node controller \(nC\) using FAS.
 This section includes templates for JSON files that can be used and the procedure for running the update.
@@ -36,10 +36,10 @@ All of the example JSON files below are set to run a dry-run. Update the `overri
 
 This procedure updates node controller \(nC\) firmware.
 
-**NOTE:**: `AccFPGA0` and  `AccUC` updates requires HFP release 23.12 or later.
+**NOTE:**: `AccFPGA0` and `AccUC` updates requires HFP release 23.12 or later.
 Previous versions did not contain these firmware.
 
-### Liquid-Cooled Nodes Update Procedures
+### Liquid-cooled nodes update procedures
 
 #### Manufacturer: Cray | Device Type: `NodeBMC` | Target: BMC
 
@@ -78,7 +78,7 @@ If the nodes are not off when the update command is issued, the update will get 
 **NOTE:** Redstone FPGAs requires HFP release 23.12 or later.
 Previous versions did not contain the Redstone FPGA firmware.
 
-> **IMPORTANT:** The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
+> **IMPORTANT:** The nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
 
 ```json
 {
@@ -202,7 +202,7 @@ The targets can be run in the same action (as shown in the example) or run separ
 On larger systems, it is recommended to run as separate actions one after each other as the output will be shorter.
 
 > **IMPORTANT:** The Cray `nodeBMC` device needs to be updated before the `nodeBIOS` because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require.
-See [Update Liquid-Cooled Node Firmware](#liquid-cooled-nodes-update-procedures) for more information.
+See [Update liquid-cooled node firmware](#liquid-cooled-nodes-update-procedures) for more information.
 > **IMPORTANT:** The nodes themselves must be powered **off** in order to update the BIOS on the nodes.
 The BMC will still have power and will perform the update.
 If nodes are not off when the update command is issued, it will report as a failed update.
@@ -237,11 +237,11 @@ It is also recommended that the nodes be powered back on after the updates are c
 }
 ```
 
-##### Cray Node Firmware and BIOS Update Procedure
+##### Cray node firmware and BIOS update procedure
 
 **NOTE:** The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
-Use the file `cray_nodeBMC_BMC.json` for Node BMC updates,
-`cray_nodeBMC_nodeBIOS.json` (or `cray_nodeBMC_node[0-4]BIOS.json`) for Node BIOS updates,
+Use the file `cray_nodeBMC_BMC.json` for node BMC updates,
+`cray_nodeBMC_nodeBIOS.json` (or `cray_nodeBMC_node[0-4]BIOS.json`) for node BIOS updates,
 or `cray_nodeBMC_nodeAccFPGA0.json` (or `cray_nodeBMC_node[0-1]AccFPGA0.json`) for FPG updates,
 or `cray_nodeBMC_nodeManagementEthernet.json` (or `cray_nodeBMC_node[0-3]ManagementEthernet.json`) for Management Ethernet updates,
 or `cray_nodeBMC_nodeAccUC.json` for `AccUC` updates.
@@ -407,7 +407,7 @@ or `cray_nodeBMC_nodeAccUC.json` for `AccUC` updates.
 
     Once firmware and BIOS are updated, the compute nodes can be turned back on.
 
-## Update Chassis Management Module Firmware
+## Update Chassis Management Module firmware
 
 Update the Chassis Management Module \(CMM\) controller \(cC\) firmware using FAS. This procedure uses the dry-run feature to verify that the update will be successful.
 
@@ -443,10 +443,10 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 }
 ```
 
-#### Cray Chassis BMC Update Procedure
+#### Cray chassis BMC update procedure
 
 **NOTE:** The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
-Use the file `cray_chassisBMC_BMC.json` for Chassis BMC updates.
+Use the file `cray_chassisBMC_BMC.json` for chassis BMC updates.
 
 1. (`ncn#`) Power off the liquid-cooled chassis slots and chassis rectifiers.
 
@@ -582,7 +582,7 @@ Use the file `cray_chassisBMC_BMC.json` for Chassis BMC updates.
 
 1. After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
-## Update Air-Cooled Compute Node BMC, BIOS, iLO 5, iLO 6, and System ROM
+## Update air-cooled compute node BMC, BIOS, iLO 5, iLO 6, and system ROM
 
 Firmware and BIOS for Gigabyte and HPE compute nodes can be updated with FAS.
 This section includes templates for JSON files that can be used for updates, and the procedure for running the updates.
@@ -784,14 +784,14 @@ Make sure to wait for the current firmware to be updated before starting a new F
 }
 ```
 
-#### HPE and Gigabyte Compute Node Update Procedure
+#### HPE and Gigabyte compute node update procedure
 
 **NOTE:** The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
-Use the file `gigabyte_nodeBMC_BMC.json` for Gigabyte Node BMC updates,
-the file `gigabyte_nodeBMC_BIOS.json` for Gigabyte Node BIOS updates,
-the file `hpe_nodeBMC_iLO5.json` for HPE Node iLO 5 updates,
-the file `hpe_nodeBMC_iLO6.json` for HPE Node iLO 6 updates,
-or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
+Use the file `gigabyte_nodeBMC_BMC.json` for Gigabyte node BMC updates,
+the file `gigabyte_nodeBMC_BIOS.json` for Gigabyte node BIOS updates,
+the file `hpe_nodeBMC_iLO5.json` for HPE node iLO 5 updates,
+the file `hpe_nodeBMC_iLO6.json` for HPE node iLO 6 updates,
+or the file `hpe_nodeBMC_systemRom.json` for HPE node `System ROM` updates.
 
 > **IMPORTANT:**
 > Updating to iLO 5 version above 2.78 requires an install of 2.78 first.
@@ -956,7 +956,7 @@ or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
     deviceType = "NodeBMC"
     ```
 
-## Update Non-Compute Node (NCN) BIOS and BMC Firmware
+## Update Non-Compute Node (NCN) BIOS and BMC firmware
 
 Gigabyte and HPE non-compute nodes \(NCNs\) firmware can be updated with FAS. This section includes templates for JSON files that can be used to update firmware with the `cray fas actions create` command.
 
@@ -1137,11 +1137,11 @@ The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NC
 > See [FAS Update iLO 5 to 2.78](FAS_Update_iLO5_2.78.md)
 
 **NOTE:** The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
-Use the file `gigabyte_nodeBMC_BMC.json` for Gigabyte Node BMC updates,
-the file `gigabyte_nodeBMC_BIOS.json` for Gigabyte Node BIOS updates,
-the file `hpe_nodeBMC_iLO5.json` for HPE Node iLO 5 updates,
-the file `hpe_nodeBMC_iLO6.json` for HPE Node iLO 6 updates,
-or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
+Use the file `gigabyte_nodeBMC_BMC.json` for Gigabyte node BMC updates,
+the file `gigabyte_nodeBMC_BIOS.json` for Gigabyte node BIOS updates,
+the file `hpe_nodeBMC_iLO5.json` for HPE node iLO 5 updates,
+the file `hpe_nodeBMC_iLO6.json` for HPE node iLO 6 updates,
+or the file `hpe_nodeBMC_systemRom.json` for HPE node `System ROM` updates.
 The script flag `--xnames x1,x2` can be used to limit the updates to certain xnames.
 **NOTE:** Use the xname of the BMC not the node.
 
@@ -1177,7 +1177,7 @@ Example output:
    1. Unlock the NCN BMC.
       See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
    1. Run the FAS action on the NCN. **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
-   1. Reboot the Node.  The node must be rebooted for the new BIOS to be used.
+   1. Reboot the node. The node must be rebooted for the new BIOS to be used.
       You may reboot the node(s) at a later time, but the BIOS version will not reflect the updated version until rebooted.
       Make sure to run the next step for `HPE` NCNs after rebooting the node.
       See [Reboot NCNs](../node_management/Reboot_NCNs.md).
@@ -1186,14 +1186,14 @@ Example output:
    1. Relock the NCN BMC.
       See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
 
-## Compute Node BIOS Workaround for HPE CRAY EX425
+## Compute node BIOS workaround for HPE CRAY EX425
 
 Correct an issue where the model of the liquid-cooled compute node BIOS is the incorrect name. The name has changed from `WNC-ROME` to `HPE CRAY EX425` or `HPE CRAY EX425 (ROME)`.
 
 Prerequisites:
 
 * The system is running HPE Cray EX release v1.4 or higher.
-* A firmware upgrade has been done following [Update Liquid-Cooled Compute Node BIOS Firmware](#liquid-cooled-nodes-update-procedures).
+* A firmware upgrade has been done following [Update liquid-cooled compute node BIOS firmware](#liquid-cooled-nodes-update-procedures).
     * The result of the upgrade is that the `NodeX.BIOS` has failed as `noSolution` and the `stateHelper` field for the operation states is `"No Image Available"`.
     * The BIOS in question is running a version less than or equal to `1.2.5` as reported by Redfish or described by the `noSolution` operation in FAS.
 * The hardware model reported by Redfish is `wnc-rome`, which is now designated as `HPE CRAY EX425`.
@@ -1240,7 +1240,7 @@ Prerequisites:
 
   The model in this example is `WNC-Rome` and the firmware version currently running is `wnc.bios-1.2.5`.
 
-### Compute Node BIOS Workaround for HPE CRAY EX425 Procedure
+### Compute node BIOS workaround for HPE CRAY EX425 procedure
 
 1. (`ncn#`) Search for a FAS image record with `cray` as the manufacturer, `Node1.BIOS` as the target, and `HPE CRAY EX425` as the model.
 

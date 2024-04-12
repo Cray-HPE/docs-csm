@@ -250,7 +250,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
    1. (`ncn-m001#`) Check the HSM state from `sat status` of the compute and application nodes, but not the management nodes.
 
       A node will progress through HSM states in this order: `Off`, `On`, `Ready`. If a node fails to leave `Off` state or
-      moves from `On` to `Off` state, it needs to be investigated.  If nodes are in `Standby`, that means they had been in `Ready`,
+      moves from `On` to `Off` state, it needs to be investigated. If nodes are in `Standby`, that means they had been in `Ready`,
       but stopped sending a heartbeat to HSM so transitioned to `Standby` and may need to be investigated.
 
       ```bash
