@@ -6,14 +6,14 @@ Session templates can be created via the API by providing JSON data or via the C
 
 * [Session template structure](#session-template-structure)
 * [Boot sets](#boot-sets)
-  * [Boot artifacts](#boot-artifacts)
-  * [Specifying nodes](#specifying-nodes)
-    * [Node list](#node-list)
-    * [Node groups](#node-groups)
-    * [Node roles groups](#node-roles-groups)
-  * [`rootfs` providers](#rootfs-providers)
-    * [`root` kernel parameter example](#root-kernel-parameter-example)
-  * [Overriding configuration (BOS v2 only)](#overriding-configuration-bos-v2-only)
+    * [Boot artifacts](#boot-artifacts)
+    * [Specifying nodes](#specifying-nodes)
+        * [Node list](#node-list)
+        * [Node groups](#node-groups)
+        * [Node roles groups](#node-roles-groups)
+    * [`rootfs` providers](#rootfs-providers)
+        * [`root` kernel parameter example](#root-kernel-parameter-example)
+    * [Overriding configuration (BOS v2 only)](#overriding-configuration-bos-v2-only)
 * [Deprecated fields](#deprecated-fields)
 
 ## Session template structure
@@ -202,13 +202,13 @@ This feature is not supported for BOS v1.
 The following fields do not exist in BOS v2 and are deprecated in BOS v1:
 
 * Session template fields
-  * `cfs_branch`
-  * `cfs_url`
-  * `partition`
+    * `cfs_branch`
+    * `cfs_url`
+    * `partition`
 * Boot set fields
-  * `boot_ordinal`
-  * `network`
-  * `shutdown_ordinal`
+    * `boot_ordinal`
+    * `network`
+    * `shutdown_ordinal`
 
 When upgrading to CSM 1.5, these fields are automatically removed from all BOS session
 templates that contain them.
