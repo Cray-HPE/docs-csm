@@ -120,6 +120,6 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
 1. Make nodes available to customers and refer to [Validate CSM Health](../validate_csm_health.md) to check system health and status.
 
-## Next Step
+## Next step
 
 Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.

@@ -313,6 +313,8 @@ An authentication token is required to access the API gateway and to use the `sa
       ncn-mw# kubectl -n services describe job boa-0216d2d9-b2bc-41b0-960d-165d2af7a742 |grep ConfigMap -A 1 -B 1
       ```
 
+      Example output:
+
       ```text
          boot-session:
           Type:      ConfigMap (a volume populated by a ConfigMap)
