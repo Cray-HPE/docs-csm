@@ -155,8 +155,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         Additional Kubernetes status check examples:
 
         ```bash
-        kubectl get pods -o wide -A | egrep  "CrashLoopBackOff" > k8s.pods.CLBO
-        kubectl get pods -o wide -A | egrep  "ContainerCreating" > k8s.pods.CC
+        kubectl get pods -o wide -A | egrep "CrashLoopBackOff" > k8s.pods.CLBO
+        kubectl get pods -o wide -A | egrep "ContainerCreating" > k8s.pods.CC
         kubectl get pods -o wide -A | egrep -v "Run|Completed" > k8s.pods.errors
         ```
 
@@ -208,14 +208,14 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         1. Ping all switches using the proper list of hostnames in the index of the for loop.
 
            ```bash
-           ncn# for switch in sw-leaf-00{1,2} sw-leaf-bmc-00{1-2} sw-spine-00{1,2} sw-cdu-00{1,2}l; do
-                   while true; do
-                        ping -c 1 $switch > /dev/null && break
-                        echo "switch $switch is not yet up"
-                        sleep 5
-                    done
-                    echo "switch $switch is up"
-                done | tee switches
+           for switch in sw-leaf-00{1,2} sw-leaf-bmc-00{1-2} sw-spine-00{1,2} sw-cdu-00{1,2}l; do
+             while true; do
+               ping -c 1 $switch > /dev/null && break
+               echo "switch $switch is not yet up"
+               sleep 5
+             done
+             echo "switch $switch is up"
+           done | tee switches
            ```
 
     1. Check Lustre server health.
@@ -305,6 +305,11 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
         ```bash
         kubectl -n services describe job boa-0216d2d9-b2bc-41b0-960d-165d2af7a742 |grep ConfigMap -A 1 -B 1
+        ```
+
+        Example output:
+
+        ```text
            boot-session:
             Type:      ConfigMap (a volume populated by a ConfigMap)
             Name:      e0543eb5-3445-4ee0-93ec-c53e3d1832ce    <<< ConfigMap name. Delete this one.
