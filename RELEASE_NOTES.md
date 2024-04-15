@@ -227,6 +227,6 @@ see [Removals](introduction/deprecated_features/README.md#removals)
 * On large systems, [BOS](glossary.md#boot-orchestration-service-bos) v2 sessions, some CSM health checks, and SAT status may not work properly, because of a failed interaction with CFS.
     * Most of this will be fixed in CSM 1.5.1. The remainder will be fixed in CSM 1.6.0.
     * For more information, including a workaround, see [CFS V2 Failures On Large Systems](troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md).
-* On systems with a large number of non-existent network switches, it has been observed that the hms-discovery job may fail to finish due to spending too much time trying to communicate with the non-existent switches. This may happen when incrementally building up a new system and running CSM prior to completion of the full hardware installation.
+* It has been observed that the hms-discovery job may fail to finish due to spending too much time trying to communicate with non-existent switches. This may happen when incrementally building up a new system and running CSM prior to completion of the full hardware installation.
     * For more information, including a workaround, see [hms-discovery Timeout Due to Missing Switches](troubleshooting/known_issues/hms_discovery_timeout_due_to_missing_switches.md)
     * This is expected to be fixed in CSM 1.6.0.
