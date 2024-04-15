@@ -4,7 +4,7 @@ SAT provides an automated solution for creating CFS configurations, building
 and configuring images in IMS, and creating BOS session templates. The
 solution is based on a given input file that defines how those configurations,
 images, and session templates should be created. This automated process centers
-around the `sat bootprep` command. Man page documentation for `sat bootprep`
+around the `sat bootprep` command. `man` page documentation for `sat bootprep`
 can be viewed similar to other SAT commands.
 
 (`ncn-m001#`) Here is an example:
@@ -19,7 +19,7 @@ it is uncommon to use `sat bootprep`. For more information on this relationship,
 see [SAT and IUF](SAT_and_IUF.md). For more information on IUF, see
 [Install and Upgrade Framework](../../iuf/IUF.md).
 
-## SAT Bootprep vs SAT Bootsys
+## SAT `bootprep` vs SAT `bootsys`
 
 `sat bootprep` is used to create CFS configurations, build and
 rename IMS images, and create BOS session templates which tie the
@@ -30,7 +30,7 @@ including (but not limited to) performing BOS operations (such as creating BOS
 sessions), powering on and off cabinets, and checking the state of the system
 prior to shutdown.
 
-## Edit a Bootprep Input File
+## Edit a `bootprep` input file
 
 The input file provided to `sat bootprep` is a YAML file containing information
 which CFS, IMS, and BOS use to create configurations, images, and BOS session
@@ -40,7 +40,7 @@ sections, one each for configurations, images, and session templates. These
 sections may be specified in any order, and any of the sections may be omitted
 if desired.
 
-### Provide a Schema Version
+### Provide a schema version
 
 The `sat bootprep` input file is validated against a versioned schema
 definition. The input file should specify the version of the schema with which
@@ -77,7 +77,7 @@ The default HPC CSM Software Recipe bootprep input files provided by the
 `hpc-csm-software-recipe` release distribution already contain the correct
 schema version.
 
-### Define CFS Configurations
+### Define CFS configurations
 
 The CFS configurations are defined under a `configurations` key. Under this
 key, list one or more configurations to create. For each
@@ -144,7 +144,7 @@ above might look something like the following:
 }
 ```
 
-### Define IMS Images
+### Define IMS images
 
 The IMS images are defined under an `images` key. Under the `images` key, the
 user may define one or more images to be created in a list. Each element of the
@@ -177,7 +177,7 @@ Images may also contain the following keys:
 - Use a `description` key to describe the image in the bootprep input file.
   Note that this key is not currently used.
 
-#### Use Base Images or Recipes from IMS
+#### Use base images or recipes from IMS
 
 Here is an example of an image using an existing IMS recipe as its base. This
 example builds an IMS image from that recipe. It then configures it with
@@ -200,7 +200,7 @@ images:
   - Compute
 ```
 
-#### Use Base Images or Recipes from a Product
+#### Use base images or recipes from a product
 
 Here is an example showing the definition of two images. The first image is
 built from a recipe provided by the `cne` product. The second image uses the
@@ -237,7 +237,7 @@ only a single IMS recipe. If more than one recipe is provided by the
 given version of the `cne` product, use a filter as described in
 [Filter Base Images or Recipes from a Product](#filter-base-images-or-recipes-from-a-product).
 
-#### Filter Base Images or Recipes from a Product
+#### Filter base images or recipes from a product
 
 A product may provide more than one image or recipe. If this happens,
 filter the product's images or recipes whenever a base image or recipe from
@@ -340,12 +340,12 @@ images:
         arch: aarch64
 ```
 
-### Define BOS Session Templates
+### Define BOS session templates
 
 The BOS session templates are defined under the `session_templates` key. Each
 session template must provide values for the `name`, `image`, `configuration`,
 and `bos_parameters` keys. The `name` key defines the name of the resulting BOS
-session template.  The `image` key defines the image to use in the BOS session
+session template. The `image` key defines the image to use in the BOS session
 template. One of the following keys must be present under the `image` key:
 
 - Use an `ims` key to specify an existing image or recipe in IMS.
@@ -424,7 +424,7 @@ session_templates:
         rootfs_provider_passthrough: dvs:api-gw-service-nmn.local:300:nmn0
 ```
 
-### HPC CSM Software Recipe Variable Substitutions
+### HPC CSM Software Recipe variable substitutions
 
 The `sat bootprep` command takes any variables provided and substitutes them
 into the input file. Variables are sourced from the command line, any variable
@@ -442,7 +442,7 @@ information on SAT variable limitations, see [SAT and IUF](SAT_and_IUF.md).
 For more information on IUF and variable substitutions, see
 [Install and Upgrade Framework](../../iuf/IUF.md).
 
-#### Select an HPC CSM Software Recipe Version
+#### Select an HPC CSM Software Recipe version
 
 View a listing of the default HPC CSM Software Recipe variables and
 their values by running `sat bootprep list-vars`. For more information on
@@ -460,7 +460,7 @@ Recipe default variables, specify `--recipe-version 22.11.0`:
 sat bootprep run --recipe-version 22.11.0 compute-and-uan-bootprep.yaml
 ```
 
-#### Values Supporting Jinja2 Template Rendering
+#### Values supporting Jinja2 template rendering
 
 The entire `sat bootprep` input file is not rendered by the Jinja2 template
 engine. Jinja2 template rendering of the input file is performed individually
@@ -470,27 +470,30 @@ input file support rendering as a Jinja2 template and thus support variables:
 - The `name` key of each configuration under the `configurations` key.
 - The following keys of each layer under the `layers` key in a
   configuration:
-  - `name`
-  - `playbook`
-  - `git.branch`
-  - `product.version`
-  - `product.branch`
+    - `name`
+    - `playbook`
+    - `git.branch`
+    - `product.version`
+    - `product.branch`
 - The following keys of each image under the `images` key:
-  - `name`
-  - `base.product.version`
-  - `base.product.filter.arch`
-  - `base.product.filter.prefix`
-  - `base.product.filter.wildcard`
-  - `configuration`
+    - `name`
+    - `base.product.version`
+    - `base.product.filter.arch`
+    - `base.product.filter.prefix`
+    - `base.product.filter.wildcard`
+    - `configuration`
 - The following keys of each session template under the
   `session_templates` key:
-  - `name`
-  - `configuration`
+    - `name`
+    - `configuration`
 
-You can use Jinja2 built-in filters in values of any of the keys listed above.
+Jinja2 built-in filters may be used in values of any of the keys listed above.
+(**Note:** When the value of a key in the bootprep input file is a Jinja2
+expression, it must be quoted to pass YAML syntax checking.)
+
 In addition, Python string methods can be called on the string variables.
 
-#### Hyphens in HPC CSM Software Recipe Variables
+#### Hyphens in HPC CSM Software Recipe variables
 
 Variable names with hyphens are not allowed in Jinja2 expressions because they
 are parsed as an arithmetic expression instead of a single variable. To support
@@ -502,7 +505,7 @@ input file, keep this in mind. For example, to refer to the product version
 variable for `slingshot-host-software` in the bootprep input file, write
 `"{{slingshot_host_software.version}}"`.
 
-#### HPC CSM Software Recipe Variable Substitution Example
+#### HPC CSM Software Recipe variable substitution example
 
 The following example bootprep input file shows how a variable of a CNE version
 can be used in an input file that creates a CFS configuration for computes.
@@ -543,7 +546,7 @@ configurations:
       branch: integration-{{cne.version.split('.')[0]}}-{{cne.version.split('.')[1]}}
 ```
 
-### Dynamic Variable Substitutions
+### Dynamic variable substitutions
 
 Additional variables are available besides the default variables provided by
 the HPC CSM Software Recipe. (For more information, see [HPC CSM Software
@@ -570,13 +573,13 @@ bootprep` input file and make the following use cases possible:
 - Using the name of the image in the name of a session template when
   the image is generated as described in the previous use case
 
-## Example Bootprep Input Files
+## Example `bootprep` input files
 
 This section provides an example bootprep input file. It also gives
 instructions for obtaining the default bootprep input files delivered
 with a release of the HPC CSM Software Recipe.
 
-### Example Bootprep Input File
+### Example `bootprep` input file
 
 The following bootprep input file provides an example of using most of the
 features described in previous sections. It is not intended to be a complete
@@ -631,9 +634,9 @@ session_templates:
         rootfs_provider_passthrough: "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0"
 ```
 
-### Access Default Bootprep Input Files
+### Access default `bootprep` input files
 
-Default bootprep input files are delivered by the HPC CSM Software Recipe product. Access these
+Default `bootprep` input files are delivered by the HPC CSM Software Recipe product. Access these
 files by cloning the `hpc-csm-software-recipe` repository, as described in
 [Accessing `sat bootprep` files](../../configuration_management/Accessing_Sat_Bootprep_Files.md).
 
@@ -644,7 +647,7 @@ cloned repository:
 ls bootprep/
 ```
 
-### Generate an Example Bootprep Input File
+### Generate an example `bootprep` input file
 
 The `sat bootprep generate-example` command was not updated for
 recent bootprep schema changes. It is recommended to instead use the
@@ -652,7 +655,7 @@ default bootprep input files described in [Access Default Bootprep Input
 Files](#access-default-bootprep-input-files). The `sat bootprep
 generate-example` command will be updated in a future release of SAT.
 
-## Summary of SAT Bootprep Results
+## Summary of SAT `bootprep` results
 
 The `sat bootprep run` command uses information from the bootprep input file to
 create CFS configurations, IMS images, and BOS session templates. For easy
@@ -689,7 +692,7 @@ BOS session templates
 +------------------+----------------+
 ```
 
-## View SAT Bootprep Schema
+## View SAT `bootprep` schema
 
 The contents of the YAML input files used by `sat bootprep` must conform to a
 schema which defines the structure of the data. The schema definition is written
@@ -698,7 +701,7 @@ schema itself is written in YAML as well.) More information, including introduct
 materials and a formal specification of the JSON Schema metaschema, can be found
 [on the JSON Schema website](https://json-schema.org/specification.html).
 
-### View the Exact Schema Specification
+### View the exact schema specification
 
 (`ncn-m001#`) To view the exact schema specification, run `sat bootprep view-schema`.
 
@@ -708,9 +711,9 @@ sat bootprep view-schema
 $schema: "https://json-schema.org/draft/2020-12/schema"
 ```
 
-Example output:
+Beginning of example output:
 
-```text
+```yaml
 title: Bootprep Input File
 description: >
   A description of the set of CFS configurations to create, the set of IMS
@@ -719,11 +722,9 @@ description: >
   images and configurations.
 type: object
 additionalProperties: false
-properties:
-  ...
 ```
 
-### Generate User-Friendly Documentation
+### Generate user-friendly documentation
 
 The raw schema definition can be difficult to understand without experience
 working with JSON Schema specifications. For this reason, a feature is included

@@ -29,27 +29,27 @@ The following IUF topics are discussed in the sections below.
 - [Argo workflows](#argo-workflows)
 - [Stages and hooks](#stages-and-hooks)
 - [`iuf` CLI](#iuf-cli)
-  - [Global arguments](#global-arguments)
-  - [Input file](#input-file)
-  - [Subcommands](#subcommands)
-    - [run](#run)
-    - [abort](#abort)
-    - [resume](#resume)
-    - [restart](#restart)
-    - [activity](#activity)
-    - [list-activities](#list-activities)
-    - [list-stages](#list-stages)
-    - [workflow](#workflow)
+    - [Global arguments](#global-arguments)
+    - [Input file](#input-file)
+    - [Subcommands](#subcommands)
+        - [run](#run)
+        - [abort](#abort)
+        - [resume](#resume)
+        - [restart](#restart)
+        - [activity](#activity)
+        - [list-activities](#list-activities)
+        - [list-stages](#list-stages)
+        - [workflow](#workflow)
 - [Output and log files](#output-and-log-files)
-  - [`iuf` output](#iuf-output)
-  - [Log files](#log-files)
+    - [`iuf` output](#iuf-output)
+    - [Log files](#log-files)
 - [Site and recipe variables](#site-and-recipe-variables)
 - [`sat bootprep` configuration files](#sat-bootprep-configuration-files)
-  - [ARM images](#arm-images)
+    - [ARM images](#arm-images)
 - [Recovering from failures](#recovering-from-failures)
-  - [Addressing the issue without changing products](#addressing-the-issue-without-changing-products)
-  - [Addressing the issue by removing a product](#addressing-the-issue-by-removing-a-product)
-  - [Addressing the issue by adding a new version of a product](#addressing-the-issue-by-adding-a-new-version-of-a-product)
+    - [Addressing the issue without changing products](#addressing-the-issue-without-changing-products)
+    - [Addressing the issue by removing a product](#addressing-the-issue-by-removing-a-product)
+    - [Addressing the issue by adding a new version of a product](#addressing-the-issue-by-adding-a-new-version-of-a-product)
 - [Troubleshooting](#troubleshooting)
 - [Install and Upgrade Observability Framework](#install-and-upgrade-observability-framework)
 
@@ -382,8 +382,8 @@ options:
                         Override list used to target specific nodes only when rolling out managed nodes. Arguments
                         should be xnames or HSM node groups. Defaults to the Compute role.
   --limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT [LIMIT_MANAGEMENT_ROLLOUT ...]
-                        List used to target specific hostnames or HSM management role_subrole only when rolling 
-                        out management nodes. Hostname arguments can only belong to a single node type. For example, 
+                        List used to target specific hostnames or HSM management role_subrole only when rolling
+                        out management nodes. Hostname arguments can only belong to a single node type. For example,
                         both master and worker hostnames can not be provided at the same time. Defaults to an empty list
                         which means no nodes will be rolled out.
   -mrp MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...], --mask-recipe-prods MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...]
@@ -812,7 +812,7 @@ The Install and Upgrade Observability Framework is automatically deployed and co
 
 For more information on the Install and Upgrade Observability Framework, refer to [Install and Upgrade Observability Framework](../observability/Observability.md).
 
-## Deleting Products installed with IUF
+## Deleting products installed with IUF
 
 To help the CSM administrator in clearing the cray-product-catalog
 of unused product version entries which were installed
@@ -859,7 +859,7 @@ refer to the following:
 Note that the `product-deletion-utility` only marks the artifacts in the blob store for deletion but is not removed from the disk.
 For cleaning up the Nexus blob storage, refer to the operational procedure mentioned in [Nexus Space Cleanup](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/package_repository_management/Nexus_Space_Cleanup.md#cleanup-of-data-not-being-used).
 
-### Deletion Logs
+### Deletion logs
 
 The `logs` for the progress of deletion is generated in the
 `/etc/cray/upgrade/csm/iuf/deletion` directory or the `$CWD` from
