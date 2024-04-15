@@ -41,14 +41,14 @@ See [Check for latest documentation](../../../update_product_stream/README.md#ch
     1. Take note of the last timestamp in the `cray-ipxe` log.
 
         ```bash
-        kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe
+        kubectl -n services logs -l app.kubernetes.io/instance=cms-ipxe
         ```
 
     1. Wait for the updated iPXE binary to be built.
 
         ```bash
         sleep 30
-        kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
+        kubectl -n services logs -l app.kubernetes.io/instance=cms-ipxe -f
         ```
 
         The following output means that a new iPXE binary has been built:
@@ -120,7 +120,7 @@ See [Check for latest documentation](../../../update_product_stream/README.md#ch
         | `mgmt1`   | `98:03:9b:bb:a9:95` | `--mac-mgmt1=98:03:9b:bb:a9:95` |
         | `hsn0`    | `ec:0d:9a:d4:2b:d8` | `--mac-hsn0=ec:0d:9a:d4:2b:d8`  |
 
-   1. Power off the NCN.
+    1. Power off the NCN.
 
         ```bash
         ipmitool -I lanplus -U root -E -H "${BMC_IP}" chassis power off

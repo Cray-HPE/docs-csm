@@ -19,7 +19,8 @@ This procedure requires administrative privileges.
     Example output:
 
     ```text
-    cray-ipxe                                   1/1     1            1           22m
+    cray-ipxe-aarch64                           1/1     1            1           22m
+    cray-ipxe-x86-64                            1/1     1            1           22m
     cray-tftp                                   3/3     3            3           28m
     ```
 
@@ -27,7 +28,8 @@ This procedure requires administrative privileges.
 
     ```bash
     kubectl -n services delete deployment cray-tftp
-    kubectl -n services delete deployment cray-ipxe
+    kubectl -n services delete deployment cray-ipxe-aarch64
+    kubectl -n services delete deployment cray-ipxe-x86-64
     ```
 
 1. Check the status of Ceph.
@@ -210,17 +212,17 @@ This procedure requires administrative privileges.
     loftsman helm upgrade cms-ipxe loftsman/cms-ipxe
     ```
 
-1. (`ncn-mw#`) Log into the iPXE pod and verify the iPXE file was created.
+1. (`ncn-mw#`) Log into each iPXE pod and verify the iPXE file was created.
 
     This may take another couple of minutes while it is creating the files.
 
-    1. Find the iPXE pod ID.
+    1. Find the iPXE pod IDs.
 
         ```bash
         kubectl get pods -n services --no-headers -o wide | grep cray-ipxe | awk '{print $1}'
         ```
 
-    1. Log into the pod using the iPXE pod ID.
+    1. Log into the iPXE pods using their IDs.
 
         ```bash
         kubectl exec -n services -it IPXE_POD_ID /bin/sh
