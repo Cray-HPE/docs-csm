@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -170,14 +170,28 @@ spec:
 
                     source /etc/cray/upgrade/csm/myenv
                     scp ncn-m001:/root/csm_upgrade.pre_m001_reboot_artifacts.*.tgz /root
-                    # Add a check for the scp command result
-                    zypper --plus-repo="/etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)" --no-gpg-checks install -y cray-site-init
+                    if [[ "$?" -ne 0 ]]; then
+                        echo "ERROR Copying of CSM upgrade artifacts from ncn-m001 has failed "
+                        exit 1
+                    fi
+                    zypper --plus-repo="${CSM_ARTI_DIR}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)" --no-gpg-checks install -y cray-site-init
                     scp ncn-m001:/root/*.noarch.rpm /root/
-                    # Add a check for the scp command result
-                    rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
-
-                    rpm -Uvh --force /root/libcsm-latest.noarch.rpm
-
+                    if [[ "$?" -ne 0 ]]; then
+                        echo "ERROR Copying of *.noarch.rpm RPM's from ncn-m001 has failed "
+                        exit 1
+                    fi
+                    if [ -f /root/docs-csm-latest.noarch.rpm ]; then
+                        rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+                    else
+                        echo "ERROR docs-csm-latest.noarch.rpm RPM doesn't exists under /root directory"
+                        exit 1
+                    fi
+                    if [ -f  /root/libcsm-latest.noarch.rpm ]; then
+                        rpm -Uvh --force /root/libcsm-latest.noarch.rpm
+                    else
+                        echo "ERROR libcsm-latest.noarch.rpm RPM doesn't exists under /root directory"
+                        exit 1
+                    fi
                     /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
 
           - name: end-operation
