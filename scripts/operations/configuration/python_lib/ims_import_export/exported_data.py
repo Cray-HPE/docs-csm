@@ -31,14 +31,14 @@ import re
 from typing import NamedTuple, Union
 
 from python_lib import bos, bss, common, s3
-from python_lib.s3 import S3UrlList, S3UrlSet
-
+from python_lib.s3 import S3Url, S3UrlList, S3UrlSet
 from python_lib.product_catalog import ProductCatalog
 from python_lib.types import JsonDict
 
 from .defs import EXPORTED_DATA_FILENAME
 from .ims_data import ImsData
 from .s3_data import S3Data
+from .s3_helper import S3TransferRequest, create_s3_artifacts
 
 # Format of EXPORTED_DATA_FILENAME
 # {
@@ -171,7 +171,7 @@ class ExportedData(NamedTuple):
         Return that object
         """
         def load_s3url_list(json_list) -> S3UrlList:
-            return [ s3.S3Url(s3_url) for s3_url in json_list ]
+            return [ S3Url(s3_url) for s3_url in json_list ]
 
         data_file = os.path.join(tarfile_dir, EXPORTED_DATA_FILENAME)
         common.validate_file_readable(data_file)
@@ -253,6 +253,7 @@ class ExportedData(NamedTuple):
         If there are any S3 links included for BOS, BSS, and/or the product catalog, upload those if needed.
         """
         current_s3_bucket_artifact_maps = {}
+        s3_upload_requests = []
         for s3_url in self.all_s3_urls:
             try:
                 bucket_map = current_s3_bucket_artifact_maps[s3_url.bucket]
@@ -264,8 +265,18 @@ class ExportedData(NamedTuple):
             if s3_url.key in bucket_map:
                 logging.debug("%s already exists in S3", s3_url)
                 continue
-            logging.info("Uploading %s to S3", s3_url)
-            s3.create_artifact(s3_url, self.s3_data.downloaded_artifact_path(s3_url, basedir))
+            logging.debug("Add %s to list of required S3 uploads", s3_url)
+            s3_upload_requests.append(
+                S3TransferRequest(
+                    url=s3_url,
+                    filepath=self.s3_data.downloaded_artifact_path(s3_url,
+                                                                   basedir)))
+        if not s3_upload_requests:
+            logging.debug("Nothing to upload to S3")
+            return
+        logging.info("Starting parallel S3 uploads for %d artifacts", len(s3_upload_requests))
+        create_s3_artifacts(s3_upload_requests)
+        logging.info("Parallel S3 upload complete")
 
 
 # Bucket names must be between 3 (min) and 63 (max) characters long.
@@ -290,7 +301,7 @@ def s3_links_in_kernel_param_string(param_string: str) -> S3UrlList:
     """
     Returns a list of S3 URLs from the specified kernel parameter string
     """
-    return [ s3.S3Url(s3_url) for s3_url in set(kp_re_prog.findall(param_string)) ]
+    return [ S3Url(s3_url) for s3_url in set(kp_re_prog.findall(param_string)) ]
 
 
 def strip_nonexistent_artifacts(s3_links: S3UrlList) -> S3UrlList:
@@ -361,7 +372,7 @@ def get_all_s3_links_from_bos_session_templates() -> S3UrlList:
                 continue
             if bs_type != "s3":
                 continue
-            s3_url = s3.S3Url(bs_path)
+            s3_url = S3Url(bs_path)
             logging.debug("Found S3 artifact in 'path' field of boot set '%s' in session "
                          "template '%s': %s", bs_name, template_name, s3_url)
             found_link(s3_url)
@@ -394,7 +405,7 @@ def get_all_s3_links_from_bss_boot_parameters() -> S3UrlList:
         for field in [ "initrd", "kernel" ]:
             if field not in bss_bootparam_entry:
                 continue
-            s3_url = s3.S3Url(bss_bootparam_entry[field])
+            s3_url = S3Url(bss_bootparam_entry[field])
             logging.debug("Found S3 link in '%s' field of BSS bootparameter entry: %s", field,
                           s3_url)
             found_link(s3_url)
@@ -445,7 +456,7 @@ def get_all_s3_links_from_product_catalog() -> S3UrlList:
                                    "'%s' in the product catalog (missing '%s' field): %s",
                                    product_name, product_version, exc, s3_artifact)
                     continue
-                s3_url = s3.S3Url.from_bucket_and_key(bucket, key)
+                s3_url = S3Url.from_bucket_and_key(bucket, key)
                 logging.debug("Found S3 artifact listed for product '%s' version '%s' in the "
                             "product catalog: %s", product_name, product_version, s3_url)
                 if s3_url in s3_links:
