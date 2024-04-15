@@ -20,8 +20,6 @@ Should hms-discovery be found to not complete in such an environment, this speci
     ... "msg":"Failed to get port map for management switch!", ..., "error":"failed to perform bulk get: read udp 10.38.0.46:55957->10.254.0.18:161: i/o timeout" ...
     ```
 
-    In order to be considered a duplicate of the problem described here, there should be at least several of these matching logs.
-
 # Workaround
 
 If this problem is encountered, it can be worked around by increasing the activeDeadlineSeconds value in the hms-discovery deployment.
