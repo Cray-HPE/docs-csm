@@ -41,14 +41,14 @@ See [Check for latest documentation](../../../update_product_stream/README.md#ch
     1. Take note of the last timestamp in the `cray-ipxe` log.
 
         ```bash
-        kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe
+        kubectl -n services logs -l app.kubernetes.io/instance=cms-ipxe
         ```
 
     1. Wait for the updated iPXE binary to be built.
 
         ```bash
         sleep 30
-        kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
+        kubectl -n services logs -l app.kubernetes.io/instance=cms-ipxe -f
         ```
 
         The following output means that a new iPXE binary has been built:

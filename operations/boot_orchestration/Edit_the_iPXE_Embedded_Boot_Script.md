@@ -69,18 +69,20 @@ This procedure requires administrative privileges.
             kubectl create -f /root/cray-ipxe-bss-ipxe.yaml
             ```
 
-2. Delete the iPXE pod to ensure the updated ConfigMap will be used.
+2. Delete the iPXE pods to ensure the updated ConfigMap will be used.
 
     1. Find the pod ID.
 
         ```bash
         kubectl -n services get pods|grep cray-ipxe
-        cray-ipxe-5dddfc65f-qfmrr           2/2     Running        2       39h
+        cray-ipxe-aarch64-5cdd74f889-wrkj7  2/2     Running        0       10d
+        cray-ipxe-x86-64-5b88cb79c-wb22l    2/2     Running        0       10d
+
         ```
 
     2. Delete the pod.
 
-        Replace CRAY-IPXE\_POD\_ID with the value returned in the previous step. In this example, the pod ID is `cray-ipxe-5dddfc65f-qfmrr`.
+        Replace CRAY-IPXE\_POD\_ID with the value returned in the previous step. In this example, the pod IDs are `cray-ipxe-aarch64-5cdd74f889-wrkj7' and 'cray-ipxe-x86-64-5b88cb79c-wb22l`.
 
         ```bash
         kubectl -n services delete pod CRAY-IPXE_POD_ID
