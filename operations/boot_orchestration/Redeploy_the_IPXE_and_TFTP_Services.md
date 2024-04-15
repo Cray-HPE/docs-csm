@@ -212,7 +212,7 @@ This procedure requires administrative privileges.
     loftsman helm upgrade cms-ipxe loftsman/cms-ipxe
     ```
 
-1. (`ncn-mw#`) Log into the iPXE pod and verify the iPXE file was created.
+1. (`ncn-mw#`) Log into each iPXE pod and verify the iPXE file was created.
 
     This may take another couple of minutes while it is creating the files.
 
@@ -222,7 +222,7 @@ This procedure requires administrative privileges.
         kubectl get pods -n services --no-headers -o wide | grep cray-ipxe | awk '{print $1}'
         ```
 
-    1. Log into the pods using the iPXE pod ID.
+    1. Log into the iPXE pods using their IDs.
 
         ```bash
         kubectl exec -n services -it IPXE_POD_ID /bin/sh
