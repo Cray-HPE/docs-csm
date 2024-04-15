@@ -22,7 +22,7 @@ Should hms-discovery be found to not complete in such an environment, this speci
 
 # Workaround
 
-If this problem is encountered, it can be worked around by increasing the activeDeadlineSeconds value in the hms-discovery deployment.
+If this problem is encountered, it can be worked around by increasing the `activeDeadlineSeconds` value in the hms-discovery deployment.
 
 1. (`ncn-mw#`) Edit the hms-discovery deployment:
 
