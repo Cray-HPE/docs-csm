@@ -2,9 +2,10 @@
 
 ## Overview
 
-On systems with a large number of non-existent network switches, it has been observed that the hms-discovery job may fail to finish due to spending too much time trying to communicate with the non-existent switches. This may happen when incrementally building up a new system and running CSM prior to completion of the full hardware installation.
+On systems with a large number of non-existent network switches, it has been observed that the hms-discovery job may fail to finish due to spending too much time trying to communicate with the non-existent switches.
+This may happen when incrementally building up a new system and running CSM prior to completion of the full hardware installation.
 
-# Symptoms and Diagnosis
+## Symptoms and Diagnosis
 
 Should hms-discovery be found to not complete in such an environment, this specific problem can be diagnosed as follows:
 
@@ -20,7 +21,7 @@ Should hms-discovery be found to not complete in such an environment, this speci
     ... "msg":"Failed to get port map for management switch!", ..., "error":"failed to perform bulk get: read udp 10.38.0.46:55957->10.254.0.18:161: i/o timeout" ...
     ```
 
-# Workaround
+## Workaround
 
 If this problem is encountered, it can be worked around by increasing the `activeDeadlineSeconds` value in the hms-discovery deployment.
 
@@ -58,6 +59,6 @@ If this problem is encountered, it can be worked around by increasing the `activ
     cray hsm inventory discover create --xnames <COMMA_SEPERATED_XNAME_LIST> --force true
     ```
 
-# Fix
+## Fix
 
 This issue is expected to be fixed in the CSM 1.6 release.
