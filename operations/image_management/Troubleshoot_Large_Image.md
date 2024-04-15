@@ -6,7 +6,7 @@ of different failures that can happen, but these failures can be resolved by cha
 IMS configuration settings.
 
 These settings require a balancing act based on the size of the images being produced and
-the size of the system and what resources are available.  If these settings are too large,
+the size of the system and what resources are available. If these settings are too large,
 the IMS jobs will consume more resources than required and it will be more difficult to
 schedule jobs on the Kubernetes workers because of resource limitations. If they are too small,
 then the IMS jobs will fail because the job lacks the resources required for a larger image.

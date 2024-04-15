@@ -55,7 +55,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [`initrd.img.xz` Not Found](known_issues/initrd.img.zx_not_found.md)
 - [NCN health checks known issues](known_issues/issues_with_ncn_health_checks.md)
 - [`kubectl logs -f` returns no space left on device](known_issues/kubectl_logs_no_space_left_on_device.md)
-- [Kubernetes Master or Worker node’s root filesystem is out of space](known_issues/kubernetes_node_rootFS_out_of_space.md)
+- [Kubernetes Master or Worker node's root filesystem is out of space](known_issues/kubernetes_node_rootFS_out_of_space.md)
 - [Mellanox `lacp-individual` Limitations](known_issues/mellanox_lacp_individual.md)
 - [NCN resource checks known issues](known_issues/ncn_resource_checks.md)
 - [RTS fails to restart after a worker node has been rebooted](known_issues/rts_fails_to_start_after_worker_node_restart.md)
