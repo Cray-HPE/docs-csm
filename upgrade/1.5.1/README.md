@@ -13,7 +13,6 @@ in [Upgrade CSM](../README.md) instead.
 ## Bug fixes and improvements
 
 * Updated [IMS](../../glossary.md#image-management-service-ims) to allow for remote node builds
-* Support for Paradise hardware
 * Fixed an issue where `hms-discovery` would put default credentials into vault disabling non default credentials
 * Fixed an issue where `cray-ipxe` generated scripts would cause boot errors
 * Fixed an issue where [BOS](../../glossary.md#boot-orchestration-service-bos) v2 would send large queries to [CFS](../../glossary.md#configuration-framework-service-cfs) resulting 503 and 431 responses
