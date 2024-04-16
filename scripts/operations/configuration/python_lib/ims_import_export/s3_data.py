@@ -38,14 +38,15 @@ from .defs import S3_EXPORTED_ARTIFACTS_DIRNAME
 from .exceptions import S3ArtifactNotFound
 from .ims_data import ImsData
 from .s3_bucket_listings import S3BucketListings
-
+from .s3_helper import S3TransferRequest
+from .s3_helper import download_s3_artifacts as parallel_download_s3_artifacts
 
 S3ArtifactMap = Dict[s3.S3Url, JsonDict]
 
 
 class S3DataLoadOptions:
     """
-    A helper class for the S3Data class.    
+    A helper class for the S3Data class.
     """
     def __init__(self, outdir: str, ims_data: ImsData,
                  extra_s3_urls: Union[None, S3UrlList],
@@ -138,8 +139,8 @@ class S3Data(NamedTuple):
             options.s3_artifacts[s3_url]["describe"] = s3.describe_artifact(s3_url)
 
         # For all other links, download them and describe them
-        for s3_url in options.undownloaded_s3_urls:
-            relpath = download_s3_artifact(options.outdir, s3_url)
+        for s3_url, relpath in download_s3_artifacts(options.outdir,
+                                                     options.undownloaded_s3_urls).items():
             describe = s3.describe_artifact(s3_url)
             options.s3_artifacts[s3_url] = { "relpath": relpath, "describe": describe }
 
@@ -238,11 +239,10 @@ def get_image_recipe_s3_urls(ims_data: ImsData,
 
 
 def download_manifests(outdir: str, image_s3_urls: S3UrlSet) -> S3ArtifactMap:
-    s3_artifacts = {}
-    for s3_url in image_s3_urls:
-        relpath = download_s3_artifact(outdir, s3_url)
-        s3_artifacts[s3_url] = { "relpath": relpath }
-    return s3_artifacts
+    if not image_s3_urls:
+        return {}
+    s3_urls_to_relpaths = download_s3_artifacts(outdir, image_s3_urls)
+    return { s3_url: {  "relpath": relpath } for s3_url, relpath in s3_urls_to_relpaths.items() }
 
 
 def get_child_urls_from_manifests(outdir: str, s3_artifacts: S3ArtifactMap) -> S3UrlSet:
@@ -287,13 +287,10 @@ def estimate_required_space(all_s3_urls: S3UrlSet, undownloaded_s3_urls: S3UrlSe
 
 ARTIFACT_BASENAME_CHARS = string.ascii_letters + string.digits + '._-'
 
-
-def download_s3_artifact(outdir: str, s3_url: s3.S3Url) -> str:
+def generate_artifact_local_path(outdir: str, s3_url: s3.S3Url) -> Tuple[str, str]:
     """
-    Downloads the specified S3 URL to a subdirectory of the specified artifact directory.
-    Returns the relative path to the downloaded artifact in outdir
+    Return the full path for the artifact file in outdir, and its relative path
     """
-
     # Convert the key portion of the S3 URL to a filename consisting of
     # only letters, numbers, periods, underscores, or dashes
     # Do this by:
@@ -311,6 +308,37 @@ def download_s3_artifact(outdir: str, s3_url: s3.S3Url) -> str:
         # Need to choose a different name
         artifact_file_path = tempfile.mkstemp(prefix=artifact_basename, dir=artifact_dir)[1]
         artifact_basename = os.path.basename(artifact_file_path)
+    return artifact_file_path, os.path.join(artifact_subdir, artifact_basename)
+
+
+def download_s3_artifact(outdir: str, s3_url: s3.S3Url) -> str:
+    """
+    Downloads the specified S3 URL to a subdirectory of the specified artifact directory.
+    Returns the relative path to the downloaded artifact in outdir
+    """
+    artifact_file_path, artifact_file_relpath = generate_artifact_local_path(outdir, s3_url)
     logging.info("Downloading %s to '%s'", s3_url, artifact_file_path)
     s3.get_artifact(s3_url, artifact_file_path)
-    return os.path.join(artifact_subdir, artifact_basename)
+    return artifact_file_relpath
+
+
+def download_s3_artifacts(outdir: str, s3_urls: Iterable[s3.S3Url]) -> Dict[s3.S3Url, str]:
+    """
+    Downloads the specified S3 URLs to a subdirectory of the specified artifact directory.
+    Returns a mapping from each S3 URL to the relative path of the downloaded artifact in outdir
+    """
+    s3_download_requests = []
+    url_relpath_map = {}
+    for s3_url in s3_urls:
+        artifact_file_path, artifact_file_relpath = generate_artifact_local_path(outdir, s3_url)
+        url_relpath_map[s3_url] = artifact_file_relpath
+        logging.debug("Add %s to list of required S3 downloads", s3_url)
+        s3_download_requests.append(S3TransferRequest(url=s3_url, filepath=artifact_file_path))
+
+    if s3_download_requests:
+        logging.info("Starting parallel S3 downloads for %d artifacts", len(s3_download_requests))
+        parallel_download_s3_artifacts(s3_download_requests)
+        logging.info("Parallel S3 downnload complete")
+    else:
+        logging.debug("Nothing to download from S3")
+    return url_relpath_map
