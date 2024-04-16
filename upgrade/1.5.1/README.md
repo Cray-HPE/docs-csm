@@ -47,7 +47,6 @@ in [Upgrade CSM](../README.md) instead.
 1. [Setup Nexus](#setup-nexus)
 1. [Upgrade services](#upgrade-services)
 1. [Upload NCN images](#upload-ncn-images)
-1. [Enable `smartmon` metrics on storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
 1. [Update management node CFS configuration](#update-management-node-cfs-configuration)
 1. [Update test suite packages](#update-test-suite-packages)
 1. [Verification](#verification)
