@@ -31,7 +31,7 @@ The primary method of handling this problem is the `batcher_max_backoff` option.
 
 (`ncn-mw#`) If this value has been changed from its default value of 3600 (1 hour), then it should be set back to that value:
 
- ```bash
+```bash
 cray cfs v3 options update --batcher-max-backoff 3600
 ```
 
