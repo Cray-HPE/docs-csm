@@ -229,4 +229,4 @@ see [Removals](introduction/deprecated_features/README.md#removals)
     * For more information, including a workaround, see [CFS V2 Failures On Large Systems](troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md).
 * The hms-discovery job may fail to finish when trying to communicate with non-existent switches. This may happen when incrementally building up a new system and running CSM prior to completion of the full hardware installation.
     * For more information, including a workaround, see [hms-discovery Timeout Due to Missing Switches](troubleshooting/known_issues/hms_discovery_timeout_due_to_missing_switches.md)
-    * This is expected to be fixed in CSM 1.6.0.
+    * This issue is expected to be fixed in CSM 1.6.0.
