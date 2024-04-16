@@ -208,10 +208,11 @@ see [Removals](introduction/deprecated_features/README.md#removals)
     * This affects the HFP script `post-deliver-product.sh` which will hang when the FAS Loader crashes. Rerunning the script will be required.
     * IUF procedure calls the `post-deliver-product.sh` script and may require restarting that IUF process.
     * This is expected to be fixed in CSM 1.5.1.
-* [Power Control Service (PCS)](glossary.md#power-control-service-pcs) is unable to place power caps on `Blanca Peak` (`ex254n`) and Parry Peak (`ex255a`) compute nodes
+* [Power Control Service (PCS)](glossary.md#power-control-service-pcs) is unable to place power caps on Blanca Peak (`ex254n`) and Parry Peak (`ex255a`) compute nodes
     * To workaround this issue, use [Cray Advanced Platform Monitoring and Control (CAPMC)](glossary.md#cray-advanced-platform-monitoring-and-control-capmc) to place power
       caps on these node types
     * Issue is fixed in CSM 1.5.1
+    * For more information, including a workaround, see [PCS Power Capping Blanca Peak and Parry Peak](troubleshooting/known_issues/PCS_Power_Capping_Blanca_Peak_and_Parry_Peak.md).
 * `cray-tftp-upload`
     * The `cray-tftp-upload` script errors out because of a change to the `ipxe` pods and the TFTP repository.
     * This error affects the `cray-upload-recovery-images` script.
@@ -226,3 +227,6 @@ see [Removals](introduction/deprecated_features/README.md#removals)
 * On large systems, [BOS](glossary.md#boot-orchestration-service-bos) v2 sessions, some CSM health checks, and SAT status may not work properly, because of a failed interaction with CFS.
     * Most of this will be fixed in CSM 1.5.1. The remainder will be fixed in CSM 1.6.0.
     * For more information, including a workaround, see [CFS V2 Failures On Large Systems](troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md).
+* The hms-discovery job may fail to finish when trying to communicate with non-existent switches. This may happen when incrementally building up a new system and running CSM prior to completion of the full hardware installation.
+    * For more information, including a workaround, see [hms-discovery Timeout Due to Missing Switches](troubleshooting/known_issues/hms_discovery_timeout_due_to_missing_switches.md)
+    * This issue is expected to be fixed in CSM 1.6.0.
