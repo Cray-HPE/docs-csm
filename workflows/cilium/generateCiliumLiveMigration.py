@@ -68,7 +68,7 @@ if __name__ == "__main__":
   # Load templates file from templates folder
   env = Environment(loader = FileSystemLoader(this_dir),   trim_blocks=True, lstrip_blocks=True)
   template = env.get_template(template_file)
-  file=open(render_file, "w")
+  file=open(this_dir + "/" + render_file, "w")
   file.write(template.render(target_ncns=node_list, now=now))
   file.close()
   print("Workflow rendered in " + this_dir + "/" + render_file) 
