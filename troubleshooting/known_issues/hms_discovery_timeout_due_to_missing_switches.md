@@ -7,7 +7,7 @@ This may happen when incrementally building up a new system and running CSM prio
 
 ## Symptoms and Diagnosis
 
-Should hms-discovery be found to not complete in such an environment, this specific problem can be diagnosed as follows:
+If hms-discovery does not complete in such an environment, this specific problem can be diagnosed as follows:
 
 1. (`ncn-mw#`) Dump the logs for the failed hms-discovery jobs.  Example:
 
