@@ -45,7 +45,6 @@ in [Upgrade CSM](../README.md) instead.
 
 1. [Preparation](#preparation)
 1. [Setup Nexus](#setup-nexus)
-1. [Update Argo CRDs](#update-argo-crds)
 1. [Upgrade services](#upgrade-services)
 1. [Upload NCN images](#upload-ncn-images)
 1. [Enable `smartmon` metrics on storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
