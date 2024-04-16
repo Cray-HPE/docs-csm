@@ -113,19 +113,6 @@ to resolve potential problems and then try running `setup-nexus.sh` again. Note 
 may report `FAIL` when uploading duplicate assets. This is okay as long as `setup-nexus.sh` outputs `setup-nexus.sh: OK`
 and exits with status code `0`.
 
-### Update Argo CRDs
-
-(`ncn-m001#`) Run the following script in preparation for 1.5.1 patch upgrade:
-
-```bash
-for c in $(kubectl get crd |grep argo | cut -d' ' -f1)
-do
-   kubectl label --overwrite crd $c app.kubernetes.io/managed-by="Helm"
-   kubectl annotate --overwrite crd $c meta.helm.sh/release-name="cray-nls"
-   kubectl annotate --overwrite crd $c meta.helm.sh/release-namespace="argo"
-done
-```
-
 ### Upgrade services
 
 (`ncn-m001#`) Run `upgrade.sh` to deploy upgraded CSM applications and services:
