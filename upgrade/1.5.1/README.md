@@ -48,7 +48,6 @@ in [Upgrade CSM](../README.md) instead.
 1. [Update Argo CRDs](#update-argo-crds)
 1. [Upgrade services](#upgrade-services)
 1. [Upload NCN images](#upload-ncn-images)
-1. [Upgrade Ceph and stop local Docker registries](#upgrade-ceph-and-stop-local-docker-registries)
 1. [Enable `smartmon` metrics on storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
 1. [Update management node CFS configuration](#update-management-node-cfs-configuration)
 1. [Update test suite packages](#update-test-suite-packages)
