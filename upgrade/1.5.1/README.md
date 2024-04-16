@@ -146,48 +146,6 @@ products with IUF. If this step is skipped, IUF will fail when updating or upgra
 /usr/share/doc/csm/upgrade/scripts/upgrade/upload-ncn-images.sh
 ```
 
-### Upgrade Ceph and stop local Docker registries
-
-**Note:** This step may not be necessary if it was already completed by the CSM `v1.3.5` patch or `v1.4.2` patch. If it was already run,
-the following steps can be re-executed to verify that Ceph daemons are using images in Nexus and the local Docker
-registries have been stopped.
-
-These steps will upgrade Ceph to `v16.2.13`. Then the Ceph monitoring daemons' images will be pushed to Nexus and the
-monitoring daemons will be redeployed so that they use these images in Nexus. Once this is complete, all Ceph daemons
-should be using images in Nexus and not images hosted in the local Docker registry on storage nodes. The third step
-stops the local Docker registry on all storage nodes.
-
-1. (`ncn-m001#`) Run Ceph upgrade to `v16.2.13`.
-
-   ```bash
-   /usr/share/doc/csm/upgrade/scripts/ceph/ceph-upgrade-tool.py --version "v16.2.13"
-   ```
-
-1. (`ncn-m001#`) Redeploy Ceph monitoring daemons so they are using images in Nexus.
-
-   ```bash
-   scp /usr/share/doc/csm/scripts/operations/ceph/redeploy_monitoring_stack_to_nexus.sh ncn-s001:/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh
-   ssh ncn-s001 "/srv/cray/scripts/common/redeploy_monitoring_stack_to_nexus.sh"
-   ```
-
-1. (`ncn-m001#`) Stop the local Docker registries on all storage nodes.
-
-   ```bash
-   scp /usr/share/doc/csm/scripts/operations/ceph/disable_local_registry.sh ncn-s001:/srv/cray/scripts/common/disable_local_registry.sh
-   ssh ncn-s001 "/srv/cray/scripts/common/disable_local_registry.sh"
-   ```
-
-### Enable `smartmon` metrics on storage NCNs
-
-This step will install the `smart-mon` rpm on storage nodes, and reconfigure the `node-exporter` to provide `smartmon`
-metrics.
-
-1. (`ncn-m001#`) Execute the following script.
-
-   ```bash
-   /usr/share/doc/csm/scripts/operations/ceph/enable-smart-mon-storage-nodes.sh
-   ```
-
 ### Update management node CFS configuration
 
 This step updates the CFS configuration which is set as the desired configuration for the management
