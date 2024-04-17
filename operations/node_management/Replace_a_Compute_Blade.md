@@ -25,7 +25,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    This example disables MEDS for the compute node in cabinet 1000, chassis 3, slot 0 (`x1000c3s0b0`). If there is more than 1 node card, in the blade specify each node card (`x1000c3s0b0`, `x1000c3s0b1`).
 
    ```bash
-   cray hsm inventory redfishEndpoints update --enabled false x1000c3s0b0
+   cray hsm inventory redfishEndpoints update --enabled false x1000c3s0b0 --id x1000c3s0b0 --hostname x1000c3s0b0
    ```
 
 1. Verify that the workload manager (WLM) is not using the affected nodes.

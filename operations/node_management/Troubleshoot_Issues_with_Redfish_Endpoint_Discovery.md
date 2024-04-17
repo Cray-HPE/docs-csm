@@ -79,6 +79,7 @@ LastDiscoveryStatus = "HTTPsGetFailed"
 
     ```bash
     cray hsm inventory redfishEndpoints update BMC_XNAME \
+                --id BMC_XNAME --hostname BMC_XNAME \
                 --enabled true --rediscover-on-update true
     ```
 

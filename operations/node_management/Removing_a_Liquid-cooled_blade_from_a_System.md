@@ -41,8 +41,8 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 1. (`ncn-mw#`) Temporarily disable the Redfish endpoints for `NodeBMCs` present in the blade.
 
     ```bash
-    cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b0
-    cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b1
+    cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b0 --id x9000c3s0b0 --hostname x9000c3s0b0
+    cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b1 --id x9000c3s0b1 --hostname x9000c3s0b1
     ```
 
 ### 3. Clear Redfish event subscriptions from BMCs on the blade
