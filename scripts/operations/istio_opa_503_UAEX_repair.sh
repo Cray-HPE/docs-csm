@@ -23,7 +23,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-# This script adjusts a few settings to work around 503 UAEX errors caused by OPA for CSM 1.4.x 
+# This script adjusts a few settings to work around 503 UAEX errors caused by OPA for CSM 1.4.x
 set -euo pipefail
 
 # Ensure istio ingressgateway HPA has minReplicas set to number of worker nodes (up to 8)
