@@ -8,7 +8,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  labels:
+  annotations:
     target-ncns:  {{ target_ncns|join('.') }}
   name: cilium-live-migration-{{ uid }}
 spec:
