@@ -124,7 +124,7 @@ The possible values for this field are:
 
 * `failed`
 
-    This indicates that the component is not yet in the desired state, but that BOS will not take further actions on the component.  
+    This indicates that the component is not yet in the desired state, but that BOS will not take further actions on the component.
     This can be due to too many attempts of a power action, or due to CFS reporting failed configuration.
 
 * `on_hold`

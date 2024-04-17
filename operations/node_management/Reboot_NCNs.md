@@ -65,6 +65,8 @@ Execute the rolling NCN reboot procedure steps for the particular node type bein
         > done by running `kubectl delete po -n kube-system kube-multus-ds.. --force`. After executing this
         > command, re-running the `ncnHealthChecks` script should indicate that a new pod is in the `Running` state.
 
+        Remediate any reported failures before proceeding.
+
     1. (`ncn-m#`) Validate Postgres health.
 
         Run this on any master NCN. It will run a set of checks on every Postgres cluster.
