@@ -54,6 +54,17 @@ in [Upgrade CSM](../README.md) instead.
 
 ### Preparation
 
+1. Validate CSM health.
+
+   See [Validate CSM Health](../../operations/validate_csm_health.md).
+
+   Run the CSM health checks to ensure that everything is working properly before the upgrade starts.
+   After the upgrade is completed, another health check is performed.
+   It is important to know if any problems observed at that time existed prior to the upgrade.
+
+   IMPORTANT: See the CSM Install Validation and Health Checks procedures in the documentation for the CURRENT CSM version on the system.
+   The validation procedures in the CSM documentation are only intended to work with that specific version of CSM.
+
 1. (`ncn-m001#`) Start a typescript on `ncn-m001` to capture the commands and output from this procedure.
 
    ```bash
