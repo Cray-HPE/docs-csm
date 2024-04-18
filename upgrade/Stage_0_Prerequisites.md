@@ -42,7 +42,7 @@ after a break, always be sure that a typescript is running before proceeding.
 
 1. (`ncn-m001#`) Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
-   > If upgrading to a patch version of CSM 1.4, be sure to specify the correct patch version number when setting this variable.
+   > If upgrading to a patch version of CSM, be sure to specify the correct patch version number when setting this variable.
 
    ```bash
    export CSM_RELEASE=1.4.0

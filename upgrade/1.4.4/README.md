@@ -12,9 +12,10 @@ described in [CSM major/minor version upgrade](../README.md#csm-majorminor-versi
 In the unusual situation of upgrading from a pre-release version of CSM `v1.4.0`, then follow the procedures
 described in [CSM major/minor version upgrade](../README.md#csm-majorminor-version-upgrade) instead.
 
-Also note that there is no need to perform intermediate CSM `v1.4` patch upgrades. Instead,
-consider upgrading to the latest recent CSM `v1.4` patch release. See
-[CSM patch version upgrade](../README.md#csm-patch-version-upgrade) for the full list of patch versions.
+If there are more recent CSM `v1.4` patch versions available, note that there is no need to perform
+intermediate CSM `v1.4` patch upgrades. Instead, consider upgrading to the latest CSM `v1.4`
+patch release. See [CSM patch version upgrade](../README.md#csm-patch-version-upgrade) for the full
+list of patch versions.
 
 ## Bug fixes and improvements
 
