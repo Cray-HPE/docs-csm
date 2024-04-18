@@ -22,8 +22,8 @@ The following covers redeploying the Spire service and restoring the data.
       Example output:
 
       ```text
-      REVISION	UPDATED                 	STATUS  	CHART       	APP VERSION	DESCRIPTION
-      1       	Wed Nov 15 12:41:47 2023	deployed	spire-2.14.2	0.12.2     	Install complete
+      REVISION  UPDATED                    STATUS    CHART          APP VERSION  DESCRIPTION
+      1         Wed Nov 15 12:41:47 2023   deployed  spire-2.14.2   0.12.2       Install complete
       ```
 
    1. Uninstall the `spire` chart.
