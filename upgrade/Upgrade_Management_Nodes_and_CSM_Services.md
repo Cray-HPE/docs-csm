@@ -125,8 +125,8 @@ For additional reference material on the upgrade processes and scripts mentioned
    [2021-07-22 20:58:39] INSTALL_NEW_CONSOLE
    ```
 
-  - See the inline comment above on how to rerun a single step.
-  - In order to rerun the whole upgrade of a node, delete its state file.
+    - See the inline comment above on how to rerun a single step.
+    - In order to rerun the whole upgrade of a node, delete its state file.
 
 - Skip a step after running it manually
 
