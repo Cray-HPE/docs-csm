@@ -99,7 +99,7 @@ echo "=================================================="
 
 ## Disable the Redfish Endpoint
 echo "Disabling Redfish Endpoint in HSM: ${BMC_XNAME}"
-cray hsm inventory redfishEndpoints update "${BMC_XNAME}" --enabled false --id "${BMC_XNAME}"
+cray hsm inventory redfishEndpoints update "${BMC_XNAME}" --enabled false --id "${BMC_XNAME}" --hostname "${BMC_XNAME}"
 
 ## Remove from state components
 for XNAME in "$NODE_XNAME" "$BMC_XNAME" "${NODE_ENCLOSURE_XNAME}"; do

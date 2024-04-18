@@ -102,8 +102,8 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 (`ncn-mw#`) Temporarily disable the Redfish endpoints for each compute node `NodeBMC`.
 
 ```bash
-cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b0
-cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b1
+cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b0 --id x9000c3s0b0 --hostname x9000c3s0b0
+cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b1 --id x9000c3s0b1 --hostname x9000c3s0b1
 ```
 
 ### Source: Clear Redfish event subscriptions from BMCs on the blade
@@ -280,8 +280,8 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 Disabling chassis slot prevents `hms-discovery` from attempting to power them back on.
 
 ```bash
-cray hsm inventory redfishEndpoints update --enabled false x1005c3s0b0
-cray hsm inventory redfishEndpoints update --enabled false x1005c3s0b1
+cray hsm inventory redfishEndpoints update --enabled false x1005c3s0b0 --id x1005c3s0b0 --hostname x1005c3s0b0
+cray hsm inventory redfishEndpoints update --enabled false x1005c3s0b1 --id x1005c3s0b1 --hostname x1005c3s0b1
 ```
 
 ### Destination: Clear Redfish event subscriptions from BMCs on the blade

@@ -81,7 +81,7 @@ echo "=================================================="
 # Remove from HSM
 ## Disable the Redfish Endpoint
 echo "Disabling Redfish Endpoint in HSM: ${CMC_XNAME}"
-cray hsm inventory redfishEndpoints update "${CMC_XNAME}" --enabled false --id "${CMC_XNAME}"
+cray hsm inventory redfishEndpoints update "${CMC_XNAME}" --enabled false --id "${CMC_XNAME}" --hostname "${CMC_XNAME}"
 
 ## Remove from state components
 echo "Deleting component from HSM State Components: ${CMC_XNAME}"
