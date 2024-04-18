@@ -47,8 +47,8 @@ The following covers redeploying the Spire service and restoring the data.
       Example output:
 
       ```text
-      REVISION	UPDATED                 	STATUS  	CHART           	APP VERSION	DESCRIPTION
-      1       	Wed Nov 15 12:41:50 2023	deployed	cray-spire-1.5.4	1.5.5      	Install complete
+      REVISION    UPDATED                   STATUS    CHART             APP VERSION  DESCRIPTION
+      1           Wed Nov 15 12:41:50 2023  deployed  cray-spire-1.5.4  1.5.5        Install complete
       ```
 
    1. Uninstall the `cray-spire` chart.
