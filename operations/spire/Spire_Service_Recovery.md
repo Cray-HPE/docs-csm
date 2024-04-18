@@ -6,26 +6,10 @@ The following covers redeploying the Spire service and restoring the data.
 
 - The system is fully installed and has transitioned off of the LiveCD.
 - All activities required for site maintenance are complete.
-- A backup or export of the data already exists.
 - The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 - The Cray CLI has been configured on the node where the procedure is being performed. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Service recovery for Spire
-
-1. (`ncn-mw#`) Verify that a backup of the Spire Postgres data exists.
-
-   1. List the Postgres logical backups by date.
-
-      ```bash
-      cray artifacts list postgres-backup --format json | jq -r '.artifacts[] | select(.Key | contains("spilo/spire")) | "\(.LastModified) \(.Key)"'
-      ```
-
-      Example output:
-
-      ```text
-      2023-03-23T16:00:10.360000+00:00 spilo/spire-postgres/f5d7952e-b049-4bcf-ba7f-6357898bd617/logical_backups/1679676609.sql.gz
-      2023-03-24T16:00:11.010220+00:00 spilo/spire-postgres/f5d7952e-b049-4bcf-ba7f-6357898bd617/logical_backups/1679677088.sql.gz
-      ```
 
 1. (`ncn-mw#`) Uninstall the `spire` and `cray-spire` charts and wait for the resources to terminate.
 
