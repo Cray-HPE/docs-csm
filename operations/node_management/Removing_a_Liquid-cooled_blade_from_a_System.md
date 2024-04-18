@@ -15,8 +15,8 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 - Check the status of the HSN and record link status before the procedure.
 
 - The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
-  - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
-  - Review the *HPE Cray EX Hand Pump User Guide H-6200*
+    - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
+    - Review the *HPE Cray EX Hand Pump User Guide H-6200*
 
 ## Procedure
 
@@ -41,8 +41,8 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 1. (`ncn-mw#`) Temporarily disable the Redfish endpoints for `NodeBMCs` present in the blade.
 
     ```bash
-    cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b0
-    cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b1
+    cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b0 --id x9000c3s0b0
+    cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b1 --id x9000c3s0b1
     ```
 
 ### 3. Clear Redfish event subscriptions from BMCs on the blade
@@ -128,7 +128,7 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
     Disabling the slot prevents `hms-discovery` from automatically powering on the slot. This example disables slot 0, chassis 3, in cabinet 9000.
 
     ```bash
-    cray hsm state components enabled update --enabled false x9000c3s0
+    cray hsm state components enabled update --enabled false x9000c3s0 --id x9000c3s0
     ```
 
 ### 7. Record MAC and IP addresses for nodes

@@ -182,7 +182,7 @@ Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.m
             continue
         fi
         echo "$RF: Updating credentials"
-        cray hsm inventory redfishEndpoints update ${RF} --user root --password ${CRED_PASSWORD}
+        cray hsm inventory redfishEndpoints update ${RF} --id ${RF} --user root --password ${CRED_PASSWORD}
     done
     ```
 
@@ -191,7 +191,7 @@ Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.m
     > Alternatively, use the following command on each BMC. Replace `BMC_XNAME` with the BMC component name (xname) to update the credentials:
     >
     > ```bash
-    > cray hsm inventory redfishEndpoints update BMC_XNAME --user root --password ${CRED_PASSWORD}
+    > cray hsm inventory redfishEndpoints update BMC_XNAME --id BMC_XNAME --user root --password ${CRED_PASSWORD}
     > ```
 
 1. Restart the `hms-discovery` Kubernetes CronJob.
