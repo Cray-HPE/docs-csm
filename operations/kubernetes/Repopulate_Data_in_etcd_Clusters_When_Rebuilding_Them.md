@@ -52,26 +52,7 @@ Boot preparation information for other product streams can be found in the follo
 
 ### BSS
 
-Data is repopulated in BSS when the REDS `init` job is run.
-
-1. (`ncn-mw#`) Get the current REDS job.
-
-    ```bash
-    kubectl get -o json -n services job/cray-reds-init |
-            jq 'del(.spec.template.metadata.labels["controller-uid"], .spec.selector)' > cray-reds-init.json
-    ```
-
-1. (`ncn-mw#`) Delete the `reds-client-init` job.
-
-    ```bash
-    kubectl delete -n services -f cray-reds-init.json
-    ```
-
-1. (`ncn-mw#`) Restart the `reds-client-init` job.
-
-    ```bash
-    kubectl apply -n services -f cray-reds-init.json
-    ```
+Restore BSS from the ETCD backup see [Restore an ETCD Cluster from a Backup](Restore_an_etcd_Cluster_from_a_Backup.md)
 
 ### CPS
 
@@ -121,12 +102,4 @@ Resubscribe the compute nodes and any NCNs that use the ORCA daemon for their St
 
 ```bash
 kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-meds'
-```
-
-### REDS
-
-(`ncn-mw#`) Restart REDS.
-
-```bash
-kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-reds'
 ```
