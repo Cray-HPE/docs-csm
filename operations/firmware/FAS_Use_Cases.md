@@ -1142,21 +1142,22 @@ the file `gigabyte_nodeBMC_BIOS.json` for Gigabyte node BIOS updates,
 the file `hpe_nodeBMC_iLO5.json` for HPE node iLO 5 updates,
 the file `hpe_nodeBMC_iLO6.json` for HPE node iLO 6 updates,
 or the file `hpe_nodeBMC_systemRom.json` for HPE node `System ROM` updates.
-The script flag `--xnames x1,x2` can be used to limit the updates to certain xnames.
+The script flag `--xnames` can be used to limit the updates to certain xnames.
 **NOTE:** Use the xname of the BMC not the node.
 
 (`ncn#`) To get a list of NCNs on a system:
 
 ```bash
-cray bss bootparameters list --format=json | jq -c '.[] | { "hostname" : ."cloud-init"."meta-data"."local-hostname", "xname" : .hosts[0] }' | grep -v :null | jq .xname | sed s/n[0-9]// | paste -d',' -s
+BMC_XNAMES=$(cray bss bootparameters list --format=json | jq -c '.[] | { "hostname" : ."cloud-init"."meta-data"."local-hostname", "xname" : .hosts[0] }' | grep -v :null | jq -r .xname | sed s/n[0-9]// | paste -d',' -s)
+echo $BMC_XNAMES
 ```
 
-This can be used with the `FASUpdate.py --xnames` script to limit the `xnames` to just the NCNs.
+This can be used with the `FASUpdate.py --xnames $BMC_XNAMES` script to limit the `xnames` to just the NCNs.
 **NOTE:** Use the xname of the BMC not the node.
 Example output:
 
 ```text
-"x3000c0s13b0","x3000c0s14b0","x3000c0s18b0","x3000c0s1b0","x3000c0s2b0","x3000c0s3b0","x3000c0s4b0","x3000c0s5b0","x3000c0s6b0","x3000c0s7b0","x3000c0s8b0","x3000c0s9b0"
+x3000c0s13b0,x3000c0s14b0,x3000c0s18b0,x3000c0s1b0,x3000c0s2b0,x3000c0s3b0,x3000c0s4b0,x3000c0s5b0,x3000c0s6b0,x3000c0s7b0,x3000c0s8b0,x3000c0s9b0
 ```
 
 1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H XNAME -s`. Replace `XNAME` with the xname of the NCN BMC.
@@ -1165,9 +1166,9 @@ Example output:
 1. Run a `dryrun` for all NCNs first to determine which NCNs and targets need updating.
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
-   > **NOTE:** Update of `BMC`, `iLO 5`, and `iLO 6` will not affect the nodes.
+   > **NOTE:** Update of `BMC`, `iLO 5` and `iLO 6` will not affect the nodes.
 
-1. For each NCN requiring updates to target `BMC`, `iLO 5`, or `iLO 6` :
+1. For each NCN requiring updates to target `BMC`, `iLO 5`, or `iLO 6`:
    1. Unlock the NCN BMC.
       See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
    1. Run the FAS action on the NCN. **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
