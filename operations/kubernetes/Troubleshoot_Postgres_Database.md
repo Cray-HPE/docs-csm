@@ -14,6 +14,9 @@ This page contains general Postgres troubleshooting topics.
         - [Case 1: `some persistent volumes are not compatible with existing resizing providers`](#case-1-some-persistent-volumes-are-not-compatible-with-existing-resizing-providers)
         - [Case 2: `could not init db connection`](#case-2-could-not-init-db-connection)
         - [Case 3: `password authentication failed for user`](#case-3-password-authentication-failed-for-user)
+- [Cluster member start failed](#cluster-member-start-failed)
+    - [Determine if invalid permissions](#determine-if-invalid-permissions)
+    - [Recover from a start failed member](#recover-from-a-start-failed-member)
 - [Cluster member missing](#cluster-member-missing)
     - [Determine if a cluster member is missing](#determine-if-a-cluster-member-is-missing)
     - [Recover from a missing member](#recover-from-a-missing-member)
@@ -872,6 +875,71 @@ Kubernetes secret and update the password in the database.
         sleep 2
     done
     ```
+
+## Cluster member start failed
+
+Due to a bug in the Postgres `spilo` image, there are cases where Postgres cluster members may fail to start due to invalid permissions.
+
+### Determine if invalid permissions
+
+(`ncn-mw#`) The following is an example for `cray-console-data-postgres`. One cluster member is failing to start due to invalid permissions on `/home/postgres/pgdata/pgroot/data`.
+
+```bash
+POSTGRESQL=cray-console-data-postgres
+NAMESPACE=services
+kubectl exec "${POSTGRESQL}-1" -c postgres -it -n ${NAMESPACE} -- patronictl list
+```
+
+Example output:
+
+```text
++ Cluster: cray-console-data-postgres (7302102293929427021) ----------+----+-----------+
+|            Member            |     Host     |  Role  |    State     | TL | Lag in MB |
++------------------------------+--------------+--------+--------------+----+-----------+
+| cray-console-data-postgres-0 |  10.32.0.22  | Leader | start failed |    |           |
+| cray-console-data-postgres-1 |  10.46.0.55  |        |   running    | 55 |         0 |
+| cray-console-data-postgres-2 | 10.39.128.15 |        |   running    | 55 |         0 |
++------------------------------+--------------+--------+--------------+----+-----------+
+```
+
+For this example, the member `cray-console-data-postgres-0` has failed to start. Check the pod logs for errors such as those shown below.
+
+```bash
+kubectl logs "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres | grep FATAL
+```
+
+Example output:
+
+```text
+2024-03-30 07:41:35 UTC [2092847]: [1-1] 6607c22f.1fef2f 0     FATAL:  data directory "/home/postgres/pgdata/pgroot/data" has invalid permissions
+```
+
+### Recover from a start failed member
+
+For a member that has failed to start and is logging invalid permission errors on `/home/postgres/pgdata/pgroot/data`, run the following to correct the permissions.
+For this example, `cray-console-data-postgres-0` encountered the issue. If one or more of the members have failed to start due to the invalid permission error, the following would need to be run on each member.
+
+```bash
+kubectl exec -it "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -- chmod 700 -R /home/postgres/pgdata/pgroot/data
+```
+
+Check that the member has started.
+
+```bash
+kubectl exec "${POSTGRESQL}-1" -c postgres -it -n ${NAMESPACE} -- patronictl list
+```
+
+Example output:
+
+```text
++ Cluster: cray-console-data-postgres (7302102293929427021) ----------+----+-----------+
+|            Member            |     Host     |  Role  |    State     | TL | Lag in MB |
++------------------------------+--------------+--------+--------------+----+-----------+
+| cray-console-data-postgres-0 |  10.32.0.22  | Leader |   running    | 56 |           |
+| cray-console-data-postgres-1 |  10.46.0.55  |        |   running    | 56 |         0 |
+| cray-console-data-postgres-2 | 10.39.128.15 |        |   running    | 56 |         0 |
++------------------------------+--------------+--------+--------------+----+-----------+
+```
 
 ## Cluster member missing
 
