@@ -2,7 +2,7 @@
 
 > **Reminders:**
 >
-> - CSM 1.5.0 or higher is required in order to upgrade to CSM 1.6.0.
+> - CSM 1.5.0 or higher is required in order to upgrade to CSM 1.6.
 > - If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 >   [Relevant troubleshooting links for upgrade-related issues](Upgrade_Management_Nodes_and_CSM_Services.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
@@ -39,6 +39,8 @@ after a break, always be sure that a typescript is running before proceeding.
 ## Stage 0.1 - Prepare assets
 
 1. (`ncn-m001#`) Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
+
+   > If upgrading to a patch version of CSM, be sure to specify the correct patch version number when setting this variable.
 
    ```bash
    export CSM_RELEASE=1.6.0
