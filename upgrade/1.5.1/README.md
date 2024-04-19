@@ -6,9 +6,16 @@
 
 ## Introduction
 
-This document guides an administrator through the patch update to Cray Systems Management `v1.5.1` from `1.5.0`.
-If upgrading from CSM `v1.4.x` directly to `v1.5.1`, follow the procedures described
-in [Upgrade CSM](../README.md) instead.
+This document guides an administrator through the patch update to Cray Systems Management `v1.5.1`
+from CSM `v1.5.0`. If upgrading from CSM `v1.4.x`,  then follow the procedures
+described in [CSM major/minor version upgrade](../README.md#csm-majorminor-version-upgrade) instead.
+In the unusual situation of upgrading from a pre-release version of CSM `v1.5.0`, then follow the procedures
+described in [CSM major/minor version upgrade](../README.md#csm-majorminor-version-upgrade) instead.
+
+If there are more recent CSM `v1.5` patch versions available, note that there is no need to perform
+intermediate CSM `v1.5` patch upgrades. Instead, consider upgrading to the latest CSM `v1.5`
+patch release. See [CSM patch version upgrade](../README.md#csm-patch-version-upgrade) for the full
+list of patch versions.
 
 ## Bug fixes and improvements
 

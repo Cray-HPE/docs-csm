@@ -1,10 +1,15 @@
-# CSM 1.4.0 or later to 1.5.0 Upgrade Process
+# CSM 1.4 to 1.5 Upgrade Process
 
 ## Introduction
 
-This document guides an administrator through the upgrade of Cray Systems Management from version 1.4 or later to version 1.5. When upgrading a system, follow this top-level file
-from top to bottom. The content on this top-level page is meant to be terse. For additional reference material on the upgrade processes and scripts
-mentioned explicitly on this page, see [resource material](resource_material/README.md).
+This document guides an administrator through the upgrade of Cray Systems Management from version 1.4 to version 1.5.
+This procedure works for all patch versions of the source and target CSM releases.
+
+This procedure is also the correct one to follow in the unusual situation of upgrading from a pre-release version of CSM 1.5.0
+to a newer version of CSM 1.5.
+
+When upgrading a system, follow this top-level file from top to bottom. The content on this top-level page is meant to be terse.
+For additional reference material on the upgrade processes and scripts mentioned explicitly on this page, see [resource material](resource_material/README.md).
 
 ## Important notes
 
@@ -119,8 +124,8 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
    [2021-07-22 20:58:39] INSTALL_NEW_CONSOLE
    ```
 
-  - See the inline comment above on how to rerun a single step.
-  - In order to rerun the whole upgrade of a node, delete its state file.
+    - See the inline comment above on how to rerun a single step.
+    - In order to rerun the whole upgrade of a node, delete its state file.
 
 - Skip a step after running it manually
 
