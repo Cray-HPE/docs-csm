@@ -6,26 +6,10 @@ The following covers redeploying the Spire service and restoring the data.
 
 - The system is fully installed and has transitioned off of the LiveCD.
 - All activities required for site maintenance are complete.
-- A backup or export of the data already exists.
 - The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 - The Cray CLI has been configured on the node where the procedure is being performed. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Service recovery for Spire
-
-1. (`ncn-mw#`) Verify that a backup of the Spire Postgres data exists.
-
-   1. List the Postgres logical backups by date.
-
-      ```bash
-      cray artifacts list postgres-backup --format json | jq -r '.artifacts[] | select(.Key | contains("spilo/spire")) | "\(.LastModified) \(.Key)"'
-      ```
-
-      Example output:
-
-      ```text
-      2023-03-23T16:00:10.360000+00:00 spilo/spire-postgres/f5d7952e-b049-4bcf-ba7f-6357898bd617/logical_backups/1679676609.sql.gz
-      2023-03-24T16:00:11.010220+00:00 spilo/spire-postgres/f5d7952e-b049-4bcf-ba7f-6357898bd617/logical_backups/1679677088.sql.gz
-      ```
 
 1. (`ncn-mw#`) Uninstall the `spire` and `cray-spire` charts and wait for the resources to terminate.
 
@@ -38,8 +22,8 @@ The following covers redeploying the Spire service and restoring the data.
       Example output:
 
       ```text
-      REVISION	UPDATED                 	STATUS  	CHART       	APP VERSION	DESCRIPTION
-      1       	Wed Nov 15 12:41:47 2023	deployed	spire-2.14.2	0.12.2     	Install complete
+      REVISION  UPDATED                    STATUS    CHART          APP VERSION  DESCRIPTION
+      1         Wed Nov 15 12:41:47 2023   deployed  spire-2.14.2   0.12.2       Install complete
       ```
 
    1. Uninstall the `spire` chart.
@@ -63,8 +47,8 @@ The following covers redeploying the Spire service and restoring the data.
       Example output:
 
       ```text
-      REVISION	UPDATED                 	STATUS  	CHART           	APP VERSION	DESCRIPTION
-      1       	Wed Nov 15 12:41:50 2023	deployed	cray-spire-1.5.4	1.5.5      	Install complete
+      REVISION    UPDATED                   STATUS    CHART             APP VERSION  DESCRIPTION
+      1           Wed Nov 15 12:41:50 2023  deployed  cray-spire-1.5.4  1.5.5        Install complete
       ```
 
    1. Uninstall the `cray-spire` chart.
