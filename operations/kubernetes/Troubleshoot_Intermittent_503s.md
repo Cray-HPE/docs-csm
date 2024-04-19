@@ -111,6 +111,12 @@ This error code typically indicates an issue with the authorization service (for
 
 Once the restarts are all complete, the HTTP 503 message should clear.
 
+NOTE: If the `UAEX` issue keeps happening, run the following script as the workaround:
+
+```bash
+/usr/share/doc/csm/scripts/operations/istio_opa_503_UAEX_repair.sh
+```
+
 ## Other error codes
 
 Although the above codes are most common, various other issues such as networking or application errors can cause different errors in
