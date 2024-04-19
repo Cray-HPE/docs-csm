@@ -38,8 +38,6 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
 - [CPS](#cps)
 - [FAS](#fas)
 - [HMNFD](#hmnfd)
-- [MEDS](#meds)
-- [REDS](#reds)
 
 ### BOS
 
@@ -95,11 +93,3 @@ Resubscribe the compute nodes and any NCNs that use the ORCA daemon for their St
     ```bash
     pdsh -w ncn-w00[1-4]-can.local "systemctl restart cray-orca"
     ```
-
-### MEDS
-
-(`ncn-mw#`) Restart MEDS.
-
-```bash
-kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-meds'
-```
