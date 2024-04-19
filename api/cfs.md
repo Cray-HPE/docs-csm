@@ -5391,7 +5391,10 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
           "source": "string",
           "playbook": "site.yml",
           "commit": "string",
-          "branch": "string"
+          "branch": "string",
+          "special_parameters": {
+            "ims_require_dkms": true
+          }
         }
       ],
       "additional_inventory": {
@@ -5510,7 +5513,10 @@ Retrieve the given configuration
       "source": "string",
       "playbook": "site.yml",
       "commit": "string",
-      "branch": "string"
+      "branch": "string",
+      "special_parameters": {
+        "ims_require_dkms": true
+      }
     }
   ],
   "additional_inventory": {
@@ -5617,7 +5623,10 @@ Add a configuration to CFS or replace an existing configuration.
       "source": "string",
       "playbook": "site.yml",
       "commit": "string",
-      "branch": "string"
+      "branch": "string",
+      "special_parameters": {
+        "ims_require_dkms": true
+      }
     }
   ],
   "additional_inventory": {
@@ -5654,7 +5663,10 @@ Add a configuration to CFS or replace an existing configuration.
       "source": "string",
       "playbook": "site.yml",
       "commit": "string",
-      "branch": "string"
+      "branch": "string",
+      "special_parameters": {
+        "ims_require_dkms": true
+      }
     }
   ],
   "additional_inventory": {
@@ -5767,7 +5779,10 @@ Updates the commits for all layers that specify a branch
       "source": "string",
       "playbook": "site.yml",
       "commit": "string",
-      "branch": "string"
+      "branch": "string",
+      "special_parameters": {
+        "ims_require_dkms": true
+      }
     }
   ],
   "additional_inventory": {
@@ -7522,7 +7537,10 @@ A single desired configuration state for a component.
   "source": "string",
   "playbook": "site.yml",
   "commit": "string",
-  "branch": "string"
+  "branch": "string",
+  "special_parameters": {
+    "ims_require_dkms": true
+  }
 }
 
 ```
@@ -7539,6 +7557,8 @@ A single desired configuration state for a component.
 |playbook|string|true|none|The Ansible playbook to run.|
 |commit|string|false|none|The commit hash of the configuration repository when the state is set.|
 |branch|string|false|none|The configuration branch to use.  This will automatically set commit to master on the branch<br>when the configuration is added.|
+|special_parameters|object|false|none|Optional parameters that do not affect the configuration content or are only used in<br>special circumstances.|
+|» ims_require_dkms|boolean|false|none|If true, any image customization sessions that use this configuration will enable DKMS in IMS.|
 
 <h2 id="tocS_V2Configuration">V2Configuration</h2>
 <!-- backwards compatibility -->
@@ -7605,7 +7625,10 @@ A collection of ConfigurationLayers.
       "source": "string",
       "playbook": "site.yml",
       "commit": "string",
-      "branch": "string"
+      "branch": "string",
+      "special_parameters": {
+        "ims_require_dkms": true
+      }
     }
   ],
   "additional_inventory": {
@@ -7696,7 +7719,10 @@ An array of configurations.
           "source": "string",
           "playbook": "site.yml",
           "commit": "string",
-          "branch": "string"
+          "branch": "string",
+          "special_parameters": {
+            "ims_require_dkms": true
+          }
         }
       ],
       "additional_inventory": {
