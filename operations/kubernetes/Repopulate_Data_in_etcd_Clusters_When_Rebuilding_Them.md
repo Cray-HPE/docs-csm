@@ -4,14 +4,14 @@ When an etcd cluster is not healthy, it needs to be rebuilt. During that process
 That data needs to be repopulated in order for the cluster to go back to a healthy state.
 
 - [Repopulate Data in etcd Clusters When Rebuilding Them](#repopulate-data-in-etcd-clusters-when-rebuilding-them)
-  - [Applicable services](#applicable-services)
-  - [Prerequisites](#prerequisites)
-  - [Procedures](#procedures)
-    - [BOS](#bos)
-    - [BSS](#bss)
-    - [CPS](#cps)
-    - [FAS](#fas)
-    - [HMNFD](#hmnfd)
+    - [Applicable services](#applicable-services)
+    - [Prerequisites](#prerequisites)
+    - [Procedures](#procedures)
+        - [BOS](#bos)
+        - [BSS](#bss)
+        - [CPS](#cps)
+        - [FAS](#fas)
+        - [HMNFD](#hmnfd)
 
 ## Applicable services
 
