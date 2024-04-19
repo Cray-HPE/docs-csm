@@ -12,8 +12,6 @@ That data needs to be repopulated in order for the cluster to go back to a healt
     - [CPS](#cps)
     - [FAS](#fas)
     - [HMNFD](#hmnfd)
-    - [MEDS](#meds)
-    - [REDS](#reds)
 
 ## Applicable services
 
@@ -25,7 +23,6 @@ The following services need their data repopulated in the etcd cluster:
 - Firmware Action Service \(FAS\)
 - HMS Notification Fanout Daemon \(HMNFD\)
 - Mountain Endpoint Discovery Service \(MEDS\)
-- River Endpoint Discovery Service \(REDS\)
 
 ## Prerequisites
 
