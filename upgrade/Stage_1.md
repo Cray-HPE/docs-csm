@@ -57,6 +57,10 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
    /usr/share/doc/csm/upgrade/scripts/upgrade/csm-upgrade.sh
    ```
 
+   > **`NOTE`**: If some charts fail to upgrade due to timeout, follow the instructions in
+   > [Helm chart deployment timeout](../troubleshooting/known_issues/helm_chart_deploy_timeouts.md)
+   > to increase the timeout value and re-run the `csm-upgrade.sh` script.
+
 ## Verify Keycloak users
 
 1. (`ncn-m001#`) Verify that the Keycloak users localize job has completed as expected.
