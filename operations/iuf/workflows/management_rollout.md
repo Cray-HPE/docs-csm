@@ -75,21 +75,32 @@ Refer to that table and any corresponding product documents before continuing to
     verified with the command below using the xname of the node that was upgraded instead of the example value `x3000c0s13b0n0`.
 
         ```bash
-        XNAME=x3000c0s13b0n0
+        XNAME=$(ssh $STORAGE_CANARY 'cat /etc/cray/xname')
+        echo "${XNAME}"
         cray cfs components describe "${XNAME}"
         ```
 
         The desired value for `configuration_status` is `configured`. If it is `pending`, then wait for the status to change to `configured`.
 
     1. (`ncn-m001#`) Upgrade the remaining NCN storage nodes once the first has upgraded successfully. This upgrades NCN storage nodes serially.
-    Adjust the number of storage nodes based on the cluster.
+    Get the number of storage nodes based on the cluster and verify that it is correct. The storage canary node should not be in the list since it has already been upgraded.
+    The list of storage nodes can be manually entered if it is not desired to upgrade all of the remaining storage nodes.
 
         ```bash
-        STORAGE_NODES="ncn-s002 ncn-s003 ncn-s004"
+        STORAGE_NODES="$(ceph orch host ls | grep ncn-s | grep -v "$STORAGE_CANARY" | awk '{print $1}' | xargs echo)"
+        echo "$STORAGE_NODES"
         ```
 
         ```bash
         iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_NODES}
+        ```
+
+    1. (`ncn-m001#`) Vreify that all storage nodes configured successfully.
+
+        ```bash
+        for ncn in $(cray hsm state components list --subrole Storage --type Node \
+           --format json | jq -r .Components[].ID | grep b0n | sort); do cray cfs components describe \
+           $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'; done
         ```
 
 1. Perform the NCN master node upgrade on `ncn-m002` and `ncn-m003`.
@@ -105,6 +116,12 @@ Refer to that table and any corresponding product documents before continuing to
 
     1. Verify that `ncn-m002` booted successfully with the desired image and CFS configuration.
 
+        ```bash
+        XNAME=$(ssh ncn-m002 'cat /etc/cray/xname')
+        echo "${XNAME}"
+        cray cfs components describe "${XNAME}"
+        ```
+
     1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m003`. This will rebuild `ncn-m003` with the new CFS configuration and image built in
     previous steps of the workflow.
 
@@ -112,6 +129,14 @@ Refer to that table and any corresponding product documents before continuing to
 
         ```bash
         iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ncn-m003
+        ```
+
+    1. Verify that `ncn-m003` booted successfully with the desired image and CFS configuration.
+
+        ```bash
+        XNAME=$(ssh ncn-m003 'cat /etc/cray/xname')
+        echo "${XNAME}"
+        cray cfs components describe "${XNAME}"
         ```
 
 1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [3.3 NCN worker nodes](#33-ncn-worker-nodes) and then return to this procedure to complete the next step.
@@ -289,6 +314,12 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 
 1. Verify the canary node booted successfully with the desired image and CFS configuration.
 
+    ```bash
+    XNAME=$(ssh $WORKER_CANARY 'cat /etc/cray/xname')
+    echo "${XNAME}"
+    cray cfs components describe "${XNAME}"
+    ```
+
 1. (`ncn-m001#`) Use `kubectl` to apply the `iuf-prevent-rollout=true` label to the canary node to prevent it from unnecessarily rebuilding again.
 
     ```bash
@@ -303,17 +334,41 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
 
-    **`NOTE`** Instead of supplying `Management_Worker` as the argument to `--limit-management-rollout`, worker node hostnames could be supplied.
-    For example, `--limit-management-rollout ncn-w002 ncn-w003` will rebuild `ncn-w002` and `ncn-w003`.
+    **`NOTE`** For this step, the argument to `--limit-management-rollout` can be `Management_Worker` or a list of worker
+    node names seperated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
+    with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
 
-    ```bash
-    iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout Management_Worker
-    ```
+    **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
 
-1. Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the canary node.
+    1. (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
+
+        ```bash
+        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout Management_Worker
+        ```
+
+    1. (`ncn-m001#`) Execute `management-nodes-rollout` on a group of worker nodes. The list of worker nodes can be manually edited if it is undesirable to rebuild/upgrade all of the workers with one execution.
+
+        ```bash
+        WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | grep -v $WORKER_CANARY |  awk '{print $1}' | xargs)
+        echo $WORKER_NODES
+        ```
+
+        ```bash
+        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout $WORKER_NODES
+        ```
+
+1. (`ncn-m001#`) Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the canary node.
 
     ```bash
     kubectl label nodes "${WORKER_CANARY}" --overwrite iuf-prevent-rollout-
+    ```
+
+1. (`ncn-m001#`) Vreify that all worker nodes configured successfully.
+
+    ```bash
+    for ncn in $(cray hsm state components list --subrole Worker --type Node \
+      --format json | jq -r .Components[].ID | grep b0n | sort); do cray cfs components describe \
+      $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'; done
     ```
 
 Once this step has completed:
