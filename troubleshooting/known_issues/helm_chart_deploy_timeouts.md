@@ -5,13 +5,13 @@ Several charts known to take longer than five minutes have been modified to allo
 
 ## Edit the manifest used by Loftsman
 
-Locate the chart which is taking too long to deploy in the manifest (typically `platform.yaml` or `sysmgmt.yaml`), and add the `timeout` field at the same level as `name` in the manifest:
+Locate the chart which is taking longer than usual to deploy in the manifest (typically `platform.yaml` or `sysmgmt.yaml` under the media directory for CSM release, e.g., `/etc/cray/upgrade/csm/media/update-products-24.3.0/csm-1.5.0/manifests/sysmgmt.yaml`), and edit (or add) the `timeout` field at the same level as `name` in the manifest:
 
 ```text
-  - name: cray-precache-images
+  - name: cray-uas-mgr
     source: csm-algol60
-    version: 0.5.2
-    namespace: nexus
+    version: 1.23.2
+    namespace: services
     timeout: 20m0s     <-------------
 ```
 
