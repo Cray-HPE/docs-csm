@@ -8,7 +8,8 @@ firmware can be found in the switch [External User Guides](../external_user_guid
 - Access to the switches.
 - Firmware in a location that the switches can reach.
 
-All firmware can be found in the HFP package provided with the Shasta release.
+Aruba firmware can be found in the HFP package provided with the HPE Cray EX release.
+Dell and Mellanox firmware must be downloaded from the manufacturer.
 
 ## Switch Firmware
 
