@@ -7,7 +7,7 @@ More details and other options to upgrade firmware can be found in the switch [E
 - Access to the switches.
 - Firmware in a location that the switches can reach.
 
-Aruba firmware can be found in the HFP package provided with the Shasta release.
+Aruba firmware can be found in the HFP package provided with the HPE Cray EX release.
 Dell and Mellanox firmware must be downloaded from the manufacturer.
 
 ## Switch Firmware
