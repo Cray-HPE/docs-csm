@@ -341,7 +341,7 @@ def get_all_s3_links_from_bos_session_templates() -> S3UrlList:
         s3_links.append(s3_url)
 
     logging.info("Scanning BOS session templates for S3 artifact links")
-    for template in bos.list_v2_session_templates():
+    for template in bos.list_session_templates():
         template_name = template["name"]
         try:
             boot_sets = template["boot_sets"]
