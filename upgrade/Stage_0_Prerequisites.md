@@ -519,8 +519,9 @@ Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data).
 ## Stage 0.4 - Backup workload manager data
 
 To prevent any possibility of losing workload manager configuration data or files, a backup is required. Execute all backup procedures (for the workload manager in use) located in
-the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the
-`HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting backup data should be stored in a safe location off of the system.
+the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of version `23.05` of the
+`HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`.
+The resulting backup data should be stored in a safe location off of the system.
 
 If performing an upgrade of CSM and additional HPE Cray EX software products using the IUF,
 return to the [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
