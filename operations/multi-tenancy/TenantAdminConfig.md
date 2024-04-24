@@ -50,7 +50,7 @@ Below is an example of a YAML file which will give a user some basic permissions
 
 ```yaml
 kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: tenant-admin-role
 rules:
@@ -62,7 +62,7 @@ rules:
     verbs: ["patch", "get", "watch", "list"]
 ---
 kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: tenant-admin-rb-blue
   namespace: vcluster-blue
@@ -76,7 +76,7 @@ subjects:
   apiGroup: rbac.authorization.k8s.io
 ---
 kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: tenant-admin-tenants-blue-rb
   namespace: tenants
@@ -97,7 +97,9 @@ Note the reference to the Keycloak group `vcluster-blue-tenant-admin` in each of
 (`ncn-mw#`) The following command is an example of how to retrieve an OIDC token for interacting directly with the Kubernetes API:
 
 ```bash
-TOKEN=$(curl -k -s -d scope=openid -d response_type=id_token -d grant_type=password -d client_id=kubernetes-api-oidc-client -d password=<REDACTED> -d username=tenant-admin https://api-gateway.vshasta.io/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.id_token')
+TOKEN=$(curl -k -s -d scope=openid -d response_type=id_token -d grant_type=password \
+            -d client_id=kubernetes-api-oidc-client -d password=<REDACTED> -d username=tenant-admin \
+            https://api-gateway.vshasta.io/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.id_token')
 ```
 
 Decoding this token will illustrate the `groups` and `name` claims added by Keycloak:
@@ -108,44 +110,33 @@ This token can now be used by a the tenant administrator to interact with Kubern
 
 * (`ncn-mw#`) The following is an example of listing pods in the `vcluster-blue` namespace (which was specified in the `ClusterRole` above as allowed):
 
-  ```bash
-  curl -k -H "Authorization: Bearer $TOKEN"  https://kubernetes-api.vshasta.io:6443/api/v1/namespaces/vcluster-blue/pods
-  ```
-
-  Example output:
-
-  ```text
-  {
-    "kind": "PodList",
-    "apiVersion": "v1",
-    "metadata": {
-    "resourceVersion": "5860840"
-  },
-  "items": []
-  ```
+    ```bash
+    curl -k -H "Authorization: Bearer $TOKEN" https://kubernetes-api.vshasta.io:6443/api/v1/namespaces/vcluster-blue/pods
+    ```
 
 * (`ncn-mw#`) Note that this token could not be used to list pods in a different namespace (`services` for example):
 
     ```bash
-    curl -k -H "Authorization: Bearer $TOKEN"  https://kubernetes-api.vshasta.io:643/api/v1/namespaces/services/pods
+    curl -k -H "Authorization: Bearer $TOKEN" https://kubernetes-api.vshasta.io:643/api/v1/namespaces/services/pods
     ```
 
     Example output:
 
-    ```text
+    ```json
     {
-    "kind": "Status",
-    "apiVersion": "v1",
-    "metadata": {
-  
-    },
-    "status": "Failure",
-    "message": "pods is forbidden: User \"https://api-gateway.vshasta.io/keycloak/realms/shasta#tenant-admin\" cannot list resource \"pods\" in API group \"\" in the namespace \"services\"",
-    "reason": "Forbidden",
-    "details": {
-      "kind": "pods"
-    },
-    "code": 403
+      "kind": "Status",
+      "apiVersion": "v1",
+      "metadata": {
+
+      },
+      "status": "Failure",
+      "message": "pods is forbidden: User \"https://api-gateway.vshasta.io/keycloak/realms/shasta#tenant-admin\" cannot list resource \"pods\" in API group \"\" in the namespace \"services\"",
+      "reason": "Forbidden",
+      "details": {
+        "kind": "pods"
+      },
+      "code": 403
+    }
     ```
 
 ## Using `kubelogin`
