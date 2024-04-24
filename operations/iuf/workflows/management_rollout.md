@@ -86,7 +86,7 @@ Refer to that table and any corresponding product documents before continuing to
         iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_NODES}
         ```
 
-    1. (`ncn-m001#`) Vreify that all storage nodes configured successfully.
+    1. (`ncn-m001#`) Verify that all storage nodes configured successfully.
 
         ```bash
         for ncn in $(cray hsm state components list --subrole Storage --type Node \
@@ -357,7 +357,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     kubectl label nodes "${WORKER_CANARY}" --overwrite iuf-prevent-rollout-
     ```
 
-1. (`ncn-m001#`) Vreify that all worker nodes configured successfully.
+1. (`ncn-m001#`) Verify that all worker nodes configured successfully.
 
     ```bash
     for ncn in $(cray hsm state components list --subrole Worker --type Node \
