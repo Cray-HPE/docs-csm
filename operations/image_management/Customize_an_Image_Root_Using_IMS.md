@@ -10,8 +10,8 @@ to boot a node\) to the artifact repository.
 ## Prerequisites
 
 * System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
-  * `cray-ims`, the Image Management Service \(IMS\)
-  * `cray-nexus`, the Nexus repository manager service
+    * `cray-ims`, the Image Management Service \(IMS\)
+    * `cray-nexus`, the Nexus repository manager service
 * `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
 * An IMS registered image root archive or a pre-built image root SquashFS archive is available to customize.
 * The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
