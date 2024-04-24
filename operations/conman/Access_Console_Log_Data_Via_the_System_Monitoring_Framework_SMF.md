@@ -1,6 +1,6 @@
 # Access Console Log Data Via the System Monitoring Framework \(SMF\)
 
-Console log data is collected by SMF and can be queried through the Kibana UI or Elasticsearch. Each line of the console logs are an individual record in the SMF database.
+Console log data is collected by SMF and can be queried through the SMA Dashboards UI or Opensearch. Each line of the console logs are an individual record in the SMF database.
 
 - [Prerequisites](#prerequisites)
 - [System domain name](#system-domain-name)
@@ -8,7 +8,7 @@ Console log data is collected by SMF and can be queried through the Kibana UI or
 
 ## Prerequisites
 
-This procedure requires the Kibana service to be up and running on a non-compute node \(NCN\).
+This procedure requires the `sma-dashboards` service to be up and running on a non-compute node \(NCN\).
 
 ## System domain name
 
@@ -30,21 +30,21 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
 
 ## Procedure
 
-1. Navigate to the following URL in a web browser: `https://sma-kibana.cmn.SYSTEM_DOMAIN_NAME/app/kibana`
+1. Navigate to the following URL in a web browser: `https://sma-dashboards.cmn.SYSTEM_DOMAIN_NAME`
 
     | If this appears                                                                             | Do this                                                                                                          |
     |---------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
-    | **the Keycloak login page**                                                                 | Supply valid credentials, then wait to be redirected to the Kibana dashboard before continuing to the next step. |
-    | **the error `Kibana did not load properly. Check the server output for more information.`** | Clear browser cookies for `https://sma-kibana.cmn.SYSTEM_DOMAIN_NAME`                                            |
-    | **The Kibana dashboard \(see example below\)**                                              | Proceed to next step                                                                                             |
+    | **the Keycloak login page**                                                                 | Supply valid credentials, then wait to be redirected to the SMA dashboard before continuing to the next step. |
+    | **the error `Opensearch Dashboards did not load properly. Check the server output for more information.`** | Clear browser cookies for `https://sma-dashboards.cmn.SYSTEM_DOMAIN_NAME`                                            |
+    | **The SMA dashboard \(see example below\)**                                              | Proceed to next step                                                                                             |
 
-    When the Kibana dashboard loads, the web UI displays the Discover page by default. Note that even without entering a search pattern, an index pattern shows entries ordered in time.
+    When the SMA dashboard loads, the web UI displays the SMA dashboard home page. 
 
-    ![Kibana Discover Dashboard](../../img/operations/Kibana_Discover_Dashboard.png)
+    ![SMA Dashboard Home Page](../../img/operations/Sma_dashboard_home_page.png)
 
 1. Select the Shasta index for the type of logs desired from the drop-down list to search that data source.
 
-    ![Kibana ClusterStor Logs](../../img/operations/Kibana_Clusterstor_Logs-Dropdown.png)
+    ![SMA Shasta Logs](../../img/operations/Sma_dashboard_index_dropdown.png)
 
 1. Identify the component name (xname) for individual consoles to search for specific logs.
 
@@ -65,4 +65,4 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
 
     The default time range is 15 minutes.
 
-    ![Kibana Results Time Period](../../img/operations/Kibana_Results_Time_Period.png)
+    ![Dashboard Results Time Period](../../img/operations/Sma_dashboard_Time_Period.png)
