@@ -71,8 +71,7 @@ Refer to that table and any corresponding product documents before continuing to
         iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
         ```
 
-    1. (`ncn-m#`) Verify that the storage node booted and is configured correctly. The CFS configuration can be
-    verified with the command below using the xname of the node that was upgraded instead of the example value `x3000c0s13b0n0`.
+    1. (`ncn-m#`) Verify that the storage canary node booted successfully with the desired CFS configuration.
 
         ```bash
         XNAME=$(ssh $STORAGE_CANARY 'cat /etc/cray/xname')
