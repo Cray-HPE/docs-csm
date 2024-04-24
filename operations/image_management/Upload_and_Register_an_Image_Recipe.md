@@ -2,11 +2,19 @@
 
 Download and expand recipe archives from S3 and IMS. Modify and upload a recipe archive, and then register that recipe archive with IMS.
 
+* [Prerequisites](#prerequisites)
+* [Limitations](#limitations)
+* [Register recipe with IMS](#register-recipe-with-ims)
+* [Templating IMS recipes](#templating-ims-recipes)
+    * [Enable templating in recipe archive file](#enable-templating-in-recipe-archive-file)
+    * [Add template key/value pairs to IMS recipe record](#add-template-keyvalue-pairs-to-ims-recipe-record)
+    * [Build an image from an IMS templated recipe](#build-an-image-from-an-ims-templated-recipe)
+
 ## Prerequisites
 
 * The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 * System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCNs\) and include the following deployment:
-  * `cray-ims`, the Image Management Service \(IMS\)
+    * `cray-ims`, the Image Management Service \(IMS\)
 * The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
 * A token providing Simple Storage Service \(S3\) credentials has been generated.
 
@@ -15,14 +23,14 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
 * The commands in this procedure must be run as the `root` user.
 * The IMS tool currently only supports Kiwi-NG recipe types.
 
-## Procedure
+## Register recipe with IMS
 
 1. (`ncn-mw#`) Locate the desired recipe to download from S3.
 
     There may be multiple records returned. Ensure that the correct record is selected in the returned data.
 
     ```bash
-    cray ims recipes list
+    cray ims recipes list --format toml
     ```
 
     Excerpt from example output:
@@ -102,7 +110,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     ```bash
     cray ims recipes create --name "My Recipe" \
             --recipe-type kiwi-ng --linux-distribution sles15 \
-            --arch x86_64 --require-dkms False
+            --arch x86_64 --require-dkms False --format toml
     ```
 
     Example output:
@@ -136,7 +144,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
 
     ```bash
     cray ims recipes update $IMS_RECIPE_ID --link-type s3 \
-            --link-path s3://ims/recipes/$IMS_RECIPE_ID/$ARTIFACT_FILE
+            --link-path s3://ims/recipes/$IMS_RECIPE_ID/$ARTIFACT_FILE --format toml
     ```
 
     Example output:
@@ -156,7 +164,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     type = "s3"
     ```
 
-## Templating IMS Recipes when Building an IMS Image
+## Templating IMS recipes
 
 IMS can optionally template the contents of an IMS recipe before building the recipe with Kiwi-NG during an IMS `create` job. This
 enables variables stored in the recipe to be dynamically replaced with values registered with the IMS recipe record after the
@@ -166,7 +174,7 @@ that the resulting image is built from the most correct release versions of Nexu
 Follow the steps below to enable IMS templating within a given recipe. Note that for IMS to properly template a recipe,
 the following procedures must all be completed.
 
-### Enable Templating in IMS Recipe Archive `tgz` File
+### Enable templating in recipe archive file
 
 1. Add a file named `.ims_recipe_template.yaml` to the root of the recipe archive.
 
@@ -229,16 +237,19 @@ the following procedures must all be completed.
     cd ..
     ```
 
-### Add Template Key/Value Pairs to IMS Recipe Record
+### Add template key/value pairs to IMS recipe record
 
 1. (`ncn-mw#`) Create a new IMS recipe record with `template_dictionary` key/value pairs.
+
+    As shown in the example command, multiple key/value pairs may be added by providing a list of comma-separated
+    keys/values to the `--template-dictionary-key` and `--template-dictionary-value` parameters.
 
     ```bash
     cray ims recipes create --name "My Recipe" \
             --recipe-type kiwi-ng --linux-distribution sles15 \
-            --template-dictionary-key CSM_RELEASE_VERSION \
-            --template-dictionary-value 1.2.5 \
-            --arch x86_64
+            --template-dictionary-key CSM_RELEASE_VERSION,SLE_VERSION \
+            --template-dictionary-value 1.2.5,15sp4 \
+            --arch x86_64 --format toml
     ```
 
     Example output:
@@ -251,16 +262,13 @@ the following procedures must all be completed.
     recipe_type = "kiwi-ng"
     arch = "x86_64"
     require_dkms = false
-    
+
     [[template_dictionary]]
     key = "CSM_RELEASE_VERSION"
     value = "1.2.5"
     key = "SLE_VERSION"
     value = "15sp4"
     ```
-
-    Additional key/value pairs can be added by providing a list of comma-separated keys/values to the
-    `--template-dictionary-key` and `--template-dictionary-value` parameters.
 
 1. (`ncn-mw#`) Create a variable for the `id` value in the returned data.
 
@@ -281,7 +289,7 @@ the following procedures must all be completed.
 
    ```bash
    cray ims recipes update $IMS_RECIPE_ID --link-type s3 \
-           --link-path s3://ims/recipes/$IMS_RECIPE_ID/$ARTIFACT_FILENAME
+           --link-path s3://ims/recipes/$IMS_RECIPE_ID/$ARTIFACT_FILENAME --format toml
    ```
 
    Example output:
@@ -299,17 +307,17 @@ the following procedures must all be completed.
    key = "CSM_RELEASE_VERSION"
    value = "1.2.5"
    key = "SLE_VERSION"
-   value = "15sp4
-   
+   value = "15sp4"
+
    [link]
    path = "s3://ims/recipes/2233c82a-5081-4f67-bec4-4b59a60017a6/recipe.tar.gz"
    etag = ""
    type = "s3"
    ```
 
-### Build an Image from an IMS Templated Recipe
+### Build an image from an IMS templated recipe
 
-The procedure to build an image from an IMS recipe that uses templating does not change. Follow the normal IMS create
+(`ncn-mw#`) The procedure to build an image from an IMS recipe that uses templating does not change. Follow the normal IMS create
 procedure, specifying the recipe's ID value in the job's `--artifact-id` parameter. The IMS job will start as normal,
 but after downloading the recipe from S3, there will be an indication that IMS is templating the recipe in the job's
 `fetch-recipe` container log.
