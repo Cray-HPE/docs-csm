@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -33,7 +33,7 @@ function redeploy_monitoring_stack() {
   echo -e "\nREDEPLOYING CEPH MONITORING STACK."
   echo "(This will redeploy all prometheus, node-exporter, alertmanager, and grafana daemons so that they will be using the container image in nexus.)"
   for daemon in "prometheus" "node-exporter" "alertmanager" "grafana"; do
-    echo "Redploying $daemon daemons."
+    echo "Redeploying $daemon daemons."
     daemons_to_restart=$(ceph --name client.ro orch ps --daemon_type $daemon | awk '{print $1}' | tail -n+2)
     for each in $daemons_to_restart; do
       ceph orch daemon redeploy $each
@@ -70,7 +70,7 @@ function redeploy_failed_monitoring_daemons() {
     should_recheck=0
     for daemon in "prometheus" "node-exporter" "alertmanager" "grafana"; do
       # using grep to get the info below. jq cannot be used
-      # becasue some ceph 'event' values are incorrectly formatted and jq fails to filter json
+      # because some ceph 'event' values are incorrectly formatted and jq fails to filter json
       daemons_not_running=$(ceph orch ps --daemon_type $daemon | grep -v 'running' | tail -n+2 | awk '{print $1}')
       for each in $daemons_not_running; do
         should_recheck=1

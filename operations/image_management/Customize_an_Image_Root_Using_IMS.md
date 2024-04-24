@@ -37,7 +37,7 @@ to boot a node\) to the artifact repository.
     The following query may return multiple public key records. The correct one will have a name value including the current username in use.
 
     ```bash
-    cray ims public-keys list
+    cray ims public-keys list --format toml
     ```
 
     Example output excerpt:
@@ -64,7 +64,7 @@ to boot a node\) to the artifact repository.
     Replace the `username` value with the actual username being used on the system when setting the public key name.
 
     ```bash
-    cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub
+    cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub --format toml
     ```
 
     Example output:
@@ -95,7 +95,7 @@ to boot a node\) to the artifact repository.
 1. (`ncn-mw#`) Locate the IMS image record for the image that is being customized.
 
     ```bash
-    cray ims images list
+    cray ims images list --format toml
     ```
 
     Example output excerpt:
@@ -159,7 +159,8 @@ to boot a node\) to the artifact repository.
         --artifact-id $IMS_IMAGE_ID \
         --public-key-id $IMS_PUBLIC_KEY_ID \
         --enable-debug False \
-        --image-root-archive-name MY_CUSTOMIZED_IMAGE
+        --image-root-archive-name MY_CUSTOMIZED_IMAGE \
+        --format toml
     ```
 
     Example output:
@@ -270,7 +271,7 @@ to boot a node\) to the artifact repository.
 1. (`ncn-mw#`) Verify that the status of the IMS job is `waiting_on_user`.
 
     ```bash
-    cray ims jobs describe $IMS_JOB_ID
+    cray ims jobs describe $IMS_JOB_ID --format toml
     ```
 
     Example output:
@@ -321,8 +322,6 @@ to boot a node\) to the artifact repository.
 
         ```bash
         ssh -p $IMS_SSH_PORT root@$IMS_SSH_HOST
-        Last login: Tue Sep  4 18:06:27 2018 from gateway
-        [root@POD ~]#
         ```
 
         Once connected to the IMS image customization shell, perform any customizations required. If the SSH shell was created without using the `--ssh-containers-jail True`
@@ -501,7 +500,7 @@ to boot a node\) to the artifact repository.
 1. (`ncn-mw#`) Look up the ID of the newly created image.
 
     ```bash
-    cray ims jobs describe $IMS_JOB_ID
+    cray ims jobs describe $IMS_JOB_ID --format toml
     ```
 
     Example output:
@@ -538,7 +537,7 @@ to boot a node\) to the artifact repository.
 1. (`ncn-mw#`) Verify that the new IMS image record exists.
 
     ```bash
-    cray ims images describe $IMS_RESULTANT_IMAGE_ID
+    cray ims images describe $IMS_RESULTANT_IMAGE_ID --format toml
     ```
 
     Example output:
@@ -566,6 +565,6 @@ to boot a node\) to the artifact repository.
 
     Jobs left in a 'Running' state continue to consume Kubernetes resources until the job is completed, or deleted. If there
     are enough 'Running' IMS jobs on the system it may not be possible to schedule more pods on worker nodes due to
-    insuffient resouces errors.
+    insufficient resouces errors.
 
 The image root has been modified, compressed, and uploaded to S3, along with its associated `initrd` and kernel files. The image customization environment has also been cleaned up.
