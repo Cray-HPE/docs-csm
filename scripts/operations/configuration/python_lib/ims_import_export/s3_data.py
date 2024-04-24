@@ -338,7 +338,7 @@ def download_s3_artifacts(outdir: str, s3_urls: Iterable[s3.S3Url]) -> Dict[s3.S
     if s3_download_requests:
         logging.info("Starting parallel S3 downloads for %d artifacts", len(s3_download_requests))
         parallel_download_s3_artifacts(s3_download_requests)
-        logging.info("Parallel S3 downnload complete")
+        logging.info("Parallel S3 download complete")
     else:
         logging.debug("Nothing to download from S3")
     return url_relpath_map
