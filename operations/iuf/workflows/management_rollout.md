@@ -390,13 +390,17 @@ It should be copied to the canary node when that node is being
 rebuilt, and to the remaining worker nodes after the canary node boot
 has succeeded.
 
-1. (`ncn-m001#`) Optionally, set an environment variable to the media directory:
+1. (`ncn-m001#`) Set an environment variable to the media directory, if not already set.
 
     ```bash
-    MEDIADIR=/etc/cray/upgrade/csm/media/<directory>
+    echo $MEDIA_DIR
     ```
 
-2. (`ncn-m001#`) Optionally, create and `cd` to a temporary directory.
+    ```bash
+    MEDIA_DIR=/etc/cray/upgrade/csm/media/<directory>
+    ```
+
+1. (`ncn-m001#`) Optionally, create and `cd` to a temporary directory.
 in which to extract the new version of the script.
 
     ```bash
@@ -404,34 +408,29 @@ in which to extract the new version of the script.
     cd /tmp/upgrade-prechecks_WAR
     ```
 
-3. (`ncn-m001#`) Extract the `cray-dvs-csm` rpm that's included in the USS image:
+1. (`ncn-m001#`) Extract the `cray-dvs-csm` rpm that's included in the USS image:
 
     ```bash
-    rpm2cpio < $MEDIADIR/uss-*-csm-1.5/rpms/uss-*-csm-1.5/x86_64/cray-dvs-csm-*.x86_64.rpm | cpio -i --make-directories --no-absolute-filenames
+    rpm2cpio < $MEDIA_DIR/uss-*-csm-1.5/rpms/uss-*-csm-1.5/x86_64/cray-dvs-csm-*.x86_64.rpm | cpio -i --make-directories --no-absolute-filenames
     ```
 
-4. (`ncn-m001#`) Install the new version of the script onto the canary node.
+1. (`ncn-m001#`) Install the new version of the script onto all of the worker nodes. This is one way to do that:
 
     ```bash
     SSH_OPTIONS='-o StrictHostKeyChecking=no -o ConnectTimeout=15 -o LogLevel=ERROR -o UserKnownHostsFile=/dev/null'
-    scp $SSH_OPTIONS opt/cray/shasta/cne/bin/prechecks_for_worker_reboots $WORKER_CANARY:/opt/cray/shasta/cos/bin/prechecks_for_worker_reboots
-    ```
-
-5. (`ncn-m001#`) After the canary node has booted successfully, install the new version of the script onto the other worker nodes. This is one way to do that:
-
-    ```bash
     for name in $(kubectl get node | grep -P 'ncn-w\d+' | awk '{print $1}'); do
-        xname=$(nslookup $(dig +short ${name}.nmn) | grep -P "x\d+c\d+s\d+b\dn\d.$" | sed -e 's/.* = //' -e 's/\.$//')
-        scp $SSH_OPTIONS opt/cray/shasta/cne/bin/prechecks_for_worker_reboots $xname:/opt/cray/shasta/cos/bin/prechecks_for_worker_reboots
+        scp -p $SSH_OPTIONS opt/cray/shasta/cne/bin/prechecks_for_worker_reboots $name:/opt/cray/shasta/cos/bin/prechecks_for_worker_reboots
     done
     ```
 
-6. (`ncn-m001#`) Optionally, remove the temporary directory.
+1. (`ncn-m001#`) Optionally, remove the temporary directory.
 
     ```bash
     cd ..
     rm -rf upgrade-prechecks_WAR
     ```
+
+After completing this workaround, return to [2.3 NCN worker nodes](#23-ncn-worker-nodes) to roll out worker nodes.
 
 ## 3. Update management host Slingshot NIC firmware
 
