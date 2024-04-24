@@ -37,7 +37,7 @@ to boot a node\) to the artifact repository.
     The following query may return multiple public key records. The correct one will have a name value including the current username in use.
 
     ```bash
-    ncn# cray ims public-keys list
+    ncn-mw# cray ims public-keys list --format toml
     ```
 
     Example output excerpt:
@@ -64,7 +64,7 @@ to boot a node\) to the artifact repository.
     Replace the `username` value with the actual username being used on the system when setting the public key name.
 
     ```bash
-    ncn# cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub
+    ncn-mw# cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub --format toml
     ```
 
     Example output:
@@ -83,7 +83,7 @@ to boot a node\) to the artifact repository.
     Create a variable for the IMS public key `id` value noted previously.
 
     ```bash
-    ncn# IMS_PUBLIC_KEY_ID=a252ff6f-c087-4093-a305-122b41824a3e
+    ncn-mw# IMS_PUBLIC_KEY_ID=a252ff6f-c087-4093-a305-122b41824a3e
     ```
 
 1. Determine if the image root being used is in IMS and ready to be customized.
@@ -95,7 +95,7 @@ to boot a node\) to the artifact repository.
 1. <a name="locate"></a>Locate the IMS image record for the image that is being customized.
 
     ```bash
-    ncn# cray ims images list
+    ncn-mw# cray ims images list --format toml
     ```
 
     Example output excerpt:
@@ -117,7 +117,7 @@ to boot a node\) to the artifact repository.
     Create a variable for the `id` field value for the image that is being customized.
 
     ```bash
-    ncn# IMS_IMAGE_ID=4e78488d-4d92-4675-9d83-97adfc17cb19
+    ncn-mw# IMS_IMAGE_ID=4e78488d-4d92-4675-9d83-97adfc17cb19
     ```
 
 1. Create an IMS job record in order to start the image customization job.
@@ -146,14 +146,15 @@ to boot a node\) to the artifact repository.
     > Before running the following command, replace the `MY_CUSTOMIZED_IMAGE` value with the name of the image root being used.
 
     ```bash
-    ncn# cray ims jobs create \
-            --job-type customize \
-            --kernel-file-name vmlinuz \
-            --initrd-file-name initrd \
-            --artifact-id $IMS_IMAGE_ID \
-            --public-key-id $IMS_PUBLIC_KEY_ID \
-            --enable-debug False \
-            --image-root-archive-name MY_CUSTOMIZED_IMAGE
+    ncn-mw# cray ims jobs create \
+              --job-type customize \
+              --kernel-file-name vmlinuz \
+              --initrd-file-name initrd \
+              --artifact-id $IMS_IMAGE_ID \
+              --public-key-id $IMS_PUBLIC_KEY_ID \
+              --enable-debug False \
+              --image-root-archive-name MY_CUSTOMIZED_IMAGE \
+              --format toml
     ```
 
     Example output:
@@ -194,8 +195,8 @@ to boot a node\) to the artifact repository.
     the `kubernetes_job` field.
 
     ```bash
-    ncn# IMS_JOB_ID=ad5163d2-398d-4e93-94f0-2f439f114fe7
-    ncn# IMS_KUBERNETES_JOB=cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-customize
+    ncn-mw# IMS_JOB_ID=ad5163d2-398d-4e93-94f0-2f439f114fe7
+    ncn-mw# IMS_KUBERNETES_JOB=cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-customize
     ```
 
 1. Create variables for the SSH connection values in the returned data.
@@ -215,7 +216,7 @@ to boot a node\) to the artifact repository.
     the `10.103.2.160` IP address.
 
     ```bash
-    ncn# kubectl get services -n ims | grep $IMS_JOB_ID
+    ncn-mw# kubectl get services -n ims | grep $IMS_JOB_ID
     ```
 
     Example output:
@@ -227,14 +228,14 @@ to boot a node\) to the artifact repository.
     To create the variables:
 
     ```bash
-    ncn# IMS_SSH_HOST=ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com
-    ncn# IMS_SSH_PORT=22
+    ncn-mw# IMS_SSH_HOST=ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com
+    ncn-mw# IMS_SSH_PORT=22
     ```
 
 1. Describe the image create job.
 
     ```bash
-    ncn# kubectl -n ims describe job $IMS_KUBERNETES_JOB
+    ncn-mw# kubectl -n ims describe job $IMS_KUBERNETES_JOB
     ```
 
     Example output:
@@ -256,13 +257,13 @@ to boot a node\) to the artifact repository.
     The name is located in the `Events` section of the output.
 
     ```bash
-    ncn# POD=cray-ims-cfa864b3-4e08-49b1-9c57-04573228fd3f-customize-xh2jf
+    ncn-mw# POD=cray-ims-cfa864b3-4e08-49b1-9c57-04573228fd3f-customize-xh2jf
     ```
 
 1. Verify that the status of the IMS job is `waiting_on_user`.
 
     ```bash
-    ncn# cray ims jobs describe $IMS_JOB_ID
+    ncn-mw# cray ims jobs describe $IMS_JOB_ID --format toml
     ```
 
     Example output:
@@ -310,9 +311,7 @@ to boot a node\) to the artifact repository.
         > **IMPORTANT:** The following command will work when run on any of the master nodes and worker nodes, except for `ncn-w001`.
 
         ```bash
-        ncn# ssh -p $IMS_SSH_PORT root@$IMS_SSH_HOST
-        Last login: Tue Sep  4 18:06:27 2018 from gateway
-        [root@POD ~]#
+        ncn-mw# ssh -p $IMS_SSH_PORT root@$IMS_SSH_HOST
         ```
 
         Once connected to the IMS image customization shell, perform any customizations required. If the SSH shell was created without using the `--ssh-containers-jail True`
@@ -343,7 +342,7 @@ to boot a node\) to the artifact repository.
     * **Option 2:** Use Ansible to run playbooks against the image root.
 
         ```bash
-        ncn# ansible all -i $IMS_SSH_HOST, -m ping --ssh-extra-args \
+        ncn-mw# ansible all -i $IMS_SSH_HOST, -m ping --ssh-extra-args \
                 " -p $IMS_SSH_PORT -i ./pod_rsa_key -o StrictHostKeyChecking=no" -u root
         ```
 
@@ -394,13 +393,13 @@ to boot a node\) to the artifact repository.
         The sample playbook can be run with the following command:
 
         ```bash
-        ncn# ansible-playbook -i ./inventory.ini sample_playbook.yml
+        ncn-mw# ansible-playbook -i ./inventory.ini sample_playbook.yml
         ```
 
 1. Follow the `buildenv-sidecar` to ensure that any artifacts are properly uploaded to S3 and associated with IMS.
 
     ```bash
-    ncn# kubectl -n ims logs -f $POD -c buildenv-sidecar
+    ncn-mw# kubectl -n ims logs -f $POD -c buildenv-sidecar
     ```
 
     Example output:
@@ -489,7 +488,7 @@ to boot a node\) to the artifact repository.
 1. Look up the ID of the newly created image.
 
     ```bash
-    ncn# cray ims jobs describe $IMS_JOB_ID
+    ncn-mw# cray ims jobs describe $IMS_JOB_ID --format toml
     ```
 
     Example output:
@@ -518,13 +517,13 @@ to boot a node\) to the artifact repository.
     Set `IMS_RESULTANT_IMAGE_ID` to the value of the `resultant_image_id` field in the output of the previous command.
 
     ```bash
-    ncn# IMS_RESULTANT_IMAGE_ID=d88521c3-b339-43bc-afda-afdfda126388
+    ncn-mw# IMS_RESULTANT_IMAGE_ID=d88521c3-b339-43bc-afda-afdfda126388
     ```
 
 1. Verify that the new IMS image record exists.
 
     ```bash
-    ncn# cray ims images describe $IMS_RESULTANT_IMAGE_ID
+    ncn-mw# cray ims images describe $IMS_RESULTANT_IMAGE_ID --format toml
     ```
 
     Example output:
@@ -545,9 +544,13 @@ to boot a node\) to the artifact repository.
     Delete the IMS job record.
 
     ```bash
-    ncn# cray ims jobs delete $IMS_JOB_ID
+    ncn-mw# cray ims jobs delete $IMS_JOB_ID
     ```
 
     Deleting the job record also deletes the underlying Kubernetes job, service, and ConfigMap that were created when the job record was submitted.
+
+    Jobs left in a 'Running' state continue to consume Kubernetes resources until the job is completed, or deleted. If there
+    are enough 'Running' IMS jobs on the system it may not be possible to schedule more pods on worker nodes due to
+    insufficient resouces errors.
 
 The image root has been modified, compressed, and uploaded to S3, along with its associated `initrd` and kernel files. The image customization environment has also been cleaned up.
