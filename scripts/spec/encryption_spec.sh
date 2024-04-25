@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022, 2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -440,10 +440,10 @@ API version: 3.5"
       End
 
       # Same as above but with an aescbc cipher, again, nothing in here is
-      # secret its using the sut encyption string in this test suite to encrypt
+      # secret its using the sut encryption string in this test suite to encrypt
       # the secret however. But nobody should use sut(repeated) as an encryption
       # secret cipher anyway. This output may be a bit mangled due to there
-      # being newlinesetc... all over but its OK for test data.
+      # being newlinesetc... all over but it's OK for test data.
       It 'sutkeyencryption can return the cipher string name for an encrypted aescbc key'
         aescbc() {
           %text
