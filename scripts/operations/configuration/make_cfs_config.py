@@ -23,7 +23,7 @@
 #
 
 """
-Create a simple, single-layer CFS configuration.
+Create a simple CFS configurations.
 """
 
 import argparse
@@ -38,13 +38,12 @@ from python_lib.cfs import create_configuration
 def parse_args() -> Tuple[str, str]:
     """
     Parses command-line arguments.
-    Returns the name of the product and the desired version (or 'latest')
     """
     parser = argparse.ArgumentParser(
         description="Create a simple single-layer CFS configuration")
 
     parser.add_argument('configuration_name', help="The name of the CFS configuration")
-    parser.add_argument('playbook_file', help="The name of the playbook file")
+    parser.add_argument('playbook_file', nargs='+', help="The names of the playbook files")
 
     args = parser.parse_args()
 
@@ -53,12 +52,12 @@ def parse_args() -> Tuple[str, str]:
 
 def main():
     """ Main function """
-    config_name, playbook_name = parse_args()
+    config_name, playbook_names = parse_args()
     _, clone_uri, _, commit = get_cfs_data("csm", "latest")
-    layer = { "cloneUrl": f"{API_GW_BASE_URL}/{clone_uri}",
-              "playbook": playbook_name,
-              "commit": commit }
-    json_resp = create_configuration(config_name=config_name, layers=[layer])
+    layers = [ { "cloneUrl": f"{API_GW_BASE_URL}/{clone_uri}",
+                 "playbook": playbook_name,
+                 "commit": commit } for playbook_name in playbook_names ]
+    json_resp = create_configuration(config_name=config_name, layers=layers)
     print(json.dumps(json_resp, indent=2))
 
 
