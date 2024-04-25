@@ -87,7 +87,7 @@ BosSessionTemplateUniqueId = BosTemplateOrV2SessionUniqueId
 class BosTemplateOrV2Session(dict):
     """
     Base class for session template and v2 session objects (since both
-    have a lot of similar and indentical features, from the perspective of the
+    have a lot of similar and identical features, from the perspective of the
     scripts using this module
     """
 
