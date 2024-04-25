@@ -2,11 +2,19 @@
 
 Download and expand recipe archives from S3 and IMS. Modify and upload a recipe archive, and then register that recipe archive with IMS.
 
+* [Prerequisites](#prerequisites)
+* [Limitations](#limitations)
+* [Register recipe with IMS](#register-recipe-with-ims)
+* [Templating IMS recipes](#templating-ims-recipes)
+    * [Enable templating in recipe archive file](#enable-templating-in-recipe-archive-file)
+    * [Add template key/value pairs to IMS recipe record](#add-template-keyvalue-pairs-to-ims-recipe-record)
+    * [Build an image from an IMS templated recipe](#build-an-image-from-an-ims-templated-recipe)
+
 ## Prerequisites
 
 * The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 * System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCNs\) and include the following deployment:
-  * `cray-ims`, the Image Management Service \(IMS\)
+    * `cray-ims`, the Image Management Service \(IMS\)
 * The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
 * A token providing Simple Storage Service \(S3\) credentials has been generated.
 
@@ -15,14 +23,14 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
 * The commands in this procedure must be run as the `root` user.
 * The IMS tool currently only supports Kiwi-NG recipe types.
 
-## Procedure
+## Register recipe with IMS
 
-1. Locate the desired recipe to download from S3.
+1. (`ncn-mw#`) Locate the desired recipe to download from S3.
 
     There may be multiple records returned. Ensure that the correct record is selected in the returned data.
 
     ```bash
-    cray ims recipes list
+    cray ims recipes list --format toml
     ```
 
     Excerpt from example output:
@@ -39,7 +47,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     type = "s3"
     ```
 
-1. Create variables for the S3 `bucket` and `key` values from the S3 `path` in the returned data of the previous step.
+1. (`ncn-mw#`) Create variables for the S3 `bucket` and `key` values from the S3 `path` in the returned data of the previous step.
 
     ```bash
     S3_ARTIFACT_BUCKET=ims
@@ -47,7 +55,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     ARTIFACT_FILENAME=cray-sles15-barebones.tgz
     ```
 
-1. Download the recipe archive.
+1. (`ncn-mw#`) Download the recipe archive.
 
     Use the variables created in the previous step when running the following command.
 
@@ -55,7 +63,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     cray artifacts get $S3_ARTIFACT_BUCKET $S3_ARTIFACT_KEY $ARTIFACT_FILENAME
     ```
 
-1. Expand the recipe with `tar`.
+1. (`ncn-mw#`) Expand the recipe with `tar`.
 
     ```bash
     mkdir image-recipe
@@ -74,7 +82,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
       root, see the [Kiwi-NG documentation](https://doc.opensuse.org/projects/kiwi/doc/).
     * Recipes built by IMS are required to reference repositories that are hosted on the NCN by the Nexus service.
 
-1. Locate the directory containing the Kiwi-NG image description files.
+1. (`ncn-mw#`) Locate the directory containing the Kiwi-NG image description files.
 
     This step should be done after the recipe has been changed.
 
@@ -82,24 +90,25 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     cd image-recipe
     ```
 
-1. Set an environment variable for the name of the file that will contain the archive of the image recipe.
+1. (`ncn-mw#`) Set an environment variable for the name of the file that will contain the archive of the image recipe.
 
     ```bash
     ARTIFACT_FILE=my_recipe.tgz
     ```
 
-1. Create a `tgz` archive of the image recipe.
+1. (`ncn-mw#`) Create a `tgz` archive of the image recipe.
 
     ```bash
     tar cvfz ../$ARTIFACT_FILE .
     cd ..
     ```
 
-1. Create a new IMS recipe record.
+1. (`ncn-mw#`) Create a new IMS recipe record.
 
     ```bash
     cray ims recipes create --name "My Recipe" \
-            --recipe-type kiwi-ng --linux-distribution sles15
+            --recipe-type kiwi-ng --linux-distribution sles15 \
+            --format toml
     ```
 
     Example output:
@@ -112,13 +121,13 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     recipe_type = "kiwi-ng"
     ```
 
-1. Create a variable for the `id` value in the returned data.
+1. (`ncn-mw#`) Create a variable for the `id` value in the returned data.
 
     ```bash
     IMS_RECIPE_ID=2233c82a-5081-4f67-bec4-4b59a60017a6
     ```
 
-1. Upload the customized recipe to S3.
+1. (`ncn-mw#`) Upload the customized recipe to S3.
 
     It is suggested as a best practice that the S3 object name start with `recipes/` and contain the IMS recipe ID,
     in order to remove ambiguity.
@@ -127,11 +136,11 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     cray artifacts create ims recipes/$IMS_RECIPE_ID/$ARTIFACT_FILE $ARTIFACT_FILE
     ```
 
-1. Update the IMS recipe record with the S3 path to the recipe archive.
+1. (`ncn-mw#`) Update the IMS recipe record with the S3 path to the recipe archive.
 
     ```bash
     cray ims recipes update $IMS_RECIPE_ID --link-type s3 \
-            --link-path s3://ims/recipes/$IMS_RECIPE_ID/$ARTIFACT_FILE
+            --link-path s3://ims/recipes/$IMS_RECIPE_ID/$ARTIFACT_FILE --format toml
     ```
 
     Example output:
@@ -149,7 +158,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     type = "s3"
     ```
 
-## Templating IMS Recipes when Building an IMS Image
+## Templating IMS recipes
 
 IMS can optionally template the contents of an IMS recipe before building the recipe with Kiwi-NG during an IMS `create` job. This
 enables variables stored in the recipe to be dynamically replaced with values registered with the IMS recipe record after the
@@ -159,7 +168,7 @@ that the resulting image is built from the most correct release versions of Nexu
 Follow the steps below to enable IMS templating within a given recipe. Note that for IMS to properly template a recipe,
 the following procedures must all be completed.
 
-### Enable Templating in IMS Recipe Archive `tgz` File
+### Enable templating in recipe archive file
 
 1. Add a file named `.ims_recipe_template.yaml` to the root of the recipe archive.
 
@@ -222,15 +231,19 @@ the following procedures must all be completed.
     cd ..
     ```
 
-### Add Template Key/Value Pairs to IMS Recipe Record
+### Add template key/value pairs to IMS recipe record
 
-1. Create a new IMS recipe record with `template_dictionary` key/value pairs.
+1. (`ncn-mw#`) Create a new IMS recipe record with `template_dictionary` key/value pairs.
+
+    As shown in the example command, multiple key/value pairs may be added by providing a list of comma-separated
+    keys/values to the `--template-dictionary-key` and `--template-dictionary-value` parameters.
 
     ```bash
     cray ims recipes create --name "My Recipe" \
             --recipe-type kiwi-ng --linux-distribution sles15 \
-            --template-dictionary-key CSM_RELEASE_VERSION \
-            --template-dictionary-value 1.2.5
+            --template-dictionary-key CSM_RELEASE_VERSION,SLE_VERSION \
+            --template-dictionary-value 1.2.5,15sp4 \
+            --format toml
     ```
 
     Example output:
@@ -249,16 +262,13 @@ the following procedures must all be completed.
     value = "15sp4"
     ```
 
-    Additional key/value pairs can be added by providing a list of comma-separated keys/values to the
-    `--template-dictionary-key` and `--template-dictionary-value` parameters.
-
-1. Create a variable for the `id` value in the returned data.
+1. (`ncn-mw#`) Create a variable for the `id` value in the returned data.
 
     ```bash
     IMS_RECIPE_ID=2233c82a-5081-4f67-bec4-4b59a60017a6
     ```
 
-1. Upload the customized recipe to S3.
+1. (`ncn-mw#`) Upload the customized recipe to S3.
 
    It is suggested as a best practice that the S3 object name start with `recipes/` and contain the IMS recipe ID,
    in order to remove ambiguity.
@@ -267,11 +277,11 @@ the following procedures must all be completed.
    cray artifacts create ims recipes/$IMS_RECIPE_ID/$ARTIFACT_FILENAME $ARTIFACT_FILENAME
    ```
 
-1. Update the IMS recipe record with the S3 path to the recipe archive.
+1. (`ncn-mw#`) Update the IMS recipe record with the S3 path to the recipe archive.
 
    ```bash
    cray ims recipes update $IMS_RECIPE_ID --link-type s3 \
-           --link-path s3://ims/recipes/$IMS_RECIPE_ID/$ARTIFACT_FILENAME
+           --link-path s3://ims/recipes/$IMS_RECIPE_ID/$ARTIFACT_FILENAME --format toml
    ```
 
    Example output:
@@ -287,17 +297,17 @@ the following procedures must all be completed.
    key = "CSM_RELEASE_VERSION"
    value = "1.2.5"
    key = "SLE_VERSION"
-   value = "15sp4
-   
+   value = "15sp4"
+
    [link]
    path = "s3://ims/recipes/2233c82a-5081-4f67-bec4-4b59a60017a6/recipe.tar.gz"
    etag = ""
    type = "s3"
    ```
 
-### Build an Image from an IMS Templated Recipe
+### Build an image from an IMS templated recipe
 
-The procedure to build an image from an IMS recipe that uses templating does not change. Follow the normal IMS create
+(`ncn-mw#`) The procedure to build an image from an IMS recipe that uses templating does not change. Follow the normal IMS create
 procedure, specifying the recipe's ID value in the job's `--artifact-id` parameter. The IMS job will start as normal,
 but after downloading the recipe from S3, there will be an indication that IMS is templating the recipe in the job's
 `fetch-recipe` container log.
