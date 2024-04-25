@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -91,7 +91,7 @@ spec:
 
                       active_mgr=$(ceph mgr dump | jq -r .active_name)
                       if [[ -n $(echo $active_mgr | grep $TARGET_NCN) ]]; then
-                        echo "Acitve mgr is $active_mgr"
+                        echo "Active mgr is $active_mgr"
                         ceph mgr fail
                         echo "Failed over mgr"
                         active_on_target=$(( $active_on_target + 1 ))
