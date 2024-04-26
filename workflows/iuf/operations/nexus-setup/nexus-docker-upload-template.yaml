@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -77,7 +77,7 @@ spec:
         arguments:
           parameters:
           - name: nexus_setup_image
-            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.10.1
+            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.11.1
           - name: nexus_admin_credential_secret_name
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
           - name: content
