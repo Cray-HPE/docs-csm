@@ -153,6 +153,9 @@ else
   echo "====> ${state_name} has been completed"
 fi
 
+# Restart CFS deployments to avoid CASMINST-6852
+"${basedir}/../common/restart-cfs.sh"
+
 state_name="POST CSM Upgrade Validation"
 echo "====> ${state_name} ..."
 GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-post-csm-service-upgrade-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
