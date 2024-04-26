@@ -32,11 +32,11 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
 
 1. Navigate to the following URL in a web browser: `https://sma-dashboards.cmn.SYSTEM_DOMAIN_NAME`
 
-    | If this appears                                                                             | Do this                                                                                                          |
-    |---------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
-    | **the Keycloak login page**                                                                 | Supply valid credentials, then wait to be redirected to the SMA dashboard before continuing to the next step. |
-    | **the error `Opensearch Dashboards did not load properly. Check the server output for more information.`** | Clear browser cookies for `https://sma-dashboards.cmn.SYSTEM_DOMAIN_NAME`                                            |
-    | **The SMA dashboard \(see example below\)**                                              | Proceed to next step                                                                                             |
+    | If this appears                                                                                            | Do this                                                                                                       |
+    |------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+    | **the Keycloak login page**                                                                                | Supply valid credentials, then wait to be redirected to the SMA dashboard before continuing to the next step. |
+    | **the error `Opensearch Dashboards did not load properly. Check the server output for more information.`** | Clear browser cookies for `https://sma-dashboards.cmn.SYSTEM_DOMAIN_NAME`                                     |
+    | **The SMA dashboard \(see example below\)**                                                                | Proceed to next step                                                                                          |
 
     When the SMA dashboard loads, the web UI displays the SMA dashboard home page. 
 
