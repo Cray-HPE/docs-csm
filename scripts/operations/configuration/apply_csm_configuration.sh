@@ -29,6 +29,7 @@ locOfScript=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 . "${locOfScript}/bash_lib/common.sh"
 
 MONITOR_COMPS="${locOfScript}/monitor_comp_cfs_config_status.py"
+GET_GIT="${locOfScript}/get_git.py"
 
 CONFIG_NAME=""
 CONFIG_CHANGE=""
@@ -203,16 +204,35 @@ XNAME_LIST=${XNAMES//,/ }
 ## CONFIGURATION SETUP ##
 if [[ ${CONFIG_CHANGE} == true ]]; then
 
-  if [[ -z ${RELEASE} && -z ${VERSION} ]]; then
-    RELEASE=$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' 2> /dev/null | yq r -j - 2> /dev/null | jq -r ' to_entries | max_by(.key) | .key' 2> /dev/null)
-    [[ -n ${RELEASE} ]] || err_exit "Unable to determine CSM release version"
-    echo "Using latest release ${RELEASE}"
-  fi
+  if [[ -z ${VERSION} || -z ${CLONE_URL} || -z ${COMMIT} ]]; then
+    echo "Retrieving CSM information from Product Catalog"
+    if [[ -n ${RELEASE} ]]; then
+      PRODCAT_DATA=$(${GET_GIT} -v "${RELEASE}") || exit 1
+    else
+      PRODCAT_DATA=$(${GET_GIT}) || exit 1
+      RELEASE=$(echo "${PRODCAT_DATA}" | awk '{ print $1}')
+      [[ -n ${RELEASE} ]] || err_exit "Unable to determine CSM release version"
+      echo "Using latest CSM release ${RELEASE}"
+    fi
 
-  if [[ -z ${VERSION} ]]; then
-    VERSION=$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' 2> /dev/null | yq r -j - 2> /dev/null | jq -r ".[\"$RELEASE\"].configuration.import_branch" 2> /dev/null | awk -F'/' '{ print $NF }')
-    [[ -n ${VERSION} ]] || err_exit "Unable to determine CSM configuration version"
-    echo "Using CSM configuration version ${VERSION}"
+    if [[ -z ${VERSION} ]]; then
+      VERSION=$(echo "${PRODCAT_DATA}" | awk '{ print $3}' | awk -F'/' '{ print $NF }')
+      [[ -n ${VERSION} ]] || err_exit "Unable to determine CSM configuration version"
+      echo "Using CSM configuration version ${VERSION}"
+    fi
+
+    if [[ -z ${CLONE_URL} ]]; then
+      CLONE_URI=$(echo "${PRODCAT_DATA}" | awk '{ print $2}')
+      [[ -n ${CLONE_URI} ]] || err_exit "Unable to determine VCS clone URI"
+      CLONE_URL="https://api-gw-service-nmn.local/${CLONE_URI}"
+      echo "Found VCS clone url: ${CLONE_URL}"
+    fi
+
+    if [[ -z ${COMMIT} ]]; then
+      COMMIT=$(echo "${PRODCAT_DATA}" | awk '{ print $4}')
+      [[ -n ${COMMIT} ]] || err_exit "Unable to determine Git commit"
+      echo "Found Git commit: ${COMMIT}"
+    fi
   fi
 
   # If a file is passed in as input, keep a copy in the temporary directory
@@ -222,32 +242,6 @@ if [[ ${CONFIG_CHANGE} == true ]]; then
 
   CSM_CONFIG_FILE=$(run_mktemp --tmpdir="${TMPDIR}" "csm-config-${VERSION}-XXXXXX.json") || exit 1
   NCN_CONFIG_FILE=$(run_mktemp --tmpdir="${TMPDIR}" "new-${CONFIG_NAME}-XXXXXX.json") || exit 1
-
-  if [[ -z ${CLONE_URL} ]]; then
-    CLONE_URL="https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
-  fi
-
-  if [[ -z ${COMMIT} ]]; then
-    VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template='{{.data.vcs_username}}' | base64 --decode)
-    [[ -n ${VCS_USER} ]] || err_exit "Unable to obtain VCS username"
-    VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template='{{.data.vcs_password}}' | base64 --decode)
-    [[ -n ${VCS_PASSWORD} ]] || err_exit "Unable to obtain VCS password"
-    TEMP_DIR=$(run_mktemp -d) || exit 1
-    TEMP_HOME=${HOME}
-    HOME=${TEMP_DIR}
-    cd "${TEMP_DIR}" || err_exit "Unable to change directory to '${TEMP_DIR}'"
-    echo "${CLONE_URL/\/\//\/\/${VCS_USER}:${VCS_PASSWORD}@}" > .git-credentials
-    run_cmd git config --file .gitconfig credential.helper store
-    COMMIT=$(git ls-remote ${CLONE_URL} refs/heads/cray/csm/${VERSION} | awk '{print $1}')
-    if [[ -n ${COMMIT} ]]; then
-      echo "Found git commit ${COMMIT}"
-    else
-      err_exit "No git commit found"
-    fi
-    cd - > /dev/null || err_exit "Unable to change directory back to previous directory"
-    HOME=${TEMP_HOME}
-    rm -r "${TEMP_DIR}" || err "WARNING: Unable to delete temporary directory '${TEMP_DIR}'"
-  fi
 
   NCN_NODES_LAYER="{ \"name\": \"csm-ncn-nodes-${VERSION}\", \"cloneUrl\": \"${CLONE_URL}\", \"commit\": \"${COMMIT}\", \"playbook\": \"ncn_nodes.yml\" }"
   NCN_INITRD_LAYER="{ \"name\": \"csm-ncn-initrd-${VERSION}\", \"cloneUrl\": \"${CLONE_URL}\", \"commit\": \"${COMMIT}\", \"playbook\": \"ncn-initrd.yml\" }"
