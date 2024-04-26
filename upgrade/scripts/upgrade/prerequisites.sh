@@ -1422,6 +1422,9 @@ for chart_name in "${CHARTS[@]}"; do
   do_upgrade_csm_chart "${chart_name}" sysmgmt.yaml
 done
 
+# Restart CFS deployments to avoid CASMINST-6852
+"${locOfScript}/../common/restart-cfs.sh"
+
 # Ensure kata containers hypervisor file has the list of annotations required for CSM 1.5 CASMTRIAGE-6414
 for node in $(kubectl get nodes | grep -E "^ncn-w[0-9]" | awk '{ print $1 }'); do
   ssh "${node}" "sed -i 's/\[\"enable_iommu\"\]/[\"enable_iommu\", \"virtio_fs_extra_args\", \"default_memory\", \"kernel_params\", \"cpu_features\"]/' /opt/kata/share/defaults/kata-containers/configuration-qemu.toml"
