@@ -138,7 +138,7 @@ Refer to that table and any corresponding product documents before continuing to
         cray cfs components describe "${XNAME}"
         ```
 
-1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [2.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
+1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [3.3 NCN worker nodes](#33-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
 1. Upgrade `ncn-m001`.
 
