@@ -7,7 +7,7 @@
 ## Overview
 
 The `cray-dns-unbound` DNS service configuration forwards queries it cannot answer to the customer-defined DNS server.
-If this upstream DNS server is configured to drop queries it cannot answer then `cray-dns-unbound` sees this as aa timeout.
+If this upstream DNS server is configured to drop queries it cannot answer then `cray-dns-unbound` sees this as a timeout.
 This can cause some of the CSM upgrade pre-flight checks to fail.
 
 ## Symptoms
@@ -24,7 +24,7 @@ This can cause some of the CSM upgrade pre-flight checks to fail.
    ```
 
 * (`ncn-m#`) When run, the `/opt/cray/tests/install/ncn/scripts/python/check_ncn_uan_ip_dns.py` script fails.
-    
+
     ```text
     2023-07-21 13:39:13,536 - __main__ - ERROR - ERROR: ncn-m003.chn has more than 1 DNS entry
     ;; connection timed out; no servers could be reached
