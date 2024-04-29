@@ -130,7 +130,7 @@ Refer to that table and any corresponding product documents before continuing to
         cray cfs components describe "${XNAME}"
         ```
 
-1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [3.3 NCN worker nodes](#33-ncn-worker-nodes) and then return to this procedure to complete the next step.
+1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [2.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
 1. Upgrade `ncn-m001`.
 
@@ -329,7 +329,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
 
     **`NOTE`** For this step, the argument to `--limit-management-rollout` can be `Management_Worker` or a list of worker
-    node names seperated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
+    node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
     with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
 
     **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
