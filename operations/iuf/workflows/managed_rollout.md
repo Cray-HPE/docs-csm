@@ -61,6 +61,9 @@ Once this step has completed:
    that summarizes which product documents contain information or actions for the `managed-nodes-rollout` stage. Refer
    to that table and any corresponding product documents before continuing to the next step.
 
+1. Before booting computes, consider if SMA `OpenSearch` needs to be tuned.
+Refer to the "Configure `OpenSearch`" section in the _HPE Cray EX System Monitoring Application Administration Guide_ for instructions on tuning `OpenSearch`.
+
 1. Invoke `iuf run` with `-r` to execute the [`managed-nodes-rollout`](../stages/managed_nodes_rollout.md) stage on a
    single node to ensure the node reboots successfully with the desired image and CFS configuration. This node is
    referred to as the "canary node" in the remainder of this section. Use `--limit-managed-rollout` to target the canary
