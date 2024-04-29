@@ -94,6 +94,10 @@ For additional reference material on the upgrade processes and scripts mentioned
 
     See [SLS Not Working During Node Rebuild](../troubleshooting/known_issues/SLS_Not_Working_During_Node_Rebuild.md).
 
+- Troubleshoot `Check for duplicate and DNS entries for NCN and UANs` test failure
+
+  See [Check for duplicate and DNS entries for NCN and UANs test failure](../troubleshooting/known_ussues/check_ncn_uan_ip_dns_failing.md)
+
 - Rerun a step
 
    When running master node and storage node upgrade scripts, each script records what has been done successfully on a node. This is recorded in the
