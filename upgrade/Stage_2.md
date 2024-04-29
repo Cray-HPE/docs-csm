@@ -56,6 +56,15 @@ It is possible to upgrade a single storage node at a time using the following co
 > - Refer to [storage troubleshooting documentation](../operations/utility_storage/Utility_Storage.md#storage-troubleshooting-references) for Ceph related issues.
 > - Refer to [troubleshoot Ceph image with tag:'\<none\>'](../operations/utility_storage/Troubleshoot_ceph_image_with_none_tag.md) if running `podman images` on a storage node shows an image with tag:\<none\>.
 
+## Update ceph node-exporter config for SNMP counters
+
+> **OPTIONAL:** This is an optional step.
+
+This uses `netstat` collector form node-exporter and enables all the SNMP counters monitoring in `/proc/net/snmp` on `ncn` nodes.
+
+See [Update ceph node-exporter configuration](../../utility_storage/update_ceph_node_exporter_config.md) to update the ceph node-exporter configuration to monitor SNMP counters.
+
+
 ## Stop typescript
 
 For any typescripts that were started during this stage, stop them with the `exit` command.
