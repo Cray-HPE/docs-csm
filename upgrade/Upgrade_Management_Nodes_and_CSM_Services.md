@@ -96,7 +96,7 @@ For additional reference material on the upgrade processes and scripts mentioned
 
 - Troubleshoot `Check for duplicate and DNS entries for NCN and UANs` test failure
 
-  See [Check for duplicate and DNS entries for NCN and UANs test failure](../troubleshooting/known_ussues/check_ncn_uan_ip_dns_failing.md)
+  See [Check for duplicate and DNS entries for NCN and UANs test failure](../troubleshooting/known_issues/check_ncn_uan_ip_dns_failing.md)
 
 - Rerun a step
 
