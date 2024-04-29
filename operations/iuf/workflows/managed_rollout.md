@@ -3,11 +3,11 @@
 This section updates the software running on managed compute and application (UAN, etc.) nodes.
 
 - [1. Update managed host firmware (FAS)](#1-update-managed-host-firmware-fas)
-- [2. Tune SMA OpenSearch](#2-tune-sma-opensearch)
+- [2. Tune SMA `OpenSearch`](#2-tune-sma-opensearch)
 - [3. Execute the IUF `managed-nodes-rollout` stage](#3-execute-the-iuf-managed-nodes-rollout-stage)
-  - [3.1 LNet router nodes and gateway nodes](#31-lnet-router-nodes-and-gateway-nodes)
-  - [3.2 Compute nodes](#32-compute-nodes)
-  - [3.3 Application nodes](#33-application-nodes)
+    - [3.1 LNet router nodes and gateway nodes](#31-lnet-router-nodes-and-gateway-nodes)
+    - [3.2 Compute nodes](#32-compute-nodes)
+    - [3.3 Application nodes](#33-application-nodes)
 - [4. Update managed host Slingshot NIC firmware](#4-update-managed-host-slingshot-nic-firmware)
 - [5. Execute the IUF `post-install-check` stage](#5-execute-the-iuf-post-install-check-stage)
 - [6. Next steps](#6-next-steps)
@@ -20,11 +20,11 @@ Once this step has completed:
 
 - Host firmware has been updated on managed nodes
 
-## 2. Tune SMA OpenSearch
+## 2. Tune SMA `OpenSearch`
 
 When moving from CSM 1.3/SMA 1.7 to CSM 1.4/SMA 1.8 or when fresh installing a CSM 1.4/SMA 1.8 system, tuning `OpenSearch` needs to be considered.
 During an upgrade of SMA, `OpenSearch` replaces `ElasticSearch` and any `ElasticSearch` tuning that was used previously will not be relevant.
-Before booting compute nodes, please refer to the "Configure OpenSearch" section in the _HPE Cray EX System Monitoring Application Administration Guide_ for instructions on tuning `OpenSearch`.
+Before booting compute nodes, please refer to the "Configure`OpenSearch`" section in the _HPE Cray EX System Monitoring Application Administration Guide_ for instructions on tuning `OpenSearch`.
 
 ## 3. Execute the IUF `managed-nodes-rollout` stage
 
