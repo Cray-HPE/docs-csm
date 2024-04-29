@@ -103,6 +103,8 @@ def main():
     logfile=os.path.join(LOG_DIR, datetime.datetime.now().strftime("%Y%m%d%H%M%S.log"))
     print(f"Detailed logging will be recorded to: {logfile}")
     logger.configure_logging(filename=logfile)
+    logging.debug("Command-line arguments: %s", sys.argv)
+    logging.debug("Parsed arguments: %s", parsed_args)
 
     try:
         export_options = ims_import_export.ExportOptions(
