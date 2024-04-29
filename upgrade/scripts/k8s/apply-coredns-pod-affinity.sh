@@ -23,7 +23,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-echo "Applying pod anti-affinity to coredns pods"
+echo "INFO Applying pod anti-affinity to coredns pods"
 
 cat > /tmp/coredns-affinity.yaml << EOF
 spec:
