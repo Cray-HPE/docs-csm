@@ -497,13 +497,13 @@ software products installed. This upgrade scenario is extremely uncommon in prod
         echo "Storage node image: $STORAGE_IMS_IMAGE_ID"
         ```
 
-    1. (`ncn-m001#`) Set kubernetes image on master nodes and worker nodes.
+    1. (`ncn-m001#`) Set the kubernetes node image on master nodes and worker nodes.
 
         ```bash
         /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $K8S_IMS_IMAGE_ID -mw
         ```
 
-    1. (`ncn-m001#`) Set storage image on storage nodes.
+    1. (`ncn-m001#`) Set the storage node image on storage nodes.
 
         ```bash
         /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $STORAGE_IMS_IMAGE_ID -s
