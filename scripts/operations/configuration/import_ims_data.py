@@ -138,6 +138,8 @@ def main():
     logfile=os.path.join(LOG_DIR, datetime.datetime.now().strftime("%Y%m%d%H%M%S.log"))
     print(f"Detailed logging will be recorded to: {logfile}")
     logger.configure_logging(filename=logfile)
+    logging.debug("Command-line arguments: %s", sys.argv)
+    logging.debug("Parsed arguments: %s", script_args)
 
     try:
         do_import(script_args)
