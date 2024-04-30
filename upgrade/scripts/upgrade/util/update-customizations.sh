@@ -191,3 +191,19 @@ if [[ $inplace == "yes" ]]; then
 else
   cat "$c"
 fi
+
+# Add new image signing keys for Kyverno. Do not add keys which are already there.
+num_keys=$(yq r --length "${c}" "spec.kubernetes.services.kyverno-policy.checkImagePolicy.publicKeys")
+declare -A sha_sums
+for i in $(seq 0 "$((num_keys-1))"); do
+    sha_sums[$(yq r "${c}" "spec.kubernetes.services.kyverno-policy.checkImagePolicy.publicKeys[$i]" | tr -d '\n' | sha256sum | awk '{print $1}')]=1
+done
+for key in "${CSM_REL_DIR}"/tarball/"${CSM_REL_NAME}"/security/keys/oci/*.pub; do
+    new_sha=$(cat "${key}" | tr -d '\n' | sha256sum | awk '{print $1}')
+    if [ "${sha_sums[$new_sha]}" == 1 ]; then
+        echo "Key $(basename "${key}") is already present in customizations."
+    else
+        echo "Adding key $(basename "${key}") to customizations."
+        yq -P w -i "${c}" "spec.kubernetes.services.kyverno-policy.checkImagePolicy.publicKeys[+]" -- "$(< "${key}")"
+    fi
+done
