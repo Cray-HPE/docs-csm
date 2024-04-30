@@ -1123,7 +1123,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     for ncn_xname in "${NCN_XNAMES[@]}"; do
 
       params=$(cray bss bootparameters list --hosts "${ncn_xname}" --format json | jq '.[] |."params"' \
-        | sed -E 's/ ip=hsn[0-9]+:auto6 //g' \
+        | sed -E 's/ip=hsn[0-9]+:auto6//g' \
         | tr -d \")
 
       if ! cray bss bootparameters update --hosts "${ncn_xname}" \
