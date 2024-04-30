@@ -902,8 +902,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 
     # NOTE: NCN node images are no longer set in BSS here
     # IUF workflows handle setting the correct node image before a node is upgraded
-    # If doing a CSM only upgrade, set-base-csm-ncn-images-in-bss.sh is run which will set
-    # the correct images in BSS
+    # If doing a CSM only upgrade, NCN images are set in the CSM-Only procedure
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
