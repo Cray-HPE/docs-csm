@@ -65,11 +65,3 @@
         ```bash
         cray artifacts create config-data "${TARFILE}" "/root/${TARFILE}"
         ```
-
-1. Update ceph node-exporter config for SNMP counters.
-
-    > **OPTIONAL:** This is an optional step.
-
-    This uses `netstat` collector form node-exporter and enables all the SNMP counters monitoring in `/proc/net/snmp` on `ncn` nodes.
-
-    See [Update ceph node-exporter configuration](../operations/utility_storage/update_ceph_node_exporter_config.md) to update the ceph node-exporter configuration to monitor SNMP counters.
