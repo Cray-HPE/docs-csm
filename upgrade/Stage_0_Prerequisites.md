@@ -489,9 +489,25 @@ software products installed. This upgrade scenario is extremely uncommon in prod
 
 1. (`ncn-m001#`) Set node images in BSS for all NCNs. This script sets the new CSM base NCN images in BSS so that NCNs will boot into them during the node upgrades.
 
-   ```bash
-   /usr/share/doc/csm/upgrade/scripts/upgrade/util/set-base-csm-ncn-images-in-bss.sh
-   ```
+    1. (`ncn-m001#`) Get CSM base images for NCNs.
+
+        ```bash
+        source /etc/cray/upgrade/csm/myenv
+        echo "K8s node image: $K8S_IMS_IMAGE_ID"
+        echo "Storage node image: $STORAGE_IMS_IMAGE_ID"
+        ```
+
+    1. (`ncn-m001#`) Set kubernetes image on master nodes and worker nodes.
+
+        ```bash
+        /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $K8S_IMS_IMAGE_ID -mw
+        ```
+
+    1. (`ncn-m001#`) Set storage image on storage nodes.
+
+        ```bash
+        /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $STORAGE_IMS_IMAGE_ID -s
+        ```
 
 1. (`ncn-m001#`) Generate a new CFS configuration for the management nodes.
 
