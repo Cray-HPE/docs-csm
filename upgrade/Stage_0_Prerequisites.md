@@ -487,6 +487,28 @@ Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data).
 Use this alternative if performing an upgrade of CSM on a CSM-only system with no other HPE Cray EX
 software products installed. This upgrade scenario is extremely uncommon in production environments.
 
+1. (`ncn-m001#`) Set node images in BSS for all NCNs. These steps set the new CSM base NCN images in BSS so that NCNs will boot into them during the node upgrades.
+
+    1. (`ncn-m001#`) Get CSM base images for NCNs. (These images were set in `/etc/cray/upgrade/csm/myenv` in the `prerequisites.sh` script.)
+
+        ```bash
+        source /etc/cray/upgrade/csm/myenv
+        echo "K8s node image: $K8S_IMS_IMAGE_ID"
+        echo "Storage node image: $STORAGE_IMS_IMAGE_ID"
+        ```
+
+    1. (`ncn-m001#`) Set the kubernetes node image on master nodes and worker nodes.
+
+        ```bash
+        /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $K8S_IMS_IMAGE_ID -mw
+        ```
+
+    1. (`ncn-m001#`) Set the storage node image on storage nodes.
+
+        ```bash
+        /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $STORAGE_IMS_IMAGE_ID -s
+        ```
+
 1. (`ncn-m001#`) Generate a new CFS configuration for the management nodes.
 
    This script creates a new CFS configuration that includes the CSM version in its name and
