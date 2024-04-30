@@ -31,28 +31,19 @@ target_ncn=$1
 
 . ${basedir}/ncn-common.sh ${target_ncn}
 
-state_name="CSI_VALIDATE_BSS_NTP"
+state_name="FORCE_TIME_SYNC"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-if [[ $state_recorded == "0" && $2 != "--rebuild" ]]; then
-  echo "====> ${state_name} ..."
-  {
-
-    if ! cray bss bootparameters list --hosts $TARGET_XNAME --format json | jq '.[] |."cloud-init"."user-data".ntp' | grep -q '/etc/chrony.d/cray.conf'; then
-      echo "${target_ncn} is missing NTP data in BSS. Please see the procedure which can be found in the 'Known Issues and Bugs' section titled 'Fix BSS Metadata' on the 'Configure NTP on NCNs' page of the CSM documentation."
-      exit 1
-    else
-      record_state "${state_name}" ${target_ncn}
-    fi
-  } >> ${LOG_FILE} 2>&1
-else
-  echo "====> ${state_name} has been completed"
-fi
-
-state_name="ELIMINATE_NTP_CLOCK_SKEW"
-state_recorded=$(is_state_recorded "${state_name}" "$target_ncn")
+TOKEN=$(curl -s -S -d grant_type=client_credentials \
+  -d client_id=admin-client \
+  -d client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
+  https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+export TOKEN
 if [[ $state_recorded == "0" ]]; then
   echo "====> ${state_name} ..."
   {
+    ssh_keygen_keyscan "${target_ncn}"
+    ssh_keys_done=1
+    ssh "$target_ncn" "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"
     loop_idx=0
     in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
     if [[ $in_sync == "no" ]]; then
@@ -65,13 +56,29 @@ if [[ $state_recorded == "0" ]]; then
         in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
         loop_idx=$((loop_idx + 1))
       done
-      if [[ $in_sync == "no" ]]; then
-        exit 1
-      else
+      if [[ $in_sync == "yes" ]]; then
         record_state "${state_name}" "${target_ncn}"
       fi
+      # else wait for goss tests to catch time sync problems during CSM health checks
     else
       record_state "${state_name}" "${target_ncn}"
+    fi
+  } >> ${LOG_FILE} 2>&1
+else
+  echo "====> ${state_name} has been completed"
+fi
+
+state_name="CSI_VALIDATE_BSS_NTP"
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+if [[ $state_recorded == "0" && $2 != "--rebuild" ]]; then
+  echo "====> ${state_name} ..."
+  {
+
+    if ! cray bss bootparameters list --hosts $TARGET_XNAME --format json | jq '.[] |."cloud-init"."user-data".ntp' | grep -q '/etc/chrony.d/cray.conf'; then
+      echo "${target_ncn} is missing NTP data in BSS. Please see the procedure which can be found in the 'Known Issues and Bugs' section titled 'Fix BSS Metadata' on the 'Configure NTP on NCNs' page of the CSM documentation."
+      exit 1
+    else
+      record_state "${state_name}" ${target_ncn}
     fi
   } >> ${LOG_FILE} 2>&1
 else
@@ -514,10 +521,4 @@ if [[ ${target_ncn} != ncn-s* ]]; then
   else
     echo "====> ${state_name} has been completed"
   fi
-fi
-
-if [[ $in_sync == "no" ]]; then
-  echo "The clock for ${target_ncn} is not in sync. Please verify $target_ncn:/etc/chrony.d/cray.conf"
-  echo "contains a server that is reachable. See also: chronyc sources -v"
-  exit 1
 fi

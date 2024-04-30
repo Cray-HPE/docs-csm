@@ -240,7 +240,7 @@ The existing console log files will be retained, but there will be a gap in the 
     watch 'kubectl -n services get pods | grep console'
     ```
 
-    Watch for the `cray-console-node` pods to scale up. Exmaple output when the
+    Watch for the `cray-console-node` pods to scale up. Example output when the
     system is still updating:
 
     ```text

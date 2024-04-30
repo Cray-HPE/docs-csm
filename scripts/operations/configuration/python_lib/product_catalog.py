@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -170,6 +170,7 @@ class ProductCatalog:
             log_error_raise_exception(f"{K8S_NAMESPACE}/{K8S_CONFIG_MAP_NAME} Kubernetes configmap"
                                       " has an unexpected format", exc)
 
+
     def get_installed_products(self) -> ProductCatalogMap:
         """
         Returns the product mapping from the Cray Product Catalog configmap.
@@ -184,6 +185,7 @@ class ProductCatalog:
             installed_products_map[product_name] = parse_product_yaml(
                 label=f"'{product_name}' entry in {label}", yaml_string=product_yaml)
         return installed_products_map
+
 
     def get_installed_product_versions(self, requested_product_name: str) -> ProductVersionMap:
         """
@@ -200,27 +202,67 @@ class ProductCatalog:
         # Return an empty mapping if no versions are installed
         return {}
 
+
     def get_installed_csm_versions(self) -> ProductVersionMap:
         """
         CSM-specific wrapper for get_installed_product_versions
         """
         return self.get_installed_product_versions("csm")
 
+
+    def get_product_version_data(self, product_name: str, product_version: str) -> JsonObject:
+        """
+        Returns the data for the specified version of the specified product
+        """
+        installed_version_map = self.get_installed_product_versions(
+            product_name)
+        try:
+            return installed_version_map[product_version]
+        except KeyError as exc:
+            label = (f"'{product_name}' entry in {K8S_NAMESPACE}/{K8S_CONFIG_MAP_NAME} "
+                     "Kubernetes configmap")
+            log_error_raise_exception(
+                f"No '{product_version}' version found in {label}", exc)
+
+
+    def get_product_version_cfs_information(self, product_name: str, product_version: str) -> Dict[str, str]:
+        """
+        Returns the configuration data mapping from the specified version of the specified product
+        """
+        try:
+            return self.get_product_version_data(product_name, product_version)["configuration"]
+        except KeyError as exc:
+            label = (f"'{product_name}' version '{latest_version_string}' entry in {K8S_NAMESPACE}/"
+                     f"{K8S_CONFIG_MAP_NAME} Kubernetes configmap")
+            log_error_raise_exception(
+                f"No 'configuration' field found in {label}", exc)
+
+
+    def get_latest_product_version(self, product_name: str) -> str:
+        """
+        Returns the latest version string for the specified product
+        """
+        installed_version_map = self.get_installed_product_versions(
+            product_name)
+        return get_latest_version(installed_version_map)
+
+
     def get_latest_cfs_information(self, product_name: str) -> Dict[str, str]:
         """
         Returns the configuration data mapping from the latest installed version of the specified
         product
         """
-        label = (f"'{product_name}' entry in {K8S_NAMESPACE}/{K8S_CONFIG_MAP_NAME} "
-                 "Kubernetes configmap")
         installed_version_map = self.get_installed_product_versions(
             product_name)
         latest_version_string = get_latest_version(installed_version_map)
         try:
             return installed_version_map[latest_version_string]["configuration"]
         except KeyError as exc:
+            label = (f"'{product_name}' version '{latest_version_string}' entry in {K8S_NAMESPACE}/"
+                     f"{K8S_CONFIG_MAP_NAME} Kubernetes configmap")
             log_error_raise_exception(
                 f"No 'configuration' field found in {label}", exc)
+
 
     def get_latest_csm_cfs_information(self) -> Dict[str, str]:
         """

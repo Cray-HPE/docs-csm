@@ -99,9 +99,10 @@ Once this step has completed:
   - Use this command to list all of the compute nodes in the system using their Node Identities (NIDs). First, enter the
     SAT bash shell using `sat bash`.
 
-    (`ncn-m001#`) sat bash
+    (`ncn-m001#`) Enter the sat container and fetch the compute list
 
     ```bash
+    sat bash
     (ef637ae8a8b5) sat-container:/sat/share # sat status --fields xname --filter role=compute --no-headings --no-borders | xargs sat xname2nid
     nid[000001-000004]
     (ef637ae8a8b5) sat-container:/sat/share # exit
@@ -111,7 +112,7 @@ Once this step has completed:
   - Now, tell the workload manager to reboot the compute nodes. Paste the output from the previous step as the last
     argument.
 
-    (`ncn-m001#`) A sample reboot command to reboot NIDs 1 through 4.
+    (`compute#`) A sample reboot command to reboot NIDs 1 through 4.
 
     ```bash
     scontrol reboot nextstate=Resume Reason="IUF Managed Nodes Rollout" nid[000001-000004]

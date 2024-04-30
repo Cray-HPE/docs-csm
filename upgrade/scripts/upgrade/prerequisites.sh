@@ -688,7 +688,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
       fi
 
       # Ensure the cert-manager namespace is deleted in a case of both helm charts
-      # removed but there might be detritous leftover in the namespace.
+      # removed but there might be detritus leftover in the namespace.
       kubectl delete namespace "${cmns}" || :
 
       tmp_manifest=/tmp/certmanager-tmp-manifest.yaml
@@ -1421,6 +1421,9 @@ CHARTS=(
 for chart_name in "${CHARTS[@]}"; do
   do_upgrade_csm_chart "${chart_name}" sysmgmt.yaml
 done
+
+# Restart CFS deployments to avoid CASMINST-6852
+"${locOfScript}/../common/restart-cfs.sh"
 
 # Ensure kata containers hypervisor file has the list of annotations required for CSM 1.5 CASMTRIAGE-6414
 for node in $(kubectl get nodes | grep -E "^ncn-w[0-9]" | awk '{ print $1 }'); do
