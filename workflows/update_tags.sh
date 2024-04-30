@@ -83,7 +83,7 @@ function get_latest_tag_for_image() {
             | capture("^(?<v>[^-]+)(?:-(?<p>.*))?$") | [.v, .p // empty]
             | map(split(".") | map(opt(tonumber)))
             | .[1] |= (. // {});
-    .[0].Tags | sort_by(.|semver_cmp) | map(select(. != "csm-latest")) | last'
+    .[0].Tags | sort_by(.|semver_cmp) | map(select(. != "csm-latest" and (. | endswith(".sig") | not))) | last'
 }
 
 function get_filenames_referring_to_image() {
