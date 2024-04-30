@@ -497,9 +497,9 @@ Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data).
 Use this alternative if performing an upgrade of CSM on a CSM-only system with no other HPE Cray EX
 software products installed. This upgrade scenario is extremely uncommon in production environments.
 
-1. (`ncn-m001#`) Set node images in BSS for all NCNs. This script sets the new CSM base NCN images in BSS so that NCNs will boot into them during the node upgrades.
+1. (`ncn-m001#`) Set node images in BSS for all NCNs. These steps set the new CSM base NCN images in BSS so that NCNs will boot into them during the node upgrades.
 
-    1. (`ncn-m001#`) Get CSM base images for NCNs.
+    1. (`ncn-m001#`) Get CSM base images for NCNs. (These images were set in '/etc/cray/upgrade/csm/myenv' in the 'prerequisites.sh' script.)
 
         ```bash
         source /etc/cray/upgrade/csm/myenv
