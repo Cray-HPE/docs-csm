@@ -10,7 +10,7 @@ This section describes procedures that back up critical state in case it becomes
 
 ### 1.1 Slingshot Fabric Manager
 
-Create a backup of the Slingshot Fabric Manager prior to proceeding with the workflow. Refer to the "Backup and Restore Operation of Fabric Configuration" section in the _Slingshot Operations Guide for Customers_
+Create a backup of the Slingshot Fabric Manager prior to proceeding with the workflow. Refer to the "Backup and Restore Operation of Fabric Configuration" section in the _HPE Slingshot Operations Guide_
 for details on how to perform this operation.
 
 Once this step has completed:
