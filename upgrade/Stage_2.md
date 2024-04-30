@@ -3,12 +3,11 @@
 **Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 [Relevant troubleshooting links for upgrade-related issues](Upgrade_Management_Nodes_and_CSM_Services.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
-- [Stage 2 - Ceph image upgrade](#stage-2---ceph-image-upgrade)
-  - [Start typescript](#start-typescript)
-  - [Argo workflows](#argo-workflows)
-  - [Storage node image upgrade and Ceph upgrade](#storage-node-image-upgrade-and-ceph-upgrade)
-  - [Stop typescript](#stop-typescript)
-  - [Stage completed](#stage-completed)
+- [Start typescript](#start-typescript)
+- [Argo workflows](#argo-workflows)
+- [Storage node image upgrade and Ceph upgrade](#storage-node-image-upgrade-and-ceph-upgrade)
+- [Stop typescript](#stop-typescript)
+- [Stage completed](#stage-completed)
 
 ## Start typescript
 
@@ -55,6 +54,14 @@ It is possible to upgrade a single storage node at a time using the following co
 >   The crash should be evaluated to determine if there is an issue that should be addressed.
 > - Refer to [storage troubleshooting documentation](../operations/utility_storage/Utility_Storage.md#storage-troubleshooting-references) for Ceph related issues.
 > - Refer to [troubleshoot Ceph image with tag:'\<none\>'](../operations/utility_storage/Troubleshoot_ceph_image_with_none_tag.md) if running `podman images` on a storage node shows an image with tag:\<none\>.
+
+## Update ceph node-exporter config for SNMP counters
+
+> **OPTIONAL:** This is an optional step.
+
+This uses `netstat` collector form node-exporter and enables all the SNMP counters monitoring in `/proc/net/snmp` on `ncn` nodes.
+
+See [Update ceph node-exporter configuration](../operations/utility_storage/update_ceph_node_exporter_config.md) to update the ceph node-exporter configuration to monitor SNMP counters.
 
 ## Stop typescript
 
