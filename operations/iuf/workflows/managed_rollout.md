@@ -4,9 +4,9 @@ This section updates the software running on managed compute and application (UA
 
 - [1. Update managed host firmware (FAS)](#1-update-managed-host-firmware-fas)
 - [2. Execute the IUF `managed-nodes-rollout` stage](#2-execute-the-iuf-managed-nodes-rollout-stage)
-  - [2.1 LNet router nodes and gateway nodes](#21-lnet-router-nodes-and-gateway-nodes)
-  - [2.2 Compute nodes](#22-compute-nodes)
-  - [2.3 Application nodes](#23-application-nodes)
+    - [2.1 LNet router nodes and gateway nodes](#21-lnet-router-nodes-and-gateway-nodes)
+    - [2.2 Compute nodes](#22-compute-nodes)
+    - [2.3 Application nodes](#23-application-nodes)
 - [3. Update managed host Slingshot NIC firmware](#3-update-managed-host-slingshot-nic-firmware)
 - [4. Execute the IUF `post-install-check` stage](#4-execute-the-iuf-post-install-check-stage)
 - [5. Next steps](#5-next-steps)
@@ -60,6 +60,9 @@ Once this step has completed:
    section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table
    that summarizes which product documents contain information or actions for the `managed-nodes-rollout` stage. Refer
    to that table and any corresponding product documents before continuing to the next step.
+
+1. Before booting computes, consider if SMA `OpenSearch` needs to be tuned.
+Refer to the "Configure `OpenSearch`" section in the _HPE Cray EX System Monitoring Application Administration Guide_ for instructions on tuning `OpenSearch`.
 
 1. Invoke `iuf run` with `-r` to execute the [`managed-nodes-rollout`](../stages/managed_nodes_rollout.md) stage on a
    single node to ensure the node reboots successfully with the desired image and CFS configuration. This node is
