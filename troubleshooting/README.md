@@ -50,6 +50,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Gigabyte BMC Missing Redfish Data](known_issues/Gigabyte_BMC_Missing_Redfish_Data.md)
 * [IUF fails with `Not a directory: /etc/cray/upgrade/csm/media/...`](known_issues/iuf_error_not_a_directory.md)
 * [Hang Listing BOS V1 Sessions](known_issues/Hang_Listing_BOS_V1_Sessions.md)
+* [Check for duplicate and DNS entries for NCN and UANs test failure](known_issues/check_ncn_uan_ip_dns_failing.md)
 
 ## Booting
 
