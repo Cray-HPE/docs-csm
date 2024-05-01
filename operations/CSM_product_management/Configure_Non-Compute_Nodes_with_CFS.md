@@ -231,7 +231,8 @@ Specifically, the `write_root_secrets_to_vault.py` script reads the following fr
 - The private SSH key from `/root/.ssh/id_rsa`.
 - The public SSH key from `/root/.ssh/id_rsa.pub`.
 
-This script can be run on any NCN which is configured to access the Kubernetes cluster.
+This script can be run on any Kubernetes management NCN (master or worker). It only needs to be run once for
+the cluster, because the same Vault credentials are used for all management NCNs.
 
 > The `docs-csm` RPM must be installed in order to use this script. See
 > [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation)
