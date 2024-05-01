@@ -28,7 +28,7 @@ cray-sysmgmt-health:
             plugins: ""
 ```
 
-In the above section, comment or delete the `plguins` line in order to install the pie chart plugin.
+In the above section, comment or delete the `plugins` line in order to install the pie chart plugin.
 
 (`ncn-mw#`) Upload `customizations.yaml` file to Kubernetes so that the changes persist.
 

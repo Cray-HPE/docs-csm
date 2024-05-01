@@ -106,7 +106,7 @@ class S3Client:
         Queries S3 to list contents of the specified bucket. Makes additional queries if
         response is truncated. Returns a combined list of the artifacts.
         """
-        logging.debug("Quering S3 for contents of '%s' bucket", bucket_name)
+        logging.debug("Querying S3 for contents of '%s' bucket", bucket_name)
         resp = self.s3_cli.list_objects_v2(Bucket=bucket_name)
         logging.debug("S3 returned list of %d artifacts in '%s' bucket", resp["KeyCount"],
                       bucket_name)
@@ -116,7 +116,7 @@ class S3Client:
         page_num=1
         while resp["IsTruncated"]:
             page_num+=1
-            logging.debug("Quering S3 for contents of '%s' bucket (page %d)", bucket_name, page_num)
+            logging.debug("Querying S3 for contents of '%s' bucket (page %d)", bucket_name, page_num)
             resp = self.s3_cli.list_objects_v2(Bucket=bucket_name,
                                                ContinuationToken=resp["NextContinuationToken"])
             logging.debug("S3 returned list of %d artifacts in '%s' bucket", resp["KeyCount"],
@@ -136,7 +136,7 @@ class S3Client:
         In the case of CSM, all buckets should be created by this user. If any other
         buckets exist, they are not our concern.
         """
-        logging.debug("Quering S3 for list of buckets")
+        logging.debug("Querying S3 for list of buckets")
         resp = self.s3_cli.list_buckets()
         logging.debug("S3 returned list of %d buckets", len(resp["Buckets"]))
         return resp["Buckets"]
