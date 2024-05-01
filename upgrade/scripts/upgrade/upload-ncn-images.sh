@@ -82,19 +82,21 @@ UUID_REGEX='^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F
 
 echo "Uploading Kubernetes images..."
 export IMS_ROOTFS_FILENAME="${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs"
-export IMS_INITRD_FILENAME="${artdir}/kubernetes/initrd.img-${KUBERNETES_VERSION}-${arch}.xz"
 # do not quote this glob.  bash will add single ticks (') around it, preventing expansion later
-resolve_kernel_glob=$(echo ${artdir}/kubernetes/*-${arch}.kernel)
-export IMS_KERNEL_FILENAME=$resolve_kernel_glob
+IMS_INITRD_FILENAME=$(echo ${artdir}/kubernetes/initrd*.xz)
+IMS_KERNEL_FILENAME=$(echo ${artdir}/kubernetes/*.kernel)
+export IMS_INITRD_FILENAME
+export IMS_KERNEL_FILENAME
 K8S_IMS_IMAGE_ID=$($IMS_UPLOAD_SCRIPT)
 [[ -n ${K8S_IMS_IMAGE_ID} ]] && [[ ${K8S_IMS_IMAGE_ID} =~ $UUID_REGEX ]]
 
 echo "Uploading Ceph images..."
 export IMS_ROOTFS_FILENAME="${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs"
-export IMS_INITRD_FILENAME="${artdir}/storage-ceph/initrd.img-${CEPH_VERSION}-${arch}.xz"
 # do not quote this glob.  bash will add single ticks (') around it, preventing expansion later
-resolve_kernel_glob=$(echo ${artdir}/storage-ceph/*-${arch}.kernel)
-export IMS_KERNEL_FILENAME=$resolve_kernel_glob
+IMS_INITRD_FILENAME=$(echo ${artdir}/storage-ceph/initrd*.xz)
+IMS_KERNEL_FILENAME=$(echo ${artdir}/storage-ceph/*.kernel)
+export IMS_INITRD_FILENAME
+export IMS_KERNEL_FILENAME
 STORAGE_IMS_IMAGE_ID=$($IMS_UPLOAD_SCRIPT)
 [[ -n ${STORAGE_IMS_IMAGE_ID} ]] && [[ ${STORAGE_IMS_IMAGE_ID} =~ $UUID_REGEX ]]
 set +o pipefail
