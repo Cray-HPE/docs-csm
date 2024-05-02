@@ -10,7 +10,7 @@ Configure or create an IMS remote build node for use for image builds.
 * [Adding storage to a remote build node](#adding-storage-to-a-remote-build-node)
 * [Adding and removing an HSM lock](#adding-and-removing-an-hsm-lock)
 * [Adding remote build nodes to IMS](#adding-remote-build-nodes-to-ims)
-* [Remove remote build nodes from IMS](#remove-remote-build-nodes-from-ims)
+* [Removing remote build nodes from IMS](#removing-remote-build-nodes-from-ims)
 * [Listing remote build nodes in IMS](#listing-remote-build-nodes-in-ims)
 
 ## Prerequisites
