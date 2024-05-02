@@ -49,7 +49,7 @@ This type of problem can occur in the following scenarios:
 1. Update the credentials for the Redfish endpoint stored in Vault using Hardware State Manager (HSM):
 
     ```bash
-    cray hsm inventory redfishEndpoints update $BMC --user root --password $CURRENT_ROOT_PASSWORD 
+    cray hsm inventory redfishEndpoints update $BMC --id $BMC --user root --password $CURRENT_ROOT_PASSWORD
     ```
 
 1. Wait a few minutes for HSM to attempt to inventory the BMC:
