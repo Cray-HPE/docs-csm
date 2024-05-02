@@ -653,7 +653,7 @@ that node with IMS, allowing it to be used for image builds.
     }
     ```
 
-### Remove remote build nodes from IMS
+### Removing remote build nodes from IMS
 
 (`ncn-mw#`) Remove a remote build node from IMS.
 
