@@ -66,12 +66,12 @@ class S3TransferResult(NamedTuple):
 
 def do_s3_upload(transfer_request: S3TransferRequest) -> JsonDict:
     logging.info("Starting S3 upload of %s", transfer_request.url)
-    return create_artifact(transfer_request.url, transfer_request.filepath)
+    return create_artifact(transfer_request.url, transfer_request.filepath, num_retries=3, timeout=1200)
 
 
 def do_s3_download(transfer_request: S3TransferRequest) -> None:
     logging.info("Starting S3 download of %s", transfer_request.url)
-    get_artifact(transfer_request.url, transfer_request.filepath)
+    get_artifact(transfer_request.url, transfer_request.filepath, num_retries=3, timeout=1200)
 
 
 def s3_transfer_worker(do_transfer: Callable,
