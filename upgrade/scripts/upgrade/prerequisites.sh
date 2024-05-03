@@ -495,7 +495,7 @@ else
 fi
 
 # Need to upgrade Nexus prior to uploading new images into it.
-# Nexus 3.38.0 does not support multi-platofrm images with sigstore attachments.
+# Nexus 3.38.0 does not support multi-platform images with sigstore attachments.
 # To upgrade Nexus, we need to upload new Nexus images into existing Nexus,
 # then pre-cache these images, and finally run cray-nexus chart upgrade.
 #

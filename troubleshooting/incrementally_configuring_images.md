@@ -158,7 +158,7 @@ can be adapted for other image types.
 
 1. (`ncn-mw#`) Monitor CFS and retrieve the image ID of the partially generated image.
 
-    Monitor the CFS session with the following command until the status is complete. If `suceeded` is true, then move on to the next step; otherwise, debug the failure and re-run the session as necessary.
+    Monitor the CFS session with the following command until the status is complete. If `succeeded` is true, then move on to the next step; otherwise, debug the failure and re-run the session as necessary.
 
    ```bash
    cray cfs sessions describe $SESSION_NAME --format json | jq .status.session

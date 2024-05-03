@@ -1,6 +1,6 @@
 # NCN NIC Replacement
 
-This procedure is for readding a non-compute node (NCN) after NIC replacement. This is similar to the
+This procedure is for re-adding a non-compute node (NCN) after NIC replacement. This is similar to the
 [Replace NCN procedure](Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#replace-ncn-procedure) but many of
 the steps can be skipped because only the NIC and its MAC addresses changed.
 
