@@ -4,9 +4,9 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 - The two systems in this example are:
 
-  - Source system - Cray EX TDS cabinet `x9000` with a healthy EX425 blade (Windom dual-injection) in chassis 3, slot 0
+    - Source system - Cray EX TDS cabinet `x9000` with a healthy EX425 blade (Windom dual-injection) in chassis 3, slot 0
 
-  - Destination system - Cray EX cabinet `x1005` with a defective EX425 blade (Windom dual-injection) in chassis 3, slot 0
+    - Destination system - Cray EX cabinet `x1005` with a defective EX425 blade (Windom dual-injection) in chassis 3, slot 0
 
 - Substitute the correct component names (xnames) or other parameters in the command examples that follow.
 
@@ -81,8 +81,8 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 - The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
 
-  - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
-  - Review the *HPE Cray EX Hand Pump User Guide H-6200*
+    - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
+    - Review the *HPE Cray EX Hand Pump User Guide H-6200*
 
 ## Prepare the source system blade for removal
 
