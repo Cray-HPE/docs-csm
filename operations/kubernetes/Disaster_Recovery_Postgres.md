@@ -9,7 +9,7 @@ Disaster recovery procedures by service:
 - [Restore HSM (Hardware State Manger) Postgres without a Backup](../hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
 - [Restore SLS (System Layout Service) Postgres without a Backup](../system_layout_service/Restore_SLS_Postgres_without_an_Existing_Backup.md)
 - [Restore Spire Postgres without a Backup](../spire/Restore_Spire_Postgres_without_a_Backup.md)
-- [Restore Keycloak Postgres without a Backup](#restore-keycloak-postgres-without-a-backup)
+- [Restore Keycloak Postgres without a backup](#restore-keycloak-postgres-without-a-backup)
 - [Restore console Postgres](#restore-console-postgres)
 
 ## Restore Keycloak Postgres without a backup
@@ -101,12 +101,12 @@ recreated.
       kubectl rollout restart -n services deployment/cray-oauth2-proxies-customer-management-ingress
       ```
 
-     Expected output:
+      Expected output:
 
       ```text
       deployment.apps/cray-oauth2-proxies-customer-access-ingress restarted
       deployment.apps/cray-oauth2-proxies-customer-high-speed-ingress restarted
-      deployment.apps/cray-oauth2-proxies-customer-management-ingress restarte
+      deployment.apps/cray-oauth2-proxies-customer-management-ingress restarted
       ```
 
    1. Wait for the restart to complete.
@@ -117,7 +117,7 @@ recreated.
       kubectl rollout status -n services deployment/cray-oauth2-proxies-customer-management-ingress
       ```
 
-     Expected output:
+      Expected output:
 
       ```text
       deployment "cray-oauth2-proxies-customer-access-ingress" successfully rolled out
