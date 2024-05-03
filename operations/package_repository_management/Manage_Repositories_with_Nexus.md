@@ -326,7 +326,7 @@ Then you can tell Nexus to rebuild the repository index by sending a HTTP `POST`
 (`ncn-mw#`) For example, to rebuild the index of a repository named `test-repo`:
 
 ```bash
-curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --request POST https://pacakages.local/service/rest/v1/repository/test-repo/rebuild-index
+curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --request POST https://packages.local/service/rest/v1/repository/test-repo/rebuild-index
 ```
 
 ### Create a repository

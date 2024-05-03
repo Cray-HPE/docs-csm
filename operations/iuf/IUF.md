@@ -194,16 +194,16 @@ activity identifier and that information is used for all other stages.
 
 The `iuf` command-line interface is used to invoke all IUF operations. The `iuf` command provides the following subcommands.
 
-| Subcommand      | Description                                             |
-|-----------------|---------------------------------------------------------|
-| run             | Initiates execution of IUF operations                   |
-| abort           | Abort an IUF session                                    |
-| resume          | Resume a previously aborted or failed IUF session       |
-| restart         | Restart the most recently aborted or failed IUF session |
-| activity        | Display IUF activity details, annotate IUF activity     |
-| list-activities | List all activities present on the system               |
-| list-stages     | Display stages and status for a given IUF activity      |
-| workflow        | List workflows or information for a particular workflow |
+| Subcommand        | Description                                             |
+|-------------------|---------------------------------------------------------|
+| `run`             | Initiates execution of IUF operations                   |
+| `abort`           | Abort an IUF session                                    |
+| `resume`          | Resume a previously aborted or failed IUF session       |
+| `restart`         | Restart the most recently aborted or failed IUF session |
+| `activity`        | Display IUF activity details, annotate IUF activity     |
+| `list-activities` | List all activities present on the system               |
+| `list-stages`     | Display stages and status for a given IUF activity      |
+| `workflow`        | List workflows or information for a particular workflow |
 
 ### Global arguments
 
@@ -480,22 +480,22 @@ The activity details displayed are:
 
 Values for `Category` are:
 
-| Category Value | Description                                                                          |
-|----------------|--------------------------------------------------------------------------------------|
-| in_progress    | An Argo workflow was initiated at the time recorded in `Start`                       |
-| waiting_admin  | No activity operations were in progress beginning at time recorded in `Start`        |
-| paused         | The administrator paused activity operations at the time recorded in `Start`         |
-| debug          | The administrator started debugging an issue at the time recorded in `Start`         |
-| blocked        | The administrator reported being blocked by an issue at the time recorded in `Start` |
+| Category Value   | Description                                                                          |
+|------------------|--------------------------------------------------------------------------------------|
+| `in_progress`    | An Argo workflow was initiated at the time recorded in `Start`                       |
+| `waiting_admin`  | No activity operations were in progress beginning at time recorded in `Start`        |
+| `paused`         | The administrator paused activity operations at the time recorded in `Start`         |
+| `debug`          | The administrator started debugging an issue at the time recorded in `Start`         |
+| `blocked`        | The administrator reported being blocked by an issue at the time recorded in `Start` |
 
 Values for `Status` are:
 
-| Status Value | Description                                                                    |
-|--------------|--------------------------------------------------------------------------------|
-| Succeeded    | The `Argo Workflow` completed successfully                                     |
-| Failed       | The `Argo Workflow` failed                                                     |
-| Running      | The `Argo Workflow` is currently executing                                     |
-| n/a          | The activity entry is not associated with an `Argo Workflow` and has no status |
+| Status Value   | Description                                                                    |
+|----------------|--------------------------------------------------------------------------------|
+| `Succeeded`    | The `Argo Workflow` completed successfully                                     |
+| `Failed`       | The `Argo Workflow` failed                                                     |
+| `Running`      | The `Argo Workflow` is currently executing                                     |
+| `n/a`          | The activity entry is not associated with an `Argo Workflow` and has no status |
 
 **`NOTE`** Each row displayed by `iuf activity` is a historical entry associated with the recorded `Start` and the `Duration` time values. For example, the `Category` value `in_progress` signifies that an Argo Workflow was put
 in progress at the time the entry was created, but it may not still be running when `iuf activity` is executed. The `Status` value provides context on whether an Argo Workflow is still executing.
@@ -822,19 +822,17 @@ using IUF, the `prodmgr` CLI provides a new option
 the product version (if they are not used by other
 product versions or other products):
 
-- `Docker Images`
-- `Helm Charts`
-- `Loftsman Manifests`
-- `s3 artifacts`
-- `ims images`
-- `ims receipes`
-- `hosted repos`
+- Docker images
+- Helm charts
+- Loftsman manifests
+- S3 artifacts
+- IMS images
+- IMS recipes
+- hosted repositories
 
-Finally, the product entry is also deleted from the cray-product-catalog
-ConfigMap.
+Finally, the product entry is also deleted from the `cray-product-catalog` ConfigMap.
 
-An example of launching the `prodmgr` for cleaning a `uss` version
-`1.0.0` is shown below:
+An example of launching the `prodmgr` for cleaning a `uss` version `1.0.0` is shown below:
 
 ```bash
 prodmgr delete uss 1.0.0 --container-registry-hostname arti.hpc.amslabs.hpecorp.net/csm-docker/stable --deletion-image-name product-deletion-utility --deletion-image-version 1.0.0
