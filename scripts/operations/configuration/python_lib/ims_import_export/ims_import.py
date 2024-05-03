@@ -249,7 +249,7 @@ def do_import(tarfile_dir: str,
     logging.debug("Looking up IMS pod name")
     ims_pod_name = get_ims_pod_name()
     logging.info("Copying files to IMS Kubernetes pod (%s)", ims_pod_name)
-    result = common.run_command(["kubectl", "exec", "-n", "services", ims_pod_name, "--", "mktemp", "-d"])
+    result = common.run_command(["kubectl", "exec", "-n", "services", ims_pod_name, "--", "mktemp", "-d"], num_retries=3, timeout=60)
     pod_tmpdir = result.decode().strip()
     if not pod_tmpdir:
         raise common.ScriptException("No output when creating temporary directory in IMS pod")
@@ -269,7 +269,7 @@ def do_import(tarfile_dir: str,
     logging.debug("Copying IMS data JSON file to pod")
     datafile_path_in_pod = os.path.join(pod_tmpdir, "data.json")
     common.run_command(["kubectl", "cp", "-n", "services", temp_export_datafile,
-                        f"{ims_pod_name}:{datafile_path_in_pod}"])
+                        f"{ims_pod_name}:{datafile_path_in_pod}"], num_retries=3, timeout=60)
 
     # Clean up local copy of JSON file
     os.remove(temp_export_datafile)
@@ -277,17 +277,17 @@ def do_import(tarfile_dir: str,
     logging.debug("Copying import tool to IMS pod")
     tool_path_in_pod = os.path.join(pod_tmpdir, "import.py")
     # Copy import tool to tmpdir in pod
-    common.run_command(["kubectl", "cp", "-n", "services", ImsPodImportToolPath, f"{ims_pod_name}:{tool_path_in_pod}"])
+    common.run_command(["kubectl", "cp", "-n", "services", ImsPodImportToolPath, f"{ims_pod_name}:{tool_path_in_pod}"], num_retries=3, timeout=60)
 
     logging.info("Updating data in IMS")
     # Execute import tool in pod
-    common.run_command(["kubectl", "exec", "-n", "services", ims_pod_name, "--", "python3", tool_path_in_pod])
+    common.run_command(["kubectl", "exec", "-n", "services", ims_pod_name, "--", "python3", tool_path_in_pod], num_retries=3, timeout=120)
 
     # Restart IMS to pick up imported changes
     logging.info("Initiating rolling restart of IMS Kubernetes deployment")
-    common.run_command(["kubectl", "rollout", "restart", "deployment", "-n", "services", "cray-ims"])
+    common.run_command(["kubectl", "rollout", "restart", "deployment", "-n", "services", "cray-ims"], num_retries=3, timeout=60)
     logging.info("Waiting for rolling restart to complete (this may take a few minutes)")
-    common.run_command(["kubectl", "rollout", "status", "deployment", "-n", "services", "cray-ims"])
+    common.run_command(["kubectl", "rollout", "status", "deployment", "-n", "services", "cray-ims"], num_retries=3, timeout=1200)
 
 
 def delete_deleted_resources(current: ImsData, export: ImsData) -> ImsData:
