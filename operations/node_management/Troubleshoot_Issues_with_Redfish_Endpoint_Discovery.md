@@ -78,7 +78,7 @@ LastDiscoveryStatus = "HTTPsGetFailed"
     If `Enabled = false` for the `RedfishEndpoint`, then it may indicate a network or firmware issue with the BMC.
 
     ```bash
-    cray hsm inventory redfishEndpoints update BMC_XNAME \
+    cray hsm inventory redfishEndpoints update BMC_XNAME --id BMC_XNAME \
                 --enabled true --rediscover-on-update true
     ```
 
