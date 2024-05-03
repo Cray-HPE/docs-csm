@@ -9,7 +9,7 @@ Disaster recovery procedures by service:
 - [Restore HSM (Hardware State Manger) Postgres without a Backup](../hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
 - [Restore SLS (System Layout Service) Postgres without a Backup](../system_layout_service/Restore_SLS_Postgres_without_an_Existing_Backup.md)
 - [Restore Spire Postgres without a Backup](../spire/Restore_Spire_Postgres_without_a_Backup.md)
-- [Restore Keycloak Postgres without a Backup](#restore-keycloak-postgres-without-a-backup)
+- [Restore Keycloak Postgres without a backup](#restore-keycloak-postgres-without-a-backup)
 - [Restore console Postgres](#restore-console-postgres)
 
 ## Restore Keycloak Postgres without a backup
@@ -99,7 +99,7 @@ recreated.
       ncn-mw# kubectl rollout restart deployment -n services cray-keycloak-gatekeeper-ingress
       ```
 
-     Expected output:
+      Expected output:
 
       ```text
       deployment.apps/cray-keycloak-gatekeeper-ingress restarted
@@ -109,6 +109,12 @@ recreated.
 
       ```bash
       ncn-mw# kubectl rollout status deployment -n services cray-keycloak-gatekeeper-ingress
+      ```
+
+      Expected output:
+
+      ```text
+      deployment "cray-keycloak-gatekeeper-ingress" successfully rolled out
       ```
 
 Any other changes made to Keycloak, such as local users that have been created, will have to be manually re-applied.
