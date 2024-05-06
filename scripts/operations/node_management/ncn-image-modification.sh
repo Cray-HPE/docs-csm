@@ -532,6 +532,37 @@ EOF
   done
 }
 
+function csm_145_patch {
+  local rpms=(
+    "${CSM_PATH}/rpm/cray/csm/sle-15sp4/noarch/dracut-metal-mdsquash-2.3.2-1.noarch.rpm"
+  )
+
+  if [ ! -d "${CSM_PATH}" ]; then
+    echo >&2 "CSM_PATH does not exist, or was not defined."
+    return 1
+  fi
+
+  echo "Patching images for CSM 1.4.5 ... "
+  for squash in "${SQUASH_PATHS[@]}"; do
+    (
+      pushd "$(dirname "$squash")" || exit
+
+      if rpm -Uvh --nodeps --root "$(pwd)/squashfs-root" "${rpms[@]}"; then
+        :
+      else
+        rc=$?
+        [ "$rc" -ne 127 ] && return "$rc"
+      fi
+
+      sed -i -r -E 's|(.*)\[\s?LABEL=CONTAIN,\s+/var/lib/containers.*\]|\1[ LABEL=CONTAIN, /var/lib/containers, auto, "defaults" ]|g' \
+        squashfs-root/etc/cloud/cloud.cfg.d/01_metalfs.cfg \
+        squashfs-root/srv/cray/resources/metal/cloud.cfg.d/01_metalfs.cfg
+
+      popd || exit
+    )
+  done
+}
+
 if [ "$#" -lt 2 ]; then
   usage
   exit 1
@@ -547,6 +578,7 @@ fi
 set_timezone
 if [[ $CSM_RELEASE =~ ^1\.4\.4 ]]; then
   csm_144_patch
+  csm_145_patch
 fi
 create_new_squashfs
 cleanup

@@ -8,9 +8,11 @@ This page details how to wipe disks on NCNs installed with the current version o
 
 ## Topics
 
-- [Basic wipe](#basic-wipe)
-- [Advanced wipe](#advanced-wipe)
-- [Full wipe](#full-wipe)
+- [Manual Wipe Procedures](#manual-wipe-procedures)
+  - [Topics](#topics)
+  - [Basic wipe](#basic-wipe)
+  - [Advanced wipe](#advanced-wipe)
+  - [Full wipe](#full-wipe)
 
 ## Basic wipe
 
@@ -226,8 +228,8 @@ wiping a different type of node than what a step specifies, then skip that step.
             Example output:
 
             ```text
-            /dev/mapper/metalvg0-CONTAIN on /var/lib/containers type xfs (rw,noatime,swalloc,attr2,largeio,inode64,allocsize=131072k,logbufs=8,logbsize=32k,noquota)
-            /dev/mapper/metalvg0-CONTAIN on /var/lib/containers/storage/overlay type xfs (rw,noatime,swalloc,attr2,largeio,inode64,allocsize=131072k,logbufs=8,logbsize=32k,noquota)
+            /dev/mapper/metalvg0-CONTAIN on /var/lib/containers type xfs (rw,attr2,logbufs=8,logbsize=32k,noquota)
+            /dev/mapper/metalvg0-CONTAIN on /var/lib/containers/storage/overlay type xfs (rw,attr2,logbufs=8,logbsize=32k,noquota)
             ```
 
         1. Unmount `/var/lib/containers/storage/overlay`.
