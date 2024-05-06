@@ -77,12 +77,12 @@ class DestinationDirectory:
     A local directory on the system into which we will download IMS artifacts from minio.
     """
 
-    def __init__(self, base_dir: str, min_gb: int=0, min_pct: int=0, require_1gb_avail: bool=True):
+    def __init__(self, base_dir: str, min_gb: int=0, max_pct: int=0, require_1gb_avail: bool=True):
         """
         min_gb is the minimum free space we will allow to happen after we copy files (that is, we
         will not copy in files that would bring us under this).
 
-        min_pct is the minimum free space percentage we will allow to happen after we copy files.
+        max_pct is the maximum used space percentage we will allow to happen after we copy files.
 
         If require_1gb_avail is True, we will not use a directory if it doesn't have at least
         min_gb + 1 GB available currently. In other words, we want to make sure it has some room for
@@ -90,14 +90,14 @@ class DestinationDirectory:
 
         Raise InsufficientSpace exception if there is not enough space
         """
-        logging.debug("DestinationDirectory: base_dir=%s min_gb=%d min_pct=%d require_1gb_avail=%s",
-                      base_dir, min_gb, min_pct, require_1gb_avail)
+        logging.debug("DestinationDirectory: base_dir=%s min_gb=%d max_pct=%d require_1gb_avail=%s",
+                      base_dir, min_gb, max_pct, require_1gb_avail)
         min_bytes = min_gb*1024*1024*1024
         usg = shutil.disk_usage(base_dir)
         logging.debug("'%s' has %d free bytes, %d used bytes, and %d total bytes",
                       base_dir, usg.free, usg.used, usg.total)
-        if min_pct > 0:
-            min_bytes = max(min_bytes, math.ceil(usg.total*(100-min_pct)/100.0))
+        if max_pct > 0:
+            min_bytes = max(min_bytes, math.ceil(usg.total*(100-max_pct)/100.0))
         orig_avail_bytes = usg.free - min_bytes
         if require_1gb_avail:
             min_orig_avail = 1024*1024*1024
@@ -420,8 +420,9 @@ def create_local_directories(logfile_path: str) -> LocalDirList:
     ims_export_dir = create_main_export_dir(logfile_path)
     local_dir_list = LocalDirList(ims_export_dir)
     local_dir_list.add_dir(base_dir="/var/lib/etcd", min_gb=10)
-    local_dir_list.add_dir(base_dir="/root", min_pct=70)
+    local_dir_list.add_dir(base_dir="/root", max_pct=70)
     local_dir_list.add_dir(base_dir="/var/lib/s3fs_cache", min_gb=1)
+    local_dir_list.add_dir(base_dir="/metal/recovery", max_pct=75, require_1gb_avail=False)
     local_dir_list.create_cleanup_script()
     return local_dir_list
 
