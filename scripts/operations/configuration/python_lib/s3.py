@@ -106,7 +106,7 @@ class S3Client:
         Queries S3 to list contents of the specified bucket. Makes additional queries if
         response is truncated. Returns a combined list of the artifacts.
         """
-        logging.debug("Quering S3 for contents of '%s' bucket", bucket_name)
+        logging.debug("Querying S3 for contents of '%s' bucket", bucket_name)
         resp = self.s3_cli.list_objects_v2(Bucket=bucket_name)
         logging.debug("S3 returned list of %d artifacts in '%s' bucket", resp["KeyCount"],
                       bucket_name)
@@ -116,7 +116,7 @@ class S3Client:
         page_num=1
         while resp["IsTruncated"]:
             page_num+=1
-            logging.debug("Quering S3 for contents of '%s' bucket (page %d)", bucket_name, page_num)
+            logging.debug("Querying S3 for contents of '%s' bucket (page %d)", bucket_name, page_num)
             resp = self.s3_cli.list_objects_v2(Bucket=bucket_name,
                                                ContinuationToken=resp["NextContinuationToken"])
             logging.debug("S3 returned list of %d artifacts in '%s' bucket", resp["KeyCount"],
@@ -131,12 +131,12 @@ class S3Client:
     def list_buckets(self) -> list:
         """
         Queries S3 for a list of all buckets, and returns this list.
-        
+
         Technically this is all of the buckets belonging to the authenticated user.
         In the case of CSM, all buckets should be created by this user. If any other
         buckets exist, they are not our concern.
         """
-        logging.debug("Quering S3 for list of buckets")
+        logging.debug("Querying S3 for list of buckets")
         resp = self.s3_cli.list_buckets()
         logging.debug("S3 returned list of %d buckets", len(resp["Buckets"]))
         return resp["Buckets"]
@@ -154,13 +154,13 @@ class S3Client:
         return True
 
 
-def create_artifact(s3_url: S3Url, source_path: str) -> JsonDict:
+def create_artifact(s3_url: S3Url, source_path: str, **run_command_kwargs) -> JsonDict:
     """
     Uploads the specified S3 artifact from the specified path
     """
     command = ['cray', 'artifacts', 'create', s3_url.bucket, s3_url.key, source_path, '--format',
                'json']
-    return json.loads(common.run_command(command))
+    return json.loads(common.run_command(command, **run_command_kwargs))
 
 
 def delete_artifact(s3_url: S3Url) -> None:
@@ -171,20 +171,20 @@ def delete_artifact(s3_url: S3Url) -> None:
     common.run_command(command)
 
 
-def describe_artifact(s3_url: S3Url) -> JsonDict:
+def describe_artifact(s3_url: S3Url, **run_command_kwargs) -> JsonDict:
     """
     Queries S3 to describe an artifact and returns the response
     """
     command = ['cray', 'artifacts', 'describe', s3_url.bucket, s3_url.key, '--format', 'json']
-    return json.loads(common.run_command(command))
+    return json.loads(common.run_command(command, **run_command_kwargs))
 
 
-def get_artifact(s3_url: S3Url, target_path: str) -> None:
+def get_artifact(s3_url: S3Url, target_path: str, **run_command_kwargs) -> None:
     """
     Downloads the specified S3 artifact to the specified path
     """
     command = ['cray', 'artifacts', 'get', s3_url.bucket, s3_url.key, target_path]
-    common.run_command(command)
+    common.run_command(command, **run_command_kwargs)
 
 
 def list_artifacts(bucket_name: str) -> JsonDict:
