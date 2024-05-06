@@ -533,14 +533,37 @@ EOF
 }
 
 function csm_145_patch {
-  local rpms=(
-    "${CSM_PATH}/rpm/cray/csm/sle-15sp4/noarch/dracut-metal-mdsquash-2.3.2-1.noarch.rpm"
-  )
+  local rpms=()
+  local tar_path
 
-  if [ ! -d "${CSM_PATH}" ]; then
-    echo >&2 "CSM_PATH does not exist, or was not defined."
+  if [ -n "$CSM_PATH" ]; then
+    if [ ! -d "${CSM_PATH}" ]; then
+      echo >&2 "CSM_PATH was defined but does not exist [$CSM_PATH]"
+    else
+      tar_path="${CSM_PATH}"
+    fi
+  fi
+  if [ -z "${tar_path}" ]; then
+    if [ -n "${CSM_DISTDIR}" ]; then
+      if [ ! -d "${CSM_DISTDIR}" ]; then
+        echo >&2 "CSM_DISTDIR was defined but does not exist [$CSM_DISTDIR]"
+      else
+        tar_path="${CSM_DISTDIR}"
+      fi
+    fi
+  fi
+  if [ -z "${tar_path}" ]; then
+    echo >&2 "Failed to resolve path to extracted tarball! CSM_PATH nor CSM_DISTDIR were found in the environment!"
     return 1
   fi
+  if [ ! -d "${tar_path}" ]; then
+    echo >&2 "Extracted tarball resolved to ${tar_path} but this path does not exist!"
+    return 1
+  fi
+
+  rpms=(
+    "${tar_path}/rpm/cray/csm/sle-15sp4/noarch/dracut-metal-mdsquash-2.3.2-1.noarch.rpm"
+  )
 
   echo "Patching images for CSM 1.4.5 ... "
   for squash in "${SQUASH_PATHS[@]}"; do
