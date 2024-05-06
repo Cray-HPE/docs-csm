@@ -554,7 +554,7 @@ function csm_145_patch {
         [ "$rc" -ne 127 ] && return "$rc"
       fi
 
-      sed -i -r -E 's|(.*)\[\s?LABEL=CONTAIN,\s+/var/lib/containers.*\]|\1[ LABEL=CONTAIN, /var/lib/containers, auto, "defaults" ]|g' \
+      sed -i -r -E 's|(.*)\[\s?LABEL=CONTAIN,\s+/var/lib/containers.*\]|\1[ LABEL=CONTAIN, /var/lib/containers, auto, defaults ]|g' \
         squashfs-root/etc/cloud/cloud.cfg.d/01_metalfs.cfg \
         squashfs-root/srv/cray/resources/metal/cloud.cfg.d/01_metalfs.cfg
 
@@ -578,7 +578,9 @@ fi
 set_timezone
 if [[ $CSM_RELEASE =~ ^1\.4\.4 ]]; then
   csm_144_patch
-  csm_145_patch
+elif [[ $CSM_RELEASE =~ ^1\.4\.([5-9]|[1-9]0+|[1-9]{2,}) ]]; then    
+    csm_144_patch
+    csm_145_patch
 fi
 create_new_squashfs
 cleanup
