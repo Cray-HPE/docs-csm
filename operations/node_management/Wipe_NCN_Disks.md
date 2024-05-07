@@ -9,10 +9,10 @@ This page details how to wipe disks on NCNs installed with the current version o
 ## Topics
 
 - [Manual Wipe Procedures](#manual-wipe-procedures)
-  - [Topics](#topics)
-  - [Basic wipe](#basic-wipe)
-  - [Advanced wipe](#advanced-wipe)
-  - [Full wipe](#full-wipe)
+    - [Topics](#topics)
+    - [Basic wipe](#basic-wipe)
+    - [Advanced wipe](#advanced-wipe)
+    - [Full wipe](#full-wipe)
 
 ## Basic wipe
 
