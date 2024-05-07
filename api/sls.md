@@ -1127,7 +1127,7 @@ Perform a search for networks matching a set of criteria.  Any of the properties
     "Name": "HSN",
     "FullName": "High Speed Network",
     "IPRanges": [
-      "0.0.0.0/0|0/0"
+      "string"
     ],
     "Type": "slingshot10",
     "LastUpdated": 0,
@@ -1326,7 +1326,7 @@ Get a dump of current service state. The format of this is implementation-specif
       "Name": "HSN",
       "FullName": "High Speed Network",
       "IPRanges": [
-        "0.0.0.0/0|0/0"
+        "string"
       ],
       "Type": "slingshot10",
       "LastUpdated": 0,
@@ -1366,7 +1366,7 @@ Get a dump of current service state. The format of this is implementation-specif
       "Name": "HSN",
       "FullName": "High Speed Network",
       "IPRanges": [
-        "0.0.0.0/0|0/0"
+        "string"
       ],
       "Type": "slingshot10",
       "LastUpdated": 0,
@@ -1504,7 +1504,7 @@ sls_dump:
       Name: HSN
       FullName: High Speed Network
       IPRanges:
-        - 0.0.0.0/0|0/0
+        - string
       Type: slingshot10
       ExtraProperties:
         CIDR: 10.253.0.0/16
@@ -1531,7 +1531,7 @@ sls_dump:
       Name: HSN
       FullName: High Speed Network
       IPRanges:
-        - 0.0.0.0/0|0/0
+        - string
       Type: slingshot10
       ExtraProperties:
         CIDR: 10.253.0.0/16
@@ -2117,7 +2117,7 @@ is an array of strings with each string representing the name field of the netwo
     "Name": "HSN",
     "FullName": "High Speed Network",
     "IPRanges": [
-      "0.0.0.0/0|0/0"
+      "string"
     ],
     "Type": "slingshot10",
     "LastUpdated": 0,
@@ -2271,7 +2271,7 @@ Create a new network. Must include all fields at the time of upload.
   "Name": "HSN",
   "FullName": "High Speed Network",
   "IPRanges": [
-    "0.0.0.0/0|0/0"
+    "string"
   ],
   "Type": "slingshot10",
   "ExtraProperties": {
@@ -2405,7 +2405,7 @@ Retrieve the specific network.
   "Name": "HSN",
   "FullName": "High Speed Network",
   "IPRanges": [
-    "0.0.0.0/0|0/0"
+    "string"
   ],
   "Type": "slingshot10",
   "LastUpdated": 0,
@@ -2530,7 +2530,7 @@ Update a network object. Parent objects will be created, if possible.
   "Name": "HSN",
   "FullName": "High Speed Network",
   "IPRanges": [
-    "0.0.0.0/0|0/0"
+    "string"
   ],
   "Type": "slingshot10",
   "ExtraProperties": {
@@ -2582,7 +2582,7 @@ Update a network object. Parent objects will be created, if possible.
   "Name": "HSN",
   "FullName": "High Speed Network",
   "IPRanges": [
-    "0.0.0.0/0|0/0"
+    "string"
   ],
   "Type": "slingshot10",
   "LastUpdated": 0,
@@ -2747,7 +2747,7 @@ bearerAuth
   "Name": "HSN",
   "FullName": "High Speed Network",
   "IPRanges": [
-    "0.0.0.0/0|0/0"
+    "string"
   ],
   "Type": "slingshot10",
   "LastUpdated": 0,
@@ -2806,7 +2806,7 @@ bearerAuth
 <a id="tocsnetwork_ip_range"></a>
 
 ```json
-"0.0.0.0/0|0/0"
+"string"
 
 ```
 
@@ -3651,7 +3651,7 @@ xor
       "Name": "HSN",
       "FullName": "High Speed Network",
       "IPRanges": [
-        "0.0.0.0/0|0/0"
+        "string"
       ],
       "Type": "slingshot10",
       "LastUpdated": 0,
@@ -3691,7 +3691,7 @@ xor
       "Name": "HSN",
       "FullName": "High Speed Network",
       "IPRanges": [
-        "0.0.0.0/0|0/0"
+        "string"
       ],
       "Type": "slingshot10",
       "LastUpdated": 0,

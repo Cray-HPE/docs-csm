@@ -175,9 +175,9 @@ Return list of versions currently running.
 ```json
 [
   {
-    "major": "^(0|1)$",
-    "minor": "^(0|1)$",
-    "patch": "^(0|1)$",
+    "major": "string",
+    "minor": "string",
+    "patch": "string",
     "links": [
       {
         "href": "string",
@@ -285,9 +285,9 @@ Return the API version
 
 ```json
 {
-  "major": "^(0|1)$",
-  "minor": "^(0|1)$",
-  "patch": "^(0|1)$",
+  "major": "string",
+  "minor": "string",
+  "patch": "string",
   "links": [
     {
       "href": "string",
@@ -385,9 +385,9 @@ Return the API version
 
 ```json
 {
-  "major": "^(0|1)$",
-  "minor": "^(0|1)$",
-  "patch": "^(0|1)$",
+  "major": "string",
+  "minor": "string",
+  "patch": "string",
   "links": [
     {
       "href": "string",
@@ -620,7 +620,7 @@ The created template will be modified if necessary to follow the BOS v2 session 
       ],
       "rootfs_provider": "cpss3",
       "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "^nmn$",
+      "network": "string",
       "boot_ordinal": 0,
       "shutdown_ordinal": 0
     },
@@ -643,7 +643,7 @@ The created template will be modified if necessary to follow the BOS v2 session 
       ],
       "rootfs_provider": "cpss3",
       "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "^nmn$",
+      "network": "string",
       "boot_ordinal": 0,
       "shutdown_ordinal": 0
     }
@@ -3237,9 +3237,9 @@ Return the API version
 
 ```json
 {
-  "major": "^(0|1)$",
-  "minor": "^(0|1)$",
-  "patch": "^(0|1)$",
+  "major": "string",
+  "minor": "string",
+  "patch": "string",
   "links": [
     {
       "href": "string",
@@ -7169,9 +7169,9 @@ Return the API version
 
 ```json
 {
-  "major": "^(0|1)$",
-  "minor": "^(0|1)$",
-  "patch": "^(0|1)$",
+  "major": "string",
+  "minor": "string",
+  "patch": "string",
   "links": [
     {
       "href": "string",
@@ -8020,9 +8020,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ```json
 {
-  "major": "^(0|1)$",
-  "minor": "^(0|1)$",
-  "patch": "^(0|1)$",
+  "major": "string",
+  "minor": "string",
+  "patch": "string",
   "links": [
     {
       "href": "string",
@@ -8539,7 +8539,7 @@ The status for a Session. It is a list of all of the Boot Set Statuses in the Se
   ],
   "rootfs_provider": "cpss3",
   "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-  "network": "^nmn$",
+  "network": "string",
   "boot_ordinal": 0,
   "shutdown_ordinal": 0
 }
@@ -8640,7 +8640,7 @@ It is recommended to use names which meet the following restrictions:
       ],
       "rootfs_provider": "cpss3",
       "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "^nmn$",
+      "network": "string",
       "boot_ordinal": 0,
       "shutdown_ordinal": 0
     },
@@ -8663,7 +8663,7 @@ It is recommended to use names which meet the following restrictions:
       ],
       "rootfs_provider": "cpss3",
       "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "^nmn$",
+      "network": "string",
       "boot_ordinal": 0,
       "shutdown_ordinal": 0
     }
