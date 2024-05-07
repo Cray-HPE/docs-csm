@@ -33,9 +33,7 @@ from python_lib.types import JsonDict
 
 from .exceptions import ImsImportExportError
 
-# Current test has shown this to be the sweet spot, at least when uploading from the
-# USB drive
-DEFAULT_NUM_UPLOAD_WORKERS=6
+DEFAULT_NUM_UPLOAD_WORKERS=12
 
 # Downloads to the USB drive do not appear to benefit from parallel downloads
 DEFAULT_NUM_DOWNLOAD_WORKERS=1
