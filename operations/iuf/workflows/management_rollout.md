@@ -298,7 +298,7 @@ Refer to that table and any corresponding product documents before continuing to
 
         Sample output for configuring multiple management nodes is:
 
-          ```bash
+          ```text
           Taking snapshot of existing minimal-management-23.11.0 configuration to /root/apply_csm_configuration.20240305_173700.vKxhqC backup-minimal-management-23.11.0.json
           Setting desired configuration, clearing state, clearing error count, enabling components in CFS
           desiredConfig = "minimal-management-23.11.0"
