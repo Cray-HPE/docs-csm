@@ -202,6 +202,13 @@ version of CSM being installed. It then waits for the components to reach a conf
 /usr/share/doc/csm/upgrade/scripts/upgrade/util/upgrade-test-rpms.sh
 ```
 
+On success, the output should end with the following:
+
+```text
+Enabling and restarting goss-servers
+SUCCESS
+```
+
 ### Verification
 
 1. Verify that the new CSM version is in the product catalog.
