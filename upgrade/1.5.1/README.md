@@ -138,6 +138,13 @@ cd "$CSM_DISTDIR"
 ./upgrade.sh
 ```
 
+On success, the output should end with the following:
+
+```text
++ CSM applications and services upgraded
+upgrade.sh: OK
+```
+
 ### Upload NCN images
 
 It is important to upload NCN images to IMS and to edit the `cray-product-catalog`. This is necessary when updating
