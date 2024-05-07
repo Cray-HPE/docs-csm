@@ -149,6 +149,14 @@ products with IUF. If this step is skipped, IUF will fail when updating or upgra
 /usr/share/doc/csm/upgrade/scripts/upgrade/upload-ncn-images.sh
 ```
 
+On success, the output should end with the following:
+
+```text
+Uploading Kubernetes images...
+Uploading Ceph images...
+Updating image ids...
+```
+
 ### Update management node CFS configuration
 
 This step updates the CFS configuration which is set as the desired configuration for the management
