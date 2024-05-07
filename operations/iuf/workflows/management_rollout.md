@@ -206,22 +206,17 @@ Refer to that table and any corresponding product documents before continuing to
 
 1. Rebuild the NCN worker nodes. Follow the procedure in section [2.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
-1. Configure NCN master and NCN storage nodes.
+1. Configure NCN master nodes.
 
-    1. (`ncn-m#`) Create a comma-separated list of the xnames for all NCN master and NCN storage nodes and verify they are correct.
+    1. (`ncn-m#`) Create a comma-separated list of the xnames for all NCN master nodes and verify they are correct.
 
         ```bash
         MASTER_XNAMES=$(cray hsm state components list --role Management --subrole Master --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
-        STORAGE_XNAMES=$(cray hsm state components list --role Management --subrole Storage --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
-        MASTER_STORAGE_XNAMES="${MASTER_XNAMES},${STORAGE_XNAMES}"
         echo "Master node xnames: $MASTER_XNAMES"
-        echo "Storage node xnames: $STORAGE_XNAMES"
-        echo "Master and storage node xnames: $MASTER_STORAGE_XNAMES"
         ```
 
     1. Get the CFS configuration created for management nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created)
-       documentation to get the value for `configuration` for any image with a `configuration_group_name` value matching `Management_Master`,`Management_Worker`, or `Management_Storage` (since `configuration` is the same for all
-       management nodes).
+       documentation to get the value for `configuration` for the image with a `configuration_group_name` value matching `Management_Master`.
 
     1. (`ncn-m#`) Set `CFS_CONFIG_NAME` to the value for `configuration` found in the previous step.
 
@@ -229,11 +224,11 @@ Refer to that table and any corresponding product documents before continuing to
         CFS_CONFIG_NAME=<appropriate configuration value>
         ```
 
-    1. (`ncn-m#`) Apply the CFS configuration to NCN master nodes and NCN storage nodes.
+    1. (`ncn-m#`) Apply the CFS configuration to NCN master nodes.
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $MASTER_STORAGE_XNAMES --clear-state
+        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $MASTER_XNAMES --clear-state
         ```
 
         Sample output for configuring multiple management nodes is:
@@ -258,6 +253,64 @@ Refer to that table and any corresponding product documents before continuing to
           [tags]
 
           desiredConfig = "management-23.11.0"
+          enabled = true
+          errorCount = 0
+          id = "x3702c0s16b0n0"
+          state = []
+
+          [tags]
+
+          Waiting for configuration to complete. 3 components remaining.
+          Configuration complete. 3 component(s) completed successfully.  0 component(s) failed.
+          ```
+
+1. Configure NCN storage nodes.
+
+    1. (`ncn-m#`) Create a comma-separated list of the xnames for all NCN storage nodes and verify they are correct.
+
+        ```bash
+        STORAGE_XNAMES=$(cray hsm state components list --role Management --subrole Storage --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
+        echo "Storage node xnames: $STORAGE_XNAMES"
+        ```
+
+    1. Get the CFS configuration created for management storage nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created)
+       documentation to get the value for `configuration` for the image with a `configuration_group_name` value matching `Management_Storage`.
+
+    1. (`ncn-m#`) Set `CFS_CONFIG_NAME` to the value for `configuration` found in the previous step.
+
+        ```bash
+        CFS_CONFIG_NAME=<appropriate configuration value>
+        ```
+
+    1. (`ncn-m#`) Apply the CFS configuration to NCN storage nodes.
+
+        ```bash
+        /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $STORAGE_XNAMES --clear-state
+        ```
+
+        Sample output for configuring multiple management nodes is:
+
+          ```text
+          Taking snapshot of existing minimal-management-23.11.0 configuration to /root/apply_csm_configuration.20240305_173700.vKxhqC backup-minimal-management-23.11.0.json
+          Setting desired configuration, clearing state, clearing error count, enabling components in CFS
+          desiredConfig = "minimal-management-23.11.0"
+          enabled = true
+          errorCount = 0
+          id = "x3700c0s16b0n0"
+          state = []
+
+          [tags]
+
+          desiredConfig = "minimal-management-23.11.0"
+          enabled = true
+          errorCount = 0
+          id = "x3701c0s16b0n0"
+          state = []
+
+          [tags]
+
+          desiredConfig = "minimal-management-23.11.0"
           enabled = true
           errorCount = 0
           id = "x3702c0s16b0n0"
