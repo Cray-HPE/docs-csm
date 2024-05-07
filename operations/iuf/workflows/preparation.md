@@ -51,7 +51,17 @@ iuf -a "${ACTIVITY_NAME}" activity --create --comment "download complete" waitin
 
 The install and upgrade workflow instructions will not use `iuf activity` in this manner, deferring to the administrator to use it as desired.
 
-## 3. Next steps
+## 3. Save system state before upgrade
+
+Before performing the install/upgrade, it is important to save specific system state information so that it can be referenced later if needed.
+Run the script below to save the state information. The information gathered by this script is SAT status, SAT site information,
+HSN status, Ceph status, and SDU and RDA configurations. This information will be saved to ____________.
+
+```bash
+/usr/share/doc/csm/upgrade/scripts/upgrade/util/pre-upgrade-status.sh
+```
+
+## 4. Next steps
 
 - If performing an initial install or an upgrade of non-CSM products only, return to the
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)
