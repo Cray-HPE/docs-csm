@@ -1,8 +1,7 @@
 # Validate deployment and perform Slingshot switch FW updates
 
 - [1. Execute the IUF `post-install-service-check` stage](#1-execute-the-iuf-post-install-service-check-stage)
-- [2. Perform Slingshot switch firmware updates](#2-perform-slingshot-switch-firmware-updates)
-- [3. Next steps](#3-next-steps)
+- [2. Next steps](#2-next-steps)
 
 ## 1. Execute the IUF `post-install-service-check` stage
 
@@ -23,15 +22,7 @@ Once this step has completed:
 - Validation scripts have executed to verify the health of the product microservices
 - Per-stage product hooks have executed for the `post-install-service-check` stage
 
-## 2. Perform Slingshot switch firmware updates
-
-Instructions to perform Slingshot switch firmware updates are provided in the "Upgrade Slingshot Switch Firmware on HPE Cray EX" section of the _Slingshot Operations Guide for Customers_.
-
-Once this step has completed:
-
-- Slingshot switch firmware has been updated
-
-## 3. Next steps
+## 2. Next steps
 
 - If performing an initial install or an upgrade of non-CSM products only, return to the
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)
