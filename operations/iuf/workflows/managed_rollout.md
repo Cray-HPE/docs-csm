@@ -4,9 +4,9 @@ This section updates the software running on managed compute and application (UA
 
 - [1. Update managed host firmware (FAS)](#1-update-managed-host-firmware-fas)
 - [2. Execute the IUF `managed-nodes-rollout` stage](#2-execute-the-iuf-managed-nodes-rollout-stage)
-  - [2.1 LNet router nodes and gateway nodes](#21-lnet-router-nodes-and-gateway-nodes)
-  - [2.2 Compute nodes](#22-compute-nodes)
-  - [2.3 Application nodes](#23-application-nodes)
+    - [2.1 LNet router nodes and gateway nodes](#21-lnet-router-nodes-and-gateway-nodes)
+    - [2.2 Compute nodes](#22-compute-nodes)
+    - [2.3 Application nodes](#23-application-nodes)
 - [3. Update managed host Slingshot NIC firmware](#3-update-managed-host-slingshot-nic-firmware)
 - [4. Execute the IUF `post-install-check` stage](#4-execute-the-iuf-post-install-check-stage)
 - [5. Next steps](#5-next-steps)
@@ -61,6 +61,9 @@ Once this step has completed:
    that summarizes which product documents contain information or actions for the `managed-nodes-rollout` stage. Refer
    to that table and any corresponding product documents before continuing to the next step.
 
+1. Before booting computes, consider if SMA `OpenSearch` needs to be tuned.
+Refer to the "Configure `OpenSearch`" section in the _HPE Cray EX System Monitoring Application Administration Guide_ for instructions on tuning `OpenSearch`.
+
 1. Invoke `iuf run` with `-r` to execute the [`managed-nodes-rollout`](../stages/managed_nodes_rollout.md) stage on a
    single node to ensure the node reboots successfully with the desired image and CFS configuration. This node is
    referred to as the "canary node" in the remainder of this section. Use `--limit-managed-rollout` to target the canary
@@ -99,9 +102,10 @@ Once this step has completed:
   - Use this command to list all of the compute nodes in the system using their Node Identities (NIDs). First, enter the
     SAT bash shell using `sat bash`.
 
-    (`ncn-m001#`) sat bash
+    (`ncn-m001#`) Enter the sat container and fetch the compute list
 
     ```bash
+    sat bash
     (ef637ae8a8b5) sat-container:/sat/share # sat status --fields xname --filter role=compute --no-headings --no-borders | xargs sat xname2nid
     nid[000001-000004]
     (ef637ae8a8b5) sat-container:/sat/share # exit
@@ -111,7 +115,7 @@ Once this step has completed:
   - Now, tell the workload manager to reboot the compute nodes. Paste the output from the previous step as the last
     argument.
 
-    (`ncn-m001#`) A sample reboot command to reboot NIDs 1 through 4.
+    (`compute#`) A sample reboot command to reboot NIDs 1 through 4.
 
     ```bash
     scontrol reboot nextstate=Resume Reason="IUF Managed Nodes Rollout" nid[000001-000004]

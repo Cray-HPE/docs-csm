@@ -2,6 +2,7 @@
 
 This section updates the software running on management NCNs.
 
+
 - [1. Perform Slingshot switch firmware updates](#1-perform-slingshot-switch-firmware-updates)
 - [2. Update management host firmware (FAS)](#2-update-management-host-firmware-fas)
 - [3. Execute the IUF `management-nodes-rollout` stage](#3-execute-the-iuf-management-nodes-rollout-stage)
@@ -9,8 +10,9 @@ This section updates the software running on management NCNs.
   - [3.2 `management-nodes-rollout` without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade)
   - [3.3 NCN worker nodes](#33-ncn-worker-nodes)
     - [3.3.1 DVS workaround upgrading from COS prior to 2.5.146](#331-dvs-workaround-upgrading-from-cos-prior-to-25146)
-- [4. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware)
-- [5. Next steps](#5-next-steps)
+- [4. Update ceph node-exporter config for SNMP counters](#3-update-ceph-node-exporter-config-for-snmp-counters)
+- [5. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware)
+- [6. Next steps](#5-next-steps)
 
 ## 1. Perform Slingshot switch firmware updates
 
@@ -72,25 +74,35 @@ Refer to that table and any corresponding product documents before continuing to
         iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
         ```
 
-    1. (`ncn-m#`) Verify that the storage node booted and is configured correctly. The CFS configuration can be
-    verified with the command below using the xname of the node that was upgraded instead of the example value `x3000c0s13b0n0`.
+    1. (`ncn-m#`) Verify that the storage canary node booted successfully with the desired CFS configuration.
 
         ```bash
-        XNAME=x3000c0s13b0n0
+        XNAME=$(ssh $STORAGE_CANARY 'cat /etc/cray/xname')
+        echo "${XNAME}"
         cray cfs components describe "${XNAME}"
         ```
 
         The desired value for `configuration_status` is `configured`. If it is `pending`, then wait for the status to change to `configured`.
 
     1. (`ncn-m001#`) Upgrade the remaining NCN storage nodes once the first has upgraded successfully. This upgrades NCN storage nodes serially.
-    Adjust the number of storage nodes based on the cluster.
+    Get the number of storage nodes based on the cluster and verify that it is correct. The storage canary node should not be in the list since it has already been upgraded.
+    The list of storage nodes can be manually entered if it is not desired to upgrade all of the remaining storage nodes.
 
         ```bash
-        STORAGE_NODES="ncn-s002 ncn-s003 ncn-s004"
+        STORAGE_NODES="$(ceph orch host ls | grep ncn-s | grep -v "$STORAGE_CANARY" | awk '{print $1}' | xargs echo)"
+        echo "$STORAGE_NODES"
         ```
 
         ```bash
         iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_NODES}
+        ```
+
+    1. (`ncn-m001#`) Verify that all storage nodes configured successfully.
+
+        ```bash
+        for ncn in $(cray hsm state components list --subrole Storage --type Node \
+           --format json | jq -r .Components[].ID | grep b0n | sort); do cray cfs components describe \
+           $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'; done
         ```
 
 1. Perform the NCN master node upgrade on `ncn-m002` and `ncn-m003`.
@@ -106,6 +118,12 @@ Refer to that table and any corresponding product documents before continuing to
 
     1. Verify that `ncn-m002` booted successfully with the desired image and CFS configuration.
 
+        ```bash
+        XNAME=$(ssh ncn-m002 'cat /etc/cray/xname')
+        echo "${XNAME}"
+        cray cfs components describe "${XNAME}"
+        ```
+
     1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m003`. This will rebuild `ncn-m003` with the new CFS configuration and image built in
     previous steps of the workflow.
 
@@ -113,6 +131,14 @@ Refer to that table and any corresponding product documents before continuing to
 
         ```bash
         iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ncn-m003
+        ```
+
+    1. Verify that `ncn-m003` booted successfully with the desired image and CFS configuration.
+
+        ```bash
+        XNAME=$(ssh ncn-m003 'cat /etc/cray/xname')
+        echo "${XNAME}"
+        cray cfs components describe "${XNAME}"
         ```
 
 1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [2.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
@@ -173,7 +199,7 @@ Once this step has completed:
 - All management NCNs have been upgraded to the image and CFS configuration created in the previous steps of this workflow
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [3. Update management host Slingshot NIC firmware](#3-update-management-host-slingshot-nic-firmware).
+Continue to the next section [3. Update ceph node-exporter config for SNMP counters](#3-update-ceph-node-exporter-config-for-snmp-counters).
 
 ### 3.2 `management-nodes-rollout` without CSM upgrade
 
@@ -190,22 +216,17 @@ Refer to that table and any corresponding product documents before continuing to
 
 1. Rebuild the NCN worker nodes. Follow the procedure in section [2.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
-1. Configure NCN master and NCN storage nodes.
+1. Configure NCN master nodes.
 
-    1. (`ncn-m#`) Create a comma-separated list of the xnames for all NCN master and NCN storage nodes and verify they are correct.
+    1. (`ncn-m#`) Create a comma-separated list of the xnames for all NCN master nodes and verify they are correct.
 
         ```bash
         MASTER_XNAMES=$(cray hsm state components list --role Management --subrole Master --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
-        STORAGE_XNAMES=$(cray hsm state components list --role Management --subrole Storage --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
-        MASTER_STORAGE_XNAMES="${MASTER_XNAMES},${STORAGE_XNAMES}"
         echo "Master node xnames: $MASTER_XNAMES"
-        echo "Storage node xnames: $STORAGE_XNAMES"
-        echo "Master and storage node xnames: $MASTER_STORAGE_XNAMES"
         ```
 
     1. Get the CFS configuration created for management nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created)
-       documentation to get the value for `configuration` for any image with a `configuration_group_name` value matching `Management_Master`,`Management_Worker`, or `Management_Storage` (since `configuration` is the same for all
-       management nodes).
+       documentation to get the value for `configuration` for the image with a `configuration_group_name` value matching `Management_Master`.
 
     1. (`ncn-m#`) Set `CFS_CONFIG_NAME` to the value for `configuration` found in the previous step.
 
@@ -213,11 +234,11 @@ Refer to that table and any corresponding product documents before continuing to
         CFS_CONFIG_NAME=<appropriate configuration value>
         ```
 
-    1. (`ncn-m#`) Apply the CFS configuration to NCN master nodes and NCN storage nodes.
+    1. (`ncn-m#`) Apply the CFS configuration to NCN master nodes.
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $MASTER_STORAGE_XNAMES --clear-state
+        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $MASTER_XNAMES --clear-state
         ```
 
         Sample output for configuring multiple management nodes is:
@@ -253,13 +274,71 @@ Refer to that table and any corresponding product documents before continuing to
           Configuration complete. 3 component(s) completed successfully.  0 component(s) failed.
           ```
 
+1. Configure NCN storage nodes.
+
+    1. (`ncn-m#`) Create a comma-separated list of the xnames for all NCN storage nodes and verify they are correct.
+
+        ```bash
+        STORAGE_XNAMES=$(cray hsm state components list --role Management --subrole Storage --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
+        echo "Storage node xnames: $STORAGE_XNAMES"
+        ```
+
+    1. Get the CFS configuration created for management storage nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created)
+       documentation to get the value for `configuration` for the image with a `configuration_group_name` value matching `Management_Storage`.
+
+    1. (`ncn-m#`) Set `CFS_CONFIG_NAME` to the value for `configuration` found in the previous step.
+
+        ```bash
+        CFS_CONFIG_NAME=<appropriate configuration value>
+        ```
+
+    1. (`ncn-m#`) Apply the CFS configuration to NCN storage nodes.
+
+        ```bash
+        /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $STORAGE_XNAMES --clear-state
+        ```
+
+        Sample output for configuring multiple management nodes is:
+
+          ```text
+          Taking snapshot of existing minimal-management-23.11.0 configuration to /root/apply_csm_configuration.20240305_173700.vKxhqC backup-minimal-management-23.11.0.json
+          Setting desired configuration, clearing state, clearing error count, enabling components in CFS
+          desiredConfig = "minimal-management-23.11.0"
+          enabled = true
+          errorCount = 0
+          id = "x3700c0s16b0n0"
+          state = []
+
+          [tags]
+
+          desiredConfig = "minimal-management-23.11.0"
+          enabled = true
+          errorCount = 0
+          id = "x3701c0s16b0n0"
+          state = []
+
+          [tags]
+
+          desiredConfig = "minimal-management-23.11.0"
+          enabled = true
+          errorCount = 0
+          id = "x3702c0s16b0n0"
+          state = []
+
+          [tags]
+
+          Waiting for configuration to complete. 3 components remaining.
+          Configuration complete. 3 component(s) completed successfully.  0 component(s) failed.
+          ```
+
 Once this step has completed:
 
 - Management NCN worker nodes have been rebuilt with the image and CFS configuration created in previous steps of this workflow
 - Management NCN storage and NCN master nodes have be updated with the CFS configuration created in the previous steps of this workflow.
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [3. Update management host Slingshot NIC firmware](#3-update-management-host-slingshot-nic-firmware).
+Continue to the next section [3. Update ceph node-exporter config for SNMP counters](#3-update-ceph-node-exporter-config-for-snmp-counters).
 
 ### 3.3 NCN worker nodes
 
@@ -293,6 +372,12 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 
 1. Verify the canary node booted successfully with the desired image and CFS configuration.
 
+    ```bash
+    XNAME=$(ssh $WORKER_CANARY 'cat /etc/cray/xname')
+    echo "${XNAME}"
+    cray cfs components describe "${XNAME}"
+    ```
+
 1. (`ncn-m001#`) Use `kubectl` to apply the `iuf-prevent-rollout=true` label to the canary node to prevent it from unnecessarily rebuilding again.
 
     ```bash
@@ -307,17 +392,41 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
 
-    **`NOTE`** Instead of supplying `Management_Worker` as the argument to `--limit-management-rollout`, worker node hostnames could be supplied.
-    For example, `--limit-management-rollout ncn-w002 ncn-w003` will rebuild `ncn-w002` and `ncn-w003`.
+    **`NOTE`** For this step, the argument to `--limit-management-rollout` can be `Management_Worker` or a list of worker
+    node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
+    with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
 
-    ```bash
-    iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout Management_Worker
-    ```
+    **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
 
-1. Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the canary node.
+    1. (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
+
+        ```bash
+        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout Management_Worker
+        ```
+
+    1. (`ncn-m001#`) Execute `management-nodes-rollout` on a group of worker nodes. The list of worker nodes can be manually edited if it is undesirable to rebuild/upgrade all of the workers with one execution.
+
+        ```bash
+        WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | grep -v $WORKER_CANARY |  awk '{print $1}' | xargs)
+        echo $WORKER_NODES
+        ```
+
+        ```bash
+        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout $WORKER_NODES
+        ```
+
+1. (`ncn-m001#`) Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the canary node.
 
     ```bash
     kubectl label nodes "${WORKER_CANARY}" --overwrite iuf-prevent-rollout-
+    ```
+
+1. (`ncn-m001#`) Verify that all worker nodes configured successfully.
+
+    ```bash
+    for ncn in $(cray hsm state components list --subrole Worker --type Node \
+      --format json | jq -r .Components[].ID | grep b0n | sort); do cray cfs components describe \
+      $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'; done
     ```
 
 Once this step has completed:
@@ -344,13 +453,17 @@ It should be copied to the canary node when that node is being
 rebuilt, and to the remaining worker nodes after the canary node boot
 has succeeded.
 
-1. (`ncn-m001#`) Optionally, set an environment variable to the media directory:
+1. (`ncn-m001#`) Set an environment variable to the media directory, if not already set.
 
     ```bash
-    MEDIADIR=/etc/cray/upgrade/csm/media/<directory>
+    echo $MEDIA_DIR
     ```
 
-2. (`ncn-m001#`) Optionally, create and `cd` to a temporary directory.
+    ```bash
+    MEDIA_DIR=/etc/cray/upgrade/csm/media/<directory>
+    ```
+
+1. (`ncn-m001#`) Optionally, create and `cd` to a temporary directory.
 in which to extract the new version of the script.
 
     ```bash
@@ -358,36 +471,41 @@ in which to extract the new version of the script.
     cd /tmp/upgrade-prechecks_WAR
     ```
 
-3. (`ncn-m001#`) Extract the `cray-dvs-csm` rpm that's included in the USS image:
+1. (`ncn-m001#`) Extract the `cray-dvs-csm` rpm that's included in the USS image:
 
     ```bash
-    rpm2cpio < $MEDIADIR/uss-*-csm-1.5/rpms/uss-*-csm-1.5/x86_64/cray-dvs-csm-*.x86_64.rpm | cpio -i --make-directories --no-absolute-filenames
+    rpm2cpio < $MEDIA_DIR/uss-*-csm-1.5/rpms/uss-*-csm-1.5/x86_64/cray-dvs-csm-*.x86_64.rpm | cpio -i --make-directories --no-absolute-filenames
     ```
 
-4. (`ncn-m001#`) Install the new version of the script onto the canary node.
+1. (`ncn-m001#`) Install the new version of the script onto all of the worker nodes. This is one way to do that:
 
     ```bash
     SSH_OPTIONS='-o StrictHostKeyChecking=no -o ConnectTimeout=15 -o LogLevel=ERROR -o UserKnownHostsFile=/dev/null'
-    scp $SSH_OPTIONS opt/cray/shasta/cne/bin/prechecks_for_worker_reboots $WORKER_CANARY:/opt/cray/shasta/cos/bin/prechecks_for_worker_reboots
-    ```
-
-5. (`ncn-m001#`) After the canary node has booted successfully, install the new version of the script onto the other worker nodes. This is one way to do that:
-
-    ```bash
     for name in $(kubectl get node | grep -P 'ncn-w\d+' | awk '{print $1}'); do
-        xname=$(nslookup $(dig +short ${name}.nmn) | grep -P "x\d+c\d+s\d+b\dn\d.$" | sed -e 's/.* = //' -e 's/\.$//')
-        scp $SSH_OPTIONS opt/cray/shasta/cne/bin/prechecks_for_worker_reboots $xname:/opt/cray/shasta/cos/bin/prechecks_for_worker_reboots
+        scp -p $SSH_OPTIONS opt/cray/shasta/cne/bin/prechecks_for_worker_reboots $name:/opt/cray/shasta/cos/bin/prechecks_for_worker_reboots
     done
     ```
 
-6. (`ncn-m001#`) Optionally, remove the temporary directory.
+1. (`ncn-m001#`) Optionally, remove the temporary directory.
 
     ```bash
     cd ..
     rm -rf upgrade-prechecks_WAR
     ```
 
-## 4. Update management host Slingshot NIC firmware
+After completing this workaround, return to [2.3 NCN worker nodes](#23-ncn-worker-nodes) to roll out worker nodes.
+
+## 4. Update ceph node-exporter config for SNMP counters
+
+> **OPTIONAL:** This is an optional step.
+
+This uses `netstat` collector form node-exporter and enables all the SNMP counters monitoring in `/proc/net/snmp` on `ncn` nodes.
+
+See [Update ceph node-exporter configuration](../../utility_storage/update_ceph_node_exporter_config.md) to update the ceph node-exporter configuration to monitor SNMP counters.
+
+Continue to the next section [4. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware).
+
+## 5. Update management host Slingshot NIC firmware
 
 If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the  _HPE Slingshot Operations Guide_ for details on how to update NIC firmware on management nodes.
 
@@ -400,7 +518,7 @@ Once this step has completed:
 - Service checks have been run to verify product microservices are executing as expected
 - Per-stage product hooks have executed for the `deploy-product` and `post-install-service-check` stages
 
-## 5. Next steps
+## 6. Next steps
 
 - If performing an initial install or an upgrade of non-CSM products only, return to the
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)

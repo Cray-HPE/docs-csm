@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -28,10 +28,13 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 import traceback
 
 from contextlib import contextmanager
-from typing import Any, List
+from typing import Any, List, Union
+
+WAIT_SECONDS_BETWEEN_COMMAND_RETRIES=2
 
 class ScriptException(Exception):
     """
@@ -187,11 +190,31 @@ def validate_file_readable(filepath: str) -> None:
     if not os.access(filepath, os.R_OK):
         raise ScriptException(f"File exists but is not readable: '{filepath}'")
 
-def run_command(command: List[str]) -> bytes:
+def run_command(command: List[str], num_retries: int=0, timeout: Union[int, None]=None) -> bytes:
     """
     Runs the specified command and returns the output.
+    If num_retries is non-0, if the command fails, it will be retried up to the
+    specified number of times.
     """
-    logging.debug(command)
-    result = subprocess.check_output(command)
-    logging.debug(result)
-    return result
+    while True:
+        logging.debug(command)
+        try:
+            cmd_result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
+            logging.debug("stdout: %s", cmd_result.stdout)
+            logging.debug("stderr: %s", cmd_result.stderr)
+            return cmd_result.stdout
+        except subprocess.CalledProcessError as exc:
+            logging.warning("Command failed with return code %d: %s", exc.returncode, exc.cmd)
+            logging.debug("stdout: %s", exc.stdout)
+            logging.debug("stderr: %s", exc.stderr)
+            if num_retries == 0:
+                raise exc
+        except subprocess.TimeoutExpired as exc:
+            logging.warning("Command did not complete after %d seconds: %s", exc.timeout, exc.cmd)
+            logging.debug("stdout: %s", exc.stdout)
+            logging.debug("stderr: %s", exc.stderr)
+            if num_retries == 0:
+                raise exc
+        logging.debug("Retrying command after %d seconds (%d retries remaining)", WAIT_SECONDS_BETWEEN_COMMAND_RETRIES, num_retries)
+        time.sleep(WAIT_SECONDS_BETWEEN_COMMAND_RETRIES)
+        num_retries-=1

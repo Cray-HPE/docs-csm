@@ -900,48 +900,9 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "export STORAGE_IMS_IMAGE_ID=${STORAGE_IMS_IMAGE_ID}" >> /etc/cray/upgrade/csm/myenv
     echo "export K8S_IMS_IMAGE_ID=${K8S_IMS_IMAGE_ID}" >> /etc/cray/upgrade/csm/myenv
 
-    echo "Retrieving a list of all management node component names (xnames)"
-    set -o pipefail
-
-    WORKER_XNAMES=$(cray hsm state components list --role Management --subrole Worker --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
-    [[ -n ${WORKER_XNAMES} ]]
-    MASTER_XNAMES=$(cray hsm state components list --role Management --subrole Master --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
-    [[ -n ${MASTER_XNAMES} ]]
-    K8S_XNAMES="$WORKER_XNAMES $MASTER_XNAMES"
-    K8S_XNAME_LIST=${K8S_XNAMES//,/ }
-    STORAGE_XNAMES=$(cray hsm state components list --role Management --subrole Storage --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
-    [[ -n ${STORAGE_XNAMES} ]]
-    STORAGE_XNAME_LIST=${STORAGE_XNAMES//,/ }
-    set +o pipefail
-
-    for xname in ${K8S_XNAME_LIST}; do
-      METAL_SERVER=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' \
-        | awk -F 'metal.server=' '{print $2}' \
-        | awk -F ' ' '{print $1}')
-      NEW_METAL_SERVER="s3://boot-images/${K8S_IMS_IMAGE_ID}/rootfs"
-      PARAMS=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' \
-        | sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" \
-        | tr -d \")
-
-      cray bss bootparameters update --hosts "${xname}" \
-        --kernel "s3://boot-images/${K8S_IMS_IMAGE_ID}/kernel" \
-        --initrd "s3://boot-images/${K8S_IMS_IMAGE_ID}/initrd" \
-        --params "${PARAMS}"
-    done
-    for xname in ${STORAGE_XNAME_LIST}; do
-      METAL_SERVER=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' \
-        | awk -F 'metal.server=' '{print $2}' \
-        | awk -F ' ' '{print $1}')
-      NEW_METAL_SERVER="s3://boot-images/${STORAGE_IMS_IMAGE_ID}/rootfs"
-      PARAMS=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' \
-        | sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" \
-        | tr -d \")
-
-      cray bss bootparameters update --hosts "${xname}" \
-        --kernel "s3://boot-images/${STORAGE_IMS_IMAGE_ID}/kernel" \
-        --initrd "s3://boot-images/${STORAGE_IMS_IMAGE_ID}/initrd" \
-        --params "${PARAMS}"
-    done
+    # NOTE: NCN node images are no longer set in BSS here
+    # IUF workflows handle setting the correct node image before a node is upgraded
+    # If doing a CSM only upgrade, NCN images are set in the CSM-Only procedure
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
@@ -1123,7 +1084,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     for ncn_xname in "${NCN_XNAMES[@]}"; do
 
       params=$(cray bss bootparameters list --hosts "${ncn_xname}" --format json | jq '.[] |."params"' \
-        | sed -E 's/ ip=hsn[0-9]+:auto6 //g' \
+        | sed -E 's/ip=hsn[0-9]+:auto6//g' \
         | tr -d \")
 
       if ! cray bss bootparameters update --hosts "${ncn_xname}" \
@@ -1421,6 +1382,9 @@ CHARTS=(
 for chart_name in "${CHARTS[@]}"; do
   do_upgrade_csm_chart "${chart_name}" sysmgmt.yaml
 done
+
+# Restart CFS deployments to avoid CASMINST-6852
+"${locOfScript}/../common/restart-cfs.sh"
 
 # Ensure kata containers hypervisor file has the list of annotations required for CSM 1.5 CASMTRIAGE-6414
 for node in $(kubectl get nodes | grep -E "^ncn-w[0-9]" | awk '{ print $1 }'); do

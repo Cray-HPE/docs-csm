@@ -138,6 +138,13 @@ cd "$CSM_DISTDIR"
 ./upgrade.sh
 ```
 
+On success, the output should end with the following:
+
+```text
++ CSM applications and services upgraded
+upgrade.sh: OK
+```
+
 ### Upload NCN images
 
 It is important to upload NCN images to IMS and to edit the `cray-product-catalog`. This is necessary when updating
@@ -147,6 +154,14 @@ products with IUF. If this step is skipped, IUF will fail when updating or upgra
 
 ```bash
 /usr/share/doc/csm/upgrade/scripts/upgrade/upload-ncn-images.sh
+```
+
+On success, the output should end with the following:
+
+```text
+Uploading Kubernetes images...
+Uploading Ceph images...
+Updating image ids...
 ```
 
 ### Update management node CFS configuration
@@ -200,6 +215,13 @@ version of CSM being installed. It then waits for the components to reach a conf
 
 ```bash
 /usr/share/doc/csm/upgrade/scripts/upgrade/util/upgrade-test-rpms.sh
+```
+
+On success, the output should end with the following:
+
+```text
+Enabling and restarting goss-servers
+SUCCESS
 ```
 
 ### Verification
