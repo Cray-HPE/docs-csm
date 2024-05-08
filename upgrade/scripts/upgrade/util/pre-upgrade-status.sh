@@ -27,14 +27,17 @@ set -o pipefail
 
 exit_status=0
 error_summary=""
-OUTPUT_DIR="/root/system-status-pre-upgrade-$(date +%Y%m%d_%H%M%S)"
+OUTPUT_DIR_SUFFIX="/system-status/system-status-pre-upgrade-$(date +%Y%m%d_%H%M%S)"
+OUTPUT_MOUNT="/etc/cray/upgrade/csm"
+FULL_OUTPUT_DIR=${OUTPUT_MOUNT}${OUTPUT_DIR_SUFFIX}
+USER_OUTPUT_DIR=""
 
 while [[ $# -gt 0 ]]; do
   key="$1"
 
   case $key in
     -o|--output)
-      OUTPUT_DIR="$2"
+      USER_OUTPUT_DIR="$2"
       shift # past argument
       shift # past value
       ;;
@@ -43,25 +46,32 @@ while [[ $# -gt 0 ]]; do
       echo "usage 1: $0"
       echo "usage 2: $0 [-o|--output] OUTPUT_DIRECTORY"
       echo
-      echo "If no output directory is supplied, status files will be saved in ${OUTPUT_DIR}."
-      echo "If output directory is supplied, status files will be save in the provided directory"
+      echo "If no output directory is supplied, status files will be saved in ${FULL_OUTPUT_DIR}."
+      echo "If OUTPUT_DIRECTORY is supplied, status files will be save in the provided directory."
       exit 1
       ;;
   esac
 done
 
-if [[ ! -d $OUTPUT_DIR ]]; then
-  mkdir -p "$OUTPUT_DIR"
-  echo "Created $OUTPUT_DIR directory"
+# check that mount exists
+if [[ -n $USER_OUTPUT_DIR ]]; then
+  FULL_OUTPUT_DIR=$USER_OUTPUT_DIR
+elif [[ ! -d $OUTPUT_MOUNT ]]; then
+  echo -e "Warning: did not find $OUTPUT_MOUNT directory. Saving files on '/root/'. These files will not persist after a node rebuild/upgrade.\n"
+  FULL_OUTPUT_DIR="/root${OUTPUT_DIR_SUFFIX}"
+fi
+if [[ ! -d $FULL_OUTPUT_DIR ]]; then
+  mkdir -p "$FULL_OUTPUT_DIR"
+  echo "Created $FULL_OUTPUT_DIR directory"
 fi
 
 # check if last character in path is '/''
-if [[ ${OUTPUT_DIR: -1} != '/' ]]; then
-  OUTPUT_DIR="${OUTPUT_DIR}/"
+if [[ ${FULL_OUTPUT_DIR: -1} != '/' ]]; then
+  FULL_OUTPUT_DIR="${FULL_OUTPUT_DIR}/"
 fi
 
 function get_file_path() {
-  echo "${OUTPUT_DIR}${1}.$(date +%Y%m%d_%H%M%S).txt"
+  echo "${FULL_OUTPUT_DIR}${1}.$(date +%Y%m%d_%H%M%S).txt"
 }
 
 function execute() {
