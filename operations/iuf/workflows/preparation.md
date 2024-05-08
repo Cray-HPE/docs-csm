@@ -55,7 +55,7 @@ The install and upgrade workflow instructions will not use `iuf activity` in thi
 
 Before performing the install/upgrade, it is important to save specific system state information so that it can be referenced later if needed.
 Run the script below to save the state information. The information gathered by this script is SAT status, SAT site information,
-HSN status, Ceph status, and SDU and RDA configurations. This information will be saved to ____________.
+HSN status, Ceph status, and SDU and RDA configurations. This information will be saved in '/etc/cray/upgrade/csm/system-status/'.
 
 ```bash
 /usr/share/doc/csm/upgrade/scripts/upgrade/util/pre-upgrade-status.sh
