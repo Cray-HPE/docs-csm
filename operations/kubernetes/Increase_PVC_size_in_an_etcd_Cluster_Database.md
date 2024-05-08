@@ -2,8 +2,8 @@
 
 This procedure will detail how to increase the size of the Persistent Volume Claims (PVCs) that back an etcd cluster, in the event they have filled the database. Below are symptoms which may be caused by etcd running out of space:
 
-1. The etcd pods for a given cluster won't start and end up in CLBO (Crash Loop Back Off).
-1. The pod logs for one of the etcd members reports 'no space' errors.
+- The etcd pods for a given cluster will not start and end up in CLBO (Crash Loop Back Off).
+- The pod logs for one of the etcd members reports 'no space' errors.
 
 ## Prerequisites
 

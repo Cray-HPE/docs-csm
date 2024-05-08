@@ -1,6 +1,6 @@
 # Cray System Management (CSM) - Release Notes
 
-[CSM](glossary.md#cray-system-management-csm) 1.5 contains many changes spanning bug fixes, new feature development, and documentation improvements. This page lists some of the highlights.
+[CSM](glossary.md#cray-system-management-csm) 1.6 contains many changes spanning bug fixes, new feature development, and documentation improvements. This page lists some of the highlights.
 
 ## New
 
@@ -41,4 +41,4 @@ For a list of all features with an announced removal target, see [Removals](intr
 
 ## Known issues
 
-### Security vulnerability exceptions in CSM 1.5
+### Security vulnerability exceptions in CSM 1.6

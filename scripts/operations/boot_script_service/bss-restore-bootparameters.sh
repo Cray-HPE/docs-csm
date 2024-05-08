@@ -1,7 +1,7 @@
 #! /bin/bash
 #  MIT License
 #
-#  (C) Copyright [2023] Hewlett Packard Enterprise Development LP
+#  (C) Copyright [2023-2024] Hewlett Packard Enterprise Development LP
 #
 #  Permission is hereby granted, free of charge, to any person obtaining a
 #  copy of this software and associated documentation files (the "Software"),
@@ -60,6 +60,8 @@ bss-restore() {
 
 test $# = 0 && set -- "$(jq -r '.[] | select(."cloud-init"."meta-data" != null) | .hosts[0]' < $BACKUP_FILE)"
 
-for i in "$@"; do
-  bss-restore $i
+# Do not add quotes around $@, it causes the for loop to not work as intended!
+# shellcheck disable=SC2068
+for i in $@; do
+  bss-restore "$i"
 done

@@ -8,7 +8,7 @@ This procedure requires administrative privileges.
 
 ## Procedure
 
-1. Edit the ConfigMap using one of the following options.
+1. (`ncn-mw#`) Edit the ConfigMap using one of the following options.
 
     > **`NOTE`** Save a backup of the ConfigMap before making any changes.
 
@@ -23,7 +23,7 @@ This procedure requires administrative privileges.
 
     In the following example, the `net2` section is located before the `net0` section. If an administrator wants `net0` to be run first, they could move the `net0` section to be located before the `net2` section.
 
-    ```bash
+    ```text
     :net2
     dhcp net2 || goto net2_stop
     echo net2 IPv4 lease: ${ip} mac: ${net2/mac}
@@ -50,17 +50,12 @@ This procedure requires administrative privileges.
         1. Save the file.
 
             ```bash
-            kubectl get configmap -n services cray-ipxe-bss-ipxe \
-                    -o yaml > /root/cray-ipxe-bss-ipxe.yaml
+            kubectl get configmap -n services cray-ipxe-bss-ipxe -o yaml > /root/cray-ipxe-bss-ipxe.yaml
             ```
 
-        2. Edit the `cray-ipxe-bss-ipxe.yaml` file.
+        1. Edit the `cray-ipxe-bss-ipxe.yaml` file.
 
-            ```bash
-            vi /root/cray-ipxe-bss-ipxe.yaml
-            ```
-
-        3. Reload the ConfigMap.
+        1. Reload the ConfigMap.
 
             Deleting and recreating the ConfigMap will reload it.
 
@@ -69,18 +64,24 @@ This procedure requires administrative privileges.
             kubectl create -f /root/cray-ipxe-bss-ipxe.yaml
             ```
 
-2. Delete the iPXE pod to ensure the updated ConfigMap will be used.
+1. (`ncn-mw#`) Delete the iPXE pods to ensure the updated ConfigMap will be used.
 
     1. Find the pod ID.
 
         ```bash
         kubectl -n services get pods|grep cray-ipxe
-        cray-ipxe-5dddfc65f-qfmrr           2/2     Running        2       39h
         ```
 
-    2. Delete the pod.
+        Example output:
 
-        Replace CRAY-IPXE\_POD\_ID with the value returned in the previous step. In this example, the pod ID is `cray-ipxe-5dddfc65f-qfmrr`.
+        ```text
+        cray-ipxe-aarch64-5cdd74f889-wrkj7  2/2     Running        0       10d
+        cray-ipxe-x86-64-5b88cb79c-wb22l    2/2     Running        0       10d
+        ```
+
+    1. Delete the pod.
+
+        Replace `CRAY-IPXE_POD_ID` with the value returned in the previous step. In this example, the pod IDs are `cray-ipxe-aarch64-5cdd74f889-wrkj7' and 'cray-ipxe-x86-64-5b88cb79c-wb22l`.
 
         ```bash
         kubectl -n services delete pod CRAY-IPXE_POD_ID

@@ -4,14 +4,14 @@ When an etcd cluster is not healthy, it needs to be rebuilt. During that process
 That data needs to be repopulated in order for the cluster to go back to a healthy state.
 
 - [Repopulate Data in etcd Clusters When Rebuilding Them](#repopulate-data-in-etcd-clusters-when-rebuilding-them)
-  - [Applicable services](#applicable-services)
-  - [Prerequisites](#prerequisites)
-  - [Procedures](#procedures)
-    - [BOS](#bos)
-    - [BSS](#bss)
-    - [CPS](#cps)
-    - [FAS](#fas)
-    - [HMNFD](#hmnfd)
+    - [Applicable services](#applicable-services)
+    - [Prerequisites](#prerequisites)
+    - [Procedures](#procedures)
+        - [BOS](#bos)
+        - [BSS](#bss)
+        - [CPS](#cps)
+        - [FAS](#fas)
+        - [HMNFD](#hmnfd)
 
 ## Applicable services
 
@@ -47,26 +47,7 @@ Boot preparation information for other product streams can be found in the follo
 
 ### BSS
 
-Data is repopulated in BSS when the REDS `init` job is run.
-
-1. (`ncn-mw#`) Get the current REDS job.
-
-    ```bash
-    kubectl get -o json -n services job/cray-reds-init |
-            jq 'del(.spec.template.metadata.labels["controller-uid"], .spec.selector)' > cray-reds-init.json
-    ```
-
-1. (`ncn-mw#`) Delete the `reds-client-init` job.
-
-    ```bash
-    kubectl delete -n services -f cray-reds-init.json
-    ```
-
-1. (`ncn-mw#`) Restart the `reds-client-init` job.
-
-    ```bash
-    kubectl apply -n services -f cray-reds-init.json
-    ```
+Restore BSS from the ETCD backup see [Restore an ETCD Cluster from a Backup](Restore_an_etcd_Cluster_from_a_Backup.md)
 
 ### CPS
 

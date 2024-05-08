@@ -177,7 +177,7 @@ The Hardware Management System no longer supports a "diag" state, as such the `s
 |body|body|object|true|A JSON object to get status for selected components.|
 |» filter|body|string|false|Optional, pipe concatenated (|) list of filter strings, e.g. "filter1|filter2|filter3". Valid status filters are `show_all`, `show_disabled`, `show_halt`, `show_off`, `show_on`, `show_ready`, and `show_standby`. Valid flag filters are `show_alert`, `show_resvd`, and `show_warn`. Status and flag filters may be intermixed freely. If omitted, the default is `show_all`.|
 |» source|body|any|false|A string indicating the source for node status. Valid sources are `HSM` (or its aliases `HMS`, `SM`, `SMD`, or `Software`) and `Redfish` (or its alias `Hardware`). The default, when unspecified, is to use Redfish via the appropriate controller as the source for all status. The Hardware Management System (HMS) returns the largest set of possible status. A Redfish hardware source can *only* report **off** and **on** status for components.  Source strings are normalized to all lower case so `HSM` or `hsm` are both valid.|
-|» xnames|body|[string]|false|User specified list of component IDs (xnames) to get the status of. An empty array indicates all components in the system. If invalid xnames are specified then an error will be returned.|
+|» xnames|body|[string]|false|User specified list of component IDs (xnames) to get the status of. An empty array indicates all components in the system. On systems with more than around 200 nodes, requests that specify an empty array may not succeed; in those cases, explicitly specifying the desired xnames should work. If invalid xnames are specified then an error will be returned.|
 
 > Example responses
 

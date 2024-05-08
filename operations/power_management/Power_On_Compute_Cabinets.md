@@ -52,7 +52,7 @@ power-on command from Cray System Management \(CSM\) software.
    Finally, the `sat bootsys` command waits for the components in the liquid-cooled cabinets to be
    powered on. The `sat bootsys` command controls power only to liquid-cooled cabinets.
 
-   If the `hms-disocvery` cronjob fails to be scheduled after it is resumed, then SAT will delete
+   If the `hms-discovery` cronjob fails to be scheduled after it is resumed, then SAT will delete
    and re-create the cronjob, and will wait for it to run. After the cronjob has been scheduled
    within the time expected based on its cron schedule, execute the `sat bootsys boot --stage
    cabinet-power` command again.

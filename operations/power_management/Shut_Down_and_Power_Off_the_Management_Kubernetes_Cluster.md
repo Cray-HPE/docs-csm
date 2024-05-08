@@ -28,13 +28,14 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
 - Stops `etcd` and which freezes the state of the Kubernetes cluster on each management node.
 - Stops **and disables** the `kubelet` on each management and worker node.
 - Stops all containers on each management and worker node.
-- Stop `containerd` on each management and worker node.
+- Stops `containerd` on each management and worker node.
 - Stops Ceph from rebalancing on the management node that is running a `mon` process.
 
 ## Prerequisites
 
-An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream
+- An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream
 documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
+- To avoid slow `sat` commands, ensure `/root/.bashrc` has proper handling of `kubectl` commands on all master and worker nodes. See [Prepare the System for Power Off](Prepare_the_System_for_Power_Off.md)
 
 ## Check health of the management cluster
 
@@ -50,7 +51,7 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
       See [Backups for Etcd Clusters Running in Kubernetes](../kubernetes/Backups_for_Etcd_Clusters_Running_in_Kubernetes.md).
 
-1. (`ncn-mw#`) Check the status of NCN no wipe settings.
+1. (`ncn-m001#`) Check the status of NCN no wipe settings.
 
    Make sure that `metal.no-wipe=1`. If any management NCNs do not have that set, then review
    [Check and Set the `metal.no-wipe` Setting on NCNs](../node_management/Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md) before proceeding.
@@ -86,7 +87,15 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
 ## Shut down the Kubernetes management cluster
 
-1. (`ncn-mw#`) Shut down platform services.
+1. (`ncn-m001#`) Set variables as comma-separated lists for the three types of management NCNs.
+
+   ```bash
+   MASTERS="ncn-m002,ncn-m003"
+   STORAGE=$(ceph orch host ls | grep ncn-s | awk '{print $1}' | xargs | sed 's/ /,/g')
+   WORKERS=$(kubectl get nodes | grep ncn-w | awk '{print $1}' | sort -u | xargs | sed 's/ /,/g')
+   ```
+
+1. (`ncn-m001#`) Shut down platform services.
 
    ```bash
    sat bootsys shutdown --stage platform-services
@@ -95,9 +104,13 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    Example output:
 
    ```text
+   Proceed with stopping platform services? [yes,no] yes
+   Proceeding with stopping platform services.
    The following Non-compute Nodes (NCNs) will be included in this operation:
    managers:
    - ncn-m001
+   - ncn-m002
+   - ncn-m003
    storage:
    - ncn-s001
    - ncn-s002
@@ -119,17 +132,16 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    ERROR: Failed to stop 2 container(s) on ncn-w002. Execute "crictl ps -q" on the host to view running containers.
    WARNING: One or more "crictl stop" commands timed out on ncn-w001
    ERROR: Failed to stop 4 container(s) on ncn-w001. Execute "crictl ps -q" on the host to view running containers.
-   WARNING: Non-fatal error in step "Stop containers running under containerd on all Kubernetes NCNs." of platform services stop: Failed to stop containers on the following NCN
-   (s): ncn-w001, ncn-w002, ncn-w003
+   WARNING: Non-fatal error in step "Stop containers running under containerd on all Kubernetes NCNs." of platform services stop: Failed to stop containers on the following NCN(s): ncn-w001, ncn-w002, ncn-w003
    Continue with platform services stop? [yes,no] no
    Aborting.
    ```
 
    In the preceding example, the commands to stop containers timed out on all the worker nodes and reported `WARNING` and `ERROR` messages.
-   A summary of the issue displays and prompts the user to continue or stop. Respond `no` stop the shutdown. Then review the containers running on the nodes.
+   A summary of the issue displays and prompts the user to continue or stop. Respond `no` to stop the shutdown. Then review the containers running on the nodes.
 
    ```bash
-   for ncn in ncn-w00{1,2,3}; do echo "${ncn}"; ssh "${ncn}" "crictl ps"; echo; done
+   for ncn in $(echo $WORKERS | sed 's/,/ /g'); do echo "${ncn}"; ssh "${ncn}" "crictl ps"; echo; done
    ```
 
    Example output:
@@ -160,6 +172,8 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    The following Non-compute Nodes (NCNs) will be included in this operation:
    managers:
    - ncn-m001
+   - ncn-m002
+   - ncn-m003
    storage:
    - ncn-s001
    - ncn-s002
@@ -175,8 +189,7 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    WARNING: Failed to create etcd snapshot on ncn-m001: The etcd service is not active on ncn-m001 so a snapshot cannot be created.
    WARNING: Failed to create etcd snapshot on ncn-m002: The etcd service is not active on ncn-m002 so a snapshot cannot be created.
    WARNING: Failed to create etcd snapshot on ncn-m003: The etcd service is not active on ncn-m003 so a snapshot cannot be created.
-   WARNING: Non-fatal error in step "Create etcd snapshot on all Kubernetes manager NCNs." of platform services stop: Failed to create etcd snapshot on hosts: ncn-m001, ncn-m00
-   2, ncn-m003
+   WARNING: Non-fatal error in step "Create etcd snapshot on all Kubernetes manager NCNs." of platform services stop: Failed to create etcd snapshot on hosts: ncn-m001, ncn-m002, ncn-m003
    Continue with platform services stop? [yes,no] yes
    Continuing.
    Executing step: Stop etcd on all Kubernetes manager NCNs.
@@ -189,73 +202,98 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    If the process continues to report errors due to `Failed to stop containers`, then iterate on the above step. Each iteration should reduce the number of containers running. If necessary,
    containers can be manually stopped using `crictl stop CONTAINER`. If containers are stopped manually, then re-run the above procedure to complete any final steps in the process.
 
-1. (`ncn-mw#`) Shut down and power off all management NCNs except `ncn-m001`.
+1. (`ncn-m001#`) Shut down and power off all management NCNs except `ncn-m001`.
 
-   ```bash
-   sat bootsys shutdown --stage ncn-power
-   ```
+    This command requires input for the IPMI username and password for the management nodes.
 
-   Example output:
+    **Important:** The default timeout for the `sat bootsys shutdown --stage ncn-power` command is 300 seconds. If it is known that
+    the nodes take longer than this amount of time for a graceful shutdown, then a different value
+    can be set using `--ncn-shutdown-timeout NCN_SHUTDOWN_TIMEOUT` with a value other than 300
+    for `NCN_SHUTDOWN_TIMEOUT`. Once this timeout has been exceeded, the node will be forcefully
+    powered down.
 
-   ```text
-   Proceed with shutdown of other management NCNs? [yes,no] yes
-   Proceeding with shutdown of other management NCNs.
-   IPMI username: root
-   IPMI password:
-   The following Non-compute Nodes (NCNs) will be included in this operation:
-   managers:
-   - ncn-m002
-   - ncn-m003
-   storage:
-   - ncn-s001
-   - ncn-s002
-   - ncn-s003
-   workers:
-   - ncn-w001
-   - ncn-w002
-   - ncn-w003
+   1. Shutdown management NCNs.
 
-   The following Non-compute Nodes (NCNs) will be excluded from this operation:
-   managers:
-   - ncn-m001
-   storage: []
-   workers: []
+      ```bash
+      sat bootsys shutdown --stage ncn-power --ncn-shutdown-timeout 900
+      ```
 
-   Are the above NCN groupings and exclusions correct? [yes,no] yes
-   ```
+      Example output:
 
-1. (`ncn-mw#`) Monitor the consoles for each NCN.
+      ```text
+      Proceed with shutdown of other management NCNs? [yes,no] yes
+      Proceeding with shutdown of other management NCNs.
+      IPMI username: root
+      IPMI password:
+      The following Non-compute Nodes (NCNs) will be included in this operation:
+      managers:
+      - ncn-m002
+      - ncn-m003
+      storage:
+      - ncn-s001
+      - ncn-s002
+      - ncn-s003
+      workers:
+      - ncn-w001
+      - ncn-w002
+      - ncn-w003
 
-   Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
+      The following Non-compute Nodes (NCNs) will be excluded from this operation:
+      managers:
+      - ncn-m001
+      storage: []
+      workers: []
 
-   Alternately attach to the screen session \(screen sessions real time, but not saved\):
+      Are the above NCN groupings and exclusions correct? [yes,no] yes
+      ```
 
-   ```bash
-   screen -ls
-   ```
+   1. (`ncn-m001#`) Monitor the consoles for each NCN.
 
-   Example output:
+      Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
 
-   ```text
-   There are screens on:
-   26745.SAT-console-ncn-m003-mgmt (Detached)
-   26706.SAT-console-ncn-m002-mgmt (Detached)
-   26666.SAT-console-ncn-s003-mgmt (Detached)
-   26627.SAT-console-ncn-s002-mgmt (Detached)
-   26589.SAT-console-ncn-s001-mgmt (Detached)
-   26552.SAT-console-ncn-w003-mgmt (Detached)
-   26514.SAT-console-ncn-w002-mgmt (Detached)
-   26444.SAT-console-ncn-w001-mgmt (Detached)
-   ```
+      Alternately attach to the screen session \(screen sessions real time, but not saved\):
 
-   ```bash
-   screen -x 26745.SAT-console-ncn-m003-mgmt
-   ```
+      ```bash
+      screen -ls
+      ```
 
-1. (`ncn-m001#`) Check the power off status of management nodes.
+      Example output:
 
-    > NOTE: `read -s` is used to read the password in order to prevent it from being
-    > echoed to the screen or preserved in the shell history.
+      ```text
+      There are screens on:
+      26745.SAT-console-ncn-m003-mgmt (Detached)
+      26706.SAT-console-ncn-m002-mgmt (Detached)
+      26666.SAT-console-ncn-s003-mgmt (Detached)
+      26627.SAT-console-ncn-s002-mgmt (Detached)
+      26589.SAT-console-ncn-s001-mgmt (Detached)
+      26552.SAT-console-ncn-w003-mgmt (Detached)
+      26514.SAT-console-ncn-w002-mgmt (Detached)
+      26444.SAT-console-ncn-w001-mgmt (Detached)
+      ```
+
+      ```bash
+      screen -x 26745.SAT-console-ncn-w003-mgmt
+      ```
+
+   1. (`ncn-m001#`) Check the power off status of management NCNs.
+
+       > NOTE: `read -s` is used to read the password in order to prevent it from being
+       > echoed to the screen or preserved in the shell history.
+
+       ```bash
+       USERNAME=root
+       read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
+       ```
+
+       ```bash
+       export IPMI_PASSWORD
+       for ncn in $(echo "$MASTERS,$STORAGE,$WORKERS" | sed 's/,/ /g'); do
+           echo -n "${ncn}: "
+           ipmitool -U "${USERNAME}" -H "${ncn}-mgmt" -E -I lanplus chassis power status
+       done
+       ```
+
+1. (`external#`) From a remote system, activate the serial console for `ncn-m001`.
 
     ```bash
     USERNAME=root
@@ -264,15 +302,6 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
     ```bash
     export IPMI_PASSWORD
-    for ncn in ncn-m00{2,3} ncn-w00{1,2,3} ncn-s00{1,2,3}; do
-        echo -n "${ncn}: "
-        ipmitool -U "${USERNAME}" -H "${ncn}-mgmt" -E -I lanplus chassis power status
-    done
-    ```
-
-1. (`external#`) From a remote system, activate the serial console for `ncn-m001`.
-
-    ```bash
     ipmitool -I lanplus -U "${USERNAME}" -E -H NCN-M001_BMC_HOSTNAME sol activate
     ```
 
@@ -292,11 +321,13 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
     ipmitool -I lanplus -U "${USERNAME}" -E -H NCN-M001_BMC_HOSTNAME chassis power status
     ```
 
+1. (Optional) Power down Modular coolant distribution unit (MDCU) in a liquid-cooled HPE Cray EX20000 cabinet.
+
     **CAUTION:** The modular coolant distribution unit \(MDCU\) in a liquid-cooled HPE Cray EX2000 cabinet (also referred to as a Hill or TDS cabinet) typically receives power from its management
     cabinet PDUs. If the system includes an EX2000 cabinet, then **do not power off** the management cabinet PDUs. Powering off the MDCU will cause an emergency power off \(EPO\) of the cabinet and
     may result in data loss or equipment damage.
 
-1. (Optional) If a liquid-cooled EX2000 cabinet is not receiving MCDU power from this management cabinet, then power off the PDU circuit breakers or disconnect the PDUs from facility power and
+    1. (Optional) If a liquid-cooled EX2000 cabinet is not receiving MCDU power from this management cabinet, then power off the PDU circuit breakers or disconnect the PDUs from facility power and
    follow lock out/tag out procedures for the site.
 
 ## Next step

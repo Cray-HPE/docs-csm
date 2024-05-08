@@ -97,7 +97,7 @@ DKMS operation.
     ```
 
     Then wait until the new pod is in the `2/2 Running` status. New IMS jobs will be created in
-    Kata VM's with enhanced kernel access.
+    Kata VMs with enhanced kernel access.
 
 ## Revert back to non DKMS usage
 
@@ -217,9 +217,9 @@ To set the `dkms_required` field for a particular recipe:
     }
     ```
 
-## Run a particular IMS Job using DKMS
+## Run a particular IMS job using DKMS
 
-The call to create a new Job in IMS has a `require-dkms` field that will override the global and
+The call to create a new job in IMS has a `require-dkms` field that will override the global and
 recipe setting. If a value is passed in directly it will always take precedence when the job is
 created.
 

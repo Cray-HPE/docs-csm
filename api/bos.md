@@ -172,9 +172,9 @@ Return list of versions currently running.
 ```json
 [
   {
-    "major": "string",
-    "minor": "string",
-    "patch": "string",
+    "major": "^(0|1)$",
+    "minor": "^(0|1)$",
+    "patch": "^(0|1)$",
     "links": [
       {
         "href": "string",
@@ -284,9 +284,9 @@ Return the API version
 
 ```json
 {
-  "major": "string",
-  "minor": "string",
-  "patch": "string",
+  "major": "^(0|1)$",
+  "minor": "^(0|1)$",
+  "patch": "^(0|1)$",
   "links": [
     {
       "href": "string",
@@ -4216,9 +4216,9 @@ Return the API version
 
 ```json
 {
-  "major": "string",
-  "minor": "string",
-  "patch": "string",
+  "major": "^(0|1)$",
+  "minor": "^(0|1)$",
+  "patch": "^(0|1)$",
   "links": [
     {
       "href": "string",
@@ -5039,9 +5039,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ```json
 {
-  "major": "string",
-  "minor": "string",
-  "patch": "string",
+  "major": "^(0|1)$",
+  "minor": "^(0|1)$",
+  "patch": "^(0|1)$",
   "links": [
     {
       "href": "string",
@@ -6480,7 +6480,7 @@ Options for the Boot Orchestration Service.
 |cleanup_completed_session_ttl|string(^(0|0[mMhHdDwW]|[1-9][0-9]*[mMhHdDwW])$)|false|none|Delete complete Sessions that are older than cleanup_completed_session_ttl (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior.|
 |clear_stage|boolean|false|none|Allows a Component's staged information to be cleared when the requested staging action has been started. Defaults to false.|
 |component_actual_state_ttl|string(^(0|0[mMhHdDwW]|[1-9][0-9]*[mMhHdDwW])$)|false|none|The maximum amount of time a Component's actual state is considered valid (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior for newly booted nodes and instructs bos-state-reporter to report once instead of periodically.|
-|disable_components_on_completion|boolean|false|none|Allows for BOS Components to be marked as disabled after a Session has been completed. If false, BOS will continue to maintain the state<br>of the nodes declaratively, even after a Session finishes.|
+|disable_components_on_completion|boolean|false|none|If true, when a Session has brought a Component to its desired state, that Component will be marked as disabled in BOS.<br>If false, BOS will continue to maintain the state of the nodes declaratively, even after a Session finishes.|
 |discovery_frequency|integer|false|none|How frequently the BOS discovery agent syncs new Components from HSM. (in seconds)|
 |logging_level|string|false|none|The logging level for all BOS services|
 |max_boot_wait_time|integer|false|none|How long BOS will wait for a node to boot into a usable state before rebooting it again (in seconds)|

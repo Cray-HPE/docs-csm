@@ -29,27 +29,27 @@ The following IUF topics are discussed in the sections below.
 - [Argo workflows](#argo-workflows)
 - [Stages and hooks](#stages-and-hooks)
 - [`iuf` CLI](#iuf-cli)
-  - [Global arguments](#global-arguments)
-  - [Input file](#input-file)
-  - [Subcommands](#subcommands)
-    - [run](#run)
-    - [abort](#abort)
-    - [resume](#resume)
-    - [restart](#restart)
-    - [activity](#activity)
-    - [list-activities](#list-activities)
-    - [list-stages](#list-stages)
-    - [workflow](#workflow)
+    - [Global arguments](#global-arguments)
+    - [Input file](#input-file)
+    - [Subcommands](#subcommands)
+        - [run](#run)
+        - [abort](#abort)
+        - [resume](#resume)
+        - [restart](#restart)
+        - [activity](#activity)
+        - [list-activities](#list-activities)
+        - [list-stages](#list-stages)
+        - [workflow](#workflow)
 - [Output and log files](#output-and-log-files)
-  - [`iuf` output](#iuf-output)
-  - [Log files](#log-files)
+    - [`iuf` output](#iuf-output)
+    - [Log files](#log-files)
 - [Site and recipe variables](#site-and-recipe-variables)
 - [`sat bootprep` configuration files](#sat-bootprep-configuration-files)
-  - [ARM images](#arm-images)
+    - [ARM images](#arm-images)
 - [Recovering from failures](#recovering-from-failures)
-  - [Addressing the issue without changing products](#addressing-the-issue-without-changing-products)
-  - [Addressing the issue by removing a product](#addressing-the-issue-by-removing-a-product)
-  - [Addressing the issue by adding a new version of a product](#addressing-the-issue-by-adding-a-new-version-of-a-product)
+    - [Addressing the issue without changing products](#addressing-the-issue-without-changing-products)
+    - [Addressing the issue by removing a product](#addressing-the-issue-by-removing-a-product)
+    - [Addressing the issue by adding a new version of a product](#addressing-the-issue-by-adding-a-new-version-of-a-product)
 - [Troubleshooting](#troubleshooting)
 - [Install and Upgrade Observability Framework](#install-and-upgrade-observability-framework)
 
@@ -194,16 +194,16 @@ activity identifier and that information is used for all other stages.
 
 The `iuf` command-line interface is used to invoke all IUF operations. The `iuf` command provides the following subcommands.
 
-| Subcommand      | Description                                             |
-|-----------------|---------------------------------------------------------|
-| run             | Initiates execution of IUF operations                   |
-| abort           | Abort an IUF session                                    |
-| resume          | Resume a previously aborted or failed IUF session       |
-| restart         | Restart the most recently aborted or failed IUF session |
-| activity        | Display IUF activity details, annotate IUF activity     |
-| list-activities | List all activities present on the system               |
-| list-stages     | Display stages and status for a given IUF activity      |
-| workflow        | List workflows or information for a particular workflow |
+| Subcommand        | Description                                             |
+|-------------------|---------------------------------------------------------|
+| `run`             | Initiates execution of IUF operations                   |
+| `abort`           | Abort an IUF session                                    |
+| `resume`          | Resume a previously aborted or failed IUF session       |
+| `restart`         | Restart the most recently aborted or failed IUF session |
+| `activity`        | Display IUF activity details, annotate IUF activity     |
+| `list-activities` | List all activities present on the system               |
+| `list-stages`     | Display stages and status for a given IUF activity      |
+| `workflow`        | List workflows or information for a particular workflow |
 
 ### Global arguments
 
@@ -382,8 +382,8 @@ options:
                         Override list used to target specific nodes only when rolling out managed nodes. Arguments
                         should be xnames or HSM node groups. Defaults to the Compute role.
   --limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT [LIMIT_MANAGEMENT_ROLLOUT ...]
-                        List used to target specific hostnames or HSM management role_subrole only when rolling 
-                        out management nodes. Hostname arguments can only belong to a single node type. For example, 
+                        List used to target specific hostnames or HSM management role_subrole only when rolling
+                        out management nodes. Hostname arguments can only belong to a single node type. For example,
                         both master and worker hostnames can not be provided at the same time. Defaults to an empty list
                         which means no nodes will be rolled out.
   -mrp MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...], --mask-recipe-prods MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...]
@@ -480,22 +480,22 @@ The activity details displayed are:
 
 Values for `Category` are:
 
-| Category Value | Description                                                                          |
-|----------------|--------------------------------------------------------------------------------------|
-| in_progress    | An Argo workflow was initiated at the time recorded in `Start`                       |
-| waiting_admin  | No activity operations were in progress beginning at time recorded in `Start`        |
-| paused         | The administrator paused activity operations at the time recorded in `Start`         |
-| debug          | The administrator started debugging an issue at the time recorded in `Start`         |
-| blocked        | The administrator reported being blocked by an issue at the time recorded in `Start` |
+| Category Value   | Description                                                                          |
+|------------------|--------------------------------------------------------------------------------------|
+| `in_progress`    | An Argo workflow was initiated at the time recorded in `Start`                       |
+| `waiting_admin`  | No activity operations were in progress beginning at time recorded in `Start`        |
+| `paused`         | The administrator paused activity operations at the time recorded in `Start`         |
+| `debug`          | The administrator started debugging an issue at the time recorded in `Start`         |
+| `blocked`        | The administrator reported being blocked by an issue at the time recorded in `Start` |
 
 Values for `Status` are:
 
-| Status Value | Description                                                                    |
-|--------------|--------------------------------------------------------------------------------|
-| Succeeded    | The `Argo Workflow` completed successfully                                     |
-| Failed       | The `Argo Workflow` failed                                                     |
-| Running      | The `Argo Workflow` is currently executing                                     |
-| n/a          | The activity entry is not associated with an `Argo Workflow` and has no status |
+| Status Value   | Description                                                                    |
+|----------------|--------------------------------------------------------------------------------|
+| `Succeeded`    | The `Argo Workflow` completed successfully                                     |
+| `Failed`       | The `Argo Workflow` failed                                                     |
+| `Running`      | The `Argo Workflow` is currently executing                                     |
+| `n/a`          | The activity entry is not associated with an `Argo Workflow` and has no status |
 
 **`NOTE`** Each row displayed by `iuf activity` is a historical entry associated with the recorded `Start` and the `Duration` time values. For example, the `Category` value `in_progress` signifies that an Argo Workflow was put
 in progress at the time the entry was created, but it may not still be running when `iuf activity` is executed. The `Status` value provides context on whether an Argo Workflow is still executing.
@@ -812,7 +812,7 @@ The Install and Upgrade Observability Framework is automatically deployed and co
 
 For more information on the Install and Upgrade Observability Framework, refer to [Install and Upgrade Observability Framework](../observability/Observability.md).
 
-## Deleting Products installed with IUF
+## Deleting products installed with IUF
 
 To help the CSM administrator in clearing the cray-product-catalog
 of unused product version entries which were installed
@@ -822,19 +822,17 @@ using IUF, the `prodmgr` CLI provides a new option
 the product version (if they are not used by other
 product versions or other products):
 
-- `Docker Images`
-- `Helm Charts`
-- `Loftsman Manifests`
-- `s3 artifacts`
-- `ims images`
-- `ims receipes`
-- `hosted repos`
+- Docker images
+- Helm charts
+- Loftsman manifests
+- S3 artifacts
+- IMS images
+- IMS recipes
+- hosted repositories
 
-Finally, the product entry is also deleted from the cray-product-catalog
-ConfigMap.
+Finally, the product entry is also deleted from the `cray-product-catalog` ConfigMap.
 
-An example of launching the `prodmgr` for cleaning a `uss` version
-`1.0.0` is shown below:
+An example of launching the `prodmgr` for cleaning a `uss` version `1.0.0` is shown below:
 
 ```bash
 prodmgr delete uss 1.0.0 --container-registry-hostname arti.hpc.amslabs.hpecorp.net/csm-docker/stable --deletion-image-name product-deletion-utility --deletion-image-version 1.0.0
@@ -859,7 +857,7 @@ refer to the following:
 Note that the `product-deletion-utility` only marks the artifacts in the blob store for deletion but is not removed from the disk.
 For cleaning up the Nexus blob storage, refer to the operational procedure mentioned in [Nexus Space Cleanup](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/package_repository_management/Nexus_Space_Cleanup.md#cleanup-of-data-not-being-used).
 
-### Deletion Logs
+### Deletion logs
 
 The `logs` for the progress of deletion is generated in the
 `/etc/cray/upgrade/csm/iuf/deletion` directory or the `$CWD` from

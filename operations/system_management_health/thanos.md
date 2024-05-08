@@ -62,7 +62,7 @@ spec:
 #### Configuring Thanos Object Storage
 
 You can configure the Thanos sidecar to upload TSDB blocks to object storage by providing a Kubernetes Secret containing the required configuration.
-Once you have written your configuration save it to a file. Here's an example:
+Once you have written your configuration save it to a file. Here is an example:
 
 ```yaml
 type: s3

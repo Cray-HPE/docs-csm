@@ -195,7 +195,7 @@ Example output:
 
 When defining a configuration layer, either the `clone_url` or `source` values can be used to reference a Git repo.
 `clone_url` can be used for repos where CFS can use the default username, password and CA certificate, such as internal repos.
-`source` allows the layer to reference a CFS source which can include information beyond a single `clone_url`.  See [CFS Sources](CFS_Sources.md) for more information.
+`source` allows the layer to reference a CFS source which can include information beyond a single `clone_url`. See [CFS Sources](CFS_Sources.md) for more information.
 
 (`ncn-mw#`) In the following example, a `source` is specified rather than a `clone_url`.
 

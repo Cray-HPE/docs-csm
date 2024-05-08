@@ -15,35 +15,35 @@ CSM dependencies:
 
 CSM dependencies:
 
-- System Configuration Service (SCSD)
+- [System Configuration Service (SCSD)](../../../glossary.md#system-configuration-service-scsd)
 
 ## `sat bootprep`
 
 CSM dependencies:
 
-- Boot Orchestration Service (BOS)
-- Configuration Framework Service (CFS)
-- Image Management Service (IMS)
-- Version Control Service (VCS)
+- [Boot Orchestration Service (BOS)](../../../glossary.md#boot-orchestration-service-bos)
+- [Configuration Framework Service (CFS)](../../../glossary.md#configuration-framework-service-cfs)
+- [Image Management Service (IMS)](../../../glossary.md#image-management-service-ims)
+- [Version Control Service (VCS)](../../../glossary.md#version-control-service-vcs)
 - Kubernetes
-- S3
+- [Simple Storage Service (S3)](../../../glossary.md#simple-storage-service-s3)
 
 ## `sat bootsys`
 
 CSM dependencies:
 
 - Boot Orchestration Service (BOS)
-- Cray Advanced Platform Monitoring and Control (CAPMC)
+- [Cray Advanced Platform Monitoring and Control (CAPMC)](../../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
 - Ceph
 - Etcd
-- Firmware Action Service (FAS)
-- Hardware State Manager (HSM)
+- [Firmware Action Service (FAS)](../../../glossary.md#firmware-action-service-fas)
+- [Hardware State Manager (HSM)](../../../glossary.md#hardware-state-manager-hsm)
 - Kubernetes
 - S3
 
-HPE Cray Supercomputing Compute Node Software Environment dependencies:
+HPE Cray Supercomputing [Compute Node](../../../glossary.md#compute-node-cn) Software Environment dependencies:
 
-- Node Memory Dump (NMD)
+- [Node Memory Dump (NMD)](../../../glossary.md#node-memory-dump-nmd)
 
 ## `sat diag`
 
@@ -108,7 +108,7 @@ CSM dependencies:
 - Hardware State Manager (HSM)
 - HM Collector
 
-SMA dependencies:
+[System Monitoring Application (SMA)](../../../glossary.md#system-monitoring-application-sma) dependencies:
 
 - Telemetry API
 
@@ -131,7 +131,7 @@ CSM dependencies:
 CSM dependencies:
 
 - Hardware State Manager (HSM)
-- System Layout Service (SLS)
+- [System Layout Service (SLS)](../../../glossary.md#system-layout-service-sls)
 
 ## `sat status`
 
@@ -145,9 +145,21 @@ CSM dependencies:
 
 ## `sat swap`
 
-Slingshot dependencies:
+Note: Starting in CSM v1.6.0, the `sat swap cable` and `sat swap switch`
+commands are deprecated. Use [Slingshot](../../../glossary.md#slingshot) Orchestrated Maintenance to perform
+removal and addition of Slingshot switches and cables. See the HPE Slingshot
+Operations Guide for details.
+
+The `sat swap switch` and `sat swap cable` commands have the following Slingshot
+dependencies:
 
 - Fabric Manager
+
+The `sat swap blade` command has the following CSM dependencies:
+
+- Hardware State Manager (HSM)
+- Kubernetes
+- [Power Control Service (PCS)](../../../glossary.md#power-control-service-pcs)
 
 ## `sat switch`
 

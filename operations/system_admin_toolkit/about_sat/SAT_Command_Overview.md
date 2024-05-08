@@ -47,6 +47,6 @@ command.
 |`sat showrev`|Requires API gateway authentication in order to query the Interconnect from HSM. Requires S3 to be configured for site information such as system name, serial number, install date, and site name.|`sat-showrev`|Print revision information for the HPE Cray EX system.|
 |`sat slscheck`|Requires authentication to the API gateway.|`sat-slscheck`|Perform a cross-check between SLS and HSM.|
 |`sat status`|Requires authentication to the API gateway.|`sat-status`|Report node status across the HPE Cray EX system.|
-|`sat swap`|Requires authentication to the API gateway.|`sat-swap`|Prepare HSN switch or cable for replacement and bring HSN switch or cable into service.|
+|`sat swap`|Requires authentication to the API gateway.|`sat-swap`|Prepare compute blade, HSN switch, or HSN cable for replacement and bring those components into service after replacement.|
 |`sat xname2nid`|Requires authentication to the API gateway.|`sat-xname2nid`|Translate node and node BMC XNames to node IDs.|
 |`sat switch`|**This command has been deprecated.** It has been replaced by `sat swap`.|

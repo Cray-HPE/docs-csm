@@ -6,20 +6,20 @@ This page contains general Postgres troubleshooting topics.
 - [Database unavailable](#database-unavailable)
 - [Database disk full](#database-disk-full)
 - [Replication lagging](#replication-lagging)
-  - [Check if replication is working](#check-if-replication-is-working)
-  - [Recover replication](#recover-replication)
-  - [Setup alerts for replication lag](#setup-alerts-for-replication-lag)
+    - [Check if replication is working](#check-if-replication-is-working)
+    - [Recover replication](#recover-replication)
+    - [Setup alerts for replication lag](#setup-alerts-for-replication-lag)
 - [Postgres status `SyncFailed`](#postgres-status-syncfailed)
-  - [Check all the `postgresql` resources](#check-all-the-postgresql-resources)
-    - [Case 1: `some persistent volumes are not compatible with existing resizing providers`](#case-1-some-persistent-volumes-are-not-compatible-with-existing-resizing-providers)
-    - [Case 2: `could not init db connection`](#case-2-could-not-init-db-connection)
-    - [Case 3: `password authentication failed for user`](#case-3-password-authentication-failed-for-user)
+    - [Check all the `postgresql` resources](#check-all-the-postgresql-resources)
+        - [Case 1: `some persistent volumes are not compatible with existing resizing providers`](#case-1-some-persistent-volumes-are-not-compatible-with-existing-resizing-providers)
+        - [Case 2: `could not init db connection`](#case-2-could-not-init-db-connection)
+        - [Case 3: `password authentication failed for user`](#case-3-password-authentication-failed-for-user)
 - [Cluster member missing](#cluster-member-missing)
-  - [Determine if a cluster member is missing](#determine-if-a-cluster-member-is-missing)
-  - [Recover from a missing member](#recover-from-a-missing-member)
+    - [Determine if a cluster member is missing](#determine-if-a-cluster-member-is-missing)
+    - [Recover from a missing member](#recover-from-a-missing-member)
 - [Postgres leader missing](#postgres-leader-missing)
-  - [Determine if the Postgres leader is missing](#determine-if-the-postgres-leader-is-missing)
-  - [Recover from a missing Postgres leader](#recover-from-a-missing-postgres-leader)
+    - [Determine if the Postgres leader is missing](#determine-if-the-postgres-leader-is-missing)
+    - [Recover from a missing Postgres leader](#recover-from-a-missing-postgres-leader)
 
 ## The `patronictl` tool
 
@@ -875,7 +875,8 @@ Kubernetes secret and update the password in the database.
 
 ## Cluster member missing
 
-Most services expect to maintain a Postgres cluster consisting of three pods for resiliency (SMA is one exception where only two pods are expected to exist).
+Most services expect to maintain a Postgres cluster consisting of three pods for resiliency
+([System Monitoring Application (SMA)](../../glossary.md#system-monitoring-application-sma) is one exception where only two pods are expected to exist).
 
 ### Determine if a cluster member is missing
 

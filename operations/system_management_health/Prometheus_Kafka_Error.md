@@ -13,7 +13,7 @@ dial tcp: lookup prometheus-kafka-adapter.sma.svc.cluster.local on 10.16.0.10:53
 
 ## Explanation
 
-This Kafka service does not exist, because SMA has not been installed yet. This causes the above errors for retry to be logged.
-Prometheus can operate without SMA Kafka and it will periodically retry the connection to Kafka.
-These errors will be logged until SMA is installed. Therefore, if they are seen before SMA is installed,
-then disregard them.
+This Kafka service does not exist, because the [System Monitoring Application (SMA)](../../glossary.md#system-monitoring-application-sma)
+has not been installed yet. This causes the above errors for retry to be logged. Prometheus can operate without SMA Kafka and it will
+periodically retry the connection to Kafka. These errors will be logged until SMA is installed. Therefore, if they are seen before SMA is
+installed, then disregard them.

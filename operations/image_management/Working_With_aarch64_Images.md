@@ -1,46 +1,55 @@
-# Working With aarch64 Images
+# Working With `aarch64` Images
 
-Systems may have aarch64 (arm64) compute nodes present, but the Kubernetes nodes are always going to be running
-x86 hardware. This presents a challenge in creating and modifying compute images through IMS running on the
-Kubernetes cluster. To solve this, aarch64 hardware is emulated using Kata VM's and QEMU emulation software.
+Systems may have `aarch64` (`arm64`) compute nodes present, but the Kubernetes nodes are always going to be running
+`x86` hardware. This presents a challenge in creating and modifying compute images through IMS running on the
+Kubernetes cluster. To solve this, `aarch64` hardware is emulated using Kata VMs and QEMU emulation software.
 
-## Kata and QEMU Emulation
+## Kata and QEMU emulation
 
 ### QEMU
 
-QEMU is a generic open source emulator. We use qemu-user-static as a translator that is inserted via binfmt_misc
-into the kernel as a translator. The aarch64 binaries are then recognized by the kernel and the correct emulation
-applied to run them on the x86 hardware.
+QEMU is a generic open source emulator. `qemu-user-static` is inserted via `binfmt_misc`
+into the kernel as a translator. The `aarch64` binaries are then recognized by the kernel and the correct emulation
+applied to run them on the `x86` hardware.
 
 More information can be found on the technologies here:
-[QEMU Documentation](https://www.qemu.org/docs/master/about/index.html)
-[qemu-user-static](https://github.com/multiarch/qemu-user-static)
+
+* [QEMU Documentation](https://www.qemu.org/docs/master/about/index.html)
+* [`qemu-user-static`](https://github.com/multiarch/qemu-user-static)
 
 ### Kata
 
-Due to the level of kernel interaction required by QEMU and the fact that most recipe builds and image
-customization jobs are running as the 'root' user, this would open a fairly significant security hole
+Because of the level of kernel interaction required by QEMU and the fact that most recipe builds and image
+customization jobs are running as the `root` user, this would open a fairly significant security hole
 if these Kubernetes pods were running directly on the worker nodes like normal pods.
 
-In order to keep the system secure, the emulation pods are being run inside Kata VM's with a different
-running kernel than the worker node so it is not possible through a kernel bug to get access to the
+In order to keep the system secure, the emulation pods are being run inside Kata VMs with a different
+running kernel than the worker node, so it is not possible through a kernel bug to get access to the
 running worker kernel. Each IMS job pod is run inside its own Kata VM so there is no possibility of
 breaking out from one job into another.
 
-More information on Kata can be found here:
-[Kata](https://katacontainers.io/)
+For more information on Kata, see [Kata](https://katacontainers.io/).
 
 ### Performance
 
-Due to the emulation and needing to run inside of a VM, the performance of the aarch64 image building and
-customization is quite a bit slower than the same operation being done for x86 images running on native
-hardware. We typically see around a 10 times slowdown in this configuration. This is unfortunate, but
-unavoidable given the need to work on the existing x86 management nodes.
+Because of the emulation and needing to run inside of a VM, the performance of the `aarch64` image building and
+customization is much slower than the same operation being done for `x86` images running on native
+hardware; there typically is around a 10 times slowdown in this configuration. This is unfortunate, but
+unavoidable given the need to work on the existing `x86` management nodes.
 
-## Specifying Architecture for Recipes and Images
+## Remote build nodes
+
+Compute nodes may be converted into remote build nodes to speed up recipe builds and image customizations
+if there are `aarch64` compute nodes available. The IMS job will be run on the compute node and utilizing
+native hardware it will perform much better than any emulated job.
+
+For more information on setting up and using remote build nodes, see
+[Configure a Remote Build Node](Configure_a_Remote_Build_Node.md).
+
+## Specifying architecture for recipes and images
 
 For the most part, the architecture is handled automatically once a recipe is labeled with having an
-architecture of aarch64. If the recipe is being installed via a package, the architecture may be set
+architecture of `aarch64`. If the recipe is being installed via a package, the architecture may be set
 in the manifest file. If the recipe is being installed manually, there is an option using the `cray` CLI
 to set or modify the architecture.
 
@@ -53,9 +62,9 @@ picked up from the recipe. When an image is customized, the resulting image will
 architecture as the original base image used for the customization. No manual changes are required in
 these workflows.
 
-### Importing a Recipe
+### Importing a recipe
 
-1. (`ncn-mw#`) Create the new recipe record
+1. (`ncn-mw#`) Create the new recipe record.
 
     When a new recipe is imported or created in IMS there is an architecture flag that will set that information
     into the recipe record.
@@ -63,7 +72,7 @@ these workflows.
     ```bash
         cray ims recipes create --name "My Recipe" \
             --recipe-type kiwi-ng --linux-distribution sles15 \
-            --arch = "aarch64" --require-dkms False
+            --arch = "aarch64" --require-dkms False --format toml
     ```
 
     Expected output will look something like:
@@ -78,14 +87,14 @@ these workflows.
     require_dkms = false
     ```
 
-### Updating an Existing Recipe
+### Updating an existing recipe
 
 If a recipe record is created with the incorrect architecture, that field can be updated.
 
-1. (`ncn-mw#`) Look at the existing recipe record
+1. (`ncn-mw#`) Look at the existing recipe record.
 
     ```bash
-    cray ims recipes describe $IMS_RECIPE_ID
+    cray ims recipes describe $IMS_RECIPE_ID --format toml
     ```
 
     Expected output will look something like this:
@@ -112,10 +121,10 @@ If a recipe record is created with the incorrect architecture, that field can be
     type = "s3"
     ```
 
-1. (`ncn-mw#`) If the architecture is wrong, update it
+1. (`ncn-mw#`) If the architecture is wrong, update it.
 
     ```bash
-    cray ims recipes update --arch aarch64 $IMS_RECIPE_ID
+    cray ims recipes update --arch aarch64 $IMS_RECIPE_ID --format toml
     ```
 
     Expected output will look something like:
@@ -142,7 +151,7 @@ If a recipe record is created with the incorrect architecture, that field can be
     type = "s3"
     ```
 
-### Importing an Image
+### Importing an image
 
 1. (`ncn-mw#`) Create the new image record.
 
@@ -150,7 +159,7 @@ If a recipe record is created with the incorrect architecture, that field can be
     into the image record.
 
     ```bash
-    cray ims images create --name "My New Image" --arch aarch64
+    cray ims images create --name "My New Image" --arch aarch64 --format toml
     ```
 
     Example output:
@@ -162,14 +171,14 @@ If a recipe record is created with the incorrect architecture, that field can be
     name = "My New Image"
     ```
 
-### Updating an Existing Image
+### Updating an existing image
 
 If an image is uploaded into IMS with the incorrect architecture specified, that field can be updated.
 
-1. (`ncn-mw#`) Look at the image record:
+1. (`ncn-mw#`) Look at the image record.
 
     ```bash
-    cray ims images describe $MY_IMS_IMAGE_ID
+    cray ims images describe $MY_IMS_IMAGE_ID --format json
     ```
 
     Expected output:
@@ -188,10 +197,10 @@ If an image is uploaded into IMS with the incorrect architecture specified, that
     }
     ```
 
-1. (`ncn-mw#`) If the architecture is incorrect, update it to the correct value
+1. (`ncn-mw#`) If the architecture is incorrect, update it to the correct value.
 
     ```bash
-    cray ims images update --arch aarch64 $MY_IMS_IMAGE_ID
+    cray ims images update --arch aarch64 $MY_IMS_IMAGE_ID --format json
     ```
 
     Expected output:

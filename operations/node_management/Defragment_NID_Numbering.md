@@ -16,11 +16,11 @@ The example in this procedure removes NID gaps from 2 cabinets of compute nodes 
 * [Prerequisites](#prerequisites)
 * [Defragment NID script functionality and limitations](#defragment-nid-script-functionality-and-limitations)
 * [NID defragmentation procedure](#nid-defragmentation-procedure)
-  * [Step 1: Run the defragmentation script](#step-1-run-the-defragmentation-script)
-  * [Step 2: Perform reload of DVS/LNet service](#step-2-perform-reload-of-dvslnet-service)
+    * [Step 1: Run the defragmentation script](#step-1-run-the-defragmentation-script)
+    * [Step 2: Perform reload of DVS/LNet service](#step-2-perform-reload-of-dvslnet-service)
 * [Troubleshooting](#troubleshooting)
-  * [Discovery errors](#discovery-errors)
-  * [Invalid NID range](#invalid-nid-range)
+    * [Discovery errors](#discovery-errors)
+    * [Invalid NID range](#invalid-nid-range)
 
 ## Prerequisites
 
@@ -292,7 +292,8 @@ DVS node maps on NCN worker nodes and gateway nodes have entries of compute node
 NID defragmentation process will impact the NCN worker and gateway nodes.
 
 Carry out the _Procedure To Perform After CSM Defragmentation of Compute Node Identifiers_ documented in publication
-_HPE Cray Operating System Administration Guide: CSM on HPE Cray EX Systems_.
+_HPE Cray Supercomputing User Services Software Administration
+Guide: CSM on HPE Cray EX Systems (1.0.0 Rev A) (S-8063)_.
 
 ## Troubleshooting
 
@@ -331,18 +332,18 @@ The `defragment_nids.py` script checks for nodes with NIDs that fall within the 
 These might be NCNs and UANs or compute nodes that were not covered by the specified include list. Here are some scenarios and how to fix them:
 
 * Computes nodes in cabinets `x1000` and `x1002` were specified in the include list, so the new NID block is 1000-1100, but the compute nodes in cabinet `x1001` have NIDs 1090-1140.
-  This would create a conflict so `defragment_nids.py` will return an error. This can be fixed by:
+    This would create a conflict so `defragment_nids.py` will return an error. This can be fixed by:
 
-  * Change the starting NID for the new NID block (e.g., 1200).
-  * Include `x1001` in the include list to include it in the new NID block.
-  * Run `defragment_nids.py` to first move the computes nodes in `x1001` to another NID block then rerun `defragment_nids.py` for the compute nodes in cabinets `x1000` and `x1002`.
+    * Change the starting NID for the new NID block (e.g., 1200).
+    * Include `x1001` in the include list to include it in the new NID block.
+    * Run `defragment_nids.py` to first move the computes nodes in `x1001` to another NID block then rerun `defragment_nids.py` for the compute nodes in cabinets `x1000` and `x1002`.
 
 * Computes nodes in cabinet `x1000` were specified in the include list, so the new NID block is 1000-1100, but `x1000c1b0n0` is a UAN that was given the NID 1000.
-  This would create a conflict so `defragment_nids.py` will return an error. This can be fixed by:
+    This would create a conflict so `defragment_nids.py` will return an error. This can be fixed by:
 
-  * Change the starting NID for the new NID block (e.g., 1001).
-  * Manually change the NID of the UAN in HSM and SLS then rerun `defragment_nids.py` for the nodes in `x1000`.
+    * Change the starting NID for the new NID block (e.g., 1001).
+    * Manually change the NID of the UAN in HSM and SLS then rerun `defragment_nids.py` for the nodes in `x1000`.
 
 * Computes nodes in cabinet `x1000` were specified in the include list, so the new NID block is 1000-1100, but `x3000c0b0n0` is an NCN that was given the NID 1000.
-  This would create a conflict so `defragment_nids.py` will return an error. It is not recommended to try and change the NID of an NCN. The best course of action is to
-  change the starting NID for the new NID block.
+    This would create a conflict so `defragment_nids.py` will return an error. It is not recommended to try and change the NID of an NCN. The best course of action is to
+    change the starting NID for the new NID block.
