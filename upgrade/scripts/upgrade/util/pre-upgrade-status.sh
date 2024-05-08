@@ -36,7 +36,7 @@ while [[ $# -gt 0 ]]; do
   key="$1"
 
   case $key in
-    -o|--output)
+    -o | --output)
       USER_OUTPUT_DIR="$2"
       shift # past argument
       shift # past value
@@ -125,7 +125,7 @@ function sat_rev_status() {
     if [ -n "$site_info_conf" ]; then
       # get filepath after '='
       site_info_file=${site_info_conf##*= }
-      site_info_file=${site_info_file//\"}
+      site_info_file=${site_info_file//\"/}
       if [ -f $site_info_file ]; then
         execute "cat $site_info_file" "sat.site_info"
       fi
