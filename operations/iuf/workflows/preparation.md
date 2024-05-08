@@ -4,7 +4,8 @@ This section defines environment variables and directory content that is used th
 
 - [1. Prepare for the install or upgrade](#1-prepare-for-the-install-or-upgrade)
 - [2. Use of `iuf activity`](#2-use-of-iuf-activity)
-- [3. Next steps](#3-next-steps)
+- [3. Save system state before upgrade](#3-save-system-state-before-upgrade)
+- [4. Next steps](#4-next-steps)
 
 ## 1. Prepare for the install or upgrade
 
