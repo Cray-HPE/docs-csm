@@ -117,7 +117,7 @@ Previous versions did not contain the this firmware.
     "manufacturer": "cray"
     },
 "targetFilter": {
-    "targets": [ "Node0.AccUC", ]
+    "targets": [ "Node0.AccUC" ]
   },
 "command": {
     "version": "latest",
