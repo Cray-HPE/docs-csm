@@ -86,10 +86,10 @@ for master in $masters; do
   rc=$?
   if [ "$rc" -ne 0 ]; then
     echo ""
-    echo "ERROR ERROR: The 'kubeadm certs renew apiserver-etcd-client' failed. The output from this script should be inspected"
-    echo "ERROR        and addressed before moving on with the upgrade. If unable to determine the issue"
-    echo "ERROR        and run this script without errors, discontinue the upgrade and contact HPE Service"
-    echo "ERROR        for support."
+    echo "ERROR The 'kubeadm certs renew apiserver-etcd-client' failed. The output from this script should be inspected"
+    echo "ERROR and addressed before moving on with the upgrade. If unable to determine the issue"
+    echo "ERROR and run this script without errors, discontinue the upgrade and contact HPE Service"
+    echo "ERROR for support."
     exit 1
   fi
   echo ""
