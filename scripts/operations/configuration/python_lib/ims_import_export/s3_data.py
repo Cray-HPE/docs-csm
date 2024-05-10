@@ -136,12 +136,12 @@ class S3Data(NamedTuple):
 
         # Describe the manifest S3 URLs
         for s3_url in options.image_s3_urls:
-            options.s3_artifacts[s3_url]["describe"] = s3.describe_artifact(s3_url)
+            options.s3_artifacts[s3_url]["describe"] = s3.describe_artifact(s3_url, num_retries=3, timeout=90)
 
         # For all other links, download them and describe them
         for s3_url, relpath in download_s3_artifacts(options.outdir,
                                                      options.undownloaded_s3_urls).items():
-            describe = s3.describe_artifact(s3_url)
+            describe = s3.describe_artifact(s3_url, num_retries=3, timeout=90)
             options.s3_artifacts[s3_url] = { "relpath": relpath, "describe": describe }
 
         return cls(artifacts=options.s3_artifacts, buckets=options.s3_buckets)
@@ -309,17 +309,6 @@ def generate_artifact_local_path(outdir: str, s3_url: s3.S3Url) -> Tuple[str, st
         artifact_file_path = tempfile.mkstemp(prefix=artifact_basename, dir=artifact_dir)[1]
         artifact_basename = os.path.basename(artifact_file_path)
     return artifact_file_path, os.path.join(artifact_subdir, artifact_basename)
-
-
-def download_s3_artifact(outdir: str, s3_url: s3.S3Url) -> str:
-    """
-    Downloads the specified S3 URL to a subdirectory of the specified artifact directory.
-    Returns the relative path to the downloaded artifact in outdir
-    """
-    artifact_file_path, artifact_file_relpath = generate_artifact_local_path(outdir, s3_url)
-    logging.info("Downloading %s to '%s'", s3_url, artifact_file_path)
-    s3.get_artifact(s3_url, artifact_file_path)
-    return artifact_file_relpath
 
 
 def download_s3_artifacts(outdir: str, s3_urls: Iterable[s3.S3Url]) -> Dict[s3.S3Url, str]:

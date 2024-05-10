@@ -7,10 +7,11 @@ This section configures the Slingshot Fabric Manager.
 
 ## 1. Manual configuration of the Slingshot Fabric Manager
 
-Instructions to configure the Slingshot Fabric Manager are provided in the "Slingshot Installation in a Kubernetes Orchestrated Container Environment" section of the _Slingshot Operations Guide for Customers_. Follow all
-subsections beginning with "Configure Fabric Manager" and ending with "Verify Fabric Manager version".
+Instructions to configure the HPE Slingshot Fabric Manager are provided in the
+"Install HPE Slingshot Fabric Manager software" section of the _HPE Slingshot Installation Guide for CSM_.
 
-For systems with Slingshot NICs, also follow the instructions in the "Fabric Configuration for Slingshot NICs" section.
+For systems with Slingshot NICs, also follow the instructions in
+the "Installing 200Gbps NIC host software" section of the _HPE Slingshot Installation Guide for CSM_.
 
 Once this step has completed:
 

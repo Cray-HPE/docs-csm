@@ -13,7 +13,7 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
     1. Obtain an API token.
 
         ```bash
-        cd /usr/share/docs/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs
+        cd /usr/share/doc/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs
         export TOKEN=$(curl -s -S -d grant_type=client_credentials -d client_id=admin-client \
                         -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
                         https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \

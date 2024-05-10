@@ -45,7 +45,7 @@ This top level procedure outlines the process for adding additional liquid-coole
 
     Perform the procedures in [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md). Perform updates as needed with FAS.
 
-    > Slingshot switches are updated with procedures from the *HPE Slingshot Operations Guide*.
+    > Slingshot switches are updated with procedures from the *HPE Slingshot Installation Guide for CSM*.
 
 1. Configure BMC and controller parameters with SCSD
 
@@ -57,4 +57,4 @@ This top level procedure outlines the process for adding additional liquid-coole
 
     See [Configure BMC and Controller Parameters with SCSD](../system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md).
 
-1. Continue on to the *HPE Slingshot Operations Guide* to bring up the additional cabinets.
+1. Continue on to the *HPE Slingshot Administration Guide* to bring up the additional cabinets.
