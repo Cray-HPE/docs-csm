@@ -1,6 +1,6 @@
-# Updating Foxconn Paradise Nodes with FAS
+# Updating `Foxconn` Paradise Nodes with FAS
 
-Use the Firmware Action Service (FAS) to update the firmware on Foxconn Paradise devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
+Use the Firmware Action Service (FAS) to update the firmware on `Foxconn` Paradise devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
 
 **NOTE:** Any node that is locked remains in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
 If the action is timed out, these nodes report as `failed` with the `stateHelper` message of `"time expired; could not complete update"`.
@@ -31,7 +31,7 @@ The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to update `bmc_acti
 
 The BMC will reboot after the update is complete.
 
-To update using a JSON file and the Cray CLI, use this example JSON file and follow the [Updating Paradise Firmaware with JSON and the Cray CLI Procedure](#update-paradise-firmware-using-json-file-and-cray-cli)
+To update using a JSON file and the Cray CLI, use this example JSON file and follow the [Updating Paradise Firmware with JSON and the Cray CLI Procedure](#update-paradise-firmware-using-json-file-and-cray-cli)
 
 ```json
 {
@@ -65,7 +65,7 @@ The nodes must be **OFF** before updating the BIOS
 
 The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to update `bios_active` - use recipe `foxconn_nodeBMC_bios.json`
 
-To update using a JSON file and the Cray CLI, use this example JSON file and follow the [Updating Paradise Firmaware with JSON and the Cray CLI Procedure](#update-paradise-firmware-using-json-file-and-cray-cli)
+To update using a JSON file and the Cray CLI, use this example JSON file and follow the [Updating Paradise Firmware with JSON and the Cray CLI Procedure](#update-paradise-firmware-using-json-file-and-cray-cli)
 
 ```json
 {
@@ -92,7 +92,7 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
 ## Update Paradise `erot_active` procedure
 
 **NOTE:** After update of `erot_active` an AC power cycle is required for update to take affect.
-To do an AC power cycle, run the following command (ncn#).
+To do an AC power cycle, run the following command (`ncn#`).
 
 ```bash
 ssh $(xname) "ipmitool raw 0x38 0x02"
@@ -100,7 +100,7 @@ ssh $(xname) "ipmitool raw 0x38 0x02"
 
 The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to update `erot_active` - use recipe `foxconn_nodeBMC_erot.json`
 
-To update using a JSON file and the Cray CLI, use this example JSON file and follow the [Updating Paradise Firmaware with JSON and the Cray CLI Procedure](#update-paradise-firmware-using-json-file-and-cray-cli)
+To update using a JSON file and the Cray CLI, use this example JSON file and follow the [Updating Paradise Firmware with JSON and the Cray CLI Procedure](#update-paradise-firmware-using-json-file-and-cray-cli)
 
 ```json
 {
@@ -127,7 +127,7 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
 ## Update Paradise `fpga_active` procedure
 
 **NOTE:** After update of `fpga_active` an AC power cycle is required for update to take affect.
-To do an AC power cycle, run the following command (ncn#).
+To do an AC power cycle, run the following command (`ncn#`).
 
 ```bash
 ssh $(xname) "ipmitool raw 0x38 0x02"
@@ -135,7 +135,7 @@ ssh $(xname) "ipmitool raw 0x38 0x02"
 
 The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to update `fpga_active` - use recipe `foxconn_nodeBMC_fpga.json`
 
-To update using a JSON file and the Cray CLI, use this example JSON file and follow the [Updating Paradise Firmaware with JSON and the Cray CLI Procedure](#update-paradise-firmware-using-json-file-and-cray-cli)
+To update using a JSON file and the Cray CLI, use this example JSON file and follow the [Updating Paradise Firmware with JSON and the Cray CLI Procedure](#update-paradise-firmware-using-json-file-and-cray-cli)
 
 ```json
 {
@@ -163,11 +163,11 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
 
 ## Update Paradise `pld_active` procedure
 
-**IMPORTANT:** The update of the target `pld_active` should only be applied to blade 1 (i.e. x3000c0s3b1) - applying to other blades at the same time may cause issues.  To use the `FASUpdate.py script`, use the `--xnames` flag to specify b1.
+**IMPORTANT:** The update of the target `pld_active` should only be applied to blade 1 (i.e. `x3000c0s3b1`) - applying to other blades at the same time may cause issues.  To use the `FASUpdate.py script`, use the `--xnames` flag to specify `b1`.
 
 The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to update `pld_active` - use recipe `foxconn_nodeBMC_pld.json`
 
-To update using a JSON file and the Cray CLI, use this example JSON file and follow the [Updating Paradise Firmaware with JSON and the Cray CLI Procedure](#update-paradise-firmware-using-json-file-and-cray-cli)
+To update using a JSON file and the Cray CLI, use this example JSON file and follow the [Updating Paradise Firmware with JSON and the Cray CLI Procedure](#update-paradise-firmware-using-json-file-and-cray-cli)
 
 ```json
 {
@@ -194,11 +194,11 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
 
 ## Update Paradise firmware using JSON file and Cray CLI
 
-**NOTE:** The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS. 
+**NOTE:** The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
 1. Create a JSON file using the example recipe.
 
-2. Initiate a dry-run to verify the firmware that will be updated and the version it will update to.
+1. Initiate a dry-run to verify the firmware that will be updated and the version it will update to.
 
     1. (`ncn#`) Create the dry-run session.
 
@@ -268,7 +268,7 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
             [operationSummary.noSolution]
             ```
 
-1. Update the firmware after verifying that the dry-run worked as expected. 
+1. Update the firmware after verifying that the dry-run worked as expected.
 
     1. Edit the JSON file and update the values so an actual firmware update can be run.
 
