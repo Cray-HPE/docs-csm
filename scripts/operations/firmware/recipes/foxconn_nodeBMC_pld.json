@@ -1,0 +1,23 @@
+{
+    "inventoryHardwareFilter": {
+        "manufacturer": "foxconn"
+    },
+    "stateComponentFilter": {
+        "deviceTypes": [
+          "NodeBMC"
+        ]
+    },
+    "targetFilter": {
+        "targets": [
+          "pld_active"
+        ]
+    },
+    "command": {
+        "version": "latest",
+        "tag": "default",
+        "overrideDryrun": false,
+        "restoreNotPossibleOverride": true,
+        "timeLimit": 1000,
+        "description": "Upgrade of Foxconn node bios_active"
+    }
+}
