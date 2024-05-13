@@ -75,6 +75,7 @@ function get_latest_tag_for_image() {
     THIS_PREFIX="${THIS_REGISTRY_NAME}/"
     THIS_IMAGE=$(echo "${THIS_IMAGE}" | sed "s#^${DEFAULT_REGISTRY_REGEX}/##")
   fi
+  echo $THIS_PODMAN_TLS $THIS_PREFIX$THIS_IMAGE
   podman search $THIS_PODMAN_TLS $THIS_PREFIX$THIS_IMAGE --list-tags --format=json | jq -r '
     def opt(f):
       . as $in | try f catch $in;
@@ -109,12 +110,13 @@ for THIS_IMAGE in $(get_list_of_images_to_update); do
       sleep 10
       LATEST_TAG=$(get_latest_tag_for_image $THIS_IMAGE)
       i=$((i + 1))
+      echo "Inside loop: $LATEST_TAG"
     else
       echo "ERROR: unable to get the latest tag for image: $THIS_IMAGE"
       exit 1
     fi
   done
-
+  echo "Outside loop: $LATEST_TAG"
   for FILE in $(get_filenames_referring_to_image); do
     update_tags_in_file $THIS_IMAGE $LATEST_TAG $FILE
   done
