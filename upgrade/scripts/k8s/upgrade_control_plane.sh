@@ -22,7 +22,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-echo "Updating imageRepository and extraArgs in kubeadm-config configmap"
+echo "DEBUG Updating imageRepository and extraArgs in kubeadm-config configmap"
 echo ""
 kubectl get configmap kubeadm-config -n kube-system -o yaml > /tmp/kubeadm-config.yaml
 cp /tmp/kubeadm-config.yaml /tmp/kubeadm-config.yaml.back
@@ -49,7 +49,7 @@ grep -q '^    audit-log-path:' /tmp/kubeadm-config.yaml
 cm_auditing_enabled=$?
 
 if [[ ${manifest_auditing_enabled} -eq 0 && ${cm_auditing_enabled} -ne 0 ]]; then
-  echo "Updating kubeadm-config configmap with audit configuration"
+  echo "DEBUG Updating kubeadm-config configmap with audit configuration"
   sed -i '/      runtime-config/a\        audit-log-maxbackup: "100"\n        audit-log-path: /var/log/audit/kl8s/apiserver/audit.log\n        audit-policy-file: /etc/kubernetes/audit/audit-policy.yaml' /tmp/kubeadm-config.yaml
   sed -i '/    apiServer:/a\      extraVolumes:\n      - hostPath: /var/log/audit/kl8s/apiserver\n        mountPath: /var/log/audit/kl8s/apiserver\n        name: k8s-audit-log\n        pathType: DirectoryOrCreate\n        readOnly: false\n      - hostPath: /etc/kubernetes/audit\n        mountPath: /etc/kubernetes/audit\n        name: k8s-audit\n        pathType: DirectoryOrCreate\n        readOnly: true' /tmp/kubeadm-config.yaml
 fi
@@ -65,34 +65,34 @@ masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u)
 k8sVersionUpgradeTo=$(kubeadm version -o json | jq -r '.clientVersion.gitVersion')
 
 for master in $masters; do
-  echo "Upgrading kube-system pods for $master:"
+  echo "DEBUG Upgrading kube-system pods for $master:"
   echo ""
   pdsh -b -S -w $master "kubeadm upgrade apply ${k8sVersionUpgradeTo} -y"
   rc=$?
   if [ "$rc" -ne 0 ]; then
     echo ""
-    echo "ERROR: The 'kubeadm upgrade apply' failed. The output from this script should be inspected"
-    echo "       and addressed before moving on with the upgrade. If unable to determine the issue"
-    echo "       and run this script without errors, discontinue the upgrade and contact HPE Service"
-    echo "       for support."
+    echo "ERROR The 'kubeadm upgrade apply' failed. The output from this script should be inspected"
+    echo "ERROR and addressed before moving on with the upgrade. If unable to determine the issue"
+    echo "ERROR and run this script without errors, discontinue the upgrade and contact HPE Service"
+    echo "ERROR for support."
     exit 1
   fi
   echo ""
-  echo "Successfully upgraded kube-system pods for $master."
+  echo "INFO Successfully upgraded kube-system pods for $master."
   echo ""
-  echo "Upgrading apiserver-etcd-client certificate for $master:"
+  echo "DEBUG Upgrading apiserver-etcd-client certificate for $master:"
   echo ""
   pdsh -b -S -w $master "kubeadm certs renew apiserver-etcd-client --config /etc/kubernetes/kubeadmcfg.yaml"
   rc=$?
   if [ "$rc" -ne 0 ]; then
     echo ""
-    echo "ERROR: The 'kubeadm certs renew apiserver-etcd-client' failed. The output from this script should be inspected"
-    echo "       and addressed before moving on with the upgrade. If unable to determine the issue"
-    echo "       and run this script without errors, discontinue the upgrade and contact HPE Service"
-    echo "       for support."
+    echo "ERROR The 'kubeadm certs renew apiserver-etcd-client' failed. The output from this script should be inspected"
+    echo "ERROR and addressed before moving on with the upgrade. If unable to determine the issue"
+    echo "ERROR and run this script without errors, discontinue the upgrade and contact HPE Service"
+    echo "ERROR for support."
     exit 1
   fi
   echo ""
-  echo "Successfully upgraded  apiserver-etcd-client certificate for $master."
+  echo "INFO Successfully upgraded  apiserver-etcd-client certificate for $master."
   echo ""
 done
