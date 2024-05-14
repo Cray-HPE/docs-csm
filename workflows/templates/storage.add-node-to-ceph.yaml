@@ -104,7 +104,7 @@ spec:
                         ssh ${TARGET_NCN} podman pull $image
                     done
                     active_mgr=$(ceph mgr dump | jq -r .active_name)
-                    active_mgr_version=$(ceph orch ps -f json | jq --arg MGR $active_mgr '.[] | select(.daemon_name | contains($MGR)) | .version' | tr -d '"')
+                    active_mgr_version=$(ceph orch ps -f json | jq --arg MGR mgr.$active_mgr '.[] | select(.daemon_name | contains($MGR)) | .version' | tr -d '"')
                     ssh ${TARGET_NCN} podman pull "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v${active_mgr_version}"
           - name: copy-ceph-pub
             templateRef:
