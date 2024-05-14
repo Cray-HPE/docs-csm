@@ -184,11 +184,7 @@ image that is installed with CSM.
         Set environment variables for the configuration information from the above CSM installed version, and
         set an environment variable for the name of the CFS configuration.
 
-        > NOTE: Change the host for the `clone_url` to `api-gw-service-nmn.local` in the first environment
-        > variable below, because access will be from inside the Kubernetes service mesh.
-
         ```bash
-        CLONE_URL=<configuration.clone_url-from-above-information>
         COMMIT_ID=<configuration.commit-from-above-information>
         IMS_REMOTE_CFS_CONFIGURATION=remote-ims-node
         ```
@@ -200,7 +196,7 @@ image that is installed with CSM.
         {
             "layers": [
                 {
-                    "clone_url": "$CLONE_URL",
+                    "clone_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
                     "commit": "$COMMIT_ID",
                     "playbook": "ims_computes.yml"
                 }
@@ -238,9 +234,11 @@ image that is installed with CSM.
 
     1. Set environment variables with names for the new IMS image and the CFS session.
 
+        Supply the architecture of the image being worked with as part of the name:
+
         ```bash
-        NEW_IMAGE_NAME=ims-remote-image-x86_64
-        CFS_SESSION_NAME=build-ims-remote-image-x86
+        NEW_IMAGE_NAME=ims-remote-image-<arch>
+        CFS_SESSION_NAME=build-ims-remote-image-<arch>
         ```
 
     1. Create the CFS session.
@@ -257,7 +255,7 @@ image that is installed with CSM.
     1. When complete, record the image id of the new image.
 
         ```bash
-        cray cfs sessions describe $CFS_SESSION_NAME | jq '.status.artifacts'
+        cray cfs sessions describe $CFS_SESSION_NAME --format json | jq '.status.artifacts'
         ```
 
         Example output:
@@ -296,7 +294,7 @@ image that is installed with CSM.
                 "path": "s3://boot-images/295aa9a1-f56c-4307-acad-21b58d02321c/manifest.json",
                 "type": "s3"
             },
-            "name": "compute-uss-1.0.1-8-csm-1.5.aarch64-516248"
+            "name": "ims-remote-image-x86_64"
         }
         ```
 
