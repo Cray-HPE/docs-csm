@@ -4,7 +4,8 @@ This section defines environment variables and directory content that is used th
 
 - [1. Prepare for the install or upgrade](#1-prepare-for-the-install-or-upgrade)
 - [2. Use of `iuf activity`](#2-use-of-iuf-activity)
-- [3. Next steps](#3-next-steps)
+- [3. Save system state before upgrade](#3-save-system-state-before-upgrade)
+- [4. Next steps](#4-next-steps)
 
 ## 1. Prepare for the install or upgrade
 
@@ -51,7 +52,17 @@ iuf -a "${ACTIVITY_NAME}" activity --create --comment "download complete" waitin
 
 The install and upgrade workflow instructions will not use `iuf activity` in this manner, deferring to the administrator to use it as desired.
 
-## 3. Next steps
+## 3. Save system state before upgrade
+
+(`ncn-m001#`) Before performing the install/upgrade, it is important to save specific system state information so that it can be referenced later if needed.
+Run the script below to save the state information. The information gathered by this script is SAT status, SAT site information,
+HSN status, Ceph status, and SDU and RDA configurations. This information will be saved in `/etc/cray/upgrade/csm/system-status/`.
+
+```bash
+/usr/share/doc/csm/upgrade/scripts/upgrade/util/pre-upgrade-status.sh
+```
+
+## 4. Next steps
 
 - If performing an initial install or an upgrade of non-CSM products only, return to the
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)
