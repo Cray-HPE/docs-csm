@@ -419,7 +419,6 @@ def create_local_directories(logfile_path: str) -> LocalDirList:
     """
     ims_export_dir = create_main_export_dir(logfile_path)
     local_dir_list = LocalDirList(ims_export_dir)
-    local_dir_list.add_dir(base_dir="/var/lib/etcd", min_gb=10)
     local_dir_list.add_dir(base_dir="/root", max_pct=70)
     local_dir_list.add_dir(base_dir="/var/lib/s3fs_cache", min_gb=1)
     local_dir_list.add_dir(base_dir="/metal/recovery", max_pct=75, require_1gb_avail=False)
