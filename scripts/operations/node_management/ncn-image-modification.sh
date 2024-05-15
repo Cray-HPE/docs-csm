@@ -555,6 +555,60 @@ EOF
   done
 }
 
+function csm_145_patch {
+  local rpms=()
+  local tar_path
+
+  if [ -n "$CSM_PATH" ]; then
+    if [ ! -d "${CSM_PATH}" ]; then
+      echo >&2 "CSM_PATH was defined but does not exist [$CSM_PATH]"
+    else
+      tar_path="${CSM_PATH}"
+    fi
+  fi
+  if [ -z "${tar_path}" ]; then
+    if [ -n "${CSM_DISTDIR}" ]; then
+      if [ ! -d "${CSM_DISTDIR}" ]; then
+        echo >&2 "CSM_DISTDIR was defined but does not exist [$CSM_DISTDIR]"
+      else
+        tar_path="${CSM_DISTDIR}"
+      fi
+    fi
+  fi
+  if [ -z "${tar_path}" ]; then
+    echo >&2 "Failed to resolve path to extracted tarball! CSM_PATH nor CSM_DISTDIR were found in the environment!"
+    return 1
+  fi
+  if [ ! -d "${tar_path}" ]; then
+    echo >&2 "Extracted tarball resolved to ${tar_path} but this path does not exist!"
+    return 1
+  fi
+
+  rpms=(
+    "${tar_path}/rpm/cray/csm/sle-15sp4/noarch/dracut-metal-mdsquash-2.3.2-1.noarch.rpm"
+  )
+
+  echo "Patching images for CSM 1.4.5 ... "
+  for squash in "${SQUASH_PATHS[@]}"; do
+    (
+      pushd "$(dirname "$squash")" || exit
+
+      if rpm -Uvh --nodeps --root "$(pwd)/squashfs-root" "${rpms[@]}"; then
+        :
+      else
+        rc=$?
+        [ "$rc" -ne 127 ] && return "$rc"
+      fi
+
+      sed -i -r -E 's|(.*)\[\s?LABEL=CONTAIN,\s+/var/lib/containers.*\]|\1[ LABEL=CONTAIN, /var/lib/containers, auto, defaults ]|g' \
+        squashfs-root/etc/cloud/cloud.cfg.d/01_metalfs.cfg \
+        squashfs-root/srv/cray/resources/metal/cloud.cfg.d/01_metalfs.cfg
+
+      popd || exit
+    )
+  done
+}
+
 if [ "$#" -lt 2 ]; then
   usage
   exit 1
@@ -570,6 +624,9 @@ fi
 set_timezone
 if [[ $CSM_RELEASE =~ ^1\.4\.4 ]]; then
   csm_144_patch
+elif [[ $CSM_RELEASE =~ ^1\.4\.([5-9]|[1-9]0+|[1-9]{2,}) ]]; then
+  csm_144_patch
+  csm_145_patch
 fi
 create_new_squashfs
 cleanup
