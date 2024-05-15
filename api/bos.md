@@ -172,9 +172,9 @@ Return list of versions currently running.
 ```json
 [
   {
-    "major": "^(0|1)$",
-    "minor": "^(0|1)$",
-    "patch": "^(0|1)$",
+    "major": "string",
+    "minor": "string",
+    "patch": "string",
     "links": [
       {
         "href": "string",
@@ -284,9 +284,9 @@ Return the API version
 
 ```json
 {
-  "major": "^(0|1)$",
-  "minor": "^(0|1)$",
-  "patch": "^(0|1)$",
+  "major": "string",
+  "minor": "string",
+  "patch": "string",
   "links": [
     {
       "href": "string",
@@ -4216,9 +4216,9 @@ Return the API version
 
 ```json
 {
-  "major": "^(0|1)$",
-  "minor": "^(0|1)$",
-  "patch": "^(0|1)$",
+  "major": "string",
+  "minor": "string",
+  "patch": "string",
   "links": [
     {
       "href": "string",
@@ -5039,9 +5039,9 @@ targeted to start being enforced in an upcoming BOS version.
 
 ```json
 {
-  "major": "^(0|1)$",
-  "minor": "^(0|1)$",
-  "patch": "^(0|1)$",
+  "major": "string",
+  "minor": "string",
+  "patch": "string",
   "links": [
     {
       "href": "string",

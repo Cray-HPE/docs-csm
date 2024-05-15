@@ -4797,8 +4797,8 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
         "name": "sample-config",
         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
         "playbook": "site.yml",
-        "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-        "branch": "^$",
+        "commit": "string",
+        "branch": "string",
         "specialParameters": {
           "imsRequireDkms": true
         }
@@ -4807,8 +4807,8 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
     "additional_inventory": {
       "name": "sample-inventory",
       "cloneUrl": "https://vcs.domain/vcs/org/inventory.git",
-      "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-      "branch": "^$"
+      "commit": "string",
+      "branch": "string"
     }
   }
 ]
@@ -4912,8 +4912,8 @@ Retrieve the given configuration
       "name": "sample-config",
       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "playbook": "site.yml",
-      "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-      "branch": "^$",
+      "commit": "string",
+      "branch": "string",
       "specialParameters": {
         "imsRequireDkms": true
       }
@@ -4922,8 +4922,8 @@ Retrieve the given configuration
   "additional_inventory": {
     "name": "sample-inventory",
     "cloneUrl": "https://vcs.domain/vcs/org/inventory.git",
-    "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-    "branch": "^$"
+    "commit": "string",
+    "branch": "string"
   }
 }
 ```
@@ -5020,8 +5020,8 @@ Add a configuration to CFS or replace an existing configuration.
       "name": "sample-config",
       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "playbook": "site.yml",
-      "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-      "branch": "^$",
+      "commit": "string",
+      "branch": "string",
       "specialParameters": {
         "imsRequireDkms": true
       }
@@ -5030,8 +5030,8 @@ Add a configuration to CFS or replace an existing configuration.
   "additional_inventory": {
     "name": "sample-inventory",
     "cloneUrl": "https://vcs.domain/vcs/org/inventory.git",
-    "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-    "branch": "^$"
+    "commit": "string",
+    "branch": "string"
   }
 }
 ```
@@ -5057,8 +5057,8 @@ Add a configuration to CFS or replace an existing configuration.
       "name": "sample-config",
       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "playbook": "site.yml",
-      "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-      "branch": "^$",
+      "commit": "string",
+      "branch": "string",
       "specialParameters": {
         "imsRequireDkms": true
       }
@@ -5067,8 +5067,8 @@ Add a configuration to CFS or replace an existing configuration.
   "additional_inventory": {
     "name": "sample-inventory",
     "cloneUrl": "https://vcs.domain/vcs/org/inventory.git",
-    "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-    "branch": "^$"
+    "commit": "string",
+    "branch": "string"
   }
 }
 ```
@@ -5171,8 +5171,8 @@ Updates the commits for all layers that specify a branch
       "name": "sample-config",
       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "playbook": "site.yml",
-      "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-      "branch": "^$",
+      "commit": "string",
+      "branch": "string",
       "specialParameters": {
         "imsRequireDkms": true
       }
@@ -5181,8 +5181,8 @@ Updates the commits for all layers that specify a branch
   "additional_inventory": {
     "name": "sample-inventory",
     "cloneUrl": "https://vcs.domain/vcs/org/inventory.git",
-    "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-    "branch": "^$"
+    "commit": "string",
+    "branch": "string"
   }
 }
 ```
@@ -5390,8 +5390,8 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
           "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
           "source": "string",
           "playbook": "site.yml",
-          "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-          "branch": "^$",
+          "commit": "string",
+          "branch": "string",
           "special_parameters": {
             "ims_require_dkms": true
           }
@@ -5401,8 +5401,8 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
         "name": "sample-inventory",
         "clone_url": "https://vcs.domain/vcs/org/inventory.git",
         "source": "string",
-        "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-        "branch": "^$"
+        "commit": "string",
+        "branch": "string"
       }
     }
   ],
@@ -5512,8 +5512,8 @@ Retrieve the given configuration
       "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "source": "string",
       "playbook": "site.yml",
-      "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-      "branch": "^$",
+      "commit": "string",
+      "branch": "string",
       "special_parameters": {
         "ims_require_dkms": true
       }
@@ -5523,8 +5523,8 @@ Retrieve the given configuration
     "name": "sample-inventory",
     "clone_url": "https://vcs.domain/vcs/org/inventory.git",
     "source": "string",
-    "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-    "branch": "^$"
+    "commit": "string",
+    "branch": "string"
   }
 }
 ```
@@ -5622,8 +5622,8 @@ Add a configuration to CFS or replace an existing configuration.
       "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "source": "string",
       "playbook": "site.yml",
-      "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-      "branch": "^$",
+      "commit": "string",
+      "branch": "string",
       "special_parameters": {
         "ims_require_dkms": true
       }
@@ -5633,8 +5633,8 @@ Add a configuration to CFS or replace an existing configuration.
     "name": "sample-inventory",
     "clone_url": "https://vcs.domain/vcs/org/inventory.git",
     "source": "string",
-    "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-    "branch": "^$"
+    "commit": "string",
+    "branch": "string"
   }
 }
 ```
@@ -5662,8 +5662,8 @@ Add a configuration to CFS or replace an existing configuration.
       "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "source": "string",
       "playbook": "site.yml",
-      "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-      "branch": "^$",
+      "commit": "string",
+      "branch": "string",
       "special_parameters": {
         "ims_require_dkms": true
       }
@@ -5673,8 +5673,8 @@ Add a configuration to CFS or replace an existing configuration.
     "name": "sample-inventory",
     "clone_url": "https://vcs.domain/vcs/org/inventory.git",
     "source": "string",
-    "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-    "branch": "^$"
+    "commit": "string",
+    "branch": "string"
   }
 }
 ```
@@ -5778,8 +5778,8 @@ Updates the commits for all layers that specify a branch
       "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "source": "string",
       "playbook": "site.yml",
-      "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-      "branch": "^$",
+      "commit": "string",
+      "branch": "string",
       "special_parameters": {
         "ims_require_dkms": true
       }
@@ -5789,8 +5789,8 @@ Updates the commits for all layers that specify a branch
     "name": "sample-inventory",
     "clone_url": "https://vcs.domain/vcs/org/inventory.git",
     "source": "string",
-    "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-    "branch": "^$"
+    "commit": "string",
+    "branch": "string"
   }
 }
 ```
@@ -7441,8 +7441,8 @@ A collection of session data.
 {
   "name": "sample-inventory",
   "cloneUrl": "https://vcs.domain/vcs/org/inventory.git",
-  "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-  "branch": "^$"
+  "commit": "string",
+  "branch": "string"
 }
 
 ```
@@ -7470,8 +7470,8 @@ An inventory reference to include in a set of configurations.
   "name": "sample-inventory",
   "clone_url": "https://vcs.domain/vcs/org/inventory.git",
   "source": "string",
-  "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-  "branch": "^$"
+  "commit": "string",
+  "branch": "string"
 }
 
 ```
@@ -7500,8 +7500,8 @@ An inventory reference to include in a set of configurations.
   "name": "sample-config",
   "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
   "playbook": "site.yml",
-  "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-  "branch": "^$",
+  "commit": "string",
+  "branch": "string",
   "specialParameters": {
     "imsRequireDkms": true
   }
@@ -7536,8 +7536,8 @@ A single desired configuration state for a component.
   "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
   "source": "string",
   "playbook": "site.yml",
-  "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-  "branch": "^$",
+  "commit": "string",
+  "branch": "string",
   "special_parameters": {
     "ims_require_dkms": true
   }
@@ -7577,8 +7577,8 @@ A single desired configuration state for a component.
       "name": "sample-config",
       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "playbook": "site.yml",
-      "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-      "branch": "^$",
+      "commit": "string",
+      "branch": "string",
       "specialParameters": {
         "imsRequireDkms": true
       }
@@ -7587,8 +7587,8 @@ A single desired configuration state for a component.
   "additional_inventory": {
     "name": "sample-inventory",
     "cloneUrl": "https://vcs.domain/vcs/org/inventory.git",
-    "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-    "branch": "^$"
+    "commit": "string",
+    "branch": "string"
   }
 }
 
@@ -7624,8 +7624,8 @@ A collection of ConfigurationLayers.
       "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "source": "string",
       "playbook": "site.yml",
-      "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-      "branch": "^$",
+      "commit": "string",
+      "branch": "string",
       "special_parameters": {
         "ims_require_dkms": true
       }
@@ -7635,8 +7635,8 @@ A collection of ConfigurationLayers.
     "name": "sample-inventory",
     "clone_url": "https://vcs.domain/vcs/org/inventory.git",
     "source": "string",
-    "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-    "branch": "^$"
+    "commit": "string",
+    "branch": "string"
   }
 }
 
@@ -7672,8 +7672,8 @@ A collection of ConfigurationLayers.
         "name": "sample-config",
         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
         "playbook": "site.yml",
-        "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-        "branch": "^$",
+        "commit": "string",
+        "branch": "string",
         "specialParameters": {
           "imsRequireDkms": true
         }
@@ -7682,8 +7682,8 @@ A collection of ConfigurationLayers.
     "additional_inventory": {
       "name": "sample-inventory",
       "cloneUrl": "https://vcs.domain/vcs/org/inventory.git",
-      "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-      "branch": "^$"
+      "commit": "string",
+      "branch": "string"
     }
   }
 ]
@@ -7718,8 +7718,8 @@ An array of configurations.
           "clone_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
           "source": "string",
           "playbook": "site.yml",
-          "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-          "branch": "^$",
+          "commit": "string",
+          "branch": "string",
           "special_parameters": {
             "ims_require_dkms": true
           }
@@ -7729,8 +7729,8 @@ An array of configurations.
         "name": "sample-inventory",
         "clone_url": "https://vcs.domain/vcs/org/inventory.git",
         "source": "string",
-        "commit": "^aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$",
-        "branch": "^$"
+        "commit": "string",
+        "branch": "string"
       }
     }
   ],
