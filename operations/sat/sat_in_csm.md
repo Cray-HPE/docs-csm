@@ -45,6 +45,8 @@ SAT, all files and directories are created with the appropriate permissions.
 
 For full SAT documentation, refer to the [*HPE Cray EX System Admin Toolkit (SAT) Guide*](https://cray-hpe.github.io/docs-sat/).
 
+Most `sat` subcommands depend on services or components from other products in the HPE Cray EX software stack. For more details, refer to the [*SAT Dependencies*](https://github.com/Cray-HPE/docs-sat/blob/main/docs/about_sat/dependencies.md).
+
 If SAT has not been installed before, some initial configuration is required (for example, authenticating to the API
 gateway with `sat auth`). To complete the initial configuration of SAT, refer to the following post-installation procedures in the SAT documentation:
 
