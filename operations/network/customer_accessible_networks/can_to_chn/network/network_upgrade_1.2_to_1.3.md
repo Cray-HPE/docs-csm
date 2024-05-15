@@ -72,7 +72,7 @@ Additionally, UAN can be operated normally and any reboot or rebuild operations 
 
 ## Generate CSM 1.3 switch configurations
 
-- (`ncn-m001#`) Use CANU to [generate new switch configurations](https://github.com/Cray-HPE/canu/blob/main/docs/network_configuration_and_upgrade/generate_config.md). Shown below is an example using the preferred CCJ/Paddle file.
+- (`ncn-m001#`) Use CANU to [generate new switch configurations](https://cray-hpe.github.io/canu/latest/_build/markdown/examples_output/#generate-network-config). Shown below is an example using the preferred CCJ/Paddle file.
 
    ```bash
    canu generate network config --csm 1.3 --architecture <full|tds|v1> --ccj <system-ccj.json> --custom-config <system-custom-config.yaml> --folder generated --sls-file sls_input_file.json
