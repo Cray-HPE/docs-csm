@@ -18,7 +18,7 @@ For example, if there is a suspected configuration issue on single switch, a con
   * If generating CSM 1.2 configurations, the SLS file must be updated prior to generating configurations.
   * See [Collect Data](collect_data.md).
 * Generate custom switch configuration.
-  * See [CANU custom configuration](https://github.com/Cray-HPE/canu/blob/develop/docs/network_configuration_and_upgrade/custom_config.md).
+  * See [CANU custom configuration](https://cray-hpe.github.io/canu/latest/network_configuration_and_upgrade/custom_config/).
 
 ## Generate configuration files
 
