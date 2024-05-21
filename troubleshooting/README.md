@@ -68,6 +68,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [IUF fails with `Not a directory: /etc/cray/upgrade/csm/media/...`](known_issues/iuf_error_not_a_directory.md)
 - [Hang Listing BOS V1 Sessions](known_issues/Hang_Listing_BOS_V1_Sessions.md)
 - [CFS V2 Failures On Large Systems](known_issues/CFS_V2_Failures_On_Large_Systems.md)
+- [Product Catalog Upgrade Error](known_issues/product_catalog_upgrade_error.md)
 
 ## Booting
 
