@@ -68,6 +68,7 @@ spec:
               - name: scriptContent
                 value: |
                   #!/usr/bin/bash
+                  set +e
                   echo '{{inputs.parameters.global_params}}' > global.params.data
                   PRODUCT_NAME=$(cat global.params.data  | jq -r '.product_manifest.current_product.manifest.name')
                   if [[ -z "$PRODUCT_NAME" ]]; then
@@ -107,14 +108,11 @@ spec:
                       exit_code=1
                     else
                       echo "INFO Deploying loftman manifest ${manifest}"
-                      manifest_deploy_output=$(loftsman ship --manifest-path /tmp/"$(basename $manifest)" --charts-repo https://packages.local/repository/charts 2>&1)
+                      loftsman ship --manifest-path /tmp/"$(basename $manifest)" --charts-repo https://packages.local/repository/charts 2>&1
                       if [ $? -ne 0 ]; then
-                        manifest_deploy_output=$(echo "$manifest_deploy_output" | sed -e 's/^/ERROR /')
                         echo "ERROR There was a problem deploying the loftsman manifest ${manifest}"
-                        echo -e "ERROR <loftsman ship --manifest-path /tmp/"$(basename $manifest)" --charts-repo https://packages.local/repository/charts> failed with\n\n $manifest_deploy_output"
+                        echo -e "ERROR <loftsman ship --manifest-path /tmp/"$(basename $manifest)" --charts-repo https://packages.local/repository/charts> failed. Check argo logs."
                         exit_code=1
-                      else
-                        echo >&2 "DEBUG $manifest_deploy_output"
                       fi
                     fi
                     return $exit_code
