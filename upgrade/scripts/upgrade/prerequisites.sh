@@ -521,7 +521,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     # Skopeo image is stored as "skopeo:csm-${CSM_RELEASE}"
     podman load -i "${CSM_ARTI_DIR}/vendor/skopeo.tar"
     nexus_images=$(yq r -j "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-precache-images).values.cacheImages' | jq -r '.[] | select( . | contains("nexus"))')
-    worker_nodes=$(grep -oP "(ncn-w\w+)" /etc/hosts | sort -u)
+    worker_nodes=$(grep -oP "(ncn-w\d+)" /etc/hosts | sort -u)
     while read -r nexus_image; do
       echo "Uploading $nexus_image into Nexus ..."
       podman run --rm -v "${CSM_ARTI_DIR}/docker":/images \
