@@ -43,10 +43,11 @@ shown here with numbered topics.
     1. [Deploy final NCN](#4-deploy-final-ncn)
     1. [Configure administrative access](#5-configure-administrative-access)
     1. [Upgrade Ceph and enable `Smartmon` metrics on storage NCNs](#6-upgrade-ceph-and-enable-smartmon-metrics-on-storage-ncns)
-    1. [Validate CSM health](#7-validate-csm-health)
-    1. [Configure Prometheus alert notifications](#8-configure-prometheus-alert-notifications)
-    1. [Prepare compute nodes](#9-prepare-compute-nodes)
-    1. [Troubleshooting installation problems](#10-troubleshooting-installation-problems)
+    1. [Configure E1000 node and Redfish Exporter for SMART data](#7-configure-e1000-node-and-redfish-exporter-for-smart-data)
+    1. [Validate CSM health](#8-validate-csm-health)
+    1. [Configure Prometheus alert notifications](#9-configure-prometheus-alert-notifications)
+    1. [Prepare compute nodes](#10-prepare-compute-nodes)
+    1. [Troubleshooting installation problems](#11-troubleshooting-installation-problems)
 1. [Post-Installation](#post-installation)
     1. [Kubernetes encryption](#1-kubernetes-encryption)
     1. [Export Nexus data](#2-export-nexus-data)
@@ -218,7 +219,14 @@ Now that all management nodes have joined the Kubernetes cluster, Ceph should be
 
 See [Upgrade Ceph and enable `Smartmon` metrics on storage nodes](../upgrade_ceph_enable_smartmon.md).
 
-### 7. Validate CSM health
+### 7. Configure E1000 node and Redfish Exporter for SMART data
+
+> **NOTE:** Please follow this step if SMART disk data is needed for E1000 node.
+
+This step is for getting the SMART data from the disks on E1000 node using the Redfish exporter into `prometheus` time-series database.
+To configure the LDAP instance on the E1000 primary management node and reconfigure the redfish-exporter instance running on the `ncn`, see [Configure E1000 node and Redfish Exporter](../../operations/system_management_health/E1000_SMART_data_configuration.md)
+
+### 8. Validate CSM health
 
 Now that all management nodes have joined the Kubernetes cluster, CSM services have been installed, and administrative access has been enabled, the health of the
 management nodes and all CSM services should be validated. There are no exceptions to running the tests -- all tests should be run now.
@@ -228,7 +236,7 @@ management node has rebooted because of a crash, as part of doing a full system 
 
 See [Validate CSM Health](../../operations/validate_csm_health.md).
 
-### 8. Configure Prometheus alert notifications
+### 9. Configure Prometheus alert notifications
 
 Now that CSM has been installed and health has been validated, if the system management health monitoring tools (specifically Prometheus) are found to be useful, then
 email notifications can be configured for specific alerts defined in Prometheus.
@@ -239,7 +247,7 @@ Currently supported notification types include Slack, Pager Duty, email, or a cu
 See [Configure Prometheus Email Alert Notifications](../../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
 for an example configuration of an email alert notification for the Postgres replication alerts that are defined on the system.
 
-### 9. Prepare compute nodes
+### 10. Prepare compute nodes
 
 Some compute node types have special preparation steps, but most compute nodes are ready to be used now.
 
@@ -250,7 +258,7 @@ These compute node types require preparation:
 
 See [Prepare Compute Nodes](../prepare_compute_nodes.md).
 
-### 10. Troubleshooting installation problems
+### 11. Troubleshooting installation problems
 
 The installation of the CSM product requires knowledge of the various nodes and switches for the HPE Cray EX system.
 The procedures in this section should be referenced during the CSM install for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
