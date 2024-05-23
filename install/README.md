@@ -62,20 +62,21 @@ shown here with numbered topics.
         - [3. Validate CSM health before final NCN deployment](#3-validate-csm-health-before-final-ncn-deployment)
         - [4. Deploy final NCN](#4-deploy-final-ncn)
         - [5. Configure administrative access](#5-configure-administrative-access)
-        - [6. Validate CSM health](#6-validate-csm-health)
-        - [7. Configure Prometheus alert notifications](#7-configure-prometheus-alert-notifications)
-        - [8. Update ceph node-exporter config for SNMP counters](#8-update-ceph-node-exporter-config-for-snmp-counters)
-        - [9. Upload Olympus BMC recovery firmware into TFTP server](#9-upload-olympus-bmc-recovery-firmware-into-tftp-server)
-        - [10. Update firmware with FAS](#10-update-firmware-with-fas)
-        - [11. Prepare compute nodes](#11-prepare-compute-nodes)
-        - [12. Troubleshooting installation problems](#12-troubleshooting-installation-problems)
+        - [6. Configure E1000 node and Redfish Exporter for SMART data](#6-configure-e1000-node-and-redfish-exporter-for-smart-data)
+        - [7. Validate CSM health](#7-validate-csm-health)
+        - [8. Configure Prometheus alert notifications](#8-configure-prometheus-alert-notifications)
+        - [9. Update ceph node-exporter config for SNMP counters](#9-update-ceph-node-exporter-config-for-snmp-counters)
+        - [10. Upload Olympus BMC recovery firmware into TFTP server](#10-upload-olympus-bmc-recovery-firmware-into-tftp-server)
+        - [11. Update firmware with FAS](#11-update-firmware-with-fas)
+        - [12. Prepare compute nodes](#12-prepare-compute-nodes)
+        - [13. Troubleshooting installation problems](#13-troubleshooting-installation-problems)
     - [Post-Installation](#post-installation)
         - [1. Kubernetes encryption](#1-kubernetes-encryption)
         - [2. Export Nexus data](#2-export-nexus-data)
     - [Installation of additional HPE Cray EX software products](#installation-of-additional-hpe-cray-ex-software-products)
 
 > **`NOTE`** If problems are encountered during the installation,
-> [Troubleshooting installation problems](#12-troubleshooting-installation-problems) and
+> [Troubleshooting installation problems](#13-troubleshooting-installation-problems) and
 > [Cray System Management (CSM) Administration Guide](../operations/README.md) will offer assistance.
 
 ## Pre-installation
@@ -238,7 +239,14 @@ This may include:
 
 See [Configure Administrative Access](configure_administrative_access.md).
 
-### 6. Validate CSM health
+### 6. Configure E1000 node and Redfish Exporter for SMART data
+
+> **NOTE:** Please follow this step if SMART disk data is needed for E1000 node.
+
+This step is for getting the SMART data from the disks on E1000 node using the Redfish exporter into `prometheus` time-series database.
+To configure the LDAP instance on the E1000 primary management node and reconfigure the redfish-exporter instance running on the `ncn`, see [Configure E1000 node and Redfish Exporter](../operations/system_management_health/E1000_SMART_data_configuration.md)
+
+### 7. Validate CSM health
 
 Now that all management nodes have joined the Kubernetes cluster, CSM services have been installed, and administrative access has been enabled, the health of the
 management nodes and all CSM services should be validated. There are no exceptions to running the tests -- all tests should be run now.
@@ -248,7 +256,7 @@ management node has rebooted because of a crash, as part of doing a full system 
 
 See [Validate CSM Health](../operations/validate_csm_health.md).
 
-### 7. Configure Prometheus alert notifications
+### 8. Configure Prometheus alert notifications
 
 Now that CSM has been installed and health has been validated, if the system management health monitoring tools (specifically Prometheus) are found to be useful, then
 email notifications can be configured for specific alerts defined in Prometheus.
@@ -259,7 +267,7 @@ Currently supported notification types include Slack, Pager Duty, email, or a cu
 See [Configure Prometheus Email Alert Notifications](../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
 for an example configuration of an email alert notification for the Postgres replication alerts that are defined on the system.
 
-### 8. Update ceph node-exporter config for SNMP counters
+### 9. Update ceph node-exporter config for SNMP counters
 
 > **OPTIONAL:** This is an optional step.
 
@@ -267,7 +275,7 @@ This uses `netstat` collector form node-exporter and enables all the SNMP counte
 
 See [Update ceph node-exporter configuration](../operations/utility_storage/update_ceph_node_exporter_config.md) to update the ceph node-exporter configuration to monitor SNMP counters.
 
-### 9. Upload Olympus BMC recovery firmware into TFTP server
+### 10. Upload Olympus BMC recovery firmware into TFTP server
 
 > **IMPORTANT:** Before Firmware can be updated the HPC Firmware Pack (HFP) must be installed  refer to the [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
 >on the HPE Customer Support Center for more information about how to install the HPE Cray EX HPC Firmware Pack (HFP) product.
@@ -277,14 +285,14 @@ This procedure does not modify any BMC firmware, but only stages the firmware on
 
 See [Load Olympus BMC Recovery Firmware into TFTP server](../operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md).
 
-## 10. Update firmware with FAS
+## 11. Update firmware with FAS
 
 Now that all management nodes and CSM services have been validated as healthy, the firmware on other components in the system can be checked and updated. The Firmware Action Service (FAS) communicates with many devices on the system.
 FAS can be used to update the firmware for all of the devices it communicates with at once, or specific devices can be targeted for a firmware update.
 
 See [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
 
-### 11. Prepare compute nodes
+### 12. Prepare compute nodes
 
 After completion of the firmware update with FAS, compute nodes can be prepared. Some compute node types have special preparation steps, but most compute nodes are ready to be used now.
 
@@ -295,7 +303,7 @@ These compute node types require preparation:
 
 See [Prepare Compute Nodes](prepare_compute_nodes.md).
 
-### 12. Troubleshooting installation problems
+### 13. Troubleshooting installation problems
 
 The installation of the CSM product requires knowledge of the various nodes and switches for the HPE Cray EX system.
 The procedures in this section should be referenced during the CSM install for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.

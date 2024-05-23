@@ -7,6 +7,7 @@
 - [Perform upgrade](#perform-upgrade)
 - [Verify Keycloak users](#verify-keycloak-users)
 - [Take Etcd Manual Backup](#take-etcd-manual-backup)
+- [Configure E1000 node and Redfish Exporter for SMART data](#configure-e1000-node-and-redfish-exporter-for-smart-data)
 - [Stop typescript](#stop-typescript)
 - [Stage completed](#stage-completed)
 
@@ -77,9 +78,16 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
    These clusters are automatically backed up every 24 hours, but taking a manual backup
    at this stage in the upgrade enables restoring from backup later in this process if needed.
 
-   ```bash
-   /usr/share/doc/csm/scripts/operations/etcd/take-etcd-manual-backups.sh post_upgrade
-   ```
+    ```bash
+    /usr/share/doc/csm/scripts/operations/etcd/take-etcd-manual-backups.sh post_upgrade
+    ```
+
+## Configure E1000 node and Redfish Exporter for SMART data
+
+> **NOTE:** Please follow this step if SMART disk data is needed for E1000 node.
+
+This step is for getting the SMART data from the disks on E1000 node using the Redfish exporter into `prometheus` time-series database.
+To configure the LDAP instance on the E1000 primary management node and reconfigure the redfish-exporter instance running on the `ncn`, see [Configure E1000 node and Redfish Exporter](../operations/system_management_health/E1000_SMART_data_configuration.md)
 
 ## Stop typescript
 
