@@ -10,7 +10,7 @@ NOTE: The below steps needs to be performed on the ClusterStor E1000 node.
 
 In order to provide SMART data to the `prometheus` time series database, the Redfish Exporter must be configured with domain name from ClusterStor primary management node.
 
-1. Find the `ip address` of both mgmt nodes on the EAN (external access network) of ClusterStor
+1. Find the `ip address` of both mgmt nodes on the external access network (EAN) of ClusterStor.
 
     1. If static EAN IP addresses are configured on the mgmt nodes in the, following command will show what they are:
 
@@ -64,7 +64,7 @@ In order to provide SMART data to the `prometheus` time series database, the Red
 
            This output indicates that the primary EAN interface is pub0, this is the default primary EAN interface on ClusterStor mgmt nodes. If no static IP address is set on this interface, it will default to DHCP.
 
-           Please check the IP address of this interface on both mgmt nodes with the following command:
+           Check the IP address of this interface on both mgmt nodes with the following command:
 
             ```bash
             [root@kjlmo1200 ~]# pdsh -g mgmt ip a l pub0 | dshbak -c
@@ -168,7 +168,7 @@ In order to provide SMART data to the `prometheus` time series database, the Red
 
 NOTE: The below steps needs to be performed on the ClusterStor E1000 node.
 
-1. Command to add an admin user on primary management node discovered in the above section.
+1. Add an admin user on primary management node discovered in the above section.
 
    ```bash
    cscli admins add --username abcxyz --role full --password Abcxyz@123
@@ -176,7 +176,7 @@ NOTE: The below steps needs to be performed on the ClusterStor E1000 node.
 
    NOTE: Password should have minimum length of 8 characters with minimum 1 lowercase alphabet, 1 uppercase alphabet, 1 alpha numeric and 1 special character.
 
-1. Command to view the created admins user
+1. View the created admins user.
 
    ```bash
    cscli admins list
