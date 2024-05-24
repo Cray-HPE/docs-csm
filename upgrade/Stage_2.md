@@ -77,7 +77,7 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
 > **NOTE:** Please follow this step if SMART disk data is needed for E1000 node.
 
 This step is for getting the SMART data from the disks on E1000 node using the Redfish exporter into `prometheus` time-series database.
-To configure the LDAP instance on the E1000 primary management node and reconfigure the redfish-exporter instance running on the `ncn`, see [Configure E1000 node and Redfish Exporter](../operations/system_management_health/E1000_SMART_data_configuration.md)
+To configure the LDAP instance on the E1000 primary management node and reconfigure the redfish-exporter instance running on the `ncn`, see [Configure E1000 node and Redfish Exporter](../operations/system_management_health/E1000_SMART_data_configuration.md).
 
 ## Stop typescript
 
