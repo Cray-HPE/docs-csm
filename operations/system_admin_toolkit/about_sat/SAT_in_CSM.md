@@ -68,4 +68,4 @@ For detailed instructions, see
 **Q: Do SAT commands have any dependency?**
 
 Most `sat` subcommands depend on services or components from other products in the HPE Cray EX software stack.
-For more details, refer to the [*SAT Dependencies*](SAT_Dependencies.md).
+For more details, refer to the [SAT Dependencies](SAT_Dependencies.md).
