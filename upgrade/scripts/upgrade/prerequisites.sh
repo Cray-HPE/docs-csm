@@ -521,8 +521,9 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     # Skopeo image is stored as "skopeo:csm-${CSM_RELEASE}"
     podman load -i "${CSM_ARTI_DIR}/vendor/skopeo.tar"
     nexus_images=$(yq r -j "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-precache-images).values.cacheImages' | jq -r '.[] | select( . | contains("nexus"))')
+    worker_nodes=$(grep -oP "(ncn-w\d+)" /etc/hosts | sort -u)
     while read -r nexus_image; do
-      echo "Uploading $nexus_image ..."
+      echo "Uploading $nexus_image into Nexus ..."
       podman run --rm -v "${CSM_ARTI_DIR}/docker":/images \
         "skopeo:csm-${CSM_RELEASE}" \
         --override-os=linux --override-arch=amd64 \
@@ -532,17 +533,11 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
         --dest-creds "${NEXUS_USERNAME:-admin}:${NEXUS_PASSWORD}" \
         "dir:/images/${nexus_image}" \
         "docker://registry.local/${nexus_image}"
+      while read -r worker_node; do
+        echo "Pre-caching image ${nexus_image} on node ${worker_node}"
+        ssh -n "${worker_node}" "crictl pull ${nexus_image}"
+      done <<< "${worker_nodes}"
     done <<< "${nexus_images}"
-
-    echo "Adding the following images to pre-cache configmap:"
-    echo "${nexus_images}"
-    echo ""
-    kubectl get configmap -n nexus cray-precache-images -o json \
-      | jq --arg value "${nexus_images}" '.data.images_to_cache |= . + "\n" + $value' \
-      | kubectl replace --force -f -
-    refresh_seconds=$(kubectl get configmap -n nexus cray-precache-images -o json | jq -r '.data.cache_refresh_seconds')
-    echo "Waiting for ${refresh_seconds} seconds for images to pre-cache on worker nodes"
-    sleep "${refresh_seconds}"
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
