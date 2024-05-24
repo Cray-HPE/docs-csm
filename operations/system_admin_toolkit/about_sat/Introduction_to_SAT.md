@@ -14,6 +14,8 @@ multiple subcommands that perform different administrative tasks. For example, `
 a summary of the status of the components in the system while `sat bootprep` provides a way to
 create CFS configurations, IMS images, and session templates to prepare for booting the system. For
 more information on the available SAT commands, see [SAT Command Overview](SAT_Command_Overview.md).
+Most `sat` subcommands depend on services or components from other products in the HPE Cray EX software stack.
+For more details, refer to the [SAT Dependencies](SAT_Dependencies.md).
 
 In CSM 1.3 and newer, the `sat` command is automatically available on all the Kubernetes control
 plane nodes. For more information, see [SAT in CSM](SAT_in_CSM.md). Older versions of CSM do not
