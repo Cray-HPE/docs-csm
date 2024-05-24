@@ -162,7 +162,7 @@ In order to provide SMART data to the `prometheus` time series database, the Red
 
    The FQDN of the primary EAN `ip address` discovered above on the primary mgmt node is the FQDN that should be used to connected to the RFSF API.
 
- The primary EAN `ip address` discovered above on the secondary node should be used in the case of a failover on the mgmt nodes that causes the secondary node to become the primary.
+    The primary EAN `ip address` discovered above on the secondary node should be used in the case of a failover on the mgmt nodes that causes the secondary node to become the primary.
 
 ## Create admin user `(LDAP instance)` on ClusterStor E1000 primary mgmt node
 
