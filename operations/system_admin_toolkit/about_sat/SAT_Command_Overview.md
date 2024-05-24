@@ -6,7 +6,7 @@ a summary of the status of the components in the system while `sat bootprep`
 provides a way to create CFS configurations, IMS images, and session templates
 to prepare for booting the system.
 Most `sat` subcommands depend on services or components from other products in the HPE Cray EX software stack.
-For more details, refer to the [*SAT Dependencies*](SAT_Dependencies.md).
+For more details, refer to the [SAT Dependencies](SAT_Dependencies.md).
 
 Some SAT subcommands make requests to the HPE Cray EX services through the API
 gateway and thus require authentication to the API gateway in order to function.
