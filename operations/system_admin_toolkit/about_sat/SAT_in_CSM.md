@@ -64,3 +64,8 @@ registry can be inspected with `podman image search`.
 
 For detailed instructions, see
 [Downgrade: Switch Between SAT Versions](../SAT_Uninstall_and_Downgrade.md#downgrade-switch-between-sat-versions).
+
+**Q: Do SAT commands have any dependency?**
+
+Most `sat` subcommands depend on services or components from other products in the HPE Cray EX software stack.
+For more details, refer to the [SAT Dependencies](SAT_Dependencies.md).
