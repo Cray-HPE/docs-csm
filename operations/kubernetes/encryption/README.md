@@ -88,9 +88,9 @@ There are two allowed encryption methods that may be chosen: `aescbc` and `aesgc
 
 Both ciphers allow the same input string type. Note that while it is possible to specify multiple encryption keys, only the first key will be used for encryption of any newly written Kubernetes secret.
 
-**Execute the following step on ALL control plane nodes.** If it is not executed on all control plane nodes, `kubeapi-server` pods can be unhealthy and the kubernetes interface can lose communications.
+**Execute the following step on ALL control plane nodes.** If it is not executed on all control plane nodes, `kubeapi-server` pods can be unhealthy and the Kubernetes interface can lose communications.
 
-* (`ncn-m#`) Use the `encryption.sh` script to enable encryption. This only enables encription on the node that the command was executed on.
+* (`ncn-m#`) Use the `encryption.sh` script to enable encryption. This only enables encryption on the node that the command was executed on.
 
     As shown in the following command example, always run `encryption.sh` with a leading space on the command line. This will cause Bash to not record the command in the `.bash_history` file.
 
@@ -133,7 +133,7 @@ Safely disabling encryption requires two steps to ensure no access to Kubernetes
 
         See [Encryption status](#encryption-status) for details on how to check this.
 
-    1. (`ncn-m#`) Fully disable all encryption. This only disables encription on the node that the command was executed on.
+    1. (`ncn-m#`) Fully disable all encryption. This only disables encryption on the node that the command was executed on.
 
         ```bash
          /usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --disable
