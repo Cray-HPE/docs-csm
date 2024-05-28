@@ -127,6 +127,7 @@ def main():
     parser.add_argument("--recipedir", type=str, required=False, help="Specify the directory to find the recipes", default="")
     parser.add_argument("--xnames", type=str, required=False, help="List of xnames to update", default="")
     parser.add_argument("--imageID", type=str, required=False, help="image ID of image to flash to node", default="")
+    parser.add_argument("--timeLimit", type=int, required=False, help="Time limit for FAS run", default=0)
     parser.add_argument("--overrideDryrun", type=str2bool, required=False, help="Perform Dry or Real update", default=False)
     parser.add_argument("--watchtime", type=int, required=False, help="Time between actions status", default=30)
     parser.add_argument("--description", type=str, required=False, help="Overwrite description", default="")
@@ -198,6 +199,13 @@ def main():
             data["imageFilter"] = {}
         data["imageFilter"]["imageID"] = imageIDarg
         data["imageFilter"]["overrideImage"] = True
+
+# Create time limit override
+    timeLimitarg = args.timeLimit
+    if timeLimitarg > 0:
+        if "command" not in data:
+            data["command"] = {}
+        data["command"]["timeLimit"] = timeLimitarg
 
 # Update description
     if "command" not in data:

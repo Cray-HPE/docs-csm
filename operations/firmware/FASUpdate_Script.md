@@ -57,9 +57,9 @@ Set `overrideDryrun` to true to do an actual update instead of a dryrun.
 * `--recipedir dir` : Directory containing the action recipe file (if not using the default directory).
 * `--xnames xname1,xname2` : List of BMC xnames to be updated. If not present, FAS will check all xnames.
 * `--overrideDryrun {true/false}` : Default false - Set to true to do an actual update run instead of a dryrun.
-* `--imageID imageID` : Update nodes to `imageID` instead of the latest firmware available.
-* `--watchtime sec` : Number of seconds to wait before outputting the summary status (default 30).
+* `--timeLimit sec` : Set the FAS time limit (time to wait for update verification) in seconds (default varies by recipe).
 * `--description des` : Overwrite the description field in the recipe file.
+* `--watchtime sec` : Number of seconds to wait before outputting the summary status (default 30).
 * `--url-fas url` : URL to access FAS (usually not needed).
 
 ## Sample `FASUpdate` script run
