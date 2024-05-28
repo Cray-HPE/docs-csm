@@ -79,26 +79,28 @@ Shown here for `ncn-m003`.
 
 ## Enabling encryption
 
-Before encryption is enabled, it is recommend that a Bare-Metal etcd backup is taken only if the etcd cluster is healthy.
+Before encryption is enabled, it is recommended that a Bare-Metal etcd backup is taken only if the etcd cluster is healthy.
 
 See [Create a manual Backup of a Healthy Bare-Metal etcd Cluster](../Create_a_Manual_Backup_of_a_Healthy_Bare-Metal_etcd_Cluster.md) for details.
 
-When enabling encryption it is important to ensure all control plane nodes are enabled in short order. However that does not mean all control plane nodes should run the script in parallel.
+When enabling encryption, it is important to **ensure all control plane nodes** are enabled in short order. However, that does not mean all control plane nodes should run the script in parallel.
 
-When encryption is enabled a Bare-Metal etcd cluster can not be restored from a backup taken before encryption is enabled. Such a backup can be used to restore etcd in the event that encryption is later fully disabled.
+When encryption is enabled, a Bare-Metal etcd cluster can not be restored from a backup taken before encryption is enabled. Such a backup can be used to restore etcd in the event that encryption is later fully disabled.
 
-It is recommended to enable encryption on one node first. If successful may enable encryption in parallel on the remaining nodes.
+It is recommended to enable encryption on one node first. If successful, encryption may be enabled in parallel on the remaining nodes.
 
 In order to enable encryption, a 16, 24, or 32 byte string must be provided and retained. It is important not to lose this key, because once secrets
 are encrypted in `etcd`, Kubernetes must be configured with this secret before it can start.
 
-Note that all control plane nodes must be updated. Also note that once a node is updated, any new secret data writes performed by `kubeapi` for that node will be encrypted. All control plane nodes should be updated as close to the same time as possible.
+Note that **all control plane nodes must be updated**. Also note, that once a node is updated, any new secret data writes performed by `kubeapi` for that node will be encrypted. All control plane nodes should be updated as close to the same time as possible.
 
 There are two allowed encryption methods that may be chosen: `aescbc` and `aesgcm`.
 
 Both ciphers allow the same input string type. Note that while it is possible to specify multiple encryption keys, only the first key will be used for encryption of any newly written Kubernetes secret.
 
-* (`ncn-m#`) The `encryption.sh` script can be used to enable encryption on all control plane nodes.
+**Execute the following step on ALL control plane nodes.** If it is not executed on all control plane nodes, `kubeapi-server` pods can be unhealthy and the Kubernetes interface can lose communications.
+
+* (`ncn-m#`) Use the `encryption.sh` script to enable encryption. This only enables encryption on the node that the command was executed on.
 
     As shown in the following command example, always run `encryption.sh` with a leading space on the command line. This will cause Bash to not record the command in the `.bash_history` file.
 
@@ -116,12 +118,14 @@ Both ciphers allow the same input string type. Note that while it is possible to
 
 Safely disabling encryption requires two steps to ensure no access to Kubernetes secret data is lost:
 
+**Execute the following steps on ALL control plane nodes.**
+
 1. (`ncn-m#`) Disable encryption but retain the existing encryption key.
 
     This ensures that if a node is rebooted, or if Kubernetes is restarted, then Kubernetes can still read
     existing encrypted secret data.
 
-    The following command disables encryption on all control plane nodes.
+    The following command disables encryption only on the node it was executed on.
 
     ```bash
      /usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --disable --aescbc KEYVALUE
@@ -139,7 +143,7 @@ Safely disabling encryption requires two steps to ensure no access to Kubernetes
 
         See [Encryption status](#encryption-status) for details on how to check this.
 
-    1. (`ncn-m#`) Fully disable all encryption.
+    1. (`ncn-m#`) Fully disable all encryption. This only disables encryption on the node that the command was executed on.
 
         ```bash
          /usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --disable
