@@ -149,6 +149,12 @@ if [[ $powerStatus =~ "is on" ]]; then
   err_exit "Not all NCNs have powered off"
 fi
 
+# Pre-populate the arp cache with the NCN NMN IP and MAC addresses based on /etc/dnsmasq.d/statics.conf
+while read -r mac ip ncn; do
+  echo "Adding arp cache entry for ${ncn} ip=${ip} mac=${mac}"
+  ip neigh add "${ip}" lladdr "${mac}" dev bond0.nmn0
+done < <(awk -F',' '/Bond/{ print $3" "$5" "$6 }' "${DNSFILE}")
+
 # Set the NCNs to PXE boot
 echo "$ncn_list" | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot
 
