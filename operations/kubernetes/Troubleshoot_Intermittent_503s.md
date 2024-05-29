@@ -78,6 +78,8 @@ If any pods are still affected by this specific issue the script will provide a 
 [2022-06-24T14:16:27.229Z] "POST /apis/hbtd/hmi/v1/heartbeat HTTP/2" 503 UAEX "-" 131 0 30 - "10.34.0.0" "-" "1797b0d3-56f0-4674-8cf2-a8a61f9adaea" "api-gw-service-nmn.local" "-" - - 10.40.0.29:443 10.34.0.0:15995 api-gw-service-nmn.local -
 ```
 
+The salient portion is the '503 UAEX'. This can happen for many different micro-services, so URLs for APIs may differ. They will not be solely /apis/hbtd as in the example.
+
 ### Description (`UAEX`)
 
 This error code typically indicates an issue with the authorization service (for example, Spire).
@@ -90,6 +92,8 @@ This error code typically indicates an issue with the authorization service (for
     kubectl rollout restart -n spire statefulset spire-postgres spire-server
     kubectl rollout restart -n spire daemonset spire-agent request-ncn-join-token
     kubectl rollout restart -n spire deployment spire-jwks spire-postgres-pooler
+    kubectl rollout restart -n opa deployment cray-opa-ingressgateway
+    kubectl rollout restart -n istio-system deployment istio-ingressgateway    
     ```
 
 1. (`ncn-mw#`) Wait for all of the restarts to complete.
@@ -101,6 +105,8 @@ This error code typically indicates an issue with the authorization service (for
     kubectl rollout status -n spire daemonset request-ncn-join-token
     kubectl rollout status -n spire deployment spire-jwks
     kubectl rollout status -n spire deployment spire-postgres-pooler
+    kubectl rollout status -n opa deployment cray-opa-ingressgateway
+    kubectl rollout status -n istio-system deployment istio-ingressgateway    
     ```
 
 Once the restarts are all complete, the HTTP 503 message should clear.
