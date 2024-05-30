@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -45,7 +45,7 @@ ingress_api_services:
   gateways: ["services-gateway","customer-admin-gateway"]
   project: CSM
 - name: cray-bos
-  path: apis/bos/v1/session 
+  path: apis/bos/v2/sessions 
   port: 443
   expected-result: 200
   namespace: services

@@ -183,7 +183,7 @@ Token successfully retrieved at https://api-gw-service-nmn.local/keycloak/realms
 
 ------------- api-gw-service-nmn.local -------------------
 api-gw-service-nmn.local is reachable
-PASS - [cray-bos]: https://api-gw-service-nmn.local/apis/bos/v1/session - 200
+PASS - [cray-bos]: https://api-gw-service-nmn.local/apis/bos/v2/sessions - 200
 PASS - [cray-bss]: https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters - 200
 PASS - [cray-capmc]: https://api-gw-service-nmn.local/apis/capmc/capmc/get_node_rules - 200
 PASS - [cray-cfs-api]: https://api-gw-service-nmn.local/apis/cfs/v3/sessions - 200
@@ -208,7 +208,7 @@ SKIP - [sma-telemetry]: https://api-gw-service-nmn.local/apis/sma-telemetry-api/
 
 ------------- api.cmn.eniac.dev.cray.com -------------------
 api.cmn.eniac.dev.cray.com is reachable
-PASS - [cray-bos]: https://api.cmn.eniac.dev.cray.com/apis/bos/v1/session - 200
+PASS - [cray-bos]: https://api.cmn.eniac.dev.cray.com/apis/bos/v2/sessions - 200
 PASS - [cray-bss]: https://api.cmn.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 200
 PASS - [cray-capmc]: https://api.cmn.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 200
 PASS - [cray-cfs-api]: https://api.cmn.eniac.dev.cray.com/apis/cfs/v3/sessions - 200
@@ -238,7 +238,7 @@ can is not reachable and is not expected to be
 
 ------------- api.chn.eniac.dev.cray.com -------------------
 api.chn.eniac.dev.cray.com is reachable
-PASS - [cray-bos]: https://api.chn.eniac.dev.cray.com/apis/bos/v1/session - 404
+PASS - [cray-bos]: https://api.chn.eniac.dev.cray.com/apis/bos/v2/sessions - 404
 PASS - [cray-bss]: https://api.chn.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 404
 PASS - [cray-capmc]: https://api.chn.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 404
 PASS - [cray-cfs-api]: https://api.chn.eniac.dev.cray.com/apis/cfs/v3/sessions - 404
@@ -267,7 +267,7 @@ Token successfully retrieved at https://auth.cmn.eniac.dev.cray.com/keycloak/rea
 
 ------------- api-gw-service-nmn.local -------------------
 api-gw-service-nmn.local is reachable
-PASS - [cray-bos]: https://api-gw-service-nmn.local/apis/bos/v1/session - 200
+PASS - [cray-bos]: https://api-gw-service-nmn.local/apis/bos/v2/sessions - 200
 PASS - [cray-bss]: https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters - 200
 PASS - [cray-capmc]: https://api-gw-service-nmn.local/apis/capmc/capmc/get_node_rules - 200
 PASS - [cray-cfs-api]: https://api-gw-service-nmn.local/apis/cfs/v3/sessions - 200
@@ -292,7 +292,7 @@ SKIP - [sma-telemetry]: https://api-gw-service-nmn.local/apis/sma-telemetry-api/
 
 ------------- api.cmn.eniac.dev.cray.com -------------------
 api.cmn.eniac.dev.cray.com is reachable
-PASS - [cray-bos]: https://api.cmn.eniac.dev.cray.com/apis/bos/v1/session - 200
+PASS - [cray-bos]: https://api.cmn.eniac.dev.cray.com/apis/bos/v2/sessions - 200
 PASS - [cray-bss]: https://api.cmn.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 200
 PASS - [cray-capmc]: https://api.cmn.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 200
 PASS - [cray-cfs-api]: https://api.cmn.eniac.dev.cray.com/apis/cfs/v3/sessions - 200
@@ -322,7 +322,7 @@ can is not reachable and is not expected to be
 
 ------------- api.chn.eniac.dev.cray.com -------------------
 api.chn.eniac.dev.cray.com is reachable
-PASS - [cray-bos]: https://api.chn.eniac.dev.cray.com/apis/bos/v1/session - 404
+PASS - [cray-bos]: https://api.chn.eniac.dev.cray.com/apis/bos/v2/sessions - 404
 PASS - [cray-bss]: https://api.chn.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 404
 PASS - [cray-capmc]: https://api.chn.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 404
 PASS - [cray-cfs-api]: https://api.chn.eniac.dev.cray.com/apis/cfs/v3/sessions - 404
@@ -355,7 +355,7 @@ Token successfully retrieved at https://auth.chn.eniac.dev.cray.com/keycloak/rea
 
 ------------- api-gw-service-nmn.local -------------------
 api-gw-service-nmn.local is reachable
-PASS - [cray-bos]: https://api-gw-service-nmn.local/apis/bos/v1/session - 403
+PASS - [cray-bos]: https://api-gw-service-nmn.local/apis/bos/v2/sessions - 403
 PASS - [cray-bss]: https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters - 403
 PASS - [cray-capmc]: https://api-gw-service-nmn.local/apis/capmc/capmc/get_node_rules - 403
 PASS - [cray-cfs-api]: https://api-gw-service-nmn.local/apis/cfs/v3/sessions - 403
@@ -380,7 +380,7 @@ SKIP - [sma-telemetry]: https://api-gw-service-nmn.local/apis/sma-telemetry-api/
 
 ------------- api.cmn.eniac.dev.cray.com -------------------
 api.cmn.eniac.dev.cray.com is reachable
-PASS - [cray-bos]: https://api.cmn.eniac.dev.cray.com/apis/bos/v1/session - 403
+PASS - [cray-bos]: https://api.cmn.eniac.dev.cray.com/apis/bos/v2/sessions - 403
 PASS - [cray-bss]: https://api.cmn.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 403
 PASS - [cray-capmc]: https://api.cmn.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 403
 PASS - [cray-cfs-api]: https://api.cmn.eniac.dev.cray.com/apis/cfs/v3/sessions - 403
@@ -410,7 +410,7 @@ can is not reachable and is not expected to be
 
 ------------- api.chn.eniac.dev.cray.com -------------------
 api.chn.eniac.dev.cray.com is reachable
-PASS - [cray-bos]: https://api.chn.eniac.dev.cray.com/apis/bos/v1/session - 404
+PASS - [cray-bos]: https://api.chn.eniac.dev.cray.com/apis/bos/v2/sessions - 404
 PASS - [cray-bss]: https://api.chn.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 404
 PASS - [cray-capmc]: https://api.chn.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 404
 PASS - [cray-cfs-api]: https://api.chn.eniac.dev.cray.com/apis/cfs/v3/sessions - 404
@@ -474,7 +474,7 @@ cmn is not reachable and is not expected to be
 
 ------------- api.can.eniac.dev.cray.com -------------------
 api.can.eniac.dev.cray.com is reachable
-PASS - [cray-bos]: https://api.can.eniac.dev.cray.com/apis/bos/v1/session - 404
+PASS - [cray-bos]: https://api.can.eniac.dev.cray.com/apis/bos/v2/sessions - 404
 PASS - [cray-bss]: https://api.can.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 404
 PASS - [cray-capmc]: https://api.can.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 404
 PASS - [cray-cfs-api]: https://api.can.eniac.dev.cray.com/apis/cfs/v3/sessions - 404
@@ -499,7 +499,7 @@ SKIP - [sma-telemetry]: https://api.can.eniac.dev.cray.com/apis/sma-telemetry-ap
 
 ------------- api.chn.eniac.dev.cray.com -------------------
 api.chn.eniac.dev.cray.com is reachable
-PASS - [cray-bos]: https://api.chn.eniac.dev.cray.com/apis/bos/v1/session - 404
+PASS - [cray-bos]: https://api.chn.eniac.dev.cray.com/apis/bos/v2/sessions - 404
 PASS - [cray-bss]: https://api.chn.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 404
 PASS - [cray-capmc]: https://api.chn.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 404
 PASS - [cray-cfs-api]: https://api.chn.eniac.dev.cray.com/apis/cfs/v3/sessions - 404
@@ -536,7 +536,7 @@ cmn is not reachable and is not expected to be
 
 ------------- api.can.eniac.dev.cray.com -------------------
 api.can.eniac.dev.cray.com is reachable
-PASS - [cray-bos]: https://api.can.eniac.dev.cray.com/apis/bos/v1/session - 404
+PASS - [cray-bos]: https://api.can.eniac.dev.cray.com/apis/bos/v2/sessions - 404
 PASS - [cray-bss]: https://api.can.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 404
 PASS - [cray-capmc]: https://api.can.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 404
 PASS - [cray-cfs-api]: https://api.can.eniac.dev.cray.com/apis/cfs/v3/sessions - 404
@@ -561,7 +561,7 @@ SKIP - [sma-telemetry]: https://api.can.eniac.dev.cray.com/apis/sma-telemetry-ap
 
 ------------- api.chn.eniac.dev.cray.com -------------------
 api.chn.eniac.dev.cray.com is reachable
-PASS - [cray-bos]: https://api.chn.eniac.dev.cray.com/apis/bos/v1/session - 404
+PASS - [cray-bos]: https://api.chn.eniac.dev.cray.com/apis/bos/v2/sessions - 404
 PASS - [cray-bss]: https://api.chn.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 404
 PASS - [cray-capmc]: https://api.chn.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 404
 PASS - [cray-cfs-api]: https://api.chn.eniac.dev.cray.com/apis/cfs/v3/sessions - 404
