@@ -106,9 +106,21 @@ run_loftsman() {
   loftsman ship --charts-path "${PWD}/helm" --manifest-path "${TMPDIR}/manifest.yaml"
 
   # Restart opa pods so that the policy changes are picked up
-  kubectl rollout restart -n opa deployment cray-opa-ingressgateway
-  kubectl rollout restart -n opa deployment cray-opa-ingressgateway-customer-admin
-  kubectl rollout restart -n opa deployment cray-opa-ingressgateway-customer-user
+  if kubectl get deployment -n opa |grep cray-opa-ingressgateway; then
+    # CSM 1.5.0
+    kubectl rollout restart -n opa deployment cray-opa-ingressgateway
+    kubectl rollout restart -n opa deployment cray-opa-ingressgateway-hmn
+    kubectl rollout restart -n opa deployment cray-opa-ingressgateway-customer-admin
+    kubectl rollout restart -n opa deployment cray-opa-ingressgateway-customer-user
+  fi
+
+  if kubectl get daemonset -n opa |grep cray-opa-ingressgateway; then
+    # CSM 1.5.1 or later
+    kubectl rollout restart -n opa daemonset cray-opa-ingressgateway
+    kubectl rollout restart -n opa daemonset cray-opa-ingressgateway-hmn
+    kubectl rollout restart -n opa daemonset cray-opa-ingressgateway-customer-admin
+    kubectl rollout restart -n opa daemonset cray-opa-ingressgateway-customer-user
+  fi
 }
 
 # validate_prereqs makes sure everything is available for this script to work
