@@ -157,12 +157,12 @@ The results of running the tests will show the following:
 
 - Retrieval of a token on the CMN network; the token is used to get SLS data, which determines which user network is configured
   on the system.
-  - If CMN is not accessible, then the test will get the user network from the command line.
+    - If CMN is not accessible, then the test will get the user network from the command line.
 - For each of the test networks defined in `gateway-test-defn.yaml`:
-  - Retrieval of a token on the network under test.
-  - It will attempt to access each of the services with the token and check the expected results.
-    - It will show `PASS` or `FAIL` depending on the expected response for the service and the token being used.
-    - It will show `SKIP` for services that are not expected to be installed on the system.
+    - Retrieval of a token on the network under test.
+    - It will attempt to access each of the services with the token and check the expected results.
+        - It will show `PASS` or `FAIL` depending on the expected response for the service and the token being used.
+        - It will show `SKIP` for services that are not expected to be installed on the system.
 - The return code of `gateway-test.py` will be non-zero if any of the tests within it fail.
 
 ### Running from an NCN with CHN as the user network
