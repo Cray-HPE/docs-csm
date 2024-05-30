@@ -1,5 +1,7 @@
 # Troubleshoot UAIs by Viewing Log Output
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 Sometimes a UAI will come up and run but will not work correctly. It is possible to see errors reported by elements of the UAI entrypoint script using the `kubectl logs` command.
 
 ## Procedure

@@ -1,5 +1,7 @@
 # List Available UAI Classes
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 View all the details of every available UAI class. Use this information to select a class to apply to one or more UAIs.
 
 ## Prerequisites

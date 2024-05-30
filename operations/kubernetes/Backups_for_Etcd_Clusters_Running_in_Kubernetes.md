@@ -13,7 +13,7 @@ The following services are backed up daily \(one week of backups retained\) as p
 - Boot Orchestration Service \(BOS\)
 - Boot Script Service \(BSS\)
 - Firmware Action Service \(FAS\)
-- User Access Service \(UAS\)
+- User Access Service \(UAS\) - Deprecated
 
 (`ncn-mw#`) Run the following command on any Kubernetes master or worker node in order to list the backups for a specific project.
 In the example below, the backups for BSS are listed.

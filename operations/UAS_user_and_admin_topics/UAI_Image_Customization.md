@@ -1,5 +1,7 @@
 # UAI Image Customization
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 This section covers common customizations of both End-User UAIs and Broker UAIs.
 
 Refer to the following topics for more information:

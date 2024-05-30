@@ -1,5 +1,7 @@
 # Special Purpose UAIs
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 Even though most UAIs are End-User UAIs, [UAI classes](UAI_Classes.md) make it possible to construct UAIs to serve special purposes that are not strictly end-user oriented.
 
 One kind of special purpose UAI is the [Broker UAI](Broker_Mode_UAI_Management.md), which provides on demand End-User UAI launch and management.

@@ -1,5 +1,7 @@
 # List Volumes Registered in UAS
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 List the details of all volumes registered in UAS with the `cray uas admin config volumes list` command. Use this command to obtain the `volume_id` value of volume, which is required for other UAS administrative commands.
 
 ## Prerequisites

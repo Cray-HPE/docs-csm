@@ -1,5 +1,7 @@
 # Obtain the Configuration of a UAS Volume
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 View the configuration information of a specific UAS volume. This procedure requires the `volume_ID` of that volume.
 
 ## Prerequisites

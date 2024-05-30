@@ -1,5 +1,7 @@
 # UAI Host Node Selection
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 When selecting UAI host nodes, it is a good idea to take into account the amount of combined load users and system services will bring to those nodes.
 UAIs run by default at a lower priority than system services on worker nodes which means that, if the combined load exceeds the capacity of the nodes, Kubernetes will eject UAIs and/or refuse to schedule them to protect system services.
 This can be disruptive or frustrating for users. This section explains how to identify the currently configured UAI host nodes and how to adjust that selection to meet the needs of users.

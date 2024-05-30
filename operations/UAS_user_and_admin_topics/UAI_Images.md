@@ -1,5 +1,7 @@
 # UAI Images
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 There are three kinds of UAI images used by UAS:
 
 * A pre-packaged Broker UAI image provided with the UAS

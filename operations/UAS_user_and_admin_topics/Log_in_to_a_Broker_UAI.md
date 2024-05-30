@@ -1,5 +1,7 @@
 # Log in to a Broker UAI
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 SSH to log into a Broker UAI and reach the End-User UAIs on demand.
 
 ## Prerequisites

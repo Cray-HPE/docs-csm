@@ -1,5 +1,7 @@
 # UAS Limitations
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 Functionality that is currently not supported while using UAS.
 
 ## Functionality Not Currently Supported by the User Access Service

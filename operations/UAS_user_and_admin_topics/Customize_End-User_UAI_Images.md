@@ -1,5 +1,7 @@
 # Customize End-User UAI Images
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 The provided end-user UAI image is a basic UAI image that includes an up-to-date version of the SLES Linux distribution. It provides an entry point to using UAIs and an easy way for administrators to experiment with UAS configurations.
 To support building software to be run in compute nodes, or other HPC and Analytics workflows, it is necessary to create a custom end-user UAI image and use that.
 

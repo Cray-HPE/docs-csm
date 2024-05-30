@@ -1,5 +1,7 @@
 # Delete a Volume Configuration
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 Delete an existing volume configuration. This procedure does not delete the underlying object referred to by the UAS volume configuration.
 
 ## Prerequisites

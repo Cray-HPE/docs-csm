@@ -1,5 +1,7 @@
 # Configure UAIs in UAS
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 The sub-topics in this section cover the four main elements of UAI configuration in UAS, and provide Links to procedures for listing, adding, examining, updating, and deleting each kind of element.
 
 Options for the elements of a UAI are maintained in the UAS configuration. The following can be configured in UAS:

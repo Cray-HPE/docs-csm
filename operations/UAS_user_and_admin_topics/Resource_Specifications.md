@@ -1,5 +1,7 @@
 # Resource Specifications
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 Kubernetes uses [resource limits and resource requests](https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource), to manage the system resources available to pods.
 Because UAIs run as pods under Kubernetes, UAS takes advantage of Kubernetes to manage the system resources available to UAIs.
 

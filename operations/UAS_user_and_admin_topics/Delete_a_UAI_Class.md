@@ -1,5 +1,7 @@
 # Delete a UAI Class
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 Delete a UAI class. After deletion, the class will no longer be available for creation of UAIs. Existing UAIs are unaffected.
 
 ## Prerequisites

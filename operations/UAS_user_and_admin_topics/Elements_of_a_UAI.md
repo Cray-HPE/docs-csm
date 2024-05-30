@@ -1,5 +1,7 @@
 # Elements of a UAI
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 All UAIs can have the following attributes associated with them:
 
 * A required container image

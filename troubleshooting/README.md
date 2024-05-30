@@ -17,7 +17,7 @@ This document provides links to troubleshooting information for services and fun
 - [Node management](#node-management)
 - [Security and authentication](#security-and-authentication)
 - [Spire](#spire)
-- [User Access service UAS](#user-access-service-uas)
+- [User Access service UAS - Deprecated](#user-access-service-uas)
 - [Utility storage](#utility-storage)
 
 ## Helpful tips for navigating the CSM repository
@@ -163,6 +163,8 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Spire Server Report Database is in Recovery](known_issues/spire_server_database_recovery.md)
 
 ## User Access service UAS
+
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
 
 - [Viewing UAI Log Output](../operations/UAS_user_and_admin_topics/Troubleshoot_UAIs_by_Viewing_Log_Output.md)
 - [Stale Brokered UAIs](../operations/UAS_user_and_admin_topics/Troubleshoot_Stale_Brokered_UAIs.md)

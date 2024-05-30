@@ -1,5 +1,7 @@
 # UAI Management
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 UAS supports two manual methods and one automated method of UAI management:
 
 * Direct administrative UAI management

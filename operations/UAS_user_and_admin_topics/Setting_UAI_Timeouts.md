@@ -1,5 +1,7 @@
 # Setting UAI Timeouts
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 The procedures and specific values used for setting UAI timeouts are explained in the [UAI Classes](UAI_Classes.md) section. Please refer to that section.
 
 On systems where UAIs are used as part of normal user activities, the number of UAIs can grow large. Stale UAIs (i.e. UAIs that sit idle for long periods of time) can prevent creation of fresh UAIs for users who are actually active on the system.

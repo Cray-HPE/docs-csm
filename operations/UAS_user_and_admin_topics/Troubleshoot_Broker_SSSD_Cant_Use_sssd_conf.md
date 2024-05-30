@@ -1,5 +1,7 @@
 # Troubleshoot Broker UAI SSSD Cannot Use `/etc/sssd/sssd.conf`
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 ## Symptom
 
 A Broker UAI has been created using an SSSD configuration in a secret and volume as described in [Configure a Broker UAI Class](Configure_a_Broker_UAI_Class.md), but logging into the Broker UAI does not work.

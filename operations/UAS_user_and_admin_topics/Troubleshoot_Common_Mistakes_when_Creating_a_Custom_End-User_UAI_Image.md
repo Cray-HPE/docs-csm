@@ -1,5 +1,7 @@
 # Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 There are several problems that may occur while making or working with custom end-user UAI images.
 The following are some basic troubleshooting questions to ask:
 

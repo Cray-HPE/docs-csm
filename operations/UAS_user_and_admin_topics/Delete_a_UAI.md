@@ -1,5 +1,7 @@
 # Delete a UAI
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 There are two procedures described here. The first shows how an administrator can manually delete arbitrary UAIs or delete UAIs belonging to a given user or created using a given [UAI Class](UAI_Classes.md). The second shows how an authorized user on can delete UAIs created in the [legacy UIA creation mode](Legacy_Mode_User-Driven_UAI_Management.md).
 
 When a UAI is deleted, any running WLM sessions associated with the owner of the UAI are left intact and can be interacted with through future UAIs owned by the same user or from UANs.

@@ -18,6 +18,8 @@ Authorized for every possible REST API endpoint.
 
 ## `user`
 
+**NOTE:** UAS and User Access Instances are deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 Authorized for a subset of endpoints to allow users to create and use [User Access Instances (UAIs)](../../glossary.md#user-access-instance-uai),
 run jobs, view job results, and use capsules.
 

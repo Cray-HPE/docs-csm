@@ -1,5 +1,7 @@
 # End-User UAIs
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 UAIs used for interactive logins are called End-User UAIs. End-User UAIs can be seen as lightweight User Access Nodes (UANs), but there are important differences between UAIs and UANs.
 
 End-User UAIs are not dedicated hardware like UANs. They are implemented as containers orchestrated by Kubernetes, which makes them subject to Kubernetes scheduling and resource management rules.

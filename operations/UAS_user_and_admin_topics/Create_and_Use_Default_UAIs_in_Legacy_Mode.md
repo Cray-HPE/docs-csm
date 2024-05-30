@@ -1,5 +1,7 @@
 # Create and Use Default UAIs in Legacy Mode
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 Create a UAI using the default UAI image or the default UAI class in legacy mode.
 
 ## Procedure

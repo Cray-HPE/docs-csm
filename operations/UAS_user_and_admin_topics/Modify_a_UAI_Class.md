@@ -1,5 +1,7 @@
 # Modify a UAI Class
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 Update a UAI class with a modified configuration.
 
 ## Prerequisites

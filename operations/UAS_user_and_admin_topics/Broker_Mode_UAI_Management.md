@@ -1,5 +1,7 @@
 # Broker Mode UAI Management
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 A Broker UAI is a special kind of UAI whose job is not to host users directly but to accept attempts to reach a UAI, locate or create a UAI for the user making the attempt, and then pass the user's connection on to the correct UAI.
 Multiple Broker UAIs can be created, each serving users with UAIs of a different classes. This makes it possible to set up UAIs for varying workflows and environments as needed. The following illustrates a system using the Broker mode of UAI management:
 

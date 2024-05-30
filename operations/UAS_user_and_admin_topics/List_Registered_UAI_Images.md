@@ -1,5 +1,7 @@
 # List Registered UAI Images
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 Administrators can use the `cray uas admin config images list` command to see the list of registered images. This command also displays the UAS registration information about each image.
 
 While Registering a UAI image name with UAS is necessary for UAIs to use the image, simply registering the image is not sufficient.

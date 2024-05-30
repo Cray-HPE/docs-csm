@@ -36,7 +36,7 @@ The following administrative topics can be found in this guide:
     - [MetalLB in BGP-mode](#metallb-in-bgp-mode)
 - [Spire](#spire)
 - [Update firmware with FAS](#update-firmware-with-fas)
-- [User Access Service (UAS)](#user-access-service-uas)
+- [User Access Service (UAS) - Deprecated](#user-access-service-uas)
 - [System Admin Toolkit (SAT)](#system-admin-toolkit-sat)
 - [Install and Upgrade Framework (IUF)](#install-and-upgrade-framework-iuf)
 - [Backup and recovery](#backup-and-recovery)
@@ -732,7 +732,9 @@ stream to update firmware on other components.
 - [Updating Firmware without FAS](firmware/Updating_Firmware_without_FAS.md)
 - [Update iLO 5 firmware above `v2.78`](firmware/FAS_Update_iLO5_2.78.md)
 
-## User Access Service (UAS)
+## User Access Service (UAS) - Deprecated
+
+**NOTE:** The User Access Service is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
 
 The User Access Service \(UAS\) is a containerized service managed by Kubernetes that enables application developers to create and run user applications. Users launch
 a User Access Instance \(UAI\) using the `cray` command. Users can also transfer data between the Cray system and external systems using the UAI.

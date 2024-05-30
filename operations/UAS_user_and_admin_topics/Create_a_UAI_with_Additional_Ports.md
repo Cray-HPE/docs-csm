@@ -1,5 +1,7 @@
 # Create a UAI with Additional Ports
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 In legacy mode UAI creation, an option is available to expose UAI ports to the customer user network in addition to the port used for SSH access. These ports are restricted to ports 80, 443, and 8888.
 This procedure allows a user or administrator to create a new UAI with these additional ports.
 

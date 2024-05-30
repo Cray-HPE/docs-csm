@@ -1,5 +1,7 @@
 # Create UAIs From Specific UAI Images in Legacy Mode
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 A user can create a UAI from a specific UAI image (assuming no default UAI class exists) using a command of the form:
 
 ```text

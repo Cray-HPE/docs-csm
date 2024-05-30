@@ -1,5 +1,7 @@
 # Choosing UAI Resource Settings
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 The [Resource Specifications](Resource_Specifications.md) and [UAI Classes](UAI_Classes.md) sections describe how to set up resource specifications to be used with UAIs.
 Refer to those sections for all procedures and specific data structures associated with resources. In this section the question of how and why to configure UAI resources is addressed.
 While Kubernetes resource requests and limits can be used for other things, this section focuses on memory requests and limits and CPU requests and limits. Other resource types are outside the scope of this discussion.

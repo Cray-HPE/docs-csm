@@ -1,5 +1,7 @@
 # Troubleshoot UAS by Viewing Log Output
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 At times there will be problems with UAS. Usually this takes the form of errors showing up on CLI commands that are not immediately interpretable as some sort of input error.
 It is sometimes useful to examine the UAS service logs to find out what is wrong.
 

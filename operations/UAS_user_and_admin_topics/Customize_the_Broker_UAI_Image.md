@@ -1,5 +1,7 @@
 # Customize the Broker UAI Image
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 The Broker UAI image that comes with UAS is the image used to construct Broker UAIs.
 
 The key pieces of the Broker UAI image are:
