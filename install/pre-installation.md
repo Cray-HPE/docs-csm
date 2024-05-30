@@ -411,16 +411,11 @@ These variables will need to be set for many procedures within the CSM installat
    tar -zxvf  "${PITDATA}/csm-${CSM_RELEASE}.tar.gz" -C ${PITDATA}
    ```
 
-1. (`pit#`) ***CSM 1.6.0 Only*** At this time, the metal-ipxe 1.6.0 pre-install hotfix is required. Please review the current field notices for the hotfix.
-   This hotfix will insert a new metal-ipxe RPM into the extracted tarball.
-
-    > ***NOTE*** CSM 1.5.1 and later do NOT need to run this. The metal-ipxe RPM is already included in their tarballs.
-
 1. (`pit#`) Install/update the RPMs necessary for the CSM installation.
 
    > ***NOTE*** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
 
-   1. Update `cray-site-init` and `metal-init`.
+   1. Check for, and update `cray-site-init`, `metal-init`, and `metal-ipxe`.
 
        > ***NOTES***
        >
