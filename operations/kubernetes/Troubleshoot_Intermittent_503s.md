@@ -115,17 +115,17 @@ This error code typically indicates an issue with the authorization service (for
 
     1. For CSM 1.5.0:
 
-    ```bash
-    kubectl rollout restart -n opa deployment cray-opa-ingressgateway
-    kubectl rollout status -n opa deployment cray-opa-ingressgateway
-    ```
+        ```bash
+        kubectl rollout restart -n opa deployment cray-opa-ingressgateway
+        kubectl rollout status -n opa deployment cray-opa-ingressgateway
+        ```
 
     1. For CSM 1.5.1 or later:
 
-    ```bash
-    kubectl rollout restart -n opa daemonset cray-opa-ingressgateway
-    kubectl rollout status -n opa daemonset cray-opa-ingressgateway
-    ```
+        ```bash
+        kubectl rollout restart -n opa daemonset cray-opa-ingressgateway
+        kubectl rollout status -n opa daemonset cray-opa-ingressgateway
+        ```
 
 Once the restarts are all complete, the HTTP 503 UAEX message should clear.
 
