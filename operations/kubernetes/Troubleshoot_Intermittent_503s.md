@@ -84,7 +84,7 @@ This error code typically indicates an issue with the authorization service (for
 
 ### Remediation (`UAEX`)
 
-1. (`ncn-mw#`) Initiate a rolling restart of Istio, Spire and OPA.
+1. (`ncn-mw#`) Initiate a rolling restart of Istio, Spire, and OPA.
 
     ```bash
     kubectl rollout restart -n istio-system deployment istio-ingressgateway
