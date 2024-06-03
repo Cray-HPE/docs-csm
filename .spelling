@@ -911,6 +911,98 @@ vsx-pair
 
 # Per-file spelling exceptions. Please keep this section sorted in order by filepath, to help make it easier to
 # see if a file already is listed.
+# 
+# UAS/UAI are deprecated, so putting spelling exceptions here for easy removal later.
+- api/uas-mgr.md
+250Mi
+additionalProperties
+bearerAuth
+class_id
+config_map
+cpu
+create_uai
+create_uai_admin
+create_uas_class_admin
+create_uas_image_admin
+create_uas_resource_admin
+create_uas_volume_admin
+default_image
+delete_all_uais
+delete_local_config_admin
+delete_uai_by_name
+delete_uais_admin
+delete_uas_class_admin
+delete_uas_image_admin
+delete_uas_resource_admin
+delete_uas_volume_admin
+DirectoryOrCreate
+get_all_uais
+get_uai_admin
+get_uais_admin
+get_uais_for_user
+get_uas_class_admin
+get_uas_classes_admin
+get_uas_image_admin
+get_uas_images_admin
+get_uas_images
+get_uas_mgr_info
+get_uas_resource_admin
+get_uas_resources_admin
+get_uas_volume_admin
+get_uas_volumes_admin
+gidNumber
+homeDirectory
+host_path
+id_rsa.pub
+image_id
+Image_list
+imagename
+loginShell
+K8s
+k8s
+Mibibytes
+Millicpus
+mount_path
+opt_ports
+parameterization
+passwd
+passwd_str
+priority_class_name
+public_ip
+publickey
+publickey_str
+resource_id
+root_get
+secretName
+service_account
+ssh
+SSHd
+uais
+uai_age
+UAIClass
+uai_compute_network
+uai_connect_string
+uai_creation_class
+uai_host
+uai_img
+uai_list
+uai_message
+uai_name
+uai_portmap
+uai-priority
+uai_status
+uas
+UAS_MGR
+UAS_mgr_info
+uidNumber
+update_uas_class_admin
+update_uas_image_admin
+update_uas_volume_admin
+volume_description
+volume_id
+volume_list
+volumename
+
 
 - background/ncn_kernel.md
 initramFS
@@ -921,6 +1013,8 @@ initramFS
 bs
 # To allow Site Init
 Init
+# To allow UAI-on-UAN
+UAI-on-UAN
 
 - operations/observability/Observability.md
 IaC
@@ -1050,6 +1144,63 @@ thanos
 Thanos
 thanos
 
+- operations/UAS_user_and_admin_topics/Customize_the_Broker_UAI_Image.md
+Entrypoint
+entrypoint
+entrypoint.sh
+sshd
+UAI_ONE_SHOT
+
+- operations/UAS_user_and_admin_topics/Legacy_Mode_User-Driven_UAI_Management.md
+ContainerCreating
+
+- operations/UAS_user_and_admin_topics/Modify_a_UAI_Class.md
+bb28a35a-6cbc-4c30-84b0-6050314af76b
+
+- operations/UAS_user_and_admin_topics/README.md
+ContainersCreating
+cray
+kubectl
+macvlans
+sssd
+sssd.conf
+
+- operations/UAS_user_and_admin_topics/Retrieve_UAI_Image_Registration_Information.md
+imagename
+
+- operations/UAS_user_and_admin_topics/Troubleshoot_Stale_Brokered_UAIs.md
+ContainerCreating
+uai-creation-class
+
+- operations/UAS_user_and_admin_topics/Troubleshoot_UAI_Authentication_Issues.md
+sssd
+sssd.conf
+
+- operations/UAS_user_and_admin_topics/Troubleshoot_UAIs_by_Viewing_Log_Output.md
+entrypoint
+
+- operations/UAS_user_and_admin_topics/Troubleshoot_UAS_Issues.md
+keep-alives
+ssh
+sshd
+hostkey
+kubectl
+Xauthority
+Xeyes
+
+- operations/UAS_user_and_admin_topics/UAI_Host_Node_Selection.md
+macvlans
+
+- operations/UAS_user_and_admin_topics/UAI_Network_Attachments.md
+macvlan
+
+-  operations/UAS_user_and_admin_topics/UAI_macvlans_Network_Attachments.md
+macvlans
+
+- operations/UAS_user_and_admin_topics/UAS_Limitations.md
+containerd
+LoadBalancer
+NodePorts
 - RELEASE_NOTES.md
 5.x
 Antero
