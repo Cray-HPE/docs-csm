@@ -41,7 +41,6 @@ The user network will allow for the following:
   - Access user web UIs within the system \(e.g. Capsules\).
   - Access the user REST APIs.
   - Run user Cray CLI commands from outside the system.
-  - Access the User Access Instances \(UAI\).
 - UANs to access systems outside the cluster \(e.g. LDAP, license servers, and more\).
 
 ## Subnet configuration
@@ -82,7 +81,7 @@ The minimum size for the CAN or CHN subnet is /27. The /27 subnet allows for the
 
 - 16 IP addresses for NCNs, UANs, and Switches
 - 16 IP addresses for the external CAN or CHN services.
-  - 2 of these IP addresses are used as standard CAN/CHN service IP addresses and the remaining 14 IP addresses are for UAI services.
+  - 2 of these IP addresses are used as standard CAN/CHN service IP addresses.
 
 ![CAN/CHN /27 Subnet Layout](../../../img/operations/CAN_CHN_27_Subnet.png "CAN/CHN /27 Subnet Layout")
 

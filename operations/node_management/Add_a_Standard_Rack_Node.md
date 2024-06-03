@@ -183,7 +183,6 @@ For this procedure, a new object must be created in the SLS and modifications wi
                 Pass node x3000c0s19b0n0 has expected node Role of Application
                 Pass node x3000c0s19b0n0 has expected SubRole of UAN
                 Pass node x3000c0s19b0n0 has alias of uan01
-        WARNING: Gateway not in Subnet for uai_macvlan (possibly supernetting).
         Called:  GET https://api-gw-service-nmn.local/apis/sls/v1/networks with params None
                 Allocating UAN node IP address in network CAN
                 Allocated IP 10.102.4.144 on the CAN network
@@ -225,7 +224,6 @@ For this procedure, a new object must be created in the SLS and modifications wi
                 Pass node x3000c0s19b0n0 has expected node Role of Application
                 Pass node x3000c0s19b0n0 has expected SubRole of UAN
                 Pass node x3000c0s19b0n0 has alias of uan01
-        WARNING: Gateway not in Subnet for uai_macvlan (possibly supernetting).
         Called:  GET https://api-gw-service-nmn.local/apis/sls/v1/networks with params None
                 Allocating UAN node IP address in network CAN
                 Allocated IP 10.102.4.144 on the CAN network

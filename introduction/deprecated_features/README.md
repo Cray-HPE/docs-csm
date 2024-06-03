@@ -39,6 +39,8 @@ in chronological order.
 ### Removals in CSM 1.6
 
 * [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) v1
+* User Access Service
+* User Access Instance
 
 ## Deprecations
 

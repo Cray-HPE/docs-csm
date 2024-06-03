@@ -34,9 +34,8 @@ In addition, the following general criteria describe the expected behavior of th
 - Once a job has been launched and is executing on the compute plane, it is expected that it will continue to run without interruption during planned or unplanned outages characterized
   by the loss of an NCN master, worker, or storage node. Applications launched through PALS may show error messages and lost output if a worker node goes down during application runtime.
 - If an NCN worker node goes down, it will take between 4 and 5 minutes before most of the pods which had been running on the downed NCN will begin terminating. This is a predefined Kubernetes behavior, not something inherent to HPE Cray EX.
-- Within around 20 minutes or less, it should be possible to launch a job using a UAI or UAN after planned or unplanned outages characterized by the loss of an NCN master, worker, or storage node.
-  - In the case of a UAN, the recovery time is expected to be quicker. However, launching a UAI after an NCN outage means that some UAI pods may need to relocate to other NCN worker nodes.
-    The status of those new UAI pods will remain unready until all necessary content has been loaded on the new NCN that the UAI is starting up on. This process can take approximately 10 minutes.
+- Within around 20 minutes or less, it should be possible to launch a job using a UAN after planned or unplanned outages characterized by the loss of an NCN master, worker, or storage node.
+  - In the case of a UAN, the recovery time is expected to be quicker.
 - Within around 20 minutes or less, it should be possible to boot and configure compute nodes after planned or unplanned outages characterized by the loss of an NCN master, worker, or storage node.
 
 - At least three utility storage nodes provide persistent storage for the services running on the Kubernetes management nodes. When one of the utility storage nodes goes down,
@@ -50,9 +49,9 @@ In addition, the following general criteria describe the expected behavior of th
   pod off the NCN worker node which is down.
   - The `cps-cm-pm` pods are part of a DaemonSet and they only run on designated nodes. When the node comes back up the containers will be restarted and service restored. Refer to
     "Content Projection Service \(CPS\)" in the Cray Operating System \(COS\) product stream documentation for more information on changing node assignments.
-- After an NCN worker, storage, or master node goes down, if there are issues with launching a UAI session or booting compute nodes, that does not necessarily mean that the problem is due to a
-  worker node being down. If possible, it is advised to also check the relevant "Compute Node Boot Troubleshooting Information" and [User Access Service](../UAS_user_and_admin_topics/README.md)
-  (specifically with respect to [Troubleshoot UAS Issues](../UAS_user_and_admin_topics/Troubleshoot_UAS_Issues.md)) procedures. Those sections can give guidance around general known issues and
+- After an NCN worker, storage, or master node goes down, if there are issues with booting compute nodes, that does not necessarily mean that the problem is due to a
+  worker node being down. If possible, it is advised to also check the relevant "Compute Node Boot Troubleshooting Information"
+  procedures. Those sections can give guidance around general known issues and
   how to troubleshoot them. For any customer support ticket opened on these issues, however, it would be an important piece of data to include in that ticket if the issue was encountered while
   one or more of the NCNs were down.
 

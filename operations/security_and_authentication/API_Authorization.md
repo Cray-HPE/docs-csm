@@ -7,7 +7,6 @@ The decision is based on the authenticated [JSON Web Token (JWT)](../../glossary
 This page lists the available personas and the supported REST API endpoints for each.
 
 - [`admin`](#admin)
-- [`user`](#user)
 - [`system-pxe`](#system-pxe)
 - [`system-compute`](#system-compute)
 - [`wlm`](#wlm)
@@ -15,47 +14,6 @@ This page lists the available personas and the supported REST API endpoints for 
 ## `admin`
 
 Authorized for every possible REST API endpoint.
-
-## `user`
-
-Authorized for a subset of endpoints to allow users to create and use [User Access Instances (UAIs)](../../glossary.md#user-access-instance-uai),
-run jobs, view job results, and use capsules.
-
-- [`user` UAS endpoints](#user-uas-endpoints)
-- [`user` PALS endpoints](#user-pals-endpoints)
-- [`user` Replicant endpoints](#user-replicant-endpoints)
-- [`user` Analytics Capsules endpoints](#user-analytics-capsules-endpoints)
-
-### `user` UAS endpoints
-
-REST API endpoints for the `user` persona for the [User Access Service (UAS)](../../glossary.md#user-access-service-uas):
-
-| Method   | Endpoint                    | Description |
-| -------- | --------------------------- | ----------- |
-| `GET`    | `/apis/uas-mgr/v1/`         | Get UAS API version |
-| `GET`    | `/apis/uas-mgr/v1/uas`      | List UAIs for current user |
-| `POST`   | `/apis/uas-mgr/v1/uas`      | Create a UAI for current user |
-| `DELETE` | `/apis/uas-mgr/v1/uas`      | Delete UAIs for current user |
-| `GET`    | `/apis/uas-mgr/v1/images`   | List available UAI images |
-| `GET`    | `/apis/uas-mgr/v1/mgr-info` | Get UAS service version |
-
-### `user` PALS endpoints
-
-The `user` persona is authorized to make `DELETE`, `GET`, `HEAD`, `PATCH`, `POST` or `PUT` calls to any
-[Parallel Application Launch Service (PALS)](../../glossary.md#parallel-application-launch-service-pals) endpoint (`/apis/pals/v1/*`).
-
-### `user` Replicant endpoints
-
-REST API endpoints for the `user` persona for Replicant:
-
-| Method   | Endpoint                    | Description |
-| -------- | --------------------------- | ----------- |
-| `GET`    | `/apis/rm/v1/report/<id>`   | Get report by ID |
-| `GET`    | `/apis/rm/v1/reports`       | Get reports |
-
-### `user` Analytics Capsules endpoints
-
-The `user` persona is authorized to make `DELETE`, `GET`, `HEAD`, `PATCH`, `POST` or `PUT` calls to any Analytics Capsules endpoint (`/apis/capsules/*`).
 
 ## `system-pxe`
 
