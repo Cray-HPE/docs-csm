@@ -956,6 +956,7 @@ host_path
 id_rsa.pub
 image_id
 Image_list
+image_list
 imagename
 loginShell
 K8s
@@ -963,6 +964,7 @@ k8s
 Mibibytes
 Millicpus
 mount_path
+my-configmap
 opt_ports
 parameterization
 passwd
@@ -971,12 +973,15 @@ priority_class_name
 public_ip
 publickey
 publickey_str
+resource_config
 resource_id
 root_get
 secretName
 service_account
+service_name
 ssh
 SSHd
+uai
 uais
 uai_age
 UAIClass
@@ -984,9 +989,12 @@ uai_compute_network
 uai_connect_string
 uai_creation_class
 uai_host
+uai_id
+uai_image
 uai_img
 uai_list
 uai_message
+uai_msg
 uai_name
 uai_portmap
 uai-priority
@@ -997,10 +1005,12 @@ UAS_mgr_info
 uidNumber
 update_uas_class_admin
 update_uas_image_admin
+update_uas_resource_admin
 update_uas_volume_admin
 volume_description
 volume_id
 volume_list
+volume_mounts
 volumename
 
 
@@ -1184,9 +1194,11 @@ keep-alives
 ssh
 sshd
 hostkey
+kubeconfig
 kubectl
 Xauthority
 Xeyes
+xeyes
 
 - operations/UAS_user_and_admin_topics/UAI_Host_Node_Selection.md
 macvlans
