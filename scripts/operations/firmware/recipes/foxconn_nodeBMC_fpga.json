@@ -18,6 +18,6 @@
         "overrideDryrun": false,
         "restoreNotPossibleOverride": true,
         "timeLimit": 1000,
-        "description": "Upgrade of Foxconn node bios_active"
+        "description": "Upgrade of Foxconn node fpga_active"
     }
 }
