@@ -84,32 +84,50 @@ This error code typically indicates an issue with the authorization service (for
 
 ### Remediation (`UAEX`)
 
-1. (`ncn-mw#`) Initiate a rolling restart of Spire and OPA.
+1. (`ncn-mw#`) Initiate a rolling restart of Istio and Spire.
 
     ```bash
+    kubectl rollout restart -n istio-system deployment istio-ingressgateway
     kubectl rollout restart -n spire statefulset spire-postgres spire-server
     kubectl rollout restart -n spire daemonset spire-agent request-ncn-join-token
     kubectl rollout restart -n spire deployment spire-jwks spire-postgres-pooler
-    kubectl rollout restart -n opa deployment cray-opa-ingressgateway cray-opa-ingressgateway-hmn
-    kubectl rollout restart -n opa deployment cray-opa-ingressgateway-customer-admin cray-opa-ingressgateway-customer-user
+    kubectl rollout restart -n spire statefulset cray-spire-postgres cray-spire-server
+    kubectl rollout restart -n spire daemonset cray-spire-agent
+    kubectl rollout restart -n spire deployment cray-spire-jwks cray-spire-postgres-pooler
     ```
 
-1. (`ncn-mw#`) Wait for all of the restarts to complete.
+1. (`ncn-mw#`) Wait for Istio and Spire restarts to complete.
 
     ```bash
-    kubectl rollout status -n spire statefulset spire-postgres
+    kubectl rollout status -n istio-system deployment istio-ingressgateway
     kubectl rollout status -n spire statefulset spire-server
     kubectl rollout status -n spire daemonset spire-agent
     kubectl rollout status -n spire daemonset request-ncn-join-token
     kubectl rollout status -n spire deployment spire-jwks
     kubectl rollout status -n spire deployment spire-postgres-pooler
-    kubectl rollout status -n opa deployment cray-opa-ingressgateway
-    kubectl rollout status -n opa deployment cray-opa-ingressgateway-hmn
-    kubectl rollout status -n opa deployment cray-opa-ingressgateway-customer-admin
-    kubectl rollout status -n opa deployment cray-opa-ingressgateway-customer-user
+    kubectl rollout status -n spire statefulset cray-spire-server
+    kubectl rollout status -n spire daemonset cray-spire-agent
+    kubectl rollout status -n spire deployment cray-spire-jwks
+    kubectl rollout status -n spire deployment cray-spire-postgres-pooler
     ```
 
-Once the restarts are all complete, the HTTP 503 message should clear.
+1. (`ncn-mw#`) Initiate a rolling restart of OPA ingressgateway deployment (CSM 1.5.0) or daemonset (CSM 1.5.1 or later).
+
+    1. For CSM 1.5.0:
+
+        ```bash
+        kubectl rollout restart -n opa deployment cray-opa-ingressgateway
+        kubectl rollout status -n opa deployment cray-opa-ingressgateway
+        ```
+
+    1. For CSM 1.5.1 or later:
+
+        ```bash
+        kubectl rollout restart -n opa daemonset cray-opa-ingressgateway
+        kubectl rollout status -n opa daemonset cray-opa-ingressgateway
+        ```
+
+Once the restarts are all complete, the HTTP 503 UAEX message should clear.
 
 ## Other error codes
 
