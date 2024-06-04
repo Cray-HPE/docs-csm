@@ -1,5 +1,7 @@
 # Volumes
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 Volumes provide a way to connect UAIs to external data, whether they be Kubernetes managed objects, external file systems or files, host node files and directories, or remote networked data to be used within the UAI.
 
 The following are examples of how volumes are commonly used by UAIs:

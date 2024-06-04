@@ -1,5 +1,9 @@
 # User Access Service (UAS)
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
+User Access Instances \(UAIs\) are part of HPE Cray User Services Software (USS) beginning with the USS 1.1.0 release. See the USS 1.1.0 documentation for more information on UAI.
+
 The User Access Service \(UAS\) is a service that manages User Access Instances \(UAIs\) which are containerized services under Kubernetes that provide application developers and users with a lightweight login environment in which to create and run user applications. UAIs run on non-compute nodes \(NCN\), specifically Kubernetes Worker nodes.
 
 At a high level, there are two ways to configure UAS with respect to allowing users access to UAIs. The standard configuration involves the use of [Broker UAIs](Broker_Mode_UAI_Management.md) through which users establish SSH login sessions. When a login session is established to a Broker UAI the Broker UAI either locates or creates a new UAI on behalf of the user and forwards the user's SSH connection to that UAI. A [legacy configuration](Legacy_Mode_User-Driven_UAI_Management.md) requires users to create their own UAIs through the `cray` CLI. Once a UAI is created in this way, the users can use SSH to log into the UAI directly. The legacy configuration will soon be deprecated. Sites using it should migrate to the Broker UAI based configuration.

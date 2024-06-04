@@ -1,5 +1,7 @@
 # Delete a UAI Image Registration
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 Unregister a UAI image from UAS.
 
 ## Prerequisites

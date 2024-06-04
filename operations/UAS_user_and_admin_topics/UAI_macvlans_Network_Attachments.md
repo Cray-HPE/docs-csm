@@ -1,5 +1,7 @@
 # UAI macvlans Network Attachments
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 UAIs need to be able to reach compute nodes across the HPE Cray EX internal networks. When the compute node networks are structured as multiple subnets, this requires routing from the UAIs to those subnets.
 The default route in a UAI goes to the public network through the Customer Access Network (CAN) so that will not work for reaching compute nodes.
 To solve this problem, UAS installs Kubernetes Network Attachments within the Kubernetes `user` namespace. One of these network attachments is used by UAIs.

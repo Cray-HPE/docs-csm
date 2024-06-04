@@ -1,5 +1,7 @@
 # Start a Broker UAI
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 Create a Broker UAI after a Broker UAI class has been created.
 
 ## Prerequisites

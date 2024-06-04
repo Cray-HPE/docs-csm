@@ -1,5 +1,7 @@
 # Troubleshoot Duplicate Mount Paths in a UAI
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 If a user attempts to create a UAI in the legacy mode and cannot create the UAI at all, a good place to look is at volumes. Duplicate `mount_path` specifications in the list of volumes in a UAI will cause a failure that looks like this:
 
 ```bash

@@ -1,5 +1,7 @@
 # List UAI Resource Specifications
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 Obtain a list of all the UAI resource specifications registered with UAS.
 
 ## Prerequisites

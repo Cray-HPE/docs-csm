@@ -1,5 +1,7 @@
 # Update a Resource Specification
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 Modify a specific UAI resource specification using the `resource_id` of that specification.
 
 ## Prerequisites

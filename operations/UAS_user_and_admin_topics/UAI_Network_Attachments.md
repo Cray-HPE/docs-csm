@@ -1,5 +1,7 @@
 # UAI Network Attachment Customization
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 The UAI network attachment configuration flows from the Cray Site Initializer (CSI) localization data through `customizations.yaml` into the UAS Helm chart and, ultimately, into Kubernetes in the form of a "network-attachment-definition".
 
 This section describes the data at each of those stages to show how the final network attachment gets created.

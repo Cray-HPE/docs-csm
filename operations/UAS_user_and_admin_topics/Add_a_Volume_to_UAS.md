@@ -1,5 +1,7 @@
 # Add a Volume to UAS
 
+**NOTE:** UAS is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 This procedure registers and configures a volume in UAS so that the volume can be mounted in UAIs.
 
 See [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) for examples of valid volume configurations. Refer to [Elements of a UAI](Elements_of_a_UAI.md) for descriptions of the volume configuration fields and values.

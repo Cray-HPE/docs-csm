@@ -1,5 +1,7 @@
 # Register a UAI Image
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 Register a UAI image with UAS. Registration tells UAS where to locate the image and whether to use the image as the default for UAIs.
 
 ## Prerequisites

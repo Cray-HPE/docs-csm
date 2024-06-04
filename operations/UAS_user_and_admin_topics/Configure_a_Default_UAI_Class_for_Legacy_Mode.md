@@ -1,5 +1,7 @@
 # Configure a Default UAI Class for Legacy Mode
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 Using a default UAI class is optional but recommended for any site using the legacy UAI management mode that wants to have some control over UAIs created by users. UAI classes used for this purpose need to have certain minimum configuration in them:
 
 * The `image_id` field set to identify the image used to construct UAIs

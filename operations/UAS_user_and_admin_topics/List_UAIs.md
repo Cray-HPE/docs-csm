@@ -1,5 +1,7 @@
 # List UAIs
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 There are two ways to list UAIs in UAS. One of these is an administrative action and provides access to all currently running UAIs.
 The other is associated with the [Legacy UAI Management](Legacy_Mode_User-Driven_UAI_Management.md) mode and provides authorized users access to their own UAIs. Both of these are shown here.
 

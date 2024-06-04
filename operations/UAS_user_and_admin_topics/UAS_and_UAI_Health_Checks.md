@@ -1,5 +1,7 @@
 # UAS and UAI Legacy Mode Health Checks
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 Check the health of UAS and UAI to validate installation / upgrade of an HPE Cray EX system. This is a legacy mode procedure that can be run at installation / upgrade time to make sure that the following are true:
 
 * UAS is installed and running correctly

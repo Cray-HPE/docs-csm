@@ -1,5 +1,7 @@
 # UAI Classes
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 UAI Classes provide templates for the creation of UAIs. They permit precise configuration of the behavior, volumes, resources, and other elements of the UAI.
 When a UAI is created using a UAI Class, it is configured to use exactly what that UAI Class has in it at the time the UAI was created.
 UIA Classes permit Broker UAIs to create different kinds of UAIs based on the UAI Creation Class setting of the Broker UAI.

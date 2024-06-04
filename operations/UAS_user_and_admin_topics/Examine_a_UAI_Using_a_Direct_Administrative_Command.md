@@ -1,5 +1,7 @@
 # Examine a UAI Using a Direct Administrative Command
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 Print out information about a UAI.
 
 ## Prerequisites

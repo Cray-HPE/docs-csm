@@ -1,5 +1,7 @@
 # Troubleshoot UAS / CLI Authentication Issues
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 Several troubleshooting steps related to authentication in a UAI.
 
 ## Internal Server Error

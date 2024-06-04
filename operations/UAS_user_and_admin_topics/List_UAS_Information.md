@@ -1,5 +1,7 @@
 # List UAS Version Information
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 Use the `cray uas mgr-info list` command to determine the version and service name of UAS.
 
 ## List UAS Version with `cray uas mgr-info list`

@@ -1,5 +1,7 @@
 # Update a UAS Volume
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 Modify the configuration of an already-registered UAS volume. Almost any part of the configuration of a UAS volume can be modified.
 
 ## Prerequisites

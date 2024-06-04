@@ -1,5 +1,7 @@
 # Update a UAI Image Registration
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 Modify the UAS registration information of a UAI image.
 
 ## Prerequisites

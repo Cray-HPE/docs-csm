@@ -38,7 +38,7 @@ Each section of this health check document provides links to relevant troublesho
     - [4.3 External SSH access test execution](#43-external-ssh-access-test-execution)
 - [5. Booting CSM `barebones` image](#5-booting-csm-barebones-image)
     - [5.1 Run the test script](#51-run-the-test-script)
-- [6. UAS/UAI tests](#6-uasuai-tests)
+- [6. UAS/UAI tests - Deprecated](#6-uasuai-tests)
     - [6.1 Validate the basic UAS installation](#61-validate-the-basic-uas-installation)
     - [6.2 Validate UAI creation](#62-validate-uai-creation)
     - [6.3 Test UAI gateway health](#63-test-uai-gateway-health)
@@ -540,6 +540,8 @@ cray.barebones-boot-test: INFO     Successfully completed barebones image boot t
 ```
 
 ## 6. UAS/UAI tests
+
+**NOTE** UAS/UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
 
 The commands in this section require that the [Cray CLI is configured](#0-cray-command-line-interface) on nodes where the commands are being executed.
 

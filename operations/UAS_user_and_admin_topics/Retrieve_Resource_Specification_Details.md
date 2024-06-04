@@ -1,5 +1,7 @@
 # Retrieve Resource Specification Details
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 Display a specific resource specification using the `resource_id` of that specification.
 
 ## Prerequisites

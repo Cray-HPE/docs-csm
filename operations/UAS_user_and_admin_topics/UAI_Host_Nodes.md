@@ -1,5 +1,7 @@
 # UAI Host Nodes
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 UAIs run as Kubernetes pods on Kubernetes worker nodes.
 UAS provides a [a mechanism using Kubernetes labels](UAI_Host_Node_Selection.md) to prevent UAIs from running on a specific worker nodes, but any Kubernetes node that is not labeled to prevent UAIs from running on it is considered eligible to host UAIs.
 The administrator of a given site may control the set of UAI host nodes by labeling Kubernetes worker nodes appropriately.

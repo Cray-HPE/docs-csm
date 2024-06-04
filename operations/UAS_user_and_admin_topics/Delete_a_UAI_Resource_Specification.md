@@ -1,5 +1,7 @@
 # Delete a UAI Resource Specification
 
+**NOTE:** UAI is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
+
 Delete a specific UAI resource specification using the `resource_id` of that specification. Once deleted, UAIs will no longer be able to use that specification for creation. Existing UAIs are not affected by the change.
 
 ## Prerequisites

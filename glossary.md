@@ -752,6 +752,8 @@ manage the switch power, [HSN](#high-speed-network-hsn) ASIC, and FPGA interface
 
 ## User Access Instance (UAI)
 
+**NOTE:** The User Access Instance is deprecated in CSM 1.5.2, and will be removed in CSM 1.6. The UAI experience is migrating to a new UAI-on-UAN implementation under the USS product.
+
 The User Access Instance (UAI) is a lightweight, disposable platform that runs under Kubernetes orchestration
 on worker nodes. The UAI provides a single user containerized environment for users on a Cray Ex system to
 develop, build, and execute their applications on the HPE Cray EX [compute node](#compute-node-cn). See [UAN](#user-access-node-uan) for another
@@ -767,6 +769,8 @@ develop, build, and execute their applications on the HPE Cray EX [compute node]
 way for users to gain access. Some sites refer to their UANs as Login nodes.
 
 ## User Access Service (UAS)
+
+**NOTE:** The User Access Service is deprecated in CSM 1.5.2 and will be removed in CSM 1.6.
 
 The User Access Service (UAS) is a containerized service managed by Kubernetes that enables users to
 create and run user applications inside a [UAI](#user-access-instance-uai). UAS runs on a [management node](#management-nodes) that is acting as a

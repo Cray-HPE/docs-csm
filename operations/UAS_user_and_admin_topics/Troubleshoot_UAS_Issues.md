@@ -1,5 +1,7 @@
 # Troubleshoot UAS Issues
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 This section provides examples of some commands that can be used to troubleshoot UAS-related issues.
 
 ## Troubleshoot Connection Issues

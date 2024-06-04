@@ -1,5 +1,7 @@
 # Broker UAI Resiliency and Load Balancing
 
+**NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
+
 Broker UAI resiliency and load balancing is achieved through the use of Multi-Replica Broker UAIs.
 The procedures and data involved in configuring a UAI Class to create Multi-Replica Broker UAIs can be found in [UAI Classes](UAI_Classes.md).
 This page describes some of the reasons to use Multi-Replica Broker UAIs and some of the implications of doing so.
