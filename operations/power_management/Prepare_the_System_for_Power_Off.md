@@ -236,7 +236,6 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
        Run `fmn-show-status` in the `slingshot-fabric-manager` pod and save the output to a file.
 
-
         ```bash
         kubectl exec -it -n services \
             "$(kubectl get pod -l app.kubernetes.io/name=slingshot-fabric-manager \
