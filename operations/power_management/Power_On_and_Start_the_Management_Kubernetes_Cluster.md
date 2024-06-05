@@ -294,6 +294,15 @@ Verify that the Lustre file system is available from the management cluster.
     /var/lib/cps-local/boot-images is a mountpoint
     ```
 
+1. (`ncn-m001#`) Correct the SDU collection link.
+
+    If SDU has been configured on a master node, correct the `collection` link now that its `fuse.s3fs` filesystem is mounted from Ceph storage nodes.
+    Change the link target of `/var/opt/cray/sdu/collection` to `collection-mount` instead to have `collection-local` as the link target.  This command checks all master nodes but changes them and restarts cray-sdu-rda only if needed.
+
+    ```bash
+    pdsh -w ncn-m00[1-3]  '(cd /var/opt/cray/sdu; if [ -L "collection" ]; then if [ "$(readlink collection)" = "collection-local" ]; then rm collection; ln -s collection-mount collection; systemctl restart cray-sdu-rda; fi; fi)'
+    ```
+
 1. (`ncn-m001#`) Monitor the status of the management cluster and which pods are restarting (as indicated by either a `Running` or `Completed` state).
 
     ```bash
