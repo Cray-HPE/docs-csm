@@ -146,38 +146,29 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
       ```
 
    1. (`ncn-m001#`) Check the HSM state from `sat status`of the compute and application nodes, but not the management nodes.
+      All the nodes should be in the `Off` state after the previous sat bootsys shutdown step, unless they are disabled in HSM,
+      shown as `False` in the `Enabled` column of output from this SAT command.
 
       A node will progress through HSM states in this order: `Ready`, `Standby`, `Off`.
 
       ```bash
-      sat status --filter role!=management --hsm-fields
+      sat status --filter role!=management --hsm-fields --filter state!=off
       ```
 
       Example output:
 
       ```text
-      +----------------+------+----------+-------+------+---------+------+-------+-------------+-----------+----------+
-      | xname          | Type | NID      | State | Flag | Enabled | Arch | Class | Role        | SubRole   | Net Type |
-      +----------------+------+----------+-------+------+---------+------+-------+-------------+-----------+----------+
-      | x3209c0s13b0n0 | Node | 52593056 | Off   | OK   | True    | X86  | River | Application | UAN       | Sling    |
-      | x3209c0s15b0n0 | Node | 52593120 | Off   | OK   | True    | X86  | River | Application | UAN       | Sling    |
-      | x3209c0s17b0n0 | Node | 52593184 | Off   | OK   | True    | X86  | River | Application | UAN       | Sling    |
-      | x3209c0s19b0n0 | Node | 52593248 | Off   | OK   | True    | X86  | River | Application | UAN       | Sling    |
-      | x3209c0s22b0n0 | Node | 52593344 | Off   | OK   | True    | X86  | River | Application | Gateway   | Sling    |
-      | x3209c0s23b0n0 | Node | 52593376 | Off   | OK   | True    | X86  | River | Application | Gateway   | Sling    |
-      | x9002c1s0b0n0  | Node | 1000     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s0b0n1  | Node | 1001     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s0b1n0  | Node | 1002     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s0b1n1  | Node | 1003     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s1b0n0  | Node | 1004     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s1b0n1  | Node | 1005     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s1b1n0  | Node | 1006     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s1b1n1  | Node | 1007     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s2b0n0  | Node | 1008     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s2b0n1  | Node | 1009     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s2b1n0  | Node | 1010     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s2b1n1  | Node | 1011     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      +----------------+------+----------+-------+------+---------+------+-------+-------------+-----------+----------+
+      +----------------+------+----------+--------+------+---------+------+-----------+-------------+-----------+----------+
+      | xname          | Type | NID      | State  | Flag | Enabled | Arch | Class     | Role        | SubRole   | Net Type |
+      +----------------+------+----------+--------+------+---------+------+-----------+-------------+-----------+----------+
+      | x3000c0s13b0n0 | Node | 52593056 | Ready  | OK   | True    | X86  | River     | Application | UAN       | Sling    |
+      | x3000c0s15b0n0 | Node | 52593120 | Standby| OK   | True    | X86  | River     | Application | UAN       | Sling    |
+      | x3001c0s22b0n0 | Node | 52593344 | Ready  | OK   | True    | X86  | River     | Application | Gateway   | Sling    |
+      | x1002c1s0b0n0  | Node | 1000     | Standby| OK   | True    | X86  | Mountain  | Compute     | Compute   | Sling    |
+      | x1002c3s2b0n0  | Node | 1008     | On     | OK   | True    | X86  | Mountain  | Compute     | Compute   | Sling    |
+      | x1004c1s2b0n1  | Node | 1009     | Ready  | OK   | True    | X86  | Mountain  | Compute     | Compute   | Sling    |
+      | x1005c7s2b1n0  | Node | 1010     | Standby| OK   | False   | X86  | Mountain  | Compute     | Compute   | Sling    |
+      +----------------+------+----------+--------+------+---------+------+-----------+-------------+-----------+----------+
       ```
 
 ## Next Steps
