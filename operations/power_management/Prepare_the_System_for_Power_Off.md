@@ -234,24 +234,15 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     1. Check HSN status.
 
-        Determine the name of the `slingshot-fabric-manager` pod:
+       Run `fmn-show-status` in the `slingshot-fabric-manager` pod and save the output to a file.
+
 
         ```bash
-        kubectl get pods -l app.kubernetes.io/name=slingshot-fabric-manager -n services
-        ```
-
-        Example output:
-
-        ```text
-        NAME                                        READY   STATUS    RESTARTS   AGE
-        slingshot-fabric-manager-5dc448779c-d8n6q   2/2     Running   0          4d21h
-        ```
-
-        Run `fmn_status` in the `slingshot-fabric-manager` pod and save the output to a file:
-
-        ```bash
-        kubectl exec -it -n services slingshot-fabric-manager-5dc448779c-d8n6q \
-                     -c slingshot-fabric-manager -- fmn_status --details | tee -a fabric.status
+        kubectl exec -it -n services \
+            "$(kubectl get pod -l app.kubernetes.io/name=slingshot-fabric-manager \
+            -n services --no-headers | head -1 | awk '{print $1}')" \
+             -c slingshot-fabric-manager -- fmn-show-status --details \
+           | tee -a fmn-show-status-details.txt
         ```
 
     1. Check management switches to verify they are reachable.
