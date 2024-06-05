@@ -146,7 +146,7 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
       ```
 
    1. (`ncn-m001#`) Check the HSM state from `sat status`of the compute and application nodes, but not the management nodes.
-      All the nodes should be in the `Off` state after the previous sat bootsys shutdown step, unless they are disabled in HSM,
+      All the nodes should be in the `Off` state after the previous `sat bootsys shutdown` step, unless they are disabled in HSM,
       shown as `False` in the `Enabled` column of output from this SAT command.
 
       A node will progress through HSM states in this order: `Ready`, `Standby`, `Off`.
