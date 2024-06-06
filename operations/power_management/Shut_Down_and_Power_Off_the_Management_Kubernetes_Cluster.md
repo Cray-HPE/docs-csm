@@ -90,12 +90,14 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 1. (`ncn-m001#`) Set variables as comma-separated lists for the three types of management NCNs.
 
    ```bash
-   MASTERS="ncn-m002,ncn-m003"
-   STORAGE=$(ceph orch host ls | grep ncn-s | awk '{print $1}' | xargs | sed 's/ /,/g')
-   WORKERS=$(kubectl get nodes | grep ncn-w | awk '{print $1}' | sort -u | xargs | sed 's/ /,/g')
+   MASTERS="ncn-m002,ncn-m003"; echo MASTERS=$MASTERS
+   STORAGE=$(ceph orch host ls | grep ncn-s | awk '{print $1}' | xargs | sed 's/ /,/g'); echo STORAGE=$STORAGE
+   WORKERS=$(kubectl get nodes | grep ncn-w | awk '{print $1}' | sort -u | xargs | sed 's/ /,/g'); echo WORKERS=$WORKERS
    ```
 
 1. (`ncn-m001#`) Shut down platform services.
+
+   > NOTE: There are some interactive questions which need answers before the shutdown process can progress.
 
    ```bash
    sat bootsys shutdown --stage platform-services
@@ -214,8 +216,10 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
    1. Shutdown management NCNs.
 
+      > NOTE: There are some interactive questions which need answers before the shutdown process can progress.
+
       ```bash
-      sat bootsys shutdown --stage ncn-power --ncn-shutdown-timeout 900
+      sat bootsys shutdown --stage ncn-power --ncn-shutdown-timeout 1200
       ```
 
       Example output:
@@ -274,6 +278,14 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
       ```bash
       screen -x 26745.SAT-console-ncn-w003-mgmt
       ```
+
+      > NOTE: There may be many messages like this in the console logs for worker nodes and master nodes.
+      > There are no special actions to address these errors.
+      > 
+      > Example console log output:
+      > ```
+      > [76266.056108][T2394731] libceph: connect (1)100.96.129.14:6789 error -101
+      > ```
 
    1. (`ncn-m001#`) Check the power off status of management NCNs.
 
