@@ -257,6 +257,11 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     SNAPSHOT_DIR=$(mktemp -d --tmpdir=/root "csm_upgrade.pre_upgrade_snapshot.${DATESTRING}.XXXXXX")
     echo "Pre-upgrade snapshot directory: ${SNAPSHOT_DIR}"
 
+    # Record BOS data, because the upgrade to CSM 1.6 will delete all BOS v1 data, and will sanitize
+    # the BOS v2 data
+    echo "Backing up BOS data"
+    /usr/share/doc/csm/scripts/operations/configuration/export_bos_data.sh --include-v1 "${SNAPSHOT_DIR}"
+
     # Record CFS components and configurations, since these are modified during the upgrade process
     CFS_CONFIG_SNAPSHOT=${SNAPSHOT_DIR}/cfs_configurations.json
     echo "Backing up CFS configurations to ${CFS_CONFIG_SNAPSHOT}"

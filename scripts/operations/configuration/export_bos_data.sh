@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -28,10 +28,15 @@
 # This script exports all BOS data into JSON files. These files are then
 # compressed into an tgz archive.
 #
-# Usage: export_bos_data.sh [directory_to_create_archive_in]
+# Usage: export_bos_data.sh [--include-v1] [directory_to_create_archive_in]
 #
 # If no directory is specified, the archive will be created in the current
 # directory.
+#
+# If --include-v1 is specified, the exported will attempt to backup BOS v1
+# data as well. This is intended for use before upgrades to CSM 1.6 from
+# CSM 1.5. If the system is already at CSM 1.6, BOS v1 is no longer available,
+# and specifying this option will have no effect.
 #
 ################################################################################
 
@@ -41,7 +46,7 @@ err_exit() {
 }
 
 usage() {
-  echo "Usage: export_bos_data.sh [directory_to_create_archive_in]"
+  echo "Usage: export_bos_data.sh [--include-v1] [directory_to_create_archive_in]"
   echo
   err_exit "$@"
 }
@@ -52,7 +57,7 @@ run_cmd() {
 
 bos_cli() {
   # Expands to: run_cmd cray bos <args to bos_cli> --format json
-  # e.g. bos_cli v2 sessions list
+  # e.g. bos_cli v1 session list
   #      bos_cli v2 sessiontemplates  list
   run_cmd cray bos "$@" --format json
 }
@@ -62,7 +67,22 @@ bos_list() {
   bos_cli "$@" list
 }
 
-if [[ $# -eq 0 ]]; then
+INCLUDE_V1=N
+
+if [[ $# -gt 0 && $1 == --include-v1 ]]; then
+  echo "User has requested to include BOS v1 data in the export, if possible"
+  # Use the Cray CLI to see if BOS v1 is available
+  if ! cray bos v1 >/dev/null 2>&1; then
+    echo "BOS v1 is no longer available in the Cray CLI; BOS v1 data will not be exported"
+  else
+    INCLUDE_V1=Y
+  fi
+  shift
+fi
+
+if [[ $# -gt 1 ]]; then
+  usage "Too many arguments"
+elif [[ $# -eq 0 ]]; then
   OUTPUT_DIRECTORY=$(pwd)
 else
   [[ -n $1 ]] || usage "Directory name is optional, but if specified it may not be blank"
@@ -76,6 +96,28 @@ ARCHIVE_DIR=$(run_cmd mktemp -p "${OUTPUT_DIRECTORY}" -d "${ARCHIVE_PREFIX}-XXX"
 
 # Export all BOS data. Some of it (like sessions and components) are not intended to be
 # restored from this backup, but retaining the historical data may be useful in some situations.
+
+if [[ ${INCLUDE_V1} == Y ]]; then
+  V1_DIR="${ARCHIVE_DIR}/v1"
+  run_cmd mkdir -p "${V1_DIR}"
+
+  # For BOS v1 the only thing to list is sessions. Every other thing that could be listed can be
+  # listed using the v2 CLI.
+
+  echo "Exporting BOS v1 sessions..."
+  V1_SESSION_LIST_JSON="${V1_DIR}/session.json"
+  bos_list v1 session > "${V1_SESSION_LIST_JSON}"
+
+  # For v1 sessions, we will also describe each, since in BOS v1, just listing them
+  # does not show information about them.
+
+  V1_SESSION_DIR="${V1_DIR}/session"
+  run_cmd mkdir -p "${V1_SESSION_DIR}"
+
+  for SESSION_ID in $(jq -r '.[] | .' "${V1_SESSION_LIST_JSON}"); do
+    bos_cli v1 session describe "${SESSION_ID}" > "${V1_SESSION_DIR}/${SESSION_ID}.json"
+  done
+fi
 
 # For v2, listing is all we need for all of the types.
 
