@@ -281,9 +281,10 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
       > NOTE: There may be many messages like this in the console logs for worker nodes and master nodes.
       > There are no special actions to address these errors.
-      > 
+      >
       > Example console log output:
-      > ```
+      >
+      > ```bash
       > [76266.056108][T2394731] libceph: connect (1)100.96.129.14:6789 error -101
       > ```
 
