@@ -1248,6 +1248,7 @@ Additional valid values may be added via configuration file. See the results of 
 |type|MgmtHLSwitch|
 |type|CDUMgmtSwitch|
 |type|Node|
+|type|VirtualNode|
 |type|Processor|
 |type|Drive|
 |type|StorageGroup|
@@ -1262,7 +1263,6 @@ Additional valid values may be added via configuration file. See the results of 
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
-|type|VirtualNode|
 |state|Unknown|
 |state|Empty|
 |state|Populated|
@@ -3862,6 +3862,7 @@ Additional valid values may be added via configuration file. See the results of 
 |type|MgmtHLSwitch|
 |type|CDUMgmtSwitch|
 |type|Node|
+|type|VirtualNode|
 |type|Processor|
 |type|Drive|
 |type|StorageGroup|
@@ -3876,7 +3877,6 @@ Additional valid values may be added via configuration file. See the results of 
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
-|type|VirtualNode|
 |state|Unknown|
 |state|Empty|
 |state|Populated|
@@ -4689,6 +4689,7 @@ Default is NestNodesOnly.
 |type|MgmtHLSwitch|
 |type|CDUMgmtSwitch|
 |type|Node|
+|type|VirtualNode|
 |type|Processor|
 |type|Drive|
 |type|StorageGroup|
@@ -4703,7 +4704,6 @@ Default is NestNodesOnly.
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
-|type|VirtualNode|
 
 > Example responses
 
@@ -5388,6 +5388,7 @@ Retrieve all HWInventoryByLocation entries. Note that all entries are displayed 
 |type|MgmtHLSwitch|
 |type|CDUMgmtSwitch|
 |type|Node|
+|type|VirtualNode|
 |type|Processor|
 |type|Drive|
 |type|StorageGroup|
@@ -5402,7 +5403,6 @@ Retrieve all HWInventoryByLocation entries. Note that all entries are displayed 
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
-|type|VirtualNode|
 
 > Example responses
 
@@ -5467,6 +5467,7 @@ Status Code **200**
 |Type|MgmtHLSwitch|
 |Type|CDUMgmtSwitch|
 |Type|Node|
+|Type|VirtualNode|
 |Type|Processor|
 |Type|Drive|
 |Type|StorageGroup|
@@ -5481,7 +5482,6 @@ Status Code **200**
 |Type|HSNLink|
 |Type|HSNConnector|
 |Type|INVALID|
-|Type|VirtualNode|
 |Status|Populated|
 |Status|Empty|
 |HWInventoryByLocationType|HWInvByLocCabinet|
@@ -5528,6 +5528,7 @@ Status Code **200**
 |Type|MgmtHLSwitch|
 |Type|CDUMgmtSwitch|
 |Type|Node|
+|Type|VirtualNode|
 |Type|Processor|
 |Type|Drive|
 |Type|StorageGroup|
@@ -5542,7 +5543,6 @@ Status Code **200**
 |Type|HSNLink|
 |Type|HSNConnector|
 |Type|INVALID|
-|Type|VirtualNode|
 |HWInventoryByFRUType|HWInvByFRUCabinet|
 |HWInventoryByFRUType|HWInvByFRUChassis|
 |HWInventoryByFRUType|HWInvByFRUComputeModule|
@@ -5710,6 +5710,7 @@ Create/Update hardware inventory entries
 |»» Type|MgmtHLSwitch|
 |»» Type|CDUMgmtSwitch|
 |»» Type|Node|
+|»» Type|VirtualNode|
 |»» Type|Processor|
 |»» Type|Drive|
 |»» Type|StorageGroup|
@@ -5724,7 +5725,6 @@ Create/Update hardware inventory entries
 |»» Type|HSNLink|
 |»» Type|HSNConnector|
 |»» Type|INVALID|
-|»» Type|VirtualNode|
 |»» Status|Populated|
 |»» Status|Empty|
 |»» HWInventoryByLocationType|HWInvByLocCabinet|
@@ -5771,6 +5771,7 @@ Create/Update hardware inventory entries
 |»»» Type|MgmtHLSwitch|
 |»»» Type|CDUMgmtSwitch|
 |»»» Type|Node|
+|»»» Type|VirtualNode|
 |»»» Type|Processor|
 |»»» Type|Drive|
 |»»» Type|StorageGroup|
@@ -5785,7 +5786,6 @@ Create/Update hardware inventory entries
 |»»» Type|HSNLink|
 |»»» Type|HSNConnector|
 |»»» Type|INVALID|
-|»»» Type|VirtualNode|
 |»»» HWInventoryByFRUType|HWInvByFRUCabinet|
 |»»» HWInventoryByFRUType|HWInvByFRUChassis|
 |»»» HWInventoryByFRUType|HWInvByFRUComputeModule|
@@ -6451,6 +6451,7 @@ Retrieve all HWInventoryByFRU entries. Note that there is no organization of the
 |type|MgmtHLSwitch|
 |type|CDUMgmtSwitch|
 |type|Node|
+|type|VirtualNode|
 |type|Processor|
 |type|Drive|
 |type|StorageGroup|
@@ -6465,7 +6466,6 @@ Retrieve all HWInventoryByFRU entries. Note that there is no organization of the
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
-|type|VirtualNode|
 
 > Example responses
 
@@ -6540,6 +6540,7 @@ Status Code **200**
 |Type|MgmtHLSwitch|
 |Type|CDUMgmtSwitch|
 |Type|Node|
+|Type|VirtualNode|
 |Type|Processor|
 |Type|Drive|
 |Type|StorageGroup|
@@ -6554,7 +6555,6 @@ Status Code **200**
 |Type|HSNLink|
 |Type|HSNConnector|
 |Type|INVALID|
-|Type|VirtualNode|
 |HWInventoryByFRUType|HWInvByFRUCabinet|
 |HWInventoryByFRUType|HWInvByFRUChassis|
 |HWInventoryByFRUType|HWInvByFRUComputeModule|
@@ -7714,6 +7714,7 @@ Retrieve all Redfish endpoint entries as a named array, optionally filtering it.
 |type|MgmtHLSwitch|
 |type|CDUMgmtSwitch|
 |type|Node|
+|type|VirtualNode|
 |type|Processor|
 |type|Drive|
 |type|StorageGroup|
@@ -7728,7 +7729,6 @@ Retrieve all Redfish endpoint entries as a named array, optionally filtering it.
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
-|type|VirtualNode|
 
 > Example responses
 
@@ -8736,6 +8736,7 @@ Retrieve the full collection of ComponentEndpoints in the form of a ComponentEnd
 |type|MgmtHLSwitch|
 |type|CDUMgmtSwitch|
 |type|Node|
+|type|VirtualNode|
 |type|Processor|
 |type|Drive|
 |type|StorageGroup|
@@ -8750,7 +8751,6 @@ Retrieve the full collection of ComponentEndpoints in the form of a ComponentEnd
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
-|type|VirtualNode|
 
 > Example responses
 
@@ -9973,6 +9973,7 @@ Status Code **200**
 |Type|MgmtHLSwitch|
 |Type|CDUMgmtSwitch|
 |Type|Node|
+|Type|VirtualNode|
 |Type|Processor|
 |Type|Drive|
 |Type|StorageGroup|
@@ -9987,7 +9988,6 @@ Status Code **200**
 |Type|HSNLink|
 |Type|HSNConnector|
 |Type|INVALID|
-|Type|VirtualNode|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -13154,6 +13154,7 @@ Additional valid values may be added via configuration file. See the results of 
 |type|MgmtHLSwitch|
 |type|CDUMgmtSwitch|
 |type|Node|
+|type|VirtualNode|
 |type|Processor|
 |type|Drive|
 |type|StorageGroup|
@@ -13168,7 +13169,6 @@ Additional valid values may be added via configuration file. See the results of 
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
-|type|VirtualNode|
 |state|Unknown|
 |state|Empty|
 |state|Populated|
@@ -15720,6 +15720,7 @@ Additional valid values may be added via configuration file. See the results of 
 |type|MgmtHLSwitch|
 |type|CDUMgmtSwitch|
 |type|Node|
+|type|VirtualNode|
 |type|Processor|
 |type|Drive|
 |type|StorageGroup|
@@ -15734,7 +15735,6 @@ Additional valid values may be added via configuration file. See the results of 
 |type|HSNLink|
 |type|HSNConnector|
 |type|INVALID|
-|type|VirtualNode|
 |state|Unknown|
 |state|Empty|
 |state|Populated|
@@ -25434,6 +25434,7 @@ This is the HMS component type category.  It has a particular xname format and r
 |*anonymous*|MgmtHLSwitch|
 |*anonymous*|CDUMgmtSwitch|
 |*anonymous*|Node|
+|*anonymous*|VirtualNode|
 |*anonymous*|Processor|
 |*anonymous*|Drive|
 |*anonymous*|StorageGroup|
@@ -25448,7 +25449,6 @@ This is the HMS component type category.  It has a particular xname format and r
 |*anonymous*|HSNLink|
 |*anonymous*|HSNConnector|
 |*anonymous*|INVALID|
-|*anonymous*|VirtualNode|
 
 <h2 id="tocS_NetType.1.0.0">NetType.1.0.0</h2>
 <!-- backwards compatibility -->
