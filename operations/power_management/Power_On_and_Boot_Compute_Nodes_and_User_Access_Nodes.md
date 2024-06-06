@@ -99,6 +99,27 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     Offline Switches:
     ```
 
+1. If any workload manager queues were disabled during the power off procedure, enable them.
+   Follow the vendor workload manager documentation to enable queues for running jobs on compute nodes.
+   After compute nodes boot and configure, they will become available in the workload manager.
+
+    1. For Slurm, see the `scontrol` man page.
+
+       If any queues were disabled during the power off procedure, enable them.  
+
+    1. For PBS Professional, see the `qstat` and `qmgr` man pages.
+
+       Below is an example to list the available queues, enable a specific queue named `workq`, and check
+       that the queue has been enabled:
+
+       ```bash
+       qstat -q
+       qmgr -c 'set queue workq enabled = True'
+       qmgr -c 'list queue workq enabled'
+       ```
+
+       Each system might have many different queue names. There is no default queue name.
+
 1. (`ncn-m001#`) List detailed information about the available boot orchestration service \(BOS\) session template names.
 
     Identify the BOS session template names (such as `"compute-23.7.0"` or `uan-23.7.0`), and choose the appropriate compute and UAN node templates for the power on and boot.
@@ -379,3 +400,4 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 ## Next step
 
 Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.
+gi

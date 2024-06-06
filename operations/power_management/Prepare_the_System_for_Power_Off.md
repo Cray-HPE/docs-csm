@@ -397,7 +397,18 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
        scontrol update NodeName=ALL State=DRAIN Reason="Shutdown"
        ```
 
-    1. For PBS Professional, see the `pbsnodes` man page.
+    1. For PBS Professional, see the `qstat` and `qmgr` man pages.
+
+       Below is an example to list the available queues, disable a specific queue named `workq`, and check
+       that the queue has been disabled:
+
+       ```bash
+       qstat -q
+       qmgr -c 'set queue workq enabled = False'
+       qmgr -c 'list queue workq enabled'
+       ```
+
+       Each system might have many different queue names. There is no default queue name.
 
 ## Next step
 
