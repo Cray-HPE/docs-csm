@@ -383,6 +383,10 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     There is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
+1. Notify users and operations staff about the upcoming full system power off.
+
+   The notification method will vary by system, but might be email, messaging applications, `/etc/motd` on UANs, `wall` commands on UANs, etc.
+
 1. Follow the vendor workload manager documentation to drain processes running on compute nodes.
 
     1. For Slurm, see the `scontrol` man page.
