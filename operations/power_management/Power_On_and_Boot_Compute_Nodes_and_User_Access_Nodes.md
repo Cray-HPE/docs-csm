@@ -400,4 +400,3 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 ## Next step
 
 Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.
-gi
