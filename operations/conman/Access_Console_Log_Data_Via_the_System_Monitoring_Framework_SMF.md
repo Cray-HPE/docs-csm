@@ -57,7 +57,9 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
     console.hostname: x3000c0s19b4n0 2020-10-09 15:11:39 Keepalived_vrrp[38]: bogus VRRP packet received on bond0.nmn0 !!!
     ```
 
-1. Enter **Search** terms for the specific console component name (xname) using the `console.hostname: XNAME` string.
+1. Enter **Search** terms for the specific console component name (xname) using the `"console.hostname: XNAME"` string.
+
+    ![SMA Dashboard Home Page](../../img/operations/Sma_dashboard_console_hostname.png) 
 
 1. Click the time range drop-down menu to select the time period for which logs are displayed.
 

@@ -224,9 +224,9 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
     Perform the procedures in [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md). Perform updates as needed with FAS.
 
-    > Slingshot switches are updated with procedures from the *HPE Slingshot Operations Guide*.
+    > Slingshot switches are updated with procedures from the *HPE Slingshot Installation Guide for CSM*.
 
-1. Continue on to the *HPE Slingshot Operations Guide* to bring up the additional cabinets in the fabric.
+1. Continue on to the *HPE Slingshot Administration Guide* to bring up the additional cabinets in the fabric.
 
 1. Update workload manager configuration to include any newly added compute nodes to the system.
 

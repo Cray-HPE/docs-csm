@@ -494,26 +494,64 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Need to upgrade Nexus prior to uploading new images into it.
+# Nexus 3.38.0 does not support multi-platform images with sigstore attachments.
+# To upgrade Nexus, we need to upload new Nexus images into existing Nexus,
+# then pre-cache these images, and finally run cray-nexus chart upgrade.
+#
+state_name="PRECACHE_NEXUS_IMAGES"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    NEXUS_USERNAME=${NEXUS_USERNAME:-$(kubectl get secret -n nexus nexus-admin-credential --template '{{.data.username}}' | base64 -d)}
+    NEXUS_PASSWORD=${NEXUS_PASSWORD:-$(kubectl get secret -n nexus nexus-admin-credential --template '{{.data.password}}' | base64 -d)}
+    set +e
+    nexus-cred-check() {
+      pod=$(kubectl get pods -n nexus --selector app=nexus -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep -v nexus-init | head -1)
+      kubectl -n nexus exec -it "${pod}" -c nexus -- curl -i -sfk -u "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" \
+        -H "accept: application/json" -X GET http://nexus/service/rest/v1/security/user-sources > /dev/null 2>&1
+    }
+    if ! nexus-cred-check; then
+      echo "Nexus password is incorrect. Please set NEXUS_USERNAME and NEXUS_PASSWORD and try again."
+      exit 1
+    fi
+    set -e
+
+    # Skopeo image is stored as "skopeo:csm-${CSM_RELEASE}"
+    podman load -i "${CSM_ARTI_DIR}/vendor/skopeo.tar"
+    nexus_images=$(yq r -j "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-precache-images).values.cacheImages' | jq -r '.[] | select( . | contains("nexus"))')
+    worker_nodes=$(grep -oP "(ncn-w\d+)" /etc/hosts | sort -u)
+    while read -r nexus_image; do
+      echo "Uploading $nexus_image into Nexus ..."
+      podman run --rm -v "${CSM_ARTI_DIR}/docker":/images \
+        "skopeo:csm-${CSM_RELEASE}" \
+        --override-os=linux --override-arch=amd64 \
+        copy \
+        --remove-signatures \
+        --dest-tls-verify=false \
+        --dest-creds "${NEXUS_USERNAME:-admin}:${NEXUS_PASSWORD}" \
+        "dir:/images/${nexus_image}" \
+        "docker://registry.local/${nexus_image}"
+      while read -r worker_node; do
+        echo "Pre-caching image ${nexus_image} on node ${worker_node}"
+        ssh -n "${worker_node}" "crictl pull ${nexus_image}"
+      done <<< "${worker_nodes}"
+    done <<< "${nexus_images}"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+do_upgrade_csm_chart cray-nexus nexus.yaml
+
 state_name="SETUP_NEXUS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
-
-    set +e
-    nexus-cred-check() {
-      pod=$(kubectl get pods -n nexus --selector app=nexus -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep -v nexus-init)
-      kubectl -n nexus exec -it "${pod}" -c nexus -- curl -i -sfk -u \
-        "admin:${NEXUS_PASSWORD:=$(kubectl get secret -n nexus nexus-admin-credential --template '{{.data.password}}' | base64 -d)}" \
-        -H "accept: application/json" -X GET http://nexus/service/rest/beta/security/user-sources > /dev/null 2>&1
-    }
-    if ! nexus-cred-check; then
-      echo "Nexus password is incorrect. Please set NEXUS_PASSWORD and try again."
-      exit 1
-    fi
-    set -e
     "${CSM_ARTI_DIR}/lib/setup-nexus.sh"
-
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
@@ -842,48 +880,9 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "export STORAGE_IMS_IMAGE_ID=${STORAGE_IMS_IMAGE_ID}" >> /etc/cray/upgrade/csm/myenv
     echo "export K8S_IMS_IMAGE_ID=${K8S_IMS_IMAGE_ID}" >> /etc/cray/upgrade/csm/myenv
 
-    echo "Retrieving a list of all management node component names (xnames)"
-    set -o pipefail
-
-    WORKER_XNAMES=$(cray hsm state components list --role Management --subrole Worker --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
-    [[ -n ${WORKER_XNAMES} ]]
-    MASTER_XNAMES=$(cray hsm state components list --role Management --subrole Master --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
-    [[ -n ${MASTER_XNAMES} ]]
-    K8S_XNAMES="$WORKER_XNAMES $MASTER_XNAMES"
-    K8S_XNAME_LIST=${K8S_XNAMES//,/ }
-    STORAGE_XNAMES=$(cray hsm state components list --role Management --subrole Storage --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
-    [[ -n ${STORAGE_XNAMES} ]]
-    STORAGE_XNAME_LIST=${STORAGE_XNAMES//,/ }
-    set +o pipefail
-
-    for xname in ${K8S_XNAME_LIST}; do
-      METAL_SERVER=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' \
-        | awk -F 'metal.server=' '{print $2}' \
-        | awk -F ' ' '{print $1}')
-      NEW_METAL_SERVER="s3://boot-images/${K8S_IMS_IMAGE_ID}/rootfs"
-      PARAMS=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' \
-        | sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" \
-        | tr -d \")
-
-      cray bss bootparameters update --hosts "${xname}" \
-        --kernel "s3://boot-images/${K8S_IMS_IMAGE_ID}/kernel" \
-        --initrd "s3://boot-images/${K8S_IMS_IMAGE_ID}/initrd" \
-        --params "${PARAMS}"
-    done
-    for xname in ${STORAGE_XNAME_LIST}; do
-      METAL_SERVER=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' \
-        | awk -F 'metal.server=' '{print $2}' \
-        | awk -F ' ' '{print $1}')
-      NEW_METAL_SERVER="s3://boot-images/${STORAGE_IMS_IMAGE_ID}/rootfs"
-      PARAMS=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' \
-        | sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" \
-        | tr -d \")
-
-      cray bss bootparameters update --hosts "${xname}" \
-        --kernel "s3://boot-images/${STORAGE_IMS_IMAGE_ID}/kernel" \
-        --initrd "s3://boot-images/${STORAGE_IMS_IMAGE_ID}/initrd" \
-        --params "${PARAMS}"
-    done
+    # NOTE: NCN node images are no longer set in BSS here
+    # IUF workflows handle setting the correct node image before a node is upgraded
+    # If doing a CSM only upgrade, NCN images are set in the CSM-Only procedure
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
