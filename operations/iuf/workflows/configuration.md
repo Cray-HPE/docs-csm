@@ -203,6 +203,12 @@ required for initial installation scenarios.
   - Configure SAT authentication via `sat auth`
   - Generate SAT S3 credentials
   - Configure system revision information via `sat setrev`
+- UAS
+  - Configure UAS network settings 
+    - The network settings for UAS must match the WLM to allow job submission from UAIs
+- Badger
+  - Update CSM Diags network attachment definition
+
 
 Once this step has completed:
 
