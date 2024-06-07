@@ -274,8 +274,11 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
       moves from `On` to `Off` state, it needs to be investigated. If nodes are in `Standby`, that means they had been in `Ready`,
       but stopped sending a heartbeat to HSM so transitioned to `Standby` and may need to be investigated.
 
+      Check which nodes are not in the `Ready` state. This sample command excludes nodes which have `Role` equal to `Management`
+      or are disabled in HSM (`Enabled=False`) or have `State` not equal to `Ready`.
+
       ```bash
-      sat status --filter role!=management --hsm-fields
+      sat status --filter role!=management --filter enabled=true --filter state!=ready --hsm-fields
       ```
 
       Example output:
@@ -284,29 +287,19 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
       +----------------+------+----------+-------+------+---------+------+-------+-------------+-----------+----------+
       | xname          | Type | NID      | State | Flag | Enabled | Arch | Class | Role        | SubRole   | Net Type |
       +----------------+------+----------+-------+------+---------+------+-------+-------------+-----------+----------+
-      | x3209c0s13b0n0 | Node | 52593056 | Ready | OK   | True    | X86  | River | Application | UAN       | Sling    |
-      | x3209c0s15b0n0 | Node | 52593120 | Ready | OK   | True    | X86  | River | Application | UAN       | Sling    |
-      | x3209c0s17b0n0 | Node | 52593184 | Ready | OK   | True    | X86  | River | Application | UAN       | Sling    |
       | x3209c0s22b0n0 | Node | 52593344 | Off   | OK   | True    | X86  | River | Application | Gateway   | Sling    |
       | x3209c0s23b0n0 | Node | 52593376 | Off   | OK   | True    | X86  | River | Application | Gateway   | Sling    |
-      | x9002c1s0b0n0  | Node | 1000     | Ready | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s0b0n1  | Node | 1001     | Ready | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s0b1n0  | Node | 1002     | Ready | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s0b1n1  | Node | 1003     | Ready | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s1b0n0  | Node | 1004     | Ready | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s1b0n1  | Node | 1005     | Ready | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s1b1n0  | Node | 1006     | Ready | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s1b1n1  | Node | 1007     | Ready | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s2b0n0  | Node | 1008     | Ready | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s2b0n1  | Node | 1009     | Ready | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s2b1n0  | Node | 1010     | Ready | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s2b1n1  | Node | 1011     | Ready | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
+      | x9002c1s1b0n1  | Node | 1005     | On    | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
+      | x9002c1s2b1n1  | Node | 1011     | On    | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
       +----------------+------+----------+-------+------+---------+------+-------+-------------+-----------+----------+
       ```
 
-      In this example, two of the application Gateway nodes have a `State` of `Off` which means that they did not power on.
+      In this example, two of the application Gateway nodes have a `State` of `Off` which means that they did not power on
+      and two of the compute nodes have a `State` of `On` which means they powered on but failed to boot to multi-user Linux.
+      
 
-   1. (`ncn-m001#`) Check the BOS fields from `sat status`, but exclude the management nodes which are never booted with BOS.
+   1. (`ncn-m001#`) Check the BOS fields from `sat status`, but exclude the nodes which have `Most Recent BOS Session`
+       set to `Missing`. This will exclude the management nodes because they are never booted with BOS.
 
       ```bash
       sat status --bos-fields --filter '"Most Recent BOS Session"!=MISSING'
@@ -375,6 +368,23 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
       ```
 
       In this example, two of the application nodes have an older `Desired Config` version than the other UANs and have a last reported `Configuration Status` of pending, meaning they have not begun their CFS configuration.
+
+      To highlight which nodes still have configuration `pending` also exclude nodes which do not have `Configuration Status` set to `configured`.
+
+      ```bash
+      sat status --cfs-fields --filter '"Desired Config"!=*management*' --filter '"Configuration Status"!=configured'
+      ```
+
+      Example output:
+
+      ```text
+      +----------------+----------------------+----------------------+-------------+
+      | xname          | Desired Config       | Configuration Status | Error Count |
+      +----------------+----------------------+----------------------+-------------+
+      | x3209c0s22b0n0 | uan-22.11.0          | pending              | 0           |
+      | x3209c0s23b0n0 | uan-22.11.0          | pending              | 0           |
+      +----------------+----------------------+----------------------+-------------+
+      ```
 
    1. (`ncn-m001#`) For any compute nodes or UANs which booted but failed the CFS configuration, check the CFS Ansible log for errors.
 
