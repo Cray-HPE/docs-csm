@@ -212,6 +212,14 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    pdsh -w ncn-m001,$MASTERS,$STORAGE,$WORKERS 'efibootmgr -n $(efibootmgr | grep "CRAY UEFI OS 0"| cut -c 5-8)' | dshbak -c
    ```
 
+1. (`ncn-m001#`) Unmount ceph and fuse.s3fs filesystems from master and worker nodes.
+
+   ```bash
+   pdsh -w ncn-m001,$MASTERS,$WORKERS 'mount -t ceph|egrep -v kubelet; umount /etc/cray/upgrade/csm' | dshbak -c
+   pdsh -w ncn-m001,$MASTERS 'mount -t fuse.s3fs |egrep -v kubelet; umount /var/opt/cray/sdu/collection-mount; umount  /var/opt/cray/config-data' | dshbak -c
+   pdsh -w $WORKERS 'mount -t fuse.s3fs ; fusermount -u /var/lib/cps-local/boot-images;  umount  /var/lib/cps-local/boot-images; pkill s3fs' | dshbak -c 
+   ```
+
 1. (`ncn-m001#`) Shut down and power off all management NCNs except `ncn-m001`.
 
     This command requires input for the IPMI username and password for the management nodes.
