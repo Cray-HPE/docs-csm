@@ -97,7 +97,7 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
 1. (`ncn-m001#`) Install tools that will help to find processes preventing filesystem unmounting.
 
-   The `psmisc` rpm includes these tools: fuser, killall, peekfd, prtstat, pslog, pstree. 
+   The `psmisc` rpm includes these tools: `fuser`, `killall`, `peekfd`, `prtstat`, `pslog`, `pstree`.
 
    ```bash
    pdsh -w ncn-m001,$MASTERS,$WORKERS 'zypper -n install psmisc'
