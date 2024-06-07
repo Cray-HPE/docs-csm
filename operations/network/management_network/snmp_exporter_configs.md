@@ -47,22 +47,23 @@ In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must 
 
 1. (`pit#`) Update `customizations.yaml` with the list of switches to be monitored by the SNMP Exporter.
 
-    ```bash
-    /usr/share/doc/csm/scripts/configure_snmp_monitor.py -c "${PITDATA}/prep/site-init/customizations.yaml" -s "${PITDATA}/prep/${SYSTEM_NAME}/sls_input_file.json"
-    ```
+   ```bash
+   /usr/share/doc/csm/scripts/configure_snmp_monitor.py -c "${PITDATA}/prep/site-init/customizations.yaml" -s "${PITDATA}/prep/${SYSTEM_NAME}/sls_input_file.json"
+   ```
 
-    Expected output looks similar to the following:
+   Expected output looks similar to the following:
 
-    ```text
-    Switches to monitor for subnet HMN
-    [{'name': 'sw-spine-001', 'target': '10.254.0.2'},
-     {'name': 'sw-spine-002', 'target': '10.254.0.3'},
-     {'name': 'sw-leaf-bmc-001', 'target': '10.254.0.4'}]
-    Enabling prometheus-snmp-exporter serviceMonitor
-    Adding the targets to the SNMP serviceMonitor configuration
-    ```
-   The HMN is used by default as ACLs in the switch configuration blocks SNMP over the NMN. 
-   This can be overidden by passing `-n NMN` to the `configure_snmp_monitor.py` script.
+   ```text
+   Switches to monitor for subnet HMN
+   [{'name': 'sw-spine-001', 'target': '10.254.0.2'},
+    {'name': 'sw-spine-002', 'target': '10.254.0.3'},
+    {'name': 'sw-leaf-bmc-001', 'target': '10.254.0.4'}]
+   Enabling prometheus-snmp-exporter serviceMonitor
+   Adding the targets to the SNMP serviceMonitor configuration
+   ```
+
+   The HMN is used by default as ACLs in the switch configuration blocks SNMP over the NMN.
+   This can be overridden by passing `-n NMN` to the `configure_snmp_monitor.py` script.
 
 1. (`pit#`) Review the SNMP Exporter configuration.
 
