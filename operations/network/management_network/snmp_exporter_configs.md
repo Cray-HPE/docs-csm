@@ -62,7 +62,7 @@ In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must 
    Adding the targets to the SNMP serviceMonitor configuration
    ```
 
-   The HMN is used by default as ACLs in the switch configuration blocks SNMP over the NMN.
+   The HMN is used by default as ACLs in the switch configuration block SNMP over the NMN.
    This can be overridden by passing `-n NMN` to the `configure_snmp_monitor.py` script.
 
 1. (`pit#`) Review the SNMP Exporter configuration.
