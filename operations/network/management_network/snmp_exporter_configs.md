@@ -45,45 +45,24 @@ In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must 
 
 > ***NOTE*** All variables used within this page depend on the `/etc/environment` setup done in [Pre-installation](../../../install/pre-installation.md).
 
-1. (`pit#`) Obtain the list of switch names and their IP addresses in a format to use with copy/paste in the next command.
+1. (`pit#`) Update `customizations.yaml` with the list of switches to be monitored by the SNMP Exporter.
 
     ```bash
-    jq '.Networks.NMN.ExtraProperties.Subnets | .[] | select(.FullName=="NMN Management Network Infrastructure").IPReservations | map( {name: .Name, target: .IPAddress })' \
-    "${PITDATA}/prep/${SYSTEM_NAME}/sls_input_file.json"
+    /usr/share/doc/csm/scripts/configure_snmp_monitor.py -c "${PITDATA}/prep/site-init/customizations.yaml" -s "${PITDATA}/prep/${SYSTEM_NAME}/sls_input_file.json"
     ```
 
     Expected output looks similar to the following:
 
-    ```json
-    [
-      {
-        "name": "sw-spine-001",
-        "target": "10.252.0.2"
-      },
-      {
-        "name": "sw-spine-002",
-        "target": "10.252.0.3"
-      },
-      {
-        "name": "sw-leaf-bmc-001",
-        "target": "10.252.0.4"
-      }
-    ]
+    ```text
+    Switches to monitor for subnet HMN
+    [{'name': 'sw-spine-001', 'target': '10.254.0.2'},
+     {'name': 'sw-spine-002', 'target': '10.254.0.3'},
+     {'name': 'sw-leaf-bmc-001', 'target': '10.254.0.4'}]
+    Enabling prometheus-snmp-exporter serviceMonitor
+    Adding the targets to the SNMP serviceMonitor configuration
     ```
-
-1. (`pit#`) Update `customizations.yaml` with the list of switches by copying and pasting the output from the previous command.
-
-    * Create the new `prometheus-snmp-exporter` key.
-
-        ```bash
-        yq4 eval -i '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter = {"serviceMonitor" : {"enabled": true, "params": []}}' "${PITDATA}/prep/site-init/customizations.yaml"
-        ```
-
-    * Merge `sls_input_file.json`'s switches into `customizations.yaml`.
-
-        ```bash
-        yq4 eval -i '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.params |= '"$(jq '.Networks.NMN.ExtraProperties.Subnets | .[] | select(.FullName=="NMN Management Network Infrastructure").IPReservations | map( {name: .Name, target: .IPAddress })' "${PITDATA}/prep/${SYSTEM_NAME}/sls_input_file.json")"'' "${PITDATA}/prep/site-init/customizations.yaml"
-        ```
+   The HMN is used by default as ACLs in the switch configuration blocks SNMP over the NMN. 
+   This can be overidden by passing `-n NMN` to the `configure_snmp_monitor.py` script.
 
 1. (`pit#`) Review the SNMP Exporter configuration.
 
@@ -96,8 +75,14 @@ In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must 
     ```yaml
     serviceMonitor:
       enabled: true
-      params: [{name: sw-spine-001, target: 10.252.0.2}, {name: sw-spine-002, target: 10.252.0.3}, {name: sw-leaf-bmc-001, target: 10.252.0.4}]
-    ```
+      params:
+        - name: sw-spine-001
+          target: 10.254.0.2
+        - name: sw-spine-002
+          target: 10.254.0.3
+        - name: sw-leaf-bmc-001
+          target: 10.254.0.4
+      ```
 
 The most common configuration parameters are specified in the following table. They must be set in the `customizations.yaml` file
 under the `spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter` service definition.
