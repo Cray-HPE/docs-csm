@@ -92,7 +92,7 @@ power-on command from Cray System Management \(CSM\) software.
    cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[1,3,5,7] --format json
    ```
 
-1. (`ncn-m001#`) (ncn-m#) Check the power status for every liquid-cooled cabinet Chassis.
+1. (`ncn-m001#`) Check the power status for every liquid-cooled cabinet Chassis.
 
    The `State` should be `On` for every Chassis.
 
