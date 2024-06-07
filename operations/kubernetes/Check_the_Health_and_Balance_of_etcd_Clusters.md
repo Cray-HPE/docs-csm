@@ -1,8 +1,7 @@
 # Check the Health and Balance of etcd Clusters
 
 Check to see if all of the etcd clusters have healthy pods, are balanced, and have a healthy cluster database.
-There needs to be the same number of pods running on each worker node for the etcd clusters to be balanced.
-If the number of pods is not the same for each worker node, the cluster is not balanced.
+A balanced etcd cluster has at least three pods which are running on different worker nodes.
 
 Any clusters that do not have healthy pods will need to be rebuilt. Kubernetes cluster data will not be stored as efficiently when etcd clusters are not balanced.
 

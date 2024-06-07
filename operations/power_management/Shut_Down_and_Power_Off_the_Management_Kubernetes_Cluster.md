@@ -41,13 +41,13 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
 1. To check the health and status of the management cluster before shutdown, see the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md).
 
-1. Check the health and backup etcd clusters:
+1. Check the health and backup status of etcd clusters:
 
-   1. Determine which etcd clusters must be backed up and if they are healthy.
+   1. Determine whether the etcd clusters are healthy.
 
       Review [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
 
-   1. Backup etcd clusters.
+   1. Check the status of etcd cluster backups and make backups if missing.
 
       See [Backups for etcd-operator Clusters](../kubernetes/Backups_for_etcd-operator_Clusters.md).
 
