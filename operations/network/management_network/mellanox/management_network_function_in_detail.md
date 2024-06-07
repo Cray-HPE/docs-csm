@@ -3,7 +3,6 @@
 * Edge: Any interactions with the customer network or Internet
   * Customer jobs ([Customer Access Network (CAN)](../../../../glossary.md#customer-access-network-can))
   * User-facing cloud APIs
-    * [User Access Instances (UAIs)](../../../../glossary.md#user-access-instance-uai)
   * Customer administration (Customer Management Network (CMN))
     * Administrative access to the system by customer administrators
     * Access from the system to external services:
@@ -25,6 +24,5 @@
   * Cloud-based system services
   * Jobs
   * Traditional [User Access Node (UAN)](../../../../glossary.md#user-access-node-uan)
-  * New UAI
 * Storage
   * Ceph (IP-based storage)

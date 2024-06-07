@@ -87,7 +87,6 @@ This procedure is applicable for the following types of standard rack nodes:
                 Pass node x3000c0s19b0n0 has expected node Role of Application
                 Pass node x3000c0s19b0n0 has expected SubRole of UAN
                 Pass node x3000c0s19b0n0 has alias of uan01
-        WARNING: Gateway not in Subnet for uai_macvlan (possibly supernetting).
         Called:  GET https://api-gw-service-nmn.local/apis/sls/v1/networks with params None
                 Removing existing UAN node IP Reservation in subnet bootstrap_dhcp of network CAN: {'Name': 'uan01', 'IPAddress': '10.102.4.144', 'Comment': 'x3000c0s19b0n0'}
                 Skipping network CHN as it does not exist in SLS
@@ -111,7 +110,6 @@ This procedure is applicable for the following types of standard rack nodes:
                 Pass node x3000c0s19b0n0 has expected node Role of Application
                 Pass node x3000c0s19b0n0 has expected SubRole of UAN
                 Pass node x3000c0s19b0n0 has alias of uan01
-        WARNING: Gateway not in Subnet for uai_macvlan (possibly supernetting).
         Called:  GET https://api-gw-service-nmn.local/apis/sls/v1/networks with params None
                 Removing existing UAN node IP Reservation in subnet bootstrap_dhcp of network CAN: {'Name': 'uan01', 'IPAddress': '10.102.4.144', 'Comment': 'x3000c0s19b0n0'}
                 Skipping network CHN as it does not exist in SLS

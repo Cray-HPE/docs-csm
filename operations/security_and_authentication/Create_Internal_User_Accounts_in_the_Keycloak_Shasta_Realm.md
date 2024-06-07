@@ -52,13 +52,6 @@ kubectl get secret -n services keycloak-master-admin-auth --template={{.data.pas
 
     Other attributes can be added as needed by site-specific applications.
 
-    User accounts need the following attributes defined in order to create a User Access Instance \(UAI\):
-
-    - `gidNumber`
-    - `homeDirectory`
-    - `loginShell`
-    - `uidNumber`
-
 1. Click on the `Role Mappings` tab to grant the user authority.
 
     1. Click the `Assign Role` button.

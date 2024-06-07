@@ -37,7 +37,7 @@ Bifurcation or splitting of the Customer Access Network (CAN) enables customizat
 Customization will be performed during installation.
 In CSM 1.2, there were two new customer access networks introduced as part of the process of splitting the existing monolithic CAN:
 
-1. **High Speed Customer Access - CHN (Customer High Speed Network)** : This feature provides the ability to connect to User Application Nodes (UAN), User Access Instance (UAI), and Compute nodes
+1. **High Speed Customer Access - CHN (Customer High Speed Network)** : This feature provides the ability to connect to User Application Nodes (UAN) and Compute nodes
 and Kubernetes API endpoints from the customer site via the High Speed Network (HSN).
 2. **Management Customer Access - CMN (Customer Management Network)** :  Using a VLAN on the Management Network, this feature allows system administrative access from the customer site.
 Prior to CSM 1.2, administrative access was available on the original CAN; this feature provided a traffic path and access split.
@@ -127,7 +127,6 @@ This is intended to be changed during installation to a **customer-supplied IPv4
 - CSI for network generation and initial configuration.
 - NCN images to support additional **subnets and routing.**
 - CFS configurations for CN and UAN **addressing and routing.**
-- UAI to support changes to **addressing and routing.**
 - MetalLB to create new API endpoints and peer with edge router.
 - Arista switch pair to create a new BGP routing instance, and add or modify existing virtual routing instance for path and access control.
 - HSN required for transport of application traffic, so new procedures need to be developed for troubleshooting and support.
@@ -151,7 +150,6 @@ Isolation is within the Slingshot network as well as separated at the edge route
 - Internal to the system, CHN traffic will exist in the same Layer 2 domain with internal HSN traffic until the Slingshot network supports VLAN separation.
 - Compute Node (CN) and Application Node (UAN, in this case) configuration or IPv4 addressing and routing is via CFS.
   - When multiple HSN interfaces exist, the CHN will be configured on the HSN0 NIC.
-- UAI addressing and routing over the HSN interfaces for the worker NCNs is required.
 - API endpoints in MetalLB for the CHN will be accessible over worker NCN HSN interfaces (via ECMP Layer 3 routing).
   - MetalLB will peer with the edge routers to supply load balanced API access.
 

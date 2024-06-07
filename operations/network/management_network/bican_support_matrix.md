@@ -20,7 +20,7 @@ In CSM 1.2, the notion of the CAN was expanded to meet customer requests for inc
 | System Resource                                     | Traffic to and from System | Management Network or CAN | High Speed Network CHN | Management Network CMN |
 |-----------------------------------------------------|:--------------------------:|:-------------------------:|:----------------------:|:----------------------:|
 | System Cloud Resources (APIs)                       |          Ingress           |     Jobs-related APIs     |   Jobs-related APIs    |  Administrative APIs   |
-| Application Node Servers (UAI, UAN, re-purposed CN) |          Ingress           |          Allowed          |        Allowed         |      Not Allowed       |
+| Application Node Servers (UAN, re-purposed CN) |          Ingress           |          Allowed          |        Allowed         |      Not Allowed       |
 | Non-Compute Node (NCN) Servers                      |          Ingress           |        Not Allowed        |      Not Allowed       |        Allowed         |
 | System Access to External/Site (LDAP, DNS)          |           Egress           |          Allowed          |        Allowed         |      Not Allowed       |
 
@@ -98,7 +98,6 @@ CMN, CAN, and CHN have broadcast boundaries at the edge between the system and t
 * Non-overlapping with internal networks (configurable during installation)
 * Size estimate is the sum of:
   * Number of application nodes requiring access from the site (User Access Node (UAN), login nodes, and more)
-  * Number of User Access Instances (UAI) in Kubernetes (if used)
   * Number of API endpoints
   * Several administrative addresses for switch interfaces and routing
   * CAN or CHN sizing is largely dependent on customer-specific use cases and application node hardware

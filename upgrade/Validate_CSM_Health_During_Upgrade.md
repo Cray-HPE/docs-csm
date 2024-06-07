@@ -3,12 +3,6 @@
 - Before performing the health validation, be sure that at least 15 minutes have elapsed
   since the CSM services were upgraded. This allows the various Kubernetes resources to
   initialize and start.
-- If the site does not use UAIs, then skip UAS and UAI validation. If UAIs are used, then
-  before validating UAS and UAI, first validate any products that configure UAS (such as
-  Cray Analytics and Cray Programming Environment); the procedures for this are
-  beyond the scope of this document. Failures in UAI creation that result
-  from incorrect or incomplete installation of these products will generally take the form of UAIs stuck in
-  `waiting` state, trying to set up volume mounts.
 - Although it is not recommended, the [Booting CSM `barebones` image](../operations/validate_csm_health.md#5-booting-csm-barebones-image)
   test may be skipped if all compute nodes are active running application workloads.
 
@@ -65,7 +59,6 @@
         ```bash
         cray artifacts create config-data "${TARFILE}" "/root/${TARFILE}"
         ```
-
 1. Update ceph node-exporter config for SNMP counters.
 
     > **OPTIONAL:** This is an optional step.

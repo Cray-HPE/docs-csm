@@ -90,9 +90,7 @@ Glossary of terms used in CSM documentation.
 * [System Monitoring Framework (SMF)](#system-monitoring-framework-smf)
 * [Tenant and Partition Management System (TAPMS)](#tenant-and-partition-management-system-tapms)
 * [Top of Rack Switch Controller (sC-ToR)](#top-of-rack-switch-controller-sc-tor)
-* [User Access Instance (UAI)](#user-access-instance-uai)
 * [User Access Node (UAN)](#user-access-node-uan)
-* [User Access Service (UAS)](#user-access-service-uas)
 * [User Services Software (USS)](#user-services-software-uss)
 * [Version Control Service (VCS)](#version-control-service-vcs)
 * [Virtual Network Identifier Daemon (VNID)](#virtual-network-identifier-daemon-vnid)
@@ -241,7 +239,7 @@ inventory and node targeting options.
 The Content Projection Service (CPS) provides the root filesystem for [compute nodes](#compute-node-cn) and [application nodes](#application-node-an)
 in conjunction with the [Data Virtualization Service (DVS)](#data-virtualization-service-dvs).
 Using CPS and DVS, the HPE Cray Programming Environment (CPE) and Analytics products are provided as separately mounted filesystems
-to compute nodes, application nodes (such as [UANs](#user-access-node-uan)), and worker nodes hosting [UAI](#user-access-instance-uai) pods.
+to compute nodes, application nodes (such as [UANs](#user-access-node-uan)), and worker nodes.
 
 ## Coolant Distribution Unit (CDU)
 
@@ -324,7 +322,6 @@ and [User Access Nodes (UANs)](#user-access-node-uan) in the system. This allows
     * Access the Rest APIs within the system.
     * Access a DNS server within the system for resolution of names for the webUI and REST API services.
     * Run [Cray CLI](#cray-cli-cray) commands from outside the system.
-    * Access the [User Access Instances (UAIs)](#user-access-instance-uai).
 * NCNs and UANs to access systems outside the cluster (e.g. LDAP, license servers, and more).
 * Services within the cluster to access systems outside the cluster.
 
@@ -350,8 +347,8 @@ The Data Virtualization Service (DVS) is a distributed network service that proj
 mounted on [Non-Compute Nodes (NCNs)](#non-compute-node-ncn) to other nodes within the HPE Cray EX system. Projecting is
 the process of making a file system available on nodes where it does not physically reside.
 DVS-specific configuration settings enable clients to access a file system projected by DVS
-servers. These clients include [compute nodes](#compute-node-cn), [User Access Nodes (UANs)](#user-access-node-uan), and other
-[management nodes](#management-nodes) running [User Access Instances (UAIs)](#user-access-instance-uai). Thus DVS, while not a file system, represents a
+servers. These clients include [compute nodes](#compute-node-cn), [User Access Nodes (UANs)](#user-access-node-uan),
+Thus DVS, while not a file system, represents a
 software layer that provides scalable transport for file system services. DVS is integrated
 with the [Content Projection Service (CPS)](#content-projection-service-cps).
 
@@ -601,8 +598,8 @@ that supports higher rates of small messages).
 
 The Scalable Boot Projection Service (SBPS) provides the root filesystem for compute nodes and
 application nodes using iSCSI. In addition, the HPE Cray Programming Environment (CPE) and
-Analytics products leverage SBPS to provide content to compute nodes, application nodes
-(such as UANs), and worker nodes hosting UAI pods. CPE and Analytics are provided
+Analytics products leverage SBPS to provide content to compute nodes and application nodes
+(such as UANs). CPE and Analytics are provided
 as separately mounted filesystems that are mounted alongside the root filesystem.
 
 ## Service/IO Cabinet
@@ -753,32 +750,12 @@ The air-Cooled cabinet [HSN](#high-speed-network-hsn) ToR switch embedded contro
 management REST endpoint to monitor the ToR switch environmental conditions and
 manage the switch power, [HSN](#high-speed-network-hsn) ASIC, and FPGA interfaces.
 
-## User Access Instance (UAI)
-
-The User Access Instance (UAI) is a lightweight, disposable platform that runs under Kubernetes orchestration
-on worker nodes. The UAI provides a single user containerized environment for users on a Cray Ex system to
-develop, build, and execute their applications on the HPE Cray EX [compute node](#compute-node-cn). See [UAN](#user-access-node-uan) for another
-way for users to gain access.
-
-For more information, see [User Access Service](operations/UAS_user_and_admin_topics/README.md).
-
 ## User Access Node (UAN)
 
 The User Access Node (UAN) is an [NCN](#non-compute-node-ncn), but is really one of the special types of [application nodes](#application-node-an).
 The UAN provides a traditional multi-user Linux environment for users on a Cray Ex system to
-develop, build, and execute their applications on the HPE Cray EX [compute node](#compute-node-cn). See [UAI](#user-access-instance-uai) for another
-way for users to gain access. Some sites refer to their UANs as Login nodes.
-
-## User Access Service (UAS)
-
-The User Access Service (UAS) is a containerized service managed by Kubernetes that enables users to
-create and run user applications inside a [UAI](#user-access-instance-uai). UAS runs on a [management node](#management-nodes) that is acting as a
-Kubernetes worker node. When a user requests a new UAI, the UAS service returns status and connection
-information to the newly created UAI. External access to UAS is routed through a node that hosts
-gateway services.
-
-* For more information on UAS, see [User Access Service](operations/UAS_user_and_admin_topics/README.md).
-* For more information on the UAS API, see [UAS API](api/uas-mgr.md).
+develop, build, and execute their applications on the HPE Cray EX [compute node](#compute-node-cn).
+Some sites refer to their UANs as Login nodes.
 
 ## User Services Software (USS)
 

@@ -5,7 +5,6 @@ The following is a description of the system management network functions:
 * **Edge** - Any interactions with the Customer network or Internet
 	* Customer Jobs - Customer Access Network (CAN)
 	* User-facing cloud APIs
-		* User Access Instances (UAIs)
 	* Customer Administration - Customer Management Network (CMN)
 		* Administrative Access to the system by Customer Admins
 		* Access from the system to external services:
@@ -28,7 +27,6 @@ The following is a description of the system management network functions:
 	* Cloud-based System Services
 	* Jobs
 	* Traditional UAN
-	* New UAI
 * **Storage**
 	* Ceph (IP-based storage)
 

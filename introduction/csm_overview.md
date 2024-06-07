@@ -146,8 +146,6 @@ There are several network values and other pieces of system information that are
 
   For more information on the CAN and CHN, see [Customer Accessible Networks](../operations/network/customer_accessible_networks/Customer_Accessible_Networks.md).
 
-  * Subnet for the MetalLB dynamic address pool \(`can-dynamic-pool`\) or \(`chn-dynamic-pool`\), which is used for services such as User Access Instances \(UAIs\) that can be reached by DNS.
-
 ## 3. Resilience of System Management Services
 
 HPE Cray EX systems are designed so that system management services (SMS) are fully resilient and that there
