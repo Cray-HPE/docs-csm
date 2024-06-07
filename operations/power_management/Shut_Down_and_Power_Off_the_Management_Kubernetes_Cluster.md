@@ -212,7 +212,7 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    pdsh -w ncn-m001,$MASTERS,$STORAGE,$WORKERS 'efibootmgr -n $(efibootmgr | grep "CRAY UEFI OS 0"| cut -c 5-8)' | dshbak -c
    ```
 
-1. (`ncn-m001#`) Unmount ceph and fuse.s3fs filesystems from master and worker nodes.
+1. (`ncn-m001#`) Unmount `ceph` and `fuse.s3fs` filesystems from master and worker nodes.
 
    ```bash
    pdsh -w ncn-m001,$MASTERS,$WORKERS 'mount -t ceph|egrep -v kubelet; umount /etc/cray/upgrade/csm' | dshbak -c
