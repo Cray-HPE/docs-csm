@@ -164,6 +164,12 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
     screen -x 26745.SAT-console-ncn-m003-mgmt
     ```
 
+1. (`ncn-m001#`) Confirm all NCNs have booted.
+
+    ```bash
+     pdsh -w $(grep "nmn ncn-" /etc/hosts | awk '{print $3}' | xargs | sed 's/ /,/g') uptime
+    ```
+
 ### Verify access to Lustre file system
 
 Verify that the Lustre file system is available from the management cluster.
@@ -277,7 +283,7 @@ Verify that the Lustre file system is available from the management cluster.
     to successfully start on worker nodes.
 
     ```bash
-    pdsh -w $(kubectl get nodes | grep -v NAME | awk '{print $1}' | xargs | sed 's/ /,/g') "awk '{ if (\$3 == \"fuse.s3fs\") { print \$2; }}' /etc/fstab | xargs -I {} -n 1 sh -c \"mountpoint {} || mount {}\"" | dshbak -c
+    pdsh -w $(kubectl get nodes | grep -v NAME | awk '{print $1}' | xargs | sed 's/ /,/g')  "awk '{ if (\$3 == \"fuse.s3fs\" || \$3 == \"ceph\") { print \$2; }}' /etc/fstab | xargs -I {} -n 1 sh -c \"mountpoint {} || mount {}\"" | dshbak -c
     ```
 
     Example output:
@@ -286,11 +292,13 @@ Verify that the Lustre file system is available from the management cluster.
     ----------------
     ncn-m[001-003]
     ----------------
+    /etc/cray/upgrade/csm is not a mountpoint
     /var/opt/cray/sdu/collection-mount is a mountpoint
     /var/opt/cray/config-data is a mountpoint
     ----------------
     ncn-w[001-003]
     ----------------
+    /etc/cray/upgrade/csm is a mountpoint
     /var/lib/cps-local/boot-images is a mountpoint
     ```
 
@@ -303,7 +311,48 @@ Verify that the Lustre file system is available from the management cluster.
     pdsh -w ncn-m00[1-3]  '(cd /var/opt/cray/sdu; if [ -L "collection" ]; then if [ "$(readlink collection)" = "collection-local" ]; then rm collection; ln -s collection-mount collection; systemctl restart cray-sdu-rda; fi; fi)'
     ```
 
+1. (`ncn-m001#`) Check that `spire` pods have started.
+
+    **Note:** Because no containers are running, all pods first transition to an `Error` state. The `Error` state indicates that their containers were stopped. The `kubelet` on each node
+    restarts the containers for each pod. The `RESTARTS` column of the `kubectl get pods -A` command increments as each pod progresses through the restart sequence.
+
+    Monitor the status of the `spire-jwks` pods to ensure they restart and enter the `Running` state.
+
+    ```bash
+    kubectl get pods -n spire -o wide | grep spire-jwks
+    ```
+
+    Example output:
+
+    ```text
+    spire-jwks-6b97457548-gc7td    2/3  CrashLoopBackOff   9    23h   10.44.0.117  ncn-w002 <none>   <none>
+    spire-jwks-6b97457548-jd7bd    2/3  CrashLoopBackOff   9    23h   10.36.0.123  ncn-w003 <none>   <none>
+    spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
+    ```
+
+   1. (`ncn-m001#`) If the `spire-jwks` pods indicate `CrashLoopBackOff`, then restart the Spire deployment.
+
+       ```bash
+       kubectl rollout restart -n spire deployment spire-jwks
+       ```
+
+   1. (`ncn-m001#`) Rejoin Spire on the worker and master NCNs, to avoid issues with Spire tokens.
+
+       ```bash
+       kubectl rollout restart -n spire daemonset request-ncn-join-token
+       kubectl rollout status -n spire daemonset request-ncn-join-token
+       ```
+
+   1. (`ncn-m001#`) Rejoin Spire on the storage NCNs, to avoid issues with Spire tokens.
+
+       ```bash
+       /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
+       ```
+
 1. (`ncn-m001#`) Monitor the status of the management cluster and which pods are restarting (as indicated by either a `Running` or `Completed` state).
+
+    **Note:** Because no containers are running, all pods first transition to an `Error` state. The error state indicates that their containers were stopped. The `kubelet` on each node
+    restarts the containers for each pod. The `RESTARTS` column of the `kubectl get pods -A` command increments as each pod progresses through the restart sequence.
 
     ```bash
     kubectl get pods -A -o wide | grep -v -e Running -e Completed
@@ -311,12 +360,10 @@ Verify that the Lustre file system is available from the management cluster.
 
     The pods and containers are normally restored in approximately 10 minutes.
 
-    Because no containers are running, all pods first transition to an `Error` state. The error state indicates that their containers were stopped. The `kubelet` on each node
-    restarts the containers for each pod. The `RESTARTS` column of the `kubectl get pods -A` command increments as each pod progresses through the restart sequence.
-
     If there are pods in the `MatchNodeSelector` state, delete these pods. Then verify that the pods restart and are in the `Running` state.
+    **Note:** With COS 2.5, the `cray-cps-cm-pm` pods will be in `Error` state until CFS has run on the worker nodes.
 
-1. (`ncn-m001#`) Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
+1. (`ncn-m001#`) If Slurm is installed, check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
 
     ```bash
     kubectl describe pod -n user -lapp=slurmctld
@@ -341,39 +388,6 @@ Verify that the Lustre file system is available from the management cluster.
 
     * `/var/lib/cni/networks/macvlan-slurmctld-nmn-conf`
     * `/var/lib/cni/networks/macvlan-slurmdbd-nmn-conf`
-
-1. (`ncn-m001#`) Check that `spire` pods have started.
-
-    ```bash
-    kubectl get pods -n spire -o wide | grep spire-jwks
-    ```
-
-    Example output:
-
-    ```text
-    spire-jwks-6b97457548-gc7td    2/3  CrashLoopBackOff   9    23h   10.44.0.117  ncn-w002 <none>   <none>
-    spire-jwks-6b97457548-jd7bd    2/3  CrashLoopBackOff   9    23h   10.36.0.123  ncn-w003 <none>   <none>
-    spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
-    ```
-
-   1. (`ncn-m001#`) If Spire pods indicate `CrashLoopBackOff`, then restart the Spire deployment.
-
-       ```bash
-       kubectl rollout restart -n spire deployment spire-jwks
-       ```
-
-   1. (`ncn-m001#`) Rejoin Spire on the worker and master NCNs, to avoid issues with Spire tokens.
-
-       ```bash
-       kubectl rollout restart -n spire daemonset request-ncn-join-token
-       kubectl rollout status -n spire daemonset request-ncn-join-token
-       ```
-
-   1. (`ncn-m001#`) Rejoin Spire on the storage NCNs, to avoid issues with Spire tokens.
-
-       ```bash
-       /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
-       ```
 
 1. (`ncn-m001#`) Check if any pods are in `CrashLoopBackOff` state because of errors connecting to Vault.
 
@@ -447,7 +461,7 @@ Verify that the Lustre file system is available from the management cluster.
 
 1. (`ncn-m001#`) Determine whether the `cfs-state-reporter` service is failing to start on each manager/master and worker NCN while trying to contact CFS.
 
-    **Note:** The `systemctl` command run on each node may have `exit code 3` reported, this does not indicate a problem with `cfs-state-reporter` on that node..
+    **Note:** The `systemctl` command run on each node may have `exit code 3` reported, this does not indicate a problem with `cfs-state-reporter` on that node.
 
     ```bash
     pdsh -w $(kubectl get nodes | grep -v NAME | awk '{print $1}' | xargs | sed 's/ /,/g') systemctl status cfs-state-reporter | grep "Active: activating"
