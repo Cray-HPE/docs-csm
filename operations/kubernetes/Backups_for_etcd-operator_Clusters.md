@@ -91,7 +91,7 @@ The returned output includes the date and time of the latest backup for each ser
 that the service is not backed up automatically. Create a manual backup for that service by following the
 [Create a Manual Backup of a Healthy etcd Cluster](Create_a_Manual_Backup_of_a_Healthy_etcd_Cluster.md) procedure.
 
-## Check backup status for a specific etcd cluster 
+## Check backup status for a specific etcd cluster
 
 (`ncn-mw#`) Run the following command to list the backups for a specific project.
 In the example below, the backups for BSS are listed.
@@ -114,4 +114,3 @@ cray-bss/etcd.backup_v7210_2020-02-03-20:45:48
 The returned output includes the date and time of the latest backup for this etcd cluster. If a recent backup is not included, it is an indication
 that the service is not backed up automatically. Create a manual backup for that service by following the
 [Create a Manual Backup of a Healthy etcd Cluster](Create_a_Manual_Backup_of_a_Healthy_etcd_Cluster.md) procedure.
-
