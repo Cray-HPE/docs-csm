@@ -7316,7 +7316,7 @@ Age in minutes (e.g. "3m"), hours (e.g. "5h"), days (e.g. "10d"), or weeks (e.g.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string(^(0|0[mMhHdDwW]|[1-9][0-9]*[mMhHdDwW])$)|false|none|Age in minutes (e.g. "3m"), hours (e.g. "5h"), days (e.g. "10d"), or weeks (e.g. "2w").|
+|*anonymous*|string|false|none|Age in minutes (e.g. "3m"), hours (e.g. "5h"), days (e.g. "10d"), or weeks (e.g. "2w").|
 
 <h2 id="tocS_BootInitrdPath">BootInitrdPath</h2>
 <!-- backwards compatibility -->
@@ -10707,9 +10707,9 @@ Options for the Boot Orchestration Service.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|cleanup_completed_session_ttl|string(^(0|0[mMhHdDwW]|[1-9][0-9]*[mMhHdDwW])$)|false|none|Delete complete Sessions that are older than cleanup_completed_session_ttl (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior.|
+|cleanup_completed_session_ttl|string|false|none|Delete complete Sessions that are older than cleanup_completed_session_ttl (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior.|
 |clear_stage|boolean|false|none|Allows a Component's staged information to be cleared when the requested staging action has been started. Defaults to false.|
-|component_actual_state_ttl|string(^(0|0[mMhHdDwW]|[1-9][0-9]*[mMhHdDwW])$)|false|none|The maximum amount of time a Component's actual state is considered valid (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior for newly booted nodes and instructs bos-state-reporter to report once instead of periodically.|
+|component_actual_state_ttl|string|false|none|The maximum amount of time a Component's actual state is considered valid (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior for newly booted nodes and instructs bos-state-reporter to report once instead of periodically.|
 |disable_components_on_completion|boolean|false|none|If true, when a Session has brought a Component to its desired state, that Component will be marked as disabled in BOS.<br>If false, BOS will continue to maintain the state of the nodes declaratively, even after a Session finishes.|
 |discovery_frequency|integer|false|none|How frequently the BOS discovery agent syncs new Components from HSM. (in seconds)|
 |logging_level|string|false|none|The logging level for all BOS services|
