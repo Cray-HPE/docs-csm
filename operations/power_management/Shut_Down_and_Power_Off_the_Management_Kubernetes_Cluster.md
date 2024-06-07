@@ -95,6 +95,14 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    WORKERS=$(kubectl get nodes | grep ncn-w | awk '{print $1}' | sort -u | xargs | sed 's/ /,/g'); echo WORKERS=$WORKERS
    ```
 
+1. (`ncn-m001#`) Install tools that will help to find processes preventing filesystem unmounting.
+
+   The `psmisc` rpm includes these tools: fuser, killall, peekfd, prtstat, pslog, pstree. 
+
+   ```bash
+   pdsh -w ncn-m001,$MASTERS,$WORKERS 'zypper -n install psmisc'
+   ```
+
 1. (`ncn-m001#`) Shut down platform services.
 
    > NOTE: There are some interactive questions which need answers before the shutdown process can progress.
