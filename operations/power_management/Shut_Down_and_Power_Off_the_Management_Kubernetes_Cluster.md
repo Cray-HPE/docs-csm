@@ -204,6 +204,14 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    If the process continues to report errors due to `Failed to stop containers`, then iterate on the above step. Each iteration should reduce the number of containers running. If necessary,
    containers can be manually stopped using `crictl stop CONTAINER`. If containers are stopped manually, then re-run the above procedure to complete any final steps in the process.
 
+1. (`ncn-m001#`) Adjust boot order for management NCNs so the next boot will use disk.
+   This ensures that when the node is powered up again it will boot from disk rather than attempting
+   to PXEboot before the services to support that are available.
+
+   ```bash
+   pdsh -w ncn-m001,$MASTERS,$STORAGE,$WORKERS 'efibootmgr -n $(efibootmgr | grep "CRAY UEFI OS 0"| cut -c 5-8)' | dshbak -c
+   ```
+
 1. (`ncn-m001#`) Shut down and power off all management NCNs except `ncn-m001`.
 
     This command requires input for the IPMI username and password for the management nodes.
