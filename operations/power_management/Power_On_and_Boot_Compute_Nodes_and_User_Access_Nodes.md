@@ -296,7 +296,6 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
       In this example, two of the application Gateway nodes have a `State` of `Off` which means that they did not power on
       and two of the compute nodes have a `State` of `On` which means they powered on but failed to boot to multi-user Linux.
-      
 
    1. (`ncn-m001#`) Check the BOS fields from `sat status`, but exclude the nodes which have `Most Recent BOS Session`
        set to `Missing`. This will exclude the management nodes because they are never booted with BOS.
