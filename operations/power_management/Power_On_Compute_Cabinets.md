@@ -41,6 +41,21 @@ power-on command from Cray System Management \(CSM\) software.
 
    ![PSU Status LEDs](../../img/operations/PSU_Status.svg)
 
+1. (`ncn-m001#`) Unsuspend the `hms-discovery cronjob` to re-enable the `hms-discovery` job.
+
+   ```bash
+   kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
+   ```
+
+   Example output.
+
+   `ACTIVE` = `1` and `SUSPEND` = `False` in the output indicates that the job has been unsuspended:
+
+   ```text
+   NAME             SCHEDULE      SUSPEND   ACTIVE   LAST   SCHEDULE  AGE
+   hms-discovery    */3 * * * *   False       1      41s              33d
+   ```
+
 1. (`ncn-m001#`) Use the System Admin Toolkit \(`sat`\) to power on liquid-cooled cabinets, chassis, and slots.
 
    ```console
@@ -75,6 +90,30 @@ power-on command from Cray System Management \(CSM\) software.
    cray capmc xname_on create --xnames x[1000-1003]c[0-7] --format json
    cray capmc xname_on create --xnames x[1000-1003]c[0-7]s[0-7] --format json
    cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[1,3,5,7] --format json
+   ```
+
+1. (`ncn-m001#`) (ncn-m#) Check the power status for every liquid-cooled cabinet Chassis.
+
+   The `State` should be `On` for every Chassis.
+
+   ```bash
+   sat status --types Chassis
+   ```
+
+   Example output.
+
+   ```text
+   +---------+---------+-------+------+---------+------+----------+----------+
+   | xname   | Type    | State | Flag | Enabled | Arch | Class    | Net Type |
+   +---------+---------+-------+------+---------+------+----------+----------+
+   | x1020c0 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c1 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c2 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c3 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c4 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c5 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c6 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c7 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
    ```
 
 ### Power On Standard Rack PDU Circuit Breakers
