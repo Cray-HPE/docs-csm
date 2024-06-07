@@ -600,6 +600,7 @@ prebuilt
 preempted
 preemptively
 provisioners
+PXEboot
 redis
 re-architecting
 ReadOnly
