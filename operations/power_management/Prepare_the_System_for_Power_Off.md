@@ -128,6 +128,36 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
       * See [Renew Etcd Certificate](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#renew-etcd-certificate)
       * See [Update Client Certificates](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
 
+1. (`ncn-mw#`) Check for a recent backup of Nexus data.
+
+   **Note:** Doing the Nexus backup may take multiple hours with Nexus being unavailable for the entire time.
+
+   Check whether an export PVC called `nexus-bak` exists and is recent.
+
+   ```bash
+   kubectl get pvc -n nexus
+   ```
+
+   Example output:
+
+   ```text
+   NAME         STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS           AGE
+   nexus-bak    Bound    pvc-09b6efe6-18e3-4681-8103-53590ad49d04   1000Gi     RWO            k8s-block-replicated   293d
+   nexus-data   Bound    pvc-bce9db69-d1a6-491d-89fc-d458c92f2895   1000Gi     RWX            ceph-cephfs-external   518d
+   ```
+
+   This output shows that the `nexus-bak` PVC was created 293 days ago.
+
+   * If there is no `nexus-bak` PVC, then use this Nexus export procedure to create one. This procedure does check that
+   there is enough space available for the copy of the `nexus-data` PVC and provides guidance on how to clean up space if
+   necessary or reduce the size of the existing `nexus-data` PVC.
+   See [Nexus Export](../package_repository_management/Nexus_Export_and_Restore.md#Export).
+
+   * If there is an existing `nexus-bak` PVC, but it is too old or the age is not recent enough to include the most recent
+   software update or otherwise not considered valid, then use the Nexus cleanup procedure before the export procedure.
+   See [Nexus Cleanup](../package_repository_management/Nexus_Export_and_Restore.md#Cleanup), then see
+   [Nexus Export](../package_repository_management/Nexus_Export_and_Restore.md#Export).
+
 1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
 
    There will be separate session templates for UANs and computes nodes.
