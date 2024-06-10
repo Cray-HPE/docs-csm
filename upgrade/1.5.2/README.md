@@ -20,9 +20,9 @@ list of patch versions.
 ## Bug fixes and improvements
 
 INSTRUCTIONS FOR CASM FOLKS (delete this line later): Replace any line below that contains your
-name with a one line description of the change tha occurred as a result of your Jira. Combine
-bullets together if it makes sense (eg. many Paradise bullets combined into a single "Support
-for Paradise hardware"..
+name with a one line description of the change that occurred as a result of your Jira. Combine
+bullets together if it makes sense (eg. many Paradise bullets were combined into a single "Support
+for Paradise hardware" bullet..
 
 * Added support for Paradise hardware
 * Fixed issue in `conman` in order to support Paradise hardware
@@ -45,8 +45,6 @@ for Paradise hardware"..
 * Mitchell Harding: CASMCMS-9018
 * Mitchell Harding: CASMCMS-9015
 * Mitchell Harding: CASMCMS-9022
-* Shreni Agrawal: CASMMON-364
-* Shreni Agrawal: CASMMON-396
 * David Laine: CASMCMS-8976
 * Russell Bunch: CASMTRIAGE-6991
 * Russell Bunch: MTL-2393
@@ -60,7 +58,7 @@ for Paradise hardware"..
 * Power capping support for Paradise Hardware
   * Power caps are applied to the processor complex, not to the entire node
   * A power cap cannot be applied when node power is off
-  * If a power cap is set when node power is on, it will be removed if the node is ever powered off.  A new power cap must be applied after the node powers back on
+  * If a power cap is set when node power is on, it will be removed if the node is ever powered off.  A new power cap must be applied after the node is powered back on
 
 ## Steps
 
