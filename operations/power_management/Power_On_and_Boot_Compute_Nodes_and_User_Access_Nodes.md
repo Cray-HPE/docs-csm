@@ -74,7 +74,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
        ```bash
        kubectl exec -it -n services "$(kubectl get pod -l app.kubernetes.io/name=slingshot-fabric-manager -n services --no-headers | head -1 | awk '{print $1}')" -c slingshot-fabric-manager -- bash
        ```
-   
+
     1. (`slingshot-fabric-manager>`) Correct SSH file permissions.
 
        ```bash
