@@ -19,7 +19,48 @@ list of patch versions.
 
 ## Bug fixes and improvements
 
-* tbd
+INSTRUCTIONS FOR CASM FOLKS (delete this line later): Replace any line below that contains your
+name with a one line description of the change tha occurred as a result of your Jira. Combine
+bullets together if it makes sense (eg. many Paradise bullets combined into a single "Support
+for Paradise hardware"..
+
+* Added support for Paradise hardware
+* Fixed issue in `conman` in order to support Paradise hardware
+* Fixed issue in `run_hms_ct_tests.sh` which caused false positives for CDU switches
+* Enhanced `hmcollector` logging
+* Mike Buchmann: CASMHMS-6207
+* Mitchell Harding: CASMCMS-8971
+* Mitchell Harding: CASMCMS-8973
+* Mitchell Harding: CASMCMS-8978
+* Mitchell Harding: CASMCMS-8186
+* Mitchell Harding: CASMCMS-8438
+* Mitchell Harding: CASMINST-6861
+* Mitchell Harding: CASMTRIAGE-6993
+* Mitchell Harding: CASMTRIAGE-7019
+* Mitchell Harding: CASMHMS-5838
+* Mitchell Harding: CASMCMS-9001
+* Mitchell Harding: CASMCMS-8997
+* Mitchell Harding: CASMCMS-8998
+* Mitchell Harding: CASMCMS-9017
+* Mitchell Harding: CASMCMS-9018
+* Mitchell Harding: CASMCMS-9015
+* Mitchell Harding: CASMCMS-9022
+* Shreni Agrawal: CASMMON-364
+* Shreni Agrawal: CASMMON-396
+* David Laine: CASMCMS-8976
+* Russell Bunch: CASMTRIAGE-6991
+* Russell Bunch: MTL-2393
+* Jason Davis: MTL-2394
+* Mikhail Tupitsyn: CASMPET-7093
+* Chris Spiller: CASMPET-7021
+* Chris Spiller: CASMNET-2221
+
+## Limitations and Known Issues
+
+* Power capping support for Paradise Hardware
+  * Power caps are applied only to the processor complex, not to the entire node
+  * A power cap cannot be set when a node is powered off
+  * If a power cap is applied to a powered on node, it will be reset if the node is powered off.  A new power cap must be applied when the node powers back on
 
 ## Steps
 
