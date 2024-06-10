@@ -265,7 +265,7 @@ This procedure can be performed on any master or worker NCN.
 
     ```bash
     kubectl get secret -n sysmgmt-health cray-sysmgmt-health-redfish-exporter \         
-         -ojsonpath='{.data.config\.yaml}' | base64 --decode > /tmp/config-default.yaml
+         -ojsonpath='{.data.config\.yml}' | base64 --decode > /tmp/config-default.yaml
     ```
 
 1. (`ncn-mw#`) Create a secret and an redfish-exporter configuration that will be used to add ClusterStor user LDAP instance credential.
