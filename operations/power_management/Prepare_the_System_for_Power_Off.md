@@ -73,6 +73,61 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
    To prevent this issue from happening, remove stale `ssh` host keys from `/root/.ssh/known_hosts` before running the `sat` command.
 
+1. Check certificate expiration deadlines to ensure that a certificate won't expire while the system is powered off.
+
+   1. (`ncn-mw#`) Check the expiration date of the Spire Intermediate CA Certificate.
+
+      ```bash
+      kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
+      ```
+
+      Example output:
+
+      ```bash
+      notAfter=Dec 17 00:00:24 2024 GMT
+      ```
+
+      If the certificate will expire while the system is powered off, replace it before powering off the system.
+      See [Replace the Spire Intermediate CA Certificate](../spire/Update_Spire_Intermediate_CA_Certificate.md#replace-the-spire-intermediate-ca-certificate).
+
+   1. (`ncn-m#`) Check the Kubernetes and Bare Metal etcd certificates from a master node.
+
+      Check certificate expiration deadlines for Kubernetes and its bare-metal etcd cluster.
+
+      ```bash
+      kubeadm certs check-expiration --config /etc/kubernetes/kubeadmcfg.yaml
+      ```
+
+      Example output:
+
+      ```text
+      WARNING: kubeadm cannot validate component configs for API groups [kubelet.config.k8s.io kubeproxy.config.k8s.io]
+
+      CERTIFICATE                EXPIRES                  RESIDUAL TIME   CERTIFICATE AUTHORITY   EXTERNALLY MANAGED
+      admin.conf                 Sep 24, 2021 15:21 UTC   14d             ca                      no
+      apiserver                  Sep 24, 2021 15:21 UTC   14d             ca                      no
+      apiserver-etcd-client      Sep 24, 2021 15:20 UTC   14d             etcd-ca                 no
+      apiserver-kubelet-client   Sep 24, 2021 15:21 UTC   14d             ca                      no
+      controller-manager.conf    Sep 24, 2021 15:21 UTC   14d             ca                      no
+      etcd-healthcheck-client    Sep 24, 2021 15:19 UTC   14d             etcd-ca                 no
+      etcd-peer                  Sep 24, 2021 15:19 UTC   14d             etcd-ca                 no
+      etcd-server                Sep 24, 2021 15:19 UTC   14d             etcd-ca                 no
+      front-proxy-client         Sep 24, 2021 15:21 UTC   14d             front-proxy-ca          no
+      scheduler.conf             Sep 24, 2021 15:21 UTC   14d             ca                      no
+
+      CERTIFICATE AUTHORITY   EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
+      ca                      Sep 02, 2030 15:21 UTC   8y              no
+      etcd-ca                 Sep 02, 2030 15:19 UTC   8y              no
+      front-proxy-ca          Sep 02, 2030 15:21 UTC   8y              no
+      ```
+
+      Depending on which certificates will expire, one of these procedures could be used for the renewal. The first procedure
+      will renew all certificates, but that may be more than needs to be renewed.
+
+      * See [Renew All Certificates](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#renew-all-certificates)
+      * See [Renew Etcd Certificate](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#renew-etcd-certificate)
+      * See [Update Client Certificates](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
+
 1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
 
    There will be separate session templates for UANs and computes nodes.
