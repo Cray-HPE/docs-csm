@@ -28,7 +28,9 @@ for Paradise hardware" bullet..
 * Fixed issue in `conman` in order to support Paradise hardware
 * Fixed issue in `run_hms_ct_tests.sh` which caused false positives for CDU switches
 * Enhanced `hmcollector` logging
-* Mike Buchmann: CASMHMS-6207
+* FAS now waits for the time limit to expire when verifying update. FASUpdate.py script also updated to accept a --timeLimit parameter to change the preset time limit
+* Required environment variables now set to address breaking changes in the latest ca-certificates RPM
+* Update IMS recipe builds to use new DST signing key
 * Mitchell Harding: CASMCMS-8971
 * Mitchell Harding: CASMCMS-8973
 * Mitchell Harding: CASMCMS-8978
@@ -45,13 +47,10 @@ for Paradise hardware" bullet..
 * Mitchell Harding: CASMCMS-9018
 * Mitchell Harding: CASMCMS-9015
 * Mitchell Harding: CASMCMS-9022
-* David Laine: CASMCMS-8976
 * Russell Bunch: CASMTRIAGE-6991
 * Russell Bunch: MTL-2393
-* Jason Davis: MTL-2394
 * Mikhail Tupitsyn: CASMPET-7093
-* Chris Spiller: CASMPET-7021
-* Chris Spiller: CASMNET-2221
+* Chris Spiller: CASMNET-2221 (to be replaced by Chris as part of CASMNET-2179)
 
 ## Limitations
 
