@@ -59,8 +59,8 @@ for Paradise hardware"..
 
 * Power capping support for Paradise Hardware
   * Power caps are applied to the processor complex, not to the entire node
-  * A power cap cannot be set when node power is off
-  * If a power cap is applied when node power is on, it will be removed if the node is ever powered off.  A new power cap must be applied when the node powers back on
+  * A power cap cannot be applied when node power is off
+  * If a power cap is set when node power is on, it will be removed if the node is ever powered off.  A new power cap must be applied after the node powers back on
 
 ## Steps
 
