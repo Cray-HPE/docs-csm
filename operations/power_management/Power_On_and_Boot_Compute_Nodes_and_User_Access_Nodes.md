@@ -67,6 +67,32 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
         kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible
         ```
 
+1. (Only for Slingshot 2.1.1 and 2.1.2) Set permissions on the SSH keys in the `slingshot-fabric-manager` pod.
+
+    1. (`ncn-m001#`) Enter the `slingshot-fabric-manager` pod.
+
+       ```bash
+       kubectl exec -it -n services "$(kubectl get pod -l app.kubernetes.io/name=slingshot-fabric-manager -n services --no-headers | head -1 | awk '{print $1}')" -c slingshot-fabric-manager -- bash
+       ```
+   
+    1. (`slingshot-fabric-manager>`) Correct SSH file permissions.
+
+       ```bash
+       chmod 600 ~/.ssh/id_rsa
+       chmod 644 ~/.ssh/id_rsa.pub
+       chmod 600 ~/.ssh/config
+       exit
+       ```
+
+1. (`ncn-m001#`) If the Slingshot `fmn-debug` rpm is used inside the `slingshot-fabric-manager` pod, ensure it is available after the pod has been restarted by the power up procedure.
+
+   > This step assumes the `fmn-debug` rpm was previously copied to the PVC which is mounted as `/opt/slingshot`. The version of the rpm might be different.
+
+    ```bash
+    kubectl exec -it -n services "$(kubectl get pod -l app.kubernetes.io/name=slingshot-fabric-manager -n services --no-headers | head -1 | awk '{print $1}')" \
+            -c slingshot-fabric-manager -- sudo rpm -ivh /opt/slingshot/data/fmn-debug-2.1.1-22.noarch.rpm  --nodeps
+    ```
+
 1. (`ncn-m001#`) Check that the slingshot switches are all online.
 
     If BOS will be used to boot computes and if DVS is configured to use HSN, then check the fabric manager switches to ensure the switches are all online
@@ -74,7 +100,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
     ```bash
     kubectl exec -it -n services "$(kubectl get pod -l app.kubernetes.io/name=slingshot-fabric-manager -n services --no-headers | head -1 | awk '{print $1}')" \
-            -c slingshot-fabric-manager -- fmn_status -q
+            -c slingshot-fabric-manager -- fmn-show-status -q
     ```
 
     Example output:
@@ -99,6 +125,100 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     ============================
     Offline Switches:
     ```
+
+1. If any of the slingshot switches are offline, troubleshoot them.
+
+   1. (`ncn-m001#`) Enter the `slingshot-fabric-manager` pod
+
+      ```bash
+      kubectl exec -it -n services "$(kubectl get pod -l app.kubernetes.io/name=slingshot-fabric-manager -n services --no-headers | head -1 | awk '{print $1}')" -c slingshot-fabric-manager -- bash
+      ```
+
+   1. (`slingshot-fabric-manager>`) Set a variable with the switches which are offline. The list should be separated by space characters.
+
+      ```bash
+      SWITCHES="x1000c0r7b0 x1001c1r3b0 x1004c0r3b0"
+      ```
+
+   1. (`slingshot-fabric-manager>`) Reboot the switches and reset their ASICs.
+
+      ```bash
+      date; fmn-reset-switch -k -i $SWITCHES ; sleep 3m; date;  fmn-reset-switch -r -i $SWITCHES; sleep 3m; date
+      ```
+
+   1. (`slingshot-fabric-manager>`) Check whether the switches are online now.
+
+      ```bash
+      fmn-show-status -q
+      ```
+
+   1. (`slingshot-fabric-manager>`) If the switches are all online, then exit the `slingshot-fabric-manager` pod and continue to the next step not related to Slingshot.
+
+      ```bash
+      exit
+      ```
+
+   1. (`slingshot-fabric-manager>`) If some switches are still offline, then repeat the step to reboot the Slingshot switches and reset the ASICs.
+
+      ```bash
+      date; fmn-reset-switch -k -i $SWITCHES ; sleep 3m; date;  fmn-reset-switch -r -i $SWITCHES; sleep 3m; date
+      ```
+
+   1. (`slingshot-fabric-manager>`) Check whether the switches are online now.
+
+      ```bash
+      fmn-show-status -q
+      ```
+
+   1. (`slingshot-fabric-manager>`) If the switches are all online after the second attempt, then exit the `slingshot-fabric-manager` pod and continue to the next step not related to Slingshot.
+
+      ```bash
+      exit
+      ```
+
+   1. (`slingshot-fabric-manager>`) If that doesn't work, then check the `FabricHost` log in the `slingshot-fabric-manager` pod for messages to see whether sweeps are happening on a regular basis (10 seconds) and have the correct quantity of Slingshot switches.
+
+      ```bash
+      tail -f /opt/slingshot/data/slingshot/fabric-manager/8000/FabricHost.8000.0.log
+      ```
+
+      Example output excerpts:
+
+      ```bash
+      [48365][I][2024-06-04T21:17:17.006Z][219][8000/fabric/available-agents][lambda$handlePeriodicMaintenance$4][Switch Availability: 180/180 switches available]
+      [48366][I][2024-06-04T21:17:28.062Z][56][8000/fabric/available-agents][lambda$handlePeriodicMaintenance$4][Switch Availability: 180/180 switches available]
+      [48367][I][2024-06-04T21:17:39.072Z][56][8000/fabric/available-agents][lambda$handlePeriodicMaintenance$4][Switch Availability: 180/180 switches available]
+      ```
+
+      1. (`slingshot-fabric-manager>`) If no sweeps are visible, then the `slingshot-fabric-manager` pod will need to be restarted.
+
+         1. Exit from the `slingshot-fabric-manager` pod.
+
+            ```bash
+            exit
+            ```
+
+         1. (`ncn-m001#`) Restart the `slingshot-fabric-manager`.
+
+            ```bash
+            kubectl -n services rollout restart deployment slingshot-fabric-manager
+            ```
+
+         1. (`ncn-m001#`) Wait for the `slingshot-fabric-manager` to restart.
+
+            ```bash
+            kubectl -n services rollout status deployment slingshot-fabric-manager
+            ```
+
+         1. (`ncn-m001#`) Check that the Slingshot switches are all online.
+
+            ```bash
+            kubectl exec -it -n services \
+              "$(kubectl get pod -l app.kubernetes.io/name=slingshot-fabric-manager -n services --no-headers | head -1 | awk '{print $1}')" \
+              -c slingshot-fabric-manager -- fmn-show-status -q
+            ```
+
+            If the switches are not online repeat the steps above to reboot the Slingshot switches and reset the ASICs.
 
 1. If any workload manager queues were disabled during the power off procedure, enable them.
    Follow the vendor workload manager documentation to enable queues for running jobs on compute nodes.
