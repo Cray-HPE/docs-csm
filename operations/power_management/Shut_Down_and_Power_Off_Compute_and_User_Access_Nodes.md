@@ -10,6 +10,11 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
 
 ## Procedure
 
+1. If this system mounts an external SpectrumScale (GPFS) file system on the compute nodes and UANs, then follow the site procedures
+to ensure that the file system and its quorum nodes are quiesced before shutting down the nodes which have it mounted.
+
+   The quorum nodes might be on worker nodes or on application nodes.
+
 1. (`ncn-mw#`) List detailed information about the available boot orchestration service \(BOS\) session template names.
 
    Identify the BOS session template names such as `compute-23.7.0` and `uan-23.7.0`, and choose the appropriate compute and UAN node templates for the shutdown.
