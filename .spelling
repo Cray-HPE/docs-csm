@@ -1222,3 +1222,6 @@ Blanca
 - troubleshooting/known_issues/antero_node_NID_allocation.md
 # To allow Site Init
 Init
+
+- upgrade/1.5.2/README.md
+Multitenancy

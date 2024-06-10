@@ -23,7 +23,7 @@ list of patch versions.
 * HSM: Fixed issue in `conman` in order to support Paradise hardware
 * HSM: Fixed issue in `run_hms_ct_tests.sh` which caused false positives for CDU switches
 * HSM: Enhanced `hmcollector` logging
-* HSM: FAS now waits for the time limit to expire when verifying update. FASUpdate.py script also updated to accept a --timeLimit parameter to change the preset time limit
+* HSM: FAS now waits for the time limit to expire when verifying update. `FASUpdate.py` script also updated to accept a `--timeLimit` parameter to change the preset time limit
 * Required environment variables now set to address breaking changes in the latest ca-certificates RPM
 * Update IMS recipe builds to use new DST signing key
 * Multitenancy: Allowed tenant admins to list their BOS v2 sessions
@@ -36,9 +36,9 @@ list of patch versions.
 * CFS: Updated dependency version to prevent deprecation warnings in pod logs during image customization
 * BOS: Fixed some failures when multiple simultaneous BOS sessions are created soon after the service first starts
 * BOS: Perform better checking of age string arguments to relevant API endpoints
-* Chris Spiller: CASMNET-2221 (to be replaced by Chris as part of CASMNET-2179)
-* Russell Bunch: CASMTRIAGE-6991
-* Russell Bunch: MTL-2393
+* Fixed issue for `goss-servers` being able to be installed without `goss`, `goss-servers` now requires `goss` as a dependency
+* Fixed issue for `goss-servers.service` from being disabled when updating the `goss-servers`’s package.
+* Chris Spiller: `CASMNET-2221` (to be replaced by Chris as part of `CASMNET-2179`)
 
 ## Limitations
 
