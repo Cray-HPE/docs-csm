@@ -19,11 +19,6 @@ list of patch versions.
 
 ## Bug fixes and improvements
 
-INSTRUCTIONS FOR CASM FOLKS (delete this line later): Replace any line below that contains your
-name with a one line description of the change that occurred as a result of your Jira. Combine
-bullets together if it makes sense (eg. many Paradise bullets were combined into a single "Support
-for Paradise hardware" bullet..
-
 * Added support for Paradise hardware
 * HSM: Fixed issue in `conman` in order to support Paradise hardware
 * HSM: Fixed issue in `run_hms_ct_tests.sh` which caused false positives for CDU switches
