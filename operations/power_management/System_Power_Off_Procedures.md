@@ -29,7 +29,7 @@ To save management switch configuration settings, refer to [Save Management Netw
 
 ## Power Off System Cabinets
 
-If any of the external file systems are in air-cooled cabinets shared with air-cooled compute nodes or management nodes, then 
+If any of the external file systems are in air-cooled cabinets shared with air-cooled compute nodes or management nodes, then
 the power off of the PDU circuits in these cabinets should be delayed until the external Lustre or SpectrumScale (GPFS) file
 systems have been cleanly shut down.
 

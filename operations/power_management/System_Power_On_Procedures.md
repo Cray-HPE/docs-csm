@@ -30,7 +30,7 @@ To power on the external SpectrumScale (GPFS) file system, refer to site procedu
 
 **Note:** If the external file systems are not mounted on worker nodes, then the power on of them can continue in parallel with
 the power on and boot of the Kubernetes management cluster and the power on of the compute cabinets, but must be completed
-before beginning to power on and boot the compute nodes and User Access Nodes (UANs). 
+before beginning to power on and boot the compute nodes and User Access Nodes (UANs).
 
 ## Power on and boot the Kubernetes management cluster
 
