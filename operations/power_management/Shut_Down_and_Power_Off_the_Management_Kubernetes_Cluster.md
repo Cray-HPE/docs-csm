@@ -103,7 +103,7 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    pdsh -w ncn-m001,$MASTERS,$WORKERS 'zypper -n install psmisc'
    ```
 
-1. If the worker nodes have been supporting the containerized User Access Instance (UAI) pods, then the DVS-mounted
+1. If the worker nodes have been supporting the containerized User Access Instance (UAI) pods, then the DVS mounted
    Cray Programming Environment (CPE) and Analytics filesystems should be unmounted.
 
    1. (`ncn-m001#`) Unmount the CPE content on the worker nodes.
@@ -117,7 +117,7 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
       1. (`ncn-m001#`) Checkout analytics-config-management from VCS.
 
         > If the `git clone` command fails to find the `analytics-config-management` repository in VCS, then Analytics
-        > is not installed and the rest of thes steps can be ignored.
+        > is not installed and the rest of these steps can be ignored.
 
          ```bash
          export git_pwd=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
