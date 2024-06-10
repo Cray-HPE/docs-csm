@@ -189,11 +189,11 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
 
 1. If any external filesystems are mounted on the worker nodes, unmount them.
 
-   Lustre, SpectrumScale (GPFS), and NFS filesystems are usually defined in VCS cos-config-management in the group_vars
+   Lustre, SpectrumScale (GPFS), and NFS filesystems are usually defined in VCS cos-config-management in the g`roup_vars`
    directory structure, such as `group_vars/all/filesystems.yml` or `group_vars/Management_Worker/filesystems.yml`. These steps
-   will run the `cos-config-management` Ansible playboork `configure_fs_unload.yml` using the variables set in `filesystems.yml`.
+   will run the `cos-config-management` Ansible playbook `configure_fs_unload.yml` using the variables set in `filesystems.yml`.
 
-   1. (`ncn-m#`) Copy the dvs_reload_ncn script from ncn-w001 to a master node.
+   1. (`ncn-m#`) Copy the `dvs_reload_ncn script` from `ncn-w001` to a master node.
 
    ```bash
    scp ncn-w001:/opt/cray/dvs/default/sbin/dvs_reload_ncn /tmp
@@ -214,7 +214,7 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
 
    1. (`ncn-m#`) Set variable for the configuration assigned to worker nodes found in the previous step.
 
-   ```
+   ```bash
    CONFIGURATION=
    echo $CONFIGURATION
    ```
