@@ -208,7 +208,6 @@ liquid-cooled cabinet chassis, compute modules, and router modules, then powers 
 compute nodes or management nodes, then the power off of the PDU circuits in these cabinets should be delayed until the external
 file systems have been confirmed to be cleanly shut down. See the procedures in [Power Off the External File Systems](System_Power_Off_Procedures.md#Power_off_the_External_File_systems).
 
-
 1. Set each cabinet PDU circuit breaker to `OFF`.
 
     A slotted screwdriver may be required to open PDU circuit breakers.

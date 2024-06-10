@@ -4,7 +4,9 @@ Power off storage nodes and management switches in standard racks.
 
 ## Power off standard rack PDU circuit breakers
 
-**CAUTION:** The Lustre or SpectrumScale (GPFS) file systems on nodes and switches in storage cabinets should only be powered off once it has been confirmed that the filesystems have been cleanly shut down.  See the procedures in [Power Off the External File Systems](System_Power_Off_Procedures.md#Power_off_the_External_File_systems).
+**CAUTION:** The Lustre or SpectrumScale (GPFS) file systems on nodes and switches in storage cabinets should only
+be powered off once it has been confirmed that the filesystems have been cleanly shut down.  See the procedures in
+[Power Off the External File Systems](System_Power_Off_Procedures.md#Power_off_the_External_File_systems).
 
 1. Set each cabinet PDU circuit breaker to `OFF`.
 
