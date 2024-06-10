@@ -212,10 +212,9 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    If the process continues to report errors due to `Failed to stop containers`, then iterate on the above step. Each iteration should reduce the number of containers running. If necessary,
    containers can be manually stopped using `crictl stop CONTAINER`. If containers are stopped manually, then re-run the above procedure to complete any final steps in the process.
 
-1. (`ncn-m001#`) Unload DVS and Lnet kernel modules from worker nodes.
+1. (`ncn-m001#`) Unload DVS and `Lnet` kernel modules from worker nodes.
 
-   > This step helps to avoid error messages in the console log while Linux is shutting down similar to 
-   > "DVS: task XXX exiting on a signal"
+   > This step helps to avoid error messages in the console log while Linux is shutting down similar to "DVS: task XXX exiting on a signal"
 
    ```bash
    pdsh -w $WORKERS 'lsmod | egrep "^dvs\s+"; rm -rf /run/dvs; \
