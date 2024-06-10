@@ -25,39 +25,32 @@ bullets together if it makes sense (eg. many Paradise bullets were combined into
 for Paradise hardware" bullet..
 
 * Added support for Paradise hardware
-* Fixed issue in `conman` in order to support Paradise hardware
-* Fixed issue in `run_hms_ct_tests.sh` which caused false positives for CDU switches
-* Enhanced `hmcollector` logging
-* FAS now waits for the time limit to expire when verifying update. FASUpdate.py script also updated to accept a --timeLimit parameter to change the preset time limit
+* HSM: Fixed issue in `conman` in order to support Paradise hardware
+* HSM: Fixed issue in `run_hms_ct_tests.sh` which caused false positives for CDU switches
+* HSM: Enhanced `hmcollector` logging
+* HSM: FAS now waits for the time limit to expire when verifying update. FASUpdate.py script also updated to accept a --timeLimit parameter to change the preset time limit
 * Required environment variables now set to address breaking changes in the latest ca-certificates RPM
 * Update IMS recipe builds to use new DST signing key
-* Mitchell Harding: CASMCMS-8971
-* Mitchell Harding: CASMCMS-8973
-* Mitchell Harding: CASMCMS-8978
-* Mitchell Harding: CASMCMS-8186
-* Mitchell Harding: CASMCMS-8438
-* Mitchell Harding: CASMINST-6861
-* Mitchell Harding: CASMTRIAGE-6993
-* Mitchell Harding: CASMTRIAGE-7019
-* Mitchell Harding: CASMHMS-5838
-* Mitchell Harding: CASMCMS-9001
-* Mitchell Harding: CASMCMS-8997
-* Mitchell Harding: CASMCMS-8998
-* Mitchell Harding: CASMCMS-9017
-* Mitchell Harding: CASMCMS-9018
-* Mitchell Harding: CASMCMS-9015
-* Mitchell Harding: CASMCMS-9022
+* Multitenancy: Allowed tenant admins to list their BOS v2 sessions
+* CFS: Fixed error when updating multiple components using CFS v2
+* BOS: Changes to avoid pods being `OOMKilled`
+* HSM: Fixed bug preventing bulk updates of roles/subroles
+* BOS: Improved logging
+* BOS: v2 performance improvements, particularly at scale
+* BOS: Fix possible false BOS failure in `cmsdev` health check
+* CFS: Updated dependency version to prevent deprecation warnings in pod logs during image customization
+* BOS: Fixed some failures when multiple simultaneous BOS sessions are created soon after the service first starts
+* BOS: Perform better checking of age string arguments to relevant API endpoints
+* Chris Spiller: CASMNET-2221 (to be replaced by Chris as part of CASMNET-2179)
 * Russell Bunch: CASMTRIAGE-6991
 * Russell Bunch: MTL-2393
-* Mikhail Tupitsyn: CASMPET-7093
-* Chris Spiller: CASMNET-2221 (to be replaced by Chris as part of CASMNET-2179)
 
 ## Limitations
 
-* Power capping support for Paradise Hardware
+* Power capping support for Paradise hardware
   * Power caps are applied to the processor complex, not to the entire node
   * A power cap cannot be applied when node power is off
-  * If a power cap is set when node power is on, it will be removed if the node is ever powered off.  A new power cap must be applied after the node is powered back on
+  * If a power cap is set when node power is on, it will be removed if the node is ever powered off. A new power cap must be applied after the node is powered back on
 
 ## Steps
 
@@ -81,9 +74,6 @@ for Paradise hardware" bullet..
    Run the CSM health checks to ensure that everything is working properly before the upgrade starts.
    After the upgrade is completed, another health check is performed.
    It is important to know if any problems observed at that time existed prior to the upgrade.
-
-   IMPORTANT: See the CSM Install Validation and Health Checks procedures in the documentation for the CURRENT CSM version on the system.
-   The validation procedures in the CSM documentation are only intended to work with that specific version of CSM.
 
 1. (`ncn-m001#`) Start a typescript on `ncn-m001` to capture the commands and output from this procedure.
 
