@@ -7,6 +7,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 ## Prerequisites
 
 * All compute cabinet PDUs, servers, and switches must be powered on.
+* All external file systems, such as Lustre or SpectrumScale (GPFS), should be available to be mounted by clients
 * An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section
   of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
 
@@ -119,6 +120,10 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
        ```
 
        Each system might have many different queue names. There is no default queue name.
+
+1. If the servers providing external external Lustre or SpectrumScale (GPFS) file systems have been powering up in parallel
+to the CSM system, ensure that they are ready to be mounted by clients before continuing to the next step which boots
+the UANs and compute nodes.
 
 1. (`ncn-m001#`) List detailed information about the available boot orchestration service \(BOS\) session template names.
 

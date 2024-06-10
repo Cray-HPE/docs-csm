@@ -170,9 +170,12 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
      pdsh -w $(grep "nmn ncn-" /etc/hosts | awk '{print $3}' | xargs | sed 's/ /,/g') uptime
     ```
 
-### Verify access to Lustre file system
+### Verify Access to External File Systems
 
-Verify that the Lustre file system is available from the management cluster.
+If the worker nodes host User Access Instance (UAI) pods or normally mount the external Lustre or SpectrumScale (GPFS) file systems,
+then verify that the external file system is ready to be mounted by the worker nodes.
+
+Some systems are configured with lazy mounts that do not have this requirement for the worker nodes.
 
 ### Start Kubernetes and other services
 
