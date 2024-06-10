@@ -103,6 +103,58 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    pdsh -w ncn-m001,$MASTERS,$WORKERS 'zypper -n install psmisc'
    ```
 
+1. If the worker nodes have been supporting the containerized User Access Instance (UAI) pods, then the DVS-mounted
+   Cray Programming Environment (CPE) and Analytics filesystems should be unmounted.
+
+   1. (`ncn-m001#`) Unmount the CPE content on the worker nodes.
+
+      ```bash
+      pdsh -w $WORKERS bash /etc/cray-pe.d/pe_cleanup.sh | dshbak -c
+      ```
+
+   1. Unmount Analytics contents on the worker nodes.
+
+      1. (`ncn-m001#`) Checkout analytics-config-management from VCS.
+
+        > If the `git clone` command fails to find the `analytics-config-management` repository in VCS, then Analytics
+        > is not installed and the rest of thes steps can be ignored.
+
+         ```bash
+         export git_pwd=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+         export git_url="api-gw-service-nmn.local/vcs/cray/analytics-config-management.git"
+         git clone https://crayvcs:"${git_pwd}"@${git_url} >/dev/null 2>&1
+         ```
+
+      1. (`ncn-m001#`) Copy the `forcecleanup.sh` script to all worker nodes.
+
+         ```bash
+         (cd analytics-config-management; git checkout integration; cd ..)
+         pdcp -w $WORKERS -p analytics-config-management/roles/analyticsdeploy/files/forcecleanup.sh /tmp/forcecleanup.sh
+         ```
+
+      1. (`ncn-m001#`) Run the `forcecleanup.sh` script on all worker nodes.
+
+         > Sometimes it takes a few runs of the `forcecleanup.sh` script to unmount the Analytics contents.
+
+         ```bash
+         pdsh -w $WORKERS sh /tmp/forcecleanup.sh| dshbak -c
+         ```
+
+      1. (`ncn-m001#`) Check that the Analytics content has been unmounted on all worker nodes.
+
+         If this command returns output, then run the `forcecleanup.sh` command again.
+
+         ```bash
+         pdsh -w $WORKERS 'mount -t dvs | grep -i analytics'
+         ```
+
+      1. (`ncn-m001#`) Confirm that the `dvs` kernel module has a zero reference count on all worker nodes.
+         If this is not the case, then investigate why the unmounts did not complete correctly.
+
+         ```bash
+         pdsh -w $WORKERS 'lsmod | grep -P "^dvs "' | dshbak -c
+         ```
+
 1. (`ncn-m001#`) Shut down platform services.
 
    > NOTE: There are some interactive questions which need answers before the shutdown process can progress.
