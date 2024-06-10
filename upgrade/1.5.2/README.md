@@ -55,7 +55,7 @@ for Paradise hardware"..
 * Chris Spiller: CASMPET-7021
 * Chris Spiller: CASMNET-2221
 
-## Limitations and Known Issues
+## Limitations
 
 * Power capping support for Paradise Hardware
   * Power caps are applied only to the processor complex, not to the entire node
