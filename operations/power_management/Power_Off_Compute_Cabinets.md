@@ -50,14 +50,14 @@ HPE Cray standard EIA racks typically include two redundant PDUs. Some PDU model
        +---------+---------+-------+------+---------+------+----------+----------+
        | xname   | Type    | State | Flag | Enabled | Arch | Class    | Net Type |
        +---------+---------+-------+------+---------+------+----------+----------+
-       | x1020c0 | Chassis | Off    | OK   | True    | X86  | Mountain | Sling    |
-       | x1020c1 | Chassis | Off    | OK   | True    | X86  | Mountain | Sling    |
-       | x1020c2 | Chassis | Off    | OK   | True    | X86  | Mountain | Sling    |
-       | x1020c3 | Chassis | Off    | OK   | True    | X86  | Mountain | Sling    |
-       | x1020c4 | Chassis | Off    | OK   | True    | X86  | Mountain | Sling    |
-       | x1020c5 | Chassis | Off    | OK   | True    | X86  | Mountain | Sling    |
-       | x1020c6 | Chassis | Off    | OK   | True    | X86  | Mountain | Sling    |
-       | x1020c7 | Chassis | Off    | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c0 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c1 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c2 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c3 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c4 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c5 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c6 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c7 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
        ```
 
     1. (`ncn-m001#`) Check the power status with CAPMC.
