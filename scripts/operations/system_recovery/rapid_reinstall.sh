@@ -106,3 +106,6 @@ kubectl -n spire get "${SPIRE_JOB}" -o json | jq 'del(.spec.selector)' \
   | jq 'del(.spec.template.metadata.labels."controller-uid")' \
   | kubectl replace --force -f -
 kubectl -n spire wait "${SPIRE_JOB}" --for=condition=complete --timeout=5m
+
+# Update the test RPMs (and related RPMs) on all NCNs and PIT
+/usr/share/doc/csm/install/scripts/install-goss-tests.sh
