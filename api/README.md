@@ -14,4 +14,3 @@
  * [Hardware State Manager API v2](./smd.md)
  * [Cray STS Token Generator v1](./sts.md)
  * [TAPMS Tenant Status API v1](./tapms-operator.md)
- * [User Access Service v1](./uas-mgr.md)
