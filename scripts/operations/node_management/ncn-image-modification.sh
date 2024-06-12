@@ -437,19 +437,42 @@ function csm_144_patch {
   )
   local add_drivers=()
   local omit_drivers=()
-  local rpms=(
-    "${CSM_PATH}/rpm/cray/csm/sle-15sp4/x86_64/qlgc-fastlinq-kmp-default-8.74.1.0_k5.14.21_150400.22-1.sles15sp4.x86_64.rpm"
-    "${CSM_PATH}/rpm/cray/csm/sle-15sp4/x86_64/kernel-default-devel-${kernel_version}.x86_64.rpm"
-    "${CSM_PATH}/rpm/cray/csm/sle-15sp4/x86_64/kernel-default-${kernel_version}.x86_64.rpm"
-    "${CSM_PATH}/rpm/cray/csm/sle-15sp4/noarch/kernel-devel-${kernel_version}.noarch.rpm"
-    "${CSM_PATH}/rpm/cray/csm/sle-15sp4/noarch/kernel-macros-${kernel_version}.noarch.rpm"
-    "${CSM_PATH}/rpm/cray/csm/sle-15sp4/x86_64/kernel-syms-${kernel_version}.x86_64.rpm"
-  )
+  local rpms=()
+  local tar_path
 
-  if [ ! -d "${CSM_PATH}" ]; then
-    echo >&2 "CSM_PATH does not exist, or was not defined."
+  if [ -n "$CSM_PATH" ]; then
+    if [ ! -d "${CSM_PATH}" ]; then
+      echo >&2 "CSM_PATH was defined but does not exist [$CSM_PATH]"
+    else
+      tar_path="${CSM_PATH}"
+    fi
+  fi
+  if [ -z "${tar_path}" ]; then
+    if [ -n "${CSM_DISTDIR}" ]; then
+      if [ ! -d "${CSM_DISTDIR}" ]; then
+        echo >&2 "CSM_DISTDIR was defined but does not exist [$CSM_DISTDIR]"
+      else
+        tar_path="${CSM_DISTDIR}"
+      fi
+    fi
+  fi
+  if [ -z "${tar_path}" ]; then
+    echo >&2 "Failed to resolve path to extracted tarball! CSM_PATH nor CSM_DISTDIR were found in the environment!"
     return 1
   fi
+  if [ ! -d "${tar_path}" ]; then
+    echo >&2 "Extracted tarball resolved to ${tar_path} but this path does not exist!"
+    return 1
+  fi
+  rpms=(
+    "${tar_path}/rpm/cray/csm/sle-15sp4/x86_64/qlgc-fastlinq-kmp-default-8.74.1.0_k5.14.21_150400.22-1.sles15sp4.x86_64.rpm"
+    "${tar_path}/rpm/cray/csm/sle-15sp4/x86_64/kernel-default-devel-${kernel_version}.x86_64.rpm"
+    "${tar_path}/rpm/cray/csm/sle-15sp4/x86_64/kernel-default-${kernel_version}.x86_64.rpm"
+    "${tar_path}/rpm/cray/csm/sle-15sp4/noarch/kernel-devel-${kernel_version}.noarch.rpm"
+    "${tar_path}/rpm/cray/csm/sle-15sp4/noarch/kernel-macros-${kernel_version}.noarch.rpm"
+    "${tar_path}/rpm/cray/csm/sle-15sp4/x86_64/kernel-syms-${kernel_version}.x86_64.rpm"
+  )
+
   echo "Patching images for CSM 1.4.4 ... "
   for squash in "${SQUASH_PATHS[@]}"; do
     (
