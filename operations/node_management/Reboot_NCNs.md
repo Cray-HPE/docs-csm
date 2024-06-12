@@ -354,7 +354,7 @@ Before rebooting NCNs:
     1. (`ncn-mw#`) Cordon and drain the node.
 
        ```bash
-       kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
+       kubectl drain --ignore-daemonsets=true --delete-emptydir-data <node to be rebooted>
        ```
 
        There may be pods that cannot be gracefully evicted because of Pod Disruption Budgets (PDB). This will result in messages like the following:
