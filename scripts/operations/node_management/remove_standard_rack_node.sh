@@ -64,7 +64,17 @@ echo
 echo "=================================================="
 echo "Removing BMC Event subscriptions"
 echo "=================================================="
-/usr/share/doc/csm/scripts/operations/node_management/delete_bmc_subscriptions.py "${BMC_XNAME}"
+EXIT_CODE=0
+/usr/share/doc/csm/scripts/operations/node_management/delete_bmc_subscriptions.py "${BMC_XNAME}" || EXIT_CODE=$?
+if [[ $EXIT_CODE -ne 0 ]]; then
+  if [[ -z ${TOKEN+x} ]]; then
+    # delete_bmc_subscriptions.py failed because the TOKEN was not set
+    exit $EXIT_CODE
+  fi
+  echo "The redfish subscriptions were not removed from ${BMC_XNAME}. Check the messages above for the specific errors."
+  echo "This could be because the node has already been physically removed."
+  echo "The subscriptions will need to be cleaned up when the node is added back, if it is added in a new xname location, and is on a system running CSM 1.4 or older."
+fi
 
 echo
 echo "=================================================="
