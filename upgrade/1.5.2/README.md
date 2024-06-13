@@ -40,7 +40,7 @@ list of patch versions.
 * BOS: Perform better checking of age string arguments to relevant API endpoints
 * Fixed issue for `goss-servers` being able to be installed without `goss`, `goss-servers` now requires `goss` as a dependency
 * Fixed issue for `goss-servers.service` from being disabled when updating the `goss-servers`’s package.
-* Chris Spiller: `CASMNET-2221` (to be replaced by Chris as part of `CASMNET-2179`)
+* DHCP: Boot filename can be overriden on a per-node basis.
 
 ## Limitations
 
