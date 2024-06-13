@@ -375,7 +375,7 @@ Before rebooting NCNs:
        Then rerun the `kubectl drain` command, and it should report that the node is drained.
 
        ```bash
-       kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
+       kubectl drain --ignore-daemonsets=true --delete-emptydir-data <node to be rebooted>
        ```
 
     1. If booting from disk is desired, then [set the boot order](../../background/ncn_boot_workflow.md#setting-boot-order).
