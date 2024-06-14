@@ -22,6 +22,7 @@ list of patch versions.
 ## Bug fixes and improvements
 
 * Added support for Paradise hardware
+    * A BMC firmware bug will prevent power capping on Paradise hardware from functioning. A future BMC fw update will resolve the issue
 * Added support for Parry Peak hardware
 * Console: Fixed issue in `conman` in order to support Paradise hardware
 * HSM: Fixed issue in `run_hms_ct_tests.sh` which caused false positives for CDU switches
