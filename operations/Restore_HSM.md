@@ -2,9 +2,31 @@
 
 ## Procedure
 
-1. Place `tar` file from [Backup](Backup_HMS.md) on the system to restore.
+1. If `tar` file was placed in s3 from [Backup](Backup_HMS.md) copy to the system to restore.
 
-1. (`ncn-mw#`) Set name of backup file (without `.tar.gz`).
+    1. List objects in s3
+
+        ```bash
+        bucket=hms
+        aws s3api list-objects --bucket $bucket --endpoint-url http://ncn-m001.nmn:8000
+        ```
+
+    1. (`ncn-mw#`) Set name of backup file (without `.tar.gz`). example:
+
+        ```bash
+        BACKUP_FILE=hms-backup_2023-06-28_11-12-24
+        ```
+
+    1. (`ncn-mw#`) To retrieve files from backup disk.
+
+        ```bash
+        file=$BACKUP_FILE.tar.gz
+        aws s3api get-object --bucket $bucket --key $file $file --endpoint-url http://ncn-m001.nmn:8000
+        file=sls_input_file.json
+        aws s3api get-object --bucket $bucket --key $file $file --endpoint-url http://ncn-m001.nmn:8000
+        ```
+
+1. (`ncn-mw#`) Set name of backup file (without `.tar.gz`). example:
 
     ```bash
     BACKUP_FILE=hms-backup_2023-06-28_11-12-24
@@ -34,6 +56,7 @@
 
     ```bash
     kubectl replace -f cray-hms-base-config_$BACKUP_FILE.yaml
+    sleep 60
     $DOCS_DIR/operations/hardware_state_manager/updateroles.py cray-smd-components-dump_$BACKUP_FILE.json
     ```
 
@@ -103,4 +126,14 @@
 
     ```bash
     $DOCS_DIR/operations/boot_script_service/bss-restore-bootparameters.sh cray-bss-boot-parameters-dump_$BACKUP_FILE.json
+    ```
+
+1. (`ncn-mw#`) Disable nodes.
+
+    ```bash
+    COMPONENT_FILE=cray-smd-components-dump_$BACKUP_FILE.json
+    ENABLE_URL=https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components/BulkEnabled
+    xnames=`cat $COMPONENT_FILE | jq '.[] | .[] | select(.Enabled==false)' | jq .ID | paste -sd, -`
+    payload='{"ComponentIDs": ['$xnames'], "Enabled": false}'
+    if [ ${#xnames} -gt 0 ]; then curl -k -s -X PATCH -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" -d $payload $ENABLE_URL; echo $xnames; fi
     ```
