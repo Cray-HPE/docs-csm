@@ -21,7 +21,7 @@ To shut down compute nodes and User Access Nodes \(UANs\), refer to [Shut Down a
 
 To power off the external Lustre file system (ClusterStor), refer to [Power Off the External Lustre File System](Power_Off_the_External_Lustre_File_System.md).
 
-To power off the external SpectrumScale (GPFS) file system, refer to site procedures.
+To power off the external Spectrum Scale (GPFS) file system, refer to site procedures.
 
 ## Save Management Network Switch Settings
 
@@ -30,7 +30,7 @@ To save management switch configuration settings, refer to [Save Management Netw
 ## Power Off System Cabinets
 
 If any of the external file systems are in air-cooled cabinets shared with air-cooled compute nodes or management nodes, then
-the power off of the PDU circuits in these cabinets should be delayed until the external Lustre or SpectrumScale (GPFS) file
+the power off of the PDU circuits in these cabinets should be delayed until the external Lustre or Spectrum Scale (GPFS) file
 systems have been cleanly shut down.
 
 To power off standard rack and liquid-cooled cabinet PDUs, refer to [Power Off Compute Cabinets](Power_Off_Compute_Cabinets.md).

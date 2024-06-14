@@ -172,7 +172,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
 ### Verify Access to External File Systems
 
-If the worker nodes host User Access Instance (UAI) pods or normally mount the external Lustre or SpectrumScale (GPFS) file systems,
+If the worker nodes host User Access Instance (UAI) pods or normally mount the external Lustre or Spectrum Scale (GPFS) file systems,
 then verify that the external file system is ready to be mounted by the worker nodes.
 
 Some systems are configured with lazy mounts that do not have this requirement for the worker nodes.
@@ -464,7 +464,7 @@ Some systems are configured with lazy mounts that do not have this requirement f
 
 1. (`ncn-m001#`) Determine whether the `cfs-state-reporter` service is failing to start on each manager/master and worker NCN while trying to contact CFS.
 
-    **Note:** The `systemctl` command run on each node may have `exit code 3` reported, this does not indicate a problem with `cfs-state-reporter` on that node.
+    **Note:** The `systemctl` command run on each node may have `exit code 3` reported. This does not indicate a problem with `cfs-state-reporter` on that node.
 
     ```bash
     pdsh -w $(kubectl get nodes | grep -v NAME | awk '{print $1}' | xargs | sed 's/ /,/g') systemctl status cfs-state-reporter | grep "Active: activating"
