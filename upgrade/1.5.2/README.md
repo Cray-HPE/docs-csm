@@ -22,7 +22,9 @@ list of patch versions.
 ## Bug fixes and improvements
 
 * Added support for Paradise hardware
-* HSM: Fixed issue in `conman` in order to support Paradise hardware
+    * A BMC firmware bug will prevent power capping on Paradise hardware from functioning. A future BMC firmware update will resolve the issue
+* Added support for Parry Peak hardware
+* Console: Fixed issue in `conman` in order to support Paradise hardware
 * HSM: Fixed issue in `run_hms_ct_tests.sh` which caused false positives for CDU switches
 * HSM: Enhanced `hmcollector` logging
 * HSM: FAS now waits for the time limit to expire when verifying update. `FASUpdate.py` script also updated to accept a `--timeLimit` parameter to change the preset time limit
