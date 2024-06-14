@@ -106,7 +106,7 @@ function err_exit {
 }
 
 function run_on_pit {
-  [[ -n ${CSM_RELEASE} ]] || err_exit 'Please set and export $CSM_RELEASE and try again'
+  [[ -n ${CSM_RELEASE} || -n ${CSM_PATH} ]] || err_exit 'Please set and export $CSM_PATH or $CSM_RELEASE and try again'
 
   local MTOKEN STOKEN WTOKEN PREPDIR STORAGE_NCNS K8S_NCNS PREP_RPM_DIR ncn
   local STORAGE_RPM_PATHS K8S_RPM_PATHS STORAGE_RPM_BASENAMES K8S_RPM_BASENAMES
