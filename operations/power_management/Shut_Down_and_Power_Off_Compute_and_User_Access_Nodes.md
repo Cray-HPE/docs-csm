@@ -10,7 +10,7 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
 
 ## Procedure
 
-1. If this system mounts an external SpectrumScale (GPFS) file system on the compute nodes and UANs, then follow the site procedures
+1. If this system mounts an external Spectrum Scale (GPFS) file system on the compute nodes and UANs, then follow the site procedures
 to ensure that the file system and its quorum nodes are quiesced before shutting down the nodes which have it mounted.
 
    The quorum nodes might be on worker nodes or on application nodes.
@@ -194,7 +194,7 @@ to ensure that the file system and its quorum nodes are quiesced before shutting
 
 1. If any external filesystems are mounted on the worker nodes, unmount them.
 
-   Lustre, SpectrumScale (GPFS), and NFS filesystems are usually defined in VCS cos-config-management in the g`roup_vars`
+   Lustre, Spectrum Scale (GPFS), and NFS filesystems are usually defined in VCS cos-config-management in the `group_vars`
    directory structure, such as `group_vars/all/filesystems.yml` or `group_vars/Management_Worker/filesystems.yml`. These steps
    will run the `cos-config-management` Ansible playbook `configure_fs_unload.yml` using the variables set in `filesystems.yml`.
 
