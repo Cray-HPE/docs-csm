@@ -8,7 +8,7 @@ See [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal
 - This procedure uses `SYSTEM_DOMAIN_NAME` as an example for the DNS name of the non-compute node \(NCN\). Replace this name with the actual NCN's DNS name while executing this procedure.
 - This procedure assumes that the password for the Keycloak `admin` account is known. The Keycloak password is set during the software installation process.
   - (`ncn-mw#`) The password can be obtained with the following command
-  
+
       ```bash
       kubectl get secret -n services keycloak-master-admin-auth --template={{.data.password}} | base64 --decode
       ```
