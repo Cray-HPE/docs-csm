@@ -1,8 +1,8 @@
-# Replacing Foxconn Username and Passwords in Vault
+# Replacing `Foxconn` Username and Passwords in Vault
 
-Foxconn (Paradise) nodes may be shipped with a different default username and password then the system password.
-Because of the difference in user/password, these nodes will be undiscoverable.
-Vault needs to be updated with the Foxconn username and password using the `FoxconnUserPass.py` script or manually.
+'Foxconn' (Paradise) nodes may be shipped with a different default username and password then the system password.
+Because of the difference in user/password, these nodes will not be abled to be discovered.
+Vault needs to be updated with the `Foxconn` username and password using the `FoxconnUserPass.py` script or manually.
 
 ## Procedure using the `FoxconnUserPass.py` script
 
@@ -35,7 +35,7 @@ Vault needs to be updated with the Foxconn username and password using the `Foxc
 
 ## Manual procedure to update credentials in vault
 
-1. (`ncn-mw#`) Use the cray CLI to update vault through HSM (replace `BMC_xname` with the xname of the BMC, `Foxconn_user` with the `Foxconn` default username, and `Foxconn_pass` with the `Foxconn` default password):
+1. (`ncn-mw#`) Use the Cray CLI to update vault through HSM (replace `BMC_xname` with the xname of the BMC, `Foxconn_user` with the `Foxconn` default username, and `Foxconn_pass` with the `Foxconn` default password):
     NOTE: `BMC_xname` needs to be in the line twice
 
    ```bash
