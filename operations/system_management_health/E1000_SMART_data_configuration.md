@@ -216,7 +216,7 @@ NOTE: The below steps needs to be performed on the CSM cluster either on master 
     ```
 
 1. (`ncn-mw#`) Create a `configmap` file `/tmp/configmap.yml` with the below content and replace TARGET with site specific FQDN of the primary mgmt node from the above section in the second last line.
-   For e.g `TARGET=abc100.xyz.com`
+   For example, `TARGET=abc100.xyz.com`.
 
     ```yaml
     apiVersion: v1
