@@ -42,7 +42,7 @@ list of patch versions.
 * BOS: Perform better checking of age string arguments to relevant API endpoints
 * Fixed issue for `goss-servers` being able to be installed without `goss`, `goss-servers` now requires `goss` as a dependency
 * Fixed issue for `goss-servers.service` from being disabled when updating the `goss-servers`’s package.
-* DHCP: Boot filename can be overriden on a per-node basis.
+* DHCP: Boot filename can be overridden on a per-node basis.
 
 ## Limitations
 
@@ -62,6 +62,7 @@ list of patch versions.
 1. [Verification](#verification)
 1. [Take Etcd manual backup](#take-etcd-manual-backup)
 1. [NCN reboot](#ncn-reboot)
+1. [Configure E1000 node and Redfish Exporter for SMART data](#configure-e1000-node-and-redfish-exporter-for-smart-data)
 1. [Complete upgrade](#complete-upgrade)
 
 ### Preparation
@@ -283,6 +284,13 @@ enables restoring from backup later in this process if needed.
 This is an optional step but is strongly recommended. As each patch release includes updated container images that may
 contain CVE fixes, it is recommended to reboot each NCN to refresh cached container images. For detailed instructions on
 how to gracefully reboot each NCN, refer to [Reboot NCNs](../../operations/node_management/Reboot_NCNs.md).
+
+### Configure E1000 node and Redfish Exporter for SMART data
+
+> **NOTE:** Please follow this step if SMART disk data is needed for E1000 node.
+
+This step is for getting the SMART data from the disks on E1000 node using the Redfish exporter into `prometheus` time-series database.
+To configure the LDAP instance on the E1000 primary management node and reconfigure the redfish-exporter instance running on the `ncn`, see [Configure E1000 node and Redfish Exporter](../../operations/system_management_health/E1000_SMART_data_configuration.md).
 
 ### Complete upgrade
 
