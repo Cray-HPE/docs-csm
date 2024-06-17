@@ -87,6 +87,7 @@ export CSM_ARTI_DIR="/etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_
 >
 > - If the `/etc/cray/upgrade/csm/` directory is empty, create an empty directory at the same path. Download and extract CSM tarball to that directory.
 > - Update the value of `CSM_ARTI_DIR` with the newly created directory above.
+> - Download and install/upgrade the **latest** documentation on `ncn-m001` at path `/root/<rpm>`. See [Check for Latest Documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
 > - Ensure the `/etc/cray/upgrade/csm/` directory is `ceph` mount using the command below (its output should show `ceph` as the type):
 
 ```bash
