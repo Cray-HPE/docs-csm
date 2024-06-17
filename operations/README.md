@@ -472,6 +472,7 @@ confident that a lack of issues indicates the system is operating normally.
 - [Grafterm](system_management_health/Grafterm.md)
 - [Remove Kiali](system_management_health/Remove_Kiali.md)
 - [`prometheus-kafka-adapter` errors during installation](system_management_health/Prometheus_Kafka_Error.md)
+- [`grok-exporter` errors during installation](system_management_health/Grok-Exporter_Error.md)
 - [Troubleshoot Prometheus Alerts](system_management_health/Troubleshoot_Prometheus_Alerts.md)
 - [Configure UAN Node Exporter](system_management_health/uan_node_exporter_configs.md)
 
