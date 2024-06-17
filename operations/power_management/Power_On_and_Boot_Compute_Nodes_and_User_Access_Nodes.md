@@ -241,7 +241,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
        Each system might have many different queue names. There is no default queue name.
 
-1. If the servers providing external external Lustre or Spectrum Scale (GPFS) file systems have been powering up in parallel
+1. If the servers providing external Lustre or Spectrum Scale (GPFS) file systems have been powering up in parallel
 to the CSM system, ensure that they are ready to be mounted by clients before continuing to the next step which boots
 the UANs and compute nodes.
 
