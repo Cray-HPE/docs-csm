@@ -18,24 +18,25 @@ Vault needs to be updated with the Foxconn username and password using the `Foxc
     DOCS_DIR=/usr/share/doc/csm/scripts
     ```
 
-1. (`ncn-mw#`) Run the Foxconn update script
+1. (`ncn-mw#`) Run the `Foxconn` update script
 
     ```bash
     $DOCS_DIR/hardware_state_manager/FoxconnUserPass.py
     ```
 
     This will ask for the BMC username and password for the Paradise nodes.
-    The scirpt will look for undiscovered nodes, if it finds a Foxconn node, update vault with correct credentials.
+    The scirpt will look for undiscovered nodes, if it finds a `Foxconn` node, update vault with correct credentials.
 
 1. (`ncn-mw#`) Wait 10+ minutes for changes to take affect and nodes to be discovered.  To check nodes which have failed to be discovered:
 
    ```bash
    cray hsm inventory redfishEndpoints list --format json | jq '.[] | .[] | select (.DiscoveryInfo.LastDiscoveryStatus!="DiscoverOK")'
    ```
-## Manual procedure to update credentials in vault.
 
-1. (`ncn-mw#`) Use the cray CLI to update vault through HSM (replace xname with the BMC_xname of the BMC, Foxconn_user with the Foxconn default username, and Foxconn_pass with the Foxconn default password):
-    NOTE: BMC_xname needs to be in the line twice
+## Manual procedure to update credentials in vault
+
+1. (`ncn-mw#`) Use the cray CLI to update vault through HSM (replace `BMC_xname` with the xname of the BMC, `Foxconn_user` with the `Foxconn` default username, and `Foxconn_pass` with the `Foxconn` default password):
+    NOTE: `BMC_xname` needs to be in the line twice
 
    ```bash
    cray hsm inventory redfishEndpoints update BMC_xname -id BMC_xname --user Foxconn_user --password Foxconn_pass
