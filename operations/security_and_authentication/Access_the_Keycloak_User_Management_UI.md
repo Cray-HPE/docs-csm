@@ -28,12 +28,12 @@ See [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal
 
     The browser may return an error message similar to the following when `auth.cmn.SYSTEM_DOMAIN_NAME/keycloak` is launched for the first time:
 
-    ```text
-    This Connection Is Not Private
+        ```text
+        This Connection Is Not Private
 
-    This website may be impersonating "hostname" to steal your personal or financial information.
-    You should go back to the previous page.
-    ```
+        This website may be impersonating "hostname" to steal your personal or financial information.
+        You should go back to the previous page.
+        ```
 
     See [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
     for more information on getting the Certificate Authority \(CA\) certificate on the system.
