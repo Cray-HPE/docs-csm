@@ -215,12 +215,16 @@ NOTE: The below steps needs to be performed on the CSM cluster either on master 
     kubectl delete cm -n sysmgmt-health cray-sysmgmt-health-redfish --force
     ```
 
-1. (`ncn-mw#`) Create a `configmap` file `/tmp/configmap.yml` with the below content and replace TARGET `abc100.hpc.amslabs.hpecorp.net` with FQDN of the primary mgmt node from the above section in the second last line.
+1. (`ncn-mw#`) Create a `configmap` file `/tmp/configmap.yml` with the below content and replace TARGET with site specific FQDN of the primary mgmt node from the above section in the second last line.
+   For example, `TARGET=abc100.xyz.com`.
 
     ```yaml
     apiVersion: v1
     kind: ConfigMap
     metadata:
+      annotations:
+        meta.helm.sh/release-name: cray-sysmgmt-health
+        meta.helm.sh/release-namespace: sysmgmt-health
       name: cray-sysmgmt-health-redfish
       namespace: sysmgmt-health
       labels:
@@ -233,9 +237,27 @@ NOTE: The below steps needs to be performed on the CSM cluster either on master 
       fetch_health.sh: |
         #!/bin/bash
 
-        TARGET=abc100.hpc.amslabs.hpecorp.net
+        TARGET=""
         curl -o /tmp/redfish-smart-1.prom cray-sysmgmt-health-redfish-exporter.sysmgmt-health.svc:9220/health?target=${TARGET}
-    ```  
+    ```
+  
+    NOTE: In case `ClusterStor` has more than one or multiple primary management node then multiple targets and curl commands can be used. The above script file `fetch_health.sh` under data section will look similar to:
+  
+    ```yaml
+    data:
+      fetch_health.sh: |
+        #!/bin/bash
+
+        TARGET1=""
+        curl -o /tmp/redfish-smart-1.prom cray-sysmgmt-health-redfish-exporter.sysmgmt-health.svc:9220/health?target=${TARGET1}
+        TARGET2=""
+        curl -o /tmp/redfish-smart-1.prom cray-sysmgmt-health-redfish-exporter.sysmgmt-health.svc:9220/health?target=${TARGET2}
+        .
+        .
+        .
+        TARGETN=""
+        curl -o /tmp/redfish-smart-1.prom cray-sysmgmt-health-redfish-exporter.sysmgmt-health.svc:9220/health?target=${TARGETN}
+    ```
 
 1. (`ncn-mw#`) Apply the above file to create a `configmap` in `sysmgmt-health` namespace.
 
