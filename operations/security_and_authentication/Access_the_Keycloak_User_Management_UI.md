@@ -18,6 +18,13 @@ See [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal
 1. Point a browser at `https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/`, replacing `SYSTEM_DOMAIN_NAME` with the actual NCN's DNS name. Use of the `auth.cmn.` sub-domain is required for administrative access to Keycloak.
 
     The following is an example URL for a system: `https://auth.cmn.system1.us.cray.com/keycloak/`
+    
+    The value of `SYSTEM_DOMAIN_NAME` for a given cluster is obtained as in example below
+
+    ```bash
+    # echo $SYSTEM_DOMAIN
+    system1.us.cray.com
+    ```
 
     The browser may return an error message similar to the following when `auth.cmn.SYSTEM_DOMAIN_NAME/keycloak` is launched for the first time:
 
