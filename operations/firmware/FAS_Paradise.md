@@ -375,7 +375,7 @@ If the firmware file you need is not listed, run the following command to copy t
 
 ## Reset BMC
 
-This will reset the BMC to factory resets - including reseting the BMC username and password.
+This will reset the BMC to factory resets - including resetting the BMC username and password.
 *Only do this if required!*
 
 Before BMC firmware update (`ncn#`):
