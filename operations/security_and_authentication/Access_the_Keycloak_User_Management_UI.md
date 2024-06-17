@@ -21,10 +21,10 @@ See [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal
   
     The value of `SYSTEM_DOMAIN_NAME` for a given cluster is obtained as in example below
 
-     ```bash
-     # echo $SYSTEM_DOMAIN
-     system1.us.cray.com
-     ```
+         ```bash
+         # echo $SYSTEM_DOMAIN
+         system1.us.cray.com
+         ```
 
     The browser may return an error message similar to the following when `auth.cmn.SYSTEM_DOMAIN_NAME/keycloak` is launched for the first time:
 
