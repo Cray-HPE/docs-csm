@@ -1,7 +1,7 @@
 # Replacing `Foxconn` Username and Passwords in Vault
 
-'Foxconn' (Paradise) nodes may be shipped with a different default username and password then the system password.
-Because of the difference in user/password, these nodes will not be abled to be discovered.
+`Foxconn` (Paradise) nodes may be shipped with a different default username and password then the system password.
+Because of the difference in user/password, these nodes will not be able to be discovered.
 Vault needs to be updated with the `Foxconn` username and password using the `FoxconnUserPass.py` script or manually.
 
 ## Procedure using the `FoxconnUserPass.py` script
