@@ -27,6 +27,8 @@ The following targets can be updated with FAS on Paradise Nodes:
 
 ## Update Paradise `bmc_active` procedure
 
+NOTE: If a reset of the BMC is required, follow [this procedure](#reset-bmc) before and after the update of each node.  *Only do this if required!*
+
 The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to update `bmc_active` - use recipe `foxconn_nodeBMC_bmc.json`
 
 The BMC will reboot after the update is complete.
@@ -95,7 +97,7 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
 To do an AC power cycle, run the following command (`ncn#`).
 
 ```bash
-ssh $(xname) "ipmitool raw 0x38 0x02"
+ssh admin@$(xname) "ipmitool raw 0x38 0x02"
 ```
 
 The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to update `erot_active` - use recipe `foxconn_nodeBMC_erot.json`
@@ -130,7 +132,7 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
 To do an AC power cycle, run the following command (`ncn#`).
 
 ```bash
-ssh $(xname) "ipmitool raw 0x38 0x02"
+ssh admin@$(xname) "ipmitool raw 0x38 0x02"
 ```
 
 The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to update `fpga_active` - use recipe `foxconn_nodeBMC_fpga.json`
@@ -370,3 +372,29 @@ If the firmware file you need is not listed, run the following command to copy t
 ```bash
 /usr/share/doc/csm/scripts/operations/firmware/upload_foxconn_images_tftp.py
 ```
+
+## Reset BMC
+
+This will reset the BMC to factory resets - including reseting the BMC username and password.
+*Only do this if required!*
+
+Before BMC firmware update (`ncn#`):
+
+The nodes must be **OFF** before updating BMC (when doing a reset)
+
+```bash
+ssh admin@$(xname) 'fw_setenv openbmconce "factory-reset"'
+```
+
+**Update BMC firmware using one of the methods above**
+NOTE: If the password changes after the boot of BMC, FAS will no longer be able to verify the update and will fail after the time limit.
+
+After firmware update(`ncn#`):
+
+If the password changed to something other than the what is stored in vault, update the BMC password:
+
+```bash
+ssh admin@$(xname) 'ipmitool user set password 1 "password"'
+```
+
+Boot node
