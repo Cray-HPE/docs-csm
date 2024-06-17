@@ -280,7 +280,7 @@ Some systems are configured with lazy mounts that do not have this requirement f
 
     To resolve the space issue, see [Troubleshoot Ceph OSDs Reporting Full](../utility_storage/Troubleshoot_Ceph_OSDs_Reporting_Full.md).
 
-1. (`ncn-m001#`) Manually mount S3 filesystems on the master and worker nodes. These nodes try
+1. (`ncn-m001#`) Manually mount S3 and Ceph filesystems on the master and worker nodes. These nodes try
     to mount several S3 filesystems when they are booted. Since Ceph is not available during boot
     time, this workaround is required. The `boot-images` S3 filesystem is required for CPS pods
     to successfully start on worker nodes.
@@ -308,16 +308,13 @@ Some systems are configured with lazy mounts that do not have this requirement f
 1. (`ncn-m001#`) Correct the SDU collection link.
 
     If SDU has been configured on a master node, correct the `collection` link now that its `fuse.s3fs` filesystem is mounted from Ceph storage nodes.
-    Change the link target of `/var/opt/cray/sdu/collection` to `collection-mount` instead to have `collection-local` as the link target. This command checks all master nodes but changes them and restarts `cray-sdu-rda` only if needed.
+    Change the link target of `/var/opt/cray/sdu/collection` to `collection-mount` instead of `collection-local`. This command checks all master nodes but changes them and restarts `cray-sdu-rda` only if needed.
 
     ```bash
     pdsh -w ncn-m00[1-3]  '(cd /var/opt/cray/sdu; if [ -L "collection" ]; then if [ "$(readlink collection)" = "collection-local" ]; then rm collection; ln -s collection-mount collection; systemctl restart cray-sdu-rda; fi; fi)'
     ```
 
 1. (`ncn-m001#`) Check that `spire` pods have started.
-
-    **Note:** Because no containers are running, all pods first transition to an `Error` state. The `Error` state indicates that their containers were stopped. The `kubelet` on each node
-    restarts the containers for each pod. The `RESTARTS` column of the `kubectl get pods -A` command increments as each pod progresses through the restart sequence.
 
     Monitor the status of the `spire-jwks` pods to ensure they restart and enter the `Running` state.
 

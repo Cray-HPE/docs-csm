@@ -41,7 +41,7 @@ power-on command from Cray System Management \(CSM\) software.
 
    ![PSU Status LEDs](../../img/operations/PSU_Status.svg)
 
-1. (`ncn-m001#`) Unsuspend the `hms-discovery cronjob` to re-enable the `hms-discovery` job.
+1. (`ncn-m001#`) Unsuspend the `hms-discovery cronjob`.
 
    ```bash
    kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
@@ -49,12 +49,14 @@ power-on command from Cray System Management \(CSM\) software.
 
    Example output.
 
-   `ACTIVE` = `1` and `SUSPEND` = `False` in the output indicates that the job has been unsuspended:
-
    ```text
    NAME             SCHEDULE      SUSPEND   ACTIVE   LAST   SCHEDULE  AGE
-   hms-discovery    */3 * * * *   False       1      41s              33d
+   hms-discovery    */3 * * * *   False     1        41s              33d
    ```
+
+   A value of `False` in the `SUSPEND` column indicates that the cronjob is no longer suspended. A
+   value of `1` in the `Active` column indicates that a Kubernetes job is currently running for the
+   cronjob.
 
 1. (`ncn-m001#`) Use the System Admin Toolkit \(`sat`\) to power on liquid-cooled cabinets, chassis, and slots.
 
@@ -114,6 +116,8 @@ power-on command from Cray System Management \(CSM\) software.
    | x1020c5 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
    | x1020c6 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
    | x1020c7 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   ...
+   +---------+---------+-------+------+---------+------+----------+----------+
    ```
 
 ### Power On Standard Rack PDU Circuit Breakers

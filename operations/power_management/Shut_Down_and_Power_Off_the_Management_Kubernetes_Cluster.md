@@ -277,7 +277,7 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
 1. (`ncn-m001#`) Adjust boot order for management NCNs so the next boot will use disk.
    This ensures that when the node is powered up again it will boot from disk rather than attempting
-   to PXEboot before the services to support that are available.
+   to PXE boot before the services to support that are available.
 
    ```bash
    pdsh -w ncn-m001,$MASTERS,$STORAGE,$WORKERS 'efibootmgr -n $(efibootmgr | grep "CRAY UEFI OS 0"| cut -c 5-8)' | dshbak -c

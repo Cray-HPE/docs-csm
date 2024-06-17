@@ -143,7 +143,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
    1. (`slingshot-fabric-manager>`) Reboot the switches and reset their ASICs.
 
       ```bash
-      date; fmn-reset-switch -k -i $SWITCHES ; sleep 3m; date;  fmn-reset-switch -r -i $SWITCHES; sleep 3m; date
+      date; fmn-reset-switch -k -i $SWITCHES; sleep 3m; date; fmn-reset-switch -r -i $SWITCHES; sleep 3m; date
       ```
 
    1. (`slingshot-fabric-manager>`) Check whether the switches are online now.

@@ -58,6 +58,8 @@ HPE Cray standard EIA racks typically include two redundant PDUs. Some PDU model
        | x1020c5 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
        | x1020c6 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
        | x1020c7 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       ...
+       +---------+---------+-------+------+---------+------+----------+----------+
        ```
 
     1. (`ncn-m001#`) Check the power status with CAPMC.
@@ -91,6 +93,8 @@ HPE Cray standard EIA racks typically include two redundant PDUs. Some PDU model
        | x3000c0s20b2n0 | Node | 2        | Off     | OK    | True    | X86  | River | Compute     | None       | Sling    |
        | x3000c0s20b3n0 | Node | 3        | Off     | OK    | True    | X86  | River | Compute     | None       | Sling    |
        | x3000c0s20b4n0 | Node | 4        | Off     | OK    | True    | X86  | River | Compute     | None       | Sling    |
+       ...
+       +----------------+------+----------+---------+-------+---------+------+-------+-------------+------------+----------+
        ```
 
     1. (`ncn-m001#`) Check the power status with CAPMC.
