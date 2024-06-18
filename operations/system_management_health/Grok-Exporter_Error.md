@@ -18,7 +18,7 @@ installed, then disregard them.
 The root file system on master is at more than 80% but keeps hitting the threshold to raise `NodeHasDiskPressure`(85%) which causes the
 node to then attempt to reclaim ephemeral-storage.
 
-Increase/clean root filesystem and delete the grok exporter pod as below:
+Increase/clean the root filesystem and delete the grok exporter pod as follows:
 
 ```bash
 kubectl delete pod -l app=grok-exporter -n sysmgmt-health
