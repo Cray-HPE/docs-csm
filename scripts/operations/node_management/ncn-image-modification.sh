@@ -624,7 +624,7 @@ fi
 set_timezone
 if [[ $CSM_RELEASE =~ ^1\.4\.4 ]]; then
   csm_144_patch
-elif [[ $CSM_RELEASE =~ ^1\.4\.([5-9]|[1-9]0+|[1-9]{2,}) ]]; then
+elif [[ $CSM_RELEASE =~ ^^1\.4\.([5-9]|[1-9]0+|[1-9]{2,}) ]]; then
   csm_144_patch
   csm_145_patch
 fi
