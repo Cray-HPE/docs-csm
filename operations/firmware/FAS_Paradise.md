@@ -397,4 +397,5 @@ If the password changed to something other than the what is stored in vault, upd
 ssh admin@$(xname) 'ipmitool user set password 1 "password"'
 ```
 
-Boot node
+Boot the node.
+
