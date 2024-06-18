@@ -1,8 +1,8 @@
-# `grok-exporter` pod status showing as ContainerStatusUnknown Error
+# `grok-exporter` pod status showing as "ContainerStatusUnknown" Error
 
 ## Symptom
 
-On CSM upgradation, the grok-exporter pod log has errors similar to the following:
+On CSM upgrade, the grok-exporter pod log has errors similar to the following:
 
 ```text
 The node was low on resource: ephemeral-storage. Container grok-exporter was using 127200Ki, which exceeds its request of 0.
@@ -15,10 +15,10 @@ has not been installed yet. This causes the above errors for retry to be logged.
 periodically retry the connection to Kafka. These errors will be logged until SMA is installed. Therefore, if they are seen before SMA is
 installed, then disregard them.
 
-The root file system on master is at more than 80% but keeps hitting the threshold to raise NodeHasDiskPressure (85%) which causes the 
+The root file system on master is at more than 80% but keeps hitting the threshold to raise "NodeHasDiskPressure" (85%) which causes the 
 node to then attempt to reclaim ephemeral-storage.
  
-Increase/clean root filesystem and delete the grok exporter podsas below:
+Increase/clean root filesystem and delete the grok exporter pod as below:
 
 ```bash
 kubectl delete pod -l app=grok-exporter -n sysmgmt-health
