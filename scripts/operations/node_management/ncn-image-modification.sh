@@ -438,9 +438,8 @@ function csm_15X_gpg_patch {
     return 1
   fi
 
-  while IFS= read -r -d '' gpg_key
-  do
-    gpg_keys+=( "$gpg_key" )
+  while IFS= read -r -d '' gpg_key; do
+    gpg_keys+=("$gpg_key")
   done < <(find "${gpg_keys_path}" -maxdepth 1 -type f -name '*.asc' -print0)
   echo "Found [${#gpg_keys[@]}] GPG keys to import."
 
