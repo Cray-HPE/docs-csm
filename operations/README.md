@@ -36,7 +36,7 @@ The following administrative topics can be found in this guide:
     - [MetalLB in BGP-mode](#metallb-in-bgp-mode)
 - [Spire](#spire)
 - [Update firmware with FAS](#update-firmware-with-fas)
-- [User Access Service (UAS) - Deprecated](#user-access-service-uas)
+- [User Access Service (UAS) - Deprecated](#user-access-service-uas---deprecated)
 - [System Admin Toolkit (SAT)](#system-admin-toolkit-sat)
 - [Install and Upgrade Framework (IUF)](#install-and-upgrade-framework-iuf)
 - [Backup and recovery](#backup-and-recovery)
