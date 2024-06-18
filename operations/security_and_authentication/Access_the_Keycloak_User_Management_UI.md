@@ -19,7 +19,7 @@ See [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal
 
     The following is an example URL for a system: `https://auth.cmn.system1.us.cray.com/keycloak/`
 
-    The value of `SYSTEM_DOMAIN_NAME` for a given cluster is obtained as in example below
+    The value of `SYSTEM_DOMAIN_NAME` for a given cluster is obtained as shown in the following example:
 
          ```bash
          # echo $SYSTEM_DOMAIN
