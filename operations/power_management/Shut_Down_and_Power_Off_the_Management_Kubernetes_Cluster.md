@@ -280,7 +280,7 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    to PXE boot before the services to support that are available.
 
    ```bash
-   pdsh -w ncn-m001,$MASTERS,$STORAGE,$WORKERS 'efibootmgr -n $(efibootmgr | grep "CRAY UEFI OS 0"| cut -c 5-8)' | dshbak -c
+   pdsh -w ncn-m001,$MASTERS,$STORAGE,$WORKERS 'efibootmgr -n $(efibootmgr | grep "UEFI OS" | head -1 | cut -c 5-8)' | dshbak -c
    ```
 
 1. (`ncn-m001#`) Unmount `ceph` and `fuse.s3fs` filesystems from master and worker nodes.
