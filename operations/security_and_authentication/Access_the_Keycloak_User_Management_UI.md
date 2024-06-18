@@ -7,7 +7,7 @@ See [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal
 
 - This procedure uses `SYSTEM_DOMAIN_NAME` as an example for the DNS name of the non-compute node \(NCN\). Replace this name with the actual NCN's DNS name while executing this procedure.
 - This procedure assumes that the password for the Keycloak `admin` account is known. The Keycloak password is set during the software installation process.
-  - (`ncn-mw#`) The password can be obtained with the following command:
+  (`ncn-mw#`) The password can be obtained with the following command
 
       ```bash
       kubectl get secret -n services keycloak-master-admin-auth --template={{.data.password}} | base64 --decode
@@ -18,15 +18,22 @@ See [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal
 1. Point a browser at `https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/`, replacing `SYSTEM_DOMAIN_NAME` with the actual NCN's DNS name. Use of the `auth.cmn.` sub-domain is required for administrative access to Keycloak.
 
     The following is an example URL for a system: `https://auth.cmn.system1.us.cray.com/keycloak/`
+  
+    The value of `SYSTEM_DOMAIN_NAME` for a given cluster is obtained as shown in the following example:
+
+         ```bash
+         # echo $SYSTEM_DOMAIN
+         system1.us.cray.com
+         ```
 
     The browser may return an error message similar to the following when `auth.cmn.SYSTEM_DOMAIN_NAME/keycloak` is launched for the first time:
 
-    ```text
-    This Connection Is Not Private
+        ```text
+        This Connection Is Not Private
 
-    This website may be impersonating "hostname" to steal your personal or financial information.
-    You should go back to the previous page.
-    ```
+        This website may be impersonating "hostname" to steal your personal or financial information.
+        You should go back to the previous page.
+        ```
 
     See [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
     for more information on getting the Certificate Authority \(CA\) certificate on the system.
