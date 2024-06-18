@@ -55,7 +55,7 @@ power-on command from Cray System Management \(CSM\) software.
    ```
 
    A value of `False` in the `SUSPEND` column indicates that the cronjob is no longer suspended. A
-   value of `1` in the `Active` column indicates that a Kubernetes job is currently running for the
+   value of `1` in the `ACTIVE` column indicates that a Kubernetes job is currently running for the
    cronjob.
 
 1. (`ncn-m001#`) Use the System Admin Toolkit \(`sat`\) to power on liquid-cooled cabinets, chassis, and slots.
