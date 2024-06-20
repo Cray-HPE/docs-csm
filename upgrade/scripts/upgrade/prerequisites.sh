@@ -523,14 +523,14 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     fi
     set -e
 
-    # Skopeo image is stored as "skopeo:csm-${CSM_RELEASE}"
-    podman load -i "${CSM_ARTI_DIR}/vendor/skopeo.tar"
+    # Skopeo image is stored as "skopeo:csm-${CSM_RELEASE}", which may resolve to docker.io/lirary/skopeo or quay.io/skopeo, depending on configured shortcuts
+    SKOPEO_IMAGE=$(podman load -q -i "${CSM_ARTI_DIR}/vendor/skopeo.tar" 2> /dev/null | sed -e 's/^.*: //')
     nexus_images=$(yq r -j "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-precache-images).values.cacheImages' | jq -r '.[] | select( . | contains("nexus"))')
     worker_nodes=$(grep -oP "(ncn-w\d+)" /etc/hosts | sort -u)
     while read -r nexus_image; do
       echo "Uploading $nexus_image into Nexus ..."
       podman run --rm -v "${CSM_ARTI_DIR}/docker":/images \
-        "skopeo:csm-${CSM_RELEASE}" \
+        "${SKOPEO_IMAGE}" \
         --override-os=linux --override-arch=amd64 \
         copy \
         --remove-signatures \
