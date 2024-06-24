@@ -538,12 +538,12 @@ EOF
       fi
 
       rm squashfs-root/squashfs/*
-      if [[ $name =~ 'kubernetes' ]]; then
+      if [ -f "squashfs-root/srv/cray/scripts/metal/create-kis-artifacts.sh" ]; then
         chroot squashfs-root bash -c "/srv/cray/scripts/metal/create-kis-artifacts.sh kernel-initrd-only"
-      elif [[ $name =~ 'storage-ceph' ]]; then
+      elif [ -f "squashfs-root/srv/cray/scripts/common/create-kis-artifacts.sh" ]; then
         chroot squashfs-root bash -c "/srv/cray/scripts/common/create-kis-artifacts.sh kernel-initrd-only"
       else
-        echo >&2 "Error! squashFS not of type Kubernetes or Storage-CEPH, found $name."
+        echo >&2 "Fatal Error! Could not locate create-kis-artifacts.sh in $name's extracted squashFS."
         return 1
       fi
       mkdir -pv old
