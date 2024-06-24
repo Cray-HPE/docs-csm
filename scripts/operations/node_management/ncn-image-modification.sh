@@ -538,9 +538,9 @@ EOF
       fi
 
       rm squashfs-root/squashfs/*
-      if [ -f "squashfs-root/srv/cray/scripts/metal/create-kis-artifacts.sh" ] ; then
+      if [ -f "squashfs-root/srv/cray/scripts/metal/create-kis-artifacts.sh" ]; then
         chroot squashfs-root bash -c "/srv/cray/scripts/metal/create-kis-artifacts.sh kernel-initrd-only"
-      elif [ -f "squashfs-root/srv/cray/scripts/common/create-kis-artifacts.sh" ] ; then
+      elif [ -f "squashfs-root/srv/cray/scripts/common/create-kis-artifacts.sh" ]; then
         chroot squashfs-root bash -c "/srv/cray/scripts/common/create-kis-artifacts.sh kernel-initrd-only"
       else
         echo >&2 "Fatal Error! Could not locate create-kis-artifacts.sh in $name's extracted squashFS."
