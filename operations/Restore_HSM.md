@@ -11,7 +11,8 @@
         aws s3api list-objects --bucket $bucket --endpoint-url http://ncn-m001.nmn:8000
         ```
 
-    1. (`ncn-mw#`) Set name of backup file (without `.tar.gz`). example:
+    1. (`ncn-mw#`) Set name of backup file (without `.tar.gz`). For example:
+
 
         ```bash
         BACKUP_FILE=hms-backup_2023-06-28_11-12-24
