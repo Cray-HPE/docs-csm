@@ -46,9 +46,9 @@ list of patch versions.
 1. [Enable `smartmon` metrics on storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
 1. [Update management node CFS configuration](#update-management-node-cfs-configuration)
 1. [Update NCN images](#update-ncn-images)
-1. [Warnings](#warnings)
-1. [Image customization](#image-customization)
-1. [WLM backup](#wlm-backup)
+    1. [Warnings](#warnings)
+    1. [Image customization](#image-customization)
+    1. [WLM backup](#wlm-backup)
 1. [Storage nodes in-place update](#storage-nodes-in-place-update)
 1. [Kubernetes nodes rolling rebuild](#kubernetes-nodes-rolling-rebuild)
 1. [Update test suite packages](#update-test-suite-packages)
@@ -270,7 +270,7 @@ Storage CEPH nodes will receive an in-place modification, and do not need to be 
 
 ***IMPORTANT*** This minor version bump has an unprecedented rolling rebuild. This is a friendly reminder that any
 system administration data living on masters and workers **will be wiped** during the rebuild. Administrators are
-advised to take backups of their local, site files.
+advised to take backups of their local site files.
 
 > Examples:
 >
@@ -353,7 +353,7 @@ advised to take backups of their local, site files.
 > ***NOTE*** For CSM-only systems, skip this step and continue
 > onto [Storage nodes in-place update](#storage-nodes-in-place-update)
 
-1. Follow the directions in [Stage 0.4](../Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data).
+Follow the directions in [Stage 0.4](../Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data).
 
 ### Storage nodes in-place update
 
@@ -368,9 +368,9 @@ In lieu of rebuilding the storage nodes, they will be live patched.
 1. (`ncn-m001#`) Verify that `qedr` is no longer loaded.
 
    ```bash
-   pdsh -b -w $(grep -oP 'ncn-s\d+' /etc/hosts | sort -u | tr -t '\n' ',') '
-   lsmod | grep -Eo '\''^qedr'\'' || echo OK
-   ' | dshbak -c
+   pdsh -b -w $(grep -oP 'ncn-s\d+' /etc/hosts | sort -u | tr -t '\n' ',') \
+           'lsmod | grep -Eo '\''^qedr'\'' || echo OK' \
+       | dshbak -c
    ```
 
    Expected output:
