@@ -36,16 +36,7 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
     cray bos v1 session create --template-name $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
     ```
 
-### 2. Disable the Redfish endpoints for the nodes
-
-1. (`ncn-mw#`) Temporarily disable the Redfish endpoints for `NodeBMCs` present in the blade.
-
-    ```bash
-    cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b0 --id x9000c3s0b0
-    cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b1 --id x9000c3s0b1
-    ```
-
-### 3. Clear Redfish event subscriptions from BMCs on the blade
+### 2. Clear Redfish event subscriptions from BMCs on the blade
 
 1. (`ncn-mw#`) Set the environment variable `SLOT` to the blade's location.
 
@@ -74,6 +65,15 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
     Retrieving Redfish Event subscriptions from the BMC: https://x3000c0s9b0/redfish/v1/EventService/Subscriptions
     Deleting event subscription: https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
     Successfully deleted https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
+    ```
+
+### 3. Disable the Redfish endpoints for the nodes
+
+1. (`ncn-mw#`) Temporarily disable the Redfish endpoints for `NodeBMCs` present in the blade.
+
+    ```bash
+    cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b0 --id x9000c3s0b0
+    cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b1 --id x9000c3s0b1
     ```
 
 ### 4. Clear the node controller settings
