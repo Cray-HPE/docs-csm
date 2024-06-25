@@ -36,10 +36,10 @@ This section defines environment variables and directory content that is used th
     - Environment variables have been set and required IUF directories have been created
 
 1. Ensure that the
-   [latest version of docs-csm](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/update_product_stream/README.md#check-for-latest-documentation)
+   [latest version of `docs-csm`](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/update_product_stream/README.md#check-for-latest-documentation)
     is installed for the target CSM version being installed or upgraded.
 
-    For example: when upgrading from CSM version 1.5.0 to version 1.5.1, install docs-csm-1.5.1.noarch
+    For example: when upgrading from CSM version 1.5.0 to version 1.5.1, install `docs-csm-1.5.1.noarch`
 
 ## 2. Use of `iuf activity`
 
