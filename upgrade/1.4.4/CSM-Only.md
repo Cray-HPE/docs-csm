@@ -6,7 +6,7 @@ The [v1.4.4 upgrade page](../1.4.4/README.md) will refer to this page
 during [Update NCN images](../1.4.4/README.md#update-ncn-images).
 
 **If other products are installed on the system, return to [Update NCN images](../1.4.4/README.md#update-ncn-images) and
-choose option 2.**
+choose option 1.**
 
 ## Requirements
 
