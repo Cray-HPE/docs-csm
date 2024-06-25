@@ -40,6 +40,8 @@ the K8S pods. There are two primary reasons to choose to run jobs on a remote bu
     run on the native architecture of the remote node. Running `aarch64` image builds on an `aarch64` remote node
     can see over a 10 fold performance increase versus running the same job under emulation.
 
+Multiple remote build nodes may be created in any mix of architectures.
+
 Any job with an architecture matching a defined remote build node will be run remotely with no other changes
 needed. If there are multiple remote build nodes with the same architecture, there is a basic load balancing
 algorithm in place to spread the workload between all active remote build nodes.
@@ -47,8 +49,8 @@ algorithm in place to spread the workload between all active remote build nodes.
 When a new IMS job is created, the defined remote build nodes are checked to ensure SSH access is available
 and the required software is present on the node. If either of these checks fail, the node will not be used
 for the new job. If all matching remote nodes fail this check, the job will be created to run within the
-K8S environment as a standard local job. There is output in the `cray-ims` pod that will indicate why defined
-remote nodes are not being used if these checks fail.
+K8S environment as a standard local job. There is output in the `cray-ims` pod log that will indicate why
+defined remote nodes are not being used if these checks fail.
 
 See [Troubleshoot Remote Build Node](Troubleshoot_Remote_Build_Node.md) for issues running remote jobs.
 
@@ -128,7 +130,7 @@ used to work with images, or if it can still run compute jobs while building ima
 ### Create a barebones IMS builder image
 
 If there is no existing compute image to boot a node with, one can be created based on the barebones
-image that is installed with CSM.
+image that is installed with CSM. This image may be used to boot multiple remote build nodes.
 
 1. (`ncn-mw#`) Find the latest CSM install on the system.
 
@@ -213,7 +215,7 @@ image that is installed with CSM.
 
         Expected output will be something similar to:
 
-    ```json
+        ```json
         {
             "last_updated": "2024-04-23T16:44:55Z",
             "layers": [
@@ -348,16 +350,16 @@ image that is installed with CSM.
         {
             "boot_sets": {
                 "compute": {
-                "arch": "X86",
-                "etag": "9bbdebd4e51f32a2db8f8dd3e6124166",
-                "kernel_parameters": "ip=dhcp quiet spire_join_token=${SPIRE_JOIN_TOKEN} root=live:s3://boot-images/f6d9cfc7-9291-4c46-8350-c252b919d396/rootfs nmd_data=url=s3://boot-images/f6d9cfc7-9291-4c46-8350-c252b919d396/rootfs,etag=9bbdebd4e51f32a2db8f8dd3e6124166",
-                "node_roles_groups": [
-                    "Compute"
-                ],
-                "path": "s3://boot-images/f6d9cfc7-9291-4c46-8350-c252b919d396/manifest.json",
-                "rootfs_provider": "",
-                "rootfs_provider_passthrough": "",
-                "type": "s3"
+                    "arch": "X86",
+                    "etag": "9bbdebd4e51f32a2db8f8dd3e6124166",
+                    "kernel_parameters": "ip=dhcp quiet spire_join_token=${SPIRE_JOIN_TOKEN} root=live:s3://boot-images/f6d9cfc7-9291-4c46-8350-c252b919d396/rootfs nmd_data=url=s3://boot-images/f6d9cfc7-9291-4c46-8350-c252b919d396/rootfs,etag=9bbdebd4e51f32a2db8f8dd3e6124166",
+                    "node_roles_groups": [
+                        "Compute"
+                    ],
+                    "path": "s3://boot-images/f6d9cfc7-9291-4c46-8350-c252b919d396/manifest.json",
+                    "rootfs_provider": "",
+                    "rootfs_provider_passthrough": "",
+                    "type": "s3"
                 }
             },
             "name": "bos_ims_remote_node",
@@ -385,6 +387,14 @@ storage being available to the IMS builder node. This can be achieved by mountin
 directly into the IMS builder node.
 
 Below is a procedure to provide the IMS builder node with additional storage.
+
+NOTE: The Ceph storage described below has several important characteristics to keep in mind:
+
+* This RBD device is created globally.
+* Each RBD device will still exist after the remote build node is rebooted.
+* Each RBD device must have a unique name, but may be re-used after the node is rebooted.
+* This type of RBD device may only be mounted on one node - one must be created for each remote build node.
+* If the remote build node is rebooted, the RBD device must be manually mounted again.
 
 1. Set an environment variable for the xname of the remote build node.
 
