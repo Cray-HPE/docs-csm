@@ -139,4 +139,4 @@ choose option 1.**
            -p "$NEW_STORAGE_IMAGE_ID"
        ```
 
-1. Return to [WLM backup](./README.md#wlm-backup)
+1. Return to [WLM backup](./README.md#update-test-suite-packages)
