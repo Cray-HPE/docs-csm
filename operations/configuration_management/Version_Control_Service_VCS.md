@@ -232,16 +232,16 @@ Data for Gitea is stored in two places: Git content is stored directly in a PVC,
 in a Postgres database. Because of this, both sources must be backed up and restored together.
 
 * [Automated backup and restore](#automated-backup-and-restore)
-  * [Automated backup](#automated-backup)
-  * [Automated restore](#automated-restore)
+    * [Automated backup](#automated-backup)
+    * [Automated restore](#automated-restore)
 * [Manual backup and restore](#manual-backup-and-restore)
-  * [Manually backup Postgres data](#manually-backup-postgres-data)
-  * [Manually backup PVC data](#manually-backup-pvc-data)
-  * [Manually restore Postgres data](#manually-restore-postgres-data)
-  * [Manually restore PVC data](#manually-restore-pvc-data)
+    * [Manually backup Postgres data](#manually-backup-postgres-data)
+    * [Manually backup PVC data](#manually-backup-pvc-data)
+    * [Manually restore Postgres data](#manually-restore-postgres-data)
+    * [Manually restore PVC data](#manually-restore-pvc-data)
 * [Alternative backup/restore strategy](#alternative-backuprestore-strategy)
-  * [Alternative export method](#alternative-export-method)
-  * [Alternative import method](#alternative-import-method)
+    * [Alternative export method](#alternative-export-method)
+    * [Alternative import method](#alternative-import-method)
 
 ### Automated backup and restore
 
