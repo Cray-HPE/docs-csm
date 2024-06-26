@@ -190,69 +190,33 @@ The steps in this section load hand-off data before a later procedure reboots th
 
 It is important to backup some files from `ncn-m001` before it is rebooted.
 
-1. (`pit#`) Set up passwordless SSH **to** the PIT node from `ncn-m002`.
-
-    > The `ssh` command below may prompt for the NCN root password.
-
-    ```bash
-    ssh ncn-m002 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys &&
-        chmod 600 /root/.ssh/authorized_keys
-    ```
-
 1. (`pit#`) Stop the typescript session.
 
     ```bash
     exit
     ```
 
-1. (`pit#`) Preserve logs and configuration files if desired.
+1. (`pit#`) Create PIT backup and copy it off.
 
-    The following commands create a `tar` archive of select files on the PIT node. This archive is located
-    in a directory that will be backed up in the next steps.
+    This script creates a backup of select files on the PIT node, copying them to both
+    another master NCN and to S3.
 
-    ```bash
-    mkdir -pv "${PITDATA}"/prep/logs &&
-         ls -d \
-            /etc/dnsmasq.d \
-            /etc/os-release \
-            /etc/sysconfig/network \
-            /opt/cray/tests/cmsdev.log \
-            /opt/cray/tests/install/logs \
-            /opt/cray/tests/logs \
-            /root/.canu \
-            /root/.config/cray/logs \
-            /root/csm*.{log,txt} \
-            /tmp/*.log \
-            /usr/share/doc/csm/install/scripts/csm_services/yapl.log \
-            /var/log/conman \
-            /var/log/zypper.log 2>/dev/null |
-         sed 's_^/__' |
-         xargs tar -C / -czvf "${PITDATA}/prep/logs/pit-backup-$(date +%Y-%m-%d_%H-%M-%S).tgz"
-    ```
-
-1. (`pit#`) Copy some of the installation files to `ncn-m002`.
-
-    These files will be copied back to `ncn-m001` after the PIT node is rebooted.
+    > The script below may prompt for the NCN root password.
 
     ```bash
-    ssh ncn-m002 \
-        "mkdir -pv /metal/bootstrap
-         rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${PITDATA}'/prep /metal/bootstrap/
-         rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${CSM_PATH}'/images/pre-install-toolkit/pre-install-toolkit*.iso /metal/bootstrap/"
+    /usr/share/doc/csm/install/scripts/backup-pit-data.sh
     ```
 
-1. (`pit#`) Upload install files to S3 in the cluster.
+    Ensure that the script output ends with `COMPLETED`, indicating that the procedure was successful.
 
-    ```bash
-    PITBackupDateTime=$(date +%Y-%m-%d_%H-%M-%S)
-    tar -czvf "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" "${PITDATA}/prep" "${PITDATA}/configs" "${CSM_PATH}/images/pre-install-toolkit/pre-install-toolkit"*.iso &&
-    cray artifacts create config-data \
-        "PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" \
-        "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" &&
-    rm -v "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" && echo COMPLETED
+1. In the output of the script run in the previous step, note the value it reports for the `first-master-hostname`.
+   This will be needed in a later step.
+
+    Example output excerpt:
+
+    ```text
+    first-master-hostname: ncn-m002
     ```
-
-    Ensure that the previous command chain output ends with `COMPLETED`, indicating that the procedure was successful.
 
 ## 4. Reboot
 
@@ -327,13 +291,15 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
 1. (`ncn-m001#`) Restore and verify the site link.
 
     Restore networking files from the manual backup taken during the
-    [Backup](#33-backup) step.
+    [Backup](#33-backup) step. Set the `FM` variable to the `first-master-hostname`
+    value noted in that section.
 
     > **`NOTE`** Do NOT change any default NCN hostname; otherwise, unexpected deployment or upgrade errors may happen.
 
     ```bash
     SYSTEM_NAME=eniac
-    rsync "ncn-m002:/metal/bootstrap/prep/${SYSTEM_NAME}/pit-files/ifcfg-lan0" /etc/sysconfig/network/ && \
+    FM=ncn-m002
+    rsync "${FM}:/metal/bootstrap/prep/${SYSTEM_NAME}/pit-files/ifcfg-lan0" /etc/sysconfig/network/ && \
         wicked ifreload lan0 && \
         wicked ifstatus lan0
     ```
@@ -378,19 +344,15 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
         exit
         ```
 
-    1. (`ncn-m002#`) Copy install files back to `ncn-m001`.
+    1. If `ncn-m002` is not the `first-master-hostname` noted in the [Backup](#33-backup) step, then SSH to that node.
+
+    1. (`first-master-hostname#`) Copy install files back to `ncn-m001`.
 
         ```bash
         rsync -rltDv -P /metal/bootstrap ncn-m001:/metal/ && rm -rfv /metal/bootstrap
         ```
 
-    1. (`ncn-m002#`) Log out of `ncn-m002`.
-
-        ```bash
-        exit
-        ```
-
-    1. Log in to `ncn-m001`.
+    1. Log out of the other nodes and log in to `ncn-m001`.
 
         SSH back into `ncn-m001` or log in at the console.
 
