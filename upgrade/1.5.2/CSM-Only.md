@@ -1,8 +1,8 @@
 # CSM Only Upgrade
 
-This page provides guidance for systems with exclusively CSM installed that are performing an upgrade from a CSM v1.5.X release to the CSM v1.5.2 release.
+This page provides guidance for systems with exclusively CSM installed that are performing an upgrade from a CSM `v1.5.X` release to the CSM `v1.5.2` release.
 
-The [v1.5.2 upgrade page](../1.5.2/README.md) will refer to this page
+The [`v1.5.2` upgrade page](../1.5.2/README.md) will refer to this page
 during [Update NCN images](../1.5.2/README.md#update-ncn-images).
 
 **If other products are installed on the system, return to [Update NCN images](../1.5.2/README.md#update-ncn-images) and

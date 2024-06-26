@@ -213,7 +213,7 @@ version of CSM being installed. It then waits for the components to reach a conf
 
 ### Update NCN images
 
-NCN images should be rebuilt at this time to acquire any changes from csm-config.
+NCN images should be rebuilt at this time to acquire any changes from CSM config.
 
 This step does not rebuild NCNs. These new images are built and stored in S3 to facilitate the add and rebuild NCN procedures.
 
