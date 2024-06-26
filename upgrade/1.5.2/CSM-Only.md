@@ -39,7 +39,6 @@ choose option 1.**
       KUBERNETES_IMAGE_ID="$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' \
         | yq r -j - '"'${CSM_RELEASE}'".images' \
         | jq -r '. as $o | keys_unsorted[] | select(startswith("secure-kubernetes")) | $o[.].id')"
-      export KUBERNETES_IMAGE_ID
       echo "KUBERNETES_IMAGE_ID=$KUBERNETES_IMAGE_ID"
       ```
 
@@ -49,7 +48,6 @@ choose option 1.**
       STORAGE_IMAGE_ID="$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' \
         | yq r -j - '"'${CSM_RELEASE}'".images' \
         | jq -r '. as $o | keys_unsorted[] | select(startswith("secure-storage")) | $o[.].id')"
-      export STORAGE_IMAGE_ID
       echo "STORAGE_IMAGE_ID=$STORAGE_IMAGE_ID"
       ```
 
@@ -113,7 +111,6 @@ choose option 1.**
 
       ```bash
       NEW_KUBERNETES_IMAGE_ID="$(cray cfs sessions describe "${K8S_CFS_SESSION_NAME}" --format json | jq -r '.status.artifacts[].result_id')"
-      export NEW_KUBERNETES_IMAGE_ID
       echo "NEW_KUBERNETES_IMAGE_ID=$NEW_KUBERNETES_IMAGE_ID"
       ```
 
@@ -121,7 +118,6 @@ choose option 1.**
 
       ```bash
       NEW_STORAGE_IMAGE_ID="$(cray cfs sessions describe "${CEPH_CFS_SESSION_NAME}" --format json | jq -r '.status.artifacts[].result_id')"
-      export NEW_STORAGE_IMAGE_ID
       echo "NEW_STORAGE_IMAGE_ID=$NEW_STORAGE_IMAGE_ID"
       ```
 
