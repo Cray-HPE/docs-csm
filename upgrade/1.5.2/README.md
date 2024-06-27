@@ -281,7 +281,7 @@ This step does not rebuild NCNs. These new images are built and stored in S3 to 
 
 1. Choose one of the following options based on the output from the previous step.
 
-    * Option 1: [Upgrade of CSM on system with additional products](../Stage_0_Prerequisites.md#option-1-upgrade-of-csm-and-additional-products)
+    * Option 1: [Upgrade of CSM on system with additional products](./CSM-With-Other-Products.md)
     * Option 2: [Upgrade of CSM on CSM-only system](./CSM-Only.md#steps) ***(Do not use this procedure if more than CSM is
       installed on the system.\)***
 
