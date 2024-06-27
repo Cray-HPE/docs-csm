@@ -24,8 +24,8 @@ Later in the CSM `v1.5.2` patch process, nodes will be rebooted into these image
 
 In order to follow this procedure, you will need to know the name of the IUF activity used to
 perform the initial installation of the HPE Cray EX software products. See the
-[Activities](../operations/iuf/IUF.md#activities) section of the IUF documentation for more
-information on IUF activities. See [`list-activities`](../operations/iuf/IUF.md#list-activities)
+[Activities](../../operations/iuf/IUF.md#activities) section of the IUF documentation for more
+information on IUF activities. See [`list-activities`](../../operations/iuf/IUF.md#list-activities)
 for information about listing the IUF activities on the system. The first step provides an
 example showing how to find the IUF activity.
 
@@ -193,19 +193,19 @@ example showing how to find the IUF activity.
 
 1. (`ncn-m001#`) Assign the images to the management nodes in BSS.
 
-   - Master management nodes:
+   * Master management nodes:
 
       ```bash
       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -m -p "$MASTER_IMAGE_ID"
       ```
 
-   - Storage management nodes:
+   * Storage management nodes:
 
       ```bash
       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -s -p "$STORAGE_IMAGE_ID"
       ```
 
-   - Worker management nodes:
+   * Worker management nodes:
 
       ```bash
       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -w -p "$WORKER_IMAGE_ID"
