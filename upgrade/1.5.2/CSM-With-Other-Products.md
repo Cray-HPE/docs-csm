@@ -96,6 +96,9 @@ example showing how to find the IUF activity.
    cp -pv "${ACTIVITY_DIR}/state/session_vars.yaml" "${BOOTPREP_DIR}"
    ```
 
+   > Update the `session_vars.yaml` file as needed based on the product
+   > versions that are installed on the system.
+
 1. (`ncn-m001#`) Modify the CSM version in the copied `session_vars.yaml`:
 
    ```bash
