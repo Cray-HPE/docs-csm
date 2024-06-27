@@ -13,7 +13,6 @@
 
     1. (`ncn-mw#`) Set name of backup file (without `.tar.gz`). For example:
 
-
         ```bash
         BACKUP_FILE=hms-backup_2023-06-28_11-12-24
         ```
