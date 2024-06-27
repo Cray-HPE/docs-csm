@@ -16,7 +16,7 @@ choose option 1.**
 
 This process creates new NCN node images and CFS configurations in order to acquire any changes from CSM config.
 These images and CFS configurations will be assigned to the NCNs during this process.
-Later in the CSM `v1.5.2` patch process nodes will be rebooted into these images and the CFS configuration will be applied to the nodes.
+Later in the CSM `v1.5.2` patch process, nodes will be rebooted into these images and the CFS configuration will be applied to the nodes.
 
 ## Steps
 
