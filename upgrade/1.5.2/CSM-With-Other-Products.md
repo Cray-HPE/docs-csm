@@ -10,7 +10,14 @@ choose option 1.**
 
 ## Requirements
 
-* `CSM_RELEASE` is set in the shell environment on `ncn-m001`. See [Preparation](README.md#preparation) for details on how it should be set.
+* `CSM_RELEASE_VERSION` is set in the shell environment on `ncn-m001`. See [Preparation](README.md#preparation) for details on how it should be set.
+
+* Set `CSM_RELEASE` in the shell environment to the same value as `CSM_RELEASE_VERSION`.
+
+    ```text
+   export CSM_RELEASE="${CSM_RELEASE_VERSION}"
+   echo "${CSM_RELEASE}"
+   ```
 
 ## Overview
 

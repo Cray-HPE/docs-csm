@@ -12,6 +12,13 @@ choose option 1.**
 
 * `CSM_RELEASE` is set in the shell environment on `ncn-m001`. See [Preparation](README.md#preparation) for details on how it should be set.
 
+* Set `CSM_RELEASE` in the shell environment to the same value as `CSM_RELEASE_VERSION`.
+
+    ```text
+   export CSM_RELEASE="${CSM_RELEASE_VERSION}"
+   echo "${CSM_RELEASE}"
+   ```
+
 ## Steps
 
 1. (`ncn-m001#`) Generate a new [CFS](../../glossary.md#configuration-framework-service-cfs) configuration for the management nodes.
