@@ -56,6 +56,7 @@
         ```bash
         cray artifacts create config-data "${TARFILE}" "/root/${TARFILE}"
         ```
+
 1. Update ceph node-exporter config for SNMP counters.
 
     > **OPTIONAL:** This is an optional step.
