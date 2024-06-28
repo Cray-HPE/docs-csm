@@ -354,11 +354,18 @@ SUCCESS
 These clusters are automatically backed up every 24 hours, but taking a manual backup at this stage in the upgrade
 enables restoring from backup later in this process if needed.
 
-### NCN reboot
+### NCN Upgrade
 
-This is an optional step but is strongly recommended. As each patch release includes updated container images that may
-contain CVE fixes, it is recommended to reboot each NCN to refresh cached container images. For detailed instructions on
-how to gracefully reboot each NCN, refer to [Reboot NCNs](../../operations/node_management/Reboot_NCNs.md).
+This step is neccessary so that nodes are using the correct images. If NCN are
+not upgraded into these images, then `cloudinit` would fail on the nodes the next
+time the nodes are rebuilt. The images that the nodes are being upgraded to were
+set in BSS during [Update NCN images](../1.5.2/README.md#update-ncn-images).
+If the NCN nodes are not upgraded now, then any node reboot will cause the node to be
+booted into this new image which is not following the proper upgrade procedure which could cause problems.
+
+Additionally, each patch release includes updated container images that may
+contain CVE fixes, rebuilding each NCN will refresh cached container images.
+For instructions on how to upgrade NCNs for this patch release, refer to [Upgrade NCN during CSM `1.5.2` patch](./Upgrade_NCN_images.md).
 
 ### Configure E1000 node and Redfish Exporter for SMART data
 
