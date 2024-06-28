@@ -75,7 +75,7 @@ As the script leverages Keycloak administrative APIs, the `--keycloakHost` comma
 
 > **`NOTES:`**
 >
-> - This script creates a `temporary user` that can be used for basic `cray` CLI command only until Keycloak is populated with real users. At which point, the `cray` CLI should be re-initialized with a real user. 
+> - This script creates a `temporary user` that can be used for basic `cray` CLI command only until Keycloak is populated with real users. At which point, the `cray` CLI should be re-initialized with a real user.
 > - The `temporary user` that was created is only in Keycloak - it is not a `real` user with login shells and home directories.
 
 ### Procedure for temporary Keycloak user
