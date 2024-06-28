@@ -3,7 +3,7 @@
 This page provides guidance for systems that are performing an upgrade from a CSM `v1.5.X` release to the CSM `v1.5.2` release.
 
 The [`v1.5.2` upgrade page](../1.5.2/README.md) will refer to this page
-during [Update NCN images](../1.5.2/README.md#update-ncn-images).
+during [NCN Upgrade](../1.5.2/README.md#ncn-upgrade).
 
 ## Overview
 
@@ -20,7 +20,7 @@ upgrade procedure which could cause problems.
 
 1. (`ncn-m001#`) Upgrade storage nodes.
 
-    1. Pick one storage node to test the first storage node upgrade on. This will be refered to as the `CANARY_NODE`.
+    1. Pick one storage node to test the first storage node upgrade on. This will be referred to as the `CANARY_NODE`.
 
         ```bash
         CANARY_NODE="ncn-s001"

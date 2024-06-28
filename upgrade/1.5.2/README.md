@@ -62,7 +62,7 @@ list of patch versions.
 1. [Update test suite packages](#update-test-suite-packages)
 1. [Verification](#verification)
 1. [Take Etcd manual backup](#take-etcd-manual-backup)
-1. [NCN reboot](#ncn-reboot)
+1. [NCN upgrade](#ncn-upgrade)
 1. [Configure E1000 node and Redfish Exporter for SMART data](#configure-e1000-node-and-redfish-exporter-for-smart-data)
 1. [Complete upgrade](#complete-upgrade)
 
@@ -354,9 +354,9 @@ SUCCESS
 These clusters are automatically backed up every 24 hours, but taking a manual backup at this stage in the upgrade
 enables restoring from backup later in this process if needed.
 
-### NCN Upgrade
+### NCN upgrade
 
-This step is neccessary so that nodes are using the correct images. If NCN are
+This step is necessary so that nodes are using the correct images. If NCN are
 not upgraded into these images, then `cloudinit` would fail on the nodes the next
 time the nodes are rebuilt. The images that the nodes are being upgraded to were
 set in BSS during [Update NCN images](../1.5.2/README.md#update-ncn-images).
