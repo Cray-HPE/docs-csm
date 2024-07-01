@@ -14,7 +14,7 @@ choose option 1.**
 
 * Set `CSM_RELEASE` in the shell environment to the same value as `CSM_RELEASE_VERSION`.
 
-    ```text
+    ```bash
    export CSM_RELEASE="${CSM_RELEASE_VERSION}"
    echo "${CSM_RELEASE}"
    ```
