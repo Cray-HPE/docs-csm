@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
+# (C) Copyright [2022,2024] Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -26,6 +26,7 @@ import argparse
 import json
 import re
 import netaddr
+from ipaddress import ip_address
 
 CDU_MGMT_SWITCH_XNAME_REGEX="^d([0-9]+)w([0-9]+)$"
 MGMT_HL_SWITCH_XNAME_REGEX="^x([0-9]{1,4})c([0-7])h([1-9][0-9]*)s([1-9])$"
@@ -36,32 +37,92 @@ def find_subnet(sls_network, name):
         if subnet["Name"] == name:
             network_hardware_subnet = subnet
             break
-    
+
     return  network_hardware_subnet
 
-def find_next_available_ip(sls_subnet):
+def find_next_available_ip(sls_subnet, reserved_ips=[]):
     subnet = netaddr.IPNetwork(sls_subnet["CIDR"])
 
     existing_ip_reservations = netaddr.IPSet()
-    existing_ip_reservations.add(sls_subnet["Gateway"])
+
     for ip_reservation in sls_subnet["IPReservations"]:
         print("  Found existing IP reservation {} with IP {}".format(ip_reservation["Name"], ip_reservation["IPAddress"]))
         existing_ip_reservations.add(ip_reservation["IPAddress"])
 
-    for available_ip in list(subnet[1:-2]):
+    start_ip = None
+    if len(existing_ip_reservations) > 0:
+        start_ip = list(existing_ip_reservations)[0]
+
+    existing_ip_reservations.add(sls_subnet["Gateway"])
+
+    # Add reserved IP addresses. These included IP addresses that could be selected for DHCP.
+    for ip_reservation in reserved_ips:
+        existing_ip_reservations.add(ip_reservation)
+
+    index = 2  # The default is 2 to exclude the Gateway and the address after the gateway
+    if start_ip:
+        # find the index of the start_ip in the full list of IPs for the CIDR
+        i = 1
+        for ip in list(subnet[0:-2]):
+            if str(ip) == str(start_ip):
+                index = i
+                break
+            i += 1
+
+    # Find an IP that is not used starting at the index found above
+    for available_ip in list(subnet[index:-2]):
         if available_ip not in existing_ip_reservations:
             print("  {} Available for use.".format(available_ip))
             return available_ip
 
+    # If an IP wasn't found after the current reservations,
+    # then look for one in the IPs that come before the current reservations
+    if 1 < index:
+        for available_ip in list(subnet[1:index-1]):
+            if available_ip not in existing_ip_reservations:
+                print("  {} Available for use.".format(available_ip))
+                return available_ip
+
+    return None
+
+def get_reserved_ips(sls_subnet):
+    name = sls_subnet["Name"]
+    reserved = []
+    if "DHCPEnd" in sls_subnet and "DHCPStart" in sls_subnet:
+        start = ip_address(sls_subnet["DHCPStart"])
+        end = ip_address(sls_subnet["DHCPEnd"])
+        if start <= end:
+            while start <= end:
+                print(f"  {name} Reserved for DHCP {start}")
+                reserved.append(str(start))
+                start += 1
+
+    for ip_reservation in sls_subnet.get("IPReservations", []):
+        ip = ip_reservation["IPAddress"]
+        print(f"  {name} Reserved {ip}")
+        reserved.append(ip)
+
+    return reserved
+
 def add_cdu_ip_reservation(sls_network, xname, alias):
+    print("Selecting IP Reservation for {} CDU Switch in {}'s network_hardware subnet".format(xname, sls_network["Name"]))
+
+    # collect all used IPs in every subnet of the subnet
+    reserved_ips = []
+    for subnet in sls_network["ExtraProperties"]["Subnets"]:
+        ips = get_reserved_ips(subnet)
+        reserved_ips.extend(ips)
+
     sls_subnet = find_subnet(sls_network, "network_hardware")
-    if sls_subnet == None:
+    if sls_subnet is None:
         print("Error: Unable to find network_hardware subnet in {} network!".format(network_name))
         exit(1)
 
-    print("Selecting IP Reservation for {} CDU Switch in {}'s network_hardware subnet".format(xname, sls_network["Name"]))
+    ip = find_next_available_ip(sls_subnet, reserved_ips=reserved_ips)
+    if ip is None:
+        print(f"Error: Failed to find a free IP address in network: {network_name}, subnet: {sls_subnet.get('Name')}")
+        exit(1)
 
-    ip = find_next_available_ip(sls_subnet)
     ip_reservation = {
         "Name": alias,
         "IPAddress": str(ip),
@@ -148,10 +209,10 @@ for xname in allHardware:
 
     if hardware["Type"] != "comptype_cdu_mgmt_switch" and hardware["Type"] != "comptype_hl_switch":
         continue
-    
+
     if "ExtraProperties" not in hardware:
         continue
-    
+
     if "Aliases" not in hardware["ExtraProperties"]:
         print("Error {} is missing Alias extra property!".format(xname))
         exit(1)
