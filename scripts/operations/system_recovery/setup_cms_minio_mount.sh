@@ -35,10 +35,13 @@ set -o pipefail
 
 function usage {
   echo "Usage: setup_cms_minio_mount.sh {--rw | --ro} [--init] [mount_point]" >&2
+  echo "       setup_cms_minio_mount.sh --nomount --init" >&2
   echo >&2
   echo "If --init is specified, the cms bucket will be created, if it does not exist." >&2
   echo "The --rw / --ro arguments govern whether it will be mounted read-write or read-only" >&2
   echo "If mount_point is not specified, it defaults to '${DEFAULT_CMS_MINIO_MNT}'" >&2
+  echo >&2
+  echo "The --nomount --init option creates the cms bucket (if needed) but does not create a mount" >&2
   echo >&2
 }
 
@@ -49,16 +52,19 @@ INIT=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     "--ro")
-      [[ ${MOUNT_OPT} == "ro" ]] && usage_err_exit "Argument --ro may only be specified once"
-      [[ ${MOUNT_OPT} == "rw" ]] && usage_err_exit "Arguments --ro and --rw are mutually exclusive"
-      [[ -n ${MOUNT_OPT} ]] && err_exit "Programming logic error: MOUNT_OPT='${MOUNT_OPT}'"
+      [[ ${MOUNT_OPT} == "ro" ]] && usage_err_exit "Argument --$1 may only be specified once"
+      [[ -n ${MOUNT_OPT} ]] && usage_err_exit "Arguments $1 and --${MOUNT_OPT} are mutually exclusive"
       MOUNT_OPT=ro
       ;;
     "--rw")
-      [[ ${MOUNT_OPT} == "rw" ]] && usage_err_exit "Argument --rw may only be specified once"
-      [[ ${MOUNT_OPT} == "ro" ]] && usage_err_exit "Arguments --ro and --rw are mutually exclusive"
-      [[ -n ${MOUNT_OPT} ]] && err_exit "Programming logic error: MOUNT_OPT='${MOUNT_OPT}'"
+      [[ ${MOUNT_OPT} == "rw" ]] && usage_err_exit "Argument --$1 may only be specified once"
+      [[ -n ${MOUNT_OPT} ]] && usage_err_exit "Arguments $1 and --${MOUNT_OPT} are mutually exclusive"
       MOUNT_OPT=rw
+      ;;
+    "--nomount")
+      [[ ${MOUNT_OPT} == "nomount" ]] && usage_err_exit "Argument --$1 may only be specified once"
+      [[ -n ${MOUNT_OPT} ]] && usage_err_exit "Arguments $1 and --${MOUNT_OPT} are mutually exclusive"
+      MOUNT_OPT=nomount
       ;;
     "--init")
       [[ -n ${INIT} ]] && usage_err_exit "Argument --init may only be specified once"
@@ -66,6 +72,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)
       [[ $# -gt 1 ]] && usage_err_exit "Too many arguments"
+      [[ ${MOUNT_OPT} == "nomount" ]] && usage_err_exit "Invalid to specify a mount point when --nomount specified"
       [[ -n $1 ]] || usage_err_exit "Mount point may not be blank"
       [[ $1 =~ ^/.* ]] || usage_err_exit "Cannot use relative path for mount point"
       CMS_MINIO_MNT="$1"
@@ -74,8 +81,9 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
-[[ -z ${MOUNT_OPT} ]] && usage_err_exit "Either --ro or --rw must be specified"
-[[ -n ${CMS_MINIO_MNT} ]] || CMS_MINIO_MNT="${DEFAULT_CMS_MINIO_MNT}"
+[[ -z ${MOUNT_OPT} ]] && usage_err_exit "One of the following options must be specified: --nomount, --ro, --rw"
+
+[[ ${MOUNT_OPT} == "nomount" && -z ${INIT} ]] && usage_err_exit "Invalid to specify --nomount without --init"
 
 # Make sure the credentials file exists and is not empty
 [[ -e ${AWS_CREDFILE} ]] || err_exit "AWS credentials file (${AWS_CREDFILE}) does not exist"
@@ -87,7 +95,14 @@ if ! aws s3api list-buckets --endpoint-url http://ncn-m001.nmn:8000 | jq -r '.Bu
   [[ -z ${INIT} ]] && err_exit "'cms' bucket does not exist in Minio"
   echo "Creating cms bucket"
   run_cmd aws s3api create-bucket --bucket cms --endpoint-url http://ncn-m001.nmn:8000
+  echo "cms minio bucket created"
+else
+  echo "cms minio bucket already exists"
 fi
+
+[[ ${MOUNT_OPT} == "nomount" ]] && exit 0
+
+[[ -n ${CMS_MINIO_MNT} ]] || CMS_MINIO_MNT="${DEFAULT_CMS_MINIO_MNT}"
 
 # Unmount, if it is currently mounted
 umount "${CMS_MINIO_MNT}" > /dev/null 2>&1
