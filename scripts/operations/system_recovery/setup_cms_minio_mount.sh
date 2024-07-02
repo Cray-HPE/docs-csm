@@ -23,7 +23,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-CMS_MINIO_MNT=/etc/cray/minio/cms
+DEFAULT_CMS_MINIO_MNT=/etc/cray/minio/cms
 AWS_CREDFILE=/root/.aws/credentials
 
 locOfScript=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
@@ -34,17 +34,18 @@ locOfScript=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 set -o pipefail
 
 function usage {
-  echo "Usage: setup_cms_minio_mount.sh {--rw | --ro} [--init]" >&2
+  echo "Usage: setup_cms_minio_mount.sh {--rw | --ro} [--init] [mount_point]" >&2
   echo >&2
   echo "If --init is specified, the cms bucket will be created, if it does not exist." >&2
   echo "The --rw / --ro arguments govern whether it will be mounted read-write or read-only" >&2
+  echo "If mount_point is not specified, it defaults to '${DEFAULT_CMS_MINIO_MNT}'" >&2
   echo >&2
 }
 
+CMS_MINIO_MNT=""
 MOUNT_OPT=""
 INIT=""
 [[ $# -eq 0 ]] && usage_err_exit "At least 1 argument is required"
-[[ $# -gt 2 ]] && usage_err_exit "Too many arguments"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     "--ro")
@@ -63,13 +64,18 @@ while [[ $# -gt 0 ]]; do
       [[ -n ${INIT} ]] && usage_err_exit "Argument --init may only be specified once"
       INIT=Y
       ;;
-    *) usage_err_exit "Invalid argument: '$1'" ;;
+    *)
+      [[ $# -gt 1 ]] && usage_err_exit "Too many arguments"
+      [[ -n $1 ]] || usage_err_exit "Mount point may not be blank"
+      [[ $1 =~ ^/.* ]] || usage_err_exit "Cannot use relative path for mount point"
+      CMS_MINIO_MNT="$1"
+      ;;
   esac
   shift
 done
 
 [[ -z ${MOUNT_OPT} ]] && usage_err_exit "Either --ro or --rw must be specified"
-[[ -n ${CMS_MINIO_MNT} ]] || err_exit "Variable not set: CMS_MINIO_MNT"
+[[ -n ${CMS_MINIO_MNT} ]] || CMS_MINIO_MNT="${DEFAULT_CMS_MINIO_MNT}"
 
 # Make sure the credentials file exists and is not empty
 [[ -e ${AWS_CREDFILE} ]] || err_exit "AWS credentials file (${AWS_CREDFILE}) does not exist"
