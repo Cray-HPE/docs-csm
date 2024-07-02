@@ -83,25 +83,51 @@ function backup_pvc {
 }
 
 function usage {
-  echo "Usage: backup_vcs.sh [output_directory]" >&2
+  echo "Usage: backup_vcs.sh [-t workdir_location] [output_directory]" >&2
   echo
-  echo "If no directory is specified, one is created under the user's home directory" >&2
+  echo "If no output directory is specified, one is created under the user's home directory" >&2
+  echo "If no working directory is specified, one is created under the user's home directory" >&2
 }
 
-[[ $# -gt 1 ]] && usage_err_exit "Too many arguments"
-if [[ $# -eq 0 ]]; then
-  OUTDIR=~
-else
-  [[ -n $1 ]] || usage_err_exit "Output directory argument may not be blank"
-  [[ -e $1 ]] || usage_err_exit "Specified output directory ($1) does not exist"
-  [[ -d $1 ]] || usage_err_exit "Specified output directory ($1) exists but is not a directory"
-  OUTDIR="$1"
+OUTDIR=""
+WORKDIR_BASE=""
+
+if [[ $# -eq 1 ]] && [[ $1 == "-h" || $1 == "--help" ]]; then
+  usage
+  exit 2
 fi
-TMPDIR=$(run_mktemp -d "${OUTDIR}/gitea_vcs_backup.$(date +%Y%m%d%H%M%S).XXX") || err_exit
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    "-t")
+      [[ $# -gt 1 ]] || usage_err_exit "The $1 parameter requires an argument"
+      [[ -n ${WORKDIR_BASE} ]] && usage_err_exit "The $1 parameter may only be specified once"
+      shift
+      [[ -n $1 ]] || usage_err_exit "Work directory may not be blank"
+      [[ -e $1 ]] || usage_err_exit "Specified work directory ($1) does not exist"
+      [[ -d $1 ]] || usage_err_exit "Specified work directory ($1) exists but is not a directory"
+      WORKDIR_BASE="$1"
+      ;;
+    *)
+      [[ $# -eq 1 ]] || usage_err_exit "Too many arguments"
+      [[ -n $1 ]] || usage_err_exit "Output directory argument may not be blank"
+      [[ -e $1 ]] || usage_err_exit "Specified output directory ($1) does not exist"
+      [[ -d $1 ]] || usage_err_exit "Specified output directory ($1) exists but is not a directory"
+      OUTDIR="$1"
+      ;;
+  esac
+  shift
+done
+
+[[ -n ${OUTDIR} ]] || OUTDIR=~
+[[ -n ${WORKDIR_BASE} ]] || WORKDIR_BASE=~
+
+TMPDIR=$(run_mktemp -d "${WORKDIR_BASE}/gitea_vcs_backup.$(date +%Y%m%d%H%M%S).XXX") || err_exit
 
 echo "Backing up Gitea/VCS data"
 backup_postgres
 backup_pvc
 BACKUP_TARFILE=$(run_mktemp "${OUTDIR}/gitea-vcs-$(date +%Y%m%d%H%M%S)-XXXXXX.tgz") || err_exit
 run_cmd tar -C "${TMPDIR}" -czf "${BACKUP_TARFILE}" --remove-files "${SQL_BACKUP_NAME}" "${SEC_BACKUP_NAME}" "${PVC_BACKUP_NAME}"
+rmdir "${TMPDIR}" || echo "WARNING: Unable to remove temporary directory '${TMPDIR}'"
 echo "Gitea/VCS data successfully backed up to ${BACKUP_TARFILE}"
