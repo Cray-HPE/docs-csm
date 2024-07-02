@@ -18,15 +18,12 @@
     If additional shells are opened during this procedure, then record those with typescripts as well. When resuming a procedure
     after a break, always be sure that a typescript is running before proceeding.
 
-1. Validate CSM health.
+1. (`ncn-m002#`) Validate CSM health.
 
-    Run the combined health check script, which runs a variety of health checks that should pass at this stage of the upgrade:
-
-    - Kubernetes health checks
-    - NCN health checks
+    Run the combined health check script, which runs a variety of health checks that should pass at this stage of the upgrade.
 
     ```bash
-    /opt/cray/tests/install/ncn/automated/ncn-k8s-combined-healthcheck-post-service-upgrade
+    /opt/cray/tests/install/ncn/automated/ncn-k8s-combined-healthcheck
     ```
 
     Review the output and follow the instructions provided to resolve any test failures. With the exception of
@@ -59,6 +56,7 @@
         ```bash
         cray artifacts create config-data "${TARFILE}" "/root/${TARFILE}"
         ```
+
 1. Update ceph node-exporter config for SNMP counters.
 
     > **OPTIONAL:** This is an optional step.

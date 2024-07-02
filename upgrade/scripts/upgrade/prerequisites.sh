@@ -1289,8 +1289,9 @@ if [[ ${state_recorded} == "0" ]]; then
     systemctl enable goss-servers
     systemctl restart goss-servers
 
-    # Install above RPMs and restart goss-servers on ncn-w001
-    ssh ncn-w001 "rpm --force -Uvh ${url_list[*]}; systemctl enable goss-servers; systemctl restart goss-servers;"
+    # Install above RPMs and restart goss-servers on all other NCNs
+    ncns=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | grep -Ev "^$(hostname -s)$" | tr -t '\n' ',')
+    pdsh -S -b -w ${ncns} "rpm --force -Uvh ${url_list[*]}; systemctl enable goss-servers; systemctl restart goss-servers;"
 
     # get all installed CSM version into a file
     kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm' | yq r - -d '*' -j | jq -r 'keys[]' > /tmp/csm_versions
