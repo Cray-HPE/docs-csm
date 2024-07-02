@@ -39,5 +39,5 @@ Vault needs to be updated with the `Foxconn` username and password using the `Fo
     NOTE: `BMC_xname` needs to be in the line twice
 
    ```bash
-   cray hsm inventory redfishEndpoints update BMC_xname -id BMC_xname --user Foxconn_user --password Foxconn_pass
+   cray hsm inventory redfishEndpoints update BMC_xname --id BMC_xname --user Foxconn_user --password Foxconn_pass
    ```
