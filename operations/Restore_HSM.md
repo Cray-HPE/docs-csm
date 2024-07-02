@@ -4,7 +4,8 @@
 
 1. If `tar` file was placed in `s3` from [Backup](Backup_HMS.md) copy to the system to restore.
 
-    1. List objects in `s3`
+    1. (`ncn-mw#`) List objects in `s3`
+
 
         ```bash
         bucket=hms
