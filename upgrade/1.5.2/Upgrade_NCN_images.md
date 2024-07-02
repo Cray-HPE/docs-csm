@@ -37,7 +37,7 @@ upgrade procedure which could cause problems.
         1. Get a comma sperated list of storage nodes to be upgraded.
 
             ```bash
-            STORAGE_NODES="$(ceph orch host ls | grep ncn-s | grep -v "$STORAGE_CANARY" | awk '{print $1}' | tr '\n' ',' | head -c -1)"
+            STORAGE_NODES="$(ceph orch host ls | grep ncn-s | grep -v "$CANARY_NODE" | awk '{print $1}' | tr '\n' ',' | head -c -1)"
             echo "$STORAGE_NODES"
             ```
 
@@ -49,11 +49,11 @@ upgrade procedure which could cause problems.
 
     For troubleshooting the storage node upgrades, please see the notes in the [CSM storage node upgrade procedure](../Stage_2.md#storage-node-image-upgrade-and-ceph-upgrade).
 
-1. (`ncn-m001#`) Export `CSM_ARTI_DIR` environment variable. (`CSM_RELEASE` is expected to already be set).
+1. (`ncn-m001#`) Export `CSM_ARTI_DIR` environment variable. (`CSM_RELEASE_VERSION` and `CSM_DISTDIR` is expected to already be set).
 
     ```bash
-    CSM_REL_NAME="csm-${CSM_RELEASE}"
-    export CSM_ARTI_DIR="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}"
+    CSM_REL_NAME="csm-${CSM_RELEASE_VERSION}"
+    export CSM_ARTI_DIR="${CSM_DISTDIR}"
     echo "${CSM_ARTI_DIR}"
     ```
 
