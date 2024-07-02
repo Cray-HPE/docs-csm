@@ -356,16 +356,9 @@ enables restoring from backup later in this process if needed.
 
 ### NCN upgrade
 
-This step is necessary so that nodes are using the correct images. If NCN are
-not upgraded into these images, then `cloudinit` would fail on the nodes the next
-time the nodes are rebuilt. The images that the nodes are being upgraded to were
-set in BSS during [Update NCN images](../1.5.2/README.md#update-ncn-images).
-If the NCN nodes are not upgraded now, then any node reboot will cause the node to be
-booted into this new image which is not following the proper upgrade procedure which could cause problems.
+This step is necessary so that nodes are using the correct images after running [Update NCN images](../1.5.2/README.md#update-ncn-images).
 
-Additionally, each patch release includes updated container images that may
-contain CVE fixes, rebuilding each NCN will refresh cached container images.
-For instructions on how to upgrade NCNs for this patch release, refer to [Upgrade NCN during CSM `1.5.2` patch](./Upgrade_NCN_images.md).
+The rebuild will also ensure that the NCN has the latest cached container images that often accompany a CSM patch release.
 
 ### Configure E1000 node and Redfish Exporter for SMART data
 
