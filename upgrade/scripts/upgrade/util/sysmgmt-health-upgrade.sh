@@ -23,100 +23,40 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-# Function to check cray-sysmgmt-health chart with app version 9.3.1 for prometheus-operator and retain old PVs data.
+# Function to check cray-sysmgmt-health chart with app version 45.1 for kube-prometheus-stack and delete old PVCs.
 
 function sysmgmt_health() {
   echo "Checking for chart version of cray-sysmgmt-health"
   version="45.1"
-  if [ ! -z "$(helm ls -o json --namespace sysmgmt-health | jq -r --argjson version $version '.[] | select(.app_version | sub(".[0-9]$";"") | tonumber | . < $version).name')" ]; then
-    prom_pvc="prometheus-cray-sysmgmt-health-promet-prometheus-db-prometheus-cray-sysmgmt-health-promet-prometheus-0"
-    alert_pvc="alertmanager-cray-sysmgmt-health-promet-alertmanager-db-alertmanager-cray-sysmgmt-health-promet-alertmanager-0"
-    echo "Get PV for both prometheus and Alertmanager"
-    prom_pv=$(kubectl get pvc -n sysmgmt-health -o jsonpath='{.spec.volumeName}' $prom_pvc)
-    alert_pv=$(kubectl get pvc -n sysmgmt-health -o jsonpath='{.spec.volumeName}' $alert_pvc)
-    prom_pv="${prom_pv//[\",]/}"
-    alert_pv="${alert_pv//[\",]/}"
-    echo "Prometheus PV: $prom_pv"
-    echo "Alertmanager PV: $alert_pv"
+  if [ "$(helm ls -o json --namespace sysmgmt-health | jq -r --argjson version $version '.[] | select(.app_version | sub(".[0-9]$";"") | tonumber | . = $version).name')" ]; then
+    prom0_pvc="prometheus-cray-sysmgmt-health-kube-p-prom-db-prometheus-cray-sysmgmt-health-kube-p-prom-0"
+    prom1_pvc="prometheus-cray-sysmgmt-health-kube-p-prom-db-prometheus-cray-sysmgmt-health-kube-p-prom-1"
+    prom0_shard_pvc="prometheus-cray-sysmgmt-health-kube-p-prom-db-prometheus-cray-sysmgmt-health-kube-p-prom-shard-1-0"
+    prom1_shard_pvc="prometheus-cray-sysmgmt-health-kube-p-prom-db-prometheus-cray-sysmgmt-health-kube-p-prom-shard-1-1"
+    alert_pvc="alertmanager-cray-sysmgmt-health-kube-p-alertmanager-db-alertmanager-cray-sysmgmt-health-kube-p-alertmanager-0"
+    thanos_ruler_pvc="thanos-ruler-kube-prometheus-stack-thanos-ruler-data-thanos-ruler-kube-prometheus-stack-thanos-ruler-0"
 
-    # Patch the PersistenceVolume created/used by the prometheus-operator and alertmanager to Retain claim policy
-    prom_pv_reclaim=$(kubectl get pv -o jsonpath='{.spec.persistentVolumeReclaimPolicy}' $prom_pv)
-    alert_pv_reclaim=$(kubectl get pv -o jsonpath='{.spec.persistentVolumeReclaimPolicy}' $alert_pv)
-    prom_pv_reclaim="${prom_pv_reclaim//[\",]/}"
-    alert_pv_reclaim="${alert_pv_reclaim//[\",]/}"
-    if [ "$prom_pv_reclaim" != Retain ] && [ "$alert_pv_reclaim" != Retain ]; then
-      kubectl patch pv/$prom_pv -p '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
-      kubectl patch pv/$alert_pv -p '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
-    else
-      echo "PVs persistentVolumeReclaimPolicy is already Retain"
-    fi
+    # Uninstall the cray-sysmgmt-health and delete PVCs
+    helm ls -o json --namespace sysmgmt-health | jq -r --argjson version $version '.[] | select(.app_version | sub(".[0-9]$";"") | tonumber | . = $version).name' | xargs -L1 helm uninstall --namespace sysmgmt-health
 
-    # Uninstall the cray-sysmgmt-health release
-    helm ls -o json --namespace sysmgmt-health | jq -r --argjson version $version '.[] | select(.app_version | sub(".[0-9]$";"") | tonumber | . < $version).name' | xargs -L1 helm uninstall --namespace sysmgmt-health
+    kubectl delete pvc/$prom0_pvc -n sysmgmt-health
+    kubectl delete pvc/$prom1_pvc -n sysmgmt-health
+    kubectl delete pvc/$prom0_shard_pvc -n sysmgmt-health
+    kubectl delete pvc/$prom1_shard_pvc -n sysmgmt-health
+    kubectl delete pvc/$alert_pvc -n sysmgmt-health
+    kubectl delete pvc/$thanos_ruler_pvc -n sysmgmt-health
 
-    # Delete the existing PersistentVolumeClaim, and verify PV become Released.
-    prom_pv_reclaim=$(kubectl get pv -o jsonpath='{.spec.persistentVolumeReclaimPolicy}' $prom_pv)
-    alert_pv_reclaim=$(kubectl get pv -o jsonpath='{.spec.persistentVolumeReclaimPolicy}' $alert_pv)
-    prom_pv_reclaim="${prom_pv_reclaim//[\",]/}"
-    alert_pv_reclaim="${alert_pv_reclaim//[\",]/}"
-    if [ "$prom_pv_reclaim" == Retain ] && [ "$alert_pv_reclaim" == Retain ]; then
-      kubectl delete pvc/$prom_pvc -n sysmgmt-health
-      kubectl delete pvc/$alert_pvc -n sysmgmt-health
-      prom_pv_phase=$(kubectl get pv -o jsonpath='{.status.phase}' $prom_pv)
-      alert_pv_phase=$(kubectl get pv -o jsonpath='{.status.phase}' $alert_pv)
-      prom_pv_phase="${prom_pv_phase//[\",]/}"
-      alert_pv_phase="${alert_pv_phase//[\",]/}"
-      echo "Verifying whether PVs became Released or not."
-      sleep 5
-      if [ "$alert_pv_phase" == Released ] && [ "$prom_pv_phase" == Released ]; then
-        echo "Both Prometheus and Alertmanager PVs are Released"
-      else
-        echo >&2 "PVs are not Released. Verify if PV exists or not."
-        echo "Prometheus PV: $prom_pv"
-        echo "Alertmanager PV: $alert_pv"
-        exit
-      fi
+    # Remove the cray-sysmgmt-health-promet-kubelet service.
+    echo "Deleting cray-sysmgmt-health-kube-p-kubelet service in kube-system namespace."
+    kubectl delete service/cray-sysmgmt-health-kube-p-kubelet -n kube-system
 
-      # Remove the cray-sysmgmt-health-promet-kubelet service.
-      echo "Deleting cray-sysmgmt-health-promet-kubelet service in kube-system namespace."
-      kubectl delete service/cray-sysmgmt-health-promet-kubelet -n kube-system
-
-      # Remove all the existing CRDs (ServiceMonitors, Podmonitors, etc.)
-      echo "Deleting sysmgmt-health existing CRDs"
-      for c in $(kubectl get crds -A -o jsonpath='{range .items[?(@.metadata.annotations.controller-gen\.kubebuilder\.io\/version=="v0.2.4")]}{.metadata.name}{"\n"}{end}'); do
-        kubectl delete crd ${c}
-      done
-    else
-      echo >&2 "PersistenceVolume created/used by the prometheus-operator and alertmanager is not Retain claim policy"
-      echo >&2 "Exiting"
-      exit
-    fi
-
-    # Remove current spec.claimRef values to change the PV's status from Released to Available.
-    if [ "$alert_pv_phase" == Released ] && [ "$prom_pv_phase" == Released ]; then
-      kubectl patch pv/$prom_pv --type json -p='[{"op": "remove", "path": "/spec/claimRef"}]'
-      kubectl patch pv/$alert_pv --type json -p='[{"op": "remove", "path": "/spec/claimRef"}]'
-      prom_pv_phase=$(kubectl get pv -o jsonpath='{.status.phase}' $prom_pv)
-      alert_pv_phase=$(kubectl get pv -o jsonpath='{.status.phase}' $alert_pv)
-      prom_pv_phase="${prom_pv_phase//[\",]/}"
-      alert_pv_phase="${alert_pv_phase//[\",]/}"
-      echo "Verifying whether PV became Available or not."
-      sleep 5
-      if [ "$alert_pv_phase" == Available ] && [ "$prom_pv_phase" == Available ]; then
-        echo "Both Prometheus and Alertmanager PVs are Available. Ready to deploy the latest cray-sysmgmt-chart now."
-      else
-        echo >&2 "PVs are not Available. Verify if PV exists or not."
-        echo "Prometheus PV: $prom_pv"
-        echo "Alertmanager PV: $alert_pv"
-        exit
-      fi
-    else
-      echo "PV's status is not Released. Exiting"
-      exit
-    fi
+    # Remove all the existing CRDs (ServiceMonitors, Podmonitors, etc.)
+    echo "Deleting sysmgmt-health existing CRDs"
+    for c in $(kubectl get crds -A -o jsonpath='{range .items[?(@.metadata.annotations.controller-gen\.kubebuilder\.io\/version=="v0.2.4")]}{.metadata.name}{"\n"}{end}'); do
+      kubectl delete crd ${c}
+    done
   fi
 }
 
 # sysmgmt_health function call
-
 sysmgmt_health
