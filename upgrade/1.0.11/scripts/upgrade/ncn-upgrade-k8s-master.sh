@@ -131,11 +131,12 @@ state_name="PREPARE_ETCD"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    export MEMBER_ID=$(etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+    MEMBER_ID=$(etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
      --cert=/etc/kubernetes/pki/etcd/ca.crt \
      --key=/etc/kubernetes/pki/etcd/ca.key \
      --endpoints=localhost:2379 member list | \
      grep $upgrade_ncn | cut -d ',' -f1)
+     export MEMBER_ID
 
      etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
      --cert=/etc/kubernetes/pki/etcd/ca.crt \
