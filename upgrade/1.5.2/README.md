@@ -360,6 +360,8 @@ This step is necessary so that nodes are using the correct images after running 
 
 The rebuild will also ensure that the NCN has the latest cached container images that often accompany a CSM patch release.
 
+Follow the [Upgrade NCNs during CSM `1.5.2` Patch](./Upgrade_NCN_images.md) instructions to perform the NCN node image upgrades.
+
 ### Configure E1000 node and Redfish Exporter for SMART data
 
 > **NOTE:** Please follow this step if SMART disk data is needed for E1000 node.

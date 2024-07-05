@@ -61,8 +61,16 @@ upgrade procedure which could cause problems.
 
     Follow steps `3.1`, `3.2`, and `3.3` in the [CSM Stage 3 Upgrade Kubernetes documentation](../Stage_3.md) to upgrade master nodes and worker nodes.
 
-    Start with step [Stage 3.1 - Master node image upgrade](../Stage_3.md#stage-31---master-node-image-upgrade). Then perform the worker node upgrades.
-    Stop after completing [Stage 3.3 - `ncn-m001` upgrade](../Stage_3.md#stage-33---ncn-m001-upgrade) and return to this document.
+    1. Start with step [Stage 3.1 - Master node image upgrade](../Stage_3.md#stage-31---master-node-image-upgrade).
+    1. Perform [Stage 3.2 - Master node image upgrade](../Stage_3.md#stage-32---worker-node-image-upgrade).
+    1. Perform [Stage 3.3 - `ncn-m001` upgrade](../Stage_3.md#stage-33---ncn-m001-upgrade) and return to this document.
+    **Note:** before ugrading `ncn-m001`, export `CSM_REL_NAME` and `CSM_ARTI_DIR` variables on `ncn-m002`.
+
+        ```bash
+        CSM_REL_NAME="csm-${CSM_RELEASE_VERSION}"
+        export CSM_ARTI_DIR="${CSM_DISTDIR}"
+        echo "${CSM_ARTI_DIR}"
+        ```
 
 ## Return to CSM `1.5.2` patch
 
