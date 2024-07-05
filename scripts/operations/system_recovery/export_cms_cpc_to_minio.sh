@@ -86,11 +86,12 @@ run_cmd "${locOfScript}/setup_cms_minio_mount.sh" --rw --init "${CMS_MINIO_MNT}"
 
 LOG_REL_DIR="logs/exports/$(date +%Y%m%d%H%M%S)"
 LOG_DIR="${CMS_MINIO_MNT}/${LOG_REL_DIR}"
-echo "Create log directory in minio: s3://cms/${LOG_REL_DIR}"
+echo "Create log directory in minio://cms/${LOG_REL_DIR}"
 run_cmd mkdir -p "${LOG_DIR}"
 
 function launch_area_export {
-  local epid logbase
+  local epid logbase area
+  area="$1"
   logbase="${area}.log"
   echo "$(date) Starting ${area} export (log: minio://cms/${LOG_REL_DIR}/${logbase})"
   nohup "${CMS_EXPORT_SCRIPT}" "${area}" > "${LOG_DIR}/${logbase}" 2>&1 &
