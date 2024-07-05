@@ -7,11 +7,11 @@ during [NCN Upgrade](../1.5.2/README.md#ncn-upgrade).
 
 ## Overview
 
-This steps upgrade NCNs into the node images created during the [Update NCN images](../1.5.2/README.md#update-ncn-images)
+The following steps upgrade NCNs into the node images created during the [Update NCN images](../1.5.2/README.md#update-ncn-images)
 step of the patch procedure. The node upgrades will not change the state of the node.
 
 It is important to do this step so that nodes
-are using the correct images. If NCN are not upgraded into these images, then `cloudinit` would fail on the nodes the next
+are using the correct images. If NCNs are not upgraded into these images, then `cloudinit` will fail on the nodes the next
 time the nodes are rebuilt. These images were set in BSS during [Update NCN images](../1.5.2/README.md#update-ncn-images)
 and if the NCN nodes are not upgraded, then on any node reboot will cause the node to be booted into this new image which is not following the proper
 upgrade procedure which could cause problems.
@@ -47,7 +47,7 @@ upgrade procedure which could cause problems.
             /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ${STORAGE_NODES} --upgrade
             ```
 
-    For troubleshooting the storage node upgrades, please see the notes in the [CSM storage node upgrade procedure](../Stage_2.md#storage-node-image-upgrade-and-ceph-upgrade).
+    For troubleshooting the storage node upgrades, see the notes in the [CSM storage node upgrade procedure](../Stage_2.md#storage-node-image-upgrade-and-ceph-upgrade).
 
 1. (`ncn-m001#`) Export `CSM_ARTI_DIR` environment variable. (`CSM_RELEASE_VERSION` and `CSM_DISTDIR` is expected to already be set).
 

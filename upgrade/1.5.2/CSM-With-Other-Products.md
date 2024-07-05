@@ -29,8 +29,7 @@ Later in the CSM `v1.5.2` patch process, nodes will be rebooted into these image
 
 ### Using `sat bootprep` with IUF generated input files
 
-In order to follow this procedure, you will need to know the name of the IUF activity used to
-perform the initial installation of the HPE Cray EX software products. See the
+The name of the IUF activity used to install the HPE Cray EX software products must be known before proceeding. See the
 [Activities](../../operations/iuf/IUF.md#activities) section of the IUF documentation for more
 information on IUF activities. See [`list-activities`](../../operations/iuf/IUF.md#list-activities)
 for information about listing the IUF activities on the system. The first step provides an
@@ -276,4 +275,4 @@ example showing how to find the IUF activity.
 
 ## Return to CSM `1.5.2` patch
 
-Return to [Update test suite packages](./README.md#update-test-suite-packages)
+Return to [Update test suite packages](./README.md#update-test-suite-packages).
