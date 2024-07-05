@@ -6,7 +6,7 @@ The [`v1.5.2` upgrade page](../1.5.2/README.md) will refer to this page
 during [Update NCN images](../1.5.2/README.md#update-ncn-images).
 
 **If exclusively CSM is installed on the system, return to [Update NCN images](../1.5.2/README.md#update-ncn-images) and
-choose option 1.**
+choose option 2.**
 
 ## Requirements
 
