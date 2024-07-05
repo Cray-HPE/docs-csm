@@ -166,10 +166,11 @@ while [[ ${running} -gt 0 ]]; do
   last_print=$SECONDS
 done
 
+umount "${CMS_MINIO_MNT}" || echo "WARNING: Unable to unmount '${CMS_MINIO_MNT}'" >&2
+
 if [[ $errors -ne 0 ]]; then
   err_exit "${errors} of the exports failed. See individual log files for details"
   exit 1
 fi
 
-umount "${CMS_MINIO_MNT}" || echo "WARNING: Unable to unmount '${CMS_MINIO_MNT}'" >&2
 echo "All exports completed successfully"
