@@ -82,7 +82,7 @@ fi
 {
 first_master_hostname=`curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | \
      jq -r '.[] | ."cloud-init"."meta-data"."first-master-hostname"'`
-if [[ ${first_master_hostname} == ${target_ncn} ]]; then
+if [[ ${first_master_hostname} == "${target_ncn}" ]]; then
    state_name="RECONFIGURE_FIRST_MASTER"
    state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
    if [[ $state_recorded == "0" ]]; then
@@ -91,7 +91,7 @@ if [[ ${first_master_hostname} == ${target_ncn} ]]; then
       masterNodes=$(kubectl get nodes| grep "ncn-m" | awk '{print $1}')
       for node in $masterNodes; do
         # skip target_ncn
-        if [[ ${node} == ${target_ncn} ]]; then
+        if [[ ${node} == "${target_ncn}" ]]; then
             continue;
         fi
         # check if cloud-init data is healthy
