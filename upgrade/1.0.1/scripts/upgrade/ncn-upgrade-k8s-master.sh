@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2022, 2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -181,8 +181,23 @@ state_name="INSTALL_DOCS_NEW_MASTER"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
+    # CASMTRIAGE-7122: This RPM install can fail if it happens while CFS is installing RPMs
+    # Therefore, we retry a limited number of times before giving up
+    attempt=0
+    while [[ true ]]; do
+      if [[ ${attempt} -gt 0 ]]; then
+        # Wait briefly before trying again
+        sleep 5
+      fi
+      if [[ ${attempt} -lt 12 ]]; then
+        let attempt+=1
+        ssh $upgrade_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}" && break || continue
+      fi
+      # Final attempt. The lack of the || continue means that this will cause the script to
+      # fail (since it runs with set -e) if the command fails
+      ssh $upgrade_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}" && break
+    done
     record_state "${state_name}" ${upgrade_ncn}
-    ssh $upgrade_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
 else
     echo "====> ${state_name} has been completed"
 fi
