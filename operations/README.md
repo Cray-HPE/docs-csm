@@ -654,6 +654,7 @@ The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium 
 
 - [DHCP](network/dhcp/DHCP.md)
 - [Troubleshoot DHCP Issues](network/dhcp/Troubleshoot_DHCP_Issues.md)
+- [DHCP boot file customization](network/dhcp/Customize_boot_file.md)
 
 ### Domain Name Service (DNS)
 
