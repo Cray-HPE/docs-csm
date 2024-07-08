@@ -25,10 +25,11 @@
 
 set -e
 locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-. ${locOfScript}/../common/upgrade-state.sh
-. ${locOfScript}/../common/ncn-common.sh $(hostname)
+. "${locOfScript}/../common/upgrade-state.sh"
+. "${locOfScript}/../common/ncn-common.sh" "$(hostname)"
 trap 'err_report' ERR
 # array for paths to unmount after chrooting images
+#shellcheck disable=SC2034
 declare -a UNMOUNTS=()
 
 while [[ $# -gt 0 ]]
@@ -99,7 +100,7 @@ if [[ -z ${TARBALL_FILE} ]]; then
 
     # Download tarball file
     state_name="GET_CSM_TARBALL_FILE"
-    state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+    state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
     if [[ $state_recorded == "0" ]]; then
         # Because we are getting a new tarball
         # this has to be a new upgrade
@@ -112,7 +113,7 @@ if [[ -z ${TARBALL_FILE} ]]; then
         # set TARBALL_FILE to newly downloaded file
         TARBALL_FILE=${CSM_RELEASE}.tar.gz
         } >> ${LOG_FILE} 2>&1
-        record_state ${state_name} $(hostname)
+        record_state "${state_name}" "$(hostname)"
         echo
     else
         echo "====> ${state_name} has been completed"
@@ -121,14 +122,14 @@ fi
 
 # untar csm tarball file
 state_name="UNTAR_CSM_TARBALL_FILE"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     mkdir -p /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball
-    tar -xzf ${TARBALL_FILE} -C /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball
+    tar -xzf "${TARBALL_FILE}" -C "/etc/cray/upgrade/csm/${CSM_RELEASE}/tarball"
     CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}
-    rm -rf ${TARBALL_FILE}
+    rm -rf "${TARBALL_FILE}"
 
     # if we have to untar a file, we assume this is a new upgrade
     # remove existing myenv file just in case
@@ -136,35 +137,35 @@ if [[ $state_recorded == "0" ]]; then
     echo "export CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
     echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
     } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} $(hostname)
+    record_state "${state_name}" "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="INSTALL_CSI"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "cray-site-init*.rpm") 
+    rpm --force -Uvh "$(find "${CSM_ARTI_DIR}/rpm/cray/csm/" -name "cray-site-init*.rpm")"
 
     # upload csi to s3
     csi handoff upload-utils --kubeconfig /etc/kubernetes/admin.conf
     } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} $(hostname)
+    record_state "${state_name}" "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="INSTALL_CANU"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     rpm -e canu
-    rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "canu*.rpm") 
+    rpm --force -Uvh "$(find "${CSM_ARTI_DIR}/rpm/cray/csm/" -name "canu*.rpm")"
     } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} $(hostname)
+    record_state "${state_name}" "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
 fi
