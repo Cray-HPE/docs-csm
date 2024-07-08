@@ -7,8 +7,7 @@ and images are created with the correct content and configuration values.
 
 - [1. Execute the IUF `update-cfs-config` and `prepare-images` stages](#1-execute-the-iuf-update-cfs-config-and-prepare-images-stages)
 - [2. Manually prepare additional images](#2-manually-prepare-additional-images)
-  - [2.1 UAI images](#21-uai-images)
-  - [2.2 ARM images](#22-arm-images)
+  - [2.1 ARM images](#22-arm-images)
 - [3. Next steps](#3-next-steps)
 
 ## 1. Execute the IUF `update-cfs-config` and `prepare-images` stages
@@ -42,20 +41,7 @@ Once this step has completed:
 
 ## 2. Manually prepare additional images
 
-### 2.1 UAI images
-
-If User Access Instances are utilized on the system, refer to one of the following documents for details on how to build updated UAI images with new product content.
-
-- If CPE is installed on the system, refer to the "Enable CPE in UAIs" section of _HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems_. This procedure will create new UAI images based on the new product
-  content installed, including CPE.
-- If CPE is not installed on the system, refer to [Custom End-User UAI Images](../../UAS_user_and_admin_topics/Customize_End-User_UAI_Images.md). This procedure will create new UAI images based on the new product content
-  installed, but will not include CPE content.
-
-Once this step has completed:
-
-- New UAI images have been created
-
-### 2.2 ARM images
+### 2.1 ARM images
 
 If it is necessary to build `aarch64` images, then see [ARM images](../IUF.md#arm-images).
 

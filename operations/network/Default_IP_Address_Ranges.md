@@ -69,4 +69,4 @@ There are several network values and other pieces of system information that mus
 
   For more information on the CAN and CHN, see [Customer Accessible Networks](customer_accessible_networks/Customer_Accessible_Networks.md).
 
-  - Subnet for the MetalLB dynamic address pool \(`can-dynamic-pool`\) or \(`chn-dynamic-pool`\), which is used for services such as User Access Instances \(UAIs\) that can be reached by DNS.
+  - Subnet for the MetalLB dynamic address pool \(`can-dynamic-pool`\) or \(`chn-dynamic-pool`\) that can be reached by DNS.

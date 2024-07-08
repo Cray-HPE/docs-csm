@@ -17,7 +17,6 @@
     - [Minimizing UAN downtime](#minimizing-uan-downtime)
         - [Enable CFS for UAN](#enable-cfs-for-uan)
         - [Notify UAN users](#notify-uan-users)
-    - [Migrate UAI](#migrate-uai)
     - [Migrate computes (optional)](#migrate-computes-optional)
         - [Add compute IP addresses to CHN SLS data](#add-compute-ip-addresses-to-chn-sls-data)
         - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
@@ -51,7 +50,6 @@ The overall process can be summarized as:
    1. NCN workers
    1. CSM services
    1. UAN
-   1. UAI
    1. Compute (optional)
 1. Cleanup phase
    1. Remove the CAN from operations and all data sets
@@ -66,7 +64,6 @@ However, during the migration phase, ample time and flexibility exists to contac
 
 1. The system must have successfully completed a CSM 1.3 upgrade or be ready for CSM 1.3 upgrade.
    1. [Gateway tests from outside the system](../../../../../operations/validate_csm_health.md#413-gateway-health-tests-from-outside-the-system)
-   1. [UAI creation tests](../../../../../operations/validate_csm_health.md#62-validate-uai-creation)
    1. [Confirm BGP peering of MetalLB with Edge Routers](../../../../../operations/network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md#check-bgp-status-and-reset-sessions)
 1. [Install the latest CSM 1.3 documentation](../../../../../update_product_stream/README.md#check-for-latest-documentation)
 1. A site-routable IPv4 subnet for the CHN.
@@ -76,9 +73,7 @@ However, during the migration phase, ample time and flexibility exists to contac
      - One IP address for the API ingress gateway
      - One IP address for the `oath2-proxy` service
      - One IP address for each NCN UAN on the system
-     - IP addresses for the maximum number of UAIs required
      - IP addresses for any other services to be brought up dynamically on the CHN
-   - **Note** A `/24` subnet is usually more than sufficient for small-to-medium sized systems with minimal UAI requirements.
 1. The Slingshot high speed network is configured and up, including the fabric manager service. This network is required to transit CHN traffic.
 1. The Slingshot Host Software is installed and configured on NCN Worker nodes. This is required to expose CHN services. For the purpose of CHN, the host software creates the (required) primary IPv4 address on `hsn0`, often a `10.253` IP address.
 
@@ -519,12 +514,6 @@ Administrators should enable CFS for UAN, ensure plays run successfully and then
 
 Notify users to log out of the UAN over the CAN and back in over the CHN. The old CAN interface is removed during UAN rebuild, but access over the CAN will be removed during the [management network upgrade](#update-the-management-network).
 
-### Migrate UAI
-
-Newly created User Access Instances (UAI) will use the network configured as the `SystemDefaultRoute` in the SLS BICAN network structure.
-
-Existing UAIs will continue to use the network that was set when it was created. Users with existing UAI will need to recreate their instances before the CAN network is removed from workers and the management network switches in the cleanup phase below.
-
 ### Migrate computes (optional)
 
 **Important** This part of the procedure is needed only if all compute nodes will have a CHN IPv4 address. The CHN subnet must be large enough to hold *all* compute nodes in the system. The same UAN CFS configuration is used for computes.
@@ -903,5 +892,4 @@ Follow the process outlined in [update the management network from CSM 1.2 to CS
 The following tests should be run to confirm that the system is operating correctly on the CHN.
 
 1. [Gateway tests from outside the system](../../../../validate_csm_health.md#413-gateway-health-tests-from-outside-the-system)
-1. [UAI creation tests](../../../../validate_csm_health.md#62-validate-uai-creation)
 1. [Confirm BGP peering of MetalLB with Edge Routers](../../../metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md#check-bgp-status-and-reset-sessions)

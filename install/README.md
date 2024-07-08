@@ -210,8 +210,7 @@ See [Validate CSM Health](../operations/validate_csm_health.md).
 
 ### 4. Deploy final NCN
 
-Now that all CSM services have been installed and the CSM health checks completed, with the possible exception of the
-[User Access Service (UAS)](../glossary.md#user-access-service-uas)/[User Access Instance (UAI)](../glossary.md#user-access-instance-uai) tests,
+Now that all CSM services have been installed and the CSM health checks completed,
 the PIT has served its purpose and the final NCN can be deployed. The node used for the PIT will be rebooted, this node will be the final NCN to
 deploy in the CSM install.
 

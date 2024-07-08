@@ -75,7 +75,6 @@ function get_latest_tag_for_image() {
     THIS_PREFIX="${THIS_REGISTRY_NAME}/"
     THIS_IMAGE=$(echo "${THIS_IMAGE}" | sed "s#^${DEFAULT_REGISTRY_REGEX}/##")
   fi
-  echo $THIS_PODMAN_TLS $THIS_PREFIX$THIS_IMAGE
   podman search $THIS_PODMAN_TLS $THIS_PREFIX$THIS_IMAGE --list-tags --format=json | jq -r '
     def opt(f):
       . as $in | try f catch $in;

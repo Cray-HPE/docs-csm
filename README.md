@@ -80,7 +80,6 @@ scripts, revision control with git, configuration management with Ansible, YAML,
    * System Configuration Service
    * System Layout Service
    * System Management Health
-   * UAS User And Admin Topics
    * Utility Storage
    * Validate CSM Health
 

@@ -203,6 +203,19 @@ required for initial installation scenarios.
   - Configure SAT authentication via `sat auth`
   - Generate SAT S3 credentials
   - Configure system revision information via `sat setrev`
+- SLURM
+  - UAS
+    - Configure UAS network settings 
+      - The network settings for UAS must match the SLURM WLM to allow job submission from UAIs
+  - CSM Diags
+    - Update CSM Diags network attachment definition
+- PBS Pro
+  - UAS
+    - Configure UAS network settings 
+      - The network settings for UAS must match the PBS Pro WLM to allow job submission from UAIs
+  - CSM Diags
+    - Update CSM Diags network attachment definition
+
 
 Once this step has completed:
 

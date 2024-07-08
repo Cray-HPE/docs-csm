@@ -103,8 +103,6 @@ An NCN has an interface that is failing to assign a static IP address or that ha
 
 ## Notes
 
-Running `wicked ifreload` on a worker node can have the side effect of causing Slurm and UAI pods to lose their `macvlan` attachments.
-
 (`ncn-mw#`) In this case, restarts of those services (in the Kubernetes `user` namespace) can be performed by executing the following command:
 
 ```bash

@@ -38,8 +38,6 @@ Example output:
 │   │   └── slurmdbd_service.nmn.system.dev.cray.com.
 │   ├── [PTR]  3.2.252.10.in-addr.arpa.
 │   │   └── slurmctld_service.nmn.system.dev.cray.com.
-│   ├── [PTR]  2.2.252.10.in-addr.arpa.
-│   │   └── uai_macvlan_bridge.nmn.system.dev.cray.com.
 
 [...]
 ```

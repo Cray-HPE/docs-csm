@@ -23,38 +23,23 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-# Usage: upgrade-test-rpms.sh [--local]
-# If --local is not specified, upgrade the test RPMs on all NCNs
-# If --local is specified, upgrade the test RPMs just on the system where the script is being executed
+locOfScript=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+# Inform ShellCheck about the file we are sourcing
+# shellcheck source=./common.sh
+. "${locOfScript}/common.sh"
 
-RPM_LIST="hpe-csm-goss-package csm-testing goss-servers craycli cray-cmstools-crayctldeploy"
+# Shared function and variable definitions between VCS backup and restore scripts
 
-set -euo pipefail
-if [[ $# -eq 0 ]]; then
+# These variables are not used in this file, but are used by scripts which source this file
+#shellcheck disable=SC2034
+SQL_BACKUP_NAME=gitea-vcs-postgres.sql
+#shellcheck disable=SC2034
+SEC_BACKUP_NAME=gitea-vcs-postgres.manifest
+#shellcheck disable=SC2034
+PVC_BACKUP_NAME=vcs.tar
 
-  ncns=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | tr -t '\n' ',')
-
-  echo "Installing updated versions of RPMs on all NCNs: ${RPM_LIST}"
-  pdsh -S -b -w ${ncns} "zypper install -y --allow-vendor-change ${RPM_LIST}"
-
-  echo "Enabling and restarting goss-servers"
-  pdsh -S -b -w ${ncns} 'systemctl enable goss-servers && systemctl restart goss-servers'
-
-elif [[ $# -eq 1 && $1 == --local ]]; then
-
-  echo "Installing updated versions of RPMs: ${RPM_LIST}"
-  zypper install -y --allow-vendor-change ${RPM_LIST}
-
-  echo "Enabling and restarting goss-servers"
-  systemctl enable goss-servers && systemctl restart goss-servers
-
-else
-
-  echo "usage: upgrade-test-rpms.sh [--local]" >&2
-  echo >&2
-  echo "ERROR: Invalid arguments" >&2
-  exit 1
-
-fi
-
-echo "SUCCESS"
+function get_gitea_pod {
+  # Sets $gitea_pod to the name of the gitea pod, or exits if it cannot be found
+  gitea_pod=$(run_cmd kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o custom-columns=":metadata.name" --no-headers) || err_exit
+  [[ -n ${gitea_pod} ]] || err_exit "No gitea pod found"
+}

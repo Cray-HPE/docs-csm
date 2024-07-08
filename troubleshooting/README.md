@@ -43,6 +43,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Software Management Services health check](known_issues/sms_health_check.md)
 * [QLogic driver crash](known_issues/qlogic_driver_crash.md)
 * [Nexus Fails Authentication with Keycloak Users](known_issues/Nexus_Fail_Authentication_with_Keycloak_Users.md)
+* [Keycloak Error "Cannot read properties" in Web UI](known_issues/Keycloak_Error_Cannot_read_properties.md)
 * [Gigabyte BMC Missing Redfish Data](known_issues/Gigabyte_BMC_Missing_Redfish_Data.md)
 * [`admin*client-auth` Not Found](known_issues/admin_client_auth_not_found.md)
 * [Ceph OSD latency](known_issues/ceph_osd_latency.md)
@@ -154,15 +155,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
 * [Spire Failing to Start on NCNs](../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
 * [Spire Server Report Database is in Recovery](known_issues/spire_server_database_recovery.md)
-
-## User Access service UAS
-
-* [Viewing UAI Log Output](../operations/UAS_user_and_admin_topics/Troubleshoot_UAIs_by_Viewing_Log_Output.md)
-* [Stale Brokered UAIs](../operations/UAS_user_and_admin_topics/Troubleshoot_Stale_Brokered_UAIs.md)
-* [UAI Stuck in `ContainerCreating`](../operations/UAS_user_and_admin_topics/Troubleshoot_UAI_Stuck_in_ContainerCreating.md)
-* [Duplicate Mount Paths in a UAI](../operations/UAS_user_and_admin_topics/Troubleshoot_Duplicate_Mount_Paths_in_a_UAI.md)
-* [Missing or Incorrect UAI Images](../operations/UAS_user_and_admin_topics/Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
-* [Common Mistakes When Creating a Custom End-User UAI Image](../operations/UAS_user_and_admin_topics/Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
 
 ## Utility storage
 

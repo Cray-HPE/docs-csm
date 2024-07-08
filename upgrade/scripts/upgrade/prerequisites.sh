@@ -257,6 +257,11 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     SNAPSHOT_DIR=$(mktemp -d --tmpdir=/root "csm_upgrade.pre_upgrade_snapshot.${DATESTRING}.XXXXXX")
     echo "Pre-upgrade snapshot directory: ${SNAPSHOT_DIR}"
 
+    # Record BOS data, because the upgrade to CSM 1.6 will delete all BOS v1 data, and will sanitize
+    # the BOS v2 data
+    echo "Backing up BOS data"
+    /usr/share/doc/csm/scripts/operations/configuration/export_bos_data.sh --include-v1 "${SNAPSHOT_DIR}"
+
     # Record CFS components and configurations, since these are modified during the upgrade process
     CFS_CONFIG_SNAPSHOT=${SNAPSHOT_DIR}/cfs_configurations.json
     echo "Backing up CFS configurations to ${CFS_CONFIG_SNAPSHOT}"
@@ -518,14 +523,14 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     fi
     set -e
 
-    # Skopeo image is stored as "skopeo:csm-${CSM_RELEASE}"
-    podman load -i "${CSM_ARTI_DIR}/vendor/skopeo.tar"
+    # Skopeo image is stored as "skopeo:csm-${CSM_RELEASE}", which may resolve to docker.io/lirary/skopeo or quay.io/skopeo, depending on configured shortcuts
+    SKOPEO_IMAGE=$(podman load -q -i "${CSM_ARTI_DIR}/vendor/skopeo.tar" 2> /dev/null | sed -e 's/^.*: //')
     nexus_images=$(yq r -j "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-precache-images).values.cacheImages' | jq -r '.[] | select( . | contains("nexus"))')
     worker_nodes=$(grep -oP "(ncn-w\d+)" /etc/hosts | sort -u)
     while read -r nexus_image; do
       echo "Uploading $nexus_image into Nexus ..."
       podman run --rm -v "${CSM_ARTI_DIR}/docker":/images \
-        "skopeo:csm-${CSM_RELEASE}" \
+        "${SKOPEO_IMAGE}" \
         --override-os=linux --override-arch=amd64 \
         copy \
         --remove-signatures \
@@ -1284,8 +1289,9 @@ if [[ ${state_recorded} == "0" ]]; then
     systemctl enable goss-servers
     systemctl restart goss-servers
 
-    # Install above RPMs and restart goss-servers on ncn-w001
-    ssh ncn-w001 "rpm --force -Uvh ${url_list[*]}; systemctl enable goss-servers; systemctl restart goss-servers;"
+    # Install above RPMs and restart goss-servers on all other NCNs
+    ncns=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | grep -Ev "^$(hostname -s)$" | tr -t '\n' ',')
+    pdsh -S -b -w ${ncns} "rpm --force -Uvh ${url_list[*]}; systemctl enable goss-servers; systemctl restart goss-servers;"
 
     # get all installed CSM version into a file
     kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm' | yq r - -d '*' -j | jq -r 'keys[]' > /tmp/csm_versions

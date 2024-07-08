@@ -104,7 +104,6 @@ migration script is run and a new, migrated output file is created.
 1. Create the CHN.
 1. Convert IP addresses of the CAN.
 1. Create MetalLB Pools and ASN entries on CMN and NMN.
-1. Update `uai_macvlan` in NMN DHCP ranges and `uai_macvlan` VLAN.
 1. Remove unused user networks (CAN or CHN) if requested (`--retain-unused-user-network` to keep).
 
 ### Migrate switch names
@@ -174,10 +173,6 @@ In CMN and NMN:
 ### Remove `kubeapi-vip` reservations for all networks except NMN
 
 Self explanatory. This endpoint now exists only on the NMN.
-
-### Update `uai_macvlan` in NMN ranges and `uai_macvlan` VLAN
-
-Self explanatory. Ranges are used for the addresses of UAIs.
 
 ### Remove unused user networks (either CAN or CHN) if desired
 

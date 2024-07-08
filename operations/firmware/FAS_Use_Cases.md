@@ -50,17 +50,13 @@ If the nodes are not off when the update command is issued, the update will get 
 {
 "stateComponentFilter": {
 
-    "deviceTypes": [
-      "nodeBMC"
-    ]
+    "deviceTypes": [ "nodeBMC" ]
 },
 "inventoryHardwareFilter": {
     "manufacturer": "cray"
     },
 "targetFilter": {
-    "targets": [
-      "BMC"
-    ]
+    "targets": [ "BMC" ]
   },
 "command": {
     "version": "latest",
@@ -84,8 +80,7 @@ Previous versions did not contain the Redstone FPGA firmware.
 {
 "stateComponentFilter": {
 
-    "deviceTypes": [
-      "nodeBMC"    ]
+    "deviceTypes": [ "nodeBMC" ]
   },
 "inventoryHardwareFilter": {
     "manufacturer": "cray"
@@ -116,16 +111,13 @@ Previous versions did not contain the this firmware.
 {
 "stateComponentFilter": {
 
-    "deviceTypes": [
-      "nodeBMC"    ]
+    "deviceTypes": [ "nodeBMC" ]
   },
 "inventoryHardwareFilter": {
     "manufacturer": "cray"
     },
 "targetFilter": {
-    "targets": [
-      "Node0.AccUC",
-    ]
+    "targets": [ "Node0.AccUC" ]
   },
 "command": {
     "version": "latest",
@@ -144,8 +136,7 @@ Previous versions did not contain the this firmware.
 {
 "stateComponentFilter": {
 
-    "deviceTypes": [
-      "nodeBMC"    ]
+    "deviceTypes": [ "nodeBMC" ]
   },
 "inventoryHardwareFilter": {
     "manufacturer": "cray"
@@ -173,16 +164,13 @@ Previous versions did not contain the this firmware.
 {
 "stateComponentFilter": {
 
-    "deviceTypes": [
-      "nodeBMC"    ]
+    "deviceTypes": [ "nodeBMC" ]
   },
 "inventoryHardwareFilter": {
     "manufacturer": "cray"
     },
 "targetFilter": {
-    "targets": [
-      "Node0.AccVBIOS"
-    ]
+    "targets": [ "Node0.AccVBIOS" ]
   },
 "command": {
     "version": "latest",
@@ -214,8 +202,7 @@ It is also recommended that the nodes be powered back on after the updates are c
 {
 "stateComponentFilter": {
 
-    "deviceTypes": [
-      "nodeBMC"    ]
+    "deviceTypes": [ "nodeBMC" ]
   },
 "inventoryHardwareFilter": {
     "manufacturer": "cray"
@@ -423,14 +410,10 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
     "manufacturer": "cray"
     },
 "stateComponentFilter": {
-    "deviceTypes": [
-      "chassisBMC"
-    ]
+    "deviceTypes": [ "chassisBMC" ]
 },
 "targetFilter": {
-    "targets": [
-      "BMC"
-    ]
+    "targets": [ "BMC" ]
   },
 "command": {
     "version": "latest",
@@ -600,20 +583,14 @@ This procedure updates node controller \(nC\) firmware.
 ```json
 {
 "stateComponentFilter": {
-    "deviceTypes": [
-      "nodeBMC"
-    ],
-    "xnames": [
-      "x3000c0s1b0"
-    ]
+    "deviceTypes": [ "nodeBMC" ],
+    "xnames": [ "x3000c0s1b0" ]
 },
 "inventoryHardwareFilter": {
     "manufacturer": "gigabyte"
     },
 "targetFilter": {
-    "targets": [
-      "BMC"
-    ]
+    "targets": [ "BMC" ]
   },
 "command": {
     "version": "latest",
@@ -651,21 +628,14 @@ Make sure to wait for the current firmware to be updated before starting a new F
 ```json
 {
 "stateComponentFilter": {
-
-    "deviceTypes": [
-      "nodeBMC"
-    ],
-    "xnames": [
-      "x3000c0s1b0"
-    ]
+    "deviceTypes": [ "nodeBMC" ],
+    "xnames": [ "x3000c0s1b0" ]
 },
 "inventoryHardwareFilter": {
     "manufacturer": "gigabyte"
     },
 "targetFilter": {
-    "targets": [
-      "BIOS"
-    ]
+    "targets": [ "BIOS" ]
   },
 "command": {
     "version": "latest",
@@ -691,20 +661,14 @@ Make sure to wait for the current firmware to be updated before starting a new F
 ```json
 {
 "stateComponentFilter": {
-    "deviceTypes": [
-      "nodeBMC"
-    ],
-    "xnames": [
-      "x3000c0s1b0"
-    ]
+    "deviceTypes": [ "nodeBMC" ],
+    "xnames": [ "x3000c0s1b0" ]
 },
 "inventoryHardwareFilter": {
     "manufacturer": "hpe"
     },
 "targetFilter": {
-    "targets": [
-      "iLO 5"
-    ]
+    "targets": [ "iLO 5" ]
   },
 "command": {
     "version": "latest",
@@ -722,20 +686,14 @@ Make sure to wait for the current firmware to be updated before starting a new F
 ```json
 {
 "stateComponentFilter": {
-    "deviceTypes": [
-      "nodeBMC"
-    ],
-    "xnames": [
-      "x3000c0s1b0"
-    ]
+    "deviceTypes": [ "nodeBMC" ],
+    "xnames": [ "x3000c0s1b0" ]
 },
 "inventoryHardwareFilter": {
     "manufacturer": "hpe"
     },
 "targetFilter": {
-    "targets": [
-      "iLO 6"
-    ]
+    "targets": [ "iLO 6" ]
   },
 "command": {
     "version": "latest",
@@ -758,20 +716,14 @@ Make sure to wait for the current firmware to be updated before starting a new F
 ```json
 {
 "stateComponentFilter": {
-    "deviceTypes": [
-      "NodeBMC"
-    ],
-    "xnames": [
-      "x3000c0s1b0"
-    ]
+    "deviceTypes": [ "NodeBMC" ],
+    "xnames": [ "x3000c0s1b0" ]
 },
 "inventoryHardwareFilter": {
     "manufacturer": "hpe"
     },
 "targetFilter": {
-    "targets": [
-      "System ROM"
-    ]
+    "targets": [ "System ROM" ]
   },
 "command": {
     "version": "latest",
@@ -981,20 +933,14 @@ Due to networking, FAS cannot update `ncn-m001`. See [Updating Firmware on `ncn-
 ```json
 {
 "stateComponentFilter": {
-    "deviceTypes": [
-      "nodeBMC"
-    ],
-    "xnames": [
-      "x3000c0s1b0"
-    ]
+    "deviceTypes": [ "nodeBMC" ],
+    "xnames": [ "x3000c0s1b0" ]
 },
 "inventoryHardwareFilter": {
     "manufacturer": "gigabyte"
     },
 "targetFilter": {
-    "targets": [
-      "BMC"
-    ]
+    "targets": [ "BMC" ]
   },
 "command": {
     "version": "latest",
@@ -1026,21 +972,14 @@ Make sure you have waited for the current firmware to be updated before starting
 ```json
 {
 "stateComponentFilter": {
-
-    "deviceTypes": [
-      "nodeBMC"
-    ],
-    "xnames": [
-      "x3000c0s1b0"
-    ]
+    "deviceTypes": [ "nodeBMC" ],
+    "xnames": [ "x3000c0s1b0" ]
 },
 "inventoryHardwareFilter": {
     "manufacturer": "gigabyte"
     },
 "targetFilter": {
-    "targets": [
-      "BIOS"
-    ]
+    "targets": [ "BIOS" ]
   },
 "command": {
     "version": "latest",
@@ -1066,20 +1005,14 @@ Make sure you have waited for the current firmware to be updated before starting
 ```json
 {
 "stateComponentFilter": {
-    "deviceTypes": [
-      "nodeBMC"
-    ],
-    "xnames": [
-      "x3000c0s1b0"
-    ]
+    "deviceTypes": [ "nodeBMC" ],
+    "xnames": [ "x3000c0s1b0" ]
 },
 "inventoryHardwareFilter": {
     "manufacturer": "hpe"
     },
 "targetFilter": {
-    "targets": [
-      "iLO 5"
-    ]
+    "targets": [ "iLO 5" ]
   },
 "command": {
     "version": "latest",
@@ -1102,20 +1035,14 @@ Make sure you have waited for the current firmware to be updated before starting
 ```json
 {
 "stateComponentFilter": {
-    "deviceTypes": [
-      "NodeBMC"
-    ],
-    "xnames": [
-      "x3000c0s1b0"
-    ]
+    "deviceTypes": [ "NodeBMC" ],
+    "xnames": [ "x3000c0s1b0" ]
 },
 "inventoryHardwareFilter": {
     "manufacturer": "hpe"
     },
 "targetFilter": {
-    "targets": [
-      "System ROM"
-    ]
+    "targets": [ "System ROM" ]
   },
 "command": {
     "version": "latest",
@@ -1284,9 +1211,7 @@ Prerequisites:
    ```json
    {
       "stateComponentFilter":{
-         "deviceTypes":[
-            "nodeBMC"
-         ]
+         "deviceTypes":[ "nodeBMC" ]
       },
       "inventoryHardwareFilter":{
          "manufacturer":"cray"

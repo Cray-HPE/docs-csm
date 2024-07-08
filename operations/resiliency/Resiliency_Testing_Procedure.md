@@ -29,8 +29,6 @@ examples) to inform internal users and customers about our process.
    export CRAY_CONFIG_DIR=$(mktemp -d); echo $CRAY_CONFIG_DIR; cray init --configuration default --hostname https://api-gw-service-nmn.local
    ```
 
-   Then, validate the authorization by executing the `cray uas list` command, for example. For more information, see the `Validate UAI Creation` section of [Validate CSM Health](../validate_csm_health.md).
-
 * (`ncn-mw#`) Verify that `kubectl get nodes` reports all master and worker nodes are `Ready`.
 
    ```bash
@@ -168,114 +166,7 @@ In order to keep watch on various items during and after the fault has been intr
 
 ## Launch a non-interactive batch job
 
-The purpose of this procedure is to launch a non-interactive, long-running batch job across computes via a UAI (or the UAN, if present) in order to ensure that even though the UAI pod used to launch the job is running on the
-worker NCN being taken down, it will start up on another worker NCN (once Kubernetes begins terminating pods).
-
-Additionally, it is important to verify that the batch job continued to run, uninterrupted through that process. If the target NCN for shutdown is not a worker node (where a UAI would be running), then there is no need to pay
-attention to the steps, below, that discuss ensuring the UAI can only be created on the NCN worker node that is targeted for shutdown. If executing a shut down of a master or storage NCN, the procedure can begin at creating a
-UAI. It is still good to ensure that non-interactive batch jobs are uninterrupted, even with the UAI they are launched from is not being disrupted.
-
-### Launch on a UAI
-
-1. (`ncn-mw#`) Create a UAI.
-
-   To create a UAI, see the `Validate UAI Creation` section of [Validate CSM Health](../validate_csm_health.md) and/or [Create a UAI](../UAS_user_and_admin_topics/Create_a_UAI.md).
-
-   If the target node for shutdown is a worker NCN, force the UAI to be created on target worker NCN with the following steps:
-
-   1. Create labels to ensure that UAI pods will only be able to start-up on the target worker NCN.
-
-      In this example, `ncn-w002` is the target node for shutdown on a system with only three NCN worker nodes.
-
-      ```bash
-      kubectl label node ncn-w001 uas=False --overwrite
-      kubectl label node ncn-w003 uas=False --overwrite
-      ```
-
-      If successful, output similar to `node/ncn-w00X labeled` will be returned.
-
-   1. Verify the labels were applied successfully.
-
-      ```bash
-      kubectl get nodes -l uas=False
-      ```
-
-      Example output:
-
-      ```text
-      NAME       STATUS   ROLES    AGE     VERSION
-      ncn-w001   Ready    <none>   4d19h   v1.18.2
-      ncn-w003   Ready    <none>   4d19h   v1.18.2
-      ```
-
-   1. Remove the labels set above after the UAI has been created.
-
-      > **IMPORTANT:** After a UAI has been created, labels must be cleared or else when Kubernetes terminates the running UAI on the NCN being shut down, it will not be able to reschedule the UAI on another pod.
-
-      ```bash
-      kubectl label node ncn-w001 uas-
-      kubectl label node ncn-w003 uas-
-      ```
-
-1. Verify that WLM is configured with the appropriate workload manager within the created UAI.
-
-   1. (`ncn-mw#`) Verify the connection string of the created UAI.
-
-      ```bash
-      cray uas list --format toml
-      ```
-
-      Example output:
-
-      ```toml
-      [[results]]
-      uai_age = "2m"
-      uai_connect_string = "ssh vers@10.103.8.170"
-      uai_host = "ncn-w002"
-      uai_img = "registry.local/cray/cray-uai-cos-2.1.70:latest"
-      uai_ip = "10.103.8.170"
-      uai_msg = ""
-      uai_name = "uai-vers-f8fa541f"
-      uai_status = "Running: Ready"
-      username = "vers"
-      ```
-
-   1. (`ncn-mw#`) Log in to the created UAI.
-
-      For example:
-
-      ```bash
-      ssh vers@10.103.8.170
-      ```
-
-   1. (`uai#`) Verify the configuration of Slurm, for example, within the UAI:
-
-      ```bash
-      srun -N 4 hostname | sort
-      ```
-
-      Example output:
-
-      ```text
-      nid000001
-      nid000002
-      nid000003
-      nid000004
-      ```
-
-1. Copy an MPI application source and WLM batch job files to the UAI.
-
-1. Compile an MPI application with the UAI. Launch application as batch job (not interactive) on compute node(s) that have not been designated, already, for reboots once an NCN is shut down.
-
-   1. Verify that batch job is running and that application output is streaming to a file. Streaming output will be used to verify that the batch job is still running during resiliency testing. A batch job, when submitted, will
-      designate a log file location. This log file can be accessed to be able to verify that the batch job is continuing to run after an NCN is brought down and once it is back online. Additionally, the `squeue` command can be
-      used to verify that the job continues to run (for Slurm).
-
-   1. (`ncn-mw#`) Delete the UAI session when all of the testing is complete.
-
-      ```bash
-      cray uas delete --uai-list uai-vers-f8fa541f
-      ```
+The purpose of this procedure is to launch a non-interactive, long-running batch job across computes via the UAN, if present, in order to verify that the batch job continued to run, uninterrupted.
 
 ### Launch on a UAN
 
@@ -298,8 +189,7 @@ UAI. It is still good to ensure that non-interactive batch jobs are uninterrupte
 
 1. Copy an MPI application source and WLM batch job files to UAN.
 
-1. Compile an MPI application within the UAN. Launch the application as interactive on compute node(s)that have not been designated, already, for either reboots (once an NCN is shut down) or that are not already running an MPI
-   job via a UAI.
+1. Compile an MPI application within the UAN. Launch the application as interactive on compute node(s)that have not been designated, already, for either reboots (once an NCN is shut down).
 
 1. Verify that the job launched on the UAN is running and that application output is streaming to a file. Streaming output will be used to verify that the batch job is still running during resiliency testing. A batch job, when
    submitted, will designate a log file location. This log file can be accessed to be able to verify that the batch job is continuing to run after an NCN is brought down and once it is back online. Additionally, the `squeue`
@@ -344,17 +234,10 @@ a healthy state.
 
    1. Wait until the BOS reboot session has completed.
 
-1. If the target node for shutdown was a worker NCN, verify that the UAI launched on that node still exists. It should be running on another worker NCN.
-
-   * Any prior SSH session established with the UAI while it was running on the downed NCN worker node will be unresponsive. A new SSH session will need to be established once the UAI pods has been successfully relocated to
-     another worker NCN.
-   * Log back into the UAI and verify that the WLM batch job is still running and streaming output. The log file created with the kick-off of the batch job should still be accessible and the `squeue` command can be used to
-     verify that the job continues to run (for Slurm).
-
 1. If the WLM batch job was launched on a UAN, log back into it and verify that the batch job is still running and streaming output via the log file created with the batch job and/or the `squeue` command (if Slurm is used as
    the WLM).
 
-1. Verify that new WLM jobs can be started on a compute node after the NCN is down (either via a UAI or the UAN node).
+1. Verify that new WLM jobs can be started on a compute node after the NCN is down via the UAN node).
 
 1. (`ncn-mw#`) Look for any pods that are in a state other than `Running`, `Completed`, `Pending`, or `Terminating`:
 
@@ -398,10 +281,5 @@ a healthy state.
 ## Execute post-boot health checks
 
 1. Re-run the `Platform Health Checks` section of [Validate CSM Health](../validate_csm_health.md) noting any output that indicates output is not as expected.
-
-1. Ensure that after a downed NCN worker node (can ignore if not a worker node) has been powered up, a new UAI can be created on that NCN. It may be necessary to label the nodes again, to ensure the UAI gets created on the
-   worker node that was just powered on. Refer to the section above for `Launch a Non-Interactive Batch Job` for the procedure.
-
-   > **IMPORTANT:** Do not forget to remove the labels after the UAI has been created. Once the UAI has been created, log into it and ensure a new workload manager job can be launched.
 
 1. Ensure tickets have been opened for any unexpected behavior along with associated logs and notes on workarounds, if any were executed.
