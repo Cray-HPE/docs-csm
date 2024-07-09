@@ -6,13 +6,13 @@ They also help provide a quicker and deeper understanding of how the system func
 
 * [Terminology](#terminology)
 * [BOS v2 workflows](#bos-v2-workflows)
-  * [Boot nodes](#v2-boot-nodes)
-  * [Reboot nodes](#v2-reboot-nodes)
-  * [Power off nodes](#v2-power-off-nodes)
+    * [Boot nodes](#v2-boot-nodes)
+    * [Reboot nodes](#v2-reboot-nodes)
+    * [Power off nodes](#v2-power-off-nodes)
 * [BOS v1 workflows](#bos-v1-workflows)
-  * [Boot and configure nodes](#v1-boot-and-configure-nodes)
-  * [Reconfigure nodes](#v1-reconfigure-nodes)
-  * [Power off nodes](#v1-power-off-nodes)
+    * [Boot and configure nodes](#v1-boot-and-configure-nodes)
+    * [Reconfigure nodes](#v1-reconfigure-nodes)
+    * [Power off nodes](#v1-power-off-nodes)
 
 ## Terminology
 
@@ -20,14 +20,14 @@ The following are mentioned in the workflows:
 
 * Boot Orchestration Service \(BOS\) is responsible for booting, configuring, and shutting down collections of nodes.
   The Boot Orchestration Service has the following components:
-  * A BOS session template is a collection of one or more boot sets. A boot set defines a collection of nodes and the information about the boot artifacts and parameters.
-    Session templates also include information on which [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) configuration should
-    be applied.
-  * BOS sessions provide a way to apply a template across a group of nodes and monitor the progress of those nodes as they move toward their desired state.
-  * BOS operators interact with other services to perform actions on nodes, moving them toward their desired state. BOS operators are used only for BOS v2 operations.
-  * Boot Orchestration Agent \(BOA\) is automatically launched to execute the session.
-    A BOA executes the given operation; if the operation is a boot or a reboot, it also configures the nodes post-boot \(if enabled\).
-    BOA is used only for BOS v1 operations.
+    * A BOS session template is a collection of one or more boot sets. A boot set defines a collection of nodes and the information about the boot artifacts and parameters.
+      Session templates also include information on which [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) configuration should
+      be applied.
+    * BOS sessions provide a way to apply a template across a group of nodes and monitor the progress of those nodes as they move toward their desired state.
+    * BOS operators interact with other services to perform actions on nodes, moving them toward their desired state. BOS operators are used only for BOS v2 operations.
+    * Boot Orchestration Agent \(BOA\) is automatically launched to execute the session.
+      A BOA executes the given operation; if the operation is a boot or a reboot, it also configures the nodes post-boot \(if enabled\).
+      BOA is used only for BOS v1 operations.
 * [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) service provides system-level power control
   for nodes in the system. CAPMC interfaces directly with the Redfish APIs to the controller infrastructure to effect power and environmental changes on the system.
 * [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) tracks the state of each node and its group and role associations.
