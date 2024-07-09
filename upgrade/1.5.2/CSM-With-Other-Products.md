@@ -1,5 +1,12 @@
 # CSM Only Upgrade on a System with Other Products
 
+* [CSM Only Upgrade on a System with Other Products](#csm-only-upgrade-on-a-system-with-other-products)
+    * [Requirements](#requirements)
+    * [Overview](#overview)
+    * [Steps](#steps)
+        * [Using `sat bootprep` with IUF generated input files](#using-sat-bootprep-with-iuf-generated-input-files)
+    * [Return to CSM `1.5.2` patch](#return-to-csm-152-patch)
+
 This page provides guidance for systems with products installed that are performing an upgrade from a CSM `v1.5.X` release to the CSM `v1.5.2` release.
 
 The [`v1.5.2` upgrade page](../1.5.2/README.md) will refer to this page
