@@ -234,7 +234,7 @@ ncn-mw# export XNAME=x3000c0s17b2n0
 Create a BOS session to reboot the chosen node using the BOS session template that was created:
 
 ```bash
-ncn-mw# cray bos session create --template-name shasta-1.4-csm-bare-bones-image --operation reboot --limit $XNAME --format toml
+ncn-mw# cray bos session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit $XNAME --format toml
 ```
 
 Expected output looks similar to the following:
@@ -242,7 +242,7 @@ Expected output looks similar to the following:
 ```toml
 limit = "x3000c0s17b2n0"
 operation = "reboot"
-templateName = "shasta-1.4-csm-bare-bones-image"
+templateUuid = "shasta-1.4-csm-bare-bones-image"
 [[links]]
 href = "/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
 jobId = "boa-8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"

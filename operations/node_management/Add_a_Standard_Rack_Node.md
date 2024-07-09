@@ -231,7 +231,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
     Use the appropriate BOS template for the node type.
 
     ```bash
-    ncn-mw# cray bos session create --template-name cle-VERSION \
+    ncn-mw# cray bos session create --template-uuid cle-VERSION \
                 --operation reboot --limit x3000c0s27b0n0,x3000c0s27b0n1,x3000c0s27b0n2,x3000c0s27b00n3
     ```
 

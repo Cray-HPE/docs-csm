@@ -177,5 +177,5 @@ curl -i -X POST -s https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate 
 The new CPS-based session template can be used when creating a BOS session. The following is an example of creating a reboot session using the CLI:
 
 ```bash
-ncn-mw# cray bos v1 session create --template-name cps_rootfs_template --operation Reboot
+ncn-mw# cray bos session create --template-uuid cps_rootfs_template --operation reboot
 ```

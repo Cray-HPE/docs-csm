@@ -71,22 +71,22 @@ An authentication token is required to access the API gateway and to use the `sa
       bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
       ```
 
-   1. Find the required `templateName` value with BOS.
+   1. Find the required `templateName` or `templateUuid` value with BOS (they are interchangeable).
 
       ```bash
-      ncn-mw# cray bos session describe BOS_SESSION --format toml | grep templateName
+      ncn-mw# cray bos session describe BOS_SESSION --format toml | grep -E 'template(Name|Uuid)'
       ```
 
       Example output:
 
       ```toml
-      templateName = "cos-2.3.101"
+      templateUuid = "cos-2.3.101"
       ```
 
    1. Determine the list of xnames or role groups or HSM groups associated with the desired boot session template.
 
       ```bash
-      ncn-mw# cray bos sessiontemplate describe SESSION_TEMPLATE_NAME --format toml | egrep "node_list|node_roles_groups|node_groups"
+      ncn-mw# cray bos sessiontemplate describe SESSION_TEMPLATE_NAME_OR_UUID --format toml | egrep "node_list|node_roles_groups|node_groups"
       ```
 
       Example outputs:

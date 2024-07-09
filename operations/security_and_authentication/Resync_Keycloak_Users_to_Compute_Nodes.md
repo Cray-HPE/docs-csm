@@ -92,5 +92,5 @@ The COS product must be installed.
     1. Eeboot the compute nodes with the Boot Orchestration Service \(BOS\).
 
         ```bash
-        ncn-mw# cray bos session create --template-name BOS_TEMPLATE --operation reboot
+        ncn-mw# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
         ```
