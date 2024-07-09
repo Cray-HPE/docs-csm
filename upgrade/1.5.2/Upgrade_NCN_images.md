@@ -81,8 +81,8 @@ upgrade procedure which could cause problems.
 
         1. Set the following release variables to the same values they were set to on `ncn-m001`.
 
-            - `CSM_DISTDIR`
-            - `CSM_RELEASE_VERSION`
+            * `CSM_DISTDIR`
+            * `CSM_RELEASE_VERSION`
 
            See the [`CSM-1.5.2` patch preparation](./README.md#preparation) for details on setting these variables.
 
