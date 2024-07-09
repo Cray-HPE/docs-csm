@@ -5,11 +5,11 @@ This page is a quick reference for common BOS commands in the [Cray CLI](../../g
 To find the API versions of any commands listed, add `-vvv` to the end of the CLI command, and the CLI will print the underlying call to the API in the output.
 
 * [BOS v2 commands](#bos-v2-commands)
-  * [Full system commands (v2)](#full-system-commands-v2)
-  * [Single node commands (v2)](#single-node-commands-v2)
+    * [Full system commands (v2)](#full-system-commands-v2)
+    * [Single node commands (v2)](#single-node-commands-v2)
 * [BOS v1 commands](#bos-v1-commands)
-  * [Full system commands (v1)](#full-system-commands-v1)
-  * [Single node commands (v1)](#single-node-commands-v1)
+    * [Full system commands (v1)](#full-system-commands-v1)
+    * [Single node commands (v1)](#single-node-commands-v1)
 
 ## BOS v2 commands
 
@@ -18,25 +18,25 @@ To find the API versions of any commands listed, add `-vvv` to the end of the CL
 * (`ncn-mw#`) Boot all nodes in a template:
 
     ```bash
-    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Boot
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation boot
     ```
 
 * (`ncn-mw#`) Reboot all nodes in a template:
 
     ```bash
-    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Reboot
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation reboot
     ```
 
 * (`ncn-mw#`) Shutdown all nodes in a template:
 
     ```bash
-    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Shutdown
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation shutdown
     ```
 
 * (`ncn-mw#`) Stage a reboot for all nodes in a template:
 
     ```bash
-    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Reboot --staged True
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation reboot --staged True
     ```
 
 ### Single node commands (v2)
@@ -44,25 +44,25 @@ To find the API versions of any commands listed, add `-vvv` to the end of the CL
 * (`ncn-mw#`) Boot a single node:
 
     ```bash
-    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Boot --limit <node's xname>
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation boot --limit <node's xname>
     ```
 
 * (`ncn-mw#`) Reboot a single node:
 
     ```bash
-    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Reboot --limit <node's xname>
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation reboot --limit <node's xname>
     ```
 
 * (`ncn-mw#`) Shutdown a single node:
 
     ```bash
-    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Shutdown --limit <node's xname>
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation shutdown --limit <node's xname>
     ```
 
 * (`ncn-mw#`) Stage a reboot for a single node:
 
     ```bash
-    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Reboot --staged True --limit <node's xname>
+    cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation reboot --staged True --limit <node's xname>
     ```
 
 * (`ncn-mw#`) Monitor the overall boot progress of a single node:
@@ -78,19 +78,19 @@ To find the API versions of any commands listed, add `-vvv` to the end of the CL
 * (`ncn-mw#`) Boot all nodes in a template:
 
     ```bash
-    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Boot
+    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation boot
     ```
 
 * (`ncn-mw#`) Reboot all nodes in a template:
 
     ```bash
-    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Reboot
+    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation reboot
     ```
 
 * (`ncn-mw#`) Shutdown all nodes in a template:
 
     ```bash
-    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Shutdown
+    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation shutdown
     ```
 
 ### Single node commands (v1)
@@ -98,17 +98,17 @@ To find the API versions of any commands listed, add `-vvv` to the end of the CL
 * (`ncn-mw#`) Boot a single node:
 
     ```bash
-    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Boot --limit <node's xname>
+    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation boot --limit <node's xname>
     ```
 
 * (`ncn-mw#`) Reboot a single node:
 
     ```bash
-    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Reboot --limit <node's xname>
+    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation reboot --limit <node's xname>
     ```
 
 * (`ncn-mw#`) Shutdown a single node:
 
     ```bash
-    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation Shutdown --limit <node's xname>
+    cray bos v1 session create --template-name SESSION_TEMPLATE_NAME --operation shutdown --limit <node's xname>
     ```
