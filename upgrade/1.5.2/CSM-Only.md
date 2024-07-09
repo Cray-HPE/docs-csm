@@ -1,5 +1,9 @@
 # CSM Only Upgrade
 
+* [CSM Only Upgrade](#csm-only-upgrade)
+    * [Requirements](#requirements)
+    * [Steps](#steps)
+
 This page provides guidance for systems with exclusively CSM installed that are performing an upgrade from a CSM `v1.5.X` release to the CSM `v1.5.2` release.
 
 The [`v1.5.2` upgrade page](../1.5.2/README.md) will refer to this page
