@@ -75,7 +75,7 @@ describes how the boot file name may be overridden on a per-node basis.
 
 2. (`ncn#`) Dump the DHCP server configuration.
 
-   **`NOTE`** It make take up to 2 minutes for the change to HSM to be reflected in the DHCP server configuration as the DHCP helper has to run to update the configuration.
+   **`NOTE`** It make take up to two minutes for the change to HSM to be reflected in the DHCP server configuration as the DHCP helper has to run to update the configuration.
 
    ```bash
    curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
