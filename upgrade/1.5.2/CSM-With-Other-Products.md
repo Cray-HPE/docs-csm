@@ -61,7 +61,7 @@ example showing how to find the IUF activity.
 1. (`ncn-m001#`) Record the media directory used for this activity in an environment variable.
 
    ```bash
-   export MEDIA_DIR="$(yq r "${ACTIVITY_DIR}/state/stage_hist.yaml" 'summary.media_dir')"
+   export MEDIA_DIR="$(yq4 eval '.summary.media_dir' "${ACTIVITY_DIR}/state/stage_hist.yaml")"
    echo "${MEDIA_DIR}"
    ```
 
@@ -101,7 +101,7 @@ example showing how to find the IUF activity.
 1. (`ncn-m001#`) Modify the CSM version in the copied `session_vars.yaml`:
 
    ```bash
-   yq w -i "${BOOTPREP_DIR}/session_vars.yaml" 'csm.version' "${CSM_RELEASE}"
+   yq4 eval -i '.csm.version = "'"$CSM_RELEASE"'"' "${BOOTPREP_DIR}/session_vars.yaml"
    ```
 
 1. (`ncn-m001#`) Update the `working_branch` if one is used for the CSM product.
@@ -124,8 +124,8 @@ example showing how to find the IUF activity.
    new working branch. Then check it again. For example:
 
    ```bash
-   yq w -i "${BOOTPREP_DIR}/session_vars.yaml" 'csm.working_branch' "integration-${CSM_RELEASE}"
-   yq r "${BOOTPREP_DIR}/session_vars.yaml" 'csm.working_branch'
+   yq4 eval -i '.csm.working_branch = "integration-'"${CSM_RELEASE}"'"' "${BOOTPREP_DIR}/session_vars.yaml"
+   yq4 eval '.csm.working_branch' "${BOOTPREP_DIR}/session_vars.yaml"
    ```
 
    This should output the name of the new CSM working branch.
@@ -137,7 +137,7 @@ example showing how to find the IUF activity.
    with different names from the ones created in the IUF activity.
 
    ```bash
-   yq w -i -- "${BOOTPREP_DIR}/session_vars.yaml" 'default.suffix' "-csm-${CSM_RELEASE}"
+   yq4 eval -i '.default.suffix = "-csm-'"${CSM_RELEASE}"'"' "${BOOTPREP_DIR}/session_vars.yaml"
    ```
 
 1. (`ncn-m001#`) Change directory to the `BOOTPREP_DIR` and run `sat bootprep`.
@@ -230,10 +230,10 @@ example showing how to find the IUF activity.
    1. Get the xnames of the master and worker management nodes.
 
       ```bash
-      WORKER_XNAMES=$(cray hsm state components list --role Management --subrole Worker --type Node --format json |
-          jq -r '.Components | map(.ID) | join(",")')
-      MASTER_XNAMES=$(cray hsm state components list --role Management --subrole Master --type Node --format json |
-          jq -r '.Components | map(.ID) | join(",")')
+      WORKER_XNAMES="$(cray hsm state components list --role Management --subrole Worker --type Node --format json |
+          jq -r '.Components | map(.ID) | join(",")')"
+      MASTER_XNAMES="$(cray hsm state components list --role Management --subrole Master --type Node --format json |
+          jq -r '.Components | map(.ID) | join(",")')"
       echo "${MASTER_XNAMES},${WORKER_XNAMES}"
       ```
 
@@ -254,9 +254,9 @@ example showing how to find the IUF activity.
    1. Get the xnames of the storage management nodes.
 
       ```bash
-      STORAGE_XNAMES=$(cray hsm state components list --role Management --subrole Storage --type Node --format json |
-          jq -r '.Components | map(.ID) | join(",")')
-      echo $STORAGE_XNAMES
+      STORAGE_XNAMES="$(cray hsm state components list --role Management --subrole Storage --type Node --format json |
+          jq -r '.Components | map(.ID) | join(",")')"
+      echo "$STORAGE_XNAMES"
       ```
 
    1. Apply the CFS configuration to storage nodes using the xnames and CFS configuration name found in the previous steps.
@@ -264,7 +264,7 @@ example showing how to find the IUF activity.
       ```bash
       /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
           --no-config-change --config-name "${STORAGE_CFS_CONFIG_NAME}" --no-enable --no-clear-err \
-          --xnames ${STORAGE_XNAMES}
+          --xnames "${STORAGE_XNAMES}"
       ```
 
       Successful output will end with the following:
