@@ -5,11 +5,11 @@ This page is a quick reference for common BOS commands in the [Cray CLI](../../g
 To find the API versions of any commands listed, add `-vvv` to the end of the CLI command, and the CLI will print the underlying call to the API in the output.
 
 * [BOS v2 commands](#bos-v2-commands)
-  * [Full system commands (v2)](#full-system-commands-v2)
-  * [Single node commands (v2)](#single-node-commands-v2)
+    * [Full system commands (v2)](#full-system-commands-v2)
+    * [Single node commands (v2)](#single-node-commands-v2)
 * [BOS v1 commands](#bos-v1-commands)
-  * [Full system commands (v1)](#full-system-commands-v1)
-  * [Single node commands (v1)](#single-node-commands-v1)
+    * [Full system commands (v1)](#full-system-commands-v1)
+    * [Single node commands (v1)](#single-node-commands-v1)
 
 ## BOS v2 commands
 
