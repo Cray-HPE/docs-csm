@@ -6,9 +6,9 @@ They also help provide a quicker and deeper understanding of how the system func
 
 * [Terminology](#terminology)
 * [Workflows]
-  * [Boot nodes](#boot-nodes)
-  * [Reboot nodes](#reboot-nodes)
-  * [Power off nodes](#power-off-nodes)
+    * [Boot nodes](#boot-nodes)
+    * [Reboot nodes](#reboot-nodes)
+    * [Power off nodes](#power-off-nodes)
 
 ## Terminology
 
@@ -16,11 +16,11 @@ The following are mentioned in the workflows:
 
 * Boot Orchestration Service \(BOS\) is responsible for booting, configuring, and shutting down collections of nodes.
   The Boot Orchestration Service has the following components:
-  * A BOS session template is a collection of one or more boot sets. A boot set defines a collection of nodes and the information about the boot artifacts and parameters.
-    Session templates also include information on which [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) configuration should
-    be applied.
-  * BOS sessions provide a way to apply a template across a group of nodes and monitor the progress of those nodes as they move toward their desired state.
-  * BOS operators interact with other services to perform actions on nodes, moving them toward their desired state.
+    * A BOS session template is a collection of one or more boot sets. A boot set defines a collection of nodes and the information about the boot artifacts and parameters.
+      Session templates also include information on which [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) configuration should
+      be applied.
+    * BOS sessions provide a way to apply a template across a group of nodes and monitor the progress of those nodes as they move toward their desired state.
+    * BOS operators interact with other services to perform actions on nodes, moving them toward their desired state.
 * [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) service provides system-level power control
   for nodes in the system. CAPMC interfaces directly with the Redfish APIs to the controller infrastructure to effect power and environmental changes on the system.
 * [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) tracks the state of each node and its group and role associations.
