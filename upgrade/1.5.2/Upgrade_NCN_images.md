@@ -39,7 +39,7 @@ upgrade procedure which could cause problems.
 
     1. After successfully upgrading the `CANARY_NODE`, continue upgrading the remaining storage nodes.
 
-        1. Get a comma sperated list of storage nodes to be upgraded.
+        1. Get a comma seperated list of storage nodes to be upgraded.
 
             ```bash
             STORAGE_NODES="$(ceph orch host ls | awk '/^ncn\-s/{if ($1 != "'"$CANARY_NODE"'") print $1}')"
