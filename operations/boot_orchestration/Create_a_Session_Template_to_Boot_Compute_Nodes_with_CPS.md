@@ -135,5 +135,5 @@ Refer to [Manage a Session Template](Manage_a_Session_Template.md) for more info
 (`ncn-mw#`) The new CPS-based session template can be used when creating a BOS session. The following is an example of creating a reboot session using the CLI:
 
 ```bash
-cray bos v2 sessions create --template-name cps_rootfs_template --operation Reboot
+cray bos v2 sessions create --template-name cps_rootfs_template --operation reboot
 ```
