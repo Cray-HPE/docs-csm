@@ -58,7 +58,7 @@ upgrade procedure which could cause problems.
     echo "${CSM_ARTI_DIR}"
     ```
 
-1. Upgrade master nodes and worker nodes using the steps below, these will walk through the [CSM Stage 3 Upgrade Kubernetes documentation](../Stage_3.md) steps.
+1. Upgrade master nodes and worker nodes using the following steps, these will walk through the [CSM Stage 3 Upgrade Kubernetes documentation](../Stage_3.md) steps.
 
     1. (`ncn-m001#`) Start with step [Stage 3.1 - Master node image upgrade](../Stage_3.md#stage-31---master-node-image-upgrade).
 
