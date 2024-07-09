@@ -1,6 +1,6 @@
 # Image Management Workflows
 
-Overview of how to create an image and how to customize and image.
+Overview of how to create an image and how to customize an image.
 
 The following workflows are intended to be high-level overviews of image management tasks. These workflows depict how services interact with each other during image management and help to provide a quicker and deeper
 understanding of how the system functions.
@@ -9,6 +9,7 @@ The workflows in this section include:
 
 * [Create a new image](#create-a-new-image)
 * [Customize an image](#customize-an-image)
+* [Manage image labels](#manage-image-labels)
 
 ## Create a new image
 
@@ -172,3 +173,54 @@ Mentioned in this workflow:
 1. Upload the new image artifacts to Ceph S3.
 
     The new image artifacts are uploaded to Ceph S3.
+
+## Manage Image Labels
+
+**Use Case:** The system administrator would like to apply user supplied information about IMS images or remove metadata that has been previously set.
+
+**Components:** This workflow is based on the interaction of the Image Management Service \(IMS\) with other services after the image build process completes. The information added or removed can be used by separate
+APIs or processes for whatever specific purposes they implement for, as it involves specific images. Generally, downstream APIs define specific keys and values that can be associated with an image, then perform specific
+actions against those image records in a way that is consistent with their API's behavior. Typically, this allows administrators to attach general purpose information about IMS images that will help them manage the lifecycle
+of images that IMS maintains.
+
+**Workflow Overview:** The following sequence of steps occurs during this workflow.
+
+1. (`ncn-mw#`) Administrator identifies the image to add metadata information to.
+
+    Administrators may already know the image ID in question to label. If not, examining the existing images may be of help.
+
+    ```bash
+    cray ims images list
+    ```
+   
+1. (`ncn-mw#`) Administrators may set a new label for an existing IMS Image
+
+    One label may be changed (added or removed) during each update operation. Existing values for the provided key may be overwritten if already part of the image record.
+
+    ```bash
+    cray ims images update a506a6f6-54d9-4e5a-9e8d-1fc052d62504 --metadata-operation set --metadata-value value --metadata-key key
+    ```
+
+1. (`ncn-mw#`) Administrators and downstream APIs may obtain the active record for a given image.
+
+    Image metadata information is also available via the `list` command for all images.
+
+    ```bash
+    cray ims images describe a506a6f6-54d9-4e5a-9e8d-1fc052d62504
+    arch = "x86_64"
+    created = "2024-06-27T15:41:22.467177"
+    id = "a506a6f6-54d9-4e5a-9e8d-1fc052d62504"
+    [metadata]
+    key = "value"
+    ```
+
+1. (`ncn-mw#`) Administrators may remove previously set image metadata.
+
+    Downstream APIs and Administrators using the CLI may affect these changes. During `--metadata-operation remove`, users may omit `--metadata-value` command line arguments.
+
+    ```bash
+    cray ims images update a506a6f6-54d9-4e5a-9e8d-1fc052d62504 --metadata-operation remove --metadata-key key
+    arch = "x86_64"
+    created = "2024-06-27T15:41:22.467177"
+    id = "a506a6f6-54d9-4e5a-9e8d-1fc052d62504"
+    ```
