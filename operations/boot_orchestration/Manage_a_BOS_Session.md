@@ -12,19 +12,19 @@ Managing sessions through the Cray CLI can be accomplished using the `cray bos s
 
 Creating a new BOS session requires the following command-line options:
 
-* `--template-name`: Use this option to specify the name value returned in the `cray bos sessiontemplate list` command.
+* `--template-uuid`: Use this option to specify the name value returned in the `cray bos sessiontemplate list` command.
 * `--operation`: Use this option to indicate if a `boot`, `reboot`, `configure`, or `shutdown` action is being taken.
 
 The following is an example of a boot operation:
 
 ```bash
-ncn-mw# cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation Boot --format toml
+ncn-mw# cray bos session create --template-uuid TEMPLATE_UUID --operation boot --format toml
 ```
 
 Example output:
 
 ```toml
-operation = "Boot"
+operation = "boot"
 templateUuid = "TEMPLATE_UUID"
 [[links]]
 href = "foo-c7faa704-3f98-4c91-bdfb-e377a184ab4f"
@@ -63,7 +63,7 @@ many sessions exist. For more information, see
 Get details for a BOS session using the session ID returned in the `cray bos session list` command output.
 
 ```bash
-ncn-mw# cray bos session describe BOS_SESSION_JOB_ID --format toml
+ncn-mw# cray bos session describe BOS_SESSION_ID --format toml
 ```
 
 Example output:
@@ -90,5 +90,5 @@ exist, it can lead to hangs when trying to list them. For more information, see
 Delete a specific BOS session:
 
 ```bash
-ncn-mw# cray bos session delete BOS_SESSION_JOB_ID
+ncn-mw# cray bos session delete BOS_SESSION_ID
 ```
