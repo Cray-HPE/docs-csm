@@ -1,7 +1,8 @@
 # BOS Workflows
 
 The following workflows present a high-level overview of common Boot Orchestration Service \(BOS\) operations.
-These workflows depict how services interact with each other when booting, configuring, or shutting down nodes. They also help provide a quicker and deeper understanding of how the system functions.
+These workflows depict how services interact with each other when booting, configuring, or shutting down nodes.
+They also help provide a quicker and deeper understanding of how the system functions.
 
 - [Terminology](#terminology)
 - [Workflows](#workflows)
@@ -13,26 +14,32 @@ These workflows depict how services interact with each other when booting, confi
 
 The following are mentioned in the workflows:
 
-- Boot Orchestration Service \(BOS\) is responsible for booting, configuring, and shutting down collections of nodes. The Boot Orchestration Service has the following components:
-  - A BOS session template is a collection of one or more boot sets. A boot set defines a collection of nodes and the information about the boot artifacts and parameters. Session templates also include information on what CFS configuration should be applied.
+- Boot Orchestration Service \(BOS\) is responsible for booting, configuring, and shutting down collections of nodes.
+  The Boot Orchestration Service has the following components:
+  - A BOS session template is a collection of one or more boot sets. A boot set defines a collection of nodes and the information about the boot artifacts and parameters.
+    Session templates also include information on which [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) configuration should
+    be applied.
   - BOS sessions provide a way to apply a template across a group of nodes and monitor the progress of those nodes as they move toward their desired state.
+  - BOS Operators interact with other services to perform actions on nodes, moving them toward their desired state. BOS operators are used only for BOS v2 operations.
   - Boot Orchestration Agent \(BOA\) is automatically launched to execute the session.
-    A BOA executes the given operation, and if the operation is a boot or a reboot, it also configures the nodes post-boot \(if configure is enabled\). BOA is used only for BOS v1 operations.
-- Cray Advanced Platform and Monitoring Control \(CAPMC\) service provides system-level power control for nodes in the system.
-  CAPMC interfaces directly with the Redfish APIs to the controller infrastructure to effect power and environmental changes on the system.
-- Hardware State Manager \(HSM\) tracks the state of each node and its group and role associations.
-- Boot Script Service \(BSS\) stores per-node information about the iPXE boot script. Nodes consult BSS for boot artifacts \(kernel, `initrd`, image root\) and boot parameters when nodes boot or reboot.
-- The Simple Storage Service \(Ceph S3\) is an artifact repository that stores boot artifacts.
-- Configuration Framework Service \(CFS\) configures nodes using the configuration framework. Launches and aggregates the status from one or more Ansible instances against nodes \(node personalization\) or images \(image customization\).
+    A BOA executes the given operation; if the operation is a boot or a reboot, it also configures the nodes post-boot \(if enabled\).
+- [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) service provides system-level power control
+  for nodes in the system. CAPMC interfaces directly with the Redfish APIs to the controller infrastructure to effect power and environmental changes on the system.
+- [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) tracks the state of each node and its group and role associations.
+- [Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss) stores per-node information about the iPXE boot script.
+  When booting or rebooting, nodes consult BSS for boot artifacts \(kernel, `initrd`, image root\) and boot parameters.
+- [Simple Storage Service (S3)](../../glossary.md#simple-storage-service-s3) is an artifact repository that stores boot artifacts.
+- CFS configures nodes using the configuration framework. Launches and aggregates the status from one or more Ansible instances against nodes
+  \(node personalization\) or images \(image customization\).
 
 ## Workflows
 
 The set of allowed operations for a session are:
 
-- Boot – Boot nodes that are powered off.
-- Configure – Reconfigure the nodes using the Configuration Framework Service \(CFS\).
-- Reboot – Gracefully power down nodes that are on and then power them back up.
-- Shutdown – Gracefully power down nodes that are on.
+- `boot` – Boot nodes that are powered off
+- `configure` – Reconfigure the nodes using the Configuration Framework Service \(CFS\)
+- `reboot` – Gracefully power down nodes that are on and then power them back up
+- `shutdown` – Gracefully power down nodes that are on
 
 The following workflows are included in this document:
 
@@ -78,17 +85,18 @@ The following workflows are included in this document:
 
 1. Administrator creates a session template.
 
-    A session template is a collection of metadata for a group of nodes and their desired configuration. A session template can be created from a JSON structure. It returns a session template ID if successful.
+    A session template is a collection of data specifying a group of nodes, as well as the boot artifacts and configuration that should be applied to them.
+    A session template can be created from a JSON structure. It returns a session template ID if successful.
 
-    See [Manage a Session Template](Manage_a_Session_Template.md) for more information.
+    See [Manage a session template](Manage_a_Session_Template.md) for more information.
 
 1. Administrator creates a session.
 
-    Create a session to perform the operation specified in the operation request parameter on the boot set defined in the session template. For this use case, the administrator creates a session with
-    operation as Boot and specifies the session template ID.
+    Create a session to perform the operation specified in the operation request parameter on the boot set defined in the session template.
+    For this use case, the administrator creates a session with operation as `boot` and specifies the session template ID.
 
     ```bash
-    ncn-mw# cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation Boot
+    ncn-mw# cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation boot
     ```
 
 1. Launch BOA.
@@ -125,7 +133,8 @@ The following workflows are included in this document:
 
 1. BOA to HSM.
 
-    BOA waits for the nodes to boot up and be accessible via SSH. This can take up to 30 minutes. BOA coordinates with HSM to ensures that nodes are booted and Ansible can SSH to them.
+    BOA waits for the nodes to boot up and be accessible via SSH. This can take up to 30 minutes. BOA coordinates with HSM to ensures that nodes are booted and Ansible
+    can SSH to them.
 
 1. BOA to CFS.
 
@@ -149,17 +158,18 @@ The following workflows are included in this document:
 
 1. Administrator creates a session template.
 
-    A session template is a collection of metadata for a group of nodes and their desired configuration. A session template can be created from a JSON structure. It returns a session template ID if successful.
+    A session template is a collection of data specifying a group of nodes, as well as the boot artifacts and configuration that should be applied to them.
+    A session template can be created from a JSON structure. It returns a session template ID if successful.
 
-    See [Manage a Session Template](Manage_a_Session_Template.md) for more information.
+    See [Manage a session template](Manage_a_Session_Template.md) for more information.
 
 1. Administrator creates a session.
 
-    Create a session to perform the operation specified in the operation request parameter on the boot set defined in the session template. For this use case, the administrator creates a session with
-    operation as Configure and specifies the session template ID.
+    Create a session to perform the operation specified in the operation request parameter on the boot set defined in the session template.
+    For this use case, the administrator creates a session with operation as `configure` and specifies the session template ID.
 
     ```bash
-    ncn-mw# cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation Configure
+    ncn-mw# cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation configure
     ```
 
 1. Launch BOA.
@@ -196,22 +206,24 @@ The following workflows are included in this document:
 
 1. Administrator creates a session template.
 
-    A session template is a collection of metadata for a group of nodes and their desired configuration. A session template can be created from a JSON structure. It returns a session template ID if successful.
+    A session template is a collection of data specifying a group of nodes, as well as the boot artifacts and configuration that should be applied to them.
+    A session template can be created from a JSON structure. It returns a session template ID if successful.
 
-    See [Manage a Session Template](Manage_a_Session_Template.md) for more information.
+    See [Manage a session template](Manage_a_Session_Template.md) for more information.
 
 1. Administrator creates a session.
 
-    Create a session to perform the operation specified in the operation request parameter on the boot set defined in the session template. For this use case, the administrator creates a
-    session with operation as Shutdown and specifies the session template ID.
+    Create a session to perform the operation specified in the operation request parameter on the boot set defined in the session template.
+    For this use case, the administrator creates a session with operation as `shutdown` and specifies the session template ID.
 
     ```bash
-    ncn-mw# cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation Shutdown
+    ncn-mw# cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation shutdown
     ```
 
 1. Launch BOA.
 
-    The creation of a session results in the creation of a Kubernetes BOA job to complete the operation. BOA coordinates with the underlying subsystem to complete the requested operation.
+    The creation of a session results in the creation of a Kubernetes BOA job to complete the operation. BOA coordinates with the underlying subsystem to complete
+    the requested operation.
 
 1. BOA to HSM.
 

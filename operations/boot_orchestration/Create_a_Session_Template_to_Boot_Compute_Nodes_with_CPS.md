@@ -1,153 +1,181 @@
 # Create a Session Template to Boot Compute Nodes with CPS
 
-When compute nodes are booted, the Content Projection Service \(CPS\) and Data Virtualization Service \(DVS\) project the root file system \(rootfs\) over the network to the compute nodes by default.
+When [compute nodes](../../glossary.md#compute-node-cn) are booted, the [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and
+[Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) project the root file system \(`rootfs`\) over the network to the compute nodes by default.
 
-Another option when compute nodes are booted is to download their rootfs into RAM.
+Another option when compute nodes are booted is to download their `rootfs` into RAM.
 
-### Procedure
+This page covers the appropriate contents for a BOS session template in order to use CPS and DVS.
 
-1.  Use either the cray bos session create CLI command or the bash script to create a session template.
+- [Boot set S3 parameters](#boot-set-s3-parameters)
+- [Boot set `rootfs_provider` parameters](#boot-set-rootfs_provider-parameters)
+  - [`<transport>`](#transport)
+  - [`<api_gateway>`](#api_gateway)
+  - [`<timeout>`](#timeout)
+  - [`<etag>`](#etag)
+  - [`<interface>[,<interface>][,<interface>]...`](#interfaceinterfaceinterface)
+  - [`<ramroot>`](#ramroot)
+  - [Example `rootfs_provider_passthrough`](#example-rootfs_provider_passthrough)
+- [`root=` kernel parameter](#root-kernel-parameter)
+- [Example session template input file](#example-session-template-input-file)
+- [Creating a BOS session using the new template](#creating-a-bos-session-using-the-new-template)
 
-    Refer to [Manage a Session Template](Manage_a_Session_Template.md) for more information about creating a session template.
+## Boot set S3 parameters
 
-    The Simple Storage Service \(S3\) parameters that are used in the scripts are shown below:
+The session template boot set contains several [Simple Storage Service (S3)](../../glossary.md#simple-storage-service-s3) parameters.
+These are listed below, along with the appropriate values to use.
 
-    -   type: Set to `s3`
-    -   path: Set to s3://<BUCKET\_NAME\>/<KEY\_NAME\>
-    -   etag: Set to `<etag\>`
-    The following values need to be set below to make CPS the rootfs provider:
+- `type`: Set to `s3`
+- `path`: Set to `s3://<BUCKET_NAME>/<KEY_NAME>`
+- `etag`: Set to `<etag\>`
 
-    -   `"rootfs_provider":` is set to `"cpss3"`
-    -   `"rootfs_provider_passthrough":` is set to `"dvs:api-gw-service-nmn.local:300:eth0"`
-    The Content Projection Service \(CPS\) is an optional provider for rootfs on compute nodes. The rootfs\_provider\_passthrough parameter is customized according to the following format:
+## Boot set `rootfs_provider` parameters
 
-    ```bash
-    rootfs_provider_passthrough=<transport>:<api_gateway>:<timeout>:interface[,<interface>[,<interface>]...]:<ramroot>
-    ```
+The Content Projection Service \(CPS\) is an optional provider for `rootfs` on compute nodes.
 
-    The variables used in this parameter represent the following:
+The `rootfs_provider_passthrough` boot set parameter is customized according to the following format:
 
-    -   **<transport\>**
+```text
+rootfs_provider_passthrough=<transport>:<api_gateway>:<timeout>:<interface>[,<interface>[,<interface>]...]:<ramroot>
+```
 
-        File system network transport \(For example, NFS and DVS\).
+The following values need to be set in the boot set of the session template in order to make CPS the `rootfs` provider:
 
-        Can be left as an empty string to use the default value dvs.
+- `"rootfs_provider":` Set to `"cpss3"`
+- `"rootfs_provider_passthrough":` Set to `"dvs:api-gw-service-nmn.local:300:eth0"`
 
-    -   **<api\_gateway\>**
+The variables used in this parameter represent the following:
 
-        Name or address of the Kubernetes API gateway.
+### `<transport>`
 
-        Can be left as an empty string to use the default value api-gw-service-nmn.local.
+File system network transport. For example, `nfs` or `dvs`.
 
-    -   **<timeout\>**
+Can be left as an empty string to use the default value `dvs`.
 
-        The timeout, in seconds, for attempting to mount the netroot via CPS.
+### `<api_gateway>`
 
-        Can be left as an empty string to use the default value of 300 seconds.
+Name or address of the Kubernetes API gateway.
 
-    -   **<etag\>**
+Can be left as an empty string to use the default value `api-gw-service-nmn.local`.
 
-        Lists the syntax in use. BOS fills in the s3-path and etag values, so the user does not need to fill in any data.
+### `<timeout>`
 
-    -   **interface\[,<interface\>\[,<interface\>\]...\]**
+The timeout, in seconds, for attempting to mount the `netroot` via CPS.
 
-        A comma-separated list of interfaces to support. A minimum of one interface must be specified.
+Can be left as an empty string to use the default value of 300 seconds.
 
-        The first interface specified must exist on the node or the module will exit with an error. Any other specified interface that is not found on the node will be ignored. The module will wait until all specified and existing interfaces are up before proceeding with boot. The first interface specified will be passed to the CPS mount command to identify the interface to be used for mounting.
+### `<etag>`
 
-    -   **<ramroot\>**
+Lists the syntax in use. BOS fills in the S3 path and `etag` values, so the user does not need to fill in any data.
 
-        Indicates that the specified S3 path should be copied to RAM \(tmpfs\) and mounted locally instead of persisting as a remote file system mount.
+### `<interface>[,<interface>][,<interface>]...`
 
-        Can be left empty. Any string except "0" is interpreted as True.
+A comma-separated list of interfaces to support. A minimum of one interface must be specified.
 
-    For example:
+The first interface specified must exist on the node or the module will exit with an error. Any other specified interface that is not found on the node will be ignored.
+The module will wait until all specified and existing interfaces are up before proceeding with boot.
+The first interface specified will be passed to the CPS mount command to identify the interface to be used for mounting.
 
-    ```bash
-    rootfs_provider_passthrough=dvs:api-gw-service-nmn.local:300:eth0
-    ```
+### `<ramroot>`
 
-    BOS will construct the root= kernel parameter, which will be used by the node when it boots, based on the rootfs\_provider and rootfs\_provider\_passthrough values.
+Indicates that the specified S3 path should be copied to RAM \(`tmpfs`\) and mounted locally instead of persisting as a remote file system mount.
 
-    For CPS, BOS supplies a protocol craycps-s3, the S3 path to the rootfs, and the `etag` value \(if it exists\). The rest of the parameters are supplied from the rootfs\_provider\_passthrough values as specified above.
+Can be left empty. Any string except `"0"` is interpreted as true.
 
-    BOS will construct it in the following format:
+### Example `rootfs_provider_passthrough`
 
-    ```bash
-    root=craycps-s3:s3-path:<etag>:<transport>:<api_gateway>:<timeout>:interface[,<interface>[,<interface>]...]:<ramroot>
-    ```
+```text
+rootfs_provider_passthrough=dvs:api-gw-service-nmn.local:300:eth0
+```
 
-    The following is an example of an input file to use with the Cray CLI:
+## `root=` kernel parameter
 
-    ```json
-    {
-      "enable_cfs": true,
-      "description": "Template for booting compute nodes, generated by the installation",
-      "boot_sets": {
-        "computes": {
-          "network": "nmn",
-          "rootfs_provider": "cpss3",
-          "boot_ordinal": 1,
-          "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
-          "node_roles_groups": [
-            "Compute"
-          ],
-          "etag": "b0ace28163302e18b68cf04dd64f2e01",
-          "path": "s3://boot-images/ef97d3c4-6f10-4d58-b4aa-7b70fcaf41ba/manifest.json",
-          "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:eth0",
-          "type": "s3"
-        }
-      },
-      "name": "cps_rootfs_template",
-      "cfs_branch": "master",
-      "cfs_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
+BOS will construct the `root=` kernel parameter, which will be used by the node when it boots, based on the `rootfs_provider` and `rootfs_provider_passthrough` values.
+
+For CPS, BOS supplies a protocol `craycps-s3`, the S3 path to the `rootfs`, and the `etag` value \(if it exists\).
+The rest of the parameters are supplied from the `rootfs_provider_passthrough` values as specified above.
+
+BOS will construct it in the following format:
+
+```text
+root=craycps-s3:s3-path:<etag>:<transport>:<api_gateway>:<timeout>:interface[,<interface>[,<interface>]...]:<ramroot>
+```
+
+## Example session template input file
+
+The following is an example of an input file to use with the [Cray CLI](../../glossary.md#cray-cli-cray):
+
+```json
+{
+  "enable_cfs": true,
+  "description": "Template for booting compute nodes, generated by the installation",
+  "boot_sets": {
+    "computes": {
+      "network": "nmn",
+      "rootfs_provider": "cpss3",
+      "boot_ordinal": 1,
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
+      "node_roles_groups": [
+        "Compute"
+      ],
+      "etag": "b0ace28163302e18b68cf04dd64f2e01",
+      "path": "s3://boot-images/ef97d3c4-6f10-4d58-b4aa-7b70fcaf41ba/manifest.json",
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:eth0",
+      "type": "s3"
     }
-    ```
+  },
+  "cfs_branch": "master",
+  "cfs_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
+}
+```
 
-    Or use a bash script to setup a session template using the BOS API.
+Refer to [Manage a Session Template](Manage_a_Session_Template.md) for more information about creating a session template.
 
-    ```bash
-    #!/bin/bash
-    function get_token ()
-    {
-        ADMIN_SECRET=$(kubectl get secrets admin-client-auth -ojsonpath='{.data.client-secret}' | base64 -d)
-        curl -s -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$ADMIN_SECRET \
-          https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
-          python3 -c 'import sys, json; print(json.load(sys.stdin)["access_token"])'
+Or use a bash script to setup a session template using the BOS API.
+
+```bash
+#!/bin/bash
+function get_token ()
+{
+    ADMIN_SECRET=$(kubectl get secrets admin-client-auth -ojsonpath='{.data.client-secret}' | base64 -d)
+    curl -s -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$ADMIN_SECRET \
+      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
+      python3 -c 'import sys, json; print(json.load(sys.stdin)["access_token"])'
+}
+
+body='
+{
+  "name": "st1",
+  "boot_sets": {
+    "boot_set1": {
+      "boot_ordinal": 1,
+      "type": "s3",
+      "etag": "foo",
+      "path": "s3://boot-images/ef97d3c4-6f10-4d58-b4aa-7b70fcaf41ba/manifest.json",
+      "node_roles_groups": ["Compute"],
+      "node_list": [""],
+      "rootfs_provider": "cps",
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:eth0",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
+      "network": "nmn"
     }
+  },
+  "cfs_branch": "master",
+  "cfs_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
+  "enable_cfs": true,
+  "partition": ""
+}'
 
-    body='
-    {
-      "name": "st1",
-      "boot_sets": {
-        "boot_set1": {
-          "boot_ordinal": 1,
-          "type": "s3",
-          "etag": "foo",
-          "path": "s3://boot-images/ef97d3c4-6f10-4d58-b4aa-7b70fcaf41ba/manifest.json",
-          "node_roles_groups": ["Compute"],
-          "node_list": [""],
-          "rootfs_provider": "cps",
-          "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:eth0",
-          "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
-          "network": "nmn"
-        }
-      },
-      "cfs_branch": "master",
-      "cfs_url": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
-      "enable_cfs": true,
-      "partition": ""
-    }'
+curl -i -X POST -s https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate \
+  -H "Authorization: Bearer $(get_token)" \
+  -H "Content-Type: application/json" \
+  -d "$body"
+```
 
-    curl -i -X POST -s https://api-gw-service-nmn.local/apis/bos/v1/sessiontemplate \
-      -H "Authorization: Bearer $(get_token)" \
-      -H "Content-Type: application/json" \
-      -d "$body"
-    ```
+## Creating a BOS session using the new template
 
 The new CPS-based session template can be used when creating a BOS session. The following is an example of creating a reboot session using the CLI:
 
 ```bash
-ncn# cray bos session create --template-uuid cps_rootfs_template --operation Reboot
+ncn-mw# cray bos session create --template-uuid cps_rootfs_template --operation reboot
 ```
-
