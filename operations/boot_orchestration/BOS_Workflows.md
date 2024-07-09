@@ -1,7 +1,8 @@
 # BOS Workflows
 
 The following workflows present a high-level overview of common Boot Orchestration Service \(BOS\) operations.
-These workflows depict how services interact with each other when booting, configuring, or shutting down nodes. They also help provide a quicker and deeper understanding of how the system functions.
+These workflows depict how services interact with each other when booting, configuring, or shutting down nodes.
+They also help provide a quicker and deeper understanding of how the system functions.
 
 * [Terminology](#terminology)
 * [BOS v2 workflows](#bos-v2-workflows)
@@ -17,16 +18,18 @@ These workflows depict how services interact with each other when booting, confi
 
 The following are mentioned in the workflows:
 
-* Boot Orchestration Service \(BOS\) is responsible for booting, configuring, and shutting down collections of nodes. The Boot Orchestration Service has the following components:
+* Boot Orchestration Service \(BOS\) is responsible for booting, configuring, and shutting down collections of nodes.
+  The Boot Orchestration Service has the following components:
   * A BOS session template is a collection of one or more boot sets. A boot set defines a collection of nodes and the information about the boot artifacts and parameters.
-    Session templates also include information on which [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) configuration should be applied.
+    Session templates also include information on which [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) configuration should
+    be applied.
   * BOS sessions provide a way to apply a template across a group of nodes and monitor the progress of those nodes as they move toward their desired state.
   * BOS operators interact with other services to perform actions on nodes, moving them toward their desired state. BOS operators are used only for BOS v2 operations.
   * Boot Orchestration Agent \(BOA\) is automatically launched to execute the session.
     A BOA executes the given operation; if the operation is a boot or a reboot, it also configures the nodes post-boot \(if enabled\).
     BOA is used only for BOS v1 operations.
-* [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) service provides system-level power control for nodes in the system.
-  CAPMC interfaces directly with the Redfish APIs to the controller infrastructure to effect power and environmental changes on the system.
+* [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) service provides system-level power control
+  for nodes in the system. CAPMC interfaces directly with the Redfish APIs to the controller infrastructure to effect power and environmental changes on the system.
 * [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) tracks the state of each node and its group and role associations.
 * [Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss) stores per-node information about the iPXE boot script.
   When booting or rebooting, nodes consult BSS for boot artifacts \(kernel, `initrd`, image root\) and boot parameters.
@@ -78,28 +81,32 @@ The following workflows are included in this section:
 
 1. **Administrator creates a BOS session template**
 
-    A session template is a collection of data specifying a group of nodes, as well as the boot artifacts and  configuration that should be applied to them. A session template can be created from a JSON structure. It returns a Session Template ID if successful.
+    A session template is a collection of data specifying a group of nodes, as well as the boot artifacts and configuration that should be applied to them.
+    A session template can be created from a JSON structure. It returns a session template ID if successful.
 
-    See [Manage a Session Template](Manage_a_Session_Template.md) for more information.
+    See [Manage a session template](Manage_a_Session_Template.md) for more information.
 
 1. **Administrator creates a session**
 
-    Create a session to perform the operation specified in the operation request parameter on the boot set defined in the session template. For this use case, Administrator creates a session with operation as Boot and specifies the session template ID.
+    Create a session to perform the operation specified in the operation request parameter on the boot set defined in the session template. For this use case,
+    the administrator creates a session with operation as `boot` and specifies the session template ID.
 
     (`ncn-mw#`)
 
     ```bash
-    cray bos v2 sessions create --template-name SESSIONTEMPLATE_NAME --operation Boot
+    cray bos v2 sessions create --template-name SESSIONTEMPLATE_NAME --operation boot
     ```
 
 1. **Session setup operator**
 
     The creation of a session causes the session-setup operator to set a desired state on all components listed in the session template.
-    This includes pulling files from S3 to determine boot artifacts like kernel, `initrd`, and root file system. The session setup operator also enables the relevant components at this time.
+    This includes pulling files from S3 to determine boot artifacts like kernel, `initrd`, and root file system. The session setup operator also enables the relevant
+    components at this time.
 
 1. **Status operator (powering-on)**
 
-    The status operator will detect the enabled components and assign them a phase. This involves checking the current state of the node, including communicating with HSM to determine the current power status of the node.
+    The status operator will detect the enabled components and assign them a phase. This involves checking the current state of the node, including communicating with HSM
+    to determine the current power status of the node.
 
     In this example of booting nodes, the first phase is `powering-on`. If queried at this point, the nodes will have a status of `power-on-pending`.
     For more on component phase and status, see [Component Status](Component_Status.md)
@@ -110,7 +117,8 @@ The following workflows are included in this section:
     If configuration is enabled for the node, the power-on operator will also call CFS to set the desired configuration and disable the node with CFS.
     The node must be disabled within CFS so that CFS does not try to configure node until it has booted.
     The power-on operator then calls CAPMC to power-on the node.
-    Lastly, the power-on operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of `power-on-called`.
+    Lastly, the power-on operator will update the state of the node in BOS, including setting the last action. If queried at this point,
+    the nodes will have a status of `power-on-called`.
 
 1. **CAPMC boots nodes**
 
@@ -127,7 +135,8 @@ The following workflows are included in this section:
 1. **Status operator (configuring)**
 
     The status operator monitors a node's power state until HSM reports that the power state is on.  
-    When the power state for a node is on, the status operator will either set the phase to `configuring` if CFS configuration is required or it will clear the current phase if the node is in its final state.
+    When the power state for a node is on, the status operator will either set the phase to `configuring` if CFS configuration is required or it will clear the current phase
+    if the node is in its final state.
 
 1. **CFS applies configuration**
 
@@ -180,28 +189,32 @@ The following workflows are included in this section:
 
 1. **Administrator creates a BOS session template**
 
-    A session template is a collection of data specifying a group of nodes, as well as the boot artifacts and  configuration that should be applied to them. A session template can be created from a JSON structure. It returns a Session Template ID if successful.
+    A session template is a collection of data specifying a group of nodes, as well as the boot artifacts and configuration that should be applied to them.
+    A session template can be created from a JSON structure. It returns a session template ID if successful.
 
-    See [Manage a Session Template](Manage_a_Session_Template.md) for more information.
+    See [Manage a session template](Manage_a_Session_Template.md) for more information.
 
 1. **Administrator creates a session**
 
-    Create a session to perform the operation specified in the operation request parameter on the boot set defined in the session template. For this use case, the administrator creates a session with operation as Boot and specifies the session template ID.
+    Create a session to perform the operation specified in the operation request parameter on the boot set defined in the session template. For this use case,
+    the administrator creates a session with operation as `reboot` and specifies the session template ID.
 
     (`ncn-mw#`)
 
     ```bash
-    cray bos v2 sessions create --template-name SESSIONTEMPLATE_NAME --operation Reboot
+    cray bos v2 sessions create --template-name SESSIONTEMPLATE_NAME --operation reboot
     ```
 
 1. **Session setup operator**
 
     The creation of a session causes the session-setup operator to set a desired state on all components listed in the session template.
-    This includes pulling files from S3 to determine boot artifacts like kernel, `initrd`, and root file system. The session setup operator also enables the relevant components at this time.
+    This includes pulling files from S3 to determine boot artifacts like kernel, `initrd`, and root file system. The session setup operator also enables the relevant
+    components at this time.
 
 1. **Status operator (powering-off)**
 
-    The status operator will detect the enabled components and assign them a phase. This involves checking the current state of the node, including communicating with HSM to determine the current power status of the node.
+    The status operator will detect the enabled components and assign them a phase. This involves checking the current state of the node, including communicating with
+    HSM to determine the current power status of the node.
 
     In this example of rebooting nodes, the first phase is `powering-off`. If queried at this point, the nodes will have a status of `power-off-pending`.
     For more on component phase and status, see [Component Status](Component_Status.md)
@@ -209,12 +222,14 @@ The following workflows are included in this section:
 1. **Graceful-power-off operator**
 
     The power-off operator will detect nodes with a `power-off-pending` status, calls CAPMC to power-off the node.
-    Then, the power-off operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of `power-off-gracefully-called`.
+    Then, the power-off operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of
+    `power-off-gracefully-called`.
 
 1. **Forceful-power-off operator**
 
     If powering-off is taking too long, the forceful-power-off will take over. It also calls CAPMC to power-off the node, but with the addition of the forceful flag.
-    Then, the power-off operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of `power-off-forcefully-called`.
+    Then, the power-off operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of
+    `power-off-forcefully-called`.
 
 1. **CAPMC powers off nodes**
 
@@ -223,7 +238,8 @@ The following workflows are included in this section:
 1. **Status operator (powering-on)**
 
     The status operator monitors a node's power state until HSM reports that the power state is off.
-    When the power state for a node is off, the status operator will set the phase to `powering-on`. If queried at this point, the nodes will have a status of `power-on-pending`.
+    When the power state for a node is off, the status operator will set the phase to `powering-on`. If queried at this point, the nodes will have a status of
+    `power-on-pending`.
 
 1. **Power-on operator**
 
@@ -231,7 +247,8 @@ The following workflows are included in this section:
     If configuration is enabled for the node, the power-on operator will also call CFS to set the desired configuration and disable the node with CFS.
     The node must be disabled within CFS so that CFS does not try to configure node until it has booted.
     The power-on operator then calls CAPMC to power-on the node.
-    Lastly, the power-on operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of `power-on-called`.
+    Lastly, the power-on operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of
+    `power-on-called`.
 
 1. **CAPMC boots nodes**
 
@@ -248,7 +265,8 @@ The following workflows are included in this section:
 1. **Status operator (configuring)**
 
     The status operator monitors a node's power state until HSM reports that the power state is on.
-    When the power state for a node is on, the status operator will either set the phase to `configuring` if CFS configuration is required or it will clear the current phase if the node is in its final state.
+    When the power state for a node is on, the status operator will either set the phase to `configuring` if CFS configuration is required or it will clear the current
+    phase if the node is in its final state.
 
 1. **CFS applies configuration**
 
@@ -275,18 +293,20 @@ The following workflows are included in this section:
 
 1. **Administrator creates a BOS session template**
 
-    A session template is a collection of data specifying a group of nodes, as well as the boot artifacts and configuration that should be applied to them. A session template can be created from a JSON structure. It returns a Session Template ID if successful.
+    A session template is a collection of data specifying a group of nodes, as well as the boot artifacts and configuration that should be applied to them. A session
+    template can be created from a JSON structure. It returns a session template ID if successful.
 
-    See [Manage a Session Template](Manage_a_Session_Template.md) for more information.
+    See [Manage a session template](Manage_a_Session_Template.md) for more information.
 
 1. **Administrator creates a session**
 
-    Create a session to perform the operation specified in the operation request parameter on the boot set defined in the session template. For this use case, the administrator creates a session with operation as Boot and specifies the session template ID.
+    Create a session to perform the operation specified in the operation request parameter on the boot set defined in the session template. For this use case,
+    the administrator creates a session with operation as `shutdown` and specifies the session template ID.
 
     (`ncn-mw#`)
 
     ```bash
-    cray bos v2 sessions create --template-name SESSIONTEMPLATE_NAME --operation Reboot
+    cray bos v2 sessions create --template-name SESSIONTEMPLATE_NAME --operation shutdown
     ```
 
 1. **Session setup operator**
@@ -297,7 +317,8 @@ The following workflows are included in this section:
 
 1. **Status operator (powering-off)**
 
-    The status operator will detect the enabled components and assign them a phase. This involves checking the current state of the node, including communicating with HSM to determine the current power status of the node.
+    The status operator will detect the enabled components and assign them a phase. This involves checking the current state of the node, including communicating
+    with HSM to determine the current power status of the node.
 
     In this example of booting nodes, the first phase is `powering-off`. If queried at this point, the nodes will have a status of `power-off-pending`.
     For more on component phase and status, see [Component Status](Component_Status.md)
@@ -305,12 +326,14 @@ The following workflows are included in this section:
 1. **Graceful-power-off operator**
 
     The power-off operator will detect nodes with a `power-off-pending` status, calls CAPMC to power-off the node.
-    Then, the power-off operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of `power-off-gracefully-called`.
+    Then, the power-off operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of
+    `power-off-gracefully-called`.
 
 1. **Forceful-power-off operator**
 
     If powering-off is taking too long, the forceful-power-off will take over. It also calls CAPMC to power-off the node, but with the addition of the forceful flag.
-    Then, the power-off operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of `power-off-forcefully-called`.
+    Then, the power-off operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of
+    `power-off-forcefully-called`.
 
 1. **CAPMC powers off nodes**
 
@@ -371,24 +394,25 @@ The following workflows are included in this section:
 
 1. **Administrator creates a BOS session template**
 
-    A session template is a collection of data specifying a group of nodes, as well as the boot artifacts and configuration that should be applied to them. A session template can be created from a JSON structure. It returns a Session Template ID if successful.
+    A session template is a collection of data specifying a group of nodes, as well as the boot artifacts and configuration that should be applied to them.
+    A session template can be created from a JSON structure. It returns a session template ID if successful.
 
-    See [Manage a Session Template](Manage_a_Session_Template.md) for more information.
+    See [Manage a session template](Manage_a_Session_Template.md) for more information.
 
 1. **Administrator creates a session**
 
     Create a session to perform the operation specified in the operation request parameter on the boot set defined in the session template.
-    For this use case, the administrator creates a session with operation as Boot and specifies the session template ID. The set of allowed operations are:
+    For this use case, the administrator creates a session with operation as `boot` and specifies the session template ID. The set of allowed operations are:
 
-    * Boot – Boot nodes that are powered off
-    * Configure – Reconfigure the nodes using the Configuration Framework Service \(CFS\)
-    * Reboot – Gracefully power down nodes that are on and then power them back up
-    * Shutdown – Gracefully power down nodes that are on
+    * `boot` – Boot nodes that are powered off
+    * `configure` – Reconfigure the nodes using the Configuration Framework Service \(CFS\)
+    * `reboot` – Gracefully power down nodes that are on and then power them back up
+    * `shutdown` – Gracefully power down nodes that are on
 
     (`ncn-mw#`)
 
     ```bash
-    cray bos v1 session create --template-name SESSIONTEMPLATE_NAME --operation Boot
+    cray bos v1 session create --template-name SESSIONTEMPLATE_NAME --operation boot
     ```
 
 1. **Launch BOA**
@@ -425,7 +449,8 @@ The following workflows are included in this section:
 
 1. **BOA to HSM**
 
-    BOA waits for the nodes to boot up and be accessible via SSH. This can take up to 30 minutes. BOA coordinates with HSM to ensures that nodes are booted and Ansible can SSH to them.
+    BOA waits for the nodes to boot up and be accessible via SSH. This can take up to 30 minutes. BOA coordinates with HSM to ensures that nodes are booted and Ansible
+    can SSH to them.
 
 1. **BOA to CFS**
 
@@ -447,24 +472,25 @@ The following workflows are included in this section:
 
 1. **Administrator creates a BOS session template**
 
-    A session template is a collection of data specifying a group of nodes, as well as the boot artifacts and configuration that should be applied to them. A session template can be created from a JSON structure. It returns a Session Template ID if successful.
+    A session template is a collection of data specifying a group of nodes, as well as the boot artifacts and configuration that should be applied to them.
+    A session template can be created from a JSON structure. It returns a session template ID if successful.
 
-    See [Manage a Session Template](Manage_a_Session_Template.md) for more information.
+    See [Manage a session template](Manage_a_Session_Template.md) for more information.
 
 1. **Administrator creates a session**
 
     Create a session to perform the operation specified in the operation request parameter on the boot set defined in the session template.
-    For this use case, the administrator creates a session with operation as Boot and specifies the session template ID. The set of allowed operations are:
+    For this use case, the administrator creates a session with operation as `configure` and specifies the session template ID. The set of allowed operations are:
 
-    * Boot – Boot nodes that are powered off
-    * Configure – Reconfigure the nodes using the Configuration Framework Service \(CFS\)
-    * Reboot – Gracefully power down nodes that are on and then power them back up
-    * Shutdown – Gracefully power down nodes that are on
+    * `boot` – Boot nodes that are powered off
+    * `configure` – Reconfigure the nodes using the Configuration Framework Service \(CFS\)
+    * `reboot` – Gracefully power down nodes that are on and then power them back up
+    * `shutdown` – Gracefully power down nodes that are on
 
     (`ncn-mw#`)
 
     ```bash
-    cray bos v1 session create --template-name SESSIONTEMPLATE_NAME --operation Configure
+    cray bos v1 session create --template-name SESSIONTEMPLATE_NAME --operation configure
     ```
 
 1. **Launch BOA**
@@ -499,29 +525,31 @@ The following workflows are included in this section:
 
 1. **Administrator creates a BOS session template**
 
-    A session template is a collection of data specifying a group of nodes, as well as the boot artifacts and configuration that should be applied to them. A session template can be created from a JSON structure. It returns a Session Template ID if successful.
+    A session template is a collection of data specifying a group of nodes, as well as the boot artifacts and configuration that should be applied to them.
+    A session template can be created from a JSON structure. It returns a session template ID if successful.
 
-    See [Manage a Session Template](Manage_a_Session_Template.md) for more information.
+    See [Manage a session template](Manage_a_Session_Template.md) for more information.
 
 1. **Administrator creates a session**
 
     Create a session to perform the operation specified in the operation request parameter on the boot set defined in the session template.
-    For this use case, the administrator creates a session with operation as Boot and specifies the session template ID. The set of allowed operations are:
+    For this use case, the administrator creates a session with operation as `shutdown` and specifies the session template ID. The set of allowed operations are:
 
-    * Boot – Boot nodes that are powered off
-    * Configure – Reconfigure the nodes using the Configuration Framework Service \(CFS\)
-    * Reboot – Gracefully power down nodes that are on and then power them back up
-    * Shutdown – Gracefully power down nodes that are on
+    * `boot` – Boot nodes that are powered off
+    * `configure` – Reconfigure the nodes using the Configuration Framework Service \(CFS\)
+    * `reboot` – Gracefully power down nodes that are on and then power them back up
+    * `shutdown` – Gracefully power down nodes that are on
 
     (`ncn-mw#`)
 
     ```bash
-    cray bos v1 session create --template-name SESSIONTEMPLATE_NAME --operation Shutdown
+    cray bos v1 session create --template-name SESSIONTEMPLATE_NAME --operation shutdown
     ```
 
 1. **Launch BOA**
 
-    The creation of a session results in the creation of a Kubernetes BOA job to complete the operation. BOA coordinates with the underlying subsystem to complete the requested operation.
+    The creation of a session results in the creation of a Kubernetes BOA job to complete the operation. BOA coordinates with the underlying subsystem to complete
+    the requested operation.
 
 1. **BOA to HSM**
 
