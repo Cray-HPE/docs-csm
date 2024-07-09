@@ -614,7 +614,7 @@ else
 fi
 
 # upgrade all charts dependent on cray-certmanager chart
-# it is neccessary to upgrade these before upgrade 
+# it is neccessary to upgrade these before upgrade
 do_upgrade_csm_chart cray-istio platform.yaml
 do_upgrade_csm_chart cray-keycloak platform.yaml
 do_upgrade_csm_chart cray-oauth2-proxies platform.yaml
