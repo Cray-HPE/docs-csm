@@ -679,7 +679,7 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
    1. Reboot with the Boot Orchestration Service (BOS).
 
       ```bash
-      ncn-mw# cray bos session create --template-name BOS_TEMPLATE --operation reboot
+      ncn-mw# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
       ```
 
 1. Validate that LDAP integration was added successfully.

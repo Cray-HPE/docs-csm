@@ -36,7 +36,7 @@ When a session is launched, the following items are created:
       "status_link": "/v1/session/d200f7e4-1a9f-4466-9ef4-30add3bd87dd/status",
       "complete": "",
       "start_time": "2020-08-11 21:02:09.137917",
-      "templateName": "cle-1.3.0-nid1",
+      "templateUuid": "cle-1.3.0-nid1",
       "error_count": "",
       "boa_job_name": "boa-d200f7e4-1a9f-4466-9ef4-30add3bd87dd",
       "in_progress": "",
