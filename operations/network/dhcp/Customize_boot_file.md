@@ -30,7 +30,7 @@ describes how the boot file name may be overridden on a per-node basis.
 
    Example output:
 
-   ```text
+   ```toml
    [[results]]
    ID = "b42e99dfec47"
    Description = ""
@@ -52,7 +52,7 @@ describes how the boot file name may be overridden on a per-node basis.
 
    Example output:
 
-   ```text
+   ```toml
    ID = "b42e99dfec47"
    Description = "ipxe=ipxe.test"
    MACAddress = "b4:2e:99:df:ec:47"
@@ -122,7 +122,7 @@ Example output:
 
    Example output:
 
-   ```text
+   ```toml
    ID = "b42e99dfec47"
    Description = ""
    MACAddress = "b4:2e:99:df:ec:47"
@@ -140,7 +140,7 @@ Example output:
 
    Example output:
 
-   ```text
+   ```json
    {
    "boot-file-name": "",
    "client-classes": [],
