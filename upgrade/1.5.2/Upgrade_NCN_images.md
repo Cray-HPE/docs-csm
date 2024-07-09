@@ -75,7 +75,7 @@ upgrade procedure which could cause problems.
             ```
 
         1. Set the following release variables to the same values they were set to on `ncn-m001`.
-           
+
             - `CSM_DISTDIR`
             - `CSM_RELEASE_VERSION`
 

@@ -110,7 +110,7 @@ example showing how to find the IUF activity.
    `working_branch` specified for CSM:
 
    ```bash
-   yq r "${BOOTPREP_DIR}/session_vars.yaml" 'csm.working_branch'
+   yq4 eval '.csm.working_branch' "${BOOTPREP_DIR}/session_vars.yaml"
    ```
 
    If this produces no output, a `working_branch` is not in use for the CSM product, and this step
