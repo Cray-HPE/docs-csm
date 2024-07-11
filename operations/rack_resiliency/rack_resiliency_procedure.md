@@ -1,14 +1,14 @@
 # Operational Procedure for Rack Resiliency 
 
-## Graceful shutdown of a rack
+## Planned power shutdown of an NCN rack
 It's not uncommon for customers to have a need to power off a rack of equipment at a time - either for a maintenance window or because they are moving equipment around. We'll need to do a full analysis of hardware, software, networking to determine where we need to put config/ controls in place to ensure that there are no critical failures when taking a rack down.
 
 For CSM/ K8S setup there is no "zone aware" setup of the workloads. For example, if ETCD cluster or a Postgres DB is spread across 3 nodes and in case the 3 nodes are on the same rack then the situation will be critical. We should be able to recover from this event gracefully.
 
-This document provides an operational procedure to be followed for performing graceful shutdown of the rack on the CSM clusters when there is a need for maintenance of the rack or movement of the rack. This procedure ensures that all the services will perform well in real-life or chaotic conditions when one of the rack is down. 
+This document provides an operational procedure to be followed for performing planned power shutdown of the NCN rack on the CSM clusters when there is a need for maintenance of the rack or movement of the rack. This procedure ensures that all the services will perform well in real-life or chaotic conditions when one of the rack is down. 
 
-## Non-graceful shutdown of a rack
-Unlike graceful shutdown of a rack which is planned due to maintenance or movement of equipment, non-graceful shutdown is abrupt in nature where rack can go down any time due to power failure of rack or any hardware failure. This document provides operational procedure (simulated only for internal verification to test abrupt shutdown situations) to be followed for performing non-graceful shutdown of the rack and power-on the CSM clusters.
+## Unplanned power shutdown of an NCN rack
+Unlike planned power shutdown of an NCN rack which is planned due to maintenance or movement of equipment, unplanned power shutdown of an NCN rack is abrupt in nature where rack can go down any time due to power failure of rack or any hardware failure. This document provides operational procedure (simulated only for internal verification to test abrupt shutdown situations) to be followed for performing unplanned power shutdown of an NCN rack and power-on the CSM clusters.
 
 We need to do a full analysis of hardware, software, networking to determine where we need to put config/ controls in place to ensure that there are no critical failures when rack is down abruptly. Document/ list down the issues here in this doc with possible work arounds/ remediations, if any.
 
