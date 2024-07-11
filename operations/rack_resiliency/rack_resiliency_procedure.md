@@ -36,7 +36,7 @@ We need to do a full analysis of hardware, software, networking to determine whe
 
 CSM clusters includes NCN nodes (combination of master, worker and storage nodes). These NCN nodes will be placed on different physical racks in the data centers and we need to make sure that CSM cluster is resilient at rack level, meaning, failure of one rack do not result in losing the access to the entire cluster or results in any performance degradation. 
 
-Since CSM/ K8s cluster is not "zone aware" (zone represents a logical failure domain) here we use k8s topology zoning labels applied at rack lavel in order for CSM cluster to be "zone aware" and take an advantage of distribution of the pods/ servies across the zones according to the configuration in order to minimize the risk due to any rack failure.
+Since CSM/ K8s cluster is not "zone aware" (zone represents a logical failure domain) here we use k8s topology zoning labels applied at rack level in order for CSM cluster to be "zone aware" and take an advantage of distribution of the pods/ services across the zones according to the configuration in order to minimize the risk due to any rack failure.
 
 This procedure of rack resiliency is intended to make the CSM clusters resilient or HA on the course of a rack shutdown. 
 
