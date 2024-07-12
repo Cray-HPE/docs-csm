@@ -81,45 +81,59 @@ Refer to the "Configure `OpenSearch`" section in the _HPE Cray EX System Monitor
 
 1. Invoke `iuf run` with `-r` to execute the [managed-nodes-rollout](../stages/managed_nodes_rollout.md) stage on all
    nodes. This will stage data to BOS and allow the workload manager to reboot the nodes when it is ready to do so. The
-   workload manager must be configured to tell BOS to reboot nodes using this staged data. The following assumes Slurm
-   is the workload manager. Follow the instructions in the
-   section [Using staged sessions with Slurm](../../boot_orchestration/Rolling_Upgrades.md#using-staged-sessions-with-slurm)
-   of the [Rolling Upgrades using BOS](../../boot_orchestration/Rolling_Upgrades.md) documentation. These instructions
-   describe two parameters that must be set in the `slurm.conf` file. Return to these instructions after setting them.
-   If an immediate reboot of compute nodes is desired instead, add `-mrs reboot` to the `iuf run` command.
+   workload manager must be configured to tell BOS to reboot nodes using this staged data.
 
-   (`ncn-m001#`) Execute the `managed-nodes-rollout` stage.
+   - If PBS is the workload manager:
 
-    ```bash
-    iuf -a "${ACTIVITY_NAME}" run -r managed-nodes-rollout
-    ```
+     1. Create a maintenance reservation in PBS. For more information on maintenance reservations, see the
+        [_PBS Professional Administrator's Guide_](https://community.altair.com/community?id=altair_product_documentation&spa=1&filter=language%3Denglish%5Eproduct%3D20069018db0348102af07608f4961995%5Eguide_type%3DAdministration&p=1&d=asc).
 
-   **NOTE:** If the `-mrs reboot` option is used, skip the following step.
+     1. (`ncn-m001#`) Execute the `managed-nodes-rollout` stage with the `-mrs reboot` option to immediately reboot all compute nodes.
 
-1. Tell the workload manager to reboot the compute nodes. This only works for compute nodes, and they must be specified
-   explicitly. Using the keyword `ALL` to specify the nodes does not work presently.
+        ```bash
+        iuf -a "${ACTIVITY_NAME}" run -r managed-nodes-rollout -mrs reboot
+        ```
 
-  - Use this command to list all of the compute nodes in the system using their Node Identities (NIDs). First, enter the
-    SAT bash shell using `sat bash`.
+   - If Slurm is the workload manager:
 
-    (`ncn-m001#`) Enter the sat container and fetch the compute list
+     1. Follow the instructions in the section
+        [Using staged sessions with Slurm](../../boot_orchestration/Rolling_Upgrades.md#using-staged-sessions-with-slurm)
+        of the [Rolling Upgrades using BOS](../../boot_orchestration/Rolling_Upgrades.md) documentation. These instructions
+        describe two parameters that must be set in the `slurm.conf` file. Return to these instructions after setting them.
 
-    ```bash
-    sat bash
-    (ef637ae8a8b5) sat-container:/sat/share # sat status --fields xname --filter role=compute --no-headings --no-borders | xargs sat xname2nid
-    nid[000001-000004]
-    (ef637ae8a8b5) sat-container:/sat/share # exit
-    logout
-    ```
+     1. (`ncn-m001#`) Execute the `managed-nodes-rollout` stage. If an immediate reboot of compute nodes is desired instead,
+        add `-mrs reboot` to the `iuf run` command.
 
-  - Now, tell the workload manager to reboot the compute nodes. Paste the output from the previous step as the last
-    argument.
+        ```bash
+        iuf -a "${ACTIVITY_NAME}" run -r managed-nodes-rollout
+        ```
 
-    (`compute#`) A sample reboot command to reboot NIDs 1 through 4.
+        **NOTE:** If the `-mrs reboot` option is used with Slurm, skip the following step.
 
-    ```bash
-    scontrol reboot nextstate=Resume Reason="IUF Managed Nodes Rollout" nid[000001-000004]
-    ```
+     1. Tell Slurm to reboot the compute nodes. This only works for compute nodes, and they must be specified
+        explicitly. Using the keyword `ALL` to specify the nodes does not work presently.
+
+        - Use this command to list all of the compute nodes in the system using their Node Identities (NIDs). First, enter the
+          SAT bash shell using `sat bash`.
+
+          (`ncn-m001#`) Enter the sat container and fetch the compute list
+
+          ```bash
+          sat bash
+          (ef637ae8a8b5) sat-container:/sat/share # sat status --fields xname --filter role=compute --no-headings --no-borders | xargs sat xname2nid
+          nid[000001-000004]
+          (ef637ae8a8b5) sat-container:/sat/share # exit
+          logout
+          ```
+
+        - Now, tell the workload manager to reboot the compute nodes. Paste the output from the previous step as the last
+          argument.
+
+          (`compute#`) A sample reboot command to reboot NIDs 1 through 4.
+
+          ```bash
+          scontrol reboot nextstate=Resume Reason="IUF Managed Nodes Rollout" nid[000001-000004]
+          ```
 
 Once this step has completed:
 
