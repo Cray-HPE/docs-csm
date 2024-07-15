@@ -2,6 +2,7 @@
 
 * [Introduction](#introduction)
 * [Bug fixes and improvements](#bug-fixes-and-improvements)
+* [Limitations](#limitations)
 * [Steps](#steps)
 
 ## Introduction

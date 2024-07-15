@@ -1,9 +1,8 @@
 # Upgrade NCNs during CSM `1.5.2` Patch
 
-* [Upgrade NCNs during CSM `1.5.2` Patch](#upgrade-ncns-during-csm-152-patch)
-    * [Overview](#overview)
-    * [Steps](#steps)
-    * [Return to CSM `1.5.2` patch](#return-to-csm-152-patch)
+* [Overview](#overview)
+* [Steps](#steps)
+* [Return to CSM `1.5.2` patch](#return-to-csm-152-patch)
 
 This page provides guidance for systems that are performing an upgrade from a CSM `v1.5.X` release to the CSM `v1.5.2` release.
 
