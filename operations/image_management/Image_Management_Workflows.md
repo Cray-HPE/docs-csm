@@ -193,7 +193,7 @@ of images that IMS maintains.
     cray ims images list
     ```
 
-1. (`ncn-mw#`) Administrators may set a new label for an existing IMS Image
+1. (`ncn-mw#`) Administrators may set a new label for an existing IMS image.
 
     One label may be changed (added or removed) during each update operation. Existing values for the provided key may be overwritten if already part of the image record.
 
