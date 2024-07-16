@@ -211,7 +211,7 @@ of images that IMS maintains.
 
     Expected output:
 
-    ```bash
+    ```toml
     arch = "x86_64"
     created = "2024-06-27T15:41:22.467177"
     id = "a506a6f6-54d9-4e5a-9e8d-1fc052d62504"
@@ -229,7 +229,7 @@ of images that IMS maintains.
 
     Expected output:
 
-    ```bash
+    ```toml
     arch = "x86_64"
     created = "2024-06-27T15:41:22.467177"
     id = "a506a6f6-54d9-4e5a-9e8d-1fc052d62504"
