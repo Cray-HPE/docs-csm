@@ -88,7 +88,8 @@ Refer to the "Configure `OpenSearch`" section in the _HPE Cray EX System Monitor
      1. Create a maintenance reservation in PBS. For more information on maintenance reservations, see the
         [_PBS Professional Administrator's Guide_](https://community.altair.com/community?id=altair_product_documentation&spa=1&filter=language%3Denglish%5Eproduct%3D20069018db0348102af07608f4961995%5Eguide_type%3DAdministration&p=1&d=asc).
 
-     1. (`ncn-m001#`) Execute the `managed-nodes-rollout` stage with the `-mrs reboot` option to immediately reboot all compute nodes.
+     1. (`ncn-m001#`) After the reservation has started, execute the `managed-nodes-rollout` stage with the `-mrs reboot` option to
+        immediately reboot all compute nodes.
 
         ```bash
         iuf -a "${ACTIVITY_NAME}" run -r managed-nodes-rollout -mrs reboot
