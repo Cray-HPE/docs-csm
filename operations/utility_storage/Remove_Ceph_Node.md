@@ -167,13 +167,13 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
     1. Redeploy the Rados Gateway containers to adjust the placement group.
 
         ```bash
-        ceph orch apply rgw site1 zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
+        ceph orch apply rgw site1.zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
         ```
 
         For example:
 
         ```bash
-        ceph orch apply rgw site1 zone1 --placement="3 ncn-s001 ncn-s002 ncn-s003" --port=8080
+        ceph orch apply rgw site1.zone1 --placement="3 ncn-s001 ncn-s002 ncn-s003" --port=8080
         ```
 
     1. Verify that the Rados Gateway is running on the desired nodes.
