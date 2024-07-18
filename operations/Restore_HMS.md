@@ -145,7 +145,7 @@
     echo $loaderid
     ```
 
-1. (`ncn-mw#) Check FAS loader output.
+1. (`ncn-mw#`) Check FAS loader output.
 
     ```bash
     cray fas loader describe $loaderid
