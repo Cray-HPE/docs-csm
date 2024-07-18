@@ -25,6 +25,7 @@ name: Markdown linkcheck
 
 on:
   pull_request:
+  push:
   workflow_dispatch:
     inputs:
       force_full_scan:
@@ -47,7 +48,13 @@ jobs:
           .github/**/*
           api/*
 
-    # Newer versions of markdown-link-checker do not work with anchors - https://github.com/tcort/markdown-link-check/issues/225
+    - name: debug
+      env:
+        CHANGED_FILES: ${{ toJSON(steps.changed-files.outputs) }}
+      run: |
+        echo "$CHANGED_FILES"
+
+      # Newer versions of markdown-link-checker do not work with anchors - https://github.com/tcort/markdown-link-check/issues/225
     - name: Check links in changed files
       uses: docker://ghcr.io/tcort/markdown-link-check:3.9.3
       if: ${{ steps.changed-files.outputs.deleted_files == '' && steps.changed-files.outputs.renamed_files == '' }}
