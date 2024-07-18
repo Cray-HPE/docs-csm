@@ -25,7 +25,6 @@ name: Markdown linkcheck
 
 on:
   pull_request:
-  push:
   workflow_dispatch:
     inputs:
       force_full_scan:
