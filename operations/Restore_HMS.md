@@ -138,7 +138,7 @@
     if [ ${#xnames} -gt 0 ]; then curl -k -s -X PATCH -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" -d $payload $ENABLE_URL; echo $xnames; fi
     ```
 
-1. (`ncn-mw#) Restore FAS Images.
+1. (`ncn-mw#`) Restore FAS Images.
 
     ```bash
     loaderid=`cray fas loader create --file cray-fas-images_$BACKUP_FILE.zip --format json | jq .loaderRunID`
@@ -149,4 +149,4 @@
 
     ```bash
     cray fas loader describe $loaderid
-    ``
+    ```
