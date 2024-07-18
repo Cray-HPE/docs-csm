@@ -6,7 +6,6 @@
 
     1. (`ncn-mw#`) List objects in `s3`
 
-
         ```bash
         bucket=hms
         aws s3api list-objects --bucket $bucket --endpoint-url http://ncn-m001.nmn:8000
@@ -138,3 +137,16 @@
     payload='{"ComponentIDs": ['$xnames'], "Enabled": false}'
     if [ ${#xnames} -gt 0 ]; then curl -k -s -X PATCH -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" -d $payload $ENABLE_URL; echo $xnames; fi
     ```
+
+1. (`ncn-mw#) Restore FAS Images.
+
+    ```bash
+    loaderid=`cray fas loader create --file cray-fas-images_$BACKUP_FILE.zip --format json | jq .loaderRunID`
+    echo $loaderid
+    ```
+
+1. (`ncn-mw#) Check FAS loader output.
+
+    ```bash
+    cray fas loader describe $loaderid
+    ``
