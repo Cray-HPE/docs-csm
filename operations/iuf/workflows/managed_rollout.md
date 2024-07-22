@@ -112,7 +112,7 @@ Refer to the "Configure `OpenSearch`" section in the _HPE Cray EX System Monitor
         **NOTE:** If the `-mrs reboot` option is used with Slurm, skip the following step.
 
      1. Tell Slurm to reboot the compute nodes. This only works for compute nodes, and they must be specified
-        explicitly. Using the keyword `ALL` to specify the nodes does not work presently.
+        explicitly.
 
         - Use this command to list all of the compute nodes in the system using their Node Identities (NIDs). First, enter the
           SAT bash shell using `sat bash`.
