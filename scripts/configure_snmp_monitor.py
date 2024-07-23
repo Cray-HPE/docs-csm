@@ -80,16 +80,15 @@ try:
         customizations = yaml.safe_load(customizations_file)
 
         print("Enabling prometheus-snmp-exporter serviceMonitor")
-        if "prometheus-snmp-exporter" not in customizations:
+        if "snmpExporter" not in customizations:
             customizations['spec']['kubernetes']['services']['cray-sysmgmt-health'].update(
-                {"prometheus-snmp-exporter":{'serviceMonitor': {'enabled': True, 'params': []}}})
+                {"snmpExporter":{'enabled': True, 'params': []}})
         else:
-            customizations['spec']['kubernetes']['services']['cray-sysmgmt-health']['prometheus-snmp-exporter'][
-                'serviceMonitor'].update({'enabled': 'true'})
+            customizations['spec']['kubernetes']['services']['cray-sysmgmt-health']['snmpExporter'].update({'enabled': 'true'})
 
         print("Adding the targets to the SNMP serviceMonitor configuration")
-        customizations['spec']['kubernetes']['services']['cray-sysmgmt-health']['prometheus-snmp-exporter'][
-            'serviceMonitor']['params'] = switches_to_monitor
+        customizations['spec']['kubernetes']['services']['cray-sysmgmt-health']['snmpExporter'][
+            'params'] = switches_to_monitor
 
         customizations_file.seek(0)
         yaml.dump(customizations, customizations_file, sort_keys=False)

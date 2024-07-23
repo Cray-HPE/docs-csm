@@ -128,7 +128,10 @@ if [[ -z "$(yq r "$c" "spec.network.netstaticips.nmn_ncn_storage_mons")" ]]; the
   yq w -i --style=single "$c" spec.kubernetes.services.cray-sysmgmt-health.cephExporter.endpoints '{{ network.netstaticips.nmn_ncn_storage_mons }}'
 fi
 
-# Kube-prometheus-stack
+# Disable prometheus-snmp-exporter servicemonitor
+yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.enabled = false' -i $c
+
+# victoria-metrics-k8s-stack
 if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack' $c)" != null ]; then
   if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack' $c)" != null ]; then
     yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack = (.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack * .spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack)' -i $c
