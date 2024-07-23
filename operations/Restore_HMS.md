@@ -4,7 +4,7 @@
 
 1. If `tar` file was placed in `s3` from [Backup](Backup_HMS.md) copy to the system to restore.
 
-    1. List objects in `s3`
+    1. (`ncn-mw#`) List objects in `s3`
 
         ```bash
         bucket=hms
@@ -12,7 +12,6 @@
         ```
 
     1. (`ncn-mw#`) Set name of backup file (without `.tar.gz`). For example:
-
 
         ```bash
         BACKUP_FILE=hms-backup_2023-06-28_11-12-24
@@ -137,4 +136,17 @@
     xnames=`cat $COMPONENT_FILE | jq '.[] | .[] | select(.Enabled==false)' | jq .ID | paste -sd, -`
     payload='{"ComponentIDs": ['$xnames'], "Enabled": false}'
     if [ ${#xnames} -gt 0 ]; then curl -k -s -X PATCH -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" -d $payload $ENABLE_URL; echo $xnames; fi
+    ```
+
+1. (`ncn-mw#`) Restore FAS Images.
+
+    ```bash
+    loaderid=`cray fas loader create --file cray-fas-images_$BACKUP_FILE.zip --format json | jq .loaderRunID`
+    echo $loaderid
+    ```
+
+1. (`ncn-mw#`) Check FAS loader output.
+
+    ```bash
+    cray fas loader describe $loaderid
     ```
