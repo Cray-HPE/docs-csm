@@ -42,7 +42,8 @@ after a break, always be sure that a typescript is running before proceeding.
 
 1. (`ncn-m001#`) Run `ncn-upgrade-master-nodes.sh` for `ncn-m002`.
 
-   > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../operations/kubernetes/encryption/README.md), then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+   > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../operations/kubernetes/encryption/README.md),
+   then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
 
    Follow output of the script carefully. The script will pause for manual interaction.
 
@@ -215,7 +216,8 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
 
 1. Upgrade `ncn-m001`.
 
-   > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../operations/kubernetes/encryption/README.md), then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+   > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../operations/kubernetes/encryption/README.md),
+   then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
 
    ```bash
    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001

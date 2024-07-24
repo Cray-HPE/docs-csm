@@ -5,10 +5,10 @@ This section updates the software running on management NCNs.
 - [1. Perform Slingshot switch firmware updates](#1-perform-slingshot-switch-firmware-updates)
 - [2. Update management host firmware (FAS)](#2-update-management-host-firmware-fas)
 - [3. Execute the IUF `management-nodes-rollout` stage](#3-execute-the-iuf-management-nodes-rollout-stage)
-  - [3.1 `management-nodes-rollout` with CSM upgrade](#31-management-nodes-rollout-with-csm-upgrade)
-  - [3.2 `management-nodes-rollout` without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade)
-  - [3.3 NCN worker nodes](#33-ncn-worker-nodes)
-  - [3.4 Personalize NCN storage nodes](#34-personalize-ncn-storage-nodes)
+    - [3.1 `management-nodes-rollout` with CSM upgrade](#31-management-nodes-rollout-with-csm-upgrade)
+    - [3.2 `management-nodes-rollout` without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade)
+    - [3.3 NCN worker nodes](#33-ncn-worker-nodes)
+    - [3.4 Personalize NCN storage nodes](#34-personalize-ncn-storage-nodes)
 - [4. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware)
 - [5. Next steps](#5-next-steps)
 
@@ -79,7 +79,8 @@ Refer to that table and any corresponding product documents before continuing to
     1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m002`. This will rebuild `ncn-m002` with the
     new CFS configuration and image built in previous steps of the workflow.
 
-        > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md), then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+        > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
+        then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
 
         (`ncn-m001#`) Execute the `management-nodes-rollout` stage with `ncn-m002`.
 
@@ -109,7 +110,8 @@ Refer to that table and any corresponding product documents before continuing to
     1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m003`. This will rebuild `ncn-m003` with the new CFS configuration and image built in
     previous steps of the workflow.
 
-        > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md), then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+        > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
+        then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
 
         (`ncn-m001#`) Execute the `management-nodes-rollout` stage with `ncn-m003`.
 
@@ -178,7 +180,8 @@ Refer to that table and any corresponding product documents before continuing to
 
     1. (`ncn-m002#`) Upgrade `ncn-m001`. This **must** be executed on **`ncn-m002`**.
 
-        > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md), then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+        > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
+        then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
 
         ```bash
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
@@ -186,7 +189,7 @@ Refer to that table and any corresponding product documents before continuing to
 
         > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
 
-1. Follow the steps documented in [Stage 3.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_3.md#stage-34---upgrade-weave-and-multus)
+1. Follow the steps documented in [Stage 1.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_1.md#stage-14---upgrade-weave-and-multus)
 
 1. Follow the steps documented in [Stage 1.5 - `coredns` anti-affinity](../../../upgrade/Stage_1.md#stage-15---coredns-anti-affinity)
 
