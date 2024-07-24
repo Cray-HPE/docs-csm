@@ -1,6 +1,7 @@
 # Kubernetes `kube-apiserver` Failing
 
-If Kuberenetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md) and the encryption files have not been restored after a master node rebuild or upgrade, then the `kube-apiserver` on that node will fail.
+If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../operations/kubernetes/encryption/README.md) and the encryption files have not been restored after a master node rebuild or upgrade,
+then the `kube-apiserver` on that node will fail.
 This document only outlines the fix if the `kube-apiserver` if it is failing due to Kubernetes encryption not being restored.
 
 ## Process
@@ -123,7 +124,7 @@ This document only outlines the fix if the `kube-apiserver` if it is failing due
         kubectl delete pod -n kube-system kube-apiserver-${failing_api_serv_node}
         ```
 
-1. (`ncn-m001`) Check that encryption is enabled on all master nodes. This may take 10 minutes to for the output to reflect an encryption change. Please see  the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md) for details.
+1. (`ncn-m001`) Check that encryption is enabled on all master nodes. This may take 10 minutes to for the output to reflect an encryption change. Please see  the [Kubernetes Encryption Documentation](../../operations/kubernetes/encryption/README.md) for details.
 
     ```bash
     /usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --status
