@@ -40,6 +40,8 @@ after a break, always be sure that a typescript is running before proceeding.
 
 ## Stage 3.1 - Master node image upgrade
 
+> **`NOTE`** If Kuberenetes encryption has been enabled via the [Kubernetes Encryption Documentation](../operations/kubernetes/encryption/README.md), then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+
 1. (`ncn-m001#`) Run `ncn-upgrade-master-nodes.sh` for `ncn-m002`.
 
    Follow output of the script carefully. The script will pause for manual interaction.
@@ -48,7 +50,7 @@ after a break, always be sure that a typescript is running before proceeding.
    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
    ```
 
-   > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
+   > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted. Additionally, the `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
 
 1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
@@ -209,11 +211,15 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
 
 ### Upgrade `ncn-m001`
 
+> **`NOTE`** If Kuberenetes encryption has been enabled via the [Kubernetes Encryption Documentation](../operations/kubernetes/encryption/README.md), then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+
 1. Upgrade `ncn-m001`.
 
    ```bash
    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
    ```
+
+   > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted. Additionally, the `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
 
 ## Stage 3.4 - Upgrade `weave` and `multus`
 
