@@ -2,17 +2,16 @@
 
 This section updates the software running on management NCNs.
 
-
 - [1. Perform Slingshot switch firmware updates](#1-perform-slingshot-switch-firmware-updates)
 - [2. Update management host firmware (FAS)](#2-update-management-host-firmware-fas)
 - [3. Execute the IUF `management-nodes-rollout` stage](#3-execute-the-iuf-management-nodes-rollout-stage)
-  - [3.1 `management-nodes-rollout` with CSM upgrade](#31-management-nodes-rollout-with-csm-upgrade)
-  - [3.2 `management-nodes-rollout` without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade)
-  - [3.3 NCN worker nodes](#33-ncn-worker-nodes)
-    - [3.3.1 DVS workaround upgrading from COS prior to 2.5.146](#331-dvs-workaround-upgrading-from-cos-prior-to-25146)
-- [4. Update ceph node-exporter config for SNMP counters](#3-update-ceph-node-exporter-config-for-snmp-counters)
-- [5. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware)
-- [6. Next steps](#5-next-steps)
+    - [3.1 `management-nodes-rollout` with CSM upgrade](#31-management-nodes-rollout-with-csm-upgrade)
+    - [3.2 `management-nodes-rollout` without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade)
+    - [3.3 NCN worker nodes](#33-ncn-worker-nodes)
+        - [3.3.1 DVS workaround upgrading from COS prior to 2.5.146](#331-dvs-workaround-upgrading-from-cos-prior-to-25146)
+- [4. Update ceph node-exporter config for SNMP counters](#4-update-ceph-node-exporter-config-for-snmp-counters)
+- [5. Update management host Slingshot NIC firmware](#5-update-management-host-slingshot-nic-firmware)
+- [6. Next steps](#6-next-steps)
 
 ## 1. Perform Slingshot switch firmware updates
 
@@ -45,8 +44,8 @@ being upgraded, then NCN storage nodes and NCN master nodes will not be upgraded
 upgraded, the NCN storage nodes and NCN master nodes will be upgraded with new images and the new CFS configuration. Both procedures use the same steps for rebuilding/upgrading NCN worker nodes. Select **one** of the following
 procedures based on whether or not CSM is being upgraded:
 
-- [`management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
-- [`management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
+- [`management-nodes-rollout` with CSM upgrade](#31-management-nodes-rollout-with-csm-upgrade)
+- [`management-nodes-rollout` without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade)
 
 ### 3.1 `management-nodes-rollout` with CSM upgrade
 
@@ -107,6 +106,9 @@ Refer to that table and any corresponding product documents before continuing to
 
 1. Perform the NCN master node upgrade on `ncn-m002` and `ncn-m003`.
 
+    > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
+    then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+
     1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m002`. This will rebuild `ncn-m002` with the new CFS configuration and image built in
     previous steps of the workflow.
 
@@ -115,6 +117,9 @@ Refer to that table and any corresponding product documents before continuing to
         ```bash
         iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ncn-m002
         ```
+
+        > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+        See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
     1. Verify that `ncn-m002` booted successfully with the desired image and CFS configuration.
 
@@ -133,6 +138,8 @@ Refer to that table and any corresponding product documents before continuing to
         iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ncn-m003
         ```
 
+        > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+
     1. Verify that `ncn-m003` booted successfully with the desired image and CFS configuration.
 
         ```bash
@@ -141,7 +148,7 @@ Refer to that table and any corresponding product documents before continuing to
         cray cfs components describe "${XNAME}"
         ```
 
-1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [2.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
+1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [3.3 NCN worker nodes](#33-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
 1. Upgrade `ncn-m001`.
 
@@ -186,9 +193,15 @@ Refer to that table and any corresponding product documents before continuing to
 
     1. (`ncn-m002#`) Upgrade `ncn-m001`. This **must** be executed on **`ncn-m002`**.
 
+        > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
+        then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+
         ```bash
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
         ```
+
+        > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+        See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
 1. Follow the steps documented in [Stage 3.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_3.md#stage-34---upgrade-weave-and-multus)
 
@@ -199,7 +212,7 @@ Once this step has completed:
 - All management NCNs have been upgraded to the image and CFS configuration created in the previous steps of this workflow
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [3. Update ceph node-exporter config for SNMP counters](#3-update-ceph-node-exporter-config-for-snmp-counters).
+Continue to the next section [4. Update ceph node-exporter config for SNMP counters](#4-update-ceph-node-exporter-config-for-snmp-counters).
 
 ### 3.2 `management-nodes-rollout` without CSM upgrade
 
@@ -214,7 +227,7 @@ Follow the following steps to complete the `management-nodes-rollout` stage.
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. Rebuild the NCN worker nodes. Follow the procedure in section [2.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
+1. Rebuild the NCN worker nodes. Follow the procedure in section [3.3 NCN worker nodes](#33-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
 1. Configure NCN master nodes.
 
@@ -338,7 +351,7 @@ Once this step has completed:
 - Management NCN storage and NCN master nodes have be updated with the CFS configuration created in the previous steps of this workflow.
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [3. Update ceph node-exporter config for SNMP counters](#3-update-ceph-node-exporter-config-for-snmp-counters).
+Continue to the next section [4. Update ceph node-exporter config for SNMP counters](#4-update-ceph-node-exporter-config-for-snmp-counters).
 
 ### 3.3 NCN worker nodes
 
@@ -351,8 +364,8 @@ for details on how to query the images and CFS configurations and see the [updat
 **`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN worker nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI,
 remember to include these workflows.
 
-**`NOTE`** If upgrading from CSM 1.4 to CSM 1.5 with a COS release prior to 2.5.146 currently installed, a workaround is needed to roll out the management nodes.  See the later subsection [2.3.1 DVS workaround upgrading from COS prior to
-2.5.146](#231-dvs-workaround-upgrading-from-cos-prior-to-25146).  If the installed COS version is 2.5.146 or later, this is not needed.
+**`NOTE`** If upgrading from CSM 1.4 to CSM 1.5 with a COS release prior to 2.5.146 currently installed, a workaround is needed to roll out the management nodes.  See the later subsection [3.3.1 DVS workaround upgrading from COS prior to
+2.5.146](#331-dvs-workaround-upgrading-from-cos-prior-to-25146).  If the installed COS version is 2.5.146 or later, this is not needed.
 
 1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
@@ -434,8 +447,8 @@ Once this step has completed:
 - Management NCN worker nodes have been rebuilt with the image and CFS configuration created in previous steps of this workflow
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Return to the procedure that was being followed for `management-nodes-rollout` to complete the next step, either [Management-nodes-rollout with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade) or
-[Management-nodes-rollout without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade).
+Return to the procedure that was being followed for `management-nodes-rollout` to complete the next step, either [Management-nodes-rollout with CSM upgrade](#31-management-nodes-rollout-with-csm-upgrade) or
+[Management-nodes-rollout without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade).
 
 #### 3.3.1 DVS workaround upgrading from COS prior to 2.5.146
 
@@ -493,7 +506,7 @@ in which to extract the new version of the script.
     rm -rf upgrade-prechecks_WAR
     ```
 
-After completing this workaround, return to [2.3 NCN worker nodes](#23-ncn-worker-nodes) to roll out worker nodes.
+After completing this workaround, return to [3.3 NCN worker nodes](#33-ncn-worker-nodes) to roll out worker nodes.
 
 ## 4. Update ceph node-exporter config for SNMP counters
 
@@ -503,7 +516,7 @@ This uses `netstat` collector form node-exporter and enables all the SNMP counte
 
 See [Update ceph node-exporter configuration](../../utility_storage/update_ceph_node_exporter_config.md) to update the ceph node-exporter configuration to monitor SNMP counters.
 
-Continue to the next section [4. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware).
+Continue to the next section [5. Update management host Slingshot NIC firmware](#5-update-management-host-slingshot-nic-firmware).
 
 ## 5. Update management host Slingshot NIC firmware
 

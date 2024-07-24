@@ -95,6 +95,10 @@ mount | grep /etc/cray/upgrade/csm
 ```
 
 > - Steps to download CSM tarball are at [Update Product Stream](../../../update_product_stream/README.md).
+> - If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
+then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading.
+The directory needs to be restored after the node has been rebuilt and the `kube-apiserver` on the node should be restarted.
+See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 > - This script should be run from `ncn-m001` when rebuilding `ncn-m002` or `ncn-m003`.
 
 (`ncn-m#`) Rebuild the desired master node. Replace `ncn-m002` with the desired node to rebuild:

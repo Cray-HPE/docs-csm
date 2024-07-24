@@ -7,17 +7,17 @@
 - [Stage 3.1 - Master node image upgrade](#stage-31---master-node-image-upgrade)
 - [Argo workflows](#argo-workflows)
 - [Stage 3.2 - Worker node image upgrade](#stage-32---worker-node-image-upgrade)
-  - [Option 1 - Serial upgrade](#option-1---serial-upgrade)
-  - [Option 2 - Parallel upgrade (Tech preview)](#option-2---parallel-upgrade-tech-preview)
-    - [Restrictions](#restrictions)
-    - [Example](#example)
+    - [Option 1 - Serial upgrade](#option-1---serial-upgrade)
+    - [Option 2 - Parallel upgrade (Tech preview)](#option-2---parallel-upgrade-tech-preview)
+        - [Restrictions](#restrictions)
+        - [Example](#example)
 - [Stage 3.3 - `ncn-m001` upgrade](#stage-33---ncn-m001-upgrade)
-  - [Stop typescript on `ncn-m001`](#stop-typescript-on-ncn-m001)
-  - [Backup artifacts on `ncn-m001`](#backup-artifacts-on-ncn-m001)
-  - [Move to `ncn-m002`](#move-to-ncn-m002)
-  - [Start typescript on `ncn-m002`](#start-typescript-on-ncn-m002)
-  - [Prepare `ncn-m002`](#prepare-ncn-m002)
-  - [Upgrade `ncn-m001`](#upgrade-ncn-m001)
+    - [Stop typescript on `ncn-m001`](#stop-typescript-on-ncn-m001)
+    - [Backup artifacts on `ncn-m001`](#backup-artifacts-on-ncn-m001)
+    - [Move to `ncn-m002`](#move-to-ncn-m002)
+    - [Start typescript on `ncn-m002`](#start-typescript-on-ncn-m002)
+    - [Prepare `ncn-m002`](#prepare-ncn-m002)
+    - [Upgrade `ncn-m001`](#upgrade-ncn-m001)
 - [Stage 3.4 - Upgrade `weave` and `multus`](#stage-34---upgrade-weave-and-multus)
 - [Stage 3.5 - `coredns` anti-affinity](#stage-35---coredns-anti-affinity)
 - [Stage 3.6 - Complete Kubernetes upgrade](#stage-36---complete-kubernetes-upgrade)
@@ -40,6 +40,9 @@ after a break, always be sure that a typescript is running before proceeding.
 
 ## Stage 3.1 - Master node image upgrade
 
+> **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../operations/kubernetes/encryption/README.md),
+then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+
 1. (`ncn-m001#`) Run `ncn-upgrade-master-nodes.sh` for `ncn-m002`.
 
    Follow output of the script carefully. The script will pause for manual interaction.
@@ -48,7 +51,9 @@ after a break, always be sure that a typescript is running before proceeding.
    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
    ```
 
-   > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
+   > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted. Additionally, the `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up.
+   Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+   See [Kubernetes `kube-apiserver` Failing](../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
 1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
@@ -209,11 +214,19 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
 
 ### Upgrade `ncn-m001`
 
+> **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../operations/kubernetes/encryption/README.md),
+then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+
 1. Upgrade `ncn-m001`.
 
    ```bash
    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
    ```
+
+   > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
+   Additionally, the `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up.
+   Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+   See [Kubernetes `kube-apiserver` Failing](../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
 ## Stage 3.4 - Upgrade `weave` and `multus`
 
