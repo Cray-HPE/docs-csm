@@ -89,6 +89,7 @@ Refer to that table and any corresponding product documents before continuing to
         ```
 
         > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+        See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
     1. Verify that `ncn-m002` booted successfully with the desired image and CFS configuration.
 
@@ -188,6 +189,7 @@ Refer to that table and any corresponding product documents before continuing to
         ```
 
         > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+        See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
 1. Follow the steps documented in [Stage 1.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_1.md#stage-14---upgrade-weave-and-multus)
 

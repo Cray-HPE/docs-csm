@@ -54,6 +54,7 @@ after a break, always be sure that a typescript is running before proceeding.
    > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
    > Ensure file `/etc/cray/upgrade/csm/myenv` has entries for `CSM_ARTI_DIR` and `CSM_RELEASE`.
    > The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+   > See [Kubernetes `kube-apiserver` Failing](../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
 1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
@@ -224,6 +225,7 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
    ```
 
    > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+   See [Kubernetes `kube-apiserver` Failing](../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
 ## Stage 1.4 - Upgrade `weave` and `multus`
 
