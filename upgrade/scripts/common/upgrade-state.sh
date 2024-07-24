@@ -65,7 +65,7 @@ function is_state_recorded() {
     echo "upgrade ncn is not specified"
     exit 1
   fi
-  state_recorded=$(grep "${state_name}" "${state_dir}/state" 2> /dev/null | wc -l)
+  state_recorded=$(grep -w "${state_name}" "${state_dir}/state" 2> /dev/null | wc -l)
   if [[ ${state_recorded} != 0 ]]; then
     echo "1"
   else
