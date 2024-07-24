@@ -26,8 +26,9 @@
 set -e
 
 locOfScript=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
-. "${locOfScript}/../common/upgrade-state.sh"
 . "${locOfScript}/../common/ncn-common.sh" "$(hostname)"
+# upgrade-state.sh uses CSM_RELEASE defined by ncn-common.sh
+. "${locOfScript}/../common/upgrade-state.sh"
 trap 'err_report' ERR INT TERM HUP EXIT
 # array for paths to unmount after chrooting images
 # shellcheck disable=SC2034
@@ -617,6 +618,29 @@ fi
 do_upgrade_csm_chart cray-kyverno platform.yaml
 do_upgrade_csm_chart kyverno-policy platform.yaml
 do_upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
+
+# Pre-cache images needed for istio upgrade. As soon as cray-istio-deploy is upgraded, network
+# connection to nexus will be broken, due to istio proxy and istiod versions mismatch. Upgrade of
+# cray-istio will fix that, but images must be pre-cached for it to succeed.
+state_name="PRECACHE_ISTIO_IMAGES"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    istio_images=$(yq r -j "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-precache-images).values.cacheImages' | jq -r '.[] | select( . | contains("istio"))')
+    worker_nodes=$(grep -oP "(ncn-w\d+)" /etc/hosts | sort -u)
+    while read -r istio_image; do
+      while read -r worker_node; do
+        echo "Pre-caching image ${istio_image} on node ${worker_node}"
+        ssh -n "${worker_node}" "crictl pull ${istio_image}"
+      done <<< "${worker_nodes}"
+    done <<< "${istio_images}"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+>>>>>>> 415f6c7a14 (Pre-cache istio images)
 
 # upgrade all charts dependent on cray-certmanager chart
 # it is neccessary to upgrade these before upgrade
