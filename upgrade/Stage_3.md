@@ -53,6 +53,7 @@ then backup the `/etc/cray/kubernetes/encryption` directory on the master node b
 
    > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted. Additionally, the `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up.
    Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+   See [Kubernetes `kube-apiserver` Failing](../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
 1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
@@ -225,6 +226,7 @@ then backup the `/etc/cray/kubernetes/encryption` directory on the master node b
    > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
    Additionally, the `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up.
    Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+   See [Kubernetes `kube-apiserver` Failing](../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
 ## Stage 3.4 - Upgrade `weave` and `multus`
 
