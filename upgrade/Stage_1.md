@@ -42,6 +42,9 @@ after a break, always be sure that a typescript is running before proceeding.
 
 1. (`ncn-m001#`) Run `ncn-upgrade-master-nodes.sh` for `ncn-m002`.
 
+   > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../operations/kubernetes/encryption/README.md),
+   then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+
    Follow output of the script carefully. The script will pause for manual interaction.
 
    ```bash
@@ -50,6 +53,8 @@ after a break, always be sure that a typescript is running before proceeding.
 
    > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
    > Ensure file `/etc/cray/upgrade/csm/myenv` has entries for `CSM_ARTI_DIR` and `CSM_RELEASE`.
+   > The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+   > See [Kubernetes `kube-apiserver` Failing](../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
 1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
@@ -212,9 +217,15 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
 
 1. Upgrade `ncn-m001`.
 
+   > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../operations/kubernetes/encryption/README.md),
+   then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+
    ```bash
    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
    ```
+
+   > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+   See [Kubernetes `kube-apiserver` Failing](../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
 ## Stage 1.4 - Upgrade `weave` and `multus`
 
