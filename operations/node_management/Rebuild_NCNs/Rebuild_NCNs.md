@@ -74,6 +74,11 @@ make sure that the following conditions are met:
 
 ### Master node
 
+> If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
+then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading.
+The directory needs to be restored after the node has been rebuilt and the `kube-apiserver` on the node should be restarted.
+See details on how to restart the `kube-apiserver` in the [Kubernetes `kube-apiserver` Failing document](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md).
+
 (`ncn-m#`) Run `ncn-rebuild-master-nodes.sh`:
 
 ```bash
