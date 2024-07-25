@@ -17,7 +17,6 @@ This document provides links to troubleshooting information for services and fun
 * [Node management](#node-management)
 * [Security and authentication](#security-and-authentication)
 * [Spire](#spire)
-* [User Access Service (UAS)](#user-access-service-uas)
 * [Utility storage](#utility-storage)
 
 ## Helpful tips for navigating the CSM repository
@@ -66,6 +65,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Velero Version Mismatch](known_issues/velero_version_mismatch.md)
 * [wait for unbound hang](known_issues/wait_for_unbound_hang.md)
 * [Product Catalog Upgrade Error](known_issues/product_catalog_upgrade_error.md)
+* [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
 
 ## Booting
 
