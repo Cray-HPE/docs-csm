@@ -385,7 +385,6 @@ HPE Cray EX systems are designed so that system management services \(SMS\) are 
 - [Resilience of System Management Services](resiliency/Resilience_of_System_Management_Services.md)
 - [Restore System Functionality if a Kubernetes Worker Node is Down](resiliency/Restore_System_Functionality_if_a_Kubernetes_Worker_Node_is_Down.md)
 - [Recreate `StatefulSet` Pods on Another Node](resiliency/Recreate_StatefulSet_Pods_on_Another_Node.md)
-- [NTP Resiliency](resiliency/NTP_Resiliency.md)
 - [Resiliency Testing Procedure](resiliency/Resiliency_Testing_Procedure.md)
 
 ## ConMan

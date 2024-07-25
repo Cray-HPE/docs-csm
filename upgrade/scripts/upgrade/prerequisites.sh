@@ -797,6 +797,7 @@ do_upgrade_csm_chart cray-drydock platform.yaml
 do_upgrade_csm_chart cray-kyverno platform.yaml
 do_upgrade_csm_chart kyverno-policy platform.yaml
 do_upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
+do_upgrade_csm_chart cray-sysmgmt-health platform.yaml
 do_upgrade_csm_chart cray-tftp sysmgmt.yaml
 do_upgrade_csm_chart cray-tftp-pvc sysmgmt.yaml
 
