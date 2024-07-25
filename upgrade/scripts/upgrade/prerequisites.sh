@@ -523,14 +523,14 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     fi
     set -e
 
-    # Skopeo image is stored as "skopeo:csm-${CSM_RELEASE}"
-    podman load -i "${CSM_ARTI_DIR}/vendor/skopeo.tar"
+    # Skopeo image is stored as "skopeo:csm-${CSM_RELEASE}", which may resolve to docker.io/lirary/skopeo or quay.io/skopeo, depending on configured shortcuts
+    SKOPEO_IMAGE=$(podman load -q -i "${CSM_ARTI_DIR}/vendor/skopeo.tar" 2> /dev/null | sed -e 's/^.*: //')
     nexus_images=$(yq r -j "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-precache-images).values.cacheImages' | jq -r '.[] | select( . | contains("nexus"))')
     worker_nodes=$(grep -oP "(ncn-w\d+)" /etc/hosts | sort -u)
     while read -r nexus_image; do
       echo "Uploading $nexus_image into Nexus ..."
       podman run --rm -v "${CSM_ARTI_DIR}/docker":/images \
-        "skopeo:csm-${CSM_RELEASE}" \
+        "${SKOPEO_IMAGE}" \
         --override-os=linux --override-arch=amd64 \
         copy \
         --remove-signatures \
@@ -613,20 +613,25 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# upgrade all charts dependent on cray-certmanager chart
+# it is neccessary to upgrade these before upgrade
+do_upgrade_csm_chart cray-istio platform.yaml
+do_upgrade_csm_chart cray-keycloak platform.yaml
+do_upgrade_csm_chart cray-oauth2-proxies platform.yaml
+do_upgrade_csm_chart spire sysmgmt.yaml
+do_upgrade_csm_chart cray-spire sysmgmt.yaml
+do_upgrade_csm_chart cray-tapms-crd sysmgmt.yaml
+do_upgrade_csm_chart cray-tapms-operator sysmgmt.yaml
+
 # Note for csm 1.5/k8s 1.22 only if ANY chart depends on /v1 cert-manager api
 # usage it *MUST* come after this or prerequisites will fail on an upgrade.
 # Helper functions for cert-manager upgrade
-has_cm_init() {
-  ns="${1?no namespace provided}"
-  helm list -n "${ns}" --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null 2>&1
-}
-
 has_craycm() {
   ns="${1?no namespace provided}"
   helm list -n "${ns}" --filter 'cray-certmanager$' | grep cray-certmanager > /dev/null 2>&1
 }
 
-state_name="UPGRADE_CERTMANAGER_0141_CHART"
+state_name="UPGRADE_CERTMANAGER_155_CHART"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
@@ -636,7 +641,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     # work due to helm hooks. Making this work on both isn't really worth the
     # time so just constrain this block of logic to 0.14.1 where we know its
     # needed.
-    gate="0.14.1"
+    gate="1.5.5"
     found=$(helm list -n cert-manager --filter 'cray-certmanager$' | awk '/deployed/ {print $10}')
 
     needs_upgrade=0
@@ -647,20 +652,19 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     else
       printf "note: cert-manager helm chart version %s\n" "${found}" >&2
 
-      # We might be rerunning from a pre 1.5.x install and there is no
+      # We might be rerunning from a pre 1.6.x install and there is no
       # cert-manager installed due to a prior removal
       if [ "${found}" = "" ]; then
         printf "note: no helm install appears to exist for cert-manager, likely this state is being run again\n" >&2
         ((needs_upgrade += 1))
       else
-        printf "note: no cert-manager upgrade steps needed, cert-manager 0.14.1 is not installed\n" >&2
+        printf "note: no cert-manager upgrade steps needed, cert-manager 1.5.5 is not installed\n" >&2
       fi
     fi
 
-    # Only run if we need to and detected not 0.14.1 or ""
+    # Only run if we need to and detected not 1.12.9 or ""
     if [ "${needs_upgrade}" -gt 0 ]; then
       cmns="cert-manager"
-      cminitns="cert-manager-init"
 
       backup_secret="cm-restore-data"
 
@@ -668,10 +672,6 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
       needs_backup=0
 
       if has_craycm ${cmns}; then
-        ((needs_backup += 1))
-      fi
-
-      if has_cm_init ${cminitns}; then
         ((needs_backup += 1))
       fi
 
@@ -688,35 +688,26 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
         fi
       fi
 
-      # Only remove these charts if installed
+      # Only remove cray-certmanager if installed
       if has_craycm ${cmns}; then
         helm uninstall -n "${cmns}" cray-certmanager
-      fi
-
-      if has_cm_init ${cminitns}; then
-        helm uninstall -n "${cminitns}" cray-certmanager-init
       fi
 
       # Note: These should *never* fail as we depend on helm uninstall doing
       # its job, but if it didn't exit early here as something is amiss.
       cm=1
-      cminit=1
 
       if ! helm list -n "${cmns}" --filter 'cray-certmanager$' | grep cray-certmanager > /dev/null 2>&1; then
         cm=0
       fi
 
-      if ! helm list -n "${cminitns}" --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null; then
-        cminit=0
-      fi
-
-      if [ "${cm}" = "1" ] || [ "${cminit}" = "1" ]; then
-        printf "fatal: helm uninstall did not remove expected charts, cert-manager %s cert-manager-init %s\n" "${cm}" "${cminit}" >&2
+      if [ "${cm}" = "1" ]; then
+        printf "fatal: helm uninstall did not remove expected chart cert-manager %s\n" "${cm}" >&2
         exit 1
       fi
 
       # Ensure the cert-manager namespace is deleted in a case of both helm charts
-      # removed but there might be detritus leftover in the namespace.
+      # removed but there might be detritous leftover in the namespace.
       kubectl delete namespace "${cmns}" || :
 
       tmp_manifest=/tmp/certmanager-tmp-manifest.yaml
@@ -747,7 +738,7 @@ EOF
       done
 
       platform="${CSM_MANIFESTS_DIR}/platform.yaml"
-      for chart in cray-drydock cray-certmanager cray-certmanager-issuers; do
+      for chart in cray-certmanager cray-certmanager-issuers; do
         printf "    -\n" >> "${tmp_manifest}"
         yq r "${platform}" 'spec.charts.(name=='${chart}')' | sed 's/^/      /' >> "${tmp_manifest}"
       done
@@ -806,6 +797,7 @@ do_upgrade_csm_chart cray-drydock platform.yaml
 do_upgrade_csm_chart cray-kyverno platform.yaml
 do_upgrade_csm_chart kyverno-policy platform.yaml
 do_upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
+do_upgrade_csm_chart cray-sysmgmt-health platform.yaml
 do_upgrade_csm_chart cray-tftp sysmgmt.yaml
 do_upgrade_csm_chart cray-tftp-pvc sysmgmt.yaml
 
@@ -1289,8 +1281,9 @@ if [[ ${state_recorded} == "0" ]]; then
     systemctl enable goss-servers
     systemctl restart goss-servers
 
-    # Install above RPMs and restart goss-servers on ncn-w001
-    ssh ncn-w001 "rpm --force -Uvh ${url_list[*]}; systemctl enable goss-servers; systemctl restart goss-servers;"
+    # Install above RPMs and restart goss-servers on all other NCNs
+    ncns=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | grep -Ev "^$(hostname -s)$" | tr -t '\n' ',')
+    pdsh -S -b -w ${ncns} "rpm --force -Uvh ${url_list[*]}; systemctl enable goss-servers; systemctl restart goss-servers;"
 
     # get all installed CSM version into a file
     kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm' | yq r - -d '*' -j | jq -r 'keys[]' > /tmp/csm_versions

@@ -23,38 +23,8 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-# Usage: upgrade-test-rpms.sh [--local]
-# If --local is not specified, upgrade the test RPMs on all NCNs
-# If --local is specified, upgrade the test RPMs just on the system where the script is being executed
+# Shared function and variable definitions between IMS backup and restore scripts
 
-RPM_LIST="hpe-csm-goss-package csm-testing goss-servers craycli cray-cmstools-crayctldeploy"
-
-set -euo pipefail
-if [[ $# -eq 0 ]]; then
-
-  ncns=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | tr -t '\n' ',')
-
-  echo "Installing updated versions of RPMs on all NCNs: ${RPM_LIST}"
-  pdsh -S -b -w ${ncns} "zypper install -y --allow-vendor-change ${RPM_LIST}"
-
-  echo "Enabling and restarting goss-servers"
-  pdsh -S -b -w ${ncns} 'systemctl enable goss-servers && systemctl restart goss-servers'
-
-elif [[ $# -eq 1 && $1 == --local ]]; then
-
-  echo "Installing updated versions of RPMs: ${RPM_LIST}"
-  zypper install -y --allow-vendor-change ${RPM_LIST}
-
-  echo "Enabling and restarting goss-servers"
-  systemctl enable goss-servers && systemctl restart goss-servers
-
-else
-
-  echo "usage: upgrade-test-rpms.sh [--local]" >&2
-  echo >&2
-  echo "ERROR: Invalid arguments" >&2
-  exit 1
-
-fi
-
-echo "SUCCESS"
+# These variables are not used in this file, but are used by scripts which source this file
+#shellcheck disable=SC2034
+IMS_FS_MNT=/opt/cray/pit/ims

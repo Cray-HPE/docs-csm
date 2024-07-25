@@ -36,7 +36,6 @@ The following administrative topics can be found in this guide:
       - [MetalLB in BGP-mode](#metallb-in-bgp-mode)
 - [Spire](#spire)
 - [Update firmware with FAS](#update-firmware-with-fas)
-- [User Access Service (UAS)](#user-access-service-uas)
 - [System Admin Toolkit (SAT)](#system-admin-toolkit-sat)
 - [Install and Upgrade Framework (IUF)](#install-and-upgrade-framework-iuf)
 - [Backup and recovery](#backup-and-recovery)
@@ -386,7 +385,6 @@ HPE Cray EX systems are designed so that system management services \(SMS\) are 
 - [Resilience of System Management Services](resiliency/Resilience_of_System_Management_Services.md)
 - [Restore System Functionality if a Kubernetes Worker Node is Down](resiliency/Restore_System_Functionality_if_a_Kubernetes_Worker_Node_is_Down.md)
 - [Recreate `StatefulSet` Pods on Another Node](resiliency/Recreate_StatefulSet_Pods_on_Another_Node.md)
-- [NTP Resiliency](resiliency/NTP_Resiliency.md)
 - [Resiliency Testing Procedure](resiliency/Resiliency_Testing_Procedure.md)
 
 ## ConMan
@@ -466,6 +464,7 @@ confident that a lack of issues indicates the system is operating normally.
 - [Grafterm](system_management_health/Grafterm.md)
 - [Remove Kiali](system_management_health/Remove_Kiali.md)
 - [`prometheus-kafka-adapter` errors during installation](system_management_health/Prometheus_Kafka_Error.md)
+- [`grok-exporter` errors during installation](system_management_health/Grok-Exporter_Error.md)
 - [Troubleshoot Prometheus Alerts](system_management_health/Troubleshoot_Prometheus_Alerts.md)
 - [Configure UAN Node Exporter](system_management_health/uan_node_exporter_configs.md)
 
@@ -654,6 +653,7 @@ The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium 
 
 - [DHCP](network/dhcp/DHCP.md)
 - [Troubleshoot DHCP Issues](network/dhcp/Troubleshoot_DHCP_Issues.md)
+- [DHCP boot file customization](network/dhcp/Customize_boot_file.md)
 
 ### Domain Name Service (DNS)
 

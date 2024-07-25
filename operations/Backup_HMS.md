@@ -113,6 +113,21 @@
     ls -la
     ```
 
+1. (`ncn-mw#`) Backup FAS Images.
+
+    ```bash
+    export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+    -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
+    -o jsonpath='{.data.client-secret}' | base64 -d` \
+    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
+    | jq -r '.access_token')
+    BACKUP_NAME=cray-fas-images_$BACKUPDIR
+    /usr/share/doc/csm/scripts/operations/firmware/FASBackupImages.py $BACKUP_NAME
+    zip -r $BACKUP_NAME.zip $BACKUP_NAME
+    rm -rf $BACKUP_NAME
+    ls -la
+    ```
+
 1. (`ncn-mw#`) Create a backup of the BSS etcd database.
 
     ```bash
