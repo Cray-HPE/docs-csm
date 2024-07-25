@@ -1,11 +1,11 @@
 # Missing binaries in aarch64 Images
 
-Due to a bug in the QEMU emulation software, there are times that dependencies are missed
+Because of a bug in the QEMU emulation software, there are times that dependencies are missed
 for packages that are being installed on `aarch64` images when run in emulation on `x86_64`
 hardware. This will usually manifest when the image is being booted or running processes
 where an error about missing shared libraries is encountered.
 
-## Root Cause
+## Root cause
 
 This is due to a bug in the QEMU software when the `ld` search crashes while attempting to
 follow binary dependencies for packages being installed. There are details on the bug here:
@@ -13,12 +13,12 @@ follow binary dependencies for packages being installed. There are details on th
 * [QEMU Issue 1763](https://gitlab.com/qemu-project/qemu/-/issues/1763)
 * [qemu-user-static Issue 172](https://github.com/multiarch/qemu-user-static/issues/172)
 
-## Identifying the Issue
+## Identifying the issue
 
 There have been a couple of cases where this error was observed. Here are some examples of
 what was seen to help identify if it happens again.
 
-1. Missing dependency on `libfuse.so.2`.
+* Missing dependency on `libfuse.so.2`.
 
     Initially the observed symptom was that `cxi_rh` failed to start during the dracut boot.
 
@@ -58,9 +58,9 @@ what was seen to help identify if it happens again.
     ```
 
     From this it was observed that the `libfuse.so.2` library was missing. To resolve this, the missing libraries
-    were added explicitly to the ansible playbook where the package was installed.
+    were added explicitly to the Ansible playbook where the package was installed.
 
-1. Missing dependency on `liblnetconfig.so.4`.
+* Missing dependency on `liblnetconfig.so.4`.
 
     In this case the missing shared object file was reported directly during the dracut phase of the boot:
 
@@ -87,7 +87,7 @@ what was seen to help identify if it happens again.
 
 There are a couple of ways to work around this issue once it has been identified.
 
-### Build or Customize the Image on a Remote Node (Only in CSM 1.5.2 or later)
+### Build or customize the image on a remote node
 
 This issue only applies to the emulation of `aarch64` images on `x86_64` hardware. If there is
 an `aarch64` compute node that is available to be used for remote builds, the jobs may be run
@@ -101,19 +101,19 @@ To run remote build jobs, follow the documentation here:
 
 The missing binary may be added in any of the following ways:
 
-1. Add the package to the recipe.
+* Add the package to the recipe.
 
     If the image is built via a recipe, the package that contains the missing binary
     may be added to the recipe. Rebuild the image with the updated recipe and the
     missing binary file should then be included.
 
-1. Add the package to an Ansible play.
+* Add the package to an Ansible play.
 
     If the image is being customized via Ansible plays, the package that contains the
     missing binary may be added to an Ansible play. Rerun the image customization and
     the missing should then be included.
 
-1. Manually add to the complete image.
+* Manually add to the complete image.
 
     The image that is missing the binary file may be manually customized to include the
     missing files. Follow the directions here for how to manually customize an image:
