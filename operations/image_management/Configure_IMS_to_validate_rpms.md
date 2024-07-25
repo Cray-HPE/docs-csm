@@ -36,7 +36,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
    Create an environment variable for this value.
 
     ```bash
-    export KIWI_VERSION=1.7.0
+    KIWI_VERSION=1.7.0
     ```
 
 1. (`ncn-mw#`) Create a file containing the public portion of the Signing Key to be added to the IMS Kiwi-NG image.
@@ -92,13 +92,13 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     [...]
     ```
 
-1. (`ncn-mw#`) (CSM 1.5.0 and later) Obtain a copy of the `armentry.sh` script from `cray-ims-kiwi-ng-opensuse-x86_64-builder`.
+1. (`ncn-mw#`) Obtain a copy of the `armentry.sh` script from `cray-ims-kiwi-ng-opensuse-x86_64-builder`.
 
    ```bash
    podman run -it --entrypoint "" --rm registry.local/artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:${KIWI_VERSION} cat /scripts/armentry.sh | tee armentry.sh
    ```
 
-1. (`ncn-mw#`) (CSM 1.5.0 and later) Set the correct permissions on the script file.
+1. (`ncn-mw#`) Set the correct permissions on the script file.
 
     ```bash
    chmod 755 armentry.sh
@@ -116,7 +116,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     -rwxr-xr-x 1 root root 8955 Jul 24 15:27 armentry.sh
     ```
 
-1. (`ncn-mw#`) (CSM 1.5.0 and later) Modify the `armentry.sh` script to pass the signing key to the `kiwi-ng` command.
+1. (`ncn-mw#`) Modify the `armentry.sh` script to pass the signing key to the `kiwi-ng` command.
 
     ```bash
     cat armentry.sh
@@ -136,13 +136,13 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     [...]
     ```
 
-1. (`ncn-mw#`) (CSM 1.5.2 and later) Obtain a copy of the `remote_build_entrypoint.sh` script from `cray-ims-kiwi-ng-opensuse-x86_64-builder`.
+1. (`ncn-mw#`) Obtain a copy of the `remote_build_entrypoint.sh` script from `cray-ims-kiwi-ng-opensuse-x86_64-builder`.
 
    ```bash
    podman run -it --entrypoint "" --rm registry.local/artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:${KIWI_VERSION} cat /scripts/remote_build_entrypoint.sh | tee remote_build_entrypoint.sh
    ```
 
-1. (`ncn-mw#`) (CSM 1.5.2 and later) Set the correct permissions on the script file.
+1. (`ncn-mw#`) Set the correct permissions on the script file.
 
     ```bash
    chmod 755 remote_build_entrypoint.sh
@@ -160,7 +160,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     -rwxr-xr-x 1 root root 8955 Jul 24 15:27 remote_build_entrypoint.sh
     ```
 
-1. (`ncn-mw#`) (CSM 1.5.2 and later) Modify the `remote_build_entrypoint.sh` script to pass the signing key to the `kiwi-ng` command.
+1. (`ncn-mw#`) Modify the `remote_build_entrypoint.sh` script to pass the signing key to the `kiwi-ng` command.
 
     ```bash
     cat remote_build_entrypoint.sh
@@ -191,11 +191,9 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     COPY entrypoint.sh /scripts/entrypoint.sh
     RUN sed -i -e 's/\r$//' /scripts/entrypoint.sh
 
-    # ONLY for CSM 1.5.0 and later
     COPY armentry.sh /scripts/armentry.sh
     RUN sed -i -e 's/\r$//' /scripts/armentry.sh
 
-    # ONLY for CSM 1.5.2 and later
     COPY remote_build_entrypoint.sh /scripts/remote_build_entrypoint.sh
     RUN sed -i -e 's/\r$//' /scripts/remote_build_entrypoint.sh
 
@@ -208,22 +206,10 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 1. (`ncn-mw#`) Verify that the following files are in the temporary directory.
 
     ```text
-    Dockerfile  entrypoint.sh  my-signing-key.asc
+    Dockerfile  entrypoint.sh armentry.sh remote_build_entrypoint.sh my-signing-key.asc
     ```
 
-1. (`ncn-mw#`) (CSM 1.5.0 and later) Verify that the following file is in the temporary directory.
-
-    ```text
-    armentry.sh
-    ```
-
-1. (`ncn-mw#`) (CSM 1.5.2 and later) Verify that the following file is in the temporary directory.
-
-    ```text
-    remote_build_entrypoint.sh
-    ```
-
-1. (`ncn-mw#`) (CSM 1.5.0 and later with aarch64 hardware) Install QEMU emulation software.
+1. (`ncn-mw#`) (With aarch64 hardware) Install QEMU emulation software.
 
     For cross compiling aarch64 images, QEMU emulation software must be installed on the
     node where this operation is taking place. If QEMU is already installed this step may
@@ -274,13 +260,13 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 
 1. (`ncn-mw#`) Using the `podman` command, build and tag a new `cray-ims-kiwi-ng-opensuse-x86_64-builder` image.
 
-    For versions prior to CSM 1.5.0 or for systems with only `x86_64` hardware, use the following command:
+    For systems with only `x86_64` hardware, use the following command:
 
     ```bash
     podman build -t registry.local/artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:${KIWI_VERSION}-validate .
     ```
 
-    For CSM 1.5.0 or later and systems that include aarch64 hardware, use the following command:
+    For systems that include aarch64 hardware, use the following command:
 
     ```bash
     podman buildx build --platform=linux/amd64,linux/arm64 -t registry.local/artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:${KIWI_VERSION}-validate .
