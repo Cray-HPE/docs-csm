@@ -87,7 +87,7 @@ what was seen to help identify if it happens again.
 
 There are a couple of ways to work around this issue once it has been identified.
 
-### Build or customize the image on a remote node
+### Build or customize the image on a remote node (CSM 1.5.2 or later only)
 
 This issue only applies to the emulation of `aarch64` images on `x86_64` hardware. If there is
 an `aarch64` compute node that is available to be used for remote builds, the jobs may be run
