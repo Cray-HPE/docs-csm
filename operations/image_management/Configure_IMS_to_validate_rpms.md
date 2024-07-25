@@ -28,10 +28,16 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
    Example output:
 
    ```yaml
-     - image: cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7
+        - image: artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:1.7.0
+            value: "artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:1.7.0"
    ```
 
-   If successful, make note of the version of the listed container. In this case, the version is `0.4.7`.
+   If successful, make note of the version of the listed container. In this case, the version is `1.7.0`.
+   Create an environment variable for this value.
+
+    ```bash
+    KIWI_VERSION=1.7.0
+    ```
 
 1. (`ncn-mw#`) Create a file containing the public portion of the Signing Key to be added to the IMS Kiwi-NG image.
 
@@ -45,8 +51,26 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 1. (`ncn-mw#`) Obtain a copy of the `entrypoint.sh` script from `cray-ims-kiwi-ng-opensuse-x86_64-builder`.
 
    ```bash
-   podman run -it --entrypoint "" --rm cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7 cat /scripts/entrypoint.sh | tee entrypoint.sh
+   podman run -it --entrypoint "" --rm registry.local/artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:${KIWI_VERSION} cat /scripts/entrypoint.sh | tee entrypoint.sh
    ```
+
+1. (`ncn-mw#`) Set the correct permissions on the script file.
+
+    ```bash
+   chmod 755 entrypoint.sh
+   ```
+
+    Verify the correct permissions:
+
+    ```bash
+    ls -la entrypoint.sh
+    ```
+
+    Expected output:
+
+    ```text
+    -rwxr-xr-x 1 root root 8955 Jul 24 15:27 entrypoint.sh
+    ```
 
 1. (`ncn-mw#`) Modify the `entrypoint.sh` script to pass the signing key to the `kiwi-ng` command.
 
@@ -68,14 +92,111 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     [...]
     ```
 
-1. Create a `Dockerfile` to create a new `cray-ims-kiwi-ng-opensuse-x86_64-builder` image.
+1. (`ncn-mw#`) Obtain a copy of the `armentry.sh` script from `cray-ims-kiwi-ng-opensuse-x86_64-builder`.
+
+   ```bash
+   podman run -it --entrypoint "" --rm registry.local/artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:${KIWI_VERSION} cat /scripts/armentry.sh | tee armentry.sh
+   ```
+
+1. (`ncn-mw#`) Set the correct permissions on the script file.
+
+    ```bash
+   chmod 755 armentry.sh
+   ```
+
+    Verify the correct permissions:
+
+    ```bash
+    ls -la armentry.sh
+    ```
+
+    Expected output:
 
     ```text
-    FROM registry.local/cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7
+    -rwxr-xr-x 1 root root 8955 Jul 24 15:27 armentry.sh
+    ```
 
-    RUN mkdir /signing-keys
+1. (`ncn-mw#`) Modify the `armentry.sh` script to pass the signing key to the `kiwi-ng` command.
+
+    ```bash
+    cat armentry.sh
+    ```
+
+    Example output:
+
+    ```text
+    [...]
+
+    # Call kiwi to build the image recipe. Note that the command line --add-bootstrap-package
+    # causes kiwi to install the cray-ca-cert RPM into the image root.
+    kiwi-ng $DEBUG_FLAGS --logfile=$PARAMETER_FILE_KIWI_LOGFILE --type tbz system build --description $RECIPE_ROOT_PARENT \
+    --target $IMAGE_ROOT_PARENT --add-bootstrap-package file:///mnt/ca-rpm/cray_ca_cert-1.0.1-1.x86_64.rpm \
+    --signing-key /signing-keys/my-signing-key.asc   # <--- ADD SIGNING-KEY FILE
+
+    [...]
+    ```
+
+1. (`ncn-mw#`) Obtain a copy of the `remote_build_entrypoint.sh` script from `cray-ims-kiwi-ng-opensuse-x86_64-builder`.
+
+   ```bash
+   podman run -it --entrypoint "" --rm registry.local/artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:${KIWI_VERSION} cat /scripts/remote_build_entrypoint.sh | tee remote_build_entrypoint.sh
+   ```
+
+1. (`ncn-mw#`) Set the correct permissions on the script file.
+
+    ```bash
+   chmod 755 remote_build_entrypoint.sh
+   ```
+
+    Verify the correct permissions:
+
+    ```bash
+    ls -la remote_build_entrypoint.sh
+    ```
+
+    Expected output:
+
+    ```text
+    -rwxr-xr-x 1 root root 8955 Jul 24 15:27 remote_build_entrypoint.sh
+    ```
+
+1. (`ncn-mw#`) Modify the `remote_build_entrypoint.sh` script to pass the signing key to the `kiwi-ng` command.
+
+    ```bash
+    cat remote_build_entrypoint.sh
+    ```
+
+    Example output:
+
+    ```text
+    [...]
+
+    # Call kiwi to build the image recipe. Note that the command line --add-bootstrap-package
+    # causes kiwi to install the cray-ca-cert RPM into the image root.
+    kiwi-ng $DEBUG_FLAGS --logfile=$PARAMETER_FILE_KIWI_LOGFILE --type tbz system build --description $RECIPE_ROOT_PARENT \
+    --target $IMAGE_ROOT_PARENT --add-bootstrap-package file:///mnt/ca-rpm/cray_ca_cert-1.0.1-1.x86_64.rpm \
+    --signing-key /signing-keys/my-signing-key.asc   # <--- ADD SIGNING-KEY FILE
+
+    [...]
+    ```
+
+1. (`ncn-mw#`) Create a `Dockerfile` to create a new `cray-ims-kiwi-ng-opensuse-x86_64-builder` image.
+
+    ```text
+    FROM registry.local/artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:${KIWI_VERSION}
+
+    RUN mkdir -p /signing-keys
     COPY my-signing-key.asc /signing-keys
+
     COPY entrypoint.sh /scripts/entrypoint.sh
+    RUN sed -i -e 's/\r$//' /scripts/entrypoint.sh
+
+    COPY armentry.sh /scripts/armentry.sh
+    RUN sed -i -e 's/\r$//' /scripts/armentry.sh
+
+    COPY remote_build_entrypoint.sh /scripts/remote_build_entrypoint.sh
+    RUN sed -i -e 's/\r$//' /scripts/remote_build_entrypoint.sh
+
     ENTRYPOINT ["/scripts/entrypoint.sh"]
     ```
 
@@ -85,19 +206,76 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 1. (`ncn-mw#`) Verify that the following files are in the temporary directory.
 
     ```text
-    Dockerfile  entrypoint.sh  my-signing-key.asc
+    Dockerfile  entrypoint.sh armentry.sh remote_build_entrypoint.sh my-signing-key.asc
     ```
+
+1. (`ncn-mw#`) (With aarch64 hardware) Install QEMU emulation software.
+
+    For cross compiling aarch64 images, QEMU emulation software must be installed on the
+    node where this operation is taking place. If QEMU is already installed this step may
+    be skipped.
+
+    1. Download and install the QEMU emulation package.
+
+        ```bash
+        wget https://github.com/multiarch/qemu-user-static/releases/download/v7.2.0-1/qemu-aarch64-static
+        mv ./qemu-aarch64-static /usr/bin/qemu-aarch64-static
+        chmod +x /usr/bin/qemu-aarch64-static
+        ```
+
+    1. Set up `binfmt_misc` for handling emulation.
+
+        ```bash
+        if [ ! -d /proc/sys/fs/binfmt_misc ] ; then
+            echo "- binfmt_misc does not appear to be loaded or isn't built in."
+            echo "  Trying to load it..."
+            if ! modprobe binfmt_misc ; then
+                echo "FATAL: Unable to load binfmt_misc"
+                exit 1;
+            fi
+        fi
+        ```
+
+    1. Mount the emulation file system.
+
+        ```bash
+        if [ ! -f /proc/sys/fs/binfmt_misc/register ] ; then
+            echo "- The binfmt_misc filesystem does not appear to be mounted."
+            echo "  Trying to mount it..."
+            if ! mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc ; then
+                echo "FATAL:  Unable to mount binfmt_misc filesystem."
+                exit 1
+            fi
+        fi
+        ```
+
+    1. Register QEMU for aarch64 emulation.
+
+        ```bash
+        if [ ! -f /proc/sys/fs/binfmt_misc/qemu-aarch64 ] ; then
+            echo "- Setting up QEMU for ARM64"
+            echo ":qemu-aarch64:M::\x7f\x45\x4c\x46\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xb7\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-aarch64-static:F" >> /proc/sys/fs/binfmt_misc/register
+        fi
+        ```
 
 1. (`ncn-mw#`) Using the `podman` command, build and tag a new `cray-ims-kiwi-ng-opensuse-x86_64-builder` image.
 
+    For systems with only `x86_64` hardware, use the following command:
+
     ```bash
-    podman build -t registry.local/cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7-validate .
+    podman build -t registry.local/artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:${KIWI_VERSION}-validate .
+    ```
+
+    For systems that include aarch64 hardware, use the following command:
+
+    ```bash
+    podman buildx build --platform=linux/amd64,linux/arm64 -t registry.local/artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:${KIWI_VERSION}-validate .
     ```
 
     Expected output:
 
     ```text
-    STEP 1: FROM registry.local/cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7
+    STEP 1: FROM registry.local/artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:1.7.0
     STEP 2: RUN mkdir /signing-keys
     --> Using cache 5d64aadcffd3f9f8f112cca75b886cecfccbfe903d4b0d4176882f0e78ccd4d0
     --> 5d64aadcffd
@@ -109,7 +287,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     --> 6e388b60f42
     STEP 5: ENTRYPOINT ["/scripts/entrypoint.sh"]
     --> Using cache 46c78827eb62c66c9f42aeba12333281b073dcc80212c4547c8cc806fe5519b3
-    STEP 6: COMMIT registry.local/cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7-validate
+    STEP 6: COMMIT registry.local/artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:1.7.0-validate
     --> 46c78827eb6
     46c78827eb62c66c9f42aeba12333281b073dcc80212c4547c8cc806fe5519b3
     ```
@@ -124,7 +302,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 1. (`ncn-mw#`) Push the new image to the Nexus image registry.
 
     ```bash
-    podman push registry.local/cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7-validate --creds="$NEXUS_USERNAME:$NEXUS_PASSWORD"
+    podman push registry.local/artifactory.algol60.net/csm-docker/stable/cray-ims-kiwi-ng-opensuse-x86_64-builder:${KIWI_VERSION}-validate --creds="$NEXUS_USERNAME:$NEXUS_PASSWORD"
     ```
 
 1. (`ncn-mw#`) Update the IMS `cray-configmap-ims-v2-image-create-kiwi-ng` ConfigMap to use this new image.
@@ -138,7 +316,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     ```text
     [...]
 
-    - image: cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7-validate
+    - image: cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:1.7.0-validate
 
     [...]
     ```
