@@ -347,9 +347,9 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 
 1. (`ncn-mw#`) List the IMS recipes and determine which recipes need to be updated.
 
-    ```bash
-    cray ims recipes list --format json
-    ```
+   ```bash
+   cray ims recipes list --format json
+   ```
 
     Example output:
 

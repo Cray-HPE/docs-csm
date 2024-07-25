@@ -41,9 +41,11 @@ jobs:
           .github/**/*
           api/*
 
-    - uses: docker://tmaier/markdown-spellcheck:latest
-      env:
-          FORCE_COLOR: "1"
+    - uses: actions/setup-node@v4
       with:
-        entrypoint: mdspell
-        args: ${{ steps.changed-files.outputs.all_changed_files }} -r -a -n
+        node-version: 20
+    - run: npm ci
+    - env:
+          FORCE_COLOR: "1"
+      run: |
+        npm run spellcheck -- operations/image_management/Configure_IMS_to_validate_rpms.md #${{ steps.changed-files.outputs.all_changed_files }}

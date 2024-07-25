@@ -52,3 +52,10 @@ rpm_build_source:
 
 rpm_build:
 	rpmbuild -ba $(BUILD_DIR)/SPECS/$(SPEC_FILE) --define "_topdir $(BUILD_DIR)"
+
+node_modules:
+	npm i
+
+.PHONY:
+spellcheck: node_modules
+	npm run spellcheck -- "**/*.md"
