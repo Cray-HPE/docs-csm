@@ -58,8 +58,8 @@ In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must 
    [{'name': 'sw-spine-001', 'target': '10.254.0.2'},
     {'name': 'sw-spine-002', 'target': '10.254.0.3'},
     {'name': 'sw-leaf-bmc-001', 'target': '10.254.0.4'}]
-   Enabling prometheus-snmp-exporter serviceMonitor
-   Adding the targets to the SNMP serviceMonitor configuration
+   Enabling snmpExporter VMServiceScrape
+   Adding the targets to the SNMP VMServiceScrape configuration
    ```
 
    The HMN is used by default as ACLs in the switch configuration block SNMP over the NMN.
@@ -68,29 +68,28 @@ In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must 
 1. (`pit#`) Review the SNMP Exporter configuration.
 
     ```bash
-    yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter' "${PITDATA}/prep/site-init/customizations.yaml"
+    yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.snmpExporter' "customizations.yaml"
     ```
 
     The expected output looks similar to:
 
     ```yaml
-    serviceMonitor:
-      enabled: true
-      params:
-        - name: sw-spine-001
-          target: 10.254.0.2
-        - name: sw-spine-002
-          target: 10.254.0.3
-        - name: sw-leaf-bmc-001
-          target: 10.254.0.4
+    enabled: true
+    params:
+      - name: sw-spine-001
+        target: 10.254.0.2
+      - name: sw-spine-002
+        target: 10.254.0.3
+      - name: sw-leaf-bmc-001
+        target: 10.254.0.4
       ```
 
 The most common configuration parameters are specified in the following table. They must be set in the `customizations.yaml` file
-under the `spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter` service definition.
+under the `spec.kubernetes.services.cray-sysmgmt-health.snmpExporter` service definition.
 
 | Customization            | Default      | Description                                                                         |
 |--------------------------|--------------|-------------------------------------------------------------------------------------|
-| `serviceMonitor.enabled` | `true`       | Enables `serviceMonitor` for SNMP Exporter \(default chart value is `true`\)        |
+| `snmpExporter.enabled`   | `true`       | Enables `VMServiceScrape` for SNMP Exporter \(default chart value is `true`\)       |
 | `params.enabled`         | `true`       | Sets the SNMP Exporter `params` change to `true` \(default chart value is `false`\) |
 | `params.conf.module`     | `if_mib`     | SNMP Exporter to select which module \(default chart value is `if_mib`\)            |
 | `params.conf.target`     | `10.252.0.2` | Add list of switch targets to SNMP Exporter to monitor                              |
