@@ -89,7 +89,7 @@ under the `spec.kubernetes.services.cray-sysmgmt-health.snmpExporter` service de
 
 | Customization            | Default      | Description                                                                         |
 |--------------------------|--------------|-------------------------------------------------------------------------------------|
-| `snmpExporter.enabled` | `true`       | Enables `VMServiceScrape` for SNMP Exporter \(default chart value is `true`\)        |
+| `snmpExporter.enabled`   | `true`       | Enables `VMServiceScrape` for SNMP Exporter \(default chart value is `true`\)        |
 | `params.enabled`         | `true`       | Sets the SNMP Exporter `params` change to `true` \(default chart value is `false`\) |
 | `params.conf.module`     | `if_mib`     | SNMP Exporter to select which module \(default chart value is `if_mib`\)            |
 | `params.conf.target`     | `10.252.0.2` | Add list of switch targets to SNMP Exporter to monitor                              |
