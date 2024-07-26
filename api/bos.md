@@ -190,6 +190,7 @@ Return list of versions currently running.
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Versions|Inline|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An Internal Server Error occurred handling the request.|[ProblemDetails](#schemaproblemdetails)|
 
 <h3 id="get__-responseschema">Response Schema</h3>
 
@@ -305,7 +306,7 @@ The versioning system uses [semver](https://semver.org/).
 ## Link Relationships
 * self : Link to itself
 * versions : Link back to the versions resource|[Version](#schemaversion)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An Internal Server Error occurred handling the request.|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -4102,7 +4103,8 @@ Update one or more of the BOS service options.
   "max_power_on_wait_time": 1048576,
   "max_power_off_wait_time": 1048576,
   "polling_frequency": 1048576,
-  "default_retry_policy": 1
+  "default_retry_policy": 1,
+  "max_component_batch_size": 1000
 }
 ```
 
@@ -4128,7 +4130,8 @@ Update one or more of the BOS service options.
   "max_power_on_wait_time": 1048576,
   "max_power_off_wait_time": 1048576,
   "polling_frequency": 1048576,
-  "default_retry_policy": 1
+  "default_retry_policy": 1,
+  "max_component_batch_size": 1000
 }
 ```
 
@@ -4328,7 +4331,8 @@ Retrieve the list of BOS service options.
   "max_power_on_wait_time": 1048576,
   "max_power_off_wait_time": 1048576,
   "polling_frequency": 1048576,
-  "default_retry_policy": 1
+  "default_retry_policy": 1,
+  "max_component_batch_size": 1000
 }
 ```
 
@@ -6466,7 +6470,8 @@ Mapping from Component staged Session statuses to Components with that status.
   "max_power_on_wait_time": 1048576,
   "max_power_off_wait_time": 1048576,
   "polling_frequency": 1048576,
-  "default_retry_policy": 1
+  "default_retry_policy": 1,
+  "max_component_batch_size": 1000
 }
 
 ```
@@ -6488,4 +6493,5 @@ Options for the Boot Orchestration Service.
 |max_power_off_wait_time|integer|false|none|How long BOS will wait for a node to power off before forcefully powering off (in seconds)|
 |polling_frequency|integer|false|none|How frequently the BOS operators check Component state for needed actions. (in seconds)|
 |default_retry_policy|integer|false|none|The default maximum number attempts per node for failed actions.|
+|max_component_batch_size|integer|false|none|The maximum number of components that a BOS operator will process at once. 0 means no limit.|
 

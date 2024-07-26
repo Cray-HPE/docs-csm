@@ -208,7 +208,11 @@ Retrieve a list of ImageRecords indicating images that are registered with IMS. 
       "etag": "f04af5f34635ae7c507322985e60c00c-131",
       "type": "s3"
     },
-    "arch": "aarch64"
+    "arch": "aarch64",
+    "metadata": {
+      "key": "includes_additional_packages",
+      "value": "foo,bar,baz"
+    }
   }
 ]
 ```
@@ -235,6 +239,9 @@ Status Code **200**
 |»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
 |»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
 |» arch|string|false|none|Target architecture for the recipe.|
+|» metadata|object|false|none|User supplied annotations about an image|
+|»» key|string|false|none|Template variable to associate with the IMS image|
+|»» value|string|false|none|Value variable to associate with the IMS image|
 
 #### Enumerated Values
 
@@ -328,7 +335,11 @@ Create a new ImageRecord and register the new image with IMS.
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
   },
-  "arch": "aarch64"
+  "arch": "aarch64",
+  "metadata": {
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
+  }
 }
 ```
 
@@ -352,7 +363,11 @@ Create a new ImageRecord and register the new image with IMS.
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
   },
-  "arch": "aarch64"
+  "arch": "aarch64",
+  "metadata": {
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
+  }
 }
 ```
 
@@ -549,7 +564,11 @@ Retrieve an image by image_id.
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
   },
-  "arch": "aarch64"
+  "arch": "aarch64",
+  "metadata": {
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
+  }
 }
 ```
 
@@ -645,7 +664,12 @@ Update an ImageRecord in IMS.
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
   },
-  "arch": "aarch64"
+  "arch": "aarch64",
+  "metadata": {
+    "operation": "set",
+    "key": "includes_additional_packages",
+    "value": "vim,emacs,man"
+  }
 }
 ```
 
@@ -670,7 +694,11 @@ Update an ImageRecord in IMS.
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
   },
-  "arch": "aarch64"
+  "arch": "aarch64",
+  "metadata": {
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
+  }
 }
 ```
 
@@ -872,7 +900,11 @@ Retrieve a list of DeletedImageRecords indicating images that have been deleted 
       "etag": "f04af5f34635ae7c507322985e60c00c-131",
       "type": "s3"
     },
-    "arch": "aarch64"
+    "arch": "aarch64",
+    "metadata": {
+      "key": "includes_additional_packages",
+      "value": "foo,bar,baz"
+    }
   }
 ]
 ```
@@ -900,6 +932,9 @@ Status Code **200**
 |»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
 |»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
 |» arch|string|false|none|Target architecture for the recipe.|
+|» metadata|object|false|none|User supplied annotations about an image|
+|»» key|string|false|none|Template variable to associate with the IMS image|
+|»» value|string|false|none|Value variable to associate with the IMS image|
 
 #### Enumerated Values
 
@@ -1208,7 +1243,11 @@ Retrieve deleted image details by using deleted_image_id.
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
   },
-  "arch": "aarch64"
+  "arch": "aarch64",
+  "metadata": {
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
+  }
 }
 ```
 
@@ -1522,7 +1561,11 @@ Retrieve a list of ImageRecords indicating images that are registered with the I
       "etag": "f04af5f34635ae7c507322985e60c00c-131",
       "type": "s3"
     },
-    "arch": "aarch64"
+    "arch": "aarch64",
+    "metadata": {
+      "key": "includes_additional_packages",
+      "value": "foo,bar,baz"
+    }
   }
 ]
 ```
@@ -1549,6 +1592,9 @@ Status Code **200**
 |»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
 |»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
 |» arch|string|false|none|Target architecture for the recipe.|
+|» metadata|object|false|none|User supplied annotations about an image|
+|»» key|string|false|none|Template variable to associate with the IMS image|
+|»» value|string|false|none|Value variable to associate with the IMS image|
 
 #### Enumerated Values
 
@@ -1642,7 +1688,11 @@ Create a new ImageRecord and register the new image with IMS.
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
   },
-  "arch": "aarch64"
+  "arch": "aarch64",
+  "metadata": {
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
+  }
 }
 ```
 
@@ -1667,7 +1717,11 @@ Create a new ImageRecord and register the new image with IMS.
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
   },
-  "arch": "aarch64"
+  "arch": "aarch64",
+  "metadata": {
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
+  }
 }
 ```
 
@@ -1870,7 +1924,11 @@ Retrieve an image by image_id.
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
   },
-  "arch": "aarch64"
+  "arch": "aarch64",
+  "metadata": {
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
+  }
 }
 ```
 
@@ -1966,7 +2024,12 @@ Update an ImageRecord in IMS.
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
   },
-  "arch": "aarch64"
+  "arch": "aarch64",
+  "metadata": {
+    "operation": "set",
+    "key": "includes_additional_packages",
+    "value": "vim,emacs,man"
+  }
 }
 ```
 
@@ -1991,7 +2054,11 @@ Update an ImageRecord in IMS.
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
   },
-  "arch": "aarch64"
+  "arch": "aarch64",
+  "metadata": {
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
+  }
 }
 ```
 
@@ -8781,6 +8848,52 @@ Values to update a RecipeRecord with
 |arch|aarch64|
 |arch|x86_64|
 
+<h2 id="tocS_ImagePatchRecord">ImagePatchRecord</h2>
+<!-- backwards compatibility -->
+<a id="schemaimagepatchrecord"></a>
+<a id="schema_ImagePatchRecord"></a>
+<a id="tocSimagepatchrecord"></a>
+<a id="tocsimagepatchrecord"></a>
+
+```json
+{
+  "link": {
+    "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
+    "etag": "f04af5f34635ae7c507322985e60c00c-131",
+    "type": "s3"
+  },
+  "arch": "aarch64",
+  "metadata": {
+    "operation": "set",
+    "key": "includes_additional_packages",
+    "value": "vim,emacs,man"
+  }
+}
+
+```
+
+Values used to update an existing IMS Image Record
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
+|arch|string|false|none|Target architecture for the recipe.|
+|metadata|object|false|none|An object which indicates a number of annotation patch operations relating to image tags.|
+|» operation|string|true|none|How to update a given key within the context of a patch operation|
+|» key|string|true|none|The key to update for a given image|
+|» value|string|false|none|The value to associate with a key during a patch operation|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|arch|aarch64|
+|arch|x86_64|
+|operation|set|
+|operation|remove|
+
 <h2 id="tocS_ImageRecord">ImageRecord</h2>
 <!-- backwards compatibility -->
 <a id="schemaimagerecord"></a>
@@ -8798,7 +8911,11 @@ Values to update a RecipeRecord with
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
   },
-  "arch": "aarch64"
+  "arch": "aarch64",
+  "metadata": {
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
+  }
 }
 
 ```
@@ -8814,6 +8931,9 @@ An Image Record
 |name|string|true|none|Name of the image|
 |link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
 |arch|string|false|none|Target architecture for the recipe.|
+|metadata|object|false|none|User supplied annotations about an image|
+|» key|string|false|none|Template variable to associate with the IMS image|
+|» value|string|false|none|Value variable to associate with the IMS image|
 
 #### Enumerated Values
 
@@ -8840,7 +8960,11 @@ An Image Record
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
   },
-  "arch": "aarch64"
+  "arch": "aarch64",
+  "metadata": {
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
+  }
 }
 
 ```
@@ -8857,41 +8981,9 @@ A Deleted Image Record
 |name|string|true|none|Name of the image|
 |link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
 |arch|string|false|none|Target architecture for the recipe.|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|arch|aarch64|
-|arch|x86_64|
-
-<h2 id="tocS_ImagePatchRecord">ImagePatchRecord</h2>
-<!-- backwards compatibility -->
-<a id="schemaimagepatchrecord"></a>
-<a id="schema_ImagePatchRecord"></a>
-<a id="tocSimagepatchrecord"></a>
-<a id="tocsimagepatchrecord"></a>
-
-```json
-{
-  "link": {
-    "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
-    "etag": "f04af5f34635ae7c507322985e60c00c-131",
-    "type": "s3"
-  },
-  "arch": "aarch64"
-}
-
-```
-
-Values to update an ImageRecord with
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
-|arch|string|false|none|Target architecture for the recipe.|
+|metadata|object|false|none|User supplied annotations about an image|
+|» key|string|false|none|Template variable to associate with the IMS image|
+|» value|string|false|none|Value variable to associate with the IMS image|
 
 #### Enumerated Values
 

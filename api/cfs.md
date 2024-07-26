@@ -1072,9 +1072,9 @@ Retrieve all the configuration framework sessions on the system.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h" DEPRECATED: This field has been replaced by min_age and max_age|
-|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
+|age|query|string|false|Return only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h. DEPRECATED: This field has been replaced by min_age and max_age|
+|min_age|query|string|false|Return only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
+|max_age|query|string|false|Return only sessions younger than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
 |status|query|string|false|Return only sessions with the given status.|
 |name_contains|query|string|false|Return only sessions whose session name contains the given string.|
 |succeeded|query|string|false|Return only sessions that have succeeded/failed.|
@@ -1420,13 +1420,13 @@ Delete multiple configuration sessions.  If filters are provided, only sessions 
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|age|query|string|false|Deletes only sessions older than the given age.  Age is given in the format "1d" or "6h" DEPRECATED: This field has been replaced by min_age and max_age|
-|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
+|age|query|string|false|Deletes only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h. DEPRECATED: This field has been replaced by min_age and max_age|
+|min_age|query|string|false|Deletes only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
+|max_age|query|string|false|Deletes only sessions younger than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
 |status|query|string|false|Deletes only sessions with the given status.|
 |name_contains|query|string|false|Delete only sessions whose session name contains the given string.|
 |succeeded|query|string|false|Delete only sessions that have succeeded/failed.|
-|tags|query|string|false|Return only sessions whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list. Only sessions that match all tags will be deleted.|
+|tags|query|string|false|Deletes only sessions whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list. Only sessions that match all tags will be deleted.|
 
 #### Enumerated Values
 
@@ -1923,8 +1923,8 @@ Retrieve all the configuration framework sessions on the system.
 |---|---|---|---|---|
 |limit|query|integer|false|When set, CFS will only return a number of sessions up to this limit.  Combined with after_id, this enables paging across results|
 |after_id|query|string|false|When set, CFS will only return the sessions after the session specified.  Combined with limit, this enables paging across results.|
-|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
+|min_age|query|string|false|Return only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
+|max_age|query|string|false|Return only sessions younger than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
 |status|query|string|false|Return only sessions with the given status.|
 |name_contains|query|string|false|Return only sessions whose session name contains the given string.|
 |succeeded|query|string|false|Return only sessions that have succeeded/failed.|
@@ -2285,8 +2285,8 @@ Delete multiple configuration sessions.  If filters are provided, only sessions 
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
+|min_age|query|string|false|Deletes only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
+|max_age|query|string|false|Deletes only sessions younger than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
 |status|query|string|false|Deletes only sessions with the given status.|
 |name_contains|query|string|false|Delete only sessions whose session name contains the given string.|
 |succeeded|query|string|false|Delete only sessions that have succeeded/failed.|
@@ -6601,7 +6601,7 @@ Configuration options for the configuration service.
 |defaultBatcherRetryPolicy|integer|false|none|The default maximum number retries per node when configuration fails.|
 |defaultPlaybook|string|false|none|The default playbook to be used if not specified in a node's desired state.|
 |defaultAnsibleConfig|string|false|none|The Kubernetes ConfigMap which holds the default ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service.|
-|sessionTTL|string|false|none|A time-to-live applied to all completed CFS sessions.  Specified in hours or days. e.g. 3d or 24h.  Set to an empty string to disable.|
+|sessionTTL|string|false|none|A time-to-live applied to all completed CFS sessions. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h. Set to an empty string to disable.|
 |additionalInventoryUrl|string|false|none|The git clone URL of a repo with additional inventory files.  All files in the repo will be copied into the hosts directory of CFS.|
 |batcherMaxBackoff|integer|false|none|The maximum number of seconds that batcher will backoff from session creation if problems are detected.|
 |batcherDisable|boolean|false|none|Disables cfs-batcher's automatic session creation if set to True.|
@@ -6651,7 +6651,7 @@ Configuration options for the configuration service.
 |default_batcher_retry_policy|integer|false|none|The default maximum number retries per node when configuration fails.|
 |default_playbook|string|false|read-only|[DEPRECATED] The default playbook to be used if not specified in a node's desired state. This option is read-only via the v3 API and remains only for compatibility with the v2 API. This option will be removed from v3 when the v2 API is removed.|
 |default_ansible_config|string|false|none|The Kubernetes ConfigMap which holds the default ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service.|
-|session_ttl|string|false|none|A time-to-live applied to all completed CFS sessions.  Specified in hours or days. e.g. 3d or 24h.  Set to an empty string to disable.|
+|session_ttl|string|false|none|A time-to-live applied to all completed CFS sessions. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h. Set to an empty string to disable.|
 |additional_inventory_url|string|false|none|The git clone URL of a repo with additional inventory files.  All files in the repo will be copied into the hosts directory of CFS. This is mutually exclusive with the additional_inventory_source option and only one can be set.|
 |additional_inventory_source|string|false|none|A CFS source with additional inventory files.  All files in the repo will be copied into the hosts directory of CFS. This is mutually exclusive with the additional_source_url option and only one can be set.|
 |batcher_max_backoff|integer|false|none|The maximum number of seconds that batcher will backoff from session creation if problems are detected.|
