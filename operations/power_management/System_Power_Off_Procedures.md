@@ -15,7 +15,7 @@ To make sure that the system is healthy before power off and all the information
 
 ## Shut Down Compute Nodes and UANs
 
-To shut down compute nodes and User Access Nodes \(UANs\), refer to [Shut Down and Power Off Compute and User Access Nodes](Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md).
+To shut down compute nodes and User Access Nodes \(UANs\), refer to [Shut Down and Power Off Managed Nodes](Shut_Down_and_Power_Off_Managed_Nodes.md).
 
 ## Save Management Network Switch Settings
 

@@ -34,9 +34,10 @@ To power on the management cabinet and bring up the management Kubernetes cluste
 
 To power on all liquid-cooled cabinet CDUs and cabinet PDUs, refer to [Power On Compute Cabinets](Power_On_Compute_Cabinets.md).
 
-## Power on and boot compute nodes and user access nodes \(UANs\)
+## Power on and boot managed nodes
 
-To power on and boot compute nodes and UANs, refer to [Power On and Boot Compute and User Access Nodes](Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md) and make nodes available to users.
+To power on and boot managed nodes, e.g. compute nodes and User Access Nodes (UANs), refer to
+[Power On and Boot Managed Nodes](Power_On_and_Boot_Managed_Nodes.md) and make nodes available to users.
 
 ## Run system health checks
 
