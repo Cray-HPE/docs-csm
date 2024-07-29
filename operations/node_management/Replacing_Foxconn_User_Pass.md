@@ -21,7 +21,7 @@ Vault needs to be updated with the `Foxconn` username and password using the `Fo
 1. (`ncn-mw#`) Run the `Foxconn` update script
 
     ```bash
-    $DOCS_DIR/hardware_state_manager/FoxconnUserPass.py
+    $DOCS_DIR/operations/hardware_state_manager/FoxconnUserPass.py
     ```
 
     This will ask for the BMC username and password for the Paradise nodes.
