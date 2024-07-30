@@ -65,4 +65,4 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
 
     The default time range is 15 minutes.
 
-    ![Dashboard Results Time Period](../../img/operations/Sma_dashboard_Time_Period.png)
+    ![Dashboard Results Time Period](../../img/operations/Sma_dashboard_time_period.png)
