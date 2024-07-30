@@ -204,6 +204,12 @@ Verify that the Lustre file system is available from the management cluster.
     - ncn-w003
 
     Are the above NCN groupings correct? [yes,no] yes
+    Executing step: Ensure containerd is running and enabled on all Kubernetes NCNs.
+    Executing step: Ensure etcd is running and enabled on all Kubernetes manager NCNs.
+    Executing step: Start and enable kubelet on all Kubernetes NCNs.
+    Waiting up to 300 seconds for the Kubernetes API to become available
+    The Kubernetes API is currently unreachable.
+    Kubernetes API is available
     ```
 
     The `sat bootsys boot` command may fail with a message like the following:

@@ -90,9 +90,9 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 1. (`ncn-m001#`) Set variables as comma-separated lists for the three types of management NCNs.
 
    ```bash
-   MASTERS="ncn-m002,ncn-m003"
-   STORAGE=$(ceph orch host ls | grep ncn-s | awk '{print $1}' | xargs | sed 's/ /,/g')
-   WORKERS=$(kubectl get nodes | grep ncn-w | awk '{print $1}' | sort -u | xargs | sed 's/ /,/g')
+   MASTERS="ncn-m002,ncn-m003"; echo MASTERS=$MASTERS
+   STORAGE=$(ceph orch host ls | grep ncn-s | awk '{print $1}' | xargs | sed 's/ /,/g'); echo STORAGE=$STORAGE
+   WORKERS=$(kubectl get nodes | grep ncn-w | awk '{print $1}' | sort -u | xargs | sed 's/ /,/g'); echo WORKERS=$WORKERS
    ```
 
 1. (`ncn-m001#`) Shut down platform services.
@@ -101,7 +101,9 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    sat bootsys shutdown --stage platform-services
    ```
 
-   Example output:
+   The following example output shows warnings that may occur while stopping containers on
+   Kubernetes nodes. When these warnings occur, the `sat bootsys` command will continue attempting
+   to stop containers until all containers are stopped.
 
    ```text
    Proceed with stopping platform services? [yes,no] yes
@@ -121,86 +123,24 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    - ncn-w003
 
    Are the above NCN groupings correct? [yes,no] yes
-
    Executing step: Create etcd snapshot on all Kubernetes manager NCNs.
    Executing step: Stop etcd on all Kubernetes manager NCNs.
    Executing step: Stop and disable kubelet on all Kubernetes NCNs.
    Executing step: Stop containers running under containerd on all Kubernetes NCNs.
-   WARNING: One or more "crictl stop" commands timed out on ncn-w003
-   WARNING: One or more "crictl stop" commands timed out on ncn-w002
-   ERROR: Failed to stop 1 container(s) on ncn-w003. Execute "crictl ps -q" on the host to view running containers.
-   ERROR: Failed to stop 2 container(s) on ncn-w002. Execute "crictl ps -q" on the host to view running containers.
-   WARNING: One or more "crictl stop" commands timed out on ncn-w001
-   ERROR: Failed to stop 4 container(s) on ncn-w001. Execute "crictl ps -q" on the host to view running containers.
-   WARNING: Non-fatal error in step "Stop containers running under containerd on all Kubernetes NCNs." of platform services stop: Failed to stop containers on the following NCN(s): ncn-w001, ncn-w002, ncn-w003
-   Continue with platform services stop? [yes,no] no
-   Aborting.
-   ```
-
-   In the preceding example, the commands to stop containers timed out on all the worker nodes and reported `WARNING` and `ERROR` messages.
-   A summary of the issue displays and prompts the user to continue or stop. Respond `no` to stop the shutdown. Then review the containers running on the nodes.
-
-   ```bash
-   for ncn in $(echo $WORKERS | sed 's/,/ /g'); do echo "${ncn}"; ssh "${ncn}" "crictl ps"; echo; done
-   ```
-
-   Example output:
-
-   ```text
-   ncn-w001
-   CONTAINER         IMAGE             CREATED           STATE         NAME              ATTEMPT         POD ID
-   032d69162ad24     302d9780da639     54 minutes ago    Running       cray-dhcp-kea     0               e4d1c01818a5a
-   7ab8021279164     2ad3f16035f1f     3 hours ago       Running       log-forwarding    0               a5e89a366f5a3
-
-   ncn-w002
-   CONTAINER         IMAGE             CREATED           STATE         NAME              ATTEMPT         POD ID
-   1ca9d9fb81829     de444b360808f     4 hours ago       Running       cray-uas-mgr      0               902287a6d0393
-
-   ncn-w003
-   CONTAINER         IMAGE             CREATED           STATE         NAME              ATTEMPT         POD ID
-   ```
-
-   Run the `sat` command again and enter `yes` at the prompt about the `etcd` snapshot not being created:
-
-   ```bash
-   sat bootsys shutdown --stage platform-services
-   ```
-
-   Example output:
-
-   ```text
-   The following Non-compute Nodes (NCNs) will be included in this operation:
-   managers:
-   - ncn-m001
-   - ncn-m002
-   - ncn-m003
-   storage:
-   - ncn-s001
-   - ncn-s002
-   - ncn-s003
-   workers:
-   - ncn-w001
-   - ncn-w002
-   - ncn-w003
-
-   Are the above NCN groupings correct? [yes,no] yes
-
-   Executing step: Create etcd snapshot on all Kubernetes manager NCNs.
-   WARNING: Failed to create etcd snapshot on ncn-m001: The etcd service is not active on ncn-m001 so a snapshot cannot be created.
-   WARNING: Failed to create etcd snapshot on ncn-m002: The etcd service is not active on ncn-m002 so a snapshot cannot be created.
-   WARNING: Failed to create etcd snapshot on ncn-m003: The etcd service is not active on ncn-m003 so a snapshot cannot be created.
-   WARNING: Non-fatal error in step "Create etcd snapshot on all Kubernetes manager NCNs." of platform services stop: Failed to create etcd snapshot on hosts: ncn-m001, ncn-m002, ncn-m003
-   Continue with platform services stop? [yes,no] yes
-   Continuing.
-   Executing step: Stop etcd on all Kubernetes manager NCNs.
-   Executing step: Stop and disable kubelet on all Kubernetes NCNs.
-   Executing step: Stop containers running under containerd on all Kubernetes NCNs.
+   All containers stopped on ncn-m001.
+   All containers stopped on ncn-m003.
+   All containers stopped on ncn-w003.
+   All containers stopped on ncn-w002.
+   WARNING: Some containers are still running after stop attempt on ncn-m002: ['f8a4d0ffe74588fcd4a6ab644cac62cc271df7681cea74173f28d66b5391873a']
+   Retrying container stop procedure on ncn-m002
+   WARNING: Some containers are still running after stop attempt on ncn-w001: ['21570acf6af066532bf80b2ece10c6808506f9672a03d24fd4f7e5a7775512bf', '5aebf6f06341327bbec581543e9812a20faac977fe45d870dffabf4d6f81a6c8', 'd1970d162b2f2e8f460fdba554f4aa5193c7450aa1dd0230272e18d3f6360177']
+   Retrying container stop procedure on ncn-w001
+   All containers stopped on ncn-m002.
+   WARNING: Some containers are still running after stop attempt on ncn-w001: ['5aebf6f06341327bbec581543e9812a20faac977fe45d870dffabf4d6f81a6c8']
+   Retrying container stop procedure on ncn-w001
+   All containers stopped on ncn-w001.
    Executing step: Stop containerd on all Kubernetes NCNs.
-   Executing step: Check health of Ceph cluster and freeze state.
    ```
-
-   If the process continues to report errors due to `Failed to stop containers`, then iterate on the above step. Each iteration should reduce the number of containers running. If necessary,
-   containers can be manually stopped using `crictl stop CONTAINER`. If containers are stopped manually, then re-run the above procedure to complete any final steps in the process.
 
 1. (`ncn-m001#`) Shut down and power off all management NCNs except `ncn-m001`.
 
