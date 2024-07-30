@@ -134,13 +134,33 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
    Are the above NCN groupings and exclusions correct? [yes,no] yes
    INFO: Starting console logging on ncn-s003,ncn-s001,ncn-w002,ncn-m003,ncn-w004,ncn-m002,ncn-s002,ncn-w001,ncn-w003.
    Powering on NCNs and waiting up to 900 seconds for them to be reachable via SSH: ncn-m002, ncn-m003
-   INFO: Sending IPMI power on command to host ncn-m003
-   INFO: Sending IPMI power on command to host ncn-m002
+   INFO: Sending IPMI power on command to host ncn-s002
+   INFO: Sending IPMI power on command to host ncn-s001
+   INFO: Sending IPMI power on command to host ncn-s003
    Waiting for condition "Hosts accessible via SSH" timed out after 300 seconds
    ERROR: Unable to reach the following NCNs via SSH after powering them on: ncn-m003, ncn-s002.. Troubleshoot the issue and then try again.
    ```
 
    In the preceding example, the `ssh` command to the NCN nodes timed out and reported `ERROR` messages. Repeat the above step until you see `Succeeded with boot of other management NCNs.` Each iteration should get further in the process.
+
+   NOTE: During power on, if Ceph does not become healthy, it will time out, prompting to either proceed further or exit to fix Ceph health.
+   If 'yes' is given as the input, it would skip to check the ceph status and proceed further.
+
+   Example output:
+
+   ```text
+    INFO: Checking Ceph health
+    Waiting for condition "Ceph cluster in healthy state" timed out after 60 seconds
+    ERROR: Failed to unfreeze Ceph on storage NCNs: Ceph is not healthy. Please correct Ceph health and try again.
+    eph is not healthy. Do you want to continue anyway? [yes,no] yes
+    INFO: Continuing despite Ceph not being healthy as per user's input, make sure to verify it later.
+    INFO: Checking whether ceph filesystem is mounted on /etc/cray/upgrade/csm.
+    ```
+
+   If 'No' is given as the input, it would exit the execution. To fix the Ceph health, see [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md) for Ceph troubleshooting.
+   steps, which may include restarting Ceph services.
+
+   Once Ceph is healthy, repeat the `sat bootsys boot --stage ncn-power --ncn-boot-timeout 900` command.
 
 1. (`ncn-m001#`) Monitor the consoles for each NCN.
 
