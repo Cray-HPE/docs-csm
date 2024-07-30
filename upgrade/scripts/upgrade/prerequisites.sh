@@ -813,8 +813,8 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     NCN_IMAGE_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
     set +o pipefail
 
-    KUBERNETES_VERSION=$(find "${artdir}/kubernetes" -name 'kubernetes*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')
-    CEPH_VERSION=$(find "${artdir}/storage-ceph" -name 'storage-ceph*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')
+    KUBERNETES_VERSION=$(find "${artdir}/kubernetes" -name 'kubernetes*.squashfs' -exec basename {} .squashfs \; | sed -e 's/^kubernetes-//' | sed -e 's/-[^-]*$//')
+    CEPH_VERSION=$(find "${artdir}/storage-ceph" -name 'storage-ceph*.squashfs' -exec basename {} .squashfs \; | sed -e 's/^storage-ceph-//' | sed -e 's/-[^-]*$//')
 
     k8s_done=0
     ceph_done=0
