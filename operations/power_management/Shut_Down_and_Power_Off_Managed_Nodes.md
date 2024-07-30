@@ -1,40 +1,29 @@
-# Shut Down and Power Off Compute and User Access Nodes
+# Shut Down and Power Off Managed Nodes
 
-Shut down and power off compute and user access nodes \(UANs\). This procedure powers off all compute nodes in the context of an entire system shutdown.
+Shut down and power off all managed nodes in the system. This includes compute nodes, User Access
+Nodes (UANs), and any other type of managed nodes on the system. It does not include the management
+nodes, which are powered off later.
 
 ## Prerequisites
 
 The `cray` and `sat` commands must be initialized and authenticated with valid credentials for Keycloak. If these have not been prepared, then see
 [Configure the Cray Command Line Interface (`cray` CLI)](../configure_cray_cli.md) and refer to the "SAT Authentication" section of the *HPE Cray EX
 System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructions on how to acquire a SAT authentication token.
+The BOS session templates to use for shutting down all managed nodes in the system have been identified as described in [Identify BOS session templates for managed nodes](./Prepare_the_System_for_Power_Off.md#identify-bos-session-templates-for-managed-nodes).
 
 ## Procedure
 
-1. (`ncn-mw#`) List detailed information about the available boot orchestration service \(BOS\) session template names.
-
-   Identify the BOS session template names (such as `compute-23.7.0` and `uan-23.7.0`), and choose the appropriate compute and UAN node templates for the shutdown.
-
-   ```bash
-   cray bos sessiontemplates list --format json | jq -r '.[].name' | sort
-   ```
-
-   Example output excerpts:
-
-   ```text
-   compute-23.7.0
-   [...]
-   uan-23.7.0
-   ```
-
-1. (`ncn-mw#`) To display more information about a session template, for example `compute-23.7.0`, use the `describe` option.
+1. (`ncn-m001#`) Set a variable to contain a comma-separated list of the BOS session templates to
+   use to shut down managed nodes. For example:
 
    ```bash
-   cray bos sessiontemplates describe compute-23.7.0
+   SESSION_TEMPLATES="compute-23.7.0,uan-23.7.0"
    ```
+
+   See [Identify BOS Session Templates for Managed Nodes](Prepare_the_System_for_Power_Off.md#identify-bos-session-templates-for-managed-nodes)
+   for instructions on obtaining the appropriate BOS session templates.
 
 1. (`ncn-mw#`) Use `sat bootsys shutdown` to shut down and power off UANs and compute nodes.
-
-   **Attention:** Specify the required session templates for `COS_SESSION_TEMPLATE` and `UAN_SESSION_TEMPLATE` in the example.
 
    An optional `--loglevel debug` can be used to provide more information as the system shuts down. If used, it must be added after `sat` but before `bootsys`.
 
@@ -45,7 +34,7 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
 
    ```bash
    sat bootsys shutdown --stage bos-operations --bos-shutdown-timeout BOS_SHUTDOWN_TIMEOUT \
-            --bos-templates COS_SESSION_TEMPLATE,UAN_SESSION_TEMPLATE
+            --bos-templates $SESSION_TEMPLATES
    ```
 
    Example output:
@@ -86,11 +75,12 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
     shutdown and to verify that the nodes reached the expected state. Both of these recommendations are shown
     in the remaining steps.
 
-1. Monitor status of the shutdown process.
+1. If desired, monitor status of the booting process for each BOS session.
 
-   1. (`ncn-m001#`) Use the BOS session ID to monitor the progress of the compute node shutdown session.
+   1. (`ncn-m001#`) Use the BOS session ID to monitor the progress of each shutdown session.
 
-      In the example above the compute node BOS session had the ID `e477aeb4-0038-4a11-ac55-1e359e2e243c`.
+      For example, to monitor the compute node shutdown session from the previous example use the
+      session ID `e477aeb4-0038-4a11-ac55-1e359e2e243c`.
 
       ```bash
       cray bos sessions status list --format json e477aeb4-0038-4a11-ac55-1e359e2e243c
@@ -119,33 +109,7 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
       }
       ```
 
-   1. (`ncn-m001#`) In another shell window, use a similar command to monitor the UAN boot session.
-
-      In the example above the UAN BOS session had the ID `f657296c-762e-42ce-9388-d79a723d42a1`.
-
-      ```bash
-      cray bos sessions status list --format json f657296c-762e-42ce-9388-d79a723d42a1
-      {
-        "error_summary": {},
-        "managed_components_count": 6,
-        "percent_failed": 0.0,
-        "percent_staged": 0.0,
-        "percent_successful": 0.0,
-        "phases": {
-          "percent_complete": 0.0,
-          "percent_configuring": 0,
-          "percent_powering_off": 100.0,
-          "percent_powering_on": 0
-        },
-        "status": "running",
-        "timing": {
-          "duration": "0:01:50.479877",
-          "start_time": "2024-01-29T00:21:30"
-        }
-      }
-      ```
-
-   1. (`ncn-m001#`) Check the HSM state from `sat status`of the compute and application nodes, but not the management nodes.
+   1. (`ncn-m001#`) Check the HSM state from `sat status` of the non-management nodes.
 
       A node will progress through HSM states in this order: `Ready`, `Standby`, `Off`.
 
