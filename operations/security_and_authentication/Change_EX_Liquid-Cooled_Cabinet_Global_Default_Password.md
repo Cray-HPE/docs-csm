@@ -1,6 +1,9 @@
 # Change Cray EX Liquid-Cooled Cabinet Global Default Password
 
-This procedure changes the global default `root` credential on HPE Cray EX liquid-cooled cabinet embedded controllers (BMCs). The chassis management module (CMM) controller (cC), node controller (nC), and Slingshot switch controller (sC) are generically referred to as "BMCs" in these procedures.
+This procedure changes the global default `root` credential on HPE Cray EX liquid-cooled cabinet
+embedded controllers (BMCs). The chassis management module (CMM) controller (cC), node controller
+(nC), and Slingshot switch controller (sC) are generically referred to as "BMCs" in these
+procedures.
 
 ## Prerequisites
 
@@ -9,7 +12,7 @@ This procedure changes the global default `root` credential on HPE Cray EX liqui
 
 ### Procedure
 
-1. If necessary, shut down compute nodes in each cabinet. Refer to [Shut Down and Power Off Compute and User Access Nodes](../power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md).
+1. If necessary, shut down compute nodes in each cabinet. Refer to [Shut Down and Power Off Managed Nodes](../power_management/Shut_Down_and_Power_Off_Managed_Nodes.md).
 
    ```screen
    sat bootsys shutdown --stage bos-operations --bos-templates COS_SESSION_TEMPLATE
@@ -23,7 +26,7 @@ This procedure changes the global default `root` credential on HPE Cray EX liqui
 
 3. Power off all compute slots in the cabinets the passwords are to be changed on.
 
-  > **`NOTE`**: If a chassis is not fully populated, specify each slot individually.
+   > **`NOTE`**: If a chassis is not fully populated, specify each slot individually.
 
    Example showing fully populated cabinets 1000-1003:
 
@@ -44,4 +47,3 @@ This procedure changes the global default `root` credential on HPE Cray EX liqui
 5. Perform the procedures in [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md).
 
 6. To update Slingshot switch BMCs, refer to "Change Rosetta Login and Redfish API Credentials" in the *Slingshot Operations Guide (> 1.6.0)*.
-
