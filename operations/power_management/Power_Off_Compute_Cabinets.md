@@ -39,7 +39,7 @@ HPE Cray standard EIA racks typically include two redundant PDUs. Some PDU model
     This example shows liquid-cooled cabinets 1000 - 1003.
 
     ```bash
-    cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
+    cray power status list --xnames x[1000-1003]c[0-7] --format json
     ```
 
 1. (`ncn-m#`) Check the power status for nodes in the standard racks before shutdown.
@@ -67,11 +67,11 @@ liquid-cooled cabinet chassis, compute modules, and router modules, then powers 
 
 1. (`ncn-m#`) Shut down cabinet power.
 
-    **Important:** The default timeout for the call to CAPMC is 120 seconds. If the `sat bootsys shutdown` command fails
-    to power off some cabinets and indicate that requests to CAPMC have timed out, the `sat` command may be run with an increased `--capmc-timeout` value.
+    **Important:** The default timeout for the call to PCS is 120 seconds. If the `sat bootsys shutdown` command fails
+    to power off some cabinets and indicate that requests to PCS have timed out, the `sat` command may be run with an increased `--pcs-timeout` value.
 
     ```bash
-    sat bootsys shutdown --stage cabinet-power --capmc-timeout 240
+    sat bootsys shutdown --stage cabinet-power --pcs-timeout 240
     ```
 
 1. (`ncn-m#`) Verify that the `hms-discovery` cron job has been suspended.
@@ -94,7 +94,7 @@ liquid-cooled cabinet chassis, compute modules, and router modules, then powers 
     This example shows cabinets 1000 - 1003.
 
     ```bash
-    cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
+    cray power status list --xnames x[1000-1003]c[0-7] --format json
     ```
 
 1. Rectifiers \(PSUs\) in the liquid-cooled cabinets should indicate that DC power is `OFF` \(`AC OK` means the power is on\).
