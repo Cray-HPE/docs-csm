@@ -5,7 +5,7 @@ Power off PDUs and any remaining components in management cabinets which are pow
 ## Power Off Management Cabinet PDU circuit breakers
 
 **CAUTION:** The nodes and switches in management cabinets should only
-be powered off once it has been confirmed that the management Kubernetes cluster and any Lustre or Spectrum Scale filesystems in the cabinets have been cleanly shut down. See the procedures in
+be powered off when it has been confirmed that the management Kubernetes cluster and any Lustre or Spectrum Scale filesystems in the cabinets have been cleanly shut down. See the procedures in
 [Power Off the External File Systems](System_Power_Off_Procedures.md#Power_off_the_External_File_systems)
 and [Shut Down and Power Off the Management Kubernetes Cluster](Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md).
 
