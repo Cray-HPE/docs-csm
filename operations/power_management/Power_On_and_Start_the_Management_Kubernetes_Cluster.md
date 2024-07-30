@@ -143,7 +143,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
    In the preceding example, the `ssh` command to the NCN nodes timed out and reported `ERROR` messages. Repeat the above step until you see `Succeeded with boot of other management NCNs.` Each iteration should get further in the process.
 
-   NOTE: During the Power on if the ceph does not become healthy it would timeout after which, You would have a prompt as shown below to proceed further or exit to fix the ceph health.
+   NOTE: During power on, if Ceph does not become healthy, it will time out, prompting to either proceed further or exit to fix Ceph health.
    If 'yes' is given as the input, it would skip to check the ceph status and proceed further.
 
    Example output:
@@ -157,7 +157,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
     INFO: Checking whether ceph filesystem is mounted on /etc/cray/upgrade/csm.
     ```
 
-   If 'No' is given as the input, it would exit the execution, you can fix the ceph health, See [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md) for Ceph troubleshooting
+   If 'No' is given as the input, it would exit the execution. To fix the Ceph health, see [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md) for Ceph troubleshooting.
    steps, which may include restarting Ceph services.
 
    Once Ceph is healthy, repeat the `sat bootsys boot --stage ncn-power --ncn-boot-timeout 900` command.
