@@ -365,22 +365,7 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
 
 ## 5. Enable NCN disk wiping safeguard
 
-The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise because
-it is used for Cray installation and bootstrap.
-
-1. (`ncn-m001#`) Obtain access to CSI.
-
-    ```bash
-    mkdir -pv /mnt/livecd /mnt/sqfs && \
-        mount -v /metal/bootstrap/pre-install-toolkit-*.iso /mnt/livecd/ && \
-        mount -v /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/ && \
-        cp -pv /mnt/sqfs/usr/bin/csi /tmp/csi && \
-        /tmp/csi version && \
-        umount -vl /mnt/sqfs /mnt/livecd
-    ```
-
-    > **`NOTE`** `/tmp/csi` will delete itself on the next reboot. The `/tmp` directory is `tmpfs` and runs in memory;
-    > it will not persist on restarts.
+The next steps require `csi` from the installation media. `csi` is installed on the NCNs by `cloud-init`.
 
 1. (`ncn-m001#`) Authenticate with the cluster.
 
@@ -393,7 +378,7 @@ it is used for Cray installation and bootstrap.
 1. (`ncn-m001#`) Set the wipe safeguard to allow safe reboots on all NCNs.
 
     ```bash
-    /tmp/csi handoff bss-update-param --set metal.no-wipe=1
+    csi handoff bss-update-param --set metal.no-wipe=1
     ```
 
 ## 6. Configure DNS and NTP on each BMC
