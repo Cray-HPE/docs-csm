@@ -654,6 +654,16 @@ do_upgrade_csm_chart cray-spire sysmgmt.yaml
 do_upgrade_csm_chart cray-tapms-crd sysmgmt.yaml
 do_upgrade_csm_chart cray-tapms-operator sysmgmt.yaml
 
+# Running the rollout restart script to restart the required resources in istio-injection=enabled namespaces.
+bash rollout-restart.sh
+
+# Checking the 
+if [ $? -eq 0 ]; then
+    echo "Rollout restart was executed successfully."
+else
+    echo "Rollout-restart failed."
+fi
+
 # Note for csm 1.5/k8s 1.22 only if ANY chart depends on /v1 cert-manager api
 # usage it *MUST* come after this or prerequisites will fail on an upgrade.
 # Helper functions for cert-manager upgrade
