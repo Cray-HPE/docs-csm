@@ -107,7 +107,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
    sat bootsys boot --stage ncn-power --ncn-boot-timeout 900
    ```
 
-   Example output:
+   Example output when the command is successful:
 
    ```text
    IPMI username: root
@@ -132,41 +132,93 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
    workers: []
 
    Are the above NCN groupings and exclusions correct? [yes,no] yes
-   INFO: Starting console logging on ncn-s003,ncn-s001,ncn-w002,ncn-m003,ncn-w004,ncn-m002,ncn-s002,ncn-w001,ncn-w003.
-   Powering on NCNs and waiting up to 900 seconds for them to be reachable via SSH: ncn-m002, ncn-m003
+   INFO: Starting console logging on ncn-s003,ncn-s001,ncn-w002,ncn-m003,ncn-m002,ncn-s002,ncn-w001,ncn-w003.
+   INFO: Powering on NCNs and waiting up to 900 seconds for them to be reachable via SSH: ncn-s001, ncn-s002, ncn-s003
    INFO: Sending IPMI power on command to host ncn-s002
    INFO: Sending IPMI power on command to host ncn-s001
    INFO: Sending IPMI power on command to host ncn-s003
-   Waiting for condition "Hosts accessible via SSH" timed out after 300 seconds
-   ERROR: Unable to reach the following NCNs via SSH after powering them on: ncn-m003, ncn-s002.. Troubleshoot the issue and then try again.
+   INFO: Powered on NCNs: ncn-s001, ncn-s002, ncn-s003
+   INFO: Unfreezing Ceph
+   INFO: Running command: ceph osd unset noout
+   INFO: Command output: noout is unset
+   INFO: Running command: ceph osd unset norecover
+   INFO: Command output: norecover is unset
+   INFO: Running command: ceph osd unset nobackfill
+   INFO: Command output: nobackfill is unset
+   INFO: Waiting up to 60 seconds for Ceph to become healthy after unfreeze
+   INFO: Checking Ceph health
+   ...
+   INFO: Ceph unfreeze completed successfully on storage NCNs.
+   INFO: Checking whether ceph filesystem is mounted on /etc/cray/upgrade/csm.
+   INFO: Mounting ceph filesystem on /etc/cray/upgrade/csm.
+   INFO: Successfully mounted ceph filesystem on /etc/cray/upgrade/csm.
+   INFO: Checking whether fuse.s3fs filesystem is mounted on /var/opt/cray/sdu/collection-mount.
+   INFO: Mounting fuse.s3fs filesystem on /var/opt/cray/sdu/collection-mount.
+   INFO: Successfully mounted fuse.s3fs filesystem on /var/opt/cray/sdu/collection-mount.
+   INFO: Checking whether fuse.s3fs filesystem is mounted on /var/opt/cray/config-data.
+   INFO: Mounting fuse.s3fs filesystem on /var/opt/cray/config-data.
+   INFO: Successfully mounted fuse.s3fs filesystem on /var/opt/cray/config-data.
+   INFO: Successfully restarted 'cray-sdu-rda' service on ncn-m001
+   INFO: Powering on NCNs and waiting up to 900 seconds for them to be reachable via SSH: ncn-m002, ncn-m003
+   INFO: Sending IPMI power on command to host ncn-m002
+   INFO: Sending IPMI power on command to host ncn-m003
+   INFO: Powered on NCNs: ncn-m002, ncn-m003
+   INFO: Powering on NCNs and waiting up to 900 seconds for them to be reachable via SSH: ncn-w001, ncn-w002, ncn-w003
+   INFO: Sending IPMI power on command to host ncn-w003
+   INFO: Sending IPMI power on command to host ncn-w001
+   INFO: Sending IPMI power on command to host ncn-w002
+   INFO: Powered on NCNs: ncn-w001, ncn-w002, ncn-w003
+   INFO: Stopping console logging on ncn-s003,ncn-m002,ncn-w001,ncn-m003,ncn-w003,ncn-s002,ncn-s001,ncn-w002.
+   INFO: Succeeded with boot of other management NCNs.
    ```
 
-   In the preceding example, the `ssh` command to the NCN nodes timed out and reported `ERROR` messages. Repeat the above step until you see `Succeeded with boot of other management NCNs.` Each iteration should get further in the process.
+   The above command may fail either while waiting for a group of management NCNs to boot and become
+   reachable or while waiting for Ceph to become healthy. See the following sub-steps for how to
+   proceed in either of those cases.
 
-   NOTE: During power on, if Ceph does not become healthy, it will time out, prompting to either proceed further or exit to fix Ceph health.
-   If 'yes' is given as the input, it would skip to check the ceph status and proceed further.
+   1. If any of the nodes time out during boot, an error message like the following will be logged:
 
-   Example output:
+      ```text
+      ERROR: Waiting for condition "Hosts accessible via SSH" timed out after 300 seconds
+      ERROR: Unable to reach the following NCNs via SSH after powering them on: ncn-s001, ncn-s002, ncn-s003. Troubleshoot the issue and then try again.
+      ```
 
-   ```text
-    INFO: Checking Ceph health
-    Waiting for condition "Ceph cluster in healthy state" timed out after 60 seconds
-    ERROR: Failed to unfreeze Ceph on storage NCNs: Ceph is not healthy. Please correct Ceph health and try again.
-    eph is not healthy. Do you want to continue anyway? [yes,no] yes
-    INFO: Continuing despite Ceph not being healthy as per user's input, make sure to verify it later.
-    INFO: Checking whether ceph filesystem is mounted on /etc/cray/upgrade/csm.
+      If this error occurs, troubleshoot the issue and then repeat the `sat bootsys` command again.
+
+   1. If Ceph does not become healthy within the expected time, the `sat bootsys` command will
+      prompt whether to proceed further or exit to allow further troubleshooting of Ceph health
+      issues. If the prompt is answered with 'yes', the command will continue to boot the other
+      management nodes.
+
+      Example output:
+
+      ```text
+      INFO: Checking Ceph health
+      ERROR: Waiting for condition "Ceph cluster in healthy state" timed out after 60 seconds
+      ERROR: Failed to unfreeze Ceph on storage NCNs: Ceph is not healthy. Please correct Ceph health and try again.
+      Ceph is not healthy. Do you want to continue anyway? [yes,no] yes
+      INFO: Continuing despite Ceph not being healthy as per user's input, make sure to verify it later.
+      INFO: Checking whether ceph filesystem is mounted on /etc/cray/upgrade/csm.
+      ```
+
+      If the prompt is answered with 'no', the command will exit and allow the administrator to
+      troubleshoot the Ceph health issues. Note that a Ceph status of `HEALTH_WARN` may resolve on
+      its own if given time to recover. For further Ceph health troubleshooting procedures, see
+      [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md). After troubleshooting the
+      Ceph health issues, repeat the `sat bootsys` command.
+
+1. (`ncn-m001#`) Monitor the consoles for each NCN while nodes are booting:
+
+    Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN. For example,
+    to watch the console log for `ncn-s001`, use the following `tail` command:
+
+    ```text
+    tail -f /var/log/cray/console_logs/console-ncn-s001-mgmt.log
     ```
 
-   If 'No' is given as the input, it would exit the execution. To fix the Ceph health, see [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md) for Ceph troubleshooting.
-   steps, which may include restarting Ceph services.
+    Alternatively, attach to the screen session in which the `ipmitool sol activate` command is running. This allows for input to be provided on the console if needed.
 
-   Once Ceph is healthy, repeat the `sat bootsys boot --stage ncn-power --ncn-boot-timeout 900` command.
-
-1. (`ncn-m001#`) Monitor the consoles for each NCN.
-
-    Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
-
-    Alternatively, attach to the screen session \(screen sessions real time, but not saved\):
+    List the screen sessions:
 
     ```bash
     screen -ls
@@ -186,9 +238,15 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
     26444.SAT-console-ncn-w001-mgmt (Detached)
     ```
 
+    Attach to a screen session as follows:
+
     ```bash
-    screen -x 26745.SAT-console-ncn-m003-mgmt
+    screen -x 26589.SAT-console-ncn-s001-mgmt
     ```
+
+    Detach from the screen session using `Ctrl + A` followed by `D`. This will leave the screen
+    session running in detached mode. The `sat bootsys` command will automatically exit screen
+    sessions when nodes have finished booting.
 
 ### Verify access to Lustre file system
 
@@ -198,12 +256,8 @@ Verify that the Lustre file system is available from the management cluster.
 
 1. (`ncn-m001#`) Start the Kubernetes cluster.
 
-    Note that the default timeout for Ceph to become healthy is 600 seconds, which is excessive. To work
-    around this issue, set the timeout to a more reasonable value (like 120 seconds) using the `--ceph-timeout`
-    option, as shown below.
-
     ```bash
-    sat bootsys boot --stage platform-services --ceph-timeout 120
+    sat bootsys boot --stage platform-services
     ```
 
     Example output:
@@ -224,53 +278,17 @@ Verify that the Lustre file system is available from the management cluster.
     - ncn-w003
 
     Are the above NCN groupings correct? [yes,no] yes
-    Executing step: Ensure containerd is running and enabled on all Kubernetes NCNs.
-    Executing step: Ensure etcd is running and enabled on all Kubernetes manager NCNs.
-    Executing step: Start and enable kubelet on all Kubernetes NCNs.
-    Waiting up to 300 seconds for the Kubernetes API to become available
-    The Kubernetes API is currently unreachable.
-    Kubernetes API is available
+    INFO: Executing step: Ensure containerd is running and enabled on all Kubernetes NCNs.
+    INFO: Executing step: Ensure etcd is running and enabled on all Kubernetes manager NCNs.
+    INFO: Executing step: Start and enable kubelet on all Kubernetes NCNs.
+    INFO: Waiting up to 300 seconds for the Kubernetes API to become available
+    INFO: The Kubernetes API is currently unreachable.
+    INFO: Kubernetes API is available
     ```
 
-    The `sat bootsys boot` command may fail with a message like the following:
-
-    ```text
-    Executing step: Start inactive Ceph services, unfreeze Ceph cluster and wait for Ceph health.
-    Waiting up to 120 seconds for Ceph to become healthy after unfreeze
-    Waiting for condition "Ceph cluster in healthy state" timed out after 120 seconds
-    ERROR: Fatal error in step "Start inactive Ceph services, unfreeze Ceph cluster and wait for Ceph health." of platform services start: Ceph is not healthy. Please correct Ceph health and try again.
-    ```
-
-    (`ncn-m001#`) If a failure like the above occurs, then see the info-level log messages for
-    details about the Ceph health check failure. Depending on the configured log
-    level for SAT, the log messages may appear in `stderr`, or only in the log
-    file. For example:
-
-    ```bash
-    grep "fatal Ceph health warnings" /var/log/cray/sat/sat.log | tail -n 1
-    ```
-
-    Example output:
-
-    ```text
-    2021-08-04 17:28:21,945 - INFO - sat.cli.bootsys.ceph - Ceph is not healthy: The following fatal Ceph health warnings were found: POOL_NO_REDUNDANCY
-    ```
-
-    The particular Ceph health warning may vary. In this example, it is `POOL_NO_REDUNDANCY`.
-
-    If the warning is `PG_NOT_DEEP_SCRUBBED`, this alert should clear once Ceph deep scrubs of PGs
-    have completed. The time to complete this operation depends on the number of outstanding deep
-    scrub operations and the load on the Ceph cluster. See [Ceph Deep
-    Scrubs](../utility_storage/Ceph_Deep_Scrubs.md) for more information on deep scrubs. This alert
-    is more likely to occur if the system is powered off for an extended duration.
-
-    See [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md) for Ceph troubleshooting
-    steps, which may include restarting Ceph services.
-
-    Once Ceph is healthy, repeat the `sat bootsys boot --stage platform-services` command to finish
-    starting the Kubernetes cluster.
-    If any other errors are observed run the `sat bootsys boot --stage platform-services` command again
-    and verify if they are cleared.
+    If any errors occur, after troubleshooting and fixing the issue, be sure to run the `sat bootsys
+    boot --stage platform-services` command again until it succeeds as shown above. This will ensure
+    that all necessary steps are executed.
 
 1. (`ncn-m001#`) Check the space available on the Ceph cluster.
 
