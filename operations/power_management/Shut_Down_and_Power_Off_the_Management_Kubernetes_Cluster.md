@@ -146,11 +146,11 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
     This command requires input for the IPMI username and password for the management nodes.
 
-    **Important:** The default timeout for the `sat bootsys shutdown --stage ncn-power` command is 300 seconds. If it is known that
-    the nodes take longer than this amount of time for a graceful shutdown, then a different value
-    can be set using `--ncn-shutdown-timeout NCN_SHUTDOWN_TIMEOUT` with a value other than 300
-    for `NCN_SHUTDOWN_TIMEOUT`. Once this timeout has been exceeded, the node will be forcefully
-    powered down.
+    **Important:** The default timeout for the `sat bootsys shutdown --stage ncn-power` command is
+    300 seconds. If it is known that the nodes take longer than this amount of time for a graceful
+    shutdown, then a different value can be set using `--ncn-shutdown-timeout NCN_SHUTDOWN_TIMEOUT`
+    with a value other than 300 for `NCN_SHUTDOWN_TIMEOUT`. Once this timeout has been exceeded, the
+    command will prompt whether the node should be forcefully powered off.
 
    1. Shutdown management NCNs.
 
@@ -158,7 +158,7 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
       sat bootsys shutdown --stage ncn-power --ncn-shutdown-timeout 900
       ```
 
-      Example output:
+      Example output when the command is successful:
 
       ```text
       Proceed with shutdown of other management NCNs? [yes,no] yes
@@ -185,13 +185,124 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
       workers: []
 
       Are the above NCN groupings and exclusions correct? [yes,no] yes
+      INFO: Successfully set next boot device to disk (Boot0014) for ncn-w001
+      INFO: Successfully set next boot device to disk (Boot0012) for ncn-w002
+      INFO: Successfully set next boot device to disk (Boot0014) for ncn-w003
+      INFO: Starting console logging on ncn-w001,ncn-w002,ncn-w003.
+      INFO: Shutting down worker NCNs: ncn-w001, ncn-w002, ncn-w003
+      INFO: Executing command on host "ncn-w001": `shutdown -h now`
+      INFO: Executing command on host "ncn-w002": `shutdown -h now`
+      INFO: Executing command on host "ncn-w003": `shutdown -h now`
+      INFO: Waiting up to 900 seconds for worker NCNs to shut down...
+      INFO: Stopping console logging on ncn-w001,ncn-w002,ncn-w003,ncn-w004.
+      INFO: Successfully set next boot device to disk (Boot0000) for ncn-m001
+      INFO: Successfully set next boot device to disk (Boot0014) for ncn-m002
+      INFO: Successfully set next boot device to disk (Boot000F) for ncn-m003
+      INFO: Starting console logging on ncn-m002,ncn-m003.
+      INFO: Shutting down manager NCNs: ncn-m002, ncn-m003
+      INFO: Executing command on host "ncn-m002": `shutdown -h now`
+      INFO: Executing command on host "ncn-m003": `shutdown -h now`
+      INFO: Waiting up to 900 seconds for manager NCNs to shut down...
+      INFO: Stopping console logging on ncn-m002,ncn-m003.
+      INFO: Finding mounted RBD devices on ncn-m001
+      INFO: Found no mounted RBD devices on ncn-m001
+      INFO: Finding mounted Ceph or s3fs filesystems on ncn-m001
+      INFO: Found 3 mounted Ceph or s3fs filesystems on ncn-m001
+      INFO: Checking whether mounts are in use on ncn-m001
+      INFO: Checking whether mount point /var/opt/cray/config-data is in use on ncn-m001
+      INFO: Mount point /var/opt/cray/config-data is not in use on ncn-m001
+      INFO: Checking whether mount point /etc/cray/upgrade/csm is in use on ncn-m001
+      INFO: Mount point /etc/cray/upgrade/csm is not in use on ncn-m001
+      INFO: Checking whether mount point /var/opt/cray/sdu/collection-mount is in use on ncn-m001
+      INFO: Mount point /var/opt/cray/sdu/collection-mount is not in use on ncn-m001
+      INFO: All mount points are not in use and ready to be unmounted
+      INFO: Disabling cron job that ensures Ceph and s3fs filesystems are mounted on ncn-m001
+      INFO: Successfully disabled cron job on ncn-m001
+      INFO: Unmounting 3 filesystems on ncn-m001
+      INFO: Unmounting /var/opt/cray/config-data on ncn-m001
+      INFO: Successfully unmounted /var/opt/cray/config-data on ncn-m001
+      INFO: Unmounting /etc/cray/upgrade/csm on ncn-m001
+      INFO: Successfully unmounted /etc/cray/upgrade/csm on ncn-m001
+      INFO: Unmounting /var/opt/cray/sdu/collection-mount on ncn-m001
+      INFO: Successfully unmounted /var/opt/cray/sdu/collection-mount on ncn-m001
+      INFO: Successfully unmounted 3 filesystems on ncn-m001
+      INFO: Unmapping all RBD devices on ncn-m001
+      INFO: Successfully unmapped all RBD devices on ncn-m001
+      INFO: Successfully set next boot device to disk (Boot000F) for ncn-s001
+      INFO: Successfully set next boot device to disk (Boot000F) for ncn-s002
+      INFO: Successfully set next boot device to disk (Boot000F) for ncn-s003
+      INFO: Freezing Ceph and shutting down storage NCNs: ncn-s001, ncn-s002, ncn-s003
+      INFO: Checking Ceph health
+      INFO: Freezing Ceph
+      INFO: Running command: ceph osd set noout
+      INFO: Command output: noout is set
+      INFO: Running command: ceph osd set norecover
+      INFO: Command output: norecover is set
+      INFO: Running command: ceph osd set nobackfill
+      INFO: Command output: nobackfill is set
+      INFO: Ceph freeze completed successfully on storage NCNs.
+      INFO: Starting console logging on ncn-s001,ncn-s002,ncn-s003.
+      INFO: Executing command on host "ncn-s001": `shutdown -h now`
+      INFO: Executing command on host "ncn-s002": `shutdown -h now`
+      INFO: Executing command on host "ncn-s003": `shutdown -h now`
+      INFO: Waiting up to 900 seconds for storage NCNs to shut down...
+      INFO: Shutdown and power off of storage NCNs: ncn-s001, ncn-s002, ncn-s003
+      INFO: Stopping console logging on ncn-s001,ncn-s002,ncn-s003.
+      INFO: Shutdown and power off of all management NCNs complete.
+      INFO: Succeeded with shutdown of other management NCNs.
       ```
+
+      Manual intervention may be required in the above command if a timeout occurs while waiting for
+      nodes to gracefully power down or if mount points provided by Ceph are in use. See the
+      following sub-steps for how to proceed in either of those cases.
+
+      1. If any nodes fail to reach a powered off state, log messages and a prompt like the
+         following will be displayed:
+
+         ```text
+         ERROR: Waiting for condition "IPMI power off" timed out after 900 seconds
+         WARNING: The following nodes did not complete a graceful shutdown within the timeout: ncn-w003
+         Do you want to forcibly power off the nodes that timedout? [yes,no]
+         ```
+
+         Enter 'yes' at the prompt if you wish to perform a hard power off of these nodes. See the
+         next main step of the procedure for instructions on viewing console logs to see why the
+         node is still shutting down. The following messages will be logged if the prompt is
+         answered with 'yes':
+
+         ```text
+         INFO: Proceeding with hard power off.
+         INFO: Sending IPMI power off command to host ncn-w004
+         ```
+
+      1. If any filesystems provided by Ceph are in use, the command will log a message like the
+         following:
+
+         ```text
+         INFO: Mount point /etc/cray/upgrade/csm is in use by the following processes on ncn-m001:
+         INFO: COMMAND    PID USER   FD   TYPE DEVICE SIZE/OFF     NODE NAME
+         INFO: bash    560967 root  cwd    DIR 252,16     4096 63569921 /etc/cray/upgrade/csm
+         Some filesystems to be unmounted remain in use. Please address this before continuing.
+         Proceed with unmount of filesystems? [yes,no]
+         ```
+
+         The output of the `lsof` command is logged to help identify processes using the
+         filesystem(s). Stop all usages of the identified filesystems, and then enter 'yes' to
+         proceed with the next step of shutting down management NCNs. If 'no' is entered at the
+         prompt, run the `sat bootsys` command again when the filesystems are no longer in use.
 
    1. (`ncn-m001#`) Monitor the consoles for each NCN.
 
-      Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
+      Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN. For example,
+      to watch the console log for `ncn-w003`, use the following `tail` command:
 
-      Alternately attach to the screen session \(screen sessions real time, but not saved\):
+      ```text
+      tail -f /var/log/cray/console_logs/console-ncn-w003-mgmt.log
+      ```
+
+      Alternatively, attach to the screen session in which the `ipmitool sol activate` command is running. This allows for input to be provided on the console if needed.
+
+      List the screen sessions:
 
       ```bash
       screen -ls
@@ -201,37 +312,28 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
       ```text
       There are screens on:
-      26745.SAT-console-ncn-m003-mgmt (Detached)
-      26706.SAT-console-ncn-m002-mgmt (Detached)
-      26666.SAT-console-ncn-s003-mgmt (Detached)
-      26627.SAT-console-ncn-s002-mgmt (Detached)
-      26589.SAT-console-ncn-s001-mgmt (Detached)
       26552.SAT-console-ncn-w003-mgmt (Detached)
       26514.SAT-console-ncn-w002-mgmt (Detached)
       26444.SAT-console-ncn-w001-mgmt (Detached)
       ```
 
+      Attach to a screen session as follows:
+
       ```bash
-      screen -x 26745.SAT-console-ncn-w003-mgmt
+      screen -x 26552.SAT-console-ncn-w003-mgmt
       ```
 
-   1. (`ncn-m001#`) Check the power off status of management NCNs.
+      Detach from the screen session using `Ctrl + A` followed by `D`. This will leave the screen
+      session running in detached mode. The `sat bootsys` command will automatically exit screen
+      sessions when nodes have finished shutting down.
 
-       > NOTE: `read -s` is used to read the password in order to prevent it from being
-       > echoed to the screen or preserved in the shell history.
+   1. Proceed with the next step to shut down `ncn-m001` only when the `sat bootsys shutdown --stage ncn-power`
+      command has succeeded with the final messages:
 
-       ```bash
-       USERNAME=root
-       read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
-       ```
-
-       ```bash
-       export IPMI_PASSWORD
-       for ncn in $(echo "$MASTERS,$STORAGE,$WORKERS" | sed 's/,/ /g'); do
-           echo -n "${ncn}: "
-           ipmitool -U "${USERNAME}" -H "${ncn}-mgmt" -E -I lanplus chassis power status
-       done
-       ```
+      ```text
+      INFO: Shutdown and power off of all management NCNs complete.
+      INFO: Succeeded with shutdown of other management NCNs.
+      ```
 
 1. (`external#`) From a remote system, activate the serial console for `ncn-m001`.
 
