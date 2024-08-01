@@ -377,3 +377,24 @@ To add this record to the DNS configuration:
    ```
 
 See the [Unbound DNS documentation](https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#unbound-conf-local-data) for more information about `local-data` records.
+
+Custom records added using this procedure will persist through a CSM upgrade or an upgrade of the `cray-dns-unbound` Helm chart but will be removed if the `cray-dns-unbound`
+Helm chart is uninstalled and reinstalled. A backup of the records can be taken with the following command.
+
+```bash
+kubectl -n services get cm cray-dns-unbound -o yaml | yq4 '.data."custom_records.conf"'
+```
+
+Example output:
+
+```text
+# Add any additional local-data or local-data-ptr records here, one per line.
+# See https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#unbound-conf-local-data for syntax.
+# WARNING: Syntax errors here will cause Unbound to fail to start and the cluster DNS service will fail.
+#
+# Examples:
+# local-data: "axfr-service.example.com. A 10.252.4.254"
+# local-data-ptr: "10.252.4.254 axfr-service.example.com"
+# local-data: "_axfr-service._tcp.example.com. 3600 IN SRV 0 100 8080 axfr-service.example.com."
+local-data: "_slurm-host._tcp.local. 3600 IN SRV 0 100 6818 slurmctld-service.local."
+```
