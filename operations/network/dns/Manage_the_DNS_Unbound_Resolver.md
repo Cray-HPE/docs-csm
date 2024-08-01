@@ -398,3 +398,5 @@ Example output:
 # local-data: "_axfr-service._tcp.example.com. 3600 IN SRV 0 100 8080 axfr-service.example.com."
 local-data: "_slurm-host._tcp.local. 3600 IN SRV 0 100 6818 slurmctld-service.local."
 ```
+
+If the `cray-dns-unbound` Helm chart is reinstalled then the records can be restored by following this procedure again.
