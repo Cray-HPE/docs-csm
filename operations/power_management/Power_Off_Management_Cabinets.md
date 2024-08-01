@@ -1,6 +1,6 @@
 # Power Off Management Cabinets
 
-Power off PDUs and any remaining components in management cabinets which are powered on, such as Slingshot switches, management switches, and a KVM device.
+Power off PDUs and any remaining components in management cabinets which are powered on, such as HPE Slingshot switches, management switches, and a KVM device.
 
 ## Power Off Management Cabinet PDU circuit breakers
 
@@ -9,12 +9,14 @@ be powered off when it has been confirmed that the management Kubernetes cluster
 [Power Off the External File Systems](System_Power_Off_Procedures.md#Power_off_the_External_File_systems)
 and [Shut Down and Power Off the Management Kubernetes Cluster](Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md).
 
-1. (Optional) Power down Modular coolant distribution unit (MDCU) in a liquid-cooled HPE Cray EX2000 cabinet.
+1. (Optional) Power down the modular coolant distribution unit (MCDU) in a liquid-cooled HPE Cray EX2000 cabinet.
 
-   CAUTION: The modular coolant distribution unit (MDCU) in a liquid-cooled HPE Cray EX2000 cabinet (also
+   The MCDU in a liquid-cooled HPE Cray EX2000 cabinet (also
 referred to as a Hill or TDS cabinet) typically receives power from its management cabinet PDUs. If the
-system includes an EX2000 cabinet, then do not power off the management cabinet PDUs until the MDCU has
-been powered off. Powering off the MDCU will cause an emergency power off (EPO) of the cabinet and may
+system includes an EX2000 cabinet, then do not power off the management cabinet PDUs until the MCDU has
+been powered off. 
+
+   **WARNING:** Dropping power to the management cabinet PDUs without powering off the MCDU will cause an emergency power off (EPO) of the cabinet and may
 result in data loss or equipment damage.
 
 1. Set each management cabinet PDU circuit breaker to `OFF`.
