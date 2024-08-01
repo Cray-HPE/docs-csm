@@ -25,6 +25,8 @@ Once this step has completed:
 
 ## 2. Upgrade Kubernetes
 
+**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
+
 Follow the steps documented in [Stage 3.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_3.md#stage-36---complete-kubernetes-upgrade).
 
 ## 3. Next steps
@@ -33,6 +35,14 @@ Follow the steps documented in [Stage 3.6 - Complete Kubernetes upgrade](../../.
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)
   workflow to continue the install or upgrade.
 
-- If performing an upgrade that includes upgrading CSM, return to the
-  [Upgrade CSM and additional products with IUF](upgrade_csm_and_additional_products_with_iuf.md)
+- If performing an upgrade that includes upgrading CSM manually and additional products with IUF,
+  return to the [Upgrade CSM manually and additional products with IUF](upgrade_csm_manual_and_additional_products_with_iuf.md)
+  workflow to continue the upgrade.
+
+- If performing an upgrade that includes upgrading CSM and additional products with IUF,
+  return to the [Upgrade CSM and additional products with IUF](upgrade_csm_iuf_additional_products_with_iuf.md)
+  workflow to continue the upgrade.
+
+- If performing an upgrade that includes upgrading only CSM, return to the
+  [Upgrade only CSM through IUF](../../../upgrade/Upgrade_Only_CSM_with_iuf.md)
   workflow to continue the upgrade.
