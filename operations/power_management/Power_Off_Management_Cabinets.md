@@ -14,7 +14,7 @@ and [Shut Down and Power Off the Management Kubernetes Cluster](Shut_Down_and_Po
    The MCDU in a liquid-cooled HPE Cray EX2000 cabinet (also
 referred to as a Hill or TDS cabinet) typically receives power from its management cabinet PDUs. If the
 system includes an EX2000 cabinet, then do not power off the management cabinet PDUs until the MCDU has
-been powered off. 
+been powered off.
 
    **WARNING:** Dropping power to the management cabinet PDUs without powering off the MCDU will cause an emergency power off (EPO) of the cabinet and may
 result in data loss or equipment damage.
