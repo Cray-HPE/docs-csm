@@ -21,15 +21,18 @@ Example output:
 ```json
 {
   "cleanup_completed_session_ttl": "7d",
+  "clear_stage": false,
   "component_actual_state_ttl": "4h",
   "default_retry_policy": 3,
   "disable_components_on_completion": true,
   "discovery_frequency": 300,
-  "logging_level": "INFO",
-  "max_boot_wait_time": 600,
-  "max_power_off_wait_time": 180,
-  "max_power_on_wait_time": 30,
-  "polling_frequency": 60
+  "logging_level": "DEBUG",
+  "max_boot_wait_time": 1200,
+  "max_component_batch_size": 1800,
+  "max_power_off_wait_time": 300,
+  "max_power_on_wait_time": 120,
+  "polling_frequency": 15,
+  "session_limit_required": false
 }
 ```
 
@@ -79,6 +82,11 @@ The following are the BOS global options:
 
     How long BOS will wait for a node to boot into a usable state before rebooting it again (in seconds).
 
+* `max_component_batch_size`
+
+    The maximum number of components that BOS will group together in a single API request it makes. This can be used to limit the load
+    on other services by forcing BOS to break up its requests into smaller chunks.
+
 * `max_power_off_wait_time`
 
     How long BOS will wait for a node to power off before forcefully powering it off (in seconds).
@@ -90,3 +98,11 @@ The following are the BOS global options:
 * `polling_frequency`
 
     How frequently the BOS operators check component state for needed actions (in seconds).
+
+* `session_limit_required`
+
+    If enabled, BOS v2 sessions cannot be created without specifying the `limit` parameter.
+    This can be helpful in avoiding accidental reboots of more components than intended.
+    If this option is enabled, it is still possible to effectively create a session with no limit
+    by specifying `*` as the limit parameter (if this is done on the command line, it must be
+    quoted it in order to prevent it from being interpreted by the shell).
