@@ -1,4 +1,4 @@
-# HPE Cray EX255a Boot Issue with Console Parameter
+# HPE Cray `EX255a` Boot Issue with Console Parameter
 
 - [Description](#description)
 - [Workaround](#workaround)
