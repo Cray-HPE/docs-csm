@@ -1,15 +1,15 @@
-# Parry Peak Boot Issue with Console Parameter
+#  HPE Cray EX255a Boot Issue with Console Parameter
 
 - [Description](#description)
 - [Workaround](#workaround)
 
 ## Description
 
-Parry Peak hardware has an issue in it's firmware configuration that causes boots to stall when configured to use the default kernel serial port `ttyS0` which is provided in the compute image created during installation of CSM 1.5.2.
+ HPE Cray EX255a hardware has an issue in it's firmware configuration that causes boots to stall when configured to use the default kernel serial port `ttyS0` which is provided in the compute image created during installation of CSM 1.5.2.
 
 ## Workaround
 
-1. (`ncn-mw#`) Follow the steps for [customizing](../../operations/image_management/Customize_an_Image_Root_Using_IMS.md) an image to be used for booting Parry Peak hardware.
+1. (`ncn-mw#`) Follow the steps for [customizing](../../operations/image_management/Customize_an_Image_Root_Using_IMS.md) an image to be used for booting  HPE Cray EX255a hardware.
 
     ```bash
     cray ims jobs create --public-key-id $PK_ID --job-type customize --artifact-id $IMAGE_ID --image-root-archive-name $NEW_IMAGE_NAME
@@ -73,5 +73,5 @@ Parry Peak hardware has an issue in it's firmware configuration that causes boot
    ```
 
 1. Once the image is finished customization and has been bundled and uploaded to `s3`, create or copy a BOS [template](../../operations/boot_orchestration/Session_Templates.md) that references the new image id and `etag`.
-   Optionally, you can add a `node_list` within the template to specifically target Parry Peak nodes or you can use the BOS limit option when creating a session to specify only Parry Peak xnames . Once this is complete,
-   Parry Peak hardware should successfully boot with the given created BOS template.
+   Optionally, you can add a `node_list` within the template to specifically target  HPE Cray EX255a nodes or you can use the BOS limit option when creating a session to specify only  HPE Cray EX255a xnames . Once this is complete,
+   HPE Cray EX255a hardware should successfully boot with the given created BOS template.
