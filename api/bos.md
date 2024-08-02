@@ -4104,7 +4104,8 @@ Update one or more of the BOS service options.
   "max_power_off_wait_time": 1048576,
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
-  "max_component_batch_size": 1000
+  "max_component_batch_size": 1000,
+  "session_limit_required": true
 }
 ```
 
@@ -4131,7 +4132,8 @@ Update one or more of the BOS service options.
   "max_power_off_wait_time": 1048576,
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
-  "max_component_batch_size": 1000
+  "max_component_batch_size": 1000,
+  "session_limit_required": true
 }
 ```
 
@@ -4332,7 +4334,8 @@ Retrieve the list of BOS service options.
   "max_power_off_wait_time": 1048576,
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
-  "max_component_batch_size": 1000
+  "max_component_batch_size": 1000,
+  "session_limit_required": true
 }
 ```
 
@@ -4945,6 +4948,8 @@ A comma-separated list of nodes, groups, or roles to which the Session
 will be limited. Components are treated as OR operations unless
 preceded by "&" for AND or "!" for NOT.
 
+Alternatively, the limit can be set to "*", which means no limit.
+
 It is recommended that this should be 1-65535 characters in length.
 
 This restriction is not enforced in this version of BOS, but it is
@@ -4954,7 +4959,7 @@ targeted to start being enforced in an upcoming BOS version.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 
 <h2 id="tocS_SessionTemplateDescription">SessionTemplateDescription</h2>
 <!-- backwards compatibility -->
@@ -5306,7 +5311,8 @@ Operation -- An operation to perform on Components in this Session.
 
 ```
 
-A Session Creation object. A UUID name is generated if a name is not provided.
+A Session Creation object. A UUID name is generated if a name is not provided. The limit parameter is
+required if the session_limit_required option is true.
 
 ### Properties
 
@@ -5315,7 +5321,7 @@ A Session Creation object. A UUID name is generated if a name is not provided.
 |name|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
 |operation|[V2SessionOperation](#schemav2sessionoperation)|true|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
 |template_name|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |stage|boolean|false|none|Set to stage a Session which will not immediately change the state of any Components.<br>The "applystaged" endpoint can be called at a later time to trigger the start of this Session.|
 |include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM).|
 
@@ -5608,7 +5614,7 @@ A Session object
 |tenant|[V2TenantName](#schemav2tenantname)|false|none|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same.|
 |operation|[V2SessionOperation](#schemav2sessionoperation)|false|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
 |template_name|[SessionTemplateName](#schemasessiontemplatename)|false|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |stage|boolean|false|none|Set to stage a Session which will not immediately change the state of any Components.<br>The "applystaged" endpoint can be called at a later time to trigger the start of this Session.|
 |components|string|false|none|A comma-separated list of nodes, representing the initial list of nodes<br>the Session should operate against.  The list will remain even if<br>other Sessions have taken over management of the nodes.|
 |include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM).|
@@ -6471,7 +6477,8 @@ Mapping from Component staged Session statuses to Components with that status.
   "max_power_off_wait_time": 1048576,
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
-  "max_component_batch_size": 1000
+  "max_component_batch_size": 1000,
+  "session_limit_required": true
 }
 
 ```
@@ -6493,5 +6500,6 @@ Options for the Boot Orchestration Service.
 |max_power_off_wait_time|integer|false|none|How long BOS will wait for a node to power off before forcefully powering off (in seconds)|
 |polling_frequency|integer|false|none|How frequently the BOS operators check Component state for needed actions. (in seconds)|
 |default_retry_policy|integer|false|none|The default maximum number attempts per node for failed actions.|
-|max_component_batch_size|integer|false|none|The maximum number of components that a BOS operator will process at once. 0 means no limit.|
+|max_component_batch_size|integer|false|none|The maximum number of Components that a BOS operator will process at once. 0 means no limit.|
+|session_limit_required|boolean|false|none|If true, Sessions cannot be created without specifying the limit parameter.|
 
