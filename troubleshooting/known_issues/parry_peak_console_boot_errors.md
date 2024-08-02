@@ -73,4 +73,5 @@ Parry Peak hardware has an issue in it's firmware configuration that causes boot
    ```
 
 1. Once the image is finished customization and has been bundled and uploaded to `s3`, create or copy a BOS [template](../../operations/boot_orchestration/Session_Templates.md) that references the new image id and `etag`.
-   Optionally, you can add a node_list within the template to specifcally target Parry Peak nodes or you can use the BOS limit option when creating a session to specify only Parry Peak xnames . Once this is complete, Parry Peak hardware should successfully boot with the given created BOS template.
+   Optionally, you can add a `node_list` within the template to specifically target Parry Peak nodes or you can use the BOS limit option when creating a session to specify only Parry Peak xnames . Once this is complete, 
+   Parry Peak hardware should successfully boot with the given created BOS template.
