@@ -387,7 +387,7 @@ kubectl -n services get cm cray-dns-unbound -o yaml | yq4 '.data."custom_records
 
 Example output:
 
-```text
+```yaml
 # Add any additional local-data or local-data-ptr records here, one per line.
 # See https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#unbound-conf-local-data for syntax.
 # WARNING: Syntax errors here will cause Unbound to fail to start and the cluster DNS service will fail.
