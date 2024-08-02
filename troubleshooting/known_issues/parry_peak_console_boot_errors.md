@@ -17,7 +17,7 @@ Parry Peak hardware has an issue in it's firmware configuration that causes boot
 
     Example output:
 
-    ```text
+    ```toml
     artifact_id = "fdc16942-ba1d-49b5-a4a2-0c7bbce8bb68"
     job_type = "customize"
     image_root_archive_name = "uss-compute-jsmit-test"
