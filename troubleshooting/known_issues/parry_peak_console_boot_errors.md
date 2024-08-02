@@ -10,7 +10,7 @@ Parry Peak hardware has an issue in it's firmware configuration that causes boot
 
 ## Workaround 
 
-1. (`ncn-mw#`) Customize the image to be used for booting with Parry Peak hardware.
+1. (`ncn-mw#`) Follow the steps for [customizing](../../operations/image_management/Customize_an_Image_Root_Using_IMS.md) an image to be used for booting with Parry Peak hardware.
 
     ```bash
     cray ims jobs create --public-key-id $PK_ID --job-type customize --artifact-id $IMAGE_ID --image-root-archive-name $NEW_IMAGE_NAME
@@ -70,8 +70,8 @@ Parry Peak hardware has an issue in it's firmware configuration that causes boot
 1. Finish the customization session.
 
    ```bash
-   touch /tmp/complete
+   touch /mnt/image/complete
    ```
 
-1. Once the image is finished customization and has been bundled and uploaded to `s3`, create or copy a BOS template that references the new image id and `etag`. Once this is complete, Parry Peak hardware should 
+1. Once the image is finished customization and has been bundled and uploaded to `s3`, create or copy a BOS [template](../../operations/boot_orchestration/Session_Templates.md) that references the new image id and `etag`. Once this is complete, Parry Peak hardware should 
 successfully boot with the given created BOS template.
