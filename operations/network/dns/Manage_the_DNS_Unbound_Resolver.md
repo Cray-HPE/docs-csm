@@ -11,6 +11,7 @@ This instance is accessible only within the HPE Cray EX system.
 - [Change the site DNS server](#change-the-site-dns-server)
 - [Increase the number of Unbound pods](#increase-the-number-of-unbound-pods)
 - [Change which HSN NIC is used for the node alias](#change-which-hsn-nic-is-used-for-the-node-alias)
+- [Create custom DNS records](#create-custom-dns-records)
 
 ## Check the status of the `cray-dns-unbound` pods
 
@@ -89,10 +90,10 @@ If there are any errors in the Unbound logs:
 
 - The `using localzone health.check.unbound. transparent` log is not an issue.
 - Typically, any error seen in Unbound, including the example above, falls under one of two categories:
-  - A bad configuration from a misconfiguration in the Helm chart. Currently, only the site/external DNS lookup can be at fault.
-    - **ACTION:** See the `customization.yaml` file and look at the `system_to_site_lookup` values. Ensure that the external lookup values are valid and working.
-  - Bad data \(as shown in the above example\) comes only from the DNS Helper and can be seen in the manager logs.
-    - **ACTION:** See [View manager (DNS Helper) logs](#view-manager-dns-helper-logs).
+    - A bad configuration from a misconfiguration in the Helm chart. Currently, only the site/external DNS lookup can be at fault.
+        - **ACTION:** See the `customization.yaml` file and look at the `system_to_site_lookup` values. Ensure that the external lookup values are valid and working.
+    - Bad data \(as shown in the above example\) comes only from the DNS Helper and can be seen in the manager logs.
+        - **ACTION:** See [View manager (DNS Helper) logs](#view-manager-dns-helper-logs).
 
 ## View manager \(DNS Helper\) logs
 
@@ -124,12 +125,12 @@ The healthy states are described below, as long as the write to the ConfigMap ha
 The manager runs periodically, about once every minute. Check if this is a one-time occurrence or if it is a recurring issue.
 
 - If the error shows in one manager log, but not during the next one, then this is likely a one-time failure.
-  - Check to see if the record exists in DNS, and if so, move on.
+    - Check to see if the record exists in DNS, and if so, move on.
 - If several or all manager logs show errors, particularly the same error, then this could be one of several sources:
-  - Bad network connections to DHCP or SLS/SMD.
-    - **ACTION:** Capture as much log data as possible and contact customer support.
-  - Bad data from DHCP or SLS/SMD.
-    - **ACTION:** If connections to DHCP \(Kea\) are involved, then refer to [Troubleshoot DHCP Issues](../dhcp/Troubleshoot_DHCP_Issues.md).
+    - Bad network connections to DHCP or SLS/SMD.
+        - **ACTION:** Capture as much log data as possible and contact customer support.
+    - Bad data from DHCP or SLS/SMD.
+        - **ACTION:** If connections to DHCP \(Kea\) are involved, then refer to [Troubleshoot DHCP Issues](../dhcp/Troubleshoot_DHCP_Issues.md).
 
 ## Restart Unbound
 
@@ -305,3 +306,97 @@ This behaviour is configurable, use the following procedure to change the HSN NI
       kubectl delete secret -n loftsman site-init
       kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
       ```
+
+## Create custom DNS records
+
+It may be desirable to add custom records to the DNS service, for example a "service" (`SRV`) record for a Workload Manager to allow clients to determine the host
+and port of this service. This can be achieved by adding `local-data` or `local-data-ptr` records to the `custom_records.conf` key of the `cray-dns-unbound` ConfigMap.
+
+The following example will create a `SRV` record for the `slurm-host` service in the `local` domain which uses the `TCP` protocol, port `6817`,  and will point to the
+existing `slurmctld-service.local` record.
+
+A `SRV` record has the following format:
+
+```text
+_service._protocol.name. TTL class type of record priority weight port target.
+```
+
+So the `slurm-host` record would be formatted as:
+
+```text
+_slurm-host._tcp.local. 3600 IN SRV 10 0 6817 slurmctld-service.local.
+```
+
+To add this record to the DNS configuration:
+
+1. (`ncn-mw#`) Add the record to the `cray-dns-unbound` ConfigMap.
+
+   1. Edit the `cray-dns-unbound` ConfigMap.
+
+      ```bash
+      kubectl -n services edit cm cray-dns-unbound
+      ```
+
+   2. Add the record to the `custom_records.conf` key of the ConfigMap.
+
+      **IMPORTANT:** Syntax errors in `custom_records.conf` may cause the DNS service to fail if the configuration cannot be parsed by the server.
+
+      Example output:
+
+      ```yaml
+      data:
+        custom_records.conf: |-
+          # Add any additional local-data or local-data-ptr records here, one per line.
+          # See https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#unbound-conf-local-data for syntax.
+          # WARNING: Syntax errors here will cause Unbound to fail to start and the cluster DNS service will fail.
+          #
+          # Examples:
+          # local-data: "axfr-service.example.com. A 10.252.4.254"
+          # local-data-ptr: "10.252.4.254 axfr-service.example.com"
+          # local-data: "_axfr-service._tcp.example.com. 3600 IN SRV 0 100 8080 axfr-service.example.com."
+          local-data: "_slurm-host._tcp.local. 3600 IN SRV 0 100 6818 slurmctld-service.local."
+      ```
+
+      Once saved, the `cray-dns-unbound` service will automatically pick up the record on the next refresh cycle. It may take up to 90 seconds for all replicas of the `cray-dns-unbound` service to be consistent.
+
+1. (`ncn-mw#`) Query the DNS service to verify the record was created.
+
+   ```bash
+   host -t SRV _slurm-host._tcp.local. 10.92.100.225
+   ```
+
+   Example output:
+
+   ```text
+   Using domain server:
+   Name: 10.92.100.225
+   Address: 10.92.100.225#53
+   Aliases:
+
+   _slurm-host._tcp.local has SRV record 0 100 6818 slurmctld-service.local.
+   ```
+
+See the [Unbound DNS documentation](https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#unbound-conf-local-data) for more information about `local-data` records.
+
+Custom records added using this procedure will persist through a CSM upgrade or an upgrade of the `cray-dns-unbound` Helm chart but will be removed if the `cray-dns-unbound`
+Helm chart is uninstalled and reinstalled. A backup of the records can be taken with the following command.
+
+```bash
+kubectl -n services get cm cray-dns-unbound -o yaml | yq4 '.data."custom_records.conf"'
+```
+
+Example output:
+
+```yaml
+# Add any additional local-data or local-data-ptr records here, one per line.
+# See https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html#unbound-conf-local-data for syntax.
+# WARNING: Syntax errors here will cause Unbound to fail to start and the cluster DNS service will fail.
+#
+# Examples:
+# local-data: "axfr-service.example.com. A 10.252.4.254"
+# local-data-ptr: "10.252.4.254 axfr-service.example.com"
+# local-data: "_axfr-service._tcp.example.com. 3600 IN SRV 0 100 8080 axfr-service.example.com."
+local-data: "_slurm-host._tcp.local. 3600 IN SRV 0 100 6818 slurmctld-service.local."
+```
+
+If the `cray-dns-unbound` Helm chart is reinstalled then the records can be restored by following this procedure again.
