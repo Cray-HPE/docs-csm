@@ -5,7 +5,7 @@
 
 ## Description
 
-  `HPE Cray EX255a` hardware has an issue in it's firmware configuration that causes boots to stall when configured to use the default kernel serial port `ttyS0` which is provided in the compute image created during installation of CSM 1.5.2.
+  `HPE Cray EX255a` hardware has an issue in BIOS versions 1.1.0 and earlier that causes boots to stall when configured to use the default kernel serial port `ttyS0` which is provided in the compute image created during installation of CSM 1.5.2.
 
 ## Workaround
 
@@ -24,7 +24,7 @@
     status = "creating"
     require_dkms = false
     job_mem_size = 8
-    public_key_id = "b815341b-d096-47fa-aa92-11a673b9bb69"
+    public_key_id = "<public_key_id>"
     remote_build_node = ""
     arch = "x86_64"
     enable_debug = false
@@ -72,6 +72,5 @@
    touch /mnt/image/complete
    ```
 
-1. Once the image is finished customization and has been bundled and uploaded to `s3`, create or copy a BOS [template](../../operations/boot_orchestration/Session_Templates.md) that references the new image id and `etag`.
-   Optionally, you can add a `node_list` within the template to specifically target `HPE Cray EX255a` nodes or you can use the BOS limit option when creating a session to specify only `HPE Cray EX255a` xnames . Once this is complete,
-   `HPE Cray EX255a` hardware should successfully boot with the given created BOS template.
+1. Once the image has finished customization and has been bundled and uploaded to `s3`, create or copy a BOS [template](../../operations/boot_orchestration/Session_Templates.md) that references the new image id and `etag`.
+   Optionally, you can add a `node_list` within the template to specifically target `HPE Cray EX255a` nodes, or you can use the BOS limit option when creating a session to specify only `HPE Cray EX255a` xnames. Another option available would be to create a custom group for `HPE Cray EX255a` hardware using HSM and to reference that group using the `node_groups` feature within your BOS template, this will allow for specifying the hardware without the need for referencing indivdual nodes each time in the session template. Once this is complete, `HPE Cray EX255a` hardware should successfully boot using the BOS template created previously.
