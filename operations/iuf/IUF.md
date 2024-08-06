@@ -34,9 +34,9 @@ df -h /
 Example output:
 
 ```text
-nproc --all
+# nproc --all
 40
-df -h /
+# df -h /
 Filesystem      Size    Used     Avail   Use%  Mounted on
 LiveOS_rootfs   <N>G    <M>G     <N-M>G  45%   /
 ```
