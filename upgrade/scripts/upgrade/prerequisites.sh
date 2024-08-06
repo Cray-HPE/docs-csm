@@ -642,6 +642,25 @@ else
 fi
 >>>>>>> 415f6c7a14 (Pre-cache istio images)
 
+# Cleanup for Kiali configmaps
+
+state_name="KIALI CLEANUP FOR DELETING OLD CONFIGMAPS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    echo "Cleaning up old Configmap of Kiali"
+    cmap=$(kubectl get cm -n istio-system -l app=kiali,app.kubernetes.io/instance=kiali,app.kubernetes.io/name=kiali,app.kubernetes.io/part-of=kiali -o name)
+    if [ -n "$cmap" ]; then
+      kubectl delete -n istio-system "$cmap"
+    fi
+    echo "Configmap deleted"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 # upgrade all charts dependent on cray-certmanager chart
 # it is neccessary to upgrade these before upgrade
 do_upgrade_csm_chart cray-istio-operator platform.yaml
@@ -655,15 +674,25 @@ do_upgrade_csm_chart cray-tapms-crd sysmgmt.yaml
 do_upgrade_csm_chart cray-tapms-operator sysmgmt.yaml
 
 # Running the rollout restart script to restart the required resources in istio-injection=enabled namespaces.
-bash rollout-restart.sh
+state_name="RESTART_SERVICES_REFRESH_ISTIO"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    bash rollout-restart.sh
 
-# Checking the 
-if [ $? -eq 0 ]; then
-    echo "Rollout restart was executed successfully."
+    # Checking the status
+    if [ $? -eq 0 ]; then
+        echo "Rollout-restart was executed successfully."
+    else
+        echo "Rollout-restart failed."
+    fi
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "Rollout-restart failed."
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
-
+ 
 # Note for csm 1.5/k8s 1.22 only if ANY chart depends on /v1 cert-manager api
 # usage it *MUST* come after this or prerequisites will fail on an upgrade.
 # Helper functions for cert-manager upgrade
