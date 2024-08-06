@@ -58,13 +58,13 @@
    ssh 066423ff-2704-4e3f-9df4-82eb210d776b.ims.cmn.vidar.hpc.amslabs.hpecorp.net
    ```
 
-1. Navigate to the boot directory of the image to be customized
+1. Navigate to the boot directory of the image to be customized.
 
    ```bash
    cd /mnt/image/image-root/boot
    ```
 
-1. Edit the kernel-parameters file and change `console=ttyS0,115200` to `console=ttyS1,115200`
+1. Edit the kernel-parameters file and change `console=ttyS0,115200` to `console=ttyS1,115200`.
 
 1. Finish the customization session.
 
