@@ -22,7 +22,7 @@ Argo workflows based on the subcommand specified. The Argo workflows are not con
 `iuf` does display status to the administrator as the Argo workflows execute.
 
 **`NOTE`** Before starting, [Validate CSM Health](../validate_csm_health.md). Ensure sufficient memory, CPU and disk usage
-is available (example commands given below as reference only, do change accordingly based on number of products used by IUF).
+is available (the following example commands are for reference only; change them accordingly based on number of products used by IUF).
 
 (`ncn-m001#`) List processors and disk usage using built-in commands `nproc` and `df`.
 
