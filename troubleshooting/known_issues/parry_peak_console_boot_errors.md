@@ -73,6 +73,6 @@
    ```
 
 1. Once the image has finished customization and has been bundled and uploaded to `s3`, create or copy a BOS [template](../../operations/boot_orchestration/Session_Templates.md) that references the new image id and `etag`.
-   Optionally, you can add a `node_list` within the template to specifically target `HPE Cray EX255a` nodes, or you can use the BOS limit option when creating a session to specify only `HPE Cray EX255a` xnames. 
+   Optionally, you can add a `node_list` within the template to specifically target `HPE Cray EX255a` nodes, or you can use the BOS limit option when creating a session to specify only `HPE Cray EX255a` xnames.
    Another option available would be to create a custom group for `HPE Cray EX255a` hardware using HSM and to reference that group using the `node_groups` feature within your BOS template.
    This will allow for specifying the hardware without referencing individual nodes each time in the session template. Once this is complete, `HPE Cray EX255a` hardware should successfully boot using the BOS template created previously.
