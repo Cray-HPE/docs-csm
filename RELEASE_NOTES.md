@@ -233,3 +233,5 @@ see [Removals](introduction/deprecated_features/README.md#removals)
 * The [BOS](glossary.md#boot-orchestration-service-bos) v2 "applystaged" endpoint is broken in CSM 1.5. This endpoint is used to execute a rolling reboot.
     * This is expected to be fixed in CSM 1.6.
     * For more information see [Rolling reboots](troubleshooting/known_issues/rolling_reboots.md).
+* The [multi-tenancy](operations/multi-tenancy/Overview.md) feature is broken in CSM 1.5.
+    * This is expected to be fixed in CSM 1.5.3.
