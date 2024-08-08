@@ -679,14 +679,7 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
-    bash rollout-restart.sh
-
-    # Checking the status
-    if [ $? -eq 0 ]; then
-        echo "Rollout-restart was executed successfully."
-    else
-        echo "Rollout-restart failed."
-    fi
+    "${locOfScript}/rollout-restart.sh"
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
