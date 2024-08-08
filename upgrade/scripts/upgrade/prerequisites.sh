@@ -627,7 +627,7 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
-    istio_images=$(yq r -j "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-precache-images).values.cacheImages' | jq -r '.[] | select( . | contains("istio"))')
+    istio_images=$(yq r -j "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-precache-images).values.cacheImages' | jq -r '.[] | select( . | (contains("istio") or contains("docker-kubectl")))')
     worker_nodes=$(grep -oP "(ncn-w\d+)" /etc/hosts | sort -u)
     while read -r istio_image; do
       while read -r worker_node; do
