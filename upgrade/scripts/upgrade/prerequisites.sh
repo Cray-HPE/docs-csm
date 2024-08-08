@@ -644,7 +644,7 @@ fi
 
 # Cleanup for Kiali configmaps
 
-state_name="KIALI CLEANUP FOR DELETING OLD CONFIGMAPS"
+state_name="KIALI_CLEANUP"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
