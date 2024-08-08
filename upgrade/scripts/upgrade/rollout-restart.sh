@@ -1,5 +1,46 @@
 #!/bin/bash
 
+# MIT License
+#
+# (C) Copyright 2024 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+# When upgrading from Istio 1.11.8 to 1.19.10 we need to rollout-restart because
+# the istio-injection enabled namespaces doesn't get the latest image of istio.
+#
+# The fuctionality of the script is:
+# Get all istio-injection=enabled namespaces.
+# For each namespace we are keeping the record of the sts/deploys/ds which we need to restart by following way:
+#   Get all the pods in the namespace, and check istio image version.
+#   if image is not in 1.19.10 then
+#       Keep the name of the corresponding ds/sts/deploy in a list.
+#   Else move to another pod.
+# After iterating over all the namespaces we will have the list of sts/ds/deploys that needs to be restarted.
+# We will restart the resources from the list that we have made in above steps.
+# We will wait for 2-3 mins and check the rollout status for the resources.
+
+
+
+
+set -x
+
 # Function to check if any container in a pod has the latest Istio image version
 check_pod_istio_versions() {
         local namespace=$1
