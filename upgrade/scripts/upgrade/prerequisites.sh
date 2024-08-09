@@ -642,8 +642,26 @@ else
 fi
 >>>>>>> 415f6c7a14 (Pre-cache istio images)
 
-# Cleanup for Kiali configmaps
+# Update fs.inotify.max_user_* sysctl settings on running CSM 1.5 nodes. This setting will be persisted
+# on new CSM 1.6 nodes, but istio is upgraded before nodes are rebuilt, so we need to modify settings on running worker nodes.
+state_name="UPDATE_SYSCTL"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    worker_nodes=$(grep -oP "(ncn-w\d+)" /etc/hosts | sort -u)
+    while read -r worker_node; do
+      echo "Updating sysctl settings on node ${worker_node}"
+      ssh -n "${worker_node}" "sysctl -w fs.inotify.max_user_watches=1048576"
+      ssh -n "${worker_node}" "sysctl -w fs.inotify.max_user_instances=1024"
+    done <<< "${worker_nodes}"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
 
+# Cleanup for Kiali configmaps
 state_name="KIALI_CLEANUP"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
