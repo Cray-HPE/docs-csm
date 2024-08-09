@@ -666,6 +666,7 @@ fi
 do_upgrade_csm_chart cray-istio-operator platform.yaml
 do_upgrade_csm_chart cray-istio-deploy platform.yaml
 do_upgrade_csm_chart cray-istio platform.yaml
+do_upgrade_csm_chart cray-kiali platform.yaml
 do_upgrade_csm_chart cray-keycloak platform.yaml
 do_upgrade_csm_chart cray-oauth2-proxies platform.yaml
 do_upgrade_csm_chart spire sysmgmt.yaml
