@@ -1263,6 +1263,55 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="PREPARE_KUBEADM"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    tmpdir=$(mktemp -d)
+
+    echo "Patching ConfigMap kubeadm-config ..."
+    kubectl -n kube-system get configmap kubeadm-config -o go-template --template '{{ .data.ClusterConfiguration }}' \
+      | yq4 e '.kubernetesVersion="1.24.17"' \
+      | yq4 e '.dns.imageRepository="artifactory.algol60.net/csm-docker/stable/registry.k8s.io/coredns"' \
+      | yq4 e '.imageRepository="artifactory.algol60.net/csm-docker/stable/registry.k8s.io"' \
+        > "${tmpdir}/kubeadm-config.yaml"
+    patch=$(jq -c -n --rawfile text "${tmpdir}/kubeadm-config.yaml" '.data["ClusterConfiguration"]=$text')
+    kubectl -n kube-system patch configmap kubeadm-config --type merge --patch "${patch}"
+
+    echo "Creating ConfigMap kubelet-config-1.24 ..."
+    kubectl -n kube-system get configmap kubelet-config-1.22 -o yaml \
+      | yq4 e '.metadata.name="kubelet-config-1.24"' \
+      | yq4 e 'del .metadata.creationTimestamp' \
+      | yq4 e 'del .metadata.resourceVersion' \
+      | yq4 e 'del .metadata.uid' \
+      | kubectl apply -f -
+
+    echo "Creating Role kubeadm:kubelet-config-1.24 ..."
+    kubectl -n kube-system get role kubeadm:kubelet-config-1.22 -o yaml \
+      | yq4 e '.metadata.name="kubeadm:kubelet-config-1.24"' \
+      | yq4 e '.rules[0].resourceNames[0]="kubelet-config-1.24"' \
+      | yq4 e 'del .metadata.creationTimestamp' \
+      | yq4 e 'del .metadata.resourceVersion' \
+      | yq4 e 'del .metadata.uid' \
+      | kubectl apply -f -
+
+    echo "Creating RoleBinding kubeadm:kubelet-config-1.24 ..."
+    kubectl -n kube-system get rolebinding kubeadm:kubelet-config-1.22 -o yaml \
+      | yq4 e '.metadata.name="kubeadm:kubelet-config-1.24"' \
+      | yq4 e '.roleRef.name="kubeadm:kubelet-config-1.24"' \
+      | yq4 e 'del .metadata.creationTimestamp' \
+      | yq4 e 'del .metadata.resourceVersion' \
+      | yq4 e 'del .metadata.uid' \
+      | kubectl apply -f -
+
+    rm -rf "${tmpdir}"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="PREFLIGHT_CHECK"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" ]]; then
