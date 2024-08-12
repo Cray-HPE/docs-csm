@@ -661,6 +661,13 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# upgrade all charts dependent on cray-certmanager chart
+# it is neccessary to upgrade these before upgrade
+do_upgrade_csm_chart cray-istio-operator platform.yaml
+do_upgrade_csm_chart cray-istio-deploy platform.yaml
+do_upgrade_csm_chart cray-istio platform.yaml
+do_upgrade_csm_chart cray-kiali platform.yaml
+
 # Cleanup for Kiali configmaps
 state_name="KIALI_CLEANUP"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
@@ -673,18 +680,18 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
       kubectl delete -n istio-system "$cmap"
     fi
     echo "Configmap deleted"
+
+    opr=$(kubectl get po -n istio-system -l app=kiali,app.kubernetes.io/instance=kiali,app.kubernetes.io/name=kiali,app.kubernetes.io/part-of=kiali -o name)
+    if [ -n "$opr" ]; then
+      kubectl delete -n istio-system "$opr" --grace-period=0 --force
+    fi
+    echo "Kiali Operator restarted"
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-# upgrade all charts dependent on cray-certmanager chart
-# it is neccessary to upgrade these before upgrade
-do_upgrade_csm_chart cray-istio-operator platform.yaml
-do_upgrade_csm_chart cray-istio-deploy platform.yaml
-do_upgrade_csm_chart cray-istio platform.yaml
-do_upgrade_csm_chart cray-kiali platform.yaml
 do_upgrade_csm_chart cray-keycloak platform.yaml
 do_upgrade_csm_chart cray-oauth2-proxies platform.yaml
 do_upgrade_csm_chart spire sysmgmt.yaml
