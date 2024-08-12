@@ -704,7 +704,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
- 
+
 # Note for csm 1.5/k8s 1.22 only if ANY chart depends on /v1 cert-manager api
 # usage it *MUST* come after this or prerequisites will fail on an upgrade.
 # Helper functions for cert-manager upgrade

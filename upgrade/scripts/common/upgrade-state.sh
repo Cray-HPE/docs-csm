@@ -26,7 +26,7 @@
 CSM_REL_NAME=${CSM_REL_NAME-"csm-${CSM_RELEASE}"}
 CSM_REL_DIR="/etc/cray/upgrade/csm/${CSM_REL_NAME}"
 mkdir -p ${CSM_REL_DIR}
-PREREQS_DONE_FILE="${CSM_REL_DIR}/prereqs.done"
+export PREREQS_DONE_FILE="${CSM_REL_DIR}/prereqs.done"
 
 function record_state() {
   state_name=$1
