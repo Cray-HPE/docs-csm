@@ -239,6 +239,13 @@ with system-specific customizations.
             -keystore /data/certs.jks -storepass password -noprompt
     ```
 
+    > **`NOTE`** If the command is executed multiple times by oversight, then console displays as below and may be ignored
+    > to proceed further.
+
+    ```test 
+    keytool error: java.lang.Exception: Certificate not imported, alias <cray-data-center-ca> already exists
+    ```
+
 1. (`pit#`) Create `certs.jks.b64` by base-64 encoding `certs.jks`.
 
     ```bash
