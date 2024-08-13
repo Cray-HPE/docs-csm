@@ -71,6 +71,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [CFS V2 Failures On Large Systems](known_issues/CFS_V2_Failures_On_Large_Systems.md)
 - [Product Catalog Upgrade Error](known_issues/product_catalog_upgrade_error.md)
 - [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
+- [PCS and CAPMC Transaction Size Limitation](known_issues/pcs_and_capmc_transaction_size_limitation.md)
 
 ## Booting
 
