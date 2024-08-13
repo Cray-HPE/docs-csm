@@ -159,16 +159,14 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
    INFO: Mounting fuse.s3fs filesystem on /var/opt/cray/config-data.
    INFO: Successfully mounted fuse.s3fs filesystem on /var/opt/cray/config-data.
    INFO: Successfully restarted 'cray-sdu-rda' service on ncn-m001
-   INFO: Powering on NCNs and waiting up to 900 seconds for them to be reachable via SSH: ncn-m002, ncn-m003
-   INFO: Sending IPMI power on command to host ncn-m002
-   INFO: Sending IPMI power on command to host ncn-m003
-   INFO: Powered on NCNs: ncn-m002, ncn-m003
-   INFO: Powering on NCNs and waiting up to 900 seconds for them to be reachable via SSH: ncn-w001, ncn-w002, ncn-w003
-   INFO: Sending IPMI power on command to host ncn-w003
+   INFO: Powering on NCNs and waiting up to 900 seconds for them to be reachable via SSH: ncn-m002, ncn-m003,ncn-w001, ncn-w002, ncn-w003
    INFO: Sending IPMI power on command to host ncn-w001
+   INFO: Sending IPMI power on command to host ncn-m002
+   INFO: Sending IPMI power on command to host ncn-w003
    INFO: Sending IPMI power on command to host ncn-w002
-   INFO: Powered on NCNs: ncn-w001, ncn-w002, ncn-w003
-   INFO: Stopping console logging on ncn-s003,ncn-m002,ncn-w001,ncn-m003,ncn-w003,ncn-s002,ncn-s001,ncn-w002.
+   INFO: Sending IPMI power on command to host ncn-m003
+   INFO: Powered on NCNs: ncn-m002, ncn-m003, ncn-w001, ncn-w002, ncn-w003
+   INFO: Stopping console logging on ncn-s001,ncn-w001,ncn-m002,ncn-w003,ncn-s003,ncn-s002,ncn-w002,ncn-m003.
    INFO: Succeeded with boot of other management NCNs.
    ```
 
