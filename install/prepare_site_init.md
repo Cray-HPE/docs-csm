@@ -238,7 +238,7 @@ with system-specific customizations.
             -keystore /data/certs.jks -storepass password -noprompt
     ```
 
-    > **`NOTE`** If the command is executed multiple times by oversight, then console displays as below and may be ignored
+    > **`NOTE`** If the command is executed multiple times by oversight, then the console will display the following and may be ignored
     > to proceed further.
 
     ```text
