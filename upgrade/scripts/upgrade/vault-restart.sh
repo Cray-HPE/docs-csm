@@ -27,9 +27,9 @@
 
 set -x
 
-NAMESPACE="vault"  # Set your namespace here
+NAMESPACE="vault" # Set your namespace here
 TARGET_IMAGE="proxyv2:1.19.10"
-TIMEOUT=300  # Timeout in seconds to wait for the pods to become ready
+TIMEOUT=300 # Timeout in seconds to wait for the pods to become ready
 pods_to_delete=()
 
 # Get all pods in the namespace
