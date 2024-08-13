@@ -1,6 +1,6 @@
 # Transaction Size Limitation for PCS and CAPMC
 
-PCS (Power Control Service) and CAPMC (Cray Advanced Platform Monitoring and Control) cannot handle large requests. The maximum number of nodes in a single request is approximately 2500 nodes.
+The Power Control Service (PCS) and Cray Advanced Platform Monitoring and Control (CAPMC) cannot handle large requests. The maximum number of nodes in a single request is approximately 2500 nodes.
 
 ## Identifying the issue
 
