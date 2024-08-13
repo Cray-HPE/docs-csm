@@ -242,7 +242,7 @@ with system-specific customizations.
     > **`NOTE`** If the command is executed multiple times by oversight, then console displays as below and may be ignored
     > to proceed further.
 
-    ```test
+    ```text
     keytool error: java.lang.Exception: Certificate not imported, alias <cray-data-center-ca> already exists
     ```
 
