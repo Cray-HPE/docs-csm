@@ -26,7 +26,6 @@
 # the istio-injection enabled namespaces doesn't get the latest image of istio.
 #
 
-
 set -x
 
 # This part of script is to delete the pods on vault namespace which do not have proxyv2:1.19.10
@@ -47,7 +46,7 @@ for pod in $pods; do
   image=$(kubectl get pod "$pod" -n $NAMESPACE -o jsonpath='{.spec.containers[*].image}')
 
   # If the image version is not correct, delete the pod
-  if [[ "$image" != *"$CORRECT_VERSION"* ]]; then
+  if [[ $image != *"$CORRECT_VERSION"* ]]; then
     echo "Deleting pod: $pod (Incorrect proxyv2 version: $image)"
     kubectl delete pod "$pod" -n "$NAMESPACE" --grace-period=0 --force
     pods_deleted=true
@@ -71,14 +70,14 @@ if [ "$pods_deleted" = true ]; then
   all_correct=true
   for pod in $(echo "$new_pods" | awk '{print $1}' | grep -v NAME); do
     status=$(kubectl get pod "$pod" -n "$NAMESPACE" -o jsonpath='{.status.phase}')
-    image=$(kubectl get pod "$pod" -n "$NAMESPACE" -o jsonpath='{.spec.containers[?(@.name=="proxyv2")].image}' | tr -s '[[:space:]]')
+    image=$(kubectl get pod "$pod" -n "$NAMESPACE" -o jsonpath='{.spec.containers[*].image}')
 
-    if [[ "$status" != "Running" ]]; then
+    if [[ $status != "Running" ]]; then
       echo "Pod $pod is not in Running state. Current state: $status"
       all_correct=false
     fi
 
-    if [[ "$image" != "$CORRECT_VERSION" ]]; then
+    if [[ $image != *"$CORRECT_VERSION"* ]]; then
       echo "Pod $pod does not have the correct proxyv2 version. Current version: $image"
       all_correct=false
     fi
