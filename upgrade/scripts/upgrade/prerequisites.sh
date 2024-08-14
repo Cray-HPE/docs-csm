@@ -700,18 +700,6 @@ do_upgrade_csm_chart cray-tapms-crd sysmgmt.yaml
 do_upgrade_csm_chart cray-tapms-operator sysmgmt.yaml
 
 # Restart vault pods because pods were having the older proxyv2 image version.
-state_name="RESTART_VAULT_PODS"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-    "${locOfScript}/vault-restart.sh"
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
-
 # Running the rollout restart script to restart the required resources in istio-injection=enabled namespaces.
 state_name="RESTART_SERVICES_REFRESH_ISTIO"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
