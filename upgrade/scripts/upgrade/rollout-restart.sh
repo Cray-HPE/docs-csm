@@ -61,14 +61,14 @@ if [ "$pods_deleted" = true ]; then
   sleep 120
 
   # Check the status of the pods after restart
-  new_pods=$(kubectl get pods -n "$NAMESPACE")
+  new_pods=$(kubectl get pods -n "$NAMESPACE" -o jsonpath='{.items[*].metadata.name}')
 
   echo "Checking the status of new pods..."
   echo "$new_pods"
 
   # Check if all pods are in Running state and have the correct proxyv2 version
   all_correct=true
-  for pod in $(echo "$new_pods" | awk '{print $1}' | grep -v NAME); do
+  for pod in $new_pods; do
     status=$(kubectl get pod "$pod" -n "$NAMESPACE" -o jsonpath='{.status.phase}')
     image=$(kubectl get pod "$pod" -n "$NAMESPACE" -o jsonpath='{.spec.containers[*].image}')
 
@@ -113,7 +113,7 @@ check_pod_istio_versions() {
   images=$(kubectl get pod "$pod" -n "$namespace" -o jsonpath="{.spec.containers[*].image}")
 
   # Check if any of the images is the latest Istio version
-  if echo "$images" | grep -q "istio/pilot:1.19.10" || echo "$images" | grep -q "istio/proxyv2:1.19.10"; then
+  if echo "$images" | grep -q -e "istio/pilot:1.19.10" -e "istio/proxyv2:1.19.10"; then
     return 0 # Pod has the latest Istio versions
   else
     return 1 # Pod does not have the latest Istio versions
@@ -125,14 +125,7 @@ get_controlling_resource() {
   local namespace=$1
   local pod=$2
   owner_references=$(kubectl get pod "$pod" -n "$namespace" -o jsonpath="{.metadata.ownerReferences[0].kind}/{.metadata.ownerReferences[0].name}")
-
-  if [[ -n $owner_references ]]; then
-    echo "$owner_references"
-  else
-    # Fallback to describe to get owner information if needed
-    controlling_resource=$(kubectl describe pod "$pod" -n "$namespace" | grep -E "Controlled By" | awk -F: '{print $2}' | xargs)
-    echo "$controlling_resource"
-  fi
+  echo "$owner_references"
 }
 
 # Function to check if a pod uses the Istio proxy
