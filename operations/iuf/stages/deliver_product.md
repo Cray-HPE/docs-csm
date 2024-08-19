@@ -20,6 +20,9 @@ The following arguments are most often used with the `deliver-product` stage. Se
 | Input    | `iuf` Argument | Description                                            |
 |----------|----------------|--------------------------------------------------------|
 | Activity | `-a ACTIVITY`  | Activity created for the install or upgrade operations |
+| Site variables                         | `-sv SITE_VARS`             | Path to YAML file containing site defaults and any overrides                 |
+| Recipe variables                       | `-rv RECIPE_VARS`           | Path to YAML file containing recipe variables provided by HPE                |
+| `sat bootprep` configuration directory | `-bpcd BOOTPREP_CONFIG_DIR` | Directory containing `sat bootprep` configuration files and recipe variables |
 
 ## Execution details
 
@@ -58,6 +61,14 @@ The following table describes upload behavior when the artifact being uploaded a
 
 (`ncn-m001#`) Execute the `deliver-product` stage for activity `admin-230127`.
 
+### Option 1: Install or upgrade without SLURM or PBS Products
+
 ```bash
 iuf -a admin-230127 run -r deliver-product
+```
+
+### Option 2: Install or upgrade along with SLURM or PBS Products
+
+```bash
+iuf -a admin-230127 run -sv /etc/cray/upgrade/csm/admin/site_vars.yaml -bpcd /etc/cray/upgrade/csm/admin -r deliver-product
 ```

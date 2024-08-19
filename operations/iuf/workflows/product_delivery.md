@@ -54,12 +54,28 @@ Once this step has completed:
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `deliver-product` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
+### Option 1: Install or upgrade without SLURM or PBS Products
+
 1. Invoke `iuf run` with activity identifier `${ACTIVITY_NAME}` and use `-r` to execute the [`deliver-product`](../stages/deliver_product.md) stage. Perform the upgrade using product content found in `${MEDIA_DIR}`.
 
     (`ncn-m001#`) Execute the `deliver-product` stage.
 
     ```bash
     iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run -r deliver-product
+    ```
+
+### Option 2: Install or upgrade along with SLURM or PBS Products
+
+**`NOTE`** This subsection is mandatory only while installing SLURM or PBS Products. Additional arguments are available to control the behavior of the `deliver-product` stage, for example `-rv`. See the [`deliver-product` stage
+documentation](../stages/deliver_product.md) for details and adjust the examples below if necessary.
+
+1. Invoke `iuf run` with activity identifier `${ACTIVITY_NAME}` and use `-r` to execute the [`deliver-product`](../stages/deliver_product.md) stage. Perform the upgrade using product content found in `${MEDIA_DIR}`.
+Use site variables from the `site_vars.yaml` file found in `${ADMIN_DIR}` and recipe variables from the `product_vars.yaml` file found in `${ADMIN_DIR}`.
+
+    (`ncn-m001#`) Execute the `deliver-product` stage.
+
+    ```bash
+    iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run --site-vars "${ADMIN_DIR}/site_vars.yaml" -bpcd "${ADMIN_DIR}" -r deliver-product
     ```
 
 Once this step has completed:
