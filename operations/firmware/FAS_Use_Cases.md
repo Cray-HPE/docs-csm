@@ -570,7 +570,7 @@ Use the file `cray_chassisBMC_BMC.json` for chassis BMC updates.
 
     The `--prereq` option ensures all required components are powered on first. The `--continue` option allows the command to complete in systems without fully populated hardware.
 
-1. After the required components have powered on, power on and boot the nodes using the Boot Orchestration Services \(BOS\).
+1. After the required components have powered on, the nodes can be powered on and booted using the Boot Orchestration Service \(BOS\).
 
 ## Update air-cooled compute node BMC, BIOS, iLO 5, iLO 6, and system ROM
 
