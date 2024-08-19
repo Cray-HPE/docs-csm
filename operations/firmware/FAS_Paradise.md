@@ -357,7 +357,7 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
     deviceType = "NodeBMC"
     ```
 
-    Once firmware and BIOS are updated, the compute nodes can be turned back on.
+    Once firmware and BIOS are updated, the compute nodes can be powered back on. If the nodes have never been powered on in the system before (ie. they are being added during a hardware add procedure), then use the Boot Orchestration Service (BOS) to power them on.  Using BOS will prepare the initial boot artifacts required to boot them.  If this is not the first time they have been powered on in this system, then you can use the Power Control Service \(PCS\) to power them on.
 
 ## Upload Paradise images to TFTP server
 
