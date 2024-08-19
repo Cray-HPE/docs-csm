@@ -191,15 +191,16 @@ On larger systems, it is recommended to run as separate actions one after each o
 
 > **IMPORTANT:** The Cray `nodeBMC` device needs to be updated before the `nodeBIOS` because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require.
 See [Update liquid-cooled node firmware](#liquid-cooled-nodes-update-procedures) for more information.
-
+> 
 > **IMPORTANT:** The nodes themselves must be powered **off** in order to update the BIOS on the nodes.
 The BMC will still have power and will perform the update.
 If nodes are not off when the update command is issued, it will report as a failed update.
-
+> 
 > **IMPORTANT:** When the BMC is updated or rebooted after updating the `Node0.BIOS` and/or `Node1.BIOS` liquid-cooled nodes, the node BIOS version will not report the new version string until the nodes are powered back on.
 It is recommended that the `Node0/1` BIOS be updated in a separate action, after a BMC update.
 It is also recommended that the nodes be powered back on after the updates are completed.
-If the nodes have never been powered on in the system before (ie. they are being added during a hardware add procedure), then use the Boot Orchestration Service (BOS) to power them on.  Using BOS will prepare the initial boot artifacts required to boot them.  If this is not the first time they have been powered on in this system, then you can use the Power Control Service \(PCS\) to power them on.
+If the nodes have never been powered on in the system before (they are being added during a hardware add procedure), then use the Boot Orchestration Service (BOS) to power them on.
+Using BOS will prepare the initial boot artifacts required to boot them.  If this is not the first time they have been powered on in this system, then you can use the Power Control Service \(PCS\) to power them on.
 
 ```json
 {
@@ -395,7 +396,8 @@ or `cray_nodeBMC_nodeAccUC.json` for `AccUC` updates.
     deviceType = "NodeBMC"
     ```
 
-    Once firmware and BIOS are updated, the compute nodes can be turned back on.  If the nodes have never been powered on in the system before (ie. they are being added during a hardware add procedure), then use Boot Orchestration Service \(BOS\) to power them on.  Using BOS will prepare the initial boot artifacts required to boot them.  If this is not the first time they have been powered on in this system, then you can use the Power Control Service (PCS) to power them on.
+    Once firmware and BIOS are updated, the compute nodes can be turned back on.  If the nodes have never been powered on in the system before (they are being added during a hardware add procedure), then use Boot Orchestration Service \(BOS\) to power them on.
+Using BOS will prepare the initial boot artifacts required to boot them.  If this is not the first time they have been powered on in this system, then you can use the Power Control Service (PCS) to power them on.
 
 ## Update Chassis Management Module firmware
 
