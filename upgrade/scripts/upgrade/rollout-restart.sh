@@ -148,24 +148,31 @@ restart_and_check_status() {
   shift
   local resources=("$@")
 
-  for resource in "${resources[@]}"; do
-    resource_type=$(echo "$resource" | cut -d'/' -f1)
-    resource_name=$(echo "$resource" | cut -d'/' -f2)
-
+  resolve_deployment() {
+    local resource_type=$1
+    local resource_name=$2
     if [[ $resource_type == "ReplicaSet" ]]; then
-      # Find the corresponding Deployment
       deployment=$(kubectl get replicasets "$resource_name" -n "$namespace" -o jsonpath="{.metadata.ownerReferences[0].name}")
       if [[ -n $deployment ]]; then
         resource_type="Deployment"
         resource_name=$deployment
       else
         echo "No corresponding Deployment found for ReplicaSet $resource_name"
-        continue
+        return 1
       fi
     fi
+    echo "$resource_type/$resource_name"
+  }
 
-    echo "Rolling out restart for $resource_type/$resource_name in namespace: $namespace"
-    kubectl rollout restart "$resource_type"/"$resource_name" -n "$namespace"
+  for resource in "${resources[@]}"; do
+    resource_type=$(echo "$resource" | cut -d'/' -f1)
+    resource_name=$(echo "$resource" | cut -d'/' -f2)
+
+    resolved_resource=$(resolve_deployment "$resource_type" "$resource_name")
+    if [[ $? -eq 0 ]]; then
+      echo "Rolling out restart for $resolved_resource in namespace: $namespace"
+      kubectl rollout restart "$resolved_resource" -n "$namespace"
+    fi
   done
 
   echo "Waiting for 3 minutes..."
@@ -175,20 +182,11 @@ restart_and_check_status() {
     resource_type=$(echo "$resource" | cut -d'/' -f1)
     resource_name=$(echo "$resource" | cut -d'/' -f2)
 
-    if [[ $resource_type == "ReplicaSet" ]]; then
-      # Find the corresponding Deployment
-      deployment=$(kubectl get replicasets "$resource_name" -n "$namespace" -o jsonpath="{.metadata.ownerReferences[0].name}")
-      if [[ -n $deployment ]]; then
-        resource_type="Deployment"
-        resource_name=$deployment
-      else
-        echo "No corresponding Deployment found for ReplicaSet $resource_name"
-        continue
-      fi
+    resolved_resource=$(resolve_deployment "$resource_type" "$resource_name")
+    if [[ $? -eq 0 ]]; then
+      echo "Checking rollout status for $resolved_resource in namespace: $namespace"
+      kubectl rollout status "$resolved_resource" -n "$namespace"
     fi
-
-    echo "Checking rollout status for $resource_type/$resource_name in namespace: $namespace"
-    kubectl rollout status "$resource_type"/"$resource_name" -n "$namespace"
   done
 }
 
