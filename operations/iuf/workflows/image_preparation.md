@@ -7,7 +7,7 @@ and images are created with the correct content and configuration values.
 
 - [1. Execute the IUF `update-cfs-config` and `prepare-images` stages](#1-execute-the-iuf-update-cfs-config-and-prepare-images-stages)
 - [2. Manually prepare additional images](#2-manually-prepare-additional-images)
-  - [2.1 ARM images](#22-arm-images)
+    - [2.1 ARM images](#21-arm-images)
 - [3. Next steps](#3-next-steps)
 
 ## 1. Execute the IUF `update-cfs-config` and `prepare-images` stages
@@ -51,6 +51,14 @@ If it is necessary to build `aarch64` images, then see [ARM images](../IUF.md#ar
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)
   workflow to continue the install or upgrade.
 
-- If performing an upgrade that includes upgrading CSM, return to the
-  [Upgrade CSM and additional products with IUF](upgrade_csm_and_additional_products_with_iuf.md)
+- If performing an upgrade that includes upgrading CSM manually and additional products with IUF,
+  return to the [Upgrade CSM manually and additional products with IUF](upgrade_csm_manual_and_additional_products_with_iuf.md)
+  workflow to continue the upgrade.
+
+- If performing an upgrade that includes upgrading CSM and additional products with IUF,
+  return to the [Upgrade CSM and additional products with IUF](upgrade_csm_iuf_additional_products_with_iuf.md)
+  workflow to continue the upgrade.
+
+- If performing an upgrade that includes upgrading only CSM, return to the
+  [Upgrade only CSM through IUF](../../../upgrade/Upgrade_Only_CSM_with_iuf.md)
   workflow to continue the upgrade.
