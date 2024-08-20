@@ -1276,6 +1276,7 @@ if [[ ${state_recorded} == "0" ]]; then
       | yq4 e '.dns.imageRepository="artifactory.algol60.net/csm-docker/stable/registry.k8s.io/coredns"' \
       | yq4 e '.imageRepository="artifactory.algol60.net/csm-docker/stable/registry.k8s.io"' \
       | yq4 e '.controllerManager.extraArgs.terminated-pod-gc-threshold="250"' \
+      | yq4 e '.controllerManager.extraArgs.profiling="false"' \
         > "${tmpdir}/kubeadm-config.yaml"
     patch=$(jq -c -n --rawfile text "${tmpdir}/kubeadm-config.yaml" '.data["ClusterConfiguration"]=$text')
     kubectl -n kube-system patch configmap kubeadm-config --type merge --patch "${patch}"
