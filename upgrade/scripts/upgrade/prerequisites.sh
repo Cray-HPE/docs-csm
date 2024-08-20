@@ -117,11 +117,16 @@ if [[ -f ${PREREQS_DONE_FILE} ]]; then
   rm ${PREREQS_DONE_FILE}
 fi
 
-TOKEN=$(curl -s -S -d grant_type=client_credentials \
-  -d client_id=admin-client \
-  -d client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
-  https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-export TOKEN
+function get_token() {
+  if [ -z "${TOKEN}" ]; then
+    TOKEN=$(curl -s -S -d grant_type=client_credentials \
+      -d client_id=admin-client \
+      -d client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
+      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    export TOKEN
+  fi
+  echo "${TOKEN}"
+}
 
 # Takes as input the path to a CSM RPM in the expanded tarball. e.g.:
 # /etc/cray/upgrade/csm/csm-1.5.0-beta.64/tarball/csm-1.5.0-beta.64/rpm/cray/csm/noos/x86_64/hpe-csm-virtiofsd-1.7.0-hpe1.x86_64.rpm
@@ -266,11 +271,11 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     # Record CFS components and configurations, since these are modified during the upgrade process
     CFS_CONFIG_SNAPSHOT=${SNAPSHOT_DIR}/cfs_configurations.json
     echo "Backing up CFS configurations to ${CFS_CONFIG_SNAPSHOT}"
-    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/cfs/v3/configurations > "${CFS_CONFIG_SNAPSHOT}"
+    curl -k -H "Authorization: Bearer $(get_token)" https://api-gw-service-nmn.local/apis/cfs/v3/configurations > "${CFS_CONFIG_SNAPSHOT}"
 
     CFS_COMP_SNAPSHOT=${SNAPSHOT_DIR}/cfs_components.json
     echo "Backing up CFS components to ${CFS_COMP_SNAPSHOT}"
-    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/cfs/v3/components > "${CFS_COMP_SNAPSHOT}"
+    curl -k -H "Authorization: Bearer $(get_token)" https://api-gw-service-nmn.local/apis/cfs/v3/components > "${CFS_COMP_SNAPSHOT}"
 
     # Record state of Kubernetes pods. If a pod is later seen in an unexpected state, this can provide a reference to
     # determine whether or not the issue existed prior to the upgrade.
@@ -298,7 +303,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     fi
 
     # get BSS global cloud-init data
-    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | jq .[] > cloud-init-global.json
+    curl -k -H "Authorization: Bearer $(get_token)" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | jq .[] > cloud-init-global.json
 
     CURRENT_MTU=$(jq '."cloud-init"."meta-data"."kubernetes-weave-mtu"' cloud-init-global.json)
     echo "Current kubernetes-weave-mtu is ${CURRENT_MTU}"
@@ -308,7 +313,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 
     echo "Setting kubernetes-weave-mtu to 1376"
     # post the update json to bss
-    curl -s -k -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" \
+    curl -s -k -H "Authorization: Bearer $(get_token)" --header "Content-Type: application/json" \
       --request PUT \
       --data @cloud-init-global-update.json \
       https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
@@ -365,7 +370,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 
       # shellcheck disable=SC2029 # it is intentional that ${TOKEN} expands on the client side
       # run the script
-      if ! ssh "${target_ncn}" "TOKEN=${TOKEN} /srv/cray/scripts/common/chrony/csm_ntp.py"; then
+      if ! ssh "${target_ncn}" "TOKEN=$(get_token) /srv/cray/scripts/common/chrony/csm_ntp.py"; then
         echo "${target_ncn} csm_ntp failed"
         exit 1
       fi
@@ -640,7 +645,6 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
->>>>>>> 415f6c7a14 (Pre-cache istio images)
 
 # Update fs.inotify.max_user_* sysctl settings on running CSM 1.5 nodes. This setting will be persisted
 # on new CSM 1.6 nodes, but istio is upgraded before nodes are rebuilt, so we need to modify settings on running worker nodes.
@@ -980,7 +984,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   {
 
     # get BSS cloud-init data with host_records
-    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | jq .[] > cloud-init-global.json
+    curl -k -H "Authorization: Bearer $(get_token)" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | jq .[] > cloud-init-global.json
 
     # get IP of api-gw in NMN
     ip=$(dig api-gw-service-nmn.local +short)
@@ -1000,7 +1004,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     jq '."cloud-init"."meta-data".host_records['${entry_number}']|= . + {"aliases": ["packages.local", "registry.local"],"ip": "'${ip}'"}' cloud-init-global.json > cloud-init-global_update.json
 
     # post the update json to bss
-    curl -s -k -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" \
+    curl -s -k -H "Authorization: Bearer $(get_token)" --header "Content-Type: application/json" \
       --request PUT \
       --data @cloud-init-global_update.json \
       https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
