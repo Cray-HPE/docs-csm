@@ -41,6 +41,8 @@ Once this step has completed:
 
 ## 2. Update `customizations.yaml`
 
+**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
+
 Some products require modifications to the `customizations.yaml` file before executing the `deliver-product` stage. Currently, this is limited to the Slurm and PBS Workload Manager (WLM) products and the UAN product. Refer to the
 "Install and Upgrade Framework" section of the Slurm, PBS, and UAN product documents to determine the actions that need to be performed to update `customizations.yaml`.
 
@@ -70,6 +72,8 @@ Once this step has completed:
 
 ## 4. Perform manual product delivery operations
 
+**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
+
 **`NOTE`** This subsection is optional and can be skipped if third-party GPU and/or programming environment software is not needed.
 
 Some products provide instructions for delivering third-party content to the system outside of IUF. If this content is desired, refer to the following documentation for instructions and execute the procedures before continuing
@@ -94,6 +98,14 @@ Once this step has completed:
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)
   workflow to continue the install or upgrade.
 
-- If performing an upgrade that includes upgrading CSM, return to the
-  [Upgrade CSM and additional products with IUF](upgrade_csm_and_additional_products_with_iuf.md)
+- If performing an upgrade that includes upgrading CSM manually and additional products with IUF,
+  return to the [Upgrade CSM manually and additional products with IUF](upgrade_csm_manual_and_additional_products_with_iuf.md)
+  workflow to continue the upgrade.
+
+- If performing an upgrade that includes upgrading CSM and additional products with IUF,
+  return to the [Upgrade CSM and additional products with IUF](upgrade_csm_iuf_additional_products_with_iuf.md)
+  workflow to continue the upgrade.
+
+- If performing an upgrade that includes upgrading only CSM, return to the
+  [Upgrade only CSM through IUF](../../../upgrade/Upgrade_Only_CSM_with_iuf.md)
   workflow to continue the upgrade.
