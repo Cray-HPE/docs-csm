@@ -159,7 +159,7 @@ Check on the current running state of the `cray-console-data-postgres` database.
 1. (`ncn-mw#`) Find the `cray-console-data-postgres` pods and note one that is in `Running` state.
 
     ```bash
-    kubectl -n services get pods | grep cray-console-data-postres
+    kubectl -n services get pods | grep cray-console-data-postgres
     ```
 
     Example output:

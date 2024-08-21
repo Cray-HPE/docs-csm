@@ -688,3 +688,77 @@ Expected output will be something like:
     }
 ]
 ```
+
+### Checking the status of remote build nodes
+
+Before a job is set up to be launched on a remote build node, IMS checks that it is
+ready to run remote jobs. If a node is registered as a remote build node, but is not
+able to run remote jobs, that node will not have remote jobs scheduled on it. The
+status of the remote build nodes may be queried. The status object will have a field
+`ableToRunJobs` that contains a boolean indicating if the node is able to run jobs.
+If the node is not able to run jobs, the status object will document the issue with
+running jobs on that node.
+
+* NOTE: a value of '-1' for `numCurrentJobs` indicates that the actual number of
+   current jobs on the node was not able to be determined.
+
+(`ncn-mw#`) To check the status of a particular remote build node:
+
+```bash
+cray ims remote-build-nodes status describe "${IMS_REMOTE_NODE_XNAME}"
+```
+
+If the node is ready to run jobs, the output will look something like:
+
+```text
+{
+  "ableToRunJobs": true,
+  "nodeArch": "x86_64",
+  "numCurrentJobs": 0,
+  "podmanStatus": "Podman present at /usr/bin/podman",
+  "sshStatus": "SSH connection established.",
+  "xname": "x3000c0s3b0n0"
+}
+```
+
+If the node is not able to run jobs, the output will look something like:
+
+```text
+{
+  "ableToRunJobs": false,
+  "nodeArch": "Unknown",
+  "numCurrentJobs": -1,
+  "podmanStatus": "Unknown",
+  "sshStatus": "Unable to connect to node. Error: [Errno -2] Name does not resolve",
+  "xname": "x3000c0s3b0n1"
+}
+```
+
+(`ncn-m-w#`) To check the status of all defined remote build nodes:
+
+```bash
+cray ims remote-build-nodes status list
+```
+
+The output will look something like:
+
+```text
+[
+  {
+    "ableToRunJobs": true,
+    "nodeArch": "x86_64",
+    "numCurrentJobs": 2,
+    "podmanStatus": "Podman present at /usr/bin/podman",
+    "sshStatus": "SSH connection established.",
+    "xname": "x3000c0s3b0n0"
+  },
+  {
+    "ableToRunJobs": false,
+    "nodeArch": "Unknown",
+    "numCurrentJobs": -1,
+    "podmanStatus": "Unknown",
+    "sshStatus": "Unable to connect to node. Error: [Errno -2] Name does not resolve",
+    "xname": "x3000c0s3b0n1"
+  }
+]
+```
