@@ -101,7 +101,9 @@ Base URLs:
 
 <h1 id="boot-orchestration-service-version">version</h1>
 
-## get__
+## root_get
+
+<a id="opIdroot_get"></a>
 
 > Code samples
 
@@ -185,14 +187,14 @@ Return list of versions currently running.
 ]
 ```
 
-<h3 id="get__-responses">Responses</h3>
+<h3 id="root_get-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Versions|Inline|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An Internal Server Error occurred handling the request.|[ProblemDetails](#schemaproblemdetails)|
 
-<h3 id="get__-responseschema">Response Schema</h3>
+<h3 id="root_get-responseschema">Response Schema</h3>
 
 Status Code **200**
 
@@ -503,7 +505,6 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
     },
     "boot_sets": {
       "property1": {
-        "name": "compute",
         "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
         "cfs": {
           "configuration": "compute-23.4.0"
@@ -527,7 +528,6 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
         "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
       },
       "property2": {
-        "name": "compute",
         "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
         "cfs": {
           "configuration": "compute-23.4.0"
@@ -781,7 +781,6 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
   },
   "boot_sets": {
     "property1": {
-      "name": "compute",
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "cfs": {
         "configuration": "compute-23.4.0"
@@ -805,7 +804,6 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
       "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     },
     "property2": {
-      "name": "compute",
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "cfs": {
         "configuration": "compute-23.4.0"
@@ -1017,7 +1015,6 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
   },
   "boot_sets": {
     "property1": {
-      "name": "compute",
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "cfs": {
         "configuration": "compute-23.4.0"
@@ -1041,7 +1038,6 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
       "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     },
     "property2": {
-      "name": "compute",
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "cfs": {
         "configuration": "compute-23.4.0"
@@ -1253,7 +1249,6 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
   },
   "boot_sets": {
     "property1": {
-      "name": "compute",
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "cfs": {
         "configuration": "compute-23.4.0"
@@ -1277,7 +1272,6 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
       "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     },
     "property2": {
-      "name": "compute",
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "cfs": {
         "configuration": "compute-23.4.0"
@@ -1517,7 +1511,6 @@ Session Templates.
   },
   "boot_sets": {
     "property1": {
-      "name": "compute",
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "cfs": {
         "configuration": "compute-23.4.0"
@@ -1541,7 +1534,6 @@ Session Templates.
       "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     },
     "property2": {
-      "name": "compute",
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "cfs": {
         "configuration": "compute-23.4.0"
@@ -1668,7 +1660,7 @@ on the Boot Sets defined in the Session Template.
   "name": "session-20190728032600",
   "operation": "boot",
   "template_name": "cle-1.0.0",
-  "limit": "string",
+  "limit": "",
   "stage": false,
   "include_disabled": false
 }
@@ -1699,7 +1691,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
   "tenant": "string",
   "operation": "boot",
   "template_name": "cle-1.0.0",
-  "limit": "string",
+  "limit": "",
   "stage": true,
   "components": "string",
   "include_disabled": true,
@@ -1830,7 +1822,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
     "tenant": "string",
     "operation": "boot",
     "template_name": "cle-1.0.0",
-    "limit": "string",
+    "limit": "",
     "stage": true,
     "components": "string",
     "include_disabled": true,
@@ -2051,7 +2043,7 @@ Get Session details by Session ID.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|session_id|path|string|true|Session ID|
+|session_id|path|[V2SessionName](#schemav2sessionname)|true|Session ID|
 |Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 
 #### Detailed descriptions
@@ -2072,7 +2064,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
   "tenant": "string",
   "operation": "boot",
   "template_name": "cle-1.0.0",
-  "limit": "string",
+  "limit": "",
   "stage": true,
   "components": "string",
   "include_disabled": true,
@@ -2191,7 +2183,7 @@ This is intended only for internal use by the BOS service.
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |body|body|[V2SessionUpdate](#schemav2sessionupdate)|true|The state for a single Session|
-|session_id|path|string|true|Session ID|
+|session_id|path|[V2SessionName](#schemav2sessionname)|true|Session ID|
 |Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 
 #### Detailed descriptions
@@ -2212,7 +2204,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
   "tenant": "string",
   "operation": "boot",
   "template_name": "cle-1.0.0",
-  "limit": "string",
+  "limit": "",
   "stage": true,
   "components": "string",
   "include_disabled": true,
@@ -2312,7 +2304,7 @@ Delete Session by Session ID.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|session_id|path|string|true|Session ID|
+|session_id|path|[V2SessionName](#schemav2sessionname)|true|Session ID|
 |Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 
 #### Detailed descriptions
@@ -2423,7 +2415,7 @@ Get Session extended status information by ID
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|session_id|path|string|true|Session ID|
+|session_id|path|[V2SessionName](#schemav2sessionname)|true|Session ID|
 |Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 
 #### Detailed descriptions
@@ -2546,7 +2538,7 @@ Saves the current Session to database.  For use at Session completion.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|session_id|path|string|true|Session ID|
+|session_id|path|[V2SessionName](#schemav2sessionname)|true|Session ID|
 |Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 
 #### Detailed descriptions
@@ -2567,7 +2559,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
   "tenant": "string",
   "operation": "boot",
   "template_name": "cle-1.0.0",
-  "limit": "string",
+  "limit": "",
   "stage": true,
   "components": "string",
   "include_disabled": true,
@@ -2672,10 +2664,10 @@ empty array is returned.
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |ids|query|[V2ComponentId](#schemav2componentid)|false|Retrieve the Components with the given ID|
-|session|query|string|false|Retrieve the Components with the given Session ID.|
-|staged_session|query|string|false|Retrieve the Components with the given staged Session ID.|
+|session|query|[V2SessionName](#schemav2sessionname)|false|Retrieve the Components with the given Session ID.|
+|staged_session|query|[V2SessionName](#schemav2sessionname)|false|Retrieve the Components with the given staged Session ID.|
 |enabled|query|boolean|false|Retrieve the Components with the "enabled" state.|
-|phase|query|string|false|Retrieve the Components in the given phase.|
+|phase|query|[V2ComponentPhase](#schemav2componentphase)|false|Retrieve the Components in the given phase.|
 |status|query|string|false|Retrieve the Components with the given status.|
 |Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 
@@ -2734,9 +2726,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
       "failed": true
     },
     "event_stats": {
-      "power_on_attempts": 0,
-      "power_off_graceful_attempts": 0,
-      "power_off_forceful_attempts": 0
+      "power_on_attempts": 1048576,
+      "power_off_graceful_attempts": 1048576,
+      "power_off_forceful_attempts": 1048576
     },
     "status": {
       "phase": "string",
@@ -2874,9 +2866,9 @@ Update the state for a collection of Components in the BOS database
       "failed": true
     },
     "event_stats": {
-      "power_on_attempts": 0,
-      "power_off_graceful_attempts": 0,
-      "power_off_forceful_attempts": 0
+      "power_on_attempts": 1048576,
+      "power_off_graceful_attempts": 1048576,
+      "power_off_forceful_attempts": 1048576
     },
     "status": {
       "phase": "string",
@@ -2894,7 +2886,7 @@ Update the state for a collection of Components in the BOS database
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V2ComponentArray](#schemav2componentarray)|true|The state for an array of Components|
+|body|body|[V2ComponentArrayWithIds](#schemav2componentarraywithids)|true|The state for an array of Components|
 |Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 
 #### Detailed descriptions
@@ -2948,9 +2940,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
       "failed": true
     },
     "event_stats": {
-      "power_on_attempts": 0,
-      "power_off_graceful_attempts": 0,
-      "power_off_forceful_attempts": 0
+      "power_on_attempts": 1048576,
+      "power_off_graceful_attempts": 1048576,
+      "power_off_forceful_attempts": 1048576
     },
     "status": {
       "phase": "string",
@@ -3088,9 +3080,9 @@ Update the state for a collection of Components in the BOS database
       "failed": true
     },
     "event_stats": {
-      "power_on_attempts": 0,
-      "power_off_graceful_attempts": 0,
-      "power_off_forceful_attempts": 0
+      "power_on_attempts": 1048576,
+      "power_off_graceful_attempts": 1048576,
+      "power_off_forceful_attempts": 1048576
     },
     "status": {
       "phase": "string",
@@ -3166,9 +3158,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
       "failed": true
     },
     "event_stats": {
-      "power_on_attempts": 0,
-      "power_off_graceful_attempts": 0,
-      "power_off_forceful_attempts": 0
+      "power_on_attempts": 1048576,
+      "power_off_graceful_attempts": 1048576,
+      "power_off_forceful_attempts": 1048576
     },
     "status": {
       "phase": "string",
@@ -3323,9 +3315,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
     "failed": true
   },
   "event_stats": {
-    "power_on_attempts": 0,
-    "power_off_graceful_attempts": 0,
-    "power_off_forceful_attempts": 0
+    "power_on_attempts": 1048576,
+    "power_off_graceful_attempts": 1048576,
+    "power_off_forceful_attempts": 1048576
   },
   "status": {
     "phase": "string",
@@ -3462,9 +3454,9 @@ Update the state for a given Component in the BOS database
     "failed": true
   },
   "event_stats": {
-    "power_on_attempts": 0,
-    "power_off_graceful_attempts": 0,
-    "power_off_forceful_attempts": 0
+    "power_on_attempts": 1048576,
+    "power_off_graceful_attempts": 1048576,
+    "power_off_forceful_attempts": 1048576
   },
   "status": {
     "phase": "string",
@@ -3535,9 +3527,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
     "failed": true
   },
   "event_stats": {
-    "power_on_attempts": 0,
-    "power_off_graceful_attempts": 0,
-    "power_off_forceful_attempts": 0
+    "power_on_attempts": 1048576,
+    "power_off_graceful_attempts": 1048576,
+    "power_off_forceful_attempts": 1048576
   },
   "status": {
     "phase": "string",
@@ -3673,9 +3665,9 @@ Update the state for a given Component in the BOS database
     "failed": true
   },
   "event_stats": {
-    "power_on_attempts": 0,
-    "power_off_graceful_attempts": 0,
-    "power_off_forceful_attempts": 0
+    "power_on_attempts": 1048576,
+    "power_off_graceful_attempts": 1048576,
+    "power_off_forceful_attempts": 1048576
   },
   "status": {
     "phase": "string",
@@ -3746,9 +3738,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
     "failed": true
   },
   "event_stats": {
-    "power_on_attempts": 0,
-    "power_off_graceful_attempts": 0,
-    "power_off_forceful_attempts": 0
+    "power_on_attempts": 1048576,
+    "power_off_graceful_attempts": 1048576,
+    "power_off_forceful_attempts": 1048576
   },
   "status": {
     "phase": "string",
@@ -4386,16 +4378,11 @@ Age in minutes (e.g. "3m"), hours (e.g. "5h"), days (e.g. "10d"), or weeks (e.g.
 
 A path to the initrd to use for booting.
 
-It is recommended that this should be no more than 4095 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|A path to the initrd to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|A path to the initrd to use for booting.|
 
 <h2 id="tocS_BootKernelPath">BootKernelPath</h2>
 <!-- backwards compatibility -->
@@ -4411,16 +4398,11 @@ targeted to start being enforced in an upcoming BOS version.
 
 A path to the kernel to use for booting.
 
-It is recommended that this should be no more than 4095 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|A path to the kernel to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|A path to the kernel to use for booting.|
 
 <h2 id="tocS_BootManifestPath">BootManifestPath</h2>
 <!-- backwards compatibility -->
@@ -4437,16 +4419,11 @@ targeted to start being enforced in an upcoming BOS version.
 A path identifying the metadata describing the components of the boot image.
 This could be a URI, URL, etc, depending on the type of the Boot Set.
 
-It is recommended that this should be 1-4095 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|A path identifying the metadata describing the components of the boot image.<br>This could be a URI, URL, etc, depending on the type of the Boot Set.<br><br>It is recommended that this should be 1-4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|A path identifying the metadata describing the components of the boot image.<br>This could be a URI, URL, etc, depending on the type of the Boot Set.|
 
 <h2 id="tocS_BootKernelParameters">BootKernelParameters</h2>
 <!-- backwards compatibility -->
@@ -4462,16 +4439,11 @@ targeted to start being enforced in an upcoming BOS version.
 
 The kernel parameters to use to boot the nodes.
 
-Linux kernel parameters may never exceed 4096 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|The kernel parameters to use to boot the nodes.|
 
 <h2 id="tocS_BootSetEtag">BootSetEtag</h2>
 <!-- backwards compatibility -->
@@ -4487,16 +4459,11 @@ targeted to start being enforced in an upcoming BOS version.
 
 This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.
 
-ETags are defined as being 1-65536 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.|
 
 <h2 id="tocS_BootSetName">BootSetName</h2>
 <!-- backwards compatibility -->
@@ -4512,19 +4479,14 @@ targeted to start being enforced in an upcoming BOS version.
 
 The Boot Set name.
 
-It is recommended that:
-* Boot Set names should be 1-127 characters in length.
-* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).
-* Boot Set names should begin and end with a letter or digit.
-
-These restrictions are not enforced in this version of BOS, but they are
-targeted to start being enforced in an upcoming BOS version.
+* Boot Set names must use only letters, digits, periods (.), dashes (-), and underscores (_).
+* Boot Set names must begin and end with a letter or digit.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|write-only|The Boot Set name.<br><br>* Boot Set names must use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names must begin and end with a letter or digit.|
 
 <h2 id="tocS_BootSetRootfsProvider">BootSetRootfsProvider</h2>
 <!-- backwards compatibility -->
@@ -4540,16 +4502,11 @@ targeted to start being enforced in an upcoming BOS version.
 
 The root file system provider.
 
-It is recommended that this should be 1-511 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|The root file system provider.<br><br>It is recommended that this should be 1-511 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|The root file system provider.|
 
 <h2 id="tocS_BootSetRootfsProviderPassthrough">BootSetRootfsProviderPassthrough</h2>
 <!-- backwards compatibility -->
@@ -4567,16 +4524,11 @@ The root file system provider passthrough.
 These are additional kernel parameters that will be appended to
 the 'rootfs=<protocol>' kernel parameter
 
-Linux kernel parameters may never exceed 4096 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter|
 
 <h2 id="tocS_BootSetType">BootSetType</h2>
 <!-- backwards compatibility -->
@@ -4592,16 +4544,11 @@ targeted to start being enforced in an upcoming BOS version.
 
 The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.
 
-It is recommended that this should be 1-127 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.|
 
 <h2 id="tocS_CfsConfiguration">CfsConfiguration</h2>
 <!-- backwards compatibility -->
@@ -4617,16 +4564,11 @@ targeted to start being enforced in an upcoming BOS version.
 
 The name of configuration to be applied.
 
-It is recommended that this should be no more than 127 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|The name of configuration to be applied.|
 
 <h2 id="tocS_EmptyString">EmptyString</h2>
 <!-- backwards compatibility -->
@@ -4672,7 +4614,7 @@ An empty string value.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|An empty string value.|
+|*anonymous*|string¦null|false|none|An empty string value.|
 
 #### Enumerated Values
 
@@ -4714,16 +4656,11 @@ Whether to enable the Configuration Framework Service (CFS).
 
 Hardware component name (xname).
 
-It is recommended that this should be 1-127 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|Hardware component name (xname).<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|Hardware component name (xname).|
 
 <h2 id="tocS_Healthz">Healthz</h2>
 <!-- backwards compatibility -->
@@ -4840,16 +4777,11 @@ List of links to other resources
 
 A node list that is required to have at least one node.
 
-It is recommended that this list should be 1-65535 items in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|[[HardwareComponentName](#schemahardwarecomponentname)]|false|none|A node list that is required to have at least one node.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|[[HardwareComponentName](#schemahardwarecomponentname)]|false|none|A node list that is required to have at least one node.|
 
 <h2 id="tocS_NodeGroupList">NodeGroupList</h2>
 <!-- backwards compatibility -->
@@ -4866,11 +4798,6 @@ targeted to start being enforced in an upcoming BOS version.
 ```
 
 Node group list. Allows actions against associated nodes by logical groupings.
-
-It is recommended that this list should be 1-4095 items in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
@@ -4892,11 +4819,6 @@ targeted to start being enforced in an upcoming BOS version.
 ```
 
 Node role list. Allows actions against nodes with associated roles.
-
-It is recommended that this list should be 1-1023 items in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
@@ -4940,7 +4862,7 @@ An error response for RFC 7807 problem details.
 <a id="tocssessionlimit"></a>
 
 ```json
-"string"
+""
 
 ```
 
@@ -4950,16 +4872,13 @@ preceded by "&" for AND or "!" for NOT.
 
 Alternatively, the limit can be set to "*", which means no limit.
 
-It is recommended that this should be 1-65535 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
+An empty string or null value is the same as specifying no limit.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string¦null|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.|
 
 <h2 id="tocS_SessionTemplateDescription">SessionTemplateDescription</h2>
 <!-- backwards compatibility -->
@@ -4975,16 +4894,11 @@ targeted to start being enforced in an upcoming BOS version.
 
 An optional description for the Session Template.
 
-It is recommended that this should be 1-1023 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|An optional description for the Session Template.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|An optional description for the Session Template.|
 
 <h2 id="tocS_SessionTemplateName">SessionTemplateName</h2>
 <!-- backwards compatibility -->
@@ -5000,19 +4914,15 @@ targeted to start being enforced in an upcoming BOS version.
 
 Name of the Session Template.
 
-It is recommended to use names which meet the following restrictions:
-* Maximum length of 127 characters.
+The name must:
 * Use only letters, digits, periods (.), dashes (-), and underscores (_).
 * Begin and end with a letter or digit.
-
-These restrictions are not enforced in this version of BOS, but they are
-targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|Name of the Session Template.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
 
 <h2 id="tocS_TenantName">TenantName</h2>
 <!-- backwards compatibility -->
@@ -5028,16 +4938,11 @@ targeted to start being enforced in an upcoming BOS version.
 
 Name of a tenant. Used for multi-tenancy. An empty string means no tenant.
 
-It is recommended that this should be no more than 127 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|Name of a tenant. Used for multi-tenancy. An empty string means no tenant.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|Name of a tenant. Used for multi-tenancy. An empty string means no tenant.|
 
 <h2 id="tocS_Version">Version</h2>
 <!-- backwards compatibility -->
@@ -5117,7 +5022,7 @@ a Session Template, or individually within a Boot Set.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.|
 
 <h2 id="tocS_V2SessionTemplate">V2SessionTemplate</h2>
 <!-- backwards compatibility -->
@@ -5207,13 +5112,13 @@ group of Components.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|string|false|read-only|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+|name|string|false|read-only|Name of the Session Template.<br><br>Names must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
 |tenant|[V2TenantName](#schemav2tenantname)|false|none|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same.|
-|description|[SessionTemplateDescription](#schemasessiontemplatedescription)|false|none|An optional description for the Session Template.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|description|[SessionTemplateDescription](#schemasessiontemplatedescription)|false|none|An optional description for the Session Template.|
 |enable_cfs|[EnableCfs](#schemaenablecfs)|false|none|Whether to enable the Configuration Framework Service (CFS).|
 |cfs|[V2CfsParameters](#schemav2cfsparameters)|false|none|This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a Boot Set.|
-|boot_sets|object|false|none|Mapping from Boot Set names to Boot Sets.<br><br>It is recommended that:<br>* At least one Boot Set should be defined, because a Session Template with no<br>  Boot Sets is not functional.<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|» **additionalProperties**|[V2BootSet](#schemav2bootset)|false|none|A Boot Set is a collection of nodes defined by an explicit list, their functional<br>role, and their logical groupings. This collection of nodes is associated with one<br>set of boot artifacts and optional additional records for configuration and root<br>filesystem provisioning.|
+|boot_sets|object|true|none|Mapping from Boot Set names to Boot Sets.<br><br>* Boot Set names must be 1-127 characters in length.<br>* Boot Set names must use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names must begin and end with a letter or digit.|
+|» **additionalProperties**|[V2BootSet](#schemav2bootset)|false|none|none|
 |links|[LinkListReadOnly](#schemalinklistreadonly)|false|none|List of links to other resources|
 
 <h2 id="tocS_V2SessionTemplateValidation">V2SessionTemplateValidation</h2>
@@ -5304,7 +5209,7 @@ Operation -- An operation to perform on Components in this Session.
   "name": "session-20190728032600",
   "operation": "boot",
   "template_name": "cle-1.0.0",
-  "limit": "string",
+  "limit": "",
   "stage": false,
   "include_disabled": false
 }
@@ -5320,8 +5225,8 @@ required if the session_limit_required option is true.
 |---|---|---|---|---|
 |name|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
 |operation|[V2SessionOperation](#schemav2sessionoperation)|true|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
-|template_name|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|template_name|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
+|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.|
 |stage|boolean|false|none|Set to stage a Session which will not immediately change the state of any Components.<br>The "applystaged" endpoint can be called at a later time to trigger the start of this Session.|
 |include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM).|
 
@@ -5421,6 +5326,78 @@ Information on the status of a Session.
 |status|[V2SessionStatusLabel](#schemav2sessionstatuslabel)|false|none|The status of a Session.|
 |error|string¦null|false|none|Error which prevented the Session from running.<br>A null value means the Session has not encountered an error.|
 
+<h2 id="tocS_V2BootSetData">V2BootSetData</h2>
+<!-- backwards compatibility -->
+<a id="schemav2bootsetdata"></a>
+<a id="schema_V2BootSetData"></a>
+<a id="tocSv2bootsetdata"></a>
+<a id="tocsv2bootsetdata"></a>
+
+```json
+{
+  "name": "compute",
+  "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+  "cfs": {
+    "configuration": "compute-23.4.0"
+  },
+  "type": "s3",
+  "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+  "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+  "node_list": [
+    "x3000c0s19b1n0",
+    "x3000c0s19b2n0"
+  ],
+  "node_roles_groups": [
+    "Compute",
+    "Application"
+  ],
+  "node_groups": [
+    "string"
+  ],
+  "arch": "X86",
+  "rootfs_provider": "cpss3",
+  "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+}
+
+```
+
+A Boot Set is a collection of nodes defined by an explicit list, their functional
+role, and their logical groupings. This collection of nodes is associated with one
+set of boot artifacts and optional additional records for configuration and root
+filesystem provisioning.
+
+A boot set requires at least one of the following fields to be specified:
+node_list, node_roles_groups, node_groups
+
+If specified, the name field must match the key mapping to this boot set in the
+boot_sets field of the containing V2SessionTemplate.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|name|[BootSetName](#schemabootsetname)|false|none|The Boot Set name.<br><br>* Boot Set names must use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names must begin and end with a letter or digit.|
+|path|[BootManifestPath](#schemabootmanifestpath)|true|none|A path identifying the metadata describing the components of the boot image.<br>This could be a URI, URL, etc, depending on the type of the Boot Set.|
+|cfs|[V2CfsParameters](#schemav2cfsparameters)|false|none|This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a Boot Set.|
+|type|[BootSetType](#schemabootsettype)|true|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.|
+|etag|[BootSetEtag](#schemabootsetetag)|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.|
+|kernel_parameters|[BootKernelParameters](#schemabootkernelparameters)|false|none|The kernel parameters to use to boot the nodes.|
+|node_list|[NodeList](#schemanodelist)|false|none|A node list that is required to have at least one node.|
+|node_roles_groups|[NodeRoleList](#schemanoderolelist)|false|none|Node role list. Allows actions against nodes with associated roles.|
+|node_groups|[NodeGroupList](#schemanodegrouplist)|false|none|Node group list. Allows actions against associated nodes by logical groupings.|
+|arch|string|false|none|The node architecture to target. Filters nodes that are not part of matching architecture from being targeted by boot actions. This value should correspond to HSM component 'Arch' field exactly. For reasons of backwards compatibility, all HSM nodes that are of type Unknown are treated as being of type X86.|
+|rootfs_provider|[BootSetRootfsProvider](#schemabootsetrootfsprovider)|false|none|The root file system provider.|
+|rootfs_provider_passthrough|[BootSetRootfsProviderPassthrough](#schemabootsetrootfsproviderpassthrough)|false|none|The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|arch|X86|
+|arch|ARM|
+|arch|Other|
+|arch|Unknown|
+
 <h2 id="tocS_V2BootSet">V2BootSet</h2>
 <!-- backwards compatibility -->
 <a id="schemav2bootset"></a>
@@ -5456,36 +5433,37 @@ Information on the status of a Session.
 
 ```
 
-A Boot Set is a collection of nodes defined by an explicit list, their functional
-role, and their logical groupings. This collection of nodes is associated with one
-set of boot artifacts and optional additional records for configuration and root
-filesystem provisioning.
-
 ### Properties
+
+allOf
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|[BootSetName](#schemabootsetname)|false|none|The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|path|[BootManifestPath](#schemabootmanifestpath)|true|none|A path identifying the metadata describing the components of the boot image.<br>This could be a URI, URL, etc, depending on the type of the Boot Set.<br><br>It is recommended that this should be 1-4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|cfs|[V2CfsParameters](#schemav2cfsparameters)|false|none|This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a Boot Set.|
-|type|[BootSetType](#schemabootsettype)|true|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|etag|[BootSetEtag](#schemabootsetetag)|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|kernel_parameters|[BootKernelParameters](#schemabootkernelparameters)|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_list|[NodeList](#schemanodelist)|false|none|A node list that is required to have at least one node.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_roles_groups|[NodeRoleList](#schemanoderolelist)|false|none|Node role list. Allows actions against nodes with associated roles.<br><br>It is recommended that this list should be 1-1023 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_groups|[NodeGroupList](#schemanodegrouplist)|false|none|Node group list. Allows actions against associated nodes by logical groupings.<br><br>It is recommended that this list should be 1-4095 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|arch|string|false|none|The node architecture to target. Filters nodes that are not part of matching architecture from being targeted by boot actions. This value should correspond to HSM component 'Arch' field exactly. For reasons of backwards compatibility, all HSM nodes that are of type Unknown are treated as being of type X86.|
-|rootfs_provider|[BootSetRootfsProvider](#schemabootsetrootfsprovider)|false|none|The root file system provider.<br><br>It is recommended that this should be 1-511 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|rootfs_provider_passthrough|[BootSetRootfsProviderPassthrough](#schemabootsetrootfsproviderpassthrough)|false|none|The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|[V2BootSetData](#schemav2bootsetdata)|false|none|A Boot Set is a collection of nodes defined by an explicit list, their functional<br>role, and their logical groupings. This collection of nodes is associated with one<br>set of boot artifacts and optional additional records for configuration and root<br>filesystem provisioning.<br><br>A boot set requires at least one of the following fields to be specified:<br>node_list, node_roles_groups, node_groups<br><br>If specified, the name field must match the key mapping to this boot set in the<br>boot_sets field of the containing V2SessionTemplate.|
 
-#### Enumerated Values
+and
 
-|Property|Value|
-|---|---|
-|arch|X86|
-|arch|ARM|
-|arch|Other|
-|arch|Unknown|
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|any|false|none|none|
+
+anyOf
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|object|false|none|none|
+
+or
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|object|false|none|none|
+
+or
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|object|false|none|none|
 
 <h2 id="tocS_V2SessionTemplateArray">V2SessionTemplateArray</h2>
 <!-- backwards compatibility -->
@@ -5586,7 +5564,7 @@ An array of Session Templates.
   "tenant": "string",
   "operation": "boot",
   "template_name": "cle-1.0.0",
-  "limit": "string",
+  "limit": "",
   "stage": true,
   "components": "string",
   "include_disabled": true,
@@ -5610,11 +5588,11 @@ A Session object
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+|name|[V2SessionName](#schemav2sessionname)|true|none|Name of the Session.|
 |tenant|[V2TenantName](#schemav2tenantname)|false|none|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same.|
-|operation|[V2SessionOperation](#schemav2sessionoperation)|false|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
-|template_name|[SessionTemplateName](#schemasessiontemplatename)|false|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|operation|[V2SessionOperation](#schemav2sessionoperation)|true|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
+|template_name|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
+|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.|
 |stage|boolean|false|none|Set to stage a Session which will not immediately change the state of any Components.<br>The "applystaged" endpoint can be called at a later time to trigger the start of this Session.|
 |components|string|false|none|A comma-separated list of nodes, representing the initial list of nodes<br>the Session should operate against.  The list will remain even if<br>other Sessions have taken over management of the nodes.|
 |include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM).|
@@ -5667,7 +5645,7 @@ A Session update object
     "tenant": "string",
     "operation": "boot",
     "template_name": "cle-1.0.0",
-    "limit": "string",
+    "limit": "",
     "stage": true,
     "components": "string",
     "include_disabled": true,
@@ -5811,9 +5789,9 @@ A collection of boot artifacts.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|kernel|[BootKernelPath](#schemabootkernelpath)|false|none|A path to the kernel to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|kernel_parameters|[BootKernelParameters](#schemabootkernelparameters)|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|initrd|[BootInitrdPath](#schemabootinitrdpath)|false|none|A path to the initrd to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|kernel|[BootKernelPath](#schemabootkernelpath)|false|none|A path to the kernel to use for booting.|
+|kernel_parameters|[BootKernelParameters](#schemabootkernelparameters)|false|none|The kernel parameters to use to boot the nodes.|
+|initrd|[BootInitrdPath](#schemabootinitrdpath)|false|none|A path to the initrd to use for booting.|
 
 <h2 id="tocS_V2ComponentBssToken">V2ComponentBssToken</h2>
 <!-- backwards compatibility -->
@@ -5850,16 +5828,11 @@ For BOS use-only, users should not set this field. It will be overwritten.
 
 The Component's ID. (e.g. xname for hardware Components)
 
-It is recommended that this should be 1-127 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|The Component's ID. (e.g. xname for hardware Components)<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|The Component's ID. (e.g. xname for hardware Components)|
 
 <h2 id="tocS_V2ComponentIdList">V2ComponentIdList</h2>
 <!-- backwards compatibility -->
@@ -5961,7 +5934,7 @@ The desired boot artifacts and configuration for a Component
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |boot_artifacts|[V2BootArtifacts](#schemav2bootartifacts)|false|none|A collection of boot artifacts.|
-|configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.|
 |bss_token|[V2ComponentBssToken](#schemav2componentbsstoken)|false|none|A token received from the node identifying the boot artifacts.<br>For BOS use-only, users should not set this field. It will be overwritten.|
 |last_updated|[V2ComponentLastUpdated](#schemav2componentlastupdated)|false|none|The date/time when the state was last updated in RFC 3339 format.|
 
@@ -5994,7 +5967,7 @@ may be set which can be triggered at a later time against this Component.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |boot_artifacts|[V2BootArtifacts](#schemav2bootartifacts)|false|none|A collection of boot artifacts.|
-|configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.|
 |session|any|false|none|none|
 
 oneOf
@@ -6050,9 +6023,9 @@ Information on the most recent action taken against the node.
 
 ```json
 {
-  "power_on_attempts": 0,
-  "power_off_graceful_attempts": 0,
-  "power_off_forceful_attempts": 0
+  "power_on_attempts": 1048576,
+  "power_off_graceful_attempts": 1048576,
+  "power_off_forceful_attempts": 1048576
 }
 
 ```
@@ -6066,6 +6039,26 @@ Information on the most recent attempt to return the node to its desired state.
 |power_on_attempts|integer|false|none|How many attempts have been made to power-on since the last time the node was in the desired state.|
 |power_off_graceful_attempts|integer|false|none|How many attempts have been made to power-off gracefully since the last time the node was in the desired state.|
 |power_off_forceful_attempts|integer|false|none|How many attempts have been made to power-off forcefully since the last time the node was in the desired state.|
+
+<h2 id="tocS_V2ComponentPhase">V2ComponentPhase</h2>
+<!-- backwards compatibility -->
+<a id="schemav2componentphase"></a>
+<a id="schema_V2ComponentPhase"></a>
+<a id="tocSv2componentphase"></a>
+<a id="tocsv2componentphase"></a>
+
+```json
+"string"
+
+```
+
+The current phase of the Component in the boot process.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|The current phase of the Component in the boot process.|
 
 <h2 id="tocS_V2ComponentStatus">V2ComponentStatus</h2>
 <!-- backwards compatibility -->
@@ -6089,7 +6082,7 @@ Status information for the Component
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|phase|string|false|none|The current phase of the Component in the boot process.|
+|phase|[V2ComponentPhase](#schemav2componentphase)|false|none|The current phase of the Component in the boot process.|
 |status|string|false|read-only|The current status of the Component.  More detailed than phase.|
 |status_override|string|false|none|If set, this will override the status value.|
 
@@ -6138,9 +6131,9 @@ Status information for the Component
     "failed": true
   },
   "event_stats": {
-    "power_on_attempts": 0,
-    "power_off_graceful_attempts": 0,
-    "power_off_forceful_attempts": 0
+    "power_on_attempts": 1048576,
+    "power_off_graceful_attempts": 1048576,
+    "power_off_forceful_attempts": 1048576
   },
   "status": {
     "phase": "string",
@@ -6162,7 +6155,105 @@ the Session responsible for the Component's current state.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|[V2ComponentId](#schemav2componentid)|false|none|The Component's ID. (e.g. xname for hardware Components)<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|id|[V2ComponentId](#schemav2componentid)|false|none|The Component's ID. (e.g. xname for hardware Components)|
+|actual_state|[V2ComponentActualState](#schemav2componentactualstate)|false|none|The actual boot artifacts and configuration for a Component|
+|desired_state|[V2ComponentDesiredState](#schemav2componentdesiredstate)|false|none|The desired boot artifacts and configuration for a Component|
+|staged_state|[V2ComponentStagedState](#schemav2componentstagedstate)|false|none|The staged boot artifacts and configuration for a Component. Optionally, a Session<br>may be set which can be triggered at a later time against this Component.|
+|last_action|[V2ComponentLastAction](#schemav2componentlastaction)|false|none|Information on the most recent action taken against the node.|
+|event_stats|[V2ComponentEventStats](#schemav2componenteventstats)|false|none|Information on the most recent attempt to return the node to its desired state.|
+|status|[V2ComponentStatus](#schemav2componentstatus)|false|none|Status information for the Component|
+|enabled|boolean|false|none|A flag indicating if actions should be taken for this Component.|
+|error|string|false|none|A description of the most recent error to impact the Component.|
+|session|any|false|none|none|
+
+oneOf
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+
+xor
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[EmptyString](#schemaemptystring)|false|none|An empty string value.|
+
+continued
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|retry_policy|integer|false|none|The maximum number attempts per action when actions fail.<br>Defaults to the global default_retry_policy if not set|
+
+<h2 id="tocS_V2ComponentWithId">V2ComponentWithId</h2>
+<!-- backwards compatibility -->
+<a id="schemav2componentwithid"></a>
+<a id="schema_V2ComponentWithId"></a>
+<a id="tocSv2componentwithid"></a>
+<a id="tocsv2componentwithid"></a>
+
+```json
+{
+  "id": "string",
+  "actual_state": {
+    "boot_artifacts": {
+      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+    },
+    "bss_token": "string",
+    "last_updated": "2019-07-28T03:26:00Z"
+  },
+  "desired_state": {
+    "boot_artifacts": {
+      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+    },
+    "configuration": "compute-23.4.0",
+    "bss_token": "string",
+    "last_updated": "2019-07-28T03:26:00Z"
+  },
+  "staged_state": {
+    "boot_artifacts": {
+      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+    },
+    "configuration": "compute-23.4.0",
+    "session": "session-20190728032600",
+    "last_updated": "2019-07-28T03:26:00Z"
+  },
+  "last_action": {
+    "last_updated": "2019-07-28T03:26:00Z",
+    "action": "string",
+    "failed": true
+  },
+  "event_stats": {
+    "power_on_attempts": 1048576,
+    "power_off_graceful_attempts": 1048576,
+    "power_off_forceful_attempts": 1048576
+  },
+  "status": {
+    "phase": "string",
+    "status": "string",
+    "status_override": "string"
+  },
+  "enabled": true,
+  "error": "string",
+  "session": "session-20190728032600",
+  "retry_policy": 1
+}
+
+```
+
+The current and desired artifacts state for a Component, and
+the Session responsible for the Component's current state.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|id|[V2ComponentId](#schemav2componentid)|true|none|The Component's ID. (e.g. xname for hardware Components)|
 |actual_state|[V2ComponentActualState](#schemav2componentactualstate)|false|none|The actual boot artifacts and configuration for a Component|
 |desired_state|[V2ComponentDesiredState](#schemav2componentdesiredstate)|false|none|The desired boot artifacts and configuration for a Component|
 |staged_state|[V2ComponentStagedState](#schemav2componentstagedstate)|false|none|The staged boot artifacts and configuration for a Component. Optionally, a Session<br>may be set which can be triggered at a later time against this Component.|
@@ -6237,9 +6328,9 @@ continued
       "failed": true
     },
     "event_stats": {
-      "power_on_attempts": 0,
-      "power_off_graceful_attempts": 0,
-      "power_off_forceful_attempts": 0
+      "power_on_attempts": 1048576,
+      "power_off_graceful_attempts": 1048576,
+      "power_off_forceful_attempts": 1048576
     },
     "status": {
       "phase": "string",
@@ -6263,6 +6354,78 @@ An array of Component states.
 |---|---|---|---|---|
 |*anonymous*|[[V2Component](#schemav2component)]|false|none|An array of Component states.|
 
+<h2 id="tocS_V2ComponentArrayWithIds">V2ComponentArrayWithIds</h2>
+<!-- backwards compatibility -->
+<a id="schemav2componentarraywithids"></a>
+<a id="schema_V2ComponentArrayWithIds"></a>
+<a id="tocSv2componentarraywithids"></a>
+<a id="tocsv2componentarraywithids"></a>
+
+```json
+[
+  {
+    "id": "string",
+    "actual_state": {
+      "boot_artifacts": {
+        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
+        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      },
+      "bss_token": "string",
+      "last_updated": "2019-07-28T03:26:00Z"
+    },
+    "desired_state": {
+      "boot_artifacts": {
+        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
+        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      },
+      "configuration": "compute-23.4.0",
+      "bss_token": "string",
+      "last_updated": "2019-07-28T03:26:00Z"
+    },
+    "staged_state": {
+      "boot_artifacts": {
+        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
+        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      },
+      "configuration": "compute-23.4.0",
+      "session": "session-20190728032600",
+      "last_updated": "2019-07-28T03:26:00Z"
+    },
+    "last_action": {
+      "last_updated": "2019-07-28T03:26:00Z",
+      "action": "string",
+      "failed": true
+    },
+    "event_stats": {
+      "power_on_attempts": 1048576,
+      "power_off_graceful_attempts": 1048576,
+      "power_off_forceful_attempts": 1048576
+    },
+    "status": {
+      "phase": "string",
+      "status": "string",
+      "status_override": "string"
+    },
+    "enabled": true,
+    "error": "string",
+    "session": "session-20190728032600",
+    "retry_policy": 1
+  }
+]
+
+```
+
+An array of Component states with associated Ids.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[V2ComponentWithId](#schemav2componentwithid)]|false|none|An array of Component states with associated Ids.|
+
 <h2 id="tocS_V2ComponentsFilterByIds">V2ComponentsFilterByIds</h2>
 <!-- backwards compatibility -->
 <a id="schemav2componentsfilterbyids"></a>
@@ -6284,7 +6447,7 @@ Information for patching multiple Components by listing their IDs.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|ids|string|true|none|A comma-separated list of Component IDs.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|ids|string|true|none|A comma-separated list of Component IDs.|
 |session|[EmptyStringNullable](#schemaemptystringnullable)|false|none|An empty string value.|
 
 <h2 id="tocS_V2ComponentsFilterBySession">V2ComponentsFilterBySession</h2>
@@ -6358,9 +6521,9 @@ All Components part of this Session will be patched.
       "failed": true
     },
     "event_stats": {
-      "power_on_attempts": 0,
-      "power_off_graceful_attempts": 0,
-      "power_off_forceful_attempts": 0
+      "power_on_attempts": 1048576,
+      "power_off_graceful_attempts": 1048576,
+      "power_off_forceful_attempts": 1048576
     },
     "status": {
       "phase": "string",
@@ -6493,12 +6656,12 @@ Options for the Boot Orchestration Service.
 |clear_stage|boolean|false|none|Allows a Component's staged information to be cleared when the requested staging action has been started. Defaults to false.|
 |component_actual_state_ttl|string|false|none|The maximum amount of time a Component's actual state is considered valid (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior for newly booted nodes and instructs bos-state-reporter to report once instead of periodically.|
 |disable_components_on_completion|boolean|false|none|If true, when a Session has brought a Component to its desired state, that Component will be marked as disabled in BOS.<br>If false, BOS will continue to maintain the state of the nodes declaratively, even after a Session finishes.|
-|discovery_frequency|integer|false|none|How frequently the BOS discovery agent syncs new Components from HSM. (in seconds)|
+|discovery_frequency|integer|false|none|How frequently the BOS discovery agent syncs new Components from HSM (in seconds)|
 |logging_level|string|false|none|The logging level for all BOS services|
 |max_boot_wait_time|integer|false|none|How long BOS will wait for a node to boot into a usable state before rebooting it again (in seconds)|
 |max_power_on_wait_time|integer|false|none|How long BOS will wait for a node to power on before calling power on again (in seconds)|
 |max_power_off_wait_time|integer|false|none|How long BOS will wait for a node to power off before forcefully powering off (in seconds)|
-|polling_frequency|integer|false|none|How frequently the BOS operators check Component state for needed actions. (in seconds)|
+|polling_frequency|integer|false|none|How frequently the BOS operators check Component state for needed actions (in seconds)|
 |default_retry_policy|integer|false|none|The default maximum number attempts per node for failed actions.|
 |max_component_batch_size|integer|false|none|The maximum number of Components that a BOS operator will process at once. 0 means no limit.|
 |session_limit_required|boolean|false|none|If true, Sessions cannot be created without specifying the limit parameter.|
