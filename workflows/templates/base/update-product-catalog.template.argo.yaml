@@ -34,8 +34,6 @@ spec:
   - name: catalog-update
     inputs:
       parameters:
-        - name: cray-product-catalog-update-image
-          value: "artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:2.3.0"
         - name: product-catalog-configmap-name
           value: "cray-product-catalog"
         - name: product-catalog-configmap-namespace
@@ -44,7 +42,7 @@ spec:
         - name: product-version
         - name: yaml-content
     container:
-      image: "{{inputs.parameters.cray-product-catalog-update-image}}"
+      image: artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:2.3.1
       command: [catalog_update]
       env:
         - name: PRODUCT
