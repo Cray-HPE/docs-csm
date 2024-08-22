@@ -26,7 +26,7 @@
 CSM_REL_NAME=${CSM_REL_NAME-"csm-${CSM_RELEASE}"}
 CSM_REL_DIR="/etc/cray/upgrade/csm/${CSM_REL_NAME}"
 mkdir -p ${CSM_REL_DIR}
-PREREQS_DONE_FILE="${CSM_REL_DIR}/prereqs.done"
+export PREREQS_DONE_FILE="${CSM_REL_DIR}/prereqs.done"
 
 function record_state() {
   state_name=$1
@@ -65,7 +65,7 @@ function is_state_recorded() {
     echo "upgrade ncn is not specified"
     exit 1
   fi
-  state_recorded=$(grep "${state_name}" "${state_dir}/state" 2> /dev/null | wc -l)
+  state_recorded=$(grep -w "${state_name}" "${state_dir}/state" 2> /dev/null | wc -l)
   if [[ ${state_recorded} != 0 ]]; then
     echo "1"
   else
