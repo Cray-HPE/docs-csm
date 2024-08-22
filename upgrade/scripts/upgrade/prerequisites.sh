@@ -613,6 +613,11 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Upgrade Kyverno charts before istio to avoid webhook timeouts
+do_upgrade_csm_chart cray-kyverno platform.yaml
+do_upgrade_csm_chart kyverno-policy platform.yaml
+do_upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
+
 # upgrade all charts dependent on cray-certmanager chart
 # it is neccessary to upgrade these before upgrade
 do_upgrade_csm_chart cray-istio platform.yaml
@@ -794,9 +799,6 @@ else
 fi
 
 do_upgrade_csm_chart cray-drydock platform.yaml
-do_upgrade_csm_chart cray-kyverno platform.yaml
-do_upgrade_csm_chart kyverno-policy platform.yaml
-do_upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
 do_upgrade_csm_chart cray-sysmgmt-health platform.yaml
 do_upgrade_csm_chart cray-tftp sysmgmt.yaml
 do_upgrade_csm_chart cray-tftp-pvc sysmgmt.yaml
@@ -813,8 +815,8 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     NCN_IMAGE_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
     set +o pipefail
 
-    KUBERNETES_VERSION=$(find "${artdir}/kubernetes" -name 'kubernetes*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')
-    CEPH_VERSION=$(find "${artdir}/storage-ceph" -name 'storage-ceph*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')
+    KUBERNETES_VERSION=$(find "${artdir}/kubernetes" -name 'kubernetes*.squashfs' -exec basename {} .squashfs \; | sed -e 's/^kubernetes-//' -e 's/-[^-]*$//')
+    CEPH_VERSION=$(find "${artdir}/storage-ceph" -name 'storage-ceph*.squashfs' -exec basename {} .squashfs \; | sed -e 's/^storage-ceph-//' -e 's/-[^-]*$//')
 
     k8s_done=0
     ceph_done=0
@@ -1257,6 +1259,57 @@ if [[ ${state_recorded} == "0" ]]; then
     "${locOfScript}/../../../workflows/scripts/upload-rebuild-templates.sh"
     rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*iuf-cli\*.rpm | sort -V | tail -1)"
 
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+state_name="PREPARE_KUBEADM"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    tmpdir=$(mktemp -d)
+
+    echo "Patching ConfigMap kubeadm-config ..."
+    kubectl -n kube-system get configmap kubeadm-config -o go-template --template '{{ .data.ClusterConfiguration }}' \
+      | yq4 e '.kubernetesVersion="1.24.17"' \
+      | yq4 e '.dns.imageRepository="artifactory.algol60.net/csm-docker/stable/registry.k8s.io/coredns"' \
+      | yq4 e '.imageRepository="artifactory.algol60.net/csm-docker/stable/registry.k8s.io"' \
+      | yq4 e '.controllerManager.extraArgs.terminated-pod-gc-threshold="250"' \
+      | yq4 e '.controllerManager.extraArgs.profiling="false"' \
+        > "${tmpdir}/kubeadm-config.yaml"
+    patch=$(jq -c -n --rawfile text "${tmpdir}/kubeadm-config.yaml" '.data["ClusterConfiguration"]=$text')
+    kubectl -n kube-system patch configmap kubeadm-config --type merge --patch "${patch}"
+
+    echo "Creating ConfigMap kubelet-config-1.24 ..."
+    kubectl -n kube-system get configmap kubelet-config-1.22 -o yaml \
+      | yq4 e '.metadata.name="kubelet-config-1.24"' \
+      | yq4 e 'del .metadata.creationTimestamp' \
+      | yq4 e 'del .metadata.resourceVersion' \
+      | yq4 e 'del .metadata.uid' \
+      | kubectl apply -f -
+
+    echo "Creating Role kubeadm:kubelet-config-1.24 ..."
+    kubectl -n kube-system get role kubeadm:kubelet-config-1.22 -o yaml \
+      | yq4 e '.metadata.name="kubeadm:kubelet-config-1.24"' \
+      | yq4 e '.rules[0].resourceNames[0]="kubelet-config-1.24"' \
+      | yq4 e 'del .metadata.creationTimestamp' \
+      | yq4 e 'del .metadata.resourceVersion' \
+      | yq4 e 'del .metadata.uid' \
+      | kubectl apply -f -
+
+    echo "Creating RoleBinding kubeadm:kubelet-config-1.24 ..."
+    kubectl -n kube-system get rolebinding kubeadm:kubelet-config-1.22 -o yaml \
+      | yq4 e '.metadata.name="kubeadm:kubelet-config-1.24"' \
+      | yq4 e '.roleRef.name="kubeadm:kubelet-config-1.24"' \
+      | yq4 e 'del .metadata.creationTimestamp' \
+      | yq4 e 'del .metadata.resourceVersion' \
+      | yq4 e 'del .metadata.uid' \
+      | kubectl apply -f -
+
+    rm -rf "${tmpdir}"
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
