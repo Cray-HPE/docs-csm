@@ -149,7 +149,7 @@ Filters for a status query may be supplied as a pipe-separated (|) list surround
 
 **Notice**
 
-The hardware management system no longer supports a "diag" state, as such the `show_diag` filter is considered deprecated. Specifying only the `show_diag` filter will not return any results.
+The Hardware Management System no longer supports a "diag" state, as such the `show_diag` filter is considered deprecated. Specifying only the `show_diag` filter will not return any results.
 
 > Body parameter
 
@@ -177,7 +177,7 @@ The hardware management system no longer supports a "diag" state, as such the `s
 |body|body|object|true|A JSON object to get status for selected components.|
 |» filter|body|string|false|Optional, pipe concatenated (|) list of filter strings, e.g. "filter1|filter2|filter3". Valid status filters are `show_all`, `show_disabled`, `show_halt`, `show_off`, `show_on`, `show_ready`, and `show_standby`. Valid flag filters are `show_alert`, `show_resvd`, and `show_warn`. Status and flag filters may be intermixed freely. If omitted, the default is `show_all`.|
 |» source|body|any|false|A string indicating the source for node status. Valid sources are `HSM` (or its aliases `HMS`, `SM`, `SMD`, or `Software`) and `Redfish` (or its alias `Hardware`). The default, when unspecified, is to use Redfish via the appropriate controller as the source for all status. The Hardware Management System (HMS) returns the largest set of possible status. A Redfish hardware source can *only* report **off** and **on** status for components.  Source strings are normalized to all lower case so `HSM` or `hsm` are both valid.|
-|» xnames|body|[string]|false|User specified list of component IDs (xnames) to get the status of. An empty array indicates all components in the system. If invalid xnames are specified then an error will be returned.|
+|» xnames|body|[string]|false|User specified list of component IDs (xnames) to get the status of. An empty array indicates all components in the system. On systems with more than around 200 nodes, requests that specify an empty array may not succeed; in those cases, explicitly specifying the desired xnames should work. If invalid xnames are specified then an error will be returned.|
 
 > Example responses
 
@@ -221,7 +221,7 @@ Status Code **200**
 |» err_msg|string|true|none|Message indicating any error encountered.|
 |» on|[string]|false|none|Optional, list of powered on components by xname.|
 |» off|[string]|false|none|Optional, list of powered off components by xname.|
-|» disabled|[string]|false|none|Optional, list of disabled components by xname. The component is physically installed, but ignored by system management software. The hardware management system does not treat disabled as a separate state and as such disabled does not indicate the anything about the hardware or software state of a node.|
+|» disabled|[string]|false|none|Optional, list of disabled components by xname. The component is physically installed, but ignored by system management software. The Hardware Management System does not treat disabled as a separate state and as such disabled does not indicate the anything about the hardware or software state of a node.|
 |» ready|[string]|false|none|Optional, list of booted components by xname. Operating system is fully booted and sending heartbeats.|
 |» standby|[string]|false|none|Optional, list of components in standby by xname. Components that were previously booted and but are no longer sending heartbeat.|
 
@@ -770,7 +770,7 @@ The `get_power_cap` API returns the power capping control(s) and currently appli
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|object|true|A JSON object to get power capping controls of selected nids.|
+|body|body|object|true|A JSON object to get power capping controls of selected NIDs.|
 |» nids|body|[integer]|true|User specified list, or empty array for all NIDs. This list must not contain invalid or duplicate NID numbers. If invalid NID numbers are specified then an error will be returned. If empty, the default is all NIDs. The specified NIDs must be in the `ready` state per the `get_node_status` command.|
 
 > Example responses
@@ -929,7 +929,7 @@ The `get_power_cap_capabilities` API returns information about installed hardwar
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|object|true|A JSON object to get power capping capabilities of selected nids.|
+|body|body|object|true|A JSON object to get power capping capabilities of selected NIDs.|
 |» nids|body|[integer]|true|User specified list, or empty array for all NIDs. This list must not contain invalid or duplicate NID numbers. If invalid NID numbers are specified, then an error will be returned.|
 
 > Example responses
@@ -944,7 +944,7 @@ The `get_power_cap_capabilities` API returns information about installed hardwar
     {
       "name": "01:000d:306e:0082:000a:0020:3a34:8300",
       "desc": "ComputeANC_IVB_130W_10c_32GB_14900_IntelKNCAccel",
-      "suppy": 425,
+      "supply": 425,
       "host_limit_min": 100,
       "host_limit_max": 200,
       "static": 0,
@@ -971,7 +971,7 @@ The `get_power_cap_capabilities` API returns information about installed hardwar
     {
       "name": "01:000d:306e:00e6:0014:0040:3a34:0000",
       "desc": "ComputeANC_IVB_230W_20c_64GB_14900_NoAccel",
-      "suppy": 425,
+      "supply": 425,
       "host_limit_min": 200,
       "host_limit_max": 350,
       "static": 0,
@@ -1009,7 +1009,7 @@ Status Code **200**
 |» e|integer(int32)|true|none|Request status code, zero on success.|
 |» err_msg|string|true|none|Message indicating any error encountered.|
 |» groups|[object]|true|none|Object array containing hardware specific information and NID membership, each element represent a unique hardware type.|
-|»» name|string|true|none|Opaque identifier which Cray system management sofware uses to uniquely identify a node type.|
+|»» name|string|true|none|Opaque identifier which Cray System Management Software uses to uniquely identify a node type.|
 |»» desc|string|true|none|Text description of the opaque node type identifier.|
 |»» host_limit_max|integer(int32)|true|none|Estimated maximum power, specified in watts, which host CPU(s) and memory may consume.|
 |»» host_limit_min|integer(int32)|true|none|Estimated minimum power, specified in watts, which host CPU(s) and memory require to operate.|
@@ -1131,7 +1131,7 @@ The `set_power_cap` API is used to establish an upper bound with respect to powe
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|object|true|A JSON object to set power capping parameters of selected nids.|
+|body|body|object|true|A JSON object to set power capping parameters of selected NIDs.|
 |» nids|body|[object]|true|Object array containing NID specific input data, each element represents a single NID.|
 |»» nid|body|integer(int32)|true|NID to apply the specified power caps. The specified NID must be in the **ready** state per the `get_node_status` command.|
 |»» controls|body|[object]|true|Array of node level control objects to be adjusted, one element per control.|
@@ -1142,7 +1142,7 @@ The `set_power_cap` API is used to establish an upper bound with respect to powe
 
 **»» controls**: Array of node level control objects to be adjusted, one element per control.
 Nodes with a high powered accelerators and high TDP processors will be automatically power capped at the **supply** limit returned per the `get_power_cap_capabilities` command. If a node level power cap is specified that is within the node control range but exceeds the supply limit, the actual power cap assigned will be clamped at the supply limit.
-The accelerator power cap value represents a subset of the total node level power cap. If a node level power cap of 400 watts is applied and an accelerator power cap of 180 watts is applied, then the total node power consumption is limited to 400 watts. If the accelerator is activerly consuming its entire 180 watt power allocation, then the host processor, memory subsystem, and support logic for that node may consume a maximum of 220 watts.
+The accelerator power cap value represents a subset of the total node level power cap. If a node level power cap of 400 watts is applied and an accelerator power cap of 180 watts is applied, then the total node power consumption is limited to 400 watts. If the accelerator is actively consuming its entire 180 watt power allocation, then the host processor, memory subsystem, and support logic for that node may consume a maximum of 220 watts.
 
 > Example responses
 
@@ -1537,7 +1537,7 @@ CAPMC Method Not Allowed error payload
 ```json
 {
   "e": 500,
-  "err_msg": "Connection to the secure store isn't ready. Cannot get redfish credentials."
+  "err_msg": "Connection to the secure store isn't ready. Cannot get Redfish credentials."
 }
 
 ```

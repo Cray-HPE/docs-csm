@@ -6718,7 +6718,9 @@ Update one or more of the BOS service options.
   "max_power_on_wait_time": 0,
   "max_power_off_wait_time": 0,
   "polling_frequency": 0,
-  "default_retry_policy": 1
+  "default_retry_policy": 1,
+  "max_component_batch_size": 1000,
+  "session_limit_required": true
 }
 ```
 
@@ -6744,7 +6746,9 @@ Update one or more of the BOS service options.
   "max_power_on_wait_time": 0,
   "max_power_off_wait_time": 0,
   "polling_frequency": 0,
-  "default_retry_policy": 1
+  "default_retry_policy": 1,
+  "max_component_batch_size": 1000,
+  "session_limit_required": true
 }
 ```
 
@@ -6944,7 +6948,9 @@ Retrieve the list of BOS service options.
   "max_power_on_wait_time": 0,
   "max_power_off_wait_time": 0,
   "polling_frequency": 0,
-  "default_retry_policy": 1
+  "default_retry_policy": 1,
+  "max_component_batch_size": 1000,
+  "session_limit_required": true
 }
 ```
 
@@ -8026,14 +8032,14 @@ A Session object specified by templateUuid (DEPRECATED -- use templateName)
 
 ```
 
-The phase that this data belongs to (boot, shutdown, or configure). If blank,
-it belongs to the Boot Set itself, which only applies to the GenericMetadata type.
+The phase that this data belongs to (boot, shutdown, or configure). Or it can
+be set to "boot_set" to indicate that it belongs to the Boot Set itself.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|*anonymous*|string|false|none|The phase that this data belongs to (boot, shutdown, or configure). Or it can<br>be set to "boot_set" to indicate that it belongs to the Boot Set itself.|
 
 <h2 id="tocS_V1NodeChangeList">V1NodeChangeList</h2>
 <!-- backwards compatibility -->
@@ -8062,7 +8068,7 @@ one category to another within a phase.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). Or it can<br>be set to "boot_set" to indicate that it belongs to the Boot Set itself.|
 |source|[V1PhaseCategoryName](#schemav1phasecategoryname)|true|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
 |destination|[V1PhaseCategoryName](#schemav1phasecategoryname)|true|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
 |node_list|[V1NodeList](#schemav1nodelist)|true|none|A list of node xnames.|
@@ -8132,7 +8138,7 @@ updates to which categories nodes are in.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |update_type|string|false|none|The type of update data|
-|phase|[V1PhaseName](#schemav1phasename)|false|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|phase|[V1PhaseName](#schemav1phasename)|false|none|The phase that this data belongs to (boot, shutdown, or configure). Or it can<br>be set to "boot_set" to indicate that it belongs to the Boot Set itself.|
 |data|[V1NodeChangeList](#schemav1nodechangelist)|false|none|The information used to update the status of a node list. It moves nodes from<br>one category to another within a phase.|
 
 <h2 id="tocS_V1UpdateRequestNodeErrorsList">V1UpdateRequestNodeErrorsList</h2>
@@ -8170,7 +8176,7 @@ updates to which errors have occurred and which nodes encountered those errors
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |update_type|string|false|none|The type of update data|
-|phase|[V1PhaseName](#schemav1phasename)|false|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|phase|[V1PhaseName](#schemav1phasename)|false|none|The phase that this data belongs to (boot, shutdown, or configure). Or it can<br>be set to "boot_set" to indicate that it belongs to the Boot Set itself.|
 |data|[V1NodeErrorsList](#schemav1nodeerrorslist)|false|none|Categorizing nodes into failures by the type of error they have.<br>This is an additive characterization. Nodes will be added to existing errors.<br>This does not overwrite previously existing errors.|
 
 <h2 id="tocS_V1UpdateRequestGenericMetadata">V1UpdateRequestGenericMetadata</h2>
@@ -8205,7 +8211,7 @@ updates to metadata, specifically start and stop times
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |update_type|string|false|none|The type of update data|
-|phase|[V1PhaseName](#schemav1phasename)|false|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|phase|[V1PhaseName](#schemav1phasename)|false|none|The phase that this data belongs to (boot, shutdown, or configure). Or it can<br>be set to "boot_set" to indicate that it belongs to the Boot Set itself.|
 |data|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
 
 <h2 id="tocS_V2CfsParameters">V2CfsParameters</h2>
@@ -8396,7 +8402,8 @@ enforced in a future version.
 
 ```
 
-A Session Creation object
+A Session Creation object. A UUID name is generated if a name is not provided. The limit parameter is
+required if the session_limit_required option is true.
 
 ### Properties
 
@@ -8405,7 +8412,7 @@ A Session Creation object
 |name|string|false|none|Name of the session. A UUID name is generated if a name is not provided.|
 |operation|string|true|none|A Session represents a desired state that is being applied to a group of components.  Sessions run until all components it manages have either been disabled due to completion, or until all components are managed by other newer sessions.<br>Operation -- An operation to perform on nodes in this session.<br><br><br><br><br>    Boot                 Applies the template to the components and boots/reboots if necessary.<br>    Reboot               Applies the template to the components guarantees a reboot.<br>    Shutdown             Power down nodes that are on.|
 |template_name|[V2TemplateName](#schemav2templatename)|true|none|The name of the Session Template<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but will be<br>enforced in a future version.|
-|limit|string|false|none|A comma-separated of nodes, groups, or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.<br>It is recommended that this should be 1-65535 characters in length.<br>This restriction is not enforced in this version of BOS, but it is targeted to start being enforced in an upcoming BOS version.|
+|limit|string|false|none|A comma-separated of nodes, groups, or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.<br>Alternatively, the limit can be set to "*", which means no limit.<br>It is recommended that this should be 1-65535 characters in length.<br>This restriction is not enforced in this version of BOS, but it is targeted to start being enforced in an upcoming BOS version.|
 |stage|boolean|false|none|Set to stage a session which will not immediately change the state of any components. The "applystaged" endpoint can be called at a later time to trigger the start of this session.|
 |include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM)|
 
@@ -8750,7 +8757,7 @@ A collection of boot artifacts.
 
 ```
 
-The desired boot artifacts and configuration for a component
+The actual boot artifacts and configuration for a component
 
 ### Properties
 
@@ -8813,7 +8820,8 @@ The desired boot artifacts and configuration for a component
 
 ```
 
-The desired boot artifacts and configuration for a component
+The staged boot artifacts and configuration for a component. Optionally, a session
+may be set which can be triggered at a later time against this component.
 
 ### Properties
 
@@ -8971,9 +8979,9 @@ The current and desired artifacts state for a component.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |id|string|false|none|The component's ID. e.g. xname for hardware components<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|actual_state|[V2ComponentActualState](#schemav2componentactualstate)|false|none|The desired boot artifacts and configuration for a component|
+|actual_state|[V2ComponentActualState](#schemav2componentactualstate)|false|none|The actual boot artifacts and configuration for a component|
 |desired_state|[V2ComponentDesiredState](#schemav2componentdesiredstate)|false|none|The desired boot artifacts and configuration for a component|
-|staged_state|[V2ComponentStagedState](#schemav2componentstagedstate)|false|none|The desired boot artifacts and configuration for a component|
+|staged_state|[V2ComponentStagedState](#schemav2componentstagedstate)|false|none|The staged boot artifacts and configuration for a component. Optionally, a session<br>may be set which can be triggered at a later time against this component.|
 |last_action|[V2ComponentLastAction](#schemav2componentlastaction)|false|none|Information on the most recent action taken against the node.|
 |event_stats|[V2ComponentEventStats](#schemav2componenteventstats)|false|none|Information on the most recent attempt to return the node to its desired state.|
 |status|[V2ComponentStatus](#schemav2componentstatus)|false|none|Status information for the component|
@@ -9230,7 +9238,9 @@ A list of components that should have their staged session applied.
   "max_power_on_wait_time": 0,
   "max_power_off_wait_time": 0,
   "polling_frequency": 0,
-  "default_retry_policy": 1
+  "default_retry_policy": 1,
+  "max_component_batch_size": 1000,
+  "session_limit_required": true
 }
 
 ```
@@ -9244,7 +9254,7 @@ Options for the Boot Orchestration Service.
 |cleanup_completed_session_ttl|string|false|none|Delete complete sessions that are older than cleanup_completed_session_ttl (in hours). 0h disables cleanup behavior.|
 |clear_stage|boolean|false|none|Allows components staged information to be cleared when the requested staging action has been started. Defaults to false.|
 |component_actual_state_ttl|string|false|none|The maximum amount of time a component's actual state is considered valid (in hours). 0h disables cleanup behavior for newly booted nodes and instructs bos-state-reporter to report once instead of periodically.|
-|disable_components_on_completion|boolean|false|none|Allows for BOS components to be marked as disabled after a session has been completed. If false, BOS will continue to maintain the state of the nodes declaratively, even after a session finishes.|
+|disable_components_on_completion|boolean|false|none|If true, when a session has brought a component to its desired state, that component will be marked as disabled in BOS.<br>If false, BOS will continue to maintain the state of the nodes declaratively, even after a session finishes.|
 |discovery_frequency|integer|false|none|How frequently the BOS discovery agent syncs new components from HSM. (in seconds)|
 |logging_level|string|false|none|The logging level for all BOS services|
 |max_boot_wait_time|integer|false|none|How long BOS will wait for a node to boot into a usable state before rebooting it again (in seconds)|
@@ -9252,6 +9262,8 @@ Options for the Boot Orchestration Service.
 |max_power_off_wait_time|integer|false|none|How long BOS will wait for a node to power off before forcefully powering off (in seconds)|
 |polling_frequency|integer|false|none|How frequently the BOS operators check component state for needed actions. (in seconds)|
 |default_retry_policy|integer|false|none|The default maximum number attempts per node for failed actions.|
+|max_component_batch_size|integer|false|none|The maximum number of Components that a BOS operator will process at once. 0 means no limit.|
+|session_limit_required|boolean|false|none|If true, BOS v2 Sessions cannot be created without specifying the limit parameter.|
 
 <h2 id="tocS_SessionTemplateArray">SessionTemplateArray</h2>
 <!-- backwards compatibility -->

@@ -142,9 +142,9 @@ func main() {
 
 `GET /`
 
-*Get API versions*
+*Get CFS service version*
 
-Return list of versions currently running.
+Return the CFS service version that is currently running.
 
 > Example responses
 
@@ -152,9 +152,9 @@ Return list of versions currently running.
 
 ```json
 {
-  "major": 0,
-  "minor": 0,
-  "patch": 0
+  "major": "1",
+  "minor": "0",
+  "patch": "10"
 }
 ```
 
@@ -231,9 +231,9 @@ func main() {
 
 `GET /versions`
 
-*Get API versions*
+*Get CFS service version*
 
-Return list of versions currently running.
+Return the CFS service version that is currently running.
 
 > Example responses
 
@@ -241,9 +241,9 @@ Return list of versions currently running.
 
 ```json
 {
-  "major": 0,
-  "minor": 0,
-  "patch": 0
+  "major": "1",
+  "minor": "0",
+  "patch": "10"
 }
 ```
 
@@ -320,9 +320,9 @@ func main() {
 
 `GET /v2`
 
-*Get API versions*
+*Get CFS service version*
 
-Return list of versions currently running.
+Return the CFS service version that is currently running.
 
 > Example responses
 
@@ -330,9 +330,9 @@ Return list of versions currently running.
 
 ```json
 {
-  "major": 0,
-  "minor": 0,
-  "patch": 0
+  "major": "1",
+  "minor": "0",
+  "patch": "10"
 }
 ```
 
@@ -741,9 +741,9 @@ Retrieve all the configuration framework sessions on the system.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h" DEPRECATED: This field has been replaced by min_age and max_age|
-|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
+|age|query|string|false|Return only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h. DEPRECATED: This field has been replaced by min_age and max_age|
+|min_age|query|string|false|Return only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
+|max_age|query|string|false|Return only sessions younger than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
 |status|query|string|false|Return only sessions with the given status.|
 |name_contains|query|string|false|Return only sessions whose session name contains the given string.|
 |succeeded|query|string|false|Return only sessions that have succeeded/failed.|
@@ -1143,13 +1143,13 @@ Delete multiple configuration sessions.  If filters are provided, only sessions 
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|age|query|string|false|Deletes only sessions older than the given age.  Age is given in the format "1d" or "6h" DEPRECATED: This field has been replaced by min_age and max_age|
-|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
+|age|query|string|false|Deletes only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h. DEPRECATED: This field has been replaced by min_age and max_age|
+|min_age|query|string|false|Deletes only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
+|max_age|query|string|false|Deletes only sessions younger than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
 |status|query|string|false|Deletes only sessions with the given status.|
 |name_contains|query|string|false|Delete only sessions whose session name contains the given string.|
 |succeeded|query|string|false|Delete only sessions that have succeeded/failed.|
-|tags|query|string|false|Return only sessions whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list. Only sessions that match all tags will be deleted.|
+|tags|query|string|false|Deletes only sessions whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list. Only sessions that match all tags will be deleted.|
 
 #### Enumerated Values
 
@@ -1679,13 +1679,6 @@ Retrieve the full collection of components in the form of a ComponentArray. Full
         "sessionName": "string"
       }
     ],
-    "stateAppend": {
-      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
-      "playbook": "site.yml",
-      "commit": "string",
-      "lastUpdated": "2019-07-28T03:26:00Z",
-      "sessionName": "string"
-    },
     "desiredConfig": "string",
     "desiredState": [
       {
@@ -1852,13 +1845,6 @@ Update the state for a collection of components in the cfs database
         "sessionName": "string"
       }
     ],
-    "stateAppend": {
-      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
-      "playbook": "site.yml",
-      "commit": "string",
-      "lastUpdated": "2019-07-28T03:26:00Z",
-      "sessionName": "string"
-    },
     "desiredConfig": "string",
     "desiredState": [
       {
@@ -2025,13 +2011,6 @@ Update the state for a collection of components in the cfs database
         "sessionName": "string"
       }
     ],
-    "stateAppend": {
-      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
-      "playbook": "site.yml",
-      "commit": "string",
-      "lastUpdated": "2019-07-28T03:26:00Z",
-      "sessionName": "string"
-    },
     "desiredConfig": "string",
     "desiredState": [
       {
@@ -2156,13 +2135,6 @@ Retrieve the configuration and current state of a single component
       "sessionName": "string"
     }
   ],
-  "stateAppend": {
-    "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
-    "playbook": "site.yml",
-    "commit": "string",
-    "lastUpdated": "2019-07-28T03:26:00Z",
-    "sessionName": "string"
-  },
   "desiredConfig": "string",
   "desiredState": [
     {
@@ -2320,13 +2292,6 @@ Update the state for a given component in the cfs database
       "sessionName": "string"
     }
   ],
-  "stateAppend": {
-    "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
-    "playbook": "site.yml",
-    "commit": "string",
-    "lastUpdated": "2019-07-28T03:26:00Z",
-    "sessionName": "string"
-  },
   "desiredConfig": "string",
   "desiredState": [
     {
@@ -2483,13 +2448,6 @@ Update the state for a given component in the cfs database
       "sessionName": "string"
     }
   ],
-  "stateAppend": {
-    "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
-    "playbook": "site.yml",
-    "commit": "string",
-    "lastUpdated": "2019-07-28T03:26:00Z",
-    "sessionName": "string"
-  },
   "desiredConfig": "string",
   "desiredState": [
     {
@@ -3232,9 +3190,9 @@ Link to other resources
 
 ```json
 {
-  "major": 0,
-  "minor": 0,
-  "patch": 0
+  "major": "1",
+  "minor": "0",
+  "patch": "10"
 }
 
 ```
@@ -3245,9 +3203,9 @@ Version data
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|major|integer|false|none|none|
-|minor|integer|false|none|none|
-|patch|integer|false|none|none|
+|major|string|false|none|none|
+|minor|string|false|none|none|
+|patch|string|false|none|none|
 
 <h2 id="tocS_Healthz">Healthz</h2>
 <!-- backwards compatibility -->
@@ -3312,7 +3270,7 @@ Configuration options for the configuration service.
 |defaultBatcherRetryPolicy|integer|false|none|The default maximum number retries per node when configuration fails.|
 |defaultPlaybook|string|false|none|The default playbook to be used if not specified in a node's desired state.|
 |defaultAnsibleConfig|string|false|none|The Kubernetes ConfigMap which holds the default ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service.|
-|sessionTTL|string|false|none|A time-to-live applied to all completed CFS sessions.  Specified in hours or days. e.g. 3d or 24h.  Set to an empty string to disable.|
+|sessionTTL|string|false|none|A time-to-live applied to all completed CFS sessions. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h. Set to an empty string to disable.|
 |additionalInventoryUrl|string|false|none|The git clone URL of a repo with additional inventory files.  All files in the repo will be copied into the hosts directory of CFS.|
 |batcherMaxBackoff|integer|false|none|The maximum number of seconds that batcher will backoff from session creation if problems are detected.|
 |batcherDisable|boolean|false|none|Disables cfs-batcher's automatic session creation if set to True.|
@@ -3733,7 +3691,6 @@ The current configuration state for a component.
     "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
     "playbook": "site.yml",
     "commit": "string",
-    "lastUpdated": "2019-07-28T03:26:00Z",
     "sessionName": "string"
   },
   "desiredConfig": "string",
@@ -3766,7 +3723,11 @@ The configuration state and desired state for a component.
 |---|---|---|---|---|
 |id|string|false|none|The component's id. e.g. xname for hardware components|
 |state|[[ConfigurationStateLayer](#schemaconfigurationstatelayer)]|false|none|Information about the desired config and status of the layers|
-|stateAppend|[ConfigurationStateLayer](#schemaconfigurationstatelayer)|false|none|A single state that will be appended to the list of current states.|
+|stateAppend|object|false|write-only|A single state that will be appended to the list of current states.|
+|» cloneUrl|string|false|none|The clone URL of the configuration content repository.|
+|» playbook|string|false|none|The Ansible playbook to run.|
+|» commit|string|false|none|The commit hash of the configuration repository when the state is set.|
+|» sessionName|string|false|none|The name of the CFS session that last configured the component.|
 |desiredConfig|string|false|none|A reference to a configuration|
 |desiredState|[[ConfigurationStateLayer](#schemaconfigurationstatelayer)]|false|read-only|Information about the desired config and status of the layers|
 |errorCount|integer|false|none|The count of failed configuration attempts.|
@@ -3809,7 +3770,6 @@ The configuration state and desired state for a component.
       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "playbook": "site.yml",
       "commit": "string",
-      "lastUpdated": "2019-07-28T03:26:00Z",
       "sessionName": "string"
     },
     "desiredConfig": "string",
@@ -3906,7 +3866,6 @@ Information for patching multiple components.
       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/config-management.git",
       "playbook": "site.yml",
       "commit": "string",
-      "lastUpdated": "2019-07-28T03:26:00Z",
       "sessionName": "string"
     },
     "desiredConfig": "string",

@@ -1244,6 +1244,9 @@ Additional valid values may be added via configuration file. See the results of 
 |type|NodeEnclosure|
 |type|NodeEnclosurePowerSupply|
 |type|HSNBoard|
+|type|MgmtSwitch|
+|type|MgmtHLSwitch|
+|type|CDUMgmtSwitch|
 |type|Node|
 |type|Processor|
 |type|Drive|
@@ -3854,6 +3857,9 @@ Additional valid values may be added via configuration file. See the results of 
 |type|NodeEnclosure|
 |type|NodeEnclosurePowerSupply|
 |type|HSNBoard|
+|type|MgmtSwitch|
+|type|MgmtHLSwitch|
+|type|CDUMgmtSwitch|
 |type|Node|
 |type|Processor|
 |type|Drive|
@@ -4677,6 +4683,9 @@ Default is NestNodesOnly.
 |type|NodeEnclosure|
 |type|NodeEnclosurePowerSupply|
 |type|HSNBoard|
+|type|MgmtSwitch|
+|type|MgmtHLSwitch|
+|type|CDUMgmtSwitch|
 |type|Node|
 |type|Processor|
 |type|Drive|
@@ -4814,6 +4823,36 @@ Default is NestNodesOnly.
   "HSNBoards": [
     {
       "HSNBoardLocationInfo": {
+        "Id": "string",
+        "Name": "string",
+        "Description": "string",
+        "Hostname": "string"
+      }
+    }
+  ],
+  "MgmtSwitches": [
+    {
+      "MgmtSwitchLocationInfo": {
+        "Id": "string",
+        "Name": "string",
+        "Description": "string",
+        "Hostname": "string"
+      }
+    }
+  ],
+  "MgmtHLSwitches": [
+    {
+      "MgmtHLSwitchLocationInfo": {
+        "Id": "string",
+        "Name": "string",
+        "Description": "string",
+        "Hostname": "string"
+      }
+    }
+  ],
+  "CDUMgmtSwitches": [
+    {
+      "CDUMgmtSwitchLocationInfo": {
         "Id": "string",
         "Name": "string",
         "Description": "string",
@@ -5342,6 +5381,9 @@ Retrieve all HWInventoryByLocation entries. Note that all entries are displayed 
 |type|NodeEnclosure|
 |type|NodeEnclosurePowerSupply|
 |type|HSNBoard|
+|type|MgmtSwitch|
+|type|MgmtHLSwitch|
+|type|CDUMgmtSwitch|
 |type|Node|
 |type|Processor|
 |type|Drive|
@@ -5417,6 +5459,9 @@ Status Code **200**
 |Type|NodeEnclosure|
 |Type|NodeEnclosurePowerSupply|
 |Type|HSNBoard|
+|Type|MgmtSwitch|
+|Type|MgmtHLSwitch|
+|Type|CDUMgmtSwitch|
 |Type|Node|
 |Type|Processor|
 |Type|Drive|
@@ -5440,6 +5485,9 @@ Status Code **200**
 |HWInventoryByLocationType|HWInvByLocRouterModule|
 |HWInventoryByLocationType|HWInvByLocNodeEnclosure|
 |HWInventoryByLocationType|HWInvByLocHSNBoard|
+|HWInventoryByLocationType|HWInvByLocMgmtSwitch|
+|HWInventoryByLocationType|HWInvByLocMgmtHLSwitch|
+|HWInventoryByLocationType|HWInvByLocCDUMgmtSwitch|
 |HWInventoryByLocationType|HWInvByLocNode|
 |HWInventoryByLocationType|HWInvByLocProcessor|
 |HWInventoryByLocationType|HWInvByLocNodeAccel|
@@ -5471,6 +5519,9 @@ Status Code **200**
 |Type|NodeEnclosure|
 |Type|NodeEnclosurePowerSupply|
 |Type|HSNBoard|
+|Type|MgmtSwitch|
+|Type|MgmtHLSwitch|
+|Type|CDUMgmtSwitch|
 |Type|Node|
 |Type|Processor|
 |Type|Drive|
@@ -5492,6 +5543,9 @@ Status Code **200**
 |HWInventoryByFRUType|HWInvByFRURouterModule|
 |HWInventoryByFRUType|HWInvByFRUNodeEnclosure|
 |HWInventoryByFRUType|HWInvByFRUHSNBoard|
+|HWInventoryByFRUType|HWInvByFRUMgmtSwitch|
+|HWInventoryByFRUType|HWInvByFRUMgmtHLSwitch|
+|HWInventoryByFRUType|HWInvByFRUCDUMgmtSwitch|
 |HWInventoryByFRUType|HWInvByFRUNode|
 |HWInventoryByFRUType|HWInvByFRUProcessor|
 |HWInventoryByFRUType|HWInvByFRUNodeAccel|
@@ -5646,6 +5700,9 @@ Create/Update hardware inventory entries
 |»» Type|NodeEnclosure|
 |»» Type|NodeEnclosurePowerSupply|
 |»» Type|HSNBoard|
+|»» Type|MgmtSwitch|
+|»» Type|MgmtHLSwitch|
+|»» Type|CDUMgmtSwitch|
 |»» Type|Node|
 |»» Type|Processor|
 |»» Type|Drive|
@@ -5669,6 +5726,9 @@ Create/Update hardware inventory entries
 |»» HWInventoryByLocationType|HWInvByLocRouterModule|
 |»» HWInventoryByLocationType|HWInvByLocNodeEnclosure|
 |»» HWInventoryByLocationType|HWInvByLocHSNBoard|
+|»» HWInventoryByLocationType|HWInvByLocMgmtSwitch|
+|»» HWInventoryByLocationType|HWInvByLocMgmtHLSwitch|
+|»» HWInventoryByLocationType|HWInvByLocCDUMgmtSwitch|
 |»» HWInventoryByLocationType|HWInvByLocNode|
 |»» HWInventoryByLocationType|HWInvByLocProcessor|
 |»» HWInventoryByLocationType|HWInvByLocNodeAccel|
@@ -5700,6 +5760,9 @@ Create/Update hardware inventory entries
 |»»» Type|NodeEnclosure|
 |»»» Type|NodeEnclosurePowerSupply|
 |»»» Type|HSNBoard|
+|»»» Type|MgmtSwitch|
+|»»» Type|MgmtHLSwitch|
+|»»» Type|CDUMgmtSwitch|
 |»»» Type|Node|
 |»»» Type|Processor|
 |»»» Type|Drive|
@@ -5721,6 +5784,9 @@ Create/Update hardware inventory entries
 |»»» HWInventoryByFRUType|HWInvByFRURouterModule|
 |»»» HWInventoryByFRUType|HWInvByFRUNodeEnclosure|
 |»»» HWInventoryByFRUType|HWInvByFRUHSNBoard|
+|»»» HWInventoryByFRUType|HWInvByFRUMgmtSwitch|
+|»»» HWInventoryByFRUType|HWInvByFRUMgmtHLSwitch|
+|»»» HWInventoryByFRUType|HWInvByFRUCDUMgmtSwitch|
 |»»» HWInventoryByFRUType|HWInvByFRUNode|
 |»»» HWInventoryByFRUType|HWInvByFRUProcessor|
 |»»» HWInventoryByFRUType|HWInvByFRUNodeAccel|
@@ -6373,6 +6439,9 @@ Retrieve all HWInventoryByFRU entries. Note that there is no organization of the
 |type|NodeEnclosure|
 |type|NodeEnclosurePowerSupply|
 |type|HSNBoard|
+|type|MgmtSwitch|
+|type|MgmtHLSwitch|
+|type|CDUMgmtSwitch|
 |type|Node|
 |type|Processor|
 |type|Drive|
@@ -6458,6 +6527,9 @@ Status Code **200**
 |Type|NodeEnclosure|
 |Type|NodeEnclosurePowerSupply|
 |Type|HSNBoard|
+|Type|MgmtSwitch|
+|Type|MgmtHLSwitch|
+|Type|CDUMgmtSwitch|
 |Type|Node|
 |Type|Processor|
 |Type|Drive|
@@ -6479,6 +6551,9 @@ Status Code **200**
 |HWInventoryByFRUType|HWInvByFRURouterModule|
 |HWInventoryByFRUType|HWInvByFRUNodeEnclosure|
 |HWInventoryByFRUType|HWInvByFRUHSNBoard|
+|HWInventoryByFRUType|HWInvByFRUMgmtSwitch|
+|HWInventoryByFRUType|HWInvByFRUMgmtHLSwitch|
+|HWInventoryByFRUType|HWInvByFRUCDUMgmtSwitch|
 |HWInventoryByFRUType|HWInvByFRUNode|
 |HWInventoryByFRUType|HWInvByFRUProcessor|
 |HWInventoryByFRUType|HWInvByFRUNodeAccel|
@@ -7625,6 +7700,9 @@ Retrieve all Redfish endpoint entries as a named array, optionally filtering it.
 |type|NodeEnclosure|
 |type|NodeEnclosurePowerSupply|
 |type|HSNBoard|
+|type|MgmtSwitch|
+|type|MgmtHLSwitch|
+|type|CDUMgmtSwitch|
 |type|Node|
 |type|Processor|
 |type|Drive|
@@ -8643,6 +8721,9 @@ Retrieve the full collection of ComponentEndpoints in the form of a ComponentEnd
 |type|NodeEnclosure|
 |type|NodeEnclosurePowerSupply|
 |type|HSNBoard|
+|type|MgmtSwitch|
+|type|MgmtHLSwitch|
+|type|CDUMgmtSwitch|
 |type|Node|
 |type|Processor|
 |type|Drive|
@@ -9876,6 +9957,9 @@ Status Code **200**
 |Type|NodeEnclosure|
 |Type|NodeEnclosurePowerSupply|
 |Type|HSNBoard|
+|Type|MgmtSwitch|
+|Type|MgmtHLSwitch|
+|Type|CDUMgmtSwitch|
 |Type|Node|
 |Type|Processor|
 |Type|Drive|
@@ -13053,6 +13137,9 @@ Additional valid values may be added via configuration file. See the results of 
 |type|NodeEnclosure|
 |type|NodeEnclosurePowerSupply|
 |type|HSNBoard|
+|type|MgmtSwitch|
+|type|MgmtHLSwitch|
+|type|CDUMgmtSwitch|
 |type|Node|
 |type|Processor|
 |type|Drive|
@@ -15615,6 +15702,9 @@ Additional valid values may be added via configuration file. See the results of 
 |type|NodeEnclosure|
 |type|NodeEnclosurePowerSupply|
 |type|HSNBoard|
+|type|MgmtSwitch|
+|type|MgmtHLSwitch|
+|type|CDUMgmtSwitch|
 |type|Node|
 |type|Processor|
 |type|Drive|
@@ -18744,6 +18834,36 @@ Numerical identifier for HSN topology class
       }
     }
   ],
+  "MgmtSwitches": [
+    {
+      "MgmtSwitchLocationInfo": {
+        "Id": "string",
+        "Name": "string",
+        "Description": "string",
+        "Hostname": "string"
+      }
+    }
+  ],
+  "MgmtHLSwitches": [
+    {
+      "MgmtHLSwitchLocationInfo": {
+        "Id": "string",
+        "Name": "string",
+        "Description": "string",
+        "Hostname": "string"
+      }
+    }
+  ],
+  "CDUMgmtSwitches": [
+    {
+      "CDUMgmtSwitchLocationInfo": {
+        "Id": "string",
+        "Name": "string",
+        "Description": "string",
+        "Hostname": "string"
+      }
+    }
+  ],
   "Nodes": [
     {
       "ID": "x0c0s0b0n0",
@@ -19166,6 +19286,9 @@ Either way, the 'Target' field is the parent component, partition or system that
 |RouterModules|[[HWInvByLocRouterModule](#schemahwinvbylocroutermodule)]|false|read-only|All appropriate components with HMS type 'RouterModule' given Target component/partition and query type.|
 |NodeEnclosures|[[HWInvByLocNodeEnclosure](#schemahwinvbylocnodeenclosure)]|false|read-only|All appropriate components with HMS type 'NodeEnclosure' given Target component/partition and query type.|
 |HSNBoards|[[HWInvByLocHSNBoard](#schemahwinvbylochsnboard)]|false|read-only|All appropriate components with HMS type 'HSNBoard' given Target component/partition and query type.|
+|MgmtSwitches|[[HWInvByLocMgmtSwitch](#schemahwinvbylocmgmtswitch)]|false|read-only|All appropriate components with HMS type 'MgmtSwitch' given Target component/partition and query type.|
+|MgmtHLSwitches|[[HWInvByLocMgmtHLSwitch](#schemahwinvbylocmgmthlswitch)]|false|read-only|All appropriate components with HMS type 'MgmtHLSwitch' given Target component/partition and query type.|
+|CDUMgmtSwitches|[[HWInvByLocCDUMgmtSwitch](#schemahwinvbyloccdumgmtswitch)]|false|read-only|All appropriate components with HMS type 'CDUMgmtSwitch' given Target component/partition and query type.|
 |Nodes|[[HWInvByLocNode](#schemahwinvbylocnode)]|false|read-only|All appropriate components with HMS type 'Node' given Target component/partition and query type.|
 |Processors|[[HWInvByLocProcessor](#schemahwinvbylocprocessor)]|false|read-only|All appropriate components with HMS type 'Processor' given Target component/partition and query type.|
 |NodeAccels|[[HWInvByLocNodeAccel](#schemahwinvbylocnodeaccel)]|false|read-only|All appropriate components with HMS type 'NodeAccel' given Target component/partition and query type.|
@@ -19225,6 +19348,9 @@ This is the basic entry in the hardware inventory for a particular location/xnam
 |HWInventoryByLocationType|HWInvByLocRouterModule|
 |HWInventoryByLocationType|HWInvByLocNodeEnclosure|
 |HWInventoryByLocationType|HWInvByLocHSNBoard|
+|HWInventoryByLocationType|HWInvByLocMgmtSwitch|
+|HWInventoryByLocationType|HWInvByLocMgmtHLSwitch|
+|HWInventoryByLocationType|HWInvByLocCDUMgmtSwitch|
 |HWInventoryByLocationType|HWInvByLocNode|
 |HWInventoryByLocationType|HWInvByLocProcessor|
 |HWInventoryByLocationType|HWInvByLocNodeAccel|
@@ -19519,6 +19645,114 @@ and
 |---|---|---|---|---|
 |*anonymous*|object|false|none|none|
 |» HSNBoardLocationInfo|[HWInventory.1.0.0_RedfishChassisLocationInfo](#schemahwinventory.1.0.0_redfishchassislocationinfo)|false|none|These are pass-through properties of the Redfish Chassis object type that are also used in HMS inventory data.  They will be mostly informational as exactly how fields are set depends on how the particular implementation does things, but will be useful for servicing.|
+
+<h2 id="tocS_HWInvByLocMgmtSwitch">HWInvByLocMgmtSwitch</h2>
+<!-- backwards compatibility -->
+<a id="schemahwinvbylocmgmtswitch"></a>
+<a id="schema_HWInvByLocMgmtSwitch"></a>
+<a id="tocShwinvbylocmgmtswitch"></a>
+<a id="tocshwinvbylocmgmtswitch"></a>
+
+```json
+{
+  "MgmtSwitchLocationInfo": {
+    "Id": "string",
+    "Name": "string",
+    "Description": "string",
+    "Hostname": "string"
+  }
+}
+
+```
+
+This is a subtype of HWInventoryByLocation for HMSType MgmtSwitch. It represents a management switch.  It is selected via the 'discriminator: HWInventoryByLocationType' of HWInventoryByLocation when HWInventoryByLocationType is 'HWInvByLocMgmtSwitch'.
+
+### Properties
+
+allOf - discriminator: HWInventory.1.0.0_HWInventoryByLocation.HWInventoryByLocationType
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[HWInventory.1.0.0_HWInventoryByLocation](#schemahwinventory.1.0.0_hwinventorybylocation)|false|none|This is the basic entry in the hardware inventory for a particular location/xname.  If the location is populated (e.g. if a slot for a blade exists and the blade is present), then there will also be a link to the FRU entry for the physical piece of hardware that occupies it.|
+
+and
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|object|false|none|none|
+|» MgmtSwitchLocationInfo|[HWInventory.1.0.0_RedfishChassisLocationInfo](#schemahwinventory.1.0.0_redfishchassislocationinfo)|false|none|These are pass-through properties of the Redfish Chassis object type that are also used in HMS inventory data.  They will be mostly informational as exactly how fields are set depends on how the particular implementation does things, but will be useful for servicing.|
+
+<h2 id="tocS_HWInvByLocMgmtHLSwitch">HWInvByLocMgmtHLSwitch</h2>
+<!-- backwards compatibility -->
+<a id="schemahwinvbylocmgmthlswitch"></a>
+<a id="schema_HWInvByLocMgmtHLSwitch"></a>
+<a id="tocShwinvbylocmgmthlswitch"></a>
+<a id="tocshwinvbylocmgmthlswitch"></a>
+
+```json
+{
+  "MgmtHLSwitchLocationInfo": {
+    "Id": "string",
+    "Name": "string",
+    "Description": "string",
+    "Hostname": "string"
+  }
+}
+
+```
+
+This is a subtype of HWInventoryByLocation for HMSType MgmtHLSwitch. It represents a high level management switch.  It is selected via the 'discriminator: HWInventoryByLocationType' of HWInventoryByLocation when HWInventoryByLocationType is 'HWInvByLocMgmtHLSwitch'.
+
+### Properties
+
+allOf - discriminator: HWInventory.1.0.0_HWInventoryByLocation.HWInventoryByLocationType
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[HWInventory.1.0.0_HWInventoryByLocation](#schemahwinventory.1.0.0_hwinventorybylocation)|false|none|This is the basic entry in the hardware inventory for a particular location/xname.  If the location is populated (e.g. if a slot for a blade exists and the blade is present), then there will also be a link to the FRU entry for the physical piece of hardware that occupies it.|
+
+and
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|object|false|none|none|
+|» MgmtHLSwitchLocationInfo|[HWInventory.1.0.0_RedfishChassisLocationInfo](#schemahwinventory.1.0.0_redfishchassislocationinfo)|false|none|These are pass-through properties of the Redfish Chassis object type that are also used in HMS inventory data.  They will be mostly informational as exactly how fields are set depends on how the particular implementation does things, but will be useful for servicing.|
+
+<h2 id="tocS_HWInvByLocCDUMgmtSwitch">HWInvByLocCDUMgmtSwitch</h2>
+<!-- backwards compatibility -->
+<a id="schemahwinvbyloccdumgmtswitch"></a>
+<a id="schema_HWInvByLocCDUMgmtSwitch"></a>
+<a id="tocShwinvbyloccdumgmtswitch"></a>
+<a id="tocshwinvbyloccdumgmtswitch"></a>
+
+```json
+{
+  "CDUMgmtSwitchLocationInfo": {
+    "Id": "string",
+    "Name": "string",
+    "Description": "string",
+    "Hostname": "string"
+  }
+}
+
+```
+
+This is a subtype of HWInventoryByLocation for HMSType CDUMgmtSwitch. It represents a CDU management switch.  It is selected via the 'discriminator: HWInventoryByLocationType' of HWInventoryByLocation when HWInventoryByLocationType is 'HWInvByLocCDUMgmtSwitch'.
+
+### Properties
+
+allOf - discriminator: HWInventory.1.0.0_HWInventoryByLocation.HWInventoryByLocationType
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[HWInventory.1.0.0_HWInventoryByLocation](#schemahwinventory.1.0.0_hwinventorybylocation)|false|none|This is the basic entry in the hardware inventory for a particular location/xname.  If the location is populated (e.g. if a slot for a blade exists and the blade is present), then there will also be a link to the FRU entry for the physical piece of hardware that occupies it.|
+
+and
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|object|false|none|none|
+|» CDUMgmtSwitchLocationInfo|[HWInventory.1.0.0_RedfishChassisLocationInfo](#schemahwinventory.1.0.0_redfishchassislocationinfo)|false|none|These are pass-through properties of the Redfish Chassis object type that are also used in HMS inventory data.  They will be mostly informational as exactly how fields are set depends on how the particular implementation does things, but will be useful for servicing.|
 
 <h2 id="tocS_HWInvByLocNode">HWInvByLocNode</h2>
 <!-- backwards compatibility -->
@@ -20658,6 +20892,9 @@ This represents a physical piece of hardware with properties specific to a uniqu
 |HWInventoryByFRUType|HWInvByFRURouterModule|
 |HWInventoryByFRUType|HWInvByFRUNodeEnclosure|
 |HWInventoryByFRUType|HWInvByFRUHSNBoard|
+|HWInventoryByFRUType|HWInvByFRUMgmtSwitch|
+|HWInventoryByFRUType|HWInvByFRUMgmtHLSwitch|
+|HWInventoryByFRUType|HWInvByFRUCDUMgmtSwitch|
 |HWInventoryByFRUType|HWInvByFRUNode|
 |HWInventoryByFRUType|HWInvByFRUProcessor|
 |HWInventoryByFRUType|HWInvByFRUNodeAccel|
@@ -20995,6 +21232,168 @@ and
 |---|---|---|---|---|
 |*anonymous*|object|false|none|none|
 |» HSNBoardFRUInfo|[HWInventory.1.0.0_RedfishChassisFRUInfo](#schemahwinventory.1.0.0_redfishchassisfruinfo)|false|none|These are pass-through properties of the Redfish Chassis object type that are also used in HMS inventory data when this is the underlying Redfish object type for a particular HMS component type.  These are properties of a specific hardware instance/FRU that remain the same if the component is relocated within the system.|
+
+<h2 id="tocS_HWInvByFRUMgmtSwitch">HWInvByFRUMgmtSwitch</h2>
+<!-- backwards compatibility -->
+<a id="schemahwinvbyfrumgmtswitch"></a>
+<a id="schema_HWInvByFRUMgmtSwitch"></a>
+<a id="tocShwinvbyfrumgmtswitch"></a>
+<a id="tocshwinvbyfrumgmtswitch"></a>
+
+```json
+{
+  "FRUID": "Dell-99999-1234-1234-2345",
+  "Type": "Node",
+  "Subtype": "River",
+  "HWInventoryByFRUType": "HWInvByFRUNode",
+  "NodeFRUInfo": {
+    "AssetTag": "AdminAssignedAssetTag",
+    "BiosVersion": "v1.0.2.9999",
+    "Model": "OKS0P2354",
+    "Manufacturer": "Dell",
+    "PartNumber": "y99999",
+    "SerialNumber": "1234-1234-2345",
+    "SKU": "as213234",
+    "SystemType": "Physical",
+    "UUID": "26276e2a-29dd-43eb-8ca6-8186bbc3d971"
+  },
+  "MgmtSwitchFRUInfo": {
+    "AssetTag": "string",
+    "ChassisType": "Rack",
+    "Model": "string",
+    "Manufacturer": "string",
+    "PartNumber": "string",
+    "SerialNumber": "string",
+    "SKU": "string"
+  }
+}
+
+```
+
+This is a subtype of HWInventoryByFRU for HMSType MgmtSwitch. It represents a management switch.  It is selected via the 'discriminator: HWInventoryByFRUType' of HWInventoryByFRU when HWInventoryByFRUType is 'HWInvByFRUMgmtSwitch'.
+
+### Properties
+
+allOf - discriminator: HWInventory.1.0.0_HWInventoryByFRU.HWInventoryByFRUType
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[HWInventory.1.0.0_HWInventoryByFRU](#schemahwinventory.1.0.0_hwinventorybyfru)|false|none|This represents a physical piece of hardware with properties specific to a unique component in the system.  It is the counterpart to HWInventoryByLocation (which contains ONLY information specific to a particular location in the system that may or may not be populated), in that it contains only info about the component that is durably consistent wherever the component is installed in the system (if it is still installed at all).|
+
+and
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|object|false|none|none|
+|» MgmtSwitchFRUInfo|[HWInventory.1.0.0_RedfishChassisFRUInfo](#schemahwinventory.1.0.0_redfishchassisfruinfo)|false|none|These are pass-through properties of the Redfish Chassis object type that are also used in HMS inventory data when this is the underlying Redfish object type for a particular HMS component type.  These are properties of a specific hardware instance/FRU that remain the same if the component is relocated within the system.|
+
+<h2 id="tocS_HWInvByFRUMgmtHLSwitch">HWInvByFRUMgmtHLSwitch</h2>
+<!-- backwards compatibility -->
+<a id="schemahwinvbyfrumgmthlswitch"></a>
+<a id="schema_HWInvByFRUMgmtHLSwitch"></a>
+<a id="tocShwinvbyfrumgmthlswitch"></a>
+<a id="tocshwinvbyfrumgmthlswitch"></a>
+
+```json
+{
+  "FRUID": "Dell-99999-1234-1234-2345",
+  "Type": "Node",
+  "Subtype": "River",
+  "HWInventoryByFRUType": "HWInvByFRUNode",
+  "NodeFRUInfo": {
+    "AssetTag": "AdminAssignedAssetTag",
+    "BiosVersion": "v1.0.2.9999",
+    "Model": "OKS0P2354",
+    "Manufacturer": "Dell",
+    "PartNumber": "y99999",
+    "SerialNumber": "1234-1234-2345",
+    "SKU": "as213234",
+    "SystemType": "Physical",
+    "UUID": "26276e2a-29dd-43eb-8ca6-8186bbc3d971"
+  },
+  "MgmtHLSwitchFRUInfo": {
+    "AssetTag": "string",
+    "ChassisType": "Rack",
+    "Model": "string",
+    "Manufacturer": "string",
+    "PartNumber": "string",
+    "SerialNumber": "string",
+    "SKU": "string"
+  }
+}
+
+```
+
+This is a subtype of HWInventoryByFRU for HMSType MgmtHLSwitch. It represents a high level management switch.  It is selected via the 'discriminator: HWInventoryByFRUType' of HWInventoryByFRU when HWInventoryByFRUType is 'HWInvByFRUMgmtHLSwitch'.
+
+### Properties
+
+allOf - discriminator: HWInventory.1.0.0_HWInventoryByFRU.HWInventoryByFRUType
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[HWInventory.1.0.0_HWInventoryByFRU](#schemahwinventory.1.0.0_hwinventorybyfru)|false|none|This represents a physical piece of hardware with properties specific to a unique component in the system.  It is the counterpart to HWInventoryByLocation (which contains ONLY information specific to a particular location in the system that may or may not be populated), in that it contains only info about the component that is durably consistent wherever the component is installed in the system (if it is still installed at all).|
+
+and
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|object|false|none|none|
+|» MgmtHLSwitchFRUInfo|[HWInventory.1.0.0_RedfishChassisFRUInfo](#schemahwinventory.1.0.0_redfishchassisfruinfo)|false|none|These are pass-through properties of the Redfish Chassis object type that are also used in HMS inventory data when this is the underlying Redfish object type for a particular HMS component type.  These are properties of a specific hardware instance/FRU that remain the same if the component is relocated within the system.|
+
+<h2 id="tocS_HWInvByFRUCDUMgmtSwitch">HWInvByFRUCDUMgmtSwitch</h2>
+<!-- backwards compatibility -->
+<a id="schemahwinvbyfrucdumgmtswitch"></a>
+<a id="schema_HWInvByFRUCDUMgmtSwitch"></a>
+<a id="tocShwinvbyfrucdumgmtswitch"></a>
+<a id="tocshwinvbyfrucdumgmtswitch"></a>
+
+```json
+{
+  "FRUID": "Dell-99999-1234-1234-2345",
+  "Type": "Node",
+  "Subtype": "River",
+  "HWInventoryByFRUType": "HWInvByFRUNode",
+  "NodeFRUInfo": {
+    "AssetTag": "AdminAssignedAssetTag",
+    "BiosVersion": "v1.0.2.9999",
+    "Model": "OKS0P2354",
+    "Manufacturer": "Dell",
+    "PartNumber": "y99999",
+    "SerialNumber": "1234-1234-2345",
+    "SKU": "as213234",
+    "SystemType": "Physical",
+    "UUID": "26276e2a-29dd-43eb-8ca6-8186bbc3d971"
+  },
+  "CDUMgmtSwitchFRUInfo": {
+    "AssetTag": "string",
+    "ChassisType": "Rack",
+    "Model": "string",
+    "Manufacturer": "string",
+    "PartNumber": "string",
+    "SerialNumber": "string",
+    "SKU": "string"
+  }
+}
+
+```
+
+This is a subtype of HWInventoryByFRU for HMSType CDUMgmtSwitch. It represents a CDU management switch.  It is selected via the 'discriminator: HWInventoryByFRUType' of HWInventoryByFRU when HWInventoryByFRUType is 'HWInvByFRUCDUMgmtSwitch'.
+
+### Properties
+
+allOf - discriminator: HWInventory.1.0.0_HWInventoryByFRU.HWInventoryByFRUType
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[HWInventory.1.0.0_HWInventoryByFRU](#schemahwinventory.1.0.0_hwinventorybyfru)|false|none|This represents a physical piece of hardware with properties specific to a unique component in the system.  It is the counterpart to HWInventoryByLocation (which contains ONLY information specific to a particular location in the system that may or may not be populated), in that it contains only info about the component that is durably consistent wherever the component is installed in the system (if it is still installed at all).|
+
+and
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|object|false|none|none|
+|» CDUMgmtSwitchFRUInfo|[HWInventory.1.0.0_RedfishChassisFRUInfo](#schemahwinventory.1.0.0_redfishchassisfruinfo)|false|none|These are pass-through properties of the Redfish Chassis object type that are also used in HMS inventory data when this is the underlying Redfish object type for a particular HMS component type.  These are properties of a specific hardware instance/FRU that remain the same if the component is relocated within the system.|
 
 <h2 id="tocS_HWInvByFRUNode">HWInvByFRUNode</h2>
 <!-- backwards compatibility -->
@@ -25016,6 +25415,9 @@ This is the HMS component type category.  It has a particular xname format and r
 |*anonymous*|NodeEnclosure|
 |*anonymous*|NodeEnclosurePowerSupply|
 |*anonymous*|HSNBoard|
+|*anonymous*|MgmtSwitch|
+|*anonymous*|MgmtHLSwitch|
+|*anonymous*|CDUMgmtSwitch|
 |*anonymous*|Node|
 |*anonymous*|Processor|
 |*anonymous*|Drive|
