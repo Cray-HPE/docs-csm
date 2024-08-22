@@ -593,7 +593,7 @@ function csm_145_patch {
     (
       pushd "$(dirname "$squash")" || exit
 
-      if rpm -Uvh --nodeps --root "$(pwd)/squashfs-root" "${rpms[@]}"; then
+      if rpm -Uvh --oldpackage --nodeps --root "$(pwd)/squashfs-root" "${rpms[@]}"; then
         :
       else
         rc=$?
