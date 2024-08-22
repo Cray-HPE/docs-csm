@@ -613,6 +613,11 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Upgrade Kyverno charts before istio to avoid webhook timeouts
+do_upgrade_csm_chart cray-kyverno platform.yaml
+do_upgrade_csm_chart kyverno-policy platform.yaml
+do_upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
+
 # upgrade all charts dependent on cray-certmanager chart
 # it is neccessary to upgrade these before upgrade
 do_upgrade_csm_chart cray-istio platform.yaml
@@ -794,9 +799,6 @@ else
 fi
 
 do_upgrade_csm_chart cray-drydock platform.yaml
-do_upgrade_csm_chart cray-kyverno platform.yaml
-do_upgrade_csm_chart kyverno-policy platform.yaml
-do_upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
 do_upgrade_csm_chart cray-sysmgmt-health platform.yaml
 do_upgrade_csm_chart cray-tftp sysmgmt.yaml
 do_upgrade_csm_chart cray-tftp-pvc sysmgmt.yaml
