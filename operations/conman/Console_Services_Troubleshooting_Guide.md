@@ -9,6 +9,7 @@ how to look at all aspects of the service to determine what the current problem 
 * [Find the `cray-console-node` pod for a specific node](#find-the-cray-console-node-pod-for-a-specific-node)
 * [Investigate service problem](#investigate-service-problem)
 * [Investigate Postgres deployment](#investigate-postgres-deployment)
+* [Check the capacity of the PVC](#check-the-capacity-of-the-pvc)
 
 ## Prerequisites
 
@@ -229,3 +230,7 @@ If the database can not be made healthy through these procedures, the easiest wa
 resolve this is to perform a complete reset of the console services including
 reinstalling the `cray-console-data` service. See
 [Complete Reset of the Console Services](Complete_Reset_of_the_Console_Services.md).
+
+## Check the capacity of the PVC
+
+If the 
