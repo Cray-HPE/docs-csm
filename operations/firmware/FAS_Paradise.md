@@ -1,6 +1,6 @@
-# Updating `Foxconn` Paradise Nodes with FAS
+# Updating Foxconn Paradise Nodes with FAS
 
-Use the Firmware Action Service (FAS) to update the firmware on `Foxconn` Paradise devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
+Use the Firmware Action Service (FAS) to update the firmware on Foxconn Paradise devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
 
 **NOTE:** Any node that is locked remains in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
 If the action is timed out, these nodes report as `failed` with the `stateHelper` message of `"time expired; could not complete update"`.

@@ -60,7 +60,7 @@ Table 1. Upgradable Firmware Items
 | Cray             | `routerBMC`  | `BMC`, `Recovery`                                                                                            |
 | Gigabyte         | `nodeBMC`    | `BMC`, `BIOS`                                                                                                |
 | HPE              | `nodeBMC`    | `iLO 5`, `iLO 6`, `System ROM` ,`Redundant System ROM`                                                       |
-| `Foxconn`        | `nodeBMC`    | `bmc_active`, `bios_active`, `erot_active` ,`fpga_active`, `pld_active`                                      |
+| Foxconn          | `nodeBMC`    | `bmc_active`, `bios_active`, `erot_active` ,`fpga_active`, `pld_active`                                      |
 
 ## Order of operations
 
@@ -124,7 +124,7 @@ After identifying which hardware is in the system, start with the top item on th
    1. [`iLO 5` (BMC)](FAS_Use_Cases.md#manufacturer-hpe--device-type-nodebmc--target-ilo-5-bmc)
    1. [`iLO 6` (BMC)](FAS_Use_Cases.md#manufacturer-hpe--device-type-nodebmc--target-ilo-6-bmc)
    1. [System ROM (BIOS)](FAS_Use_Cases.md#manufacturer-hpe--device-type-nodebmc--target-system-rom-bios)
-1. [`Foxconn` (Paradise)](FAS_Paradise.md)
+1. [Foxconn (Paradise)](FAS_Paradise.md)
 
 ## FAS administrative procedures
 
