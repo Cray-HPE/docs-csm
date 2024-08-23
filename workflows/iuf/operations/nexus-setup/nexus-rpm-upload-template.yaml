@@ -145,6 +145,8 @@ spec:
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
     metadata:
       annotations:
         sidecar.istio.io/inject: "false"
@@ -245,6 +247,8 @@ spec:
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
     metadata:
       annotations:
         sidecar.istio.io/inject: "false"
@@ -282,6 +286,8 @@ spec:
       - name: nexus_admin_credential_secret_name
     tolerations:
     - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
     metadata:
       annotations:
