@@ -1,25 +1,27 @@
 # Create a Session Template to Boot Compute Nodes with Scalable Boot Projection Service (SBPS)
 
 When [compute nodes](../../glossary.md#compute-node-cn) are booted, the [Scalable Boot Projection Service (SBPS)](../../glossary.md#scalable-boot-projection-service-sbps)
-projects the root file system (`rootfs`) over the network to the compute nodes.
+projects the root file system (`rootfs`) over the network to the compute nodes using iSCSI.
 
-This page covers the appropriate contents for a BOS session template in order to use SBPS.
+This page covers the necessary configuration of a BOS session template in order to use SBPS.
 
 - [Boot set `rootfs_provider` parameter](#boot-set-rootfs_provider-parameter)
-- [Boot set `rootfs_provider_passthrough` parameters](#boot-set-rootfs_provider_passthrough-parameters)
-    - [`<transport>`](#transport)
-    - [`<schema version>`](#schema-version)
-    - [`<IQN Domain>`](#iqn-domain)
-    - [`<DNS SRV record reference>`](#dns-service-srv-record-reference)
-    - [`<client discovery timeout in seconds>`](#client-discovery-timeout-in-seconds)
-    - [`<ramroot>`](#ramroot)
-    - [Example `rootfs_provider_passthrough`](#example-rootfs_provider_passthrough)
-- [Boot set S3 parameters](#boot-set-s3-parameters)
+- [Boot set `rootfs_provider_passthrough` parameter](#boot-set-rootfs_provider_passthrough-parameter)
+    - [`Setting the parameter`](#setting-the-parameter)
+    - [`Detailed Explanation`](#detailed-explanation-of-each-element-of-the-parameter)
+        - [`<transport>`](#transport)
+        - [`<schema version>`](#schema-version)
+        - [`<IQN Domain>`](#iqn-domain)
+        - [`<DNS SRV record reference>`](#dns-service-srv-record-reference)
+        - [`<client discovery timeout in seconds>`](#client-discovery-timeout-in-seconds)
+        - [`<ramroot>`](#ramroot)
+        - [Example `rootfs_provider_passthrough`](#example-rootfs_provider_passthrough)
 - [Example session template input file](#example-session-template-input-file)
-- [Creating a BOS session using the new template](#creating-a-bos-session-using-the-new-template)
 - [Appendix: `root=` kernel parameter](#appendix-root-kernel-parameter)
 
-The Scalable Boot Projection Service (SBPS) is an optional provider for the `rootfs` on compute nodes.
+The Scalable Boot Projection Service (SBPS) is the **default**  provider for the `rootfs` on compute nodes.
+
+Two parameters need to be set to configure SBPS, the `rootfs_provider` and the `rootfs_provider_passthrough`.
 
 ## Boot set `rootfs_provider` parameter
 
@@ -27,26 +29,47 @@ The following value needs to be set in the boot set of the session template in o
 
 `"rootfs_provider":` Set to `"sbps"`
 
-## Boot set `rootfs_provider_passthrough` parameters
+## Boot set `rootfs_provider_passthrough` parameter
 
-For SBPS, the `rootfs_provider_passthrough` boot set parameter is customized according to the following format:
+### Setting the parameter
+
+In a BOS session template, the `rootfs_provider_passthrough` parameter should be set to the following string.
+
+```text
+rootfs_provider_passthrough=sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
+```
+
+The two parameters/strings that need to be customized are 'my-system' and 'my-site-domain'.
+Use the following commands to find the values for these parameters/strings.
+
+```bash
+(`ncn-mw#`) craysys metadata get system-name
+<my-system>
+(`ncn-mw#`) craysys metadata get site-domain
+<my-site-domain>
+```
+
+**Note:** These two elements should be joined with a '.' in the `rootfs_provider_passthrough` string.
+
+```text
+<my-system>.<my-site-domain>
+```
+
+### Detailed explanation of each element of the parameter
+
+Here is a detailed explanation of each of the elements of the `rootfs_provider_passthrough` parameter.
+
+For SBPS, the `rootfs_provider_passthrough` string should adhere to this format:
 
 ```text
 rootfs_provider_passthrough=<transport>:<schema version>:<IQN Domain>:<DNS SRV record>:<client discovery timeout in seconds>:<ramroot>
 ```
 
-The following values need to be set in the boot set of the session template in order to make SBPS the `rootfs` provider.
-The DNS SRV record should contain the system's DNS domain.
-In this example, the `system-name` is `my-system` and the site domain name is `my-site-domain.net`. These need to be
-replaced with the system's _actual_ system name and site DNS Domain.
+Here is an example string for reference.
 
-- `"rootfs_provider":` Set to `"sbps"`
-- To use the Node Management Network (NMN) for content projection,
-    - `"rootfs_provider_passthrough"`: Set to `"sbps:v1:iqn.2023-06.csm.iscsi:_sbps-nmn._tcp.my-system.my-site-domain.net:300"`
-- To use the High Speed Network (HSN) for content projection,
-    - `"rootfs_provider_passthrough"`: Set to `"sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain.net:300"`
-
-Note that `iqn.2023-06.csm.iscsi` is the IQN domain.
+```text
+rootfs_provider_passthrough=sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
+```
 
 The variables used in this parameter represent the following:
 
@@ -73,11 +96,11 @@ iqn.2023-06.csm.iscsi:ncn-w002
 In this example:
 
 - `iqn.2023-06.csm.iscsi` is the IQN domain.
-- `ncn-w002` is a unique identifier for the storage device.
+- `ncn-w002` is a unique identifier (e.g. hostname) of the target storage device.
 
 The IQN domain helps in ensuring unique identification of iSCSI targets within a given namespace, allowing for proper routing and management of storage resources over the network
 
-For SBPS, only the domain portion of the IQN needs to be supplied, not the entire IQN.
+For SBPS, only the domain portion of the IQN needs to be supplied, not the entire IQN. The target storage device is optional does not need to be specified.
 
 ### `<DNS Service (SRV) record reference>`
 
@@ -90,46 +113,55 @@ A DNS SRV record is structured as follows:
 - Name: The domain name for which this record is valid.
 - Other elements were omitted for clarity and brevity.
 
+```text
+<service>.<protocol>.<domain name>
+```
+
 For example, DNS SRV record might look like this:
 
 ```text
-_sbps-hsn._tcp.my-system.my-site-domain.net
+_sbps-hsn._tcp.my-system.my-site-domain
 ```
 
 The following is an explanation of the values used in this example:
 
 - `_sbps-hsn` is the symbolic name of the service.
+    - In this example, the High Speed Network (HSN) is being used.
 - `_tcp` is the transport protocol.
-- `my-system.my-site-domain.net` is the domain name for which the record is valid. The domain name includes the system name `my-system` and the site domain name `my-site-domain.net`.
+- `my-system.my-site-domain` is the domain name for which the record is valid.
+    - The domain name includes the system name `my-system` and the site domain name `my-site-domain`.
+
+To use the Node Management Network (NMN) for content projection, the service is set to `_sbps-nmn`.
+
+- `"rootfs_provider_passthrough"`: Set to `"sbps:v1:iqn.2023-06.csm.iscsi:_sbps-nmn._tcp.my-system.my-site-domain:300"`
+  
+To use the High Speed Network (HSN) for content projection, the service is set to `_sbps-hsn`.
+
+- `"rootfs_provider_passthrough"`: Set to `"sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"`
+
+**Reminder:** The DNS SRV record should contain the system's _actual_ DNS domain.
+In this example, the `system-name` is `my-system` and the site domain name is `my-site-domain`. These need to be
+replaced with the system's _actual_ system name and site DNS Domain. Refer to the [previous instructions](#boot-set-rootfs_provider_passthrough-parameter) to determine the system-name and site-domain.
 
 ### `<client discovery timeout in seconds>`
 
-The timeout, in seconds, for attempting to mount the `netroot` via SBPS.
+The timeout, in seconds, for attempting to mount the `rootfs` via SBPS.
 
-Can be left as an empty string to use the default value of 300 seconds.
+This can be left as an empty string to use the default value of 300 seconds.
 
 ### `<ramroot>`
 
 Indicates that the specified S3 path should be copied to RAM (`tmpfs`) and mounted locally instead of persisting as a remote file system mount.
 
-Can be left empty. Any string except `"0"` is interpreted as true.
+This can be left empty. Any string except `"0"` is interpreted as true. The example above does specify a value for the ramroot.
 
 ### Example `rootfs_provider_passthrough`
 
+Here is the example once again.
+
 ```text
-rootfs_provider_passthrough=sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain.net:300
+rootfs_provider_passthrough=sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
 ```
-
-## Boot set S3 parameters
-
-The session template boot set contains several [Simple Storage Service (S3)](../../glossary.md#simple-storage-service-s3) parameters.
-These are listed below, along with the appropriate values to use.
-
-- `type`: Set to `s3`
-- `path`: Set to `s3://<BUCKET_NAME>/<KEY_NAME>/manifest.json`
-    - `<BUCKET_NAME>` is set to `boot-images`
-    - `<KEY_NAME>` is set to the image ID that the [Image Management Service (IMS)](../../glossary.md#image-management-service-ims) created when it generated the boot artifacts.
-- `etag`: set to the `etag` of the `manifest.json` file in S3 as stored by the [Image Management Service (IMS)](../../glossary.md#image-management-service-ims)
 
 ## Example session template input file
 
@@ -142,7 +174,7 @@ The following is an example of an input file to use with the [Cray CLI](../../gl
   "boot_sets": {
     "computes": {
       "rootfs_provider": "sbps",
-      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain.net:300",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300",
       "kernel_parameters":"ip=dhcp quiet spire_join_token=${SPIRE_JOIN_TOKEN}",
       "node_roles_groups": [
         "Compute"
@@ -159,14 +191,6 @@ The following is an example of an input file to use with the [Cray CLI](../../gl
 ```
 
 Refer to [Manage a Session Template](Manage_a_Session_Template.md) for more information about creating a session template.
-
-## Creating a BOS session using the new template
-
-(`ncn-mw#`) The new CPS-based session template can be used when creating a BOS session. The following is an example of creating a reboot session using the CLI:
-
-```bash
-cray bos v2 sessions create --template-name cps_rootfs_template --operation reboot
-```
 
 ## Appendix: `root=` kernel parameter
 
@@ -187,5 +211,5 @@ root=sbps-s3:s3-path:<etag>:<transport>:<schema version>:<IQN Domain>:<DNS SRV r
 ### Example kernel parameter
 
 ```text
-root=sbps-s3:s3://boot-images/4fab0408-0bfe-4668-b957-964f8ff0e4e9/rootfs:b6ea7a2314d54dead0c94223863b3488-1977:sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain.net:30
+root=sbps-s3:s3://boot-images/4fab0408-0bfe-4668-b957-964f8ff0e4e9/rootfs:b6ea7a2314d54dead0c94223863b3488-1977:sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:30
 0```
