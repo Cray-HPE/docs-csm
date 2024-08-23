@@ -4,42 +4,43 @@ The Cray System Management (CSM) operational activities are administrative proce
 
 The following administrative topics can be found in this guide:
 
-- [CSM product management](#csm-product-management)
-- [Bare-metal](#bare-metal)
-- [Image management](#image-management)
-- [Boot orchestration](#boot-orchestration)
-- [System power off procedures](#system-power-off-procedures)
-- [System power on procedures](#system-power-on-procedures)
-- [Power management](#power-management)
-- [Artifact management](#artifact-management)
-- [Compute rolling upgrades](#compute-rolling-upgrades)
-- [Configuration management](#configuration-management)
-- [Kubernetes](#kubernetes)
-- [Package repository management](#package-repository-management)
-- [Security and authentication](#security-and-authentication)
-- [Resiliency](#resiliency)
-- [ConMan](#conman)
-- [Utility storage](#utility-storage)
-- [System management health](#system-management-health)
-- [System Layout Service (SLS)](#system-layout-service-sls)
-- [System configuration service](#system-configuration-service)
-- [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
-- [Hardware Management (HM) collector](#hardware-management-hm-collector)
-- [HPE Power Distribution Unit (PDU)](#hpe-power-distribution-unit-pdu)
-- [Node management](#node-management)
-- [Network](#network)
-      - [Management network](#management-network)
-      - [Customer accessible networks (CMN/CAN/CHN)](#customer-accessible-networks-cmncanchn)
-      - [Dynamic Host Configuration Protocol (DHCP)](#dynamic-host-configuration-protocol-dhcp)
-      - [Domain Name Service (DNS)](#domain-name-service-dns)
-      - [External DNS](#external-dns)
-      - [MetalLB in BGP-mode](#metallb-in-bgp-mode)
-- [Spire](#spire)
-- [Update firmware with FAS](#update-firmware-with-fas)
-- [System Admin Toolkit (SAT)](#system-admin-toolkit-sat)
-- [Install and Upgrade Framework (IUF)](#install-and-upgrade-framework-iuf)
-- [Backup and recovery](#backup-and-recovery)
-- [Multi-tenancy](#multi-tenancy)
+- [Cray System Management (CSM) Administration Guide](#cray-system-management-csm-administration-guide)
+  - [CSM product management](#csm-product-management)
+  - [Bare-metal](#bare-metal)
+  - [Image management](#image-management)
+  - [Boot orchestration](#boot-orchestration)
+  - [System power off procedures](#system-power-off-procedures)
+  - [System power on procedures](#system-power-on-procedures)
+  - [Power management](#power-management)
+  - [Artifact management](#artifact-management)
+  - [Compute rolling upgrades](#compute-rolling-upgrades)
+  - [Configuration management](#configuration-management)
+  - [Kubernetes](#kubernetes)
+  - [Package repository management](#package-repository-management)
+  - [Security and authentication](#security-and-authentication)
+  - [Resiliency](#resiliency)
+  - [ConMan](#conman)
+  - [Utility storage](#utility-storage)
+  - [System management health](#system-management-health)
+  - [System Layout Service (SLS)](#system-layout-service-sls)
+  - [System configuration service](#system-configuration-service)
+  - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
+  - [Hardware Management (HM) collector](#hardware-management-hm-collector)
+  - [HPE Power Distribution Unit (PDU)](#hpe-power-distribution-unit-pdu)
+  - [Node management](#node-management)
+  - [Network](#network)
+    - [Management network](#management-network)
+    - [Customer accessible networks (CMN/CAN/CHN)](#customer-accessible-networks-cmncanchn)
+    - [Dynamic Host Configuration Protocol (DHCP)](#dynamic-host-configuration-protocol-dhcp)
+    - [Domain Name Service (DNS)](#domain-name-service-dns)
+    - [External DNS](#external-dns)
+    - [MetalLB in BGP-mode](#metallb-in-bgp-mode)
+  - [Spire](#spire)
+  - [Update firmware with FAS](#update-firmware-with-fas)
+  - [System Admin Toolkit (SAT)](#system-admin-toolkit-sat)
+  - [Install and Upgrade Framework (IUF)](#install-and-upgrade-framework-iuf)
+  - [Backup and recovery](#backup-and-recovery)
+  - [Multi-tenancy](#multi-tenancy)
 
 ## CSM product management
 
@@ -151,7 +152,7 @@ Additional links to power off sub-procedures provided for reference. Refer to th
 - [Prepare the System for Power Off](power_management/Prepare_the_System_for_Power_Off.md)
 - [Shut Down and Power Off Managed Nodes](power_management/Shut_Down_and_Power_Off_Managed_Nodes.md)
 - [Save Management Network Switch Configuration Settings](power_management/Save_Management_Network_Switch_Configurations.md)
-- [Power Off Compute Cabinets](power_management/Power_Off_Compute_Cabinets.md)
+- [Power Off Compute Cabinets](power_management/Power_Control_Service/Power_Off_Compute_Cabinets.md) using PCS
 - [Shut Down and Power Off the Management Kubernetes Cluster](power_management/Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md)
 - [Power Off the External Lustre File System](power_management/Power_Off_the_External_Lustre_File_System.md)
 
@@ -164,12 +165,10 @@ Procedures required for a full power on of an HPE Cray EX system.
 Additional links to power on sub-procedures provided for reference. Refer to the main procedure linked above before using any of these sub-procedures:
 
 - [Power On and Start the Management Kubernetes Cluster](power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
-- [Power On Compute Cabinets](power_management/Power_On_Compute_Cabinets.md)
+- [Power On Compute Cabinets](power_management/Power_Control_Service/Power_On_Compute_Cabinets.md) using PCS
 - [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
 - [Power On and Boot Managed Nodes](power_management/Power_On_and_Boot_Managed_Nodes.md)
-- Recover from a Liquid Cooled Cabinet EPO Event
-    - [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md) using CAPMC
-    - [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Power_Control_Service/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md) using PCS
+- [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Power_Control_Service/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md) using PCS
 
 ## Power management
 

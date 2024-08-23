@@ -178,7 +178,7 @@ Use `Ctrl`-`C` to return to the prompt if command does not return.
    This examples powers off slot 0, chassis 3, in cabinet 9000.
 
    ```bash
-   cray capmc xname_off create --xnames x9000c3s0 --recursive true
+   cray power transition off x9000c3s0 --include children
    ```
 
 ### Source: Disable the chassis slot
@@ -359,7 +359,7 @@ curl -k -u root:PASSWORD -X POST -H 'Content-Type: application/json' -d \
    This example powers off slot 0 in chassis 3 of cabinet 1005.
 
     ```bash
-    cray capmc xname_off create --xnames x1005c3s0 --recursive true
+    cray power transition off x1005c3s0 --include children
     ```
 
 ### Destination: Disable the chassis slot
@@ -565,7 +565,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     The example powers on slot 0, chassis 3, in cabinet 1005.
 
     ```bash
-    cray capmc xname_on create --xnames x1005c3s0 --recursive true
+    cray power transition off x1005c3s0 --include children
     ```
 
 ### Enable discovery

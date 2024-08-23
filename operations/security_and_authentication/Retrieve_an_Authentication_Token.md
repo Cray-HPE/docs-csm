@@ -118,22 +118,11 @@ The appropriate token must be retrieved from the gateway to access services on t
 
     ```bash
     TOKEN=access_token
-    curl -H "Authorization: Bearer $TOKEN" https://api.cmn.SYSTEM_DOMAIN_NAME/apis/capmc/capmc/get_node_rules
+    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/ready
     ```
 
     Example output:
 
     ```json
-    {
-        "e":0,
-        "err_msg":"",
-        "latency_node_off":60,
-        "latency_node_on":120,
-        "latency_node_reinit":180,
-        "max_off_req_count":-1,
-        "max_off_time":-1,
-        "max_on_req_count":-1,
-        "max_reinit_req_count":-1,
-        "min_off_time":-1
-    }
+    {"code":0,"message":"HSM is healthy"}
     ```

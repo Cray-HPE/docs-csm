@@ -8,12 +8,12 @@ product documentation. To update Slingshot switch BMCs, refer to "Change Rosetta
 
 This procedure provisions only the default Redfish `root` account passwords. It does not modify Redfish accounts that have been added after an initial system installation.
 
-- [Prerequisites](#prerequisites)
-- [Procedure](#procedure)
-
-    1. [Update the default credentials used by MEDS for new hardware](#1-update-the-default-credentials-used-by-meds-for-new-hardware)
-    1. [Update credentials for existing EX hardware in the system](#2-update-credentials-for-existing-ex-hardware-in-the-system)
-    1. [Reapply BMC settings if a `StatefulReset` was performed on any BMC](#3-reapply-bmc-settings-if-a-statefulreset-was-performed-on-any-bmc)
+- [Updating the Liquid-Cooled EX Cabinet CEC with Default Credentials after a CEC Password Change](#updating-the-liquid-cooled-ex-cabinet-cec-with-default-credentials-after-a-cec-password-change)
+  - [Prerequisites](#prerequisites)
+  - [Procedure](#procedure)
+    - [1. Update the default credentials used by MEDS for new hardware](#1-update-the-default-credentials-used-by-meds-for-new-hardware)
+    - [2. Update credentials for existing EX hardware in the system](#2-update-credentials-for-existing-ex-hardware-in-the-system)
+    - [3. Reapply BMC settings if a `StatefulReset` was performed on any BMC](#3-reapply-bmc-settings-if-a-statefulreset-was-performed-on-any-bmc)
 
 ## Prerequisites
 
@@ -266,21 +266,25 @@ Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.m
             For example, the `NodeBMC` `x1001c1s0b0` is in slot `x1001c1s0`:
 
             ```bash
-            cray capmc get_xname_status create --xnames x1001c1s0
+            cray power status describe x1001c1s0 --format toml
             ```
 
             Example output:
 
             ```toml
-            e = 0
-            err_msg = ""
-            on = [ "x1001c1s0b0",]
+            [[status]]
+            xname = "x1001c1s0"
+            powerState = "on"
+            managementState = "available"
+            error = ""
+            supportedPowerTransitions = [ "On", "Force-Off", "Soft-Off", "Off", "Init", "Hard-Restart", "Soft-Restart",]
+            lastUpdated = "2024-02-04T01:48:48.3156272Z"
             ```
 
             If the slot is off, power it on:
 
             ```bash
-            cray capmc xname_on create --xnames x1001c1s0
+            cray power transition on --xnames x1001c1s0
             ```
 
         1. If the BMC is reachable and in `HTTPsGetFailed`, then verify that the BMC is accessible with the new default global credential.

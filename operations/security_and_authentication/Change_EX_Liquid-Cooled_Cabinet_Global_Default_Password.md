@@ -18,32 +18,32 @@ procedures.
    sat bootsys shutdown --stage bos-operations --bos-templates COS_SESSION_TEMPLATE
    ```
 
-2. Disable the `hms-discovery` Kubernetes cron job.
+1. Disable the `hms-discovery` Kubernetes cron job.
 
    ```screen
     kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
     ```
 
-3. Power off all compute slots in the cabinets the passwords are to be changed on.
+1. Power off all compute slots in the cabinets the passwords are to be changed on.
 
    > **`NOTE`**: If a chassis is not fully populated, specify each slot individually.
 
    Example showing fully populated cabinets 1000-1003:
 
    ```screen
-   cray capmc xname_off create --xnames x[1000-1003]c[0-7]s[0-7] --format json
+   cray power transition off --xnames x[1000-1003]c[0-7]s[0-7]
    ```
 
    Check the power status:
 
    ```screen
-   cray capmc get_xname_status create --xnames x[1000-1003]c[0-7]s[0-7] --format json
+   cray power status list --xnames x[1000-1003]c[0-7]s[0-7]
    ```
 
    Continue when all compute slots are `Off`.
 
-4. Perform the procedures in [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md).
+1. Perform the procedures in [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md).
 
-5. Perform the procedures in [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md).
+1. Perform the procedures in [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md).
 
-6. To update Slingshot switch BMCs, refer to "Change Rosetta Login and Redfish API Credentials" in the *Slingshot Operations Guide (> 1.6.0)*.
+1. To update Slingshot switch BMCs, refer to "Change Rosetta Login and Redfish API Credentials" in the *Slingshot Operations Guide (> 1.6.0)*.

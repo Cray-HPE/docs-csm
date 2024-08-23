@@ -147,7 +147,7 @@ The Boot Orchestration Service (BOS) is responsible for booting, configuring, an
 collections of nodes. This is accomplished using BOS components, such as boot orchestration session
 templates and sessions. BOS uses other services which provide
 boot artifact configuration ([BSS](#boot-script-service-bss)),
-power control ([CAPMC](#cray-advanced-platform-monitoring-and-control-capmc)),
+power control ([PCS](#power-control-service-pcs)),
 node status ([HSM](#hardware-state-manager-hsm)),
 and configuration ([CFS](#configuration-framework-service-cfs)).
 
@@ -263,6 +263,9 @@ replaced by [Power Control Service (PCS)](#power-control-service-pcs).
 
 * For more information on CAPMC, see [Cray Advanced Platform Monitoring and Control](operations/power_management/Cray_Advanced_Platform_Monitoring_and_Control_CAPMC.md).
 * For more information on the CAPMC API, see [CAPMC API](api/capmc.md).
+
+CAPMC was depricated in CSM 1.5 and was intended to be removed in CSM 1.6.
+[Power Control Service (PCS)](#power-control-service-pcs) is the replacement for CAPMC.
 
 ## Cray CLI (`cray`)
 
