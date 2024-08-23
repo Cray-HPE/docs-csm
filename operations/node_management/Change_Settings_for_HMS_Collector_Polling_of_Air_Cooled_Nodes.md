@@ -22,14 +22,14 @@ The following are the best practices for using the HMS Collector polling:
 
 - Polling of air-cooled nodes should be disabled by default. Before nodes are booted, verify that `cray-hms-hmcollector` polling is disabled.
 
-      - (`ncn-mw#`) To check if polling is disabled:
+    - (`ncn-mw#`) To check if polling is disabled:
 
         ```bash
         kubectl get deployments.apps -n services cray-hms-hmcollector -o json | \
                  jq '.spec.template.spec.containers[].env[]|select(.name=="POLLING_ENABLED")'
         ```
 
-      - (`ncn-mw#`) To disable polling, if it is not already disabled:
+    - (`ncn-mw#`) To disable polling, if it is not already disabled:
 
         ```bash
         kubectl edit deployment -n services cray-hms-hmcollector
@@ -38,7 +38,7 @@ The following are the best practices for using the HMS Collector polling:
         Change the value for the `POLLING_ENABLED` environment variable to `false` in the `spec:` section. Save and quit the editor for the changes to take effect. The
         `cray-hms-hmcollector` pod will automatically restart.
 
-  - (`ncn-mw#`) Only enable telemetry polling when needed, such as when running jobs.
+- (`ncn-mw#`) Only enable telemetry polling when needed, such as when running jobs.
 
     ```bash
     kubectl edit deployment -n services cray-hms-hmcollector
