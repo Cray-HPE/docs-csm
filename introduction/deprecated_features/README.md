@@ -41,7 +41,7 @@ in chronological order.
 ### Removals in CSM 1.6
 
 - [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) v1
-- [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) 
+- [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
   was deprecated in CSM 1.5 and intended to be removed from CSM 1.6.  The decision was made to not
   remove it in CSM 1.6 so that existing dependencies that have not yet transitioned to
   [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs) do not break.  Support
