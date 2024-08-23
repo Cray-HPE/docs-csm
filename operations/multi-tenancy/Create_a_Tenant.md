@@ -352,8 +352,7 @@ munge_vault_path: secret/slurm/<metadata.namespace>/<metadata.name>/munge
 slurmd_options: "--conf-server <spec.slurmctld.ip>,<spec.slurmctld.backupIP>"
 ```
 
-Where values in angle brackets correspond to values from the SlurmCluster CR yaml file.
-
+Where values in angle brackets correspond to values from the `mycluster.yaml` file.
 For example, if using the example `mycluster.yaml` file from the previous section, create a `group_vars/blue/slurm.yaml` file in the `uss-config-management` VCS repository with the following content:
 
 ```yaml

@@ -1,7 +1,6 @@
 # Slurm Operator
 
 * [Overview](#overview)
-* [Install the Slurm operator](#install-the-slurm-operator)
 * [Troubleshooting](#troubleshooting)
 
 ## Overview
