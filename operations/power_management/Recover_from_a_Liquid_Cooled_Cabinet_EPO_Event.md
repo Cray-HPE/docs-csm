@@ -4,7 +4,7 @@ Identify an emergency power off \(EPO\) has occurred and restore cabinets to a h
 
 **CAUTION:** Verify the reason why the EPO occurred and resolve that problem before clearing the EPO state.
 
-If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, the compute nodes may not boot. Use CAPMC to force off all the chassis affected by the EPO event.
+If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, the compute nodes may not boot. Use PCS to force off all the chassis affected by the EPO event.
 
 ## Procedure
 

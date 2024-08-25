@@ -2,7 +2,7 @@
 
 This procedure updates the default credentials used by the Redfish Translation Service (RTS) for when new ServerTech PDUs or management network switches are discovered in a system.
 
-The Redfish Translation Service provides a Redfish interface that the Hardware State Manager (HSM) and Power Control Service (PCS) or Cray Advanced Platform Monitoring and Control (CAPMC) services can use interact with
+The Redfish Translation Service provides a Redfish interface that the Hardware State Manager (HSM) and Power Control Service (PCS) services can use interact with
 ServerTech PDUs and management network switches which do not natively support Redfish.
 
 There are two sets of default credentials that are required for RTS to function:

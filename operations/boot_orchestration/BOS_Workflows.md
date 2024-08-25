@@ -21,8 +21,8 @@ The following are mentioned in the workflows:
       be applied.
     * BOS sessions provide a way to apply a template across a group of nodes and monitor the progress of those nodes as they move toward their desired state.
     * BOS operators interact with other services to perform actions on nodes, moving them toward their desired state.
-* [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) service provides system-level power control
-  for nodes in the system. CAPMC interfaces directly with the Redfish APIs to the controller infrastructure to effect power and environmental changes on the system.
+* [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs) provides system-level power control
+  for nodes in the system. PCS interfaces directly with the Redfish APIs to the controller infrastructure to effect power and environmental changes on the system.
 * [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) tracks the state of each node and its group and role associations.
 * [Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss) stores per-node information about the iPXE boot script.
   When booting or rebooting, nodes consult BSS for boot artifacts \(kernel, `initrd`, image root\) and boot parameters.
@@ -109,13 +109,13 @@ The following workflows are included in this section:
     The power-on operator will detect nodes with a `power-on-pending` status. The power-on operator first sets the desired boot artifacts in BSS.
     If configuration is enabled for the node, the power-on operator will also call CFS to set the desired configuration and disable the node with CFS.
     The node must be disabled within CFS so that CFS does not try to configure node until it has booted.
-    The power-on operator then calls CAPMC to power-on the node.
+    The power-on operator then calls PCS to power-on the node.
     Lastly, the power-on operator will update the state of the node in BOS, including setting the last action. If queried at this point,
     the nodes will have a status of `power-on-called`.
 
-1. **CAPMC boots nodes**
+1. **PCS boots nodes**
 
-    CAPMC interfaces directly with the Redfish APIs and powers on the selected nodes.
+    PCS interfaces directly with the Redfish APIs and powers on the selected nodes.
 
 1. **BSS interacts with the nodes**
 
@@ -214,19 +214,19 @@ The following workflows are included in this section:
 
 1. **Graceful-power-off operator**
 
-    The power-off operator will detect nodes with a `power-off-pending` status, calls CAPMC to power-off the node.
+    The power-off operator will detect nodes with a `power-off-pending` status, calls PCS to power-off the node.
     Then, the power-off operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of
     `power-off-gracefully-called`.
 
 1. **Forceful-power-off operator**
 
-    If powering-off is taking too long, the forceful-power-off will take over. It also calls CAPMC to power-off the node, but with the addition of the forceful flag.
+    If powering-off is taking too long, the forceful-power-off will take over. It also calls PCS to power-off the node, but with the addition of the forceful flag.
     Then, the power-off operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of
     `power-off-forcefully-called`.
 
-1. **CAPMC powers off nodes**
+1. **PCS powers off nodes**
 
-    CAPMC interfaces directly with the Redfish APIs and powers off the selected nodes.
+    PCS interfaces directly with the Redfish APIs and powers off the selected nodes.
 
 1. **Status operator (powering-on)**
 
@@ -239,13 +239,13 @@ The following workflows are included in this section:
     The power-on operator will detect nodes with a `power-on-pending` status. The power-on operator first sets the desired boot artifacts in BSS.
     If configuration is enabled for the node, the power-on operator will also call CFS to set the desired configuration and disable the node with CFS.
     The node must be disabled within CFS so that CFS does not try to configure node until it has booted.
-    The power-on operator then calls CAPMC to power-on the node.
+    The power-on operator then calls PCS to power-on the node.
     Lastly, the power-on operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of
     `power-on-called`.
 
-1. **CAPMC boots nodes**
+1. **PCS boots nodes**
 
-    CAPMC interfaces directly with the Redfish APIs and powers on the selected nodes.
+    PCS interfaces directly with the Redfish APIs and powers on the selected nodes.
 
 1. **BSS interacts with the nodes**
 
@@ -318,19 +318,19 @@ The following workflows are included in this section:
 
 1. **Graceful-power-off operator**
 
-    The power-off operator will detect nodes with a `power-off-pending` status, calls CAPMC to power-off the node.
+    The power-off operator will detect nodes with a `power-off-pending` status, calls PCS to power-off the node.
     Then, the power-off operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of
     `power-off-gracefully-called`.
 
 1. **Forceful-power-off operator**
 
-    If powering-off is taking too long, the forceful-power-off will take over. It also calls CAPMC to power-off the node, but with the addition of the forceful flag.
+    If powering-off is taking too long, the forceful-power-off will take over. It also calls PCS to power-off the node, but with the addition of the forceful flag.
     Then, the power-off operator will update the state of the node in BOS, including setting the last action. If queried at this point, the nodes will have a status of
     `power-off-forcefully-called`.
 
-1. **CAPMC powers off nodes**
+1. **PCS powers off nodes**
 
-    CAPMC interfaces directly with the Redfish APIs and powers off the selected nodes.
+    PCS interfaces directly with the Redfish APIs and powers off the selected nodes.
 
 1. **Status operator (complete)**
 

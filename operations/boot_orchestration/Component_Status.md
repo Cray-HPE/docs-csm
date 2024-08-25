@@ -43,15 +43,15 @@ The possible values for this field are:
 
 * `powering_on`
 
-    This indicates that the `power-on` operator called CAPMC to power-on the component.
+    This indicates that the `power-on` operator called PCS to power-on the component.
 
 * `powering_off_gracefully`
 
-    This indicates that the `power-off-graceful` operator called CAPMC to gracefully power-off the component.
+    This indicates that the `power-off-graceful` operator called PCS to gracefully power-off the component.
 
 * `powering_off_forcefully`
 
-    This indicates that the `power-off-forceful` operator called CAPMC to gracefully power-off the component.
+    This indicates that the `power-off-forceful` operator called PCS to gracefully power-off the component.
 
 * `apply_staged`
 
@@ -76,13 +76,13 @@ The possible values for this field are:
 
 * `power_on_pending`
 
-    This indicates that the component needs to be powered on, but CAPMC has not yet been called.
+    This indicates that the component needs to be powered on, but PCS has not yet been called.
     This status will be set when the `phase` is `powering_on` and the `last_action` is not `powering_on`.
     The `power-on` operator monitors for components in this state to find components that need to be acted on.
 
 * `power_on_called`
 
-    This indicates that CAPMC has been called to power on the component, but HSM does not yet report that the component is on.
+    This indicates that PCS has been called to power on the component, but HSM does not yet report that the component is on.
     This status will be set when the `phase` is `powering_on` and the `last_action` is `powering_on`
     The component will remain in this state until HSM reports the component is `on` and `ready`.
     If the `max_power_on_wait_time` expires while waiting for the component to power on, the status reverts to `power_on_pending`.
@@ -91,13 +91,13 @@ The possible values for this field are:
 
 * `power_off_pending`
 
-    This indicates that the component needs to be powered off, but CAPMC has not yet been called.
+    This indicates that the component needs to be powered off, but PCS has not yet been called.
     This status will be set when the `phase` is `powering_off` and the `last_action` is not `powering_off_gracefully` or `powering_off_forcefully`.
     The `power-off-graceful` operator monitors for components in this state to find components that need to be acted on.
 
 * `power_off_gracefully_called`
 
-    This indicates that CAPMC has been called to power off the component, but HSM does not yet report that the component is off.
+    This indicates that PCS has been called to power off the component, but HSM does not yet report that the component is off.
     This status will be set when the `phase` is `powering_off` and the `last_action` is `powering_off_gracefully`
     The component will remain in this state until either HSM reports the power state for the component is `off` and the `status` operator updates the `phase`,
     or until the `max_power_off_wait_time` has expired and the `power-off-forceful` operator takes over.
@@ -105,7 +105,7 @@ The possible values for this field are:
 
 * `power_off_forcefully_called`
 
-        This indicates that CAPMC has been called to power off the component, but HSM does not yet report that the component is off.
+        This indicates that PCS has been called to power off the component, but HSM does not yet report that the component is off.
     This status will be set when the `phase` is `powering_off` and the `last_action` is `powering_off_gracefully`
     The component will remain in this state until either HSM reports the power state for the component is `off` and the `status` operator updates the `phase`,
     or until the `max_power_off_wait_time` has expired and the `power-off-forceful` operator takes over.
