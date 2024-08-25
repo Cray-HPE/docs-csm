@@ -58,15 +58,15 @@ This operator periodically checks with HSM to discover new components and create
 
 ### `power-off-forceful`
 
-This operator calls CAPMC to forcefully power off components when a previous power off action fails to power off the component.
+This operator calls PCS to forcefully power off components when a previous power off action fails to power off the component.
 
 ### `power-off-graceful`
 
-This operator calls CAPMC to gracefully power off components for components that have a `power-off-pending` status.
+This operator calls PCS to gracefully power off components for components that have a `power-off-pending` status.
 
 ### `power-on`
 
-This operator calls CAPMC to power on components for components that have a `power-on-pending` status.
+This operator calls PCS to power on components for components that have a `power-on-pending` status.
 
 ### `session-cleanup`
 

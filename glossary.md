@@ -264,7 +264,7 @@ replaced by [Power Control Service (PCS)](#power-control-service-pcs).
 * For more information on CAPMC, see [Cray Advanced Platform Monitoring and Control](operations/power_management/Cray_Advanced_Platform_Monitoring_and_Control_CAPMC.md).
 * For more information on the CAPMC API, see [CAPMC API](api/capmc.md).
 
-CAPMC was deprecated in CSM 1.5 and was intended to be removed in CSM 1.6.
+CAPMC was deprecated in CSM 1.5 and no longer supported starting in CSM 1.6.
 [Power Control Service (PCS)](#power-control-service-pcs) is the replacement for CAPMC.
 
 ## Cray CLI (`cray`)
