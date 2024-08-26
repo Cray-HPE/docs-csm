@@ -357,6 +357,8 @@ Follow the [Added Hardware](../network/management_network/added_hardware.md) pro
     ping "${BMC_XNAME}"
     ```
 
+1. If adding Foxconn (Paradise) nodes to the system, follow the [Replacing Foxconn Usernames and Passwords in Vault](./Replacing_Foxconn_User_Pass.md) procedure if nodes fail to discover.
+
 1. (`ncn#`) Verify that discovery has completed.
 
     ```bash

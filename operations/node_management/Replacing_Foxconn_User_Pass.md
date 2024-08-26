@@ -1,8 +1,8 @@
-# Replacing `Foxconn` Username and Passwords in Vault
+# Replacing Foxconn Username and Passwords in Vault
 
-`Foxconn` (Paradise) nodes may be shipped with a different default username and password then the system password.
+Foxconn (Paradise) nodes may be shipped with a different default username and password then the system password.
 Because of the difference in user/password, these nodes will not be able to be discovered.
-Vault needs to be updated with the `Foxconn` username and password using the `FoxconnUserPass.py` script or manually.
+Vault needs to be updated with the Foxconn username and password using the `FoxconnUserPass.py` script or manually.
 
 ## Procedure using the `FoxconnUserPass.py` script
 
@@ -18,14 +18,14 @@ Vault needs to be updated with the `Foxconn` username and password using the `Fo
     DOCS_DIR=/usr/share/doc/csm/scripts
     ```
 
-1. (`ncn-mw#`) Run the `Foxconn` update script
+1. (`ncn-mw#`) Run the Foxconn update script
 
     ```bash
     $DOCS_DIR/operations/hardware_state_manager/FoxconnUserPass.py
     ```
 
     This will ask for the BMC username and password for the Paradise nodes.
-    The scirpt will look for undiscovered nodes, if it finds a `Foxconn` node, update vault with correct credentials.
+    The scirpt will look for undiscovered nodes, if it finds a Foxconn node, update vault with correct credentials.
 
 1. (`ncn-mw#`) Wait 10+ minutes for changes to take affect and nodes to be discovered.  To check nodes which have failed to be discovered:
 
@@ -35,7 +35,7 @@ Vault needs to be updated with the `Foxconn` username and password using the `Fo
 
 ## Manual procedure to update credentials in vault
 
-1. (`ncn-mw#`) Use the Cray CLI to update vault through HSM (replace `BMC_xname` with the xname of the BMC, `Foxconn_user` with the `Foxconn` default username, and `Foxconn_pass` with the `Foxconn` default password):
+1. (`ncn-mw#`) Use the Cray CLI to update vault through HSM (replace `BMC_xname` with the xname of the BMC, `Foxconn_user` with the Foxconn default username, and `Foxconn_pass` with the Foxconn default password):
     NOTE: `BMC_xname` needs to be in the line twice
 
    ```bash
