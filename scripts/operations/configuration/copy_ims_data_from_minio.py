@@ -190,7 +190,7 @@ class DestinationDirectory:
             include_args.extend(["--include", art.path])
         logging.info("Copying selected artifacts from minio to '%s'", self.path)
         run_aws_s3_cmd("sync", f"s3://cms/{folder_name}", self.path, "--exclude", "*",
-                       *include_args, num_retries=5, timeout=7200)
+                       *include_args, num_retries=5, timeout=14400)
         if self.is_main_dir:
             return
         logging.info("Creating symbolic links in main export directory to files under '%s'",
