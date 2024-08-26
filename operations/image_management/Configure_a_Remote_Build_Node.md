@@ -691,16 +691,19 @@ Expected output will be something like:
 
 ### Checking the status of remote build nodes
 
-Before a job is set up to be launched on a remote build node, IMS checks that it is
-ready to run remote jobs. If a node is registered as a remote build node, but is not
-able to run remote jobs, that node will not have remote jobs scheduled on it. The
-status of the remote build nodes may be queried. The status object will have a field
-`ableToRunJobs` that contains a boolean indicating if the node is able to run jobs.
-If the node is not able to run jobs, the status object will document the issue with
-running jobs on that node.
+Before a job is set up to be launched on a remote build node, IMS checks that there is
+a remote node capable of running the job. If a node is registered as a remote build node
+but is not able to run remote jobs, that node will not have remote jobs scheduled on it.
+The status of the remote build nodes may be queried. The status object will have a field
+`ableToRunJobs` that contains a boolean indicating if the node is able to run jobs. If the
+node is not able to run jobs, the status object will document the issue with running jobs
+on that node.
 
-* NOTE: a value of '-1' for `numCurrentJobs` indicates that the actual number of
-   current jobs on the node was not able to be determined.
+In order to run jobs all of the following conditions must be met:
+
+* The IMS service can ssh to the node.
+* The node architecture must be determined and valid.
+* The `podman` executable must be installed.
 
 (`ncn-mw#`) To check the status of a particular remote build node:
 
@@ -714,14 +717,14 @@ If the node is ready to run jobs, the output will look something like:
 {
   "ableToRunJobs": true,
   "nodeArch": "x86_64",
-  "numCurrentJobs": 0,
+  "numCurrentJobs": 4,
   "podmanStatus": "Podman present at /usr/bin/podman",
   "sshStatus": "SSH connection established.",
   "xname": "x3000c0s3b0n0"
 }
 ```
 
-If the node is not able to run jobs, the output will look something like:
+If IMS is unable to ssh to a node the output may look something like:
 
 ```text
 {
@@ -730,6 +733,32 @@ If the node is not able to run jobs, the output will look something like:
   "numCurrentJobs": -1,
   "podmanStatus": "Unknown",
   "sshStatus": "Unable to connect to node. Error: [Errno -2] Name does not resolve",
+  "xname": "x3000c0s3b0n1"
+}
+```
+
+If IMS is unable to determine the architecture of the node the output may look something like:
+
+```text
+{
+  "ableToRunJobs": false,
+  "nodeArch": "Unable to determine architecture of node.",
+  "numCurrentJobs": -1,
+  "podmanStatus": "Unknown",
+  "sshStatus": "SSH connection established.",
+  "xname": "x3000c0s3b0n1"
+}
+```
+
+If `podman` is not correctly installed the output may look something like:
+
+```text
+{
+  "ableToRunJobs": false,
+  "nodeArch": "x86_64",
+  "numCurrentJobs": -1,
+  "podmanStatus": "Podman not installed on node.",
+  "sshStatus": "SSH connection established.",
   "xname": "x3000c0s3b0n1"
 }
 ```
