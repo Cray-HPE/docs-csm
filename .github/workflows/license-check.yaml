@@ -41,7 +41,7 @@ jobs:
 
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v44
+      uses: tj-actions/changed-files@v45
 
     - name: License Check
       if: ${{ steps.changed-files.outputs.all_changed_files }}
