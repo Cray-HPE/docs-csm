@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -34,7 +34,7 @@ import json
 import os
 import subprocess
 import sys
-from typing import Dict, List, NamedTuple, Union
+from typing import Dict, Generator, List, NamedTuple, Union
 
 from python_lib import args, cfs
 from python_lib.types import JsonDict, JSONDecodeError
@@ -290,6 +290,16 @@ def create_configs(configs_map: NameObjectMap, config_names_to_create: List[str]
                 del layer["commit"]
         cfs.create_configuration(config_name, configs_map[config_name]["layers"])
 
+def chunk_list(items: list, max_batch_size: int=500) -> Generator[list, None, None]:
+    """
+    Break a given list into chunks with size <= the specified maximum, and yield
+    them one at a time.
+    """
+    chunk_size = max_batch_size if max_batch_size > 0 else len(items)
+    while items:
+        yield items[:chunk_size]
+        items = items[chunk_size:]
+
 def update_components(comps_map: NameObjectMap, comp_ids_to_update: List[str]) -> None:
     """
     Loop through the specified component names one at a time, and update them in CFS with
@@ -298,10 +308,19 @@ def update_components(comps_map: NameObjectMap, comp_ids_to_update: List[str]) -
     if not comp_ids_to_update:
         return
     print("")
+    comps_to_update_by_desired_config = {}
     for comp_id in comp_ids_to_update:
         desired_config_name = comps_map[comp_id]["desired_config"]
-        print(f"Updating component {comp_id} to desired configuration '{desired_config_name}'")
-        cfs.update_component_desired_config(comp_id, desired_config_name)
+        if desired_config_name in comps_to_update_by_desired_config:
+            comps_to_update_by_desired_config[desired_config_name].append(comp_id)
+        else:
+            comps_to_update_by_desired_config[desired_config_name] = [comp_id]
+
+    for desired_config_name, comp_id_list in comps_to_update_by_desired_config.items():
+        update_data = { "desired_config": desired_config_name }
+        for comp_sublist in chunk_list(comp_id_list):
+            print(f"Updating desired configuration to '{desired_config_name}' for components: {comp_sublist}")
+            cfs.update_components_by_ids(comp_ids=comp_sublist, update_data=update_data)
 
 def main() -> None:
     """
@@ -334,14 +353,12 @@ def main() -> None:
             cfs.delete_configuration(config_name)
             del current_cfs_data.configurations[config_name]
 
-        for comp_name, comp_data in list(current_cfs_data.components.items()):
-            if "tags" in comp_data and comp_data["tags"]:
-                print(f"Clearing error count, desired configuration, state, and tags for component '{comp_name}'")
-                updated_comp = cfs.update_component(comp_name, errorCount=0, state=[], desired_config="", tags={})
-            else:
-                print(f"Clearing error count, desired configuration, and state for component '{comp_name}'")
-                updated_comp = cfs.update_component(comp_name, errorCount=0, state=[], desired_config="", tags={})
-            current_cfs_data.components[comp_name] = updated_comp
+        comp_clear_data = {"error_count": 0, "state": [], "desired_config": "", "tags": {}}
+        for comp_sublist in chunk_list(list(current_cfs_data.components)):
+            print(f"Clearing error count, desired configuration, state, and tags for components: '{comp_sublist}'")
+            updated_comp_ids = cfs.update_components_by_ids(comp_ids=comp_sublist, update_data=comp_clear_data)
+            for comp_id in updated_comp_ids:
+                current_cfs_data.components[comp_id].update(comp_clear_data)
 
     # Determine the necessary updates
     print("\nExamining CFS configurations...")
