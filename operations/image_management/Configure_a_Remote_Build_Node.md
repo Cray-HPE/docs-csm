@@ -701,7 +701,7 @@ on that node.
 
 In order to run jobs all of the following conditions must be met:
 
-* The IMS service can ssh to the node.
+* The IMS service can SSH to the node.
 * The node architecture must be determined and valid.
 * The `podman` executable must be installed.
 
@@ -724,7 +724,7 @@ If the node is ready to run jobs, the output will look something like:
 }
 ```
 
-If IMS is unable to ssh to a node the output may look something like:
+If IMS is unable to SSH to a node the output may look something like:
 
 ```text
 {
