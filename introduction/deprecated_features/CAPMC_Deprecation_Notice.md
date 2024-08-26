@@ -1,18 +1,10 @@
 # CAPMC Deprecation Notice
 
-## Status of CAPMC in CSM 1.6
-
 CAPMC was deprecated in CSM 1.5 and intended to be removed from CSM 1.6.  The
 decision was made to not remove it in CSM 1.6 so that existing dependencies
 that have not yet transitioned to PCS do not break.  Support for CAPMC however,
 is removed starting in CSM 1.6.  Everyone is encouraged to transition to PCS as
 soon as possible.
-
-## Deprecated Features in CSM 1.5
-
-CSM 1.5 was intended to be  the last release to contain the CAPMC service. It has been
-replaced by PCS. It co-existed with PCS in CSM 1.5 to assist in transitioning to
-PCS. It was slated to be permanently removed from the system beginning with CSM 1.6.
 
 CAPMC has been end-of-life since the CSM 1.3 release. The remaining APIs and CLI commands
 are officially deprecated.
