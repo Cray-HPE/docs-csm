@@ -10,13 +10,12 @@ soon as possible.
 
 ## Deprecated Features in CSM 1.5
 
-CSM 1.5 is the last release that will contain the CAPMC service. It has been
-replaced by PCS. CAPMC continues to co-exist with PCS to assist in transition to
-PCS. CAPMC is slated to be permanently removed from the system beginning with
-CSM 1.6.
+CSM 1.5 was intended to be  the last release to contain the CAPMC service. It has been
+replaced by PCS. It co-existed with PCS in CSM 1.5 to assist in transitioning to
+PCS. It was slated to be permanently removed from the system beginning with CSM 1.6.
 
 CAPMC has been end-of-life since the CSM 1.3 release. The remaining APIs and CLI commands
-are officially deprecated and will be removed in the CSM 1.6 release.
+are officially deprecated.
 
 Many CAPMC v1 REST API and CLI features have been deprecated and removed as part
 of CSM version 1.3. Further development of CAPMC service and CAPMC CLI has
