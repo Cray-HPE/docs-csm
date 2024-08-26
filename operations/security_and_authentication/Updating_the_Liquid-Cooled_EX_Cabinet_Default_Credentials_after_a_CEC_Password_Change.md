@@ -8,12 +8,11 @@ product documentation. To update Slingshot switch BMCs, refer to "Change Rosetta
 
 This procedure provisions only the default Redfish `root` account passwords. It does not modify Redfish accounts that have been added after an initial system installation.
 
-- [Updating the Liquid-Cooled EX Cabinet CEC with Default Credentials after a CEC Password Change](#updating-the-liquid-cooled-ex-cabinet-cec-with-default-credentials-after-a-cec-password-change)
-    - [Prerequisites](#prerequisites)
-    - [Procedure](#procedure)
-        - [1. Update the default credentials used by MEDS for new hardware](#1-update-the-default-credentials-used-by-meds-for-new-hardware)
-        - [2. Update credentials for existing EX hardware in the system](#2-update-credentials-for-existing-ex-hardware-in-the-system)
-        - [3. Reapply BMC settings if a `StatefulReset` was performed on any BMC](#3-reapply-bmc-settings-if-a-statefulreset-was-performed-on-any-bmc)
+- [Prerequisites](#prerequisites)
+- [Procedure](#procedure)
+    - [1. Update the default credentials used by MEDS for new hardware](#1-update-the-default-credentials-used-by-meds-for-new-hardware)
+    - [2. Update credentials for existing EX hardware in the system](#2-update-credentials-for-existing-ex-hardware-in-the-system)
+    - [3. Reapply BMC settings if a `StatefulReset` was performed on any BMC](#3-reapply-bmc-settings-if-a-statefulreset-was-performed-on-any-bmc)
 
 ## Prerequisites
 

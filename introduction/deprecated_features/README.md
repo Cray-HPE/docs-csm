@@ -6,17 +6,16 @@ When a feature is first deprecated, it may not yet be announced in which CSM ver
 been made, that information will be available on this page. For any deprecated features listed on this page that do not yet have an announced CSM
 version for their planned removal, customers are still strongly encouraged to make plans to migrate away from the deprecated feature.
 
-- [Deprecated Features](#deprecated-features)
-    - [Removals](#removals)
-        - [Removals in CSM 1.4](#removals-in-csm-14)
-        - [Removals in CSM 1.5](#removals-in-csm-15)
-        - [Removals in CSM 1.6](#removals-in-csm-16)
-    - [Deprecations](#deprecations)
-        - [Deprecated in CSM 1.5](#deprecated-in-csm-15)
-        - [Deprecated in CSM 1.3](#deprecated-in-csm-13)
-        - [Deprecated in CSM 1.2](#deprecated-in-csm-12)
-        - [Deprecated in CSM 1.0](#deprecated-in-csm-10)
-        - [Deprecated in CSM 0.9.3](#deprecated-in-csm-093)
+- [Removals](#removals)
+    - [Removals in CSM 1.4](#removals-in-csm-14)
+    - [Removals in CSM 1.5](#removals-in-csm-15)
+    - [Removals in CSM 1.6](#removals-in-csm-16)
+- [Deprecations](#deprecations)
+    - [Deprecated in CSM 1.5](#deprecated-in-csm-15)
+    - [Deprecated in CSM 1.3](#deprecated-in-csm-13)
+    - [Deprecated in CSM 1.2](#deprecated-in-csm-12)
+    - [Deprecated in CSM 1.0](#deprecated-in-csm-10)
+    - [Deprecated in CSM 0.9.3](#deprecated-in-csm-093)
 
 ## Removals
 
@@ -45,7 +44,7 @@ in chronological order.
   was deprecated in CSM 1.5 and intended to be removed from CSM 1.6.  The decision was made to not
   remove it in CSM 1.6 so that existing dependencies that have not yet transitioned to
   [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs) do not break.  Support
-  for CAPMC however, is removed starting in CSM 1.6.  We encourage everyone to transition to PCS as
+  for CAPMC however, is removed starting in CSM 1.6.  Everyone is encouraged to transition to PCS as
   soon as possible.
 - User Access Service
 - User Access Instance
