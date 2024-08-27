@@ -57,6 +57,15 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
 }
 ```
 
+**IMPORTANT:** There is a known bug that causes the hmcollector-poll service to lose event subscriptions
+after BMC firmware is updated.  After updating BMC firmware, the hmcollector service must be restarted to
+work around this issue.  After the update is complete, and you confirm the BMC has been rebooted, restart
+the hmcollector-poll service with this command:
+
+```bash
+kubectl -n services rollout restart deployment cray-hms-hmcollector-poll
+```
+
 ## Update Paradise `bios_active` procedure
 
 The nodes must be **OFF** before updating the BIOS
