@@ -235,3 +235,5 @@ see [Removals](introduction/deprecated_features/README.md#removals)
     * For more information see [Rolling reboots](troubleshooting/known_issues/rolling_reboots.md).
 * The [multi-tenancy](operations/multi-tenancy/Overview.md) feature is broken in CSM 1.5.
     * This is expected to be fixed in CSM 1.5.3.
+* After updating Paradise BMC firmware, the hmcollector-poll service will lose event subscriptions and must be restarted
+    * See [Updating Foxconn Paradise Nodes with FAS](operations/firmware/FAS_Paradise.md) for details on how to do this
