@@ -61,7 +61,7 @@ are times that problems crop up with running these remote jobs.
 1. (`ncn-mw#`) Check the IMS service logs for creation of the job.
 
     ```bash
-    kubectl -n services logs cray-ims-<id of current pod> | grep -A 15 POST
+    cray -n services logs cray-ims-<id of current pod> | grep -A 15 POST
     ```
 
     When the job is created there is information in the log about matching remote build nodes - look
