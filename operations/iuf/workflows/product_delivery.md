@@ -57,12 +57,18 @@ section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide
 Refer to that table and any corresponding product documents before continuing to the next step.
 
 1. Invoke `iuf run` with activity identifier `${ACTIVITY_NAME}` and use `-r` to execute the [`deliver-product`](../stages/deliver_product.md) stage. Perform the upgrade using product content found in `${MEDIA_DIR}`.
+   Additional arguments are available to control the behavior of the `deliver-product` stage (for example, `-rv`). See the [`deliver-product` stage documentation](../stages/deliver_product.md)
+   for details and adjust the example below if necessary.
 
-    (`ncn-m001#`) Execute the `deliver-product` stage.
+     **`NOTE`** When installing USS 1.1 or higher, select either SLURM or PBS Pro Products to use on the system before running this stage. For more information, see the `deliver-product` stage
+     details in the "Install and Upgrade Framework" section of the _HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)_.
 
-    ```bash
-    iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run -r deliver-product
-    ```
+      (`ncn-m001#`) Execute the `deliver-product` stage. Use site variables from the `site_vars.yaml` file found in `${ADMIN_DIR}` and recipe variables from the `product_vars.yaml` file found in `${ADMIN_DIR}`.
+
+      ```bash
+      iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run --site-vars \
+      "${ADMIN_DIR}/site_vars.yaml" -bpcd "${ADMIN_DIR}" -r deliver-product
+      ```
 
 Once this step has completed:
 
