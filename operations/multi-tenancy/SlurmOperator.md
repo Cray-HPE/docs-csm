@@ -1,24 +1,12 @@
 # Slurm Operator
 
 * [Overview](#overview)
-* [Install the Slurm operator](#install-the-slurm-operator)
 * [Troubleshooting](#troubleshooting)
 
 ## Overview
 
 The Slurm operator can be used to deploy Slurm within a tenant, so each tenant can have a separate instance of Slurm.
-This page explains how to install the Slurm operator.
-
-## Install the Slurm operator
-
-The Slurm operator must be installed in order to create Slurm tenants. The Slurm
-operator runs in a Kubernetes pod and watches for `SlurmCluster` custom resources.
-
-(`ncn-mw#`) To install the Slurm operator, run this command from the unpacked CPE Slurm release tarball:
-
-```bash
-helm upgrade --install -n slurm-operator cray-slurm-operator ./helm/cray-slurm-operator-*.tgz
-```
+The Slurm operator is distributed as part of USS, and is installed if `uss.deploy_slurm` is enabled in `site_vars.yaml` during IUF installation.
 
 ## Troubleshooting
 
