@@ -1366,6 +1366,7 @@ if [[ ${state_recorded} == "0" ]]; then
       | yq4 e '.kubernetesVersion="1.24.17"' \
       | yq4 e '.dns.imageRepository="artifactory.algol60.net/csm-docker/stable/registry.k8s.io/coredns"' \
       | yq4 e '.imageRepository="artifactory.algol60.net/csm-docker/stable/registry.k8s.io"' \
+      | yq4 e '.apiServer.extraArgs.profiling="false"' \
       | yq4 e '.controllerManager.extraArgs.terminated-pod-gc-threshold="250"' \
       | yq4 e '.controllerManager.extraArgs.profiling="false"' \
         > "${tmpdir}/kubeadm-config.yaml"
