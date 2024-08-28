@@ -36,16 +36,18 @@ specified. To access tenant owned resources, the system administrator will need 
 
 ## BOS API Access with Tenancy
 
-`BOS` v2 API introspects request information pertaining to tenant information, if provided. If you have tenant information
-populated by the CrayCLI, it will be passed into the associated `BOS` command. Otherwise, if you are interacting with the
-API directly and are scripting against it, you may provide this information by hand, via curl.
+The `BOS` v2 API identifies the tenant based on information passed in the request. A tenant must always pass information 
+identifying itself -- their tenant ID -- when making a request. If you have tenant information forwarded to the `BOS`
+api service through use of the `cray init` command, `BOS` will contextually operate on behalf of that tenant. Otherwise, 
+if you are interacting with the API directly or are scripting against it, the same information may be provided with your
+request as part of a header that accompanies your request.
 
-Note: `OPA` prevents unauthorized tenant requests from accessing the `BOS` API, so the value you choose for 
-`Cray-Tenant-Name: ` must match your user provided access token within your request. If your user access token is not
-part of the tenant name you are issuing, your command will fail. This allows users who are part of multiple tenancies to
-select the tenant that they are operating under, as it is possible for one user to be a part of multiple tenants. In the
-case of `BOS`, even if you are part of multiple individual tenant groups, only the resources that are allocated to a
-specific provided tenant, as referenced by name, are affected.
+Note: HPE Authored `OPA` rules prevent unauthorized tenant requests from accessing the `BOS` API, so the value you 
+choose for `Cray-Tenant-Name: ` must match your user provided access token within your request. If your user access 
+token is not part of the tenant name you are issuing, your command will fail. This allows users who are part of multiple
+tenancies to select the specific tenant that they are operating under, as it is possible for one user to be a part of 
+multiple tenant groups. In the case of `BOS`, even if you are part of multiple individual tenant groups, only the 
+resources that are allocated to a specifically provided tenant, as referenced by name, are affected.
 
 1. (`ncn-mw#`) Administrators may provide tenant information via an HTTP verb in the form of a header to affect resources
 that are part of a specific `TAPMS` tenant.
