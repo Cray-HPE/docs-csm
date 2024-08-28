@@ -38,12 +38,12 @@ specified. To access tenant owned resources, the system administrator will need 
 
 The `BOS` v2 API identifies the tenant based on information passed in the request. A tenant must always pass information
 identifying itself -- their tenant ID -- when making a request. If you have tenant information forwarded to the `BOS`
-API service through use of the cray init command, `BOS` will contextually operate on behalf of that tenant. Otherwise,
+API service through use of the Cray CLI `init` command, `BOS` will contextually operate on behalf of that tenant. Otherwise,
 if you are interacting with the API directly or are scripting against it, the same information may be provided with your
 request as part of a header that accompanies your request.
 
 Note: HPE Authored `OPA` rules prevent unauthorized tenant requests from accessing the `BOS` API, so the value you
-choose for `Cray-Tenant-Name: ` must match your user provided access token within your request. If your user access
+choose for `Cray-Tenant-Name:` must match your user provided access token within your request. If your user access
 token is not part of the tenant name you are issuing, your command will fail. This allows users who are part of multiple
 tenancies to select the specific tenant that they are operating under, as it is possible for one user to be a part of
 multiple tenant groups. In the case of `BOS`, even if you are part of multiple individual tenant groups, only the
@@ -52,7 +52,7 @@ resources that are allocated to a specifically provided tenant, as referenced by
 Administrators may provide tenant information via an HTTP verb in the form of a header to affect resources
 that are part of a specific `TAPMS` tenant.
 
-(`ncn-mw#`) 
+(`ncn-mw#`)
 
 ```bash
 curl -H "Cray-Tenant-Name: red" -H "Authorization: Bearer ${TOKEN}" -H 'Content-Type: application/json' https://api-gw-service-nmn.local/apis/bos/v2/components/
