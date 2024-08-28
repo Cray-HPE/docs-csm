@@ -49,9 +49,12 @@ tenancies to select the specific tenant that they are operating under, as it is 
 multiple tenant groups. In the case of `BOS`, even if you are part of multiple individual tenant groups, only the 
 resources that are allocated to a specifically provided tenant, as referenced by name, are affected.
 
-1. (`ncn-mw#`) Administrators may provide tenant information via an HTTP verb in the form of a header to affect resources
+Administrators may provide tenant information via an HTTP verb in the form of a header to affect resources
 that are part of a specific `TAPMS` tenant.
 
-    ```bash
-    curl -H "Cray-Tenant-Name: red" -H "Authorization: Bearer ${TOKEN}" -H 'Content-Type: application/json' https://api-gw-service-nmn.local/apis/bos/v2/components/
-    ```
+(`ncn-mw#`) 
+
+```bash
+curl -H "Cray-Tenant-Name: red" -H "Authorization: Bearer ${TOKEN}" -H 'Content-Type: application/json' https://api-gw-service-nmn.local/apis/bos/v2/components/
+```
+
