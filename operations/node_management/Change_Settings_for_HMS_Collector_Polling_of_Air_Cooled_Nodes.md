@@ -20,32 +20,23 @@ information returned from the BMCs.
 
 The following are the best practices for using the HMS Collector polling:
 
-- (`ncn#`) Do not query the power state of air-cooled nodes using CAPMC more than two or three times a minute.
-
-  - This is done via the CAPMC `get_xname_status` command.
-  - The Cray CLI must be configured on the node where this command is run. See [Configure the Cray CLI](../configure_cray_cli.md).
-
-      ```bash
-      cray capmc get_xname_status create --xnames LIST_OF_NODES
-      ```
-
 - Polling of air-cooled nodes should be disabled by default. Before nodes are booted, verify that `cray-hms-hmcollector` polling is disabled.
 
-  - (`ncn-mw#`) To check if polling is disabled:
+    - (`ncn-mw#`) To check if polling is disabled:
 
-      ```bash
-      kubectl get deployments.apps -n services cray-hms-hmcollector -o json | \
-               jq '.spec.template.spec.containers[].env[]|select(.name=="POLLING_ENABLED")'
-      ```
+        ```bash
+        kubectl get deployments.apps -n services cray-hms-hmcollector -o json | \
+                 jq '.spec.template.spec.containers[].env[]|select(.name=="POLLING_ENABLED")'
+        ```
 
-  - (`ncn-mw#`) To disable polling, if it is not already disabled:
+    - (`ncn-mw#`) To disable polling, if it is not already disabled:
 
-      ```bash
-      kubectl edit deployment -n services cray-hms-hmcollector
-      ```
+        ```bash
+        kubectl edit deployment -n services cray-hms-hmcollector
+        ```
 
-      Change the value for the `POLLING_ENABLED` environment variable to `false` in the `spec:` section. Save and quit the editor for the changes to take effect. The
-      `cray-hms-hmcollector` pod will automatically restart.
+        Change the value for the `POLLING_ENABLED` environment variable to `false` in the `spec:` section. Save and quit the editor for the changes to take effect. The
+        `cray-hms-hmcollector` pod will automatically restart.
 
 - (`ncn-mw#`) Only enable telemetry polling when needed, such as when running jobs.
 
@@ -103,10 +94,10 @@ If the reset does not recover the BMCs, then use the following steps to shut dow
     ping -c 1 BMC_HOSTNAME
     ```
 
-1. (`ncn#`) Check the power of the nodes.
+1. (`ncn#`) Check the power state of the nodes.
 
     ```bash
-    cray capmc get_xname_status create --xnames LIST_OF_NODES
+    cray power status list --xnames LIST_OF_NODES
     ```
 
 After these steps, the nodes should be ready to be booted again with the Boot Orchestration Service (BOS).

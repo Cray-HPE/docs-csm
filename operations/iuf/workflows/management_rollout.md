@@ -13,6 +13,8 @@ This section updates the software running on management NCNs.
 
 ## 1. Perform Slingshot switch firmware updates
 
+**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
+
 Instructions to perform Slingshot switch firmware updates are provided in the "Upgrade HPE Slingshot switch firmware in a CSM environment" section of the _HPE Slingshot Installation Guide for CSM_.
 
 Once this step has completed:
@@ -20,6 +22,8 @@ Once this step has completed:
 - Slingshot switch firmware has been updated
 
 ## 2. Update management host firmware (FAS)
+
+**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
 Refer to [Update Non-Compute Node (NCN) BIOS and BMC Firmware](../../firmware/FAS_Use_Cases.md#update-non-compute-node-ncn-bios-and-bmc-firmware) for details on how to upgrade the firmware on management nodes.
 
@@ -150,65 +154,104 @@ Refer to that table and any corresponding product documents before continuing to
 
 1. Upgrade `ncn-m001`.
 
-    1. Follow the steps documented in [Stage 3.3 - `ncn-m001` upgrade](../../../upgrade/Stage_3.md#stage-33---ncn-m001-upgrade).
-    **Stop** before performing the specific [upgrade `ncn-m001`](../../../upgrade/Stage_3.md#upgrade-ncn-m001) step and return to this document.
+    1. Option 1 - Perform the NCN master node upgrade on `ncn-m001` without IUF
 
-    1. Get the image ID and CFS configuration created for NCN master nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the
-    [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation to get the values for `final_image_id` and `configuration` for images with a `configuration_group_name` value matching `Management_Master`.
-    These values will be needed for upgrading `ncn-m001` in the following steps.
+        1. Follow the steps documented in [Stage 3.3 - `ncn-m001` upgrade](../../../upgrade/Stage_3.md#stage-33---ncn-m001-upgrade).
+           >**`Stop`** before performing the specific [upgrade `ncn-m001`](../../../upgrade/Stage_3.md#upgrade-ncn-m001) step and return to this document.
 
-    1. Set the CFS configuration on `ncn-m001`.
+            1. Get the image ID and CFS configuration created for NCN master nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the
+                [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation to get the values for `final_image_id` and `configuration` for images with a `configuration_group_name` value matching `Management_Master`.
+                These values will be needed for upgrading `ncn-m001` in the following steps.
 
-        1. (`ncn-m#`) Set `CFS_CONFIG_NAME` to be the value for `configuration` found for `Management_Master` nodes in the the second step.
+            1. Set the CFS configuration on `ncn-m001`.
 
-            ```bash
-            CFS_CONFIG_NAME=<appropriate configuration value>
-            ```
+                1. (`ncn-m#`) Set `CFS_CONFIG_NAME` to be the value for `configuration` found for `Management_Master` nodes in the the second step.
 
-        1. (`ncn-m#`) Get the xname of `ncn-m001`.
+                    ```bash
+                    CFS_CONFIG_NAME=<appropriate configuration value>
+                    ```
 
-            ```bash
-            XNAME=$(ssh ncn-m001 'cat /etc/cray/xname')
-            echo "${XNAME}"
-            ```
+                1. (`ncn-m#`) Get the xname of `ncn-m001`.
 
-        1. (`ncn-m#`) Set the CFS configuration on `ncn-m001`.
+                    ```bash
+                    XNAME=$(ssh ncn-m001 'cat /etc/cray/xname')
+                    echo "${XNAME}"
+                    ```
 
-            ```bash
-            /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-            --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames "${XNAME}" --no-enable --no-clear-err
-            ```
+                1. (`ncn-m#`) Set the CFS configuration on `ncn-m001`.
 
-            The expected output is:
+                    ```bash
+                    /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+                    --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames "${XNAME}" --no-enable --no-clear-err
+                    ```
 
-              ```bash
-              All components updated successfully.
-              ```
+                    The expected output is:
 
-    1. Set the image in BSS for `ncn-m001` by following the [Set NCN boot image for `ncn-m001`](../stages/management_nodes_rollout.md#set-ncn-boot-image-for-ncn-m001)
-    section of the [Management nodes rollout stage documentation](../stages/management_nodes_rollout.md).
-    Set the `IMS_RESULTANT_IMAGE_ID` variable to the `final_image_id` for `Management_Master` found in the second step.
+                    ```bash
+                    All components updated successfully.
+                    ```
 
-    1. (`ncn-m002#`) Upgrade `ncn-m001`. This **must** be executed on **`ncn-m002`**.
+            1. Set the image in BSS for `ncn-m001` by following the [Set NCN boot image for `ncn-m001`](../stages/management_nodes_rollout.md#set-ncn-boot-image-for-ncn-m001)
+            section of the [Management nodes rollout stage documentation](../stages/management_nodes_rollout.md).
+            Set the `IMS_RESULTANT_IMAGE_ID` variable to the `final_image_id` for `Management_Master` found in the second step.
 
-        > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
-        then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+            1. (`ncn-m002#`) Upgrade `ncn-m001`. This **must** be executed on **`ncn-m002`**.
 
-        ```bash
-        /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
-        ```
+                > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
+                then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
 
-        > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
-        See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
+                ```bash
+                /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
+                ```
 
-1. Follow the steps documented in [Stage 3.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_3.md#stage-34---upgrade-weave-and-multus)
+                > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should     be restarted.
+                See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
-1. Follow the steps documented in [Stage 3.5 - `coredns` anti-affinity](../../../upgrade/Stage_3.md#stage-35---coredns-anti-affinity)
+            1. Follow the steps documented in [Stage 3.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_3.md#stage-34---upgrade-weave-and-multus)
 
-Once this step has completed:
+            1. Follow the steps documented in [Stage 3.5 - `coredns` anti-affinity](../../../upgrade/Stage_3.md#stage-35---coredns-anti-affinity)
 
-- All management NCNs have been upgraded to the image and CFS configuration created in the previous steps of this workflow
-- Per-stage product hooks have executed for the `management-nodes-rollout` stage
+    1. Option 2 - Perform the NCN master node upgrade on `ncn-m001` with IUF
+
+       **`NOTE`** This subsection is mandatory only for Upgrade CSM and additional products with IUF.
+
+       > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
+       then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+
+       1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m001`. This will rebuild `ncn-m001` with the    new CFS configuration and image built in
+       previous steps of the workflow.
+
+           (`ncn-m002#`) Upgrade `ncn-m001`. This **must** be executed on **`ncn-m002`**.
+
+           1. Run `upload-rebuild-templates.sh` to update all the workflows that will be used by IUF and to ensure the correct CSM product versions will be used by IUF.
+
+               (`ncn-m002#`) Execute the `upload-rebuild-templates.sh` script.
+
+               ```bash
+               /usr/share/doc/csm/workflows/scripts/upload-rebuild-templates.sh
+               ```
+
+           (`ncn-m002#`) Execute the `management-nodes-rollout` stage with `ncn-m001`.
+
+           ```bash
+           iuf -a "${ACTIVITY_NAME}" --media-host ncn-m002 run -r management-nodes-rollout --limit-management-rollout ncn-m001
+           ```
+
+           > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should    be restarted.
+           See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
+
+       1. Verify that `ncn-m001` booted successfully with the desired image and CFS configuration.
+
+           ```bash
+           XNAME=$(ssh ncn-m001 'cat /etc/cray/xname')
+           echo "${XNAME}"
+           cray cfs components describe "${XNAME}"
+           ```
+
+    Once this step has completed:
+
+     - All management NCNs have been upgraded to the image and CFS configuration created in the previous steps of this workflow
+     - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
 Continue to the next section [4. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware).
 
@@ -447,6 +490,8 @@ Return to the procedure that was being followed for `management-nodes-rollout` t
 
 ## 4. Update management host Slingshot NIC firmware
 
+**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
+
 If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the _HPE Slingshot Installation Guide for CSM_ for details on how to update NIC firmware on management nodes.
 
 After updating management host Slingshot NIC firmware, all nodes where the firmware was updated must be power cycled.
@@ -464,6 +509,14 @@ Once this step has completed:
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)
   workflow to continue the install or upgrade.
 
-- If performing an upgrade that includes upgrading CSM, return to the
-  [Upgrade CSM and additional products with IUF](upgrade_csm_and_additional_products_with_iuf.md)
+- If performing an upgrade that includes upgrading CSM manually and additional products with IUF,
+  return to the [Upgrade CSM manually and additional products with IUF](upgrade_csm_manual_and_additional_products_with_iuf.md)
+  workflow to continue the upgrade.
+
+- If performing an upgrade that includes upgrading CSM and additional products with IUF,
+  return to the [Upgrade CSM and additional products with IUF](upgrade_csm_iuf_additional_products_with_iuf.md)
+  workflow to continue the upgrade.
+
+- If performing an upgrade that includes upgrading only CSM, return to the
+  [Upgrade only CSM through IUF](../../../upgrade/Upgrade_Only_CSM_with_iuf.md)
   workflow to continue the upgrade.

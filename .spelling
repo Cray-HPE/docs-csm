@@ -167,6 +167,7 @@ Cutoff
 DB-9
 DCS-7060CX-32S
 DHCP
+Diags
 DNS
 DSAv2
 DUTs
@@ -181,6 +182,7 @@ Elasticsearch
 FAS
 FPGAs
 FastLinQ
+Foxconn
 Frontend
 GBs
 GBs
@@ -404,6 +406,8 @@ TrustedCerts
 U.S.
 UAN-specific
 UANs
+UAI
+UAIs
 UIs
 URIs
 Un-rack

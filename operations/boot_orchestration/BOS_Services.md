@@ -5,16 +5,16 @@ The Boot Orchestration Service \(BOS\) consists of many different micro-services
 * [BOS API](#bos-api)
 * [Boot Orchestration Agent \(BOA\)](#boot-orchestration-agent-boa)
 * [BOS operators](#bos-operators)
-  * [`actual-state-cleanup`](#actual-state-cleanup)
-  * [`configuration`](#configuration)
-  * [`discovery`](#discovery)
-  * [`power-off-forceful`](#power-off-forceful)
-  * [`power-off-graceful`](#power-off-graceful)
-  * [`power-on`](#power-on)
-  * [`session-cleanup`](#session-cleanup)
-  * [`session-completion`](#session-completion)
-  * [`session-setup`](#session-setup)
-  * [`status`](#status)
+    * [`actual-state-cleanup`](#actual-state-cleanup)
+    * [`configuration`](#configuration)
+    * [`discovery`](#discovery)
+    * [`power-off-forceful`](#power-off-forceful)
+    * [`power-off-graceful`](#power-off-graceful)
+    * [`power-on`](#power-on)
+    * [`session-cleanup`](#session-cleanup)
+    * [`session-completion`](#session-completion)
+    * [`session-setup`](#session-setup)
+    * [`status`](#status)
 * [BOS state reporter](#bos-state-reporter)
 
 ## BOS API
@@ -58,15 +58,15 @@ This operator periodically checks with HSM to discover new components and create
 
 ### `power-off-forceful`
 
-This operator calls CAPMC to forcefully power off components when a previous power off action fails to power off the component.
+This operator calls PCS to forcefully power off components when a previous power off action fails to power off the component.
 
 ### `power-off-graceful`
 
-This operator calls CAPMC to gracefully power off components for components that have a `power-off-pending` status.
+This operator calls PCS to gracefully power off components for components that have a `power-off-pending` status.
 
 ### `power-on`
 
-This operator calls CAPMC to power on components for components that have a `power-on-pending` status.
+This operator calls PCS to power on components for components that have a `power-on-pending` status.
 
 ### `session-cleanup`
 

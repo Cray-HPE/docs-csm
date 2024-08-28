@@ -15,9 +15,8 @@ Stage 0 has several critical procedures which prepare the environment and verify
         - [Manual copy](#manual-copy)
     - [Stage 0.2 - Prerequisites](#stage-02---prerequisites)
     - [Stage 0.3 - Update management node CFS configuration and customize worker node image](#stage-03---update-management-node-cfs-configuration-and-customize-worker-node-image)
-        - [Option 1: Upgrade of CSM and additional products](#option-1-upgrade-of-csm-and-additional-products)
+        - [Option 1: Upgrade of CSM manually and additional products](#option-1-upgrade-of-csm-manually-and-additional-products)
         - [Option 2: Upgrade of CSM on CSM-only system](#option-2-upgrade-of-csm-on-csm-only-system)
-    - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
     - [Stop typescript](#stop-typescript)
     - [Stage completed](#stage-completed)
 
@@ -194,9 +193,7 @@ The http proxy variables must be `unset` after the desired artifacts are downloa
    git push
    ```
 
-1. If performing an upgrade of CSM and additional HPE Cray EX software products using the IUF,
-   return to the [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
-   procedure. Otherwise, if performing an upgrade of only CSM, proceed to Stage 0.3.
+1. Proceed to [Stage 0.3](#stage-03---update-management-node-cfs-configuration-and-customize-worker-node-image).
 
 ## Stage 0.3 - Update management node CFS configuration and customize worker node image
 
@@ -212,10 +209,10 @@ after it has booted.
 There are several options for this stage. Use the option which applies to the current upgrade
 scenario.
 
-- [Option 1: Upgrade of CSM and additional products](#option-1-upgrade-of-csm-and-additional-products)
+- [Option 1: Upgrade of CSM manually and additional products](#option-1-upgrade-of-csm-manually-and-additional-products)
 - [Option 2: Upgrade of CSM on CSM-only system](#option-2-upgrade-of-csm-on-csm-only-system)
 
-### Option 1: Upgrade of CSM and additional products
+### Option 1: Upgrade of CSM manually and additional products
 
 If performing an upgrade of CSM and additional HPE Cray EX software products, this stage
 should not be performed. Instead, the [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
@@ -270,21 +267,8 @@ software products installed. This upgrade scenario is extremely uncommon in prod
    All components updated successfully.
    ```
 
-Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data).
-
-## Stage 0.4 - Backup workload manager data
-
-To prevent any possibility of losing workload manager configuration data or files, a backup is required. Execute all backup procedures for the workload manager in use,
-using the backup procedures for the currently installed version of the workload manager (not the target version of the upgrade, if the WLM is also being upgraded).
-The resulting backup data should be stored in a safe location off of the system. See the following links for the backup procedures:
-
-- For PBS, see `8.1 Backup PBS home directory` in
-  [HPE Portable Batch System Installation Guide: CSM on HPE Cray EX Systems (`S-8055`)](https://support.hpe.com/hpesc/public/docDisplay?docLocale=en_US&docId=dp00004161en_us).
-- For Slurm, see `8.1 Backup Slurm accounting database` and `8.3 Backup Slurm spool directory` in
-  [HPE Slurm Installation Guide: CSM on HPE Cray EX Systems (`S-8058`)](https://support.hpe.com/hpesc/public/docDisplay?docLocale=en_US&docId=dp00004162en_us).
-
-If performing an upgrade of CSM and additional HPE Cray EX software products using the IUF,
-return to the [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
+If performing an upgrade of CSM manually and additional HPE Cray EX software products using the IUF,
+return to the [Upgrade CSM manually and additional products with IUF](../operations/iuf/workflows/upgrade_csm_manual_and_additional_products_with_iuf.md)
 procedure. Otherwise, if performing an upgrade of only CSM, proceed to the next step.
 
 ## Stop typescript

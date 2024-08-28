@@ -15,10 +15,10 @@ Dell and Mellanox firmware must be downloaded from the manufacturer.
 
 | Model                         | software version |
 |-------------------------------|-----------------:|
-| Aruba 8320 Switch Series      |     `10.11.1010` |
-| Aruba 8325 Switch Series      |     `10.11.1010` |
-| Aruba 8360 Switch Series      |     `10.11.1010` |
-| Aruba 6300 Switch Series      |     `10.11.1010` |
+| Aruba 8320 Switch Series      |     `10.13.1040` |
+| Aruba 8325 Switch Series      |     `10.13.1040` |
+| Aruba 8360 Switch Series      |     `10.13.1040` |
+| Aruba 6300 Switch Series      |     `10.13.1040` |
 | Mellanox SN2100 Switch Series |       `3.9.3210` |
 | Mellanox SN2700 Switch Series |       `3.9.3210` |
 | Dell S3048-ON Switch Series   |       `10.5.1.4` |
@@ -33,9 +33,9 @@ For example: `10.11.1010`
 
 - 10 = OS
 
-- 11 = Major branch (new features)
+- 13 = Major branch (new features)
 
-- 1010 = CPE release (bug fixes)
+- 1040 = CPE release (bug fixes)
 
 It is considered to be a best practice to keep all Aruba CX platform devices running the same software version.
 

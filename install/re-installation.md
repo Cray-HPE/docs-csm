@@ -21,7 +21,7 @@ the NCNs have been deployed (e.g. there is no more PIT node).
 The application and compute nodes must be shutdown prior to a reinstallation. If they are left on, then they will
 potentially end up in an undesirable state.
 
-See [Shut Down and Power Off Compute and User Access Nodes](../operations/power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md).
+See [Shut Down and Power Off Managed Nodes](../operations/power_management/Shut_Down_and_Power_Off_Managed_Nodes.md).
 
 ## Disable DHCP service
 

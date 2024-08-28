@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -76,7 +76,12 @@ spec:
           # construct kubeconfig file in the pod
           # this is so csi can use it too
           secret=`kubectl -n argo get serviceaccount/default -o jsonpath='{.secrets[0].name}'`
-          token=`kubectl -n argo get secret $secret -o jsonpath='{.data.token}'| base64 -d`
+          if [[ -z "$secret" ]]; then
+            # token needs to be created for serviceAccount default in k8s 1.24
+            token=`kubectl -n argo create token default`
+          else
+            token=`kubectl -n argo get secret $secret -o jsonpath='{.data.token}'| base64 -d`
+          fi
           mkdir -p mykubeconfig
           cat << EOF > mykubeconfig/admin.conf
           apiVersion: v1

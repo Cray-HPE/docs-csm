@@ -4,7 +4,7 @@ Identify an emergency power off \(EPO\) has occurred and restore cabinets to a h
 
 **CAUTION:** Verify the reason why the EPO occurred and resolve that problem before clearing the EPO state.
 
-If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, the compute nodes may not boot. Use CAPMC to force off all the chassis affected by the EPO event.
+If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, the compute nodes may not boot. Use PCS to force off all the chassis affected by the EPO event.
 
 ## Procedure
 
@@ -13,35 +13,42 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 2. From `ncn-m001`, check the status of the chassis.
 
     ```bash
-    cray capmc get_xname_status create --xnames x9000c[1,3]
+    cray power status list --xnames x9000c[1,3] --format toml
     ```
 
     Example output:
 
     ```text
-    e = 0
-    err_msg = ""
-    off = [ "x9000c1", "x9000c3",]
+    [[status]]
+    xname = "x9000c1"
+    powerState = "off"
+    managementState = "available"
+    error = ""
+    supportedPowerTransitions = [ "On", "Force-Off", "Soft-Off", "Off", "Init", "Hard-Restart", "Soft-Restart",]
+    lastUpdated = "2024-02-04T01:48:47.839347547Z"
+
+    [[status]]
+    xname = "x9000c3"
+    powerState = "off"
+    managementState = "available"
+    error = ""
+    supportedPowerTransitions = [ "On", "Force-Off", "Soft-Off", "Off", "Init", "Hard-Restart", "Soft-Restart",]
+    lastUpdated = "2024-02-04T01:48:48.240138908Z"
     ```
 
 3. Check the Chassis Controller Module \(CCM\) log for `Critical` messages and the EPO event.
 
-    A cabinet has eight chassis.
-
     ```bash
-    kubectl logs -n services -l app.kubernetes.io/name=cray-capmc \
-    -c cray-capmc --tail -1 | grep EPO -A 10
+    ssh x9000c1b0 egrep \"Critical\|= No\" /var/log/messages
     ```
 
     Example output:
 
     ```text
-    2019/10/24 02:37:30 capmcd.go:805: Message: Can not issue Enclosure Chassis.Reset 'On'|'Off' while in EPO state
-    2019/10/24 02:37:30 capmcd.go:808: ExtendedInfo.Message: Can not issue Enclosure Chassis.Reset 'On'|'Off' while in EPO state
-    2019/10/24 02:37:30 capmcd.go:809: ExtendedInfo.Resolution: Verify physical hardware, issue Enclosure Chassis.Reset --> 'ForceOff', and resubmit the request
-    2019/10/24 02:37:31 capmcd.go:136: Info: <-- Bad Request (400) POST https://x1000c7b0/redfish/v1/ Chassis/Enclosure/Actions/Chassis.Reset (1.045967005s)
-    2019/10/24 02:37:31 capmcd.go:799: POST https://x1000c7b0/redfish/v1/Chassis/Enclosure/Actions/Chassis.Reset
-    !HTTP Error!
+    Apr 8 03:47:55 x9000c1 user.info redfish-cmmd[4453]: do_cmm_enclosure_reset_forceoff: Handling Enclosure (Force)Off request: clearing EPO = No
+    Apr 8 03:47:55 x9000c1 user.info redfish-cmmd[4453]: rbe_set_chassis_status: Update Chassis 'Enclosure' Status: UnavailableOffline, Critical
+    Apr 11 04:00:06 x9000c1 user.info redfish-cmmd[4453]: do_cmm_enclosure_reset_forceoff: Handling Enclosure (Force)Off request: clearing EPO = No
+    Apr 11 04:00:06 x9000c1 user.info redfish-cmmd[4453]: rbe_set_chassis_status: Update Chassis 'Enclosure' Status: UnavailableOffline, Critical
     ```
 
 4. Disable the hms-discovery Kubernetes cron job.
@@ -57,27 +64,13 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     All chassis in cabinets 1000-1003 are forced off in this example. Power off all chassis in a cooling group simultaneously, or the EPO condition may persist.
 
     ```bash
-    cray capmc xname_off create --xnames x[1000-1003]c[0-7] --force true
-    ```
-
-    Example output:
-
-    ```text
-    e = 0
-    err_msg = ""
+    cray power transition force-off --xnames x[1000-1003]c[0-7]
     ```
 
     The HPE Cray EX EX TDS cabinet contains only two chassis: 1 \(bottom\) and 3 \(top\).
 
     ```bash
-    cray capmc xname_off create --xnames x9000c[1,3] --force true
-    ```
-
-    Example output:
-
-    ```text
-    e = 0
-    err_msg = ""
+    cray power transition force-off --xnames x9000c[1,3]
     ```
 
 6. Restart the hms-discovery cron job.
@@ -89,15 +82,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     About 5 minutes after hms-discovery restarts, the service will power on the chassis enclosures, switches, and compute blades. If components are not being powered back on, then power them on manually.
 
     ```bash
-    cray capmc xname_on create \
-    --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
-    ```
-
-    Example output:
-
-    ```text
-    e = 0
-    err_msg = ""
+    cray power transition on -xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --include parents
     ```
 
 7. Verify the Slingshot fabric is up and healthy.
@@ -107,4 +92,4 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
 8. After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
-    See [Power On and Boot Compute and User Access Nodes](Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md).
+    See [Power On and Boot Managed Nodes](Power_On_and_Boot_Managed_Nodes.md).

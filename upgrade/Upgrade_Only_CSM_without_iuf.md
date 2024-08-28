@@ -1,6 +1,6 @@
 # Upgrade only CSM
 
-This procedure describes how to upgrade Cray Systems Management (CSM) software on a CSM-only system
+This option describes how to upgrade Cray Systems Management (CSM) software on a CSM-only system
 without additional HPE Cray EX software products installed.
 
 After the upgrade of CSM software, the CSM health checks will validate the system before doing any

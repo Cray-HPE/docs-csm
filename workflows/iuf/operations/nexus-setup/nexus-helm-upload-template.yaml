@@ -156,6 +156,8 @@ spec:
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
     metadata:
       annotations:
         sidecar.istio.io/inject: "false"
@@ -263,6 +265,8 @@ spec:
     tolerations:
     - key: node-role.kubernetes.io/master
       effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
     metadata:
       annotations:
         sidecar.istio.io/inject: "false"
@@ -301,6 +305,8 @@ spec:
         value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
     tolerations:
     - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/control-plane
       effect: NoSchedule
     metadata:
       annotations:

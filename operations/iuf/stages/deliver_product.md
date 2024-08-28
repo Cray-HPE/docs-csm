@@ -17,9 +17,12 @@ The `deliver-product` stage does not change the running state of the system as t
 
 The following arguments are most often used with the `deliver-product` stage. See `iuf -h` and `iuf run -h` for additional arguments.
 
-| Input    | `iuf` Argument | Description                                            |
-|----------|----------------|--------------------------------------------------------|
-| Activity | `-a ACTIVITY`  | Activity created for the install or upgrade operations |
+| Input                                  | `iuf` Argument              | Description                                                                  |
+|----------------------------------------|-----------------------------|------------------------------------------------------------------------------|
+| Activity                               | `-a ACTIVITY`               | Activity created for the install or upgrade operations                       |
+| Site variables                         | `-sv SITE_VARS`             | Path to YAML file containing site defaults and any overrides                 |
+| Recipe variables                       | `-rv RECIPE_VARS`           | Path to YAML file containing recipe variables provided by HPE                |
+| `sat bootprep` configuration directory | `-bpcd BOOTPREP_CONFIG_DIR` | Directory containing `sat bootprep` configuration files and recipe variables |
 
 ## Execution details
 
@@ -56,8 +59,8 @@ The following table describes upload behavior when the artifact being uploaded a
 
 ## Example
 
-(`ncn-m001#`) Execute the `deliver-product` stage for activity `admin-230127`.
+(`ncn-m001#`) Execute the `deliver-product` stage for activity `admin-230127` using the `/etc/cray/upgrade/csm/admin/site_vars.yaml` file and the `product_vars.yaml` file found in the `/etc/cray/upgrade/csm/admin` directory.
 
 ```bash
-iuf -a admin-230127 run -r deliver-product
+iuf -a admin-230127 run -sv /etc/cray/upgrade/csm/admin/site_vars.yaml -bpcd /etc/cray/upgrade/csm/admin -r deliver-product
 ```
