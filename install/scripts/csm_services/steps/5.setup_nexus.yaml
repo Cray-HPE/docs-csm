@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -53,9 +53,10 @@ spec:
           counter_max=10
           sleep_time=30
           url=packages.local
+          dns_server=10.92.100.225
           while [[ $nexus_resources_ready -eq 0 ]] && [[ "$counter" -le "$counter_max" ]]; do
               nexus_check_configmap=$(kubectl -n services get cm cray-dns-unbound -o json 2>&1 | jq '.binaryData."records.json.gz"' -r 2>&1 | base64 -d 2>&1| gunzip - 2>&1|jq 2>&1|grep $url|wc -l)
-              nexus_check_dns=$(dig $url +short |wc -l)
+              nexus_check_dns=$(dig @$dns_server $url +short |wc -l)
               nexus_check_pod=$(kubectl get pods -n nexus| grep nexus | grep -v Completed |awk {' print $3 '})
 
               if [[ "$nexus_check_dns" -eq "1" ]] && [[ "$nexus_check_pod" == "Running" ]]; then

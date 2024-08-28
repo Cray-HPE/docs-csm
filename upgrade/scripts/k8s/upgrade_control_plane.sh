@@ -51,7 +51,17 @@ cm_auditing_enabled=$?
 if [[ ${manifest_auditing_enabled} -eq 0 && ${cm_auditing_enabled} -ne 0 ]]; then
   echo "DEBUG Updating kubeadm-config configmap with audit configuration"
   sed -i '/      runtime-config/a\        audit-log-maxbackup: "100"\n        audit-log-path: /var/log/audit/kl8s/apiserver/audit.log\n        audit-policy-file: /etc/kubernetes/audit/audit-policy.yaml' /tmp/kubeadm-config.yaml
-  sed -i '/    apiServer:/a\      extraVolumes:\n      - hostPath: /var/log/audit/kl8s/apiserver\n        mountPath: /var/log/audit/kl8s/apiserver\n        name: k8s-audit-log\n        pathType: DirectoryOrCreate\n        readOnly: false\n      - hostPath: /etc/kubernetes/audit\n        mountPath: /etc/kubernetes/audit\n        name: k8s-audit\n        pathType: DirectoryOrCreate\n        readOnly: true' /tmp/kubeadm-config.yaml
+  # a temporary replacement hack for the subsequent yq4 command to work
+  sed -i 's/ClusterConfiguration: |/ClusterConfiguration:/' /tmp/kubeadm-config.yaml
+  if [ "$(yq4 eval '.data.ClusterConfiguration.apiServer.extraVolumes' /tmp/kubeadm-config.yaml)" == null ]; then
+    # No existing volumes
+    sed -i '/    apiServer:/a\      extraVolumes:\n      - hostPath: /var/log/audit/kl8s/apiserver\n        mountPath: /var/log/audit/kl8s/apiserver\n        name: k8s-audit-log\n        pathType: DirectoryOrCreate\n        readOnly: false\n      - hostPath: /etc/kubernetes/audit\n        mountPath: /etc/kubernetes/audit\n        name: k8s-audit\n        pathType: DirectoryOrCreate\n        readOnly: true' /tmp/kubeadm-config.yaml
+  else
+    yq4 eval '.data.ClusterConfiguration.apiServer.extraVolumes += {"hostPath": "/var/log/audit/kl8s/apiserver", "mountPath": "/var/log/audit/kl8s/apiserver", "name":"k8s-audit-log", "pathType":"DirectoryOrCreate", "readOnly":false}' -i /tmp/kubeadm-config.yaml
+    yq4 eval '.data.ClusterConfiguration.apiServer.extraVolumes += {"hostPath": "/etc/kubernetes/audit", "mountPath": "/etc/kubernetes/audit", "name":"k8s-audit", "pathType":"DirectoryOrCreate", "readOnly":true}' -i /tmp/kubeadm-config.yaml
+  fi
+  # reverse the temporary replacement hack
+  sed -i 's/ClusterConfiguration:/ClusterConfiguration: |/' /tmp/kubeadm-config.yaml
 fi
 
 kubectl -n kube-system apply -f /tmp/kubeadm-config.yaml

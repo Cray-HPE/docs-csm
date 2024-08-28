@@ -1,5 +1,7 @@
 # Cray Advanced Platform Monitoring and Control (CAPMC)
 
+NOTE: CAPMC was deprecated in CSM 1.5 and may be removed in the future.  See [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs) for its replacement.
+
 The Cray Advanced Platform Monitoring and Control (CAPMC) service enables
 direct hardware control of nodes, compute blades, router modules, and liquid-cooled
 chassis. CAPMC talks to BMCs via Redfish to control power, query status,
@@ -20,13 +22,17 @@ The `cray capmc` command (see `--help`) can be used to control power to
 specific components by specifying the component NID, component name (xname), or group.
 
 - [Power control and query by xname](#power-control-and-query-by-xname)
-  - [Controllable components](#controllable-components)
-  - [Power capping](#power-capping)
-  - [Power control and query by NID](#power-control-and-query-by-nid)
-  - [Power control and query by group](#power-control-and-query-by-group)
+    - [Controllable components](#controllable-components)
+        - [Air-cooled cabinets](#air-cooled-cabinets)
+        - [Liquid-cooled cabinets](#liquid-cooled-cabinets)
+        - [Naming convention](#naming-convention)
+            - [Examples of valid xnames](#examples-of-valid-xnames)
+    - [Power capping](#power-capping)
+    - [Power control and query by NID](#power-control-and-query-by-nid)
+    - [Power control and query by group](#power-control-and-query-by-group)
 - [Node energy](#node-energy)
-  - [System monitor](#system-monitor)
-  - [Others](#others)
+    - [System monitor](#system-monitor)
+    - [Others](#others)
 - [Deprecated interfaces](#deprecated-interfaces)
 
 ## Power control and query by xname

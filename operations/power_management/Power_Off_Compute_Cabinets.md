@@ -24,7 +24,7 @@ HPE Cray standard EIA racks typically include two redundant PDUs. Some PDU model
 * An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream
   documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
 * This procedure assumes all system software and user jobs were shut down. See
-  [Shut Down and Power Off Compute and User Access Nodes (UAN)](Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md).
+  [Shut Down and Power Off Managed Nodes](Shut_Down_and_Power_Off_Managed_Nodes.md).
 
 ## Procedure
 
@@ -34,15 +34,15 @@ HPE Cray standard EIA racks typically include two redundant PDUs. Some PDU model
 
    If coolant levels are on the verge of being too low, there may be a fault upon power up due to not enough coolant.
 
-1. (`ncn-m#`) Check the power status in liquid-cooled cabinets before shutdown.
+1. (Optional) (`ncn-m#`) Check the power status in liquid-cooled cabinets before shutdown.
 
     This example shows liquid-cooled cabinets 1000 - 1003.
 
     ```bash
-    cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
+    cray power status list --xnames x[1000-1003]c[0-7] --format json
     ```
 
-1. (`ncn-m#`) Check the power status for nodes in the standard racks before shutdown.
+1. (Optional) (`ncn-m#`) Check the power status for nodes in the standard racks before shutdown.
 
     This example shows nodes in cabinets 3001 - 3003.
 
@@ -67,11 +67,11 @@ liquid-cooled cabinet chassis, compute modules, and router modules, then powers 
 
 1. (`ncn-m#`) Shut down cabinet power.
 
-    **Important:** The default timeout for the call to CAPMC is 120 seconds. If the `sat bootsys shutdown` command fails
-    to power off some cabinets and indicate that requests to CAPMC have timed out, the `sat` command may be run with an increased `--capmc-timeout` value.
+    **Important:** The default timeout for the call to PCS is 120 seconds. If the `sat bootsys shutdown` command fails
+    to power off some cabinets and indicate that requests to PCS have timed out, the `sat` command may be run with an increased `--pcs-timeout` value.
 
     ```bash
-    sat bootsys shutdown --stage cabinet-power --capmc-timeout 240
+    sat bootsys shutdown --stage cabinet-power --pcs-timeout 240
     ```
 
 1. (`ncn-m#`) Verify that the `hms-discovery` cron job has been suspended.
@@ -89,17 +89,17 @@ liquid-cooled cabinet chassis, compute modules, and router modules, then powers 
     hms-discovery   */3 * * * *   True      0        117s            15d
     ```
 
-1. (`ncn-m#`) Check the power status for liquid-cooled cabinets after shutdown.
+1. (Optional) (`ncn-m#`) Check the power status for liquid-cooled cabinets after shutdown.
 
     This example shows cabinets 1000 - 1003.
 
     ```bash
-    cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
+    cray power status list --xnames x[1000-1003]c[0-7] --format json
     ```
 
 1. Rectifiers \(PSUs\) in the liquid-cooled cabinets should indicate that DC power is `OFF` \(`AC OK` means the power is on\).
 
-1. (`ncn-m#`) Check the power status for nodes in the standard racks after shutdown.
+1. (Optional) (`ncn-m#`) Check the power status for nodes in the standard racks after shutdown.
 
     ```bash
     cray power status list --xnames x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0 --format json

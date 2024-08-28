@@ -26,8 +26,9 @@
 set -e
 
 locOfScript=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
-. "${locOfScript}/../common/upgrade-state.sh"
 . "${locOfScript}/../common/ncn-common.sh" "$(hostname)"
+# upgrade-state.sh uses CSM_RELEASE defined by ncn-common.sh
+. "${locOfScript}/../common/upgrade-state.sh"
 trap 'err_report' ERR INT TERM HUP EXIT
 # array for paths to unmount after chrooting images
 # shellcheck disable=SC2034
@@ -116,11 +117,16 @@ if [[ -f ${PREREQS_DONE_FILE} ]]; then
   rm ${PREREQS_DONE_FILE}
 fi
 
-TOKEN=$(curl -s -S -d grant_type=client_credentials \
-  -d client_id=admin-client \
-  -d client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
-  https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-export TOKEN
+function get_token() {
+  if [ -z "${TOKEN}" ]; then
+    TOKEN=$(curl -s -S -d grant_type=client_credentials \
+      -d client_id=admin-client \
+      -d client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
+      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    export TOKEN
+  fi
+  echo "${TOKEN}"
+}
 
 # Takes as input the path to a CSM RPM in the expanded tarball. e.g.:
 # /etc/cray/upgrade/csm/csm-1.5.0-beta.64/tarball/csm-1.5.0-beta.64/rpm/cray/csm/noos/x86_64/hpe-csm-virtiofsd-1.7.0-hpe1.x86_64.rpm
@@ -265,11 +271,11 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     # Record CFS components and configurations, since these are modified during the upgrade process
     CFS_CONFIG_SNAPSHOT=${SNAPSHOT_DIR}/cfs_configurations.json
     echo "Backing up CFS configurations to ${CFS_CONFIG_SNAPSHOT}"
-    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/cfs/v3/configurations > "${CFS_CONFIG_SNAPSHOT}"
+    curl -k -H "Authorization: Bearer $(get_token)" https://api-gw-service-nmn.local/apis/cfs/v3/configurations > "${CFS_CONFIG_SNAPSHOT}"
 
     CFS_COMP_SNAPSHOT=${SNAPSHOT_DIR}/cfs_components.json
     echo "Backing up CFS components to ${CFS_COMP_SNAPSHOT}"
-    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/cfs/v3/components > "${CFS_COMP_SNAPSHOT}"
+    curl -k -H "Authorization: Bearer $(get_token)" https://api-gw-service-nmn.local/apis/cfs/v3/components > "${CFS_COMP_SNAPSHOT}"
 
     # Record state of Kubernetes pods. If a pod is later seen in an unexpected state, this can provide a reference to
     # determine whether or not the issue existed prior to the upgrade.
@@ -297,7 +303,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     fi
 
     # get BSS global cloud-init data
-    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | jq .[] > cloud-init-global.json
+    curl -k -H "Authorization: Bearer $(get_token)" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | jq .[] > cloud-init-global.json
 
     CURRENT_MTU=$(jq '."cloud-init"."meta-data"."kubernetes-weave-mtu"' cloud-init-global.json)
     echo "Current kubernetes-weave-mtu is ${CURRENT_MTU}"
@@ -307,7 +313,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 
     echo "Setting kubernetes-weave-mtu to 1376"
     # post the update json to bss
-    curl -s -k -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" \
+    curl -s -k -H "Authorization: Bearer $(get_token)" --header "Content-Type: application/json" \
       --request PUT \
       --data @cloud-init-global-update.json \
       https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
@@ -364,7 +370,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 
       # shellcheck disable=SC2029 # it is intentional that ${TOKEN} expands on the client side
       # run the script
-      if ! ssh "${target_ncn}" "TOKEN=${TOKEN} /srv/cray/scripts/common/chrony/csm_ntp.py"; then
+      if ! ssh "${target_ncn}" "TOKEN=$(get_token) /srv/cray/scripts/common/chrony/csm_ntp.py"; then
         echo "${target_ncn} csm_ntp failed"
         exit 1
       fi
@@ -613,15 +619,103 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Upgrade Kyverno charts before istio to avoid webhook timeouts
+do_upgrade_csm_chart cray-kyverno platform.yaml
+do_upgrade_csm_chart kyverno-policy platform.yaml
+do_upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
+
+# Pre-cache images needed for istio upgrade. As soon as cray-istio-deploy is upgraded, network
+# connection to nexus will be broken, due to istio proxy and istiod versions mismatch. Upgrade of
+# cray-istio will fix that, but images must be pre-cached for it to succeed.
+state_name="PRECACHE_ISTIO_IMAGES"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    istio_images=$(yq r -j "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-precache-images).values.cacheImages' | jq -r '.[] | select( . | (contains("istio") or contains("docker-kubectl")))')
+    worker_nodes=$(grep -oP "(ncn-w\d+)" /etc/hosts | sort -u)
+    while read -r istio_image; do
+      while read -r worker_node; do
+        echo "Pre-caching image ${istio_image} on node ${worker_node}"
+        ssh -n "${worker_node}" "crictl pull ${istio_image}"
+      done <<< "${worker_nodes}"
+    done <<< "${istio_images}"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+# Update fs.inotify.max_user_* sysctl settings on running CSM 1.5 nodes. This setting will be persisted
+# on new CSM 1.6 nodes, but istio is upgraded before nodes are rebuilt, so we need to modify settings on running worker nodes.
+state_name="UPDATE_SYSCTL"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    worker_nodes=$(grep -oP "(ncn-w\d+)" /etc/hosts | sort -u)
+    while read -r worker_node; do
+      echo "Updating sysctl settings on node ${worker_node}"
+      ssh -n "${worker_node}" "sysctl -w fs.inotify.max_user_watches=1048576"
+      ssh -n "${worker_node}" "sysctl -w fs.inotify.max_user_instances=1024"
+    done <<< "${worker_nodes}"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 # upgrade all charts dependent on cray-certmanager chart
 # it is neccessary to upgrade these before upgrade
+do_upgrade_csm_chart cray-istio-operator platform.yaml
+do_upgrade_csm_chart cray-istio-deploy platform.yaml
 do_upgrade_csm_chart cray-istio platform.yaml
+do_upgrade_csm_chart cray-kiali platform.yaml
+
+# Cleanup for Kiali configmaps
+state_name="KIALI_CLEANUP"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    echo "Cleaning up old Configmap of Kiali"
+    cmap=$(kubectl get cm -n istio-system -l app=kiali,app.kubernetes.io/instance=kiali,app.kubernetes.io/name=kiali,app.kubernetes.io/part-of=kiali -o name)
+    if [ -n "$cmap" ]; then
+      kubectl delete -n istio-system "$cmap"
+    fi
+    echo "Configmap deleted"
+
+    opr=$(kubectl get po -n istio-system -l app=kiali,app.kubernetes.io/instance=kiali,app.kubernetes.io/name=kiali,app.kubernetes.io/part-of=kiali -o name)
+    if [ -n "$opr" ]; then
+      kubectl delete -n istio-system "$opr" --grace-period=0 --force
+    fi
+    echo "Kiali Operator restarted"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 do_upgrade_csm_chart cray-keycloak platform.yaml
 do_upgrade_csm_chart cray-oauth2-proxies platform.yaml
 do_upgrade_csm_chart spire sysmgmt.yaml
 do_upgrade_csm_chart cray-spire sysmgmt.yaml
 do_upgrade_csm_chart cray-tapms-crd sysmgmt.yaml
 do_upgrade_csm_chart cray-tapms-operator sysmgmt.yaml
+
+# Restart vault pods because pods were having the older proxyv2 image version.
+# Running the rollout restart script to restart the required resources in istio-injection=enabled namespaces.
+state_name="RESTART_SERVICES_REFRESH_ISTIO"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    "${locOfScript}/rollout-restart.sh"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
 
 # Note for csm 1.5/k8s 1.22 only if ANY chart depends on /v1 cert-manager api
 # usage it *MUST* come after this or prerequisites will fail on an upgrade.
@@ -794,9 +888,6 @@ else
 fi
 
 do_upgrade_csm_chart cray-drydock platform.yaml
-do_upgrade_csm_chart cray-kyverno platform.yaml
-do_upgrade_csm_chart kyverno-policy platform.yaml
-do_upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
 do_upgrade_csm_chart cray-sysmgmt-health platform.yaml
 do_upgrade_csm_chart cray-tftp sysmgmt.yaml
 do_upgrade_csm_chart cray-tftp-pvc sysmgmt.yaml
@@ -813,8 +904,8 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     NCN_IMAGE_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
     set +o pipefail
 
-    KUBERNETES_VERSION=$(find "${artdir}/kubernetes" -name 'kubernetes*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')
-    CEPH_VERSION=$(find "${artdir}/storage-ceph" -name 'storage-ceph*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')
+    KUBERNETES_VERSION=$(find "${artdir}/kubernetes" -name 'kubernetes*.squashfs' -exec basename {} .squashfs \; | sed -e 's/^kubernetes-//' -e 's/-[^-]*$//')
+    CEPH_VERSION=$(find "${artdir}/storage-ceph" -name 'storage-ceph*.squashfs' -exec basename {} .squashfs \; | sed -e 's/^storage-ceph-//' -e 's/-[^-]*$//')
 
     k8s_done=0
     ceph_done=0
@@ -893,7 +984,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   {
 
     # get BSS cloud-init data with host_records
-    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | jq .[] > cloud-init-global.json
+    curl -k -H "Authorization: Bearer $(get_token)" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | jq .[] > cloud-init-global.json
 
     # get IP of api-gw in NMN
     ip=$(dig api-gw-service-nmn.local +short)
@@ -913,7 +1004,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     jq '."cloud-init"."meta-data".host_records['${entry_number}']|= . + {"aliases": ["packages.local", "registry.local"],"ip": "'${ip}'"}' cloud-init-global.json > cloud-init-global_update.json
 
     # post the update json to bss
-    curl -s -k -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" \
+    curl -s -k -H "Authorization: Bearer $(get_token)" --header "Content-Type: application/json" \
       --request PUT \
       --data @cloud-init-global_update.json \
       https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
@@ -1257,6 +1348,57 @@ if [[ ${state_recorded} == "0" ]]; then
     "${locOfScript}/../../../workflows/scripts/upload-rebuild-templates.sh"
     rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*iuf-cli\*.rpm | sort -V | tail -1)"
 
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+state_name="PREPARE_KUBEADM"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    tmpdir=$(mktemp -d)
+
+    echo "Patching ConfigMap kubeadm-config ..."
+    kubectl -n kube-system get configmap kubeadm-config -o go-template --template '{{ .data.ClusterConfiguration }}' \
+      | yq4 e '.kubernetesVersion="1.24.17"' \
+      | yq4 e '.dns.imageRepository="artifactory.algol60.net/csm-docker/stable/registry.k8s.io/coredns"' \
+      | yq4 e '.imageRepository="artifactory.algol60.net/csm-docker/stable/registry.k8s.io"' \
+      | yq4 e '.controllerManager.extraArgs.terminated-pod-gc-threshold="250"' \
+      | yq4 e '.controllerManager.extraArgs.profiling="false"' \
+        > "${tmpdir}/kubeadm-config.yaml"
+    patch=$(jq -c -n --rawfile text "${tmpdir}/kubeadm-config.yaml" '.data["ClusterConfiguration"]=$text')
+    kubectl -n kube-system patch configmap kubeadm-config --type merge --patch "${patch}"
+
+    echo "Creating ConfigMap kubelet-config-1.24 ..."
+    kubectl -n kube-system get configmap kubelet-config-1.22 -o yaml \
+      | yq4 e '.metadata.name="kubelet-config-1.24"' \
+      | yq4 e 'del .metadata.creationTimestamp' \
+      | yq4 e 'del .metadata.resourceVersion' \
+      | yq4 e 'del .metadata.uid' \
+      | kubectl apply -f -
+
+    echo "Creating Role kubeadm:kubelet-config-1.24 ..."
+    kubectl -n kube-system get role kubeadm:kubelet-config-1.22 -o yaml \
+      | yq4 e '.metadata.name="kubeadm:kubelet-config-1.24"' \
+      | yq4 e '.rules[0].resourceNames[0]="kubelet-config-1.24"' \
+      | yq4 e 'del .metadata.creationTimestamp' \
+      | yq4 e 'del .metadata.resourceVersion' \
+      | yq4 e 'del .metadata.uid' \
+      | kubectl apply -f -
+
+    echo "Creating RoleBinding kubeadm:kubelet-config-1.24 ..."
+    kubectl -n kube-system get rolebinding kubeadm:kubelet-config-1.22 -o yaml \
+      | yq4 e '.metadata.name="kubeadm:kubelet-config-1.24"' \
+      | yq4 e '.roleRef.name="kubeadm:kubelet-config-1.24"' \
+      | yq4 e 'del .metadata.creationTimestamp' \
+      | yq4 e 'del .metadata.resourceVersion' \
+      | yq4 e 'del .metadata.uid' \
+      | kubectl apply -f -
+
+    rm -rf "${tmpdir}"
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else

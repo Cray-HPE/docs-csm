@@ -11,6 +11,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
 ## Procedure
 
+### Collect authentication credentials and authenticate SAT
+
 1. Obtain the user ID and passwords for system components:
 
     1. Obtain user ID and passwords for all the system management network switches.
@@ -24,6 +26,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
    If SAT has already been authenticated to the API gateway, this step may be skipped.
 
    See the "SAT Authentication" section in the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
+
+### Check shell initialization scripts
 
 1. Ensure `/root/.bashrc` has proper handling of `kubectl` commands on all master and worker nodes.
 
@@ -56,6 +60,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
          fi
          ```
 
+### Check SSH known hosts
+
 1. Ensure `/root/.ssh/known_hosts` does not have `ssh` stale host key entries for any of the management nodes.
 
    **Important:** Many of the `sat` commands use `ssh` from a `sat` Kubernetes pod to execute commands on the management nodes. This `sat` pod
@@ -73,94 +79,125 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
    To prevent this issue from happening, remove stale `ssh` host keys from `/root/.ssh/known_hosts` before running the `sat` command.
 
-1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
+### Identify BOS session templates for managed nodes
 
-   There will be separate session templates for UANs and computes nodes.
+(`ncn-mw#`) Determine the appropriate Boot Orchestration Service (BOS) templates to use to shut down
+managed nodes, including compute nodes and User Access Nodes (UANs).
 
-    1. List all the BOS session templates.
+1. (`ncn-mw#`) Use `sat status` to find the BOS session templates used most recently to boot nodes.
 
-       If it is unclear what BOS session template is in use, proceed to the next substep.
+    ```bash
+    sat status --filter role!=management --fields xname,role,subrole,"most recent session template"
+    ```
+
+    Example output:
+
+    ```text
+    +----------------+-------------+-----------+------------------------------+
+    | xname          | Role        | SubRole   | Most Recent Session Template |
+    +----------------+-------------+-----------+------------------------------+
+    | x3209c0s13b0n0 | Application | UAN       | uan-23.7.0                   |
+    | x3209c0s15b0n0 | Application | UAN       | uan-23.7.0                   |
+    | x3209c0s17b0n0 | Application | UAN       | uan-23.7.0                   |
+    | x3209c0s19b0n0 | Application | UAN       | uan-23.7.0                   |
+    | x3209c0s22b0n0 | Application | Gateway   | MISSING                      |
+    | x3209c0s23b0n0 | Application | Gateway   | MISSING                      |
+    | x9002c1s0b0n0  | Compute     | Compute   | compute-23.7.0               |
+    | x9002c1s0b0n1  | Compute     | Compute   | compute-23.7.0               |
+    | x9002c1s0b1n0  | Compute     | Compute   | compute-23.7.0               |
+    | x9002c1s0b1n1  | Compute     | Compute   | compute-23.7.0               |
+    | x9002c1s1b0n0  | Compute     | Compute   | compute-23.7.0               |
+    | x9002c1s1b0n1  | Compute     | Compute   | compute-23.7.0               |
+    | x9002c1s1b1n0  | Compute     | Compute   | compute-23.7.0               |
+    | x9002c1s1b1n1  | Compute     | Compute   | compute-23.7.0               |
+    | x9002c1s2b0n0  | Compute     | Compute   | compute-23.7.0               |
+    | x9002c1s2b0n1  | Compute     | Compute   | compute-23.7.0               |
+    | x9002c1s2b1n0  | Compute     | Compute   | compute-23.7.0               |
+    | x9002c1s2b1n1  | Compute     | Compute   | compute-23.7.0               |
+    +----------------+-------------+-----------+------------------------------+
+    ```
+
+    **`NOTE`** The above command may show a value of `MISSING` for the `Most Recent Session
+    Template`. This means the BOS session last used to boot the node was deleted. BOS automatically
+    deletes sessions after the number of days specified in the BOS setting
+    `cleanup_completed_session_ttl`. The default value is seven days. To view the value of this
+    setting, use the following command:
+
+    ```bash
+    cray bos options list | grep cleanup_completed_session_ttl
+    ```
+
+1. (`ncn-mw#`) If the `sat status` command in the previous step identified the BOS session templates
+    to use for shutting down and booting all managed nodes, proceed to the next step. Otherwise, the
+    BOS session templates will have to be manually identified from the list of all BOS session
+    templates.
+
+    1. Use the following command to list the names of all BOS session templates.
 
        ```bash
        cray bos sessiontemplates list --format json | jq -r '.[].name' | sort
        ```
 
-    1. Find the BOS session templates used most recently to boot nodes.
+    1. Use the following command to get the details for a BOS session template listed by the
+       previous command. Replace `BOS_SESSION_TEMPLATE` with the name of the BOS session template:
 
        ```bash
-       sat status --filter role!=management --fields xname,role,subrole,"most recent session template"
+       cray bos sessiontemplates describe --format json BOS_SESSION_TEMPLATE
        ```
 
-       Example output:
+1. (`ncn-mw#`) Once the appropriate BOS session templates are identified, validate the set of nodes
+   that each session template affects as follows.
 
-       ```text
-       +----------------+-------------+-----------+------------------------------+
-       | xname          | Role        | SubRole   | Most Recent Session Template |
-       +----------------+-------------+-----------+------------------------------+
-       | x3209c0s13b0n0 | Application | UAN       | uan-23.7.0                   |
-       | x3209c0s15b0n0 | Application | UAN       | uan-23.7.0                   |
-       | x3209c0s17b0n0 | Application | UAN       | uan-23.7.0                   |
-       | x3209c0s19b0n0 | Application | UAN       | uan-23.7.0                   |
-       | x3209c0s22b0n0 | Application | Gateway   | MISSING                      |
-       | x3209c0s23b0n0 | Application | Gateway   | MISSING                      |
-       | x9002c1s0b0n0  | Compute     | Compute   | compute-23.7.0               |
-       | x9002c1s0b0n1  | Compute     | Compute   | compute-23.7.0               |
-       | x9002c1s0b1n0  | Compute     | Compute   | compute-23.7.0               |
-       | x9002c1s0b1n1  | Compute     | Compute   | compute-23.7.0               |
-       | x9002c1s1b0n0  | Compute     | Compute   | compute-23.7.0               |
-       | x9002c1s1b0n1  | Compute     | Compute   | compute-23.7.0               |
-       | x9002c1s1b1n0  | Compute     | Compute   | compute-23.7.0               |
-       | x9002c1s1b1n1  | Compute     | Compute   | compute-23.7.0               |
-       | x9002c1s2b0n0  | Compute     | Compute   | compute-23.7.0               |
-       | x9002c1s2b0n1  | Compute     | Compute   | compute-23.7.0               |
-       | x9002c1s2b1n0  | Compute     | Compute   | compute-23.7.0               |
-       | x9002c1s2b1n1  | Compute     | Compute   | compute-23.7.0               |
-       +----------------+-------------+-----------+------------------------------+
-       ```
-
-       **`NOTE`** When the `Most Recent Session Template` shows `MISSING`, it means the BOS session information was removed.
-       Old BOS sessions are cleaned up based on the numbers of days in `cleanup_completed_session_ttl`. The default value is seven days.
-
-       1. Check the current setting for `cleanup_completed_session_ttl`.
-
-          ```bash
-          cray bos options list | grep cleanup_completed_session_ttl
-          ```
-
-    1. Determine the list of xnames associated with the desired boot session template.
+    1. Set the name of the session template in an environment variable. For example:
 
        ```bash
-       cray bos sessiontemplates describe SESSION_TEMPLATE_NAME --format json | jq '.boot_sets | map({node_list, node_roles_groups, node_groups})'
+       SESSION_TEMPLATE_NAME="compute-24.6.0"
        ```
 
-       Example outputs:
+    1. Get the nodes affected by the BOS session template:
+
+       ```bash
+       cray bos sessiontemplates describe $SESSION_TEMPLATE_NAME --format json \
+           | jq '.boot_sets | map({node_list, node_roles_groups, node_groups})'
+       ```
+
+       The following example shows the output for a session template that specifies an explict list
+       of node xnames:
 
        ```json
        [
-         {
-           "node_list": [
-             "x3000c0s19b1n0",
-             "x3000c0s19b2n0",
-             "x3000c0s19b3n0",
-             "x3000c0s19b4n0"
-           ],
-           "node_roles_groups": null,
-           "node_groups": null
-         }
+           {
+               "node_list": [
+                   "x3000c0s19b1n0",
+                   "x3000c0s19b2n0",
+                   "x3000c0s19b3n0",
+                   "x3000c0s19b4n0"
+               ],
+               "node_roles_groups": null,
+               "node_groups": null
+           }
        ]
        ```
 
+       The following example shows the output for a session template that specifies a node group:
+
        ```json
        [
-         {
-           "node_list": null,
-           "node_roles_groups": [
-             "Compute"
-           ],
-           "node_groups": null
-         }
+           {
+               "node_list": null,
+               "node_roles_groups": [
+                   "Compute"
+               ],
+               "node_groups": null
+           }
        ]
        ```
+
+1. Confirm that the set of identified BOS session templates will affect all managed nodes in the
+   system. This is important to ensure all managed nodes are gracefully shut down during the system
+   power off.
+
+### Capture state and perform system health checks
 
 1. (`ncn-mw#`) Use SAT to capture state of the system before the shutdown.
 
@@ -322,6 +359,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         lfs check servers
         lfs df
         ```
+
+### Check system activity
 
 1. (`ncn-mw#`) Check for running sessions.
 

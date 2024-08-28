@@ -1,6 +1,6 @@
-# Updating `Foxconn` Paradise Nodes with FAS
+# Updating Foxconn Paradise Nodes with FAS
 
-Use the Firmware Action Service (FAS) to update the firmware on `Foxconn` Paradise devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
+Use the Firmware Action Service (FAS) to update the firmware on Foxconn Paradise devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
 
 **NOTE:** Any node that is locked remains in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
 If the action is timed out, these nodes report as `failed` with the `stateHelper` message of `"time expired; could not complete update"`.
@@ -357,7 +357,10 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
     deviceType = "NodeBMC"
     ```
 
-    Once firmware and BIOS are updated, the compute nodes can be turned back on.
+    Once the firmware and BIOS are updated, the compute nodes can be powered back on.
+
+    If the nodes have never been powered on in the system before (they are being added during a hardware add procedure), then use the Boot Orchestration Service (BOS) to power them on.
+    Using BOS will prepare the initial boot artifacts required to boot them.  If this is not the first time they have been powered on in this system, then you can use the Power Control Service \(PCS\) to power them on.
 
 ## Upload Paradise images to TFTP server
 
@@ -398,4 +401,3 @@ ssh admin@$(xname) 'ipmitool user set password 1 "password"'
 ```
 
 Boot the node.
-

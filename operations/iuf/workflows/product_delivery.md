@@ -41,6 +41,8 @@ Once this step has completed:
 
 ## 2. Update `customizations.yaml`
 
+**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
+
 Some products require modifications to the `customizations.yaml` file before executing the `deliver-product` stage. Currently, this is limited to the Slurm and PBS Workload Manager (WLM) products and the UAN product. Refer to the
 "Install and Upgrade Framework" section of the Slurm, PBS, and UAN product documents to determine the actions that need to be performed to update `customizations.yaml`.
 
@@ -55,12 +57,18 @@ section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide
 Refer to that table and any corresponding product documents before continuing to the next step.
 
 1. Invoke `iuf run` with activity identifier `${ACTIVITY_NAME}` and use `-r` to execute the [`deliver-product`](../stages/deliver_product.md) stage. Perform the upgrade using product content found in `${MEDIA_DIR}`.
+   Additional arguments are available to control the behavior of the `deliver-product` stage (for example, `-rv`). See the [`deliver-product` stage documentation](../stages/deliver_product.md)
+   for details and adjust the example below if necessary.
 
-    (`ncn-m001#`) Execute the `deliver-product` stage.
+     **`NOTE`** When installing USS 1.1 or higher, select either SLURM or PBS Pro Products to use on the system before running this stage. For more information, see the `deliver-product` stage
+     details in the "Install and Upgrade Framework" section of the _HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)_.
 
-    ```bash
-    iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run -r deliver-product
-    ```
+      (`ncn-m001#`) Execute the `deliver-product` stage. Use site variables from the `site_vars.yaml` file found in `${ADMIN_DIR}` and recipe variables from the `product_vars.yaml` file found in `${ADMIN_DIR}`.
+
+      ```bash
+      iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run --site-vars \
+      "${ADMIN_DIR}/site_vars.yaml" -bpcd "${ADMIN_DIR}" -r deliver-product
+      ```
 
 Once this step has completed:
 
@@ -69,6 +77,8 @@ Once this step has completed:
 - Per-stage product hooks have executed for the `deliver-product` stage
 
 ## 4. Perform manual product delivery operations
+
+**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
 **`NOTE`** This subsection is optional and can be skipped if third-party GPU and/or programming environment software is not needed.
 
@@ -94,6 +104,14 @@ Once this step has completed:
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)
   workflow to continue the install or upgrade.
 
-- If performing an upgrade that includes upgrading CSM, return to the
-  [Upgrade CSM and additional products with IUF](upgrade_csm_and_additional_products_with_iuf.md)
+- If performing an upgrade that includes upgrading CSM manually and additional products with IUF,
+  return to the [Upgrade CSM manually and additional products with IUF](upgrade_csm_manual_and_additional_products_with_iuf.md)
+  workflow to continue the upgrade.
+
+- If performing an upgrade that includes upgrading CSM and additional products with IUF,
+  return to the [Upgrade CSM and additional products with IUF](upgrade_csm_iuf_additional_products_with_iuf.md)
+  workflow to continue the upgrade.
+
+- If performing an upgrade that includes upgrading only CSM, return to the
+  [Upgrade only CSM through IUF](../../../upgrade/Upgrade_Only_CSM_with_iuf.md)
   workflow to continue the upgrade.

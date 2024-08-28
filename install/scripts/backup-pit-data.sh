@@ -116,7 +116,7 @@ done
 echo "Creating PIT backup tarfile"
 
 pushd "${TEMPDIR}"
-run_cmd tar -czvf "${PITDATA}/prep/logs/pit-backup-$(date +%Y-%m-%d_%H-%M-%S).tgz" --remove-files *
+run_cmd tar --sparse -czvf "${PITDATA}/prep/logs/pit-backup-$(date +%Y-%m-%d_%H-%M-%S).tgz" --remove-files *
 popd
 run_cmd rmdir -v "${TEMPDIR}"
 

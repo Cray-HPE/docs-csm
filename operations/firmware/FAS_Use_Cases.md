@@ -191,12 +191,16 @@ On larger systems, it is recommended to run as separate actions one after each o
 
 > **IMPORTANT:** The Cray `nodeBMC` device needs to be updated before the `nodeBIOS` because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require.
 See [Update liquid-cooled node firmware](#liquid-cooled-nodes-update-procedures) for more information.
+>  
 > **IMPORTANT:** The nodes themselves must be powered **off** in order to update the BIOS on the nodes.
 The BMC will still have power and will perform the update.
 If nodes are not off when the update command is issued, it will report as a failed update.
+>  
 > **IMPORTANT:** When the BMC is updated or rebooted after updating the `Node0.BIOS` and/or `Node1.BIOS` liquid-cooled nodes, the node BIOS version will not report the new version string until the nodes are powered back on.
 It is recommended that the `Node0/1` BIOS be updated in a separate action, after a BMC update.
 It is also recommended that the nodes be powered back on after the updates are completed.
+If the nodes have never been powered on in the system before (they are being added during a hardware add procedure), then use the Boot Orchestration Service (BOS) to power them on.
+Using BOS will prepare the initial boot artifacts required to boot them.  If this is not the first time they have been powered on in this system, then you can use the Power Control Service \(PCS\) to power them on.
 
 ```json
 {
@@ -393,6 +397,9 @@ or `cray_nodeBMC_nodeAccUC.json` for `AccUC` updates.
     ```
 
     Once firmware and BIOS are updated, the compute nodes can be turned back on.
+    If the nodes have never been powered on in the system before (they are being added during a hardware add procedure), then use Boot Orchestration Service \(BOS\) to power them on.
+    Using BOS will prepare the initial boot artifacts required to boot them.
+    If this is not the first time they have been powered on in this system, then you can use the Power Control Service (PCS) to power them on.
 
 ## Update Chassis Management Module firmware
 
@@ -442,12 +449,15 @@ Use the file `cray_chassisBMC_BMC.json` for chassis BMC updates.
     1. Power off all the components. For example, in chassis 0-7, cabinets 1000-1003:
 
         ```bash
-        cray capmc xname_off create --xnames x[1000-1003]c[0-7] --recursive true --continue true
+        cray power transition off --xnames x[1000-1003]c[0-7] --include children
         ```
 
-        This command powers off all the node cards, then all the compute blades, then all the Slingshot switch ASICS, then all the Slingshot switch enclosures, and finally all the chassis enclosures in cabinets 1000-1003.
+        This command powers off all the node cards, then all the compute blades,
+        then all the Slingshot switch modules, and finally all the chassis
+        enclosures in cabinets 1000-1003.
 
-        When power is removed from a chassis, the high-voltage DC rectifiers that support the chassis are powered off. If a component is not populated, the `--continue` option enables the command to continue instead of returning error messages.
+        When power is removed from a chassis, the high-voltage DC rectifiers
+        that support the chassis are powered off.
 
 1. Create a JSON file using the example recipe above with the command parameters required for updating the CMM firmware.
 
@@ -558,12 +568,12 @@ Use the file `cray_chassisBMC_BMC.json` for chassis BMC updates.
     The `hms-discovery` cronjob will run within 5 minutes of being unsuspended and start powering on the chassis enclosures, switches, and compute blades. If components are not being powered back on, then power them on manually:
 
     ```bash
-    cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
+    cray power transition on --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --include parents
     ```
 
-    The `--prereq` option ensures all required components are powered on first. The `--continue` option allows the command to complete in systems without fully populated hardware.
+    The `--include parents` option ensures all required components are powered on first.
 
-1. After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
+1. After the required components have powered on, the nodes can be powered on and booted using the Boot Orchestration Service \(BOS\).
 
 ## Update air-cooled compute node BMC, BIOS, iLO 5, iLO 6, and system ROM
 
