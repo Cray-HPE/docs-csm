@@ -38,7 +38,7 @@ specified. To access tenant owned resources, the system administrator will need 
 
 The `BOS` v2 API identifies the tenant based on information passed in the request. A tenant must always pass information
 identifying itself -- their tenant ID -- when making a request. If you have tenant information forwarded to the `BOS`
-api service through use of the cray init command, `BOS` will contextually operate on behalf of that tenant. Otherwise,
+API service through use of the cray init command, `BOS` will contextually operate on behalf of that tenant. Otherwise,
 if you are interacting with the API directly or are scripting against it, the same information may be provided with your
 request as part of a header that accompanies your request.
 
