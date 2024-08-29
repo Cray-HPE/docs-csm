@@ -61,9 +61,9 @@ There are only two requirements for using a compute node as a remote build node:
 * Have Podman installed and configured
 * Allow IMS access via SSH key
 
-Each system is unique and the node chosen to run remote jobs needs to be manually configured based on the
+Each system is unique so the node chosen to run remote jobs needs to be manually configured based on the
 requirements and capabilities of the system and that particular node. It is not possible to list all the
-configuration steps to optimize a particular node, the directions below are only intended to make a
+configuration steps to optimize a particular node. The directions below are only intended to make a
 minimally functional remote node. Much better performance may be possible with custom configuration by a
 system administrator who is familiar with the configuration and capabilities of the system.
 
