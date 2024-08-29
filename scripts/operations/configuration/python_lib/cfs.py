@@ -96,6 +96,20 @@ def update_component_desired_config(comp_id: str, config_name: str) -> JsonObjec
     return update_component(comp_id, desiredConfig=config_name)
 
 
+def update_components_by_ids(comp_ids: List[str], update_data: JsonObject) -> JsonObject:
+    """
+    Perform a bulk component update on the specified component ID list, with the specified
+    update data.
+    """
+    # Even though it does not follow convention for patch operations,
+    # the status code when successful is 200
+    request_kwargs = {"url": CFS_V2_COMPS_URL,
+                      "add_api_token": True,
+                      "expected_status_codes": {200},
+                      "json": {"patch": update_data, "filters": {"ids": ",".join(comp_ids)}}}
+    return api_requests.patch_retry_validate_return_json(**request_kwargs)
+
+
 # CFS configuration functions
 
 def create_configuration(config_name: str, layers: List[Dict[str, str]]) -> JsonObject:
