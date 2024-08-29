@@ -112,10 +112,10 @@ This procedure boots all managed nodes in the context of a full system power-up.
 
 1. (`ncn-m001#`) Use `sat bootsys boot` to power on and boot the managed nodes.
 
-    **Important:** The default timeout for the `sat bootsys boot --stage bos-operations` command is 900 seconds.
-    If it is known that the nodes take longer than this amount of time to boot, then a different value
-    can be set using `--bos-boot-timeout BOS_BOOT_TIMEOUT` with a value larger than 900 for `BOS_BOOT_TIMEOUT`. Once
-    this timeout has been exceeded, `sat` will no longer watch the BOS sessions even if they are still in progress.
+    **Important:** No default timeout is set for `sat bootsys boot --stage bos-operations`. It is infinite.
+    However, if a specific timeout is required, user can still set a custom value using the
+    `--bos-boot-timeout BOS_BOOT_TIMEOUT` option. If a custom timeout is set, `sat` will no longer watch the BOS sessions
+    once the timeout has been exceeded even if the sessions are still in progress.
 
     After this step there are several commands that can be used in other windows from where the `sat bootsys boot --stage bos-operations`
     command has been run to monitor the status of the booting process as nodes move through the phases of powering on, booting Linux,
