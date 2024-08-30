@@ -682,7 +682,7 @@ commatospace() {
 # controlplane nodes have the encryption file so no sense in annotating anything
 # that isn't a control-plane.
 kubectl_get_controlplane_nodes() {
-  kubectl get nodes --selector=node-role.kubernetes.io/master --no-headers=true -o custom-columns=NAME:.metadata.name
+  kubectl get nodes --selector=node-role.kubernetes.io/control-plane --no-headers=true -o custom-columns=NAME:.metadata.name
 }
 
 # Get the current node annotation values
