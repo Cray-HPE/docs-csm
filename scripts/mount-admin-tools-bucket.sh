@@ -70,20 +70,20 @@ else
   echo "An entry in /etc/fstab already exists for ${s3_bucket} ${s3fs_mount_dir} fuse.s3fs"
 fi
 
-echo "Set cache pruning for admin tools to 5G of the 200G volume (every 2nd hour)"
+echo "Set cache pruning for s3_bucket to 5G of the 200G volume (every 2nd hour)"
 echo "0 */2 * * * root /usr/bin/prune-s3fs-cache.sh ${s3_bucket} ${s3fs_cache_dir} 5368709120 -silent" > /etc/cron.d/prune-s3fs-${s3_bucket}-cache
 
 echo -e "Done mounting ${s3_bucket} S3 bucket\n"
 
-# Validate admin-tools S3 bucket has been mounted
+# Validate S3 bucket has been mounted
 
 echo "/etc/fstab has the following content:"
 grep fuse.s3fs /etc/fstab
 exit_code=0
 if grep "$s3_bucket" /etc/fstab | grep -q "fuse.s3fs"; then
-  echo -e "admin-tools was successfully added to /etc/fstab\n"
+  echo -e "${s3_bucket} was successfully added to /etc/fstab\n"
 else
-  echo -e "Error: admin-tools fuse.s3fs mount was not added to the /etc/fstab file\n"
+  echo -e "Error: ${s3_bucket} fuse.s3fs mount was not added to the /etc/fstab file\n"
   exit_code=1
 fi
 echo "The following s3fs mounts exist:"
