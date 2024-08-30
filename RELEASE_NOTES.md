@@ -230,8 +230,10 @@ see [Removals](introduction/deprecated_features/README.md#removals)
 * The hms-discovery job may fail to finish when trying to communicate with non-existent switches. This may happen when incrementally building up a new system and running CSM prior to completion of the full hardware installation.
     * For more information, including a workaround, see [hms-discovery Timeout Due to Missing Switches](troubleshooting/known_issues/hms_discovery_timeout_due_to_missing_switches.md)
     * This issue is expected to be fixed in CSM 1.6.0.
-* The [BOS](glossary.md#boot-orchestration-service-bos) v2 "applystaged" endpoint is broken in CSM 1.5. This endpoint is used to execute a rolling reboot.
+* The [BOS](glossary.md#boot-orchestration-service-bos) v2 `applystaged` endpoint is broken in CSM 1.5. This endpoint is used to execute a rolling reboot.
     * This is expected to be fixed in CSM 1.6.
     * For more information see [Rolling reboots](troubleshooting/known_issues/rolling_reboots.md).
 * The [multi-tenancy](operations/multi-tenancy/Overview.md) feature is broken in CSM 1.5.
     * This is expected to be fixed in CSM 1.5.3.
+* After updating Paradise BMC firmware, the `hmcollector-poll` service will lose event subscriptions and must be restarted
+    * See [Updating Foxconn Paradise Nodes with FAS](operations/firmware/FAS_Paradise.md) for details on how to do this
