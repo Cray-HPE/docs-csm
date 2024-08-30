@@ -41,4 +41,7 @@ For a list of all features with an announced removal target, see [Removals](intr
 
 ## Known issues
 
+* After updating Paradise BMC firmware, the `hmcollector-poll` service will lose event subscriptions and must be restarted
+    * See [Updating Foxconn Paradise Nodes with FAS](operations/firmware/FAS_Paradise.md) for details on how to do this
+
 ### Security vulnerability exceptions in CSM 1.6
