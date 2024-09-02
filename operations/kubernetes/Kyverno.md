@@ -410,8 +410,8 @@ There are 3 different use cases under which the container images are signed and 
    images for their authenticity to make sure they are not tampered.
 2. **Verify CSM container images signed by customer** : Customer or end users have their own container images running as part of CSM. With this policy end user can use their own private key to sign the container images
    and use the their public key for verify the authenticity to make sure they are not tampered.
-3. **Allow deployment of un signed container images listed as exceptions** : Under scenarios where end user does not want to use the container image signing and verification feature, they can add the container images to
-   exception list so that they are allowed without signature verification.   
+3. **Allow deployment of unsigned container images listed as exceptions** : Under the scenarios where end user does not want to use the signed container images, they can add the unsigned container image details to
+   exception list in the kyverno policy so that they are allowed without signature verification.   
 
 ## Known issues
 
