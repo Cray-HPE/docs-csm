@@ -394,9 +394,21 @@ Example output:
 ## What is new in the HPE CSM 1.6 release and above
 
 1. Kyverno is upgraded from 1.9.5 version to 1.10.7 version and is now available for customers as part of the HPE CSM 1.6 release.
-2. Container image signing and verification using Kyverno policy along with cosign.
+2. Container image signing and verification using Kyverno policy.
    
-### 
+### Container image signing and verification using Kyverno policy
+
+A container image is a standalone executable file used to create a container. The container image contains all the libraries, dependencies, and files that the container needs to run.
+Container image signing is a critical security process for establishing trust. A container image is said to be signed, when a digital signature is created and added it to the image. 
+This process is called signing. To sign an image, the entity can create a public/private key pair. 	The private key must be kept secret, and the public key can be shared publicly.
+
+There are 3 different use cases under which the container images are signed and verified using Kyverno policies,
+1. **Verify CSM container images signed by HPE** : HPE ships Container images as part of CSM. These are signed using private key and public key shared to customer. This particular policy uses public key to verify the
+   images for their authenticity to make sure they are not tampered.
+2. **Verify CSM container images signed by customer** : Customer or end users have their own container images running as part of CSM. With this policy end user can use their own private key to sign the container images
+   and use the their public key for verify the authenticity to make sure they are not tampered.
+3. **Allow deployment of un signed container images listed as exceptions** : Under scenarios where end user does not want to use the container image signing and verification feature, they can add the container images to
+   exception list so that they are allowed without signature verification.   
 
 ## Known issues
 
