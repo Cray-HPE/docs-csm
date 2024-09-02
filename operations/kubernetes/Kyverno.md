@@ -394,6 +394,9 @@ Example output:
 ## What is new in the HPE CSM 1.6 release and above
 
 1. Kyverno is upgraded from 1.9.5 version to 1.10.7 version and is now available for customers as part of the HPE CSM 1.6 release.
+
+   This is a major upgrade with many new features and bug fixes. For complete list please refer to the link https://github.com/kyverno/kyverno/blob/main/CHANGELOG.md
+
 2. Container image signing and verification using Kyverno policy.
    
 ### Container image signing and verification using Kyverno policy
