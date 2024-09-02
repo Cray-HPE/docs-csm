@@ -1071,3 +1071,9 @@ Expat-15
 - troubleshooting/known_issues/antero_node_NID_allocation.md
 # To allow Site Init
 Init
+
+- operations/configuration_management/iSCSI_SBPS_Node_Personalization.md
+enablement
+LUNs
+fileio
+iscsi-sbps-targets-config
