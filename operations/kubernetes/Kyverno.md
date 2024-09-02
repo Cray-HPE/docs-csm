@@ -391,6 +391,12 @@ Example output:
 "cray-ceph-csi-cephfs-nodeplugin","DaemonSet","ceph-cephfs","disallow-capabilities","Any capabilities added beyond the allowed list (AUDIT_WRITE, CHOWN, DAC_OVERRIDE, FOWNER, FSETID, KILL, MKNOD, NET_BIND_SERVICE, SETFCAP, SETGID, SETPCAP, SETUID, SYS_CHROOT) are disallowed."
 "cray-ceph-csi-cephfs-nodeplugin","DaemonSet","ceph-cephfs","disallow-privileged-containers","validation error: Privileged mode is disallowed. The fields spec.containers[*].securityContext.privileged and spec.initContainers[*].securityContext.privileged must be unset or set to `false`. Rule autogen-privileged-containers failed at path /spec/template/spec/containers/0/securityContext/privileged/"
 ```
+## What is new in the HPE CSM 1.6 release and above
+
+1. Kyverno is upgraded from 1.9.5 version to 1.10.7 version and is now available for customers as part of the HPE CSM 1.6 release.
+2. Container image signing and verification using Kyverno policy along with cosign.
+   
+### 
 
 ## Known issues
 
