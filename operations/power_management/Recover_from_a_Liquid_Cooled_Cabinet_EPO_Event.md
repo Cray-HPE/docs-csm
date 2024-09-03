@@ -10,27 +10,26 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
 1. Verify that the EPO event did not damage the system hardware.
 
-2. From `ncn-m001`, check the status of the chassis.
+1. (`ncn-mw#`) Check the status of the chassis.
 
     ```bash
-    cray capmc get_xname_status create --xnames x9000c[1,3]
+    cray capmc get_xname_status create --xnames x9000c[1,3] --format toml
     ```
 
     Example output:
 
-    ```text
+    ```toml
     e = 0
     err_msg = ""
     off = [ "x9000c1", "x9000c3",]
     ```
 
-3. Check the Chassis Controller Module \(CCM\) log for `Critical` messages and the EPO event.
+1. (`ncn-mw#`) Check the Chassis Controller Module \(CCM\) log for `Critical` messages and the EPO event.
 
     A cabinet has eight chassis.
 
     ```bash
-    kubectl logs -n services -l app.kubernetes.io/name=cray-capmc \
-    -c cray-capmc --tail -1 | grep EPO -A 10
+    kubectl logs -n services -l app.kubernetes.io/name=cray-capmc -c cray-capmc --tail -1 | grep EPO -A 10
     ```
 
     Example output:
@@ -44,7 +43,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     !HTTP Error!
     ```
 
-4. Disable the hms-discovery Kubernetes cron job.
+1. (`ncn-mw#`) Disable the `hms-discovery` Kubernetes cron job.
 
     ```bash
     kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
@@ -52,17 +51,17 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
     **CAUTION:** Do not power the system on until it is safe to do so. Determine why the EPO event occurred before clearing the EPO state.
 
-5. **If it is safe to power on the hardware**, clear all chassis in the EPO state in the cooling group.
+1. (`ncn-mw#`) **If it is safe to power on the hardware**, clear all chassis in the EPO state in the cooling group.
 
     All chassis in cabinets 1000-1003 are forced off in this example. Power off all chassis in a cooling group simultaneously, or the EPO condition may persist.
 
     ```bash
-    cray capmc xname_off create --xnames x[1000-1003]c[0-7] --force true
+    cray capmc xname_off create --xnames x[1000-1003]c[0-7] --force true --format toml
     ```
 
     Example output:
 
-    ```text
+    ```toml
     e = 0
     err_msg = ""
     ```
@@ -70,41 +69,43 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     The HPE Cray EX EX TDS cabinet contains only two chassis: 1 \(bottom\) and 3 \(top\).
 
     ```bash
-    cray capmc xname_off create --xnames x9000c[1,3] --force true
+    cray capmc xname_off create --xnames x9000c[1,3] --force true --format toml
     ```
 
     Example output:
 
-    ```text
+    ```toml
     e = 0
     err_msg = ""
     ```
 
-6. Restart the hms-discovery cron job.
+1. (`ncn-mw#`) Restart the `hms-discovery` cron job.
 
     ```bash
     kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
     ```
 
-    About 5 minutes after hms-discovery restarts, the service will power on the chassis enclosures, switches, and compute blades. If components are not being powered back on, then power them on manually.
+    About 5 minutes after `hms-discovery` restarts, the service will power on the chassis enclosures, switches, and compute blades.
+    If components are not being powered back on, then power them on manually.
 
     ```bash
-    cray capmc xname_on create \
-    --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
+    cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true --format toml
     ```
 
     Example output:
 
-    ```text
+    ```toml
     e = 0
     err_msg = ""
     ```
 
-7. Bring up the Slingshot Fabric.
-    Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
+1. Verify the Slingshot fabric is up and healthy.
+
+    Refer to the following documentation for more information on how to verify the health of the Slingshot Fabric:
+
     * The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
     * The *Slingshot Troubleshooting Guide* PDF.
 
-8. After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
+1. After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
     See [Power On and Boot Compute and User Access Nodes](Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md).

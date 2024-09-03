@@ -2,11 +2,11 @@
 
 This section ensures the product content is loaded onto the system and available for later steps in the workflow.
 
-- [1. Execute the IUF `process-media` and `pre-install-check` stages](#1-execute-the-iuf-process-media-and-pre-install-check-stages)
-- [2. Update `customizations.yaml`](#2-update-customizationsyaml)
-- [3. Execute the IUF `deliver-product` stage](#3-execute-the-iuf-deliver-product-stage)
-- [4. Perform manual product delivery operations](#4-perform-manual-product-delivery-operations)
-- [5. Next steps](#5-next-steps)
+1. [Execute the IUF `process-media` and `pre-install-check` stages](#1-execute-the-iuf-process-media-and-pre-install-check-stages)
+1. [Update `customizations.yaml`](#2-update-customizationsyaml)
+1. [Execute the IUF `deliver-product` stage](#3-execute-the-iuf-deliver-product-stage)
+1. [Perform manual product delivery operations](#4-perform-manual-product-delivery-operations)
+1. [Next steps](#5-next-steps)
 
 ## 1. Execute the IUF `process-media` and `pre-install-check` stages
 
@@ -68,13 +68,13 @@ Some products provide instructions for delivering third-party content to the sys
 with the workflow.
 
 - **Content:** Third-party GPU software
-  - **Description:** The Cray Operating System (COS) provides the `gpu-nexus-tool` script to upload third-party GPU software to Nexus. The GPU software is used later in the workflow when creating CFS configurations and building
-    compute and application node images.
-  - **Instructions:** See the "IUF Stage Details for COS" section of _HPE Cray Operating System Installation Guide CSM on HPE Cray EX Systems (S-8025)_ for references to the installation procedures.
+    - **Description:** The Cray Operating System (COS) provides the `gpu-nexus-tool` script to upload third-party GPU software to Nexus. The GPU software is used later in the workflow when creating CFS configurations and building
+      compute and application node images.
+    - **Instructions:** See the "IUF Stage Details for COS" section of _HPE Cray Operating System Installation Guide CSM on HPE Cray EX Systems (S-8025)_ for references to the installation procedures.
 - **Content:** Third-party programming environment software
-  - **Description:** The Cray Programming Environment (CPE) provides the `install-3p.sh` and `cpe-custom-img.sh` scripts to upload third-party programming environment software to Nexus and build images. The programming environment
-    software is used later in the workflow when creating CPE configurations.
-  - **Instructions:** See the "CPE Install and Upgrade Framework usage" section of _HPE CPE Installation Guide CSM on HPE Cray EX Systems (S-8003)_ for references to the installation procedures.
+    - **Description:** The Cray Programming Environment (CPE) provides the `install-3p.sh` and `cpe-custom-img.sh` scripts to upload third-party programming environment software to Nexus and build images. The programming environment
+      software is used later in the workflow when creating CPE configurations.
+    - **Instructions:** See the "CPE Install and Upgrade Framework usage" section of _HPE CPE Installation Guide CSM on HPE Cray EX Systems (S-8003)_ for references to the installation procedures.
 
 Once this step has completed:
 
