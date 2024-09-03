@@ -688,7 +688,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
       fi
 
       # Ensure the cert-manager namespace is deleted in a case of both helm charts
-      # removed but there might be detritus leftover in the namespace.
+      # removed but there might be detritus left over in the namespace.
       kubectl delete namespace "${cmns}" || :
 
       tmp_manifest=/tmp/certmanager-tmp-manifest.yaml
