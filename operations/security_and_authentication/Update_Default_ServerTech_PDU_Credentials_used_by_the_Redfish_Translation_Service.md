@@ -6,8 +6,8 @@ The Redfish Translation Service provides a Redfish interface that the Hardware S
 
 There are two sets of default credentials that are required for RTS to function:
 
-1. The default credentials to use when new ServerTech PDUs are discovered in the system.
-2. The global default credential that RTS uses for its Redfish interface with other CSM services.
+- The default credentials to use when new ServerTech PDUs are discovered in the system.
+- The global default credential that RTS uses for its Redfish interface with other CSM services.
 
 **Important:**: After this procedure is completed **going forward all future ServerTech PDUs** added to the system will be assumed to be already configured with the new global default credential when getting added to the system.
 
