@@ -28,7 +28,7 @@ The BOS session templates to use for shutting down all managed nodes in the syst
    An optional `--loglevel debug` can be used to provide more information as the system shuts down. If used, it must be added after `sat` but before `bootsys`.
 
    **Important:** No default timeout is set for `sat bootsys shutdown --stage bos-operations`. It is infinite.
-   However, if a specific timeout is required, user can still set a custom value using the
+   However, if a specific timeout is required, a user can still set a custom value using the
    `--bos-shutdown-timeout BOS_SHUTDOWN_TIMEOUT` option. If a custom timeout is set, `sat` will no longer watch the
    BOS sessions once the timeout has been exceeded even if the sessions are still in progress.
 
