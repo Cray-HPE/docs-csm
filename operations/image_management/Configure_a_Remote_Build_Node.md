@@ -350,8 +350,6 @@ image that is installed with CSM. This image may be used to boot multiple remote
                     "etag": "<REMOTE_IMS_NODE_IMAGE_ETAG>",
                     "arch": "<REMOTE_NODE_ARCH>",
                     "path": "s3://boot-images/<REMOTE_IMS_NODE_IMAGE_ID>/manifest.json",
-                    "rootfs_provider": "",
-                    "rootfs_provider_passthrough": "",
                     "type": "s3"
                 }
             }
@@ -380,8 +378,6 @@ image that is installed with CSM. This image may be used to boot multiple remote
                         "Compute"
                     ],
                     "path": "s3://boot-images/f6d9cfc7-9291-4c46-8350-c252b919d396/manifest.json",
-                    "rootfs_provider": "",
-                    "rootfs_provider_passthrough": "",
                     "type": "s3"
                 }
             },
