@@ -6,7 +6,7 @@
 
 ## Overview
 
-Global Tenant Hooks behave in a similar manner to hooks defined in the tenant definition, but apply to all tenants.  This is useful for cases where administrators want to be alerted to all tenant events regardless of the tenant definition.
+Global Tenant Hooks behave in a similar manner to hooks defined in the tenant definition, but apply to all tenants. This is useful for cases where administrators want to be alerted to all tenant events regardless of the tenant definition.
 
 ## Create a Global Hook CRD
 
@@ -15,7 +15,7 @@ Creating a global tenant hook involves creating a Custom Resource Definition (CR
 - (`ncn-mw#`) The full schema is available by executing the following command:
 
     ```bash
-    kubectl get customresourcedefinitions.apiextensions.k8s.io globaltenanthooks.tapms.hpe.com  -o yaml
+    kubectl get customresourcedefinitions.apiextensions.k8s.io globaltenanthooks.tapms.hpe.com -o yaml
     ```
 
 - An example of a global tenant hook custom resource (CR):
