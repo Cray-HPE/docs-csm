@@ -158,7 +158,7 @@ BOS fills in the protocol based on the value provided in `rootfs_provider`. If B
 BOS finds the `rootfs_provider` and `etag` values in the manifest file in the session template in the boot set.
 The `rootfs_provider_passthrough` parameters are appended to the `root` parameter without modification. They are "passed through", as the name implies.
 
-Currently, the only `rootfs` providers that BOS recognizes is `cpss3`.
+Currently, the only `rootfs` provider that BOS recognizes is `cpss3`.
 For more information on `cpss3`, see [Create a Session Template to Boot Compute Nodes with CPS](Create_a_Session_Template_to_Boot_Compute_Nodes_with_CPS.md).
 
 #### `root` kernel parameter example
