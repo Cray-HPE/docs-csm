@@ -1,6 +1,6 @@
 # Cray Advanced Platform Monitoring and Control (CAPMC)
 
-NOTE: CAPMC was deprecated in CSM 1.5 and may be removed in the future.  See [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs) for its replacement.
+NOTE: CAPMC was deprecated in CSM 1.5 and may be removed in the future. See [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs) for its replacement.
 
 The Cray Advanced Platform Monitoring and Control (CAPMC) service enables
 direct hardware control of nodes, compute blades, router modules, and liquid-cooled

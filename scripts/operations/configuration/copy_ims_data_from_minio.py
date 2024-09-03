@@ -282,7 +282,7 @@ class LocalDirList:
         directory.
         Then print a summary of how much has been assigned to each directory.
         """
-        logging.info("Determing download location for each artifact")
+        logging.info("Determining download location for each artifact")
         for artifact in sorted(all_artifacts, key=lambda a: a.size_bytes, reverse=True):
             self.add_artifact(artifact)
         self.print_artifact_summary()

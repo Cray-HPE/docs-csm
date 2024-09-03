@@ -1,6 +1,6 @@
 # Upgrade CSM and additional products with IUF
 
-**Note: From CSM 1.6 , CSM supports upgrade through IUF.   All CSM specific steps mentioned in [Upgrade CSM manually and additional products with IUF](upgrade_csm_manual_and_additional_products_with_iuf.md) are now part of CSM Upgrade with IUF.**
+**Note: From CSM 1.6, CSM supports upgrade through IUF. All CSM-specific steps mentioned in [Upgrade CSM manually and additional products with IUF](upgrade_csm_manual_and_additional_products_with_iuf.md) are now part of CSM Upgrade with IUF.**
 
 All stages of `iuf` are executed in this option. All of the new product software provided in the
 recipe release is deployed and all [management NCNs](../../../glossary.md#management-nodes) and managed

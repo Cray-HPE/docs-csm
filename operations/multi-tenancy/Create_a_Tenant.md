@@ -310,7 +310,7 @@ spec:
         accessModes:
           - ReadWriteOnce
         storage: 512Gi
-      # Backup daily at 9:10PM (doesn't conflict with other CSM DB backups)
+      # Backup daily at 9:10PM (does not conflict with other CSM DB backups)
       schedule: "10 21 * * *"
       keep: 3
       resources:
