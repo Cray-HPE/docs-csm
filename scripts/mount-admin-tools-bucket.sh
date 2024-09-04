@@ -41,7 +41,7 @@ fi
 pwd_file="/root/.${s3_user}.s3fs"
 secret_name="${s3_user}-s3-credentials"
 s3_user_credentials="$(
-  if ! kubectl get secret "$secret_name" -o json 2>/dev/null | jq -r '.data' 2>/dev/null; then
+  if ! kubectl get secret "$secret_name" -o json 2> /dev/null | jq -r '.data' 2> /dev/null; then
     echo >&2 "Failed to obtain credential data for user: [$s3_user]"
   fi
 )"
@@ -61,16 +61,19 @@ echo "${access_key}:${secret_key}" > ${pwd_file}
 chmod 600 ${pwd_file}
 
 echo "Mounting bucket: ${s3_bucket} at ${s3fs_mount_dir}"
-s3fs ${s3_bucket} ${s3fs_mount_dir} -o passwd_file=${pwd_file},url=${s3_endpoint},${s3fs_opts}
+if ! s3fs ${s3_bucket} ${s3fs_mount_dir} -o passwd_file=${pwd_file},url=${s3_endpoint},${s3fs_opts}; then
+  echo "Error: Check that ${s3_bucket} is not already mounted and ${s3fs_mount_dir} is empty."
+  exit 1
+fi
 
 echo "Adding fstab entry for ${s3_bucket} S3 bucket at ${s3fs_mount_dir} for ${s3_user} S3 user"
-if grep "${s3_bucket}" /etc/fstab | grep -q "fuse.s3fs"; then
+if ! grep "${s3_bucket}" /etc/fstab | grep -q "fuse.s3fs"; then
   echo "${s3_bucket} ${s3fs_mount_dir} fuse.s3fs _netdev,allow_other,passwd_file=${pwd_file},url=${s3_endpoint},${s3fs_opts} 0 0" >> /etc/fstab
 else
   echo "An entry in /etc/fstab already exists for ${s3_bucket} ${s3fs_mount_dir} fuse.s3fs"
 fi
 
-echo "Set cache pruning for s3_bucket to 5G of the 200G volume (every 2nd hour)"
+echo "Set cache pruning for ${s3_bucket} to 5G of the 200G volume (every 2nd hour)"
 echo "0 */2 * * * root /usr/bin/prune-s3fs-cache.sh ${s3_bucket} ${s3fs_cache_dir} 5368709120 -silent" > /etc/cron.d/prune-s3fs-${s3_bucket}-cache
 
 echo -e "Done mounting ${s3_bucket} S3 bucket\n"
@@ -88,7 +91,7 @@ else
 fi
 echo "The following s3fs mounts exist:"
 mount | grep 's3fs on'
-if mount | grep -q 's3fs on '"$s3fs_mount_dir"'; then
+if mount | grep -q 's3fs on '"$s3fs_mount_dir"; then
   echo -e "$s3fs_mount_dir is an s3fs mount\n"
 else
   echo -e "Error: ${s3fs_mount_dir} is not an s3fs mount.\n"
