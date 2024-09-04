@@ -182,6 +182,11 @@ restart_and_check_status() {
     resource_type=$(echo "$resource" | cut -d'/' -f1)
     resource_name=$(echo "$resource" | cut -d'/' -f2)
 
+    if [ "$resource_name" = "cray-dvs-mqtt-ss" ]; then
+      # CASMTRIAGE-7260: skip it as its second replicaSet will stay in the "1/2 Running" state (instead of "2/2 Running")
+      continue
+    fi
+
     resolved_resource=$(resolve_deployment "$resource_type" "$resource_name")
     if [[ $? -eq 0 ]]; then
       echo "Checking rollout status for $resolved_resource in namespace: $namespace"
