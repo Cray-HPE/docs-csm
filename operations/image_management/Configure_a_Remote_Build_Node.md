@@ -350,8 +350,6 @@ image that is installed with CSM. This image may be used to boot multiple remote
                     "etag": "<REMOTE_IMS_NODE_IMAGE_ETAG>",
                     "arch": "<REMOTE_NODE_ARCH>",
                     "path": "s3://boot-images/<REMOTE_IMS_NODE_IMAGE_ID>/manifest.json",
-                    "rootfs_provider": "",
-                    "rootfs_provider_passthrough": "",
                     "type": "s3"
                 }
             }
@@ -380,8 +378,6 @@ image that is installed with CSM. This image may be used to boot multiple remote
                         "Compute"
                     ],
                     "path": "s3://boot-images/f6d9cfc7-9291-4c46-8350-c252b919d396/manifest.json",
-                    "rootfs_provider": "",
-                    "rootfs_provider_passthrough": "",
                     "type": "s3"
                 }
             },
@@ -731,12 +727,12 @@ In order to run jobs all of the following conditions must be met:
 (`ncn-mw#`) To check the status of a particular remote build node:
 
 ```bash
-cray ims remote-build-nodes status describe "${IMS_REMOTE_NODE_XNAME}"
+cray ims remote-build-nodes status describe "${IMS_REMOTE_NODE_XNAME}" --format json
 ```
 
 If the node is ready to run jobs, the output will look something like:
 
-```text
+```json
 {
   "ableToRunJobs": true,
   "nodeArch": "x86_64",
@@ -749,7 +745,7 @@ If the node is ready to run jobs, the output will look something like:
 
 If IMS is unable to SSH to a node the output may look something like:
 
-```text
+```json
 {
   "ableToRunJobs": false,
   "nodeArch": "Unknown",
@@ -762,7 +758,7 @@ If IMS is unable to SSH to a node the output may look something like:
 
 If IMS is unable to determine the architecture of the node the output may look something like:
 
-```text
+```json
 {
   "ableToRunJobs": false,
   "nodeArch": "Unable to determine architecture of node.",
@@ -775,7 +771,7 @@ If IMS is unable to determine the architecture of the node the output may look s
 
 If `podman` is not correctly installed the output may look something like:
 
-```text
+```json
 {
   "ableToRunJobs": false,
   "nodeArch": "x86_64",
@@ -786,15 +782,15 @@ If `podman` is not correctly installed the output may look something like:
 }
 ```
 
-(`ncn-m-w#`) To check the status of all defined remote build nodes:
+(`ncn-mw#`) To check the status of all defined remote build nodes:
 
 ```bash
-cray ims remote-build-nodes status list
+cray ims remote-build-nodes status list --format json
 ```
 
 The output will look something like:
 
-```text
+```json
 [
   {
     "ableToRunJobs": true,
