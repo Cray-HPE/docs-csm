@@ -26,22 +26,17 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
 3. Check the Chassis Controller Module \(CCM\) log for `Critical` messages and the EPO event.
 
-    A cabinet has eight chassis.
-
     ```bash
-    kubectl logs -n services -l app.kubernetes.io/name=cray-capmc \
-    -c cray-capmc --tail -1 | grep EPO -A 10
+    ssh x9000c1b0 egrep \"Critical\|= No\" /var/log/messages
     ```
 
     Example output:
 
     ```text
-    2019/10/24 02:37:30 capmcd.go:805: Message: Can not issue Enclosure Chassis.Reset 'On'|'Off' while in EPO state
-    2019/10/24 02:37:30 capmcd.go:808: ExtendedInfo.Message: Can not issue Enclosure Chassis.Reset 'On'|'Off' while in EPO state
-    2019/10/24 02:37:30 capmcd.go:809: ExtendedInfo.Resolution: Verify physical hardware, issue Enclosure Chassis.Reset --> 'ForceOff', and resubmit the request
-    2019/10/24 02:37:31 capmcd.go:136: Info: <-- Bad Request (400) POST https://x1000c7b0/redfish/v1/ Chassis/Enclosure/Actions/Chassis.Reset (1.045967005s)
-    2019/10/24 02:37:31 capmcd.go:799: POST https://x1000c7b0/redfish/v1/Chassis/Enclosure/Actions/Chassis.Reset
-    !HTTP Error!
+    Apr 8 03:47:55 x9000c1 user.info redfish-cmmd[4453]: do_cmm_enclosure_reset_forceoff: Handling Enclosure (Force)Off request: clearing EPO = No
+    Apr 8 03:47:55 x9000c1 user.info redfish-cmmd[4453]: rbe_set_chassis_status: Update Chassis 'Enclosure' Status: UnavailableOffline, Critical
+    Apr 11 04:00:06 x9000c1 user.info redfish-cmmd[4453]: do_cmm_enclosure_reset_forceoff: Handling Enclosure (Force)Off request: clearing EPO = No
+    Apr 11 04:00:06 x9000c1 user.info redfish-cmmd[4453]: rbe_set_chassis_status: Update Chassis 'Enclosure' Status: UnavailableOffline, Critical
     ```
 
 4. Disable the hms-discovery Kubernetes cron job.
@@ -100,7 +95,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     err_msg = ""
     ```
 
-7. Bring up the Slingshot Fabric.
+7. Verify the Slingshot Fabric.
     Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
     * The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
     * The *Slingshot Troubleshooting Guide* PDF.
