@@ -8,11 +8,11 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 The following procedures are included in this section:
 
-1. [Update Liquid-Cooled Compute Node BMC, FPGA, and BIOS](#liquidcooled)
-1. [Update Air-Cooled Compute Node BMC, BIOS, iLO 5, and System ROM](#aircooled)
-1. [Update Chassis Management Module (CMM) Firmware](#cmm)
-1. [Update NCN BIOS and BMC Firmware with FAS](#ncn-bios-bmc)
-1. [Compute Node BIOS Workaround for HPE CRAY EX425](#cn-workaround)
+* [Update Liquid-Cooled Compute Node BMC, FPGA, and BIOS](#liquidcooled)
+* [Update Air-Cooled Compute Node BMC, BIOS, iLO 5, and System ROM](#aircooled)
+* [Update Chassis Management Module (CMM) Firmware](#cmm)
+* [Update NCN BIOS and BMC Firmware with FAS](#ncn-bios-bmc)
+* [Compute Node BIOS Workaround for HPE CRAY EX425](#cn-workaround)
 
 > **NOTE:** To update Switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta Documentation.
 
