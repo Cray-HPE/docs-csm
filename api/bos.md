@@ -5118,7 +5118,7 @@ group of Components.
 |enable_cfs|[EnableCfs](#schemaenablecfs)|false|none|Whether to enable the Configuration Framework Service (CFS).|
 |cfs|[V2CfsParameters](#schemav2cfsparameters)|false|none|This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a Boot Set.|
 |boot_sets|object|true|none|Mapping from Boot Set names to Boot Sets.<br><br>* Boot Set names must be 1-127 characters in length.<br>* Boot Set names must use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names must begin and end with a letter or digit.|
-|» **additionalProperties**|[V2BootSet](#schemav2bootset)|false|none|none|
+|» **additionalProperties**|[V2BootSet](#schemav2bootset)|false|none|A Boot Set is a collection of nodes defined by an explicit list, their functional<br>role, and their logical groupings. This collection of nodes is associated with one<br>set of boot artifacts and optional additional records for configuration and root<br>filesystem provisioning.<br><br>A boot set requires at least one of the following fields to be specified:<br>node_list, node_roles_groups, node_groups<br><br>If specified, the name field must match the key mapping to this boot set in the<br>boot_sets field of the containing V2SessionTemplate.|
 |links|[LinkListReadOnly](#schemalinklistreadonly)|false|none|List of links to other resources|
 
 <h2 id="tocS_V2SessionTemplateValidation">V2SessionTemplateValidation</h2>
@@ -5326,12 +5326,12 @@ Information on the status of a Session.
 |status|[V2SessionStatusLabel](#schemav2sessionstatuslabel)|false|none|The status of a Session.|
 |error|string¦null|false|none|Error which prevented the Session from running.<br>A null value means the Session has not encountered an error.|
 
-<h2 id="tocS_V2BootSetData">V2BootSetData</h2>
+<h2 id="tocS_V2BootSet">V2BootSet</h2>
 <!-- backwards compatibility -->
-<a id="schemav2bootsetdata"></a>
-<a id="schema_V2BootSetData"></a>
-<a id="tocSv2bootsetdata"></a>
-<a id="tocsv2bootsetdata"></a>
+<a id="schemav2bootset"></a>
+<a id="schema_V2BootSet"></a>
+<a id="tocSv2bootset"></a>
+<a id="tocsv2bootset"></a>
 
 ```json
 {
@@ -5397,73 +5397,6 @@ boot_sets field of the containing V2SessionTemplate.
 |arch|ARM|
 |arch|Other|
 |arch|Unknown|
-
-<h2 id="tocS_V2BootSet">V2BootSet</h2>
-<!-- backwards compatibility -->
-<a id="schemav2bootset"></a>
-<a id="schema_V2BootSet"></a>
-<a id="tocSv2bootset"></a>
-<a id="tocsv2bootset"></a>
-
-```json
-{
-  "name": "compute",
-  "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
-  "cfs": {
-    "configuration": "compute-23.4.0"
-  },
-  "type": "s3",
-  "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-  "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-  "node_list": [
-    "x3000c0s19b1n0",
-    "x3000c0s19b2n0"
-  ],
-  "node_roles_groups": [
-    "Compute",
-    "Application"
-  ],
-  "node_groups": [
-    "string"
-  ],
-  "arch": "X86",
-  "rootfs_provider": "cpss3",
-  "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
-}
-
-```
-
-### Properties
-
-allOf
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[V2BootSetData](#schemav2bootsetdata)|false|none|A Boot Set is a collection of nodes defined by an explicit list, their functional<br>role, and their logical groupings. This collection of nodes is associated with one<br>set of boot artifacts and optional additional records for configuration and root<br>filesystem provisioning.<br><br>A boot set requires at least one of the following fields to be specified:<br>node_list, node_roles_groups, node_groups<br><br>If specified, the name field must match the key mapping to this boot set in the<br>boot_sets field of the containing V2SessionTemplate.|
-
-and
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|any|false|none|none|
-
-anyOf
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|object|false|none|none|
-
-or
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|object|false|none|none|
-
-or
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|object|false|none|none|
 
 <h2 id="tocS_V2SessionTemplateArray">V2SessionTemplateArray</h2>
 <!-- backwards compatibility -->

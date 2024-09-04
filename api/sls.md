@@ -331,6 +331,14 @@ Status Code **200**
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
+|»» *anonymous*|[hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node)|false|none|none|
+|»»» NodeType|string|true|none|The role type assigned to this node.|
+|»»» nid|integer|false|none|none|
+
+*xor*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
 |»» *anonymous*|[hardware_ip_and_creds_optional](#schemahardware_ip_and_creds_optional)|false|none|none|
 |»»» IP6addr|string|false|none|The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.|
 |»»» IP4addr|string|false|none|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
@@ -348,6 +356,7 @@ Status Code **200**
 |NodeType|System|
 |NodeType|Application|
 |NodeType|Storage|
+|NodeType|Management|
 |NodeType|Management|
 
 <aside class="warning">
@@ -1020,6 +1029,14 @@ Status Code **200**
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
+|»» *anonymous*|[hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node)|false|none|none|
+|»»» NodeType|string|true|none|The role type assigned to this node.|
+|»»» nid|integer|false|none|none|
+
+*xor*
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
 |»» *anonymous*|[hardware_ip_and_creds_optional](#schemahardware_ip_and_creds_optional)|false|none|none|
 |»»» IP6addr|string|false|none|The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.|
 |»»» IP4addr|string|false|none|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
@@ -1037,6 +1054,7 @@ Status Code **200**
 |NodeType|System|
 |NodeType|Application|
 |NodeType|Storage|
+|NodeType|Management|
 |NodeType|Management|
 
 <aside class="warning">
@@ -1602,6 +1620,9 @@ sls_dump:
 |»»»»» *anonymous*|body|[hardware_comptype_node](#schemahardware_comptype_node)|false|none|
 |»»»»»» NodeType|body|string|true|The role type assigned to this node.|
 |»»»»»» nid|body|integer|false|none|
+|»»»»» *anonymous*|body|[hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node)|false|none|
+|»»»»»» NodeType|body|string|true|The role type assigned to this node.|
+|»»»»»» nid|body|integer|false|none|
 |»»»»» *anonymous*|body|[hardware_ip_and_creds_optional](#schemahardware_ip_and_creds_optional)|false|none|
 |»»»»»» IP6addr|body|string|false|The ipv6 address that should be assigned to this BMC, or "DHCPv6".  If omitted, "DHCPv6" is assumed.|
 |»»»»»» IP4addr|body|string|false|The ipv4 address that should be assigned to this BMC, or "DHCPv4".  If omitted, "DHCPv4" is assumed.|
@@ -1646,6 +1667,7 @@ sls_dump:
 |»»»»»» NodeType|System|
 |»»»»»» NodeType|Application|
 |»»»»»» NodeType|Storage|
+|»»»»»» NodeType|Management|
 |»»»»»» NodeType|Management|
 
 <h3 id="post__loadstate-responses">Responses</h3>
@@ -3490,6 +3512,34 @@ The human-readable time this object was last created or updated.
 |NodeType|Storage|
 |NodeType|Management|
 
+<h2 id="tocS_hardware_comptype_virtual_node">hardware_comptype_virtual_node</h2>
+<!-- backwards compatibility -->
+<a id="schemahardware_comptype_virtual_node"></a>
+<a id="schema_hardware_comptype_virtual_node"></a>
+<a id="tocShardware_comptype_virtual_node"></a>
+<a id="tocshardware_comptype_virtual_node"></a>
+
+```json
+{
+  "NodeType": "Management",
+  "nid": "2"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|NodeType|string|true|none|The role type assigned to this node.|
+|nid|integer|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|NodeType|Management|
+
 <h2 id="tocS_hardware_comptype_nodecard">hardware_comptype_nodecard</h2>
 <!-- backwards compatibility -->
 <a id="schemahardware_comptype_nodecard"></a>
@@ -3594,6 +3644,12 @@ xor
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[hardware_comptype_node](#schemahardware_comptype_node)|false|none|none|
+
+xor
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[hardware_comptype_virtual_node](#schemahardware_comptype_virtual_node)|false|none|none|
 
 xor
 

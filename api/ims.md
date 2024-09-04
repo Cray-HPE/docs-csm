@@ -8443,6 +8443,117 @@ To perform this operation, you must be authenticated by means of one of the foll
 bearerAuth
 </aside>
 
+<h1 id="image-management-service-remote-build-node-status">remote build node status</h1>
+
+## get_all_v3_remote_build_status
+
+<a id="opIdget_all_v3_remote_build_status"></a>
+
+> Code samples
+
+```http
+GET https://api-gw-service-nmn.local/apis/ims/v3/remote-build-nodes/status HTTP/1.1
+Host: api-gw-service-nmn.local
+Accept: application/json
+
+```
+
+```shell
+# You can also use wget
+curl -X GET https://api-gw-service-nmn.local/apis/ims/v3/remote-build-nodes/status \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.get('https://api-gw-service-nmn.local/apis/ims/v3/remote-build-nodes/status', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "https://api-gw-service-nmn.local/apis/ims/v3/remote-build-nodes/status", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /v3/remote-build-nodes/status`
+
+*List remote build node status objects*
+
+Retrieve the status of all remote build nodes that are registered with IMS.
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "xname": "x3000c1s10b1n0",
+    "nodeArch": "x86_64",
+    "numCurrentJobs": 15,
+    "podmanStatus": "Podman present at /usr/bin/podman",
+    "sshStatus": "SSH connection established",
+    "ableToRunJobs": true
+  }
+]
+```
+
+<h3 id="get_all_v3_remote_build_status-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of the status of each remote build node|Inline|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
+
+<h3 id="get_all_v3_remote_build_status-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[RemoteBuildNodeStatus](#schemaremotebuildnodestatus)]|false|none|[A Remote Build Node Status]|
+|» xname|string|true|none|Xname of the remote build node|
+|» nodeArch|string|false|none|Architecture of the remote build node|
+|» numCurrentJobs|integer|false|none|Number of current jobs running on the remote build node|
+|» podmanStatus|string|false|none|Status of the podman executable on the remote build node|
+|» sshStatus|string|false|none|Status of the ssh connection to the remote build node|
+|» ableToRunJobs|boolean|false|none|If the node is able to run new jobs|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
 # Schemas
 
 <h2 id="tocS_SSHConnectionInfo">SSHConnectionInfo</h2>
@@ -8640,6 +8751,38 @@ A Remote Build Node Record
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |xname|string|true|none|Xname of the remote build node|
+
+<h2 id="tocS_RemoteBuildNodeStatus">RemoteBuildNodeStatus</h2>
+<!-- backwards compatibility -->
+<a id="schemaremotebuildnodestatus"></a>
+<a id="schema_RemoteBuildNodeStatus"></a>
+<a id="tocSremotebuildnodestatus"></a>
+<a id="tocsremotebuildnodestatus"></a>
+
+```json
+{
+  "xname": "x3000c1s10b1n0",
+  "nodeArch": "x86_64",
+  "numCurrentJobs": 15,
+  "podmanStatus": "Podman present at /usr/bin/podman",
+  "sshStatus": "SSH connection established",
+  "ableToRunJobs": true
+}
+
+```
+
+A Remote Build Node Status
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|xname|string|true|none|Xname of the remote build node|
+|nodeArch|string|false|none|Architecture of the remote build node|
+|numCurrentJobs|integer|false|none|Number of current jobs running on the remote build node|
+|podmanStatus|string|false|none|Status of the podman executable on the remote build node|
+|sshStatus|string|false|none|Status of the ssh connection to the remote build node|
+|ableToRunJobs|boolean|false|none|If the node is able to run new jobs|
 
 <h2 id="tocS_ArtifactLinkRecord">ArtifactLinkRecord</h2>
 <!-- backwards compatibility -->
