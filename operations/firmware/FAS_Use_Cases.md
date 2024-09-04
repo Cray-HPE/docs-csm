@@ -17,11 +17,11 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
 
 The following procedures are included in this section:
 
-1. [Update liquid-cooled nodes BMC, FPGA, and node BIOS](#liquid-cooled-nodes-update-procedures)
-1. [Update air-cooled compute node BMC, BIOS, iLO 5, and system ROM](#update-air-cooled-compute-node-bmc-bios-ilo-5-and-system-rom)
-1. [Update Chassis Management Module (CMM) firmware](#update-chassis-management-module-firmware)
-1. [Update NCN BIOS and BMC firmware with FAS](#update-non-compute-node-ncn-bios-and-bmc-firmware)
-1. [Compute node BIOS workaround for HPE CRAY EX425](#compute-node-bios-workaround-for-hpe-cray-ex425)
+* [Update liquid-cooled nodes BMC, FPGA, and node BIOS](#liquid-cooled-nodes-update-procedures)
+* [Update air-cooled compute node BMC, BIOS, iLO 5, and system ROM](#update-air-cooled-compute-node-bmc-bios-ilo-5-and-system-rom)
+* [Update Chassis Management Module (CMM) firmware](#update-chassis-management-module-firmware)
+* [Update NCN BIOS and BMC firmware with FAS](#update-non-compute-node-ncn-bios-and-bmc-firmware)
+* [Compute node BIOS workaround for HPE CRAY EX425](#compute-node-bios-workaround-for-hpe-cray-ex425)
 
 > **`NOTE`** To update switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta documentation.
 
