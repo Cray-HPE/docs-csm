@@ -7,8 +7,8 @@ ServerTech PDUs which do not natively support Redfish.
 
 There are two sets of default credentials that are required for RTS to function:
 
-1. The default credentials to use when new ServerTech PDUs are discovered in the system.
-1. The global default credential that RTS uses for its Redfish interface with other CSM services.
+- The default credentials to use when new ServerTech PDUs are discovered in the system.
+- The global default credential that RTS uses for its Redfish interface with other CSM services.
 
 ***IMPORTANT*** After this procedure is completed **going forward all future ServerTech PDUs** added to the system will be assumed to be already configured with the new global default
 credential when getting added to the system.
