@@ -119,7 +119,7 @@ E0724 19:46:37.872059       1 cacher.go:420] cacher (*core.Secret): unexpected L
         SRC_NODE=ncn-m002
         ```
 
-    1. Copy `/etc/cray/kubernetes/encryption` files from the `SRC_NODE` to the node where encryption needs to be enaled.
+    1. Copy `/etc/cray/kubernetes/encryption` files from the `SRC_NODE` to the node where encryption needs to be enabled.
 
         ```bash
         scp ${SRC_NODE}:/etc/cray/kubernetes/encryption/* /etc/cray/kubernetes/encryption/
