@@ -7,8 +7,8 @@ ServerTech PDUs and management network switches which do not natively support Re
 
 There are two sets of default credentials that are required for RTS to function:
 
-1. The default credentials to use when new ServerTech PDUs are discovered in the system.
-1. The global default credential that RTS uses for its Redfish interface with other CSM services.
+- The default credentials to use when new ServerTech PDUs are discovered in the system.
+- The global default credential that RTS uses for its Redfish interface with other CSM services.
 
 ***NOTE*** RTS management network switch Redfish interfaces only use the global default RTS password. The username comes from the SNMP credentials pushed by REDS.
 See [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md) to manage the SNMP credentials.
@@ -20,12 +20,10 @@ credential when getting added to the system.
 > [Change Credentials on ServerTech PDUs](Change_Credentials_on_ServerTech_PDUs.md) procedure. However, this procedure will update the global default credential that RTS
 > uses for its Redfish interface to other CSM services.
 
-- [Procedure](#procedure)
-
-    1. [Update credentials and redeploy RTS](#1-update-credentials-and-redeploy-rts)
-    1. [Restart the SNMP-backed RTS to pick up the global RTS credential changes](#2-restart-the-snmp-backed-rts-to-pick-up-the-global-rts-credential-changes)
-
 ## Procedure
+
+1. [Update credentials and redeploy RTS](#1-update-credentials-and-redeploy-rts)
+1. [Restart the SNMP-backed RTS to pick up the global RTS credential changes](#2-restart-the-snmp-backed-rts-to-pick-up-the-global-rts-credential-changes)
 
 ### 1. Update credentials and redeploy RTS
 

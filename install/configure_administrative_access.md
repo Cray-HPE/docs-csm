@@ -10,6 +10,8 @@ and BMC/controller passwords.
 ## Topics
 
 1. [Configure the Cray command line interface](#1-configure-the-cray-command-line-interface)
+    - [Automatic configuration using temporary Keycloak account](#automatic-configuration-using-temporary-keycloak-account)
+    - [Manual configuration](#manual-configuration)
 1. [Set `Management` role on the BMCs of management nodes](#2-set-management-role-on-the-bmcs-of-management-nodes)
 1. [Lock management nodes](#3-lock-management-nodes)
 1. [Configure BMC and controller parameters with SCSD](#4-configure-bmc-and-controller-parameters-with-scsd)
@@ -159,7 +161,8 @@ then applies that configuration to the management nodes.
     Configuration complete. 9 component(s) completed successfully.  0 component(s) failed.
     ```
 
-    The number reported should match the number of management nodes in the system. If there are failures, see [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md).
+    The number reported should match the number of management nodes in the system. If there are failures, see
+    [Track the Status of a Session](../operations/configuration_management/Track_the_Status_of_a_Session.md).
 
 ## 8. Proceed to next topic
 
