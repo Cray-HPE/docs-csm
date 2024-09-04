@@ -2,11 +2,11 @@
 
 This section ensures the product content is loaded onto the system and available for later steps in the workflow.
 
-- [1. Execute the IUF `process-media` and `pre-install-check` stages](#1-execute-the-iuf-process-media-and-pre-install-check-stages)
-- [2. Update `customizations.yaml`](#2-update-customizationsyaml)
-- [3. Execute the IUF `deliver-product` stage](#3-execute-the-iuf-deliver-product-stage)
-- [4. Perform manual product delivery operations](#4-perform-manual-product-delivery-operations)
-- [5. Next steps](#5-next-steps)
+1. [Execute the IUF `process-media` and `pre-install-check` stages](#1-execute-the-iuf-process-media-and-pre-install-check-stages)
+1. [Update `customizations.yaml`](#2-update-customizationsyaml)
+1. [Execute the IUF `deliver-product` stage](#3-execute-the-iuf-deliver-product-stage)
+1. [Perform manual product delivery operations](#4-perform-manual-product-delivery-operations)
+1. [Next steps](#5-next-steps)
 
 ## 1. Execute the IUF `process-media` and `pre-install-check` stages
 

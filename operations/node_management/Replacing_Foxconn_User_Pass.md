@@ -25,9 +25,9 @@ Vault needs to be updated with the Foxconn username and password using the `Foxc
     ```
 
     This will ask for the BMC username and password for the Paradise nodes.
-    The scirpt will look for undiscovered nodes, if it finds a Foxconn node, update vault with correct credentials.
+    The script will look for undiscovered nodes; if it finds a Foxconn node, it will update vault with correct credentials.
 
-1. (`ncn-mw#`) Wait 10+ minutes for changes to take affect and nodes to be discovered.  To check nodes which have failed to be discovered:
+1. (`ncn-mw#`) Wait 10+ minutes for changes to take effect and nodes to be discovered. To check nodes which have failed to be discovered:
 
    ```bash
    cray hsm inventory redfishEndpoints list --format json | jq '.[] | .[] | select (.DiscoveryInfo.LastDiscoveryStatus!="DiscoverOK")'
