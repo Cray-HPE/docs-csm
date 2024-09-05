@@ -966,6 +966,9 @@ Lorem
 # To allow Site Init
 Init
 
+- operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md
+ramroot
+
 - operations/boot_orchestration/Exporting_and_Importing_BOS_Data.md
 etag
 
