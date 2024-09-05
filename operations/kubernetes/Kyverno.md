@@ -405,14 +405,365 @@ A container image is a standalone executable file used to create a container. Th
 Container image signing is a critical security process for establishing trust. A container image is said to be signed, when a digital signature is created and added it to the image. 
 This process is called signing. To sign an image, the entity can create a public/private key pair. 	The private key must be kept secret, and the public key can be shared publicly.
 
-There are 3 different use cases under which the container images are signed and verified using Kyverno policies,
-1. **Verify CSM container images signed by HPE** : HPE ships Container images as part of CSM. These are signed using private key and public key shared to customer. This particular policy uses public key to verify the
-   images for their authenticity to make sure they are not tampered.
-2. **Verify CSM container images signed by customer** : Customer or end users have their own container images running as part of CSM. With this policy end user can use their own private key to sign the container images
-   and use the their public key for verify the authenticity to make sure they are not tampered.
-3. **Allow deployment of unsigned container images listed as exceptions** : Under the scenarios where end user does not want to use the signed container images, they can add the unsigned container image details to
-   exception list in the kyverno policy so that they are allowed without signature verification.   
+There are 3 different use cases under which the container image signatures are verified using Kyverno policies,
+1. **Verify CSM container images signed by HPE** : HPE ships container images as part of CSM. These are signed using private keys. Corresponding public keys are available as kubernetes secrets which are shipped as part of CSM. This policy uses the public keys to verify the image signatures for their authenticity to make sure that they are not tampered.
 
+    Sample policy:
+
+    ```yaml
+    apiVersion: kyverno.io/v1
+    kind: ClusterPolicy
+    metadata:
+      annotations:
+        kyverno.io/kyverno-version: 1.6.0
+        meta.helm.sh/release-name: kyverno-policy
+        meta.helm.sh/release-namespace: kyverno
+        policies.kyverno.io/description: Verify Cosign image signatures against provided
+          public key(s).
+        policies.kyverno.io/subject: Pod
+        policies.kyverno.io/title: Verify Cosign image signatures against provided public
+          key
+      creationTimestamp: "2024-09-05T06:03:00Z"
+      generation: 1
+      labels:
+        app.kubernetes.io/managed-by: Helm
+      name: check-image
+      resourceVersion: "97160548"
+      uid: 3a65f533-1dc8-472b-bcdb-93f264a04f21
+    spec:
+      background: true
+      failurePolicy: Fail
+      rules:
+      - exclude:
+          any:
+          - resources:
+              names:
+              - sample-name
+              namespaces:
+              - sample-ns
+        match:
+          any:
+          - resources:
+              kinds:
+              - Pod
+              namespaces:
+              - '*'
+        name: check-image
+        verifyImages:
+        - attestors:
+          - count: 1
+            entries:
+            - keys:
+              publicKeys: |-
+                {{- range $name, $key := $keys }}
+                {{ $key | b64dec | trim | indent 14 }}
+                {{- end }}
+          imageReferences:
+          - '*'
+          mutateDigest: false
+          required: true
+          verifyDigest: false
+      validationFailureAction: Audit
+      webhookTimeoutSeconds: 30    
+    ```
+    The unverified images will be reported as violations in the policy report at namespace level. These can be viewed using the following command.
+   
+    ```bash
+    kubectl get polr -n <namespace>
+    ```
+
+    Example output:
+
+    ```text
+    # kubectl get polr -n cosign-test
+    NAME                                  PASS   FAIL   WARN   ERROR   SKIP   AGE
+    cpol-check-image                      0      1      0      0       0      18s
+    cpol-disallow-capabilities            3      0      0      0       0      167m
+    cpol-disallow-host-namespaces         3      0      0      0       0      167m
+    cpol-disallow-host-path               3      0      0      0       0      167m
+    cpol-disallow-host-ports              3      0      0      0       0      167m
+    cpol-disallow-host-process            3      0      0      0       0      167m
+    cpol-disallow-privileged-containers   3      0      0      0       0      167m
+    cpol-disallow-proc-mount              3      0      0      0       0      167m
+    cpol-disallow-selinux                 6      0      0      0       0      167m
+    cpol-restrict-apparmor-profiles       3      0      0      0       0      167m
+    cpol-restrict-seccomp                 3      0      0      0       0      167m
+    cpol-restrict-sysctls                 3      0      0      0       0      167m
+    ```
+
+    To view the container images which failed the signature verification, use the following command.
+
+    ```bash
+    kubectl get polr cpol-check-image -n <namespace> -o jsonpath='{.results[?(@.result=="fail")]}' | jq .
+    ```
+    Sample output:
+   
+    ```text
+    kubectl get polr cpol-check-image -n cosign-test -o jsonpath='{.results[?(@.result=="fail")]}' | jq .
+    {
+      "message": "unverified image registry.local/stable/docker-kubectl:1.21.12",
+      "policy": "check-image",
+      "resources": [
+        {
+          "apiVersion": "v1",
+          "kind": "Pod",
+          "name": "docker-kubectl-57565f745d-zltgh",
+          "namespace": "cosign-test",
+          "uid": "64542e6a-c6b4-4e77-8c04-235f8634ea0a"
+        }
+      ],
+      "result": "fail",
+      "rule": "check-image",
+      "scored": true,
+      "source": "kyverno",
+      "timestamp": {
+        "nanos": 0,
+        "seconds": 1725530260
+      }
+    }    
+    ```
+2. **Verify CSM container images signed by customer** : End users who run their own container images as part of CSM can make use of this policy to verify image signatures. They can use their own private key to sign the container images and use the corresponding public key to verify their authenticity to make sure that they are not tampered.
+
+    Sample policy:
+      
+    ```yaml
+    apiVersion: kyverno.io/v1
+    kind: ClusterPolicy
+    metadata:
+      annotations:
+        kyverno.io/kyverno-version: 1.6.0
+        meta.helm.sh/release-name: kyverno-policy
+        meta.helm.sh/release-namespace: kyverno
+        policies.kyverno.io/description: Verify Cosign image signatures against provided
+          public key(s).
+        policies.kyverno.io/subject: Pod
+        policies.kyverno.io/title: Verify Cosign image signatures against provided public
+          key
+      creationTimestamp: "2024-09-05T06:03:00Z"
+      generation: 2
+      labels:
+        app.kubernetes.io/managed-by: Helm
+      name: check-image
+      resourceVersion: "97174145"
+      uid: 3a65f533-1dc8-472b-bcdb-93f264a04f21
+    spec:
+      background: true
+      failurePolicy: Fail
+      rules:
+      - exclude:
+          any:
+          - resources:
+              names:
+              - sample-name
+              namespaces:
+              - sample-ns
+        match:
+          any:
+          - resources:
+              kinds:
+              - Pod
+              namespaces:
+              - '*'
+        name: check-image
+        verifyImages:
+        - attestors:
+          - count: 1
+            entries:
+            - keys:
+                publicKeys: |-
+                  {{- range $name, $key := $keys }}
+                  {{ $key | b64dec | trim | indent 14 }}
+                  {{- end }}
+            - keys:
+                publicKeys: k8s://cosign-test/customer-secret
+                signatureAlgorithm: sha256
+          imageReferences:
+          - '*'
+          mutateDigest: false
+          required: true
+          verifyDigest: false
+      validationFailureAction: Audit
+      webhookTimeoutSeconds: 30    
+    ```   
+
+    The container images succesfully signed by the end users using their own private key, won't be reported as policy violations in the policy report.
+  
+    ```bash
+    kubectl get polr -n <namespace>
+    ```
+
+    Example output:
+
+    ```text
+    # kubectl get polr -n cosign-test
+    NAME                                  PASS   FAIL   WARN   ERROR   SKIP   AGE
+    cpol-check-image                      1      0      0      0       0      18s
+    cpol-disallow-capabilities            3      0      0      0       0      167m
+    cpol-disallow-host-namespaces         3      0      0      0       0      167m
+    cpol-disallow-host-path               3      0      0      0       0      167m
+    cpol-disallow-host-ports              3      0      0      0       0      167m
+    cpol-disallow-host-process            3      0      0      0       0      167m
+    cpol-disallow-privileged-containers   3      0      0      0       0      167m
+    cpol-disallow-proc-mount              3      0      0      0       0      167m
+    cpol-disallow-selinux                 6      0      0      0       0      167m
+    cpol-restrict-apparmor-profiles       3      0      0      0       0      167m
+    cpol-restrict-seccomp                 3      0      0      0       0      167m
+    cpol-restrict-sysctls                 3      0      0      0       0      167m
+    ```
+
+    To view the container images which passed the signature verification, use the following command.
+
+    ```bash
+    kubectl get polr cpol-check-image -n <namespace> -o jsonpath='{.results[?(@.result=="pass")]}' | jq .
+    ```
+    Sample output:
+   
+    ```text
+    kubectl get polr cpol-check-image -n cosign-test -o jsonpath='{.results[?(@.result=="pass")]}' | jq .
+    {
+      "message": "image verified",
+      "policy": "check-image",
+      "resources": [
+        {
+          "apiVersion": "v1",
+          "kind": "Pod",
+          "name": "key-signing-latest-57bcbf5b8c-zt8sx",
+          "namespace": "cosign-test",
+          "uid": "3e3b19c5-f332-4932-92c2-9b062f461e36"
+        }
+      ],
+      "result": "pass",
+      "rule": "check-image",
+      "scored": true,
+      "source": "kyverno",
+      "timestamp": {
+        "nanos": 0,
+        "seconds": 1725516791
+      }
+    }   
+    ```
+    
+3. **Allow deployment of unsigned container images listed as exceptions** : End users who want to use unsigned container images (signed by neither HPE nor self) as part of CSM, can add them as exceptions in the kyverno policy, so that they are allowed without violations in the policy report.   
+
+    Sample policy:
+      
+    ```yaml
+    apiVersion: kyverno.io/v1
+    kind: ClusterPolicy
+    metadata:
+      annotations:
+        kyverno.io/kyverno-version: 1.6.0
+        meta.helm.sh/release-name: kyverno-policy
+        meta.helm.sh/release-namespace: kyverno
+        policies.kyverno.io/description: Verify Cosign image signatures against provided
+          public key(s).
+        policies.kyverno.io/subject: Pod
+        policies.kyverno.io/title: Verify Cosign image signatures against provided public
+          key
+      creationTimestamp: "2024-09-05T06:03:00Z"
+      generation: 3
+      labels:
+        app.kubernetes.io/managed-by: Helm
+      name: check-image
+      resourceVersion: "97179892"
+      uid: 3a65f533-1dc8-472b-bcdb-93f264a04f21
+    spec:
+      background: true
+      failurePolicy: Fail
+      rules:
+      - exclude:
+          any:
+          - resources:
+              names:
+              - docker-kubectl*
+              namespaces:
+              - cosign-test
+        match:
+          any:
+          - resources:
+              kinds:
+              - Pod
+              namespaces:
+              - '*'
+        name: check-image
+        verifyImages:
+        - attestors:
+          - count: 1
+            entries:
+            - keys:
+                publicKeys: |-
+                  {{- range $name, $key := $keys }}
+                  {{ $key | b64dec | trim | indent 14 }}
+                  {{- end }}
+            - keys:
+                publicKeys: k8s://cosign-test/customer-secret
+                signatureAlgorithm: sha256
+          imageReferences:
+          - '*'
+          mutateDigest: false
+          required: true
+          verifyDigest: false
+      validationFailureAction: Audit
+      webhookTimeoutSeconds: 30  
+    ```   
+
+    The unsigned container images added as exceptions won't be reported as policy violations in the policy report.
+  
+    ```bash
+    kubectl get polr -n <namespace>
+    ```
+
+    Example output:
+
+    ```text
+    # kubectl get polr -n cosign-test
+    NAME                                  PASS   FAIL   WARN   ERROR   SKIP   AGE
+    cpol-check-image                      1      0      0      0       0      18s
+    cpol-disallow-capabilities            3      0      0      0       0      167m
+    cpol-disallow-host-namespaces         3      0      0      0       0      167m
+    cpol-disallow-host-path               3      0      0      0       0      167m
+    cpol-disallow-host-ports              3      0      0      0       0      167m
+    cpol-disallow-host-process            3      0      0      0       0      167m
+    cpol-disallow-privileged-containers   3      0      0      0       0      167m
+    cpol-disallow-proc-mount              3      0      0      0       0      167m
+    cpol-disallow-selinux                 6      0      0      0       0      167m
+    cpol-restrict-apparmor-profiles       3      0      0      0       0      167m
+    cpol-restrict-seccomp                 3      0      0      0       0      167m
+    cpol-restrict-sysctls                 3      0      0      0       0      167m
+    ```
+
+    To view the unsigned container images which passed the signature verification, use the following command.
+
+    ```bash
+    kubectl get polr cpol-check-image -n <namespace> -o jsonpath='{.results[?(@.result=="pass")]}' | jq .
+    ```
+    Sample output:
+   
+    ```text
+    kubectl get polr cpol-check-image -n cosign-test -o jsonpath='{.results[?(@.result=="pass")]}' | jq .
+    {
+      "message": "image verified",
+      "policy": "check-image",
+      "resources": [
+        {
+          "apiVersion": "v1",
+          "kind": "Pod",
+          "name": "docker-kubectl-57bcbf5b8c-zt8sx",
+          "namespace": "cosign-test",
+          "uid": "3e3b19c5-f332-4932-92c2-9b062f461e36"
+        }
+      ],
+      "result": "pass",
+      "rule": "check-image",
+      "scored": true,
+      "source": "kyverno",
+      "timestamp": {
+        "nanos": 0,
+        "seconds": 1725516791
+      }
+    }   
+    ```
+    
 ## Known issues
 
 * [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)
