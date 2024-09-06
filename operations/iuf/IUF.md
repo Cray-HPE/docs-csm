@@ -838,6 +838,22 @@ The following actions may be useful if errors are encountered when executing `iu
   of this document includes links to descriptions of each stage. Each of those descriptions includes an **Execution Details** section describing how to find the appropriate code in the IUF `workflows` directory to understand the
   workflow and debug the issue.
 
+### 4. Specific scenarios
+
+ 1. IUF workflow loops while rebuilding a management node.
+
+    - IUF loops while waiting for CFS to complete configuration of a management node. This step might not be completing because the CFS error count for the node has exceeded the   maximum retry count for applying the configuration.
+    - Look at the Ansible logs for the CFS configuration operation for that node and attempt to rectify the problem.
+    - After resolving the problem, update the default error count in CFS using the below command.
+
+         ```bash
+         ncn# cray cfs components update --enabled true --state '[]' --error-count 0 --format json $XNAME
+         ```
+
+    - Once the error count is reset, the CFS batcher pod will restart configuration for the node. If it does not start within a few minutes,
+   check the CFS batcher pod log to determine whether CFS batcher is doing back off logic due to too many failures from CFS batches it has started.
+   See [CFS troubleshooting guide](../../operations/configuration_management/Troubleshoot_CFS_Sessions_Failing_to_Start.md)
+
 ## Install and Upgrade Observability Framework
 
 The Install and Upgrade Observability Framework includes assertions for Goss health checks, as well as metrics and dashboards for health checks.
