@@ -8,9 +8,11 @@ Master nodes should host the following three mount points:
 
 ```bash
 /var/opt/cray/config-data (config-data S3 bucket)
-/var/lib/admin-tools (admin-tools S3 bucket)
 /var/opt/cray/sdu/collection-mount (sds S3 bucket)
 ```
+
+> NOTE: the mount `/var/lib/admin-tools (admin-tools S3 bucket)` is no longer mounted in CSM 1.4+.
+> If it is desired to have this bucket mounted, please see [Mount 'admin-tools' S3 bucket](#mount-admin-tools-s3-bucket).
 
 ## Worker Node Mount Points
 
@@ -31,7 +33,6 @@ Run the following command on master nodes to ensure the mounts are present:
 ```bash
 ncn-m: # mount | grep 's3fs on'
 s3fs on /var/opt/cray/config-data type fuse.s3fs (rw,nosuid,nodev,relatime,user_id=0,group_id=0)
-s3fs on /var/lib/admin-tools type fuse.s3fs (rw,relatime,user_id=0,group_id=0,allow_other)
 s3fs on /var/opt/cray/sdu/collection-mount type fuse.s3fs (rw,relatime,user_id=0,group_id=0,allow_other)
 ```
 
@@ -57,7 +58,6 @@ Ensure the `/etc/fstab` contains the following content:
 ```bash
 ncn-m: # grep fuse.s3fs /etc/fstab
 sds /var/opt/cray/sdu/collection-mount fuse.s3fs _netdev,allow_other,passwd_file=/root/.sds.s3fs,url=http://rgw-vip.nmn,use_path_request_style,use_cache=/var/lib/s3fs_cache,check_cache_dir_exist,use_xattr,uid=2370,gid=2370,umask=0007,allow_other 0 0
-admin-tools /var/lib/admin-tools fuse.s3fs _netdev,allow_other,passwd_file=/root/.admin-tools.s3fs,url=http://rgw-vip.nmn,use_path_request_style,use_cache=/var/lib/s3fs_cache,check_cache_dir_exist,use_xattr 0 0
 config-data /var/opt/cray/config-data fuse.s3fs _netdev,allow_other,passwd_file=/root/.config-data.s3fs,url=http://rgw-vip.nmn,use_path_request_style,use_xattr 0 0
 ```
 
@@ -84,3 +84,18 @@ ncn-mw: # mount -a
 
 If the above command fails, then the error likely indicates that there is an issue communicating with Ceph's `Radosgw` endpoint (`rgw-vip`).
 In this case the [Troubleshoot an Unresponsive S3 Endpoint](Troubleshoot_an_Unresponsive_S3_Endpoint.md) procedure should be followed to ensure the endpoint is healthy.
+
+## Mount 'admin-tools' S3 bucket
+
+In CSM 1.2 and CSM 1.3, `/var/lib/admin-tools (admin-tools S3 bucket)` was a mounted S3 bucket. Starting in CSM 1.4, the `admin-tools` S3 bucket is no longer mounted.
+It is not necessary for this bucket to be mounted for system operations.
+However, if it is desired to have the `admin-tools` S3 bucket mounted, please run the following script on all master nodes where the `admin-tools` bucket should be mounted.
+
+(`ncn-m#`) Mount the `admin-tools` S3 bucket.
+
+  ```bash
+  /usr/share/doc/csm/scripts/mount-admin-tools-bucket.sh
+  ```
+
+> NOTE: This mount will not be recreated after a node upgrade or rebuild.
+> This procedure will need to be redone in the case of a node upgrade or rebuild.
