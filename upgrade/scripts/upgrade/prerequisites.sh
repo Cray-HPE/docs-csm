@@ -1373,31 +1373,43 @@ if [[ ${state_recorded} == "0" ]]; then
     patch=$(jq -c -n --rawfile text "${tmpdir}/kubeadm-config.yaml" '.data["ClusterConfiguration"]=$text')
     kubectl -n kube-system patch configmap kubeadm-config --type merge --patch "${patch}"
 
-    echo "Creating ConfigMap kubelet-config-1.24 ..."
-    kubectl -n kube-system get configmap kubelet-config-1.22 -o yaml \
-      | yq4 e '.metadata.name="kubelet-config-1.24"' \
-      | yq4 e 'del .metadata.creationTimestamp' \
-      | yq4 e 'del .metadata.resourceVersion' \
-      | yq4 e 'del .metadata.uid' \
-      | kubectl apply -f -
+    if kubectl -n kube-system get configmap -o custom-columns=name:.metadata.name --no-headers | grep -x -q -F kubelet-config-1.22; then
+      echo "Creating ConfigMap kubelet-config-1.24 ..."
+      kubectl -n kube-system get configmap kubelet-config-1.22 -o yaml \
+        | yq4 e '.metadata.name="kubelet-config-1.24"' \
+        | yq4 e 'del .metadata.creationTimestamp' \
+        | yq4 e 'del .metadata.resourceVersion' \
+        | yq4 e 'del .metadata.uid' \
+        | kubectl apply -f -
+    else
+      echo "ConfigMap kubelet-config-1.22 not found, assuming kubelet-config or kubelet-config-1.24 is already in place."
+    fi
 
-    echo "Creating Role kubeadm:kubelet-config-1.24 ..."
-    kubectl -n kube-system get role kubeadm:kubelet-config-1.22 -o yaml \
-      | yq4 e '.metadata.name="kubeadm:kubelet-config-1.24"' \
-      | yq4 e '.rules[0].resourceNames[0]="kubelet-config-1.24"' \
-      | yq4 e 'del .metadata.creationTimestamp' \
-      | yq4 e 'del .metadata.resourceVersion' \
-      | yq4 e 'del .metadata.uid' \
-      | kubectl apply -f -
+    if kubectl -n kube-system get role -o custom-columns=name:.metadata.name --no-headers | grep -x -q -F kubeadm:kubelet-config-1.22; then
+      echo "Creating Role kubeadm:kubelet-config-1.24 ..."
+      kubectl -n kube-system get role kubeadm:kubelet-config-1.22 -o yaml \
+        | yq4 e '.metadata.name="kubeadm:kubelet-config-1.24"' \
+        | yq4 e '.rules[0].resourceNames[0]="kubelet-config-1.24"' \
+        | yq4 e 'del .metadata.creationTimestamp' \
+        | yq4 e 'del .metadata.resourceVersion' \
+        | yq4 e 'del .metadata.uid' \
+        | kubectl apply -f -
+    else
+      echo "Role kubeadm:kubelet-config-1.22 not found, assuming kubeadm:kubelet-config or kubeadm:kubelet-config-1.24 is already in place."
+    fi
 
-    echo "Creating RoleBinding kubeadm:kubelet-config-1.24 ..."
-    kubectl -n kube-system get rolebinding kubeadm:kubelet-config-1.22 -o yaml \
-      | yq4 e '.metadata.name="kubeadm:kubelet-config-1.24"' \
-      | yq4 e '.roleRef.name="kubeadm:kubelet-config-1.24"' \
-      | yq4 e 'del .metadata.creationTimestamp' \
-      | yq4 e 'del .metadata.resourceVersion' \
-      | yq4 e 'del .metadata.uid' \
-      | kubectl apply -f -
+    if kubectl -n kube-system get rolebinding -o custom-columns=name:.metadata.name --no-headers | grep -x -q -F kubeadm:kubelet-config-1.22; then
+      echo "Creating RoleBinding kubeadm:kubelet-config-1.24 ..."
+      kubectl -n kube-system get rolebinding kubeadm:kubelet-config-1.22 -o yaml \
+        | yq4 e '.metadata.name="kubeadm:kubelet-config-1.24"' \
+        | yq4 e '.roleRef.name="kubeadm:kubelet-config-1.24"' \
+        | yq4 e 'del .metadata.creationTimestamp' \
+        | yq4 e 'del .metadata.resourceVersion' \
+        | yq4 e 'del .metadata.uid' \
+        | kubectl apply -f -
+    else
+      echo "RoleBinding kubeadm:kubelet-config-1.22 not found, assuming kubeadm:kubelet-config or kubeadm:kubelet-config-1.24 is already in place."
+    fi
 
     rm -rf "${tmpdir}"
   } >> "${LOG_FILE}" 2>&1
