@@ -840,9 +840,9 @@ The following actions may be useful if errors are encountered when executing `iu
 
 ### 4. Specific scenarios
 
- 1. IUF workflow loops while rebuilding a management node.
+ 1. IUF workflow may loop while rebuilding a management node.
 
-    - IUF loops while waiting for CFS to complete configuration of a management node. This step might not be completing because the CFS error count for the node has exceeded the   maximum retry count for applying the configuration.
+    - IUF loops while waiting for CFS to complete configuration of a management node. This step might not be completing because the CFS error count for the node has exceeded the maximum retry count for applying the configuration.
     - Look at the Ansible logs for the CFS configuration operation for that node and attempt to rectify the problem.
     - After resolving the problem, update the default error count in CFS using the below command.
 
@@ -850,9 +850,9 @@ The following actions may be useful if errors are encountered when executing `iu
          ncn# cray cfs components update --enabled true --state '[]' --error-count 0 --format json $XNAME
          ```
 
-    - Once the error count is reset, the CFS batcher pod will restart configuration for the node. If it does not start within a few minutes,
-   check the CFS batcher pod log to determine whether CFS batcher is doing back off logic due to too many failures from CFS batches it has started.
-   See [CFS troubleshooting guide](../../operations/configuration_management/Troubleshoot_CFS_Sessions_Failing_to_Start.md)
+    - Once the error count is reset, the CFS will restart configuration for the node. If it does not start within a few minutes,
+   check whether CFS is unable to start the configuration again for the node due to any other issue. Rectify the problem by referring to the
+   [CFS troubleshooting guide](../../operations/configuration_management/Troubleshoot_CFS_Sessions_Failing_to_Start.md)
 
 ## Install and Upgrade Observability Framework
 
