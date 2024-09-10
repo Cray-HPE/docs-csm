@@ -844,10 +844,10 @@ The following actions may be useful if errors are encountered when executing `iu
 
     - IUF loops while waiting for CFS to complete configuration of a management node. This step might not be completing because the CFS error count for the node has exceeded the maximum retry count for applying the configuration.
     - Look at the Ansible logs for the CFS configuration operation for that node and attempt to rectify the problem.
-    - After resolving the problem, update the default error count in CFS using the below command.
+    - After resolving the problem, update the default error count in CFS using the below command. Run this command form a master or worker node. Set environment variable `XNAME` to be the xname of the node where the CFS configuration has failed.
 
          ```bash
-         ncn# cray cfs components update --enabled true --state '[]' --error-count 0 --format json $XNAME
+         cray cfs components update --enabled true --state '[]' --error-count 0 --format json $XNAME
          ```
 
     - Once the error count is reset, the CFS will restart configuration for the node. If it does not start within a few minutes,
