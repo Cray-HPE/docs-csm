@@ -399,13 +399,14 @@ Example output:
    This is a major upgrade with many new features and bug fixes. For complete list please refer to the link [CHANGELOG](https://github.com/kyverno/kyverno/blob/main/CHANGELOG.md)
 
 2. Container image signing and verification using Kyverno policy.
-   
+
 ### Container image signing and verification using Kyverno policy
 
 Container images are signed and verified using a Kyverno policy for software supply chain security. For more information, refer to the link
 [Verify image signatures](https://kyverno.io/docs/writing-policies/verify-images)
 
-1. **Verify CSM container images signed by HPE** : HPE ships container images as part of CSM. These are signed using private keys. Corresponding public keys are available as Kubernetes secrets which are shipped as part of CSM. This policy uses the public keys to verify the image signatures for their authenticity to make sure that they are not tampered.
+1. **Verify CSM container images signed by HPE** : HPE ships container images as part of CSM. These are signed using private keys. Corresponding public keys are available as Kubernetes
+   secrets which are shipped as part of CSM. This policy uses the public keys to verify the image signatures for their authenticity to make sure that they are not tampered.
 
     Sample policy:
 
@@ -465,8 +466,9 @@ Container images are signed and verified using a Kyverno policy for software sup
       validationFailureAction: Audit
       webhookTimeoutSeconds: 30    
     ```
+
     The unverified images will be reported as violations in the policy report at namespace level. These can be viewed using the following command.
-   
+
     ```bash
     kubectl get polr -n <namespace>
     ```
@@ -495,8 +497,9 @@ Container images are signed and verified using a Kyverno policy for software sup
     ```bash
     kubectl get polr cpol-check-image -n <namespace> -o jsonpath='{.results[?(@.result=="fail")]}' | jq .
     ```
+
     Sample output:
-   
+
     ```text
     kubectl get polr cpol-check-image -n cosign-test -o jsonpath='{.results[?(@.result=="fail")]}' | jq .
     {
@@ -521,11 +524,13 @@ Container images are signed and verified using a Kyverno policy for software sup
       }
     }    
     ```
-    **Note**: Not all the non CSM images are signed today. Those images can be reported as policy violations. 
-2.  **Allow deployment of unsigned container images listed as exceptions** : Customers who want to use unsigned container images (signed by neither HPE nor self) as part of CSM, can add them as exceptions in the Kyverno policy, so that they are allowed without violations in the policy report. The policy can be modified using `Kubectl edit` command or by using cluster management tools like `Rancher` and `OpenShift`.
+
+    **Note**: Not all the non CSM images are signed today. Those images can be reported as policy violations.
+   
+3.  **Allow deployment of unsigned container images listed as exceptions** : Customers who want to use unsigned container images (signed by neither HPE nor self) as part of CSM, can add them as exceptions in the Kyverno policy, so that they are allowed without violations in the policy report. The policy can be modified using `Kubectl edit` command or by using cluster management tools like `Rancher` and `OpenShift`.
 
     Sample policy:
-      
+
     ```yaml
     apiVersion: kyverno.io/v1
     kind: ClusterPolicy
@@ -588,7 +593,7 @@ Container images are signed and verified using a Kyverno policy for software sup
     [Adding Exceptions](https://release-1-9-0.kyverno.io/docs/writing-policies/match-exclude/#match-statements)
 
     Command to view policyreports:
-  
+
     ```bash
     kubectl get polr -n <namespace>
     ```
@@ -617,8 +622,9 @@ Container images are signed and verified using a Kyverno policy for software sup
     ```bash
     kubectl get polr cpol-check-image -n <namespace> -o jsonpath='{.results[?(@.result=="pass")]}' | jq .
     ```
+
     Sample output:
-   
+
     ```text
     kubectl get polr cpol-check-image -n cosign-test -o jsonpath='{.results[?(@.result=="pass")]}' | jq .
     {
@@ -643,11 +649,11 @@ Container images are signed and verified using a Kyverno policy for software sup
       }
     }   
     ```
-    
-3. **Verify CSM container images signed by customer** : Customers who run their own container images as part of CSM can make use of this policy to verify image signatures. They can use their own private key to sign the container images and use the corresponding public key to verify their authenticity to make sure that they are not tampered.
+
+4. **Verify CSM container images signed by customer** : Customers who run their own container images as part of CSM can make use of this policy to verify image signatures. They can use their own private key to sign the container images and use the corresponding public key to verify their authenticity to make sure that they are not tampered.
 
     Sample policy:
-      
+
     ```yaml
     apiVersion: kyverno.io/v1
     kind: ClusterPolicy
@@ -711,7 +717,7 @@ Container images are signed and verified using a Kyverno policy for software sup
 
     The container images succesfully signed by the Customers using their own private key, won't be reported as policy violations in the policy report.
     To understand more about adding keys as secrets, refer to this link: [Keys as secrets](https://release-1-10-0.kyverno.io/docs/writing-policies/verify-images/sigstore/#:~:text=YAML-,Note,-The%20public%20key)
-  
+
     ```bash
     kubectl get polr -n <namespace>
     ```
@@ -740,8 +746,9 @@ Container images are signed and verified using a Kyverno policy for software sup
     ```bash
     kubectl get polr cpol-check-image -n <namespace> -o jsonpath='{.results[?(@.result=="pass")]}' | jq .
     ```
+
     Sample output:
-   
+
     ```text
     kubectl get polr cpol-check-image -n cosign-test -o jsonpath='{.results[?(@.result=="pass")]}' | jq .
     {
@@ -766,18 +773,19 @@ Container images are signed and verified using a Kyverno policy for software sup
       }
     }   
     ```
+
 How to enable and disable the image signature verification policy.
 
 Steps to be followed.
 
 1. Take backup of the policy.
-   
+
 ```bash
 kubectl get cpol check-image -o yaml > check-image-backup.yaml
 ```
 
 2. Disable the policy.
-   
+
 ```bash
 kubectl delete cpol check-image
 ```
