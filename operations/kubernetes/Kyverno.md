@@ -652,7 +652,7 @@ Container images are signed and verified using a Kyverno policy for software sup
     }
     ```
 
-4. **Verify CSM container images signed by customer** : Customers who run their own container images as part of CSM can make use of this policy to verify image signatures.
+3. **Verify CSM container images signed by customer** : Customers who run their own container images as part of CSM can make use of this policy to verify image signatures.
    They can use their own private key to sign the container images and use the corresponding public key to verify their authenticity to make sure that they are not tampered.
 
     Sample policy:
@@ -777,7 +777,7 @@ Container images are signed and verified using a Kyverno policy for software sup
     }   
     ```
 
-How to enable and disable the image signature verification policy.
+#### How to enable and disable the image signature verification policy.
 
  Steps to be followed.
 
