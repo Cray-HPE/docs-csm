@@ -783,21 +783,21 @@ Container images are signed and verified using a Kyverno policy for software sup
 
  1. Take backup of the policy.
 
-   ```bash
-   kubectl get cpol check-image -o yaml > check-image-backup.yaml
-   ```
+    ```bash
+    kubectl get cpol check-image -o yaml > check-image-backup.yaml
+    ```
 
  2. Disable the policy.
 
-   ```bash
-   kubectl delete cpol check-image
-   ```
+    ```bash
+    kubectl delete cpol check-image
+    ```
 
  3. Enable the policy backed-up in step 1.
 
-   ```bash
-   kubectl apply <path to policy>/check-image-backup.yaml
-   ```
+    ```bash
+    kubectl apply <path to policy>/check-image-backup.yaml
+    ```
 
 ## Known issues
 
