@@ -519,7 +519,7 @@ https://kyverno.io/docs/writing-policies/verify-images/
       }
     }    
     ```
-	**Note**: Not all the non CSM images are signed today. Those images can be reported as policy violations. 
+    **Note**: Not all the non CSM images are signed today. Those images can be reported as policy violations. 
 2.  **Allow deployment of unsigned container images listed as exceptions** : Customers who want to use unsigned container images (signed by neither HPE nor self) as part of CSM, can add them as exceptions in the kyverno policy, so that they are allowed without violations in the policy report.   The pollicy can be modified using 'kubectl edit' or by using cluster management tools like Rancher and OpenShift.
 
     Sample policy:
@@ -583,9 +583,9 @@ https://kyverno.io/docs/writing-policies/verify-images/
     ```   
 
     The unsigned container images added as exceptions won't be reported as policy violations in the policy report. To understand more about adding exceptions, refer to this link
-	https://release-1-9-0.kyverno.io/docs/writing-policies/match-exclude/#match-statements
-	
-	Command to view policyreports:
+    https://release-1-9-0.kyverno.io/docs/writing-policies/match-exclude/#match-statements
+
+    Command to view policyreports:
   
     ```bash
     kubectl get polr -n <namespace>
@@ -708,8 +708,8 @@ https://kyverno.io/docs/writing-policies/verify-images/
     ```   
 
     The container images succesfully signed by the Customers using their own private key, won't be reported as policy violations in the policy report.
-	To understand more about adding keys as secrets, refer to this link:
-	https://release-1-10-0.kyverno.io/docs/writing-policies/verify-images/sigstore/#:~:text=YAML-,Note,-The%20public%20key
+    To understand more about adding keys as secrets, refer to this link:
+    https://release-1-10-0.kyverno.io/docs/writing-policies/verify-images/sigstore/#:~:text=YAML-,Note,-The%20public%20key
   
     ```bash
     kubectl get polr -n <namespace>
