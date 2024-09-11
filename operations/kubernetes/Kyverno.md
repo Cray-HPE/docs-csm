@@ -528,8 +528,8 @@ Container images are signed and verified using a Kyverno policy for software sup
     **Note**: Not all the non CSM images are signed today. Those images can be reported as policy violations.
 
 2. **Allow deployment of unsigned container images listed as exceptions** : Customers who want to use unsigned container images (signed by neither HPE nor self) as part of CSM,
-   can add them as exceptions in the Kyverno policy, so that they are allowed without violations in the policy report. The policy can be modified using `Kubectl edit` command or
-   by using cluster management tools like `Rancher` and `OpenShift`.
+   can add them as exceptions in the Kyverno policy, so that they are allowed without violations in the policy report. The policy can be modified using `Kubectl edit` command
+   (recommended to take backup of the policy before editing) or by using cluster management tools like `Rancher` and `OpenShift`.
 
     Sample policy:
 
@@ -652,7 +652,7 @@ Container images are signed and verified using a Kyverno policy for software sup
     }
     ```
 
-3. **Verify CSM container images signed by customer** : Customers who run their own container images as part of CSM can make use of this policy to verify image signatures.
+4. **Verify CSM container images signed by customer** : Customers who run their own container images as part of CSM can make use of this policy to verify image signatures.
    They can use their own private key to sign the container images and use the corresponding public key to verify their authenticity to make sure that they are not tampered.
 
     Sample policy:
@@ -779,25 +779,25 @@ Container images are signed and verified using a Kyverno policy for software sup
 
 How to enable and disable the image signature verification policy.
 
-  Steps to be followed.
+ Steps to be followed.
 
-  1. Take backup of the policy.
+   1. Take backup of the policy.
 
-  ```bash
-  kubectl get cpol check-image -o yaml > check-image-backup.yaml
-  ```
+   ```bash
+   kubectl get cpol check-image -o yaml > check-image-backup.yaml
+   ```
 
-  2. Disable the policy.
+   2. Disable the policy.
 
-  ```bash
-  kubectl delete cpol check-image
-  ```
+   ```bash
+   kubectl delete cpol check-image
+   ```
 
-  3. Enable the policy backed-up in step 1.
+   3. Enable the policy backed-up in step 1.
 
-  ```bash
-  kubectl apply <path to policy>/check-image-backup.yaml
-  ```
+   ```bash
+   kubectl apply <path to policy>/check-image-backup.yaml
+   ```
 
 ## Known issues
 
