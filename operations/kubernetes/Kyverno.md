@@ -405,7 +405,7 @@ Example output:
 Container images are signed and verified using a Kyverno policy for software supply chain security. For more information, refer to the link
 https://kyverno.io/docs/writing-policies/verify-images
 
-1. **Verify CSM container images signed by HPE** : HPE ships container images as part of CSM. These are signed using private keys. Corresponding public keys are available as kubernetes secrets which are shipped as part of CSM. This policy uses the public keys to verify the image signatures for their authenticity to make sure that they are not tampered.
+1. **Verify CSM container images signed by HPE** : HPE ships container images as part of CSM. These are signed using private keys. Corresponding public keys are available as Kubernetes secrets which are shipped as part of CSM. This policy uses the public keys to verify the image signatures for their authenticity to make sure that they are not tampered.
 
     Sample policy:
 
@@ -522,7 +522,7 @@ https://kyverno.io/docs/writing-policies/verify-images
     }    
     ```
     **Note**: Not all the non CSM images are signed today. Those images can be reported as policy violations. 
-2.  **Allow deployment of unsigned container images listed as exceptions** : Customers who want to use unsigned container images (signed by neither HPE nor self) as part of CSM, can add them as exceptions in the kyverno policy, so that they are allowed without violations in the policy report.   The pollicy can be modified using 'kubectl edit' or by using cluster management tools like Rancher and OpenShift.
+2.  **Allow deployment of unsigned container images listed as exceptions** : Customers who want to use unsigned container images (signed by neither HPE nor self) as part of CSM, can add them as exceptions in the Kyverno policy, so that they are allowed without violations in the policy report. The policy can be modified using Kubectl edit command or by using cluster management tools like "Rancher" and "OpenShift".
 
     Sample policy:
       
