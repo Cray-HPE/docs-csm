@@ -5155,11 +5155,15 @@ Message describing errors or incompleteness in a Session Template.
 
 Name of the Session.
 
+The name must:
+* Use only letters, digits, periods (.), dashes (-), and underscores (_).
+* Begin and end with a letter or digit.
+
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|Name of the Session.|
+|*anonymous*|string|false|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
 
 <h2 id="tocS_V2SessionOperation">V2SessionOperation</h2>
 <!-- backwards compatibility -->
@@ -5223,7 +5227,7 @@ required if the session_limit_required option is true.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+|name|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
 |operation|[V2SessionOperation](#schemav2sessionoperation)|true|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
 |template_name|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
 |limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.|
@@ -5521,7 +5525,7 @@ A Session object
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|[V2SessionName](#schemav2sessionname)|true|none|Name of the Session.|
+|name|[V2SessionName](#schemav2sessionname)|true|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
 |tenant|[V2TenantName](#schemav2tenantname)|false|none|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same.|
 |operation|[V2SessionOperation](#schemav2sessionoperation)|true|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
 |template_name|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
@@ -5907,7 +5911,7 @@ oneOf
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
 
 xor
 
@@ -6103,7 +6107,7 @@ oneOf
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
 
 xor
 
@@ -6201,7 +6205,7 @@ oneOf
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
 
 xor
 
@@ -6406,7 +6410,7 @@ All Components part of this Session will be patched.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |ids|[EmptyStringNullable](#schemaemptystringnullable)|false|none|An empty string value.|
-|session|[V2SessionName](#schemav2sessionname)|true|none|Name of the Session.|
+|session|[V2SessionName](#schemav2sessionname)|true|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
 
 <h2 id="tocS_V2ComponentsUpdate">V2ComponentsUpdate</h2>
 <!-- backwards compatibility -->
