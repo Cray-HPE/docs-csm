@@ -765,7 +765,28 @@ https://kyverno.io/docs/writing-policies/verify-images/
       }
     }   
     ```
-    
+How to enable and disable the image signature verification policy.
+
+Steps to be followed.
+
+1. Take backup of the policy.
+   
+```bash
+kubectl get cpol check-image -o yaml > check-image-backup.yaml
+```
+
+2. Disable the policy.
+   
+```bash
+kubectl delete cpol check-image
+```
+
+3. Enable the policy backed-up in step 1.
+
+```bash
+kubectl apply <path to policy>/check-image-backup.yaml
+```
+
 ## Known issues
 
 * [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)
