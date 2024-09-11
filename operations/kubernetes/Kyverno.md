@@ -527,7 +527,7 @@ Container images are signed and verified using a Kyverno policy for software sup
 
     **Note**: Not all the non CSM images are signed today. Those images can be reported as policy violations.
 
-3.  **Allow deployment of unsigned container images listed as exceptions** : Customers who want to use unsigned container images (signed by neither HPE nor self) as part of CSM,
+2. **Allow deployment of unsigned container images listed as exceptions** : Customers who want to use unsigned container images (signed by neither HPE nor self) as part of CSM,
    can add them as exceptions in the Kyverno policy, so that they are allowed without violations in the policy report. The policy can be modified using `Kubectl edit` command or
    by using cluster management tools like `Rancher` and `OpenShift`.
 
@@ -652,7 +652,7 @@ Container images are signed and verified using a Kyverno policy for software sup
     }
     ```
 
-5. **Verify CSM container images signed by customer** : Customers who run their own container images as part of CSM can make use of this policy to verify image signatures.
+3. **Verify CSM container images signed by customer** : Customers who run their own container images as part of CSM can make use of this policy to verify image signatures.
    They can use their own private key to sign the container images and use the corresponding public key to verify their authenticity to make sure that they are not tampered.
 
     Sample policy:
