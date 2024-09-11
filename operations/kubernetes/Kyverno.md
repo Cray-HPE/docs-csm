@@ -777,23 +777,23 @@ Container images are signed and verified using a Kyverno policy for software sup
     }   
     ```
 
-#### How to enable and disable the image signature verification policy.
+#### How to enable and disable the image signature verification policy
 
  Steps to be followed.
 
-   1. Take backup of the policy.
+ 1. Take backup of the policy.
 
    ```bash
    kubectl get cpol check-image -o yaml > check-image-backup.yaml
    ```
 
-   2. Disable the policy.
+ 2. Disable the policy.
 
    ```bash
    kubectl delete cpol check-image
    ```
 
-   3. Enable the policy backed-up in step 1.
+ 3. Enable the policy backed-up in step 1.
 
    ```bash
    kubectl apply <path to policy>/check-image-backup.yaml
