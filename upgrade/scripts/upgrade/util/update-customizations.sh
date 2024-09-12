@@ -30,7 +30,9 @@ trap 'err_report' ERR
 set -o pipefail
 
 usage() {
-  echo >&2 "usage: ${0##*/} [-i] [CUSTOMIZATIONS-YAML]"
+  echo >&2 "Update customizations during upgrade, using current customizations (from live system) and"
+  echo >&2 "    new customizations (from upgrade tarball). With -i, update CUSTOMIZATIONS-YAML in place."
+  echo >&2 "usage: ${0##*/} [-i] CUSTOMIZATIONS-YAML CUSTOMIZATIONS-YAML-FROM-UPGRADE-TARBALL"
   exit 1
 }
 
@@ -52,9 +54,10 @@ done
 
 set -- "${args[@]}"
 
-[[ $# -eq 1 ]] || usage
+[[ $# -eq 2 ]] || usage
 
 customizations="$1"
+upgrade_customizations="$2"
 
 if [[ ! -f $customizations ]]; then
   echo >&2 "error: no such file: $customizations"
@@ -170,6 +173,9 @@ yq4 -i eval 'del(.spec.kubernetes.services.*.cray-service.sqlCluster)' "$c"
 yq4 -i eval 'del(.spec.kubernetes.services.cray-hms-reds)' "$c"
 # Add customizations for cray-hms-discovery for it to get the River credential sealed secret:
 yq4 -i eval '.spec.kubernetes.services.cray-hms-discovery.sealedSecrets = ["{{ kubernetes.sealed_secrets.cray_reds_credentials | toYaml }}"]' "$c"
+
+# kyverno-policy did not have configurable customization prior to 1.6. Import kyverno-policy.checkImageSettings from upgrade customizations file during upgrade.
+yq4 -i eval ".spec.kubernetes.services[\"kyverno-policy\"].checkImagePolicy += (load(\"${upgrade_customizations}\") | .spec.kubernetes.services[\"kyverno-policy\"].checkImagePolicy)" "$c"
 
 # lower cpu request for tds systems (4 workers)
 num_workers=$(kubectl get nodes | grep ncn-w | wc -l)
