@@ -106,6 +106,9 @@ For example:
 "node_list": ["x3000c0s19b1n0", "x3000c0s19b1n1", "x3000c0s19b2n0"]
 ```
 
+NIDs are not supported.
+The `reject_nids` [BOS Option](Options.md) can be enabled in order to prevent accidental creation of session templates that reference NIDs.
+
 #### Node groups
 
 `node_groups` maps to a list of groups defined by the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm).
