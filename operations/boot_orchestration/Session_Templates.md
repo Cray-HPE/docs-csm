@@ -89,7 +89,7 @@ The `node_list`, `node_groups`, or `node_role` values can each be specified as a
 
 #### Node list
 
-`node_list` maps to a list of nodes identified by component names (xnames).
+`node_list` maps to a list of nodes identified by component names (xnames). NIDs are not supported.
 
 For example:
 
