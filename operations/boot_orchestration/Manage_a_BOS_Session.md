@@ -45,6 +45,7 @@ Sessions also support several other optional arguments:
 
 * `--name`: The session name can be specified. If not set, a random UUID will be generated for the name.
 * `--limit`: Limits the nodes that BOS will run against. For more information see [Limit the Scope of a BOS Session](Limit_the_Scope_of_a_BOS_Session.md)
+    * If the `session_limit_required` [BOS Option](Options.md) is enabled, then the `limit` argument is not optional.
 * `--stage`: Sets `staged_state` for components rather than `desired_state`. This has no immediate effect, but can be applied at a later time. For more information see [Stage Changes with BOS](Stage_Changes_with_BOS.md)
 
 ## List all sessions
