@@ -36,7 +36,7 @@ IMS creates and customizes existing boot images and maintains metadata about the
 
     Manage the set of nodes set up for running remote jobs. These are jobs that are
     run on nodes outside of the set of Kubernetes worker nodes. They can be used to
-    offload work from the worker nodes, or match the archetecture of the images
+    offload work from the worker nodes, or match the architecture of the images
     being created or customized.
 
     The remote node must be fully configured and booted into the 'remote-node-image'

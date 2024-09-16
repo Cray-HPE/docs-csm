@@ -4097,6 +4097,7 @@ Update one or more of the BOS service options.
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
   "max_component_batch_size": 1000,
+  "reject_nids": true,
   "session_limit_required": true
 }
 ```
@@ -4125,6 +4126,7 @@ Update one or more of the BOS service options.
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
   "max_component_batch_size": 1000,
+  "reject_nids": true,
   "session_limit_required": true
 }
 ```
@@ -4327,6 +4329,7 @@ Retrieve the list of BOS service options.
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
   "max_component_batch_size": 1000,
+  "reject_nids": true,
   "session_limit_required": true
 }
 ```
@@ -4776,12 +4779,15 @@ List of links to other resources
 ```
 
 A node list that is required to have at least one node.
+Nodes must be specified by component name (xname). NIDs are not supported.
+If the reject_nids option is enabled, then Session Template creation or validation will fail if
+any of the boot sets contain a NodeList that appears to contain a NID.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|[[HardwareComponentName](#schemahardwarecomponentname)]|false|none|A node list that is required to have at least one node.|
+|*anonymous*|[[HardwareComponentName](#schemahardwarecomponentname)]|false|none|A node list that is required to have at least one node.<br>Nodes must be specified by component name (xname). NIDs are not supported.<br>If the reject_nids option is enabled, then Session Template creation or validation will fail if<br>any of the boot sets contain a NodeList that appears to contain a NID.|
 
 <h2 id="tocS_NodeGroupList">NodeGroupList</h2>
 <!-- backwards compatibility -->
@@ -4874,11 +4880,14 @@ Alternatively, the limit can be set to "*", which means no limit.
 
 An empty string or null value is the same as specifying no limit.
 
+If the reject_nids option is enabled, then Session creation will fail if its
+limit appears to contain a NID value.
+
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string¦null|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.|
+|*anonymous*|string¦null|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.<br><br>If the reject_nids option is enabled, then Session creation will fail if its<br>limit appears to contain a NID value.|
 
 <h2 id="tocS_SessionTemplateDescription">SessionTemplateDescription</h2>
 <!-- backwards compatibility -->
@@ -5230,7 +5239,7 @@ required if the session_limit_required option is true.
 |name|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
 |operation|[V2SessionOperation](#schemav2sessionoperation)|true|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
 |template_name|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.|
+|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.<br><br>If the reject_nids option is enabled, then Session creation will fail if its<br>limit appears to contain a NID value.|
 |stage|boolean|false|none|Set to stage a Session which will not immediately change the state of any Components.<br>The "applystaged" endpoint can be called at a later time to trigger the start of this Session.|
 |include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM).|
 
@@ -5386,7 +5395,7 @@ boot_sets field of the containing V2SessionTemplate.
 |type|[BootSetType](#schemabootsettype)|true|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.|
 |etag|[BootSetEtag](#schemabootsetetag)|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.|
 |kernel_parameters|[BootKernelParameters](#schemabootkernelparameters)|false|none|The kernel parameters to use to boot the nodes.|
-|node_list|[NodeList](#schemanodelist)|false|none|A node list that is required to have at least one node.|
+|node_list|[NodeList](#schemanodelist)|false|none|A node list that is required to have at least one node.<br>Nodes must be specified by component name (xname). NIDs are not supported.<br>If the reject_nids option is enabled, then Session Template creation or validation will fail if<br>any of the boot sets contain a NodeList that appears to contain a NID.|
 |node_roles_groups|[NodeRoleList](#schemanoderolelist)|false|none|Node role list. Allows actions against nodes with associated roles.|
 |node_groups|[NodeGroupList](#schemanodegrouplist)|false|none|Node group list. Allows actions against associated nodes by logical groupings.|
 |arch|string|false|none|The node architecture to target. Filters nodes that are not part of matching architecture from being targeted by boot actions. This value should correspond to HSM component 'Arch' field exactly. For reasons of backwards compatibility, all HSM nodes that are of type Unknown are treated as being of type X86.|
@@ -5529,7 +5538,7 @@ A Session object
 |tenant|[V2TenantName](#schemav2tenantname)|false|none|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same.|
 |operation|[V2SessionOperation](#schemav2sessionoperation)|true|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
 |template_name|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.|
+|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.<br><br>If the reject_nids option is enabled, then Session creation will fail if its<br>limit appears to contain a NID value.|
 |stage|boolean|false|none|Set to stage a Session which will not immediately change the state of any Components.<br>The "applystaged" endpoint can be called at a later time to trigger the start of this Session.|
 |components|string|false|none|A comma-separated list of nodes, representing the initial list of nodes<br>the Session should operate against.  The list will remain even if<br>other Sessions have taken over management of the nodes.|
 |include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM).|
@@ -6578,6 +6587,7 @@ Mapping from Component staged Session statuses to Components with that status.
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
   "max_component_batch_size": 1000,
+  "reject_nids": true,
   "session_limit_required": true
 }
 
@@ -6601,5 +6611,6 @@ Options for the Boot Orchestration Service.
 |polling_frequency|integer|false|none|How frequently the BOS operators check Component state for needed actions (in seconds)|
 |default_retry_policy|integer|false|none|The default maximum number attempts per node for failed actions.|
 |max_component_batch_size|integer|false|none|The maximum number of Components that a BOS operator will process at once. 0 means no limit.|
+|reject_nids|boolean|false|none|If true, then BOS will attempt to prevent Sessions and Session Templates that reference NIDs (which BOS does not support).<br>Specifically, if this option is true, then:<br>- When creating a Session, if the Session limit or a Session Template node list appear to contain NID values, then Session creation will fail.<br>- When creating a Session Template, if a node list appears to contain a NID value, then the Session Template creation will fail.<br>- When validating an existing Session Template, if a node list appears to contain a NID value, then the validation will report an error.<br><br>This option does NOT have an effect on Sessions that were created prior to it being enabled (even if they have not yet started).|
 |session_limit_required|boolean|false|none|If true, Sessions cannot be created without specifying the limit parameter.|
 
