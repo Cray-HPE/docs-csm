@@ -31,7 +31,7 @@ Refer to that table and any corresponding product documents before continuing to
     iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run -e pre-install-check
     ```
 
-> **`IMPORTANT`*** Ensure that the `docs-csm-latest.noarch.rpm` and `libcsm-latest.noarch.rpm` are available at path `/root/<rpm>` before executing the above command.
+> **`IMPORTANT`*** If Upgrading CSM manually , Ensure that the `docs-csm-latest.noarch.rpm` and `libcsm-latest.noarch.rpm` are available at path `/root/<rpm>` before executing the above command.
 
 Once this step has completed:
 
