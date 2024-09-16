@@ -39,7 +39,7 @@ This section defines environment variables and directory content that is used th
    [latest version of `docs-csm`](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/update_product_stream/README.md#check-for-latest-documentation)
     is installed for the target CSM version being installed or upgraded.
 
-    **`NOTE`** This subsection is optional and can be skipped if upgrading CSM through IUF.
+    **`NOTE`** When using IUF to upgrade CSM, please skip this subsection.
 
     For example: when upgrading from CSM version 1.5.0 to version 1.5.1, install `docs-csm-1.5.1.noarch`
 
