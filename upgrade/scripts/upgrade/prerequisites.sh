@@ -489,7 +489,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     # NOTE:  There are currently no sealed secrets being added so we are skipping the sealed secrets steps
 
     cp "${CUSTOMIZATIONS_YAML}" "${CUSTOMIZATIONS_YAML}.bak"
-    . "${locOfScript}/util/update-customizations.sh" -i "${CUSTOMIZATIONS_YAML}"
+    . "${locOfScript}/util/update-customizations.sh" -i "${CUSTOMIZATIONS_YAML}" "${CSM_ARTI_DIR}/shasta-cfg/customizations.yaml"
 
     # rename customizations file so k8s secret name stays the same
     cp "${CUSTOMIZATIONS_YAML}" customizations.yaml
