@@ -730,10 +730,10 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
-    # The actions below only need to happen iff we are on 0.14.1 if we're
-    # already at 1.5.5+ the crd ownership changes makes this logic impossible to
+    # The actions below only need to happen iff we are on 1.5.5. If we're
+    # already at 1.12.9+ the crd ownership changes makes this logic impossible to
     # work due to helm hooks. Making this work on both isn't really worth the
-    # time so just constrain this block of logic to 0.14.1 where we know its
+    # time so just constrain this block of logic to 1.5.5 where we know its
     # needed.
     gate="1.5.5"
     found=$(helm list -n cert-manager --filter 'cray-certmanager$' | awk '/deployed/ {print $10}')
@@ -832,7 +832,7 @@ EOF
       done
 
       platform="${CSM_MANIFESTS_DIR}/platform.yaml"
-      for chart in cray-certmanager cray-certmanager-issuers; do
+      for chart in cray-drydock cray-certmanager cray-certmanager-issuers; do
         printf "    -\n" >> "${tmp_manifest}"
         yq r "${platform}" 'spec.charts.(name=='${chart}')' | sed 's/^/      /' >> "${tmp_manifest}"
       done
