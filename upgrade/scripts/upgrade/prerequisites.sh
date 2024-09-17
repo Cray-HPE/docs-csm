@@ -756,6 +756,22 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
       fi
     fi
 
+    # cert-manager will need to be upgraded if cray-drydock version is less than 2.18.4.
+    # This will only be the case in some CSM 1.6 to CSM 1.6 upgrades.
+    # It only needs to be checked if cert-manager is not already being upgraded.
+    if [ "${needs_upgrade}" -eq 0 ]; then
+      drydock_vers=$(helm get metadata -n loftsman cray-drydock -o json | jq -r '.version')
+      major=2
+      minor=18
+      patch=4
+      if [[ $(echo "$drydock_vers" | cut -d. -f1) -eq $major ]] && [[ $(echo "$drydock_vers" | cut -d. -f2) -eq $minor ]] && [[ $(echo "$drydock_vers" | cut -d. -f3) -lt $patch ]]; then
+        ((needs_upgrade += 1))
+        echo "Cray-drydock version: $drydock_vers is installed and needs to be upgraded. Cray-drydock will be upgraded and the cert-manager namespace will be redeployed."
+      elif [[ $drydock_vers == "" ]]; then
+        ((needs_upgrade += 1))
+      fi
+    fi
+
     # Only run if we need to and detected not 1.12.9 or ""
     if [ "${needs_upgrade}" -gt 0 ]; then
       cmns="cert-manager"
