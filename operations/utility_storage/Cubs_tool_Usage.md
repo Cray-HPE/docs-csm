@@ -22,7 +22,7 @@
 (`ncn-s#`) Run the following command to see the tool usage.
 
 ```bash
-./cubs_tool.py --help
+/srv/cray/scripts/common/cubs_tool.py --help
 ```
 
 Example output:
@@ -49,7 +49,7 @@ optional arguments:
 * (`ncn-s#`) Version and status report
 
    ```bash
-   ./cubs_tool.py --report
+   /srv/cray/scripts/common/cubs_tool.py --report
    ```
 
    Potential output:
@@ -108,7 +108,7 @@ optional arguments:
 * (`ncn-s#`) Upgrade check.
 
    ```bash
-    ./cubs_tool.py --version 16.2.10 --registry localhost
+    /srv/cray/scripts/common/cubs_tool.py --version 16.2.10 --registry localhost
     ```
 
    Potential output:
@@ -120,13 +120,13 @@ optional arguments:
 * (`ncn-s#`) Upgrade.
 
    ```bash
-   ./cubs_tool.py --version 16.2.10 --registry localhost --upgrade
+   /srv/cray/scripts/common/cubs_tool.py --version 16.2.10 --registry localhost --upgrade
    ```
 
 * (`ncn-s#`) In-family upgrade.
 
    ```bash
-   ./cubs_tool.py --version 16.2.10 --registry localhost --upgrade
+   /srv/cray/scripts/common/cubs_tool.py --version 16.2.10 --registry localhost --upgrade
    ```
 
 ## Troubleshooting
