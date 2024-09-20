@@ -1,10 +1,10 @@
 # Utility Storage
 
 - [Utility Storage](#utility-storage)
-  - [Overview](#overview)
-    - [Key Concepts](#key-concepts)
-  - [Storage tools and information references](#storage-tools-and-information-references)
-  - [Storage troubleshooting references](#storage-troubleshooting-references)
+    - [Overview](#overview)
+        - [Key Concepts](#key-concepts)
+    - [Storage tools and information references](#storage-tools-and-information-references)
+    - [Storage troubleshooting references](#storage-troubleshooting-references)
 
 ## Overview
 
@@ -54,7 +54,7 @@ Ceph tools' usage documentation
 
 - [Ceph Orchestrator Usage](Ceph_Orchestrator_Usage.md)
 - [Ceph Service Check Script Usage](Ceph_Service_Check_Script_Usage.md)
-- [`cubs_tool.py` Usage](Cubs_tool_Usage.md)
+- [`ceph-upgrade-tool` Usage](Ceph_upgrade_tool_Usage.md)
 
 ## Storage troubleshooting references
 
