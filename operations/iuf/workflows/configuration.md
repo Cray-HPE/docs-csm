@@ -63,7 +63,7 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
     - Add a `system-name` entry to the `default` section. The Scalable Boot Projection Service (SBPS) uses this system name as the first part of the domain name. Do not add if not using SBPS.
       - See the procedure [Create a Session Template to Boot Compute Nodes with SBPS](../../../operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md#boot-set-rootfs_provider_passthrough-parameter) for more information.
         - If the `docs-csm` RPM is installed on a node, then this page can be found under `/usr/share/doc/csm/operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md`. See the 
-          `Boot set rootfs_provider_passthrough parameter` section for more details.
+          "Boot set `rootfs_provider_passthrough` parameter" section for more details.
         - Otherwise, it can be found under the appropriate release branch in <https://github.com/Cray-HPE/docs-csm>.
       - This documentation indicates how to find the `system-name`.
     - Add a `site-domain` entry to the `default` section. The Scalable Boot Projection Service (SBPS) uses this domain name as the second part of the domain name.  Do not add if not using SBPS.
