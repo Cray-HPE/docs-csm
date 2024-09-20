@@ -52,7 +52,7 @@ Ceph tools' usage documentation
 
 - [Ceph Orchestrator Usage](Ceph_Orchestrator_Usage.md)
 - [Ceph Service Check Script Usage](Ceph_Service_Check_Script_Usage.md)
-- [`cubs_tool` Usage](Cubs_tool_Usage.md)
+- [`ceph-upgrade-tool` Usage](Ceph_upgrade_tool_Usage.md)
 
 ## Storage troubleshooting references
 
