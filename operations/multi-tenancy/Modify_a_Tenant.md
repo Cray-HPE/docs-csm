@@ -202,13 +202,13 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
 
 1. (`ncn-mw#`) Clear the desired state.
 
-    - If only a single component is changing tenants, then use the following command:
+    - For a single component changing tenants, then use the following command:
 
         ```bash
         cray bos v2 components update --enabled true --clear-pending-state <xname> 
         ```
 
-    - If multiple components are changing tenants, then use the following command:
+    - For multiple components changing tenants, then use the following command:
 
         ```bash
         cray bos v2 components updatemany --enabled true --clear-pending-state --filter-ids <xname1>,<xname2>,...
@@ -218,13 +218,13 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
 
     Because the previous step cleared the desired state, the `stable` state indicates that the components are powered off.
 
-    - To check a single component, use the following command:
+    - For checking a single component, use the following command:
 
         ```bash
         cray bos v2 components describe <xname> --format json | jq .status.status
         ```
 
-    - To check multiple components, use the following command:
+    - For checking multiple components, use the following command:
 
         ```bash
         cray bos v2 components list --ids <xname1>,<xname2>,... --format json | jq '.[] | .status.status'
