@@ -14,6 +14,8 @@
 
 ### New hardware support
 
+* CSM 1.6.0 does not support servers with NVIDIA CPUs and GPUs. Systems with these servers should not be upgraded to CSM 1.6.0.
+
 ### Automation improvements
 
 ### Base platform component upgrades
@@ -41,6 +43,7 @@ For a list of all features with an announced removal target, see [Removals](intr
 
 ## Known issues
 
+* CSM 1.6.0 does not support servers with NVIDIA CPUs and GPUs. Systems with these servers should not be upgraded to CSM 1.6.0.
 * After updating Paradise BMC firmware, the `hmcollector-poll` service will lose event subscriptions and must be restarted
     * See [Updating Foxconn Paradise Nodes with FAS](operations/firmware/FAS_Paradise.md) for details on how to do this
 

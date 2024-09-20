@@ -4,6 +4,10 @@ This page will guide an administrator through installing Cray System Management 
 HPE Cray EX system. Fresh-installations on bare-metal or re-installations of CSM must follow
 this guide in order.
 
+## Release Notes
+
+Before installing review the [Release Notes](../RELEASE_NOTES.md)
+
 ## Bifurcated CAN notice
 
 Introduced in CSM 1.2, a major feature of CSM is the [Bifurcated CAN (BICAN)](../glossary.md#bifurcated-can-bican).
@@ -11,6 +15,11 @@ The BICAN is designed to separate administrative network traffic from user netwo
 More information can be found on the [BICAN Technical Summary](../operations/network/management_network/bican_technical_summary.md).
 Review the BICAN summary before continuing with the CSM install.
 For detailed BICAN documentation, see [BICAN Technical Details](../operations/network/management_network/bican_technical_details.md).
+
+## NVIDIA CPU and GPU notice
+
+Servers with NVIDIA CPUs and GPUs are not supported by CSM 1.6.0. Systems with these servers should
+not be installed with CSM 1.6.0
 
 ## High-level overview of CSM install
 
