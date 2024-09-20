@@ -202,13 +202,13 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
 
 1. (`ncn-mw#`) Clear the desired state.
 
-    - For a single component changing tenants, then use the following command:
+    - For a single component changing tenants, use the following command:
 
         ```bash
         cray bos v2 components update --enabled true --clear-pending-state <xname> 
         ```
 
-    - For multiple components changing tenants, then use the following command:
+    - For multiple components changing tenants, use the following command:
 
         ```bash
         cray bos v2 components updatemany --enabled true --clear-pending-state --filter-ids <xname1>,<xname2>,...
