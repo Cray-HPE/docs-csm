@@ -61,20 +61,23 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
     - Add a `default` section containing a `network_type: "cassini"` entry to designate that Cassini is the desired Slingshot network type to be used when executing CFS configurations later in the workflow
     - Add a `suffix` entry to the `default` section to append a string to the names of CFS configuration, image, and BOS session template artifacts created during the workflow to make them easy to identify
     - Add a `system-name` entry to the `default` section. The Scalable Boot Projection Service (SBPS) uses this system name as the first part of the domain name. Do not add if not using SBPS.
-      - See the procedure [Create a Session Template to Boot Compute Nodes with SBPS](../../../operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md#boot-set-rootfs_provider_passthrough-parameter) for more information.
-        - If the `docs-csm` RPM is installed on a node, then this page can be found under `/usr/share/doc/csm/operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md`. See the 
+      - See the procedure [Create a Session Template to Boot Compute Nodes with SBPS](../../../operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md#boot-set-rootfs_provider_passthrough-parameter)
+        for more information.
+        - If the `docs-csm` RPM is installed on a node, then this page can be found under `/usr/share/doc/csm/operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md`. See the
           "Boot set `rootfs_provider_passthrough` parameter" section for more details.
         - Otherwise, it can be found under the appropriate release branch in <https://github.com/Cray-HPE/docs-csm>.
       - This documentation indicates how to find the `system-name`.
-    - Add a `site-domain` entry to the `default` section. The Scalable Boot Projection Service (SBPS) uses this domain name as the second part of the domain name.  Do not add if not using SBPS.
-      - See the procedure [Create a Session Template to Boot Compute Nodes with SBPS](../../../operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md#boot-set-rootfs_provider_passthrough-parameter) for more information.
-        - If the `docs-csm` RPM is installed on a node, then this page can be found under `/usr/share/doc/csm/operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md`. See the `Boot set rootfs_provider_passthrough parameter` section for more details.
+    - Add a `site-domain` entry to the `default` section. The Scalable Boot Projection Service (SBPS) uses this domain name as the second part of the domain name. Do not add if not using SBPS.
+      - See the procedure [Create a Session Template to Boot Compute Nodes with SBPS](../../../operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md#boot-set-rootfs_provider_passthrough-parameter)
+        for more information.
+        - If the `docs-csm` RPM is installed on a node, then this page can be found under `/usr/share/doc/csm/operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md`.
+          See the "Boot set `rootfs_provider_passthrough` parameter"section for more details.
         - Otherwise, it can be found under the appropriate release branch in <https://github.com/Cray-HPE/docs-csm>.
       - This documentation indicates how to find the `site-domain`.
 
    Additional information on `site_vars.yaml` files can be found in the [Site and recipe variables](../IUF.md#site-and-recipe-variables) and [`update-vcs-config`](../stages/update_vcs_config.md) sections.
 
-    1. <create a `site_vars.yaml` file  with desired key/value pairs >
+    1. <create a `site_vars.yaml` file with desired key/value pairs >
 
     2. Ensure the `site_vars.yaml` file contents are formatted correctly. The following text is an example for verification purposes only.
 
@@ -112,7 +115,7 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
        ```
 
 SAT will not automatically replace the variables `system-name` and `site-domain` with the values defined in `site_vars.yaml` in the `${ADMIN_DIR}/bootprep/compute-and-uan-bootprep.yaml` file. Therefore, they must
-be replaced manually. Use the same directions listed above for finding the values for these variables to populate the site_vars.yaml file and use them in the `${ADMIN_DIR}/bootprep/compute-and-uan-bootprep.yaml` file.
+be replaced manually. Use the same directions listed above for finding the values for these variables to populate the `site_vars.yaml` file and use them in the `${ADMIN_DIR}/bootprep/compute-and-uan-bootprep.yaml` file.
 
 Once this step has completed:
 
