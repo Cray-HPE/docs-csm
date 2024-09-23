@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -199,7 +199,7 @@ if [[ $kafkaDeployed -ne 0 ]]; then
     echo "Patching cluster-kafka with new cpu request of $cluster_kafka_new_cpu_request (from $current_req)"
     kubectl patch kafkas cluster -n sma --type=json -p="[{'op' : 'replace', 'path':'/spec/kafka/resources/requests/cpu', 'value' : \"$cluster_kafka_new_cpu_request\" }]"
     sleep 10
-    until [[ $(kubectl -n sma get statefulset cluster-kafka -o json | jq -r '.status.updatedReplicas') -eq 3 ]]; do
+    until [[ $(kubectl -n sma get strimzipodset cluster-kafka -o json | jq -r '.status.readyPods') -eq 3 ]]; do
       echo "Waiting for cluster-kafka cluster to have three updated replicas..."
       sleep 30
     done
@@ -211,7 +211,7 @@ if [[ $kafkaDeployed -ne 0 ]]; then
     echo "Patching cluster-zookeeper statefulset with new cpu request of $cluster_zookeeper_new_cpu_request (from $current_req)"
     kubectl patch kafkas cluster -n sma --type=json -p="[{'op' : 'replace', 'path':'/spec/zookeeper/resources/requests/cpu', 'value' : \"$cluster_zookeeper_new_cpu_request\" }]"
     sleep 10
-    until [[ $(kubectl -n sma get statefulset cluster-zookeeper -o json | jq -r '.status.updatedReplicas') -eq 3 ]]; do
+    until [[ $(kubectl -n sma get strimzipodsetstatefulset cluster-zookeeper -o json | jq -r '.status.readyPods') -eq 3 ]]; do
       echo "Waiting for cluster-zookeeper cluster to have three updated replicas..."
       sleep 30
     done
