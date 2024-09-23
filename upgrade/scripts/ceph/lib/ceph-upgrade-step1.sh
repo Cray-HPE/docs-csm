@@ -78,6 +78,6 @@ rm -rf /var/lib/ceph/mds/ceph-*
 # stop the ceph-rgw daemon on all hosts as the command needs the cluster status to be in HEALTH_OK
 
 systemctl stop ceph-radosgw.target # again for each host then:
-ceph orch daemon add rgw site1.zone1 --placement="<host>"
+ceph orch daemon add rgw site1 zone1 --placement="<host>"
 
 # we may have to adjust this for fresh installs as per https://docs.ceph.com/en/latest/mgr/orchestrator/

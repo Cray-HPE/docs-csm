@@ -81,7 +81,7 @@
 1. `ncn-s00[1/2/3]#` Deploy Rados Gateway containers to the new nodes. The placement should be all nodes that Rados Gateway should be running on, not only the new node.
 
      ```bash
-     ceph orch apply rgw site1.zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
+     ceph orch apply rgw site1 zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
      ```
 
 1. `ncn-s00[1/2/3]#` Verify that Rados Gateway is running on the desired nodes.

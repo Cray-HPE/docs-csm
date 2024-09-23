@@ -84,7 +84,7 @@ This is automated as part of the install, but administrators may have to regener
    - Configure Rados Gateway containers with the complete list of nodes it should be running on:
 
      ```bash
-     ceph orch apply rgw site1.zone1 --placement="<node1 node2 node3 node4 ... >" --port=8080
+     ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >" --port=8080
      ```
 
 1. (`ncn-s00[1/2/3]#`) Verify Rados Gateway is running on the desired nodes.

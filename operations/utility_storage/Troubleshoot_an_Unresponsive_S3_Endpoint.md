@@ -90,7 +90,7 @@ Expected Responses: `2xx`, `3xx`
    1. `(ncn-s00[1/2/3]#)` Redeploy RGW and specify hostnames for the placement.
 
       ```bash
-        ceph orch apply rgw site1.zone1 --placement="<num-daemons> ncn-s001 ncn-s002 ncn-s003 ... ncn-s00X" --port=8080
+        ceph orch apply rgw site1 zone1 --placement="<num-daemons> ncn-s001 ncn-s002 ncn-s003 ... ncn-s00X" --port=8080
       ```
 
    1. Regenerate `haproxy.cfg` on all storage nodes and restart Haproxy.
