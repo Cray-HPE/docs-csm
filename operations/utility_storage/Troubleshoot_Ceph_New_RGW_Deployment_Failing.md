@@ -12,9 +12,7 @@ This procedure requires admin privileges.
 
 See [Collect Information about the Ceph Cluster](Collect_Information_About_the_Ceph_Cluster.md) for more information on how to interpret the output of the Ceph commands used in this procedure.
 
-1. Log on to the manager nodes via `ssh`.
-
-    The commands in the next step will need to be run on each manager node.
+1. Log on to a master node or `ncn-s001/2/3` to run the following commands.
 
 1. Check that the issue is occuring
 
