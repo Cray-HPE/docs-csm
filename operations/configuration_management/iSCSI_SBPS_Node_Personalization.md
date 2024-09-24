@@ -55,7 +55,7 @@ The LUN projection is over either HSN or NMN.
     3bb1fce7d7de4c2cce237ab19dd6f239158d6d07
     ```
 
-1. Create input file for CFS configuration
+1. Create an input file for the CFS configuration.
 
     ```bash
     cat << EOF > iscsi-sbps-targets-config.json
@@ -72,7 +72,7 @@ The LUN projection is over either HSN or NMN.
     EOF
     ```
 
-1. Create CFS configuration
+1. Create a CFS configuration.
 
     See [CFS Configuration](CFS_Configurations.md) for more information.
 
@@ -212,7 +212,7 @@ See [Troubleshooting](Track_the_Status_of_a_Session.md) for more information.
     cfs-b840455c-e919-4656-b64a-44d433f082dc-5d4jp
     ```
 
-1. View last line of Ansible container log.
+1. View the last line of Ansible container log.
 
     ```bash
     kubectl logs -n services "${CFSPOD}" -c ansible --tail=1
@@ -249,7 +249,7 @@ See [Troubleshooting](Track_the_Status_of_a_Session.md) for more information.
 1. Verify that the images/LUN mappings are created.
 
     Check to see if the `targetcli ls` output shows that `fileio` backing store are created for `rootfs` images,
-    along with corresponding iSCSI LUNs. These should have the `rootfs` id being mapped and network portals created (HSN and NMN).
+    along with corresponding iSCSI LUNs. These should have the `rootfs` ID being mapped and network portals created (HSN and NMN).
 
     ```bash
     targetcli ls
