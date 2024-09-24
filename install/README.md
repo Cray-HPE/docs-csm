@@ -6,7 +6,7 @@ this guide in order.
 
 ## Release Notes
 
-Before installing review the [Release Notes](../RELEASE_NOTES.md)
+Before installing, review the [Release Notes](../RELEASE_NOTES.md).
 
 ## Bifurcated CAN notice
 
