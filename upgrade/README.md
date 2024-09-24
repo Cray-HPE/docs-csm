@@ -3,11 +3,21 @@
 There are several alternative procedures to perform an upgrade of Cray Systems Management (CSM)
 software. Choose the appropriate procedure from the sections below.
 
+* [Release Notes](#release-notes)
 * [CSM major/minor version upgrade](#csm-majorminor-version-upgrade)
     * [Option 1: Upgrade CSM with additional HPE Cray EX software products](#option-1-upgrade-csm-with-additional-hpe-cray-ex-software-products)
     * [Option 2: Upgrade only additional HPE Cray EX software products](#option-2-upgrade-only-additional-hpe-cray-ex-software-products)
     * [Option 3: Upgrade only CSM](#option-3-upgrade-only-csm)
 * [CSM patch version upgrade](#csm-patch-version-upgrade)
+
+## Release Notes
+
+Before upgrading, review the [Release Notes](../RELEASE_NOTES.md)
+
+### NVIDIA CPU and GPU notice
+
+Servers with NVIDIA CPUs and GPUs are **not** supported by CSM 1.6.0. Systems with these servers should
+**not** be upgraded to CSM 1.6.0. Please upgrade to CSM 1.5.x, which supports these servers.
 
 ## CSM major/minor version upgrade
 
