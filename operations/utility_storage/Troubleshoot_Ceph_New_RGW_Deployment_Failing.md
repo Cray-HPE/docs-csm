@@ -18,7 +18,6 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
     1. Check the ceph admin tool
 
-        This command needs to be run on a manager node to determine if the issue is occurring.
 
         ```bash
         ceph -W cephadm
