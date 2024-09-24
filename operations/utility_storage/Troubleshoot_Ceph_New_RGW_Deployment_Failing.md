@@ -1,0 +1,128 @@
+# Troubleshoot Ceph New RGW Deployment Failing
+
+Troubleshoot an issue where a new RGW deployment is failing because of an address already in use. This bug corrupts the health of the Ceph cluster.
+
+Return the Ceph cluster to a healthy state by resolving issues with failing deployment.
+
+## Prerequisites
+
+This procedure requires admin privileges.
+
+## Procedure
+
+See [Collect Information about the Ceph Cluster](Collect_Information_About_the_Ceph_Cluster.md) for more information on how to interpret the output of the Ceph commands used in this procedure.
+
+1. Log on to the manager nodes via `ssh`.
+
+    The commands in the next step will need to be run on each manager node.
+
+1. Check that the issue is occuring
+
+    1. Check the ceph admin tool
+
+        This command needs to be run on a manager node to determine if the issue is occurring.
+
+        ```bash
+        ceph -W cephadm
+        ```
+
+        Example output:
+
+        ```
+            cluster:
+            id:     56cdd77c-7184-11ef-9f67-42010afc0104
+            health: HEALTH_WARN
+                    Failed to place 2 daemon(s)
+
+        services:
+            mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 7d)
+            mgr: ncn-s002.mneqjy(active, since 7d), standbys: ncn-s001.iwikun, ncn-s003.pkabeg
+            mds: 2/2 daemons up, 3 standby, 1 hot standby
+            osd: 18 osds: 18 up (since 7d), 18 in (since 7d)
+            rgw: 3 daemons active (3 hosts, 1 zones)
+
+        data:
+            volumes: 2/2 healthy
+            pools:   15 pools, 625 pgs
+            objects: 69.74k objects, 123 GiB
+            usage:   260 GiB used, 8.7 TiB / 9.0 TiB avail
+            pgs:     625 active+clean
+
+        io:
+            client:   8.4 KiB/s rd, 1.8 MiB/s wr, 5 op/s rd, 176 op/s wr
+
+        progress:
+            Updating rgw.site1.zone1 deployment (+2 -> 2) (2s)
+            [============================]
+
+
+        2024-09-20T19:04:56.337199+0000 mgr.ncn-s002.mneqjy [INF] Removing key for client.rgw.site1.zone1.ncn-s002.mgujxl
+        2024-09-20T19:04:56.371965+0000 mgr.ncn-s002.mneqjy [ERR] Failed while placing rgw.site1.zone1.ncn-s002.mgujxl on ncn-s002: cephadm exited with an error code: 1, stderr: Non-zero exit code 125 from /usr/bin/podman container inspect --format {{.State.Status}} ceph-56cdd77c-7184-11ef-9f67-42010afc0104-rgw-site1-zone1-ncn-s002-mgujxl
+        /usr/bin/podman: stderr Error: no such container ceph-56cdd77c-7184-11ef-9f67-42010afc0104-rgw-site1-zone1-ncn-s002-mgujxl
+        Non-zero exit code 125 from /usr/bin/podman container inspect --format {{.State.Status}} ceph-56cdd77c-7184-11ef-9f67-42010afc0104-rgw.site1.zone1.ncn-s002.mgujxl
+        /usr/bin/podman: stderr Error: no such container ceph-56cdd77c-7184-11ef-9f67-42010afc0104-rgw.site1.zone1.ncn-s002.mgujxl
+        Deploy daemon rgw.site1.zone1.ncn-s002.mgujxl ...
+        Verifying port 8080 ...
+        Cannot bind to IP 0.0.0.0 port 8080: [Errno 98] Address already in use
+        ERROR: TCP Port(s) '8080' required for rgw already in use
+        2024-09-20T19:04:56.410687+0000 mgr.ncn-s002.mneqjy [INF] Deploying daemon rgw.site1.zone1.ncn-s001.rdtynd on ncn-s001
+        2024-09-20T19:04:57.536533+0000 mgr.ncn-s002.mneqjy [INF] Removing key for client.rgw.site1.zone1.ncn-s001.rdtynd
+        2024-09-20T19:04:57.576404+0000 mgr.ncn-s002.mneqjy [ERR] Failed while placing rgw.site1.zone1.ncn-s001.rdtynd on ncn-s001: cephadm exited with an error code: 1, stderr: Non-zero exit code 125 from /usr/bin/podman container inspect --format {{.State.Status}} ceph-56cdd77c-7184-11ef-9f67-42010afc0104-rgw-site1-zone1-ncn-s001-rdtynd
+        /usr/bin/podman: stderr Error: no such container ceph-56cdd77c-7184-11ef-9f67-42010afc0104-rgw-site1-zone1-ncn-s001-rdtynd
+        Non-zero exit code 125 from /usr/bin/podman container inspect --format {{.State.Status}} ceph-56cdd77c-7184-11ef-9f67-42010afc0104-rgw.site1.zone1.ncn-s001.rdtynd
+        /usr/bin/podman: stderr Error: no such container ceph-56cdd77c-7184-11ef-9f67-42010afc0104-rgw.site1.zone1.ncn-s001.rdtynd
+        Deploy daemon rgw.site1.zone1.ncn-s001.rdtynd ...
+        Verifying port 8080 ...
+        Cannot bind to IP 0.0.0.0 port 8080: [Errno 98] Address already in use
+        ERROR: TCP Port(s) '8080' required for rgw already in use
+        ```
+
+        Note the name of the daemon for the next step, in this case `rgw.site1.zone1`
+
+1. Remove the conflicting daemon
+
+    This command will report a HEALTH\_WARN status. There will be a message below this warning indicating that a ceph-mon node or multiple ceph-mon nodes are out of quorum.
+
+    ```bash
+    ceph orch rm rgw.site1.zone1
+    ```
+
+    Example output:
+    ```
+    Removed service rgw.site1.zone1
+    ```
+
+1. Check the health of the Ceph cluster on one of the manager nodes.
+
+   Rerun the command to check the ceph admin tool
+
+    ```bash
+        ceph -W cephadm
+    ```
+
+
+    Healthy example output:
+    ```
+    cluster:
+        id:     56cdd77c-7184-11ef-9f67-42010afc0104
+        health: HEALTH_OK
+
+    services:
+        mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 11d)
+        mgr: ncn-s002.mneqjy(active, since 11d), standbys: ncn-s001.iwikun, ncn-s003.pkabeg
+        mds: 2/2 daemons up, 3 standby, 1 hot standby
+        osd: 18 osds: 18 up (since 11d), 18 in (since 11d)
+        rgw: 3 daemons active (3 hosts, 1 zones)
+
+    data:
+        volumes: 2/2 healthy
+        pools:   15 pools, 625 pgs
+        objects: 74.42k objects, 137 GiB
+        usage:   277 GiB used, 8.7 TiB / 9.0 TiB avail
+        pgs:     625 active+clean
+
+    io:
+        client:   12 KiB/s rd, 3.9 MiB/s wr, 3 op/s rd, 374 op/s wr
+    ```
+
+
