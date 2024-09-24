@@ -18,8 +18,8 @@ For detailed BICAN documentation, see [BICAN Technical Details](../operations/ne
 
 ## NVIDIA CPU and GPU notice
 
-Servers with NVIDIA CPUs and GPUs are not supported by CSM 1.6.0. Systems with these servers should
-not be installed with CSM 1.6.0
+Servers with NVIDIA CPUs and GPUs are **not** supported by CSM 1.6.0. Systems with these servers should
+**not** be installed with CSM 1.6.0. Please install CSM 1.5.x, which supports these servers.
 
 ## High-level overview of CSM install
 
