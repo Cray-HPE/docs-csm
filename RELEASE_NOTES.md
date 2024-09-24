@@ -14,7 +14,7 @@
 
 ### New hardware support
 
-* CSM 1.6.0 **does not support servers with NVIDIA CPUs and GPUs**. Systems with these servers should not be upgraded to CSM 1.6.0. Please stay on the supported CSM release of 1.5.x.
+* **IMPORTANT** Systems with NVIDIA CPUs and GPUs must see [Known issues](#known-issues)
 
 ### Automation improvements
 
