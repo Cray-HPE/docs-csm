@@ -12,7 +12,7 @@ software. Choose the appropriate procedure from the sections below.
 
 ## Release Notes
 
-Before upgrading review the [Release Notes](../RELEASE_NOTES.md)
+Before upgrading, review the [Release Notes](../RELEASE_NOTES.md)
 
 ### NVIDIA CPU and GPU notice
 
