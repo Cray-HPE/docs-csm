@@ -33,9 +33,9 @@ osd.6                            ncn-s003  running (3d)  7m ago     3d   15.2.8 
 osd.7                            ncn-s002  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  4eb2f577daba
 osd.8                            ncn-s001  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  f0386c093874
 osd.9                            ncn-s003  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  50d7066f66a6
-rgw.site1.zone1.ncn-s001.xtjggh  ncn-s001  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  6a90ba6415e6
-rgw.site1.zone1.ncn-s002.divvfs  ncn-s002  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  825c5b5f33c5
-rgw.site1.zone1.ncn-s003.spojqa  ncn-s003  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  f95116a16e41
+rgw.site1.ncn-s001.xtjggh  ncn-s001  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  6a90ba6415e6
+rgw.site1.ncn-s002.divvfs  ncn-s002  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  825c5b5f33c5
+rgw.site1.ncn-s003.spojqa  ncn-s003  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  f95116a16e41
 ```
 
 ## Ceph Monitor Service (ceph-mon)
@@ -127,19 +127,19 @@ ncn-s00(1/2/3)# ceph orch daemon restart mds.cephfs.<container id from ceph orch
 Start the rados-gateway:
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon start rgw.site1.zone1.<container id from ceph orch ls>
+ncn-s00(1/2/3)# ceph orch daemon start rgw.site1.<container id from ceph orch ls>
 ```
 
 Stop the rados-gateway:
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon stop rgw.site1.zone1.<container id from ceph orch ls>
+ncn-s00(1/2/3)# ceph orch daemon stop rgw.site1.<container id from ceph orch ls>
 ```
 
 Restart the rados-gateway:
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon restart rgw.site1.zone1.<container id from ceph orch ls>
+ncn-s00(1/2/3)# ceph orch daemon restart rgw.site1.<container id from ceph orch ls>
 ```
 
 ## Ceph Service Restart using CEPHADM
@@ -228,7 +228,7 @@ Two SSH sessions are required. One to do the work from and another that is runni
      mgr                            3/3  9s ago     4d   ncn-s001;ncn-s002;ncn-s003;count:3                             registry.local/ceph/ceph:v15.2.8  5553b0cb212c
      mon                            3/3  9s ago     4d   ncn-s001;ncn-s002;ncn-s003;count:3                             registry.local/ceph/ceph:v15.2.8  5553b0cb212c
      osd.all-available-devices      6/6  9s ago     4d    *                                                              registry.local/ceph/ceph:v15.2.8   5553b0cb212c
-     rgw.site1.zone1                3/3  9s ago     4d   ncn-s001;ncn-s002;ncn-s003;ncn-s004;ncn-s005;ncn-s006;count:3  registry.local/ceph/ceph:v15.2.8  5553b0cb212c
+     rgw.site1                3/3  9s ago     4d   ncn-s001;ncn-s002;ncn-s003;ncn-s004;ncn-s005;ncn-s006;count:3  registry.local/ceph/ceph:v15.2.8  5553b0cb212c
 
      ```
 

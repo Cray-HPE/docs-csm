@@ -112,9 +112,9 @@ Service  on ncn-s001 is reporting up for 9207 seconds
 osd.8's status is reporting up: 1  in: 1
 Service unit name: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce-osd.8
 Status: running
-Service rgw.site1.zone1.ncn-s001.kvxhwi on ncn-s001 has been restarted and up for 9210 seconds
-rgw.site1.zone1.ncn-s001.kvxhwi's status is: running
-Service unit name: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce-rgw.site1.zone1.ncn-s001.kvxhwi
+Service rgw.site1.ncn-s001.kvxhwi on ncn-s001 has been restarted and up for 9210 seconds
+rgw.site1.ncn-s001.kvxhwi's status is: running
+Service unit name: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce-rgw.site1.ncn-s001.kvxhwi
 Status: running
 Tests run: 12  Tests Passed: 12
 ```
