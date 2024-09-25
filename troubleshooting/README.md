@@ -62,7 +62,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [RTS fails to restart after a worker node has been rebooted](known_issues/rts_fails_to_start_after_worker_node_restart.md)
 - [Spire database connection pool configuration in an air-gapped environment](known_issues/spire_database_airgap_configuration.md)
 - [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
-- [Spire Server Reports Database is in Recovery](known_issues/spire_server_database_recovery.md)
+- [Postgres Database is in Recovery](known_issues/postgres_database_recovery.md)
 - [Test Failures Due To No Discovered Compute Nodes In HSM](known_issues/test_failures_no_discovered_computes_in_hsm.md)
 - [Velero Version Mismatch](known_issues/velero_version_mismatch.md)
 - [wait for unbound hang](known_issues/wait_for_unbound_hang.md)
@@ -140,6 +140,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Recover from Postgres WAL Event](../operations/kubernetes/Troubleshoot_Postgres_Database.md)
 - [Restore Postgres](../operations/kubernetes/Restore_Postgres.md)
 - [Disaster Recovery for Postgres](../operations/kubernetes/Disaster_Recovery_Postgres.md)
+- [Postgres Database is in Recovery](known_issues/postgres_database_recovery.md)
 
 ## MetalLB
 
@@ -163,7 +164,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Restore Spire Postgres without a Backup](../operations/spire/Restore_Spire_Postgres_without_a_Backup.md)
 - [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
 - [Spire Failing to Start on NCNs](../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
-- [Spire Server Report Database is in Recovery](known_issues/spire_server_database_recovery.md)
 
 ## User Access service UAS
 
