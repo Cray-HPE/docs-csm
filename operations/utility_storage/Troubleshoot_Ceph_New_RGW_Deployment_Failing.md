@@ -12,6 +12,9 @@ This procedure requires admin privileges.
 
 See [Collect Information about the Ceph Cluster](Collect_Information_About_the_Ceph_Cluster.md) for more information on how to interpret the output of the Ceph commands used in this procedure.
 
+
+### Verify Ceph is deploying a second RGW deployment
+
 1. Log on to a master node or `ncn-s001/2/3` to run the following commands.
 
 1. Check that the issue is occuring
@@ -74,11 +77,39 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
         ERROR: TCP Port(s) '8080' required for rgw already in use
         ```
 
-        Note the name of the daemon for the next step, in this case `rgw.site1.zone1`
+        **Note** the name of the daemon attempting to deploy for the next step, in this case `rgw.site1.zone1`
+
+        **Also Note** that `rgw.site1.zone1` should no longer be used and instead replaced with `rgw.site1` instead to avoid conflicting deployments.
+
+    1. Verify that the running daemon has a different name than the one attempting to deploy
+
+        Check the running daemon with the following command.
+
+        ```bash
+        ceph orch ps --daemon_type rgw
+        ```
+
+        Example output:
+        ```
+        NAME                       HOST      PORTS   STATUS        REFRESHED  AGE  MEM USE  MEM LIM  VERSION  IMAGE ID      CONTAINER ID
+        rgw.site1.ncn-s001.xoaosp  ncn-s001  *:8080  running (6d)     7m ago   6d     516M        -  17.2.6   6eebe3129025  fdd8842a0b16
+        rgw.site1.ncn-s002.qsibkp  ncn-s002  *:8080  running (6d)     7m ago   6d     478M        -  17.2.6   6eebe3129025  86bd2327ab81
+        rgw.site1.ncn-s003.hwiydc  ncn-s003  *:8080  running (4d)     3m ago   4d     412M        -  17.2.6   6eebe3129025  fb89e37f1ec8
+        ```
+
+        Ex. in this example verify that `rgw.site1` is not the same as `rgw.site1.zone1`
+
+
+        If the error is occuring and the running daemon has a different name than the one attempting to deploy continue on to resolve the two RGW deployments.
+
+
+
+
+### Procedure to resolve two RGW deployments
 
 1. Remove the conflicting daemon
 
-    This command will report a HEALTH\_WARN status. There will be a message below this warning indicating that a ceph-mon node or multiple ceph-mon nodes are out of quorum.
+    This command will remove the conflicting daemon and should restore the ceph cluster to a healthy state.
 
     ```bash
     ceph orch rm rgw.site1.zone1
