@@ -12,7 +12,6 @@ This procedure requires admin privileges.
 
 See [Collect Information about the Ceph Cluster](Collect_Information_About_the_Ceph_Cluster.md) for more information on how to interpret the output of the Ceph commands used in this procedure.
 
-
 ### Verify Ceph is deploying a second RGW deployment
 
 1. Log on to a master node or `ncn-s001/2/3` to run the following commands.
@@ -21,14 +20,13 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
     1. Check the ceph admin tool
 
-
         ```bash
         ceph -W cephadm
         ```
 
         Example output:
 
-        ```
+        ```bash
             cluster:
             id:     56cdd77c-7184-11ef-9f67-42010afc0104
             health: HEALTH_WARN
@@ -90,7 +88,8 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
         ```
 
         Example output:
-        ```
+
+        ```bash
         NAME                       HOST      PORTS   STATUS        REFRESHED  AGE  MEM USE  MEM LIM  VERSION  IMAGE ID      CONTAINER ID
         rgw.site1.ncn-s001.xoaosp  ncn-s001  *:8080  running (6d)     7m ago   6d     516M        -  17.2.6   6eebe3129025  fdd8842a0b16
         rgw.site1.ncn-s002.qsibkp  ncn-s002  *:8080  running (6d)     7m ago   6d     478M        -  17.2.6   6eebe3129025  86bd2327ab81
@@ -99,11 +98,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
         Ex. in this example verify that `rgw.site1` is not the same as `rgw.site1.zone1`
 
-
         If the error is occuring and the running daemon has a different name than the one attempting to deploy continue on to resolve the two RGW deployments.
-
-
-
 
 ### Procedure to resolve two RGW deployments
 
@@ -116,7 +111,8 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
     ```
 
     Example output:
-    ```
+
+    ```bash
     Removed service rgw.site1.zone1
     ```
 
@@ -130,7 +126,8 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
 
     Healthy example output:
-    ```
+
+    ```bash
     cluster:
         id:     56cdd77c-7184-11ef-9f67-42010afc0104
         health: HEALTH_OK
