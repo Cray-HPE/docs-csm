@@ -2,7 +2,7 @@
 
 * [Introduction](#introduction)
 * [Usage](#usage)
-* [What the `ceph-upgrade-tool.py` does](#what-the-ceph-upgrade-toolpy-does)
+* [What is `ceph-upgrade-tool.py`](#what-is-ceph-upgrade-toolpy)
 * [Troubleshooting](#troubleshooting)
 
 ## Introduction
@@ -43,7 +43,7 @@ To upgrade to Ceph version: `x.y.z`, the following command could be used.
 /usr/share/doc/csm/upgrade/scripts/ceph/ceph-upgrade-tool.py --version "x.y.z"
 ```
 
-## What the `ceph-upgrade-tool.py` does
+## What is `ceph-upgrade-tool.py`
 
 The `ceph-upgrade-tool.py` tool starts a Ceph upgrade to the version provided. It does this in the following way.
 
