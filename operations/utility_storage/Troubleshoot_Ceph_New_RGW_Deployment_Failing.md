@@ -123,8 +123,6 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
     ```bash
         ceph -W cephadm
     ```
-
-
     Healthy example output:
 
     ```bash
@@ -149,5 +147,3 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
     io:
         client:   12 KiB/s rd, 3.9 MiB/s wr, 3 op/s rd, 374 op/s wr
     ```
-
-
