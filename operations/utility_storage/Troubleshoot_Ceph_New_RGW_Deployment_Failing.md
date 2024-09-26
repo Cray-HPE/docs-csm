@@ -81,7 +81,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
     1. Verify that the running daemon has a different name than the one attempting to deploy
 
-        Check the running daemon with the following command.
+        Check the names of the running daemons with the following command.
 
         ```bash
         ceph orch ps --daemon_type rgw
