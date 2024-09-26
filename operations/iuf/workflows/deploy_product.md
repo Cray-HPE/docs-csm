@@ -12,7 +12,7 @@ Refer to that table and any corresponding product documents before continuing to
 
 1. Invoke `iuf run` with activity identifier `${ACTIVITY_NAME}` and use `-r` to execute the [`deploy-product`](../stages/deploy_product.md) stage. Perform the upgrade using product content found in `${MEDIA_DIR}`.
    Additional arguments are available to control the behavior of the `deploy-product` stage (for example, `-rv`).
-   See the [`deploy-product` stage documentation](../stages/deploy_product.md) for details and adjust the example below if necessary.**`NOTE`** Ensure that the 
+   See the [`deploy-product` stage documentation](../stages/deploy_product.md) for details and adjust the example below if necessary.**`NOTE`** Ensure that the
 [latest version of `docs-csm`](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/update_product_stream/README.md#check-for-latest-documentation)
  is installed for the target CSM version being installed or upgraded.
 
