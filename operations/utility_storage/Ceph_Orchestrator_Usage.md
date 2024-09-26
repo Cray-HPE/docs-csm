@@ -71,7 +71,7 @@ ceph orch ps
 
 Example output:
 
-```
+```bash
 NAME                             HOST      STATUS        REFRESHED  AGE  VERSION  IMAGE NAME                                       IMAGE ID      CONTAINER ID
 alertmanager.ncn-s001            ncn-s001  running (5h)  5m ago     5h   0.20.0   registry.local/prometheus/alertmanager:v0.20.0   0881eb8f169f  0e6a24469465
 crash.ncn-s001                   ncn-s001  running (5h)  5m ago     5h   15.2.8   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c  b6a582ed7573
@@ -105,7 +105,7 @@ rgw.site1.ncn-s002.wqrzoa        ncn-s002  running (5h)  5m ago     5h   15.2.8 
 rgw.site1.ncn-s003.tzkxya        ncn-s003  running (5h)  5m ago     5h   15.2.8   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c  c67d75adc620
 ```
 
-**`FILTERS:`** Apply filters by adding any or all of [--hostname <hostname> --service_name <service_name> --daemon_type <daemon_type> --daemon_id <daemon_id>].
+**`FILTERS:`** Apply filters by adding any or all of [--hostname \<hostname\> --service_name <service_name> --daemon_type <daemon_type> --daemon_id <daemon_id>].
 
 ### Ceph Daemon start|stop|restart|reconfig
 

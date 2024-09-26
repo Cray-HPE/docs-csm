@@ -16,7 +16,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
 1. Log on to a master node or `ncn-s001/2/3` to run the following commands.
 
-1. Check that the issue is occurring
+1. Observe that a Ceph RGW deployment is failing to deploy because the address is already in use.
 
     1. Use the `cephadm` logs to see if this error is occurring. The command below is following the `cephadm` logs. It may take a minute or two for the Ceph to attempt to deploy RGW and for the error to appear.
 
@@ -77,7 +77,6 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
         **Note** the name of the daemon attempting to deploy for the next step, in this case `rgw.site1.zone1`
 
-
     1. Verify that the running daemon has a different name than the one attempting to deploy
 
         Check the names of the running daemons with the following command.
@@ -122,6 +121,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
     ```bash
         ceph -W cephadm
     ```
+
     Healthy example output:
 
     ```bash

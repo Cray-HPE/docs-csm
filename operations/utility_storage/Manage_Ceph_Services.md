@@ -10,7 +10,7 @@ ncn-s00(1/2/3)# ceph orch ps
 
 Example output:
 
-```
+```bash
 NAME                             HOST      STATUS        REFRESHED  AGE  VERSION  IMAGE NAME                        IMAGE ID      CONTAINER ID
 mds.cephfs.ncn-s001.zwptsg       ncn-s001  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  bb08bcb2f034
 mds.cephfs.ncn-s002.qyvoyv       ncn-s002  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  32c3ff10be42
@@ -154,7 +154,7 @@ ncn-s00(1/2/3)# ceph orch daemon restart rgw.site1.<container id from ceph orch 
 
    Example output:
 
-   ```
+   ```json
       {
          "style": "cephadm:v1",
          "name": "mgr.ncn-s001",
@@ -199,9 +199,11 @@ ceph mgr MODULE_NAME disable MODULE
 
 Ceph has the ability to deploy/scale/reconfigure/redeploy Ceph processes down and back up to restart the services.
 
-> **IMPORTANT:** When scaling the Ceph manager daemon (mgr.hostname.<containerid>), keep in mind that there must be a running manager daemon as it is what is controlling the orchestration processes.
+> **IMPORTANT:** When scaling the Ceph manager daemon (mgr.hostname.\<containerid>), keep in mind that there must be a running manager daemon as it is what is controlling the orchestration processes.
+
 
 > **IMPORTANT:** osd.all-available-devices cannot be scaled; this is the process to auto-discover available OSDs.
+
 
 > **IMPORTANT:** The crash service cannot be scaled; this is the equivalent of a Kubernetes daemon set and runs on all nodes to collect crash data.
 
@@ -221,7 +223,7 @@ Two SSH sessions are required. One to do the work from and another that is runni
 
      Example output:
 
-     ```
+     ```bash
      NAME                       RUNNING  REFRESHED  AGE  PLACEMENT                                                      IMAGE NAME                        IMAGE ID
      crash                          6/6  9s ago     4d   *                                                              registry.local/ceph/ceph:v15.2.8  5553b0cb212c
      mds.cephfs                     3/3  9s ago     4d   ncn-s001;ncn-s002;ncn-s003;count:3                             registry.local/ceph/ceph:v15.2.8  5553b0cb212c
@@ -242,7 +244,7 @@ Two SSH sessions are required. One to do the work from and another that is runni
 
       Example output:
 
-      ```
+      ```bash
       NAME  RUNNING  REFRESHED  AGE  PLACEMENT                           IMAGE NAME                        IMAGE ID
       mgr       3/3  17s ago    4d   ncn-s001;ncn-s002;ncn-s003;count:3  registry.local/ceph/ceph:v15.2.8  5553b0cb212c
       ```
@@ -277,7 +279,7 @@ Two SSH sessions are required. One to do the work from and another that is runni
 
      For example:
 
-     ```
+     ```bash
      ceph orch apply mgr --placement="1 ncn-s002"
      Scheduled mgr update...
      ```
@@ -290,7 +292,7 @@ Two SSH sessions are required. One to do the work from and another that is runni
 
      Example output:
 
-     ```
+     ```bash
      cluster:
       id:     11d5d552-cfac-11eb-ab69-fa163ec012bf
       health: HEALTH_OK
@@ -347,5 +349,4 @@ Two SSH sessions are required. One to do the work from and another that is runni
 
      The returned output will be "Scheduled mgr update...".
 
-   1. Monitor the Ceph status to make sure all the daemons come back online.
-
+  8. Monitor the Ceph status to make sure all the daemons come back online.
