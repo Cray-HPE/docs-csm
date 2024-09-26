@@ -23,7 +23,6 @@ list of patch versions.
 ## Bug fixes and improvements
 
 * Added support for Paradise hardware
-    * A BMC firmware bug will prevent power capping on Paradise hardware from functioning. A future BMC firmware update will resolve the issue
 * Added support for Parry Peak hardware
 * Console: Fixed issue in `conman` in order to support Paradise hardware
 * HSM: Fixed issue in `run_hms_ct_tests.sh` which caused false positives for CDU switches
@@ -44,13 +43,6 @@ list of patch versions.
 * Fixed issue for `goss-servers` being able to be installed without `goss`, `goss-servers` now requires `goss` as a dependency
 * Fixed issue for `goss-servers.service` from being disabled when updating the `goss-servers`’s package.
 * DHCP: Boot filename can be overridden on a per-node basis.
-
-## Limitations
-
-* Power capping support for Paradise hardware
-    * Power caps are applied to the processor complex, not to the entire node
-    * A power cap cannot be applied when node power is off
-    * If a power cap is set when node power is on, it will be removed if the node is ever powered off. A new power cap must be applied after the node is powered back on
 
 ## Steps
 
