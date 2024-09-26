@@ -86,7 +86,7 @@ The below example uses the `cray-sls-postgres` database cluster, refer to the ou
 1. (`ncn-mw#`) Restart the impacted Postgres database StatefulSet.
 
       ```bash
-      kubectl -n spire rollout restart statefulset cray-sls-postgres
+      kubectl -n services rollout restart statefulset cray-sls-postgres
       ```
 
 1. (`ncn-mw#`) Wait for the cluster to restart and check the logs to ensure that there are no more errors.
