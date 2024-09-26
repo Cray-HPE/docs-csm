@@ -194,12 +194,23 @@ fi
 
 kafkaDeployed=$(kubectl get pods -n sma | grep kafka | wc -l)
 if [[ $kafkaDeployed -ne 0 ]]; then
+
+  # For sma 1.9, the cluster-kafka and cluster-zookeeper resources are based on a statefulset.
+  # For sma 1.10, the cluster-kafka and cluster-zookeeper resources are based on the strimzipodset.
+  if kubectl get statefulset cluster-kafka -n sma > /dev/null 2>&1; then
+    resource='statefulset'
+    status='.status.updatedReplicas'
+  else
+    resource='strimzipodset'
+    status='.status.readyPods'
+  fi
+
   if [ ! -z $cluster_kafka_new_cpu_request ]; then
     current_req=$(kubectl get kafkas -n sma cluster -o json | jq -r '.spec.kafka.resources.requests.cpu')
     echo "Patching cluster-kafka with new cpu request of $cluster_kafka_new_cpu_request (from $current_req)"
     kubectl patch kafkas cluster -n sma --type=json -p="[{'op' : 'replace', 'path':'/spec/kafka/resources/requests/cpu', 'value' : \"$cluster_kafka_new_cpu_request\" }]"
     sleep 10
-    until [[ $(kubectl -n sma get strimzipodset cluster-kafka -o json | jq -r '.status.readyPods') -eq 3 ]]; do
+    until [[ $(kubectl -n sma get "${resource}" cluster-kafka -o json | jq --arg status $status -r "$status") -eq 3 ]]; do
       echo "Waiting for cluster-kafka cluster to have three updated replicas..."
       sleep 30
     done
@@ -211,7 +222,7 @@ if [[ $kafkaDeployed -ne 0 ]]; then
     echo "Patching cluster-zookeeper statefulset with new cpu request of $cluster_zookeeper_new_cpu_request (from $current_req)"
     kubectl patch kafkas cluster -n sma --type=json -p="[{'op' : 'replace', 'path':'/spec/zookeeper/resources/requests/cpu', 'value' : \"$cluster_zookeeper_new_cpu_request\" }]"
     sleep 10
-    until [[ $(kubectl -n sma get strimzipodsetstatefulset cluster-zookeeper -o json | jq -r '.status.readyPods') -eq 3 ]]; do
+    until [[ $(kubectl -n sma get "${resource}" cluster-zookeeper -o json | jq --arg status $status -r "$status") -eq 3 ]]; do
       echo "Waiting for cluster-zookeeper cluster to have three updated replicas..."
       sleep 30
     done
