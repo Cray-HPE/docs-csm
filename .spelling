@@ -37,6 +37,7 @@ StatefulSets
 1.4.x
 1.5.x
 1.6.x
+15.2.x
 100GBASE-CR2
 100GBASE-CR4
 100GBASE-SR2
@@ -468,6 +469,7 @@ cec0
 center
 centers
 ceph
+ceph-mon
 cfgsh
 channeled
 checkmark
@@ -486,6 +488,8 @@ cronjobs
 custom-config
 customizations.yaml
 customizations.yaml.
+daemon_id
+daemon_type
 daemonless
 datastore
 defense
@@ -585,6 +589,9 @@ neighborhoods
 neighboring
 neighbors
 netmask
+ncn-m
+ncn-s00
+ncn-s001
 non-HPE
 non-LiveCD
 non-MGMT
