@@ -78,7 +78,7 @@ This procedure requires administrative privileges and will require at least two 
 
    Example output:
 
-   ```
+   ```bash
    ceph orch device ls ncn-s001
    Hostname  Path      Type  Serial                Size   Health   Ident  Fault  Available
    ncn-s001  /dev/sdb  hdd   f94bd091-cc25-476b-9  48.3G  Unknown  N/A    N/A    No

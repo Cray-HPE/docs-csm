@@ -200,11 +200,7 @@ ceph mgr MODULE_NAME disable MODULE
 Ceph has the ability to deploy/scale/reconfigure/redeploy Ceph processes down and back up to restart the services.
 
 > **IMPORTANT:** When scaling the Ceph manager daemon (mgr.hostname.\<containerid>), keep in mind that there must be a running manager daemon as it is what is controlling the orchestration processes.
-
-
 > **IMPORTANT:** osd.all-available-devices cannot be scaled; this is the process to auto-discover available OSDs.
-
-
 > **IMPORTANT:** The crash service cannot be scaled; this is the equivalent of a Kubernetes daemon set and runs on all nodes to collect crash data.
 
 The following example shows scaling the mgr service down and back up.
