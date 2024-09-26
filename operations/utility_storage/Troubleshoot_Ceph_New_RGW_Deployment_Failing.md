@@ -18,7 +18,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
 1. Check that the issue is occurring
 
-    1. Check the ceph admin tool
+    1. Use the `cephadm` logs to see if this error is occurring. The command below is following the `cephadm` logs. It may take a minute or two for the Ceph to attempt to deploy RGW and for the error to appear.
 
         ```bash
         ceph -W cephadm
