@@ -15,7 +15,7 @@ Refer to that table and any corresponding product documents before continuing to
    See the [`deploy-product` stage documentation](../stages/deploy_product.md) for details and adjust the example below if necessary. **`NOTE`** Ensure that the 
 [latest version of `docs-csm`](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/update_product_stream/README.md#check-for-latest-documentation)
  is installed for the target CSM version being installed or upgraded.
-   
+
       (`ncn-m001#`) Execute the `deploy-product` stage. Use site variables from the `site_vars.yaml` file found in `${ADMIN_DIR}` and recipe variables from the `product_vars.yaml` file found in `${ADMIN_DIR}`.
 
    ```bash
