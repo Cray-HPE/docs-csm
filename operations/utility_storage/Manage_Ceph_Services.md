@@ -33,9 +33,9 @@ osd.6                            ncn-s003  running (3d)  7m ago     3d   15.2.8 
 osd.7                            ncn-s002  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  4eb2f577daba
 osd.8                            ncn-s001  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  f0386c093874
 osd.9                            ncn-s003  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  50d7066f66a6
-rgw.site1.ncn-s001.xtjggh  ncn-s001  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  6a90ba6415e6
-rgw.site1.ncn-s002.divvfs  ncn-s002  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  825c5b5f33c5
-rgw.site1.ncn-s003.spojqa  ncn-s003  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  f95116a16e41
+rgw.site1.ncn-s001.xtjggh        ncn-s001  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  6a90ba6415e6
+rgw.site1.ncn-s002.divvfs        ncn-s002  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  825c5b5f33c5
+rgw.site1.ncn-s003.spojqa        ncn-s003  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  f95116a16e41
 ```
 
 ## Ceph Monitor Service (ceph-mon)

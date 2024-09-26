@@ -16,7 +16,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
 1. Log on to a master node or `ncn-s001/2/3` to run the following commands.
 
-1. Check that the issue is occuring
+1. Check that the issue is occurring
 
     1. Check the ceph admin tool
 
