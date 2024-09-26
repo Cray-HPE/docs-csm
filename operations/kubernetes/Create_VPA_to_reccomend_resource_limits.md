@@ -1,5 +1,8 @@
 # Vertical Pod autoscaler
 
+> ***INTERNAL USE***
+> Currently, this document is experimental and not for external use outside of Hewlett-Packard Enterprise.
+
 Kubernetes Vertical Pod Autoscaling (VPA) is **a feature that automatically adjusts the resources allocated to Kubernetes pods, based on their actual resource usage**. In recommendation mode these resource changes are simply recommended as opposed to being automatically adjusted.
 
 ## Creating a VPA in recommendation mode for a deployment
