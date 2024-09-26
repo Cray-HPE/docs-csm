@@ -77,7 +77,6 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
         **Note** the name of the daemon attempting to deploy for the next step, in this case `rgw.site1.zone1`
 
-        **Also Note** that `rgw.site1.zone1` should no longer be used and instead replaced with `rgw.site1` instead to avoid conflicting deployments.
 
     1. Verify that the running daemon has a different name than the one attempting to deploy
 
