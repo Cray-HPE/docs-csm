@@ -96,7 +96,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
         rgw.site1.ncn-s003.hwiydc  ncn-s003  *:8080  running (4d)     3m ago   4d     412M        -  17.2.6   6eebe3129025  fb89e37f1ec8
         ```
 
-        Ex. in this example verify that `rgw.site1` is not the same as `rgw.site1.zone1`
+        In this example, observe that the name of the running RGW deployment is `rgw.site1`. This is different than the RGW  deployment that is trying to be deployed above which has the name `rgw.site1.zone1`.
 
         If the error is occuring and the running daemon has a different name than the one attempting to deploy continue on to resolve the two RGW deployments.
 
