@@ -184,10 +184,8 @@ FPGAs
 FastLinQ
 Frontend
 GBs
-GBs
 GPFS
 GbE
-Gbs
 Gbs
 Gen10
 Giga-Byte
@@ -249,8 +247,6 @@ Kibana
 Kubernetes
 Kyverno
 LAN
-LAN
-LANs
 LANs
 LNet
 LVM
@@ -288,7 +284,6 @@ NICs
 NIDs
 NMCs
 NMN
-NMNLB
 NMNLB
 NMN_MTN
 NMN_RVR
@@ -373,10 +368,8 @@ SLES-15-SP3
 SLES-15-SP4
 SLES-15-SP5
 SLES-based
-SLES-based
 SLS
 SMNet
-SMS
 SMS
 SNMPv2
 SNMPv2c
@@ -473,7 +466,9 @@ center
 centers
 ceph
 ceph-mon
+ceph-radosgw
 cephadm
+cephfs
 cfgsh
 channeled
 checkmark
@@ -523,6 +518,7 @@ flavoring
 flavors
 fs_name
 fulfills
+goss
 handoff
 haproxy
 heartbeating
@@ -552,6 +548,7 @@ inband
 init
 iscsi
 keychain
+known_hosts
 labeled
 labeler
 labeling
@@ -578,8 +575,11 @@ management-nodes-rollout
 maneuver
 maneuvers
 md65-group
+mds
 metaschema
 mgmt
+mgr.hostname.
+mgrs
 microservice
 microservices
 milli-CPUs
@@ -620,6 +620,7 @@ organizing
 osd
 osd*
 osd.*
+osd.all
 osds
 osds*
 oversubscription
@@ -693,15 +694,13 @@ sw-edge-001
 sw-edge-002
 sw-leaf
 sw-leaf-bmc
-sw-leaf-bmc
 sw-spine
 sw-spine-001
-sw-spine-001
-sw-spine-002
 sw-spine-002
 sw-spine-00x
 sysfs
 syslog
+system_unit
 teardown
 timeframes
 timestamp
