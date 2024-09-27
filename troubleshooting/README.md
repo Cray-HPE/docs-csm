@@ -168,3 +168,4 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Large Object Map Objects in Ceph Health](../operations/utility_storage/Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)
 * [Failure of RGW Health Check](../operations/utility_storage/Troubleshoot_RGW_Health_Check_Fail.md)
 * [Troubleshoot S3FS Mounts](../operations/utility_storage/Troubleshoot_S3FS_Mounts.md)
+* [Ceph New RGW Deployment Failing](../operations/utility_storage/Troubleshoot_Ceph_New_RGW_Deployment_Failing.md)
