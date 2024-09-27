@@ -87,6 +87,10 @@ spec:
             # Set up the SAT config to use the token file
             sed -i -e 's|.*token_file.*|token_file = "/root/.config/sat/token.json"|' /root/.config/sat/sat.toml
 
+            vcs_pass=`kubectl get secret -n services vcs-user-credentials -o jsonpath='{.data.vcs_password}'| base64 -d`
+            rm -f /tmp/vcs_passwd
+            echo $vcs_pass  > /tmp/vcs_passwd
+
             # TODO: Fix sat bootprep code to load kube config from cluster
             # To workaround this issue for now, construct kubeconfig file in the pod
             secret=`kubectl -n argo get serviceaccount/default -o jsonpath='{.secrets[0].name}'`
