@@ -110,6 +110,6 @@ for master in $masters; do
     exit 1
   fi
   echo ""
-  echo "INFO Successfully upgraded apiserver-etcd-client certificate for $master."
+  echo "INFO Successfully upgraded  apiserver-etcd-client certificate for $master."
   echo ""
 done
