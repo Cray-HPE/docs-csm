@@ -22,54 +22,49 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-workdir="$(mktemp -d)"
-[ -z "${DEBUG:-}" ] && trap 'rm -fr '"${workdir}"'' ERR INT EXIT RETURN || echo "DEBUG was set in environment, $workdir will not be cleaned up."
-
 echo "Updating imageRepository and extraArgs in kubeadm-config configmap"
-kubectl get configmap kubeadm-config -n kube-system -o yaml > "${workdir}/kubeadm-config.yaml"
-cp "${workdir}/kubeadm-config.yaml" "${workdir}/kubeadm-config.yaml.back"
-yq4 eval -P '.data.ClusterConfiguration' "${workdir}/kubeadm-config.yaml" > "${workdir}/ClusterConfiguration.yaml"
-
-yq4 eval -i -P '.imageRepository = "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io"' "${workdir}/ClusterConfiguration.yaml"
-yq4 eval -i -P '.dns = {"type": "CoreDNS", "imageRepository": "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io/coredns"' "${workdir}/ClusterConfiguration.yaml"
-yq4 eval -i -P '.apiServer.extraArgs.api-audiences = "api,istio-ca"' "${workdir}/ClusterConfiguration.yaml"
-yq4 eval -i -P '.controllerManager.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
-yq4 eval -i -P '.scheduler.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
-yq4 eval -i -P '.scheduler.extraArgs.enable-admission-plugins = "NodeRestriction,PodSecurityPolicy"' "${workdir}/ClusterConfiguration.yaml"
-
-manifest_auditing_enabled=0
-if ! grep -q '/var/log/audit' /etc/kubernetes/manifests/kube-apiserver.yaml; then
-  manifest_auditing_enabled=1
+echo ""
+kubectl get configmap kubeadm-config -n kube-system -o yaml > /tmp/kubeadm-config.yaml
+cp /tmp/kubeadm-config.yaml /tmp/kubeadm-config.yaml.back
+sed -i 's/imageRepository: k8s.gcr.io/imageRepository: artifactory.algol60.net\/csm-docker\/stable\/k8s.gcr.io/' /tmp/kubeadm-config.yaml
+if grep -q 'dns: {}' /tmp/kubeadm-config.yaml; then
+  sed -i -E "s/^([[:space:]]+)dns:.*/\1dns:\n\1  type: CoreDNS\n\1  imageRepository: artifactory.algol60.net\/csm-docker\/stable\/k8s.gcr.io\/coredns/" /tmp/kubeadm-config.yaml
+fi
+if ! grep -q istio-ca /tmp/kubeadm-config.yaml; then
+  sed -i '/      runtime-config/a\        api-audiences: "api,istio-ca"' /tmp/kubeadm-config.yaml
+fi
+if ! grep -A4 '    controllerManager' /tmp/kubeadm-config.yaml | grep -q bind-address; then
+  sed -i '/      flex-volume-plugin-dir/a\        bind-address: 0.0.0.0' /tmp/kubeadm-config.yaml
+fi
+if ! grep -A3 '    scheduler:' /tmp/kubeadm-config.yaml | grep -q bind-address; then
+  sed -i 's/    scheduler: {}/    scheduler:\n      extraArgs:\n        bind-address: 0.0.0.0/' /tmp/kubeadm-config.yaml
+fi
+if ! grep -q 'enable-admission-plugins:' /tmp/kubeadm-config.yaml; then
+  sed -i '/      runtime-config/a\        enable-admission-plugins: NodeRestriction,PodSecurityPolicy' /tmp/kubeadm-config.yaml
 fi
 
-cm_auditing_enabled=0
-if [ "$(yq4 eval '.audit-log-path' "${workdir}/ClusterConfiguration.yaml")" != "null" ]; then
-  cm_auditing_enabled=1
-fi
+grep -q '/var/log/audit' /etc/kubernetes/manifests/kube-apiserver.yaml
+manifest_auditing_enabled=$?
+grep -q '^    audit-log-path:' /tmp/kubeadm-config.yaml
+cm_auditing_enabled=$?
 
-if [[ ${manifest_auditing_enabled} -eq 1 && ${cm_auditing_enabled} -ne 1 ]]; then
+if [[ ${manifest_auditing_enabled} -eq 0 && ${cm_auditing_enabled} -ne 0 ]]; then
   echo "Updating kubeadm-config configmap with audit configuration"
-  yq4 eval -i -P '.apiServer.extraArgs.audit-log-maxbackup = "100"' "${workdir}/ClusterConfiguration.yaml"
-  yq4 eval -i -P '.apiServer.extraArgs.audit-log-path = "/var/log/audit/kl8s/apiserver/audit.log"' "${workdir}/ClusterConfiguration.yaml"
-  yq4 eval -i -P '.apiServer.extraArgs.audit-policy-file = "/etc/kubernetes/audit/audit-policy.yaml"' "${workdir}/ClusterConfiguration.yaml"
-
-  if [ -z "$(yq4 eval -P '.apiServer.extraVolumes[] | select(.name=="k8s-audit")' "${workdir}/ClusterConfiguration.yaml")" ]; then
-    yq4 eval -i -P '.apiServer.extraVolumes += [{"hostPath": "/etc/kubernetes/audit", "mountPath": "/etc/kubernetes/audit", "name": "k8s-audit", "pathType": "DirectoryOrCreate", "readOnly": true}]' "${workdir}/ClusterConfiguration.yaml"
+  sed -i '/      runtime-config/a\        audit-log-maxbackup: "100"\n        audit-log-path: /var/log/audit/kl8s/apiserver/audit.log\n        audit-policy-file: /etc/kubernetes/audit/audit-policy.yaml' /tmp/kubeadm-config.yaml
+  # a temporary replacement hack for the subsequent yq4 command to work
+  sed -i 's/ClusterConfiguration: |/ClusterConfiguration:/' /tmp/kubeadm-config.yaml
+  if [ "$(yq4 eval '.data.ClusterConfiguration.apiServer.extraVolumes' /tmp/kubeadm-config.yaml)" == null ]; then
+    # No existing volumes
+    sed -i '/    apiServer:/a\      extraVolumes:\n      - hostPath: /var/log/audit/kl8s/apiserver\n        mountPath: /var/log/audit/kl8s/apiserver\n        name: k8s-audit-log\n        pathType: DirectoryOrCreate\n        readOnly: false\n      - hostPath: /etc/kubernetes/audit\n        mountPath: /etc/kubernetes/audit\n        name: k8s-audit\n        pathType: DirectoryOrCreate\n        readOnly: true' /tmp/kubeadm-config.yaml
+  else
+    yq4 eval '.data.ClusterConfiguration.apiServer.extraVolumes += {"hostPath": "/var/log/audit/kl8s/apiserver", "mountPath": "/var/log/audit/kl8s/apiserver", "name":"k8s-audit-log", "pathType":"DirectoryOrCreate", "readOnly":false}' -i /tmp/kubeadm-config.yaml
+    yq4 eval '.data.ClusterConfiguration.apiServer.extraVolumes += {"hostPath": "/etc/kubernetes/audit", "mountPath": "/etc/kubernetes/audit", "name":"k8s-audit", "pathType":"DirectoryOrCreate", "readOnly":true}' -i /tmp/kubeadm-config.yaml
   fi
-
-  if [ -z "$(yq4 eval -P '.apiServer.extraVolumes[] | select(.name=="k8s-audit-log")' "${workdir}/ClusterConfiguration.yaml")" ]; then
-    yq4 eval -i -P '.apiServer.extraVolumes += [{"hostPath": "/var/log/audit/kl8s/apiserver", "mountPath": "/var/log/audit/kl8s/apiserver", "name": "k8s-audit-log", "pathType": "DirectoryOrCreate", "readOnly": false}]' "${workdir}/ClusterConfiguration.yaml"
-  fi
+  # reverse the temporary replacement hack
+  sed -i 's/ClusterConfiguration:/ClusterConfiguration: |/' /tmp/kubeadm-config.yaml
 fi
 
-# Merge our two YAML files together.
-if IFS= read -rd '' -a cluster_configuration; then
-  :
-fi <<< "$(cat "${workdir}/ClusterConfiguration.yaml")"
-cluster_configuration=$cluster_configuration yq4 eval '.data.ClusterConfiguration = strenv(cluster_configuration)' "${workdir}/kubeadm-config.yaml"
-
-# Apply the new Kubernetes config.
-kubectl -n kube-system apply -f "${workdir}/kubeadm-config.yaml"
+kubectl -n kube-system apply -f /tmp/kubeadm-config.yaml
 
 export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u)
