@@ -43,8 +43,8 @@ Once this step has completed:
 
 **`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
-Some products require modifications to the `customizations.yaml` file before executing the `deliver-product` stage. Currently, this is limited to the Slurm and PBS Workload Manager (WLM) products and the UAN product. Refer to the
-"Install and Upgrade Framework" section of the Slurm, PBS, and UAN product documents to determine the actions that need to be performed to update `customizations.yaml`.
+Some products require modifications to the `customizations.yaml` file before executing the `deliver-product` stage. Currently, this is limited to the Slurm and PBS Workload Manager (WLM) products , CSM Diags and the UAN product. Refer to the
+"Install and Upgrade Framework" section of the Slurm, PBS, CSM Diags and UAN product documents to determine the actions that need to be performed to update `customizations.yaml`.
 
 Once this step has completed:
 
