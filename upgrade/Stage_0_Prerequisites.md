@@ -214,8 +214,7 @@ scenario.
 
 ### Option 1: Upgrade of CSM manually and additional products with IUF
 
-If performing an upgrade of CSM manually and additional HPE Cray EX software products with IUF, this stage
-should not be performed. Instead, the [Upgrade CSM manually and additional products with IUF](../operations/iuf/workflows/upgrade_csm_manual_and_additional_products_with_iuf.md)
+This stage should not be performed when upgrading CSM manually and additional HPE Cray EX software products with IUF. Instead, refer to the [Upgrade CSM manually and additional products with IUF](../operations/iuf/workflows/upgrade_csm_manual_and_additional_products_with_iuf.md) procedure.
 
 That procedure will perform the appropriate steps to create a CFS configuration for management nodes
 and perform management node image customization during the
