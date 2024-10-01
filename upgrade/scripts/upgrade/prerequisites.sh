@@ -1255,90 +1255,11 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
 
-    CRAYS3CACHE="CRAYS3CACHE"
-    CONRUN="CONRUN"
-    CONLIB="CONLIB"
-    K8SLET="K8SLET"
-    CEPHETC="CEPHETC"
-    CEPHVAR="CEPHVAR"
-    CONTAIN="CONTAIN"
-    VOLUMEGROUP="metalvg0"
-    RAIDARRAY="/dev/md/AUX"
-
-    # cloud-init bootcmd for master nodes
-    MASTER_BOOT_CMD='
-    [
-      ["cloud-init-per", "once", "create_PV", "pvcreate", "-ff", "-y", "-M", "lvm2", "'"${RAIDARRAY}1"'"],
-      ["cloud-init-per", "once", "create_VG", "vgcreate", "'"${VOLUMEGROUP}"'", "'"${RAIDARRAY}1"'"],
-      ["cloud-init-per", "once", "create_LV_'${CRAYS3CACHE}'", "lvcreate", "-l", "25%PVS", "-n", "'"${CRAYS3CACHE}"'", "-y", "'"${VOLUMEGROUP}"'"],
-      ["cloud-init-per", "once", "create_LV_'${CONRUN}'", "lvcreate", "-l", "4%PVS", "-n", "'"${CONRUN}"'", "-y", "'"${VOLUMEGROUP}"'"],
-      ["cloud-init-per", "once", "create_LV_'${CONLIB}'", "lvcreate", "-l", "36%PVS", "-n", "'"${CONLIB}"'", "-y", "'"${VOLUMEGROUP}"'"],
-      ["cloud-init-per", "once", "create_LV_'${K8SLET}'", "lvcreate", "-l", "10%PVS", "-n", "'"${K8SLET}"'", "-y", "'"${VOLUMEGROUP}"'"]
-    ]'
-
-    # cloud-init fs_setup for master nodes
-    MASTER_FILE_SYSTEMS='
-    [
-      {"label": "'"${CRAYS3CACHE}"'", "filesystem": "ext4", "device": "/dev/disk/by-id/dm-name-'"${VOLUMEGROUP}"'-'"${CRAYS3CACHE}"'", "partition": "auto", "overwrite": true},
-      {"label": "'"${CONRUN}"'", "filesystem": "xfs", "device": "/dev/disk/by-id/dm-name-'"${VOLUMEGROUP}"'-'"${CONRUN}"'", "partition": "auto", "overwrite": true},
-      {"label": "'"${CONLIB}"'", "filesystem": "xfs", "device": "/dev/disk/by-id/dm-name-'"${VOLUMEGROUP}"'-'"${CONLIB}"'", "partition": "auto", "overwrite": true},
-      {"label": "'"${K8SLET}"'", "filesystem": "xfs", "device": "/dev/disk/by-id/dm-name-'"${VOLUMEGROUP}"'-'"${K8SLET}"'", "partition": "auto", "overwrite": true}
-    ]'
-
-    # cloud-init mounts for master nodes
-    MASTER_MOUNTS='
-    [
-      ["LABEL='"${CRAYS3CACHE}"'", "/var/lib/s3fs_cache", "ext4", "defaults,nofail"],
-      ["LABEL='"${CONRUN}"'", "/run/containerd", "xfs", "defaults,nofail"],
-      ["LABEL='"${CONLIB}"'", "/var/lib/containerd", "xfs", "defaults,nofail"],
-      ["LABEL='"${K8SLET}"'", "/var/lib/kubelet", "xfs", "defaults,nofail"]
-    ]'
-
-    # cloud-init bootcmd for worker nodes
-    WORKER_BOOT_CMD='
-    [
-      ["cloud-init-per", "once", "create_PV", "pvcreate", "-ff", "-y", "-M", "lvm2", "'"${RAIDARRAY}"'"], 
-      ["cloud-init-per", "once", "create_VG", "vgcreate", "'"${VOLUMEGROUP}"'", "'"${RAIDARRAY}"'"],
-      ["cloud-init-per", "once", "create_LV_'"${CRAYS3CACHE}"'", "lvcreate", "-L", "200GB", "-n", "'"${CRAYS3CACHE}"'", "-y", "'"${VOLUMEGROUP}"'"]
-    ]'
-
-    # cloud-init fs_setup for worker nodes
-    WORKER_FILE_SYSTEMS='
-    [
-      {"label": "'"${CRAYS3CACHE}"'", "filesystem": "ext4", "device": "/dev/disk/by-id/dm-name-'"${VOLUMEGROUP}"'-'"${CRAYS3CACHE}"'", "partition": "auto", "overwrite": true}
-    ]'
-
-    # cloud-init mounts for worker nodes
-    WORKER_MOUNTS='
-    [
-      ["LABEL='"${CRAYS3CACHE}"'", "/var/lib/s3fs_cache", "ext4", "defaults,nofail"]
-    ]'
-
-    # cloud-init bootcmd for storage nodes
-    STORAGE_BOOT_CMD='
-    [
-      ["cloud-init-per", "once", "create_PV", "pvcreate", "-ff", "-y", "-M", "lvm2", "'"${RAIDARRAY}"'"],
-      ["cloud-init-per", "once", "create_VG", "vgcreate", "'"${VOLUMEGROUP}"'", "'"${RAIDARRAY}"'"],
-      ["cloud-init-per", "once", "create_LV_'"${CEPHETC}"'", "lvcreate", "-L", "10GB", "-n", "'"${CEPHETC}"'", "-y", "'"${VOLUMEGROUP}"'"],
-      ["cloud-init-per", "once", "create_LV_'"${CEPHVAR}"'", "lvcreate", "-L", "60GB", "-n", "'"${CEPHVAR}"'", "-y", "'"${VOLUMEGROUP}"'"],
-      ["cloud-init-per", "once", "create_LV_'"${CONTAIN}"'", "lvcreate", "-L", "60GB", "-n", "'"${CONTAIN}"'", "-y", "'"${VOLUMEGROUP}"'"]
-    ]'
-
-    # cloud-init fs_setup for storage nodes
-    STORAGE_FILE_SYSTEMS='
-    [
-      {"label": "'"${CEPHETC}"'", "filesystem": "ext4", "device": "/dev/disk/by-id/dm-name-'"${VOLUMEGROUP}"'-'"${CEPHETC}"'", "partition": "auto", "overwrite": true},
-      {"label": "'"${CEPHVAR}"'", "filesystem": "ext4", "device": "/dev/disk/by-id/dm-name-'"${VOLUMEGROUP}"'-'"${CEPHVAR}"'", "partition": "auto", "overwrite": true},
-      {"label": "'"${CONTAIN}"'", "filesystem": "xfs", "device": "/dev/disk/by-id/dm-name-'"${VOLUMEGROUP}"'-'"${CONTAIN}"'", "partition": "auto", "overwrite": true}
-    ]'
-
-    # cloud-init mounts for storage nodes
-    STORAGE_MOUNTS='
-    [
-      ["LABEL='"${CEPHETC}"'", "/etc/ceph", "auto", "defaults"],
-      ["LABEL='"${CEPHVAR}"'", "/var/lib/ceph", "auto", "defaults"],
-      ["LABEL='"${CONTAIN}"'", "/var/lib/containers", "auto", "defaults"]
-    ]'
+    # Template cloud-init disk configurations
+    csi config template disks
+    master_user_data=$(<"ncn-master/cloud-init/user-data.json")
+    worker_user_data=$(<"ncn-worker/cloud-init/user-data.json")
+    storage_user_data=$(<"ncn-storage/cloud-init/user-data.json")
 
     # Get xnames for all Management nodes
     if IFS=$'\n' read -rd '' -a NCN_XNAMES; then
@@ -1348,30 +1269,26 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     # Update BSS data for ncn-master nodes
     for xname in "${NCN_XNAMES[@]}"; do
       xname_bss="$(cray bss bootparameters list --format json --hosts "${xname}")"
-      jq --argjson master_bootcmd "$MASTER_BOOT_CMD" \
-        --argjson master_fs_setup "$MASTER_FILE_SYSTEMS" \
-        --argjson master_mounts "$MASTER_MOUNTS" \
-        --argjson worker_bootcmd "$WORKER_BOOT_CMD" \
-        --argjson worker_fs_setup "$WORKER_FILE_SYSTEMS" \
-        --argjson worker_mounts "$WORKER_MOUNTS" \
-        --argjson storage_bootcmd "$STORAGE_BOOT_CMD" \
-        --argjson storage_fs_setup "$STORAGE_FILE_SYSTEMS" \
-        --argjson storage_mounts "$STORAGE_MOUNTS" '
-         map(
-           if .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-master" then
-             .["cloud-init"]["user-data"]["bootcmd"] = $master_bootcmd |
-             .["cloud-init"]["user-data"]["fs_setup"] = $master_fs_setup |
-             .["cloud-init"]["user-data"]["mounts"] = $master_mounts
-           elif .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-worker" then
-             .["cloud-init"]["user-data"]["bootcmd"] = $worker_bootcmd |
-             .["cloud-init"]["user-data"]["fs_setup"] = $worker_fs_setup |
-             .["cloud-init"]["user-data"]["mounts"] = $worker_mounts
-           elif .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-storage" then
-             .["cloud-init"]["user-data"]["bootcmd"] = $storage_bootcmd |
-             .["cloud-init"]["user-data"]["fs_setup"] = $storage_fs_setup |
-             .["cloud-init"]["user-data"]["mounts"] = $storage_mounts
-           else .
-         end)' <<< "$xname_bss" > "bss-patched-${xname}.json"
+
+  jq --argjson bss "$xname_bss" \
+    --argjson master_user_data "$master_user_data" \
+    --argjson worker_user_data "$worker_user_data" \
+    --argjson storage_user_data "$storage_user_data" \
+     'map(
+       if .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-master" then
+         .["cloud-init"]["user-data"]["bootcmd"] = $master_user_data["user-data"]["bootcmd"] |
+         .["cloud-init"]["user-data"]["fs_setup"] = $master_user_data["user-data"]["fs_setup"] |
+         .["cloud-init"]["user-data"]["mounts"] = $master_user_data["user-data"]["mounts"]
+       elif .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-worker" then
+         .["cloud-init"]["user-data"]["bootcmd"] = $worker_user_data["user-data"]["bootcmd"] |
+         .["cloud-init"]["user-data"]["fs_setup"] = $worker_user_data["user-data"]["fs_setup"] |
+         .["cloud-init"]["user-data"]["mounts"] = $worker_user_data["user-data"]["mounts"]
+       elif .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-storage" then
+         .["cloud-init"]["user-data"]["bootcmd"] = $storage_user_data["user-data"]["bootcmd"] |
+         .["cloud-init"]["user-data"]["fs_setup"] = $storage_user_data["user-data"]["fs_setup"] |
+         .["cloud-init"]["user-data"]["mounts"] = $storage_user_data["user-data"]["mounts"]
+       else .
+     end)' <<< "$xname_bss" > "bss-patched-${xname}.json"
 
       cray bss bootparameters update --file "bss-patched-${xname}.json" && rm "bss-patched-${xname}.json"
     done
