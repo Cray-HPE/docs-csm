@@ -2,17 +2,17 @@
 
 This is a `VictoriaMetrics` Exporter for extracting metrics from a server using the Redfish API. The hostname of the server has to be passed as target parameter in the http call.
 
-All these steps need to be followed post install/upgrade CSM services.
+All these steps need to be followed after installing or upgrading CSM services.
 
 ## Configure domain name for ClusterStor management node
 
-NOTE: The below steps needs to be performed on the ClusterStor E1000 node.
+NOTE: The following steps need to be performed on the ClusterStor E1000 node.
 
 In order to provide SMART data to the `victoria-metrics` time series database, the Redfish Exporter must be configured with domain name from ClusterStor primary management node.
 
 1. Find the `ip address` of both mgmt nodes on the external access network (EAN) of ClusterStor.
 
-    1. If static EAN IP addresses are configured on the mgmt nodes in the, following command will show what they are:
+    1. If static EAN IP addresses are configured on the mgmt nodes, then the following command will show what they are:
 
         ```bash
         [root@kjcf01n00 ~]# cscli ean ipaddr show
@@ -62,7 +62,7 @@ In order to provide SMART data to the `victoria-metrics` time series database, t
            pub3
            ```
 
-           This output indicates that the primary EAN interface is pub0, this is the default primary EAN interface on ClusterStor mgmt nodes. If no static IP address is set on this interface, it will default to DHCP.
+           This output indicates that the primary EAN interface is `pub0`, which is the default primary EAN interface on ClusterStor mgmt nodes. If no static IP address is set on this interface, it will default to DHCP.
 
            Check the IP address of this interface on both mgmt nodes with the following command:
 
@@ -113,7 +113,7 @@ In order to provide SMART data to the `victoria-metrics` time series database, t
     45.135.214.10.in-addr.arpa   name = kjlmo1201.hpc.amslabs.hpecorp.net.
     ```
 
-1. Determine which mgmt nodes is currently the primary mgmt node.
+1. Determine which mgmt node is currently the primary mgmt node.
 
    The RFSF API services run on the primary mgmt node in the ClusterStor SMU. To determine which node is currently the primary mgmt node, look at `cscli show_nodes` output:
 
@@ -166,15 +166,15 @@ In order to provide SMART data to the `victoria-metrics` time series database, t
 
 ## Create admin user `(LDAP instance)` on ClusterStor E1000 primary mgmt node
 
-NOTE: The below steps needs to be performed on the ClusterStor E1000 node.
+NOTE: The following steps need to be performed on the ClusterStor E1000 node.
 
-1. Add an admin user on primary management node discovered in the above section.
+1. Add an admin user on primary management node discovered in the previous section.
 
    ```bash
    cscli admins add --username abcxyz --role full --password Abcxyz@123
    ```
 
-   NOTE: Password should have minimum length of 8 characters with minimum 1 lowercase alphabet, 1 uppercase alphabet, 1 alpha numeric and 1 special character.
+   NOTE: Password should have minimum length of eight characters with minimum one lowercase alphabet, one uppercase alphabet, one alpha numeric and one special character.
 
 1. View the created admins user.
 
@@ -194,7 +194,7 @@ NOTE: The below steps needs to be performed on the ClusterStor E1000 node.
 
 ## Create `Configmap` with FQDN of the primary mgmt node
 
-NOTE: The below steps needs to be performed on the CSM cluster either on master or worker node.
+NOTE: The following steps need to be performed on the CSM cluster, either on the master or worker node.
 
 1. (`ncn-mw#`) Check if `configmap` `cray-sysmgmt-health-redfish` already exists.
 
@@ -215,7 +215,7 @@ NOTE: The below steps needs to be performed on the CSM cluster either on master 
     kubectl delete cm -n sysmgmt-health cray-sysmgmt-health-redfish --force
     ```
 
-1. (`ncn-mw#`) Create a `configmap` file `/tmp/configmap.yml` with the below content and replace TARGET with site specific FQDN of the primary mgmt node from the above section in the second last line.
+1. (`ncn-mw#`) Create a `configmap` file `/tmp/configmap.yml` with the following content and replace TARGET with site specific FQDN of the primary mgmt node from the previous section in the second last line.
    For example, `TARGET=abc100.xyz.com`.
 
     ```yaml
@@ -349,7 +349,7 @@ This procedure can be performed on any master or worker NCN.
         cray-sysmgmt-health-redfish-exporter-86f7596c5-g6lxl            1/1     Running     0                3h25m
         ```
 
-    1. View the current configuration after few minutes.
+    1. View the current configuration after a few minutes.
 
         ```bash
         kubectl exec cray-sysmgmt-health-redfish-exporter-86f7596c5-g6lxl \
@@ -370,7 +370,7 @@ This procedure can be performed on any master or worker NCN.
         kubectl delete pod -n sysmgmt-health cray-sysmgmt-health-redfish-exporter-86f7596c5-g6lxl --force
         ```
 
-    1. Valdiate the pod is running again after sometime.
+    1. Validate that the pod is running again after some time.
 
         ```bash
         kubectl get pod -n sysmgmt-health | grep redfish
