@@ -423,6 +423,7 @@ services running on Kubernetes, as well as for telemetry data coming from the co
 - [Ceph Storage Types](utility_storage/Ceph_Storage_Types.md)
 - [CSM RBD Tool Usage](utility_storage/CSM_rbd_tool_Usage.md)
 - [`cubs_tool` Usage](utility_storage/Cubs_tool_Usage.md)
+- [`ceph-upgrade-tool` Usage](utility_storage/Ceph_upgrade_tool_Usage.md)
 - [Dump Ceph Crash Data](utility_storage/Dump_Ceph_Crash_Data.md)
 - [Identify Ceph Latency Issues](utility_storage/Identify_Ceph_Latency_Issues.md)
 - [Cephadm Reference Material](utility_storage/Cephadm_Reference_Material.md)
