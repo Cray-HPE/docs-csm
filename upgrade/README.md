@@ -32,7 +32,7 @@ latest patch release of CSM 1.6.
 ### Option 1: Upgrade CSM with additional HPE Cray EX software products
 
 To perform an upgrade of CSM along with additional HPE Cray EX software products, see the
-[Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
+[Upgrade CSM and additional products](../operations/iuf/workflows/upgrade_csm_and_additional_products.md)
 procedure.
 
 This is the most common procedure to follow, and it should be used when performing an upgrade from
