@@ -80,8 +80,7 @@ if [ $yes -ne 1 ]; then
   fi
 fi
 
-for ss in $ssIDs
-do
+for ss in $ssIDs; do
   echo "Removing: $ss"
   cray fas snapshots delete $ss --format json
 done
