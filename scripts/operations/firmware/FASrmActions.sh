@@ -30,50 +30,43 @@ usage() {
   exit 1
 }
 
-if [ $# -lt 1 ]
-then
+if [ $# -lt 1 ]; then
   usage
 fi
 
 re='^[0-9]+$'
-if ! [[ $1 =~ $re ]]
-then
+if ! [[ $1 =~ $re ]]; then
   echo "$1 not a number"
   usage
 fi
 
 yes=0
-if [ $# -gt 1 ]
-then
-  if [ $2 == "-y" ]
-  then
+if [ $# -gt 1 ]; then
+  if [ $2 == "-y" ]; then
     yes=1
   else
     usage
   fi
 fi
 
-date=`date +%Y-%m-%d -d "$1 days ago"`
+date=$(date +%Y-%m-%d -d "$1 days ago")
 
 echo Removing FAS Actions before $date
 
-actionIDs=`cray fas actions list --format json | jq -r '.actions | .[] | select(.endTime < '\"$date\"') | .actionID'`
-if [ ${#actionIDs} -eq 0 ]
-then
+actionIDs=$(cray fas actions list --format json | jq -r '.actions | .[] | select(.endTime < '\"$date\"') | .actionID')
+if [ ${#actionIDs} -eq 0 ]; then
   echo "No actions found before date $date"
   exit 0
 fi
 
 echo $actionIDs
 
-if [ $yes -ne 1 ]
-then
+if [ $yes -ne 1 ]; then
   echo "-----------------------"
   echo "Removing these actions:"
 
   count=0
-  for actionid in $actionIDs
-  do
+  for actionid in $actionIDs; do
     ((count++))
     cray fas actions status list $actionid --format json | jq -r '. | "\(.actionID),\(.endTime),\(.command.description),\(.operationCounts.total)"'
   done
@@ -81,8 +74,7 @@ then
   echo "-----------------------"
   read -p "Continue to remove $count FAS actions? " -n 1 -r
   echo    # (optional) move to a new line
-  if ! [[ $REPLY =~ ^[Yy]$ ]]
-  then
+  if ! [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "Action aborted"
     exit 0
   fi

@@ -30,50 +30,43 @@ usage() {
   exit 1
 }
 
-if [ $# -lt 1 ]
-then
+if [ $# -lt 1 ]; then
   usage
 fi
 
 re='^[0-9]+$'
-if ! [[ $1 =~ $re ]]
-then
+if ! [[ $1 =~ $re ]]; then
   echo "$1 not a number"
   usage
 fi
 
 yes=0
-if [ $# -gt 1 ]
-then
-  if [ $2 == "-y" ]
-  then
+if [ $# -gt 1 ]; then
+  if [ $2 == "-y" ]; then
     yes=1
   else
     usage
   fi
 fi
 
-date=`date +%Y-%m-%d -d "$1 days ago"`
+date=$(date +%Y-%m-%d -d "$1 days ago")
 
 echo Removing FAS Snapshots before $date
 
-ssIDs=`cray fas snapshots list --format json | jq -r '.snapshots | .[] | select(.captureTime < '\"$date\"') | .name'`
-if [ ${#ssIDs} -eq 0 ]
-then
+ssIDs=$(cray fas snapshots list --format json | jq -r '.snapshots | .[] | select(.captureTime < '\"$date\"') | .name')
+if [ ${#ssIDs} -eq 0 ]; then
   echo "No snapshots found before date $date"
   exit 0
 fi
 
 echo $ssIDs
 
-if [ $yes -ne 1 ]
-then
+if [ $yes -ne 1 ]; then
   echo "-------------------------"
   echo "Removing these snapshots:"
 
   count=0
-  for ss in $ssIDs
-  do
+  for ss in $ssIDs; do
     ((count++))
     cray fas snapshots describe $ss --format json | jq -r '. | "\(.name),\(.captureTime)"'
   done
@@ -81,8 +74,7 @@ then
   echo "-----------------------"
   read -p "Continue to remove $count FAS snapshots? " -n 1 -r
   echo    # (optional) move to a new line
-  if  ! [[ $REPLY =~ ^[Yy]$ ]]
-  then
+  if  ! [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "Action aborted"
     exit 0
   fi

@@ -3,11 +3,11 @@
 FAS stores actions along with all of its operations and snapshots in the database.
 To clean these actions, operations, and snapshots use the following scripts.
 
-## Prerequest
+## Prereqisite
 
 Cray CLI installed and configured.
 
-## FASrmActions.sh
+## `FASrmActions.sh`
 
 Removes FAS actions from database greater than number of days ago.
 
@@ -16,12 +16,13 @@ Removes FAS actions from database greater than number of days ago.
 ```
 
 Parameters:
-- num_of_days - the number of days to keep actions (all actions older will be deleted) (required)
+
+- `num_of_days` - the number of days to keep actions (all actions older will be deleted) (required)
 - -y - optional parameter - adding the -y will skip the confirmation prompt
 
-Example - This will remove actions > 50 days ago: (ncn-mw#)
+Example - This will remove actions > 50 days ago: (`ncn-mw#`)
 
-```
+```bash
 /usr/share/doc/csm/scripts/operations/firmware/FASrmActions.sh 50
 
 Removing FAS Actions before 2024-08-07
@@ -40,7 +41,7 @@ Removing: 69288a53-3d4e-48a8-bdaa-3310b279033f
 Removing: f2bfb5ef-d332-4e1a-88a6-b8a606f616b2
 ```
 
-## FASrmSnapshots.sh
+## `FASrmSnapshots.sh`
 
 Removes FAS snapshots from database greater than number of days ago.
 
@@ -49,12 +50,13 @@ Removes FAS snapshots from database greater than number of days ago.
 ```
 
 Parameters:
-- num_of_days - the number of days to keep snapshots (all snapshots older will be deleted) (required)
+
+- `num_of_days` - the number of days to keep snapshots (all snapshots older will be deleted) (required)
 - -y - optional parameter - adding the -y will skip the confirmation prompt
 
 Example - This will remove snapshots > 30 days ago: (ncn-mw#)
 
-```
+```bash
 /usr/share/doc/csm/scripts/operations/firmware/FASrmSnapshots.sh 30
 
 Removing FAS Snapshots before 2024-08-27
