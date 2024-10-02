@@ -80,8 +80,7 @@ if [ $yes -ne 1 ]; then
   fi
 fi
 
-for actionid in $actionIDs
-do
+for actionid in $actionIDs; do
   echo "Removing: $actionid"
   cray fas actions delete $actionid --format json
 done
