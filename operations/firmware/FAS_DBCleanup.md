@@ -19,7 +19,7 @@ Parameters:
 - num_of_days - the number of days to keep actions (all actions older will be deleted) (required)
 - -y - optional parameter - adding the -y will skip the confirmation prompt
 
-Example - This will remove actions > 50 days ago:
+Example - This will remove actions > 50 days ago: (ncn-mw#)
 
 ```
 /usr/share/doc/csm/scripts/operations/firmware/FASrmActions.sh 50
@@ -52,7 +52,7 @@ Parameters:
 - num_of_days - the number of days to keep snapshots (all snapshots older will be deleted) (required)
 - -y - optional parameter - adding the -y will skip the confirmation prompt
 
-Example - This will remove snapshots > 30 days ago:
+Example - This will remove snapshots > 30 days ago: (ncn-mw#)
 
 ```
 /usr/share/doc/csm/scripts/operations/firmware/FASrmSnapshots.sh 30
