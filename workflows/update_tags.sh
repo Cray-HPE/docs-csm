@@ -102,7 +102,12 @@ function update_tags_in_file() {
   LATEST_TAG=$2
   THIS_FILE=$3
   echo "Updating tag of ${THIS_IMAGE} in ${SCRIPT_DIR}/${THIS_FILE} to ${LATEST_TAG}."
-  sed -i -e "s|${THIS_IMAGE}:.*|${THIS_IMAGE}:${LATEST_TAG}|g" $THIS_FILE
+  if [[ ${THIS_IMAGE} =~ cray-sat$ ]]; then
+    # Use a more flexible sed replacement for cray-sat images
+    sed -i -e "s|[^ ]*cray-sat[^ ]*|${THIS_IMAGE}:${LATEST_TAG}|g" "$THIS_FILE"
+  else
+    sed -i -e "s|${THIS_IMAGE}:.*|${THIS_IMAGE}:${LATEST_TAG}|g" "$THIS_FILE"
+  fi
 }
 
 function update_cray_sat_image() {
