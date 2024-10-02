@@ -3,7 +3,7 @@
 FAS stores actions along with all of its operations and snapshots in the database.
 To clean these actions, operations, and snapshots use the following scripts.
 
-## Prereqisite
+## Prerequisites
 
 Cray CLI installed and configured.
 
@@ -54,7 +54,7 @@ Parameters:
 - `num_of_days` - the number of days to keep snapshots (all snapshots older will be deleted) (required)
 - -y - optional parameter - adding the -y will skip the confirmation prompt
 
-Example - This will remove snapshots > 30 days ago: (ncn-mw#)
+Example - This will remove snapshots > 30 days ago: (`ncn-mw#`)
 
 ```bash
 /usr/share/doc/csm/scripts/operations/firmware/FASrmSnapshots.sh 30

@@ -73,7 +73,7 @@ if [ $yes -ne 1 ]; then
 
   echo "-----------------------"
   read -p "Continue to remove $count FAS actions? " -n 1 -r
-  echo    # (optional) move to a new line
+  echo # (optional) move to a new line
   if ! [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "Action aborted"
     exit 0
