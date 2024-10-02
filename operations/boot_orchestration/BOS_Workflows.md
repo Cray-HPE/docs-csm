@@ -106,7 +106,9 @@ The following workflows are included in this section:
 
 1. **Power-on operator**
 
-    The power-on operator will detect nodes with a `power-on-pending` status. The power-on operator first sets the desired boot artifacts in BSS.
+    The power-on operator will detect nodes with a `power-on-pending` status. If root file system provider is the Scalable Boot Provisioning Service (`SBPS`), then the power-on operator
+    will notify SBPS that the root file system needs to be projected. It will do this by tagging the image with `sbps-project: true` using the Image Management Service (IMS).
+     Then, the power-on operator sets the desired boot artifacts in BSS.
     If configuration is enabled for the node, the power-on operator will also call CFS to set the desired configuration and disable the node with CFS.
     The node must be disabled within CFS so that CFS does not try to configure node until it has booted.
     The power-on operator then calls PCS to power-on the node.
@@ -127,7 +129,7 @@ The following workflows are included in this section:
 
 1. **Status operator (configuring)**
 
-    The status operator monitors a node's power state until HSM reports that the power state is on.  
+    The status operator monitors a node's power state until HSM reports that the power state is on.
     When the power state for a node is on, the status operator will either set the phase to `configuring` if CFS configuration is required or it will clear the current phase
     if the node is in its final state.
 
@@ -236,7 +238,9 @@ The following workflows are included in this section:
 
 1. **Power-on operator**
 
-    The power-on operator will detect nodes with a `power-on-pending` status. The power-on operator first sets the desired boot artifacts in BSS.
+    The power-on operator will detect nodes with a `power-on-pending` status. If root file system provider is the Scalable Boot Provisioning Service (`SBPS`), then the power-on operator
+    will notify SBPS that the root file system needs to be projected. It will do this by tagging the image with `sbps-project: true` using the Image Management Service (IMS).
+     Then, the power-on operator sets the desired boot artifacts in BSS.
     If configuration is enabled for the node, the power-on operator will also call CFS to set the desired configuration and disable the node with CFS.
     The node must be disabled within CFS so that CFS does not try to configure node until it has booted.
     The power-on operator then calls PCS to power-on the node.
