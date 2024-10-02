@@ -87,38 +87,6 @@ spec:
             # Set up the SAT config to use the token file
             sed -i -e 's|.*token_file.*|token_file = "/root/.config/sat/token.json"|' /root/.config/sat/sat.toml
 
-            vcs_pass=`kubectl get secret -n services vcs-user-credentials -o jsonpath='{.data.vcs_password}'| base64 -d`
-            rm -f /tmp/vcs_passwd
-            echo $vcs_pass  > /tmp/vcs_passwd
-
-            # TODO: Fix sat bootprep code to load kube config from cluster
-            # To workaround this issue for now, construct kubeconfig file in the pod
-            secret=`kubectl -n argo get serviceaccount/default -o jsonpath='{.secrets[0].name}'`
-            token=`kubectl -n argo get secret $secret -o jsonpath='{.data.token}'| base64 -d`
-            mkdir -p mykubeconfig
-            cat << EOF > mykubeconfig/admin.conf
-            apiVersion: v1
-            kind: Config
-            current-context: default
-            contexts:
-              - context:
-                  cluster: kubernetes
-                  user: default
-                  namespace: default
-                name: default
-            clusters:
-              - cluster:
-                  server: https://kubeapi-vip.local:6442
-                  insecure-skip-tls-verify: true
-                name: kubernetes
-            users:
-            - name: default
-              user:
-                token: ${token}
-          EOF
-            export KUBECONFIG=mykubeconfig/admin.conf
-            chmod 600 mykubeconfig/admin.conf
-
             # TODO: This is required to build images in IMS with sat bootprep. Find a way to pass
             # an IMS public key id into the argo workflow. Perhaps from the IUF CLI.
             ssh-keygen -f ~/.ssh/id_rsa -N ''
