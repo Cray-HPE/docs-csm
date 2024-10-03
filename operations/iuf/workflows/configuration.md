@@ -114,9 +114,6 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
        ./site_vars.yaml
        ```
 
-SAT will not automatically replace the variables `system-name` and `site-domain` with the values defined in `site_vars.yaml` in the `${ADMIN_DIR}/bootprep/compute-and-uan-bootprep.yaml` file. Therefore, they must
-be replaced manually. Use the same directions listed above for finding the values for these variables to populate the `site_vars.yaml` file and use them in the `${ADMIN_DIR}/bootprep/compute-and-uan-bootprep.yaml` file.
-
 Once this step has completed:
 
 - `${ADMIN_DIR}` is populated with `product_vars.yaml`, `site_vars.yaml`, and `sat bootprep` input files
