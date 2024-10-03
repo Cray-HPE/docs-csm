@@ -5174,6 +5174,32 @@ The name must:
 |---|---|---|---|---|
 |*anonymous*|string|false|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
 
+<h2 id="tocS_V2SessionNameOrEmpty">V2SessionNameOrEmpty</h2>
+<!-- backwards compatibility -->
+<a id="schemav2sessionnameorempty"></a>
+<a id="schema_V2SessionNameOrEmpty"></a>
+<a id="tocSv2sessionnameorempty"></a>
+<a id="tocsv2sessionnameorempty"></a>
+
+```json
+"session-20190728032600"
+
+```
+
+### Properties
+
+oneOf
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
+
+xor
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[EmptyString](#schemaemptystring)|false|none|An empty string value.|
+
 <h2 id="tocS_V2SessionOperation">V2SessionOperation</h2>
 <!-- backwards compatibility -->
 <a id="schemav2sessionoperation"></a>
@@ -5914,24 +5940,7 @@ may be set which can be triggered at a later time against this Component.
 |---|---|---|---|---|
 |boot_artifacts|[V2BootArtifacts](#schemav2bootartifacts)|false|none|A collection of boot artifacts.|
 |configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.|
-|session|any|false|none|none|
-
-oneOf
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
-
-xor
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[EmptyString](#schemaemptystring)|false|none|An empty string value.|
-
-continued
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
+|session|[V2SessionNameOrEmpty](#schemav2sessionnameorempty)|false|none|none|
 |last_updated|[V2ComponentLastUpdated](#schemav2componentlastupdated)|false|none|The date/time when the state was last updated in RFC 3339 format.|
 
 <h2 id="tocS_V2ComponentLastAction">V2ComponentLastAction</h2>
@@ -6110,24 +6119,7 @@ the Session responsible for the Component's current state.
 |status|[V2ComponentStatus](#schemav2componentstatus)|false|none|Status information for the Component|
 |enabled|boolean|false|none|A flag indicating if actions should be taken for this Component.|
 |error|string|false|none|A description of the most recent error to impact the Component.|
-|session|any|false|none|none|
-
-oneOf
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
-
-xor
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[EmptyString](#schemaemptystring)|false|none|An empty string value.|
-
-continued
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
+|session|[V2SessionNameOrEmpty](#schemav2sessionnameorempty)|false|none|none|
 |retry_policy|integer|false|none|The maximum number attempts per action when actions fail.<br>Defaults to the global default_retry_policy if not set|
 
 <h2 id="tocS_V2ComponentWithId">V2ComponentWithId</h2>
@@ -6208,24 +6200,7 @@ the Session responsible for the Component's current state.
 |status|[V2ComponentStatus](#schemav2componentstatus)|false|none|Status information for the Component|
 |enabled|boolean|false|none|A flag indicating if actions should be taken for this Component.|
 |error|string|false|none|A description of the most recent error to impact the Component.|
-|session|any|false|none|none|
-
-oneOf
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
-
-xor
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[EmptyString](#schemaemptystring)|false|none|An empty string value.|
-
-continued
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
+|session|[V2SessionNameOrEmpty](#schemav2sessionnameorempty)|false|none|none|
 |retry_policy|integer|false|none|The maximum number attempts per action when actions fail.<br>Defaults to the global default_retry_policy if not set|
 
 <h2 id="tocS_V2ComponentArray">V2ComponentArray</h2>
