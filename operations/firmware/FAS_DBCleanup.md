@@ -18,13 +18,17 @@ Removes FAS actions from database greater than number of days ago.
 Parameters:
 
 - `num_of_days` - the number of days to keep actions (all actions older will be deleted) (required)
-- -y - optional parameter - adding the -y will skip the confirmation prompt
+- `-y` - optional parameter - adding the -y will skip the confirmation prompt
 
 Example - This will remove actions > 50 days ago: (`ncn-mw#`)
 
 ```bash
 /usr/share/doc/csm/scripts/operations/firmware/FASrmActions.sh 50
+```
 
+Expected output:
+
+```text
 FAS Actions before 2024-08-07:
 13c336d6-d090-4b21-855e-41603d42476e 69288a53-3d4e-48a8-bdaa-3310b279033f f2bfb5ef-d332-4e1a-88a6-b8a606f616b2
 -----------------------
@@ -52,13 +56,17 @@ Removes FAS snapshots from database greater than number of days ago.
 Parameters:
 
 - `num_of_days` - the number of days to keep snapshots (all snapshots older will be deleted) (required)
-- -y - optional parameter - adding the -y will skip the confirmation prompt
+- `-y` - optional parameter - adding the -y will skip the confirmation prompt
 
 Example - This will remove snapshots > 30 days ago: (`ncn-mw#`)
 
 ```bash
 /usr/share/doc/csm/scripts/operations/firmware/FASrmSnapshots.sh 30
+```
 
+Expected output:
+
+```text
 FAS Snapshots before 2024-08-27:
 snapshot_08192024.1 snapshot_08192024.2 snapshot_08192024.3 snapshot_08192024.4 snapshot_08192024.5 snapshot_08192024.6 testsnapshot
 -------------------------
