@@ -1249,6 +1249,56 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="UPDATE_BSS_DATA_NCNS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+
+    # Template cloud-init disk configurations
+    csi config template disks
+    master_user_data=$(< "ncn-master/cloud-init/user-data.json")
+    worker_user_data=$(< "ncn-worker/cloud-init/user-data.json")
+    storage_user_data=$(< "ncn-storage/cloud-init/user-data.json")
+
+    # Get xnames for all Management nodes
+    if IFS=$'\n' read -rd '' -a NCN_XNAMES; then
+      :
+    fi <<< "$(cray hsm state components list --role Management --type Node --format json | jq -r '.Components | map(.ID) | join("\n")')"
+
+    # Update BSS data for ncn-master nodes
+    for xname in "${NCN_XNAMES[@]}"; do
+      xname_bss="$(cray bss bootparameters list --format json --hosts "${xname}")"
+
+      jq --argjson bss "$xname_bss" \
+        --argjson master_user_data "$master_user_data" \
+        --argjson worker_user_data "$worker_user_data" \
+        --argjson storage_user_data "$storage_user_data" \
+        'map(
+       if .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-master" then
+         .["cloud-init"]["user-data"]["bootcmd"] = $master_user_data["user-data"]["bootcmd"] |
+         .["cloud-init"]["user-data"]["fs_setup"] = $master_user_data["user-data"]["fs_setup"] |
+         .["cloud-init"]["user-data"]["mounts"] = $master_user_data["user-data"]["mounts"]
+       elif .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-worker" then
+         .["cloud-init"]["user-data"]["bootcmd"] = $worker_user_data["user-data"]["bootcmd"] |
+         .["cloud-init"]["user-data"]["fs_setup"] = $worker_user_data["user-data"]["fs_setup"] |
+         .["cloud-init"]["user-data"]["mounts"] = $worker_user_data["user-data"]["mounts"]
+       elif .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-storage" then
+         .["cloud-init"]["user-data"]["bootcmd"] = $storage_user_data["user-data"]["bootcmd"] |
+         .["cloud-init"]["user-data"]["fs_setup"] = $storage_user_data["user-data"]["fs_setup"] |
+         .["cloud-init"]["user-data"]["mounts"] = $storage_user_data["user-data"]["mounts"]
+       else .
+     end)' <<< "$xname_bss" > "bss-patched-${xname}.json"
+
+      cray bss bootparameters update --file "bss-patched-${xname}.json" && rm "bss-patched-${xname}.json"
+    done
+
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="TDS_LOWER_CPU_REQUEST"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta} == "false" ]]; then
