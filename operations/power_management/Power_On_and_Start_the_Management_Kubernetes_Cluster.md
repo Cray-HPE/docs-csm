@@ -246,10 +246,6 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
     session running in detached mode. The `sat bootsys` command will automatically exit screen
     sessions when nodes have finished booting.
 
-### Verify access to Lustre file system
-
-Verify that the Lustre file system is available from the management cluster.
-
 ### Start Kubernetes and other services
 
 1. (`ncn-m001#`) Start the Kubernetes cluster.
