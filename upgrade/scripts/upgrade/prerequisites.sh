@@ -1257,9 +1257,9 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 
     # Template cloud-init disk configurations
     csi config template disks
-    master_user_data=$(<"ncn-master/cloud-init/user-data.json")
-    worker_user_data=$(<"ncn-worker/cloud-init/user-data.json")
-    storage_user_data=$(<"ncn-storage/cloud-init/user-data.json")
+    master_user_data=$(< "ncn-master/cloud-init/user-data.json")
+    worker_user_data=$(< "ncn-worker/cloud-init/user-data.json")
+    storage_user_data=$(< "ncn-storage/cloud-init/user-data.json")
 
     # Get xnames for all Management nodes
     if IFS=$'\n' read -rd '' -a NCN_XNAMES; then
@@ -1270,11 +1270,11 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     for xname in "${NCN_XNAMES[@]}"; do
       xname_bss="$(cray bss bootparameters list --format json --hosts "${xname}")"
 
-  jq --argjson bss "$xname_bss" \
-    --argjson master_user_data "$master_user_data" \
-    --argjson worker_user_data "$worker_user_data" \
-    --argjson storage_user_data "$storage_user_data" \
-     'map(
+      jq --argjson bss "$xname_bss" \
+        --argjson master_user_data "$master_user_data" \
+        --argjson worker_user_data "$worker_user_data" \
+        --argjson storage_user_data "$storage_user_data" \
+        'map(
        if .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-master" then
          .["cloud-init"]["user-data"]["bootcmd"] = $master_user_data["user-data"]["bootcmd"] |
          .["cloud-init"]["user-data"]["fs_setup"] = $master_user_data["user-data"]["fs_setup"] |
