@@ -51,7 +51,7 @@ fi
 
 date=$(date +%Y-%m-%d -d "$1 days ago")
 
-echo Removing FAS Snapshots before $date
+echo FAS Snapshots before $date:
 
 ssIDs=$(cray fas snapshots list --format json | jq -r '.snapshots | .[] | select(.captureTime < '\"$date\"') | .name')
 if [ ${#ssIDs} -eq 0 ]; then
@@ -63,7 +63,7 @@ echo $ssIDs
 
 if [ $yes -ne 1 ]; then
   echo "-------------------------"
-  echo "Removing these snapshots:"
+  echo "Snapshots to be removed:"
 
   count=0
   for ss in $ssIDs; do

@@ -51,7 +51,7 @@ fi
 
 date=$(date +%Y-%m-%d -d "$1 days ago")
 
-echo Removing FAS Actions before $date
+echo FAS Actions before $date:
 
 actionIDs=$(cray fas actions list --format json | jq -r '.actions | .[] | select(.endTime < '\"$date\"') | .actionID')
 if [ ${#actionIDs} -eq 0 ]; then
@@ -63,7 +63,7 @@ echo $actionIDs
 
 if [ $yes -ne 1 ]; then
   echo "-----------------------"
-  echo "Removing these actions:"
+  echo "Actions to be removed:"
 
   count=0
   for actionid in $actionIDs; do
