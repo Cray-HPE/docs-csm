@@ -62,23 +62,9 @@ spec:
           podman tag skopeo:csm-{{ getEnv "CSM_RELEASE" }} quay.io/skopeo/stable:latest
 
           podman run --rm --network host -v {{ getEnv "CSM_PATH" }}/docker:/images:ro \
-              quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 \
+              quay.io/skopeo/stable sync --all --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 \
               /images localhost:5000
 
-          # XXX For backwards compatibility with CSM 1.0, container images under
-          # XXX dtr.dev.cray.com and quay.io are also uploaded to the root of
-          # XXX registry.local. This is only necessary while charts and procedures still
-          # XXX reference dtr.dev.cray.com or quay.io/skopeo/stable:latest.
-          if [ -d "{{ getEnv "CSM_PATH" }}/docker/dtr.dev.cray.com" ]; then
-              podman run --rm --network host -v {{ getEnv "CSM_PATH" }}/docker/dtr.dev.cray.com:/images:ro \
-                  quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 \
-                  /images localhost:5000
-          fi
-          if [ -d "{{ getEnv "CSM_PATH" }}/docker/quay.io/skopeo/stable:latest" ]; then
-              podman run --rm --network host -v {{ getEnv "CSM_PATH" }}/docker/quay.io:/image:ro \
-                  quay.io/skopeo/stable copy --dest-tls-verify=false --dest-creds admin:admin123 \
-                  dir:/image/skopeo/stable:latest docker://localhost:5000/skopeo/stable:latest
-          fi
         troubleshooting: |-
           Nothing
       postValidation:
