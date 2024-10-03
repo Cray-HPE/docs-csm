@@ -1,7 +1,7 @@
 # Cleaning up FAS Database
 
 FAS stores actions along with all of its operations and snapshots in the database.
-To clean these actions, operations, and snapshots use the following scripts.
+To clean these actions and snapshots use the following scripts.
 
 ## Prerequisites
 
@@ -25,10 +25,10 @@ Example - This will remove actions > 50 days ago: (`ncn-mw#`)
 ```bash
 /usr/share/doc/csm/scripts/operations/firmware/FASrmActions.sh 50
 
-Removing FAS Actions before 2024-08-07
+FAS Actions before 2024-08-07:
 13c336d6-d090-4b21-855e-41603d42476e 69288a53-3d4e-48a8-bdaa-3310b279033f f2bfb5ef-d332-4e1a-88a6-b8a606f616b2
 -----------------------
-Removing these actions:
+Actions to be removed:
 13c336d6-d090-4b21-855e-41603d42476e,2024-07-30 18:11:44.976172732 +0000 UTC,Upgrade of Node BIOS -- Dryrun 07/30/2024 18:11:23,14
 69288a53-3d4e-48a8-bdaa-3310b279033f,2024-07-30 20:09:56.254527556 +0000 UTC,Upgrade of Node BIOS -- Dryrun 07/30/2024 20:09:37,14
 f2bfb5ef-d332-4e1a-88a6-b8a606f616b2,2024-07-31 15:58:12.848910552 +0000 UTC,Upgrade of Node BIOS -- Dryrun 07/31/2024 15:57:52,14
@@ -59,10 +59,10 @@ Example - This will remove snapshots > 30 days ago: (`ncn-mw#`)
 ```bash
 /usr/share/doc/csm/scripts/operations/firmware/FASrmSnapshots.sh 30
 
-Removing FAS Snapshots before 2024-08-27
+FAS Snapshots before 2024-08-27:
 snapshot_08192024.1 snapshot_08192024.2 snapshot_08192024.3 snapshot_08192024.4 snapshot_08192024.5 snapshot_08192024.6 testsnapshot
 -------------------------
-Removing these snapshots:
+Snapshots to be removed:
 snapshot_08192024.1,2024-08-19 20:42:47.060050059 +0000 UTC
 snapshot_08192024.2,2024-08-19 20:44:45.290255555 +0000 UTC
 snapshot_08192024.3,2024-08-19 20:45:27.590469268 +0000 UTC
