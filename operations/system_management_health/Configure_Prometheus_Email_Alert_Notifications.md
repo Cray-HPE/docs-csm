@@ -28,7 +28,7 @@ This procedure can be performed on any master or worker NCN.
 1. (`ncn-mw#`) Save the current alert notification configuration, in case a rollback is needed.
 
     ```bash
-    kubectl get secret -n sysmgmt-health alertmanager-cray-sysmgmt-health-promet-alertmanager \
+    kubectl get secret -n sysmgmt-health alertmanager-config \
             -ojsonpath='{.data.alertmanager\.yaml}' | base64 --decode > /tmp/alertmanager-default.yaml
     ```
 
@@ -45,11 +45,10 @@ This procedure can be performed on any master or worker NCN.
         kind: Secret
         metadata:
           labels:
-            app: kube-prometheus-stack-alertmanager
-            chart: kube-prometheus-stack-45.1.1
-            heritage: Tiller
-            release: cray-sysmgmt-health
-          name: alertmanager-cray-sysmgmt-health-kube-p-alertmanager
+            app.kubernetes.io/component: monitoring
+            app.kubernetes.io/instance: vms
+            app.kubernetes.io/name: vmalertmanager
+          name: alertmanager-config
           namespace: sysmgmt-health
         type: Opaque
         ```
@@ -113,18 +112,18 @@ This procedure can be performed on any master or worker NCN.
     1. View the current configuration.
 
         ```bash
-        kubectl exec alertmanager-cray-sysmgmt-health-promet-alertmanager-0 \
+        kubectl exec vmalertmanager-vms-0 \
                 -n sysmgmt-health -c alertmanager -- cat /etc/alertmanager/config/alertmanager.yaml
         ```
 
     1. If the configuration does not look accurate, check the logs for errors.
 
         ```bash
-        kubectl logs -f -n sysmgmt-health pod/alertmanager-cray-sysmgmt-health-promet-alertmanager-0 alertmanager
+        kubectl logs -f -n sysmgmt-health pod/vmalertmanager-vms-0 alertmanager
         ```
 
 An email notification will be sent once either of the alerts set in this procedure is `FIRING` in Prometheus.
-See `https://prometheus.cmn.SYSTEM_DOMAIN_NAME/alerts` for more information.
+See `https://vmselect.cmn.SYSTEM_DOMAIN_NAME/select/0/prometheus/vmalert/api/v1/alerts` for more information.
 
 If an alert is received, then refer to [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md) for more information
 about recovering replication.

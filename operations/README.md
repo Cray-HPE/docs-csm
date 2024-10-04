@@ -454,7 +454,6 @@ confident that a lack of issues indicates the system is operating normally.
 - [System Management Health](system_management_health/System_Management_Health.md)
 - [System Management Health Checks and Alerts](system_management_health/System_Management_Health_Checks_and_Alerts.md)
 - [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md)
-- [Configure Prometheus Alerta Alert Notifications](system_management_health/Configure_Prometheus_Alerta_Alert_Notifications.md)
 - [Configure Prometheus Email Alert Notifications](system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
 - [Grafana Dashboards by Component](system_management_health/Grafana_Dashboards_by_Component.md)
     - [Troubleshoot Grafana Dashboard](system_management_health/Troubleshoot_Grafana_Dashboard.md)

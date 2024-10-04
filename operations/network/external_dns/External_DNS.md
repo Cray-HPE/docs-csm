@@ -12,7 +12,7 @@ The following services are currently available:
 - Keycloak
 - Ceph RADOS gateway \(requires valid JWT\)
 - Nexus
-- System Management Health Prometheus \(redirects to OAuth2 Proxy for SSO\)
+- System Management Health Vmselect \(redirects to OAuth2 Proxy for SSO\)
 - System Management Health Grafana \(redirects to OAuth2 Proxy for SSO\)
 - System Management Health Alertmanager \(redirects to OAuth2 Proxy for SSO\)
 - Kiali, for Istio service mesh visibility \(redirects to OAuth2 Proxy for SSO\)

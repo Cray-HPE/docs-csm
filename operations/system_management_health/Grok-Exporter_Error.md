@@ -11,7 +11,7 @@ The node was low on resource: ephemeral-storage. Container grok-exporter was usi
 ## Solution
 
 This Kafka service does not exist, because the [System Monitoring Application (SMA)](../../glossary.md#system-monitoring-application-sma)
-has not been installed yet. This causes the above errors for retry to be logged. Prometheus can operate without SMA Kafka and it will
+has not been installed yet. This causes the above errors for retry to be logged. VictoriaMetrics can operate without SMA Kafka and it will
 periodically retry the connection to Kafka. These errors will be logged until SMA is installed. Therefore, if they are seen before SMA is
 installed, then disregard them.
 
