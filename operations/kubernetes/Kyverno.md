@@ -402,13 +402,13 @@ Example output:
 
 ### Container Image Signature Verification Kyverno Policy
 
-Container image signing and runtime verification policy by name `check-image` is delivered (through Kyverno 
-policy engine) as part of CSM 1.6 release in `Audit` only mode. (`Audit` only mode will log the policy violation 
+Container image signing and runtime verification policy by name `check-image` is delivered (through Kyverno
+policy engine) as part of CSM 1.6 release in `Audit` only mode. (`Audit` only mode will log the policy violation
 warning messages in to the cluster report and as events)
 
 By default the `check-image` policy is shipped as a `ClusterPolicy` and is configured to work in a sample (non-existent) namespace. To enable the policy, end users must customize it to the targeted namespaces.
 
-CSM runs in an air gapped environment, where the images stored in `artifactory` are mirrored to the local nexus registry. Kyverno policy engine does not support this environment. To enable Kyverno policy for such environments, all image specs need to be replaced from `artifactory.algol60.net/csm-docker/stable/image:tag` to `registry.local/artifactory.algol60.net/csm-docker/stable/image:tag` (prepend `registry.local/` to the image spec). This will force Kyverno to check local nexus registry for the images. Without `registry.local/`, Kyverno will try to contact remote registry (`artifactory`) every time, and this may trigger timeouts due to delays, and eventually lead to policy failure.
+CSM runs in an air gapped environment, where the images stored in `artifactory` are mirrored to the local nexus registry. Kyverno policy engine does not support this environment. To enable Kyverno policy for such environments, all `image specs` need to be replaced from `artifactory.algol60.net/csm-docker/stable/image:tag` to `registry.local/artifactory.algol60.net/csm-docker/stable/image:tag` (prepend `registry.local/` to the image spec). This will force Kyverno to check local nexus registry for the images. Without `registry.local/`, Kyverno will try to contact remote registry (`artifactory`) every time, and this may trigger timeouts due to delays, and eventually lead to policy failure.
 
 Prepending `registry.local/` to the image spec can be achieved either manually or through a mutation policy.
 
@@ -416,8 +416,8 @@ For more information on mutation policy refer [Mutation Policy](https://kyverno.
 
 #### Policy customization
 
-If any changes are to be made to the policy, for example, including or excluding certain namespaces and adding 
-a new public key, then end user need to change the CSM customizations and redeploy the `kyverno-policy` chart. 
+If any changes are to be made to the policy, for example, including or excluding certain namespaces and adding
+a new public key, then end user need to change the CSM customizations and redeploy the `kyverno-policy` chart.
 For more information on customization and redeployment refer [Customization](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/CSM_product_management/Redeploying_a_Chart.md)
 
 For more information on policy exception and matchings, refer to Kyverno documentation at [Policy Exceptions](https://release-1-10-0.kyverno.io/docs/writing-policies/exceptions/)
