@@ -18,7 +18,7 @@ Removes FAS actions from database greater than number of days ago.
 Parameters:
 
 - `num_of_days` - the number of days to keep actions (all actions older will be deleted) (required)
-- `-y` - optional parameter - adding the -y will skip the confirmation prompt
+- `-y` - optional parameter - adding the `-y` will skip the confirmation prompt
 
 Example - This will remove actions > 50 days ago: (`ncn-mw#`)
 
@@ -56,7 +56,7 @@ Removes FAS snapshots from database greater than number of days ago.
 Parameters:
 
 - `num_of_days` - the number of days to keep snapshots (all snapshots older will be deleted) (required)
-- `-y` - optional parameter - adding the -y will skip the confirmation prompt
+- `-y` - optional parameter - adding the `-y` will skip the confirmation prompt
 
 Example - This will remove snapshots > 30 days ago: (`ncn-mw#`)
 
