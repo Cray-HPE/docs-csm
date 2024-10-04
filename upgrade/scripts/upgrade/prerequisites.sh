@@ -1256,7 +1256,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   {
 
     # Template cloud-init disk configurations
-    csi config template disks
+    csi config template cloud-init disks
     master_user_data=$(< "ncn-master/cloud-init/user-data.json")
     worker_user_data=$(< "ncn-worker/cloud-init/user-data.json")
     storage_user_data=$(< "ncn-storage/cloud-init/user-data.json")
