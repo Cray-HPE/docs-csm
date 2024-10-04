@@ -6,6 +6,10 @@ version three (V3) of the CFS API. Currently, the `sat bootsys` and `sat
 bootprep` commands can only use CFS V2, but support will be added for CFS V3 in
 the future.
 
+Select the CFS version to use for individual commands with the `--cfs-version`
+option. For more information on this option, refer to the man page for a specific
+command.
+
 Another way to change the CFS version is by configuring it under the
 `api_version` setting in the `cfs` section of the SAT configuration file.
 If the system is using an existing SAT configuration file from an older
