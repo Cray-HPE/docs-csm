@@ -54,6 +54,7 @@ Ceph tools' usage documentation
 - [CSM RBD Tool Usage](CSM_rbd_tool_Usage.md)
 - [Ceph Service Check Script Usage](Ceph_Service_Check_Script_Usage.md)
 - [cubs_tool Usage](Cubs_tool_Usage.md)
+- [`ceph-upgrade-tool` Usage](utility_storage/Ceph_upgrade_tool_Usage.md)
 
 ## Storage troubleshooting references
 
