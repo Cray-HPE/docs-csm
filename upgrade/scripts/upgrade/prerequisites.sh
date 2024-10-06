@@ -1268,31 +1268,34 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 
     # Update BSS data for ncn-master nodes
     for xname in "${NCN_XNAMES[@]}"; do
-      xname_bss="$(cray bss bootparameters list --format json --hosts "${xname}")"
+      xname_bss="$(cray bss bootparameters list --format json --hosts "${xname}" | jq '.[0]')"
 
+      # Add disk configuration for each NCN
       jq --argjson bss "$xname_bss" \
         --argjson master_user_data "$master_user_data" \
         --argjson worker_user_data "$worker_user_data" \
         --argjson storage_user_data "$storage_user_data" \
-        'map(
-       if .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-master" then
-         .["cloud-init"]["user-data"]["bootcmd"] = $master_user_data["user-data"]["bootcmd"] |
-         .["cloud-init"]["user-data"]["fs_setup"] = $master_user_data["user-data"]["fs_setup"] |
-         .["cloud-init"]["user-data"]["mounts"] = $master_user_data["user-data"]["mounts"]
-       elif .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-worker" then
-         .["cloud-init"]["user-data"]["bootcmd"] = $worker_user_data["user-data"]["bootcmd"] |
-         .["cloud-init"]["user-data"]["fs_setup"] = $worker_user_data["user-data"]["fs_setup"] |
-         .["cloud-init"]["user-data"]["mounts"] = $worker_user_data["user-data"]["mounts"]
-       elif .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-storage" then
-         .["cloud-init"]["user-data"]["bootcmd"] = $storage_user_data["user-data"]["bootcmd"] |
-         .["cloud-init"]["user-data"]["fs_setup"] = $storage_user_data["user-data"]["fs_setup"] |
-         .["cloud-init"]["user-data"]["mounts"] = $storage_user_data["user-data"]["mounts"]
-       else .
-     end)' <<< "$xname_bss" > "bss-patched-${xname}.json"
+        'if .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-master" then
+          .["cloud-init"]["user-data"]["bootcmd"] = $master_user_data["user-data"]["bootcmd"] |
+          .["cloud-init"]["user-data"]["fs_setup"] = $master_user_data["user-data"]["fs_setup"] |
+          .["cloud-init"]["user-data"]["mounts"] = $master_user_data["user-data"]["mounts"]
+        elif .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-worker" then
+          .["cloud-init"]["user-data"]["bootcmd"] = $worker_user_data["user-data"]["bootcmd"] |
+          .["cloud-init"]["user-data"]["fs_setup"] = $worker_user_data["user-data"]["fs_setup"] |
+          .["cloud-init"]["user-data"]["mounts"] = $worker_user_data["user-data"]["mounts"]
+        elif .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-storage" then
+          .["cloud-init"]["user-data"]["bootcmd"] = $storage_user_data["user-data"]["bootcmd"] |
+          .["cloud-init"]["user-data"]["fs_setup"] = $storage_user_data["user-data"]["fs_setup"] |
+          .["cloud-init"]["user-data"]["mounts"] = $storage_user_data["user-data"]["mounts"]
+        else .
+        end' <<< "$xname_bss" > "bss-patched-${xname}.json"
 
-      cray bss bootparameters update --file "bss-patched-${xname}.json" && rm "bss-patched-${xname}.json"
+      # Update BSS
+      curl -s -i -k -H "Authorization: Bearer $(get_token)" -X PUT \
+        https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters \
+        --data @./"bss-patched-${xname}.json" \
+        && rm "bss-patched-${xname}.json"
     done
-
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
