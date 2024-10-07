@@ -157,7 +157,7 @@ with system-specific customizations.
    In the example below, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
 
    ```bash
-   LDAP=dcldap2.us.cray.com
+   LDAP=dcldap2.hpc.amslabs.hpecorp.net
    PORT=636
    ```
 
