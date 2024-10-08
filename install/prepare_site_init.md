@@ -165,10 +165,10 @@ with system-specific customizations.
 
     1. Set environment variables for `LDAP` and `PORT`.
 
-       In the example below, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
+       In the example below, the LDAP server has the hostname `dcldap2.hpc.amslabs.hpecorp.net` and is using the port 636.
 
        ```bash
-       linux# export LDAP=dcldap2.us.cray.com
+       linux# export LDAP=dcldap2.hpc.amslabs.hpecorp.net
        linux# PORT=636
        ```
 
@@ -338,7 +338,7 @@ with system-specific customizations.
          >     - type: static
          >         args:
          >         name: ldap_connection_url
-         >         value: ldaps://dcldap2.us.cray.com
+         >         value: ldaps://dcldap2.hpc.amslabs.hpecorp.net
          > ```
 
     1. Configure the `ldapSearchBase` and `localRoleAssignments` settings for
