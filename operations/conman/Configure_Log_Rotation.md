@@ -18,7 +18,7 @@ for more information on this topic.
     file through a log rotation. Otherwise the `tail` will follow the old file which has
     moved and is no longer being appended to with new console log information.
 
-The log rotation works in the following manner:
+## How log rotation works
 
 1. On a regular schedule, the log rotation will execute the following steps:
 
@@ -39,25 +39,26 @@ The log rotation works in the following manner:
         that limit is reached, the oldest version of the console log file will
         be deleted.
 
-To modify the settings for the log rotation, edit the `cray-console-node` stateful set:
+## Modify the settings for the log rotation
+
+1. Edit the `cray-console-node` stateful set:
 
     ```bash
     kubectl -n services edit statefulset cray-console-node
     ```
 
-    Look for the section that contains the environment variables for the log
-    rotation settings:
+1. Look for the section that contains log rotation settings:
 
     ```text
-      - env:
+        - env:
         - name: LOG_ROTATE_ENABLE
-          value: "True"
+            value: "True"
         - name: LOG_ROTATE_FILE_SIZE
-          value: 5M
+            value: 5M
         - name: LOG_ROTATE_SEC_FREQ
-          value: "600"
+            value: "600"
         - name: LOG_ROTATE_NUM_KEEP
-          value: "2"
+            value: "2"
     ```
 
     1. `LOG_ROTATE_ENABLE`
@@ -66,7 +67,7 @@ To modify the settings for the log rotation, edit the `cray-console-node` statef
         not have any log rotation happen at all, then set the value to 'False' but
         you must keep a close eye on the capacity of the PVC.
 
-    1. LOG_ROTATE_SEC_FREQ
+    1. `LOG_ROTATE_SEC_FREQ`
 
         This sets how often the log rotation will happen in seconds. The default is
         every 600 seconds (10 minutes). If you want rotation to happen more often
@@ -75,7 +76,7 @@ To modify the settings for the log rotation, edit the `cray-console-node` statef
         so if the rotation takes a bit of time you may see the actual time between
         to subsequent log rotations end up longer than this interval.
 
-    1. LOG_ROTATE_FILE_SIZE
+    1. `LOG_ROTATE_FILE_SIZE`
 
         This is the size of a file to rotate. When the log rotation happens, if an
         individual log file is larger than this size, it will be rotated.
@@ -85,7 +86,7 @@ To modify the settings for the log rotation, edit the `cray-console-node` statef
         the rotation actually happens. If files are growing significantly larger than
         this setting increase the frequency of log rotations.
 
-    1. LOG_ROTATE_NUM_KEEP
+    1. `LOG_ROTATE_NUM_KEEP`
 
         This is the number of log rotations it will keep in the `/var/log/conman.old`
         directory. For example if this value is 2, there will be a 
@@ -94,7 +95,7 @@ To modify the settings for the log rotation, edit the `cray-console-node` statef
         for the file to be rotated twice). Setting this value to 0 will prevent any
         older files to be kept.
 
-Scenarios that may be encountered and possible solutions:
+## Scenarios that may be encountered and possible solutions:
 
 1. The log files are getting too large before they are being rotated.
 
