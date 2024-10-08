@@ -202,19 +202,30 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
 
 1. (`ncn-mw#`) Clear the desired state.
 
-    > Repeat this step for each component that moving from one tenant to another.
+    - For a single component changing tenants, use the following command:
 
-    ```bash
-    cray bos v2 components update <xname> --enabled true --staged-state-session "" --staged-state-configuration "" \
-        --staged-state-boot-artifacts-initrd "" --staged-state-boot-artifacts-kernel-parameters "" --staged-state-boot-artifacts-kernel "" \
-        --desired-state-bss-token "" --desired-state-configuration "" --desired-state-boot-artifacts-initrd "" \
-        --desired-state-boot-artifacts-kernel-parameters "" --desired-state-boot-artifacts-kernel ""
-    ```
+        ```bash
+        cray bos v2 components update --enabled true --clear-pending-state <xname> 
+        ```
 
-1. (`ncn-mw#`) Wait until the component reaches a `stable` state.
+    - For multiple components changing tenants, use the following command:
 
-    Because the previous step cleared the desired state, the `stable` state indicates that the component is powered off.
+        ```bash
+        cray bos v2 components updatemany --enabled true --clear-pending-state --filter-ids <xname1>,<xname2>,...
+        ```
 
-    ```bash
-    cray bos v2 components describe <xname> --format json | jq .status.status
-    ```
+1. (`ncn-mw#`) Wait until the components reach a `stable` state.
+
+    Because the previous step cleared the desired state, the `stable` state indicates that the components are powered off.
+
+    - For checking a single component, use the following command:
+
+        ```bash
+        cray bos v2 components describe <xname> --format json | jq .status.status
+        ```
+
+    - For checking multiple components, use the following command:
+
+        ```bash
+        cray bos v2 components list --ids <xname1>,<xname2>,... --format json | jq '.[] | .status.status'
+        ```

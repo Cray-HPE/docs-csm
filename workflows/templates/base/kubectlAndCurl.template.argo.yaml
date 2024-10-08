@@ -62,7 +62,7 @@ spec:
             token=`kubectl -n argo create token default`
           else
             token=`kubectl -n argo get secret $secret -o jsonpath='{.data.token}'| base64 -d`
-          fi`
+          fi
           mkdir -p mykubeconfig
           cat << EOF > mykubeconfig/admin.conf
           apiVersion: v1

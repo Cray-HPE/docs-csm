@@ -1,4 +1,4 @@
-# Upgrade CSM and additional products with IUF
+# Upgrade CSM and additional products
 
 This procedure is used when performing an upgrade of Cray System Management (CSM) along with
 additional HPE Cray EX software products at the same time. This procedure would be used when
@@ -15,11 +15,11 @@ and [Slingshot Host Software (SHS)](../../../glossary.md#slingshot-host-software
 
 There are two options to upgrade CSM and additional HPE Cray EX software products:
 
+1. This option is for upgrading CSM and additional HPE Cray EX software products using IUF. See
+[Upgrade CSM and additional products with IUF](upgrade_csm_iuf_additional_products_with_iuf.md)
+for that procedure.
+
 1. This option alternates between CSM upgrade instructions that do not utilize IUF
 and instructions for upgrading additional HPE Cray EX software products whose installation is
 managed by the IUF. See
 [Upgrade CSM manually and additional products with IUF](upgrade_csm_manual_and_additional_products_with_iuf.md) for that procedure.
-
-1. This option is for upgrading CSM and additional HPE Cray EX software products using IUF. See
-[Upgrade CSM and additional products with IUF](upgrade_csm_iuf_additional_products_with_iuf.md)
-for that procedure.

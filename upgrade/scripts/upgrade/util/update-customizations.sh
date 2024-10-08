@@ -30,7 +30,9 @@ trap 'err_report' ERR
 set -o pipefail
 
 usage() {
-  echo >&2 "usage: ${0##*/} [-i] [CUSTOMIZATIONS-YAML]"
+  echo >&2 "Update customizations during upgrade, using current customizations (from live system) and"
+  echo >&2 "    new customizations (from upgrade tarball). With -i, update CUSTOMIZATIONS-YAML in place."
+  echo >&2 "usage: ${0##*/} [-i] CUSTOMIZATIONS-YAML CUSTOMIZATIONS-YAML-FROM-UPGRADE-TARBALL"
   exit 1
 }
 
@@ -52,9 +54,10 @@ done
 
 set -- "${args[@]}"
 
-[[ $# -eq 1 ]] || usage
+[[ $# -eq 2 ]] || usage
 
 customizations="$1"
+upgrade_customizations="$2"
 
 if [[ ! -f $customizations ]]; then
   echo >&2 "error: no such file: $customizations"
@@ -136,14 +139,16 @@ if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-
   if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack' $c)" != null ]; then
     yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack = (.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack * .spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack)' -i $c
   fi
-  yq4 eval 'del(.spec.proxiedWebAppExternalHostnames.customerManagement[] | select(. == "{{ kubernetes.services['\''cray-sysmgmt-health'\'']['\''kube-prometheus-stack'\''].thanos.thanosSpec.externalAuthority }}"))' -i $c
   yq4 ".spec.proxiedWebAppExternalHostnames.customerManagement[3] = \"{{ kubernetes.services['cray-sysmgmt-health']['victoria-metrics-k8s-stack'].vmselect.vmselectSpec.externalAuthority }}\"" -i $c
   yq4 ".spec.proxiedWebAppExternalHostnames.customerManagement[4] = \"{{ kubernetes.services['cray-sysmgmt-health']['victoria-metrics-k8s-stack'].alertmanager.externalAuthority }}\"" -i $c
   yq4 ".spec.proxiedWebAppExternalHostnames.customerManagement[5] = \"{{ kubernetes.services['cray-sysmgmt-health']['victoria-metrics-k8s-stack'].grafana.externalAuthority }}\"" -i $c
+  yq4 ".spec.proxiedWebAppExternalHostnames.customerManagement[6] = \"{{ kubernetes.services['cray-sysmgmt-health']['victoria-metrics-k8s-stack'].vmagent.vmagentSpec.externalAuthority }}\"" -i $c
   yq4 eval ".spec.kubernetes.services.cray-kiali.kiali-operator.cr.spec.external_services.grafana.url = \"https://{{ kubernetes.services['cray-sysmgmt-health']['victoria-metrics-k8s-stack'].grafana.externalAuthority }}/\"" -i $c
   yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack = .spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack | del(.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack)" -i $c
+  yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmagent.vmagentSpec.externalAuthority = "vmagent.cmn.{{ network.dns.external }}"' -i $c
   yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmselect.vmselectSpec.externalAuthority = "vmselect.cmn.{{ network.dns.external }}"' -i $c
   yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.alertmanager.externalAuthority = "alertmanager.cmn.{{ network.dns.external }}"' -i $c
+  yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmagent.vmagentSpec.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['victoria-metrics-k8s-stack'].vmagent.vmagentSpec.externalAuthority }}/\"" -i $c
   yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmselect.vmselectSpec.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['victoria-metrics-k8s-stack'].vmselect.vmselectSpec.externalAuthority }}/\"" -i $c
   yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.alertmanager.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['victoria-metrics-k8s-stack'].alertmanager.externalAuthority }}/\"" -i $c
   yq4 'del(.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.alertmanager.alertmanagerSpec)' -i $c
@@ -167,6 +172,9 @@ yq4 -i eval 'del(.spec.kubernetes.services.*.cray-service.sqlCluster)' "$c"
 yq4 -i eval 'del(.spec.kubernetes.services.cray-hms-reds)' "$c"
 # Add customizations for cray-hms-discovery for it to get the River credential sealed secret:
 yq4 -i eval '.spec.kubernetes.services.cray-hms-discovery.sealedSecrets = ["{{ kubernetes.sealed_secrets.cray_reds_credentials | toYaml }}"]' "$c"
+
+# kyverno-policy did not have configurable customization prior to 1.6. Import kyverno-policy.checkImageSettings from upgrade customizations file during upgrade.
+yq4 -i eval ".spec.kubernetes.services[\"kyverno-policy\"].checkImagePolicy += (load(\"${upgrade_customizations}\") | .spec.kubernetes.services[\"kyverno-policy\"].checkImagePolicy)" "$c"
 
 # lower cpu request for tds systems (4 workers)
 num_workers=$(kubectl get nodes | grep ncn-w | wc -l)

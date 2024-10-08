@@ -417,7 +417,7 @@ services running on Kubernetes, as well as for telemetry data coming from the co
 - [Ceph Service Check Script Usage](utility_storage/Ceph_Service_Check_Script_Usage.md)
 - [Ceph Orchestrator Usage](utility_storage/Ceph_Orchestrator_Usage.md)
 - [Ceph Storage Types](utility_storage/Ceph_Storage_Types.md)
-- [`cubs_tool` Usage](utility_storage/Cubs_tool_Usage.md)
+- [`ceph-upgrade-tool` Usage](utility_storage/Ceph_upgrade_tool_Usage.md)
 - [Dump Ceph Crash Data](utility_storage/Dump_Ceph_Crash_Data.md)
 - [Identify Ceph Latency Issues](utility_storage/Identify_Ceph_Latency_Issues.md)
 - [Cephadm Reference Material](utility_storage/Cephadm_Reference_Material.md)
@@ -806,3 +806,4 @@ these backups.
 - [Slurm Operator](multi-tenancy/SlurmOperator.md)
 - [Tenant and Partition Management System (TAPMS) Overview](multi-tenancy/Tapms.md)
 - [TAPMS Tenant Status API](../api/tapms-operator.md)
+- [Global Tenant Hooks](multi-tenancy/GlobalTenantHooks.md)

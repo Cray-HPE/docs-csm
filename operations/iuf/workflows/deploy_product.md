@@ -1,8 +1,8 @@
 # Deploy product
 
-- [1. Execute the IUF `deploy-product` stage](#1-execute-the-iuf-deploy-product-stage)
-- [2. Upgrade Kubernetes](#2-upgrade-kubernetes)
-- [3. Next steps](#3-next-steps)
+1. [Execute the IUF `deploy-product` stage](#1-execute-the-iuf-deploy-product-stage)
+1. [Upgrade Kubernetes](#2-upgrade-kubernetes)
+1. [Next steps](#3-next-steps)
 
 ## 1. Execute the IUF `deploy-product` stage
 
@@ -12,7 +12,9 @@ Refer to that table and any corresponding product documents before continuing to
 
 1. Invoke `iuf run` with activity identifier `${ACTIVITY_NAME}` and use `-r` to execute the [`deploy-product`](../stages/deploy_product.md) stage. Perform the upgrade using product content found in `${MEDIA_DIR}`.
    Additional arguments are available to control the behavior of the `deploy-product` stage (for example, `-rv`).
-   See the [`deploy-product` stage documentation](../stages/deploy_product.md) for details and adjust the example below if necessary.
+   See the [`deploy-product` stage documentation](../stages/deploy_product.md) for details and adjust the following example if necessary. **`NOTE`** Ensure that the
+   [latest version of `docs-csm`](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/update_product_stream/README.md#check-for-latest-documentation)
+   is installed for the target CSM version being installed or upgraded.
 
       (`ncn-m001#`) Execute the `deploy-product` stage. Use site variables from the `site_vars.yaml` file found in `${ADMIN_DIR}` and recipe variables from the `product_vars.yaml` file found in `${ADMIN_DIR}`.
 

@@ -2,15 +2,16 @@
 
 - [Disclaimer](#disclaimer)
 - [Components](#components)
-  - [Hierarchical Namespace Controller (HNC)](#hierarchical-namespace-controller-hnc)
-  - [Tenant and Partition Management System (TAPMS)](#tenant-and-partition-management-system-tapms)
-  - [Slurm operator](#slurm-operator)
-  - [Vault integration](#vault-integration)
+    - [Hierarchical Namespace Controller (HNC)](#hierarchical-namespace-controller-hnc)
+    - [Tenant and Partition Management System (TAPMS)](#tenant-and-partition-management-system-tapms)
+    - [Slurm operator](#slurm-operator)
+    - [Vault integration](#vault-integration)
+    - [Global tenant hooks](#global-tenant-hooks)
 - [Getting started](#getting-started)
-  - [Create a tenant](#create-a-tenant)
-  - [Modify a tenant](#modify-a-tenant)
-  - [Remove a tenant](#remove-a-tenant)
-  - [Tenant administrator configuration](#tenant-administrator-configuration)
+    - [Create a tenant](#create-a-tenant)
+    - [Modify a tenant](#modify-a-tenant)
+    - [Remove a tenant](#remove-a-tenant)
+    - [Tenant administrator configuration](#tenant-administrator-configuration)
 
 ## Disclaimer
 
@@ -41,6 +42,10 @@ tenant. See [Slurm Operator](SlurmOperator.md) for details.
 
 The `tapms` operator can create a Cray Vault transit engine for the tenant. Creating a transit engine is accomplished by enabling the feature in the `Tenant` custom resource, which is managed and reconciled by `tapms`.
 See the [Vault Overview](Vault.md) for details.
+
+### Global tenant hooks
+
+Web-hooks that apply to all tenants can be defined by using [Global Tenant Hooks](GlobalTenantHooks.md) outside the tenant definition.
 
 ## Getting started
 

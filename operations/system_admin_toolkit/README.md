@@ -24,6 +24,7 @@
 - [SAT Bootprep](usage/SAT_Bootprep.md)
 - [SAT and IUF](usage/SAT_and_IUF.md)
 - [Change the BOS Version](usage/Change_BOS_Version.md)
+- [Change the CFS Version](usage/Change_CFS_Version.md)
 
 ## [SAT Uninstall and Downgrade](SAT_Uninstall_and_Downgrade.md)
 

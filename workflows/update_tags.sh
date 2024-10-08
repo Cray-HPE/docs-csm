@@ -87,7 +87,14 @@ function get_latest_tag_for_image() {
 }
 
 function get_filenames_referring_to_image() {
-  grep -RHl -e "${THIS_IMAGE}:" .
+  local fallback_image="artifactory.algol60.net/csm-docker/stable/cray-sat"
+  # Search for filenames referring to the image in the passed THIS_IMAGE value
+  filenames=$(grep -RHl -e "${THIS_IMAGE}:" .)
+  # If no files are found, search for the image in the fallback location
+  if [[ -z $filenames && ${THIS_IMAGE} =~ cray-sat ]]; then
+    filenames=$(grep -RHl -e "${fallback_image}:" .)
+  fi
+  echo "$filenames"
 }
 
 function update_tags_in_file() {
@@ -95,11 +102,30 @@ function update_tags_in_file() {
   LATEST_TAG=$2
   THIS_FILE=$3
   echo "Updating tag of ${THIS_IMAGE} in ${SCRIPT_DIR}/${THIS_FILE} to ${LATEST_TAG}."
-  sed -i -e "s|${THIS_IMAGE}:.*|${THIS_IMAGE}:${LATEST_TAG}|g" $THIS_FILE
+  if [[ ${THIS_IMAGE} =~ cray-sat$ ]]; then
+    # Use a more flexible sed replacement for cray-sat images
+    sed -i -e "s|[^ ]*cray-sat[^ ]*|${THIS_IMAGE}:${LATEST_TAG}|g" "$THIS_FILE"
+  else
+    sed -i -e "s|${THIS_IMAGE}:.*|${THIS_IMAGE}:${LATEST_TAG}|g" "$THIS_FILE"
+  fi
+}
+
+function update_cray_sat_image() {
+  THIS_IMAGE=$1
+  # Capture the output of the podman search for img & update the img if it doesnt exist
+  SEARCH_OUTPUT=$(podman search ${DEFAULT_REGISTRY_NAME}/${THIS_IMAGE} 2>&1)
+  if [[ -z ${SEARCH_OUTPUT} ]]; then
+    THIS_IMAGE="artifactory.algol60.net/sat-docker/stable/cray-sat"
+  fi
+  echo "$THIS_IMAGE"
 }
 
 # Look up the latest tag for each image found and update the references in every file.
 for THIS_IMAGE in $(get_list_of_images_to_update); do
+  if [[ ${THIS_IMAGE} =~ cray-sat ]]; then
+    # CASMTRIAGE-7175 handle cray-sat image
+    THIS_IMAGE=$(update_cray_sat_image $THIS_IMAGE)
+  fi
   LATEST_TAG=$(get_latest_tag_for_image $THIS_IMAGE)
   # CASMTRIAGE-6188 retry for up to 60 seconds if LATEST_TAG is empty
   i=1

@@ -98,7 +98,7 @@ There are two separate workflows that utilize IUF when installing or upgrading n
    - An initial install or upgrade is being performed **with non-CSM products only**. In this
      scenario, the first step ("Perform an install of CSM") is skipped and all other steps are
      performed.
-1. The [Upgrade CSM and additional products with IUF](workflows/upgrade_csm_and_additional_products_with_iuf.md)
+1. The [Upgrade CSM and additional products](workflows/upgrade_csm_and_additional_products.md)
    workflow is used when an upgrade is being performed **with CSM and non-CSM products**.
 
 ## Activities
@@ -837,6 +837,22 @@ The following actions may be useful if errors are encountered when executing `iu
 - If the source of the error cannot be determined by the previous methods, details on the underlying commands executed by an IUF stage can be found in the IUF `workflows` directory. The [Stages and hooks](#stages-and-hooks) section
   of this document includes links to descriptions of each stage. Each of those descriptions includes an **Execution Details** section describing how to find the appropriate code in the IUF `workflows` directory to understand the
   workflow and debug the issue.
+
+### 4. Specific scenarios
+
+ 1. IUF workflow may loop while rebuilding a management node.
+
+    - IUF loops while waiting for CFS to complete configuration of a management node. This step might not be completing because the CFS error count for the node has exceeded the maximum retry count for applying the configuration.
+    - Look at the Ansible logs for the CFS configuration operation for that node and attempt to rectify the problem.
+    - After resolving the problem, update the default error count in CFS using the below command. Run this command form a master or worker node. Set environment variable `XNAME` to be the xname of the node where the CFS configuration has failed.
+
+         ```bash
+         cray cfs components update --enabled true --state '[]' --error-count 0 --format json $XNAME
+         ```
+
+    - Once the error count is reset, the CFS will restart configuration for the node. If it does not start within a few minutes,
+   check whether CFS is unable to start the configuration again for the node due to any other issue. Rectify the problem by referring to the
+   [CFS troubleshooting guide](../../operations/configuration_management/Troubleshoot_CFS_Sessions_Failing_to_Start.md)
 
 ## Install and Upgrade Observability Framework
 

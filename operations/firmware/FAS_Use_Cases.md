@@ -19,11 +19,11 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
 
 The following procedures are included in this section:
 
-1. [Update liquid-cooled compute node BMC, FPGA, management Ethernet, `AccVBIOS`, `AccUC` and BIOS](#liquid-cooled-nodes-update-procedures)
-1. [Update air-cooled compute node BMC, BIOS, iLO 5, iLO 6, and system ROM](#update-air-cooled-compute-node-bmc-bios-ilo-5-ilo-6-and-system-rom)
-1. [Update Chassis Management Module (CMM) firmware](#update-chassis-management-module-firmware)
-1. [Update NCN BIOS and BMC firmware with FAS](#update-non-compute-node-ncn-bios-and-bmc-firmware)
-1. [Compute node BIOS workaround for HPE CRAY EX425](#compute-node-bios-workaround-for-hpe-cray-ex425)
+* [Update liquid-cooled compute node BMC, FPGA, management Ethernet, `AccVBIOS`, `AccUC` and BIOS](#liquid-cooled-nodes-update-procedures)
+* [Update air-cooled compute node BMC, BIOS, iLO 5, iLO 6, and system ROM](#update-air-cooled-compute-node-bmc-bios-ilo-5-ilo-6-and-system-rom)
+* [Update Chassis Management Module (CMM) firmware](#update-chassis-management-module-firmware)
+* [Update NCN BIOS and BMC firmware with FAS](#update-non-compute-node-ncn-bios-and-bmc-firmware)
+* [Compute node BIOS workaround for HPE CRAY EX425](#compute-node-bios-workaround-for-hpe-cray-ex425)
 
 > **NOTE:** To update switch Controllers \(sC\) or `RouterBMCs`, refer to the Rosetta documentation.
 
@@ -200,7 +200,7 @@ If nodes are not off when the update command is issued, it will report as a fail
 It is recommended that the `Node0/1` BIOS be updated in a separate action, after a BMC update.
 It is also recommended that the nodes be powered back on after the updates are completed.
 If the nodes have never been powered on in the system before (they are being added during a hardware add procedure), then use the Boot Orchestration Service (BOS) to power them on.
-Using BOS will prepare the initial boot artifacts required to boot them.  If this is not the first time they have been powered on in this system, then you can use the Power Control Service \(PCS\) to power them on.
+Using BOS will prepare the initial boot artifacts required to boot them. If this is not the first time they have been powered on in this system, then you can use the Power Control Service \(PCS\) to power them on.
 
 ```json
 {

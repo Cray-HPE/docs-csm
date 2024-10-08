@@ -489,7 +489,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     # NOTE:  There are currently no sealed secrets being added so we are skipping the sealed secrets steps
 
     cp "${CUSTOMIZATIONS_YAML}" "${CUSTOMIZATIONS_YAML}.bak"
-    . "${locOfScript}/util/update-customizations.sh" -i "${CUSTOMIZATIONS_YAML}"
+    . "${locOfScript}/util/update-customizations.sh" -i "${CUSTOMIZATIONS_YAML}" "${CSM_ARTI_DIR}/shasta-cfg/customizations.yaml"
 
     # rename customizations file so k8s secret name stays the same
     cp "${CUSTOMIZATIONS_YAML}" customizations.yaml
@@ -730,10 +730,10 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
-    # The actions below only need to happen iff we are on 0.14.1 if we're
-    # already at 1.5.5+ the crd ownership changes makes this logic impossible to
+    # The actions below only need to happen iff we are on 1.5.5. If we're
+    # already at 1.12.9+ the crd ownership changes makes this logic impossible to
     # work due to helm hooks. Making this work on both isn't really worth the
-    # time so just constrain this block of logic to 0.14.1 where we know its
+    # time so just constrain this block of logic to 1.5.5 where we know its
     # needed.
     gate="1.5.5"
     found=$(helm list -n cert-manager --filter 'cray-certmanager$' | awk '/deployed/ {print $10}')
@@ -753,6 +753,33 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
         ((needs_upgrade += 1))
       else
         printf "note: no cert-manager upgrade steps needed, cert-manager 1.5.5 is not installed\n" >&2
+      fi
+    fi
+
+    # cert-manager will need to be upgraded if cray-drydock version is less than 2.18.4.
+    # This will only be the case in some CSM 1.6 to CSM 1.6 upgrades.
+    # It only needs to be checked if cert-manager is not already being upgraded.
+    if [ "${needs_upgrade}" -eq 0 ]; then
+      drydock_vers=$(helm get values -n loftsman cray-drydock | grep version: | sed 's/ *version: //')
+      major=2
+      minor=18
+      patch=4
+      drydock_major="${drydock_vers%%.*}"
+      drydock_minor_patch="${drydock_vers#*.}" # temp
+      drydock_patch="${drydock_minor_patch#*.}"
+      drydock_minor="${drydock_minor_patch%.*}"
+      if [ $drydock_major -lt $major ]; then
+        needs_upgrade=1
+      elif [ $drydock_major -eq $major ] && [ $drydock_minor -lt $minor ]; then
+        needs_upgrade=1
+      elif [ $drydock_major -eq $major ] && [ $drydock_minor -eq $minor ] && [ $drydock_patch -lt $patch ]; then
+        needs_upgrade=1
+      elif [[ $drydock_vers == "" ]]; then
+        needs_upgrade=1
+      fi
+      if [ $needs_upgrade -ne 0 ]; then
+        echo "cray-drydock version [$drydock_vers] less than $major.$minor.$patch and needs to be upgraded."
+        echo "Cray-drydock will be upgraded and the cert-manager namespace will be redeployed."
       fi
     fi
 
@@ -801,7 +828,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
       fi
 
       # Ensure the cert-manager namespace is deleted in a case of both helm charts
-      # removed but there might be detritous leftover in the namespace.
+      # removed but there might be detritus left over in the namespace.
       kubectl delete namespace "${cmns}" || :
 
       tmp_manifest=/tmp/certmanager-tmp-manifest.yaml
@@ -832,7 +859,7 @@ EOF
       done
 
       platform="${CSM_MANIFESTS_DIR}/platform.yaml"
-      for chart in cray-certmanager cray-certmanager-issuers; do
+      for chart in cray-drydock cray-certmanager cray-certmanager-issuers; do
         printf "    -\n" >> "${tmp_manifest}"
         yq r "${platform}" 'spec.charts.(name=='${chart}')' | sed 's/^/      /' >> "${tmp_manifest}"
       done
@@ -1222,6 +1249,59 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="UPDATE_BSS_DATA_NCNS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+
+    # Template cloud-init disk configurations
+    csi config template cloud-init disks
+    master_user_data=$(< "ncn-master/cloud-init/user-data.json")
+    worker_user_data=$(< "ncn-worker/cloud-init/user-data.json")
+    storage_user_data=$(< "ncn-storage/cloud-init/user-data.json")
+
+    # Get xnames for all Management nodes
+    if IFS=$'\n' read -rd '' -a NCN_XNAMES; then
+      :
+    fi <<< "$(cray hsm state components list --role Management --type Node --format json | jq -r '.Components | map(.ID) | join("\n")')"
+
+    # Update BSS data for ncn-master nodes
+    for xname in "${NCN_XNAMES[@]}"; do
+      xname_bss="$(cray bss bootparameters list --format json --hosts "${xname}" | jq '.[0]')"
+
+      # Add disk configuration for each NCN
+      jq --argjson bss "$xname_bss" \
+        --argjson master_user_data "$master_user_data" \
+        --argjson worker_user_data "$worker_user_data" \
+        --argjson storage_user_data "$storage_user_data" \
+        'if .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-master" then
+          .["cloud-init"]["user-data"]["bootcmd"] = $master_user_data["user-data"]["bootcmd"] |
+          .["cloud-init"]["user-data"]["fs_setup"] = $master_user_data["user-data"]["fs_setup"] |
+          .["cloud-init"]["user-data"]["mounts"] = $master_user_data["user-data"]["mounts"]
+        elif .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-worker" then
+          .["cloud-init"]["user-data"]["bootcmd"] = $worker_user_data["user-data"]["bootcmd"] |
+          .["cloud-init"]["user-data"]["fs_setup"] = $worker_user_data["user-data"]["fs_setup"] |
+          .["cloud-init"]["user-data"]["mounts"] = $worker_user_data["user-data"]["mounts"]
+        elif .["cloud-init"]["meta-data"]["shasta-role"] == "ncn-storage" then
+          .["cloud-init"]["user-data"]["bootcmd"] = $storage_user_data["user-data"]["bootcmd"] |
+          .["cloud-init"]["user-data"]["fs_setup"] = $storage_user_data["user-data"]["fs_setup"] |
+          .["cloud-init"]["user-data"]["mounts"] = $storage_user_data["user-data"]["mounts"]
+        else .
+        end' <<< "$xname_bss" > "bss-patched-${xname}.json"
+
+      # Update BSS
+      curl -s -i -k -H "Authorization: Bearer $(get_token)" -X PUT \
+        https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters \
+        --data @./"bss-patched-${xname}.json" \
+        && rm "bss-patched-${xname}.json"
+    done
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="TDS_LOWER_CPU_REQUEST"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta} == "false" ]]; then
@@ -1366,37 +1446,50 @@ if [[ ${state_recorded} == "0" ]]; then
       | yq4 e '.kubernetesVersion="1.24.17"' \
       | yq4 e '.dns.imageRepository="artifactory.algol60.net/csm-docker/stable/registry.k8s.io/coredns"' \
       | yq4 e '.imageRepository="artifactory.algol60.net/csm-docker/stable/registry.k8s.io"' \
+      | yq4 e '.apiServer.extraArgs.profiling="false"' \
       | yq4 e '.controllerManager.extraArgs.terminated-pod-gc-threshold="250"' \
       | yq4 e '.controllerManager.extraArgs.profiling="false"' \
         > "${tmpdir}/kubeadm-config.yaml"
     patch=$(jq -c -n --rawfile text "${tmpdir}/kubeadm-config.yaml" '.data["ClusterConfiguration"]=$text')
     kubectl -n kube-system patch configmap kubeadm-config --type merge --patch "${patch}"
 
-    echo "Creating ConfigMap kubelet-config-1.24 ..."
-    kubectl -n kube-system get configmap kubelet-config-1.22 -o yaml \
-      | yq4 e '.metadata.name="kubelet-config-1.24"' \
-      | yq4 e 'del .metadata.creationTimestamp' \
-      | yq4 e 'del .metadata.resourceVersion' \
-      | yq4 e 'del .metadata.uid' \
-      | kubectl apply -f -
+    if kubectl -n kube-system get configmap -o custom-columns=name:.metadata.name --no-headers | grep -x -q -F kubelet-config-1.22; then
+      echo "Creating ConfigMap kubelet-config-1.24 ..."
+      kubectl -n kube-system get configmap kubelet-config-1.22 -o yaml \
+        | yq4 e '.metadata.name="kubelet-config-1.24"' \
+        | yq4 e 'del .metadata.creationTimestamp' \
+        | yq4 e 'del .metadata.resourceVersion' \
+        | yq4 e 'del .metadata.uid' \
+        | kubectl apply -f -
+    else
+      echo "ConfigMap kubelet-config-1.22 not found, assuming kubelet-config or kubelet-config-1.24 is already in place."
+    fi
 
-    echo "Creating Role kubeadm:kubelet-config-1.24 ..."
-    kubectl -n kube-system get role kubeadm:kubelet-config-1.22 -o yaml \
-      | yq4 e '.metadata.name="kubeadm:kubelet-config-1.24"' \
-      | yq4 e '.rules[0].resourceNames[0]="kubelet-config-1.24"' \
-      | yq4 e 'del .metadata.creationTimestamp' \
-      | yq4 e 'del .metadata.resourceVersion' \
-      | yq4 e 'del .metadata.uid' \
-      | kubectl apply -f -
+    if kubectl -n kube-system get role -o custom-columns=name:.metadata.name --no-headers | grep -x -q -F kubeadm:kubelet-config-1.22; then
+      echo "Creating Role kubeadm:kubelet-config-1.24 ..."
+      kubectl -n kube-system get role kubeadm:kubelet-config-1.22 -o yaml \
+        | yq4 e '.metadata.name="kubeadm:kubelet-config-1.24"' \
+        | yq4 e '.rules[0].resourceNames[0]="kubelet-config-1.24"' \
+        | yq4 e 'del .metadata.creationTimestamp' \
+        | yq4 e 'del .metadata.resourceVersion' \
+        | yq4 e 'del .metadata.uid' \
+        | kubectl apply -f -
+    else
+      echo "Role kubeadm:kubelet-config-1.22 not found, assuming kubeadm:kubelet-config or kubeadm:kubelet-config-1.24 is already in place."
+    fi
 
-    echo "Creating RoleBinding kubeadm:kubelet-config-1.24 ..."
-    kubectl -n kube-system get rolebinding kubeadm:kubelet-config-1.22 -o yaml \
-      | yq4 e '.metadata.name="kubeadm:kubelet-config-1.24"' \
-      | yq4 e '.roleRef.name="kubeadm:kubelet-config-1.24"' \
-      | yq4 e 'del .metadata.creationTimestamp' \
-      | yq4 e 'del .metadata.resourceVersion' \
-      | yq4 e 'del .metadata.uid' \
-      | kubectl apply -f -
+    if kubectl -n kube-system get rolebinding -o custom-columns=name:.metadata.name --no-headers | grep -x -q -F kubeadm:kubelet-config-1.22; then
+      echo "Creating RoleBinding kubeadm:kubelet-config-1.24 ..."
+      kubectl -n kube-system get rolebinding kubeadm:kubelet-config-1.22 -o yaml \
+        | yq4 e '.metadata.name="kubeadm:kubelet-config-1.24"' \
+        | yq4 e '.roleRef.name="kubeadm:kubelet-config-1.24"' \
+        | yq4 e 'del .metadata.creationTimestamp' \
+        | yq4 e 'del .metadata.resourceVersion' \
+        | yq4 e 'del .metadata.uid' \
+        | kubectl apply -f -
+    else
+      echo "RoleBinding kubeadm:kubelet-config-1.22 not found, assuming kubeadm:kubelet-config or kubeadm:kubelet-config-1.24 is already in place."
+    fi
 
     rm -rf "${tmpdir}"
   } >> "${LOG_FILE}" 2>&1

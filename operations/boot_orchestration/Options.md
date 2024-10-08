@@ -32,6 +32,7 @@ Example output:
   "max_power_off_wait_time": 300,
   "max_power_on_wait_time": 120,
   "polling_frequency": 15,
+  "reject_nids": false,
   "session_limit_required": false
 }
 ```
@@ -99,9 +100,22 @@ The following are the BOS global options:
 
     How frequently the BOS operators check component state for needed actions (in seconds).
 
+* `reject_nids`
+
+    BOS does not support the use of NIDs to identify nodes -- only xnames.
+    If the `reject_nids` option is enabled, BOS will prevent creation of sessions and session templates that appear to reference NIDs.
+    Specifically, if this option is enabled, then:
+
+    * When creating a session template, if it has any boot sets with a `node_list` that appears to contain a NID, then the creation will fail.
+    * When validating a session template, if it has any boot sets with a `node_list` that appears to contain a NID, then the validation will fail.
+    * When creating a session, if the specified session template has any boot sets with a `node_list` that appears to contain a NID, then the session creation will fail.
+    * When creating a session, if the session limit appears to contain NID values, then the creation will fail.
+
+    This option does NOT have an effect on sessions that were created prior to it being enabled (even if they have not yet started).
+
 * `session_limit_required`
 
-    If enabled, BOS v2 sessions cannot be created without specifying the `limit` parameter.
+    If enabled, BOS sessions cannot be created without specifying the `limit` parameter.
     This can be helpful in avoiding accidental reboots of more components than intended.
     If this option is enabled, it is still possible to effectively create a session with no limit
     by specifying `*` as the limit parameter (if this is done on the command line, it must be

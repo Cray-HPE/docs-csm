@@ -14,6 +14,8 @@
 
 ### New hardware support
 
+* **IMPORTANT** Systems with NVIDIA CPUs and GPUs must see [Known issues](#known-issues)
+
 ### Automation improvements
 
 ### Base platform component upgrades
@@ -40,5 +42,17 @@ For a list of all deprecated CSM features, see [Deprecations](introduction/depre
 For a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals).
 
 ## Known issues
+
+* CSM 1.6.0 **does not support servers with NVIDIA CPUs and GPUs**. Systems with these servers should not be upgraded to CSM 1.6.0.
+
+  The January 2025 HPE HPC continuous software stack releases (CSM 1.6.0) are for HPE Cray EX systems without NVIDIA CPUs and GPUs.
+  For HPE Cray EX systems with NVIDIA CPUs and GPUs, please use the August 2024 (CSM 1.5.x) HPE HPC continuous software stack.
+  These software stacks were validated with NVIDIA HPC SDK 24.3.
+
+  The March 2025 HPE HPC continuous and extended software stack releases will be validated with NVIDIA HPC SDK 24.11.
+  The March 2025 (CSM 1.6.1) software stacks will support all HPE Cray EX systems.
+
+* After updating Paradise BMC firmware, the `hmcollector-poll` service will lose event subscriptions and must be restarted
+    * See [Updating Foxconn Paradise Nodes with FAS](operations/firmware/FAS_Paradise.md) for details on how to do this
 
 ### Security vulnerability exceptions in CSM 1.6

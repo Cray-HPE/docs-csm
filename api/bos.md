@@ -4097,6 +4097,7 @@ Update one or more of the BOS service options.
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
   "max_component_batch_size": 1000,
+  "reject_nids": true,
   "session_limit_required": true
 }
 ```
@@ -4125,6 +4126,7 @@ Update one or more of the BOS service options.
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
   "max_component_batch_size": 1000,
+  "reject_nids": true,
   "session_limit_required": true
 }
 ```
@@ -4327,6 +4329,7 @@ Retrieve the list of BOS service options.
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
   "max_component_batch_size": 1000,
+  "reject_nids": true,
   "session_limit_required": true
 }
 ```
@@ -4776,12 +4779,15 @@ List of links to other resources
 ```
 
 A node list that is required to have at least one node.
+Nodes must be specified by component name (xname). NIDs are not supported.
+If the reject_nids option is enabled, then Session Template creation or validation will fail if
+any of the boot sets contain a NodeList that appears to contain a NID.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|[[HardwareComponentName](#schemahardwarecomponentname)]|false|none|A node list that is required to have at least one node.|
+|*anonymous*|[[HardwareComponentName](#schemahardwarecomponentname)]|false|none|A node list that is required to have at least one node.<br>Nodes must be specified by component name (xname). NIDs are not supported.<br>If the reject_nids option is enabled, then Session Template creation or validation will fail if<br>any of the boot sets contain a NodeList that appears to contain a NID.|
 
 <h2 id="tocS_NodeGroupList">NodeGroupList</h2>
 <!-- backwards compatibility -->
@@ -4874,11 +4880,14 @@ Alternatively, the limit can be set to "*", which means no limit.
 
 An empty string or null value is the same as specifying no limit.
 
+If the reject_nids option is enabled, then Session creation will fail if its
+limit appears to contain a NID value.
+
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string¦null|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.|
+|*anonymous*|string¦null|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.<br><br>If the reject_nids option is enabled, then Session creation will fail if its<br>limit appears to contain a NID value.|
 
 <h2 id="tocS_SessionTemplateDescription">SessionTemplateDescription</h2>
 <!-- backwards compatibility -->
@@ -5118,7 +5127,7 @@ group of Components.
 |enable_cfs|[EnableCfs](#schemaenablecfs)|false|none|Whether to enable the Configuration Framework Service (CFS).|
 |cfs|[V2CfsParameters](#schemav2cfsparameters)|false|none|This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a Boot Set.|
 |boot_sets|object|true|none|Mapping from Boot Set names to Boot Sets.<br><br>* Boot Set names must be 1-127 characters in length.<br>* Boot Set names must use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names must begin and end with a letter or digit.|
-|» **additionalProperties**|[V2BootSet](#schemav2bootset)|false|none|none|
+|» **additionalProperties**|[V2BootSet](#schemav2bootset)|false|none|A Boot Set is a collection of nodes defined by an explicit list, their functional<br>role, and their logical groupings. This collection of nodes is associated with one<br>set of boot artifacts and optional additional records for configuration and root<br>filesystem provisioning.<br><br>A boot set requires at least one of the following fields to be specified:<br>node_list, node_roles_groups, node_groups<br><br>If specified, the name field must match the key mapping to this boot set in the<br>boot_sets field of the containing V2SessionTemplate.|
 |links|[LinkListReadOnly](#schemalinklistreadonly)|false|none|List of links to other resources|
 
 <h2 id="tocS_V2SessionTemplateValidation">V2SessionTemplateValidation</h2>
@@ -5155,11 +5164,41 @@ Message describing errors or incompleteness in a Session Template.
 
 Name of the Session.
 
+The name must:
+* Use only letters, digits, periods (.), dashes (-), and underscores (_).
+* Begin and end with a letter or digit.
+
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|Name of the Session.|
+|*anonymous*|string|false|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
+
+<h2 id="tocS_V2SessionNameOrEmpty">V2SessionNameOrEmpty</h2>
+<!-- backwards compatibility -->
+<a id="schemav2sessionnameorempty"></a>
+<a id="schema_V2SessionNameOrEmpty"></a>
+<a id="tocSv2sessionnameorempty"></a>
+<a id="tocsv2sessionnameorempty"></a>
+
+```json
+"session-20190728032600"
+
+```
+
+### Properties
+
+oneOf
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
+
+xor
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[EmptyString](#schemaemptystring)|false|none|An empty string value.|
 
 <h2 id="tocS_V2SessionOperation">V2SessionOperation</h2>
 <!-- backwards compatibility -->
@@ -5223,10 +5262,10 @@ required if the session_limit_required option is true.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+|name|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
 |operation|[V2SessionOperation](#schemav2sessionoperation)|true|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
 |template_name|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.|
+|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.<br><br>If the reject_nids option is enabled, then Session creation will fail if its<br>limit appears to contain a NID value.|
 |stage|boolean|false|none|Set to stage a Session which will not immediately change the state of any Components.<br>The "applystaged" endpoint can be called at a later time to trigger the start of this Session.|
 |include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM).|
 
@@ -5326,12 +5365,12 @@ Information on the status of a Session.
 |status|[V2SessionStatusLabel](#schemav2sessionstatuslabel)|false|none|The status of a Session.|
 |error|string¦null|false|none|Error which prevented the Session from running.<br>A null value means the Session has not encountered an error.|
 
-<h2 id="tocS_V2BootSetData">V2BootSetData</h2>
+<h2 id="tocS_V2BootSet">V2BootSet</h2>
 <!-- backwards compatibility -->
-<a id="schemav2bootsetdata"></a>
-<a id="schema_V2BootSetData"></a>
-<a id="tocSv2bootsetdata"></a>
-<a id="tocsv2bootsetdata"></a>
+<a id="schemav2bootset"></a>
+<a id="schema_V2BootSet"></a>
+<a id="tocSv2bootset"></a>
+<a id="tocsv2bootset"></a>
 
 ```json
 {
@@ -5382,7 +5421,7 @@ boot_sets field of the containing V2SessionTemplate.
 |type|[BootSetType](#schemabootsettype)|true|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.|
 |etag|[BootSetEtag](#schemabootsetetag)|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.|
 |kernel_parameters|[BootKernelParameters](#schemabootkernelparameters)|false|none|The kernel parameters to use to boot the nodes.|
-|node_list|[NodeList](#schemanodelist)|false|none|A node list that is required to have at least one node.|
+|node_list|[NodeList](#schemanodelist)|false|none|A node list that is required to have at least one node.<br>Nodes must be specified by component name (xname). NIDs are not supported.<br>If the reject_nids option is enabled, then Session Template creation or validation will fail if<br>any of the boot sets contain a NodeList that appears to contain a NID.|
 |node_roles_groups|[NodeRoleList](#schemanoderolelist)|false|none|Node role list. Allows actions against nodes with associated roles.|
 |node_groups|[NodeGroupList](#schemanodegrouplist)|false|none|Node group list. Allows actions against associated nodes by logical groupings.|
 |arch|string|false|none|The node architecture to target. Filters nodes that are not part of matching architecture from being targeted by boot actions. This value should correspond to HSM component 'Arch' field exactly. For reasons of backwards compatibility, all HSM nodes that are of type Unknown are treated as being of type X86.|
@@ -5397,73 +5436,6 @@ boot_sets field of the containing V2SessionTemplate.
 |arch|ARM|
 |arch|Other|
 |arch|Unknown|
-
-<h2 id="tocS_V2BootSet">V2BootSet</h2>
-<!-- backwards compatibility -->
-<a id="schemav2bootset"></a>
-<a id="schema_V2BootSet"></a>
-<a id="tocSv2bootset"></a>
-<a id="tocsv2bootset"></a>
-
-```json
-{
-  "name": "compute",
-  "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
-  "cfs": {
-    "configuration": "compute-23.4.0"
-  },
-  "type": "s3",
-  "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-  "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-  "node_list": [
-    "x3000c0s19b1n0",
-    "x3000c0s19b2n0"
-  ],
-  "node_roles_groups": [
-    "Compute",
-    "Application"
-  ],
-  "node_groups": [
-    "string"
-  ],
-  "arch": "X86",
-  "rootfs_provider": "cpss3",
-  "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
-}
-
-```
-
-### Properties
-
-allOf
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[V2BootSetData](#schemav2bootsetdata)|false|none|A Boot Set is a collection of nodes defined by an explicit list, their functional<br>role, and their logical groupings. This collection of nodes is associated with one<br>set of boot artifacts and optional additional records for configuration and root<br>filesystem provisioning.<br><br>A boot set requires at least one of the following fields to be specified:<br>node_list, node_roles_groups, node_groups<br><br>If specified, the name field must match the key mapping to this boot set in the<br>boot_sets field of the containing V2SessionTemplate.|
-
-and
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|any|false|none|none|
-
-anyOf
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|object|false|none|none|
-
-or
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|object|false|none|none|
-
-or
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|object|false|none|none|
 
 <h2 id="tocS_V2SessionTemplateArray">V2SessionTemplateArray</h2>
 <!-- backwards compatibility -->
@@ -5588,11 +5560,11 @@ A Session object
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|[V2SessionName](#schemav2sessionname)|true|none|Name of the Session.|
+|name|[V2SessionName](#schemav2sessionname)|true|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
 |tenant|[V2TenantName](#schemav2tenantname)|false|none|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same.|
 |operation|[V2SessionOperation](#schemav2sessionoperation)|true|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
 |template_name|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.|
+|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>Alternatively, the limit can be set to "*", which means no limit.<br><br>An empty string or null value is the same as specifying no limit.<br><br>If the reject_nids option is enabled, then Session creation will fail if its<br>limit appears to contain a NID value.|
 |stage|boolean|false|none|Set to stage a Session which will not immediately change the state of any Components.<br>The "applystaged" endpoint can be called at a later time to trigger the start of this Session.|
 |components|string|false|none|A comma-separated list of nodes, representing the initial list of nodes<br>the Session should operate against.  The list will remain even if<br>other Sessions have taken over management of the nodes.|
 |include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM).|
@@ -5968,24 +5940,7 @@ may be set which can be triggered at a later time against this Component.
 |---|---|---|---|---|
 |boot_artifacts|[V2BootArtifacts](#schemav2bootartifacts)|false|none|A collection of boot artifacts.|
 |configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.|
-|session|any|false|none|none|
-
-oneOf
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
-
-xor
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[EmptyString](#schemaemptystring)|false|none|An empty string value.|
-
-continued
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
+|session|[V2SessionNameOrEmpty](#schemav2sessionnameorempty)|false|none|none|
 |last_updated|[V2ComponentLastUpdated](#schemav2componentlastupdated)|false|none|The date/time when the state was last updated in RFC 3339 format.|
 
 <h2 id="tocS_V2ComponentLastAction">V2ComponentLastAction</h2>
@@ -6164,24 +6119,7 @@ the Session responsible for the Component's current state.
 |status|[V2ComponentStatus](#schemav2componentstatus)|false|none|Status information for the Component|
 |enabled|boolean|false|none|A flag indicating if actions should be taken for this Component.|
 |error|string|false|none|A description of the most recent error to impact the Component.|
-|session|any|false|none|none|
-
-oneOf
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
-
-xor
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[EmptyString](#schemaemptystring)|false|none|An empty string value.|
-
-continued
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
+|session|[V2SessionNameOrEmpty](#schemav2sessionnameorempty)|false|none|none|
 |retry_policy|integer|false|none|The maximum number attempts per action when actions fail.<br>Defaults to the global default_retry_policy if not set|
 
 <h2 id="tocS_V2ComponentWithId">V2ComponentWithId</h2>
@@ -6262,24 +6200,7 @@ the Session responsible for the Component's current state.
 |status|[V2ComponentStatus](#schemav2componentstatus)|false|none|Status information for the Component|
 |enabled|boolean|false|none|A flag indicating if actions should be taken for this Component.|
 |error|string|false|none|A description of the most recent error to impact the Component.|
-|session|any|false|none|none|
-
-oneOf
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
-
-xor
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» *anonymous*|[EmptyString](#schemaemptystring)|false|none|An empty string value.|
-
-continued
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
+|session|[V2SessionNameOrEmpty](#schemav2sessionnameorempty)|false|none|none|
 |retry_policy|integer|false|none|The maximum number attempts per action when actions fail.<br>Defaults to the global default_retry_policy if not set|
 
 <h2 id="tocS_V2ComponentArray">V2ComponentArray</h2>
@@ -6473,7 +6394,7 @@ All Components part of this Session will be patched.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |ids|[EmptyStringNullable](#schemaemptystringnullable)|false|none|An empty string value.|
-|session|[V2SessionName](#schemav2sessionname)|true|none|Name of the Session.|
+|session|[V2SessionName](#schemav2sessionname)|true|none|Name of the Session.<br><br>The name must:<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.|
 
 <h2 id="tocS_V2ComponentsUpdate">V2ComponentsUpdate</h2>
 <!-- backwards compatibility -->
@@ -6641,6 +6562,7 @@ Mapping from Component staged Session statuses to Components with that status.
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
   "max_component_batch_size": 1000,
+  "reject_nids": true,
   "session_limit_required": true
 }
 
@@ -6664,5 +6586,6 @@ Options for the Boot Orchestration Service.
 |polling_frequency|integer|false|none|How frequently the BOS operators check Component state for needed actions (in seconds)|
 |default_retry_policy|integer|false|none|The default maximum number attempts per node for failed actions.|
 |max_component_batch_size|integer|false|none|The maximum number of Components that a BOS operator will process at once. 0 means no limit.|
+|reject_nids|boolean|false|none|If true, then BOS will attempt to prevent Sessions and Session Templates that reference NIDs (which BOS does not support).<br>Specifically, if this option is true, then:<br>- When creating a Session, if the Session limit or a Session Template node list appear to contain NID values, then Session creation will fail.<br>- When creating a Session Template, if a node list appears to contain a NID value, then the Session Template creation will fail.<br>- When validating an existing Session Template, if a node list appears to contain a NID value, then the validation will report an error.<br><br>This option does NOT have an effect on Sessions that were created prior to it being enabled (even if they have not yet started).|
 |session_limit_required|boolean|false|none|If true, Sessions cannot be created without specifying the limit parameter.|
 

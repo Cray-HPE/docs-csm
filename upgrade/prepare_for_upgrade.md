@@ -155,7 +155,7 @@ Return here after verifying that SNMP is properly configured on the management n
    starts. After the upgrade is completed, another health check is performed, and it is important to know
    if any problems observed at that time existed prior to the upgrade.
 
-   **`IMPORTANT`**: See the `CSM Install Validation and Health Checks` procedures in the
+   **`IMPORTANT`**: See the [`CSM Install Validation and Health Checks`](../operations/validate_csm_health.md) procedures in the
    documentation for the **`CURRENT`** CSM version on the system. The validation procedures in the CSM
    documentation are only intended to work with that specific version of CSM.
 

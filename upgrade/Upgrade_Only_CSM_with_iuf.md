@@ -3,7 +3,7 @@
 This option describes how to upgrade Cray Systems Management (CSM) software on a CSM-only system
 using IUF.
 
-![Upgrade CSM and additional products with IUF](../img/operations/diagram_csm_stack_upgrade_111723.png)
+![Upgrade only CSM through IUF](../img/operations/diagram_csm_stack_upgrade_111723.png)
 
 1. CSM preparation
 
@@ -23,6 +23,10 @@ using IUF.
 1. Product delivery
 
    Follow the IUF [Product delivery](../operations/iuf/workflows/product_delivery.md) instructions.
+
+1. Configuration
+
+   Follow the IUF [Configuration](../operations/iuf/workflows/configuration.md) instructions.
 
 1. Image preparation
 

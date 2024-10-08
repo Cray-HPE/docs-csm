@@ -2,11 +2,11 @@
 
 This section ensures the product content is loaded onto the system and available for later steps in the workflow.
 
-- [1. Execute the IUF `process-media` and `pre-install-check` stages](#1-execute-the-iuf-process-media-and-pre-install-check-stages)
-- [2. Update `customizations.yaml`](#2-update-customizationsyaml)
-- [3. Execute the IUF `deliver-product` stage](#3-execute-the-iuf-deliver-product-stage)
-- [4. Perform manual product delivery operations](#4-perform-manual-product-delivery-operations)
-- [5. Next steps](#5-next-steps)
+1. [Execute the IUF `process-media` and `pre-install-check` stages](#1-execute-the-iuf-process-media-and-pre-install-check-stages)
+1. [Update `customizations.yaml`](#2-update-customizationsyaml)
+1. [Execute the IUF `deliver-product` stage](#3-execute-the-iuf-deliver-product-stage)
+1. [Perform manual product delivery operations](#4-perform-manual-product-delivery-operations)
+1. [Next steps](#5-next-steps)
 
 ## 1. Execute the IUF `process-media` and `pre-install-check` stages
 
@@ -31,7 +31,7 @@ Refer to that table and any corresponding product documents before continuing to
     iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run -e pre-install-check
     ```
 
-> **`IMPORTANT`*** Ensure that the `docs-csm-latest.noarch.rpm` and `libcsm-latest.noarch.rpm` are available at path `/root/<rpm>` before executing the above command.
+> **`IMPORTANT`*** If upgrading CSM manually, ensure that the `docs-csm-latest.noarch.rpm` and `libcsm-latest.noarch.rpm` RPMs are available at path `/root/<rpm>` before executing the above command.
 
 Once this step has completed:
 
@@ -43,8 +43,8 @@ Once this step has completed:
 
 **`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
-Some products require modifications to the `customizations.yaml` file before executing the `deliver-product` stage. Currently, this is limited to the Slurm and PBS Workload Manager (WLM) products and the UAN product. Refer to the
-"Install and Upgrade Framework" section of the Slurm, PBS, and UAN product documents to determine the actions that need to be performed to update `customizations.yaml`.
+Some products require modifications to the `customizations.yaml` file before executing the `deliver-product` stage. Currently, this is limited to the Slurm and PBS Workload Manager (WLM) products, CSM Diags, and the UAN product. Refer to the
+"Install and Upgrade Framework" section of the Slurm, PBS, CSM Diags, and UAN product documents to determine the actions that need to be performed to update `customizations.yaml`.
 
 Once this step has completed:
 

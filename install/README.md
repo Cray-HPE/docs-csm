@@ -4,6 +4,10 @@ This page will guide an administrator through installing Cray System Management 
 HPE Cray EX system. Fresh-installations on bare-metal or re-installations of CSM must follow
 this guide in order.
 
+## Release Notes
+
+Before installing, review the [Release Notes](../RELEASE_NOTES.md).
+
 ## Bifurcated CAN notice
 
 Introduced in CSM 1.2, a major feature of CSM is the [Bifurcated CAN (BICAN)](../glossary.md#bifurcated-can-bican).
@@ -11,6 +15,17 @@ The BICAN is designed to separate administrative network traffic from user netwo
 More information can be found on the [BICAN Technical Summary](../operations/network/management_network/bican_technical_summary.md).
 Review the BICAN summary before continuing with the CSM install.
 For detailed BICAN documentation, see [BICAN Technical Details](../operations/network/management_network/bican_technical_details.md).
+
+## NVIDIA CPU and GPU notice
+
+Servers with NVIDIA CPUs and GPUs are **not** supported by CSM 1.6.0.
+
+The January 2025 HPE HPC continuous software stack releases (CSM 1.6.0) are for HPE Cray EX systems without NVIDIA CPUs and GPUs.
+For HPE Cray EX systems with NVIDIA CPUs and GPUs, please use the August 2024 (CSM 1.5.x) HPE HPC continuous software stack.
+These software stacks were validated with NVIDIA HPC SDK 24.3.
+
+The March 2025 HPE HPC continuous and extended software stack releases will be validated with NVIDIA HPC SDK 24.11.
+The March 2025 (CSM 1.6.1) software stacks will support all HPE Cray EX systems.
 
 ## High-level overview of CSM install
 
@@ -40,39 +55,35 @@ describes how to install additional HPE Cray EX software products using the
 The topics in this chapter need to be done as part of an ordered procedure so are
 shown here with numbered topics.
 
-- [Cray System Management Install](#cray-system-management-install)
-    - [Bifurcated CAN notice](#bifurcated-can-notice)
-    - [High-level overview of CSM install](#high-level-overview-of-csm-install)
-    - [Topics](#topics)
-    - [Pre-installation](#pre-installation)
-        - [1. Preparing for a re-installation](#1-preparing-for-a-re-installation)
-        - [2. Boot installation environment](#2-boot-installation-environment)
-        - [3. Download the CSM tarball](#3-download-the-csm-tarball)
-        - [4. Create system configuration](#4-create-system-configuration)
-        - [5. Import the CSM tarball](#5-import-the-csm-tarball)
-        - [6. Validate the LiveCD](#6-validate-the-livecd)
-        - [7. Configure management network switches](#7-configure-management-network-switches)
-            - [Ensure SNMP is configured on the management network switches](#ensure-snmp-is-configured-on-the-management-network-switches)
-                - [When the management network is already configured](#when-the-management-network-is-already-configured)
-                - [When the management network has not been configured](#when-the-management-network-has-not-been-configured)
-            - [Configure the management network with CANU](#configure-the-management-network-with-canu)
-    - [Installation](#installation)
-        - [1. Deploy management nodes](#1-deploy-management-nodes)
-        - [2. Install CSM services](#2-install-csm-services)
-        - [3. Validate CSM health before final NCN deployment](#3-validate-csm-health-before-final-ncn-deployment)
-        - [4. Deploy final NCN](#4-deploy-final-ncn)
-        - [5. Configure administrative access](#5-configure-administrative-access)
-        - [6. Validate CSM health](#6-validate-csm-health)
-        - [7. Configure Prometheus alert notifications](#7-configure-prometheus-alert-notifications)
-        - [8. Update ceph node-exporter config for SNMP counters](#8-update-ceph-node-exporter-config-for-snmp-counters)
-        - [9. Upload Olympus BMC recovery firmware into TFTP server](#9-upload-olympus-bmc-recovery-firmware-into-tftp-server)
-        - [10. Update firmware with FAS](#10-update-firmware-with-fas)
-        - [11. Prepare compute nodes](#11-prepare-compute-nodes)
-        - [12. Troubleshooting installation problems](#12-troubleshooting-installation-problems)
-    - [Post-Installation](#post-installation)
-        - [1. Kubernetes encryption](#1-kubernetes-encryption)
-        - [2. Export Nexus data](#2-export-nexus-data)
-    - [Installation of additional HPE Cray EX software products](#installation-of-additional-hpe-cray-ex-software-products)
+- [Pre-installation](#pre-installation)
+    1. [Preparing for a re-installation](#1-preparing-for-a-re-installation)
+    1. [Boot installation environment](#2-boot-installation-environment)
+    1. [Download the CSM tarball](#3-download-the-csm-tarball)
+    1. [Create system configuration](#4-create-system-configuration)
+    1. [Import the CSM tarball](#5-import-the-csm-tarball)
+    1. [Validate the LiveCD](#6-validate-the-livecd)
+    1. [Configure management network switches](#7-configure-management-network-switches)
+        - [Ensure SNMP is configured on the management network switches](#ensure-snmp-is-configured-on-the-management-network-switches)
+            - [When the management network is already configured](#when-the-management-network-is-already-configured)
+            - [When the management network has not been configured](#when-the-management-network-has-not-been-configured)
+        - [Configure the management network with CANU](#configure-the-management-network-with-canu)
+- [Installation](#installation)
+    1. [Deploy management nodes](#1-deploy-management-nodes)
+    1. [Install CSM services](#2-install-csm-services)
+    1. [Validate CSM health before final NCN deployment](#3-validate-csm-health-before-final-ncn-deployment)
+    1. [Deploy final NCN](#4-deploy-final-ncn)
+    1. [Configure administrative access](#5-configure-administrative-access)
+    1. [Validate CSM health](#6-validate-csm-health)
+    1. [Configure Prometheus alert notifications](#7-configure-prometheus-alert-notifications)
+    1. [Update ceph node-exporter config for SNMP counters](#8-update-ceph-node-exporter-config-for-snmp-counters)
+    1. [Upload Olympus BMC recovery firmware into TFTP server](#9-upload-olympus-bmc-recovery-firmware-into-tftp-server)
+    1. [Update firmware with FAS](#10-update-firmware-with-fas)
+    1. [Prepare compute nodes](#11-prepare-compute-nodes)
+    1. [Troubleshooting installation problems](#12-troubleshooting-installation-problems)
+- [Post-Installation](#post-installation)
+    1. [Kubernetes encryption](#1-kubernetes-encryption)
+    1. [Export Nexus data](#2-export-nexus-data)
+- [Installation of additional HPE Cray EX software products](#installation-of-additional-hpe-cray-ex-software-products)
 
 > **`NOTE`** If problems are encountered during the installation,
 > [Troubleshooting installation problems](#12-troubleshooting-installation-problems) and

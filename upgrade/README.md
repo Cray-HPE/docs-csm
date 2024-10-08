@@ -3,11 +3,28 @@
 There are several alternative procedures to perform an upgrade of Cray Systems Management (CSM)
 software. Choose the appropriate procedure from the sections below.
 
+* [Release Notes](#release-notes)
 * [CSM major/minor version upgrade](#csm-majorminor-version-upgrade)
     * [Option 1: Upgrade CSM with additional HPE Cray EX software products](#option-1-upgrade-csm-with-additional-hpe-cray-ex-software-products)
     * [Option 2: Upgrade only additional HPE Cray EX software products](#option-2-upgrade-only-additional-hpe-cray-ex-software-products)
     * [Option 3: Upgrade only CSM](#option-3-upgrade-only-csm)
 * [CSM patch version upgrade](#csm-patch-version-upgrade)
+
+## Release Notes
+
+Before upgrading, review the [Release Notes](../RELEASE_NOTES.md)
+
+### NVIDIA CPU and GPU notice
+
+Servers with NVIDIA CPUs and GPUs are **not** supported by CSM 1.6.0. Systems with these servers should
+**not** be upgraded to CSM 1.6.0.
+
+The January 2025 HPE HPC continuous software stack releases (CSM 1.6.0) are for HPE Cray EX systems without NVIDIA CPUs and GPUs.
+For HPE Cray EX systems with NVIDIA CPUs and GPUs, please use the August 2024 (CSM 1.5.x) HPE HPC continuous software stack.
+These software stacks were validated with NVIDIA HPC SDK 24.3.
+
+The March 2025 HPE HPC continuous and extended software stack releases will be validated with NVIDIA HPC SDK 24.11.
+The March 2025 (CSM 1.6.1) software stacks will support all HPE Cray EX systems.
 
 ## CSM major/minor version upgrade
 
@@ -22,7 +39,7 @@ latest patch release of CSM 1.6.
 ### Option 1: Upgrade CSM with additional HPE Cray EX software products
 
 To perform an upgrade of CSM along with additional HPE Cray EX software products, see the
-[Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
+[Upgrade CSM and additional products](../operations/iuf/workflows/upgrade_csm_and_additional_products.md)
 procedure.
 
 This is the most common procedure to follow, and it should be used when performing an upgrade from
