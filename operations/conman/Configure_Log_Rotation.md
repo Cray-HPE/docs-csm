@@ -80,7 +80,7 @@ for more information on this topic.
 
         This is the size of a file to rotate. When the log rotation happens, if an
         individual log file is larger than this size, it will be rotated.
-        
+
         Depending on how often the log rotation is executed and how quickly the file
         is growing you may see the files get quite a bit larger than this size when
         the rotation actually happens. If files are growing significantly larger than
@@ -89,13 +89,13 @@ for more information on this topic.
     1. `LOG_ROTATE_NUM_KEEP`
 
         This is the number of log rotations it will keep in the `/var/log/conman.old`
-        directory. For example if this value is 2, there will be a 
+        directory. For example if this value is 2, there will be a
         `/var/log/conman.old/console.XNAME.1` and `/var/log/conman.old/console.XNAME.2`
         file for each console that has logging active (after sufficient time has passed
         for the file to be rotated twice). Setting this value to 0 will prevent any
         older files to be kept.
 
-## Scenarios that may be encountered and possible solutions:
+## Scenarios that may be encountered and possible solutions
 
 1. The log files are getting too large before they are being rotated.
 
