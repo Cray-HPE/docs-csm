@@ -133,15 +133,15 @@ with system-specific customizations.
 1.  To federate Keycloak with an upstream LDAP:
 
     > **`INTERNAL ONLY`** On internal HPE systems, if the IP address for
-    > the ncn-m001 node is even then use `ldaps://dcldap2.us.cray.com`,
+    > the ncn-m001 node is even then use `ldaps://dcldap2.hpc.amslabs.hpecorp.net`,
     > otherwise use `ldaps://dcldap3.us.cray.com`. For example, `ping
     > fanta-ncn-m001.us.cray.com` shows the IP address is `172.30.52.72`,
-    > so fanta would use `ldaps://dcldap2.us.cray.com` as the
+    > so fanta would use `ldaps://dcldap2.hpc.amslabs.hpecorp.net` as the
     > `ldap_connection_url`. This just spreads the load over the two LDAP
     > replicas.
     >
     > ```bash
-    > linux# export LDAP=dcldap2.us.cray.com
+    > linux# export LDAP=dcldap2.hpc.amslabs.hpecorp.net
     > ```
 
     *   If LDAP requires TLS (recommended), update the `cray-keycloak` sealed
@@ -323,7 +323,7 @@ with system-specific customizations.
         >     - type: static
         >         args:
         >         name: ldap_connection_url
-        >         value: ldaps://dcldap2.us.cray.com
+        >         value: ldaps://dcldap2.hpc.amslabs.hpecorp.net
         > ```
 
     *   Configure the `ldapSearchBase` and `localRoleAssignments` settings for

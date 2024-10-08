@@ -319,10 +319,10 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    
    3. Set variables for the LDAP server.
 
-        In the following example, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
+        In the following example, the LDAP server has the hostname `dcldap2.hpc.amslabs.hpecorp.net` and is using the port 636.
 
         ```bash
-        ncn-m001# export LDAP=dcldap2.us.cray.com
+        ncn-m001# export LDAP=dcldap2.hpc.amslabs.hpecorp.net
         ncn-m001# export PORT=636
         ```
 
