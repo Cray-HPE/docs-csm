@@ -151,7 +151,7 @@ with system-specific customizations.
 
 1. (`pit#`) Set environment variables for the LDAP server and its port.
 
-   In the example below, the LDAP server has the hostname `dcldap2.hpc.amslabs.hpecorp.net` and is using the port 636.
+   In the following example, the LDAP server has the hostname `dcldap2.hpc.amslabs.hpecorp.net` and is using the port 636.
 
    ```bash
    LDAP=dcldap2.hpc.amslabs.hpecorp.net
