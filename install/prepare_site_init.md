@@ -148,10 +148,10 @@ with system-specific customizations.
 
 1. Set environment variables for the LDAP server and its port.
 
-   In the example below, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
+   In the example below, the LDAP server has the hostname `dcldap2.hpc.amslabs.hpecorp.net` and is using the port 636.
 
    ```bash
-   pit# LDAP=dcldap2.us.cray.com
+   pit# LDAP=dcldap2.hpc.amslabs.hpecorp.net
    pit# PORT=636
    ```
 
