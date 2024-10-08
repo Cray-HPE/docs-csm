@@ -122,5 +122,5 @@ Scenarios that may be encountered and possible solutions:
     1. Decrease the value of `LOG_ROTATE_NUM_KEEP` to keep fewer old copies of the log files.
 
     If none of these steps are appropriate for the requirements of the system, the size of the
-    PVC may be increased by following the directions here: 
+    PVC may be increased by following the directions here:
     [Console Services Troubleshooting Guide](./Console_Services_Troubleshooting_Guide.md#check-the-capacity-of-the-pvc)

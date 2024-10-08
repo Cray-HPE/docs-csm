@@ -334,4 +334,3 @@ There are a couple of ways to resolve this situation.
     When the `cray-console-operator` pod resumes operation it will scale the number
     `cray-console-node` pods back up automatically. After all pods are back up and
     ready, the new increased size of the PVC will be visible from within the pods.
-
