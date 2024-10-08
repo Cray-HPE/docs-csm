@@ -34,6 +34,8 @@ target_ncn=$1
 
 ssh_keygen_keyscan $1
 
+encryption_backup_tar="${target_ncn}-encryption.tar.gz"
+
 # Back up local files and directories used by System Admin Toolkit (SAT)
 state_name="BACKUP_SAT_LOCAL_FILES"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
@@ -59,6 +61,26 @@ if [[ $state_recorded == "0" ]]; then
       fi
     done
     echo "SAT local files backed up to $sat_backup_directory"
+  } >> ${LOG_FILE} 2>&1
+  record_state "${state_name}" ${target_ncn}
+else
+  echo "INFO ====> ${state_name} has been completed"
+fi
+
+# Back up local files used for Kubernetes encryption
+# This will backup the default files if encryption is not enabled
+state_name="BACKUP_K8s_ENCRYPTION_FILES"
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+if [[ $state_recorded == "0" ]]; then
+  echo "====> ${state_name} ..."
+  {
+    ssh $target_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "tar -cvf ${encryption_backup_tar} --directory /etc/cray/kubernetes/encryption .; \
+    cray artifacts create config-data ${encryption_backup_tar} ${encryption_backup_tar}"
+    if [[ $? -ne 0 ]]; then
+      echo "ERROR: Failed to backup encryption files on ${target_ncn}. Please check logs."
+      exit 1
+    fi
+    echo "K8s encryption local files backed up to $encryption_backup_tar in config-data bucket in s3."
   } >> ${LOG_FILE} 2>&1
   record_state "${state_name}" ${target_ncn}
 else
@@ -190,6 +212,38 @@ if [[ $state_recorded == "0" ]]; then
     record_state "${state_name}" ${target_ncn}
     scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
     ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
+  } >> ${LOG_FILE} 2>&1
+  record_state "${state_name}" ${target_ncn}
+else
+  echo "INFO ====> ${state_name} has been completed"
+fi
+
+state_name="RESTORE_K8S_ENCRYPTION_FILES"
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+if [[ $state_recorded == "0" ]]; then
+  echo "====> ${state_name} ..."
+  {
+    # get the encryption tar file in s3
+    cray artifacts get config-data ${encryption_backup_tar} /tmp/${encryption_backup_tar}
+    if [[ $? -eq 0 ]]; then
+      scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/tmp/${encryption_backup_tar}" "$target_ncn:/etc/cray/kubernetes/encryption/${encryption_backup_tar}"
+      ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${target_ncn}" "tar -xvf /etc/cray/kubernetes/encryption/${encryption_backup_tar} --directory /etc/cray/kubernetes/encryption"
+      # remove the line below after testing
+      scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/root/leliasen/new-encryption.sh" "$target_ncn:/usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh"
+      # remove the line above
+      ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${target_ncn}" "/usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --restore"
+      if [[ $? -eq 0 ]]; then
+        echo "Successfully restored Kubernetes encryption."
+        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${target_ncn}" "rm /etc/cray/kubernetes/encryption/${encryption_backup_tar}"
+        rm /tmp/${encryption_backup_tar}
+      else
+        echo "ERROR: failed to restore encryption on ${target_ncn}. The default encryption is in place on ${target_ncn}."
+        echo "If Kubernetes has been encrypted, it will need to be manually restored on ${target_ncn}."
+        exit 1
+      fi
+    else
+      echo "ERROR: ${encryption_backup_tar} was not found in s3. This is not expected. ${target_ncn} will have the default encryption files."
+    fi
   } >> ${LOG_FILE} 2>&1
   record_state "${state_name}" ${target_ncn}
 else

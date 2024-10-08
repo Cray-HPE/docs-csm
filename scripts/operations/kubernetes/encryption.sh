@@ -736,6 +736,23 @@ main() {
     fi
   fi
 
+  if $restore; then
+    # This function is used after a master node has been upgraded or rebuilt.
+    # The encryption files will have already been restored to /etc/cray/kubernetes/encryption.
+    # This function updates the k8s config and restarts the kube-apiserver on the target_ncn
+    encryption_file=$(readlink -f "${PREFIX}/current.yaml")
+    if ! updatek8sconfig "${encryption_file}" /etc/kubernetes/manifests/kube-apiserver.yaml /srv/cray/resources/common/kubeadm.cfg /etc/cray/kubernetes/kubeadm.yaml; then
+      printf "fatal: Update of k8s config to use %s failed\n" "${encryption_file}" >&2
+      printf "Encryption needs to be reenabled on %s" "$(uname -n)" >&2
+      exit 1
+    fi
+    if ! restartk8s "${encryption_file}"; then
+      echo "ERROR: unable to restart kube-apiserver-$(uname -n). Manually restart kube-apiserver-$(uname -n)."
+      exit 1
+    fi
+    exit 0
+  fi
+
   # General validation for --enable/disable, if this doesn't pass we don't allow
   # the input at all to go any further
 
@@ -810,7 +827,7 @@ ETCDCTL=${ETCDCTL:-$(command -v etcdctl)}
 
 usage() {
   cat << FIN
-usage: $0 [-h|--help] [--enable|--disable|--status|--restart] [--aescbc|aesgcm] VALUE ...
+usage: $0 [-h|--help] [--enable|--disable|--status|--restart|--restore] [--aescbc|aesgcm] VALUE ...
 FIN
 }
 
@@ -820,6 +837,7 @@ enabled=false
 disabled=false
 restart=false
 status=false
+restore=false
 ciphers=0
 help=true
 
@@ -843,6 +861,11 @@ while true; do
     -s | --status)
       help=false
       status=true
+      shift
+      ;;
+    --restore)
+      help=false
+      restore=true
       shift
       ;;
     --aescbc)
@@ -873,8 +896,9 @@ fi
 
 if (${enabled} && ${disabled}) || (${enabled} && ${status}) || (${enabled} && ${restart}) \
   || (${disabled} && ${status}) || (${disabled} && ${restart}) \
-  || (${status} && ${restart}); then
-  printf "fatal: --enable, --disable, --status, and --restart cannot be used together\n" >&2
+  || (${status} && ${restart}) || (${restore} && ${enabled}) || (${restore} && ${disabled}) \
+  || (${restore} && ${status}) || (${restore} && ${restart}); then
+  printf "fatal: --enable, --disable, --status, --restore, and --restart cannot be used together\n" >&2
   usage
   exit 1
 elif ${enabled}; then
