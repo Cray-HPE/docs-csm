@@ -119,6 +119,10 @@ Once this step has completed:
 - `${ADMIN_DIR}` is populated with `product_vars.yaml`, `site_vars.yaml`, and `sat bootprep` input files
 - The aforementioned configuration files have been updated to reflect site preferences
 
+**`NOTE`** If performing an upgrade that includes upgrading only CSM, return to the
+  [Upgrade only CSM through IUF](../../../upgrade/Upgrade_Only_CSM_with_iuf.md)
+  workflow to continue the upgrade.
+
 ## 2. Execute the IUF `update-vcs-config` stage
 
 For each product that uploaded Ansible configuration content to a configuration management VCS repository, the `update-vcs-config` stage attempts to merge the pristine branch of the configuration management repository into a
