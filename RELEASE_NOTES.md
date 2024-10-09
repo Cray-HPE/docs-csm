@@ -29,6 +29,12 @@
 
 ### Documentation enhancements
 
+## Noteworthy changes
+
+* The [BOS](glossary.md#boot-orchestration-service-bos) API now enforces limits that previously had
+  only been recommended. When updating to CSM 1.6, BOS data is migrated to be in compliance with the
+  API specification. See [BOS data notice](upgrade/README.md#bos-data-notice) for more details.
+
 ## Bug fixes
 
 ## Deprecations

@@ -94,6 +94,7 @@ Build and customize image recipes with the Image Management Service (IMS).
 
 Use the Boot Orchestration Service \(BOS\) to boot, reboot, and shut down collections of nodes.
 
+- [BOS data notice](../upgrade/README.md#bos-data-notice)
 - [Boot Orchestration Service (BOS)](boot_orchestration/Boot_Orchestration.md)
       - [BOS Cheat Sheet](boot_orchestration/Cheatsheet.md)
       - [BOS Services](boot_orchestration/BOS_Services.md)
