@@ -139,4 +139,3 @@ cray-hbtd/db-2024-10-01_23-01
 The returned output includes the date and time of the latest backup for each service. If a recent backup for any service is not included, it is an indication
 that the service is not backed up automatically. Create a manual backup for that service by following the
 [Create a Manual Backup of a Healthy etcd Cluster](Create_a_Manual_Backup_of_a_Healthy_etcd_Cluster.md) procedure.
-
