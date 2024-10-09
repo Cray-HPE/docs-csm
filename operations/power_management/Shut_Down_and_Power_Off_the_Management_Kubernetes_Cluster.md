@@ -41,13 +41,13 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
 1. To check the health and status of the management cluster before shutdown, see the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md).
 
-1. Check the health and backup etcd clusters:
+1. Check the health and backup status of etcd clusters:
 
-   1. Determine which etcd clusters must be backed up and if they are healthy.
+   1. Determine whether the etcd clusters are healthy.
 
       Review [Check the Health of etcd Clusters](../kubernetes/Check_the_Health_of_etcd_Clusters.md).
 
-   1. Backup etcd clusters.
+   1. Check the status of etcd cluster backups and make backups if missing.
 
       See [Backups for Etcd Clusters Running in Kubernetes](../kubernetes/Backups_for_Etcd_Clusters_Running_in_Kubernetes.md).
 
@@ -90,12 +90,31 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 1. (`ncn-m001#`) Set variables as comma-separated lists for the three types of management NCNs.
 
    ```bash
-   MASTERS="ncn-m002,ncn-m003"
-   STORAGE=$(ceph orch host ls | grep ncn-s | awk '{print $1}' | xargs | sed 's/ /,/g')
-   WORKERS=$(kubectl get nodes | grep ncn-w | awk '{print $1}' | sort -u | xargs | sed 's/ /,/g')
+   MASTERS="ncn-m002,ncn-m003"; echo MASTERS=$MASTERS
+   STORAGE=$(ceph orch host ls | grep ncn-s | awk '{print $1}' | xargs | sed 's/ /,/g'); echo STORAGE=$STORAGE
+   WORKERS=$(kubectl get nodes | grep ncn-w | awk '{print $1}' | sort -u | xargs | sed 's/ /,/g'); echo WORKERS=$WORKERS
    ```
 
+1. (`ncn-m001#`) Install tools that will help to find processes preventing filesystem unmounting.
+
+   The `psmisc` rpm includes these tools: `fuser`, `killall`, `peekfd`, `prtstat`, `pslog`, `pstree`.
+
+   ```bash
+   pdsh -w ncn-m001,$MASTERS,$WORKERS 'zypper -n install psmisc'
+   ```
+
+1. If the worker nodes have been supporting the containerized User Access Instance (UAI) pods, then the DVS mounted
+   Cray Programming Environment (CPE) filesystems should be unmounted.
+
+   1. (`ncn-m001#`) Unmount the CPE content on the worker nodes.
+
+      ```bash
+      pdsh -w $WORKERS bash /etc/cray-pe.d/pe_cleanup.sh | dshbak -c
+      ```
+
 1. (`ncn-m001#`) Shut down platform services.
+
+   > NOTE: There are some interactive questions which need answers before the shutdown process can progress.
 
    ```bash
    sat bootsys shutdown --stage platform-services
@@ -202,6 +221,33 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    If the process continues to report errors due to `Failed to stop containers`, then iterate on the above step. Each iteration should reduce the number of containers running. If necessary,
    containers can be manually stopped using `crictl stop CONTAINER`. If containers are stopped manually, then re-run the above procedure to complete any final steps in the process.
 
+1. (`ncn-m001#`) Unload DVS and `Lnet` kernel modules from worker nodes.
+
+   > This step helps to avoid error messages in the console log while Linux is shutting down similar to "DVS: task XXX exiting on a signal"
+
+   ```bash
+   pdsh -w $WORKERS 'lsmod | egrep "^dvs\s+"; rm -rf /run/dvs; \
+      echo quiesce / > /sys/fs/dvs/quiesce; modprobe -r dvs; sleep 5; \
+      modprobe -r dvsipc dvsipc_lnet dvsproc; lsmod | egrep "^lnet\s"; \
+      lsmod | egrep "^lustre\s"; systemctl stop lnet; lsmod | egrep "^lnet\s"'
+   ```
+
+1. (`ncn-m001#`) Adjust boot order for management NCNs so the next boot will use disk.
+   This ensures that when the node is powered up again it will boot from disk rather than attempting
+   to PXE boot before the services to support that are available.
+
+   ```bash
+   pdsh -w ncn-m001,$MASTERS,$STORAGE,$WORKERS 'efibootmgr -n $(efibootmgr | grep "UEFI OS" | head -1 | cut -c 5-8)' | dshbak -c
+   ```
+
+1. (`ncn-m001#`) Unmount `ceph` and `fuse.s3fs` filesystems from master and worker nodes.
+
+   ```bash
+   pdsh -w ncn-m001,$MASTERS,$WORKERS 'mount -t ceph|egrep -v kubelet; umount /etc/cray/upgrade/csm' | dshbak -c
+   pdsh -w ncn-m001,$MASTERS 'mount -t fuse.s3fs |egrep -v kubelet; umount /var/opt/cray/sdu/collection-mount; umount  /var/opt/cray/config-data' | dshbak -c
+   pdsh -w $WORKERS 'mount -t fuse.s3fs ; fusermount -u /var/lib/cps-local/boot-images;  umount  /var/lib/cps-local/boot-images; pkill s3fs' | dshbak -c
+   ```
+
 1. (`ncn-m001#`) Shut down and power off all management NCNs except `ncn-m001`.
 
     This command requires input for the IPMI username and password for the management nodes.
@@ -214,8 +260,10 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
    1. Shutdown management NCNs.
 
+      > NOTE: There are some interactive questions which need answers before the shutdown process can progress.
+
       ```bash
-      sat bootsys shutdown --stage ncn-power --ncn-shutdown-timeout 900
+      sat bootsys shutdown --stage ncn-power --ncn-shutdown-timeout 1200
       ```
 
       Example output:
@@ -274,6 +322,15 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
       ```bash
       screen -x 26745.SAT-console-ncn-w003-mgmt
       ```
+
+      > NOTE: There may be many messages like this in the console logs for worker nodes and master nodes.
+      > There are no special actions to address these errors.
+      >
+      > Example console log output:
+      >
+      > ```bash
+      > [76266.056108][T2394731] libceph: connect (1)100.96.129.14:6789 error -101
+      > ```
 
    1. (`ncn-m001#`) Check the power off status of management NCNs.
 
