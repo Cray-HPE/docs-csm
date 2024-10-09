@@ -72,6 +72,32 @@ power-on command from Cray System Management \(CSM\) software.
    cray power transition describe TRANSITION_ID --format json
    ```
 
+1. (`ncn-m001#`) Check the power status for every liquid-cooled cabinet Chassis.
+
+   The `State` should be `On` for every Chassis.
+
+   ```bash
+   sat status --types Chassis
+   ```
+
+   Example output.
+
+   ```text
+   +---------+---------+-------+------+---------+------+----------+----------+
+   | xname   | Type    | State | Flag | Enabled | Arch | Class    | Net Type |
+   +---------+---------+-------+------+---------+------+----------+----------+
+   | x1020c0 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c1 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c2 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c3 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c4 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c5 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c6 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c7 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   ...
+   +---------+---------+-------+------+---------+------+----------+----------+
+   ```
+
 ### Power On Standard Rack PDU Circuit Breakers
 
 1. Switch the standard rack compute cabinet PDU circuit breakers to ON.

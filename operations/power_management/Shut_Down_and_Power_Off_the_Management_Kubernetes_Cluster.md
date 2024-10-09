@@ -41,13 +41,13 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
 1. To check the health and status of the management cluster before shutdown, see the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md).
 
-1. Check the health and backup etcd clusters:
+1. Check the health and backup status of etcd clusters:
 
-   1. Determine which etcd clusters must be backed up and if they are healthy.
+   1. Determine whether the etcd clusters are healthy.
 
       Review [Check the Health of etcd Clusters](../kubernetes/Check_the_Health_of_etcd_Clusters.md).
 
-   1. Backup etcd clusters.
+   1. Check the status of etcd cluster backups and make backups if missing.
 
       See [Backups for Etcd Clusters Running in Kubernetes](../kubernetes/Backups_for_Etcd_Clusters_Running_in_Kubernetes.md).
 
@@ -95,7 +95,26 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    WORKERS=$(kubectl get nodes | grep ncn-w | awk '{print $1}' | sort -u | xargs | sed 's/ /,/g'); echo WORKERS=$WORKERS
    ```
 
+1. (`ncn-m001#`) Install tools that will help to find processes preventing filesystem unmounting.
+
+   The `psmisc` rpm includes these tools: `fuser`, `killall`, `peekfd`, `prtstat`, `pslog`, `pstree`.
+
+   ```bash
+   pdsh -w ncn-m001,$MASTERS,$WORKERS 'zypper -n install psmisc'
+   ```
+
+1. If the worker nodes have been supporting the containerized User Access Instance (UAI) pods, then the DVS mounted
+   Cray Programming Environment (CPE) filesystems should be unmounted.
+
+   1. (`ncn-m001#`) Unmount the CPE content on the worker nodes.
+
+      ```bash
+      pdsh -w $WORKERS bash /etc/cray-pe.d/pe_cleanup.sh | dshbak -c
+      ```
+
 1. (`ncn-m001#`) Shut down platform services.
+
+   > NOTE: There are some interactive questions which need answers before the shutdown process can progress.
 
    ```bash
    sat bootsys shutdown --stage platform-services
@@ -142,6 +161,17 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
    Executing step: Stop containerd on all Kubernetes NCNs.
    ```
 
+1. (`ncn-m001#`) Unload DVS and `Lnet` kernel modules from worker nodes.
+
+   > This step helps to avoid error messages in the console log while Linux is shutting down similar to "DVS: task XXX exiting on a signal"
+
+   ```bash
+   pdsh -w $WORKERS 'lsmod | egrep "^dvs\s+"; rm -rf /run/dvs; \
+      echo quiesce / > /sys/fs/dvs/quiesce; modprobe -r dvs; sleep 5; \
+      modprobe -r dvsipc dvsipc_lnet dvsproc; lsmod | egrep "^lnet\s"; \
+      lsmod | egrep "^lustre\s"; systemctl stop lnet; lsmod | egrep "^lnet\s"'
+   ```
+
 1. (`ncn-m001#`) Shut down and power off all management NCNs except `ncn-m001`.
 
     This command requires input for the IPMI username and password for the management nodes.
@@ -154,8 +184,10 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
    1. Shutdown management NCNs.
 
+      > NOTE: There are some interactive questions which need answers before the shutdown process can progress.
+
       ```bash
-      sat bootsys shutdown --stage ncn-power --ncn-shutdown-timeout 900
+      sat bootsys shutdown --stage ncn-power --ncn-shutdown-timeout 1200
       ```
 
       Example output when the command is successful:
@@ -334,6 +366,24 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
       INFO: Shutdown and power off of all management NCNs complete.
       INFO: Succeeded with shutdown of other management NCNs.
       ```
+
+   1. (`ncn-m001#`) Check the power off status of management NCNs.
+
+       > NOTE: `read -s` is used to read the password in order to prevent it from being
+       > echoed to the screen or preserved in the shell history.
+
+       ```bash
+       USERNAME=root
+       read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
+       ```
+
+       ```bash
+       export IPMI_PASSWORD
+       for ncn in $(echo "$MASTERS,$STORAGE,$WORKERS" | sed 's/,/ /g'); do
+           echo -n "${ncn}: "
+           ipmitool -U "${USERNAME}" -H "${ncn}-mgmt" -E -I lanplus chassis power status
+       done
+       ```
 
 1. (`external#`) From a remote system, activate the serial console for `ncn-m001`.
 

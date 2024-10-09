@@ -22,9 +22,15 @@ cabinets are powered on, wait at least 10 minutes for systems to initialize.
 
 After all the system cabinets are powered on, be sure that all management network and Slingshot network switches are powered on, and that there are no error LEDS or hardware failures.
 
-## Power on the external Lustre file system
+## Power On the External File Systems
 
 To power on an external Lustre file system (ClusterStor), refer to [Power On the External Lustre File System](Power_On_the_External_Lustre_File_System.md).
+
+To power on the external Spectrum Scale (GPFS) file system, refer to site procedures.
+
+**Note:** If the external file systems are not mounted on worker nodes, then continue to power them in parallel with
+the power on and boot of the Kubernetes management cluster and the power on of the compute cabinets. This must be completed
+before beginning to power on and boot the compute nodes and User Access Nodes (UANs).
 
 ## Power on and boot the Kubernetes management cluster
 
@@ -36,8 +42,10 @@ To power on all liquid-cooled cabinet CDUs and cabinet PDUs, refer to [Power On 
 
 ## Power on and boot managed nodes
 
-To power on and boot managed nodes, e.g. compute nodes and User Access Nodes (UANs), refer to
-[Power On and Boot Managed Nodes](Power_On_and_Boot_Managed_Nodes.md) and make nodes available to users.
++**Note:** Ensure that the external Lustre and Spectrum Scale (GPFS) filesystems are available before starting to boot the compute nodes and UANs.
+
+To power on and boot managed compute nodes and application nodes, such as the User Access Nodes (UANs), refer to
+[Power On and Boot Managed Nodes](Power_On_and_Boot_Managed_Nodes.md).
 
 ## Run system health checks
 
