@@ -15,7 +15,7 @@ The following services are backed up daily \(one week of backups retained\) as p
 
 - Boot Orchestration Service \(BOS\)
 - Boot Script Service \(BSS\)
-- Controller Diagnostics Orchestration (FOX) 
+- Controller Diagnostics Orchestration (FOX)
 - Firmware Action Service \(FAS\)
 - Heartbeat Tracking Daemon \(HBTD\)
 - HMS Notification Fanout Daemon \(HMNFD\)
