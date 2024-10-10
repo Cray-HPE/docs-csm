@@ -73,7 +73,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
    To prevent this issue from happening, remove stale `ssh` host keys from `/root/.ssh/known_hosts` before running the `sat` command.
 
-1. Check certificate expiration deadlines to ensure that a certificate won't expire while the system is powered off.
+1. Check certificate expiration deadlines to ensure that a certificate will not expire while the system is powered off.
 
    1. (`ncn-mw#`) Check the expiration date of the Spire Intermediate CA Certificate.
 
@@ -458,13 +458,13 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
 1. Notify users and operations staff about the upcoming full system power off.
 
-   The notification method will vary by system, but might be email, messaging applications, `/etc/motd` on UANs, `wall` commands on UANs, etc.
+   The notification method will vary by system, but might be email, messaging applications, `/etc/motd` on UANs, `wall` commands on UANs, and so on.
 
 1. Follow the vendor workload manager documentation to drain processes running on compute nodes.
 
     1. For Slurm, see the `scontrol` man page.
 
-       Below are examples of how to drain nodes using `slurm`. The list of nodes can be copy/pasted from the `sinfo` command for nodes in an `idle` state:
+       The following are examples of how to drain nodes using `slurm`. The list of nodes can be copy/pasted from the `sinfo` command for nodes in an `idle` state:
 
        ```bash
        scontrol update NodeName=nid[001001-001003,001005] State=DRAIN Reason="Shutdown"
@@ -476,7 +476,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     1. For PBS Professional, see the `qstat` and `qmgr` man pages.
 
-       Below is an example to list the available queues, disable a specific queue named `workq`, and check
+       The following is an example to list the available queues, disable a specific queue named `workq`, and check
        that the queue has been disabled:
 
        ```bash

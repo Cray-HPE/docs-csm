@@ -204,7 +204,7 @@ to ensure that the file system and its quorum nodes are quiesced before shutting
    scp ncn-w001:/opt/cray/dvs/default/sbin/dvs_reload_ncn /tmp
    ```
 
-   1. (`ncn-m#`) Get list of worker nodes.
+   1. (`ncn-m#`) Get a list of worker nodes.
 
    ```bash
    WORKERS=$(cray hsm state components list --subrole Worker --type Node --format json | jq -r .Components[].ID | xargs)
