@@ -15,6 +15,7 @@ The following services are backed up daily \(one week of backups retained\) as p
 
 - Boot Orchestration Service \(BOS\)
 - Boot Script Service \(BSS\)
+- Controller Diagnostics Orchestration (FOX) 
 - Firmware Action Service \(FAS\)
 - Heartbeat Tracking Daemon \(HBTD\)
 - HMS Notification Fanout Daemon \(HMNFD\)
@@ -34,7 +35,7 @@ See [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_e
 
 This test will show PASS or FAIL for each of the etcd clusters as it verifies whether they had a backup in the last 24 hours.
 
-(`ncn-mw#`) To view all available etcd backups across all clusters
+(`ncn-mw#`) To view all available etcd backups across all clusters:
 
 ```bash
 /opt/cray/platform-utils/ncnHealthChecks.sh -s etcd_backups_check

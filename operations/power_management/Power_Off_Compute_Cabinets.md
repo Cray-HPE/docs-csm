@@ -210,11 +210,11 @@ liquid-cooled cabinet chassis, compute modules, and router modules, then powers 
 
 1. (`ncn-m#`) Shut down cabinet power.
 
-    **Important:** The default timeout for the call to CAPMC is 120 seconds. If the `sat bootsys shutdown` command fails
-    to power off some cabinets and indicate that requests to CAPMC have timed out, the `sat` command may be run with an increased `--capmc-timeout` value.
+    **Important:** The default timeout for the call to PCS is 120 seconds. If the `sat bootsys shutdown` command fails
+    to power off some cabinets and indicate that requests to PCS have timed out, the `sat` command may be run with an increased `--pcs-timeout` value.
 
     ```bash
-    sat bootsys shutdown --stage cabinet-power --capmc-timeout 240
+    sat bootsys shutdown --stage cabinet-power --pcs-timeout 240
     ```
 
 1. (`ncn-m#`) Verify that the `hms-discovery` cron job has been suspended.
