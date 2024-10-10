@@ -1160,6 +1160,45 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
       csi handoff bss-update-param --set "${bootparameter}"
     done
 
+    # Get a list of NCNs.
+    if IFS=$'\n' read -rd '' -a NCN_XNAMES; then
+      :
+    fi <<< "$(cray hsm state components list --role Management --subrole Worker --type Node --format json | jq -r '.Components | map(.ID) | join("\n")')"
+    # If no NCNs are found we should exit, otherwise if forces its way forward then NCNs will be missing critical packages.
+    if [ "${#NCN_XNAMES[@]}" -eq '0' ]; then
+      echo >&2 'No NCN xnames were found in HSM! Aborting.'
+      exit 1
+    fi
+
+    params=""
+    error=0
+
+    # Loop through one at a time. If `--hosts` isn't provided, we will error out on the 'Global' key.
+    for ncn_xname in "${NCN_XNAMES[@]}"; do
+      printf "% -15s: " "${ncn_xname}"
+
+      params=$(cray bss bootparameters list --hosts "${ncn_xname}" --format json | jq '.[] |."params"' \
+        | sed -E \
+          -e 's/ip=hsn[0-9]+:auto6\s?//g' \
+          -e 's/ifname=hsn[0-9]+:[0-9a-fA-F:]{17}\s?//g' \
+          -e 's/\"//g')
+
+      if ! cray bss bootparameters update --hosts "${ncn_xname}" \
+        --params "${params}" > /dev/null 2>&1; then
+        echo "ERROR - Failed to update boot parameters for $xname! Skipping ..."
+        error=1
+        continue
+      fi
+      echo 'OK'
+    done
+    if [ "$error" -ne 0 ]; then
+      echo >&2 "Errors were detected, please inspect the scripts output."
+      exit 1
+    else
+      echo "Successfully updated boot parameters for [${#NCN_XNAMES[@]}] xname(s):"
+      printf "\t%s\n" "${NCN_XNAMES[@]}"
+    fi
+
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
   echo
