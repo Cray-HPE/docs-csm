@@ -20,24 +20,24 @@ for more information on this topic.
 
 ## How log rotation works
 
-1. On a regular schedule, the log rotation will execute the following steps:
+On a regular schedule, the log rotation will execute the following steps:
 
-    1. Check the size of all the current console log files.
+1. Check the size of all the current console log files.
 
-        If the size of the file is larger than a specified size, it will be
-        moved to the `/var/log/conman.old` directory with the name
-        `console.XNAME.1` and a new file will be created for the current logs
-        `/var/log/conman/console.XNAME`.
+    If the size of the file is larger than a specified size, it will be
+    moved to the `/var/log/conman.old` directory with the name
+    `console.XNAME.1` and a new file will be created for the current logs
+    `/var/log/conman/console.XNAME`.
 
-    1. Manage the current backup files.
+1. Manage the current backup files.
 
-        If a file already exists in the `/var/log/conman.old` directory for
-        a particular console log that is being rotated, the existing files
-        will be renamed `/var/log/conman.old/console.XNAME.N+1`.
+    If a file already exists in the `/var/log/conman.old` directory for
+    a particular console log that is being rotated, the existing files
+    will be renamed `/var/log/conman.old/console.XNAME.N+1`.
 
-        There is a configuration setting for how many rotations to keep, once
-        that limit is reached, the oldest version of the console log file will
-        be deleted.
+    There is a configuration setting for how many rotations to keep, once
+    that limit is reached, the oldest version of the console log file will
+    be deleted.
 
 ## Modify the settings for the log rotation
 
