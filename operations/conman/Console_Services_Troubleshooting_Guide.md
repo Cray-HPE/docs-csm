@@ -9,6 +9,7 @@ how to look at all aspects of the service to determine what the current problem 
 * [Find the `cray-console-node` pod for a specific node](#find-the-cray-console-node-pod-for-a-specific-node)
 * [Investigate service problem](#investigate-service-problem)
 * [Investigate Postgres deployment](#investigate-postgres-deployment)
+* [Check the capacity of the PVC](#check-the-capacity-of-the-pvc)
 
 ## Prerequisites
 
@@ -229,3 +230,107 @@ If the database can not be made healthy through these procedures, the easiest wa
 resolve this is to perform a complete reset of the console services including
 reinstalling the `cray-console-data` service. See
 [Complete Reset of the Console Services](Complete_Reset_of_the_Console_Services.md).
+
+## Check the capacity of the PVC
+
+There is a shared PVC that is mounted to all the `cray-console-node` pods that is used to
+write the individual console log files. If this volume fills up, the log files will no
+longer be written to and log data will be lost. If following a log file it will look like
+the logging has stopped, but logging into the log directly with 'conman' will still show
+the current console log.
+
+This volume is mounted on the `/var/log` directory inside the `cray-console-node` pods.
+To check the usage of this PVC:
+
+1. (`ncn-mw#`) Log into one of the `cray-console-node` pods.
+
+    ```bash
+    kubectl -n services exec -it cray-console-node-0 -c cray-console-node -- sh
+    ```
+
+1. (`pod#`) Check the volume usage.
+
+    ```bash
+    df -h | grep -E 'Size|/var/log'
+    ```
+
+    Expected results will look something like:
+
+    ```text
+        Filesystem                                     Size  Used Avail Use% Mounted on
+        10.252.1.18:6789:/volumes/csi/csi-vol-0f39...  100G   36M  100G   1% /var/log
+    ```
+
+    If the 'used' value is approaching or equal to the 'Size' value, the volume is
+    filling up.
+
+There are a couple of ways to resolve this situation.
+
+1. Remove excess files from the volume.
+
+    The console files are stored in `/var/log/conman` and named `console.XNAME` to
+    distinguish which log files are from which nodes. If there are some log files that
+    are left over from nodes no longer in use, they may be removed.
+
+    The backup files for the console logs are stored in `/var/log/conman.old`. When
+    the individual files get too large they are moved to this directory by the
+    `logrotate` application. If these files are not needed for looking through historical
+    console logs, they may be removed.
+
+    The files in the `/var/log/console` directory are small and required for the
+    operation of the console services so do not remove them.
+
+1. Adjust the log rotation settings.
+
+    The `logrotate` application is used to manage the size of the log files as they
+    grow over time. The settings for this functionality are described in
+    [Configure Log Rotation](Configure_Log_Rotation.md). Tune the settings for this
+    system to prevent the log files from filling up the PVC.
+
+1. (`ncn-mw#`) Increase the size of the PVC.
+
+    If the system is large, the default settings for the log rotation and the PVC
+    size may not be sufficient to hold the console log files and the backups. If
+    more backups are required than can fit on the current PVC, it may be increased
+    in size without losing any of the current data on the volume.
+
+    1. Edit the PVC to increase the size.
+
+        ```bash
+        kubectl -n services edit pvc cray-console-operator-data-claim
+        ```
+
+        Modify the value of `spec.resources.requests.storage` to increased value required:
+
+        ```text
+        spec:
+        accessModes:
+        - ReadWriteMany
+        resources:
+            requests:
+            storage: 150Gi
+        ```
+
+    1. Scale the number of `cray-console-operator` pods to zero.
+
+        ```bash
+        kubectl -n services scale deployment --replicas=0 cray-console-operator
+        ```
+
+    1. Scale the number of `cray-console-node` pods to zero.
+
+        ```bash
+        kubectl -n services scale statefulset --replicas=0 cray-console-node
+        ```
+
+    1. Wait for these pods to terminate.
+
+    1. Scale the number of `cray-console-operator` pods to one.
+
+        ```bash
+        kubectl -n services scale deployment --replicas=1 cray-console-operator
+        ```
+
+    When the `cray-console-operator` pod resumes operation it will scale the number
+    `cray-console-node` pods back up automatically. After all pods are back up and
+    ready, the new increased size of the PVC will be visible from within the pods.
