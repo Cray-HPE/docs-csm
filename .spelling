@@ -13,6 +13,7 @@
 10Gi
 10Hz
 12-core
+15.2.x
 1GiB
 1TiB
 2-chassis
@@ -113,7 +114,10 @@ CECs
 center
 centers
 Ceph
+ceph
+ceph-mgr
 ceph-mon
+ceph-osd
 ceph-radosgw
 Cephadm
 cephadm
