@@ -115,6 +115,7 @@ Use the Boot Orchestration Service \(BOS\) to boot, reboot, and shut down collec
       - [Stage Changes with BOS](boot_orchestration/Stage_Changes_with_BOS.md)
       - [Kernel Boot Parameters](boot_orchestration/Kernel_Boot_Parameters.md)
       - [Troubleshoot UAN Boot Issues](boot_orchestration/Troubleshoot_UAN_Boot_Issues.md)
+      - [Determine Which BOS Session Booted A Node](boot_orchestration/Determine_Which_BOS_Session_Booted_A_Node.md)
 - [BOS Options](boot_orchestration/Options.md)
 - [Exporting and Importing BOS Data](boot_orchestration/Exporting_and_Importing_BOS_Data.md)
 - [Exporting and Importing BSS Data](boot_orchestration/Exporting_and_Importing_BSS_Data.md)
