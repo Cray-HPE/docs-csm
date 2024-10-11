@@ -193,7 +193,7 @@ if [[ $state_recorded == "0" ]] && k8s_job_exists "${ns}" "${job_name}"; then
 
     SNAPSHOT_DIR_BASENAME=$(basename "${SNAPSHOT_DIR}")
     TARFILE_BASENAME="${SNAPSHOT_DIR_BASENAME}.tgz"
-    TARFILE_FULLPATH="/tmp/${TARFILE_FULLPATH}"
+    TARFILE_FULLPATH="/tmp/${TARFILE_BASENAME}"
     echo "Creating compressed tarfile of snapshot data: ${TARFILE_FULLPATH}"
     tar -C /root -czf "${TARFILE_FULLPATH}" "${SNAPSHOT_DIR_BASENAME}"
 
