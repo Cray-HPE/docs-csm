@@ -8,14 +8,15 @@
 
 ## Overview
 
-The [HNC controller](https://github.com/kubernetes-sigs/hierarchical-namespaces) is deployed as part of the multi-tenancy solution for namespace management and object propagation.
-This controller is deployed in CSM with the `cray-hnc-manager` Helm chart. This HNC controller is only managing the following namespaces related to multi-tenancy:
+The [Hierarchical Namespace Controller (HNC)](https://github.com/kubernetes-sigs/hierarchical-namespaces) is deployed as part of the multi-tenancy solution for namespace management and object propagation.
+This controller is deployed in CSM with the `cray-hnc-manager` Helm chart.
+This HNC controller is only managing the following namespaces related to multi-tenancy:
 
 * `multi-tenancy`
 * `slurm-operator`
 * `tapms-operator`
 * `tenants`
-* Any namespaces created for a given tenant
+* Any namespaces created for a given tenant (prefixed with `vcluster-*` by default)
 
 Generally, operations for managing tenants do not require interacting explicitly with the HNC controller, aside from the initial configuration.
 This is because `tapms` interacts with the HNC controller programmatically to construct `HNC-specific` namespaces.

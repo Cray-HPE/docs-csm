@@ -810,3 +810,4 @@ these backups.
 - [Tenant and Partition Management System (TAPMS) Overview](multi-tenancy/Tapms.md)
 - [TAPMS Tenant Status API](../api/tapms-operator.md)
 - [Global Tenant Hooks](multi-tenancy/GlobalTenantHooks.md)
+- [Example Workflow](multi-tenancy/ExampleWorkflow.md)
