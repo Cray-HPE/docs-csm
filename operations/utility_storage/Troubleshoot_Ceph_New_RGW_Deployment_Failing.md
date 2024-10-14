@@ -116,7 +116,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
 1. Check the health of the Ceph cluster on one of the manager nodes.
 
-   Rerun the command to check the ceph admin tool
+   Rerun the command to check the Ceph admin tool.
 
     ```bash
         ceph -W cephadm
