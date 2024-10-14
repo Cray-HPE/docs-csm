@@ -136,7 +136,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
       * See [Renew Etcd Certificate](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#renew-etcd-certificate)
       * See [Update Client Certificates](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
 
-   1. (`ncn-m#`) Check the kube-etcdbackup-etcd certificate expiration
+   1. (`ncn-m#`) Check the `kube-etcdbackup-etcd` certificate expiration
 
       ```bash
       kubectl get secret -n kube-system kube-etcdbackup-etcd -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
@@ -152,7 +152,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
       * See [Update Client Secrets](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
 
-   1. (`ncn-m#`) Check the etcd-ca certificate expiration.
+   1. (`ncn-m#`) Check the `etcd-ca` certificate expiration.
 
       ```bash
       kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r '.data."etcd-ca" | @base64d' | openssl x509 -noout -enddate
@@ -164,11 +164,11 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
       notAfter=Jan 13 18:01:48 2033 GMT
       ```
 
-      If the etcd-ca certificate has expired or will expire while the system is powered off, see the procedure steps for changing the etcd-client-cert secret and then restarting Prometheus after the change.
+      If the `etcd-ca` certificate has expired or will expire while the system is powered off, see the procedure steps for changing the etcd-client-cert secret and then restarting Prometheus after the change.
 
       * See [Update Client Secrets](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
 
-   1. (`ncn-m#`) Check the etcd-client certificate expiration.
+   1. (`ncn-m#`) Check the `etcd-client` certificate expiration.
 
       ```bash
       kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r '.data."etcd-client" | @base64d' | openssl x509 -noout -enddate
@@ -180,7 +180,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
       notAfter=Jan 16 18:01:49 2024 GMT
       ```
 
-      If either the etcd-client certificate has expired or will expire while the system is powered off, see the procedure steps for changing the etcd-client-cert secret and then restarting Prometheus after the change.
+      If either the `etcd-client` certificate has expired or will expire while the system is powered off, see the procedure steps for changing the etcd-client-cert secret and then restarting Prometheus after the change.
 
       * See [Update Client Secrets](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
 
