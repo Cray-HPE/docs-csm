@@ -75,7 +75,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
         ERROR: TCP Port(s) '8080' required for rgw already in use
         ```
 
-        **Note** the name of the daemon attempting to deploy for the next step, in this case `rgw.site1.zone1`
+        **Note** the name of the daemon attempting to deploy for the next step, in this case `rgw.site1.zone1`.
 
     1. Verify that the running daemon has a different name than the one attempting to deploy
 
