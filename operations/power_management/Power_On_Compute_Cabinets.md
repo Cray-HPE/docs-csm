@@ -47,24 +47,49 @@ power-on command from Cray System Management \(CSM\) software.
    sat bootsys boot --stage cabinet-power
    ```
 
-   This command first resumes the `hms-discovery` Kubernetes cronjob and waits for it to be
-   scheduled. Then, the `hms-discovery` job initiates power-on of the liquid-cooled cabinets.
-   Finally, the `sat bootsys` command waits for the components in the liquid-cooled cabinets to be
-   powered on. The `sat bootsys` command controls power only to liquid-cooled cabinets.
+   This command resumes the `hms-discovery` Kubernetes cronjob and waits for it to be scheduled.
+   Once scheduled, the `hms-discovery` job initiates power-on of the liquid-cooled cabinets, and the
+   `sat bootsys` command waits for the components in the liquid-cooled cabinets to be powered on.
+   The `sat bootsys` command only powers on liquid-cooled cabinets.
 
-   If the `hms-discovery` cronjob fails to be scheduled after it is resumed, then SAT will delete
-   and re-create the cronjob, and will wait for it to run. After the cronjob has been scheduled
-   within the time expected based on its cron schedule, execute the `sat bootsys boot --stage
-   cabinet-power` command again.
+   If the `hms-discovery` cronjob fails to be scheduled after it is resumed, then `sat bootsys` will
+   delete and re-create the cronjob and wait again for it to be scheduled. If this command fails, it is safe to run it again until it succeeds.
 
-   If `sat bootsys` fails to power on the cabinets through `hms-discovery`, then use PCS to
-   manually power on the cabinet chassis, compute blade slots, and all populated switch blade
-   slots \(1, 3, 5, and 7\). This example shows cabinets 1000-1003.
+   If `sat bootsys` fails to power on the cabinets through `hms-discovery`, then components can be
+   manually powered on directly with PCS. The example below will power on the cabinet chassis,
+   compute blade slots, and all populated switch blade slots (1, 3, 5, and 7) in cabinets 1000-1003.
+   Adjust the example as needed for the system.
 
    ```bash
    cray power transition on --xnames x[1000-1003]c[0-7] --format json
    cray power transition on --xnames x[1000-1003]c[0-7]s[0-7] --format json
    cray power transition on --xnames x[1000-1003]c[0-7]r[1,3,5,7] --format json
+   ```
+
+1. (`ncn-m001#`) Check the power status for every liquid-cooled cabinet Chassis.
+
+   The `State` should be `On` for every Chassis.
+
+   ```bash
+   sat status --types Chassis
+   ```
+
+   Example output.
+
+   ```text
+   +---------+---------+-------+------+---------+------+----------+----------+
+   | xname   | Type    | State | Flag | Enabled | Arch | Class    | Net Type |
+   +---------+---------+-------+------+---------+------+----------+----------+
+   | x1020c0 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c1 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c2 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c3 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c4 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c5 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c6 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   | x1020c7 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+   ...
+   +---------+---------+-------+------+---------+------+----------+----------+
    ```
 
 ### Power On Standard Rack PDU Circuit Breakers
