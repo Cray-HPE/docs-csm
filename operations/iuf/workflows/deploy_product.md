@@ -30,7 +30,7 @@ Once this step has completed:
 
 ## 2. Upgrade Kubernetes
 
-**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
+**`NOTE`** This subsection is optional and mandatory only if Upgrading CSM manually and additional products with IUF
 
 Follow the steps documented in [Stage 3.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_3.md#stage-36---complete-kubernetes-upgrade).
 
