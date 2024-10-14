@@ -13,6 +13,11 @@ The BOS session templates to use for shutting down all managed nodes in the syst
 
 ## Procedure
 
+1. If this system mounts an external Spectrum Scale (GPFS) file system on the compute nodes and UANs, then follow the site procedures
+to ensure that the file system and its quorum nodes are quiesced before shutting down the nodes which have it mounted.
+
+   The quorum nodes might be on worker nodes or on application nodes.
+
 1. (`ncn-m001#`) Set a variable to contain a comma-separated list of the BOS session templates to
    use to shut down managed nodes. For example:
 
@@ -109,40 +114,91 @@ The BOS session templates to use for shutting down all managed nodes in the syst
       }
       ```
 
-   1. (`ncn-m001#`) Check the HSM state from `sat status` of the non-management nodes.
+   1. (`ncn-m001#`) Check the HSM state from `sat status`of the compute and application nodes, but not the management nodes.
+      All the nodes should be in the `Off` state after the previous `sat bootsys shutdown` step, unless they are disabled in HSM,
+      shown as `False` in the `Enabled` column of output from this SAT command.
 
       A node will progress through HSM states in this order: `Ready`, `Standby`, `Off`.
 
       ```bash
-      sat status --filter role!=management --hsm-fields
+      sat status --filter role!=management --hsm-fields --filter state!=off
       ```
 
       Example output:
 
       ```text
-      +----------------+------+----------+-------+------+---------+------+-------+-------------+-----------+----------+
-      | xname          | Type | NID      | State | Flag | Enabled | Arch | Class | Role        | SubRole   | Net Type |
-      +----------------+------+----------+-------+------+---------+------+-------+-------------+-----------+----------+
-      | x3209c0s13b0n0 | Node | 52593056 | Off   | OK   | True    | X86  | River | Application | UAN       | Sling    |
-      | x3209c0s15b0n0 | Node | 52593120 | Off   | OK   | True    | X86  | River | Application | UAN       | Sling    |
-      | x3209c0s17b0n0 | Node | 52593184 | Off   | OK   | True    | X86  | River | Application | UAN       | Sling    |
-      | x3209c0s19b0n0 | Node | 52593248 | Off   | OK   | True    | X86  | River | Application | UAN       | Sling    |
-      | x3209c0s22b0n0 | Node | 52593344 | Off   | OK   | True    | X86  | River | Application | Gateway   | Sling    |
-      | x3209c0s23b0n0 | Node | 52593376 | Off   | OK   | True    | X86  | River | Application | Gateway   | Sling    |
-      | x9002c1s0b0n0  | Node | 1000     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s0b0n1  | Node | 1001     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s0b1n0  | Node | 1002     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s0b1n1  | Node | 1003     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s1b0n0  | Node | 1004     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s1b0n1  | Node | 1005     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s1b1n0  | Node | 1006     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s1b1n1  | Node | 1007     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s2b0n0  | Node | 1008     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s2b0n1  | Node | 1009     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s2b1n0  | Node | 1010     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      | x9002c1s2b1n1  | Node | 1011     | Off   | OK   | True    | X86  | Hill  | Compute     | Compute   | Sling    |
-      +----------------+------+----------+-------+------+---------+------+-------+-------------+-----------+----------+
+      +----------------+------+----------+--------+------+---------+------+-----------+-------------+-----------+----------+
+      | xname          | Type | NID      | State  | Flag | Enabled | Arch | Class     | Role        | SubRole   | Net Type |
+      +----------------+------+----------+--------+------+---------+------+-----------+-------------+-----------+----------+
+      | x3000c0s13b0n0 | Node | 52593056 | Ready  | OK   | True    | X86  | River     | Application | UAN       | Sling    |
+      | x3000c0s15b0n0 | Node | 52593120 | Standby| OK   | True    | X86  | River     | Application | UAN       | Sling    |
+      | x3001c0s22b0n0 | Node | 52593344 | Ready  | OK   | True    | X86  | River     | Application | Gateway   | Sling    |
+      | x1002c1s0b0n0  | Node | 1000     | Standby| OK   | True    | X86  | Mountain  | Compute     | Compute   | Sling    |
+      | x1002c3s2b0n0  | Node | 1008     | On     | OK   | True    | X86  | Mountain  | Compute     | Compute   | Sling    |
+      | x1004c1s2b0n1  | Node | 1009     | Ready  | OK   | True    | X86  | Mountain  | Compute     | Compute   | Sling    |
+      | x1005c7s2b1n0  | Node | 1010     | Standby| OK   | False   | X86  | Mountain  | Compute     | Compute   | Sling    |
+      +----------------+------+----------+--------+------+---------+------+-----------+-------------+-----------+----------+
       ```
+
+1. Check for User Access Instance (UAI) pods and remove them.
+
+   > Not all systems have been configured to use the containerized user environment (UAI) on worker nodes, but if they are in use, they should be stopped now.
+
+   1. (`ncn-m#`) Check for any UAI pods. This will show the username for each pod.
+
+   ```bash
+   cray uas uais list
+   ```
+
+   1. (`ncn-m#`) Remove any UAI pods using the usernames found in the previous step.
+
+   ```bash
+   cray uas uais delete --username USERNAME
+   ```
+
+1. If any external filesystems are mounted on the worker nodes, unmount them.
+
+   Lustre, Spectrum Scale (GPFS), and NFS filesystems are usually defined in VCS cos-config-management in the `group_vars`
+   directory structure, such as `group_vars/all/filesystems.yml` or `group_vars/Management_Worker/filesystems.yml`. These steps
+   will run the `cos-config-management` Ansible playbook `configure_fs_unload.yml` using the variables set in `filesystems.yml`.
+
+   1. (`ncn-m#`) Copy the `dvs_reload_ncn script` from `ncn-w001` to a master node.
+
+   ```bash
+   scp ncn-w001:/opt/cray/dvs/default/sbin/dvs_reload_ncn /tmp
+   ```
+
+   1. (`ncn-m#`) Get a list of worker nodes.
+
+   ```bash
+   WORKERS=$(cray hsm state components list --subrole Worker --type Node --format json | jq -r .Components[].ID | xargs)
+   echo $WORKERS
+   ```
+
+   1. (`ncn-m#`) Determine CFS configuration assigned to worker nodes. This is expected to be the same for all worker nodes.
+
+   ```bash
+   for node in $WORKERS; do cray cfs components describe $node --format json | jq -r ' .id+" "+.desiredConfig'; done
+   ```
+
+   1. (`ncn-m#`) Set variable for the configuration assigned to worker nodes found in the previous step.
+
+   ```bash
+   CONFIGURATION=
+   echo $CONFIGURATION
+   ```
+
+   1. (`ncn-m#`) Run CFS `configure_fs_unload` Ansible playbook on worker nodes.
+
+   ```bash
+   /tmp/dvs_reload_ncn -c $CONFIGURATION -p configure_fs_unload.yml $WORKERS
+   ```
+
+   1. (`ncn-m#`) Wait for the resulting Kubernetes CFS job (`CFSSESSION`) from the previous step to complete before continuing.
+
+   ```bash
+   kubectl logs -f -n services -c ansible CFSSESSION
+   ```
 
 ## Next Steps
 
