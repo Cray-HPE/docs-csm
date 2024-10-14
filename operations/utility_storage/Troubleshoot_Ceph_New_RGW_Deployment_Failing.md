@@ -119,7 +119,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
    Rerun the command to check the Ceph admin tool.
 
     ```bash
-        ceph -W cephadm
+     ceph -W cephadm
     ```
 
     Healthy example output:
