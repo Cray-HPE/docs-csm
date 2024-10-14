@@ -68,7 +68,7 @@ This procedure boots all managed nodes in the context of a full system power-up.
         kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible
         ```
 
-1. (Only for Slingshot 2.1.1 and 2.1.2) Set permissions on the SSH keys in the `slingshot-fabric-manager` pod.
+1. (Only for HPE Slingshot 2.1.1 and 2.1.2) Set permissions on the SSH keys in the `slingshot-fabric-manager` pod.
 
     1. (`ncn-m001#`) Enter the `slingshot-fabric-manager` pod.
 
@@ -85,7 +85,7 @@ This procedure boots all managed nodes in the context of a full system power-up.
        exit
        ```
 
-1. (`ncn-m001#`) If the Slingshot `fmn-debug` rpm is used inside the `slingshot-fabric-manager` pod, ensure it is available after the pod has been restarted by the power up procedure.
+1. (`ncn-m001#`) If the HPE Slingshot `fmn-debug` rpm is used inside the `slingshot-fabric-manager` pod, ensure it is available after the pod has been restarted by the power up procedure.
 
    > This step assumes the `fmn-debug` rpm was previously copied to the PVC which is mounted as `/opt/slingshot`. The version of the rpm might be different.
 
@@ -94,7 +94,7 @@ This procedure boots all managed nodes in the context of a full system power-up.
             -c slingshot-fabric-manager -- sudo rpm -ivh /opt/slingshot/data/fmn-debug-2.1.1-22.noarch.rpm  --nodeps
     ```
 
-1. (`ncn-m001#`) Check that the slingshot switches are all online.
+1. (`ncn-m001#`) Check that the HPE Slingshot switches are all online.
 
     If BOS will be used to boot computes and if DVS is configured to use HSN, then check the fabric manager switches to ensure the switches are all online
     before attempting to boot computes.
@@ -127,7 +127,7 @@ This procedure boots all managed nodes in the context of a full system power-up.
     Offline Switches:
     ```
 
-1. If any of the slingshot switches are offline, troubleshoot them.
+1. If any of the HPE Slingshot switches are offline, troubleshoot them.
 
    1. (`ncn-m001#`) Enter the `slingshot-fabric-manager` pod
 
@@ -211,7 +211,7 @@ This procedure boots all managed nodes in the context of a full system power-up.
             kubectl -n services rollout status deployment slingshot-fabric-manager
             ```
 
-         1. (`ncn-m001#`) Check that the Slingshot switches are all online.
+         1. (`ncn-m001#`) Check that the HPE Slingshot switches are all online.
 
             ```bash
             kubectl exec -it -n services \
@@ -395,7 +395,7 @@ the UANs and compute nodes.
       or are disabled in HSM (`Enabled=False`) or have `State` not equal to `Ready`.
 
       ```bash
-      sat status --filter role!=management --filter enabled=true --filter state!=ready --hsm-fields 
+      sat status --filter role!=management --filter enabled=true --filter state!=ready --hsm-fields
       ```
 
       Example output:

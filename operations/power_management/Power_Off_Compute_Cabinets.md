@@ -34,9 +34,9 @@ HPE Cray standard EIA racks typically include two redundant PDUs. Some PDU model
 
    If coolant levels are on the verge of being too low, there may be a fault upon power up due to not enough coolant.
 
-1. (`ncn-m#`) Check the power status in liquid-cooled cabinets before shutdown.
+1. (`ncn-m#`) Check the power status for liquid-cooled cabinets before shutdown.
 
-    Either use `sat status` or `cray power` to check. The `State` should be `Off` for every Chassis.
+    Either use `sat status` or `cray power` to check. The `State` should be `On` for every Chassis.
 
     1. (`ncn-m001#`) Check the power status for every liquid-cooled cabinet Chassis.
 
@@ -50,14 +50,14 @@ HPE Cray standard EIA racks typically include two redundant PDUs. Some PDU model
        +---------+---------+-------+------+---------+------+----------+----------+
        | xname   | Type    | State | Flag | Enabled | Arch | Class    | Net Type |
        +---------+---------+-------+------+---------+------+----------+----------+
-       | x1020c0 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
-       | x1020c1 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
-       | x1020c2 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
-       | x1020c3 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
-       | x1020c4 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
-       | x1020c5 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
-       | x1020c6 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
-       | x1020c7 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c0 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c1 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c2 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c3 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c4 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c5 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c6 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c7 | Chassis | On    | OK   | True    | X86  | Mountain | Sling    |
        ...
        +---------+---------+-------+------+---------+------+----------+----------+
        ```
@@ -138,6 +138,7 @@ HPE Cray standard EIA racks typically include two redundant PDUs. Some PDU model
        ```
 
     1. (`ncn-m001#`) Check the power status with PCS.
+
        This example shows nodes in cabinets 3001 - 3003.
 
        The `cray power status` command requires that the list of components be explicitly listed. In this example, the system includes only 2U servers and there are no state manager entries for even-numbered U-positions \(slots\); those would return an error.
@@ -234,11 +235,39 @@ liquid-cooled cabinet chassis, compute modules, and router modules, then powers 
 
 1. (`ncn-m#`) Check the power status for liquid-cooled cabinets after shutdown.
 
-    This example shows cabinets 1000 - 1003.
+    Either use `sat status` or `cray power` to check. The `State` should be `Off` for every Chassis.
 
-    ```bash
-    cray power status list --xnames x[1000-1003]c[0-7] --format json
-    ```
+    1. (`ncn-m001#`) Check the power status for every liquid-cooled cabinet Chassis.
+
+       ```bash
+       sat status --types Chassis
+       ```
+
+       Example output:
+
+       ```text
+       +---------+---------+-------+------+---------+------+----------+----------+
+       | xname   | Type    | State | Flag | Enabled | Arch | Class    | Net Type |
+       +---------+---------+-------+------+---------+------+----------+----------+
+       | x1020c0 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c1 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c2 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c3 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c4 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c5 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c6 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       | x1020c7 | Chassis | Off   | OK   | True    | X86  | Mountain | Sling    |
+       ...
+       +---------+---------+-------+------+---------+------+----------+----------+
+       ```
+
+    1. (`ncn-m001#`) Check the power status with PCS.
+
+       This example shows cabinets 1000 - 1003.
+
+       ```bash
+       cray power status list --xnames x[1000-1003]c[0-7] --format json
+       ```
 
 1. Rectifiers \(PSUs\) in the liquid-cooled cabinets should indicate that DC power is `OFF` \(`AC OK` means the power is on\).
 
