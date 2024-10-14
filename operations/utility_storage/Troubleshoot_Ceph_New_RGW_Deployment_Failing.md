@@ -18,7 +18,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
 1. Observe that a Ceph RGW deployment is failing to deploy because the address is already in use.
 
-    1. Use the `cephadm` logs to see if this error is occurring. The command below is following the `cephadm` logs. It may take a minute or two for the Ceph to attempt to deploy RGW and for the error to appear.
+    1. Use the `cephadm` logs to see if this error is occurring. The following command is following the `cephadm` logs. It may take a minute or two for the Ceph to attempt to deploy RGW and for the error to appear.
 
         ```bash
         ceph -W cephadm
