@@ -102,7 +102,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
 1. Remove the conflicting daemon.
 
-**Note:** The RGW deployment in CSM should be named `rgw.site1`. The deployment that should be removed should have a name other than `rgw.site1`. In this example, the deployment that should be removed is `rgw.site1.zone1`.
+    **Note:** The RGW deployment in CSM should be named `rgw.site1`. The deployment that should be removed should have a name other than `rgw.site1`. In this example, the deployment that should be removed is `rgw.site1.zone1`.
     This command will remove the conflicting daemon and should restore the Ceph cluster to a healthy state.
 
     ```bash
