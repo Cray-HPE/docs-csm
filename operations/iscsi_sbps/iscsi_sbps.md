@@ -405,13 +405,13 @@ Please refer [iSCSI Metrics](https://github.com/Cray-HPE/sbps-marshal/blob/main/
 * Enable iSCSI SBPS
 
 To disable DVS please refer:
-https://github.hpe.com/hpe/hpc-shasta-os-uss-docs/blob/master/dac-assets/documents/operations/DVS_and_SBPS.md
+<https://github.hpe.com/hpe/hpc-shasta-os-uss-docs/blob/master/dac-assets/documents/operations/DVS_and_SBPS.md>
 
 To uninstall CPS services please refer:
-https://github.hpe.com/hpe/hpc-shasta-os-uss-docs/blob/master/dac-assets/documents/operations/Uninstall_CPS.md
+<https://github.hpe.com/hpe/hpc-shasta-os-uss-docs/blob/master/dac-assets/documents/operations/Uninstall_CPS.md>
 
 To enable iSCSI SBPS please refer:
-https://github.hpe.com/hpe/hpc-shasta-os-uss-docs/blob/master/dac-assets/documents/operations/Scalable_Boot_projection_service.md
+<https://github.hpe.com/hpe/hpc-shasta-os-uss-docs/blob/master/dac-assets/documents/operations/Scalable_Boot_projection_service.md>
 
 Note: These URL references will be replaced with appropriate document name and number in support center.
 
