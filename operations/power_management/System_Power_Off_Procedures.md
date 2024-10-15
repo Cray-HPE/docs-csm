@@ -41,6 +41,10 @@ To power off standard racks which have only storage nodes and switches, refer to
 
 To shut down the management Kubernetes cluster, refer to [Shut Down and Power Off the Management Kubernetes Cluster](Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md).
 
+## Power Off Management Cabinets
+
+To power off management cabinets, refer to [Power Off Management Cabinets](Power_Off_Management_Cabinets.md).
+
 ## `Lockout Tagout` Facility Power
 
 If facility power must be removed from a single cabinet or cabinet group for maintenance, follow proper `lockout-tagout` procedures for the site.
