@@ -139,6 +139,9 @@ fi
   fi
 } >> ${LOG_FILE} 2>&1
 
+# Force a time sync before draining nodes
+${basedir}/../common/ncn-rebuild-prep.sh $target_ncn
+
 drain_node $target_ncn
 
 # Validate SLS health before calling csi handoff bss-update-*, since
