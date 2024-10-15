@@ -79,6 +79,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
    To prevent this issue from happening, remove stale `ssh` host keys from `/root/.ssh/known_hosts` before running the `sat` command.
 
+### Check certificate expiration deadlines
+
 1. Check certificate expiration deadlines to ensure that a certificate will not expire while the system is powered off.
 
    1. (`ncn-mw#`) Check the expiration date of the Spire Intermediate CA Certificate.
@@ -133,6 +135,56 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
       * See [Renew All Certificates](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#renew-all-certificates)
       * See [Renew Etcd Certificate](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#renew-etcd-certificate)
       * See [Update Client Certificates](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
+
+   1. (`ncn-m#`) Check the `kube-etcdbackup-etcd` certificate expiration.
+
+      ```bash
+      kubectl get secret -n kube-system kube-etcdbackup-etcd -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
+      ```
+
+      Example output:
+
+      ```text
+      notAfter=Apr 17 09:37:52 2025 GMT
+      ```
+
+      If the certificate has expired or will expire while the system is powered off, see the procedure steps for changing the `kube-etcdbackup-etcd` secret and then restarting Prometheus after the change.
+
+      * See [Update Client Secrets](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
+
+   1. (`ncn-m#`) Check the `etcd-ca` certificate expiration.
+
+      ```bash
+      kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r '.data."etcd-ca" | @base64d' | openssl x509 -noout -enddate
+      ```
+
+      Example output:
+
+      ```text
+      notAfter=Jan 13 18:01:48 2033 GMT
+      ```
+
+      If the `etcd-ca` certificate has expired or will expire while the system is powered off, see the procedure steps for changing the `etcd-client-cert` secret and then restarting Prometheus after the change.
+
+      * See [Update Client Secrets](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
+
+   1. (`ncn-m#`) Check the `etcd-client` certificate expiration.
+
+      ```bash
+      kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r '.data."etcd-client" | @base64d' | openssl x509 -noout -enddate
+      ```
+
+      Example output:
+
+      ```text
+      notAfter=Jan 16 18:01:49 2024 GMT
+      ```
+
+      If either the `etcd-client` certificate has expired or will expire while the system is powered off, see the procedure steps for changing the `etcd-client-cert` secret and then restarting Prometheus after the change.
+
+      * See [Update Client Secrets](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
+
+### Check Nexus backup status
 
 1. (`ncn-mw#`) Check for a recent backup of Nexus data.
 
@@ -495,9 +547,13 @@ managed nodes, including compute nodes and User Access Nodes (UANs).
 
     There is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
+### Notify people of upcoming power off
+
 1. Notify users and operations staff about the upcoming full system power off.
 
    The notification method will vary by system, but might be email, messaging applications, `/etc/motd` on UANs, `wall` commands on UANs, and so on.
+
+### Prepare workload managers
 
 1. Follow the vendor workload manager documentation to drain processes running on compute nodes.
 
@@ -520,7 +576,7 @@ managed nodes, including compute nodes and User Access Nodes (UANs).
 
        ```bash
        qstat -q
-       qmgr -c 'set queue workq enabled = False
+       qmgr -c 'set queue workq enabled = False'
        qmgr -c 'list queue workq enabled'
        ```
 
