@@ -11,6 +11,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
 ## Procedure
 
+### Collect authentication credentials and authenticate SAT
+
 1. Obtain the user ID and passwords for system components:
 
     1. Obtain user ID and passwords for all the system management network switches.
@@ -24,6 +26,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
    If SAT has already been authenticated to the API gateway, this step may be skipped.
 
    See the "SAT Authentication" section in the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
+
+### Check shell initialization scripts
 
 1. Ensure `/root/.bashrc` has proper handling of `kubectl` commands on all master and worker nodes.
 
@@ -56,6 +60,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
          fi
          ```
 
+### Check SSH known hosts
+
 1. Ensure `/root/.ssh/known_hosts` does not have `ssh` stale host key entries for any of the management nodes.
 
    **Important:** Many of the `sat` commands use `ssh` from a `sat` Kubernetes pod to execute commands on the management nodes. This `sat` pod
@@ -73,7 +79,9 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
    To prevent this issue from happening, remove stale `ssh` host keys from `/root/.ssh/known_hosts` before running the `sat` command.
 
-1. Check certificate expiration deadlines to ensure that a certificate won't expire while the system is powered off.
+### Check certificate expiration deadlines
+
+1. Check certificate expiration deadlines to ensure that a certificate will not expire while the system is powered off.
 
    1. (`ncn-mw#`) Check the expiration date of the Spire Intermediate CA Certificate.
 
@@ -128,6 +136,56 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
       * See [Renew Etcd Certificate](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#renew-etcd-certificate)
       * See [Update Client Certificates](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
 
+   1. (`ncn-m#`) Check the `kube-etcdbackup-etcd` certificate expiration.
+
+      ```bash
+      kubectl get secret -n kube-system kube-etcdbackup-etcd -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
+      ```
+
+      Example output:
+
+      ```text
+      notAfter=Apr 17 09:37:52 2025 GMT
+      ```
+
+      If the certificate has expired or will expire while the system is powered off, see the procedure steps for changing the `kube-etcdbackup-etcd` secret and then restarting Prometheus after the change.
+
+      * See [Update Client Secrets](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
+
+   1. (`ncn-m#`) Check the `etcd-ca` certificate expiration.
+
+      ```bash
+      kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r '.data."etcd-ca" | @base64d' | openssl x509 -noout -enddate
+      ```
+
+      Example output:
+
+      ```text
+      notAfter=Jan 13 18:01:48 2033 GMT
+      ```
+
+      If the `etcd-ca` certificate has expired or will expire while the system is powered off, see the procedure steps for changing the `etcd-client-cert` secret and then restarting Prometheus after the change.
+
+      * See [Update Client Secrets](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
+
+   1. (`ncn-m#`) Check the `etcd-client` certificate expiration.
+
+      ```bash
+      kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r '.data."etcd-client" | @base64d' | openssl x509 -noout -enddate
+      ```
+
+      Example output:
+
+      ```text
+      notAfter=Jan 16 18:01:49 2024 GMT
+      ```
+
+      If either the `etcd-client` certificate has expired or will expire while the system is powered off, see the procedure steps for changing the `etcd-client-cert` secret and then restarting Prometheus after the change.
+
+      * See [Update Client Secrets](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
+
+### Check Nexus backup status
+
 1. (`ncn-mw#`) Check for a recent backup of Nexus data.
 
    **Note:** Doing the Nexus backup may take multiple hours with Nexus being unavailable for the entire time.
@@ -157,6 +215,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
    software update or otherwise not considered valid, then use the Nexus cleanup procedure before the export procedure.
    See [Nexus Cleanup](../package_repository_management/Nexus_Export_and_Restore.md#Cleanup), then see
    [Nexus Export](../package_repository_management/Nexus_Export_and_Restore.md#Export).
+
+### Identify BOS session templates for managed nodes
 
 1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
 
@@ -247,6 +307,12 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
        ]
        ```
 
+1. Confirm that the set of identified BOS session templates will affect all managed nodes in the
+   system. This is important to ensure all managed nodes are gracefully shut down during the system
+   power off.
+
+### Capture state and perform system health checks
+
 1. (`ncn-mw#`) Use SAT to capture state of the system before the shutdown.
 
     ```bash
@@ -323,7 +389,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
         ```bash
         kubectl exec -it -n services \
-            "$(kubectl get pod -l app.kubernetes.io/name=slingshot-fabric-manager \
+            "$(kubectl get pod -l app.kubernetes.io/name=slingshot-fabric-manager
             -n services --no-headers | head -1 | awk '{print $1}')" \
              -c slingshot-fabric-manager -- fmn-show-status --details \
            | tee -a fmn-show-status-details.txt
@@ -345,14 +411,13 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
            Example output:
 
            ```text
-           Password:
            SWITCH            CANU VERSION      CSM VERSION
-           sw-spine-001      1.6.20             1.4
-           sw-spine-002      1.6.20             1.4
-           sw-leaf-bmc-001   1.6.20             1.4
-           sw-leaf-bmc-002   1.6.20             1.4
-           sw-cdu-001        1.6.20             1.4
-           sw-cdu-002        1.6.20             1.4
+           sw-spine-001      1.6.20            1.4
+           sw-spine-002      1.6.20            1.4
+           sw-leaf-bmc-001   1.6.20            1.4
+           sw-leaf-bmc-002   1.6.20            1.4
+           sw-cdu-001        1.6.20            1.4
+           sw-cdu-002        1.6.20            1.4
            ```
 
         1. (Optional) (`ncn-mw#`) If CANU is not available, look in `/etc/hosts` for the management network
@@ -360,7 +425,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
            switches, and CDU switches need to be used in the next step.
 
            ```bash
-           grep sw- /etc/hosts
+           grep 'sw-' /etc/hosts
            ```
 
            Example output:
@@ -398,6 +463,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         lfs check servers
         lfs df
         ```
+
+### Check system activity
 
 1. (`ncn-mw#`) Check for running sessions.
 
@@ -446,7 +513,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
 1. (`ncn-mw#`) Cancel the running BOS sessions.
 
-    1. Identify the BOS Sessions to delete.
+    1. Identify the BOS sessions to delete.
 
         ```bash
         cray bos sessions list --format json
@@ -468,15 +535,19 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     There is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
+### Notify people of upcoming power off
+
 1. Notify users and operations staff about the upcoming full system power off.
 
-   The notification method will vary by system, but might be email, messaging applications, `/etc/motd` on UANs, `wall` commands on UANs, etc.
+   The notification method will vary by system, but might be email, messaging applications, `/etc/motd` on UANs, `wall` commands on UANs, and so on.
+
+### Prepare workload managers
 
 1. Follow the vendor workload manager documentation to drain processes running on compute nodes.
 
     1. For Slurm, see the `scontrol` man page.
 
-       Below are examples of how to drain nodes using `slurm`. The list of nodes can be copy/pasted from the `sinfo` command for nodes in an `idle` state:
+       The following are examples of how to drain nodes using `slurm`. The list of nodes can be copy/pasted from the `sinfo` command for nodes in an `idle` state:
 
        ```bash
        scontrol update NodeName=nid[001001-001003,001005] State=DRAIN Reason="Shutdown"
@@ -488,7 +559,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     1. For PBS Professional, see the `qstat` and `qmgr` man pages.
 
-       Below is an example to list the available queues, disable a specific queue named `workq`, and check
+       The following is an example to list the available queues, disable a specific queue named `workq`, and check
        that the queue has been disabled:
 
        ```bash
