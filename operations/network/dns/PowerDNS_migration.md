@@ -59,7 +59,7 @@ The following table of examples assumes that the system was configured with a `s
 | auth.shasta.dev.cray.com           | auth.cmn.shasta.dev.cray.com                                                              |                     | No                   |
 | nexus.shasta.dev.cray.com          | nexus.cmn.shasta.dev.cray.com                                                             |                     | No                   |
 | grafana.shasta.dev.cray.com        | grafana.cmn.shasta.dev.cray.com                                                           |                     | No                   |
-| prometheus.shasta.dev.cray.com     | prometheus.cmn.shasta.dev.cray.com                                                        |                     | No                   |
+| vmselect.shasta.dev.cray.com       | vmselect.cmn.shasta.dev.cray.com                                                          |                     | No                   |
 | alertmanager.shasta.dev.cray.com   | alertmanager.cmn.shasta.dev.cray.com                                                      |                     | No                   |
 | vcs.shasta.dev.cray.com            | vcs.cmn.shasta.dev.cray.com                                                               |                     | No                   |
 | kiali-istio.shasta.dev.cray.com    | kiali-istio.cmn.shasta.dev.cray.com                                                       |                     | No                   |

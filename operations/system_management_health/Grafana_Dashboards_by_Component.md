@@ -6,7 +6,7 @@ A Grafana dashboard is a powerful open source analytical and visualization tool 
 The panels interact with configured data sources, including the following:
 
 - AWS CloudWatch
-- Prometheus
+- VictoriaMetrics
 
 **NOTE:** For known issues around some of the Grafana dashboards, see [Troubleshoot Grafana Dashboards](Troubleshoot_Grafana_Dashboard.md).
 

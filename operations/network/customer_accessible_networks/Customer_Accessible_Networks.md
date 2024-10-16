@@ -8,7 +8,7 @@ The Customer Management Network \(CMN\) provides access from outside the custome
 
 - Administrator clients outside of the system:
   - Log in to NCNs.
-  - Access administrative web UIs within the system \(e.g. Prometheus, Grafana, and more\).
+  - Access administrative web UIs within the system \(e.g. Vmselect, Grafana, and more\).
   - Access the administrative REST APIs.
   - Access a DNS server within the system for resolution of names for the webUI and REST API services.
   - Run administrative Cray CLI commands from outside the system.

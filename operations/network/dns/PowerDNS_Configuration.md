@@ -31,13 +31,13 @@ cray-dns-powerdns-nmn-udp   LoadBalancer   10.17.203.241   10.92.100.85   53:318
 
 A system administrator would typically setup the subdomain `system.dev.cray.com` in their site DNS and create a record which points to the IP address `10.101.8.113`, for example `ins1.system.dev.cray.com`.
 
-The administrator would then delegate queries to `system.dev.cray.com` to `ins1.system.dev.cray.com` making it authoritative for that subdomain allowing CSM to respond to queries for services like `prometheus.system.dev.cray.com`
+The administrator would then delegate queries to `system.dev.cray.com` to `ins1.system.dev.cray.com` making it authoritative for that subdomain allowing CSM to respond to queries for services like `grafana.system.dev.cray.com`
 
 The specifics of how to configure to configuring DNS forwarding is dependent on the DNS server in use, please consult the documentation provided by the DNS server vendor for more information.
 
 ## Authoritative Zone Transfer
 
-In addition to responding to external DNS queries, PowerDNS can support replication of domain information to secondary servers via AXFR (Authoritative Zone Transfer) queries.
+In addition to responding to external DNS queries, PowerDNS can support replication of domain information to secondary servers via AXFR (Authoritative Zone Transfer) queries..
 
 ### Configuration parameters
 
