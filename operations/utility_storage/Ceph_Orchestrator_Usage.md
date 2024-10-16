@@ -53,7 +53,7 @@ mon                            3/3  6m ago     4h   ncn-s001;ncn-s002;ncn-s003;c
 node-exporter                  3/3  6m ago     4h   *                                   registry.local/prometheus/node-exporter:v0.18.1  e5a616e4b9cf
 osd.all-available-devices      9/9  6m ago     4h   *                                   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c
 prometheus                     1/1  6m ago     4h   count:1                             docker.io/prom/prometheus:v2.18.1                de242295e225
-rgw.site1.zone1                3/3  6m ago     4h   ncn-s001;ncn-s002;ncn-s003;count:3  registry.local/ceph/ceph:v15.2.8                 5553b0cb212c
+rgw.site1                      3/3  6m ago     4h   ncn-s001;ncn-s002;ncn-s003;count:3  registry.local/ceph/ceph:v15.2.8                 5553b0cb212c
 ```
 
 **`FILTERS:`** Apply filters by adding `--service_type <service type>` or `--service_name <service name>`.
@@ -71,7 +71,7 @@ ceph orch ps
 
 Example output:
 
-```
+```bash
 NAME                             HOST      STATUS        REFRESHED  AGE  VERSION  IMAGE NAME                                       IMAGE ID      CONTAINER ID
 alertmanager.ncn-s001            ncn-s001  running (5h)  5m ago     5h   0.20.0   registry.local/prometheus/alertmanager:v0.20.0   0881eb8f169f  0e6a24469465
 crash.ncn-s001                   ncn-s001  running (5h)  5m ago     5h   15.2.8   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c  b6a582ed7573
@@ -100,12 +100,12 @@ osd.6                            ncn-s001  running (5h)  5m ago     5h   15.2.8 
 osd.7                            ncn-s002  running (5h)  5m ago     5h   15.2.8   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c  5bd22f1d4cad
 osd.8                            ncn-s003  running (5h)  5m ago     5h   15.2.8   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c  7c5282f2e107
 prometheus.ncn-s001              ncn-s001  running (5h)  5m ago     5h   2.18.1   docker.io/prom/prometheus:v2.18.1                de242295e225  bf941a1306e9
-rgw.site1.zone1.ncn-s001.qegfux  ncn-s001  running (5h)  5m ago     5h   15.2.8   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c  e833fc05acfe
-rgw.site1.zone1.ncn-s002.wqrzoa  ncn-s002  running (5h)  5m ago     5h   15.2.8   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c  83a131a7022c
-rgw.site1.zone1.ncn-s003.tzkxya  ncn-s003  running (5h)  5m ago     5h   15.2.8   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c  c67d75adc620
+rgw.site1.ncn-s001.qegfux        ncn-s001  running (5h)  5m ago     5h   15.2.8   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c  e833fc05acfe
+rgw.site1.ncn-s002.wqrzoa        ncn-s002  running (5h)  5m ago     5h   15.2.8   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c  83a131a7022c
+rgw.site1.ncn-s003.tzkxya        ncn-s003  running (5h)  5m ago     5h   15.2.8   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c  c67d75adc620
 ```
 
-**`FILTERS:`** Apply filters by adding any or all of [--hostname <hostname> --service_name <service_name> --daemon_type <daemon_type> --daemon_id <daemon_id>].
+**`FILTERS:`** Apply filters by adding any or all of [--hostname \<hostname\> --service_name <service_name> --daemon_type <daemon_type> --daemon_id <daemon_id>].
 
 ### Ceph Daemon start|stop|restart|reconfig
 
