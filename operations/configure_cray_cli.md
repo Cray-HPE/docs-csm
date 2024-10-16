@@ -372,15 +372,15 @@ debug level log messages to be displayed. Alternatively, each failing node may b
     1. (`ncn-s#`) Restart the Ceph radosgw process on one of the first three storage nodes.
 
         ```bash
-        ceph orch restart rgw.site1.zone1
+        ceph orch restart rgw.site1
         ```
 
         The expected output will be similar to the following, but it will vary based on the number of nodes running radosgw:
 
         ```text
-        restart rgw.site1.zone1.ncn-s001.cshvbb from host 'ncn-s001'
-        restart rgw.site1.zone1.ncn-s002.tlegbb from host 'ncn-s002'
-        restart rgw.site1.zone1.ncn-s003.vwjwew from host 'ncn-s003'
+        restart rgw.site1.ncn-s001.cshvbb from host 'ncn-s001'
+        restart rgw.site1.ncn-s002.tlegbb from host 'ncn-s002'
+        restart rgw.site1.ncn-s003.vwjwew from host 'ncn-s003'
         ```
 
     1. (`ncn-s#`) Check to see that the processes restarted.
@@ -393,9 +393,9 @@ debug level log messages to be displayed. Alternatively, each failing node may b
 
         ```text
         NAME                             HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                        IMAGE ID      CONTAINER ID
-        rgw.site1.zone1.ncn-s001.cshvbb  ncn-s001  running (29s)  23s ago    9h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  2a712824adc1
-        rgw.site1.zone1.ncn-s002.tlegbb  ncn-s002  running (29s)  28s ago    9h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  e423f22d06a5
-        rgw.site1.zone1.ncn-s003.vwjwew  ncn-s003  running (29s)  23s ago    9h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  1e6ad6bc2c62
+        rgw.site1.ncn-s001.cshvbb  ncn-s001  running (29s)  23s ago    9h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  2a712824adc1
+        rgw.site1.ncn-s002.tlegbb  ncn-s002  running (29s)  28s ago    9h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  e423f22d06a5
+        rgw.site1.ncn-s003.vwjwew  ncn-s003  running (29s)  23s ago    9h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  1e6ad6bc2c62
         ```
 
     1. (`ncn-s#`) In the event that more than 5 minutes has passed and the `radosgw` services have not restarted, then fail the `ceph-mgr` process over to the standby.
