@@ -22,6 +22,7 @@ Example output:
 
 ```json
 {
+  "cfs_read_timeout": 20,
   "cleanup_completed_session_ttl": "7d",
   "component_actual_state_ttl": "4h",
   "default_retry_policy": 3,
@@ -42,6 +43,11 @@ The values for all BOS global options can be modified with the `cray bos v2 opti
 ## BOS options details
 
 The following are the BOS global options:
+
+* `cfs_read_timeout`
+
+    The amount of time in seconds BOS will wait for a response from CFS to a request. After this time, the request will
+    time out. The default is 10 seconds.
 
 * `cleanup_completed_session_ttl`
 
