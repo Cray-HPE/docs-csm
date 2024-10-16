@@ -9,7 +9,7 @@ configurations. Manual operations are documented for procedures that are not cur
 The upgrade workflow comprises the following procedures. The diagram shows the workflow and
 the steps below it provide detailed instructions which must be executed in the order shown.
 
-![Upgrade CSM manually and additional products with IUF](../../../img/operations/diagram_csm_stack_upgrade_111723.png)
+![Upgrade CSM manually and additional products with IUF](../../../img/operations/diagram_upgrade_csm_manually_and_additional_products_with_IUF_101524.png)
 
 1. CSM preparation, Stage 0.1, and Stage 0.2
 
