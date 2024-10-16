@@ -13,7 +13,7 @@ include support for the Prometheus API. The System Management Health service rel
   Alertmanager instances, scrape metrics from service endpoints, and trigger alerts
 - Grafana supports pulling data from VictoriaMetrics, and dashboards for system components are readily available from the
   open source community
-- The `stable/kube-prometheus-stack` Helm chart integrates the Prometheus operator, Prometheus, Alertmanager, Grafana,
+- The `victoria-metrics-k8s-stack` Helm chart integrates the victoria operator, VictoriaMetrics, Alertmanager, Grafana,
   node exporters \(DaemonSet\), and `kube-state-metrics` to provide a monitoring solution for Kubernetes clusters
 - Istio supports service mesh observability using Kiali
 
@@ -27,6 +27,6 @@ This service scrapes metrics from system components like Ceph, Kubernetes, and t
 - Independent retention and persistence settings based on needs for specific services; the current default configuration
   retains metrics for ten days at the top level and four hours at intermediate levels
 - Component-specific tooling for more detailed visibility:
-  - Grafana dashboards for Kubernetes
-  - Grafana dashboards and Kiali for Istio
-  - Grafana dashboards for Ceph
+    - Grafana dashboards for Kubernetes
+    - Grafana dashboards and Kiali for Istio
+    - Grafana dashboards for Ceph

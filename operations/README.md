@@ -457,7 +457,6 @@ confident that a lack of issues indicates the system is operating normally.
 - [Configure Prometheus Email Alert Notifications](system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
 - [Grafana Dashboards by Component](system_management_health/Grafana_Dashboards_by_Component.md)
     - [Troubleshoot Grafana Dashboard](system_management_health/Troubleshoot_Grafana_Dashboard.md)
-- [Grafterm](system_management_health/Grafterm.md)
 - [Remove Kiali](system_management_health/Remove_Kiali.md)
 - [`prometheus-kafka-adapter` errors during installation](system_management_health/Prometheus_Kafka_Error.md)
 - [`grok-exporter` errors during installation](system_management_health/Grok-Exporter_Error.md)

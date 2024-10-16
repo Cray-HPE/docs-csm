@@ -9,18 +9,18 @@ Different values may be be needed for systems as they scale.
 
 * [System domain name](#system-domain-name)
 * [`kubectl` events `OOMKilled`](#kubectl-events-oomkilled)
-* [Prometheus `CPUThrottlingHigh` alerts](#prometheus-cputhrottlinghigh-alerts)
+* [Vmstorage `CPUThrottlingHigh` alerts](#vmstorage-cputhrottlinghigh-alerts)
 * [Grafana "Kubernetes / Compute Resources / Pod" dashboard](#grafana-kubernetes--compute-resources--pod-dashboard)
     * [CPU throttling](#cpu-throttling)
     * [Memory usage](#memory-usage)
 * [Common customization scenarios](#common-customization-scenarios)
     * [Prerequisites](#prerequisites)
-    * [Prometheus pod is `OOMKilled` or CPU throttled](#prometheus-pod-is-oomkilled-or-cpu-throttled)
+    * [Vmstorage pod is `OOMKilled` or CPU throttled](#vmstorage-pod-is-oomkilled-or-cpu-throttled)
     * [Postgres pods are `OOMKilled` or CPU throttled](#postgres-pods-are-oomkilled-or-cpu-throttled)
     * [Scale `cray-bss` service](#scale-cray-bss-service)
     * [Scale `cray-dns-unbound` service](#scale-cray-dns-unbound-service)
     * [Postgres PVC resize](#postgres-pvc-resize)
-    * [Prometheus PVC resize](#prometheus-pvc-resize)
+    * [Vmstorage PVC resize](#vmstorage-pvc-resize)
     * [`cray-hms-hmcollector` pods are `OOMKilled`](#cray-hms-hmcollector-pods-are-oomkilled)
     * [`cray-cfs-api` pods are `OOMKilled`](#cray-cfs-api-pods-are-oomkilled)
     * [References](#references)
@@ -57,12 +57,11 @@ Check to see if there are any recent out of memory events.
 
 1. Search for the "Kubernetes / Compute Resources / Pod" dashboard to view the memory utilization graphs over time for any pod that has been `OOMKilled`.
 
-## vmstorage `CPUThrottlingHigh` alerts
+## Vmstorage `CPUThrottlingHigh` alerts
 
 Check Prometheus for recent `CPUThrottlingHigh` alerts.
 
-1. Log in to vmalert at the following URL: `https://vmselect..cmn.SYSTEM_DOMAIN_NAME/select/0/prometheus/vmalert/api/v1/alerts`
-
+1. Log in to vmalert at the following URL: `https://vmselect.cmn.SYSTEM_DOMAIN_NAME/select/0/prometheus/vmalert/api/v1/alerts`
 
    1. Scroll down to the alert for `CPUThrottlingHigh`.
 
@@ -121,12 +120,12 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
 ## Common customization scenarios
 
 * [Prerequisites](#prerequisites)
-* [vmstorage pods are `OOMKilled` or CPU throttled](#prometheus-pod-is-oomkilled-or-cpu-throttled)
+* [Vmstorage pods are `OOMKilled` or CPU throttled](#vmstorage-pod-is-oomkilled-or-cpu-throttled)
 * [Postgres pods are `OOMKilled` or CPU throttled](#postgres-pods-are-oomkilled-or-cpu-throttled)
 * [Scale `cray-bss` service](#scale-cray-bss-service)
 * [Scale `cray-dns-unbound` service](#scale-cray-dns-unbound-service)
 * [Postgres PVC resize](#postgres-pvc-resize)
-* [vmstorage PVC resize](#prometheus-pvc-resize)
+* [Vmstorage PVC resize](#vmstorage-pvc-resize)
 * [`cray-hms-hmcollector` pods are `OOMKilled`](#cray-hms-hmcollector-pods-are-oomkilled)
 * [`cray-cfs-api` pods are `OOMKilled`](#cray-cfs-api-pods-are-oomkilled)
 * [References](#references)
@@ -525,7 +524,7 @@ Using the values from the above table, follow the [Redeploying a Chart](Redeploy
 
 * **Make sure to perform the entire linked procedure, including the step to save the updated customizations.**
 
-### Vmselect PVC resize
+### Vmstorage PVC resize
 
 Increase the PVC volume size associated with `vmstorage` cluster in the `sysmgmt-health` namespace.
 This example is based on what was needed for a system with more than 20 non compute nodes (NCNs). The PVC size can only ever be increased.

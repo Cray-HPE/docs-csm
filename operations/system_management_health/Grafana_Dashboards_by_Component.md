@@ -14,19 +14,19 @@ The panels interact with configured data sources, including the following:
 
 - Cluster
 - Host
-  - Overview
-  - Details
+    - Overview
+    - Details
 - MDS Performance
 - OSD
-  - Overview
-  - Device Details
+    - Overview
+    - Device Details
 - Pool
-  - Overview
-  - Details
+    - Overview
+    - Details
 - RBD Overview
 - RGW
-  - Overview
-  - Instance Details
+    - Overview
+    - Instance Details
 
 ## CoreDNS
 
@@ -83,20 +83,20 @@ The panels interact with configured data sources, including the following:
 
 - API server
 - Compute Resources
-  - Compute Resources / Cluster
-  - Compute Resources / Namespace (Pods)
-  - Compute Resources / Namespace (Workloads)
-  - Compute Resources / Node (Pods)
-  - Compute Resources / Pod
-  - Compute Resources / Workload
+    - Compute Resources / Cluster
+    - Compute Resources / Namespace (Pods)
+    - Compute Resources / Namespace (Workloads)
+    - Compute Resources / Node (Pods)
+    - Compute Resources / Pod
+    - Compute Resources / Workload
 - Controller Manager
 - `kubelet`
 - Networking
-  - Networking / Cluster
-  - Networking / Namespace (Pods)
-  - Networking / Namespace (Workload)
-  - Networking / Pod
-  - Networking / Workload
+    - Networking / Cluster
+    - Networking / Namespace (Pods)
+    - Networking / Namespace (Workload)
+    - Networking / Pod
+    - Networking / Workload
 - Persistent Volumes
 - Proxy
 - Scheduler

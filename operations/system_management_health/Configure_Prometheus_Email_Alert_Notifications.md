@@ -62,10 +62,10 @@ This procedure can be performed on any master or worker NCN.
 
         ```yaml
         global:
-          resolve_timeout: 5m
+          resolve_timeout: 5h
         route:
           group_by:
-          - job
+          - group
           group_interval: 5m
           group_wait: 30s
           receiver: "null"
@@ -93,11 +93,14 @@ This procedure can be performed on any master or worker NCN.
           - to: receiver-email@yourcompany.com
             from: sender-email@gmail.com
             # Your smtp server address
+            require_tls: false
             smarthost: smtp.gmail.com:587
             auth_username: sender-email@gmail.com
             auth_identity: sender-email@gmail.com
             auth_password: xxxxxxxxxxxxxxxx
         ```
+
+NOTE: set `require_tls:` false per receiver, if `tls` needs to be disabled.
 
 1. (`ncn-mw#`) Replace the alert notification configuration based on the files created in the previous steps.
 

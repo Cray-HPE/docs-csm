@@ -6,8 +6,8 @@ to access these services are available on any system with CMN, BGP, MetalLB, and
 - [Prerequisites](#prerequisites)
 - [System domain name](#system-domain-name)
 - [System Management Health service links](#system-management-health-service-links)
-    - [Prometheus](#prometheus)
-    - [Thanos](#thanos)
+    - [VictoriaMetrics](#victoriametrics)
+    - [VMAlert](#vmalert)
     - [Alertmanager](#alertmanager)
     - [Grafana](#grafana)
     - [Kiali](#kiali)
@@ -44,32 +44,31 @@ When accessing the URLs listed below, it will be necessary to accept one or more
 logging in. The details of the security warning will indicate that a self-signed certificate/unknown issuer is being used for the site. Support for incorporation of certificates from Trusted Certificate
 Authorities is planned for a future release.
 
-### Prometheus
+### VictoriaMetrics
 
-URL: `https://prometheus.cmn.SYSTEM_DOMAIN_NAME/`
+URL: `https://vmselect.cmn.SYSTEM_DOMAIN_NAME/select/0/prometheus/vmui`
 
-Central Prometheus instance scrapes metrics from Kubernetes, Ceph, and the hosts (part of `kube-prometheus-stack` Helm chart).
-
-Prometheus generates alerts based on metrics and reports them to the Alertmanager. The 'Alerts' link at the top of the page will show all of the inactive, pending, and firing alerts on the system.
+Vmagent instance scrapes metrics from Kubernetes, Ceph, and the hosts (part of `victoria-metrics-k8s-stack` Helm chart).
+VictoriaMetrics generates alerts based on metrics and reports them to the Alertmanager. The 'Alerts' link at the top of the page will show all of the inactive, pending, and firing alerts on the system.
 Clicking on any of the alerts will expand them, enabling users to use the 'Labels' data to discern the details of the alert. The details will also show the state of the alert, how long it has been
 active, and the value for the alert.
 
-For more information regarding the use of the Prometheus interface, see
-[Getting Started/](https://prometheus.io/docs/prometheus/latest/getting_started/) in the Prometheus online documentation.
+For more information regarding the use of the VictoriaMetrics interface, see
+[Getting Started/](https://docs.victoriametrics.com/) in the VictoriaMetrics online documentation.
 
 Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed yet.
 See [Troubleshoot Prometheus Alerts](Troubleshoot_Prometheus_Alerts.md).
 
-### Thanos
+### VMalert
 
-URL: `https://thanos.cmn.SYSTEM_DOMAIN_NAME/`
+URL: `https://vmselect.cmn.SYSTEM_DOMAIN_NAME/select/0/prometheus/vmalert/`
+VMAlert - executes a list of given alerting or recording rules against configured address.
 
-Thanos is a set of components that can be composed into a highly available, multi Prometheus metric system with potentially unlimited storage capacity, if your Object Storage allows for it.
-It leverages the Prometheus 2.0 storage format to cost-efficiently store historical metric data in any object storage while retaining fast query latencies.
-Additionally, it provides a global query view across all Prometheus installations and can merge data from Prometheus HA pairs.
+The VMAlert CRD declaratively defines a desired VMAlert setup to run in a Kubernetes cluster.
 
-For more information regarding the use of the Thanos interface, see
-[Getting Started/](https://thanos.io/tip/thanos/getting-started.md/) in the thanos online documentation.
+It has few required config options - `datasource` and notifier are required, for other config parameters check doc.
+
+For each VMAlert resource, the Operator deploys a properly configured Deployment in the same namespace. The VMAlert Pods are configured to mount a list of `Configmaps` prefixed with `<VMAlert-name>-number` containing the configuration for alerting rules.
 
 ### Alertmanager
 
