@@ -565,26 +565,27 @@ Run the following steps from a master node.
    1. Restart Prometheus.
 
       ```bash
-      kubectl rollout restart -n sysmgmt-health statefulSet/prometheus-cray-sysmgmt-health-kube-p-prometheus
-      kubectl rollout status -n sysmgmt-health statefulSet/prometheus-cray-sysmgmt-health-kube-p-prometheus
+      kubectl rollout restart deployment -n sysmgmt-health vmagent-vms-0
+      kubectl rollout status -n sysmgmt-health deployment.apps/vmagent-vms-0
+      kubectl rollout restart deployment -n sysmgmt-health vmagent-vms-1
+      kubectl rollout status -n sysmgmt-health deployment.apps/vmagent-vms-1
       ```
 
       Example output:
 
       ```text
-      Waiting for 1 pods to be ready...
-      statefulset rolling update complete ...
+      deployment "vmagent-vms-0" successfully rolled out
       ```
 
    1. Check for any `tls` errors from the active Prometheus targets. No errors are expected.
 
       ```bash
-      PROM_IP=$(kubectl get services -n sysmgmt-health cray-sysmgmt-health-kube-p-prometheus -o json | jq -r '.spec.clusterIP')
-      curl -s http://${PROM_IP}:9090/api/v1/targets | jq -r '.data.activeTargets[] | select(."scrapePool" == "sysmgmt-health/cray-sysmgmt-health-kube-p-kube-etcd/0")' | grep lastError | sort -u
+      PROM_IP=$(kubectl get services -n sysmgmt-health vmagent-vms -o json | jq -r '.spec.clusterIP')
+      curl -s http://${PROM_IP}:8429/targets |  grep kube-etcd | sort -u 
       ```
 
       Example output:
 
       ```text
-        "lastError": "",
+        state=up, endpoint=https://10.252.1.10:2379/metrics, labels={endpoint="http-metrics",instance="10.252.1.10:2379",job="kube-etcd",namespace="kube-system",service="vms-kube-etcd"}, scrapes_total=28114, scrapes_failed=0, last_scrape=14838ms ago, scrape_duration=14ms, samples_scraped=1487, error=
       ```

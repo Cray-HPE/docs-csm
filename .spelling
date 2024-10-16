@@ -35,6 +35,13 @@ Vmalert
 Vminsert
 Vmselect
 Vmstorage
+vmstorage
+vmalert
+vmselect
+victoria
+kubectl
+kubelet
+
 
 1.0.x
 1.2.x
