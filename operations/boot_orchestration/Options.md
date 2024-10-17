@@ -26,6 +26,8 @@ Example output:
   "default_retry_policy": 3,
   "disable_components_on_completion": true,
   "discovery_frequency": 300,
+  "ims_errors_fatal": false,
+  "ims_images_must_exist": false,
   "logging_level": "DEBUG",
   "max_boot_wait_time": 1200,
   "max_component_batch_size": 1800,
@@ -74,6 +76,34 @@ The following are the BOS global options:
 * `discovery_frequency`
 
     The frequency with which BOS checks HSM for new components and adds them to the BOS component database.
+
+* `ims_errors_fatal`
+
+    This option modifies how BOS behaves when validating the architecture of a boot image in a boot set.
+    Specifically, this option comes into play when BOS needs data from IMS in order to do this validation, but
+    IMS is unreachable.
+
+    In the above situation, if this option is true, then the validation will fail.
+    Otherwise, if the option is false, then a warning will be logged, but the validation will not
+    be failed because of this.
+
+    This boot set validation happens when creating a session template, validating a session
+    template, or creating a session.
+
+* `ims_images_must_exist`
+
+    This option modifies how BOS behaves when validating a boot set whose boot image appears to be from IMS.
+    Specifically, this option comes into play when the image does not actually exist in IMS.
+
+    In the above situation, if this option is true, then the validation will fail.
+    Otherwise, if the option is false, then a warning will be logged, but the validation will not
+    be failed because of this.
+
+    Note: If `ims_images_must_exist` is true but `ims_errors_fatal` is false, then
+    a failure to determine whether or not an image is in IMS will NOT result in a fatal error.
+
+    This boot set validation happens when creating a session template, validating a session
+    template, or creating a session.
 
 * `logging_level`
 

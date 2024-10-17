@@ -1,11 +1,11 @@
 # TAPMS (Tenant and Partition Management System) Overview
 
 - [TAPMS (Tenant and Partition Management System) Overview](#tapms-tenant-and-partition-management-system-overview)
-  - [Overview](#overview)
-  - [Tenant schema](#tenant-schema)
-  - [Reconcile operations](#reconcile-operations)
-  - [Tenant states](#tenant-states)
-  - [Webhook payload](#webhook-payload)
+    - [Overview](#overview)
+    - [Tenant schema](#tenant-schema)
+    - [Reconcile operations](#reconcile-operations)
+    - [Tenant states](#tenant-states)
+    - [Webhook payload](#webhook-payload)
 
 ## Overview
 
@@ -42,7 +42,8 @@ for the full schema. Below is a description of the required fields for a tenant:
 
 When a tenant CR is applied, `tapms` will:
 
-1. If the tenant declaration includes any `TenantHooks`, `tapms` will first call the specified endpoint(s).
+1. If the tenant declaration includes any `TenantHooks` or if any `GlobalTenantHooks` have been created,
+   `tapms` will first call the specified endpoint(s).
    If the endpoint returns an HTTP code other than 200 and `blockingCall` is `true`, the tenant creation request will fail.
 1. Create a tenant and Kubernetes namespace with the specified `name`. Note that when `hnc` is deployed, it will be
    configured with a required prefix for tenant names ensuring that namespaces not associated with multi-tenancy are not

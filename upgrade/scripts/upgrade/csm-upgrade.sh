@@ -26,6 +26,7 @@
 set -e
 basedir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 . ${basedir}/../common/upgrade-state.sh
+. ${basedir}/../common/k8s-common.sh
 trap 'err_report' ERR
 
 . /etc/cray/upgrade/csm/myenv
@@ -155,6 +156,66 @@ fi
 
 # Restart CFS deployments to avoid CASMINST-6852
 "${basedir}/../common/restart-cfs.sh"
+
+# Back up BOS data post-sysmgmt upgrade, and record contents of the migration pod
+# This only needs to be done if the cray-bos-migration job exists
+job_name=cray-bos-migration
+ns=services
+state_name="POST_UPGRADE_BOS_SNAPSHOT"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" ]] && k8s_job_exists "${ns}" "${job_name}"; then
+  echo "====> ${state_name} ..."
+  {
+    # Make sure the BOS migration job is complete (succeeded or failed)
+    job_error=""
+    wait_for_k8s_job_to_succeed "${ns}" "${job_name}" || job_error="migration_job_not_successful."
+
+    DATESTRING=$(date +%Y-%m-%d_%H-%M-%S)
+    SNAPSHOT_DIR=$(mktemp -d --tmpdir=/root "csm_upgrade.post_bos_upgrade_snapshot.${job_error}${DATESTRING}.XXXXXX")
+    echo "Post-BOS-upgrade snapshot directory: ${SNAPSHOT_DIR}"
+
+    # Record BOS data, because the upgrade to CSM 1.6 deleted all BOS v1 data, and sanitized
+    # the BOS v2 data
+    echo "Backing up BOS data"
+    /usr/share/doc/csm/scripts/operations/configuration/export_bos_data.sh "${SNAPSHOT_DIR}"
+
+    # Record state of BOS Kubernetes pods.
+    K8S_PODS_SNAPSHOT=${SNAPSHOT_DIR}/k8s_bos_pods.txt
+    echo "Taking snapshot of current BOS Kubernetes pod states to ${K8S_PODS_SNAPSHOT}"
+    kubectl get pods -n services -l 'app.kubernetes.io/instance in (cray-bos, cray-bos-db)' \
+      -o wide --show-labels > "${K8S_PODS_SNAPSHOT}"
+
+    # Record pod logs
+    K8S_POD_LOGS=${SNAPSHOT_DIR}/k8s_bos_pod_logs.txt
+    kubectl logs -n services --ignore-errors --all-containers --timestamps --prefix --max-log-requests 500 \
+      --insecure-skip-tls-verify-backend --tail=-1 \
+      -l 'app.kubernetes.io/instance in (cray-bos, cray-bos-db)' > "${K8S_POD_LOGS}"
+
+    SNAPSHOT_DIR_BASENAME=$(basename "${SNAPSHOT_DIR}")
+    TARFILE_BASENAME="${SNAPSHOT_DIR_BASENAME}.tgz"
+    TARFILE_FULLPATH="/tmp/${TARFILE_BASENAME}"
+    echo "Creating compressed tarfile of snapshot data: ${TARFILE_FULLPATH}"
+    tar -C /root -czf "${TARFILE_FULLPATH}" "${SNAPSHOT_DIR_BASENAME}"
+
+    backupBucket="config-data"
+    cray artifacts list "${backupBucket}" || backupBucket="vbis"
+
+    echo "Uploading tarfile to S3 (bucket $backupBucket)"
+    cray artifacts create "${backupBucket}" "${TARFILE_BASENAME}" "${TARFILE_FULLPATH}"
+
+    echo "Deleting tar file from local filesystem"
+    rm -v "${TARFILE_FULLPATH}"
+
+    if [[ -n ${job_error} ]]; then
+      echo "ERROR: Kubernetes job ${job_name} (namespace: ${ns}) did not succeed" >&2
+      exit 1
+    fi
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)"
+  echo
+else
+  echo "====> ${state_name} has been completed"
+fi
 
 state_name="POST CSM Upgrade Validation"
 echo "====> ${state_name} ..."

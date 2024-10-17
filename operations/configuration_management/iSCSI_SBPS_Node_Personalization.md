@@ -62,7 +62,7 @@ The LUN projection is over either HSN or NMN.
     {
       "layers": [
         {
-          "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+          "clone_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
           "commit": "${COMMIT}",
           "name": "iscsi-sbps-iscsi-targets-config",
           "playbook": "config_sbps_iscsi_targets.yml"
@@ -90,7 +90,7 @@ The LUN projection is over either HSN or NMN.
           "clone_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
           "commit": "3bb1fce7d7de4c2cce237ab19dd6f239158d6d07",
           "name": "iscsi-sbps-iscsi-targets-config",
-          "playbook": "ansible/config_sbps_iscsi_targets.yml"
+          "playbook": "config_sbps_iscsi_targets.yml"
         }
       ],
       "name": "iscsi-sbps-targets-config"
@@ -149,6 +149,14 @@ The LUN projection is over either HSN or NMN.
       }
     }
     ```
+
+Note:
+For specific target worker nodes selection for node personalization (instead of default: to all workers)
+use CFS option `--ansible-limit` with xnames of the worker nodes while creating a session.
+
+```bash
+cray cfs v3 sessions create --name <session_name> --configuration-name <config_name> --ansible-limit <xname1,xname2,...>
+```
 
 ### Monitor CFS session
 

@@ -647,6 +647,7 @@ prebuilt
 preempted
 preemptively
 provisioners
+PXEboot
 qemu-user-static
 rados-gateway
 re-architecting

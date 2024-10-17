@@ -246,6 +246,19 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
     session running in detached mode. The `sat bootsys` command will automatically exit screen
     sessions when nodes have finished booting.
 
+1. (`ncn-m001#`) Confirm all NCNs have booted.
+
+    ```bash
+     pdsh -w $(grep "nmn ncn-" /etc/hosts | awk '{print $3}' | xargs | sed 's/ /,/g') uptime
+    ```
+
+### Verify Access to External File Systems
+
+If the worker nodes host User Access Instance (UAI) pods or normally mount the external Lustre or Spectrum Scale (GPFS) file systems,
+then verify that the external file system is ready to be mounted by the worker nodes.
+
+Some systems are configured with lazy mounts that do not have this requirement for the worker nodes.
+
 ### Start Kubernetes and other services
 
 1. (`ncn-m001#`) Start the Kubernetes cluster.
@@ -317,6 +330,41 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
     To resolve the space issue, see [Troubleshoot Ceph OSDs Reporting Full](../utility_storage/Troubleshoot_Ceph_OSDs_Reporting_Full.md).
 
+1. (`ncn-m001#`) Check that `spire` pods have started.
+
+    Monitor the status of the `spire-jwks` pods to ensure they restart and enter the `Running` state.
+
+    ```bash
+    kubectl get pods -n spire -o wide | grep spire-jwks
+    ```
+
+    Example output:
+
+    ```text
+    spire-jwks-6b97457548-gc7td    2/3  CrashLoopBackOff   9    23h   10.44.0.117  ncn-w002 <none>   <none>
+    spire-jwks-6b97457548-jd7bd    2/3  CrashLoopBackOff   9    23h   10.36.0.123  ncn-w003 <none>   <none>
+    spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
+    ```
+
+   1. (`ncn-m001#`) If the `spire-jwks` pods indicate `CrashLoopBackOff`, then restart the Spire deployment.
+
+       ```bash
+       kubectl rollout restart -n spire deployment spire-jwks
+       ```
+
+   1. (`ncn-m001#`) Rejoin Spire on the worker and master NCNs, to avoid issues with Spire tokens.
+
+       ```bash
+       kubectl rollout restart -n spire daemonset request-ncn-join-token
+       kubectl rollout status -n spire daemonset request-ncn-join-token
+       ```
+
+   1. (`ncn-m001#`) Rejoin Spire on the storage NCNs, to avoid issues with Spire tokens.
+
+       ```bash
+       /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
+       ```
+
 1. (`ncn-m001#`) Monitor the status of the management cluster and which pods are restarting (as indicated by either a `Running` or `Completed` state).
 
     ```bash
@@ -355,39 +403,6 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
     * `/var/lib/cni/networks/macvlan-slurmctld-nmn-conf`
     * `/var/lib/cni/networks/macvlan-slurmdbd-nmn-conf`
-
-1. (`ncn-m001#`) Check that `spire` pods have started.
-
-    ```bash
-    kubectl get pods -n spire -o wide | grep spire-jwks
-    ```
-
-    Example output:
-
-    ```text
-    spire-jwks-6b97457548-gc7td    2/3  CrashLoopBackOff   9    23h   10.44.0.117  ncn-w002 <none>   <none>
-    spire-jwks-6b97457548-jd7bd    2/3  CrashLoopBackOff   9    23h   10.36.0.123  ncn-w003 <none>   <none>
-    spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
-    ```
-
-   1. (`ncn-m001#`) If Spire pods indicate `CrashLoopBackOff`, then restart the Spire deployment.
-
-       ```bash
-       kubectl rollout restart -n spire deployment spire-jwks
-       ```
-
-   1. (`ncn-m001#`) Rejoin Spire on the worker and master NCNs, to avoid issues with Spire tokens.
-
-       ```bash
-       kubectl rollout restart -n spire daemonset request-ncn-join-token
-       kubectl rollout status -n spire daemonset request-ncn-join-token
-       ```
-
-   1. (`ncn-m001#`) Rejoin Spire on the storage NCNs, to avoid issues with Spire tokens.
-
-       ```bash
-       /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
-       ```
 
 1. (`ncn-m001#`) Check if any pods are in `CrashLoopBackOff` state because of errors connecting to Vault.
 
@@ -461,7 +476,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
 1. (`ncn-m001#`) Determine whether the `cfs-state-reporter` service is failing to start on each manager/master and worker NCN while trying to contact CFS.
 
-    **Note:** The `systemctl` command run on each node may have `exit code 3` reported, this does not indicate a problem with `cfs-state-reporter` on that node..
+    **Note:** The `systemctl` command run on each node may have `exit code 3` reported. This does not indicate a problem with `cfs-state-reporter` on that node.
 
     ```bash
     pdsh -w $(kubectl get nodes | grep -v NAME | awk '{print $1}' | xargs | sed 's/ /,/g') systemctl status cfs-state-reporter | grep "Active: activating"

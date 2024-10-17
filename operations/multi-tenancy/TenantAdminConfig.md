@@ -65,7 +65,7 @@ rules:
     verbs: ["get", "watch", "list"]
   - apiGroups: ["tapms.hpe.com"]
     resources: ["tenants"]
-    verbs: ["patch", "get", "watch", "list"]
+    verbs: ["get", "watch", "list"]
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1

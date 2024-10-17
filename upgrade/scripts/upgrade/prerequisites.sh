@@ -29,6 +29,7 @@ locOfScript=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 . "${locOfScript}/../common/ncn-common.sh" "$(hostname)"
 # upgrade-state.sh uses CSM_RELEASE defined by ncn-common.sh
 . "${locOfScript}/../common/upgrade-state.sh"
+. "${locOfScript}/../common/k8s-common.sh"
 trap 'err_report' ERR INT TERM HUP EXIT
 # array for paths to unmount after chrooting images
 # shellcheck disable=SC2034
@@ -245,6 +246,11 @@ function is_vshasta_node {
   return $?
 }
 
+function set_backupBucket_var {
+  backupBucket="config-data"
+  cray artifacts list "${backupBucket}" || backupBucket="vbis"
+}
+
 if is_vshasta_node; then
   vshasta="true"
 else
@@ -258,31 +264,26 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
-
     DATESTRING=$(date +%Y-%m-%d_%H-%M-%S)
     SNAPSHOT_DIR=$(mktemp -d --tmpdir=/root "csm_upgrade.pre_upgrade_snapshot.${DATESTRING}.XXXXXX")
     echo "Pre-upgrade snapshot directory: ${SNAPSHOT_DIR}"
 
-    # Record BOS data, because the upgrade to CSM 1.6 will delete all BOS v1 data, and will sanitize
-    # the BOS v2 data
-    echo "Backing up BOS data"
-    /usr/share/doc/csm/scripts/operations/configuration/export_bos_data.sh --include-v1 "${SNAPSHOT_DIR}"
+    /usr/share/doc/csm/upgrade/scripts/upgrade/util/pre-upgrade-status.sh -o "${SNAPSHOT_DIR}" --hsn-not-required --sdu-not-required
 
-    # Record CFS components and configurations, since these are modified during the upgrade process
-    CFS_CONFIG_SNAPSHOT=${SNAPSHOT_DIR}/cfs_configurations.json
-    echo "Backing up CFS configurations to ${CFS_CONFIG_SNAPSHOT}"
-    curl -k -H "Authorization: Bearer $(get_token)" https://api-gw-service-nmn.local/apis/cfs/v3/configurations > "${CFS_CONFIG_SNAPSHOT}"
+    SNAPSHOT_DIR_BASENAME=$(basename "${SNAPSHOT_DIR}")
+    TARFILE_BASENAME="${SNAPSHOT_DIR_BASENAME}.tgz"
+    TARFILE_FULLPATH="/tmp/${TARFILE_BASENAME}"
+    echo "Creating compressed tarfile of backup data: ${TARFILE_FULLPATH}"
+    tar -C /root -czf "${TARFILE_FULLPATH}" "${SNAPSHOT_DIR_BASENAME}"
 
-    CFS_COMP_SNAPSHOT=${SNAPSHOT_DIR}/cfs_components.json
-    echo "Backing up CFS components to ${CFS_COMP_SNAPSHOT}"
-    curl -k -H "Authorization: Bearer $(get_token)" https://api-gw-service-nmn.local/apis/cfs/v3/components > "${CFS_COMP_SNAPSHOT}"
+    # This function sets the $backupBucket variable. It is defined earlier in this file.
+    set_backupBucket_var
 
-    # Record state of Kubernetes pods. If a pod is later seen in an unexpected state, this can provide a reference to
-    # determine whether or not the issue existed prior to the upgrade.
-    K8S_PODS_SNAPSHOT=${SNAPSHOT_DIR}/k8s_pods.txt
-    echo "Taking snapshot of current Kubernetes pod states to ${K8S_PODS_SNAPSHOT}"
-    kubectl get pods -A -o wide --show-labels > "${K8S_PODS_SNAPSHOT}"
+    echo "Uploading tarfile to S3 (bucket $backupBucket)"
+    cray artifacts create "${backupBucket}" "${TARFILE_BASENAME}" "${TARFILE_FULLPATH}"
 
+    echo "Deleting tar file from local filesystem"
+    rm -v "${TARFILE_FULLPATH}"
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
   echo
@@ -578,41 +579,12 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
     job_name="csm-config-import-${CSM_RELEASE}"
-    i=1
-    max_checks=40
-    wait_time=15
+    ns=services
     # First, wait for the job to be created
-    created=no
-    while [[ ${i} -le ${max_checks} ]]; do
-      echo "Waiting for Kubernetes job ${job_name} to exist (${i}/${max_checks})"
-      sleep ${wait_time}
-      i=$((i + 1))
-      if kubectl get job -n services "${job_name}" 2> /dev/null; then
-        echo "Kubernetes job ${job_name} exists"
-        created=yes
-        break
-      fi
-    done
-    if [[ ${created} == no ]]; then
-      echo "ERROR: Kubernetes job ${job_name} does not exist after $((max_checks * wait_time)) seconds" >&2
-      exit 1
-    fi
+    wait_for_k8s_job_to_exist "${ns}" "${job_name}"
+
     # Now wait for the job to succeed
-    passed=no
-    while [[ ${i} -le ${max_checks} ]]; do
-      echo "Waiting for Kubernetes job ${job_name} to succeed (${i}/${max_checks})"
-      sleep ${wait_time}
-      i=$((i + 1))
-      if [[ $(kubectl get job -n services "${job_name}" -o jsonpath='{.status.succeeded}') == 1 ]]; then
-        echo "Kubernetes job ${job_name} succeeded"
-        passed=yes
-        break
-      fi
-    done
-    if [[ ${passed} == no ]]; then
-      echo "ERROR: Kubernetes job ${job_name} did not succeed after $((max_checks * wait_time)) seconds" >&2
-      exit 1
-    fi
+    wait_for_k8s_job_to_succeed "${ns}" "${job_name}"
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
@@ -1159,6 +1131,45 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     for bootparameter in "${bootparameters_to_set[@]}"; do
       csi handoff bss-update-param --set "${bootparameter}"
     done
+
+    # Get a list of NCNs.
+    if IFS=$'\n' read -rd '' -a NCN_XNAMES; then
+      :
+    fi <<< "$(cray hsm state components list --role Management --subrole Worker --type Node --format json | jq -r '.Components | map(.ID) | join("\n")')"
+    # If no NCNs are found we should exit, otherwise if forces its way forward then NCNs will be missing critical packages.
+    if [ "${#NCN_XNAMES[@]}" -eq '0' ]; then
+      echo >&2 'No NCN xnames were found in HSM! Aborting.'
+      exit 1
+    fi
+
+    params=""
+    error=0
+
+    # Loop through one at a time. If `--hosts` isn't provided, we will error out on the 'Global' key.
+    for ncn_xname in "${NCN_XNAMES[@]}"; do
+      printf "% -15s: " "${ncn_xname}"
+
+      params=$(cray bss bootparameters list --hosts "${ncn_xname}" --format json | jq '.[] |."params"' \
+        | sed -E \
+          -e 's/ip=hsn[0-9]+:auto6\s?//g' \
+          -e 's/ifname=hsn[0-9]+:[0-9a-fA-F:]{17}\s?//g' \
+          -e 's/\"//g')
+
+      if ! cray bss bootparameters update --hosts "${ncn_xname}" \
+        --params "${params}" > /dev/null 2>&1; then
+        echo "ERROR - Failed to update boot parameters for $xname! Skipping ..."
+        error=1
+        continue
+      fi
+      echo 'OK'
+    done
+    if [ "$error" -ne 0 ]; then
+      echo >&2 "Errors were detected, please inspect the scripts output."
+      exit 1
+    else
+      echo "Successfully updated boot parameters for [${#NCN_XNAMES[@]}] xname(s):"
+      printf "\t%s\n" "${NCN_XNAMES[@]}"
+    fi
 
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"

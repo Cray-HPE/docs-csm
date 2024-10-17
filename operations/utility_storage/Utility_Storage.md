@@ -73,6 +73,7 @@ OSD
 
 - [Troubleshoot Ceph OSDs Reporting Full](Troubleshoot_Ceph_OSDs_Reporting_Full.md)
 - [Troubleshoot a Down OSD](Troubleshoot_a_Down_OSD.md)
+- [Troubleshoot Ceph OSDs Not Being Created on Disks](Troubleshoot_Ceph_OSDs_Not_Created.md)
 
 Ceph Health
 

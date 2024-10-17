@@ -94,6 +94,7 @@ Build and customize image recipes with the Image Management Service (IMS).
 
 Use the Boot Orchestration Service \(BOS\) to boot, reboot, and shut down collections of nodes.
 
+- [BOS data notice](../upgrade/README.md#bos-data-notice)
 - [Boot Orchestration Service (BOS)](boot_orchestration/Boot_Orchestration.md)
       - [BOS Cheat Sheet](boot_orchestration/Cheatsheet.md)
       - [BOS Services](boot_orchestration/BOS_Services.md)
@@ -114,6 +115,7 @@ Use the Boot Orchestration Service \(BOS\) to boot, reboot, and shut down collec
       - [Stage Changes with BOS](boot_orchestration/Stage_Changes_with_BOS.md)
       - [Kernel Boot Parameters](boot_orchestration/Kernel_Boot_Parameters.md)
       - [Troubleshoot UAN Boot Issues](boot_orchestration/Troubleshoot_UAN_Boot_Issues.md)
+      - [Determine Which BOS Session Booted A Node](boot_orchestration/Determine_Which_BOS_Session_Booted_A_Node.md)
 - [BOS Options](boot_orchestration/Options.md)
 - [Exporting and Importing BOS Data](boot_orchestration/Exporting_and_Importing_BOS_Data.md)
 - [Exporting and Importing BSS Data](boot_orchestration/Exporting_and_Importing_BSS_Data.md)
@@ -427,6 +429,7 @@ services running on Kubernetes, as well as for telemetry data coming from the co
 - [Restore Nexus Data After Data Corruption](utility_storage/Restore_Corrupt_Nexus.md)
 - [Troubleshoot Failure to Get Ceph Health](utility_storage/Troubleshoot_Failure_to_Get_Ceph_Health.md)
 - [Troubleshoot a Down OSD](utility_storage/Troubleshoot_a_Down_OSD.md)
+- [Troubleshoot Ceph OSDs Not Being Created on Disks](utility_storage/Troubleshoot_Ceph_OSDs_Not_Created.md)
 - [Troubleshoot Ceph OSDs Reporting Full](utility_storage/Troubleshoot_Ceph_OSDs_Reporting_Full.md)
 - [Troubleshoot System Clock Skew](utility_storage/Troubleshoot_System_Clock_Skew.md)
 - [Troubleshoot an Unresponsive S3 Endpoint](utility_storage/Troubleshoot_an_Unresponsive_S3_Endpoint.md)
@@ -807,3 +810,4 @@ these backups.
 - [Tenant and Partition Management System (TAPMS) Overview](multi-tenancy/Tapms.md)
 - [TAPMS Tenant Status API](../api/tapms-operator.md)
 - [Global Tenant Hooks](multi-tenancy/GlobalTenantHooks.md)
+- [Example Workflow](multi-tenancy/ExampleWorkflow.md)
