@@ -79,7 +79,7 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
 
 1. Determine the import branch to use.
 
-   > ***`NOTE`*** Update `CSM_RELEASE` for the version being used.
+   > **`NOTE`** Update `CSM_RELEASE` for the version being used.
 
    ```bash
    CSM_RELEASE=1.6.0
@@ -141,7 +141,7 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
    | `hsn_bond_ip`         | `10.253.254.1`      |
    | `hsn_bond_netmask`    | `255.255.0.0`       |
 
-   The DMAC used should match the one defined in the fabric LAG configuration. The four parameters in this table *must* be provided. The values for
+   The DMAC used should match the one defined in the fabric LAG configuration. The four parameters in this table _must_ be provided. The values for
    `hsn_bond_mac`, `hsn_bond_ip`, and `hsn_bond_netmask` cannot be derived so must be set. Interface configuration will fail if these values are not provided.
 
    > **`NOTE`** The `hsn_bond_options` parameter defaults to `"mode=802.3ad xmit_hash_policy=layer2+3 miimon=100 ad_select=bandwidth lacp_rate=fast"` and may need changing if static mode
