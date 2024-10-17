@@ -47,8 +47,6 @@ In addition, the following general criteria describe the expected behavior of th
   should be at least two other etcd pods \(from the cluster of 3\) running on other NCN worker nodes. Additionally, any pods that are part of a stateful set will not migrate off a worker node
   when it goes down. Those are expected to stay on the node and also remain in the terminated state until the NCN worker nodes comes back up or unless deliberate action is taken to force that
   pod off the NCN worker node which is down.
-  - The `cps-cm-pm` pods are part of a DaemonSet and they only run on designated nodes. When the node comes back up the containers will be restarted and service restored. Refer to
-    "Content Projection Service \(CPS\)" in the Cray Operating System \(COS\) product stream documentation for more information on changing node assignments.
 - After an NCN worker, storage, or master node goes down, if there are issues with booting compute nodes, that does not necessarily mean that the problem is due to a
   worker node being down. If possible, it is advised to also check the relevant "Compute Node Boot Troubleshooting Information"
   procedures. Those sections can give guidance around general known issues and
