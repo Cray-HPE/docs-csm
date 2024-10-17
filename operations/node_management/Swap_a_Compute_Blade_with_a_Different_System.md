@@ -738,8 +738,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
 ### Check DVS
 
-There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and their waiter, and at least one `cray-cps-cm-pm` pod. Usually there are two `cray-cps-cm-pm` pods:
-one on `ncn-w002`, and one on `ncn-w003` or another worker node.
+There should be one or more `cray-cps` pods.
 
 1. (`ncn-mw#`) Verify that the `cray-cps` pods on worker nodes are `Running`.
 
@@ -751,15 +750,9 @@ one on `ncn-w002`, and one on `ncn-w003` or another worker node.
 
     ```text
     services   cray-cps-75cffc4b94-j9qzf    2/2  Running   0   42h 10.40.0.57  ncn-w001
-    services   cray-cps-cm-pm-g6tjx         5/5  Running   21  41h 10.42.0.77  ncn-w003
-    services   cray-cps-cm-pm-kss5k         5/5  Running   21  41h 10.39.0.80  ncn-w002
-    services   cray-cps-etcd-knt45b8sjf     1/1  Running   0   42h 10.42.0.67  ncn-w003
-    services   cray-cps-etcd-n76pmpbl5h     1/1  Running   0   42h 10.39.0.49  ncn-w002
-    services   cray-cps-etcd-qwdn74rxmp     1/1  Running   0   42h 10.40.0.42  ncn-w001
-    services   cray-cps-wait-for-etcd-jb95m 0/1  Completed
     ```
 
-1. (`ncn-w#`) SSH to each worker node running CPS/DVS, and run `dmesg -T` to ensure that there are no recurring `"DVS: merge_one"` error messages as shown.
+2. (`ncn-w#`) SSH to each worker node running CPS/DVS, and run `dmesg -T` to ensure that there are no recurring `"DVS: merge_one"` error messages as shown.
 
    The error messages indicate that DVS is detecting an IP address change for one of the client nodes.
 
@@ -775,9 +768,9 @@ one on `ncn-w002`, and one on `ncn-w003` or another worker node.
     [Tue Jul 21 13:09:54 2020] DVS: merge_one#358:   Ignoring.
     ```
 
-1. Make sure the Configuration Framework Service (CFS) finished successfully. Review *HPE Cray EX DVS Administration Guide 1.4.1 `S-8004`*.
+3. Make sure the Configuration Framework Service (CFS) finished successfully. Review *HPE Cray EX DVS Administration Guide 1.4.1 `S-8004`*.
 
-1. (`nid#`) SSH to the node and check each DVS mount.
+4. (`nid#`) SSH to the node and check each DVS mount.
 
     ```bash
     mount | grep dvs | head -1
