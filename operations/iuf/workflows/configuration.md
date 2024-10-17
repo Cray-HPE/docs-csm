@@ -54,6 +54,7 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
     - Comment out the SBPS `rootfs_provider` and `rootfs_provider_passthrough` parameters and uncomment the CPS `rootfs_provider` and `rootfs_provider_passthrough` parameters, if DVS with CPS is the preferred method to project content.
     - Comment the several sections with GPU_SUPPORT (between BEGIN_GPU_SUPPORT and END_GPU_SUPPORT) tags if the system has no GPU hardware.
         The sections are identified with BEGIN_GPU_SUPPORT and END_GPU_SUPPORT comments like this example.
+
         ```bash
         # The gpu_customize_driver_playbook.yml playbook will install GPU driver and
         # SDK/toolkit software into the compute boot image if GPU content is available
@@ -71,6 +72,7 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
               ims_require_dkms: true
         #END_GPU_SUPPORT
         ```
+
     - Comment out any CFS configuration layers in `compute-and-uan-bootprep.yaml` and `management-bootprep.yaml` files for products that are not needed on the system
     - Any other changes needed to reflect site preferences
 
