@@ -209,43 +209,43 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
 
 1. Create a CFS session to apply the configuration to the node(s).
 
-```bash
-SESSION=hsn-nic-bonding-$(date +%Y%m%d%H%M%S)
-cray cfs sessions create --name "${SESSION}" --configuration-name hsn-nic-bonding
-```
+   ```bash
+   SESSION=hsn-nic-bonding-$(date +%Y%m%d%H%M%S)
+   cray cfs sessions create --name "${SESSION}" --configuration-name hsn-nic-bonding
+   ```
 
-Example output:
+   Example output:
 
-```text
-debug_on_failure = false
-logs = "ara.cmn.surtur.hpc.amslabs.hpecorp.net/?label=hsn-nic-bonding-20241011111435"
-name = "hsn-nic-bonding-20241011111435"
+   ```text
+   debug_on_failure = false
+   logs = "ara.cmn.surtur.hpc.amslabs.hpecorp.net/?label=hsn-nic-bonding-20241011111435"
+   name = "hsn-nic-bonding-20241011111435"
 
-[ansible]
-config = "cfs-default-ansible-cfg"
-limit = ""
-passthrough = ""
-verbosity = 0
+   [ansible]
+   config = "cfs-default-ansible-cfg"
+   limit = ""
+   passthrough = ""
+   verbosity = 0
 
-[configuration]
-limit = ""
-name = "hsn-nic-bonding"
+   [configuration]
+   limit = ""
+   name = "hsn-nic-bonding"
 
-[status]
-artifacts = []
+   [status]
+   artifacts = []
 
-[tags]
+   [tags]
 
-[target]
-definition = "dynamic"
-groups = []
-image_map = []
+   [target]
+   definition = "dynamic"
+   groups = []
+   image_map = []
 
-[status.session]
-start_time = "2024-10-11T11:14:48"
-status = "pending"
-succeeded = "none"
-```
+   [status.session]
+   start_time = "2024-10-11T11:14:48"
+   status = "pending"
+   succeeded = "none"
+   ```
 
 ## Verification
 
