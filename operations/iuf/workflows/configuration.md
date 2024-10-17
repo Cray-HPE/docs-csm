@@ -60,20 +60,20 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
    There are comments at the top of the `product_vars.yaml` file that describe the variables and related details. The following are a few examples of `site_vars.yaml` changes:
     - Add a `default` section containing a `network_type: "cassini"` entry to designate that Cassini is the desired Slingshot network type to be used when executing CFS configurations later in the workflow
     - Add a `suffix` entry to the `default` section to append a string to the names of CFS configuration, image, and BOS session template artifacts created during the workflow to make them easy to identify
-    - Add a `system-name` entry to the `default` section. The Scalable Boot Projection Service (SBPS) uses this system name as the first part of the domain name. Do not add if not using SBPS.
+    - Add a `system_name` entry to the `default` section. The Scalable Boot Projection Service (SBPS) uses this system name as the first part of the domain name. Do not add if not using SBPS.
       - See the procedure [Create a Session Template to Boot Compute Nodes with SBPS](../../../operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md#boot-set-rootfs_provider_passthrough-parameter)
         for more information.
         - If the `docs-csm` RPM is installed on a node, then this page can be found under `/usr/share/doc/csm/operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md`. See the
           "Boot set `rootfs_provider_passthrough` parameter" section for more details.
         - Otherwise, it can be found under the appropriate release branch in <https://github.com/Cray-HPE/docs-csm>.
-      - This documentation indicates how to find the `system-name`.
-    - Add a `site-domain` entry to the `default` section. The Scalable Boot Projection Service (SBPS) uses this domain name as the second part of the domain name. Do not add if not using SBPS.
+      - This documentation indicates how to find the `system_name`.
+    - Add a `site_domain` entry to the `default` section. The Scalable Boot Projection Service (SBPS) uses this domain name as the second part of the domain name. Do not add if not using SBPS.
       - See the procedure [Create a Session Template to Boot Compute Nodes with SBPS](../../../operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md#boot-set-rootfs_provider_passthrough-parameter)
         for more information.
         - If the `docs-csm` RPM is installed on a node, then this page can be found under `/usr/share/doc/csm/operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md`.
           See the "Boot set `rootfs_provider_passthrough` parameter"section for more details.
         - Otherwise, it can be found under the appropriate release branch in <https://github.com/Cray-HPE/docs-csm>.
-      - This documentation indicates how to find the `site-domain`.
+      - This documentation indicates how to find the `site_domain`.
 
    Additional information on `site_vars.yaml` files can be found in the [Site and recipe variables](../IUF.md#site-and-recipe-variables) and [`update-vcs-config`](../stages/update_vcs_config.md) sections.
 
@@ -93,8 +93,11 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
        default:
          network_type: "cassini"
          suffix: "-test01"
-         system-name: "my-system"
-         site-domain: "my-site-domain.net"
+         system_name: "my-system"
+         site_domain: "my-site-domain.net"
+       uss:
+         deploy_slurm: true
+         deploy_pbs: true
        ```
 
     3. Ensure the expected files are present in the admin directory after performing the steps in this section.
