@@ -24,6 +24,10 @@ using IUF.
 
    Follow the IUF [Product delivery](../operations/iuf/workflows/product_delivery.md) instructions.
 
+1. Configuration
+
+   Follow the IUF [Configuration](../operations/iuf/workflows/configuration.md) instructions.
+
 1. Image preparation
 
    Follow the IUF [Image preparation](../operations/iuf/workflows/image_preparation.md) instructions.

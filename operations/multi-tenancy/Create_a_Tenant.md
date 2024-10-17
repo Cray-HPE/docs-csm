@@ -8,8 +8,8 @@
 
 ## Overview
 
-This page provides information about how to create a tenant. This procedure involves creating a Custom Resource Definition (CRD) and then applying the Custom Resource (CR),
-for both `tapms` and the `slurm` operator.
+This page provides information about how to create a tenant.
+This procedure involves creating a Custom Resource Definition (CRD) and then applying the Custom Resource (CR), for both `tapms` and the `slurm` operator.
 
 ## TAPMS CRD
 
@@ -35,25 +35,7 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
       tenantname: vcluster-blue
       tenantkms:
         enablekms: true
-      tenanthooks:
-      - name: blocking-hook
-        url: http://10.19.12.61:6000/block
-        blockingcall: true
-        eventtypes:
-          - UPDATE
-          - DELETE
-        hookcredentials:
-          secretname: blocking-hook-cm
-          secretnamespace: services
-      - name: notify-hook
-        url: http://10.19.12.61:6000
-        blockingcall: false
-        eventtypes:
-          - UPDATE
-          - DELETE
-        hookcredentials:
-          secretname: notify-hook-cm
-          secretnamespace: services
+      tenanthooks: []
       tenantresources:
       - enforceexclusivehsmgroups: true
         hsmgrouplabel: blue
@@ -61,6 +43,8 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
         xnames:
         - x1000c0s0b0n0
     ```
+
+**`IMPORTANT`** In order to keep nodes for different tenants separate, `enforceexclusivehsmgroups` must be set to true, and `hsmgrouplabel` must be set to a unique label for the tenant. Without these, it is possible for tenants to share nodes.
 
 ## Apply the TAPMS CR
 
@@ -92,7 +76,7 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
     metadata:
       annotations:
         kubectl.kubernetes.io/last-applied-configuration: |
-          {"apiVersion":"tapms.hpe.com/v1alpha3","kind":"Tenant","metadata":{"annotations":{},"name":"vcluster-blue","namespace":"tenants"},"spec":{"childnamespaces":["slurm","user"],"tenanthooks":[{"blockingcall":true,"eventtypes":["UPDATE","DELETE"],"hookcredentials":{"secretname":"blocking-hook-cm","secretnamespace":"services"},"name":"blocking-hook","url":"http://10.19.12.61:6000/block"},{"blockingcall":false,"eventtypes":["UPDATE","DELETE"],"hookcredentials":{"secretname":"notify-hook-cm","secretnamespace":"services"},"name":"notify-hook","url":"http://10.19.12.61:6000"}],"tenantkms":{"enablekms":true},"tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x1000c0s0b0n0"]}]}}
+          {"apiVersion":"tapms.hpe.com/v1alpha3","kind":"Tenant","metadata":{"annotations":{},"name":"vcluster-blue","namespace":"tenants"},"spec":{"childnamespaces":["slurm","user"],"tenanthooks":[],"tenantkms":{"enablekms":true},"tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x1000c0s0b0n0"]}]}}
       creationTimestamp: "2023-09-27T17:14:28Z"
       finalizers:
       - tapms.hpe.com/finalizer
@@ -106,25 +90,7 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
       - slurm
       - user
       state: Deployed
-      tenanthooks:
-      - blockingcall: true
-        eventtypes:
-        - UPDATE
-        - DELETE
-        hookcredentials:
-          secretname: blocking-hook-cm
-          secretnamespace: services
-        name: blocking-hook
-        url: http://10.19.12.61:6000/block
-      - blockingcall: false
-        eventtypes:
-        - UPDATE
-        - DELETE
-        hookcredentials:
-          secretname: notify-hook-cm
-          secretnamespace: services
-        name: notify-hook
-        url: http://10.19.12.61:6000
+      tenanthooks: []
       tenantkms:
         enablekms: true
         keyname: key1
@@ -140,25 +106,7 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
       childnamespaces:
       - vcluster-blue-slurm
       - vcluster-blue-user
-      tenanthooks:
-      - blockingcall: true
-        eventtypes:
-        - UPDATE
-        - DELETE
-        hookcredentials:
-          secretname: blocking-hook-cm
-          secretnamespace: services
-        name: blocking-hook
-        url: http://10.19.12.61:6000/block
-      - blockingcall: false
-        eventtypes:
-        - UPDATE
-        - DELETE
-        hookcredentials:
-          secretname: notify-hook-cm
-          secretnamespace: services
-        name: notify-hook
-        url: http://10.19.12.61:6000
+      tenanthooks: []
       tenantkms:
         keyname: key1
         keytype: rsa-3072

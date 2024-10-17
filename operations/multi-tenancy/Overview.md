@@ -12,6 +12,7 @@
     - [Modify a tenant](#modify-a-tenant)
     - [Remove a tenant](#remove-a-tenant)
     - [Tenant administrator configuration](#tenant-administrator-configuration)
+- [Example Workflow](#example-workflow)
 
 ## Disclaimer
 
@@ -26,26 +27,30 @@ _Soft_ multi-tenancy is defined as tenants that are hospitable, analogous to bus
 
 ### Hierarchical Namespace Controller (HNC)
 
-See [Cray HNC Manager](CrayHncManager.md) for specifics of how to configure the HNC for CSM deployments.
+The HNC is a Kubernetes component that extends the capabilities of namespaces.
+See [Cray HNC Manager](CrayHncManager.md) for specifics of how to configure the HNC for CSM deployments,
+or the [Kubernetes Documentation](https://github.com/kubernetes-sigs/hierarchical-namespaces) for general information on the HNC.
 
 ### Tenant and Partition Management System (TAPMS)
 
-`tapms` is the primary Kubernetes Operator for the multi-tenancy solution. Creating and modifying a tenant is accomplished by creating a `Tenant` custom resource, which is managed and reconciled by `tapms`.
+`tapms` is the primary Kubernetes Operator for the multi-tenancy solution.
+Creating and modifying a tenant is accomplished by creating a `Tenant` custom resource, which is managed and reconciled by `tapms`.
 See [TAPMS Overview](Tapms.md) for details on this Kubernetes Operator.
 
 ### Slurm operator
 
-The Slurm operator can be used to deploy the Slurm workload manager within a
-tenant. See [Slurm Operator](SlurmOperator.md) for details.
+The Slurm operator can be used to deploy the Slurm workload manager within a tenant.
+See [Slurm Operator](SlurmOperator.md) for details.
 
 ### Vault integration
 
-The `tapms` operator can create a Cray Vault transit engine for the tenant. Creating a transit engine is accomplished by enabling the feature in the `Tenant` custom resource, which is managed and reconciled by `tapms`.
+The `tapms` operator can create a Cray Vault transit engine for the tenant.
+Creating a transit engine is accomplished by enabling the feature in the `Tenant` custom resource, which is managed and reconciled by `tapms`.
 See the [Vault Overview](Vault.md) for details.
 
 ### Global tenant hooks
 
-Web-hooks that apply to all tenants can be defined by using [Global Tenant Hooks](GlobalTenantHooks.md) outside the tenant definition.
+In addition to the `TenantHooks` defined in the `Tenant` custom resource, global hooks that apply to all tenants can be defined by using [Global Tenant Hooks](GlobalTenantHooks.md) outside the tenant definition.
 
 ## Getting started
 
@@ -53,7 +58,7 @@ Below are common activities performed by an infrastructure administrator for man
 
 ### Create a tenant
 
-See [Create a Tenant](Create_a_Tenant.md) for how to create a tenant using the `Tenant` custom resource definition (CRD) which is managed by the `tapms`.
+See [Create a Tenant](Create_a_Tenant.md) for how to create a tenant using the `Tenant` custom resource definition (CRD) which is managed by `tapms`.
 
 ### Modify a tenant
 
@@ -66,4 +71,8 @@ See [Remove a Tenant](Remove_a_Tenant.md) for how to remove a tenant when it is 
 ### Tenant administrator configuration
 
 For information on how to configure a user to perform tenant administration functions, see [Tenant Administrator Configuration](TenantAdminConfig.md).
-Users configured as `Tenant Administrators` can modify `xname` assignments (and other changes to the `tapms` custom resource) for one or more tenants.
+Users configured as `Tenant Administrators` can view `xname` assignments (and other settings of the `tapms` custom resource) for one or more tenants.
+
+### Example Workflow
+
+See the [Example Workflow](ExampleWorkflow.md) for and end-to-end example of tenant setup, including setting up `slurm`.

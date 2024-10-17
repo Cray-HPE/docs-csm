@@ -337,10 +337,10 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
 
    1. Set variables for the LDAP server.
 
-      In the following example, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port `636`.
+      In the following example, the LDAP server has the hostname `dcldap2.hpc.amslabs.hpecorp.net` and is using the port `636`.
 
       ```bash
-      LDAP=dcldap2.us.cray.com
+      LDAP=dcldap2.hpc.amslabs.hpecorp.net
       PORT=636
       ```
 

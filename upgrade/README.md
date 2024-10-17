@@ -4,6 +4,8 @@ There are several alternative procedures to perform an upgrade of Cray Systems M
 software. Choose the appropriate procedure from the sections below.
 
 * [Release Notes](#release-notes)
+    * [NVIDIA CPU and GPU notice](#nvidia-cpu-and-gpu-notice)
+    * [BOS data notice](#bos-data-notice)
 * [CSM major/minor version upgrade](#csm-majorminor-version-upgrade)
     * [Option 1: Upgrade CSM with additional HPE Cray EX software products](#option-1-upgrade-csm-with-additional-hpe-cray-ex-software-products)
     * [Option 2: Upgrade only additional HPE Cray EX software products](#option-2-upgrade-only-additional-hpe-cray-ex-software-products)
@@ -25,6 +27,23 @@ These software stacks were validated with NVIDIA HPC SDK 24.3.
 
 The March 2025 HPE HPC continuous and extended software stack releases will be validated with NVIDIA HPC SDK 24.11.
 The March 2025 (CSM 1.6.1) software stacks will support all HPE Cray EX systems.
+
+### BOS data notice
+
+In CSM 1.6, BOS v1 is removed and the BOS API is enforcing various limits that previously had only been recommended.
+Most of these limits are unlikely to be violated in practice (for example, the `description` field of session templates
+is limited to 1023 characters in length).
+
+When first upgrading to CSM 1.6, all BOS v1 session data is deleted, and all other BOS data is checked for
+compliance with the API specification. It will attempt to automatically convert data to be in compliance with the
+specification (for example, by truncating `description` fields that are longer than 1023 characters), but in rare
+cases it may delete data. In general, if the migration deletes a session template, then it likely contains a fatal problem that
+would have prevented it from working.
+
+Regardless of the upgrade path that is used, a backup of the current BOS data is made before the BOS service is upgraded,
+and a snapshot of the BOS data is also taken after the data migration completes. Both of these are uploaded to S3,
+in either the `config-data` or `vbis` buckets. In addition, the `cray-bos-migration-` Kubernetes pod log contains a record
+of any changes that were made during the migration. This pod log is also collected as part of the post-migration snapshot.
 
 ## CSM major/minor version upgrade
 
