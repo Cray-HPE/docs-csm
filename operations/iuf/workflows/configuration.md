@@ -52,7 +52,27 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
 1. Edit the `compute-and-uan-bootprep.yaml` and `management-bootprep.yaml` files to account for any site deviations from the default values. For example:
     - Comment out the `slurm-site` CFS configuration layer and uncomment the `pbs-site` CFS configuration layer in `compute-and-uan-bootprep.yaml` if PBS is the preferred workload manager
     - Comment out the SBPS `rootfs_provider` and `rootfs_provider_passthrough` parameters and uncomment the CPS `rootfs_provider` and `rootfs_provider_passthrough` parameters, if DVS with CPS is the preferred method to project content.
-    - Uncomment the `gpu-{{recipe.version}}` CFS configuration layer and `gpu-image` image definition in `compute-and-uan-bootprep.yaml` if the system has GPU hardware
+    - Comment the several sections with GPU_SUPPORT (between BEGIN_GPU_SUPPORT and END_GPU_SUPPORT) tags if the system has no GPU hardware.
+        The sections are identified with BEGIN_GPU_SUPPORT and END_GPU_SUPPORT comments like this example.
+
+        ```bash
+        # The gpu_customize_driver_playbook.yml playbook will install GPU driver and
+        # SDK/toolkit software into the compute boot image if GPU content is available
+        # in the expected Nexus repo targets. If GPU content has not been uploaded to
+        # Nexus this play will be skipped automatically. If GPU content is available in
+        # Nexus but a non-gpu image is wanted this layer can be commented out.
+        #BEGIN_GPU_SUPPORT
+          - name: uss-gpu-customize-driver-playbook-{{uss.working_branch}}
+            playbook: gpu_customize_driver_playbook.yml
+            product:
+              name: uss
+              version: "{{uss.version}}"
+              branch: "{{uss.working_branch}}"
+            special_parameters:
+              ims_require_dkms: true
+        #END_GPU_SUPPORT
+        ```
+
     - Comment out any CFS configuration layers in `compute-and-uan-bootprep.yaml` and `management-bootprep.yaml` files for products that are not needed on the system
     - Any other changes needed to reflect site preferences
 
