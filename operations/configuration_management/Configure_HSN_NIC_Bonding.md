@@ -32,11 +32,11 @@ The "How to create a bonded IP host interface with HPE Slingshot" document is av
 
 ## Prerequisites
 
-The following steps should have occurred before configuring a bonded interface on a NCN worker node.
+The following steps should have occurred before configuring a bonded interface on an NCN worker node.
 
-* The Slingshot Fabric Manager is installed and configured.
-* The Slingshot Host Software is installed and an image containing it has been deployed to the NCN worker nodes.
-* The User Services Software is installed and an image containing it has been deployed to the NCN worker nodes.
+* Slingshot Fabric Manager is installed and configured.
+* Slingshot Host Software is installed and an image containing it has been deployed to the NCN worker nodes.
+* User Services Software is installed and an image containing it has been deployed to the NCN worker nodes.
 * Link Aggregation Groups (LAG) have been created using the Slingshot Fabric Manager.
     * An IP address and netmask have been provided by the fabric administrator.
     * The bonding mode used for the LAG has been provided by the fabric administrator.
