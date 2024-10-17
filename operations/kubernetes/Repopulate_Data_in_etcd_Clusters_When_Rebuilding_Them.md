@@ -9,7 +9,6 @@ That data needs to be repopulated in order for the cluster to go back to a healt
     - [Procedures](#procedures)
         - [BOS](#bos)
         - [BSS](#bss)
-        - [CPS](#cps)
         - [FAS](#fas)
         - [HMNFD](#hmnfd)
 
@@ -19,7 +18,6 @@ The following services need their data repopulated in the etcd cluster:
 
 - Boot Orchestration Service \(BOS\)
 - Boot Script Service \(BSS\)
-- Content Projection Service \(CPS\)
 - Firmware Action Service \(FAS\)
 - HMS Notification Fanout Daemon \(HMNFD\)
 - Mountain Endpoint Discovery Service \(MEDS\)
@@ -32,7 +30,6 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
 
 - [BOS](#bos)
 - [BSS](#bss)
-- [CPS](#cps)
 - [FAS](#fas)
 - [HMNFD](#hmnfd)
 
@@ -48,15 +45,6 @@ Boot preparation information for other product streams can be found in the follo
 ### BSS
 
 Restore BSS from the ETCD backup see [Restore an ETCD Cluster from a Backup](Restore_an_etcd_Cluster_from_a_Backup.md)
-
-### CPS
-
-Repopulate clusters for CPS.
-
-- If there are no clients using CPS when the etcd cluster is rebuilt, then nothing needs to be done other than to rebuild the cluster and make sure all of the components are up and running.
-  See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md) for more information.
-- If any clients have already mounted content provided by CPS, that content should be unmounted before rebuilding the etcd cluster, and then re-mounted after the etcd cluster is rebuilt.
-  Compute nodes that use CPS to access their root file system must be shut down to unmount, and then booted to perform the re-mount.
 
 ### FAS
 

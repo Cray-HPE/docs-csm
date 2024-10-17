@@ -523,8 +523,7 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate [
 
 #### Check DVS
 
-There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and their waiter, and at least one `cray-cps-cm-pm` pod.
-Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w003` and other worker nodes.
+There should be one or more `cray-cps` pods.
 
 1. (`ncn-mw#`) Verify that the `cray-cps` pods on worker nodes are `Running`.
 
@@ -536,12 +535,6 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
 
     ```text
     services   cray-cps-75cffc4b94-j9qzf    2/2  Running   0   42h 10.40.0.57  ncn-w001
-    services   cray-cps-cm-pm-g6tjx         5/5  Running   21  41h 10.42.0.77  ncn-w003
-    services   cray-cps-cm-pm-kss5k         5/5  Running   21  41h 10.39.0.80  ncn-w002
-    services   cray-cps-etcd-knt45b8sjf     1/1  Running   0   42h 10.42.0.67  ncn-w003
-    services   cray-cps-etcd-n76pmpbl5h     1/1  Running   0   42h 10.39.0.49  ncn-w002
-    services   cray-cps-etcd-qwdn74rxmp     1/1  Running   0   42h 10.40.0.42  ncn-w001
-    services   cray-cps-wait-for-etcd-jb95m 0/1  Completed
     ```
 
 1. (`ncn-w#`) SSH to each worker node running [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps)/DVS, and
