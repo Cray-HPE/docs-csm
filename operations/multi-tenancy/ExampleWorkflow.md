@@ -26,7 +26,6 @@
     * [Create BOS session template](#create-bos-session-template)
     * [Create CFS configuration](#create-cfs-configuration)
     * [Boot and Run](#boot-and-run)
-    * [Slurm version update](#slurm-version-update)
 * [Status and Troubleshooting](#status-and-troubleshooting)
     * [Tenant command examples](#tenant-command-examples)
     * [`SlurmCluster` command examples](#slurmcluster-command-examples)
@@ -250,7 +249,7 @@ After initial creation, the `SlurmCluster` resource may be updated with new
 settings. This is useful to correct errors with the initial deployment, or
 to update to new Slurm versions.
 
-1. (`ncn-mw#`) Edit the `SlurmCluster` yaml file (example `devcls01a.yaml`)
+1. (`ncn-mw#`) Edit the `SlurmCluster` file (example `devcls01a.yaml`)
 1. (`ncn-mw#`) Apply the changes:
 
    ```bash
@@ -262,7 +261,7 @@ to update to new Slurm versions.
 
 For example, if a new version of Slurm is installed on the system, the tenant
 can update to the new Slurm version by setting new container versions in the
-`SlurmCluster` yaml file and applying the changes.
+`SlurmCluster` file and applying the changes.
 
 ## Step-by-Step Guide
 
