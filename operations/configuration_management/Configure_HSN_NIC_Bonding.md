@@ -19,35 +19,35 @@ merely an automation of the manual steps outlined in the "How to create a bonded
 
 ## References
 
-The "How to create a bonded IP host interface with HPE Slingshot" document is available from the HPE Support Portal. The other documentation is bundled with the HPE Slingshot software download.
+The _How to create a bonded IP host interface with HPE Slingshot_ document is available from the HPE Support Portal. The other documentation is bundled with the HPE Slingshot software download.
 
-* HPE Slingshot Installation Guide for CSM
-* HPE Slingshot Administration Guide
+* _HPE Slingshot Installation Guide for CSM_
+* _HPE Slingshot Administration Guide_
 * [How to create a bonded IP host interface with HPE Slingshot](https://support.hpe.com/hpesc/public/docDisplay?docId=dp00004881en_us&docLocale=en_US)
 
 ## Limitations
 
-* This procedure is only supported on nodes with HPE Cassini interfaces.
+* This procedure is only supported on nodes with HPE Slingshot 200Gbps interfaces.
 * More than one bonded interface per NCN worker node is not supported.
 
 ## Prerequisites
 
 The following steps should have occurred before configuring a bonded interface on an NCN worker node.
 
-* Slingshot Fabric Manager is installed and configured.
-* Slingshot Host Software is installed and an image containing it has been deployed to the NCN worker nodes.
-* User Services Software is installed and an image containing it has been deployed to the NCN worker nodes.
-* Link Aggregation Groups (LAG) have been created using the Slingshot Fabric Manager.
+* HPE Slingshot Fabric Manager is installed and configured.
+* Slingshot Host Software (SHS) is installed and an image containing it has been deployed to the NCN worker nodes.
+* User Services Software (USS) is installed and an image containing it has been deployed to the NCN worker nodes.
+* Link Aggregation Groups (LAG) have been created using the HPE Slingshot Fabric Manager.
     * An IP address and netmask have been provided by the fabric administrator.
     * The bonding mode used for the LAG has been provided by the fabric administrator.
-    * The DMAC used for the LAG has been provided by the fabric administrator (See "How to create a bonded IP host interface with HPE Slingshot") for more information.
+    * The DMAC used for the LAG has been provided by the fabric administrator (See the _How to create a bonded IP host interface with HPE Slingshot_ document) for more information.
 
 ## Setup
 
 ### Fabric configuration
 
-Configuring a LAG using the Slingshot Fabric Manager is beyond the scope of this document (See the Link Aggregation section of the
-"HPE Slingshot Installation Guide for CSM" for more information) however the following example configuration is provided for the
+Configuring a LAG using the HPE Slingshot Fabric Manager is beyond the scope of this document (See the "Link Aggregation" section of the
+_HPE Slingshot Installation Guide for CSM_ for more information), however the following example configuration is provided for the
 purpose of illustration.
 
 ```json
@@ -404,14 +404,14 @@ succeeded = "none"
 Refer to [View Configuration Session Logs](./View_Configuration_Session_Logs.md) to troubleshoot why the CFS session failed to complete successfully.
 
 If the underlying HSN interfaces are not up or present refer to the Slingshot documentation listed in [References](#references) to verify the fabric is healthy.
-Troubleshooting Slingshot is beyond the scope of this document.
+Troubleshooting HPE Slingshot is beyond the scope of this document. See the _HPE Slingshot Troubleshooting Guide_ for troubleshooting information.
 
 ## Additional steps
 
 This procedure performs a one time configuration of the target nodes. The bonded HSN configuration will persist through a reboot of the node but a rebuild of the node
 will wipe it.
 
-In order to persist this configuration through a rebuild of the node, the CFS layer should be added to the CFS configuration used for the NCN Worker nodes.
+In order to persist this configuration through a rebuild of the node, the CFS layer should be added to the CFS configuration used for the NCN worker nodes.
 It may also be desirable to add this layer to the `site_vars.yaml` as well as any bootprep file used for `sat bootprep` to ensure that the `update-cfs-configuration` stage
 of IUF does not remove this layer.
 
