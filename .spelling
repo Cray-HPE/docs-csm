@@ -97,6 +97,7 @@ Argo
 Arista
 Artifactory
 ArubaOS-CX
+BEGIN_GPU_SUPPORT
 BGP
 BMC
 BMCs
@@ -177,6 +178,7 @@ DVS-specific
 DellOS
 Docker
 Dockerfile
+END_GPU_SUPPORT
 EX
 EX-1C
 EX2500
@@ -188,6 +190,7 @@ Foxconn
 Frontend
 GBs
 GPFS
+GPU_SUPPORT
 GbE
 Gbs
 Gen10
