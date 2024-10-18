@@ -35,8 +35,8 @@ In addition, the following general criteria describe the expected behavior of th
   by the loss of an NCN master, worker, or storage node. Applications launched through PALS may show error messages and lost output if a worker node goes down during application runtime.
 - If an NCN worker node goes down, it will take between 4 and 5 minutes before most of the pods which had been running on the downed NCN will begin terminating. This is a predefined Kubernetes behavior, not something inherent to HPE Cray EX.
 - Within around 20 minutes or less, it should be possible to launch a job using a UAI or UAN after planned or unplanned outages characterized by the loss of an NCN master, worker, or storage node.
-  - In the case of a UAN, the recovery time is expected to be quicker. However, launching a UAI after an NCN outage means that some UAI pods may need to relocate to other NCN worker nodes.
-    The status of those new UAI pods will remain unready until all necessary content has been loaded on the new NCN that the UAI is starting up on. This process can take approximately 10 minutes.
+    - In the case of a UAN, the recovery time is expected to be quicker. However, launching a UAI after an NCN outage means that some UAI pods may need to relocate to other NCN worker nodes.
+      The status of those new UAI pods will remain unready until all necessary content has been loaded on the new NCN that the UAI is starting up on. This process can take approximately 10 minutes.
 - Within around 20 minutes or less, it should be possible to boot and configure compute nodes after planned or unplanned outages characterized by the loss of an NCN master, worker, or storage node.
 
 - At least three utility storage nodes provide persistent storage for the services running on the Kubernetes management nodes. When one of the utility storage nodes goes down,
@@ -48,8 +48,6 @@ In addition, the following general criteria describe the expected behavior of th
   should be at least two other etcd pods \(from the cluster of 3\) running on other NCN worker nodes. Additionally, any pods that are part of a stateful set will not migrate off a worker node
   when it goes down. Those are expected to stay on the node and also remain in the terminated state until the NCN worker nodes comes back up or unless deliberate action is taken to force that
   pod off the NCN worker node which is down.
-  - The `cps-cm-pm` pods are part of a DaemonSet and they only run on designated nodes. When the node comes back up the containers will be restarted and service restored. Refer to
-    "Content Projection Service \(CPS\)" in the Cray Operating System \(COS\) product stream documentation for more information on changing node assignments.
 - After an NCN worker, storage, or master node goes down, if there are issues with launching a UAI session or booting compute nodes, that does not necessarily mean that the problem is due to a
   worker node being down. If possible, it is advised to also check the relevant "Compute Node Boot Troubleshooting Information" and [User Access Service](../UAS_user_and_admin_topics/README.md)
   (specifically with respect to [Troubleshoot UAS Issues](../UAS_user_and_admin_topics/Troubleshoot_UAS_Issues.md)) procedures. Those sections can give guidance around general known issues and
@@ -67,8 +65,8 @@ However, it is important to note that some pods, when running on a worker NCN th
 pods. Work is ongoing to correct these issues in a future release.
 
 - **Nexus pod**
-  - The nexus pod is a single pod deployment and serves as our image repository. If it is on an NCN worker node that goes down, it will attempt to start up on another NCN worker node. However, it
-    is likely that it can also encounter the `Multi-Attach error for volume` error that can be seen in the `kubectl describe` output for the pod that is trying to come up on the new node.
+    - The nexus pod is a single pod deployment and serves as our image repository. If it is on an NCN worker node that goes down, it will attempt to start up on another NCN worker node. However, it
+      is likely that it can also encounter the `Multi-Attach error for volume` error that can be seen in the `kubectl describe` output for the pod that is trying to come up on the new node.
 
     1. To determine if this is happening, run the following:
 
@@ -87,8 +85,8 @@ pods. Work is ongoing to correct these issues in a future release.
        running on the new NCN worker node.
 
 - **High-speed network resiliency after `ncn-w001` goes down**
-  - The `slingshot-fabric-manager` pod running on one of NCNs does not rely on `ncn-w001`. If `ncn-w001` goes down, the `slingshot-fabric-manager` pods should not be impacted as the pod is runs on other NCNs, such as `ncn-w002`.
-  - The `slingshot-fabric-manager` pod relies on Kubernetes to launch the new pod on another NCN if the `slingshot-fabric-manager` pod is running on `ncn-w001` when it is brought down.
+    - The `slingshot-fabric-manager` pod running on one of NCNs does not rely on `ncn-w001`. If `ncn-w001` goes down, the `slingshot-fabric-manager` pods should not be impacted as the pod is runs on other NCNs, such as `ncn-w002`.
+    - The `slingshot-fabric-manager` pod relies on Kubernetes to launch the new pod on another NCN if the `slingshot-fabric-manager` pod is running on `ncn-w001` when it is brought down.
 
       Use the following command and check the `NODE` column to check which NCN the pod is running on:
 
@@ -96,12 +94,12 @@ pods. Work is ongoing to correct these issues in a future release.
       kubectl get pod -n services -o wide | awk 'NR == 1 || /slingshot-fabric-manager/'
       ```
 
-  - When the `slingshot-fabric-manager` pod goes down, the switches will continue to run. Even if the status of the switches changes, those changes will be picked up after the
+    - When the `slingshot-fabric-manager` pod goes down, the switches will continue to run. Even if the status of the switches changes, those changes will be picked up after the
     `slingshot-fabric-manager` pod is brought back up and the sweeping process restarts.
-  - The `slingshot-fabric-manager` relies on data in persistent storage. The data is persistent across upgrades but when the pods are deleted, the data is also deleted.
+    - The `slingshot-fabric-manager` relies on data in persistent storage. The data is persistent across upgrades but when the pods are deleted, the data is also deleted.
 
 - **RTS fails to start after worker node is restarted**
-  - If RTS was running on the worker node and it has not started Running, then see [RTS fails to start after worker node is restarted](../../troubleshooting/known_issues/rts_fails_to_start_after_worker_node_restart.md)
+    - If RTS was running on the worker node and it has not started Running, then see [RTS fails to start after worker node is restarted](../../troubleshooting/known_issues/rts_fails_to_start_after_worker_node_restart.md)
 
 ## Future Resiliency Improvements
 
