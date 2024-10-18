@@ -249,7 +249,7 @@ After initial creation, the `SlurmCluster` resource may be updated with new
 settings. This is useful to correct errors with the initial deployment, or
 to update to new Slurm versions.
 
-1. (`ncn-mw#`) Edit the `SlurmCluster` file (example `devcls01a.yaml`)
+1. (`ncn-mw#`) Edit the `SlurmCluster` file (For example, `devcls01a.yaml`).
 1. (`ncn-mw#`) Apply the changes:
 
    ```bash
@@ -308,7 +308,7 @@ Filename:  `devten01a.yaml`
 
 Repeat this step as needed for additional tenants.
 
-### Create and apply `SlurmCluster` configuration file
+### Create and apply the `SlurmCluster` configuration file
 
 Filename:  `devcls01a.yaml`
 
@@ -777,7 +777,7 @@ After CFS completes, login to either a tenant UAN (if available), or tenant Comp
 
 ### Appendix C - Slurm configuration
 
-First, you are responsible for divvying up the Slingshot VNI space among the primary `SlurmCluster` ('user' namespace) and any tenant `SlurmClusters`.
+First, you are responsible for divvying up the HPE Slingshot VNI space among the primary `SlurmCluster` ('user' namespace) and any tenant `SlurmClusters`.
 Start with the primary `SlurmCluster`, and then configure each tenant.
 Here is an example for primary and one tenant:
 
