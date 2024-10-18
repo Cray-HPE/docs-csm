@@ -443,3 +443,6 @@ and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/matc
 
     When end user encounters the above issue for signature verification then the solution is to restart the Kyverno pods.
     Follow the commands mentioned in [Restart Kyverno](https://release-1-10-0.kyverno.io/docs/troubleshooting/)
+
+    Incase the issue still persists after restarting the Kyverno pods, we recommend to disable the background scanning in the Kyverno policy.
+    Set `background` to `false` to disable background scanning in the Kyverno policy
