@@ -381,7 +381,7 @@ refer to [BOS Session Templates](../../boot_orchestration/Session_Templates.md).
 
 Here is an example of a BOS session template that refers to an existing IMS
 image by name and targets nodes with the role `Compute` and the architecture
-`X86` in HSM:
+`X86` in HSM. This session template uses CPS as the `rootfs_provider`:
 
 ```yaml
 session_templates:
@@ -400,6 +400,30 @@ session_templates:
         rootfs_provider: cpss3
         rootfs_provider_passthrough: dvs:api-gw-service-nmn.local:300:nmn0
 ```
+
+Here is an example of a BOS session template that refers to an existing IMS
+image by name and targets nodes with the role `Compute` and the architecture
+`X86` in HSM. This session template uses SBPS as the `rootfs_provider`:
+
+```yaml
+session_templates:
+- name: example-session-template
+  image:
+    ims:
+      name: example-image
+  configuration: example-configuration
+  bos_parameters:
+    boot_sets:
+      example_boot_set:
+        arch: X86
+        kernel_parameters: ip=dhcp quiet
+        node_roles_groups:
+        - Compute
+        rootfs_provider: sbps
+        rootfs_provider_passthrough: sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.{{default.system-name}}.{{default.site-domain}}:300
+```
+
+(**Note:** Make sure to define the values for `system-name`and `site-domain` in the `site-vars.yaml` file.)
 
 Here is an example of a BOS session template that refers to an image from the
 input file by its `ref_name` and targets nodes with the role `Compute` and the
@@ -486,6 +510,7 @@ input file support rendering as a Jinja2 template and thus support variables:
   `session_templates` key:
     - `name`
     - `configuration`
+    - `bos_parameters.boot_sets.BOOT_SET_NAME.rootfs_provider_passthrough`
 
 Jinja2 built-in filters may be used in values of any of the keys listed above.
 (**Note:** When the value of a key in the bootprep input file is a Jinja2
