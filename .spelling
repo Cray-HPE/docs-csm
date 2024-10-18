@@ -29,6 +29,18 @@ DaemonSet
 DaemonSets
 StatefulSet
 StatefulSets
+VictoriaMetrics
+Vmagent
+Vmalert
+Vminsert
+Vmselect
+Vmstorage
+vmstorage
+vmalert
+vmselect
+victoria
+kubectl
+kubelet
 
 
 1.0.x
@@ -1070,9 +1082,6 @@ Init
 - operations/system_configuration_service/Set_BMC_Credentials.md
 # To allow System Admin Toolkit
 Admin
-
-- operations/system_management_health/Configure_Prometheus_Alerta_Alert_Notifications.md
-Alerta
 
 - operations/system_management_health/thanos.md
 gRPC
