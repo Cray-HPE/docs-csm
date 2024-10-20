@@ -532,7 +532,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 
     # Skopeo image is stored as "skopeo:csm-${CSM_RELEASE}", which may resolve to docker.io/lirary/skopeo or quay.io/skopeo, depending on configured shortcuts
     SKOPEO_IMAGE=$(podman load -q -i "${CSM_ARTI_DIR}/vendor/skopeo.tar" 2> /dev/null | sed -e 's/^.*: //')
-    nexus_images=$(yq r -j "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-precache-images).values.cacheImages' | jq -r '.[] | select( . | contains("nexus"))')
+    nexus_images=$(yq r -j "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-precache-images).values.cacheImages' | jq -r '.[] | select( . | contains("nexus")) | sub("^registry\\.local/"; "")')
     worker_nodes=$(grep -oP "(ncn-w\d+)" /etc/hosts | sort -u)
     while read -r nexus_image; do
       echo "Uploading $nexus_image into Nexus ..."
@@ -547,7 +547,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
         "docker://registry.local/${nexus_image}"
       while read -r worker_node; do
         echo "Pre-caching image ${nexus_image} on node ${worker_node}"
-        ssh -n "${worker_node}" "crictl pull ${nexus_image}"
+        ssh -n "${worker_node}" "crictl pull ${nexus_image}; ctr -n k8s.io images tag ${nexus_image} registry.local/${nexus_image}"
       done <<< "${worker_nodes}"
     done <<< "${nexus_images}"
   } >> "${LOG_FILE}" 2>&1
@@ -590,11 +590,6 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
-
-# Upgrade Kyverno charts before istio to avoid webhook timeouts
-do_upgrade_csm_chart cray-kyverno platform.yaml
-do_upgrade_csm_chart kyverno-policy platform.yaml
-do_upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
 
 # Pre-cache images needed for istio upgrade. As soon as cray-istio-deploy is upgraded, network
 # connection to nexus will be broken, due to istio proxy and istiod versions mismatch. Upgrade of
@@ -688,6 +683,12 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
+
+# Kyverno charts may be in separate manifest or in platform
+kyverno_manifest=$(test -f "${CSM_MANIFESTS_DIR}/kyverno.yaml" && echo kyverno.yaml || echo platform.yaml)
+do_upgrade_csm_chart cray-kyverno "${kyverno_manifest}"
+do_upgrade_csm_chart kyverno-policy "${kyverno_manifest}"
+do_upgrade_csm_chart cray-kyverno-policies-upstream "${kyverno_manifest}"
 
 # Note for csm 1.5/k8s 1.22 only if ANY chart depends on /v1 cert-manager api
 # usage it *MUST* come after this or prerequisites will fail on an upgrade.
@@ -830,8 +831,13 @@ EOF
         sleep ${lim}
       done
 
+      # cray-drydock may have been moved into kyverno.yaml
+      manifest=$(test -f "${CSM_MANIFESTS_DIR}/kyverno.yaml" && echo kyverno.yaml || echo platform.yaml)
+      printf "    -\n" >> "${tmp_manifest}"
+      yq r "${CSM_MANIFESTS_DIR}/${manifest}" 'spec.charts.(name=='cray-drydock')' | sed 's/^/      /' >> "${tmp_manifest}"
+
       platform="${CSM_MANIFESTS_DIR}/platform.yaml"
-      for chart in cray-drydock cray-certmanager cray-certmanager-issuers; do
+      for chart in cray-certmanager cray-certmanager-issuers; do
         printf "    -\n" >> "${tmp_manifest}"
         yq r "${platform}" 'spec.charts.(name=='${chart}')' | sed 's/^/      /' >> "${tmp_manifest}"
       done
@@ -886,7 +892,9 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-do_upgrade_csm_chart cray-drydock platform.yaml
+# cray-drydock may have been moved into kyverno.yaml
+manifest=$(test -f "${CSM_MANIFESTS_DIR}/kyverno.yaml" && echo kyverno.yaml || echo platform.yaml)
+do_upgrade_csm_chart cray-drydock "${manifest}"
 do_upgrade_csm_chart cray-sysmgmt-health platform.yaml
 do_upgrade_csm_chart cray-tftp sysmgmt.yaml
 do_upgrade_csm_chart cray-tftp-pvc sysmgmt.yaml
