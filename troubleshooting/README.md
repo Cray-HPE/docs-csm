@@ -68,6 +68,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
 * [PCS and CAPMC Transaction Size Limitation](known_issues/pcs_and_capmc_transaction_size_limitation.md)
 * [Istio-Proxy failing with too many open files](known_issues/Istio-Proxy_failing_with_too_many_open_files.md)
+* [IMS image delete loses the `arch` information](known_issues/ims_image_delete_loses_arch.md)
 
 ## Booting
 

@@ -554,6 +554,7 @@ iSCSI
 in_progress
 inband
 init
+initrd
 iscsi
 keychain
 known_hosts

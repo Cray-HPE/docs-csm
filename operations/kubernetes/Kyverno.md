@@ -432,3 +432,17 @@ and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/matc
 * [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)
 * [No event is generated in case of mutation policy being applied to a resource](https://github.com/kyverno/kyverno/issues/2160)
 * [Inaccurate annotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
+* Kyverno failed to verify `tls` certificate for signature verification from CSM 1.6 and above
+
+    ```bash
+    10m         Warning   PolicyViolation   pod/canu-test-6ff597df6d-fbnbd   policy check-image/check-image fail: failed to 
+    verify image registry.local/artifactory.algol60.net/csm-docker/stable/cray-canu/canu-test:1.6.36: 
+    .attestors[0].entries[0].keys: Get "https://registry.local/v2/": tls: failed to verify certificate: x509: certificate 
+    signed by unknown authority
+    ```
+
+    When end user encounters the above issue for signature verification then the solution is to restart the Kyverno pods.
+    Follow the commands mentioned in [Restart Kyverno](https://release-1-10-0.kyverno.io/docs/troubleshooting/)
+
+    Incase the issue still persists after restarting the Kyverno pods, we recommend to disable the background scanning in the Kyverno policy.
+    Set `background` to `false` to disable background scanning in the Kyverno policy

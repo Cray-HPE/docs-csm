@@ -22,8 +22,6 @@ Worker nodes should host the following mount point:
 /var/lib/cps-local/boot-images (boot-images S3 bucket)
 ```
 
-**Note:** If this mount is missing, the `cray-cps-cm-pm` pods may be unhealthy (in the `CrashLoopBackoff` state). Proceed to Step 1 to resolve the issue.
-
 ## Step 1: Verify Mounts are Present
 
 ### Verify Mount Points on Master Nodes

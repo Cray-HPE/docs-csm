@@ -37,7 +37,7 @@ Follow the steps in only one of the sections below:
     AUTH_FQDN="auth.cmn.${SYSTEM_NAME}.${SITE_DOMAIN}"
 
     function get_master_token {
-      curl -ks -d client_id=admin-cli -d username="${MASTER_USERNAME}" -d password="${MASTER_PASSWORD}" \
+      curl -ks -d client_id=admin-cli -d username="${MASTER_USERNAME}" --data-urlencode password="${MASTER_PASSWORD}" \
           -d grant_type=password "https://${AUTH_FQDN}/keycloak/realms/master/protocol/openid-connect/token" | \
         jq -r .access_token
     }

@@ -2,15 +2,17 @@
 
 This page is designed to cover various issues that arise when trying to PXE boot nodes in an HPE Cray EX system.
 
-- [Configuration required for PXE booting](#configuration-required-for-pxe-booting)
-- [Switch configuration](#switch-configuration)
-  - [Aruba configuration](#aruba-configuration)
-  - [Mellanox configuration](#mellanox-configuration)
-- [Next steps](#next-steps)
-  - [Node iPXE retries and NIC order](#node-ipxe-retries-and-nic-order)
-  - [Restart BSS](#restart-bss)
-  - [Restart Kea](#restart-kea)
-  - [Missing BSS data](#missing-bss-data)
+- [PXE Boot Troubleshooting](#pxe-boot-troubleshooting)
+    - [Configuration required for PXE booting](#configuration-required-for-pxe-booting)
+    - [Switch configuration](#switch-configuration)
+        - [Aruba configuration](#aruba-configuration)
+        - [Mellanox configuration](#mellanox-configuration)
+    - [Next steps](#next-steps)
+        - [Kernel panic when unpacking initrd](#kernel-panic-when-unpacking-initrd)
+        - [Node iPXE retries and NIC order](#node-ipxe-retries-and-nic-order)
+        - [Restart BSS](#restart-bss)
+        - [Restart Kea](#restart-kea)
+        - [Missing BSS data](#missing-bss-data)
 
 In order for PXE booting to work successfully, the management network switches need to be configured correctly.
 
@@ -232,7 +234,38 @@ To successfully PXE boot nodes, the following is required:
 
 ## Next steps
 
-If the configuration looks good and PXE boot is still not working, then there are some other things to try.
+If the configuration looks good and PXE boot is still not working, there are some other things to try.
+
+### Kernel panic when unpacking initrd
+
+In rare cases, when a node is PXE booting it may kernel panic when unpacking the `initrd`. The error message will be similar to the following, but may vary depending on a number of factors including the kernel and hardware in use.
+
+```text
+...
+http://rgw-vip.nmn/boot-images/9e2032aa-2e1d-4cd5-acb5-cb1ad7bac001/kernel... ok
+http://rgw-vip.nmn/boot-images/9e2032aa-2e1d-4cd5-acb5-cb1ad7bac001/initrd... ok
+DxeTpm2MeasureBootHandler: PeCoffLoaderGetImageInfo failed! Status = Unsupported
+Image path:
+"".
+[    0.554122][  T222] Initramfs unpacking failed: invalid magic at start of compressed archive
+[    1.202522][    T1] i8042: Can't read CTR while initializing i8042
+[    1.588403][    T1] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
+[    1.597815][    T1] CPU: 19 PID: 1 Comm: swapper/0 Not tainted 6.4.0-150600.23.17-default #1 SLE15-SP6
+[    1.611314][    T1] Hardware name: HPE ProLiant DL325 Gen10 Plus/ProLiant DL325 Gen10 Plus, BIOS A43 02/06/2023
+...
+```
+
+This is typically a transient issue and can be resolved by rebooting the node with `ipmitool`.
+
+>
+> `read -s` is used to prevent the password from being written to the screen or the shell history.
+>
+> ```bash
+> USERNAME=root
+> read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
+> export IPMI_PASSWORD
+> ipmitool -I lanplus -U "${USERNAME}" -E -H <bmc-hostname> power reset
+> ```
 
 ### Node iPXE retries and NIC order
 
