@@ -9,18 +9,18 @@ Different values may be be needed for systems as they scale.
 
 * [System domain name](#system-domain-name)
 * [`kubectl` events `OOMKilled`](#kubectl-events-oomkilled)
-* [Prometheus `CPUThrottlingHigh` alerts](#prometheus-cputhrottlinghigh-alerts)
+* [Vmstorage `CPUThrottlingHigh` alerts](#vmstorage-cputhrottlinghigh-alerts)
 * [Grafana "Kubernetes / Compute Resources / Pod" dashboard](#grafana-kubernetes--compute-resources--pod-dashboard)
     * [CPU throttling](#cpu-throttling)
     * [Memory usage](#memory-usage)
 * [Common customization scenarios](#common-customization-scenarios)
     * [Prerequisites](#prerequisites)
-    * [Prometheus pod is `OOMKilled` or CPU throttled](#prometheus-pod-is-oomkilled-or-cpu-throttled)
+    * [Vmstorage pod is `OOMKilled` or CPU throttled](#vmstorage-pod-is-oomkilled-or-cpu-throttled)
     * [Postgres pods are `OOMKilled` or CPU throttled](#postgres-pods-are-oomkilled-or-cpu-throttled)
     * [Scale `cray-bss` service](#scale-cray-bss-service)
     * [Scale `cray-dns-unbound` service](#scale-cray-dns-unbound-service)
     * [Postgres PVC resize](#postgres-pvc-resize)
-    * [Prometheus PVC resize](#prometheus-pvc-resize)
+    * [Vmstorage PVC resize](#vmstorage-pvc-resize)
     * [`cray-hms-hmcollector` pods are `OOMKilled`](#cray-hms-hmcollector-pods-are-oomkilled)
     * [`cray-cfs-api` pods are `OOMKilled`](#cray-cfs-api-pods-are-oomkilled)
     * [References](#references)
@@ -57,13 +57,11 @@ Check to see if there are any recent out of memory events.
 
 1. Search for the "Kubernetes / Compute Resources / Pod" dashboard to view the memory utilization graphs over time for any pod that has been `OOMKilled`.
 
-## Prometheus `CPUThrottlingHigh` alerts
+## Vmstorage `CPUThrottlingHigh` alerts
 
 Check Prometheus for recent `CPUThrottlingHigh` alerts.
 
-1. Log in to Prometheus at the following URL: `https://prometheus.cmn.SYSTEM_DOMAIN_NAME/`
-
-   1. Select the **Alert** tab.
+1. Log in to vmalert at the following URL: `https://vmselect.cmn.SYSTEM_DOMAIN_NAME/select/0/prometheus/vmalert/api/v1/alerts`
 
    1. Scroll down to the alert for `CPUThrottlingHigh`.
 
@@ -86,7 +84,7 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
    ```yaml
    datasource: default
    namespace: sysmgmt-health
-   pod: prometheus-cray-sysmgmt-health-kube-p-prometheus-0
+   pod: vmstorage-vms-0
    ```
 
 ### CPU throttling
@@ -122,12 +120,12 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
 ## Common customization scenarios
 
 * [Prerequisites](#prerequisites)
-* [Prometheus pod is `OOMKilled` or CPU throttled](#prometheus-pod-is-oomkilled-or-cpu-throttled)
+* [Vmstorage pods are `OOMKilled` or CPU throttled](#vmstorage-pod-is-oomkilled-or-cpu-throttled)
 * [Postgres pods are `OOMKilled` or CPU throttled](#postgres-pods-are-oomkilled-or-cpu-throttled)
 * [Scale `cray-bss` service](#scale-cray-bss-service)
 * [Scale `cray-dns-unbound` service](#scale-cray-dns-unbound-service)
 * [Postgres PVC resize](#postgres-pvc-resize)
-* [Prometheus PVC resize](#prometheus-pvc-resize)
+* [Vmstorage PVC resize](#vmstorage-pvc-resize)
 * [`cray-hms-hmcollector` pods are `OOMKilled`](#cray-hms-hmcollector-pods-are-oomkilled)
 * [`cray-cfs-api` pods are `OOMKilled`](#cray-cfs-api-pods-are-oomkilled)
 * [References](#references)
@@ -139,7 +137,7 @@ procedure for a specific chart. In these cases, the section on this page provide
 information necessary in order to carry out that procedure. It is recommended to keep both pages open
 in different browser windows for easy reference.
 
-### Prometheus pod is `OOMKilled` or CPU throttled
+### Vmstorage pod is `OOMKilled` or CPU throttled
 
 Update resources associated with Prometheus in the `sysmgmt-health` namespace.
 This example is based on what was needed for a system with 4000 compute nodes.
@@ -153,41 +151,41 @@ Follow the [Redeploying a Chart](Redeploying_a_Chart.md) procedure **with the fo
 
     **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-    1. Edit the customizations by adding or updating `spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources`.
+    1. Edit the customizations by adding or updating `spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmcluster.spec.vmstorage.resources`.
 
         * If the number of NCNs is less than 20, then:
 
             ```bash
-            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.cpu' --style=double '2'
-            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.memory' '15Gi'
-            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.cpu' --style=double '6'
-            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.memory' '30Gi'
+            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmcluster.spec.vmstorage.resources.requests.cpu' --style=double '4'
+            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmcluster.spec.vmstorage.resources.requests.memory' '8Gi'
+            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmcluster.spec.vmstorage.resources.limits.cpu' --style=double '8'
+            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmcluster.spec.vmstorage.resources.limits.memory' '16Gi'
             ```
 
         * If the number of NCNs is 20 or more, then:
 
             ```bash
-            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.cpu' --style=double '6'
-            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.memory' '50Gi'
-            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.cpu' --style=double '12'
-            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.memory' '60Gi'
+            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmcluster.spec.vmstorage.resources.requests.cpu' --style=double '6'
+            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmcluster.spec.vmstorage.resources.requests.memory' '16Gi'
+            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmcluster.spec.vmstorage.resources.limits.cpu' --style=double '12'
+            yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmcluster.spec.vmstorage.resources.limits.memory' '32Gi'
             ```
 
     1. Check that the customization file has been updated.
 
         ```bash
-        yq read customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources'
+        yq read customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmcluster.spec.vmstorage.resources'
         ```
 
         Example output:
 
         ```yaml
         requests:
-          cpu: "3"
-          memory: 15Gi
+          cpu: "4"
+          memory: 8Gi
         limits:
-          cpu: "6"
-          memory: 30Gi
+          cpu: "8"
+          memory: 16Gi
         ```
 
 * (`ncn-mw#`) When reaching the step to validate the redeployed chart, perform the following steps:
@@ -196,23 +194,24 @@ Follow the [Redeploying a Chart](Redeploying_a_Chart.md) procedure **with the fo
 
     1. Verify that the pod restarts and that the desired resources have been applied.
 
-        Watch the `prometheus-cray-sysmgmt-health-kube-p-prometheus-0` pod restart.
+        Watch the `vmstorage-vms` pods restart.
 
         ```bash
-        watch "kubectl get pods -n sysmgmt-health -l prometheus=cray-sysmgmt-health-kube-p-prometheus"
+        watch "kubectl get pods -n sysmgmt-health -l app.kubernetes.io/name=vmstorage"
         ```
 
-        It may take about 10 minutes for the `prometheus-cray-sysmgmt-health-kube-p-prometheus-0` pod to terminate.
+        It may take about 10 minutes for the `vmstorage-vms-*` pods to terminate.
         It can be forced deleted if it remains in the terminating state:
 
         ```bash
-        kubectl delete pod prometheus-cray-sysmgmt-health-kube-p-prometheus-0 --force --grace-period=0 -n sysmgmt-health
+        kubectl delete pod vmstorage-vms-0 --force --grace-period=0 -n sysmgmt-health
+        kubectl delete pod vmstorage-vms-1 --force --grace-period=0 -n sysmgmt-health
         ```
 
     1. Verify that the resource changes are in place.
 
         ```bash
-        kubectl get pod prometheus-cray-sysmgmt-health-kube-p-prometheus-0 -n sysmgmt-health -o json | jq -r '.spec.containers[] | select(.name == "prometheus").resources'
+        kubectl get pod vmstorage-vms-0 -n sysmgmt-health -o json | jq -r '.spec.containers[] | select(.name == "vmstorage").resources'
         ```
 
 * **Make sure to perform the entire linked procedure, including the step to save the updated customizations.**
@@ -525,9 +524,9 @@ Using the values from the above table, follow the [Redeploying a Chart](Redeploy
 
 * **Make sure to perform the entire linked procedure, including the step to save the updated customizations.**
 
-### Prometheus PVC resize
+### Vmstorage PVC resize
 
-Increase the PVC volume size associated with `prometheus-cray-sysmgmt-health-kube-p-prometheus` cluster in the `sysmgmt-health` namespace.
+Increase the PVC volume size associated with `vmstorage` cluster in the `sysmgmt-health` namespace.
 This example is based on what was needed for a system with more than 20 non compute nodes (NCNs). The PVC size can only ever be increased.
 
 Follow the [Redeploying a Chart](Redeploying_a_Chart.md) procedure **with the following specifications**:
@@ -538,16 +537,16 @@ Follow the [Redeploying a Chart](Redeploying_a_Chart.md) procedure **with the fo
 
     **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-    1. Edit the customizations by adding or updating `spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage`.
+    1. Edit the customizations by adding or updating `spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmcluster.spec.vmstorage.storage.volumeClaimTemplate.spec.resources.requests.storage`.
 
         ```bash
-        yq write -i customizations.yaml  'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage' '300Gi'
+        yq write -i customizations.yaml  'spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmcluster.spec.vmstorage.storage.volumeClaimTemplate.spec.resources.requests.storage' '300Gi'
         ```
 
     1. Check that the customization file has been updated.
 
         ```bash
-        yq read customizations.yaml  'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage'
+        yq read customizations.yaml  'spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmcluster.spec.vmstorage.storage.volumeClaimTemplate.spec.resources.requests.storage'
         ```
 
         Example output:
@@ -563,14 +562,14 @@ Follow the [Redeploying a Chart](Redeploying_a_Chart.md) procedure **with the fo
     Verify that the increased volume size has been applied.
 
     ```bash
-    watch "kubectl get pvc -n sysmgmt-health prometheus-cray-sysmgmt-health-kube-p-prometheus-db-prometheus-cray-sysmgmt-health-kube-p-prometheus-0"
+    watch "kubectl get pvc -n sysmgmt-health vmstorage-db-vmstorage-vms-0"
     ```
 
     Example output:
 
     ```text
-    NAME                                                                                                     STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS           AGE
-    prometheus-cray-sysmgmt-health-kube-p-prometheus-db-prometheus-cray-sysmgmt-health-kube-p-prometheus-0   Bound    pvc-bcb8f4f1-fb84-4b48-95c7-63508ef18962   200Gi      RWO            k8s-block-replicated   3d2h
+    NAME                                          STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS           AGE
+    vmstorage-db-vmstorage-vms-0                  Bound    pvc-092805e3-ac92-438e-b77b-a0639096f5f0   200Gi      RWO            k8s-block-replicated   3d2h
     ```
 
     At this point the Prometheus cluster is healthy, but additional steps are required to complete the resize of the Prometheus PVCs.

@@ -1,13 +1,13 @@
 # System Management Health Checks and Alerts
 
-A health check corresponds to a Prometheus query against metrics aggregated to the Prometheus instance. Core platform
+A health check corresponds to a VMalert query against metrics aggregated to the VMalert instance. Core platform
 components like Kubernetes and Istio collect service-related metrics by default, which enables the System Management
 Health service to implement generic service health checks without custom instrumentation. Health checks are intended to
 be coarse-grained and comprehensive, as opposed to fine-grained and exhaustive. Health checks related to infrastructure
 adhere to the Utilization Saturation Errors \(USE\) method whereas services follow the Rate Errors Duration \(RED\)
 method.
 
-Prometheus alerting rules periodically evaluate health checks and trigger alerts to Alertmanager, which manages
+VMalert alerting rules periodically evaluate health checks and trigger alerts to Alertmanager, which manages
 silencing, inhibition, aggregation, and sending out notifications. Alertmanager supports a number of notification
 options, but the most relevant ones are listed below:
 
@@ -15,13 +15,13 @@ options, but the most relevant ones are listed below:
 - Slack - Publishes notifications to a Slack channel
 - Webhook- Send an HTTP request to a configurable URL \(requires custom integration\)
 
-Similar to Prometheus metrics, alerts use labels to identify a particular dimensional instantiation, and the
+Similar to VictoriaMetrics, alerts use labels to identify a particular dimensional instantiation, and the
 Alertmanager dashboard enables operators to preemptively silence alerts based on them.
 
 ## Check Active Alerts from NCNs
 
-Prometheus includes the `/api/v1/alerts` endpoint, which returns a JSON object containing the active alerts. From a
-non-compute node \(NCN\), can connect to `sysmgmt-health/cray-sysmgmt-health-kube-p-prometheus` directly and bypass
+VMalert includes the `api/v1/alerts` endpoint, which returns a JSON object containing the active alerts. From a
+non-compute node \(NCN\), can connect to `vmalert-vms` directly and bypass
 service authentication and authorization.
 
 Obtain the cluster IP address:
@@ -33,46 +33,33 @@ kubectl -n sysmgmt-health get svc cray-sysmgmt-health-kube-p-prometheus
 Example output:
 
 ```text
-NAME                                    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
-cray-sysmgmt-health-kube-p-prometheus   ClusterIP   10.16.201.80   <none>        9090/TCP   2d6h
+NAME           TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+vmalert-vms   ClusterIP   10.21.216.162   <none>        8080/TCP   2d14h
 ```
 
 Get active alerts, which includes `KubeletTooManyPods` if it is going off:
 
 ```bash
-curl -s http://CLUSTER-IP:PORT/api/v1/alerts | jq . | grep -B 10 -A 20 KubeletTooManyPods
+curl 10.21.216.162:8080/api/v1/alerts | jq . | grep -B 10 -A 20 KubePersistentVolumeInodesFillingUp
 ```
 
 Example output:
 
 ```json
 {
-  "status": "success",
-  "data": {
-    "alerts": [
-      {
+ 
+  "state": "firing",
+        "name": "KubePersistentVolumeInodesFillingUp",
+        "value": "0",
         "labels": {
-          "alertname": "KubeletTooManyPods",
-          "endpoint": "https-metrics",
-          "instance": "10.252.1.6:10250",
+          "alertgroup": "kubernetes-storage",
+          "alertname": "KubePersistentVolumeInodesFillingUp",
+          "beta_kubernetes_io_arch": "amd64",
+          "beta_kubernetes_io_os": "linux",
+          "cluster": "cluster-name",
+          "group": "prometheus",
+          "instance": "ncn-w010",
           "job": "kubelet",
-          "namespace": "kube-system",
-          "node": "ncn-w003",
-          "prometheus": "kube-monitoring/cray-prometheus-operator-prometheus",
-          "prometheus_replica": "prometheus-cray-prometheus-operator-prometheus-0",
-          "service": "cray-prometheus-operator-kubelet",
-          "severity": "warning"
-        },
-        "annotations": {
-          "message": "Kubelet 10.252.1.6:10250 is running 107 Pods, close to the limit of 110.",
-          "runbook_url": "https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubelettoomanypods"
-        },
-        "state": "firing",
-        "activeAt": "2020-01-11T18:13:35.086499854Z",
-        "value": 107
-      },
-      {
-        "labels": {
 ```
 
 In the example above, the alert actually indicates it is getting close to the limit, but the value included in the alert

@@ -4,16 +4,16 @@ The primary goal of the System Management Health service is to enable system adm
 their system. Operators need to quickly and efficiently troubleshoot system issues as they occur and be confident that a
 lack of issues indicates the system is operating normally. This service currently runs as a Helm chart on the system's
 management Kubernetes cluster and monitors the health status of core system components, triggering alerts as potential
-issues are observed. It uses Prometheus to aggregate metrics from etcd, Kubernetes, Istio, and Ceph, all of which
+issues are observed. It uses VictoriaMetrics to aggregate metrics from etcd, Kubernetes, Istio, and Ceph, all of which
 include support for the Prometheus API. The System Management Health service relies on the following tools:
 
-- Prometheus is the standard cloud-native metrics and monitoring tool, which includes Alertmanager, a tool that handles
+- VictoriaMetrics is the standard cloud-native metrics and monitoring tool, which includes Alertmanager, a tool that handles
   alert duplication, silences, and notifications
-- The Prometheus operator provides custom resource definitions \(CRDs\) that make it easy to operate Prometheus and
+- The `victoria-metrics operator` provides custom resource definitions \(CRDs\) that make it easy to operate VictoriaMetrics and
   Alertmanager instances, scrape metrics from service endpoints, and trigger alerts
-- Grafana supports pulling data from Prometheus, and dashboards for system components are readily available from the
+- Grafana supports pulling data from VictoriaMetrics, and dashboards for system components are readily available from the
   open source community
-- The `stable/kube-prometheus-stack` Helm chart integrates the Prometheus operator, Prometheus, Alertmanager, Grafana,
+- The `victoria-metrics-k8s-stack` Helm chart integrates the victoria operator, VictoriaMetrics, Alertmanager, Grafana,
   node exporters \(DaemonSet\), and `kube-state-metrics` to provide a monitoring solution for Kubernetes clusters
 - Istio supports service mesh observability using Kiali
 
@@ -27,6 +27,6 @@ This service scrapes metrics from system components like Ceph, Kubernetes, and t
 - Independent retention and persistence settings based on needs for specific services; the current default configuration
   retains metrics for ten days at the top level and four hours at intermediate levels
 - Component-specific tooling for more detailed visibility:
-  - Grafana dashboards for Kubernetes
-  - Grafana dashboards and Kiali for Istio
-  - Grafana dashboards for Ceph
+    - Grafana dashboards for Kubernetes
+    - Grafana dashboards and Kiali for Istio
+    - Grafana dashboards for Ceph
