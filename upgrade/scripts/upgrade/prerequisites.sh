@@ -564,6 +564,8 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
     "${CSM_ARTI_DIR}/lib/setup-nexus.sh"
+    # Workaround: To make SAT commands work, use the command below as a WAR to update cray-sat container image
+    zypper update cray-sat-podman
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
