@@ -1094,6 +1094,20 @@ Expat-15
 # To allow Site Init
 Init
 
+- troubleshooting/known_issues/iuf_unable_to_run_next_stage.md
+_cm_backup.yaml
+activity
+argo
+cli
+configmap
+cray-nls
+current_state
+iuf
+kubectl
+o
+session_name
+yaml
+
 - operations/configuration_management/iSCSI_SBPS_Node_Personalization.md
 enablement
 LUNs
