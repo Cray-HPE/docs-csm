@@ -4,7 +4,7 @@
 * [iSCSI SBPS solution details](#iscsi-sbps-solution-details)
 * [Steps to achieve SBPS](#steps-to-achieve-sbps)
 * [Steps to switch from DVS to iSCSI](#steps-to-switch-from-dvs-to-iscsi)
-* [Steps to continue using DVS](#steps-to-continue-using-DVS-based-projection)
+* [Steps to continue using DVS](#steps-to-continue-using-dvs-based-projection)
 * [Glossary](#glossary)
 
 ## Introduction
@@ -432,8 +432,10 @@ HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE 
 If user wants to continue using DVS then during the BOS session template creation (manually using `cray bos` command)
 below parameter values have to be used:
 
-    rootfs_provider: "cpss3"
-    rootfs_provider_passthrough: "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0"
+```bash
+rootfs_provider: "cpss3"
+rootfs_provider_passthrough: "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0"
+```
 
 If `sat` command is used to create the BOS session template, then please comment out the two lines marked SBPS and uncomment the above
 two lines marked CPS in `vcs/bootprep/compute-and-uan-bootprep.yaml` and then initiate the compute/UAN node boot. Please refer the section
