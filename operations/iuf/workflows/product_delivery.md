@@ -33,6 +33,8 @@ Refer to that table and any corresponding product documents before continuing to
 
 > **`IMPORTANT`*** If upgrading CSM manually, ensure that the `docs-csm-latest.noarch.rpm` and `libcsm-latest.noarch.rpm` RPMs are available at path `/root/<rpm>` before executing the above command.
 
+**`NOTE`** Known Issue: If IUF reports that multiple sessions are in progress for an activity, refer to [IUF does not run the next stage for an activity.](../../../troubleshooting/known_issues/iuf_unable_to_run_next_stage.md)
+
 Once this step has completed:
 
 - Product content has been extracted from the product distribution files in `${MEDIA_DIR}`
