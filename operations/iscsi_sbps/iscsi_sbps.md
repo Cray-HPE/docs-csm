@@ -4,6 +4,7 @@
 * [iSCSI SBPS solution details](#iscsi-sbps-solution-details)
 * [Steps to achieve SBPS](#steps-to-achieve-sbps)
 * [Steps to switch from DVS to iSCSI](#steps-to-switch-from-dvs-to-iscsi)
+* [Steps to continue using DVS](#steps-to-coninue-using-DVS-based-projection)
 * [Glossary](#glossary)
 
 ## Introduction
@@ -31,7 +32,8 @@ In CSM 1.6, both DVS and SBPS will co-exist but SBPS will be default and DVS is 
 * Aligns with future plans for similar functionality in next generation systems management solutions
 * Easy to deploy and manage
 
-**Note:** Using HSN for boot content projection is recommended and use NMN for any debugging purposes. In the case of HSN not configured, then usage of NMN is recommended if it meets the bandwidth requirements.
+**Note:** Using HSN for boot content projection is recommended and use NMN for any debugging purposes.
+In the case of HSN isnot configured, then usage of NMN is recommended if it meets the bandwidth requirements.
 
 ## iSCSI SBPS solution details
 
@@ -291,7 +293,7 @@ sat bootprep run --vars-file "session_vars.yaml" --format json --bos-version v2 
 Please refer [BOS Session Template](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/system_admin_toolkit/usage/SAT_Bootprep.md)
 for further details.
 
-**Note:** This way of creating BOS session template uses vcs/bootprep/compute-and-uan-bootprep.yaml where SBPS will be chosen by default.
+**Note:** This way of creating BOS session template uses `vcs/bootprep/compute-and-uan-bootprep.yaml` where SBPS will be chosen by default.
 
 ### Image tagging
 
@@ -365,7 +367,8 @@ Or
 ```bash
 cray ims images update bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb --metadata-operation remove --metadata-key sbps-project
 ```
-**Note #1:** Please make sure to untag an image only with unused images. Untagging in-use images will stop the content projection by SBPS Marshal agent which may lead to any kind of failures with compute / UAN nodes. 
+
+**Note #1:** Please make sure to `untag` an image only with unused images. Untagging in-use images will stop the content projection by SBPS Marshal agent which may lead to any kind of failures with compute / UAN nodes.
 
 **Note #2:** As mentioned in `Image tagging` step, `rootfs` are tagged automatically by BOS, for untagging an image, we need to use above `craycli`
 utility of IMS as untagging of an image is not supported by BOS.
@@ -421,23 +424,25 @@ This involves below sequence of operations:
 * Uninstall CPS
 * Enable iSCSI SBPS
 
-To perform above opeations, please refer the section `Switch from DVS to iSCSI` documented in the publication
-_HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)_.
+To perform above operations, please refer the section `Switch from DVS to iSCSI` documented in the publication:
+HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063).
 
-## Steps to coninue using DVS based projection
+## Steps to continue using DVS based projection
 
 If user wants to continue using DVS then during the BOS session template creation (manually using `cray bos` command)
-below parameter values have to be used: 
+below parameter values have to be used:
 
-    rootfs_provider: "cpss3"
-    rootfs_provider_passthrough: "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0"     
+```
+rootfs_provider: "cpss3"
+rootfs_provider_passthrough: "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0"
+```
 
 If `sat` command is used to create the BOS session template, then please comment out the two lines marked SBPS and uncomment the above 
-two lines marked CPS in vcs/bootprep/compute-and-uan-bootprep.yaml and then initiate the compute/UAN node boot. Please refer the section
-`Content Projection Service` in the publication _HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray 
-EX Systems (S-8063)_ for more details on DVS based boot content projection of `rootfs`/`PE` images.
+two lines marked CPS in `vcs/bootprep/compute-and-uan-bootprep.yaml` and then initiate the compute/UAN node boot. Please refer the section
+`Content Projection Service` in the publication HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray 
+EX Systems (S-8063) for more details on DVS based boot content projection of `rootfs`/`PE` images.
 
-**Note:**: Rest of the steps in [Steps to achieve SBPS](#steps-to-achieve-sbps) viz., Image Tagging, Monitor iSCSI metrics need to be skipped. 
+**Note:**: Rest of the steps in [Steps to achieve SBPS](#steps-to-achieve-sbps) viz., Image Tagging, Monitor iSCSI metrics need to be skipped.
 
 ### Glossary
 
