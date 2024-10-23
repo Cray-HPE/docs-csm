@@ -425,7 +425,7 @@ This involves below sequence of operations:
 * Enable iSCSI SBPS
 
 To perform above operations, please refer the section `Switch from DVS to iSCSI` documented in the publication:
-HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063).
+`HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)`.
 
 ## Steps to continue using DVS based projection
 
@@ -439,8 +439,8 @@ rootfs_provider_passthrough: "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0"
 
 If `sat` command is used to create the BOS session template, then please comment out the two lines marked SBPS and uncomment the above
 two lines marked CPS in `vcs/bootprep/compute-and-uan-bootprep.yaml` and then initiate the compute/UAN node boot. Please refer the section
-`Content Projection Service` in the publication HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray
-EX Systems (S-8063) for more details on DVS based boot content projection of `rootfs`/`PE` images.
+`Content Projection Service` in the publication: `HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray
+EX Systems (S-8063)` for more details on DVS based boot content projection of `rootfs`/`PE` images.
 
 **Note:**: Rest of the steps in [Steps to achieve SBPS](#steps-to-achieve-sbps) viz., Image Tagging, Monitor iSCSI metrics need to be skipped.
 
