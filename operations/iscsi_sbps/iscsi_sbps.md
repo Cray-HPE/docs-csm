@@ -4,7 +4,7 @@
 * [iSCSI SBPS solution details](#iscsi-sbps-solution-details)
 * [Steps to achieve SBPS](#steps-to-achieve-sbps)
 * [Steps to switch from DVS to iSCSI](#steps-to-switch-from-dvs-to-iscsi)
-* [Steps to continue using DVS](#steps-to-coninue-using-DVS-based-projection)
+* [Steps to continue using DVS](#steps-to-continue-using-DVS-based-projection)
 * [Glossary](#glossary)
 
 ## Introduction
@@ -33,7 +33,7 @@ In CSM 1.6, both DVS and SBPS will co-exist but SBPS will be default and DVS is 
 * Easy to deploy and manage
 
 **Note:** Using HSN for boot content projection is recommended and use NMN for any debugging purposes.
-In the case of HSN isnot configured, then usage of NMN is recommended if it meets the bandwidth requirements.
+In the case of HSN is not configured, then usage of NMN is recommended if it meets the bandwidth requirements.
 
 ## iSCSI SBPS solution details
 
@@ -432,14 +432,12 @@ HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE 
 If user wants to continue using DVS then during the BOS session template creation (manually using `cray bos` command)
 below parameter values have to be used:
 
-```
-rootfs_provider: "cpss3"
-rootfs_provider_passthrough: "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0"
-```
+    rootfs_provider: "cpss3"
+    rootfs_provider_passthrough: "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0"
 
-If `sat` command is used to create the BOS session template, then please comment out the two lines marked SBPS and uncomment the above 
+If `sat` command is used to create the BOS session template, then please comment out the two lines marked SBPS and uncomment the above
 two lines marked CPS in `vcs/bootprep/compute-and-uan-bootprep.yaml` and then initiate the compute/UAN node boot. Please refer the section
-`Content Projection Service` in the publication HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray 
+`Content Projection Service` in the publication HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray
 EX Systems (S-8063) for more details on DVS based boot content projection of `rootfs`/`PE` images.
 
 **Note:**: Rest of the steps in [Steps to achieve SBPS](#steps-to-achieve-sbps) viz., Image Tagging, Monitor iSCSI metrics need to be skipped.
