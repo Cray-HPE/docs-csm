@@ -144,7 +144,7 @@ Request to perform power transitions.
 ```json
 {
   "transitionID": "8dd3e1a5-ae40-4761-b8fe-6c489e965fbd",
-  "operation": "Soft-Restart"
+  "operation": "on"
 }
 ```
 
@@ -241,7 +241,7 @@ are automatically deleted.
       "createTime": "2020-12-16T19:00:20",
       "automaticExpirationTime": "2019-08-24T14:15:22Z",
       "transitionStatus": "in-progress",
-      "operation": "Soft-Restart",
+      "operation": "force-off",
       "taskCounts": {
         "total": 5,
         "new": 2,
@@ -350,7 +350,7 @@ transitionID.
   "createTime": "2020-12-16T19:00:20",
   "automaticExpirationTime": "2019-08-24T14:15:22Z",
   "transitionStatus": "in-progress",
-  "operation": "Soft-Restart",
+  "operation": "force-off",
   "taskCounts": {
     "total": 5,
     "new": 2,
@@ -580,7 +580,7 @@ Retrieve the power state of the components specified by xname.
       "managementState": "available",
       "error": "permission denied - system credentials failed",
       "supportedPowerTransitions": [
-        "Soft-Restart"
+        "soft-restart"
       ],
       "lastUpdated": "2022-08-24T16:45:53.953811137Z"
     }
@@ -702,7 +702,7 @@ Retrieve the power state of the components specified by xname.
       "managementState": "available",
       "error": "permission denied - system credentials failed",
       "supportedPowerTransitions": [
-        "Soft-Restart"
+        "soft-restart"
       ],
       "lastUpdated": "2022-08-24T16:45:53.953811137Z"
     }
@@ -1445,7 +1445,7 @@ bearerAuth
   "managementState": "available",
   "error": "permission denied - system credentials failed",
   "supportedPowerTransitions": [
-    "Soft-Restart"
+    "soft-restart"
   ],
   "lastUpdated": "2022-08-24T16:45:53.953811137Z"
 }
@@ -1460,7 +1460,7 @@ bearerAuth
 |powerState|[power_state](#schemapower_state)|false|none|The power state of a component.|
 |managementState|[management_state](#schemamanagement_state)|false|none|Whether the device is currently available for commands via its management controller|
 |error|string¦null|false|none|none|
-|supportedPowerTransitions|[[power_operation](#schemapower_operation)]|false|none|[An operation to be applied to the hardware.]|
+|supportedPowerTransitions|[string]|false|none|none|
 |lastUpdated|string(date-time)|false|read-only|none|
 
 <h2 id="tocS_power_status_all">power_status_all</h2>
@@ -1479,7 +1479,7 @@ bearerAuth
       "managementState": "available",
       "error": "permission denied - system credentials failed",
       "supportedPowerTransitions": [
-        "Soft-Restart"
+        "soft-restart"
       ],
       "lastUpdated": "2022-08-24T16:45:53.953811137Z"
     }
@@ -1535,7 +1535,7 @@ Filters to limit which nodes have their power status returned.
   "createTime": "2020-12-16T19:00:20",
   "automaticExpirationTime": "2019-08-24T14:15:22Z",
   "transitionStatus": "in-progress",
-  "operation": "Soft-Restart",
+  "operation": "force-off",
   "taskCounts": {
     "total": 5,
     "new": 2,
@@ -1563,10 +1563,27 @@ Filters to limit which nodes have their power status returned.
 |transitionID|string(uuid)|false|none|none|
 |createTime|string|false|none|none|
 |automaticExpirationTime|string(date-time)|false|none|When the record will be deleted|
-|transitionStatus|[transition_status](#schematransition_status)|false|none|The status of the power transition.|
-|operation|[power_operation](#schemapower_operation)|false|none|An operation to be applied to the hardware.|
+|transitionStatus|string|false|none|none|
+|operation|string|false|none|none|
 |taskCounts|[task_counts](#schematask_counts)|false|none|none|
 |tasks|[[transition_task_data](#schematransition_task_data)]|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|transitionStatus|new|
+|transitionStatus|in-progress|
+|transitionStatus|completed|
+|transitionStatus|aborted|
+|transitionStatus|abort-signaled|
+|operation|on|
+|operation|off|
+|operation|soft-restart|
+|operation|hard-restart|
+|operation|init|
+|operation|force-off|
+|operation|soft-off|
 
 <h2 id="tocS_transitions_getAll">transitions_getAll</h2>
 <!-- backwards compatibility -->
@@ -1583,7 +1600,7 @@ Filters to limit which nodes have their power status returned.
       "createTime": "2020-12-16T19:00:20",
       "automaticExpirationTime": "2019-08-24T14:15:22Z",
       "transitionStatus": "in-progress",
-      "operation": "Soft-Restart",
+      "operation": "force-off",
       "taskCounts": {
         "total": 5,
         "new": 2,
@@ -1617,7 +1634,7 @@ Filters to limit which nodes have their power status returned.
   "createTime": "2020-12-16T19:00:20",
   "automaticExpirationTime": "2019-08-24T14:15:22Z",
   "transitionStatus": "in-progress",
-  "operation": "Soft-Restart",
+  "operation": "force-off",
   "taskCounts": {
     "total": 5,
     "new": 2,
@@ -1637,9 +1654,26 @@ Filters to limit which nodes have their power status returned.
 |transitionID|string(uuid)|false|none|none|
 |createTime|string|false|none|none|
 |automaticExpirationTime|string(date-time)|false|none|When the record will be deleted|
-|transitionStatus|[transition_status](#schematransition_status)|false|none|The status of the power transition.|
-|operation|[power_operation](#schemapower_operation)|false|none|An operation to be applied to the hardware.|
+|transitionStatus|string|false|none|none|
+|operation|string|false|none|none|
 |taskCounts|[task_counts](#schematask_counts)|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|transitionStatus|in-progress|
+|transitionStatus|new|
+|transitionStatus|completed|
+|transitionStatus|aborted|
+|transitionStatus|abort-signaled|
+|operation|on|
+|operation|off|
+|operation|soft-restart|
+|operation|hard-restart|
+|operation|init|
+|operation|force-off|
+|operation|soft-off|
 
 <h2 id="tocS_transition_start_output">transition_start_output</h2>
 <!-- backwards compatibility -->
@@ -1651,7 +1685,7 @@ Filters to limit which nodes have their power status returned.
 ```json
 {
   "transitionID": "8dd3e1a5-ae40-4761-b8fe-6c489e965fbd",
-  "operation": "Soft-Restart"
+  "operation": "on"
 }
 
 ```
@@ -1661,7 +1695,19 @@ Filters to limit which nodes have their power status returned.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |transitionID|string(uuid)|false|none|none|
-|operation|[power_operation](#schemapower_operation)|false|none|An operation to be applied to the hardware.|
+|operation|string|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|operation|on|
+|operation|off|
+|operation|soft-restart|
+|operation|hard-restart|
+|operation|init|
+|operation|force-off|
+|operation|soft-off|
 
 <h2 id="tocS_transitions_abort">transitions_abort</h2>
 <!-- backwards compatibility -->
@@ -1766,7 +1812,7 @@ Filters to limit which nodes have their power status returned.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|operation|string|false|none|The operation that should be applied to the hardware. The operation parameter is not case sensitive.|
+|operation|string|false|none|The operation that should be applied to the hardware.|
 |taskDeadlineMinutes|integer|false|none|The number of minutes to wait for a single transition task  to complete before continuing.  Defaults to 5 minutes, if unspecified. 0 disables waiting. -1 waits as long as it takes.|
 |location|[[reserved_location](#schemareserved_location)]|false|none|none|
 
@@ -1869,68 +1915,6 @@ The power state of a component.
 |*anonymous*|on|
 |*anonymous*|off|
 |*anonymous*|undefined|
-
-<h2 id="tocS_power_operation">power_operation</h2>
-<!-- backwards compatibility -->
-<a id="schemapower_operation"></a>
-<a id="schema_power_operation"></a>
-<a id="tocSpower_operation"></a>
-<a id="tocspower_operation"></a>
-
-```json
-"Soft-Restart"
-
-```
-
-An operation to be applied to the hardware.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|read-only|An operation to be applied to the hardware.|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|*anonymous*|On|
-|*anonymous*|Off|
-|*anonymous*|Soft-Restart|
-|*anonymous*|Hard-Restart|
-|*anonymous*|Init|
-|*anonymous*|Force-Off|
-|*anonymous*|Soft-Off|
-
-<h2 id="tocS_transition_status">transition_status</h2>
-<!-- backwards compatibility -->
-<a id="schematransition_status"></a>
-<a id="schema_transition_status"></a>
-<a id="tocStransition_status"></a>
-<a id="tocstransition_status"></a>
-
-```json
-"in-progress"
-
-```
-
-The status of the power transition.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The status of the power transition.|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|*anonymous*|new|
-|*anonymous*|in-progress|
-|*anonymous*|completed|
-|*anonymous*|aborted|
-|*anonymous*|abort-signaled|
 
 <h2 id="tocS_management_state">management_state</h2>
 <!-- backwards compatibility -->
