@@ -29,7 +29,16 @@ DaemonSet
 DaemonSets
 StatefulSet
 StatefulSets
-
+VictoriaMetrics
+Vmagent
+Vmalert
+Vminsert
+Vmselect
+Vmstorage
+vmstorage
+vmalert
+vmselect
+victoria
 
 1.0.x
 1.2.x

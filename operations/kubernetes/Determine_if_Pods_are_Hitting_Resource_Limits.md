@@ -80,17 +80,17 @@ Identify pods that are hitting resource limits in order to increase the resource
        Example output:
 
        ```text
-       default   54m    Warning   OOMKilling  node/ncn-w003  Memory cgroup out of memory: Kill process 1223856 (prometheus) score 1966 or sacrifice child
-       default   44m    Warning   OOMKilling  node/ncn-w003  Memory cgroup out of memory: Kill process 1372634 (prometheus) score 1966 or sacrifice child
+       default   54m    Warning   OOMKilling  node/ncn-w003  Memory cgroup out of memory: Kill process 1223856 (vmstorage) score 1966 or sacrifice child
+       default   44m    Warning   OOMKilling  node/ncn-w003  Memory cgroup out of memory: Kill process 1372634 (vmstorage) score 1966 or sacrifice child
        ```
 
     1. (`ncn-mw#`) Determine which pod was killed using the output of the previous command.
 
        Search the pods in Kubernetes for the string returned in the previous step to find the exact pod name.
-       Based on the previous example command output, `prometheus` is used in this example:
+       Based on the previous example command output, `vmstorage` is used in this example:
 
        ```bash
-       kubectl get pod -A | grep prometheus
+       kubectl get pod -A | grep vmstorage
        ```
 
 1. Increase the resource limits for the pods identified in this procedure.
