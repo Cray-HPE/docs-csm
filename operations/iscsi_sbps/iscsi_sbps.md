@@ -432,7 +432,7 @@ To perform these operations, please refer the section `Switch from DVS to iSCSI`
 If a user wants to continue using DVS, then during the BOS session template creation (manually using `cray bos` command)
 these parameter values have to be used:
 
-```
+```text
 rootfs_provider: "cpss3"
 rootfs_provider_passthrough: "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0"
 ```
