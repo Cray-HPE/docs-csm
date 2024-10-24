@@ -33,7 +33,7 @@
 # If no directory is specified, the archive will be created in the current
 # directory.
 #
-# If --include-v1 is specified, the exported will attempt to backup BOS v1
+# If --include-v1 is specified, the script will attempt to backup BOS v1
 # data as well. This is intended for use before upgrades to CSM 1.6 from
 # CSM 1.5. If the system is already at CSM 1.6, BOS v1 is no longer available,
 # and specifying this option will have no effect.
