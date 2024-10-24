@@ -15,7 +15,7 @@ to project boot content like `rootfs` and `programming environment` (PE) images.
 reliability, availability, security, ease and speed of deployment and ease of management than DVS.
 SBPS solution is offered from CSM 1.6 onwards and this solution is spread across different components BOS, USS/COS
 and the core service SBPS Marshal agent is delivered as an RPM gets deployed as part of CFS `ansible` play books.
-In CSM 1.6, both DVS and SBPS will co-exist but SBPS will be default and DVS is planned to deprecate in CSM 1.7.
+In CSM 1.6, both DVS and SBPS will co-exist but SBPS will be the default and DVS is planned to be deprecated in CSM 1.7.
 
 **SBPS Key features:**
 
@@ -241,19 +241,19 @@ size=11G features='1 queue_if_no_path' hwhandler='1 alua' wp=ro
 
 ### Node Personalization (Worker node)
 
-Node personalization is the pre-requisite step of SBPS solution where we need to first setup/ configure worker nodes as iSCSI targets (servers)
+Node personalization is the pre-requisite step of SBPS solution where we need to first setup/configure worker nodes as iSCSI targets (servers)
 with necessary provisioning, configuration and enable required components. The required RPMs for `targetcli` command / LIO are part of NCN node image in CSM 1.6 and SBPS Marshal agent gets installed during node personalization via CFS Ansible play books.
 
 This can be done in two ways:
 
 a) Auto setup with bootprep:
 
-By default worker node personalization of iSCSI SBPS is done during CSM install/ upgrade (using IUF). It is initiated during bootprep
+By default worker node personalization of iSCSI SBPS is done during CSM install/upgrade (using IUF). It is initiated during bootprep
 (management-nodes-rollout) in order to do worker node personalization automatically during boot time.
 
-b) Manual setup with CFS config/ session:
+b) Manual setup with CFS config/session:
 
-Worker node personalization can be done post CSM install with CFS config/ session.
+Worker node personalization can be done post CSM install with CFS config/session.
 Please refer [Node Personalisation](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/configuration_management/iSCSI_SBPS_Node_Personalization.md) for the details.
 
 ### Steps to configure and run GOSS tests
@@ -368,10 +368,10 @@ Or
 cray ims images update bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb --metadata-operation remove --metadata-key sbps-project
 ```
 
-**Note #1:** Please make sure to `untag` an image only with unused images. Untagging in-use images will stop the content projection by SBPS Marshal agent which may lead to any kind of failures with compute / UAN nodes.
+**Note #1:** Please make sure to `untag` an image only with unused images. Untagging in-use images will stop the content projection by SBPS Marshal agent which may lead to any kind of failures with compute/UAN nodes.
 
-**Note #2:** As mentioned in `Image tagging` step, `rootfs` are tagged automatically by BOS, for untagging an image, we need to use above `craycli`
-utility of IMS as untagging of an image is not supported by BOS.
+**Note #2:** As mentioned in the `Image tagging` step, `rootfs` is tagged automatically by BOS, for untagging an image,
+we need to use above `craycli` utility of IMS as untagging of an image is not supported by BOS.
 
 ### Steps to boot compute/ UAN node
 
@@ -418,26 +418,26 @@ Please refer [iSCSI Metrics](https://github.com/Cray-HPE/sbps-marshal/blob/main/
 
 ## Steps to switch from DVS to iSCSI
 
-This involves below sequence of operations:
+This involves this sequence of operations:
 
 * Disable DVS
 * Uninstall CPS
 * Enable iSCSI SBPS
 
-To perform above operations, please refer the section `Switch from DVS to iSCSI` documented in the publication:
+To perform these operations, please refer the section `Switch from DVS to iSCSI` documented in the publication:
 `HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)`.
 
 ## Steps to continue using DVS based projection
 
-If user wants to continue using DVS then during the BOS session template creation (manually using `cray bos` command)
-below parameter values have to be used:
+If a user wants to continue using DVS, then during the BOS session template creation (manually using `cray bos` command)
+these parameter values have to be used:
 
-```bash
+```
 rootfs_provider: "cpss3"
 rootfs_provider_passthrough: "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0"
 ```
 
-If `sat` command is used to create the BOS session template, then please comment out the two lines marked SBPS and uncomment the above
+If the `sat` command is used to create the BOS session template, then please comment out the two lines marked SBPS and uncomment the above
 two lines marked CPS in `vcs/bootprep/compute-and-uan-bootprep.yaml` and then initiate the compute/UAN node boot. Please refer the section
 `Content Projection Service` in the publication: `HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray
 EX Systems (S-8063)` for more details on DVS based boot content projection of `rootfs`/`PE` images.
