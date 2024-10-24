@@ -373,13 +373,13 @@ Filename:  `/etc/slurm/slurm.conf`
 1. (`ncn-mw#`) Look up the pod for the tenant `slurmcluster`:
 
     ```bash
-    SLURMCTLD_POD=$(kubectl get pod -n vcluster-devten01a-slurm -lapp=slurmctld -o name)
+    SLURMCTLD_POD=$(kubectl get pod -n vcluster-devten01a-slurm -lapp.kubernetes.io/name=slurmctld -o name)
     ```
 
 1. (`ncn-mw#`) Reconfigure:
 
     ```bash
-    kubectl exec -n user ${SLURMCTLD_POD} -c slurmctld -- scontrol reconfigure
+    kubectl exec -n vcluster-devten01a-slurm ${SLURMCTLD_POD} -c slurmctld -- scontrol reconfigure
     ```
 
 Repeat this step as needed for additional `SlurmClusters`.
@@ -530,7 +530,7 @@ You can use a single BOS session template for many tenants of the same node type
     cp ssi-compute-cr_2024-cr_2024_1.json ssi-compute-cr_2024-cr_2024_1-tenants.json
     ```
 
-* Edit the new copy (see appendix F for an example):
+* Edit the new copy:
     * Delete lines starting with `lastUpdated`:
     * Delete the last instance in the file of name: and remove the comma from the preceding line
     * Be SURE to replace the commit ID for each JSON block that refers to `uss-config-management.git`; you will use the commit ID from "git log" command in the earlier step that created the USS `group_vars` file
@@ -538,7 +538,7 @@ You can use a single BOS session template for many tenants of the same node type
 1. (`ncn-mw#`) Upload the new configuration, specifying the filename and the name of the new configuration:
 
     ```bash
-    # cray cfs configurations update --file ssi-compute-cr_2024-cr_2024_1-tenants ssi-compute-cr_2024-cr_2024_1-tenants.json
+    # cray cfs configurations update --file ssi-compute-cr_2024-cr_2024_1-tenants.json ssi-compute-cr_2024-cr_2024_1-tenants
     ```
 
 Repeat this step as needed for different node types and architectures.
