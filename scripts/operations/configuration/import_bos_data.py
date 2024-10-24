@@ -55,6 +55,12 @@ def print_stderr(msg: str) -> None:
     """
     sys.stderr.write(f"{msg}\n")
 
+def print_warn(msg: str) -> None:
+    """
+    Prepends "WARNING: " and outputs the specified message to stderr
+    """
+    print_stderr(f"WARNING: {msg}")
+
 def print_err(msg: str) -> None:
     """
     Prepends "ERROR: " and outputs the specified message to stderr
@@ -108,14 +114,23 @@ def get_options_to_change(options_to_import: BosOptions, current_options: BosOpt
 
     Returns a list of the names of the options to be changed.
     """
-    options_to_change = [ opt_name for opt_name, opt_value in options_to_import.items()
-                            if current_options[opt_name] != opt_value ]
-    unchanged_options = sorted(list(options_to_import.keys() - options_to_change))
+    options_to_change = []
+    unchanged_options = []
+    for opt_name, opt_value in options_to_import.items():
+        try:
+            if current_options[opt_name] != opt_value:
+                options_to_change.append(opt_name)
+            else:
+                unchanged_options.append(opt_name)
+        except KeyError:
+            print_warn(f"Not restoring unknown option found in backup data: {opt_name} = {opt_value}")
     if unchanged_options:
+        unchanged_options.sort()
         print("The following options already have the value from the imported data and will not be"
               " updated:")
         print(", ".join(unchanged_options))
     if options_to_change:
+        options_to_change.sort()
         print("The following options will be updated to match the values in the imported data:")
         print(", ".join(options_to_change))
     return options_to_change
