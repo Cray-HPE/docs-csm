@@ -254,6 +254,8 @@ Refer to that table and any corresponding product documents before continuing to
            cray cfs components describe "${XNAME}"
            ```
 
+    > **`NOTE`** After `management-nodes-rollout` stage for management NCNs is completed, re-initialize cray CLI. Refer to [Configure the Cray Command Line Interface (cray CLI)](../../configure_cray_cli.md)
+
     Once this step has completed:
 
      - All management NCNs have been upgraded to the image and CFS configuration created in the previous steps of this workflow
