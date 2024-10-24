@@ -170,6 +170,11 @@ This step updates the CFS configuration which is set as the desired configuratio
 nodes (NCNs). It ensures that the CFS configuration layers reference the correct commit hash for the
 version of CSM being installed. It then waits for the components to reach a configured state in CFS.
 
+1. **IMPORTANT**: The `update-mgmt-ncn-cfs-config.sh` script has a bug in CSM 1.5.1. This bug has
+   been addressed in a hotfix that includes `CASMINST-7033` in its title. Review the current field
+   notices to find and apply that hotfix before proceeding. If this hotfix is not applied, certain
+   properties of the CFS configuration will be lost during its modification.
+
 1. (`ncn-m001#`)
 
    ```bash
