@@ -424,7 +424,7 @@ This involves this sequence of operations:
 * Uninstall CPS
 * Enable iSCSI SBPS
 
-To perform these operations, please refer the section `Switch from DVS to iSCSI` documented in the publication:
+To perform these operations, please refer the section `DVS and SBPS` documented in the publication:
 `HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)`.
 
 ## Steps to continue using DVS based projection
