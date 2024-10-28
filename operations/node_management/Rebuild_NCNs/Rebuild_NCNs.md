@@ -26,11 +26,11 @@ echo $XNAME
 
 Only follow the steps in the section for the node type that is being rebuilt.
 
-> **`NOTE:`** Restart the `goss-servers` service on the rebuilt node after it has been rebuilt.
+> **`NOTE:`** (`ncn#`) Restart the `goss-servers` service on the rebuilt node after it has been rebuilt.
 > This is necessary because of a timing issue that has been fixed in CSM 1.6.1.
 >
 >    ```bash
->    ssh $node 'systemctl restart goss-servers'
+>    ssh "${NODE}" 'systemctl restart goss-servers'
 >    ```
 
 - [Worker node](#worker-node)
@@ -41,13 +41,13 @@ Only follow the steps in the section for the node type that is being rebuilt.
 
 #### Option 1
 
-1. (`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` for `ncn-w001`.
+(`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` for `ncn-w001`.
 
-    Follow output of the script carefully. The script will pause for manual interaction.
+Follow output of the script carefully. The script will pause for manual interaction.
 
-    ```bash
-    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-w001
-    ```
+```bash
+/usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-w001
+```
 
 > **`NOTES:`**
 >
