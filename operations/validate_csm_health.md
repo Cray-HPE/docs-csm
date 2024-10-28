@@ -15,6 +15,16 @@ The areas should be tested in the order they are listed on this page. Errors in 
 Each section of this health check document provides links to relevant troubleshooting procedures. If additional help is needed, see
 [CSM Troubleshooting Information](../troubleshooting/README.md).
 
+Before running health checks, restart `goss-servers` on all NCNs to ensure the correct tests are run on each node. This is necessary because of a timing issue on the nodes that has been fixed in CSM 1.6.1.
+
+(`ncn-m#` or `pit#`) Restart `goss-servers`.
+
+  ```bash
+  ncn_nodes=$(grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | tr -t '\n' ',')
+  ncn_nodes=${ncn_nodes%,}
+  pdsh -S -b -w $ncn_nodes 'systemctl restart goss-servers'
+  ```
+
 ## Topics
 
 - [0. Cray command line interface](#0-cray-command-line-interface)
