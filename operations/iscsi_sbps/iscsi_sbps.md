@@ -368,7 +368,7 @@ Or
 cray ims images update bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb --metadata-operation remove --metadata-key sbps-project
 ```
 
-**Note #1:** Only run the `untag` command on images that are not currenty in use. Untagging images that are currently in use will
+**Note #1:** Only run the `untag` command on images that are not currently in use. Untagging images that are currently in use will
 stop the content projection by SBPS Marshal agent causing undesirable behavior on compute/UAN nodes using the content.
 
 **Note #2:** As mentioned in the `Image tagging` step, `rootfs` is tagged automatically by BOS, for untagging an image,
