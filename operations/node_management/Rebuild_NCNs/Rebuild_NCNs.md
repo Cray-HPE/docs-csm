@@ -29,9 +29,9 @@ Only follow the steps in the section for the node type that is being rebuilt.
 > **`NOTE:`** (`ncn#`) Restart the `goss-servers` service on the rebuilt node after it has been rebuilt.
 > This is necessary because of a timing issue that has been fixed in CSM 1.6.1.
 >
->    ```bash
->    ssh "${NODE}" 'systemctl restart goss-servers'
->    ```
+> ```bash
+> ssh "${NODE}" 'systemctl restart goss-servers'
+> ```
 
 - [Worker node](#worker-node)
 - [Master node](#master-node)

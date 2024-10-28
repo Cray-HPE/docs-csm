@@ -56,7 +56,7 @@ If running these checks after the initial CSM install, then to find details on c
 All platform health checks are expected to pass. Each check has been implemented as a [Goss](https://github.com/aelsabbahy/goss) test which reports a `PASS` or `FAIL`.
 
 Before running health checks, restart `goss-servers` on all NCNs to ensure the correct tests are run on each node. This is necessary because of a timing issue on the nodes that has been fixed in CSM 1.6.1.
-Run one of the two commands below depending on if it is being executed from `ncn-m001` or from the PIT node. 
+Run one of the two commands below depending on if it is being executed from `ncn-m001` or from the PIT node.
 
 1. (`ncn-m001#`) Run the following from `ncn-m001` to restart `goss-servers`.
 

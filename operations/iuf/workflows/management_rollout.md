@@ -503,11 +503,11 @@ The `goss-servers` service needs to be restarted on all NCNs. This ensures the c
 
 (`ncn-m001#`) Restart `goss-servers`.
 
-  ```bash
-  ncn_nodes=$(grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | tr -t '\n' ',')
-  ncn_nodes=${ncn_nodes%,}
-  pdsh -S -b -w $ncn_nodes 'systemctl restart goss-servers'
-  ```
+```bash
+ncn_nodes=$(grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | tr -t '\n' ',')
+ncn_nodes=${ncn_nodes%,}
+pdsh -S -b -w $ncn_nodes 'systemctl restart goss-servers'
+```
 
 ## 5. Update management host Slingshot NIC firmware
 
