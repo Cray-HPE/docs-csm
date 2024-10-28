@@ -6,20 +6,20 @@ This outlines conventions and standards that are used in this documentation.
 - [File formats](#file-formats)
 - [Typographic conventions](#typographic-conventions)
 - [Command prompt conventions](#command-prompt-conventions)
-  - [Host and user name in command prompts](#host-and-user-name-in-command-prompts)
-  - [Node abbreviations](#node-abbreviations)
-  - [Command prompt reference](#command-prompt-reference)
-  - [Command prompt location](#command-prompt-location)
-  - [Command prompts inside new shells](#command-prompts-inside-new-shells)
-    - [`chroot` example](#chroot-example)
-    - [`kubectl exec` example](#kubectl-exec-example)
-    - [Combined `ssh` and `chroot` example](#combined-ssh-and-chroot-example)
-    - [`sat bash` example](#sat-bash-example)
-  - [Command prompts in Python virtual environments](#command-prompts-in-python-virtual-environments)
-  - [Directory path in command prompt](#directory-path-in-command-prompt)
+    - [Host and user name in command prompts](#host-and-user-name-in-command-prompts)
+    - [Node abbreviations](#node-abbreviations)
+    - [Command prompt reference](#command-prompt-reference)
+    - [Command prompt location](#command-prompt-location)
+    - [Command prompts inside new shells](#command-prompts-inside-new-shells)
+        - [`chroot` example](#chroot-example)
+        - [`kubectl exec` example](#kubectl-exec-example)
+        - [Combined `ssh` and `chroot` example](#combined-ssh-and-chroot-example)
+        - [`sat bash` example](#sat-bash-example)
+    - [Command prompts in Python virtual environments](#command-prompts-in-python-virtual-environments)
+    - [Directory path in command prompt](#directory-path-in-command-prompt)
 - [Ability to pause and resume procedures](#ability-to-pause-and-resume-procedures)
-  - [Bad example](#bad-example)
-  - [Good example](#good-example)
+    - [Bad example](#bad-example)
+    - [Good example](#good-example)
 - [Templates](#templates)
 
 ## Markdown format
@@ -58,14 +58,14 @@ The host name in a command prompt indicates where the command must be run. The u
 
 ### Node abbreviations
 
-The following list contains abbreviations for nodes used below
+The following list contains abbreviations for nodes used below:
 
 - CN - Compute Node
 - NCN - Non-Compute Node
-  - `ncn-m` - Master NCN
-  - `ncn-s` - Storage NCN
-  - `ncn-w` - Worker NCN
-  - These can also be used in combination. For example, `ncn-mw` in a command prompt indicates that the command may be run on a master or worker NCN.
+    - `ncn-m` - Master NCN
+    - `ncn-s` - Storage NCN
+    - `ncn-w` - Worker NCN
+    - These can also be used in combination. For example, `ncn-mw` in a command prompt indicates that the command may be run on a master or worker NCN.
 - AN - Application Node (special type of NCN)
 - UAN - User Access Node (special type of AN)
 - PIT - Pre-Install Toolkit (initial node used as the inception node during software installation, booted from the LiveCD)
@@ -118,7 +118,7 @@ the documentation of CSM 1.2 and earlier.
 ### Command prompts inside new shells
 
 Some commands open new shells when they are executed (for example, `chroot`, `kubectl exec`, `ssh`,
-and `sat bash`). When these commands are used, the prompt changes to indicate that subsequent
+and `sat bash`). When these commands are used, the command prompt changes to indicate that subsequent
 commands are to be run inside the new shell.
 
 #### `chroot` example
@@ -184,17 +184,17 @@ changes to indicate that it is inside this environment. This example uses `$PORT
 
 #### `sat bash` example
 
-The `sat bash` command opens a shell inside the `cray-sat` container image. The shell prompt changes
+The `sat bash` command opens a shell inside the `cray-sat` container image. The command prompt changes
 to indicate the ID of the Podman container where the shell is executing.
 
-1. (`ncn-m#`) Enter a SAT shell:
+1. (`ncn-m#`) Enter a SAT shell.
 
    ```bash
    sat bash
    ```
 
 1. (`(CONTAINER_ID) sat-container#`) Execute the `sat status` command inside the shell in the
-   `cray-sat` container started by `sat bash`:
+   `cray-sat` container started by `sat bash`.
 
    ```bash
    sat status
@@ -203,7 +203,7 @@ to indicate the ID of the Podman container where the shell is executing.
 ### Command prompts in Python virtual environments
 
 Some documentation may involve running commands inside a Python virtual environment. When a Python
-virtual environment is activated, the command prompt will change to reflect the active virtual
+virtual environment is activated, the command prompt changes to reflect the active virtual
 environment.
 
 1. (`user@hostname>`) Activate the Python virtual environment.

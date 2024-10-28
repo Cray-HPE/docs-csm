@@ -56,13 +56,11 @@ For information on deprecated features in CSM releases, see [Deprecated Features
 ## Documentation conventions
 
 The CSM documentation follows conventions to ensure consistency across documentation and provide a
-better experience for readers.
+better experience for readers. These conventions must be followed when writing or updating documentation.
 
-These conventions must be followed when writing or updating documentation.
-
-See [Documentation Conventions](documentation_conventions.md).
+For more information, see [Documentation Conventions](documentation_conventions.md).
 
 ## Viewing CSM documentation
 
-The CSM documentation can be viewed in multiple ways, both online and offline. See
-[Viewing CSM documentation](viewing_csm_documentation.md) for more details and tips.
+The CSM documentation can be viewed in multiple ways, both online and offline. For
+more details and tips, see [Viewing CSM documentation](viewing_csm_documentation.md).

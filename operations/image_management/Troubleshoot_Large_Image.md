@@ -104,7 +104,7 @@ RuntimeError('IMS reported an error when packaging artifacts for job=%s.Consult 
 determine the cause of failure.IMS response: %s', 'ac6f6ba0-f399-480b-b49f-396a192c9390',
 {'arch': 'x86_64', 'artifact_id': '00ce7971-8b42-4012-8895-42ae6fc44c0c', 'build_env_size': 15,
 'created': '2023-12-01T16:01:24.298632+00:00', 'enable_debug': False, 'id': 'ac6f6ba0-f399-480b-b49f-396a192c9390',
-'image_root_archive_name': 'uan-shs-cne-1.0.0-45-csm-1.5.x86_64-231106_cfs_gpu-2296-uan', 'initrd_file_name': 'initrd',
+'image_root_archive_name': 'uan-shs-uss-1.0.0-45-csm-1.5.x86_64-231106_cfs_gpu-2296-uan', 'initrd_file_name': 'initrd',
 'job_mem_size': 8, 'job_type': 'customize', 'kernel_file_name': 'vmlinuz', 'kernel_parameters_file_name':
 'kernel-parameters', 'kubernetes_configmap': 'cray-ims-ac6f6ba0-f399-480b-b49f-396a192c9390-configmap',
 'kubernetes_job': 'cray-ims-ac6f6ba0-f399-480b-b49f-396a192c9390-customize', 'kubernetes_namespace': 'ims',
@@ -119,9 +119,9 @@ determine the cause of failure.IMS response: %s', 'ac6f6ba0-f399-480b-b49f-396a1
 The IMS job log for the `buildenv-sidecar` container will have the following:
 
 ```text
-+ time mksquashfs /mnt/image/image-root /mnt/image/uan-shs-cne-1.0.0-45-csm-1.5.x86_64-231106_cfs_gpu-2296-uan.sqsh
++ time mksquashfs /mnt/image/image-root /mnt/image/uan-shs-uss-1.0.0-45-csm-1.5.x86_64-231106_cfs_gpu-2296-uan.sqsh
 Parallel mksquashfs: Using 57 processors
-Creating 4.0 filesystem on /mnt/image/uan-shs-cne-1.0.0-45-csm-1.5.x86_64-231106_cfs_gpu-2296-uan.sqsh, block size 131072.
+Creating 4.0 filesystem on /mnt/image/uan-shs-uss-1.0.0-45-csm-1.5.x86_64-231106_cfs_gpu-2296-uan.sqsh, block size 131072.
 Write failed because No space left on device
 FATAL ERROR: Failed to write to output filesystem
 [======================================================-   ] 588500/619268  95%
