@@ -15,7 +15,7 @@ to project boot content like `rootfs` and `programming environment` (PE) images.
 reliability, availability, security, ease and speed of deployment and ease of management than DVS.
 SBPS solution is offered from CSM 1.6 onwards and this solution is spread across different components BOS, USS/COS
 and the core service SBPS Marshal agent is delivered as an RPM gets deployed as part of CFS `ansible` play books.
-In CSM 1.6, both DVS and SBPS will co-exist but SBPS will be the default and DVS is planned to be deprecated in CSM 1.7.
+In CSM 1.6, both DVS and SBPS will co-exist, but SBPS will be the default. Note, DVS is planned to be deprecated in CSM 1.7.
 
 **SBPS Key features:**
 
@@ -32,8 +32,8 @@ In CSM 1.6, both DVS and SBPS will co-exist but SBPS will be the default and DVS
 * Aligns with future plans for similar functionality in next generation systems management solutions
 * Easy to deploy and manage
 
-**Note:** Using HSN for boot content projection is recommended and use NMN for any debugging purposes.
-In the case of HSN is not configured, then usage of NMN is recommended if it meets the bandwidth requirements.
+**Note:** Using HSN for boot content projection is recommended, and use NMN for any debugging purposes.
+In the case that the HSN is not configured, use the NMN if it meets the bandwidth requirements.
 
 ## iSCSI SBPS solution details
 
@@ -254,7 +254,7 @@ By default worker node personalization of iSCSI SBPS is done during CSM install/
 b) Manual setup with CFS config/session:
 
 Worker node personalization can be done post CSM install with CFS config/session.
-Please refer [Node Personalisation](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/configuration_management/iSCSI_SBPS_Node_Personalization.md) for the details.
+Please refer to [Node Personalization](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/configuration_management/iSCSI_SBPS_Node_Personalization.md) for the details.
 
 ### Steps to configure and run GOSS tests
 
@@ -371,8 +371,8 @@ cray ims images update bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb --metadata-operation
 **Note #1:** Only run the `untag` command on images that are not currently in use. Untagging images that are currently in use will
 stop the content projection by SBPS Marshal agent causing undesirable behavior on compute/UAN nodes using the content.
 
-**Note #2:** As mentioned in the `Image tagging` step, `rootfs` is tagged automatically by BOS, for untagging an image,
-we need to use above `craycli` utility of IMS as untagging of an image is not supported by BOS.
+**Note #2:** As mentioned in the `Image tagging` step, BOS automatically tags the `rootfs` image for projection. To untag an image,
+use the aforementioned `craycli` utility of IMS because BOS does not support automatically automatically untagging an image.
 
 ### Steps to boot compute/ UAN node
 
@@ -428,20 +428,21 @@ rootfs_provider_passthrough: "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0"
 ```
 
 If the `sat` command is used to create the BOS session template, then please comment out the two lines marked SBPS and uncomment the above
-two lines marked CPS in `vcs/bootprep/compute-and-uan-bootprep.yaml` and then initiate the compute/UAN node boot. Please refer the section
+two lines marked CPS in `vcs/bootprep/compute-and-uan-bootprep.yaml` and then initiate the compute/UAN node boot. Please refer to the section
 `Content Projection Service` in the publication: `HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray
 EX Systems (S-8063)` for more details on DVS based boot content projection of `rootfs`/`PE` images.
 
-**Note:**: Rest of the steps in [Steps to achieve SBPS](#steps-to-achieve-sbps) viz., Image Tagging, Monitor iSCSI metrics need to be skipped.
+**Note:**: The steps in [Steps to achieve SBPS](#steps-to-achieve-sbps) are not relevant and should not be followed if DVS is used.
 
-## Steps to disable DVS
+## Steps to disable DVS and CPS
 
-This involves this sequence of operations:
+Follow this sequence of operations:
 
 * Disable DVS
 * Uninstall CPS
 
-To perform these operations, please refer the section `DVS and SBPS` documented in the publication:
+To disable DVS, please refer to the section `DVS and SBPS` and to uninstall CPS, please refer to the section `Uninstall CPS`
+section under the content `Scalable Boot Projection Service` documented in the publication:
 `HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)`.
 
 ### Glossary
