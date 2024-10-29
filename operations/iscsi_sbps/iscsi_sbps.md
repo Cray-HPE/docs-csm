@@ -15,7 +15,7 @@ to project boot content like `rootfs` and `programming environment` (PE) images.
 reliability, availability, security, ease and speed of deployment and ease of management than DVS.
 SBPS solution is offered from CSM 1.6 onwards and this solution is spread across different components BOS, USS/COS
 and the core service SBPS Marshal agent is delivered as an RPM gets deployed as part of CFS `ansible` play books.
-In CSM 1.6, both DVS and SBPS will co-exist but SBPS will be the default and DVS is planned to be deprecated in CSM 1.7.
+In CSM 1.6, both DVS and SBPS will co-exist, but SBPS will be the default. Note, DVS is planned to be deprecated in CSM 1.7.
 
 **SBPS Key features:**
 
