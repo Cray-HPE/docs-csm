@@ -203,38 +203,38 @@ images:
 #### Use base images or recipes from a product
 
 Here is an example showing the definition of two images. The first image is
-built from a recipe provided by the `cne` product. The second image uses the
+built from a recipe provided by the `uss` product. The second image uses the
 first image as a base and configures it with a configuration named
 `example-compute-config`. The value of the first image's `ref_name` key is used
 in the second image's `base.image_ref` key to specify it as a dependency.
 Running `sat bootprep` against this input file results in two images, the
-first named `example-cne-image` and the second named `example-compute-image`.
+first named `example-uss-image` and the second named `example-compute-image`.
 
 ```yaml
 images:
-- name: example-cne-image
-  ref_name: example-cne-image
+- name: example-uss-image
+  ref_name: example-uss-image
   description: >
-    An example image built from the recipe provided by the CNE product.
+    An example image built from the recipe provided by the USS product.
   base:
     product:
-      name: cne
+      name: uss
       version: 1.0.0
       type: recipe
 - name: example-compute-image
   description: >
     An example image that is configured from an image built from the recipe provided
-    by the CNE product.
+    by the USS product.
   base:
-    image_ref: example-cne-image
+    image_ref: example-uss-image
   configuration: example-compute-config
   configuration_group_names:
   - Compute
 ```
 
-This example assumes that the given version of the `cne` product provides
+This example assumes that the given version of the `uss` product provides
 only a single IMS recipe. If more than one recipe is provided by the
-given version of the `cne` product, use a filter as described in
+given version of the `uss` product, use a filter as described in
 [Filter Base Images or Recipes from a Product](#filter-base-images-or-recipes-from-a-product).
 
 #### Filter base images or recipes from a product
@@ -306,34 +306,34 @@ images:
   - Management_Storage
 ```
 
-Here is an example of two IMS images built from recipes provided by the `cne`
+Here is an example of two IMS images built from recipes provided by the `uss`
 product. This example uses an architecture filter to select from the multiple
-recipes provided by the CNE product. The first image will be built from the
+recipes provided by the USS product. The first image will be built from the
 `x86_64` version of the IMS recipe provided by the specified version of the
-`cne` product. The second image will be built from the `aarch64` version of
-the IMS recipe provided by the specified version of the `cne` product.
+`uss` product. The second image will be built from the `aarch64` version of
+the IMS recipe provided by the specified version of the `uss` product.
 
 ```yaml
 images:
-- name: example-cne-image-x86_64
-  ref_name: example-cne-image-x86_64
+- name: example-uss-image-x86_64
+  ref_name: example-uss-image-x86_64
   description: >
-    An example image built from the x86_64 recipe provided by the CNE product.
+    An example image built from the x86_64 recipe provided by the USS product.
   base:
     product:
-      name: cne
+      name: uss
       version: 1.0.0
       type: recipe
       filter:
         arch: x86_64
 
-- name: example-cne-image-aarch64
-  ref_name: example-cne-image-aarch64
+- name: example-uss-image-aarch64
+  ref_name: example-uss-image-aarch64
   description: >
-    An example image built from the aarch64 recipe provided by the CNE product.
+    An example image built from the aarch64 recipe provided by the USS product.
   base:
     product:
-      name: cne
+      name: uss
       version: 1.0.0
       type: recipe
       filter:
@@ -532,7 +532,7 @@ variable for `slingshot-host-software` in the bootprep input file, write
 
 #### HPC CSM Software Recipe variable substitution example
 
-The following example bootprep input file shows how a variable of a CNE version
+The following example bootprep input file shows how a variable of a USS version
 can be used in an input file that creates a CFS configuration for computes.
 Only one layer is shown for brevity.
 
@@ -541,12 +541,12 @@ Only one layer is shown for brevity.
 configurations:
 - name: "{{default.note}}compute-{{recipe.version}}{{default.suffix}}"
   layers:
-  - name: cne-compute-{{cne.working_branch}}
+  - name: uss-compute-{{uss.working_branch}}
     playbook: cos-compute.yml
     product:
-      name: cne
-      version: "{{cne.version}}"
-      branch: "{{cne.working_branch}}"
+      name: uss
+      version: "{{uss.version}}"
+      branch: "{{uss.working_branch}}"
 ```
 
 **Note:** When the value of a key in the bootprep input file is a Jinja2
@@ -554,7 +554,7 @@ expression, it must be quoted to pass YAML syntax checking.
 
 Jinja2 expressions can also use filters and Python's built-in string methods to
 manipulate the variable values. For example, suppose only the major and minor
-components of a CNE version are to be used in the branch name for the CNE
+components of a USS version are to be used in the branch name for the USS
 layer of the CFS configuration. Use the `split` string method to
 achieve this as follows:
 
@@ -563,12 +563,12 @@ achieve this as follows:
 configurations:
 - name: "{{default.note}}compute-{{recipe.version}}{{default.suffix}}"
   layers:
-  - name: cne-compute-{{cne.working_branch}}
+  - name: uss-compute-{{uss.working_branch}}
     playbook: cos-compute.yml
     product:
-      name: cne
-      version: "{{cne.version}}"
-      branch: integration-{{cne.version.split('.')[0]}}-{{cne.version.split('.')[1]}}
+      name: uss
+      version: "{{uss.version}}"
+      branch: integration-{{uss.version.split('.')[0]}}-{{uss.version.split('.')[1]}}
 ```
 
 ### Dynamic variable substitutions
@@ -615,12 +615,12 @@ bootprep file for the entire CSM product.
 configurations:
 - name: "{{default.note}}compute-{{recipe.version}}{{default.suffix}}"
   layers:
-  - name: cne-compute-{{cne.working_branch}}
+  - name: uss-compute-{{uss.working_branch}}
     playbook: cos-compute.yml
     product:
-      name: cne
-      version: "{{cne.version}}"
-      branch: "{{cne.working_branch}}"
+      name: uss
+      version: "{{uss.version}}"
+      branch: "{{uss.working_branch}}"
   - name: cpe-pe_deploy-{{cpe.working_branch}}
     playbook: pe_deploy.yml
     product:
@@ -630,17 +630,17 @@ configurations:
 
 images:
 - name: "{{default.note}}{{base.name}}{{default.suffix}}"
-  ref_name: base_cne_image
+  ref_name: base_uss_image
   base:
     product:
-      name: cne
+      name: uss
       type: recipe
-      version: "{{cne.version}}"
+      version: "{{uss.version}}"
 
 - name: "compute-{{base.name}}"
   ref_name: compute_image
   base:
-    image_ref: base_cne_image
+    image_ref: base_uss_image
   configuration: "{{default.note}}compute-{{recipe.version}}{{default.suffix}}"
   configuration_group_names:
   - Compute

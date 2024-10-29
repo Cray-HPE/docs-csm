@@ -274,8 +274,8 @@ REST APIs into easily usable commands.
 
 ## Cray Operating System (COS)
 
-The Cray Operating System is a Cray product that may be installed on CSM systems.
-COS is comprised of [COS Base](#cray-operating-system-base-cos-base) and [User Services Software](#user-services-software-uss) components.
+HPE Cray Supercomputing Operating System Software (or COS) is a Cray product that may be installed on CSM systems.
+COS is comprised of [COS Base](#cray-operating-system-base-cos-base), HPE SUSE Linux Enterprise Operating System (SLE), and [User Services Software](#user-services-software-uss) components.
 
 ## Cray Operating System Base (COS Base)
 
@@ -688,7 +688,7 @@ valves are closed during operation, the action automatically causes the [CMMs](#
 
 ## System Admin Toolkit (SAT)
 
-The System Admin Toolkit (SAT) product provides the `sat` command line interface which interacts
+System Admin Toolkit (SAT) provides the `sat` command line interface which interacts
 with the REST APIs of many services to perform more complex system management tasks.
 
 For more information, see [System Admin Toolkit](operations/system_admin_toolkit/README.md).

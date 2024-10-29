@@ -24,7 +24,7 @@ See [External DNS](../external_dns/External_DNS.md) for more information.
 | OAuth2 Proxy Ingress - CMN             |                | customer-management                    | Yes                     | 443                |                                                            |
 | OAuth2 Proxy Ingress - CAN             |                | customer-access                        | Yes                     | 443                |                                                            |
 | OAuth2 Proxy Ingress - CHN             |                | customer-high-speed                    | Yes                     | 443                |                                                            |
-| System Management Health Prometheus    | `prometheus`   |                                        |                         | No                 | Uses the IP address of OAuth2 Proxy Ingress (CMN)          |
+| System Management Health Vmselect    | `vmselect`   |                                        |                         | No                 | Uses the IP address of OAuth2 Proxy Ingress (CMN)          |
 | System Management Health Alert Manager | `alertmanager` |                                        |                         | No                 | Uses the IP address of OAuth2 Proxy Ingress (CMN)          |
 | System Management Health Grafana       | `grafana`      |                                        |                         | No                 | Uses the IP address of OAuth2 Proxy Ingress (CMN)          |
 | Istio Kiali                            | `kiali-istio`  |                                        |                         | No                 | Uses the IP address of OAuth2 Proxy Ingress (CMN)          |

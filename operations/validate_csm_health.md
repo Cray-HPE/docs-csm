@@ -55,6 +55,30 @@ If running these checks after the initial CSM install, then to find details on c
 
 All platform health checks are expected to pass. Each check has been implemented as a [Goss](https://github.com/aelsabbahy/goss) test which reports a `PASS` or `FAIL`.
 
+If the CSM version is 1.6.0 or lower, then before running health checks, restart the `goss-servers` service on all NCNs to ensure the correct tests are run on each node. This is necessary because of a timing issue that is fixed in CSM 1.6.1.
+
+> Skip the `goss-servers` service restart if the CSM version is 1.6.1 or above.
+> The restart will cause no harm if done on CSM 1.6.1 or higher, but it is unnecessary.
+
+Run one of the two commands below depending on if it is being executed from `ncn-m001` or from the PIT node.
+
+- (`ncn-m001#`) Run the following from `ncn-m001` to restart `goss-servers`.
+
+    ```bash
+    ncn_nodes=$(grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | tr -t '\n' ',')
+    ncn_nodes=${ncn_nodes%,}
+    pdsh -S -b -w $ncn_nodes 'systemctl restart goss-servers'
+    ```
+
+- (`pit#`) Run the following from the PIT node to restart `goss-servers`.
+
+    ```bash
+    mtoken='ncn-m(?!001)\w+-mgmt' ; stoken='ncn-s\w+-mgmt' ; wtoken='ncn-w\w+-mgmt'
+    ncn_nodes=$(grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | sed -e "s/-mgmt//" | tr -t '\n' ',')
+    ncn_nodes=${ncn_nodes%,}
+    pdsh -S -b -w $ncn_nodes 'systemctl restart goss-servers'
+    ```
+
 Available platform health checks:
 
 1. [NCN health checks](#11-ncn-health-checks)

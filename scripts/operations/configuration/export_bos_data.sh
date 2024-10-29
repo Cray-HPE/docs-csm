@@ -33,7 +33,7 @@
 # If no directory is specified, the archive will be created in the current
 # directory.
 #
-# If --include-v1 is specified, the exported will attempt to backup BOS v1
+# If --include-v1 is specified, the script will attempt to backup BOS v1
 # data as well. This is intended for use before upgrades to CSM 1.6 from
 # CSM 1.5. If the system is already at CSM 1.6, BOS v1 is no longer available,
 # and specifying this option will have no effect.
@@ -69,15 +69,21 @@ bos_list() {
 
 INCLUDE_V1=N
 
-if [[ $# -gt 0 && $1 == --include-v1 ]]; then
-  echo "User has requested to include BOS v1 data in the export, if possible"
-  # Use the Cray CLI to see if BOS v1 is available
-  if ! cray bos v1 >/dev/null 2>&1; then
-    echo "BOS v1 is no longer available in the Cray CLI; BOS v1 data will not be exported"
-  else
-    INCLUDE_V1=Y
+if [[ $# -gt 0 ]]; then
+  if [[ $1 == --include-v1 ]]; then
+    echo "User has requested to include BOS v1 data in the export, if possible"
+    # Use the Cray CLI to see if BOS v1 is available
+    if ! cray bos v1 >/dev/null 2>&1; then
+      echo "BOS v1 is no longer available in the Cray CLI; BOS v1 data will not be exported"
+    else
+      INCLUDE_V1=Y
+    fi
+    shift
+  elif [[ $1 == --exclude-v1 ]]; then
+    # This flag is deprecated, because this is now the default behavior for the script.
+    # We still allow for it, though, so as to not break any scripts which may be using it.
+    shift
   fi
-  shift
 fi
 
 if [[ $# -gt 1 ]]; then

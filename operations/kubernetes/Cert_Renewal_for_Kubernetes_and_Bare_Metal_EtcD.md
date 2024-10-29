@@ -357,7 +357,7 @@ Repeat the above step on every master node.
    pdcp -w ncn-m00[2-3] -w ncn-w00[1-3] -w ncn-s001 /etc/kubernetes/admin.conf /etc/kubernetes/
    ```
 
-   **IMPORTANT:** You are now done renewing all certificates. Do NOT perform the next section unless your kubelet client certificate also expired. Use the following command to check:
+   **IMPORTANT:** You are now done renewing all certificates. Do NOT perform the next section unless your `kubelet` client certificate also expired. Use the following command to check:
 
    ```bash
    pdsh -w ncn-m00[1-3] -w ncn-w00[1-3] openssl x509 -enddate -noout -in /var/lib/kubelet/pki/kubelet-client-current.pem
@@ -365,7 +365,7 @@ Repeat the above step on every master node.
 
 ### Regenerate `kubelet` `.pem` Certificates
 
-**`NOTE`** This section is typically not necessary unless your kubelet client certificate expired (see above section).
+**`NOTE`** This section is typically not necessary unless your `kubelet` client certificate expired (see above section).
 
 1. Backup certificates for `kubelet` on each master and worker node:
 
@@ -446,7 +446,7 @@ Repeat the above step on every master node.
 
 6. Perform a rolling reboot of master nodes.
 
-   **IMPORTANT:** Make sure the current time on the master node to be rebooted falls within the validity period of its kubelet client certificate before rebooting it. Pay attention to the time zone difference when checking it:
+   **IMPORTANT:** Make sure the current time on the master node to be rebooted falls within the validity period of its `kubelet` client certificate before rebooting it. Pay attention to the time zone difference when checking it:
 
    ```bash
    date; openssl x509 -startdate -enddate -noout -in /var/lib/kubelet/pki/kubelet-client-current.pem
@@ -458,7 +458,7 @@ Repeat the above step on every master node.
 
 7. Perform a rolling reboot of worker nodes.
 
-   **IMPORTANT:** Make sure the current time on the worker node to be rebooted falls within the validity period of its kubelet client certificate before rebooting it. Pay attention to the time zone difference when checking it:
+   **IMPORTANT:** Make sure the current time on the worker node to be rebooted falls within the validity period of its `kubelet` client certificate before rebooting it. Pay attention to the time zone difference when checking it:
 
    ```bash
    date; openssl x509 -startdate -enddate -noout -in /var/lib/kubelet/pki/kubelet-client-current.pem
@@ -565,26 +565,27 @@ Run the following steps from a master node.
    1. Restart Prometheus.
 
       ```bash
-      kubectl rollout restart -n sysmgmt-health statefulSet/prometheus-cray-sysmgmt-health-kube-p-prometheus
-      kubectl rollout status -n sysmgmt-health statefulSet/prometheus-cray-sysmgmt-health-kube-p-prometheus
+      kubectl rollout restart deployment -n sysmgmt-health vmagent-vms-0
+      kubectl rollout status -n sysmgmt-health deployment.apps/vmagent-vms-0
+      kubectl rollout restart deployment -n sysmgmt-health vmagent-vms-1
+      kubectl rollout status -n sysmgmt-health deployment.apps/vmagent-vms-1
       ```
 
       Example output:
 
       ```text
-      Waiting for 1 pods to be ready...
-      statefulset rolling update complete ...
+      deployment "vmagent-vms-0" successfully rolled out
       ```
 
    1. Check for any `tls` errors from the active Prometheus targets. No errors are expected.
 
       ```bash
-      PROM_IP=$(kubectl get services -n sysmgmt-health cray-sysmgmt-health-kube-p-prometheus -o json | jq -r '.spec.clusterIP')
-      curl -s http://${PROM_IP}:9090/api/v1/targets | jq -r '.data.activeTargets[] | select(."scrapePool" == "sysmgmt-health/cray-sysmgmt-health-kube-p-kube-etcd/0")' | grep lastError | sort -u
+      PROM_IP=$(kubectl get services -n sysmgmt-health vmagent-vms -o json | jq -r '.spec.clusterIP')
+      curl -s http://${PROM_IP}:8429/targets |  grep kube-etcd | sort -u 
       ```
 
       Example output:
 
       ```text
-        "lastError": "",
+        state=up, endpoint=https://10.252.1.10:2379/metrics, labels={endpoint="http-metrics",instance="10.252.1.10:2379",job="kube-etcd",namespace="kube-system",service="vms-kube-etcd"}, scrapes_total=28114, scrapes_failed=0, last_scrape=14838ms ago, scrape_duration=14ms, samples_scraped=1487, error=
       ```

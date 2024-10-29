@@ -41,7 +41,7 @@ CSM dependencies:
 - Kubernetes
 - S3
 
-HPE Cray Supercomputing [Compute Node](../../../glossary.md#compute-node-cn) Software Environment dependencies:
+HPE Cray Supercomputing [User Services Software (USS)](../../../glossary.md#user-services-software-uss) dependencies:
 
 - [Node Memory Dump (NMD)](../../../glossary.md#node-memory-dump-nmd)
 

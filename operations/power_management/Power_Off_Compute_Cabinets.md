@@ -21,8 +21,8 @@ HPE Cray standard EIA racks typically include two redundant PDUs. Some PDU model
 
 ## Prerequisites
 
-* An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream
-  documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
+* An authentication token is required to access the API gateway and to use the `sat` command. For more information, see
+  [Authenticate SAT Commands](../../operations/system_admin_toolkit/configuration/Authenticate_SAT_Commands.md).
 * This procedure assumes all system software and user jobs were shut down. See
   [Shut Down and Power Off Managed Nodes](Shut_Down_and_Power_Off_Managed_Nodes.md).
 

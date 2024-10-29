@@ -77,7 +77,7 @@ The Domain Name Service \(DNS\) is not configured properly.
     Example output:
 
     ```text
-    10.101.5.128    opa-gpm.cmn.SYSTEM_DOMAIN_NAME kiali-istio.cmn.SYSTEM_DOMAIN_NAME prometheus.cmn.SYSTEM_DOMAIN_NAME alertmanager.cmn.SYSTEM_DOMAIN_NAME grafana.cmn.SYSTEM_DOMAIN_NAME vcs.cmn.SYSTEM_DOMAIN_NAME sma-grafana.cmn.SYSTEM_DOMAIN_NAME sma-kibana.cmn.SYSTEM_DOMAIN_NAME csms.cmn.SYSTEM_DOMAIN_NAME
+    10.101.5.128    opa-gpm.cmn.SYSTEM_DOMAIN_NAME kiali-istio.cmn.SYSTEM_DOMAIN_NAME vmselect.cmn.SYSTEM_DOMAIN_NAME alertmanager.cmn.SYSTEM_DOMAIN_NAME grafana.cmn.SYSTEM_DOMAIN_NAME vcs.cmn.SYSTEM_DOMAIN_NAME sma-grafana.cmn.SYSTEM_DOMAIN_NAME sma-kibana.cmn.SYSTEM_DOMAIN_NAME csms.cmn.SYSTEM_DOMAIN_NAME
     10.101.5.129    api.cmn.SYSTEM_DOMAIN_NAME auth.cmn.SYSTEM_DOMAIN_NAME nexus.cmn.SYSTEM_DOMAIN_NAME
     10.101.5.130    s3.cmn.SYSTEM_DOMAIN_NAME
     10.92.100.71    api.nmn.SYSTEM_DOMAIN_NAME auth.nmn.SYSTEM_DOMAIN_NAME

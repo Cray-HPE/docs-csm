@@ -29,7 +29,16 @@ DaemonSet
 DaemonSets
 StatefulSet
 StatefulSets
-
+VictoriaMetrics
+Vmagent
+Vmalert
+Vminsert
+Vmselect
+Vmstorage
+vmstorage
+vmalert
+vmselect
+victoria
 
 1.0.x
 1.2.x
@@ -1093,6 +1102,20 @@ Expat-15
 - troubleshooting/known_issues/antero_node_NID_allocation.md
 # To allow Site Init
 Init
+
+- troubleshooting/known_issues/iuf_unable_to_run_next_stage.md
+_cm_backup.yaml
+activity
+argo
+cli
+configmap
+cray-nls
+current_state
+iuf
+kubectl
+o
+session_name
+yaml
 
 - operations/configuration_management/iSCSI_SBPS_Node_Personalization.md
 enablement

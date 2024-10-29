@@ -8,8 +8,9 @@ This section updates the software running on management NCNs.
     - [3.1 `management-nodes-rollout` with CSM upgrade](#31-management-nodes-rollout-with-csm-upgrade)
     - [3.2 `management-nodes-rollout` without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade)
     - [3.3 NCN worker nodes](#33-ncn-worker-nodes)
-- [4. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware)
-- [5. Next steps](#5-next-steps)
+- [4. Restart `goss-servers` on all NCNs](#4-restart-goss-servers-on-all-ncns)
+- [5. Update management host Slingshot NIC firmware](#5-update-management-host-slingshot-nic-firmware)
+- [6. Next steps](#6-next-steps)
 
 ## 1. Perform Slingshot switch firmware updates
 
@@ -40,6 +41,8 @@ nodes. This initial test node is referred to as the "canary node". Modify the pr
 
 **`NOTE`** Additional arguments are available to control the behavior of the `management-nodes-rollout` stage, for example `--limit-management-rollout` and `-cmrp`. See the
 [`management-nodes-rollout` stage documentation](../stages/management_nodes_rollout.md) for details and adjust the examples below if necessary.
+
+**`NOTE`** Known Issue: If IUF reports that multiple sessions are in progress for an activity, refer to [IUF does not run the next stage for an activity.](../../../troubleshooting/known_issues/iuf_unable_to_run_next_stage.md)
 
 **`IMPORTANT`** There is a different procedure for `management-nodes-rollout` depending on whether or not CSM is being upgraded. The two procedures differ in the handling of NCN storage nodes and NCN master nodes. If CSM is not
 being upgraded, then NCN storage nodes and NCN master nodes will not be upgraded with new images and will be updated by the CFS configuration created in [update-cfs-config](../stages/update_cfs_config.md) only. If CSM is being
@@ -252,12 +255,14 @@ Refer to that table and any corresponding product documents before continuing to
            cray cfs components describe "${XNAME}"
            ```
 
+    > **`NOTE`** After `management-nodes-rollout` stage for management NCNs is completed, re-initialize cray CLI. Refer to [Configure the Cray Command Line Interface (cray CLI)](../../configure_cray_cli.md)
+
     Once this step has completed:
 
      - All management NCNs have been upgraded to the image and CFS configuration created in the previous steps of this workflow
      - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [4. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware).
+Continue to the next section [4. Restart `goss-servers` on all NCNs](#4-restart-goss-servers-on-all-ncns).
 
 ### 3.2 `management-nodes-rollout` without CSM upgrade
 
@@ -396,7 +401,7 @@ Once this step has completed:
 - Management NCN storage and NCN master nodes have be updated with the CFS configuration created in the previous steps of this workflow.
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [4. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware).
+Continue to the next section [4. Restart `goss-servers` on all NCNs](#4-restart-goss-servers-on-all-ncns).
 
 ### 3.3 NCN worker nodes
 
@@ -492,7 +497,21 @@ Once this step has completed:
 Return to the procedure that was being followed for `management-nodes-rollout` to complete the next step, either [Management-nodes-rollout with CSM upgrade](#31-management-nodes-rollout-with-csm-upgrade) or
 [Management-nodes-rollout without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade).
 
-## 4. Update management host Slingshot NIC firmware
+## 4. Restart `goss-servers` on all NCNs
+
+**`NOTE`** Skip this step if the CSM version is 1.6.1 or above. This step will cause no harm if done on CSM 1.6.1 or higher, but it is unnecessary.
+
+If the CSM version is 1.6.0 or lower, then the `goss-servers` service needs to be restarted on all NCNs. This ensures the correct tests are run on each NCN. This is necessary due to a timing issue that is fixed in CSM 1.6.1.
+
+(`ncn-m001#`) Restart `goss-servers`.
+
+```bash
+ncn_nodes=$(grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | tr -t '\n' ',')
+ncn_nodes=${ncn_nodes%,}
+pdsh -S -b -w $ncn_nodes 'systemctl restart goss-servers'
+```
+
+## 5. Update management host Slingshot NIC firmware
 
 **`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
@@ -507,7 +526,7 @@ Once this step has completed:
 - Service checks have been run to verify product microservices are executing as expected
 - Per-stage product hooks have executed for the `deploy-product` and `post-install-service-check` stages
 
-## 5. Next steps
+## 6. Next steps
 
 - If performing an initial install or an upgrade of non-CSM products only, return to the
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)

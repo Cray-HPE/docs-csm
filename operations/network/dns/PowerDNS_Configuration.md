@@ -4,7 +4,7 @@
 
 PowerDNS replaces the CoreDNS server that earlier versions of CSM used to provide External DNS services.
 
-The `cray-dns-powerdns-can-tcp` and `cray-dns-powerdns-can-udp` LoadBalancer resources are configured to service external DNS requests using the IP address specified by the CSI `--cmn-external-dns` command line argument.
+The `cray-dns-powerdns-can-tcp` and `cray-dns-powerdns-can-udp` `LoadBalancer` resources are configured to service external DNS requests using the IP address specified by the CSI `--cmn-external-dns` command line argument.
 
 The CSI `--system-name` and `--site-domain` command line arguments are combined to form the subdomain used for External DNS.
 
@@ -12,13 +12,13 @@ The CSI `--system-name` and `--site-domain` command line arguments are combined 
 
 In the following example, the IP address `10.101.8.113` is used for External DNS and the system has the subdomain `system.dev.cray.com`
 
-```
+```yaml
 kubectl -n services get service -l app.kubernetes.io/name=cray-dns-powerdns
 ```
 
 Example output:
 
-```
+```text
 NAME                        TYPE           CLUSTER-IP      EXTERNAL-IP    PORT(S)        AGE
 cray-dns-powerdns-api       ClusterIP      10.24.24.29     <none>         8081/TCP       21d
 cray-dns-powerdns-can-tcp   LoadBalancer   10.27.91.157    10.101.8.113   53:30726/TCP   21d
@@ -31,7 +31,7 @@ cray-dns-powerdns-nmn-udp   LoadBalancer   10.17.203.241   10.92.100.85   53:318
 
 A system administrator would typically setup the subdomain `system.dev.cray.com` in their site DNS and create a record which points to the IP address `10.101.8.113`, for example `ins1.system.dev.cray.com`.
 
-The administrator would then delegate queries to `system.dev.cray.com` to `ins1.system.dev.cray.com` making it authoritative for that subdomain allowing CSM to respond to queries for services like `prometheus.system.dev.cray.com`
+The administrator would then delegate queries to `system.dev.cray.com` to `ins1.system.dev.cray.com` making it authoritative for that subdomain allowing CSM to respond to queries for services like `grafana.system.dev.cray.com`
 
 The specifics of how to configure to configuring DNS forwarding is dependent on the DNS server in use, please consult the documentation provided by the DNS server vendor for more information.
 
@@ -49,13 +49,13 @@ Zone transfer is configured via `customizations.yaml` parameters and can also be
 **Description:**
 The name of the PowerDNS server, this is combined with the system domain information to create the NS record for zones, for example.
 
-```
-system.dev.cray.com.	1890	IN	NS	primary.system.dev.cray.com.
+```text
+system.dev.cray.com.   1890   IN    NS   primary.system.dev.cray.com.
 ```
 
 This record will also point to the External DNS IP address
 
-```
+```text
 $ dig +short primary.system.dev.cray.com
 10.101.8.113
 ```
@@ -66,7 +66,7 @@ $ dig +short primary.system.dev.cray.com
 **Description:**
 A comma-separated list of DNS servers to notify in the format `server name/ip address`.
 
-```
+```text
 externaldns1.my.domain/1.1.1.1,externaldns2.my.domain/2.2.2.2
 ```
 
@@ -78,13 +78,14 @@ If the default value is used no servers to notify on zone update will be configu
 **Description:**
 A comma-separated list of zones to transfer.
 
-```
+```text
 system.dev.cray.com,8.101.10.in-addr.arpa
 ```
 
 If the default value is used then PowerDNS will attempt to transfer all zones.
 
 ### Example configuration for BIND
+
 An example configuration demonstrating how to configure BIND as a secondary server for zone transfer.
 
 For other DNS servers please consult the documentation provided by the DNS server vendor.
@@ -124,6 +125,7 @@ zone "8.101.10.in-addr.arpa" {
   file "/var/lib/bind/db.8.101.10.in-addr.arpa";
 };
 ```
+
 `masters` should be set to the CMN IP address of the PowerDNS service. This is typically defined at install time by the `--cmn-external-dns` CSI option.
 
 `allow-notify` should contain the CAN IP addresses of all Kubernetes worker nodes.
@@ -134,17 +136,17 @@ zone "8.101.10.in-addr.arpa" {
 
 The CSM implementation of PowerDNS supports the DNS Security Extensions (DNSSEC) and the signing of zones with a user-supplied zone signing key.
 
-If DNSSEC is to be used for zone transfer then the `dnssec` SealedSecret in `customizations.yaml` should be updated to include a base64 encoded version of the private key portion of the desired zone signing key.
+If DNSSEC is to be used for zone transfer then the `dnssec` SealedSecret in `customizations.yaml` should be updated to include a `base64` encoded version of the private key portion of the desired zone signing key.
 
 Here is an example of a zone signing key.
 
-```
+```text
 cat Ksystem.dev.cray.com.+013+63812.private
 ```
 
 Example output:
 
-```
+```text
 Private-key-format: v1.3
 Algorithm: 13 (ECDSAP256SHA256)
 PrivateKey: +WFrfooCjTtoRU5UfhrpuTL0IEm6hYc4YJ6u8CcYquo=
@@ -155,13 +157,13 @@ Activate: 20210817081902
 
 Encode the key using the `base64` utility.
 
-```
+```text
 base64 Ksystem.dev.cray.com.+013+63812.private
 ```
 
 Example output:
 
-```
+```text
 UHJpdmF0ZS1rZXktZm9ybWF0OiB2MS4zCkFsZ29yaXRobTogMTMgKEVDRFNBUDI1NlNIQTI1NikK
 UHJpdmF0ZUtleTogK1dGcmZvb0NqVHRvUlU1VWZocnB1VEwwSUVtNmhZYzRZSjZ1OENjWXF1bz0K
 Q3JlYXRlZDogMjAyMTA4MTcwODE5MDIKUHVibGlzaDogMjAyMTA4MTcwODE5MDIKQWN0aXZhdGU6
@@ -170,9 +172,10 @@ IDIwMjEwODE3MDgxOTAyCg==
 
 Populate the generate block in `customizations.yaml` with the encoded key.
 
-> **`IMPORTANT`** the name of the key in SealedSecret **must** match the name of the zone being secured, in the below example the zone name is `system.dev.cray.com`. If multiple zones are to be secured each zone should have its own entry even if the same key is used.
+> **`IMPORTANT`** the name of the key in SealedSecret **must** match the name of the zone being secured, in the below example the zone name is `system.dev.cray.com`.
+If multiple zones are to be secured each zone should have its own entry even if the same key is used.
 
-```
+```yaml
 spec:
   kubernetes:
     sealed_secrets:
@@ -196,7 +199,7 @@ Transaction signatures (TSIG) provide a secure communication channel between a p
 
 To configure TSIG add the desired key to the `dnssec` generate block in `customizations.yaml`. At this time only a single transaction signing key is supported and that key is applied to all zones.
 
-```
+```yaml
 spec:
   kubernetes:
     sealed_secrets:
@@ -221,22 +224,22 @@ spec:
                   key:       dnFC5euKixIKXAr6sZhI7kVQbQCXoDG5R5eHSYZiBxY=
 ```
 
-> **`IMPORTANT`** The key used for TSIG **must** have `.tsig` in the name and unlike the zone signing key it should not be base64 encoded.
+> **`IMPORTANT`** The key used for TSIG **must** have `.tsig` in the name and unlike the zone signing key it should not be `base64` encoded.
 
-#### Example configuration for BIND
+#### Example configuration for BIND and TSIG key
 
 An example configuration demonstrating how to extend the previous BIND configuration example and add the TSIG key.
 
-```
+```json
 key "system-key" {
-	algorithm hmac-sha256;
-	secret "dnFC5euKixIKXAr6sZhI7kVQbQCXoDG5R5eHSYZiBxY=";
+        algorithm hmac-sha256;
+        secret "dnFC5euKixIKXAr6sZhI7kVQbQCXoDG5R5eHSYZiBxY=";
 };
 # Primary server IP address (i.e., PowerDNS CAN ip)
 server 10.101.8.113 {
-	keys {
-		system-key;
-	};
+        keys {
+                system-key;
+        };
 };
 ```
 

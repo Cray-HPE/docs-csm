@@ -9,8 +9,8 @@ This procedure boots all managed nodes in the context of a full system power-up.
 
 * All compute cabinet PDUs, servers, and switches must be powered on.
 * All external file systems, such as Lustre or Spectrum Scale (GPFS), should be available to be mounted by clients
-* An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section
-  of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
+* An authentication token is required to access the API gateway and to use the `sat` command. For more information, see
+  [Authenticate SAT Commands](../../operations/system_admin_toolkit/configuration/Authenticate_SAT_Commands.md).
 
 ## Procedure
 

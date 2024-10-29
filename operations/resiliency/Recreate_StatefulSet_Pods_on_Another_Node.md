@@ -61,8 +61,6 @@ This procedure prevents services from being taken out of service when a node goe
    sma              sma-monasca-notification                               1/1                2d14h
    sma              sma-monasca-zoo-entrance                               1/1                2d14h
    sma              sma-postgres-cluster                                   2/2                96s
-   sysmgmt-health   alertmanager-cray-sysmgmt-health-kube-p-alertmanager   1/1                2d14h
-   sysmgmt-health   prometheus-cray-sysmgmt-health-kube-p-prometheus       1/1                2d14h
    vault            cray-vault                                             3/3                2d14h
    ```
 

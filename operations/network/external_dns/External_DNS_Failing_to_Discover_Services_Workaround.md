@@ -30,7 +30,7 @@ Use this procedure to resolve any external DNS routing issues with backend servi
     services         sma-kibana                        [services-gateway]             [sma-kibana.cmn.SYSTEM_DOMAIN_NAME]                            2d16h
     sysmgmt-health   cray-sysmgmt-health-alertmanager  [services/services-gateway]    [alertmanager.cmn.SYSTEM_DOMAIN_NAME]                          2d16h
     sysmgmt-health   cray-sysmgmt-health-grafana       [services/services-gateway]    [grafana.cmn.SYSTEM_DOMAIN_NAME]                               2d16h
-    sysmgmt-health   cray-sysmgmt-health-prometheus    [services/services-gateway]    [prometheus.cmn.SYSTEM_DOMAIN_NAME]                            2d16h
+    sysmgmt-health   cray-sysmgmt-health-vm-select     [services/services-gateway]    [vmselect.cmn.SYSTEM_DOMAIN_NAME]                              2d16h
     ```
 
 1. (`ncn-mw#`) Inspect the `VirtualService` objects to learn the destination service and port.
@@ -47,37 +47,41 @@ Use this procedure to resolve any external DNS routing issues with backend servi
     apiVersion: networking.istio.io/v1beta1
     kind: VirtualService
     metadata:
-      creationTimestamp: "2020-07-09T17:49:07Z"
-      generation: 1
-      labels:
-        app: cray-sysmgmt-health-prometheus
-        app.kubernetes.io/instance: cray-sysmgmt-health
-        app.kubernetes.io/managed-by: Tiller
-        app.kubernetes.io/name: cray-sysmgmt-health
-        app.kubernetes.io/version: 8.15.4
-        helm.sh/chart: cray-sysmgmt-health-0.3.1
-      name: cray-sysmgmt-health-prometheus
-      namespace: sysmgmt-health
-      resourceVersion: "41620"
-      selfLink: /apis/networking.istio.io/v1beta1/namespaces/sysmgmt-health/virtualservices/cray-sysmgmt-health-prometheus
-      uid: d239dfcc-a827-4a51-9b73-6eccfb937088
-    spec:
-      gateways:
-      - services/services-gateway
-      hosts:
-      - prometheus.cmn.SYSTEM_DOMAIN_NAME
+      annotations:
+      meta.helm.sh/release-name: cray-sysmgmt-health
+      meta.helm.sh/release-namespace: sysmgmt-health
+    creationTimestamp: "2024-10-15T12:59:14Z"
+    generation: 1
+    labels:
+      app: cray-sysmgmt-health-vm-select
+      app.kubernetes.io/instance: cray-sysmgmt-health
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: cray-sysmgmt-health
+      app.kubernetes.io/version: 0.17.5
+      helm.sh/chart: cray-sysmgmt-health-1.0.17-20241016103148_b40f1aa
+    name: cray-sysmgmt-health-vm-select
+    namespace: sysmgmt-health
+    resourceVersion: "149049132"
+    uid: d166065d-1b3b-4434-b25b-e95cb8940b01
+   spec:
+     gateways:
+     - services/services-gateway
+     - services/customer-admin-gateway
+     hosts:
+      - vmselect.cmn.mug.hpc.amslabs.hpecorp.net
       http:
       - match:
-        - authority:
-            exact: prometheus.cmn.SYSTEM_DOMAIN_NAME
-        route:
-        - destination:
-            host: cray-sysmgmt-health-kube-p-prometheus
-            port:
-              number: 9090
+      - authority:
+        exact: vmselect.cmn.mug.hpc.amslabs.hpecorp.net
+     route:
+       - destination:
+          host: vmselect-vms
+          port:
+            number: 8481
+
     ```
 
-    From the `VirtualService data`, it is straightforward to see how traffic will be routed. In this example, connections to `prometheus.cmn.SYSTEM_DOMAIN_NAME` will be routed to the
-    `cray-sysmgmt-health-prometheus` service in the `sysmgmt-health` namespace on port 9090.
+    From the `VirtualService data`, it is straightforward to see how traffic will be routed. In this example, connections to `vmselect.cmn.SYSTEM_DOMAIN_NAME` will be routed to the
+    `cray-sysmgmt-health-prometheus` service in the `sysmgmt-health` namespace on port 8481.
 
 External DNS will now be connected to the backend service.

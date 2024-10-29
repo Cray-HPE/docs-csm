@@ -564,6 +564,8 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
     "${CSM_ARTI_DIR}/lib/setup-nexus.sh"
+    # Workaround: To make SAT commands work, use the command below as a WAR to update cray-sat container image
+    zypper --non-interactive update cray-sat-podman
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
@@ -890,6 +892,8 @@ do_upgrade_csm_chart cray-drydock platform.yaml
 do_upgrade_csm_chart cray-sysmgmt-health platform.yaml
 do_upgrade_csm_chart cray-tftp sysmgmt.yaml
 do_upgrade_csm_chart cray-tftp-pvc sysmgmt.yaml
+# cray-product-catalog needs to be upgraded here in CSM 1.6 so it is compatible with SAT when building images/cfs configs
+do_upgrade_csm_chart cray-product-catalog sysmgmt.yaml
 
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
