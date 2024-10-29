@@ -3,8 +3,8 @@
 * [Introduction](#introduction)
 * [iSCSI SBPS solution details](#iscsi-sbps-solution-details)
 * [Steps to achieve SBPS](#steps-to-achieve-sbps)
-* [Steps to switch from DVS to iSCSI](#steps-to-switch-from-dvs-to-iscsi)
-* [Steps to continue using DVS](#steps-to-continue-using-dvs-based-projection)
+* [Steps to continue using DVS based projection](#steps-to-continue-using-dvs-based-projection)
+* [Steps to disable DVS](#steps-to-disable-dvs)
 * [Glossary](#glossary)
 
 ## Introduction
@@ -417,17 +417,6 @@ statistics on LIO portal network endpoints etc.
 
 Please refer [iSCSI Metrics](https://github.com/Cray-HPE/sbps-marshal/blob/main/iscsi_metrics.md) for details.
 
-## Steps to switch from DVS to iSCSI
-
-This involves this sequence of operations:
-
-* Disable DVS
-* Uninstall CPS
-* Enable iSCSI SBPS
-
-To perform these operations, please refer the section `DVS and SBPS` documented in the publication:
-`HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)`.
-
 ## Steps to continue using DVS based projection
 
 If a user wants to continue using DVS, then during the BOS session template creation (manually using `cray bos` command)
@@ -444,6 +433,16 @@ two lines marked CPS in `vcs/bootprep/compute-and-uan-bootprep.yaml` and then in
 EX Systems (S-8063)` for more details on DVS based boot content projection of `rootfs`/`PE` images.
 
 **Note:**: Rest of the steps in [Steps to achieve SBPS](#steps-to-achieve-sbps) viz., Image Tagging, Monitor iSCSI metrics need to be skipped.
+
+## Steps to disable DVS
+
+This involves this sequence of operations:
+
+* Disable DVS
+* Uninstall CPS
+
+To perform these operations, please refer the section `DVS and SBPS` documented in the publication:
+`HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)`.
 
 ### Glossary
 
