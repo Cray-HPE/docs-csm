@@ -58,7 +58,7 @@ All platform health checks are expected to pass. Each check has been implemented
 Before running health checks, restart `goss-servers` on all NCNs to ensure the correct tests are run on each node. This is necessary because of a timing issue on the nodes that has been fixed in CSM 1.6.1.
 Run one of the two commands below depending on if it is being executed from `ncn-m001` or from the PIT node.
 
-1. (`ncn-m001#`) Run the following from `ncn-m001` to restart `goss-servers`.
+- (`ncn-m001#`) Run the following from `ncn-m001` to restart `goss-servers`.
 
     ```bash
     ncn_nodes=$(grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | tr -t '\n' ',')
@@ -66,7 +66,7 @@ Run one of the two commands below depending on if it is being executed from `ncn
     pdsh -S -b -w $ncn_nodes 'systemctl restart goss-servers'
     ```
 
-1. (`pit#`) Run the following from the PIT node to restart `goss-servers`.
+- (`pit#`) Run the following from the PIT node to restart `goss-servers`.
 
     ```bash
     mtoken='ncn-m(?!001)\w+-mgmt' ; stoken='ncn-s\w+-mgmt' ; wtoken='ncn-w\w+-mgmt'
