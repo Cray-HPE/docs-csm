@@ -59,6 +59,7 @@ If the CSM version is 1.6.0 or lower, then before running health checks, restart
 
 > Skip the `goss-servers` service restart if the CSM version is 1.6.1 or above.
 > The restart will cause no harm if done on CSM 1.6.1 or higher, but it is unnecessary.
+
 Run one of the two commands below depending on if it is being executed from `ncn-m001` or from the PIT node.
 
 - (`ncn-m001#`) Run the following from `ncn-m001` to restart `goss-servers`.
