@@ -442,7 +442,7 @@ Follow this sequence of operations:
 * Uninstall CPS
 
 To disable DVS, please refer to the section `DVS and SBPS` and to uninstall CPS, please refer to the section `Uninstall CPS`
-section under the content `Scalable Boot Projection Service` documented in the publication:
+under the content `Scalable Boot Projection Service` documented in the publication
 `HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)`.
 
 ### Glossary
