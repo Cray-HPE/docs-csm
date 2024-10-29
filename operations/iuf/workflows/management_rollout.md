@@ -9,9 +9,10 @@ This section updates the software running on management NCNs.
     - [3.2 `management-nodes-rollout` without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade)
     - [3.3 NCN worker nodes](#33-ncn-worker-nodes)
         - [3.3.1 DVS workaround upgrading from COS prior to 2.5.146](#331-dvs-workaround-upgrading-from-cos-prior-to-25146)
-- [4. Update ceph node-exporter config for SNMP counters](#4-update-ceph-node-exporter-config-for-snmp-counters)
-- [5. Update management host Slingshot NIC firmware](#5-update-management-host-slingshot-nic-firmware)
-- [6. Next steps](#6-next-steps)
+- [4. Restart `goss-servers` on all NCNs](#4-restart-goss-servers-on-all-ncns)
+- [5. Update ceph node-exporter config for SNMP counters](#5-update-ceph-node-exporter-config-for-snmp-counters)
+- [6. Update management host Slingshot NIC firmware](#6-update-management-host-slingshot-nic-firmware)
+- [7. Next steps](#7-next-steps)
 
 ## 1. Perform Slingshot switch firmware updates
 
@@ -212,7 +213,7 @@ Once this step has completed:
 - All management NCNs have been upgraded to the image and CFS configuration created in the previous steps of this workflow
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [4. Update ceph node-exporter config for SNMP counters](#4-update-ceph-node-exporter-config-for-snmp-counters).
+Continue to the next section [4. Restart `goss-servers` on all NCNs](#4-restart-goss-servers-on-all-ncns).
 
 ### 3.2 `management-nodes-rollout` without CSM upgrade
 
@@ -351,7 +352,7 @@ Once this step has completed:
 - Management NCN storage and NCN master nodes have be updated with the CFS configuration created in the previous steps of this workflow.
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [4. Update ceph node-exporter config for SNMP counters](#4-update-ceph-node-exporter-config-for-snmp-counters).
+Continue to the next section [4. Restart `goss-servers` on all NCNs](#4-restart-goss-servers-on-all-ncns).
 
 ### 3.3 NCN worker nodes
 
@@ -508,7 +509,21 @@ in which to extract the new version of the script.
 
 After completing this workaround, return to [3.3 NCN worker nodes](#33-ncn-worker-nodes) to roll out worker nodes.
 
-## 4. Update ceph node-exporter config for SNMP counters
+## 4. Restart `goss-servers` on all NCNs
+
+The `goss-servers` service needs to be restarted on all NCNs. This ensures the correct tests are run on each NCN. This is necessary due to a timing issue that is fixed in CSM 1.6.1.
+
+(`ncn-m001#`) Restart `goss-servers`.
+
+```bash
+ncn_nodes=$(grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | tr -t '\n' ',')
+ncn_nodes=${ncn_nodes%,}
+pdsh -S -b -w $ncn_nodes 'systemctl restart goss-servers'
+```
+
+Continue to the next section [5. Update ceph node-exporter config for SNMP counters](#5-update-ceph-node-exporter-config-for-snmp-counters).
+
+## 5. Update ceph node-exporter config for SNMP counters
 
 > **OPTIONAL:** This is an optional step.
 
@@ -516,9 +531,9 @@ This uses `netstat` collector form node-exporter and enables all the SNMP counte
 
 See [Update ceph node-exporter configuration](../../utility_storage/update_ceph_node_exporter_config.md) to update the ceph node-exporter configuration to monitor SNMP counters.
 
-Continue to the next section [5. Update management host Slingshot NIC firmware](#5-update-management-host-slingshot-nic-firmware).
+Continue to the next section [6. Update management host Slingshot NIC firmware](#6-update-management-host-slingshot-nic-firmware).
 
-## 5. Update management host Slingshot NIC firmware
+## 6. Update management host Slingshot NIC firmware
 
 If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the  _HPE Slingshot Operations Guide_ for details on how to update NIC firmware on management nodes.
 
@@ -531,7 +546,7 @@ Once this step has completed:
 - Service checks have been run to verify product microservices are executing as expected
 - Per-stage product hooks have executed for the `deploy-product` and `post-install-service-check` stages
 
-## 6. Next steps
+## 7. Next steps
 
 - If performing an initial install or an upgrade of non-CSM products only, return to the
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)
