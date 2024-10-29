@@ -51,7 +51,9 @@ Execute the rolling NCN reboot procedure steps for the particular node type bein
 
     Refer to the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md) for an overview of the health checks.
 
-    1. (`ncn-mw#`) Restart `goss-servers` on all NCNs to ensure the correct tests are run on each node. This is necessary because of a timing issue on the nodes that has been fixed in CSM 1.6.1.
+    1. (`ncn-mw#`) If the CSM version is 1.6.0 or lower, then restart the `goss-servers` service on all NCNs to ensure the correct tests are run on each node. This is necessary due to a timing issue that is fixed in CSM 1.6.1.
+
+        > Skip this step if the CSM version is 1.6.1 or above. This step will cause no harm if done on CSM 1.6.1 or higher, but it is unnecessary.
 
         ```bash
         ncn_nodes=$(grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | tr -t '\n' ',')
@@ -714,13 +716,5 @@ Before rebooting NCNs:
 1. Validate CSM health.
 
     At a minimum, run the platform health checks.
-
-    (`ncn-m001#`) Before running health checks, restart `goss-servers` on all NCNs to ensure the correct tests are run on each node. This is necessary because of a timing issue on the nodes that has been fixed in CSM 1.6.1.
-
-    ```bash
-    ncn_nodes=$(grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | tr -t '\n' ',')
-    ncn_nodes=${ncn_nodes%,}
-    pdsh -S -b -w $ncn_nodes 'systemctl restart goss-servers'
-    ```
 
     See [Validate CSM Health](../validate_csm_health.md) for the platform health checks.
