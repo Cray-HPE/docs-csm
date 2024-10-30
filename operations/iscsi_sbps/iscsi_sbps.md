@@ -372,7 +372,7 @@ cray ims images update bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb --metadata-operation
 stop the content projection by SBPS Marshal agent causing undesirable behavior on compute/UAN nodes using the content.
 
 **Note #2:** As mentioned in the `Image tagging` step, BOS automatically tags the `rootfs` image for projection. To `untag` an image,
-use the aforementioned `craycli` utility of IMS because BOS does not support automatically automatically untagging an image.
+use the aforementioned `craycli` utility of IMS because BOS does not support automatically untagging an image.
 
 ### Steps to boot compute/ UAN node
 
