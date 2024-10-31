@@ -13,4 +13,4 @@ on the new images provided by the CSM product and customized by the additional H
 products, including the [User Services Software (USS)](../../../glossary.md#user-services-software-uss)
 and [Slingshot Host Software (SHS)](../../../glossary.md#slingshot-host-software-shs).
 
-To upgrade CSM and additional HPE Cray EX software products, see the [Upgrade CSM and additional products with IUF](upgrade_csm_iuf_additional_products_with_iuf.md) procedure.
+To upgrade CSM and additional HPE Cray EX software products, see the [Upgrade CSM and additional products with IUF](upgrade_csm_and_additional_products_with_iuf.md) procedure.

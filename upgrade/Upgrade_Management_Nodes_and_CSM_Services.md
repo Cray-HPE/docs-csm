@@ -18,7 +18,7 @@ For additional reference material on the upgrade processes and scripts mentioned
 - For systems with only three worker nodes (typically Testing and Development Systems (TDS)), prior to proceeding with this upgrade, CPU limits **MUST** be
   lowered on several services in order for this upgrade to succeed. This step is
   executed automatically in the CSM upgrade prerequisites hook executed by IUF before `pre-install-check`.
-  See [description of CSM upgrade hooks](../operations/iuf/workflows/upgrade_csm_iuf_additional_products_with_iuf.md#description-of-csm-upgrade-hooks) for more details on this CSM upgrade hook.
+  See [description of CSM upgrade hooks](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md#description-of-csm-upgrade-hooks) for more details on this CSM upgrade hook.
   See [TDS Lower CPU Requests](../operations/kubernetes/TDS_Lower_CPU_Requests.md) for more information.
 
 - Independently, for three-worker systems the `customizations.yaml` file is edited automatically during the upgrade, prior to deploying new CSM services. These
@@ -34,7 +34,7 @@ The upgrade to CSM 1.6 is done through IUF. Follow one of the following two proc
 
 1. [Upgrade only CSM](./Upgrade_Only_CSM_with_iuf.md)
 
-1. [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_iuf_additional_products_with_iuf.md)
+1. [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
 
 **Important:** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
 

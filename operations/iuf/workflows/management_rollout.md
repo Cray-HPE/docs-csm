@@ -533,7 +533,7 @@ Once this step has completed:
   workflow to continue the install or upgrade.
 
 - If performing an upgrade that includes upgrading CSM and additional products with IUF,
-  return to the [Upgrade CSM and additional products with IUF](upgrade_csm_iuf_additional_products_with_iuf.md)
+  return to the [Upgrade CSM and additional products with IUF](upgrade_csm_and_additional_products_with_iuf.md)
   workflow to continue the upgrade.
 
 - If performing an upgrade that includes upgrading only CSM, return to the
