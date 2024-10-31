@@ -7,7 +7,7 @@ This procedure is used to accomplish either of the following:
 - Upgrade of additional HPE Cray EX software products when CSM itself is not being upgraded.
 
 This procedure is _not_ used to perform an upgrade of CSM and additional HPE Cray EX software
-products. See [Upgrade CSM and additional products with IUF](upgrade_csm_iuf_additional_products_with_iuf.md)
+products. See [Upgrade CSM and additional products with IUF](upgrade_csm_and_additional_products_with_iuf.md)
 for that procedure.
 
 All stages of `iuf` are executed in this procedure. All of the new product software provided in the
