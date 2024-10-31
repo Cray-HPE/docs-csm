@@ -39,6 +39,9 @@ The Kubernetes API server is then configured to reference this client for token 
 
 When a tenant is created, `tapms` will create a Keycloak group specific for that tenant. In the below example, `vcluster-blue` is the name of the tenant, and `tapms` has created a group with the name `vcluster-blue-tenant-admin`:
 
+**`NOTE`** Logging into the Keycloak UI may not automatically display the realm in which the tenant groups are created.
+Ensure that you have the correct realm selected if the expected groups are not present.
+
 ![UserGroups](images/usergroups.png)
 
 For the initial release of multi-tenancy, assigning this group to a user is a manual process. Select the desired user and add them as a member of the new group as follows:
