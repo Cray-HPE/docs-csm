@@ -1,5 +1,8 @@
 # Stage 3 - Kubernetes Upgrade
 
+**The Kubernetes upgrade is done through IUF. This page exists in CSM 1.6 so that it can be referenced by [Management Rollout](../operations/iuf/workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade).
+This page should NOT be followed in its entirety in CSM 1.6.** See [CSM 1.5 to 1.6 Upgrade Process](./Upgrade_Management_Nodes_and_CSM_Services.md) for more information.
+
 **Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 [Relevant troubleshooting links for upgrade-related issues](Upgrade_Management_Nodes_and_CSM_Services.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 

@@ -219,7 +219,7 @@ can be adapted for other image types.
 
 1. Create a copy of the original SAT `bootprep` file.
 
-   Instructions for this procedure can be found in the [Stage 0](../upgrade/Stage_0_Prerequisites.md#option-2-upgrade-of-csm-on-system-with-additional-products) upgrade documentation.
+   Instructions for this procedure can be found in steps 1-4 of [Using `sat bootprep` with IUF generated input files](../operations/system_admin_toolkit/usage/SAT_and_IUF.md#using-sat-bootprep-with-iuf-generated-input-files) documentation.
 
 1. Edit the [Boot Orchestration Service (BOS)](../glossary.md#boot-orchestration-service-bos) session templates in the SAT `bootprep` file.
 

@@ -1,6 +1,6 @@
 # SLS Not Working During Node Rebuild
 
-During some node rebuilds (including those that happen during [Stage 1](../../upgrade/Stage_1.md) and [Stage 2](../../upgrade/Stage_2.md) of the CSM upgrade process),
+During some node rebuilds (including those that happen during management node upgrades in the CSM upgrade process),
 the SLS Postgres database gets into a bad state, causing SLS to become unhealthy. This page outlines how to detect if this has happened and provides a remediation procedure.
 
 **Note:** If encountering this during a CSM upgrade, then at this point of the upgrade process, the system has not yet upgraded the CSM services
