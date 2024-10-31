@@ -3,7 +3,8 @@
 * [Introduction](#introduction)
 * [iSCSI SBPS solution details](#iscsi-sbps-solution-details)
 * [Steps to achieve SBPS](#steps-to-achieve-sbps)
-* [Steps to switch from DVS to iSCSI](#steps-to-switch-from-dvs-to-iscsi)
+* [Steps to continue using DVS based projection](#steps-to-continue-using-dvs-based-projection)
+* [Steps to disable DVS and CPS](#steps-to-disable-dvs-and-cps)
 * [Glossary](#glossary)
 
 ## Introduction
@@ -14,7 +15,7 @@ to project boot content like `rootfs` and `programming environment` (PE) images.
 reliability, availability, security, ease and speed of deployment and ease of management than DVS.
 SBPS solution is offered from CSM 1.6 onwards and this solution is spread across different components BOS, USS/COS
 and the core service SBPS Marshal agent is delivered as an RPM gets deployed as part of CFS `ansible` play books.
-In CSM 1.6, both DVS and SBPS will co-exist and DVS is planned to deprecate in CSM 1.7
+In CSM 1.6, both DVS and SBPS will co-exist, but SBPS will be the default. Note, DVS is planned to be deprecated in CSM 1.7.
 
 **SBPS Key features:**
 
@@ -30,6 +31,9 @@ In CSM 1.6, both DVS and SBPS will co-exist and DVS is planned to deprecate in C
 * Supports monitoring of content projection service for performance and reliability engineering
 * Aligns with future plans for similar functionality in next generation systems management solutions
 * Easy to deploy and manage
+
+**Note:** Using HSN for boot content projection is recommended, and use NMN for any debugging purposes.
+In the case that the HSN is not configured, use the NMN if it meets the bandwidth requirements.
 
 ## iSCSI SBPS solution details
 
@@ -237,10 +241,20 @@ size=11G features='1 queue_if_no_path' hwhandler='1 alua' wp=ro
 
 ### Node Personalization (Worker node)
 
-Node personalization is the pre-requisite step of SBPS solution where we need to first setup/ configure worker nodes as iSCSI targets (servers)
+Node personalization is the pre-requisite step of SBPS solution where we need to first setup/configure worker nodes as iSCSI targets (servers)
 with necessary provisioning, configuration and enable required components. The required RPMs for `targetcli` command / LIO are part of NCN node image in CSM 1.6 and SBPS Marshal agent gets installed during node personalization via CFS Ansible play books.
 
-Please refer [Node Personalisation](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/configuration_management/iSCSI_SBPS_Node_Personalization.md) for the details.
+This can be done in two ways:
+
+a) Auto setup with bootprep:
+
+By default worker node personalization of iSCSI SBPS is done during CSM install/upgrade (using IUF). It is initiated during bootprep
+(management-nodes-rollout) in order to do worker node personalization automatically during boot time.
+
+b) Manual setup with CFS config/session:
+
+Worker node personalization can be done post CSM install with CFS config/session.
+Please refer to [Node Personalization](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/configuration_management/iSCSI_SBPS_Node_Personalization.md) for the details.
 
 ### Steps to configure and run GOSS tests
 
@@ -279,6 +293,8 @@ sat bootprep run --vars-file "session_vars.yaml" --format json --bos-version v2 
 Please refer [BOS Session Template](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/system_admin_toolkit/usage/SAT_Bootprep.md)
 for further details.
 
+**Note:** This way of creating BOS session template uses `vcs/bootprep/compute-and-uan-bootprep.yaml` where SBPS will be chosen by default.
+
 ### Image tagging
 
 To initiate the boot of compute node/ UANs, the images (`rootfs`/ `PE` ) are tagged to determine which
@@ -294,7 +310,7 @@ We can also tag the `rootfs` images using `cracli` utility of IMS manually.
 To tag the `PE` images, we need to import the `PE` image to IMS and then use `craycli` utility of IMS to tag it.
 Please refer [Import Image to IMS](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/image_management/Import_External_Image_to_IMS.md) for the steps to import an image to IMS.
 
-Please refer the section `Manage Image Labels` of the below document on details to tag an image using `craycli` utility (manual):
+Please refer the section `Manage Image Labels` of the below document on details to `tag`/`untag` an image using `craycli` utility (manual):
 [Manage Image Labels](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/image_management/Image_Management_Workflows.md)
 
 As per this document below are few examples to `tag`/`untag` an image using `craycli`.
@@ -352,8 +368,11 @@ Or
 cray ims images update bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb --metadata-operation remove --metadata-key sbps-project
 ```
 
-**Note:** As mentioned in `Image tagging` step, `rootfs` are tagged automatically by BOS, for untagging an image, we need to use above `craycli`
-utility of IMS as untagging of an image is not supported by BOS.
+**Note #1:** Only run the `untag` command on images that are not currently in use. Untagging images that are currently in use will
+stop the content projection by SBPS Marshal agent causing undesirable behavior on compute/UAN nodes using the content.
+
+**Note #2:** As mentioned in the `Image tagging` step, BOS automatically tags the `rootfs` image for projection. To `untag` an image,
+use the aforementioned `craycli` utility of IMS because BOS does not support automatically untagging an image.
 
 ### Steps to boot compute/ UAN node
 
@@ -398,22 +417,33 @@ statistics on LIO portal network endpoints etc.
 
 Please refer [iSCSI Metrics](https://github.com/Cray-HPE/sbps-marshal/blob/main/iscsi_metrics.md) for details.
 
-## Steps to switch from DVS to iSCSI
+## Steps to continue using DVS based projection
+
+If a user wants to continue using DVS, then during the BOS session template creation (manually using `cray bos` command)
+these parameter values have to be used:
+
+```text
+rootfs_provider: "cpss3"
+rootfs_provider_passthrough: "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0"
+```
+
+If the `sat` command is used to create the BOS session template, then please comment out the two lines marked SBPS and uncomment the above
+two lines marked CPS in `vcs/bootprep/compute-and-uan-bootprep.yaml` and then initiate the compute/UAN node boot. Please refer to the section
+`Content Projection Service` in the publication: `HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray
+EX Systems (S-8063)` for more details on DVS based boot content projection of `rootfs`/`PE` images.
+
+**Note:**: The steps in [Steps to achieve SBPS](#steps-to-achieve-sbps) are not relevant and should not be followed if DVS is used.
+
+## Steps to disable DVS and CPS
+
+Follow this sequence of operations:
 
 * Disable DVS
 * Uninstall CPS
-* Enable iSCSI SBPS
 
-To disable DVS please refer:
-<https://github.hpe.com/hpe/hpc-shasta-os-uss-docs/blob/master/dac-assets/documents/operations/DVS_and_SBPS.md>
-
-To uninstall CPS services please refer:
-<https://github.hpe.com/hpe/hpc-shasta-os-uss-docs/blob/master/dac-assets/documents/operations/Uninstall_CPS.md>
-
-To enable iSCSI SBPS please refer:
-<https://github.hpe.com/hpe/hpc-shasta-os-uss-docs/blob/master/dac-assets/documents/operations/Scalable_Boot_projection_service.md>
-
-Note: These URL references will be replaced with appropriate document name and number in support center.
+To disable DVS, please refer to the section `DVS and SBPS` and to uninstall CPS, please refer to the section `Uninstall CPS`
+under the content `Scalable Boot Projection Service` documented in the publication
+`HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)`.
 
 ### Glossary
 
@@ -430,3 +460,5 @@ Note: These URL references will be replaced with appropriate document name and n
 **CPS:** Content Projection Service
 
 **DVS:** Cray Data Virtualization Service
+
+**IUF:** Install and Upgrade Framework

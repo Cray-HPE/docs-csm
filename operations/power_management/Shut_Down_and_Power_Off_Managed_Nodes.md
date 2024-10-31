@@ -6,10 +6,10 @@ nodes, which are powered off later.
 
 ## Prerequisites
 
-The `cray` and `sat` commands must be initialized and authenticated with valid credentials for Keycloak. If these have not been prepared, then see
-[Configure the Cray Command Line Interface (`cray` CLI)](../configure_cray_cli.md) and refer to the "SAT Authentication" section of the *HPE Cray EX
-System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructions on how to acquire a SAT authentication token.
-The BOS session templates to use for shutting down all managed nodes in the system have been identified as described in [Identify BOS session templates for managed nodes](./Prepare_the_System_for_Power_Off.md#identify-bos-session-templates-for-managed-nodes).
+- The `cray` and `sat` commands must be initialized and authenticated with valid credentials for Keycloak. If these have not been prepared, see
+[Configure the Cray Command Line Interface (`cray` CLI)](../configure_cray_cli.md) and
+[Authenticate SAT Commands](../../operations/system_admin_toolkit/configuration/Authenticate_SAT_Commands.md).
+- The BOS session templates to use for shutting down all managed nodes in the system have been identified as described in [Identify BOS session templates for managed nodes](./Prepare_the_System_for_Power_Off.md#identify-bos-session-templates-for-managed-nodes).
 
 ## Procedure
 

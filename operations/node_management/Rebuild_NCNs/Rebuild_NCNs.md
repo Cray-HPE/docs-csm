@@ -26,6 +26,14 @@ echo $XNAME
 
 Only follow the steps in the section for the node type that is being rebuilt.
 
+> **`NOTE:`** (`ncn#`) If the CSM version is 1.6.0 or lower, then restart the `goss-servers` service on the rebuilt node after it has been rebuilt.
+> This is necessary because of a timing issue that is fixed in CSM 1.6.1.
+> The service restart will cause no harm if done on CSM 1.6.1 or higher, but it is unnecessary.
+>
+> ```bash
+> ssh "${NODE}" 'systemctl restart goss-servers'
+> ```
+
 - [Worker node](#worker-node)
 - [Master node](#master-node)
 - [Storage node](#storage-node)

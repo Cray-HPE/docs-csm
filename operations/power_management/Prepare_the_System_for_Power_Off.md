@@ -6,8 +6,8 @@ The `sat bootsys shutdown` and `sat bootsys boot` commands are used to shut down
 
 ## Prerequisites
 
-An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the
-HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
+An authentication token is required to access the API gateway and to use the `sat` command. For more information, see
+[Authenticate SAT Commands](../../operations/system_admin_toolkit/configuration/Authenticate_SAT_Commands.md).
 
 ## Procedure
 
@@ -23,9 +23,10 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
 1. Use `sat auth` to authenticate to the API gateway within SAT.
 
-   If SAT has already been authenticated to the API gateway, this step may be skipped.
+   For information on acquiring a SAT authentication token, see
+   [Authenticate SAT Commands](../../operations/system_admin_toolkit/configuration/Authenticate_SAT_Commands.md).
 
-   See the "SAT Authentication" section in the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
+   If SAT has already been authenticated to the API gateway, this step may be skipped.
 
 ### Check shell initialization scripts
 

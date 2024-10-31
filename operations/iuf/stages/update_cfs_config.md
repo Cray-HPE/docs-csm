@@ -38,7 +38,7 @@ The following arguments are most often used with the `update-cfs-config` stage. 
 The code executed by this stage utilizes `sat bootprep` to create CFS configurations. See the `update-cfs-config` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding files in
 `/usr/share/doc/csm/workflows/iuf/operations/` for details on the commands executed.
 
-See the [HPE Cray EX System Admin Toolkit (SAT) Guide](https://cray-hpe.github.io/docs-sat/) documentation for details on `sat bootprep`.
+For more information, see [SAT Bootprep](../../../operations/system_admin_toolkit/usage/SAT_Bootprep.md).
 
 ## Example
 

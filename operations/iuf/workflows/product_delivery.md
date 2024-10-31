@@ -14,7 +14,7 @@ This section ensures the product content is loaded onto the system and available
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `process-media` or `pre-install-check` stages.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. Run `upload-rebuild-templates.sh` to update all the workflows that will be used by IUF and to ensure the correct CSM product versions will be used by IUF.
+1. Run `upload-rebuild-templates.sh` to update all the workflows that will be used by IUF and to make sure the workflow templates are the latest versions.
 
     (`ncn-m001#`) Execute the `upload-rebuild-templates.sh` script.
 
@@ -71,6 +71,14 @@ Refer to that table and any corresponding product documents before continuing to
       iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run --site-vars \
       "${ADMIN_DIR}/site_vars.yaml" -bpcd "${ADMIN_DIR}" -r deliver-product
       ```
+
+1. Run `upload-rebuild-templates.sh` to ensure the correct CSM product versions will be used by IUF now that all product artifacts have been uploaded.
+
+    (`ncn-m001#`) Execute the `upload-rebuild-templates.sh` script.
+
+    ```bash
+    /usr/share/doc/csm/workflows/scripts/upload-rebuild-templates.sh
+    ```
 
 Once this step has completed:
 

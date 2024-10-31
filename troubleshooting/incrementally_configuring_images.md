@@ -47,7 +47,7 @@ can be adapted for other image types.
    1. View the log and look for a line that includes `Creation of image`.
 
       ```text
-      INFO: Creation of image ssi-cne-1.0.0-32-csm-1.5.x86_64-csm-1.5.0.beta37-10 succeeded: ID f5374c4c-8c5a-4b79-a5e5-aef778ed36cd
+      INFO: Creation of image ssi-uss-1.0.0-32-csm-1.5.x86_64-csm-1.5.0.beta37-10 succeeded: ID f5374c4c-8c5a-4b79-a5e5-aef778ed36cd
       ```
 
    1. Set `BASE_IMAGE_ID` to the value of the image ID.
