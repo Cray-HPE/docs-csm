@@ -31,6 +31,7 @@
     * [`SlurmCluster` command examples](#slurmcluster-command-examples)
     * [HSM command examples](#hsm-command-examples)
     * [HNS command example](#hns-command-example)
+* [Upgrade all tenants after a Slurm product upgrade](#upgrade-all-tenants-after-a-Slurm-product-upgrade)
 * [Appendices](#appendices)
     * [Appendix A - `Development` tenant](#appendix-a---development-tenant)
     * [Appendix B - `Development SlurmCluster`](#appendix-b---development-slurmcluster)
@@ -538,7 +539,7 @@ You can use a single BOS session template for many tenants of the same node type
 1. (`ncn-mw#`) Upload the new configuration, specifying the filename and the name of the new configuration:
 
     ```bash
-    # cray cfs configurations update --file ssi-compute-cr_2024-cr_2024_1-tenants.json ssi-compute-cr_2024-cr_2024_1-tenants
+    cray cfs configurations update --file ssi-compute-cr_2024-cr_2024_1-tenants.json ssi-compute-cr_2024-cr_2024_1-tenants
     ```
 
 Repeat this step as needed for different node types and architectures.
@@ -589,8 +590,8 @@ After CFS completes, login to either a tenant UAN (if available), or tenant Comp
 * (`ncn-mw#`) View the logs for all tenants:
 
     ```bash
-    # TAPMS_POD=$( kubectl get pods -n tapms-operator --no-headers | awk '{print $1}' );
-    # kubectl logs --timestamps -n tapms-operator $TAPMS_POD
+    TAPMS_POD=$( kubectl get pods -n tapms-operator --no-headers | awk '{print $1}' );
+    kubectl logs --timestamps -n tapms-operator $TAPMS_POD
     ```
 
 ### `SlurmCluster` command examples
@@ -636,6 +637,41 @@ After CFS completes, login to either a tenant UAN (if available), or tenant Comp
     ```bash
     kubectl hns tree tenants
     ```
+
+## Upgrade all tenants after a Slurm upgrade
+
+This procedure is required for each tenant, after Slurm has been upgraded on the system (for example, after using IUF to upgrade products).
+
+You will need the configuration file that you used to create each tenant's `SlurmCluster`.
+For this Slurm upgrade, there is no need to change the `SlurmCluster` name; the only change is to the Slurm version inside each tenant.
+
+`SlurmCluster`: `devcls01a`
+Filename: `devcls01a.yaml`
+
+* (`ncn-mw#`) Edit and re-apply the `SlurmCluster` configuration file:
+
+    ```bash
+    cp -p devcls01a.yaml devcls01a.yaml-
+    vi devcls01a.yaml
+    diff devcls01a.yaml devcls01a.yaml-
+    10c10
+    <     image: cray/cray-slurmctld:1.7.0-slurm
+    ---
+    >     image: cray/cray-slurmctld:1.6.1
+    21c21
+    <     image: cray/cray-slurmdbd:1.7.0-slurm
+    ---
+    >     image: cray/cray-slurmdbd:1.6.1
+    kubectl apply -f devcls01a.yaml
+    ```
+
+* (`ncn-mw#`) Wait for all pods to return to Running state:
+
+    ```bash
+    kubectl get pods -A |grep vcluster
+    ```
+
+Repeat this step as needed for additional `SlurmClusters`.
 
 ## Appendices
 
