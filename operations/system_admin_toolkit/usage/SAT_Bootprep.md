@@ -448,40 +448,69 @@ session_templates:
         rootfs_provider_passthrough: dvs:api-gw-service-nmn.local:300:nmn0
 ```
 
-### HPC CSM Software Recipe variable substitutions
+### Variable substitutions
 
-The `sat bootprep` command takes any variables provided and substitutes them
-into the input file. Variables are sourced from the command line, any variable
-files directly provided, and the HPC CSM Software Recipe files used, in that
-order. When providing values through a variable file, `sat bootprep`
-substitutes the values with Jinja2 template syntax. The HPC CSM Software Recipe
-provides default variables in a `product_vars.yaml` variable file. This file
-defines information about each HPC software product included in the recipe.
+The `sat bootprep` command supports variable substitution in certain fields of
+the input file using Jinja2 template syntax. Variable definitions are sourced
+from the following locations in order from highest to lowest precedence:
 
-Variables are primarily substituted into the default HPC CSM Software Recipe
-bootprep input files through IUF. However, variable files can also be given to
-`sat bootprep` directly from IUF's use of the recipe. When using variables
-directly with `sat bootprep`, there are some limitations. For more
-information on SAT variable limitations, see [SAT and IUF](SAT_and_IUF.md).
-For more information on IUF and variable substitutions, see
-[Install and Upgrade Framework](../../iuf/IUF.md).
+- Variables specified on the command line with the `--vars` option
+- Variables defined in a file specified on the command line with the
+  `--vars-file` option
+- Variables defined in the latest installed version of the HPC CSM Software
+  Recipe.
+    - The version of the HPC CSM Software Recipe used can be controlled by the
+      `--recipe-version` option.
+    - The variables associated with an installed version of the HPC CSM Software
+      Recipe are defined in the file `product_vars.yaml` in the
+      `hpc-csm-software-recipe` repository in VCS. This file contains variables
+      associated with each product provided in the recipe.
+    - Note that the `product_vars.yaml` file delivered with the HPC CSM Software
+      Recipe now contains more complex variables that can only be resolved by
+      the Install and Upgrade Framework (IUF). See [SAT and IUF](./SAT_and_IUF.md#iuf-variable-substitutions)
+      for more information.
 
-#### Select an HPC CSM Software Recipe version
+Beginning with the introduction of IUF in CSM 1.4.0, the default `sat
+bootprep` input files now use more complex variables that are only resolved
+properly by IUF. It is still possible to call `sat bootprep` directly with
+variables defined in a file, but if the default `bootprep` input files are used,
+the `session_vars.yaml` file from an IUF activity must be passed to `sat
+bootprep`. See [SAT and IUF](./SAT_and_IUF.md) for details.
 
-View a listing of the default HPC CSM Software Recipe variables and
-their values by running `sat bootprep list-vars`. For more information on
-options that can be used with the `list-vars` subcommand, refer to the man page
-for the `sat bootprep` subcommand.
+#### View HPC CSM Software Recipe variables
 
-By default, the `sat bootprep` command uses the variables from the latest
+This section describes how to view the variables defined by a given installed
+version of the HPC CSM Software Recipe. As described in [Variable Substitutions](#variable-substitutions),
+these variables must be rendered by IUF before they can be used by `sat
+bootprep`.
+
+(`ncn-m001`) View a listing of the default HPC CSM Software Recipe variables and
+their values by running `sat bootprep list-vars`.
+
+```bash
+sat bootprep list-vars
+```
+
+(`ncn-m001`) The variables for a specific version of the HPC CSM Software Recipe
+can also be listed using the `--recipe-version` option.
+
+```bash
+sat bootprep list-vars --recipe-version 23.11.1
+```
+
+This command outputs a table showing the variables and their values from the
+`product_vars.yaml` file in the appropriate branch of the
+`hpc-csm-software-recipe` repository in VCS.
+
+By default, the `sat bootprep run` command uses the variables from the latest
 installed version of the HPC CSM Software Recipe. Override this with the
 `--recipe-version` command line argument to `sat bootprep run`.
 
-(`ncn-m001#`) For example, to explicitly select the `22.11.0` version of the HPC CSM Software
-Recipe default variables, specify `--recipe-version 22.11.0`:
+(`ncn-m001#`) For example, to explicitly select the `23.11.1` version of the HPC
+CSM Software Recipe default variables, specify `--recipe-version 23.11.1`:
 
 ```bash
-sat bootprep run --recipe-version 22.11.0 compute-and-uan-bootprep.yaml
+sat bootprep run --recipe-version 23.11.1 compute-and-uan-bootprep.yaml
 ```
 
 #### Values supporting Jinja2 template rendering
@@ -571,14 +600,13 @@ configurations:
       branch: integration-{{uss.version.split('.')[0]}}-{{uss.version.split('.')[1]}}
 ```
 
-### Dynamic variable substitutions
+#### Dynamic variable substitutions
 
-Additional variables are available besides the default variables provided by
-the HPC CSM Software Recipe. (For more information, see [HPC CSM Software
-Recipe Variable Substitutions](#hpc-csm-software-recipe-variable-substitutions).)
-These additional variables are dynamic because their values are determined
-at run-time based on the context in which they appear. Available dynamic
-variables include the following:
+Additional variables are available besides the variables provided by the
+`--vars` option, the `--vars-file` option, and the HPC CSM Software Recipe.
+These additional variables are dynamic because their values are determined at
+run-time based on the context in which they appear. Available dynamic variables
+include the following:
 
 - The variable `base.name` can be used in the `name` of an image under the
   `images` key. The value of this variable is the name of the IMS image or
@@ -715,6 +743,48 @@ BOS session templates
 +------------------+----------------+
 | example-template | example-config |
 +------------------+----------------+
+```
+
+## Limit SAT Bootprep into stages
+
+The `sat bootprep run` command uses information from the bootprep input files to
+create CFS configurations, IMS images, and BOS session templates. To restrict
+this creation into separate stages, use the `--limit` option and list whether to
+create `configurations`, `images`, `session_templates`, or some combination of
+these. IUF uses the `--limit` option in this way to install, upgrade, and
+deploy products on a system in stages.
+
+(`ncn-m001#`) For example, to create only CFS configurations, use `--limit
+configurations` as follows:
+
+```bash
+sat bootprep run --limit configurations example-bootprep-input-file.yaml
+```
+
+Example output:
+
+```text
+INFO: Validating given input file example-bootprep-input-file.yaml
+INFO: Input file successfully validated against schema
+INFO: Creating 3 CFS configurations
+...
+INFO: Skipping creation of IMS images based on value of --limit option.
+INFO: Skipping creation of BOS session templates based on value of --limit option.
+```
+
+(`ncn-m001#`) To create only IMS images and BOS session templates, use `--limit
+images` and `--limit session-templates` as follows:
+
+```bash
+sat bootprep run --limit images --limit session_templates example-bootprep-input-file.yaml
+```
+
+Example output:
+
+```text
+INFO: Validating given input file example-bootprep-input-file.yaml
+INFO: Input file successfully validated against schema
+INFO: Skipping creation of CFS configurations based on value of --limit option.
 ```
 
 ## View SAT `bootprep` schema
