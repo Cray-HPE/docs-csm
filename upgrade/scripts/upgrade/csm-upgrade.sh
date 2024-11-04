@@ -157,6 +157,9 @@ fi
 # Restart CFS deployments to avoid CASMINST-6852
 "${basedir}/../common/restart-cfs.sh"
 
+# Update test/CLI RPMs on NCNs
+"${basedir}/util/upgrade-test-rpms.sh"
+
 # Back up BOS data post-sysmgmt upgrade, and record contents of the migration pod
 # This only needs to be done if the cray-bos-migration job exists
 job_name=cray-bos-migration
