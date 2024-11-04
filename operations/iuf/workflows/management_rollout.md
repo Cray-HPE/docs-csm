@@ -155,105 +155,46 @@ Refer to that table and any corresponding product documents before continuing to
 
 1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [3.3 NCN worker nodes](#33-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
-1. Upgrade `ncn-m001`.
+1. Upgrade `ncn-m001` with IUF.
 
-    1. Option 1 - Perform the NCN master node upgrade on `ncn-m001` without IUF
+    **`NOTE`** This subsection is mandatory only for Upgrade CSM and additional products with IUF.
 
-        1. Follow the steps documented in [Stage 3.3 - `ncn-m001` upgrade](../../../upgrade/Stage_3.md#stage-33---ncn-m001-upgrade).
-           >**`Stop`** before performing the specific [upgrade `ncn-m001`](../../../upgrade/Stage_3.md#upgrade-ncn-m001) step and return to this document.
+    > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
+    then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
 
-            1. Get the image ID and CFS configuration created for NCN master nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the
-                [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation to get the values for `final_image_id` and `configuration` for images with a `configuration_group_name` value matching `Management_Master`.
-                These values will be needed for upgrading `ncn-m001` in the following steps.
+    1. Authenticate with the Cray CLI on `ncn-m002`.
 
-            1. Set the CFS configuration on `ncn-m001`.
+        See [Configure the Cray Command Line Interface](../../configure_cray_cli.md) for details on how to do this.
 
-                1. (`ncn-m#`) Set `CFS_CONFIG_NAME` to be the value for `configuration` found for `Management_Master` nodes in the the second step.
+    1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m001`. This will rebuild `ncn-m001` with the    new CFS configuration and image built in
+    previous steps of the workflow.
 
-                    ```bash
-                    CFS_CONFIG_NAME=<appropriate configuration value>
-                    ```
+        (`ncn-m002#`) Upgrade `ncn-m001`. This **must** be executed on **`ncn-m002`**.
 
-                1. (`ncn-m#`) Get the xname of `ncn-m001`.
+        1. Run `upload-rebuild-templates.sh` to update all the workflows that will be used by IUF and to ensure the correct CSM product versions will be used by IUF.
 
-                    ```bash
-                    XNAME=$(ssh ncn-m001 'cat /etc/cray/xname')
-                    echo "${XNAME}"
-                    ```
+            (`ncn-m002#`) Execute the `upload-rebuild-templates.sh` script.
 
-                1. (`ncn-m#`) Set the CFS configuration on `ncn-m001`.
+            ```bash
+            /usr/share/doc/csm/workflows/scripts/upload-rebuild-templates.sh
+            ```
 
-                    ```bash
-                    /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-                    --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames "${XNAME}" --no-enable --no-clear-err
-                    ```
+        (`ncn-m002#`) Execute the `management-nodes-rollout` stage with `ncn-m001`.
 
-                    The expected output is:
+        ```bash
+        iuf -a "${ACTIVITY_NAME}" --media-host ncn-m002 run -r management-nodes-rollout --limit-management-rollout ncn-m001
+        ```
 
-                    ```bash
-                    All components updated successfully.
-                    ```
+        > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should    be restarted.
+        See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
-            1. Set the image in BSS for `ncn-m001` by following the [Set NCN boot image for `ncn-m001`](../stages/management_nodes_rollout.md#set-ncn-boot-image-for-ncn-m001)
-            section of the [Management nodes rollout stage documentation](../stages/management_nodes_rollout.md).
-            Set the `IMS_RESULTANT_IMAGE_ID` variable to the `final_image_id` for `Management_Master` found in the second step.
+    1. Verify that `ncn-m001` booted successfully with the desired image and CFS configuration.
 
-            1. (`ncn-m002#`) Upgrade `ncn-m001`. This **must** be executed on **`ncn-m002`**.
-
-                > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
-                then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
-
-                ```bash
-                /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
-                ```
-
-                > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should     be restarted.
-                See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
-
-            1. Follow the steps documented in [Stage 3.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_3.md#stage-34---upgrade-weave-and-multus)
-
-            1. Follow the steps documented in [Stage 3.5 - `coredns` anti-affinity](../../../upgrade/Stage_3.md#stage-35---coredns-anti-affinity)
-
-    1. Option 2 - Perform the NCN master node upgrade on `ncn-m001` with IUF
-
-       **`NOTE`** This subsection is mandatory only for Upgrade CSM and additional products with IUF.
-
-       > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
-       then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
-
-       1. Authenticate with the Cray CLI on `ncn-m002`.
-
-           See [Configure the Cray Command Line Interface](../../configure_cray_cli.md) for details on how to do this.
-
-       1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m001`. This will rebuild `ncn-m001` with the    new CFS configuration and image built in
-       previous steps of the workflow.
-
-           (`ncn-m002#`) Upgrade `ncn-m001`. This **must** be executed on **`ncn-m002`**.
-
-           1. Run `upload-rebuild-templates.sh` to update all the workflows that will be used by IUF and to ensure the correct CSM product versions will be used by IUF.
-
-               (`ncn-m002#`) Execute the `upload-rebuild-templates.sh` script.
-
-               ```bash
-               /usr/share/doc/csm/workflows/scripts/upload-rebuild-templates.sh
-               ```
-
-           (`ncn-m002#`) Execute the `management-nodes-rollout` stage with `ncn-m001`.
-
-           ```bash
-           iuf -a "${ACTIVITY_NAME}" --media-host ncn-m002 run -r management-nodes-rollout --limit-management-rollout ncn-m001
-           ```
-
-           > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should    be restarted.
-           See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
-
-       1. Verify that `ncn-m001` booted successfully with the desired image and CFS configuration.
-
-           ```bash
-           XNAME=$(ssh ncn-m001 'cat /etc/cray/xname')
-           echo "${XNAME}"
-           cray cfs components describe "${XNAME}"
-           ```
+        ```bash
+        XNAME=$(ssh ncn-m001 'cat /etc/cray/xname')
+        echo "${XNAME}"
+        cray cfs components describe "${XNAME}"
+        ```
 
     > **`NOTE`** After `management-nodes-rollout` stage for management NCNs is completed, re-initialize cray CLI. Refer to [Configure the Cray Command Line Interface (cray CLI)](../../configure_cray_cli.md)
 

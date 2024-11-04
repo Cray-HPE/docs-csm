@@ -8,23 +8,8 @@ using IUF.
 ## Description
 
 The upgrade from CSM 1.5 to CSM 1.6 uses the IUF framework. The CSM upgrade steps are run automatically, either directly through IUF stages or by running a hook at the beginning or end of an IUF stage.
-The hooks that are run for the CSM upgrade are described below.
-
-- CSM upgrade prerequisites
-
-   CSM upgrade prerequisites are executed in a hook run before `pre-install-check`. This executes steps that are dependencies for later CSM upgrade steps.
-   This includes some service chart upgrades, uploading base NCN images to be used later in `prepare-images`, and other setup steps.
-   The specific script that is being executed is `/usr/share/doc/csm/upgrade/scripts/upgrade/prerequisites.sh`.
-
-- CSM services upgrade and validate CSM health
-
-   CSM services upgrade and validate CSM health are executed in a hook run before `management-nodes-rollout`. This hook is only executed before the first NCN is upgraded.
-   The specific script that executes the CSM services upgrade is `/usr/share/doc/csm/upgrade/scripts/upgrade/csm-upgrade.sh`.
-
-- Apply networking, apply CoreDNS anti-affinity, and upgrade Kubernetes control plane
-
-   Apply networking, apply CoreDNS anti-affinity, and completing the Kubernetes control plane upgrade is executed in a hook run after `deploy-product`.
-   The specific scripts executed as part of this hook are `/srv/cray/scripts/common/apply-networking-manifests.sh`, `/usr/share/doc/csm/upgrade/scripts/k8s/apply-coredns-pod-affinity.sh`, and `/usr/share/doc/csm/upgrade/scripts/k8s/upgrade_control_plane.sh`.
+The hooks that are run for the CSM upgrade are described in the [description of CSM upgrade hooks](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md#description-of-csm-upgrade-hooks)
+section of the [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md) page.
 
 ## Upgrade Procedure
 
@@ -59,13 +44,13 @@ The hooks that are run for the CSM upgrade are described below.
 
 1. Management rollout
 
-   > **NOTE** The CSM services upgrade and validate CSM health are automatically executed in a hook run before the first management node is rolled out.
+   > **NOTE** The upgrade of CSM services and validation of CSM health occur automatically in a hook executed before the first management node is rolled out.
 
    Follow the IUF [Management rollout](../operations/iuf/workflows/management_rollout.md) instructions.
 
 1. Deploy product
 
-   > **NOTE**  Networking and CoreDNS anti-affinity are applied and the Kubernetes control plane is upgraded in a hook automatically executed at the end of `deploy-product`.
+   > **NOTE** The application of networking changes and CoreDNS anti-affinity changes along with the upgrade of the Kubernetes control plane is performed in a hook automatically executed after `deploy-product`.
 
    Follow these IUF instructions in order:
 

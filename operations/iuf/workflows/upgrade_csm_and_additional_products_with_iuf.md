@@ -70,7 +70,7 @@ For more detail about about the CSM upgrade hooks, see the section [description 
 
 1. Deploy product
 
-   > **NOTE**  Networking and CoreDNS anti-affinity are applied and the Kubernetes control plane is upgraded in a hook automatically executed at the end of `deploy-product`.
+   > **NOTE** The application of networking changes and CoreDNS anti-affinity changes along with the upgrade of the Kubernetes control plane is performed in a hook automatically executed after `deploy-product`.
 
    Follow these IUF instructions in order:
 
