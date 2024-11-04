@@ -28,7 +28,7 @@ without restarting `Containerd` to forcefully clean up the running container.
 1. Find the node that the first Spire Server is attempting to start on.
 
    ```bash
-   kubectl get pods -n spire -o wide
+   kubectl get pods -n spire -o wide | grep spire-server-0
    ```
 
    Output example:
