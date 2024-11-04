@@ -38,25 +38,6 @@ spec:
   entrypoint: main
   templates:
     - name: main
-      metrics:
-        prometheus:
-        - name: operation_counter
-          help: "Count of step execution by result status"
-          labels:
-            - key: "opname"
-              value: "management-m001-rollout"
-            - key: stage
-              value: "management-nodes-rollout"
-            - key: type
-              value: "global"
-            - key: pname
-              value: "global"
-            - key: pversion
-              value: "global"
-            - key: status
-              value: "{{status}}"
-          counter:
-            value: "1"
       inputs:
         parameters:
           - name: auth_token

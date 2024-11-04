@@ -31,25 +31,6 @@ spec:
   templates:
 ### Main Steps ###
   - name: main
-    metrics:
-        prometheus:
-        - name: operation_counter
-          help: "Count of step execution by result status"
-          labels:
-            - key: "opname"
-              value: "nexus-setup"
-            - key: stage
-              value: "deliver-product"
-            - key: type
-              value: "product"
-            - key: pname
-              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
-            - key: pversion
-              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
-            - key: status
-              value: "{{status}}"
-          counter:
-            value: "1"
     inputs:
       parameters:
         - name: auth_token
