@@ -5,7 +5,7 @@
 There is a known issue when the Spire servers are started and Spire Postgres is not ready, where the pod will get stuck in a `PodInitializing` state and not be able to be restarted.
 
 Starting the Spire server when its Postgres cluster is not ready leads to the pod crashing. However due to how the Spire servers are registered when the main process crashes
-there is a loop that never killed in a side process. That leads to the pod crashing but never getting cleaned up to be restarted. There is no way to manually restart that pod
+there is a loop that never gets killed in a side process. That leads to the pod crashing but never getting cleaned up to be restarted. There is no way to manually restart that pod
 without restarting `Containerd` to forcefully clean up the running container.
 
 ## Symptoms
