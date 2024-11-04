@@ -64,7 +64,7 @@ For more detail about about the CSM upgrade hooks, see the section [description 
 
 1. Management rollout
 
-   > **NOTE** The CSM services upgrade and validate CSM health are automatically executed in a hook run before the first management node is rolled out.
+   > **NOTE** The upgrade of CSM services and validation of CSM health occur automatically in a hook executed before the first management node is rolled out.
 
    Follow the IUF [Management rollout](management_rollout.md) instructions.
 
@@ -94,12 +94,12 @@ The hooks below are automatically executed when CSM is being upgraded with IUF.
    This includes some service chart upgrades, uploading base NCN images to be used later in `prepare-images`, and other setup steps.
    The specific script that is being executed is `/usr/share/doc/csm/upgrade/scripts/upgrade/prerequisites.sh`.
 
-- CSM services upgrade and validate CSM health
+- Upgrade of CSM services and validation of CSM health
 
-   CSM services upgrade and validate CSM health are executed in a hook run before `management-nodes-rollout`. This hook is only executed before the first NCN is upgraded.
+   The upgrade of CSM services and validation of CSM health are performed in a hook executed before `management-nodes-rollout`. This hook is only executed before the first NCN is upgraded.
    The specific script that executes the CSM services upgrade is `/usr/share/doc/csm/upgrade/scripts/upgrade/csm-upgrade.sh`.
 
-- Apply networking, apply CoreDNS anti-affinity, and upgrade Kubernetes control plane
+- Application of networking changes, CoreDNS anti-affinity, upgrade of the Kubernetes control plane
 
-   Apply networking, apply CoreDNS anti-affinity, and completing the Kubernetes control plane upgrade is executed in a hook run after `deploy-product`.
+   The application of networking changes and CoreDNS anti-affinity changes along with the upgrade of the Kubernetes control plane is performed in a hook executed after `deploy-product`.
    The specific scripts executed as part of this hook are `/srv/cray/scripts/common/apply-networking-manifests.sh`, `/usr/share/doc/csm/upgrade/scripts/k8s/apply-coredns-pod-affinity.sh`, and `/usr/share/doc/csm/upgrade/scripts/k8s/upgrade_control_plane.sh`.
