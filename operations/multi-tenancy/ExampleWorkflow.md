@@ -31,7 +31,7 @@
     * [`SlurmCluster` command examples](#slurmcluster-command-examples)
     * [HSM command examples](#hsm-command-examples)
     * [HNS command example](#hns-command-example)
-* [Upgrade all tenants after a Slurm product upgrade](#upgrade-all-tenants-after-a-Slurm-product-upgrade)
+* [Upgrade all tenants after a Slurm upgrade](#upgrade-all-tenants-after-a-slurm-upgrade)
 * [Appendices](#appendices)
     * [Appendix A - `Development` tenant](#appendix-a---development-tenant)
     * [Appendix B - `Development SlurmCluster`](#appendix-b---development-slurmcluster)
@@ -645,15 +645,25 @@ This procedure is required for each tenant, after Slurm has been upgraded on the
 You will need the configuration file that you used to create each tenant's `SlurmCluster`.
 For this Slurm upgrade, there is no need to change the `SlurmCluster` name; the only change is to the Slurm version inside each tenant.
 
-- `SlurmCluster`: `devcls01a`
-- Filename: `devcls01a.yaml`
+* `SlurmCluster`: `devcls01a`
+* Filename: `devcls01a.yaml`
 
-* (`ncn-mw#`) Edit and re-apply the `SlurmCluster` configuration file:
+* (`ncn-mw#`) Edit the `SlurmCluster` configuration file:
 
     ```bash
-    cp -p devcls01a.yaml devcls01a.yaml-
+    cp -p devcls01a.yaml devcls01a.yaml{,.bak}
     vi devcls01a.yaml
-    diff devcls01a.yaml devcls01a.yaml-
+    ```
+
+* (`ncn-mw#`) Double-check the differences:
+
+    ```bash
+    diff devcls01a.yaml devcls01a.yaml.bak
+    ```
+
+    Possible output:
+
+    ```diff
     10c10
     <     image: cray/cray-slurmctld:1.7.0-slurm
     ---
@@ -662,6 +672,11 @@ For this Slurm upgrade, there is no need to change the `SlurmCluster` name; the 
     <     image: cray/cray-slurmdbd:1.7.0-slurm
     ---
     >     image: cray/cray-slurmdbd:1.6.1
+    ```
+
+* (`ncn-mw#`) Re-apply the `SlurmCluster` configuration file:
+
+    ```bash
     kubectl apply -f devcls01a.yaml
     ```
 
