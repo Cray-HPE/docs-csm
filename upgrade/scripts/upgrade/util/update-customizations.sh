@@ -93,7 +93,7 @@ if [[ "$(yq r "$c" "spec.kubernetes.services.spire.server.tokenService.enableXNa
 fi
 
 # cray-vault
-yq4 eval '.spec.kubernetes.services.cray-vault.ingress.host = "vault.cmn.{{ network.dns.external }}"' -i $c
+yq4 eval '.spec.kubernetes.services.cray-vault.ingress.host = "vault.cmn.{{ network.dns.external }}"' -i "$c"
 
 # cray-istio
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.hmnlb.{{ network.dns.external }},auth.hmnlb.{{ network.dns.external }},hmcollector.hmnlb.{{ network.dns.external }}'
