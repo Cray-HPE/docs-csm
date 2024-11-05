@@ -235,7 +235,6 @@ automatic backup created by the `cray-smd-postgresql-db-backup` Kubernetes cronj
     kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' > postgres-cr.yaml
 
     kubectl delete -f postgres-cr.yaml
-    postgresql.acid.zalan.do "cray-smd-postgres" deleted
     ```
 
     Expected output:
