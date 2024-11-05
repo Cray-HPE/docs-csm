@@ -25,7 +25,7 @@ without restarting `Containerd` to forcefully clean up the running container.
 
 ### Apply workaround
 
-1. Find the node that the first Spire Server is attempting to start on.
+1. Find the node that the first Spire server is attempting to start on.
 
    ```bash
    kubectl get pods -n spire -o wide | grep spire-server-0
@@ -37,25 +37,25 @@ without restarting `Containerd` to forcefully clean up the running container.
    spire-server-0                                0/2     PodInitializing         0                5h32m   10.34.0.129   ncn-w004   <none>           <none>
    ```
 
-1. Make sure Postgres is running
+1. Verify that Postgres is running.
 
    ```bash
    kubectl get pods -n spire | grep spire-postgres
    ```
 
-1. Delete the pod
+1. Delete the pod.
 
    ```bash
    kubectl delete pod -n spire spire-server-0
    ```
 
-1. SSH to the node it was running on and restart `Containerd`
+1. SSH to the node it was running on and restart `Containerd`.
 
    ```bash
    ssh ncn-w004 systemctl restart containerd
    ```
 
-1. Check to make sure the spire-server started up
+1. Check that the spire-server started up.
 
    ```bash
    kubectl get pods -n spire
