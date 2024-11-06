@@ -645,8 +645,8 @@ This procedure is required for each tenant, after Slurm has been upgraded on the
 You will need the configuration file that you used to create each tenant's `SlurmCluster`.
 For this Slurm upgrade, there is no need to change the `SlurmCluster` name; the only change is to the Slurm version inside each tenant.
 
-* `SlurmCluster`: `devcls01a`
-* Filename: `devcls01a.yaml`
+> * `SlurmCluster`: `devcls01a`
+> * Filename: `devcls01a.yaml`
 
 * (`ncn-mw#`) Edit the `SlurmCluster` configuration file:
 
