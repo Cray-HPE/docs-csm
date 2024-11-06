@@ -89,6 +89,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 * [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md)
 * [Incrementally Configuring Images](incrementally_configuring_images.md)
+* [CFS-API pods in CLBO state](known_issues/cfs-api_pods_in_CLBO_state.md)
 
 ## ConMan
 
