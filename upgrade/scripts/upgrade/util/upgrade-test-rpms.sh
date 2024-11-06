@@ -40,6 +40,9 @@ if [[ $# -eq 0 ]]; then
   echo "Enabling and restarting goss-servers"
   pdsh -S -b -w ${ncns} 'systemctl enable goss-servers && systemctl restart goss-servers'
 
+  echo "Waiting for goss-servers service to start"
+  pdsh -S -b -w ${ncns} 'for X in 1 2 3 4 5; do [[ $X -gt 1 ]] && sleep 3; systemctl is-active goss-servers && exit 0; done; exit 1'
+
 elif [[ $# -eq 1 && $1 == --local ]]; then
 
   echo "Installing updated versions of RPMs: ${RPM_LIST}"
@@ -47,6 +50,14 @@ elif [[ $# -eq 1 && $1 == --local ]]; then
 
   echo "Enabling and restarting goss-servers"
   systemctl enable goss-servers && systemctl restart goss-servers
+
+  echo "Waiting for goss-servers service to start"
+  started=n
+  for X in 1 2 3 4 5; do
+    [[ $X -gt 1 ]] && sleep 3
+    systemctl is-active goss-servers && started=y && break
+  done
+  [[ ${started} == y ]] || exit 1
 
 else
 

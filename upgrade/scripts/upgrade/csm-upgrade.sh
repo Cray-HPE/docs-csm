@@ -159,9 +159,6 @@ fi
 # Update test/CLI RPMs on NCNs
 "${basedir}/util/upgrade-test-rpms.sh"
 
-# Wait 10 seconds to make sure all of the restarted Goss servers are started up on the NCNs
-sleep 10
-
 state_name="POST CSM Upgrade Validation"
 echo "====> ${state_name} ..."
 GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-post-csm-service-upgrade-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
