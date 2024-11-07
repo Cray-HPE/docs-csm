@@ -23,9 +23,36 @@
 #
 """Shared Python function library: CFS import/export"""
 
-from typing import Callable, NamedTuple
+from typing import Callable, List, NamedTuple
 
 from . import cfs
+from . import common
+from .types import JsonDict
+
+
+_BAD_COMPONENT_MD = 'troubleshooting/known_issues/CFS_Component_With_0_Length_ID.md'
+
+
+def remove_components_with_empty_ids(components: List[JsonDict]) -> List[JsonDict]:
+    """
+    CASMCMS-9195: Check import data for component IDs with 0-length. If any are
+    found, remove them, because they are not valid components (and we could not patch
+    them in CFS even if we wanted to)
+    """
+    filtered_list = [ comp for comp in components if comp["id"] ]
+    diff = len(components) - len(filtered_list)
+    if diff > 0:
+        common.print_warn(f"Skipping {diff} component(s) with empty ID field "
+                          f"(see CSM documentation: {_BAD_COMPONENT_MD}")
+    return filtered_list
+
+
+def list_cfs_components() -> List[JsonDict]:
+    """
+    Wrapper for API call to CFS to list components that also filters out ones with empty IDs
+    """
+    return remove_components_with_empty_ids(cfs.list_components())
+
 
 class CfsResourceTypeData(NamedTuple):
     """
@@ -35,8 +62,9 @@ class CfsResourceTypeData(NamedTuple):
     list_function: Callable
     json_file_name: str
 
+
 CFS_RESOURCE_TYPES = {
-    "components":     CfsResourceTypeData(list_function=cfs.list_components,
+    "components":     CfsResourceTypeData(list_function=list_cfs_components,
                                           json_file_name="components.json"),
     "configurations": CfsResourceTypeData(list_function=cfs.list_configurations,
                                           json_file_name="configurations.json"),
