@@ -812,6 +812,17 @@ In this case, follow the [Gitea/VCS 401 Errors](../troubleshooting/known_issues/
 On systems where too many BOS sessions exist, the `cmsdev` test will hang when trying to list them. See
 [Hang Listing BOS Sessions](../troubleshooting/known_issues/Hang_Listing_BOS_Sessions.md) for more information.
 
+#### Invalid CFS component
+
+If a CFS component exists with a 0-length string for its `id` field, then it may cause the `cmsdev`
+CFS subtest to fail. The CFS subtest failure will resemble the following:
+
+```text
+ERROR (run tag fhn3C-cfs): First list item has empty value for "id" field
+```
+
+For details on how to correct this problem, see [CFS Component With 0-Length ID](../troubleshooting/known_issues/CFS_Component_With_0_Length_ID.md).
+
 ## 4. Booting CSM `barebones` image
 
 Included with the Cray System Management (CSM) release is a pre-built node image that can be used
