@@ -37,15 +37,16 @@ import sys
 from typing import Dict, Generator, List, NamedTuple, Union
 
 from python_lib import args, cfs
+from python_lib.cfs_import_export import CFS_RESOURCE_TYPES
 from python_lib.types import JsonDict, JSONDecodeError
 
 NameObjectMap = Dict[str,JsonDict]
 
-CMP_JSON = "components.json"
-CFG_JSON = "configurations.json"
-OPT_JSON = "options.json"
 CFS_EXPORT_TOOL = "/usr/share/doc/csm/scripts/operations/configuration/export_cfs_data.sh"
 
+CFG_JSON = CFS_RESOURCE_TYPES["configurations"].json_file_name
+CMP_JSON = CFS_RESOURCE_TYPES["components"].json_file_name
+OPT_JSON = CFS_RESOURCE_TYPES["options"].json_file_name
 
 class CfsData(NamedTuple):
     """
