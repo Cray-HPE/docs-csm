@@ -33,11 +33,13 @@ from . import common
 from .types import JsonDict, JsonObject, JSONDecodeError
 
 CFS_BASE_URL = f"{api_requests.API_GW_BASE_URL}/apis/cfs"
+CFS_VERSIONS_URL = f"{CFS_BASE_URL}/versions"
 CFS_V3_BASE_URL = f"{CFS_BASE_URL}/v3"
 CFS_V3_COMPS_URL = f"{CFS_V3_BASE_URL}/components"
 CFS_V3_CONFIGS_URL = f"{CFS_V3_BASE_URL}/configurations"
 CFS_V3_OPTIONS_URL = f"{CFS_V3_BASE_URL}/options"
 CFS_V3_SESSIONS_URL = f"{CFS_V3_BASE_URL}/sessions"
+CFS_V3_SOURCES_URL = f"{CFS_V3_BASE_URL}/sources"
 
 CfsOptions = Dict[str, Union[bool, int, str]]
 
@@ -267,3 +269,28 @@ def get_session(session_name: str, expected_to_exist: bool = True) -> Union[Json
     except JSONDecodeError as exc:
         log_error_raise_exception("Response from CFS has unexpected format", exc)
     return json_object
+
+def list_sessions() -> List[JsonObject]:
+    """
+    Queries CFS to list all sessions, and returns the list.
+    """
+    return __list_and_merge("sessions", CFS_V3_SESSIONS_URL)
+
+# CFS sources functions
+
+def list_sources() -> List[JsonObject]:
+    """
+    Queries CFS to list all sources, and returns the list.
+    """
+    return __list_and_merge("sources", CFS_V3_SOURCES_URL)
+
+# CFS versions functions
+
+def list_versions() -> JsonDict:
+    """
+    Queries CFS for its version and returns the data
+    """
+    request_kwargs = {"url": CFS_VERSIONS_URL,
+                      "add_api_token": True,
+                      "expected_status_codes": {200}}
+    return api_requests.get_retry_validate_return_json(**request_kwargs)
