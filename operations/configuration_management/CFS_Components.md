@@ -12,6 +12,7 @@ See [Automatic Configuration Management](Automatic_Configuration_Management.md) 
 * [Disable component configuration](#disable-component-configuration)
 * [Force component reconfiguration](#force-component-reconfiguration)
 * [Update components in bulk](#update-components-in-bulk)
+* [Component with 0-length ID](#component-with-0-length-id)
 
 ## Component data
 
@@ -163,3 +164,9 @@ cray cfs v3 components update <xname> --state [] --enabled true
 Updating multiple components at once is not currently available in the CLI due to limitations with the CLI.
 However for those programmatically interacting with the CFS API, it is possible to update multiple components at once by calling `/v3/components` with a `PATCH` operation.
 It is possible to either provide patches for multiple components in a list, or to provide a single patch and filters for which components to apply the patch to. See the [CFS API specification](../../api/cfs.md) for more information.
+
+## Component with 0-length ID
+
+It is possible for CFS to end up with an invalid component whose ID field is a 0-length string. See
+[CFS Component With 0-Length ID](../../troubleshooting/known_issues/CFS_Component_With_0_Length_ID.md)
+for more details.
