@@ -4,6 +4,7 @@
 - [Interpreting `cmsdev` Results](#interpreting-cmsdev-results)
 - [Known issues with SMS tests](#known-issues-with-sms-tests)
   - [Cray CLI](#cray-cli)
+  - [Invalid CFS component](#invalid-cfs-component)
 
 ## SMS test execution
 
@@ -41,6 +42,14 @@ transfer subtest, as noted in the previous paragraph).
 
 Additional test execution details can be found in `/opt/cray/tests/install/logs/cmsdev/cmsdev.log`.
 
+## Version
+
+(`ncn-mw#`) The following command displays the version of the `cmsdev` test tool.
+
+```bash
+/usr/local/bin/cmsdev version
+```
+
 ## Known issues with SMS tests
 
 ### Cray CLI
@@ -50,3 +59,32 @@ See the following for more information:
 
 - [Cray command line interface](../../operations/validate_csm_health.md#0-cray-command-line-interface)
 - [Configure the Cray CLI](../../operations/configure_cray_cli.md)
+
+### Invalid CFS component
+
+If a CFS component exists with a 0-length string for its `id` field, then it may cause the `cmsdev`
+CFS subtest to fail. The `cmsdev` test failure symptom will depend on the version of `cmsdev` being run.
+(See the [Version](#version) section above for details on how to find the version).
+
+- For `cmsdev` versions 1.25 or higher, the CFS subtest failures will resemble the following:
+
+    ```text
+    ERROR (run tag fhn3C-cfs): In first item listed, 'id' field maps to a 0-length string, but it should have non-0 length
+    ```
+
+- For `cmsdev` versions less than 1.25 but at least 1.16.2, the CFS subtest failures will resemble the following:
+
+    ```text
+    ERROR (run tag sosdD-cfs): GET https://api-gw-service-nmn.local/apis/cfs/v3/components/: expected status code 200, got 404
+    ERROR (run tag sosdD-cfs): GET https://api-gw-service-nmn.local/apis/cfs/v2/components/: expected status code 200, got 404
+    ERROR (run tag sosdD-cfs): CLI command (cfs v3 components describe  --format json) failed with exit code 2
+    ERROR (run tag sosdD-cfs): CLI command (cfs v2 components describe  --format json) failed with exit code 2
+    ```
+
+- For `cmsdev` versions less than 1.16.2, the CFS subtest failure will resemble the following:
+
+    ```text
+    ERROR (run tag fhn3C-cfs): First list item has empty value for "id" field
+    ```
+
+For details on how to correct this problem, see [CFS Component With 0-Length ID](CFS_Component_With_0_Length_ID.md).
