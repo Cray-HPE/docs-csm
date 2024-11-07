@@ -33,6 +33,7 @@ from . import common
 from .types import JsonDict, JsonObject, JSONDecodeError
 
 CFS_BASE_URL = f"{api_requests.API_GW_BASE_URL}/apis/cfs"
+CFS_VERSIONS_URL = f"{CFS_BASE_URL}/versions"
 CFS_V2_BASE_URL = f"{CFS_BASE_URL}/v2"
 CFS_V2_COMPS_URL = f"{CFS_V2_BASE_URL}/components"
 CFS_V2_CONFIGS_URL = f"{CFS_V2_BASE_URL}/configurations"
@@ -237,3 +238,23 @@ def get_session(session_name: str, expected_to_exist: bool = True) -> Union[Json
     except JSONDecodeError as exc:
         log_error_raise_exception("Response from CFS has unexpected format", exc)
     return json_object
+
+def list_sessions() -> List[JsonObject]:
+    """
+    Queries CFS to list all sessions, and returns the list.
+    """
+    request_kwargs = {"url": CFS_V2_SESSIONS_URL,
+                      "add_api_token": True,
+                      "expected_status_codes": {200}}
+    return api_requests.get_retry_validate_return_json(**request_kwargs)
+
+# CFS versions functions
+
+def list_versions() -> JsonDict:
+    """
+    Queries CFS for its version and returns the data
+    """
+    request_kwargs = {"url": CFS_VERSIONS_URL,
+                      "add_api_token": True,
+                      "expected_status_codes": {200}}
+    return api_requests.get_retry_validate_return_json(**request_kwargs)

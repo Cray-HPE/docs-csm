@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -37,15 +37,16 @@ import sys
 from typing import Dict, List, NamedTuple, Union
 
 from python_lib import args, cfs
+from python_lib.cfs_import_export import CFS_RESOURCE_TYPES
 from python_lib.types import JsonDict, JSONDecodeError
 
 NameObjectMap = Dict[str,JsonDict]
 
-CMP_JSON = "components.json"
-CFG_JSON = "configurations.json"
-OPT_JSON = "options.json"
 CFS_EXPORT_TOOL = "/usr/share/doc/csm/scripts/operations/configuration/export_cfs_data.sh"
 
+CFG_JSON = CFS_RESOURCE_TYPES["configurations"].json_file_name
+CMP_JSON = CFS_RESOURCE_TYPES["components"].json_file_name
+OPT_JSON = CFS_RESOURCE_TYPES["options"].json_file_name
 
 class CfsData(NamedTuple):
     """
