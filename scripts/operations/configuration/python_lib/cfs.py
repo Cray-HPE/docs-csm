@@ -33,11 +33,13 @@ from . import common
 from .types import JsonDict, JsonObject, JSONDecodeError
 
 CFS_BASE_URL = f"{api_requests.API_GW_BASE_URL}/apis/cfs"
-CFS_V2_BASE_URL = f"{CFS_BASE_URL}/v2"
-CFS_V2_COMPS_URL = f"{CFS_V2_BASE_URL}/components"
-CFS_V2_CONFIGS_URL = f"{CFS_V2_BASE_URL}/configurations"
-CFS_V2_OPTIONS_URL = f"{CFS_V2_BASE_URL}/options"
-CFS_V2_SESSIONS_URL = f"{CFS_V2_BASE_URL}/sessions"
+CFS_VERSIONS_URL = f"{CFS_BASE_URL}/versions"
+CFS_V3_BASE_URL = f"{CFS_BASE_URL}/v3"
+CFS_V3_COMPS_URL = f"{CFS_V3_BASE_URL}/components"
+CFS_V3_CONFIGS_URL = f"{CFS_V3_BASE_URL}/configurations"
+CFS_V3_OPTIONS_URL = f"{CFS_V3_BASE_URL}/options"
+CFS_V3_SESSIONS_URL = f"{CFS_V3_BASE_URL}/sessions"
+CFS_V3_SOURCES_URL = f"{CFS_V3_BASE_URL}/sources"
 
 CfsOptions = Dict[str, Union[bool, int, str]]
 
@@ -59,19 +61,38 @@ def log_error_raise_exception(msg: str, parent_exception: Union[Exception, None]
 # CFS component functions
 
 
+def __list_and_merge(object_field_name: str, url: str,
+                     params: Union[JsonDict, None]=None) -> List[JsonObject]:
+    """
+    For paginated CFS list endpoints, this repeatedly queries them until all items
+    are found, then returns the list.
+    """
+    request_kwargs = { "url": url,
+                       "add_api_token": True,
+                       "expected_status_codes": {200} }
+    if params is None:
+        resp_json = api_requests.get_retry_validate_return_json(**request_kwargs)
+    else:
+        resp_json = api_requests.get_retry_validate_return_json(params=params, **request_kwargs)
+    obj_list = resp_json[object_field_name]
+    while resp_json["next"] is not None:
+        resp_json = api_requests.get_retry_validate_return_json(params=resp_json["next"],
+                                                                **request_kwargs)
+        obj_list.extend(resp_json[object_field_name])
+    return obj_list
+
+
 def list_components(id_list: Union[None, List[str], str]=None) -> List[JsonObject]:
     """
     Queries CFS to list all components, and returns the list.
     If an id_list is specified, query CFS for just those components.
+    Merges paged responses together
     """
-    request_kwargs = {"url": CFS_V2_COMPS_URL,
-                      "add_api_token": True,
-                      "expected_status_codes": {200}}
     if id_list is None:
-        return api_requests.get_retry_validate_return_json(**request_kwargs)
+        params = None
     else:
         params = { "ids": id_list if isinstance(id_list, str) else ",".join(id_list) }
-        return api_requests.get_retry_validate_return_json(params=params, **request_kwargs)
+    return __list_and_merge("components", CFS_V3_COMPS_URL, params=params)
 
 
 def update_component(comp_id: str, **update_data: JsonObject) -> JsonObject:
@@ -81,7 +102,7 @@ def update_component(comp_id: str, **update_data: JsonObject) -> JsonObject:
     """
     # Even though it does not follow convention for patch operations,
     # the status code when successful is 200
-    request_kwargs = {"url": f"{CFS_V2_COMPS_URL}/{comp_id}",
+    request_kwargs = {"url": f"{CFS_V3_COMPS_URL}/{comp_id}",
                       "add_api_token": True,
                       "expected_status_codes": {200},
                       "json": update_data}
@@ -93,7 +114,7 @@ def update_component_desired_config(comp_id: str, config_name: str) -> JsonObjec
     Updates the specified component to use the specified configuration.
     Returns the updated component.
     """
-    return update_component(comp_id, desiredConfig=config_name)
+    return update_component(comp_id, desired_config=config_name)
 
 
 def update_components_by_ids(comp_ids: List[str], update_data: JsonObject) -> JsonObject:
@@ -103,7 +124,7 @@ def update_components_by_ids(comp_ids: List[str], update_data: JsonObject) -> Js
     """
     # Even though it does not follow convention for patch operations,
     # the status code when successful is 200
-    request_kwargs = {"url": CFS_V2_COMPS_URL,
+    request_kwargs = {"url": CFS_V3_COMPS_URL,
                       "add_api_token": True,
                       "expected_status_codes": {200},
                       "json": {"patch": update_data, "filters": {"ids": ",".join(comp_ids)}}}
@@ -116,11 +137,11 @@ def create_configuration(config_name: str, layers: List[Dict[str, str]]) -> Json
     """
     Creates or updates a CFS configuration with the specified name and layers.
     The layers should be dictionaries with the following fields set:
-        cloneUrl, commit, name, playbook
+        clone_url, commit, name, playbook
 
     The CFS configuration is returned if successful. Otherwise an exception is raised.
     """
-    request_kwargs = {"url": f"{CFS_V2_CONFIGS_URL}/{config_name}",
+    request_kwargs = {"url": f"{CFS_V3_CONFIGS_URL}/{config_name}",
                       "json": {"layers": layers},
                       "add_api_token": True,
                       "expected_status_codes": {200}}
@@ -133,7 +154,7 @@ def get_configuration(config_name: str, expected_to_exist: bool = True) -> Union
     is not found, unless expected_to_exist is set to False, in which case None is
     returned.
     """
-    request_kwargs = {"url": f"{CFS_V2_CONFIGS_URL}/{config_name}",
+    request_kwargs = {"url": f"{CFS_V3_CONFIGS_URL}/{config_name}",
                       "add_api_token": True,
                       "expected_status_codes": {200}}
 
@@ -158,7 +179,7 @@ def delete_configuration(config_name: str, expected_to_exist: bool = True) -> No
     Deletes the specified configuration. Throws an exception if it is not found,
     unless expected_to_exist is set to False.
     """
-    request_kwargs = {"url": f"{CFS_V2_CONFIGS_URL}/{config_name}",
+    request_kwargs = {"url": f"{CFS_V3_CONFIGS_URL}/{config_name}",
                       "add_api_token": True,
                       "expected_status_codes": {204}}
 
@@ -172,10 +193,7 @@ def list_configurations() -> List[JsonObject]:
     """
     Queries CFS to list all configurations, and returns the list.
     """
-    request_kwargs = {"url": CFS_V2_CONFIGS_URL,
-                      "add_api_token": True,
-                      "expected_status_codes": {200}}
-    return api_requests.get_retry_validate_return_json(**request_kwargs)
+    return __list_and_merge("configurations", CFS_V3_CONFIGS_URL)
 
 
 # CFS options functions
@@ -185,7 +203,7 @@ def list_options() -> CfsOptions:
     """
     Queries CFS for a dictionary of all options, and returns that dictionary.
     """
-    request_kwargs = {"url": CFS_V2_OPTIONS_URL,
+    request_kwargs = {"url": CFS_V3_OPTIONS_URL,
                       "add_api_token": True,
                       "expected_status_codes": {200}}
     return api_requests.get_retry_validate_return_json(**request_kwargs)
@@ -198,7 +216,7 @@ def update_options(new_options: CfsOptions) -> CfsOptions:
     """
     # Even though it does not follow convention for patch operations,
     # the status code when successful is 200
-    request_kwargs = {"url": CFS_V2_OPTIONS_URL,
+    request_kwargs = {"url": CFS_V3_OPTIONS_URL,
                       "add_api_token": True,
                       "expected_status_codes": {200},
                       "json": new_options}
@@ -218,12 +236,12 @@ def create_dynamic_session(session_name: str, config_name: str,
 
     The CFS session entry is returned if successful. Otherwise an exception is raised.
     """
-    request_kwargs = {"url": CFS_V2_SESSIONS_URL,
-                      "json": {"name": session_name, "configurationName": config_name},
+    request_kwargs = {"url": CFS_V3_SESSIONS_URL,
+                      "json": {"name": session_name, "configuration_name": config_name},
                       "add_api_token": True,
                       "expected_status_codes": {200}}
     if xname_limit:
-        request_kwargs["json"]["ansibleLimit"] = ",".join(xname_limit)
+        request_kwargs["json"]["ansible_limit"] = ",".join(xname_limit)
     return api_requests.post_retry_validate_return_json(**request_kwargs)
 
 
@@ -233,7 +251,7 @@ def get_session(session_name: str, expected_to_exist: bool = True) -> Union[Json
     is not found, unless expected_to_exist is set to False, in which case None is
     returned.
     """
-    request_kwargs = {"url": f"{CFS_V2_SESSIONS_URL}/{session_name}",
+    request_kwargs = {"url": f"{CFS_V3_SESSIONS_URL}/{session_name}",
                       "add_api_token": True,
                       "expected_status_codes": {200}}
 
@@ -251,3 +269,28 @@ def get_session(session_name: str, expected_to_exist: bool = True) -> Union[Json
     except JSONDecodeError as exc:
         log_error_raise_exception("Response from CFS has unexpected format", exc)
     return json_object
+
+def list_sessions() -> List[JsonObject]:
+    """
+    Queries CFS to list all sessions, and returns the list.
+    """
+    return __list_and_merge("sessions", CFS_V3_SESSIONS_URL)
+
+# CFS sources functions
+
+def list_sources() -> List[JsonObject]:
+    """
+    Queries CFS to list all sources, and returns the list.
+    """
+    return __list_and_merge("sources", CFS_V3_SOURCES_URL)
+
+# CFS versions functions
+
+def list_versions() -> JsonDict:
+    """
+    Queries CFS for its version and returns the data
+    """
+    request_kwargs = {"url": CFS_VERSIONS_URL,
+                      "add_api_token": True,
+                      "expected_status_codes": {200}}
+    return api_requests.get_retry_validate_return_json(**request_kwargs)

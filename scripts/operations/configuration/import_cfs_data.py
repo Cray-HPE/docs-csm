@@ -37,15 +37,16 @@ import sys
 from typing import Dict, Generator, List, NamedTuple, Union
 
 from python_lib import args, cfs
+from python_lib.cfs_import_export import CFS_RESOURCE_TYPES
 from python_lib.types import JsonDict, JSONDecodeError
 
 NameObjectMap = Dict[str,JsonDict]
 
-CMP_JSON = "components.json"
-CFG_JSON = "configurations.json"
-OPT_JSON = "options.json"
 CFS_EXPORT_TOOL = "/usr/share/doc/csm/scripts/operations/configuration/export_cfs_data.sh"
 
+CFG_JSON = CFS_RESOURCE_TYPES["configurations"].json_file_name
+CMP_JSON = CFS_RESOURCE_TYPES["components"].json_file_name
+OPT_JSON = CFS_RESOURCE_TYPES["options"].json_file_name
 
 class CfsData(NamedTuple):
     """
@@ -207,7 +208,7 @@ def get_comps_to_update(comps_to_import: NameObjectMap, current_comps: NameObjec
     # For these, we must then check if there is already a desired configuration set on the live
     # system.
     for comp_id in sorted(list(comps_to_import.keys() & current_comps.keys())):
-        imported_desired_config_name = comps_to_import[comp_id]["desiredConfig"]
+        imported_desired_config_name = comps_to_import[comp_id]["desired_config"]
         if not imported_desired_config_name:
             comps_no_desired_config.append(comp_id)
             continue
@@ -217,7 +218,7 @@ def get_comps_to_update(comps_to_import: NameObjectMap, current_comps: NameObjec
             print(f"Component {comp_id} will not be updated because its import data specifies"
                   f" a nonexistent desired configuration: '{imported_desired_config_name}'")
             continue
-        if current_comps[comp_id]["desiredConfig"]:
+        if current_comps[comp_id]["desired_config"]:
             comps_have_config_set.append(comp_id)
         else:
             comps_to_update.append(comp_id)
@@ -310,14 +311,14 @@ def update_components(comps_map: NameObjectMap, comp_ids_to_update: List[str]) -
     print("")
     comps_to_update_by_desired_config = {}
     for comp_id in comp_ids_to_update:
-        desired_config_name = comps_map[comp_id]["desiredConfig"]
+        desired_config_name = comps_map[comp_id]["desired_config"]
         if desired_config_name in comps_to_update_by_desired_config:
             comps_to_update_by_desired_config[desired_config_name].append(comp_id)
         else:
             comps_to_update_by_desired_config[desired_config_name] = [comp_id]
 
     for desired_config_name, comp_id_list in comps_to_update_by_desired_config.items():
-        update_data = { "desiredConfig": desired_config_name }
+        update_data = { "desired_config": desired_config_name }
         for comp_sublist in chunk_list(comp_id_list):
             print(f"Updating desired configuration to '{desired_config_name}' for components: {comp_sublist}")
             cfs.update_components_by_ids(comp_ids=comp_sublist, update_data=update_data)
@@ -353,11 +354,12 @@ def main() -> None:
             cfs.delete_configuration(config_name)
             del current_cfs_data.configurations[config_name]
 
-        comp_clear_data = {"errorCount": 0, "state": [], "desiredConfig": "", "tags": {}}
+        comp_clear_data = {"error_count": 0, "state": [], "desired_config": "", "tags": {}}
         for comp_sublist in chunk_list(list(current_cfs_data.components)):
             print(f"Clearing error count, desired configuration, state, and tags for components: '{comp_sublist}'")
-            updated_comps = cfs.update_components_by_ids(comp_ids=comp_sublist, update_data=comp_clear_data)
-            current_cfs_data.components.update({updated_comp["id"]: updated_comp for updated_comp in updated_comps})
+            updated_comp_ids = cfs.update_components_by_ids(comp_ids=comp_sublist, update_data=comp_clear_data)
+            for comp_id in updated_comp_ids:
+                current_cfs_data.components[comp_id].update(comp_clear_data)
 
     # Determine the necessary updates
     print("\nExamining CFS configurations...")
