@@ -6,6 +6,7 @@
   - [Cray CLI](#cray-cli)
   - [Etcd-restores](#etcd-restores)
   - [BOS subtest hangs](#bos-subtest-hangs)
+  - [Invalid CFS component](#invalid-cfs-component)
 
 ## SMS test execution
 
@@ -37,6 +38,14 @@ The following test can be run on any Kubernetes node (any master or worker node,
 
 Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
 
+## Version
+
+(`ncn-mw#`) The following command displays the version of the `cmsdev` test tool.
+
+```bash
+/usr/local/bin/cmsdev version
+```
+
 ## Known issues with SMS tests
 
 ### Cray CLI
@@ -67,3 +76,14 @@ In this case, these errors can be ignored, or the pod with the same name as the 
 On systems where too many BOS v1 sessions exist, the `cmsdev` test will hang when trying to
 list BOS v1 sessions. See [Hang Listing BOS V1 Sessions](Hang_Listing_BOS_V1_Sessions.md) for more
 information.
+
+### Invalid CFS component
+
+If a CFS component exists with a 0-length string for its `id` field, then it may cause the `cmsdev`
+CFS subtest to fail. The CFS subtest failure will resemble the following:
+
+```text
+ERROR (run tag fhn3C-cfs): First list item has empty value for "id" field
+```
+
+For details on how to correct this problem, see [CFS Component With 0-Length ID](CFS_Component_With_0_Length_ID.md).
