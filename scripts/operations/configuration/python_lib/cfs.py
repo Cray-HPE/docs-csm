@@ -82,7 +82,7 @@ def __list_and_merge(object_field_name: str, url: str,
     return obj_list
 
 
-def list_components(id_list: Union[None, List[str], str]=None) -> List[JsonObject]:
+def list_components(id_list: Union[None, List[str], str]=None) -> List[JsonDict]:
     """
     Queries CFS to list all components, and returns the list.
     If an id_list is specified, query CFS for just those components.
