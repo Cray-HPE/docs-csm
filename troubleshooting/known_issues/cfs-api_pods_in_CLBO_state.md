@@ -16,7 +16,7 @@ Also, `CFS-API` pods will be in CLBO state.
 
 The logs from `strimzi-cluster-operator-*` pod in the operators namespace will be throwing errors as follows:
 
-```sh
+```text
 2024-10-04T22:16:54.899932465Z 2024-10-04 22:16:54 ERROR StaticHostProvider:148 - Unable to resolve address: cray-shared-kafka-zookeeper-0.cray-shared-kafka-zookeeper-nodes.services.svc/<unresolved>:2181
 2024-10-04T22:16:54.899952739Z java.net.UnknownHostException: cray-shared-kafka-zookeeper-0.cray-shared-kafka-zookeeper-nodes.services.svc: Name or service not known
 
