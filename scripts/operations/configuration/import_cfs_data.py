@@ -37,15 +37,18 @@ import sys
 from typing import Dict, Generator, List, NamedTuple, Union
 
 from python_lib import args, cfs
+from python_lib.cfs_import_export import CFS_RESOURCE_TYPES, list_cfs_components, \
+                                         remove_components_with_empty_ids
+from python_lib.common import print_err
 from python_lib.types import JsonDict, JSONDecodeError
 
 NameObjectMap = Dict[str,JsonDict]
 
-CMP_JSON = "components.json"
-CFG_JSON = "configurations.json"
-OPT_JSON = "options.json"
 CFS_EXPORT_TOOL = "/usr/share/doc/csm/scripts/operations/configuration/export_cfs_data.sh"
 
+CFG_JSON = CFS_RESOURCE_TYPES["configurations"].json_file_name
+CMP_JSON = CFS_RESOURCE_TYPES["components"].json_file_name
+OPT_JSON = CFS_RESOURCE_TYPES["options"].json_file_name
 
 class CfsData(NamedTuple):
     """
@@ -91,17 +94,6 @@ class CfsData(NamedTuple):
 class CfsError(Exception):
     pass
 
-def print_stderr(msg: str) -> None:
-    """
-    Outputs the specified message to stderr
-    """
-    sys.stderr.write(f"{msg}\n")
-
-def print_err(msg: str) -> None:
-    """
-    Prepends "ERROR: " and outputs the specified message to stderr
-    """
-    print_stderr(f"ERROR: {msg}")
 
 def snapshot_cfs_data() -> None:
     """
@@ -137,18 +129,36 @@ def json_data_from_directory(directory_string: str) -> CfsData:
     configs_file = args.readable_file(os.path.join(dirpath, CFG_JSON))
     options_file = args.readable_file(os.path.join(dirpath, OPT_JSON))
 
+    print("Reading CFS component data from JSON file")
+    cfs_component_list=remove_components_with_empty_ids(json_data_from_file(comps_file))
+
+    print("Reading CFS configuration data from JSON file")
+    cfs_config_list=json_data_from_file(configs_file)
+
+    print("Reading CFS option data from JSON file")
+    cfs_options_map=json_data_from_file(options_file)
+
     # Finally, read in their JSON data and return it
-    return CfsData.from_api(cfs_component_list=json_data_from_file(comps_file),
-                            cfs_config_list=json_data_from_file(configs_file),
-                            cfs_options_map=json_data_from_file(options_file))
+    return CfsData.from_api(cfs_component_list=cfs_component_list,
+                            cfs_config_list=cfs_config_list,
+                            cfs_options_map=cfs_options_map)
 
 def load_cfs_data() -> CfsData:
     """
     Make API calls to list the CFS components, configurations, and options on the live system.
     """
-    return CfsData.from_api(cfs_component_list=cfs.list_components(),
-                            cfs_config_list=cfs.list_configurations(),
-                            cfs_options_map=cfs.list_options())
+    print("Reading component data from CFS")
+    cfs_component_list=list_cfs_components()
+
+    print("Reading configuration data from CFS")
+    cfs_config_list=cfs.list_configurations()
+
+    print("Reading option data from CFS")
+    cfs_options_map=cfs.list_options()
+
+    return CfsData.from_api(cfs_component_list=cfs_component_list,
+                            cfs_config_list=cfs_config_list,
+                            cfs_options_map=cfs_options_map)
 
 def get_configs_to_create(configs_to_import: NameObjectMap,
                           current_configs: NameObjectMap) -> List[str]:

@@ -62,11 +62,32 @@ def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> N
     raise ScriptException(msg) from parent_exception
 
 
+def print_stderr(msg: str) -> None:
+    """
+    Outputs the specified message to stderr
+    """
+    sys.stderr.write(f"{msg}\n")
+
+
+def print_err(msg: str) -> None:
+    """
+    Prepends "ERROR: " and outputs the specified message to stderr
+    """
+    print_stderr(f"ERROR: {msg}")
+
+
+def print_warn(msg: str) -> None:
+    """
+    Prepends "WARNING: " and outputs the specified message to stderr
+    """
+    print_stderr(f"WARNING: {msg}")
+
+
 def print_err_exit(msg: str) -> None:
     """
     Print the specified error message to stderr and exit the script with return code 1
     """
-    sys.stderr.write(f"ERROR: {msg}\n")
+    print_err(msg)
     sys.stderr.flush()
     sys.exit(1)
 
