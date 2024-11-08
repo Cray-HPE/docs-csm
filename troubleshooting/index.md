@@ -48,6 +48,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Nexus Fails Authentication with Keycloak Users](known_issues/Nexus_Fail_Authentication_with_Keycloak_Users.md)
 * [Gigabyte BMC Missing Redfish Data](known_issues/Gigabyte_BMC_Missing_Redfish_Data.md)
 * [Hang Listing BOS Sessions](known_issues/Hang_Listing_BOS_Sessions.md)
+* [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
 
 ## Kubernetes
 
