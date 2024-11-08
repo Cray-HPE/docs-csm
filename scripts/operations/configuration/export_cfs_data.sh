@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -53,7 +53,14 @@ run_cmd()
     "$@" || err_exit "Command failed with return code $?: $*"
 }
 
-INCLUDE_LIST="components configurations options sessions"
+basedir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+export_python_script="${basedir}/export_cfs_data.py"
+[[ -e ${export_python_script} ]] \
+  || err_exit "File does not exist: '${export_python_script}'"
+[[ -f ${export_python_script} ]] \
+  || err_exit "Not a regular file: '${export_python_script}'"
+[[ -x ${export_python_script} ]] \
+  || err_exit "File is not executable: '${export_python_script}'"
 
 if [[ $# -eq 0 ]]; then
     OUTPUT_DIRECTORY=$(pwd)
@@ -67,13 +74,8 @@ fi
 ARCHIVE_PREFIX="cfs-export-$(date +%Y%m%d%H%M%S)"
 ARCHIVE_DIR=$(run_cmd mktemp -p "${OUTPUT_DIRECTORY}" -d "${ARCHIVE_PREFIX}-XXX")
 
-# Export the CFS components, configurations, options, and sessions
-# The session data is not likely to be something that would be restored from a backup,
-# but retaining the historical data may be useful in some situations.
-for OBJECT in ${INCLUDE_LIST} ; do
-    echo "Exporting CFS ${OBJECT}..."
-    run_cmd cray cfs "${OBJECT}" list --format json > "${ARCHIVE_DIR}/${OBJECT}.json"
-done
+# Export the CFS data to ARCHIVE_DIR
+run_cmd "${export_python_script}" "${ARCHIVE_DIR}"
 
 # Compress the results
 echo "Creating compressed archive of exported data..."
