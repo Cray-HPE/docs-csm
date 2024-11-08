@@ -50,7 +50,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Gigabyte BMC Missing Redfish Data](known_issues/Gigabyte_BMC_Missing_Redfish_Data.md)
 * [Hang Listing BOS V1 Sessions](known_issues/Hang_Listing_BOS_V1_Sessions.md)
 * [Product Catalog Upgrade Error](known_issues/product_catalog_upgrade_error.md)
-* [CFS Component With 0-Length ID](known_issues/CFS_Component_With_0_Length_ID.md)
+* [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
 
 ## Booting
 
