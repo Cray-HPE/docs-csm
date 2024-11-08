@@ -44,7 +44,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Multiple Console Node Pods on the Same Worker](known_issues/Multiple_Console_Node_Pods_on_the_Same_Worker.md)
 * [Gigabyte BMC Missing Redfish Data](known_issues/Gigabyte_BMC_Missing_Redfish_Data.md)
 * [Hang Listing BOS Sessions](known_issues/Hang_Listing_BOS_Sessions.md)
-* [CFS Component With 0-Length ID](known_issues/CFS_Component_With_0_Length_ID.md)
+* [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
 
 ## Kubernetes
 
