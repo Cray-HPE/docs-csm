@@ -97,7 +97,7 @@ information.
 
 ### Invalid CFS component
 
-If a CFS component exists with a 0-length string for its `id` field, then it may cause the `cmsdev`
+If a CFS component exists with a zero-length string for its `id` field, then it may cause the `cmsdev`
 CFS subtest to fail. The `cmsdev` test failure symptom will depend on the version of `cmsdev` being run.
 (See the [Version](#version) section above for details on how to find the version).
 
@@ -120,4 +120,4 @@ CFS subtest to fail. The `cmsdev` test failure symptom will depend on the versio
     ERROR (run tag fhn3C-cfs): First list item has empty value for "id" field
     ```
 
-For details on how to correct this problem, see [CFS Component With 0-Length ID](CFS_Component_With_0_Length_ID.md).
+For details on how to correct this problem, see [CFS Component With Zero-Length ID](CFS_Component_With_Zero_Length_ID.md).

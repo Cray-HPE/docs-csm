@@ -53,7 +53,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Check for duplicate and DNS entries for NCN and UANs test failure](known_issues/check_ncn_uan_ip_dns_failing.md)
 * [Product Catalog Upgrade Error](known_issues/product_catalog_upgrade_error.md)
 * [PCS and CAPMC Transaction Size Limitation](known_issues/pcs_and_capmc_transaction_size_limitation.md)
-* [CFS Component With 0-Length ID](known_issues/CFS_Component_With_0_Length_ID.md)
+* [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
 
 ## Booting
 
