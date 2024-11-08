@@ -157,8 +157,6 @@ Refer to that table and any corresponding product documents before continuing to
 
 1. Upgrade `ncn-m001` with IUF.
 
-    **`NOTE`** This subsection is mandatory only for Upgrade CSM and additional products with IUF.
-
     > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
     then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
 
