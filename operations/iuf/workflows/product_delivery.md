@@ -4,9 +4,9 @@ This section ensures the product content is loaded onto the system and available
 
 1. [Execute the IUF `process-media` and `pre-install-check` stages](#1-execute-the-iuf-process-media-and-pre-install-check-stages)
 1. [Update `customizations.yaml`](#2-update-customizationsyaml)
-1. [Execute the IUF `deliver-product` stage](#3-execute-the-iuf-deliver-product-stage)
-1. [Perform manual product delivery operations](#4-perform-manual-product-delivery-operations)
-1. [Next steps](#5-next-steps)
+1. [Execute the IUF `deliver-product` stage](#4-execute-the-iuf-deliver-product-stage)
+1. [Perform manual product delivery operations](#5-perform-manual-product-delivery-operations)
+1. [Next steps](#6-next-steps)
 
 ## 1. Execute the IUF `process-media` and `pre-install-check` stages
 
@@ -52,7 +52,11 @@ Once this step has completed:
 
 - The `customizations.yaml` file has been updated per product documentation.
 
-## 3. Execute the IUF `deliver-product` stage
+## 3. Populate admin directory with files defining site preferences
+
+For creating `site_vars.yaml` in admin directory, refer to [Populate admin directory with files defining site preferences](admin_directory.md).
+
+## 4. Execute the IUF `deliver-product` stage
 
 1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `deliver-product` stage.
@@ -86,7 +90,7 @@ Once this step has completed:
 - Product content uploaded to the system has been recorded in the product catalog
 - Per-stage product hooks have executed for the `deliver-product` stage
 
-## 4. Perform manual product delivery operations
+## 5. Perform manual product delivery operations
 
 **`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
@@ -108,7 +112,7 @@ Once this step has completed:
 
 - Third-party software has been uploaded to Nexus
 
-## 5. Next steps
+## 6. Next steps
 
 - If performing an initial install or an upgrade of non-CSM products only, return to the
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)

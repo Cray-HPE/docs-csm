@@ -685,6 +685,7 @@ setups
 shasta
 shutoff
 singlemode
+site_vars.yaml
 site-routable
 slurm.conf
 spec
