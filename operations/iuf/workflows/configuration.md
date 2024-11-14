@@ -2,112 +2,18 @@
 
 This section ensures product configuration has been defined, customized, and is available for later steps in the workflow.
 
-This workflow uses `${ADMIN_DIR}` to retain files that define site preferences for IUF. `${ADMIN_DIR}` is defined separately from `${ACTIVITY_DIR}` and `${MEDIA_DIR}` based on the assumption that the files in `${ADMIN_DIR}` will be
-used when performing future IUF operations unrelated to this workflow.
+- [1. Execute the IUF `update-vcs-config` stage](#1-execute-the-iuf-update-vcs-config-stage)
+    - [1.1 Prerequisites](#11-prerequisites)
+    - [1.2 Procedure](#12-procedure)
+- [2. Perform manual product configuration operations](#2-perform-manual-product-configuration-operations)
+- [3. Next steps](#3-next-steps)
 
-**`NOTE`** The following steps assume `${ADMIN_DIR}` is empty. If this is not the case, i.e. `${ADMIN_DIR}` has been populated by previous IUF workflows, ensure the content in `${ADMIN_DIR}` is up to date with the latest content
-provided by the HPC CSM Software Recipe release content being installed. This may involve merging new content provided in the latest branch of the `hpc-csm-software-recipe` repository in VCS or provided in the files extracted from
-the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
-
-- [1. Populate admin directory with files defining site preferences](#1-populate-admin-directory-with-files-defining-site-preferences)
-- [2. Execute the IUF `update-vcs-config` stage](#2-execute-the-iuf-update-vcs-config-stage)
-    - [2.1 Prerequisites](#21-prerequisites)
-    - [2.2 Procedure](#22-procedure)
-- [3. Perform manual product configuration operations](#3-perform-manual-product-configuration-operations)
-- [4. Next steps](#4-next-steps)
-
-## 1. Populate admin directory with files defining site preferences
-
-1. Change directory to `${ADMIN_DIR}`
-
-    (`ncn-m001#`) Change directory
-
-    ```bash
-    cd ${ADMIN_DIR}
-    ```
-
-1. Copy the `sat bootprep` and `product_vars.yaml` files from the uncompressed HPC CSM Software Recipe distribution file in the media directory to the current directory.
-
-    (`ncn-m001#`) Copy `sat bootprep` and `product_vars.yaml` files
-
-    ```bash
-    cp "${MEDIA_DIR}"/hpc-csm-software-recipe-*/vcs/product_vars.yaml .
-    cp -r "${MEDIA_DIR}"/hpc-csm-software-recipe-*/vcs/bootprep .
-    ```
-
-    (`ncn-m001#`) Examine the contents of `${ADMIN_DIR}` to verify the expected content is present
-
-    ```bash
-    find . -type f
-    ```
-
-    Example output:
-
-    ```text
-    ./bootprep/management-bootprep.yaml
-    ./bootprep/compute-and-uan-bootprep.yaml
-    ./product_vars.yaml
-    ```
-
-1. Edit the `compute-and-uan-bootprep.yaml` and `management-bootprep.yaml` files to account for any site deviations from the default values. For example:
-    - Comment out the `slurm-site` CFS configuration layer and uncomment the `pbs-site` CFS configuration layer in `compute-and-uan-bootprep.yaml` if PBS is the preferred workload manager
-    - Uncomment the `gpu-{{recipe.version}}` CFS configuration layer and `gpu-image` image definition in `compute-and-uan-bootprep.yaml` if the system has GPU hardware
-    - Comment out any CFS configuration layers in `compute-and-uan-bootprep.yaml` and `management-bootprep.yaml` files for products that are not needed on the system
-    - Any other changes needed to reflect site preferences
-
-1. Create a `site_vars.yaml` file in `${ADMIN_DIR}`. This file will contain key/value pairs for any configuration changes that should override entries in the `default` section of the HPE-provided `product_vars.yaml` file.
-   There are comments at the top of the `product_vars.yaml` file that describe the variables and related details. The following are a few examples of `site_vars.yaml` changes:
-    - Add a `default` section containing a `network_type: "cassini"` entry to designate that Cassini is the desired Slingshot network type to be used when executing CFS configurations later in the workflow
-    - Add a `suffix` entry to the `default` section to append a string to the names of CFS configuration, image, and BOS session template artifacts created during the workflow to make them easy to identify
-
-   Additional information on `site_vars.yaml` files can be found in the [Site and recipe variables](../IUF.md#site-and-recipe-variables) and [`update-vcs-config`](../stages/update_vcs_config.md) sections.
-
-    1. <create a `site_vars.yaml` file  with desired key/value pairs >
-
-    2. Ensure the `site_vars.yaml` file contents are formatted correctly. The following text is an example for verification purposes only.
-
-       (`ncn-m001#`) Display the contents of an **example** `site_vars.yaml` file
-
-       ```bash
-       cat site_vars.yaml
-       ```
-
-       Example output:
-
-       ```text
-       default:
-         network_type: "cassini"
-         suffix: "-test01"
-       ```
-
-    3. Ensure the expected files are present in the admin directory after performing the steps in this section.
-
-       (`ncn-m001#`) Examine the contents of `${ADMIN_DIR}` to verify the expected content is present
-
-       ```bash
-       find . -type f
-       ```
-
-       Example output:
-
-       ```text
-       ./bootprep/management-bootprep.yaml
-       ./bootprep/compute-and-uan-bootprep.yaml
-       ./product_vars.yaml
-       ./site_vars.yaml
-       ```
-
-Once this step has completed:
-
-- `${ADMIN_DIR}` is populated with `product_vars.yaml`, `site_vars.yaml`, and `sat bootprep` input files
-- The aforementioned configuration files have been updated to reflect site preferences
-
-## 2. Execute the IUF `update-vcs-config` stage
+## 1. Execute the IUF `update-vcs-config` stage
 
 For each product that uploaded Ansible configuration content to a configuration management VCS repository, the `update-vcs-config` stage attempts to merge the pristine branch of the configuration management repository into a
 corresponding customer working branch.
 
-### 2.1 Prerequisites
+### 1.1 Prerequisites
 
 - Understand the default branching scheme defined in `product_vars.yaml`, which is typically `integration-<x.y.z>`. Details are provided in the [update-vcs-config stage documentation](../stages/update_vcs_config.md).
 - Create and configure `site_vars.yaml` to properly define the **customer** branching strategy as well as any needed product-specific overrides and provide it as an argument when invoking `iuf run`.
@@ -154,7 +60,7 @@ corresponding customer working branch.
 
     When the `update-vcs-config` stage is run, IUF will now use the `integration-1.2.10` branch, and the merge conflict that would have occurred will be avoided as the workaround was reverted.
 
-### 2.2 Procedure
+### 1.2 Procedure
 
 **`NOTE`** Additional arguments are available to control the behavior of the `update-vcs-config` stage, for example `-rv`. See the [`update-vcs-config` stage
 documentation](../stages/update_vcs_config.md) for details and adjust the examples below if necessary.
@@ -177,7 +83,7 @@ Once this step has completed:
 - Product configuration content has been merged to VCS branches as described in the [update-vcs-config stage documentation](../stages/update_vcs_config.md)
 - Per-stage product hooks have executed for the `update-vcs-config` stage
 
-## 3. Perform manual product configuration operations
+## 2. Perform manual product configuration operations
 
 Some products must be manually configured prior to the creation of CFS configurations and images. The "Install and Upgrade Framework" section of each individual product's installation documentation contains instructions for product-specific
 configuration, if any. Major changes may also be documented in the _HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray EX Systems_.
@@ -208,7 +114,7 @@ Once this step has completed:
 
 - Product configuration has been completed
 
-## 4. Next steps
+## 3. Next steps
 
 - If performing an initial install or an upgrade of non-CSM products only, return to the
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)
