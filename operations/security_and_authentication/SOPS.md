@@ -195,7 +195,7 @@ any `hostvars` or `groupvars` files that include a `*.sops.*` pattern.
 2. Replace sensitive information with Encrypted Versions
 
     (`Example from a SOPS Equipped Environment with a checked out CFS Configuration`)
-    
+
     ```bash
     cd csm-config
     sops encrypt --hc-vault-transit $VAULT_ADDR user_passwords.yml > user_passwords.sops.yml
