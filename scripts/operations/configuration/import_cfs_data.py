@@ -280,6 +280,17 @@ def change_options(option_data: cfs.CfsOptions, option_names_to_change: List[str
         print(f"{opt_name} = {option_updates[opt_name]}")
     cfs.update_options(option_updates)
 
+def scrub_layer(layer: JsonDict) -> None:
+    """
+    Check if the layer contains both "branch" and "commit" fields. It is not legal to
+    specify both for a layer when creating a configuration. In these cases, we remove the
+    "commit" field when recreating the layer, as it will be automatically populated by CFS.
+    The alternative (omitting the "branch" field) means that information is lost, since the
+    "branch" field is only present if it is specified when creating the configuration.
+    """
+    if "commit" in layer and "branch" in layer:
+        del layer["commit"]
+
 def create_configs(configs_map: NameObjectMap, config_names_to_create: List[str]) -> None:
     """
     Loop through the specified configuration names one at a time, and create them in CFS with
@@ -290,15 +301,16 @@ def create_configs(configs_map: NameObjectMap, config_names_to_create: List[str]
     print("")
     for config_name in config_names_to_create:
         print(f"Importing configuration '{config_name}'")
-        # First, check for any layers which contain both "branch" and "commit" fields. It is not legal to
-        # specify both for a layer when creating a configuration. In these cases, we omit the
-        # "commit" field when recreating the layer, as it will be automatically populated by CFS.
-        # The alternative (omitting the "branch" field) means that information is lost, since the
-        # "branch" field is only present if it is specified when creating the configuration.
-        for layer in configs_map[config_name]["layers"]:
-            if "commit" in layer and "branch" in layer:
-                del layer["commit"]
-        cfs.create_configuration(config_name, configs_map[config_name]["layers"])
+        config_data = configs_map[config_name]
+        for layer in config_data["layers"]:
+            scrub_layer(layer)
+        # If an additional inventory layer is present, the same procedure must be done for it
+        if "additional_inventory" in config_data:
+            scrub_layer(config_data["additional_inventory"])
+        # When creating a CFS configuration, the 'name' and 'last_updated' fields cannot be specified
+        for field in [ 'name', 'last_updated' ]:
+            config_data.pop(field, None)
+        cfs.create_configuration(config_name, **config_data)
 
 def chunk_list(items: list, max_batch_size: int=500) -> Generator[list, None, None]:
     """
