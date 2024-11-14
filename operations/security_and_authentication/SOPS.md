@@ -83,7 +83,7 @@ created for them.
 
     When TAPMS creates a new tenant, a new Kubernetes namespace is created bearing
     the same name. Within that namespace, there should be exactly one tenant name
-    that is part of your namespace. 
+    that is part of your namespace.
 
     (`ncn-m001#`) Retrieve, parse, decrypt and export your tenant's Kubernetes service account token.
 
@@ -99,7 +99,7 @@ created for them.
    VAULT_LOGIN=$PROTOCOL://vault.$CMN_NAME/v1/auth/kubernetes/login
    export VAULT_TOKEN=$(curl -s --data '{"jwt": "'"$TOKEN"'", "role": "'"$TRANSIT_NAME"'"}' $VAULT_LOGIN | jq -r '.auth.client_token')
    ```
-   
+
 6. Summary of steps 1-5.
 
    (`ncn-m001#`) Set the name of  your tenant.
@@ -129,11 +129,11 @@ created for them.
     echo "export VAULT_TOKEN=${VAULT_TOKEN}"
     ```
 
-
 ### SOPS Use Case Requirements
 
 The `VAULT_TOKEN` will be valid until its duration has expired. These values
 may be used on any system with SOPS installed that match these criteria:
+
 1. The environment is configured to trust TLS/SSL Certificates from CSM.
 2. The environment has a network connection that can resolve `$VAULT_ADDR` over
 the customer managed network.
@@ -149,7 +149,7 @@ These are example use cases for how SOPS can be used to secure sensitive informa
 The information provided here is a subset of what SOPS can do. The [SOPS readme](https://github.com/getsops/sops/blob/main/README.rst)
 provides more comprehensive examples of how it can be used.
 
-#### Use SOPS to interactively encrypt sensitive values that are unique to a tenant.
+#### Use SOPS to interactively encrypt sensitive values that are unique to a tenant
 
 (`From a SOPS Equipped Environment`)
 
@@ -194,19 +194,17 @@ any `hostvars` or `groupvars` files that include a `*.sops.*` pattern.
 1. [Perform a local checkout of your CFS Configuration from VCS](../configuration_management/Version_Control_Service_VCS.md)
 2. Replace sensitive information with Encrypted Versions
 
-(`Example from a SOPS Equipped Environment with a checked out CFS Configuration`)
-
-```bash
-cd csm-config
-sops encrypt --hc-vault-transit $VAULT_ADDR user_passwords.yml > user_passwords.sops.yml
-rm user_passwords.yml
-git rm user_passwords.yml
-git add user_passwords.sops.yml
-git commit -m "Securing sensitive information in vault"
-git push origin HEAD
-```
+    (`Example from a SOPS Equipped Environment with a checked out CFS Configuration`)
+    
+    ```bash
+    cd csm-config
+    sops encrypt --hc-vault-transit $VAULT_ADDR user_passwords.yml > user_passwords.sops.yml
+    rm user_passwords.yml
+    git rm user_passwords.yml
+    git add user_passwords.sops.yml
+    git commit -m "Securing sensitive information in vault"
+    git push origin HEAD
+    ```
 
 3. Check in updated CSM Config and register configuration with CFS
 4. Create a CFS Session (either automatically as part of boot or through CFS API)
-
-
