@@ -193,7 +193,7 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
 
        ```bash
        scp ncn-m001:/root/csm_upgrade.pre_m001_reboot_artifacts.*.tgz /root
-       zypper --plus-repo="/etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)" --no-gpg-checks install -y cray-site-init
+       zypper --plus-repo="/etc/cray/upgrade/csm/media/${ACTIVITY_NAME}/csm-${CSM_RELEASE}/rpm/cray/csm/noos" --no-gpg-checks install -y cray-site-init
        scp ncn-m001:/root/*.noarch.rpm /root/
        rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
        ```
