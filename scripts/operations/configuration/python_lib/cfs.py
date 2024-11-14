@@ -137,7 +137,7 @@ def update_components_by_ids(comp_ids: List[str], update_data: JsonObject) -> Js
 
 # CFS configuration functions
 
-def create_configuration(config_name: str, layers: List[Dict[str, str]]) -> JsonObject:
+def create_configuration(config_name: str, layers: List[Dict[str, str]], **config_fields) -> JsonObject:
     """
     Creates or updates a CFS configuration with the specified name and layers.
     The layers should be dictionaries with the following fields set:
@@ -145,8 +145,9 @@ def create_configuration(config_name: str, layers: List[Dict[str, str]]) -> Json
 
     The CFS configuration is returned if successful. Otherwise an exception is raised.
     """
+    config_fields["layers"] = layers
     request_kwargs = {"url": f"{CFS_V3_CONFIGS_URL}/{config_name}",
-                      "json": {"layers": layers},
+                      "json": config_fields,
                       "add_api_token": True,
                       "expected_status_codes": {200}}
     return api_requests.put_retry_validate_return_json(**request_kwargs)
