@@ -147,7 +147,7 @@ the customer managed network.
 
 These are example use cases for how SOPS can be used to secure sensitive information.
 The information provided here is a subset of what SOPS can do. The [SOPS readme](https://github.com/getsops/sops/blob/main/README.rst)
-provides more substantiative examples of how it can be used.
+provides more comprehensive examples of how it can be used.
 
 #### Use SOPS to interactively encrypt sensitive values that are unique to a tenant.
 
