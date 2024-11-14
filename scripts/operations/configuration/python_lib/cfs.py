@@ -34,6 +34,10 @@ from .types import JsonDict, JsonObject, JSONDecodeError
 
 CFS_BASE_URL = f"{api_requests.API_GW_BASE_URL}/apis/cfs"
 CFS_VERSIONS_URL = f"{CFS_BASE_URL}/versions"
+# CASMCMS-9204: The v2 options URL is needed to be able to set the default_playbook option,
+# which is read-only in v3
+CFS_V2_BASE_URL = f"{CFS_BASE_URL}/v2"
+CFS_V2_OPTIONS_URL = f"{CFS_V2_BASE_URL}/options"
 CFS_V3_BASE_URL = f"{CFS_BASE_URL}/v3"
 CFS_V3_COMPS_URL = f"{CFS_V3_BASE_URL}/components"
 CFS_V3_CONFIGS_URL = f"{CFS_V3_BASE_URL}/configurations"
@@ -209,11 +213,41 @@ def list_options() -> CfsOptions:
     return api_requests.get_retry_validate_return_json(**request_kwargs)
 
 
+def update_options_v2(new_options: CfsOptions) -> CfsOptions:
+    """
+    Updates all of the specified options to the specified values in CFS,
+    using the v2 endpoint.
+    Returns the new total set of CFS options (with the v2 names).
+    """
+    # Even though it does not follow convention for patch operations,
+    # the status code when successful is 200
+    request_kwargs = {"url": CFS_V2_OPTIONS_URL,
+                      "add_api_token": True,
+                      "expected_status_codes": {200},
+                      "json": new_options}
+    return api_requests.patch_retry_validate_return_json(**request_kwargs)
+
+
 def update_options(new_options: CfsOptions) -> CfsOptions:
     """
-    Updates all of the specified options to the specified values in CFS.
-    Returns the new total set of CFS options.
+    Updates all of the specified options to the specified values in CFS,
+    using the v3 endpoint (except for setting the default_playbook
+    option, if applicable).
+    Returns the new total set of CFS options (with v3 names).
     """
+    # CASMCMS-9204: If we are updating the default_playbook option, we have to
+    # use the v2 API for that, because it is read-only in CFS v3
+    if "default_playbook" in new_options:
+        # In CFS v2, the option is named defaultPlaybook
+        v2_new_options = { "defaultPlaybook": new_options.pop("default_playbook") }
+        update_options_v2(v2_new_options)
+        if not new_options:
+            # This was the only option we were asked to set, so we won't be making
+            # a patch request to the V3 endpoint. But we still want the response from
+            # this function to be the same as though we had only used the V3 endpoint.
+            # Therefore, we call list_options and return the data from that.
+            return list_options()
+
     # Even though it does not follow convention for patch operations,
     # the status code when successful is 200
     request_kwargs = {"url": CFS_V3_OPTIONS_URL,
