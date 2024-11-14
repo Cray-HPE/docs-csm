@@ -54,8 +54,7 @@ procedures based on whether or not CSM is being upgraded:
 
 ### 3.1 `management-nodes-rollout` with CSM upgrade
 
-All management nodes will be upgraded to a new image because CSM itself is being upgraded. All management nodes, excluding `ncn-m001`, will be upgraded with IUF.
-`ncn-m001` will be upgraded with manual commands.
+All management nodes will be upgraded to a new image because CSM itself is being upgraded.
 This section describes how to test a new image and CFS configuration on a single canary node first before rolling it out to the other management nodes of the same management type.
 Follow the steps below to upgrade all management nodes.
 
@@ -109,7 +108,7 @@ Refer to that table and any corresponding product documents before continuing to
            $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'; done
         ```
 
-1. Perform the NCN master node upgrade on `ncn-m002` and `ncn-m003`.
+1. Perform the NCN master node upgrade of `ncn-m002` and `ncn-m003`.
 
     > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
     then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
@@ -155,7 +154,7 @@ Refer to that table and any corresponding product documents before continuing to
 
 1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [3.3 NCN worker nodes](#33-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
-1. Upgrade `ncn-m001` with IUF.
+1. Perform the NCN master node upgrade of `ncn-m001`.
 
     > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
     then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
