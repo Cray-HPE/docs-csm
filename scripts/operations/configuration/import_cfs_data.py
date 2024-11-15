@@ -366,7 +366,7 @@ def main() -> None:
         comp_clear_data = {"error_count": 0, "state": [], "desired_config": "", "tags": {}}
         for comp_sublist in chunk_list(list(current_cfs_data.components)):
             print(f"Clearing error count, desired configuration, state, and tags for components: '{comp_sublist}'")
-            updated_comp_ids = cfs.update_components_by_ids(comp_ids=comp_sublist, update_data=comp_clear_data)
+            updated_comp_ids = cfs.update_components_by_ids(comp_ids=comp_sublist, update_data=comp_clear_data)['component_ids']
             for comp_id in updated_comp_ids:
                 current_cfs_data.components[comp_id].update(comp_clear_data)
 
