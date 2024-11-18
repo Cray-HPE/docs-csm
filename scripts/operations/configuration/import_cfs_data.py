@@ -30,6 +30,7 @@ if a configuration with the same name already exists, then it is skipped.
 """
 
 import argparse
+from functools import lru_cache
 import json
 import os
 import subprocess
@@ -49,18 +50,30 @@ CFS_EXPORT_TOOL = "/usr/share/doc/csm/scripts/operations/configuration/export_cf
 CFG_JSON = CFS_RESOURCE_TYPES["configurations"].json_file_name
 CMP_JSON = CFS_RESOURCE_TYPES["components"].json_file_name
 OPT_JSON = CFS_RESOURCE_TYPES["options"].json_file_name
+SRC_JSON = CFS_RESOURCE_TYPES["sources"].json_file_name
+
+
+def dict_list_to_map(dict_list: List[JsonDict], id_field_name: str) -> NameObjectMap:
+    """
+    Convert a list of dict objects into a dict mapping from the id field value of each dict object
+    to the corresponding dict object.
+    """
+    return { dict_obj[id_field_name]: dict_obj for dict_obj in dict_list }
+
 
 class CfsData(NamedTuple):
     """
     A collection of CFS components, CFS configurations, and CFS options.
     """
 
-    # Components is a mapping from component id to the component object
+    # components is a mapping from component id to the component object
     components: NameObjectMap
-    # Configurations is a mapping from config name to config object
+    # configurations is a mapping from config name to config object
     configurations: NameObjectMap
-    # Options is a mapping from option name to option value
+    # options is a mapping from option name to option value
     options: cfs.CfsOptions
+    # sources is a mapping from source name to source object
+    sources: NameObjectMap
 
     @classmethod
     def component_list_to_map(cls, cfs_component_list: List[JsonDict]) -> NameObjectMap:
@@ -68,7 +81,7 @@ class CfsData(NamedTuple):
         Convert a list of CFS components (such as returned by the API) into a dict
         mapping component IDs to the components.
         """
-        return { cfs_comp["id"]: cfs_comp for cfs_comp in cfs_component_list }
+        return dict_list_to_map(cfs_component_list, "id")
 
     @classmethod
     def config_list_to_map(cls, cfs_config_list: List[JsonDict]) -> NameObjectMap:
@@ -76,20 +89,32 @@ class CfsData(NamedTuple):
         Convert a list of CFS configurations (such as returned by the API) into a dict
         mapping config names to the configs.
         """
-        return { cfs_config["name"]: cfs_config for cfs_config in cfs_config_list }
+        return dict_list_to_map(cfs_config_list, "name")
+
+    @classmethod
+    def source_list_to_map(cls, cfs_source_list: List[JsonDict]) -> NameObjectMap:
+        """
+        Convert a list of CFS sources (such as returned by the API) into a dict
+        mapping source names to the sources.
+        """
+        return dict_list_to_map(cfs_source_list, "name")
 
     # Use a string for the type hint in the case where the type is not yet defined.
     # https://peps.python.org/pep-0484/#forward-references
     @classmethod
-    def from_api(cls, cfs_component_list: List[JsonDict], cfs_config_list: List[JsonDict],
-                 cfs_options_map: cfs.CfsOptions) -> 'CfsData':
+    def from_api(cls, cfs_component_list: List[JsonDict],
+                 cfs_config_list: List[JsonDict],
+                 cfs_options_map: cfs.CfsOptions,
+                 cfs_source_list: List[JsonDict]) -> 'CfsData':
         """
         For populating the CfsData tuple with input in the form it is given from the CFS
-        API (lists of objects in the case of components and configurations).
+        API (lists of objects in the case of components, configurations, and sources).
         """
         return cls(components=cls.component_list_to_map(cfs_component_list),
                    configurations=cls.config_list_to_map(cfs_config_list),
-                   options=cfs_options_map)
+                   options=cfs_options_map,
+                   sources=cls.source_list_to_map(cfs_source_list))
+
 
 class CfsError(Exception):
     pass
@@ -124,10 +149,11 @@ def json_data_from_directory(directory_string: str) -> CfsData:
     # First make sure it's a readable directory
     dirpath = args.readable_directory(directory_string)
 
-    # Next make sure that it contains the 3 necessary JSON files and that they're readable
+    # Next make sure that it contains the 4 necessary JSON files and that they're readable
     comps_file = args.readable_file(os.path.join(dirpath, CMP_JSON))
     configs_file = args.readable_file(os.path.join(dirpath, CFG_JSON))
     options_file = args.readable_file(os.path.join(dirpath, OPT_JSON))
+    sources_file = args.readable_file(os.path.join(dirpath, SRC_JSON))
 
     print("Reading CFS component data from JSON file")
     cfs_component_list=remove_components_with_empty_ids(json_data_from_file(comps_file))
@@ -138,10 +164,14 @@ def json_data_from_directory(directory_string: str) -> CfsData:
     print("Reading CFS option data from JSON file")
     cfs_options_map=json_data_from_file(options_file)
 
+    print("Reading CFS source data from JSON file")
+    cfs_source_list=json_data_from_file(sources_file)
+
     # Finally, read in their JSON data and return it
     return CfsData.from_api(cfs_component_list=cfs_component_list,
                             cfs_config_list=cfs_config_list,
-                            cfs_options_map=cfs_options_map)
+                            cfs_options_map=cfs_options_map,
+                            cfs_source_list=cfs_source_list)
 
 def load_cfs_data() -> CfsData:
     """
@@ -156,9 +186,50 @@ def load_cfs_data() -> CfsData:
     print("Reading option data from CFS")
     cfs_options_map=cfs.list_options()
 
+    print("Reading source data from CFS")
+    cfs_source_list=cfs.list_sources()
+
     return CfsData.from_api(cfs_component_list=cfs_component_list,
                             cfs_config_list=cfs_config_list,
-                            cfs_options_map=cfs_options_map)
+                            cfs_options_map=cfs_options_map,
+                            cfs_source_list=cfs_source_list)
+
+def get_resources_to_create(resource_type: str,
+                            exported_resources: NameObjectMap,
+                            current_resources: NameObjectMap) -> List[str]:
+    """
+    Looks at the exported resources and current resources.
+    Returns a list of item names which exist in the exported_resources list but
+    not the current resources.
+    """
+    # The intersection of these dictionary keys represents the names which
+    # exist in both the imported data and also the live system:
+    resources_already_exist = sorted(list(exported_resources.keys() & current_resources.keys()))
+
+    if resources_already_exist:
+        print(f"{resource_type} with the following names exist in CFS and will not be imported:")
+        print(", ".join([ f"'{resource_name}'" for resource_name in resources_already_exist]))
+
+    # The difference of these dictionary keys represents the names which
+    # are in our exported data but not the live system:
+    resources_to_create = sorted(list(exported_resources.keys() - current_resources.keys()))
+
+    if resources_to_create:
+        print(f"The following {resource_type} will be imported:")
+        print(", ".join([ f"'{resource_name}'" for resource_name in resources_to_create]))
+
+    return resources_to_create
+
+def get_sources_to_restore(sources_to_import: NameObjectMap,
+                           current_sources: NameObjectMap) -> List[str]:
+    """
+    Compare the sources in the import data and on the live system. Return
+    a list of source names that should be restored during the import.
+
+    The import should be restoring any which do not already exist, so this function
+    just identifies those.
+    """
+    return get_resources_to_create("sources", sources_to_import, current_sources)
 
 def get_configs_to_create(configs_to_import: NameObjectMap,
                           current_configs: NameObjectMap) -> List[str]:
@@ -169,22 +240,7 @@ def get_configs_to_create(configs_to_import: NameObjectMap,
     The import should be creating any which do not already exist, so this function
     just identifies those.
     """
-
-    # The intersection of these dictionary keys represents the names of configurations which
-    # exist in both the imported data and also the live system
-    configs_already_exist = sorted(list(
-        configs_to_import.keys() & current_configs.keys()))
-    if configs_already_exist:
-        print("Configurations with the following names exist in CFS and will not be imported:")
-        print(", ".join([ f"'{config_name}'" for config_name in configs_already_exist]))
-    # The difference of these dictionary keys represents the names of configurations which
-    # are in our imported data but not the live system:
-    configs_to_create = sorted(list(
-        configs_to_import.keys() - current_configs.keys()))
-    if configs_to_create:
-        print("The following configurations will be imported:")
-        print(", ".join([ f"'{config_name}'" for config_name in configs_to_create]))
-    return configs_to_create
+    return get_resources_to_create("configurations", configs_to_import, current_configs)
 
 def get_comps_to_update(comps_to_import: NameObjectMap, current_comps: NameObjectMap,
                         current_configs: NameObjectMap,
@@ -312,6 +368,21 @@ def create_configs(configs_map: NameObjectMap, config_names_to_create: List[str]
             config_data.pop(field, None)
         cfs.create_configuration(config_name, **config_data)
 
+def restore_sources(sources_map: NameObjectMap, source_names_to_restore: List[str]) -> None:
+    """
+    Loop through the specified source names one at a time, and restore them in CFS
+    """
+    if not source_names_to_restore:
+        return
+    print("")
+    for source_name in source_names_to_restore:
+        print(f"Restoring source '{source_name}'")
+        source_data = sources_map[source_name]
+        # Remove name and last_updated fields, as those are not used in the restore request
+        for field in [ 'name', 'last_updated' ]:
+            source_data.pop(field, None)
+        cfs.restore_source(source_name, **source_data)
+
 def chunk_list(items: list, max_batch_size: int=500) -> Generator[list, None, None]:
     """
     Break a given list into chunks with size <= the specified maximum, and yield
@@ -344,6 +415,48 @@ def update_components(comps_map: NameObjectMap, comp_ids_to_update: List[str]) -
             print(f"Updating desired configuration to '{desired_config_name}' for components: {comp_sublist}")
             cfs.update_components_by_ids(comp_ids=comp_sublist, update_data=update_data)
 
+
+@lru_cache(maxsize=1)
+def source_restore_supported() -> bool:
+    """
+    Check the CFS version and see if source restore is supported.
+    """
+    print("Checking CFS version on system")
+    cfs_version = cfs.CfsVersion.from_api()
+    print(f"CFS version is {cfs_version}")
+    return cfs.restore_source_supported(cfs_version)
+
+def clear_cfs(current_cfs_data: CfsData) -> None:
+    """
+    Clear select CFS data
+    """
+    for config_name in list(current_cfs_data.configurations):
+        print(f"Deleting configuration '{config_name}'")
+        cfs.delete_configuration(config_name)
+        del current_cfs_data.configurations[config_name]
+
+    comp_clear_data = {"error_count": 0, "state": [], "desired_config": "", "tags": {}}
+    for comp_sublist in chunk_list(list(current_cfs_data.components)):
+        print("Clearing error count, desired configuration, state, and tags for components: "
+              f"'{comp_sublist}'")
+        updated_comp_response = cfs.update_components_by_ids(comp_ids=comp_sublist,
+                                                             update_data=comp_clear_data)
+        for comp_id in updated_comp_response['component_ids']:
+            current_cfs_data.components[comp_id].update(comp_clear_data)
+
+    if current_cfs_data.sources:
+        # No sources to clear
+        return
+
+    if not source_restore_supported():
+        print("Source restore not supported at this CFS version -- will not clear source data")
+        return
+
+    for source_name in list(current_cfs_data.sources):
+        print(f"Deleting source '{source_name}'")
+        cfs.delete_source(source_name)
+        del current_cfs_data.sources[source_name]
+
 def main() -> None:
     """
     Parses the command line arguments, does the stuff.
@@ -355,12 +468,16 @@ def main() -> None:
     """
     parser = argparse.ArgumentParser(
         description="Reads CFS data from JSON files and imports the data info CFS")
-    parser.add_argument("--clear-cfs", action='store_true', help="Delete CFS configurations and clear CFS components before importing")
+    parser.add_argument("--clear-cfs", action='store_true',
+                        help="Delete CFS configurations and clear CFS components before importing")
     parser.add_argument(metavar="json_directory", type=json_data_from_directory, dest="json_data",
                         help=f"Directory containing {CMP_JSON}, {CFG_JSON}, and {OPT_JSON}")
     parsed_args = parser.parse_args()
 
     cfs_data_to_import = parsed_args.json_data
+
+    # Call this up front just to make sure we're able to get the CFS version
+    source_restore_supported()
 
     print("Reading current data from CFS")
     current_cfs_data = load_cfs_data()
@@ -369,18 +486,7 @@ def main() -> None:
         # Take a snapshot of the CFS data before clearing it
         print("Taking a snapshot of system CFS data before clearing it")
         snapshot_cfs_data()
-
-        for config_name in list(current_cfs_data.configurations):
-            print(f"Deleting configuration '{config_name}'")
-            cfs.delete_configuration(config_name)
-            del current_cfs_data.configurations[config_name]
-
-        comp_clear_data = {"error_count": 0, "state": [], "desired_config": "", "tags": {}}
-        for comp_sublist in chunk_list(list(current_cfs_data.components)):
-            print(f"Clearing error count, desired configuration, state, and tags for components: '{comp_sublist}'")
-            updated_comp_ids = cfs.update_components_by_ids(comp_ids=comp_sublist, update_data=comp_clear_data)['component_ids']
-            for comp_id in updated_comp_ids:
-                current_cfs_data.components[comp_id].update(comp_clear_data)
+        clear_cfs(current_cfs_data)
 
     # Determine the necessary updates
     print("\nExamining CFS configurations...")
@@ -395,9 +501,16 @@ def main() -> None:
     print("\nExamining CFS options...")
     options_to_change = get_options_to_change(cfs_data_to_import.options, current_cfs_data.options)
 
+    print("\nExamining CFS sources...")
+    sources_to_restore = get_sources_to_restore(cfs_data_to_import.sources,
+                                                current_cfs_data.sources)
+    if sources_to_restore and not source_restore_supported():
+        print("Source restore not supported at this CFS version -- will not restore source data")
+        sources_to_restore = []
+
     print("")
     # If there are no changes to make, we are already done
-    if not configs_to_create and not comps_to_update and not options_to_change:
+    if not any([configs_to_create, comps_to_update, options_to_change, sources_to_restore]):
         print("No updates to be performed.")
         return
 
@@ -408,6 +521,7 @@ def main() -> None:
         snapshot_cfs_data()
 
     change_options(cfs_data_to_import.options, options_to_change)
+    restore_sources(cfs_data_to_import.sources, sources_to_restore)
     create_configs(cfs_data_to_import.configurations, configs_to_create)
     update_components(cfs_data_to_import.components, comps_to_update)
 
