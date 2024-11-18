@@ -751,50 +751,78 @@ Information on how to perform backups of individual services or the entire syste
 these backups.
 
 - [System Recovery](System_Recovery/System_Recovery.md)
-- etcd
-    - [Create a Manual Backup of a Healthy Bare-Metal etcd Cluster](kubernetes/Create_a_Manual_Backup_of_a_Healthy_Bare-Metal_etcd_Cluster.md)
-    - [Create a Manual Backup of a Healthy etcd Cluster](kubernetes/Create_a_Manual_Backup_of_a_Healthy_etcd_Cluster.md)
-    - [Restore an etcd Cluster from a Backup](kubernetes/Restore_an_etcd_Cluster_from_a_Backup.md)
-    - [Repopulate Data in etcd Clusters When Rebuilding Them](kubernetes/Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md)
-    - [Restore Bare-Metal etcd Clusters from an S3 Snapshot](kubernetes/Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md)
-- Postgres
-    - [Restore Postgres](kubernetes/Restore_Postgres.md)
-    - [Disaster Recovery for Postgres](kubernetes/Disaster_Recovery_Postgres.md)
-- Nexus
-    - [Nexus Export and Restore](package_repository_management/Nexus_Export_and_Restore.md)
-    - [Restore Nexus Data After Data Corruption](utility_storage/Restore_Corrupt_Nexus.md)
-    - [Nexus Service Recovery](package_repository_management/Nexus_Service_Recovery.md)
-- Keycloak
-    - [Create a Backup of the Keycloak Postgres Database](security_and_authentication/Create_a_Backup_of_the_Keycloak_Postgres_Database.md)
-    - [Keycloak Service Recovery](security_and_authentication/Keycloak_Service_Recovery.md)
-- Vault
-    - [Backup and Restore Vault Clusters](security_and_authentication/Backup_and_Restore_Vault_Clusters.md)
-    - [Vault Service Recovery](security_and_authentication/Vault_Service_Recovery.md)
-- SLS
-    - [Create a Backup of the SLS Postgres Database](system_layout_service/Create_a_Backup_of_the_SLS_Postgres_Database.md)
-    - [Restore SLS Postgres Database from Backup](system_layout_service/Restore_SLS_Postgres_Database_from_Backup.md)
-    - [Restore SLS Postgres without an Existing Backup](system_layout_service/Restore_SLS_Postgres_without_an_Existing_Backup.md)
-- HSM
-    - [Create a Backup of the HSM Postgres Database](hardware_state_manager/Create_a_Backup_of_the_HSM_Postgres_Database.md)
-    - [Restore HSM Postgres from a Backup](hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
-    - [Restore HSM Postgres without a Backup](hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
-- Spire
-    - [Create a Backup of the Spire Postgres Database](spire/Create_a_backup_of_the_Spire_Postgres_Database.md)
-    - [Restore Spire Postgres without a Backup](spire/Restore_Spire_Postgres_without_a_Backup.md)
-    - [Spire Service Recovery](spire/Spire_Service_Recovery.md)
-- Version Control Service (VCS)
-    - [Backup and restore data](configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data)
-- Boot Orchestration Service (BOS)
-    - [Exporting and Importing BOS Data](boot_orchestration/Exporting_and_Importing_BOS_Data.md)
-- Boot Script Service (BSS)
-    - [Exporting and Importing BSS Data](boot_orchestration/Exporting_and_Importing_BSS_Data.md)
-- Configuration Management Service (CFS)
-    - [Exporting and Importing CFS Data](configuration_management/Exporting_and_Importing_CFS_Data.md)
-- Image Management Service (IMS)
-    - [Exporting and Importing IMS Data](image_management/Exporting_and_Importing_IMS_Data.md)
-- Workload managers
-    - [PBS Service Recovery](System_Recovery/PBS_Service_Recovery.md)
-    - [Slurm Service Recovery](System_Recovery/Slurm_Service_Recovery.md)
+
+### Backup and recovery: etcd
+
+- [Create a Manual Backup of a Healthy Bare-Metal etcd Cluster](kubernetes/Create_a_Manual_Backup_of_a_Healthy_Bare-Metal_etcd_Cluster.md)
+- [Create a Manual Backup of a Healthy etcd Cluster](kubernetes/Create_a_Manual_Backup_of_a_Healthy_etcd_Cluster.md)
+- [Restore an etcd Cluster from a Backup](kubernetes/Restore_an_etcd_Cluster_from_a_Backup.md)
+- [Repopulate Data in etcd Clusters When Rebuilding Them](kubernetes/Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md)
+- [Restore Bare-Metal etcd Clusters from an S3 Snapshot](kubernetes/Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md)
+
+### Backup and recovery: Postgres
+
+- [Restore Postgres](kubernetes/Restore_Postgres.md)
+- [Disaster Recovery for Postgres](kubernetes/Disaster_Recovery_Postgres.md)
+
+### Backup and recovery: Nexus
+
+- [Nexus Export and Restore](package_repository_management/Nexus_Export_and_Restore.md)
+- [Restore Nexus Data After Data Corruption](utility_storage/Restore_Corrupt_Nexus.md)
+- [Nexus Service Recovery](package_repository_management/Nexus_Service_Recovery.md)
+
+### Backup and recovery: Keycloak
+
+- [Create a Backup of the Keycloak Postgres Database](security_and_authentication/Create_a_Backup_of_the_Keycloak_Postgres_Database.md)
+- [Keycloak Service Recovery](security_and_authentication/Keycloak_Service_Recovery.md)
+
+### Backup and recovery: Vault
+
+- [Backup and Restore Vault Clusters](security_and_authentication/Backup_and_Restore_Vault_Clusters.md)
+- [Vault Service Recovery](security_and_authentication/Vault_Service_Recovery.md)
+
+### Backup and recovery: SLS
+
+- [Create a Backup of the SLS Postgres Database](system_layout_service/Create_a_Backup_of_the_SLS_Postgres_Database.md)
+- [Restore SLS Postgres Database from Backup](system_layout_service/Restore_SLS_Postgres_Database_from_Backup.md)
+- [Restore SLS Postgres without an Existing Backup](system_layout_service/Restore_SLS_Postgres_without_an_Existing_Backup.md)
+
+### Backup and recovery: HSM
+
+- [Create a Backup of the HSM Postgres Database](hardware_state_manager/Create_a_Backup_of_the_HSM_Postgres_Database.md)
+- [Restore HSM Postgres from a Backup](hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
+- [Restore HSM Postgres without a Backup](hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
+
+### Backup and recovery: Spire
+
+- [Create a Backup of the Spire Postgres Database](spire/Create_a_backup_of_the_Spire_Postgres_Database.md)
+- [Restore Spire Postgres without a Backup](spire/Restore_Spire_Postgres_without_a_Backup.md)
+- [Spire Service Recovery](spire/Spire_Service_Recovery.md)
+
+### Backup and recovery: Version Control Service (VCS)
+
+- [Backup and restore data](configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data)
+
+### Backup and recovery: Boot Orchestration Service (BOS)
+
+- [Exporting and Importing BOS Data](boot_orchestration/Exporting_and_Importing_BOS_Data.md)
+
+### Backup and recovery: Boot Script Service (BSS)
+
+- [Exporting and Importing BSS Data](boot_orchestration/Exporting_and_Importing_BSS_Data.md)
+
+### Backup and recovery: Configuration Management Service (CFS)
+
+- [Exporting and Importing CFS Data](configuration_management/Exporting_and_Importing_CFS_Data.md)
+
+### Backup and recovery: Image Management Service (IMS)
+
+- [Exporting and Importing IMS Data](image_management/Exporting_and_Importing_IMS_Data.md)
+
+### Backup and recovery: Workload managers
+
+- [PBS Service Recovery](System_Recovery/PBS_Service_Recovery.md)
+- [Slurm Service Recovery](System_Recovery/Slurm_Service_Recovery.md)
 
 ## Multi-tenancy
 

@@ -23,10 +23,10 @@
 #
 """Shared Python function library: CFS"""
 
-import traceback
 import logging
-
-from typing import Dict, List, Union
+import traceback
+from typing import Dict, List, NamedTuple, Union
+import urllib.parse
 
 from . import api_requests
 from . import common
@@ -46,6 +46,32 @@ CFS_V3_SESSIONS_URL = f"{CFS_V3_BASE_URL}/sessions"
 CFS_V3_SOURCES_URL = f"{CFS_V3_BASE_URL}/sources"
 
 CfsOptions = Dict[str, Union[bool, int, str]]
+
+class CfsVersion(NamedTuple):
+    """
+    The CFS version major, minor, and patch
+    """
+    major: int
+    minor: int
+    patch: int
+
+    # Use a string for the type hint in the case where the type is not yet defined.
+    # https://peps.python.org/pep-0484/#forward-references
+    @classmethod
+    def from_api(cls) -> "CfsVersion":
+        """
+        Loads the CFS version data from the API
+        """
+        cfs_version_data = list_versions()
+        return cls(major=int(cfs_version_data["major"]),
+                   minor=int(cfs_version_data["minor"]),
+                   patch=int(cfs_version_data["patch"]))
+
+    def __str__(self) -> str:
+        """
+        Return version as major.minor.patch
+        """
+        return f"{self.major}.{self.minor}.{self.patch}"
 
 def log_error_raise_exception(msg: str, parent_exception: Union[Exception, None] = None) -> None:
     """
@@ -313,11 +339,58 @@ def list_sessions() -> List[JsonObject]:
 
 # CFS sources functions
 
+def _encode_source_name(source_name: str) -> str:
+    """
+    Encode the source name for use in API calls that include the source name as a path parameter
+    """
+    # Quote twice.  One level of decoding is automatically done the API framework,
+    # so one level of encoding produces the same problems as not encoding at all.
+    for _ in range(2):
+        source_name = urllib.parse.quote_plus(source_name)
+    return source_name
+
 def list_sources() -> List[JsonObject]:
     """
     Queries CFS to list all sources, and returns the list.
     """
     return __list_and_merge("sources", CFS_V3_SOURCES_URL)
+
+def delete_source(source_name: str, expected_to_exist: bool = True) -> None:
+    """
+    Deletes the specified source. Throws an exception if it is not found,
+    unless expected_to_exist is set to False.
+    """
+    request_kwargs = {"url": f"{CFS_V3_SOURCES_URL}/{_encode_source_name(source_name)}",
+                      "add_api_token": True,
+                      "expected_status_codes": {204}}
+
+    if not expected_to_exist:
+        request_kwargs["expected_status_codes"].add(404)
+
+    api_requests.delete_retry_validate(**request_kwargs)
+
+def restore_source(source_name: str, **source_data) -> JsonDict:
+    """
+    Restores the specified source
+    """
+    request_kwargs = {"url": f"{CFS_V3_SOURCES_URL}/{_encode_source_name(source_name)}",
+                      "add_api_token": True,
+                      "expected_status_codes": {201},
+                      "json": source_data}
+    return api_requests.post_retry_validate_return_json(**request_kwargs)
+
+def restore_source_supported(cfs_version: CfsVersion) -> bool:
+    """
+    Returns True if the restore_source operation in supported on the specified CFS version.
+    Returns False otherwise.
+    """
+    if cfs_version.major == 1 and cfs_version.minor == 18:
+        # For CFS 1.18, support was added in 1.18.10
+        min_version = CfsVersion(major=1, minor=18, patch=10)
+    else:
+        # Otherwise, support is available starting in 1.23.0
+        min_version = CfsVersion(major=1, minor=23, patch=0)
+    return cfs_version >= min_version
 
 # CFS versions functions
 
