@@ -83,8 +83,8 @@ def get_data_file_path(data_type: str, ims_app_py_text: str) -> str:
     except KeyError as exc:
         raise ImsDataError(
             f"get_data_file_path: Invalid data_type specified: '{data_type}'") from exc
-    # Strip away surrounding quotes from the names
-    matching_filenames = [ file_name[1:-1] for file_name in file_re.findall(ims_app_py_text) ]
+    # Strip away surrounding quotes from the names, and discard duplicates
+    matching_filenames = list({ file_name[1:-1] for file_name in file_re.findall(ims_app_py_text) })
     if len(matching_filenames) > 1:
         raise ImsDataError(f"Multiple {data_type} data files found in {ImsAppPyPath}: " +
                            ", ".join(matching_filenames))
@@ -113,8 +113,14 @@ def main() -> None:
         loaded_ims_data = json.load(datafile)
 
     # Read in the contents of the app.py file (needed to know the correct names for the IMS data files)
+    # Strip away leading/trailing whitespace and discard commented lines
+    ims_app_py_text_lines = []
     with open(ImsAppPyPath, "rt") as appfile:
-        ims_app_py_text = appfile.read()
+        for line in appfile:
+            stripped_line = line.strip()
+            if not stripped_line.startswith('#'):
+                ims_app_py_text_lines.append(stripped_line)
+    ims_app_py_text = '\n'.join(ims_app_py_text_lines)
 
     # This just serves as a double check that the JSON file has all of these fields
     updated_ims_data = { data_type: loaded_ims_data[data_type] for data_type in ImsDataTypeRe }
