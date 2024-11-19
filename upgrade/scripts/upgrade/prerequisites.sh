@@ -761,7 +761,8 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     if [ "${needs_upgrade}" -gt 0 ]; then
       cmns="cert-manager"
 
-      backup_secret="cm-restore-data"
+      # make this name unique for CSM 1.6 in case CSM 1.5 secret still exists
+      backup_secret="cm-restore-data-16"
 
       # We need to backup before any helm uninstalls.
       needs_backup=0
@@ -780,6 +781,26 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
         if ! kubectl get secret "${backup_secret?}" > /dev/null 2>&1; then
           data=$(kubectl get --all-namespaces -o yaml clusterissuer,cert,issuer)
           kubectl create secret generic "${backup_secret?}" --from-literal=data="${data?}"
+        else
+          # check the amount of time between the date of backup and the current date
+          backup_date=$(kubectl get secret "${backup_secret?}" -o jsonpath='{.metadata.creationTimestamp}')
+          backup_date_sec=$(date -d"${backup_date}" +%s)
+          current_date_sec=$(date +%s)
+          days_since_backup=$(((current_date_sec - backup_date_sec) / (60 * 60 * 24)))
+          # if backup is more than 30 days old and certificates are present on the system
+          # delete old backup and take new backup
+          if [[ $days_since_backup -gt 30 ]] && [[ $(kubectl get certificates -A | wc -l) -gt 5 ]]; then
+            kubectl delete secret "${backup_secret}"
+            sleep 5
+            data=$(kubectl get --all-namespaces -o yaml clusterissuer,cert,issuer)
+            kubectl create secret generic "${backup_secret?}" --from-literal=data="${data?}"
+          elif kubectl get secret "${backup_secret?}" -o jsonpath='{.data.data}' | base64 -d | grep v1alpha3 > /dev/null 2>&1; then
+            # check the backup doesn't have v1alpha3 references, this API will not work on CSM 1.6
+            # This block is never expected to be entered but it is here just in case
+            echo "Cert-manager backup ${backup_secret} has references to an old API: 'cert-manager.io/v1alpha3'"
+            echo "This api does not work in CSM 1.6. Make sure cert-manager has been upgraded to version 1.5.5"
+            exit 1
+          fi
         fi
       fi
 
@@ -862,6 +883,20 @@ EOF
           printf "warn: kubectl apply of %s encountered errors, restore of cert-manager data may be incomplete or simply tried to restore existing data\n" "${backup_secret}" >&2
         fi
       fi
+    fi
+    # Verify that certificates exist. Fail if no certificates exist.
+    # The warning statement above needs to stay a warning. It does not exit 0 because Issuers should already exist.
+    # 5 is an arbitrary number, expect ~21 certificates
+    if [[ $(kubectl get certificates -A | wc -l) -lt 5 ]]; then
+      echo "ERROR: certificates were not restored after certmanager upgrade. 'kubectl get certificates -A' does not show certificates."
+      echo "Certificates should have been restored from backup: 'kubectl get secret ${backup_secret?}'"
+      exit 1
+    fi
+    # delete CSM 1.5 cert-manager backup if it exists
+    backup_secret_csm_15="cm-restore-data"
+    if kubectl get secret "${backup_secret_csm_15?}" > /dev/null 2>&1; then
+      echo "Deleting cert-manager backup from CSM 1.5 upgrade"
+      kubectl delete secret "${backup_secret_csm_15}"
     fi
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
