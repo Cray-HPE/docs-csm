@@ -20,7 +20,7 @@ that HTTPS/TLS certificates are used to encrypt traffic end to end while using
 this feature so that plain text sensitive fields are encrypted and not intercepted
 by a man in the middle security exception.
 
-Please follow [instructions used for trusting this certificate](./Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md) in your local environment
+Follow the [instructions used for trusting this certificate](./Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md) in your local environment
 before proceeding.
 
 ## Using SOPS with Tenant Specific TAPMS Exposed Vault Endpoint
