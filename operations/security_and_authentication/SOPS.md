@@ -191,8 +191,8 @@ Ansible relies on filename hints within`hostvars` and `groupvars` in order to de
 which files, if any, require decryption before Ansible is run. Ansible will decrypt
 any `hostvars` or `groupvars` files that include a `*.sops.*` pattern.
 
-1. [Perform a local checkout of your CFS Configuration from VCS](../configuration_management/Version_Control_Service_VCS.md)
-2. Replace sensitive information with Encrypted Versions
+1. [Perform a local checkout of your CFS Configuration from VCS](../configuration_management/Version_Control_Service_VCS.md).
+2. Replace sensitive information with Encrypted Versions.
 
     (`Example from a SOPS Equipped Environment with a checked out CFS Configuration`)
 
@@ -206,5 +206,5 @@ any `hostvars` or `groupvars` files that include a `*.sops.*` pattern.
     git push origin HEAD
     ```
 
-3. Check in updated CSM Config and register configuration with CFS
-4. Create a CFS Session (either automatically as part of boot or through CFS API)
+3. Check in the updated CSM configuration and register it with CFS.
+4. Create a CFS Session (either automatically as part of boot or through CFS API).
