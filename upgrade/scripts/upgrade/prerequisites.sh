@@ -794,12 +794,6 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
             sleep 5
             data=$(kubectl get --all-namespaces -o yaml clusterissuer,cert,issuer)
             kubectl create secret generic "${backup_secret?}" --from-literal=data="${data?}"
-          elif kubectl get secret "${backup_secret?}" -o jsonpath='{.data.data}' | base64 -d | grep v1alpha3 > /dev/null 2>&1; then
-            # check the backup doesn't have v1alpha3 references, this API will not work on CSM 1.6
-            # This block is never expected to be entered but it is here just in case
-            echo "Cert-manager backup ${backup_secret} has references to an old API: 'cert-manager.io/v1alpha3'"
-            echo "This api does not work in CSM 1.6. Make sure cert-manager has been upgraded to version 1.5.5"
-            exit 1
           fi
         fi
       fi
