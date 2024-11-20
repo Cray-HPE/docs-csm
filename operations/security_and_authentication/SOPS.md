@@ -39,7 +39,7 @@ created for them.
 1. Set your tenancy and CMN Address Variables. These will be used throughout
     the setup procedure.
 
-    (`ncn-m001#`) Set the protocol, tenant Name and CMN domain name for your system
+    (`ncn-m001#`) Set the protocol, tenant name, and CMN domain name for your system:
 
    ```bash
    TENANT_NAME=vcluster-testing-tenant
