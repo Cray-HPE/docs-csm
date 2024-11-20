@@ -56,7 +56,7 @@ created for them.
     TRANSIT_NAME=`kubectl get tenants.tapms.hpe.com -n tenants $TENANT_NAME -ojson | jq -r .status.tenantkms.transitname`
     ```
 
-    Please note that this value includes a UUID that is different from a tenant's UUID.
+    This value includes a UUID that is different from a tenant's UUID.
 
 3. Construct and export the Vault address location in the form of `VAULT_ADDR`.
 
