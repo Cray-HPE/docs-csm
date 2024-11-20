@@ -74,7 +74,7 @@ created for them.
     https://vault.cmn.mug.hpc.amslaps.hpecorp.net/v1/cray-tenant-750a987e-c7e5-4a66-8a1d-a82b29594a53/keys/key1
     ```
 
-    Please note, that SOPS has a requirement that the VAULT_ADDR be in the form
+    SOPS has a requirement that the VAULT_ADDR be in the form
     that precludes the typical use of `/api/vault/` as part of its address, which
     is why we expose `vault`.cmn.`system name` as part of its own DNS record over
     the customer managed network.
