@@ -183,7 +183,7 @@ sensitive information in variables within VCS. This is important, as only member
 of your tenancy should have access to the secure information, and no one else.
 
 By convention, Ansible is configured to decrypt any and all `hostvars` and `groupvars`
-that are stored within VCS. This allows users to checkout the contents of their
+that are stored within VCS. This allows users to check out the contents of their
 Ansible and git repositories, encrypt those files and variables that are considered
 sensitive, and then check in the SOPS encrypted version of these files.
 
