@@ -32,9 +32,9 @@ For additional reference material on the upgrade processes and scripts mentioned
 
 The upgrade to CSM 1.6 is done through IUF. Follow one of the following two procedures:
 
-1. [Upgrade only CSM](./Upgrade_Only_CSM_with_iuf.md)
-
 1. [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
+
+1. [Upgrade only CSM](./Upgrade_Only_CSM_with_iuf.md)
 
 **Important:** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
 
