@@ -18,7 +18,7 @@ This procedure requires admin privileges.
 
     Example output:
 
-    ```
+    ```bash
     cluster:
        id:     73084634-9534-434f-a28b-1d6f39cf1d3d
        health: HEALTH_WARN
@@ -69,11 +69,27 @@ Based on the output from `ceph -s` (using our example above) we can correlate so
        1. As an initial step, restart the OSDs, if the slow ops go away and do not return, then we can investigate the logs for possible software bugs or memory issues.
        1. If the slow ops come right back, then there is an issue with replication between the 2 OSDs which tends to be network-related.
 
-1. When reporting slow ops for `MONs`, then it is typically an issue with the process.
-   1. The most common cause here is either an abrupt clock skew or a hung mon/mgr process.
-      1. The recommended remediation is to do a rolling restart of the Ceph `MON` and `MGR` daemons.
+1. When reporting slow ops for `MONs`, then it is typically an issue with the process. The most common cause is either an abrupt clock skew or a hung mon/mgr process.
+   1. The recommended remediation is to do a rolling restart of the Ceph `MON` and `MGR` daemons.
+      1. Get `MON` and `MGR` daemons.
+
+            ```bash
+            ceph orch ps | grep -E 'mgr|mon'
+            ```
+
+      1. Restart each `MON` and `MGR` daemons. Make sure each daemon starts before restarting the next one.
+
+         ```bash
+         ceph orch daemon restart <daemon_name>
+         ```
+
+   1. Failover the active MDS server.
+
+         ```bash
+         ceph mds fail 0
+         ```
 
 1. When reporting slow ops for MDS, then are multiple possible causes.
    1. If listed in addition to OSDs, then the root cause for this is typically the OSDs, and the process above should be used, followed by restarting the `MDS` daemons.
    1. If it is only listing MDS, then restart the MDS daemons. If the problem persists, then examine the logs in order to determine the root cause.
-   1. See [Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client](Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client.md) for additional steps to help identify MDS slow ops
+   1. See [Troubleshoot Ceph MDS reporting slow requests and failure on client](Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client.md) for additional steps to help identify MDS slow ops
