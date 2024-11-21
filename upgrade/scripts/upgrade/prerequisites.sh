@@ -1515,6 +1515,21 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# CASMTRIAGE-7443 Apply RoleBinding to allow PostgreSQL clusters to determine the endpoints behind the "kubernetes" service
+# to reduce the chance of failover when a control plane node is rebooted
+state_name="APPLY_POSTGRESQL_ROLEBINDING"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    kubectl apply -f ${locOfScript}/postgres-pod.yaml
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+  echo
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="PREFLIGHT_CHECK"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" ]]; then

@@ -46,6 +46,12 @@ The Patroni database monitor usually relies on the `kubernetes` service to commu
 Patroni to resolve the list of API nodes behind the service and connect directly to them reducing the chance of timeout or failure when performing
 API calls.
 
+1. (`ncn-mw#`) Apply the `postgres-pod` `RoleBinding` to allow the PostgreSQL clusters to access the Kubernetes API endpoint.
+
+   ```bash
+   kubectl apply -f /usr/share/doc/csm/upgrade/scripts/upgrade/postgres-pod.yaml
+   ```
+
 1. (`ncn-mw#`) Update the `postgres-nodes-pod-env` ConfigMap.
 
    ```bash
