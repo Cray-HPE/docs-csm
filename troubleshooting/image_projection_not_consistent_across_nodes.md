@@ -62,5 +62,7 @@ There are two ways to resolve this problem.
 1. The existing image ID that was duplicated can be changed to a unique image ID and this new unique image ID can be referenced.
 This would likely mean restarting the product installation from an early IUF stage.
 
-2. If the image is being exported by SBPS, do a rolling reboot of worker nodes to ensure all worker nodes have the correct image information.
+1. If the image is being exported by SBPS, do a rolling reboot of worker nodes to ensure all worker nodes have the correct image information.
 Follow the [NCN rolling reboot documentation](../operations/node_management/Reboot_NCNs.md#ncn-rolling-reboot).
+
+1. If compute nodes are still experiencing issues after worker nodes have been rebooted, compute nodes will also need to be rebooted to cleanly remount the image.
