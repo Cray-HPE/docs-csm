@@ -149,7 +149,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Issues with Redfish Endpoint `DiscoveryCheck` for Redfish Events from Nodes](../operations/node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
 * [Interfaces with IP Address Issues](../operations/node_management/Troubleshoot_Interfaces_with_IP_Address_Issues.md)
 * [Loss of Console Connections and Logs on Gigabyte Nodes](../operations/node_management/Troubleshoot_Loss_of_Console_Connections_and_Logs_on_Gigabyte_Nodes.md)
-* [Need to manually upgrade an NCN](../upgrade/manual_ncn_upgrade.md)
+* [Manual NCN Upgrade](../upgrade/manual_ncn_upgrade.md)
 
 ## Security and authentication
 
