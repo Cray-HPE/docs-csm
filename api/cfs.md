@@ -6469,7 +6469,7 @@ Restore a CFS source by providing the name of the Vault secret that contains the
 
 > Example responses
 
-> 200 Response
+> 201 Response
 
 ```json
 {
@@ -6492,7 +6492,7 @@ Restore a CFS source by providing the name of the Vault secret that contains the
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single source|[V3SourceData](#schemav3sourcedata)|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|A single source|[V3SourceData](#schemav3sourcedata)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|A source with the same name already exists|[ProblemDetails](#schemaproblemdetails)|
 
