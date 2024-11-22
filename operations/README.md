@@ -805,6 +805,7 @@ these backups.
 - [Modifying a Tenant](multi-tenancy/Modify_a_Tenant.md)
 - [Removing a Tenant](multi-tenancy/Remove_a_Tenant.md)
 - [Slurm Operator](multi-tenancy/SlurmOperator.md)
+- [HPE Slingshot Network Operator](multi-tenancy/hpe_slingshot_network_operator.md)
 - [Tenant and Partition Management System (TAPMS) Overview](multi-tenancy/Tapms.md)
 - [TAPMS Tenant Status API](../api/tapms-operator.md)
 - [Global Tenant Hooks](multi-tenancy/GlobalTenantHooks.md)
