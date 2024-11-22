@@ -12,7 +12,7 @@ This has been observed with iSCSI SBPS but it is also possible that this could h
 
 ## Example of Error
 
-There are multiple errors that can be observed because of this problem. Below are example errors:
+There are multiple errors that can be observed because of this problem. The following are example errors:
 
 - Doing an `md5sum` on `/opt/cray/pe` files on a compute node results in IO errors.
 
