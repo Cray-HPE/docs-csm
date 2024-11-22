@@ -51,6 +51,7 @@ The following are the BOS global options:
     The amount of time in seconds BOS will wait for a response from CFS to a request. After this time, the request will
     time out. The default is 10 seconds.
     Note: This option is only available as a 'hotfix' in CSM-1.5.
+
 * `cleanup_completed_session_ttl`
 
     Delete complete sessions that are older than `cleanup_completed_session_ttl` (in hours). `0h` disables cleanup behavior.
