@@ -8,13 +8,13 @@
 ## Introduction
 
 This issue described is for content projection not working consistently across nodes.
-This has been observed with iSCSI SBPS but it is also possibly this could happen when using DVS.
+This has been observed with iSCSI SBPS but it is also possible that this could happen when using DVS.
 
 ## Example of Error
 
 There are multiple errors that can be observed because of this problem. Below are example errors:
 
-- Doing an `md5sum` on `/opt/cray/pe` files results in IO errors.
+- Doing an `md5sum` on `/opt/cray/pe` files on a compute node results in IO errors.
 
     ```bash
     md5sum: /opt/cray/pe/cce/17.0.0/cce-clang/x86_64/lib/libLLVMAArch64CodeGen.a: Input/output error
@@ -23,7 +23,7 @@ There are multiple errors that can be observed because of this problem. Below ar
     209e22ec797a5f2fdea81c8bb70c1d2e  /opt/cray/pe/cce/17.0.0/cce-clang/x86_64/lib/libLLVMAArch64Info.a
     ```
 
-- `dmesg -TW` shows decompression failed and read block errors
+- `dmesg -TW` run upon a client shows decompression failed and read block errors
 
     ```bash
     uan01:~ # dmesg -TW
@@ -33,7 +33,7 @@ There are multiple errors that can be observed because of this problem. Below ar
     [Wed Nov  6 15:40:26 2024] SQUASHFS error: Failed to read block 0x542feacb: -5
     ```
 
-- Different `md5sum`s exists for the same file on different worker nodes.
+- Different `md5sum`s exist for the same file on different worker nodes.
 
     ```bash
     ncn-w001:~ # md5sum /var/lib/cps-local/boot-images/PE/CPE-base.x86_64-25.03.squashfs
