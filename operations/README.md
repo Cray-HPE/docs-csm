@@ -370,7 +370,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
 - [API Authorization](security_and_authentication/API_Authorization.md)
 - [Retrieve an Authentication Token](security_and_authentication/Retrieve_an_Authentication_Token.md)
 - [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
-- [SecureOperations](security_and_authentication/SOPS.md)
+- [SOPS Introduction](security_and_authentication/SOPS.md)
 - [Audit Logs](security_and_authentication/Audit_Logs.md)
 - [Cray STS Token Generator API](../api/sts.md)
 - [Configure root user on HPE iLO BMCs](security_and_authentication/Configure_root_user_on_HPE_iLO_BMCs.md)
