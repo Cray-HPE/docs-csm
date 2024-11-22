@@ -88,7 +88,6 @@ func main() {
   "hosts": [
     "string"
   ],
-  "switchPassword": "string",
   "wipeOsd": true
 }
 ```
@@ -206,7 +205,6 @@ func main() {
     "property1": "string",
     "property2": "string"
   },
-  "switchPassword": "string",
   "workflowType": "string",
   "zapOsds": true
 }
@@ -699,7 +697,6 @@ bearerAuth
   "hosts": [
     "string"
   ],
-  "switchPassword": "string",
   "wipeOsd": true
 }
 
@@ -711,7 +708,6 @@ bearerAuth
 |---|---|---|---|---|
 |dryRun|boolean|false|none|none|
 |hosts|[string]|false|none|none|
-|switchPassword|string|false|none|none|
 |wipeOsd|boolean|false|none|none|
 
 <h2 id="tocS_models.CreateRebootWorkflowResponse">models.CreateRebootWorkflowResponse</h2>
@@ -757,7 +753,6 @@ bearerAuth
     "property1": "string",
     "property2": "string"
   },
-  "switchPassword": "string",
   "workflowType": "string",
   "zapOsds": true
 }
@@ -774,7 +769,6 @@ bearerAuth
 |imageId|string|false|none|none|
 |labels|object|false|none|none|
 |» **additionalProperties**|string|false|none|none|
-|switchPassword|string|false|none|none|
 |workflowType|string|false|none|used to determine storage rebuild vs upgrade|
 |zapOsds|boolean|false|none|this is necessary for storage rebuilds when unable to wipe the node prior to rebuild|
 
