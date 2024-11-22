@@ -16,7 +16,7 @@ There are multiple errors that can be observed because of this problem. Below ar
 
 - Doing an `md5sum` on `/opt/cray/pe` files on a compute node results in IO errors.
 
-    ```bash
+    ```text
     md5sum: /opt/cray/pe/cce/17.0.0/cce-clang/x86_64/lib/libLLVMAArch64CodeGen.a: Input/output error
     md5sum: /opt/cray/pe/cce/17.0.0/cce-clang/x86_64/lib/libLLVMAArch64Desc.a: Input/output error
     a764bc1859748fb1abf2548a5c1bbaae  /opt/cray/pe/cce/17.0.0/cce-clang/x86_64/lib/libLLVMAArch64Disassembler.a
