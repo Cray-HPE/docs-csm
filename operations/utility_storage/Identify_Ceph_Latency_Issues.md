@@ -18,7 +18,7 @@ This procedure requires admin privileges.
 
     Example output:
 
-    ```bash
+    ```text
     cluster:
        id:     73084634-9534-434f-a28b-1d6f39cf1d3d
        health: HEALTH_WARN
