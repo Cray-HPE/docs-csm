@@ -2,28 +2,32 @@
 
 * [What is `kdump`?](#what-is-kdump)
 * [Usage](#usage)
-  * [Configuration](#configuration)
-  * [Dracut](#dracut)
-  * [Enabling / disabling](#enabling--disabling)
+    * [Configuration](#configuration)
+    * [Core dumps with live images](#core-dumps-with-live-images)
 * [Analyzing a dump](#analyzing-a-dump)
 * [Troubleshooting](#troubleshooting)
-  * [`kdump` has hung](#kdump-has-hung)
-  * [Resetting `kdump`](#resetting-kdump)
+    * [`kdump` has hung](#kdump-has-hung)
+    * [Rebuilding the `kdump` initramFS](#rebuilding-the-kdump-initramfs)
 
 ## What is `kdump`?
 
 At a high-level, `kdump` is a Linux tool that takes a dump of the system memory at the time of a crash for analysis.
 This dump is taken on a local disk, or it can be taken on a network drive.
 
-The dump can provide insight into the origin of the crash, such as which kernel modules were running and which may have contributed to the crash.
+The dump can provide insight into the origin of the crash, such as which kernel modules were running and which may have
+contributed to the crash.
 
-Taking a dump is only possible when a portion of memory is reserved for `kdump`, because when a system goes down, there is no way to
-map which memory is free or in use. In the event of a crash, the Linux OS invokes `kexec` to load the `kdump` `initrd` into
-the reserved memory space. This enables the system to continue running after a crash. During this time, `kdump` provides tools
+Taking a dump is only possible when a portion of memory is reserved for `kdump`, because when a system goes down, there
+is no way to
+map which memory is free or in use. In the event of a crash, the Linux OS invokes `kexec` to load the `kdump` `initrd`
+into
+the reserved memory space. This enables the system to continue running after a crash. During this time, `kdump` provides
+tools
 that enable taking a dump of everything loaded in memory.
 
 The dumps are conventionally written to `/var/crash` for analysis on the same machine following a reboot (assuming it
-does not crash again), or the disk can be relocated to a stable machine. If the dump is taken over the network, then analysis
+does not crash again), or the disk can be relocated to a stable machine. If the dump is taken over the network, then
+analysis
 can be done using that network drive.
 
 For information on analyzing a dump, see [Analyzing a dump](#analyzing-a-dump).
@@ -34,36 +38,26 @@ This usage sections denotes how the non-compute nodes configure and configure `k
 
 ### Configuration
 
-`kdump` is configured by the `/etc/sysconfig/kdump` file, this file controls various aspects of `kdump`
-such as:
+On SLES distros, `kdump` is configured by `/etc/sysconfig/kdump`. By default, NCNs are configured to write dumps into
+`/run/initramfs/overlayfs/var/crash`, visible to the end user on a booted NCN at `/var/crash`.
 
-* The crash directory.
-* The kernel parameters used in the `kdump` `initrd`.
+### Core dumps with live images
 
-### Dracut
+For SquashFS booted non-compute nodes, which use a persistent OverlayFS, some extra preparation is needed for `kdump` to
+work.
 
-For SquashFS booted non-compute nodes, the `dracut-metal-mdsquash` module does some preparation for `kdump` by creating two symbolic links
+The `dracut-metal-mdsquash` module creates
 in the [root overlay](ncn_mounts_and_filesystems.md#overlayfs-and-persistence).
 
-* `ls $(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/ROOTRAID)/boot` points to the actual `/boot` directory.
+* `ls $(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/ROOTRAID)/boot` points to the actual `/boot` directory (legacy: only
+  for `kdump<1.9.0`)
 * `ls $(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/ROOTRAID)/crash` points to the actual `/var/crash` directory.
 
-These symbolic links are important for `kdump` to work. `kdump` will mount the `ROOTRAID` as the root filesystem, and then look for:
+These symbolic links are important for `kdump` to work. `kdump` will mount the `ROOTRAID` as the root filesystem, and
+then look for:
 
-* `/boot` to find the kernel image and `System.map` symbols file.
+* `/boot` to find the kernel image and `System.map` symbols file. (legacy: only for `kdump<1.9.0`)
 * The crash directory specified in `/etc/sysconfig/kdump` (e.g. `/crash`)
-
-> ***Q/A*** *Why does `kdump` look for the `ROOTRAID`?
->
-> `kdump` looks for the `ROOTRAID` because the `/etc/fstab` file denotes that `/` is on `LABEL=ROOTRAID`. `kdump` can look at either `/etc/fstab` or
-> `/proc/mounts` to resolve the root. `/proc/mounts` is not used because `kdump` will resolve the OverlayFS as the root filesystem, which is very
-> complicated to setup within the `kdump` `initrd`. Instead, `kdump` reads `/etc/fstab` and then provide a mountable filesystem that is not
-> an OverlayFS. The `ROOTRAID` is the upper-directory of the OverlayFS for the root filesystem; anything written here will appear as if it was written
-> to a filesystem mounted at `/`.
-
-### Enabling / disabling
-
-`kdump` is enabled when both the `kdump` package is installed *and* when the `crashkernel` parameter is present on the kernel command line.
 
 ## Analyzing a dump
 
@@ -74,7 +68,8 @@ to be installed; the `crash` command can not thoroughly analyze a dump without t
 
 1. (`ncn#`) Install `kernel-default-debug` on the node with the dump.
 
-   > ***NOTE*** The `kernel-default-debug` package for the current kernel (the kernel associated with the dump) must be installed.
+   > ***NOTE*** The `kernel-default-debug` package for the current kernel (the kernel associated with the dump) must be
+   installed.
    > The steps below load the `dracut-lib.sh` library which sets the `KVER` variable; this variable contains that value.
 
     * Install from the embedded repository.
@@ -84,43 +79,6 @@ to be installed; the `crash` command can not thoroughly analyze a dump without t
         KVER=$(rpm -q --queryformat='%{VERSION}-%{RELEASE}' kernel-default)
         zypper --plus-content debug in -y kernel-default-debuginfo=${KVER%-default}
         ```
-
-    * Install from Artifactory if credentials are available.
-
-        1. Set Artifactory user credential.
-
-            ```bash
-            read -s ARTIFACTORY_USER
-            ````
-
-        1. Set Artifactory token credential.
-
-            ```bash
-            read -s ARTIFACTORY_TOKEN
-            ```
-
-        1. Install from Artifactory.
-
-            > ***NOTE*** CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints.
-            Using `http_proxy` or `https_proxy` in any way other than the following examples will cause many failures in subsequent steps.
-
-            * Without proxy:
-
-              ```bash
-              DISTRO="$(grep VERSION= /etc/os-release | awk -F= '{print $NF}' | tr -d \")"
-              zypper ar https://$ARTIFACTORY_USER:$ARTIFACTORY_TOKEN@artifactory.algol60.net/artifactory/sles-mirror/Updates/SLE-Module-Basesystem/${DISTRO}/$(uname -i)/update_debug/ temp-debug
-              KVER=$(rpm -q --queryformat='%{VERSION}-%{RELEASE}' kernel-default)
-              zypper --plus-content debug in -y kernel-default-debuginfo=${KVER%-default}
-              ```
-
-            * With https proxy:
-
-              ```bash
-              DISTRO="$(grep VERSION= /etc/os-release | awk -F= '{print $NF}' | tr -d \")"
-              https_proxy=https://example.proxy.net:443 zypper ar https://$ARTIFACTORY_USER:$ARTIFACTORY_TOKEN@artifactory.algol60.net/artifactory/sles-mirror/Updates/SLE-Module-Basesystem/${DISTRO}/$(uname -i)/update_debug/ temp-debug
-              KVER=$(rpm -q --queryformat='%{VERSION}-%{RELEASE}' kernel-default)
-              zypper --plus-content debug in -y kernel-default-debuginfo=${KVER%-default}
-              ```
 
 1. (`ncn#`) On the node with the dump, select a crash dump and navigate to its directory.
 
@@ -133,7 +91,7 @@ to be installed; the `crash` command can not thoroughly analyze a dump without t
 
     1. Change to the desired crash dump directory.
 
-        For example, if `2022-09-07-14:31` was the crash to be examined:
+       For example, if `2022-09-07-14:31` was the crash to be examined:
 
         ```bash
         cd /var/crash/2022-09-07-14\:31
@@ -141,20 +99,20 @@ to be installed; the `crash` command can not thoroughly analyze a dump without t
 
 1. (`ncn#`) Run `crash` from within the crash directory.
 
-    This will open a crash console.
+   This will open a crash console.
 
-    > ***NOTE*** This assumes that the crash's kernel and the running kernel are the same.
-    > The loaded `dracut-lib.sh` provides the `KVER` variable which has a value equal to
-    > that of the currently running kernel.
+   > ***NOTE*** This assumes that the crash's kernel and the running kernel are the same.
+   > The loaded `dracut-lib.sh` provides the `KVER` variable which has a value equal to
+   > that of the currently running kernel.
 
     ```bash
     . /srv/cray/scripts/common/dracut-lib.sh
-    crash ./vmlinux-${KVER}.gz ./vmcore
+    crash "/boot/vmlinux-${KVER}.gz" ./vmcore
     ```
 
 1. Use the open crash console to inspect the dump.
 
-    Type `?` for help.
+   Type `?` for help.
 
 ## Troubleshooting
 
@@ -201,7 +159,7 @@ Unable to ioctl(KDSETLED) -- are you not on the console? (Inappropriate ioctl fo
     1. Set the IPMI username.
 
         ```bash
-        read -s USERNAME
+        USERNAME=
         ```
 
     1. Set the IPMI password.
@@ -216,11 +174,11 @@ Unable to ioctl(KDSETLED) -- are you not on the console? (Inappropriate ioctl fo
         export IPMI_PASSWORD
         ```
 
-    1. Set the node to target.
+    1. target.
 
-        ```bash
-        NODE=ncn-w001
-        ```
+       ```bash
+       NODE=ncn-w001
+       ```
 
     1. Reset the node.
 
@@ -228,7 +186,7 @@ Unable to ioctl(KDSETLED) -- are you not on the console? (Inappropriate ioctl fo
         ipmitool -I lanplus -U $USERNAME -E -H ${NODE}-mgmt power reset 
         ```
 
-### Resetting `kdump`
+### Rebuilding the `kdump` initramFS
 
 If `kdump` fails any of the validation tests, then it can be easily remedied by purging the bad `initrd` and
 restarting the `kdump.service` daemon.
@@ -236,12 +194,10 @@ restarting the `kdump.service` daemon.
 1. (`ncn#`) Purge all old `kdump` images.
 
     ```bash
-    rm -f /boot/initrd-*-kdump
+    rm -f /var/lib/kdump/initrd
     ```
 
 1. (`ncn#`) Restart the `kdump.service` daemon.
-
-    This will take 10-30 seconds.
 
     ```bash
     systemctl restart kdump.service
@@ -250,6 +206,11 @@ restarting the `kdump.service` daemon.
 1. (`ncn#`) Verify that a new `kdump` image exists for the current kernel.
 
     ```bash
-    . /srv/cray/scripts/common/dracut-lib.sh
-    ls -l /boot/initrd-${KVER}-kdump
+    ls -l /var/lib/kdump/initrd
+    ```
+
+1. (`ncn#`) Print the included kernel modules.
+
+    ```bash
+    lsinitrd -m /var/lib/kdump/initrd
     ```
