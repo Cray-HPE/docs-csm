@@ -416,7 +416,7 @@ These variables will need to be set for many procedures within the CSM installat
 
    Download and run the latest hotfix for CASMTRIAGE-6796 from https://release.algol60.net/hotfix/csm-1.5/.
 
-    > ***NOTE*** Anything newer than 1.5.2 may continue without needing any additional step.
+   > ***NOTE*** Anything newer than 1.5.2 may continue without needing any additional step.
 
 1. (`pit#`) Install/update the RPMs necessary for the CSM installation.
 
