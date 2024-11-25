@@ -414,6 +414,8 @@ These variables will need to be set for many procedures within the CSM installat
 1. (`pit#`) ***HOTFIX: 1.5.0 through 1.5.2*** At this time, a newer metal-ipxe RPM is required. Please review the current field notices for the hotfix(es).
    The hotfix will insert a new metal-ipxe RPM into the extracted tarball.
 
+   Download and run the latest hotfix for CASMTRIAGE-6796 from https://release.algol60.net/hotfix/csm-1.5/.
+
     > ***NOTE*** Anything newer than 1.5.2 may continue without needing any additional step.
 
 1. (`pit#`) Install/update the RPMs necessary for the CSM installation.
