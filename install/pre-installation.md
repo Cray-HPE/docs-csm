@@ -411,10 +411,10 @@ These variables will need to be set for many procedures within the CSM installat
    tar -zxvf  "${PITDATA}/csm-${CSM_RELEASE}.tar.gz" -C ${PITDATA}
    ```
 
-1. (`pit#`) ***HOTFIX: 1.5.0 through 1.5.2*** At this time, a newer metal-ipxe RPM is required. Please review the current field notices for the hotfix(es).
+1. (`pit#`) ***HOTFIX: 1.5.0 through 1.5.2*** At this time, a newer metal-ipxe RPM is required. Please review the current field notices for the `CASMTRIAGE-6796` hotfix.
    The hotfix will insert a new metal-ipxe RPM into the extracted tarball.
 
-   Download and run the latest hotfix for CASMTRIAGE-6796 from https://release.algol60.net/hotfix/csm-1.5/.
+   Download and run the latest hotfix for `CASMTRIAGE-6796` from [CSM's direct download portal](https://release.algol60.net/hotfix/csm-1.5/).
 
    > ***NOTE*** Anything newer than 1.5.2 may continue without needing any additional step.
 
