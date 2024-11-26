@@ -26,11 +26,11 @@ The first two options are not fully fleshed out yet as we have not done much tes
 
 `chronyc` can be used to gather information on the state of NTP.
 
-`chronyc accheck HOST` - checks if a host is allowed to use NTP from HOST
+`chronyc accheck HOST` - checks if a given host may be used as an NTP server.
 
-Example:
+This example checks whether `10.252.0.7` is a valid NTP server
 
-```
+```bash
 ncn# chronyc accheck 10.252.0.7
 208 Access allowed
 ```
