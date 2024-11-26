@@ -26,6 +26,16 @@ fatal: [3a507f20-db8b-475a-851c-214a5acda6e4]: FAILED! =>
 
 ## Fix
 
+### Building the remote node image for `aarch64`
+
+The `aarch64` architecture is not supported in CSM 1.6.0. However if a remote build image is required to
+boot an `aarch64` node, it can be done from a previously installed CSM 1.5.x version. Follow the instructions
+in [Create a barebones IMS builder image](../../operations/image_management/Configure_a_Remote_Build_Node.md#create-a-barebones-ims-builder-image)
+but choose the most recent CSM 1.5.x version installed when setting up values for `BAREBONES_IMAGE_ID` in step 2 and
+`COMMIT_ID` in step 3.
+
+### Building the remote node image for `x86_64`
+
 The fix is to update the Ansible code in the playbook that customizes the default barebones compute image.
 Prior to following the steps listed in [Create a barebones IMS builder image](../../operations/image_management/Configure_a_Remote_Build_Node.md#create-a-barebones-ims-builder-image),
 do the following:
@@ -94,13 +104,19 @@ do the following:
          - role: csm.ims-remote
          - role: csm.rebuild-initrd
     diff --git a/vars/csm_ims_repos.yml b/vars/csm_ims_repos.yml
-    index 257130d..56fa83b 100644
+    index 257130d..6853cf1 100644
     --- a/vars/csm_ims_repos.yml
     +++ b/vars/csm_ims_repos.yml
-    @@ -29,13 +29,25 @@ csm_sles_repositories:
-     - name: SUSE-SLE-Module-Basesystem-${releasever_major}-SP${releasever_minor}-aarch64-Pool
-       description: "SUSE Basesystem Modules (added by Ansible)"
-       repo: https://packages.local/repository/SUSE-SLE-Module-Basesystem-${releasever_major}-SP${releasever_minor}-aarch64-Pool
+    @@ -23,19 +23,25 @@
+     #
+     
+     csm_sles_repositories:
+    -- name: SUSE-SLE-Module-Containers-${releasever_major}-SP${releasever_minor}-aarch64-Pool
+    -  description: "SUSE Container Modules (added by Ansible)"
+    -  repo: https://packages.local/repository/SUSE-SLE-Module-Containers-${releasever_major}-SP${releasever_minor}-aarch64-Pool
+    -- name: SUSE-SLE-Module-Basesystem-${releasever_major}-SP${releasever_minor}-aarch64-Pool
+    -  description: "SUSE Basesystem Modules (added by Ansible)"
+    -  repo: https://packages.local/repository/SUSE-SLE-Module-Basesystem-${releasever_major}-SP${releasever_minor}-aarch64-Pool
     -- name: csm-sle
     -  description: "CSM SLE Packages (added by Ansible)"
     -  repo: 'https://packages.local/repository/csm-sle-${releasever_major}sp${releasever_minor}'
@@ -125,15 +141,15 @@ do the following:
     +- name: csm-embedded
     +  description: "CSM Embedded NCN Packages (added by Ansible)"
     +  repo: https://packages.local/repository/csm-embedded
-    
+     
     diff --git a/vars/csm_packages.yml b/vars/csm_packages.yml
-    index 8c9c67e..8fb8fe2 100644
+    index 8c9c67e..7bea57a 100644
     --- a/vars/csm_packages.yml
     +++ b/vars/csm_packages.yml
     @@ -77,6 +77,14 @@ compute_csm_sles_packages:
        - cray-uai-util
        - cray-spire-dracut>=2.0.0
-    
+     
     -# IMS Remote Compute Nodes:
     -ims_compute_sles_packages:
     -  - podman
