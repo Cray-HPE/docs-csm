@@ -61,7 +61,9 @@ Verify NTP is configured correctly and troubleshoot any issues.
 
 The `chronyc` command can be used to gather information on the state of NTP.
 
-1. Check if a host is allowed to use NTP from HOST. This example sets HOST to `10.252.0.7`
+1. Check if a given host may be used as an NTP server.
+
+   This example checks whether `10.252.0.7` is a valid NTP server
 
    ```bash
    ncn# chronyc accheck 10.252.0.7
