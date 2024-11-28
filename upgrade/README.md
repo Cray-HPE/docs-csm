@@ -11,6 +11,7 @@ software. Choose the appropriate procedure from the sections below.
     * [Option 2: Upgrade only additional HPE Cray EX software products](#option-2-upgrade-only-additional-hpe-cray-ex-software-products)
     * [Option 3: Upgrade only CSM](#option-3-upgrade-only-csm)
 * [CSM patch version upgrade](#csm-patch-version-upgrade)
+* [Upgrading management and managed nodes with different CSM versions using IUF](#upgrading-management-and-managed-nodes-with-different-csm-versions-using-iuf)
 
 ## Release Notes
 
@@ -91,3 +92,7 @@ CSM 1.6 patch upgrades. Instead, consider upgrading to the latest CSM 1.6 patch 
 
 There are no CSM 1.6 patch versions currently available. When any become available, they will
 be listed here.
+
+## Upgrading management and managed nodes with different CSM versions using IUF
+
+Follow the procedure [Upgrading management and managed nodes with different CSM versions using IUF](Creating_hybrid_configurations.md) when planning to upgrade management and managed nodes with different versions of CSM.
