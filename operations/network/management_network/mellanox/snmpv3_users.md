@@ -17,7 +17,7 @@ switch(config)# snmp-server user testuser v3 require-privacy
 Show Commands to Validate Functionality
 
 ```console
-show snmp users
+show snmp user
 ```
 
 [Back to Index](../README.md)
