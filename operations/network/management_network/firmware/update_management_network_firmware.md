@@ -25,6 +25,34 @@ Dell and Mellanox firmware must be downloaded from the manufacturer.
 | Dell S4148T-ON Switch Series  |       `10.5.1.4` |
 | Dell S4148F-ON Switch Series  |       `10.5.1.4` |
 
+## Verify current switch firmware levels
+
+The CANU utility can be used to report the current management switch firmware levels. The example output shows that the firmware
+is not at the recommended version and needs to be updated.
+
+(`ncn-m#`) Run `canu` to report the firmware level of all switches. The switch admin user password should be supplied when prompted.
+
+```bash
+canu report network firmware --csm 1.6 --ips $(awk '/sw-/{ printf "%s%s", sep, $1; sep="," }' /etc/hosts)
+```
+
+Example output:
+
+```text
+------------------------------------------------------------------
+    STATUS  IP              HOSTNAME            FIRMWARE
+------------------------------------------------------------------
+ ❌ Fail    10.254.0.2      sw-spine-001        LL.10.11.1010       Firmware should be in range ['LL.10.13.1040']
+ ❌ Fail    10.254.0.3      sw-spine-002        LL.10.11.1010       Firmware should be in range ['LL.10.13.1040']
+ ❌ Fail    10.254.0.4      sw-leaf-bmc-001     FL.10.11.1010       Firmware should be in range ['FL.10.13.1040']
+
+Summary
+------------------------------------------------------------------
+❌ Fail - 3 switches
+LL.10.11.1010 - 2 switches
+FL.10.11.1010 - 1 switches
+```
+
 ## Aruba Firmware Best Practices
 
 Aruba software version number explained:
