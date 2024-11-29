@@ -67,9 +67,6 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
        default:
          network_type: "cassini"
          suffix: "-test01"
-       uss:
-         deploy_slurm: true
-         deploy_pbs: true
        ```
 
     3. Ensure the expected files are present in the admin directory after performing the steps in this section.
