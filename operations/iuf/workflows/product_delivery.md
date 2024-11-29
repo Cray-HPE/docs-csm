@@ -4,6 +4,7 @@ This section ensures the product content is loaded onto the system and available
 
 1. [Execute the IUF `process-media` and `pre-install-check` stages](#1-execute-the-iuf-process-media-and-pre-install-check-stages)
 1. [Update `customizations.yaml`](#2-update-customizationsyaml)
+1. [Populate admin directory with files defining site preference](#3-populate-admin-directory-with-files-defining-site-preferences)
 1. [Execute the IUF `deliver-product` stage](#4-execute-the-iuf-deliver-product-stage)
 1. [Perform manual product delivery operations](#5-perform-manual-product-delivery-operations)
 1. [Next steps](#6-next-steps)
