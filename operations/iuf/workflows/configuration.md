@@ -92,27 +92,27 @@ required for initial installation scenarios.
 
 - USS
     - Compute Configuration
-       - Configure DVS and LNet with appropriate Slingshot settings
-       - Configure DVS and LNet for use on application nodes
-       - Enable site-specific file system mounts
-       - Set the USS root password in HashiCorp Vault
+        - Configure DVS and LNet with appropriate Slingshot settings
+        - Configure DVS and LNet for use on application nodes
+        - Enable site-specific file system mounts
+        - Set the USS root password in HashiCorp Vault
     - UAN Configuration
-       - Enable CAN, LDAP, and set MOTD
-       - Move DVS and LNet settings to USS branch
-       - Set the UAN root password in HashiCorp Vault
-       - *Tech Preview* - Enable UAIs on UAN
+        - Enable CAN, LDAP, and set MOTD
+        - Move DVS and LNet settings to USS branch
+        - Set the UAN root password in HashiCorp Vault
+        - *Tech Preview* - Enable UAIs on UAN
     - SLURM Configuration
-       - UAS
-          - Configure UAS network settings
-            - The network settings for UAS must match the SLURM WLM to allow job submission from UAIs
-       - CSM Diags
-          - Update CSM Diags network attachment definition
+        - UAS
+            - Configure UAS network settings
+                - The network settings for UAS must match the SLURM WLM to allow job submission from UAIs
+        - CSM Diags
+             - Update CSM Diags network attachment definition
     - PBS Pro Configuration
-       - UAS
-          - Configure UAS network settings
-            - The network settings for UAS must match the PBS Pro WLM to allow job submission from UAIs
-       - CSM Diags
-         - Update CSM Diags network attachment definition
+        - UAS
+             - Configure UAS network settings
+                 - The network settings for UAS must match the PBS Pro WLM to allow job submission from UAIs
+        - CSM Diags
+             - Update CSM Diags network attachment definition
 
 - SHS
     - Update release information in `group_vars` (done for each product release)
