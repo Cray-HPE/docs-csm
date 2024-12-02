@@ -100,19 +100,19 @@ required for initial installation scenarios.
         - Enable CAN, LDAP, and set MOTD
         - Move DVS and LNet settings to USS branch
         - Set the UAN root password in HashiCorp Vault
-        - *Tech Preview* - Enable UAIs on UAN
+        - _Tech Preview_ - Enable UAIs on UAN
     - SLURM Configuration
         - UAS
             - Configure UAS network settings
                 - The network settings for UAS must match the SLURM WLM to allow job submission from UAIs
         - CSM Diags
-             - Update CSM Diags network attachment definition
+            - Update CSM Diags network attachment definition
     - PBS Pro Configuration
         - UAS
-             - Configure UAS network settings
+            - Configure UAS network settings
                  - The network settings for UAS must match the PBS Pro WLM to allow job submission from UAIs
         - CSM Diags
-             - Update CSM Diags network attachment definition
+            - Update CSM Diags network attachment definition
 
 - SHS
     - Update release information in `group_vars` (done for each product release)
