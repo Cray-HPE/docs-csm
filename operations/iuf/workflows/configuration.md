@@ -110,7 +110,7 @@ required for initial installation scenarios.
     - PBS Pro Configuration
         - UAS
             - Configure UAS network settings
-                 - The network settings for UAS must match the PBS Pro WLM to allow job submission from UAIs
+                - The network settings for UAS must match the PBS Pro WLM to allow job submission from UAIs
         - CSM Diags
             - Update CSM Diags network attachment definition
 
