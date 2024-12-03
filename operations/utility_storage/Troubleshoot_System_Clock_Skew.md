@@ -107,3 +107,9 @@ This procedure requires admin privileges.
     ```
 
     If clocks are in sync and Ceph is still reporting skew, refer to [Manage Ceph Services](Manage_Ceph_Services.md) on restarting services.
+
+1. Failover the active Ceph MDS server. After there has been clock skew, the Ceph MDS server may have issues which will cause Kubernetes pods to not be able to mount PVCs. The active MDS server should be failed over to prevent this issue.
+
+    ```bash
+    ceph mds fail 0
+    ```
