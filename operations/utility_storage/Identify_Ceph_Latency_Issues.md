@@ -73,9 +73,9 @@ Based on the output from `ceph -s` (using our example above) we can correlate so
    1. The recommended remediation is to do a rolling restart of the Ceph `MON` and `MGR` daemons.
       1. Get `MON` and `MGR` daemons.
 
-            ```bash
-            ceph orch ps | grep -E 'mgr|mon'
-            ```
+         ```bash
+         ceph orch ps | grep -E 'mgr|mon'
+         ```
 
       1. Restart each `MON` and `MGR` daemons. Make sure each daemon starts before restarting the next one.
 
