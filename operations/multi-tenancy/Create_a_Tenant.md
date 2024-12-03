@@ -244,7 +244,7 @@ spec:
       timeoutSeconds: 5
     resources:
       requests:
-        cpu: "1"
+        cpu: "500m"
         memory: 4Gi
       limits:
         cpu: "8"
@@ -263,7 +263,7 @@ spec:
       keep: 3
       resources:
         requests:
-          cpu: "1"
+          cpu: "500m"
           memory: 4Gi
         limits:
           cpu: "8"
@@ -274,7 +274,7 @@ spec:
         tag: 1.3.0
       resources:
         requests:
-          cpu: "1"
+          cpu: "500m"
           memory: 128Mi
         limits:
           cpu: "16"

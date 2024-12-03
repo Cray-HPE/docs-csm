@@ -789,7 +789,7 @@ Repeat this step as needed for additional `SlurmClusters`.
           timeoutSeconds: 5
         resources:
           requests:
-            cpu: "1"
+            cpu: "500m"
             memory: 4Gi
           limits:
             cpu: "8"
@@ -808,7 +808,7 @@ Repeat this step as needed for additional `SlurmClusters`.
           keep: 3
           resources:
             requests:
-              cpu: "1"
+              cpu: "500m"
               memory: 4Gi
             limits:
               cpu: "8"
@@ -819,7 +819,7 @@ Repeat this step as needed for additional `SlurmClusters`.
             tag: 1.3.0
           resources:
             requests:
-              cpu: "1"
+              cpu: "500m"
               memory: 128Mi
             limits:
               cpu: "16"
