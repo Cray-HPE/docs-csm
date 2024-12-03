@@ -31,59 +31,58 @@ function sysmgmt_health() {
   version_2="0.17.5"
   echo "Checking for chart version of cray-sysmgmt-health"
   chart_info=$(helm ls -o json --namespace sysmgmt-health | jq -r --arg chart_name "$chart_name" '.[] | select(.name == $chart_name) | {name, app_version}')
-  
+
   if [ -n "$chart_info" ]; then
     chart_version=$(echo "$chart_info" | jq -r '.app_version')
 
     if [ "$chart_version" == "$version_1" ]; then
-	# Uninstall the cray-sysmgmt-health and delete PVCs
-        echo "Chart $chart_name found with version $version_1, uninstalling..."
-        prom0_pvc="prometheus-cray-sysmgmt-health-kube-p-prom-db-prometheus-cray-sysmgmt-health-kube-p-prom-0"
-        prom1_pvc="prometheus-cray-sysmgmt-health-kube-p-prom-db-prometheus-cray-sysmgmt-health-kube-p-prom-1"
-        prom0_shard_pvc="prometheus-cray-sysmgmt-health-kube-p-prom-db-prometheus-cray-sysmgmt-health-kube-p-prom-shard-1-0"
-        prom1_shard_pvc="prometheus-cray-sysmgmt-health-kube-p-prom-db-prometheus-cray-sysmgmt-health-kube-p-prom-shard-1-1"
-        alert_pvc="alertmanager-cray-sysmgmt-health-kube-p-alertmanager-db-alertmanager-cray-sysmgmt-health-kube-p-alertmanager-0"
-        thanos_ruler_pvc="thanos-ruler-kube-prometheus-stack-thanos-ruler-data-thanos-ruler-kube-prometheus-stack-thanos-ruler-0"
+      # Uninstall the cray-sysmgmt-health and delete PVCs
+      echo "Chart $chart_name found with version $version_1, uninstalling..."
+      prom0_pvc="prometheus-cray-sysmgmt-health-kube-p-prom-db-prometheus-cray-sysmgmt-health-kube-p-prom-0"
+      prom1_pvc="prometheus-cray-sysmgmt-health-kube-p-prom-db-prometheus-cray-sysmgmt-health-kube-p-prom-1"
+      prom0_shard_pvc="prometheus-cray-sysmgmt-health-kube-p-prom-db-prometheus-cray-sysmgmt-health-kube-p-prom-shard-1-0"
+      prom1_shard_pvc="prometheus-cray-sysmgmt-health-kube-p-prom-db-prometheus-cray-sysmgmt-health-kube-p-prom-shard-1-1"
+      alert_pvc="alertmanager-cray-sysmgmt-health-kube-p-alertmanager-db-alertmanager-cray-sysmgmt-health-kube-p-alertmanager-0"
+      thanos_ruler_pvc="thanos-ruler-kube-prometheus-stack-thanos-ruler-data-thanos-ruler-kube-prometheus-stack-thanos-ruler-0"
 
-        helm ls -o json --namespace sysmgmt-health | jq -r --arg chart_name "$chart_name" --arg version "$version_1" \
-            '.[] | select(.name == $chart_name and .app_version == $version) | .name' | xargs -L1 helm uninstall --namespace sysmgmt-health
-    
-        kubectl delete pvc/$prom0_pvc -n sysmgmt-health
-        kubectl delete pvc/$prom1_pvc -n sysmgmt-health
-        kubectl delete pvc/$prom0_shard_pvc -n sysmgmt-health
-        kubectl delete pvc/$prom1_shard_pvc -n sysmgmt-health
-        kubectl delete pvc/$alert_pvc -n sysmgmt-health
-        kubectl delete pvc/$thanos_ruler_pvc -n sysmgmt-health
-        
-	# Remove the cray-sysmgmt-health-promet-kubelet service.
-        echo "Deleting cray-sysmgmt-health-kube-p-kubelet service in kube-system namespace."
-        kubectl delete service/cray-sysmgmt-health-kube-p-kubelet -n kube-system
+      helm ls -o json --namespace sysmgmt-health | jq -r --arg chart_name "$chart_name" --arg version "$version_1" \
+        '.[] | select(.name == $chart_name and .app_version == $version) | .name' | xargs -L1 helm uninstall --namespace sysmgmt-health
 
-        # Remove all the existing CRDs (ServiceMonitors, Podmonitors, etc.)
-        echo "Deleting sysmgmt-health existing CRDs"
-        for c in $(kubectl get crds -A -o jsonpath='{range .items[?(@.metadata.annotations.controller-gen\.kubebuilder\.io\/version=="v0.2.4")]}{.metadata.name}{"\n"}{end}'); do
-           kubectl delete crd ${c}
-        done
+      kubectl delete pvc/$prom0_pvc -n sysmgmt-health
+      kubectl delete pvc/$prom1_pvc -n sysmgmt-health
+      kubectl delete pvc/$prom0_shard_pvc -n sysmgmt-health
+      kubectl delete pvc/$prom1_shard_pvc -n sysmgmt-health
+      kubectl delete pvc/$alert_pvc -n sysmgmt-health
+      kubectl delete pvc/$thanos_ruler_pvc -n sysmgmt-health
+
+      # Remove the cray-sysmgmt-health-promet-kubelet service.
+      echo "Deleting cray-sysmgmt-health-kube-p-kubelet service in kube-system namespace."
+      kubectl delete service/cray-sysmgmt-health-kube-p-kubelet -n kube-system
+
+      # Remove all the existing CRDs (ServiceMonitors, Podmonitors, etc.)
+      echo "Deleting sysmgmt-health existing CRDs"
+      for c in $(kubectl get crds -A -o jsonpath='{range .items[?(@.metadata.annotations.controller-gen\.kubebuilder\.io\/version=="v0.2.4")]}{.metadata.name}{"\n"}{end}'); do
+        kubectl delete crd ${c}
+      done
 
     elif [ "$chart_version" == "$version_2" ]; then
-        echo "Chart $chart_name found with version $version_2, uninstalling..."
-        
-        helm ls -o json --namespace sysmgmt-health | jq -r --arg chart_name "$chart_name" --arg version "$version_2" \
-            '.[] | select(.name == $chart_name and .app_version == $version) | .name' | xargs -L1 helm uninstall --namespace sysmgmt-health
-	
-	# Remove all the existing CRDs
-	echo "Deleting sysmgmt-health existing CRDs"
-        kubectl get crd | grep victoriametrics.com | awk '{print $1 }' | xargs -i kubectl delete crd {}
+      echo "Chart $chart_name found with version $version_2, uninstalling..."
+
+      helm ls -o json --namespace sysmgmt-health | jq -r --arg chart_name "$chart_name" --arg version "$version_2" \
+        '.[] | select(.name == $chart_name and .app_version == $version) | .name' | xargs -L1 helm uninstall --namespace sysmgmt-health
+
+      # Remove all the existing CRDs
+      echo "Deleting sysmgmt-health existing CRDs"
+      kubectl get crd | grep victoriametrics.com | awk '{print $1 }' | xargs -i kubectl delete crd {}
 
     else
-        echo "Chart $chart_name found, but with a different version: $chart_version"
-        # Default actions for other versions
+      echo "Chart $chart_name found, but with a different version: $chart_version"
+      # Default actions for other versions
     fi
-  else    
+  else
     echo "No chart named $chart_name found in the namespace."
   fi
 }
 
 # sysmgmt_health function call
 sysmgmt_health
-
