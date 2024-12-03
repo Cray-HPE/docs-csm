@@ -560,6 +560,7 @@ iPDU
 iPDUs
 iPXE
 iSCSI
+initramFS
 in_progress
 inband
 init
@@ -958,7 +959,6 @@ vsx-pair
 # see if a file already is listed.
 
 - background/ncn_kernel.md
-initramFS
 150400.24.38.1.25440.1.PTF.1204911
 
 - glossary.md
