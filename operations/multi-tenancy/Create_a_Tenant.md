@@ -281,7 +281,10 @@ spec:
           memory: 512Mi
 ```
 
-**Note:** Container versions must be customized to the versions installed on the system
+ > **Note:**
+ >
+ > - Container versions must be customized to the versions installed on the system
+ > - Please set `spec.munge.uid` to 498 and `spec.munge.gid` to 484 if using munger container version `cray/munge-munge:1.6.0`
 
 ## Apply the `slurm` operator CR
 
