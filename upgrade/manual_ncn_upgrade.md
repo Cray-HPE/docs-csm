@@ -12,13 +12,11 @@ describing this process in case of an emergency.
 If you are performing a regular CSM upgrade, this should be done through IUF.
 Follow [upgrade management nodes and CSM services](../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md) to perform a normal CSM upgrade.
 
-## Manually Upgrade NCNs
-
 - [Storage node manual upgrade](#storage-node-manual-upgrade)
 - [Worker node manual upgrade](#worker-node-manual-upgrade)
 - [Master node manual upgrade](#master-node-manual-upgrade)
 
-### Storage node manual upgrade
+## Storage node manual upgrade
 
 **In CSM 1.6 and later, the storage node upgrades should be executed by IUF.
 See [upgrade management nodes and CSM services](../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md) to perform a normal CSM upgrade.**
@@ -42,7 +40,7 @@ Storage node upgrades are done using an IUF Argo workflow. See [using the Argo U
     /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh $storage_node --upgrade --image-id $image --desired-cfs-conf $configuration
     ```
 
-### Worker node manual upgrade
+## Worker node manual upgrade
 
 **In CSM 1.6 and later, the worker node upgrades should be executed by IUF.
 See [upgrade management nodes and CSM services](../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md) to perform a normal CSM upgrade.**
@@ -66,14 +64,14 @@ Worker node upgrades are done using an IUF Argo workflow. See [using the Argo UI
     /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh $worker_node --image-id $image --desired-cfs-conf $configuration
     ```
 
-### Master node manual upgrade
+## Master node manual upgrade
 
 **In CSM 1.6 and later, the master node upgrades should be executed by IUF.
 See [upgrade management nodes and CSM services](../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md) to perform a normal CSM upgrade.**
 
 A master node upgrade is not executed by Argo workflows, instead the master node upgrade is a bash script.
 IUF can use Argo workflows to execute a master node upgrade but it does this by executing the master node upgrade script.
-The script keeps tracks of steps that have been completed and prints them to a state file in the `/etc/cray/upgrade/csm/csm-${CSM_RELEASE}/<node-name>` directory on the node where the script is executed.
+The script keeps track of steps that have been completed and prints them to a state file in the `/etc/cray/upgrade/csm/csm-${CSM_RELEASE}/<node-name>` directory on the node where the script is executed.
 If the master node upgrade fails partway through, it is safe to re-execute the upgrade script because the state is being tracked and steps will not be re-executed if they have already run successfully.
 
 There are two different processes for upgrading master nodes depending on if `ncn-m001` is being upgraded or if `ncn-m002` or `ncn-m003` is being upgraded.
@@ -83,7 +81,7 @@ Follow one of two procedures below.
 - [Manually upgrade `ncn-m002` or `ncn-m003`](#manually-upgrade-ncn-m002-or-ncn-m003)
 - [Manually upgrade `ncn-m001`](#manually-upgrade-ncn-m001)
 
-#### Manually upgrade `ncn-m002` or `ncn-m003`
+### Manually upgrade `ncn-m002` or `ncn-m003`
 
 > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../operations/kubernetes/encryption/README.md),
 then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
@@ -119,7 +117,7 @@ then backup the `/etc/cray/kubernetes/encryption` directory on the master node b
    Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
    See [Kubernetes `kube-apiserver` Failing](../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
-#### Manually upgrade `ncn-m001`
+### Manually upgrade `ncn-m001`
 
 To manually upgrade `ncn-m001`, the CFS configuration and node image need to be set for `ncn-m001`, the artifacts on `ncn-m001` need to be backed up, `ncn-m002` needs to be prepared to execute the upgrade, and the `ncn-m001` upgrade needs to be executed.
 Follow the steps below to upgrade `ncn-m001`.
@@ -215,7 +213,7 @@ Follow the steps below to upgrade `ncn-m001`.
    Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
    See [Kubernetes `kube-apiserver` Failing](../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
-### Set the image ID and CFS configuration manually
+## Set the image ID and CFS configuration manually
 
 (`ncn-m001#`) Set `XNAME` to the xname of the node that is being upgraded.
 
@@ -223,7 +221,7 @@ Follow the steps below to upgrade `ncn-m001`.
 XNAME=<node_xname>
 ```
 
-#### Set the image ID in BSS
+### Set the image ID in BSS
 
 1. (`ncn-m001#`) Set `IMS_IMAGE_ID` to the image ID that should be upgraded to.
 
@@ -237,7 +235,7 @@ XNAME=<node_xname>
     /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $IMS_IMAGE_ID $XNAME
     ```
 
-#### Set the CFS configuration in CFS
+### Set the CFS configuration in CFS
 
 The following steps will update the node's desired configuration but will leave it disabled.
 It will automatically enable and be applied after the node is upgraded.
