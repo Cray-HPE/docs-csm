@@ -60,5 +60,7 @@ refer to **SAT Uninstall and Downgrade** in the SAT documentation.
 
 ## Known issues
 
-In CSM 1.5.0, SAT status may give CFS errors on large systems. For more information, see
+- In CSM 1.5.0, SAT status may give CFS errors on large systems. For more information, see
 [CFS V2 Failures On Large Systems](../../troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md).
+- In CSM 1.5.2, `sat bootprep` will encounter an error during image customization.
+To overcome this issue, see [`sat bootprep` image customization error](../../troubleshooting/known_issues/sat_bootprep_image_customization_error.md).

@@ -75,6 +75,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [PCS and CAPMC Transaction Size Limitation](known_issues/pcs_and_capmc_transaction_size_limitation.md)
 - [IMS image delete loses the `arch` information](known_issues/ims_image_delete_loses_arch.md)
 - [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
+- [`sat bootprep` image customization error](known_issues/sat_bootprep_image_customization_error.md)
 
 ## Booting
 
