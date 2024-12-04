@@ -8,17 +8,17 @@ The switch supports SNMPv2c community-based security for read-only and read-writ
 
 1. Enter configuration mode.
 
-   ```text
+   ```console
    configure terminal
    ```
 
 1. Configure the SNMPv2c community name
 
-   ```text
+   ```console
    snmp-server community community-name access-mode
    ```
 
-   Parameters
+   Parameters:
 
    | Parameter        | Description                                                                                  |
    |------------------|----------------------------------------------------------------------------------------------|
@@ -39,7 +39,7 @@ When successful this command returns no output.
 
 The following command displays information about any SNMP community that may have been configured.
 
-```text
+```console
 show snmp community
 ```
 
