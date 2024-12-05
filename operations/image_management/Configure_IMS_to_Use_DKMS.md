@@ -7,7 +7,7 @@ tool. This allows kernel modules to be built for the specific kernel used in the
 access to the running kernel that is not usually allowed by the Image Management Service (IMS). In order to safely
 allow the expanded access, the IMS configuration must be modified to enable the feature.
 
-## Requirements of DMKS
+## Requirements of DKMS
 
 Many DKMS build and install scripts require access to the system `/proc`, `/dev`, and `/sys` directories which
 allows access to running processes and system services. The IMS jobs run as an administrator user since preparing
