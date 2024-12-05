@@ -69,6 +69,21 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
          suffix: "-test01"
        ```
 
+       **NOTE:** When installing USS 1.1 or higher, select either SLURM or PBS Pro Products to use on the system before running this stage. For more information, see the `deliver-product` stage
+       details in the "Install and Upgrade Framework" section of the _HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)_.
+       If installing USS 1.1 or higher, the `deploy_slurm` and `deploy_pbs` keys should be in the `site_vars.yaml` file as shown below.
+
+       ```text
+       default:
+        network_type: "cassini"
+        suffix: "-test01"
+        system_name: "my-system"
+        site_domain: "my-site-domain.net"
+       uss:
+        deploy_slurm: true
+        deploy_pbs: true
+        ```
+
     3. Ensure the expected files are present in the admin directory after performing the steps in this section.
 
        (`ncn-m001#`) Examine the contents of `${ADMIN_DIR}` to verify the expected content is present
