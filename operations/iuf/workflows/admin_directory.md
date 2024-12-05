@@ -77,8 +77,6 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
        default:
         network_type: "cassini"
         suffix: "-test01"
-        system_name: "my-system"
-        site_domain: "my-site-domain.net"
        uss:
         deploy_slurm: true
         deploy_pbs: false
