@@ -98,7 +98,9 @@ yq4 eval '.spec.kubernetes.services.cray-vault.ingress.host = "vault.cmn.{{ netw
 # cray-istio
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.hmnlb.{{ network.dns.external }},auth.hmnlb.{{ network.dns.external }},hmcollector.hmnlb.{{ network.dns.external }}'
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' 'istio-ingressgateway-cmn.istio-system.svc.cluster.local'
-yq4 eval '.spec.kubernetes.services.cray-istio.services.istio-ingressgateway-cmn.serviceAnnotations."external-dns.alpha.kubernetes.io/hostname" += ",vault.cmn.{{ network.dns.external }}"' -i "$c"
+if [[ -z "$(yq4 eval '.spec.kubernetes.services.cray-istio.services.istio-ingressgateway-cmn.serviceAnnotations."external-dns.alpha.kubernetes.io/hostname" | select(. == "*vault.cmn*")' $c)" ]]; then
+  yq4 eval '.spec.kubernetes.services.cray-istio.services.istio-ingressgateway-cmn.serviceAnnotations."external-dns.alpha.kubernetes.io/hostname" += ",vault.cmn.{{ network.dns.external }}"' -i "$c"
+fi
 
 # cray-keycloak
 if [[ -n "$(yq r "$c" "spec.kubernetes.services.cray-keycloak.keycloak.keycloak")" ]]; then
