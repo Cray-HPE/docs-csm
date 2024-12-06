@@ -98,7 +98,7 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
 
        Example output:
 
-       ```text
+       ```yaml
        default:
          network_type: "cassini"
          suffix: "-test01"
