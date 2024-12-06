@@ -73,7 +73,7 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
        details in the "Install and Upgrade Framework" section of the _HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)_.
        If installing USS 1.1 or higher, the `deploy_slurm` and `deploy_pbs` keys should be in the `site_vars.yaml` file as shown below.
 
-       ```text
+       ```yaml
        default:
         network_type: "cassini"
         suffix: "-test01"
