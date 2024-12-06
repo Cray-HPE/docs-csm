@@ -98,7 +98,7 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
 
        Example output:
 
-       ```text
+       ```yaml
        default:
          network_type: "cassini"
          suffix: "-test01"
@@ -106,7 +106,7 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
          site_domain: "my-site-domain.net"
        uss:
          deploy_slurm: true
-         deploy_pbs: true
+         deploy_pbs: false
        ```
 
     3. Ensure the expected files are present in the admin directory after performing the steps in this section.
