@@ -102,15 +102,9 @@ required for initial installation scenarios.
         - Set the UAN root password in HashiCorp Vault
         - Enable UAIs on UAN
     - SLURM Configuration
-        - UAS
-            - Configure UAS network settings
-                - The network settings for UAS must match the SLURM WLM to allow job submission from UAIs
         - CSM Diags
             - Update CSM Diags network attachment definition
     - PBS Pro Configuration
-        - UAS
-            - Configure UAS network settings
-                - The network settings for UAS must match the PBS Pro WLM to allow job submission from UAIs
         - CSM Diags
             - Update CSM Diags network attachment definition
 
