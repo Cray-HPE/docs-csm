@@ -646,9 +646,7 @@ INFO [extract-tar-files(0:analytics-1.4.22.tar.gz)             ] END extract-tar
 INFO [extract-release-distributions                            ] BEG end-operation
 INFO [extract-tar-files(1:uss-1.0.0-61-cos-base-3.0.tar.gz)    ] END extract-tar-files(1:uss-1.0.0-61-cos-base-3.0.tar.gz) [Succeeded]
 INFO [extract-release-distributions                            ] END end-operation [Succeeded]
-INFO [extract-release-distributions                            ] BEG prom-metrics
 INFO [extract-release-distributions                            ] END extract-release-distributions [Succeeded]
-INFO [extract-release-distributions                            ] END prom-metrics [Succeeded]
 INFO [STAGE: process-media                                     ] END Succeeded in 0:01:43
 INFO [IUF SESSION: admin-05-15-psdlp                           ] END Completed at 2023-05-16 17:17:20.954763
 INFO [IUF SESSION: admin-05-15-o0o25                           ] BEG Started at 2023-05-16 17:17:21.781044

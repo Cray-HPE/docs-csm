@@ -38,25 +38,6 @@ spec:
   entrypoint: main
   templates:
     - name: main
-      metrics:
-        prometheus:
-        - name: operation_counter
-          help: "Count of step execution by result status"
-          labels:
-            - key: "opname"
-              value: "management-m001-rollout"
-            - key: stage
-              value: "management-nodes-rollout"
-            - key: type
-              value: "global"
-            - key: pname
-              value: "global"
-            - key: pversion
-              value: "global"
-            - key: status
-              value: "{{status}}"
-          counter:
-            value: "1"
       inputs:
         parameters:
           - name: auth_token
@@ -203,50 +184,3 @@ spec:
             templateRef:
               name: workflow-template-record-time-template
               template: record-time-template
-          - name: prom-metrics
-            dependencies:
-              - start-operation
-              - end-operation
-            template: prom-metrics
-            arguments:
-              parameters:
-              - name: opstart
-                value: "{{tasks.start-operation.outputs.result}}"
-              - name: opend
-                value: "{{tasks.end-operation.outputs.result}}"
-    - name: prom-metrics
-      inputs:
-        parameters:
-        - name: opstart
-        - name: opend
-      metrics:
-        prometheus:
-          - name: operation_time
-            help: "Duration gauge by operation name in seconds"
-            labels:
-              - key: "opname"
-                value: "management-m001-rollout"
-              - key: stage
-                value: "management-nodes-rollout"
-              - key: type
-                value: "global"
-              - key: pdname
-                value: "global"
-              - key: pdversion
-                value: "global"
-              - key: "opstart"
-                value: "{{inputs.parameters.opstart}}"
-              - key: "opend"
-                value: "{{inputs.parameters.opend}}"
-            gauge:
-              value: "{{outputs.parameters.diff-time-value}}"
-      outputs:
-        parameters:
-          - name: diff-time-value
-            globalName: diff-time-value
-            valueFrom:
-              path: /tmp/diff_time.txt
-      container:
-        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
-        command: [sh, -c]
-        args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]
