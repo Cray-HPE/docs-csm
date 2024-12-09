@@ -325,7 +325,7 @@ Some systems are configured with lazy mounts that do not have this requirement f
 
 1. (`ncn-m001#`) Check that `spire` pods have started.
 
-    Monitor the status of the `spire-jwks` pods to ensure they restart and enter the `Running` state.
+    Monitor the status of the `spire-jwks` and `cray-spire-jwks` pods to ensure they restart and enter the `Running` state.
 
     ```bash
     kubectl get pods -n spire -o wide | grep spire-jwks
@@ -334,6 +334,9 @@ Some systems are configured with lazy mounts that do not have this requirement f
     Example output:
 
     ```text
+    cray-spire-jwks-6b97457548-gc7td    2/3  CrashLoopBackOff   9    23h   10.44.0.117  ncn-w002 <none>   <none>
+    cray-spire-jwks-6b97457548-jd7bd    2/3  CrashLoopBackOff   9    23h   10.36.0.123  ncn-w003 <none>   <none>
+    cray-spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
     spire-jwks-6b97457548-gc7td    2/3  CrashLoopBackOff   9    23h   10.44.0.117  ncn-w002 <none>   <none>
     spire-jwks-6b97457548-jd7bd    2/3  CrashLoopBackOff   9    23h   10.36.0.123  ncn-w003 <none>   <none>
     spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
@@ -343,6 +346,12 @@ Some systems are configured with lazy mounts that do not have this requirement f
 
        ```bash
        kubectl rollout restart -n spire deployment spire-jwks
+       ```
+
+   1. (`ncn-m001#`) If the `cray-spire-jwks` pods indicate `CrashLoopBackOff`, then restart the Cray Spire deployment.
+
+       ```bash
+       kubectl rollout restart -n spire deployment cray-spire-jwks
        ```
 
    1. (`ncn-m001#`) Rejoin Spire on the worker and master NCNs, to avoid issues with Spire tokens.
@@ -396,48 +405,6 @@ Some systems are configured with lazy mounts that do not have this requirement f
 
     * `/var/lib/cni/networks/macvlan-slurmctld-nmn-conf`
     * `/var/lib/cni/networks/macvlan-slurmdbd-nmn-conf`
-
-1. (`ncn-m001#`) Check that `spire` pods have started.
-
-    ```bash
-    kubectl get pods -n spire -o wide | grep spire-jwks
-    ```
-
-    Example output:
-
-    ```text
-    cray-spire-jwks-6b97457548-gc7td    2/3  CrashLoopBackOff   9    23h   10.44.0.117  ncn-w002 <none>   <none>
-    cray-spire-jwks-6b97457548-jd7bd    2/3  CrashLoopBackOff   9    23h   10.36.0.123  ncn-w003 <none>   <none>
-    cray-spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
-    spire-jwks-6b97457548-gc7td    2/3  CrashLoopBackOff   9    23h   10.44.0.117  ncn-w002 <none>   <none>
-    spire-jwks-6b97457548-jd7bd    2/3  CrashLoopBackOff   9    23h   10.36.0.123  ncn-w003 <none>   <none>
-    spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
-    ```
-
-   1. (`ncn-m001#`) If the `spire-jwks` pods indicate `CrashLoopBackOff`, then restart the Spire deployment.
-
-       ```bash
-       kubectl rollout restart -n spire deployment spire-jwks
-       ```
-
-   1. (`ncn-m001#`) If the `cray-spire-jwks` pods indicate `CrashLoopBackOff`, then restart the Cray Spire deployment.
-
-       ```bash
-       kubectl rollout restart -n spire deployment cray-spire-jwks
-       ```
-
-   1. (`ncn-m001#`) Rejoin Spire on the worker and master NCNs, to avoid issues with Spire tokens.
-
-       ```bash
-       kubectl rollout restart -n spire daemonset request-ncn-join-token
-       kubectl rollout status -n spire daemonset request-ncn-join-token
-       ```
-
-   1. (`ncn-m001#`) Rejoin Spire on the storage NCNs, to avoid issues with Spire tokens.
-
-       ```bash
-       /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
-       ```
 
 1. (`ncn-m001#`) Check if any pods are in `CrashLoopBackOff` state because of errors connecting to Vault.
 
