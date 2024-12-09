@@ -53,7 +53,7 @@ Services (master nodes):
 Client (master and worker nodes):
 
 ```text
-/var/lib/kubelet/pki/kubelet-client-2021-09-07-17-06-36.pem
+/var/lib/kubelet/pki/kubelet-client-<date-time>.pem
 /var/lib/kubelet/pki/kubelet-client-current.pem
 /var/lib/kubelet/pki/kubelet.crt
 /var/lib/kubelet/pki/kubelet.key
@@ -250,7 +250,7 @@ Run the following steps on each master node.
    ***This task is for each master node and below example checks each certificate in [File Locations](#file-locations).***
 
    ```bash
-   for i in $(ls /etc/kubernetes/pki/*.crt;ls /etc/kubernetes/pki/etcd/*.crt;ls /var/lib/kubelet/pki/*.crt;ls /var/lib/kubelet/pki/*.pem);do echo ${i}; openssl x509 -enddate -noout -in ${i};done
+   for i in $(ls /etc/kubernetes/pki/*.crt;ls /etc/kubernetes/pki/etcd/*.crt;ls /var/lib/kubelet/pki/kubelet-client-current.pem);do echo ${i}; openssl x509 -enddate -noout -in ${i};done
    ```
 
    Example output:
@@ -276,10 +276,6 @@ Run the following steps on each master node.
    notAfter=Sep 22 17:13:29 2022 GMT
    /etc/kubernetes/pki/etcd/server.crt
    notAfter=Sep 22 17:13:29 2022 GMT
-   /var/lib/kubelet/pki/kubelet.crt
-   notAfter=Sep 21 19:50:16 2022 GMT
-   /var/lib/kubelet/pki/kubelet-client-2021-09-07-17-06-36.pem
-   notAfter=Sep  4 17:01:38 2022 GMT
    /var/lib/kubelet/pki/kubelet-client-current.pem
    notAfter=Sep  4 17:01:38 2022 GMT
    ```
@@ -428,9 +424,10 @@ Repeat the above step on every master node.
         kubeadm init phase kubelet-finalize all --cert-dir /var/lib/kubelet/pki/ && echo OK
    ```
 
-5. Check the expiration of the `kubectl` certificate files. See [File Locations](#file-locations) for the list of files.
+5. Check the expiration of the `kubelet` certificate files. See [File Locations](#file-locations) for the list of files.
 
    **This task is for each master and worker node. The example checks each `kubelet` certificate in [File Locations](#file-locations).**
+   **`NOTE`** As long as the `kubelet-client-current.pem` certificate is current, expiration dates for other `kubelet` certificates can be ignored.
 
    ```bash
    for i in $(ls /var/lib/kubelet/pki/*.crt;ls /var/lib/kubelet/pki/*.pem);do echo ${i}; openssl x509 -enddate -noout -in ${i};done

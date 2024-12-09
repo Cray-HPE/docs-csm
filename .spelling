@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -46,15 +46,16 @@ StatefulSets
 10Gi
 10Hz
 12-core
+15.2.x
 15kw
 1GiB
 1TiB
 2-chassis
 2.0.0.L
-200Gbps
 200GBASE-CR4
 200GBASE-DR4
 200GBASE-SR4
+200Gbps
 3-phase
 3.1.a
 3.1.b
@@ -178,18 +179,18 @@ Elasticsearch
 FAS
 FPGAs
 FastLinQ
+Foxconn
 Frontend
-GBs
 GBs
 GPFS
 GbE
-Gbs
 Gbs
 Gen10
 Giga-Byte
 Git
 GitOps
 Gitea
+Glibc
 Goss
 Grafana
 Grafana's
@@ -283,7 +284,6 @@ NIDs
 NMCs
 NMN
 NMNLB
-NMNLB
 NMN_MTN
 NMN_RVR
 NVidia
@@ -337,6 +337,7 @@ RSAv1
 RSAv2
 Rados
 Rados-Gateway
+ReadOnly
 Redbook
 Redfish
 Redis
@@ -366,10 +367,8 @@ SLES-15-SP3
 SLES-15-SP4
 SLES-15-SP5
 SLES-based
-SLES-based
 SLS
 SMNet
-SMS
 SMS
 SNMPv2
 SNMPv2c
@@ -384,7 +383,6 @@ SharePoint
 Shasta
 Skopeo
 Slurm
-slurm.conf
 Sonatype
 Sonexion
 SpectrumScale
@@ -433,6 +431,8 @@ Yum
 Zypper
 aarch64
 airgapped
+alertmanager
+alertmanager.ncn
 analog
 analyze
 analyzed
@@ -465,6 +465,10 @@ cec0
 center
 centers
 ceph
+ceph-mon
+ceph-radosgw
+cephadm
+cephfs
 cfgsh
 channeled
 checkmark
@@ -483,6 +487,9 @@ cronjobs
 custom-config
 customizations.yaml
 customizations.yaml.
+daemon_id
+daemon_type
+daemonless
 datastore
 defense
 defenses
@@ -509,8 +516,9 @@ flavor
 flavored
 flavoring
 flavors
+fs_name
 fulfills
-Glibc
+goss
 handoff
 haproxy
 heartbeating
@@ -538,7 +546,9 @@ iSCSI
 in_progress
 inband
 init
+iscsi
 keychain
+known_hosts
 labeled
 labeler
 labeling
@@ -565,15 +575,23 @@ management-nodes-rollout
 maneuver
 maneuvers
 md65-group
+mds
+metaschema
 mgmt
+mgr.hostname.
+mgrs
 microservice
 microservices
 milli-CPUs
 miscategorized
+mon
 multimode
 nC
 nC's
 nFPGA
+ncn-m
+ncn-s00
+ncn-s001
 neighbor
 neighborhood
 neighborhoods
@@ -592,6 +610,7 @@ noncritical
 nondefault
 nonzero
 nvram
+orch
 organize
 organized
 organizer
@@ -601,6 +620,7 @@ organizing
 osd
 osd*
 osd.*
+osd.all
 osds
 osds*
 oversubscription
@@ -622,12 +642,14 @@ prebuilt
 preempted
 preemptively
 provisioners
+PXEboot
 qemu-user-static
-redis
+rados-gateway
 re-architecting
-ReadOnly
 reauthentication
 rec
+reconfig
+redis
 reestablished
 remediate
 remediated
@@ -637,13 +659,18 @@ respawns
 rollout
 rollouts
 routable
+s001
 sC
 sC-ToR
+service_name
 setups
 shasta
 shutoff
 singlemode
+site_vars.yaml
 site-routable
+slurm.conf
+spec
 specialty
 ssd
 ssds
@@ -657,6 +684,7 @@ substep
 substeps
 subtest
 subtests
+svc_arg
 sw-25g01
 sw-25g02
 sw-cdu
@@ -668,15 +696,13 @@ sw-edge-001
 sw-edge-002
 sw-leaf
 sw-leaf-bmc
-sw-leaf-bmc
 sw-spine
 sw-spine-001
-sw-spine-001
-sw-spine-002
 sw-spine-002
 sw-spine-00x
 sysfs
 syslog
+system_unit
 teardown
 timeframes
 timestamp
@@ -761,6 +787,7 @@ v1.4.x
 v1.5
 v1.5.
 v1.5.0
+v1.6.0
 v15.2.9
 v2
 v2.0

@@ -1,6 +1,6 @@
-# Updating `Foxconn` Paradise Nodes with FAS
+# Updating Foxconn Paradise Nodes with FAS
 
-Use the Firmware Action Service (FAS) to update the firmware on `Foxconn` Paradise devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
+Use the Firmware Action Service (FAS) to update the firmware on Foxconn Paradise devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
 
 **NOTE:** Any node that is locked remains in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
 If the action is timed out, these nodes report as `failed` with the `stateHelper` message of `"time expired; could not complete update"`.
@@ -19,13 +19,15 @@ See [Upload Paradise images to TFTP server](#upload-paradise-images-to-tftp-serv
 
 The following targets can be updated with FAS on Paradise Nodes:
 
-1. [`bmc_active`](#update-paradise-bmc_active-procedure)
-1. [`bios_active`](#update-paradise-bios_active-procedure)
-1. [`erot_active`](#update-paradise-erot_active-procedure)
-1. [`fpga_active`](#update-paradise-fpga_active-procedure)
-1. [`pld_active`](#update-paradise-pld_active-procedure)
+* [`bmc_active`](#update-paradise-bmc_active-procedure)
+* [`bios_active`](#update-paradise-bios_active-procedure)
+* [`erot_active`](#update-paradise-erot_active-procedure)
+* [`fpga_active`](#update-paradise-fpga_active-procedure)
+* [`pld_active`](#update-paradise-pld_active-procedure)
 
 ## Update Paradise `bmc_active` procedure
+
+NOTE: If a reset of the BMC is required, follow [this procedure](#reset-bmc) before and after the update of each node.  *Only do this if required!*
 
 The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to update `bmc_active` - use recipe `foxconn_nodeBMC_bmc.json`
 
@@ -53,6 +55,15 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
     "description": "Dryrun upgrade of Foxconn bmc_active"
   }
 }
+```
+
+**IMPORTANT:** There is a known bug that causes the `hmcollector-poll` service to lose event subscriptions
+after BMC firmware is updated. After updating BMC firmware, the `hmcollector-poll` service must be restarted to
+work around this issue. After the update is complete, and you confirm the BMC has been rebooted, restart
+the `hmcollector-poll` service with this command:
+
+```bash
+kubectl -n services rollout restart deployment cray-hms-hmcollector-poll
 ```
 
 ## Update Paradise `bios_active` procedure
@@ -95,7 +106,7 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
 To do an AC power cycle, run the following command (`ncn#`).
 
 ```bash
-ssh $(xname) "ipmitool raw 0x38 0x02"
+ssh admin@$(xname) "ipmitool raw 0x38 0x02"
 ```
 
 The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to update `erot_active` - use recipe `foxconn_nodeBMC_erot.json`
@@ -130,7 +141,7 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
 To do an AC power cycle, run the following command (`ncn#`).
 
 ```bash
-ssh $(xname) "ipmitool raw 0x38 0x02"
+ssh admin@$(xname) "ipmitool raw 0x38 0x02"
 ```
 
 The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to update `fpga_active` - use recipe `foxconn_nodeBMC_fpga.json`
@@ -163,7 +174,7 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
 
 ## Update Paradise `pld_active` procedure
 
-**IMPORTANT:** The update of the target `pld_active` should only be applied to blade 1 (i.e. `x3000c0s3b1`) - applying to other blades at the same time may cause issues.  To use the `FASUpdate.py script`, use the `--xnames` flag to specify `b1`.
+**IMPORTANT:** The update of the target `pld_active` should only be applied to blade 1 (i.e. `x3000c0s3b1`) - applying to other blades at the same time may cause issues. To use the `FASUpdate.py script`, use the `--xnames` flag to specify `b1`.
 
 The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to update `pld_active` - use recipe `foxconn_nodeBMC_pld.json`
 
@@ -355,7 +366,10 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
     deviceType = "NodeBMC"
     ```
 
-    Once firmware and BIOS are updated, the compute nodes can be turned back on.
+    Once the firmware and BIOS are updated, the compute nodes can be powered back on.
+
+    If the nodes have never been powered on in the system before (they are being added during a hardware add procedure), then use the Boot Orchestration Service (BOS) to power them on.
+    Using BOS will prepare the initial boot artifacts required to boot them. If this is not the first time they have been powered on in this system, then you can use the Power Control Service \(PCS\) to power them on.
 
 ## Upload Paradise images to TFTP server
 
@@ -370,3 +384,29 @@ If the firmware file you need is not listed, run the following command to copy t
 ```bash
 /usr/share/doc/csm/scripts/operations/firmware/upload_foxconn_images_tftp.py
 ```
+
+## Reset BMC
+
+This will reset the BMC to factory resets - including resetting the BMC username and password.
+*Only do this if required!*
+
+Before BMC firmware update (`ncn#`):
+
+The nodes must be **OFF** before updating BMC (when doing a reset)
+
+```bash
+ssh admin@$(xname) 'fw_setenv openbmconce "factory-reset"'
+```
+
+**Update BMC firmware using one of the methods above**
+NOTE: If the password changes after the boot of BMC, FAS will no longer be able to verify the update and will fail after the time limit.
+
+After firmware update(`ncn#`):
+
+If the password changed to something other than the what is stored in vault, update the BMC password:
+
+```bash
+ssh admin@$(xname) 'ipmitool user set password 1 "password"'
+```
+
+Boot the node.

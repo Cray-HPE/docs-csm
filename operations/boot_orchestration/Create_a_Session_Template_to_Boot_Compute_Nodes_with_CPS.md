@@ -9,13 +9,13 @@ This page covers the appropriate contents for a BOS session template in order to
 
 - [Boot set S3 parameters](#boot-set-s3-parameters)
 - [Boot set `rootfs_provider` parameters](#boot-set-rootfs_provider-parameters)
-  - [`<transport>`](#transport)
-  - [`<api_gateway>`](#api_gateway)
-  - [`<timeout>`](#timeout)
-  - [`<etag>`](#etag)
-  - [`<interface>[,<interface>][,<interface>]...`](#interfaceinterfaceinterface)
-  - [`<ramroot>`](#ramroot)
-  - [Example `rootfs_provider_passthrough`](#example-rootfs_provider_passthrough)
+    - [`<transport>`](#transport)
+    - [`<api_gateway>`](#api_gateway)
+    - [`<timeout>`](#timeout)
+    - [`<etag>`](#etag)
+    - [`<interface>[,<interface>][,<interface>]...`](#interfaceinterfaceinterface)
+    - [`<ramroot>`](#ramroot)
+    - [Example `rootfs_provider_passthrough`](#example-rootfs_provider_passthrough)
 - [`root=` kernel parameter](#root-kernel-parameter)
 - [Example session template input file](#example-session-template-input-file)
 - [Creating a BOS session using the new template](#creating-a-bos-session-using-the-new-template)
@@ -135,5 +135,5 @@ Refer to [Manage a Session Template](Manage_a_Session_Template.md) for more info
 (`ncn-mw#`) The new CPS-based session template can be used when creating a BOS session. The following is an example of creating a reboot session using the CLI:
 
 ```bash
-cray bos v2 sessions create --template-name cps_rootfs_template --operation Reboot
+cray bos v2 sessions create --template-name cps_rootfs_template --operation reboot
 ```

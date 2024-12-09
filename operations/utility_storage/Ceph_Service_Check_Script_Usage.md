@@ -18,7 +18,8 @@ usage:  ceph-service-status.sh # runs a simple Ceph health check
 
 > **Important:** By default, the output of this command will not be verbose. This is to accommodate goss testing. For manual runs, please use the `-v true` flag.
 
-**Troubleshooting** If the message `parse error: Invalid numeric literal at line 1, column 5` is displayed, it is indicating that the cached SSH keys in known_hosts are no longer valid. The simple fix is `> ~/.ssh/known_hosts` and re-run the script. It will update the keys.
+**Troubleshooting** If the message `parse error: Invalid numeric literal at line 1, column 5` is displayed, it is indicating that the cached SSH keys in known_hosts are no longer valid. The simple fix is `> ~/.ssh/known_hosts` and re-run the script.
+It will update the keys.
 
 ## Examples
 
@@ -30,7 +31,7 @@ usage:  ceph-service-status.sh # runs a simple Ceph health check
 
 Example output:
 
-```
+```bash
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating SSH keys..
@@ -45,7 +46,7 @@ Tests run: 1  Tests Passed: 1
 
 Example output:
 
-```
+```bash
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating SSH keys..
@@ -66,7 +67,7 @@ Tests run: 2  Tests Passed: 2
 
 Example output:
 
-```
+```bash
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating SSH keys..
@@ -112,9 +113,9 @@ Service  on ncn-s001 is reporting up for 9207 seconds
 osd.8's status is reporting up: 1  in: 1
 Service unit name: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce-osd.8
 Status: running
-Service rgw.site1.zone1.ncn-s001.kvxhwi on ncn-s001 has been restarted and up for 9210 seconds
-rgw.site1.zone1.ncn-s001.kvxhwi's status is: running
-Service unit name: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce-rgw.site1.zone1.ncn-s001.kvxhwi
+Service rgw.site1.ncn-s001.kvxhwi on ncn-s001 has been restarted and up for 9210 seconds
+rgw.site1.ncn-s001.kvxhwi's status is: running
+Service unit name: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce-rgw.site1.ncn-s001.kvxhwi
 Status: running
 Tests run: 12  Tests Passed: 12
 ```
@@ -127,7 +128,7 @@ Tests run: 12  Tests Passed: 12
 
 Example output:
 
-```
+```bash
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating SSH keys..
@@ -161,4 +162,5 @@ It is excluded in this case for brevity.
 /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -A true
 ```
 
-> **IMPORTANT:** This script can be run without the verbose flag and with an echo for the return code `echo $?`. A return code of `0` means the check was clean. A return code of `1` or greater means that there was an issue. In the latter case, re-run the command with the `-v true` flag.
+> **IMPORTANT:** This script can be run without the verbose flag and with an echo for the return code `echo $?`.
+A return code of `0` means the check was clean. A return code of `1` or greater means that there was an issue. In the latter case, re-run the command with the `-v true` flag.

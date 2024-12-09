@@ -10,7 +10,7 @@ ncn-s00(1/2/3)# ceph orch ls osd
 
 Example output:
 
-```
+```bash
 NAME                       RUNNING  REFRESHED  AGE  PLACEMENT  IMAGE NAME                        IMAGE ID
 osd.all-available-devices      9/9  4m ago     3d   *          registry.local/ceph/ceph:v15.2.8  5553b0cb212c
 ```
@@ -39,7 +39,7 @@ This procedure requires administrative privileges and will require at least two 
 
     Example output:
 
-    ```
+    ```bash
       cluster:
         id: 5b359a58-e6f7-4f0c-98b8-f528f620896a
         health: HEALTH_OK
@@ -78,7 +78,7 @@ This procedure requires administrative privileges and will require at least two 
 
    Example output:
 
-   ```
+   ```bash
    ceph orch device ls ncn-s001
    Hostname  Path      Type  Serial                Size   Health   Ident  Fault  Available
    ncn-s001  /dev/sdb  hdd   f94bd091-cc25-476b-9  48.3G  Unknown  N/A    N/A    No
@@ -92,9 +92,9 @@ This procedure requires administrative privileges and will require at least two 
 
    Example output:
 
-   ```
+   ```bash
    CONTAINER ID  IMAGE                             COMMAND               CREATED                 STATUS                     PORTS   NAMES
-   596d1c235da8  registry.local/ceph/ceph:v15.2.8  -n client.rgw.sit...  Less than a second ago  Up Less than a second ago          ceph-11d5d552-cfac-11eb-ab69-fa163ec012bf-rgw.site1.zone1.ncn-s001.oztynu
+   596d1c235da8  registry.local/ceph/ceph:v15.2.8  -n client.rgw.sit...  Less than a second ago  Up Less than a second ago          ceph-11d5d552-cfac-11eb-ab69-fa163ec012bf-rgw.site1.ncn-s001.oztynu
    eecfac35fe7c  registry.local/ceph/ceph:v15.2.8  -n mon.ncn-s001 -...  2 seconds ago           Up 2 seconds ago                   ceph-11d5d552-cfac-11eb-ab69-fa163ec012bf-mon.ncn-s001
    3140f5062945  registry.local/ceph/ceph:v15.2.8  -n mgr.ncn-s001.b...  17 seconds ago          Up 17 seconds ago                  ceph-11d5d552-cfac-11eb-ab69-fa163ec012bf-mgr.ncn-s001.bfdept
    3d25564047e1  registry.local/ceph/ceph:v15.2.8  -n mds.cephfs.ncn...  3 days ago              Up 3 days ago                      ceph-11d5d552-cfac-11eb-ab69-fa163ec012bf-mds.cephfs.ncn-s001.juehkw
@@ -150,7 +150,7 @@ This procedure requires administrative privileges and will require at least two 
 
    Example output:
 
-   ```
+   ```bash
    NAME   HOST      STATUS        REFRESHED  AGE  VERSION  IMAGE NAME                        IMAGE ID      CONTAINER ID
    osd.2  ncn-s001  running (4d)  20s ago    4d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  4ebd6db27d08
    ```
@@ -166,4 +166,3 @@ This procedure requires administrative privileges and will require at least two 
    ncn-s00(1/2/3)# ansible-playbook /etc/ansible/ceph-rgw-users/ceph-pool-quotas.yml
    ncn-s00(1/2/3)# deactivate
    ```
-

@@ -154,10 +154,10 @@ with system-specific customizations.
 
 1. (`pit#`) Set environment variables for the LDAP server and its port.
 
-   In the example below, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
+   In the following example, the LDAP server has the hostname `dcldap2.hpc.amslabs.hpecorp.net` and is using the port 636.
 
    ```bash
-   LDAP=dcldap2.us.cray.com
+   LDAP=dcldap2.hpc.amslabs.hpecorp.net
    PORT=636
    ```
 
@@ -224,7 +224,7 @@ with system-specific customizations.
 
         ```bash
         openssl s_client -showcerts -nameopt RFC2253 -connect "${LDAP}:${PORT}" </dev/null 2>/dev/null |
-                  awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' |
+                  awk '/s:CN=DigiCert Global G2 TLS RSA SHA256 2020 CA1,O=DigiCert Inc,C=US/,/END CERTIFICATE/' |
                   awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
         ```
 
@@ -237,6 +237,13 @@ with system-specific customizations.
             artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim keytool \
             -importcert -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca \
             -keystore /data/certs.jks -storepass password -noprompt
+    ```
+
+    > **`NOTE`** If the command is executed multiple times by oversight, then the console will display the following and may be ignored
+    > to proceed further.
+
+    ```text
+    keytool error: java.lang.Exception: Certificate not imported, alias <cray-data-center-ca> already exists
     ```
 
 1. (`pit#`) Create `certs.jks.b64` by base-64 encoding `certs.jks`.

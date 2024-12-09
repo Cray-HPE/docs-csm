@@ -7,8 +7,8 @@ Create an image root from an IMS recipe.
 * The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 * System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the
   following deployments:
-  * `cray-ims`, the Image Management Service \(IMS\)
-  * `cray-nexus`, the Nexus repository manager service
+    * `cray-ims`, the Image Management Service \(IMS\)
+    * `cray-nexus`, the Nexus repository manager service
 * The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
 * `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
 * A Kiwi image recipe uploaded as a gzipped tar file and registered with IMS.
@@ -535,7 +535,7 @@ use. Typically, customers access the system from outside the Kubernetes cluster 
    > **IMPORTANT:** The following command will not work when run on a node within the Kubernetes cluster.
 
     ```bash
-    ssh -p IMS_SSH_PORT root@IMS_SSH_HOST
+    ssh -p $IMS_SSH_PORT root@$IMS_SSH_HOST
     ```
 
    Example output:

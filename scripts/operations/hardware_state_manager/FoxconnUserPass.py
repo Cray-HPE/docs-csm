@@ -31,7 +31,7 @@ urllib3.disable_warnings()
 
 token = os.environ.get('TOKEN')
 if token is None or token == "":
-  print("Error environment variable TOKEN was not set")
+  print("ERROR: Environment variable TOKEN was not set")
   print('Run the following to set the TOKEN:')
   print('''export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \\
   -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \\
@@ -86,7 +86,7 @@ for ep in endpoints["RedfishEndpoints"]:
     if "Vendor" in redfish:
       vendor = redfish["Vendor"]
       if vendor == "Foxconn":
-        print("UPDATE VAULT AUTHINCATION")
+        print("UPDATE VAULT AUTHENTICATION")
         url = "https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints/" + xname
         headers = {
           'Content-Type': "application/json",

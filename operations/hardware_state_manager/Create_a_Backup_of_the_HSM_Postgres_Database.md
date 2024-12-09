@@ -1,8 +1,9 @@
 # Create a Backup of the HSM Postgres Database
 
-Perform a manual backup of the contents of the Hardware State Manager (HSM) Postgres database. This backup can be used to restore the contents of the HSM Postgres database at a later point in time using the [Restore HSM Postgres from Backup](Restore_HSM_Postgres_from_Backup.md) procedure.
+Perform a manual backup of the contents of the Hardware State Manager (HSM) Postgres database.
+This backup can be used to restore the contents of the HSM Postgres database at a later point in time using the [Restore HSM Postgres from Backup](Restore_HSM_Postgres_from_Backup.md) procedure.
 
-### Prerequisites
+## Prerequisites
 
 - Healthy HSM Postgres Cluster.
 
@@ -14,7 +15,7 @@ Perform a manual backup of the contents of the Hardware State Manager (HSM) Post
 
   Example output:
 
-  ```
+  ```text
   + Cluster: cray-smd-postgres (6975238790569058381) ---+----+-----------+
   |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
   +---------------------+------------+--------+---------+----+-----------+
@@ -34,14 +35,14 @@ Perform a manual backup of the contents of the Hardware State Manager (HSM) Post
 
   Example output:
 
-  ```
+  ```text
   NAME                  READY   STATUS    RESTARTS   AGE
   cray-smd-postgres-0   3/3     Running   0          18d
   cray-smd-postgres-1   3/3     Running   0          18d
   cray-smd-postgres-2   3/3     Running   0          18d
   ```
 
-### Procedure
+## Procedure
 
 1. Create a directory to store the HSM backup files.
 
@@ -56,6 +57,11 @@ Perform a manual backup of the contents of the Hardware State Manager (HSM) Post
 
     ```bash
     echo $BACKUP_FOLDER
+    ```
+
+    Example output:
+
+    ```text
     /root/cray-smd-postgres-backup_2021-07-07_16-39-44
     ```
 
@@ -67,7 +73,7 @@ Perform a manual backup of the contents of the Hardware State Manager (HSM) Post
 
     Example output:
 
-    ```
+    ```text
     ~/cray-smd-postgres-backup_2021-07-07_16-39-44 ~
     HSM postgres backup file will land in /root/cray-smd-postgres-backup_2021-07-07_16-39-44
     Determining the postgres leader...
@@ -104,4 +110,3 @@ Perform a manual backup of the contents of the Hardware State Manager (HSM) Post
     cd $BACKUP_FOLDER && cd ..
     tar -czvf $BACKUP_NAME.tar.gz $BACKUP_NAME
     ```
-

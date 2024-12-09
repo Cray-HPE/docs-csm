@@ -174,9 +174,23 @@ state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
   echo "====> ${state_name} ..."
   {
-    record_state "${state_name}" ${target_ncn}
     scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
-    ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
+    # CASMTRIAGE-7122: This RPM install can fail if it happens while CFS is installing RPMs
+    # Therefore, we retry a limited number of times before giving up
+    attempt=0
+    while [[ true ]]; do
+      if [[ ${attempt} -gt 0 ]]; then
+        # Wait briefly before trying again
+        sleep 5
+      fi
+      if [[ ${attempt} -lt 12 ]]; then
+        let attempt+=1
+        ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm" && break || continue
+      fi
+      # Final attempt. The lack of the || continue means that this will cause the script to
+      # fail (since it runs with set -e) if the command fails
+      ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm" && break
+    done
   } >> ${LOG_FILE} 2>&1
   record_state "${state_name}" ${target_ncn}
 else

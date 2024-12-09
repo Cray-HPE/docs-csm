@@ -48,6 +48,9 @@ It is possible to upgrade a single storage node at a time using the following co
 
 >**Storage node image upgrade troubleshooting**
 >
+> - If the storage node upgrade is looping on the `wait-for-ncn-s00X-health` stage and Ceph is in a `HEALTH_WARN` state, this is likely **not** a problem.
+Ceph needs time to recover after a node upgrade. Run `ceph -s` and observe that the percentage by `Degraded data redundancy` is decreasing.
+If the percentage is not decreasing, then continue to the following troubleshooting statements.
 > - The best troubleshooting tool for this stage is the Argo UI. Information about accessing this UI and about using Argo Workflows is above.
 > - If the upgrade is 'waiting for Ceph `HEALTH_OK`', the output from commands `ceph -s` and `ceph health detail` should provide information.
 > - If a crash has occurred, [dumping the Ceph crash data](../operations/utility_storage/Dump_Ceph_Crash_Data.md) will return Ceph to healthy state and allow the upgrade to continue.

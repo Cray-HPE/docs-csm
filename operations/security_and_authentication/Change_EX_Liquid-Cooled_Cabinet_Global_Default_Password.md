@@ -10,21 +10,21 @@ liquid-cooled cabinet embedded controllers (BMCs). The chassis management module
 - The Cray command line interface (CLI) tool is initialized and configured on the system. See [Configure the Cray Command Line Interface (`cray` CLI)](../configure_cray_cli.md) for more information.
 - Review procedures in [Manage System Passwords](Manage_System_Passwords.md).
 
-### Procedure
+## Procedure
 
-1. If necessary, shut down compute nodes in each cabinet. Refer to [Shut Down and Power Off Compute and User Access Nodes](../power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md).
+1. (`ncn-mw#`) If necessary, shut down compute nodes in each cabinet. Refer to [Shut Down and Power Off Compute and User Access Nodes](../power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md).
 
    ```screen
    sat bootsys shutdown --stage bos-operations --bos-templates COS_SESSION_TEMPLATE
    ```
 
-1. Disable the `hms-discovery` Kubernetes cron job.
+1. (`ncn-mw#`) Disable the `hms-discovery` Kubernetes cron job.
 
    ```screen
     kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
     ```
 
-1. Power off all compute slots in the cabinets the passwords are to be changed on.
+1. (`ncn-mw#`) Power off all compute slots in the cabinets the passwords are to be changed on.
 
   > **`NOTE`**: If a chassis is not fully populated, specify each slot individually.
 

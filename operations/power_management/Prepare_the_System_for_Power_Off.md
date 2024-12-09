@@ -11,6 +11,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
 ## Procedure
 
+### Collect authentication credentials and authenticate SAT
+
 1. Obtain the user ID and passwords for system components:
 
     1. Obtain user ID and passwords for all the system management network switches.
@@ -24,6 +26,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
    If SAT has already been authenticated to the API gateway, this step may be skipped.
 
    See the "SAT Authentication" section in the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
+
+### Check shell initialization scripts
 
 1. Ensure `/root/.bashrc` has proper handling of `kubectl` commands on all master and worker nodes.
 
@@ -56,6 +60,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
          fi
          ```
 
+### Check SSH known hosts
+
 1. Ensure `/root/.ssh/known_hosts` does not have `ssh` stale host key entries for any of the management nodes.
 
    **Important:** Many of the `sat` commands use `ssh` from a `sat` Kubernetes pod to execute commands on the management nodes. This `sat` pod
@@ -72,6 +78,145 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
    ```
 
    To prevent this issue from happening, remove stale `ssh` host keys from `/root/.ssh/known_hosts` before running the `sat` command.
+
+### Check certificate expiration deadlines
+
+1. Check certificate expiration deadlines to ensure that a certificate will not expire while the system is powered off.
+
+   1. (`ncn-mw#`) Check the expiration date of the Spire Intermediate CA Certificate.
+
+      ```bash
+      kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
+      ```
+
+      Example output:
+
+      ```bash
+      notAfter=Dec 17 00:00:24 2024 GMT
+      ```
+
+      If the certificate will expire while the system is powered off, replace it before powering off the system.
+      See [Replace the Spire Intermediate CA Certificate](../spire/Update_Spire_Intermediate_CA_Certificate.md#replace-the-spire-intermediate-ca-certificate).
+
+   1. (`ncn-m#`) Check the Kubernetes and Bare Metal etcd certificates from a master node.
+
+      Check certificate expiration deadlines for Kubernetes and its bare-metal etcd cluster.
+
+      ```bash
+      kubeadm certs check-expiration --config /etc/kubernetes/kubeadmcfg.yaml
+      ```
+
+      Example output:
+
+      ```text
+      WARNING: kubeadm cannot validate component configs for API groups [kubelet.config.k8s.io kubeproxy.config.k8s.io]
+
+      CERTIFICATE                EXPIRES                  RESIDUAL TIME   CERTIFICATE AUTHORITY   EXTERNALLY MANAGED
+      admin.conf                 Sep 24, 2021 15:21 UTC   14d             ca                      no
+      apiserver                  Sep 24, 2021 15:21 UTC   14d             ca                      no
+      apiserver-etcd-client      Sep 24, 2021 15:20 UTC   14d             etcd-ca                 no
+      apiserver-kubelet-client   Sep 24, 2021 15:21 UTC   14d             ca                      no
+      controller-manager.conf    Sep 24, 2021 15:21 UTC   14d             ca                      no
+      etcd-healthcheck-client    Sep 24, 2021 15:19 UTC   14d             etcd-ca                 no
+      etcd-peer                  Sep 24, 2021 15:19 UTC   14d             etcd-ca                 no
+      etcd-server                Sep 24, 2021 15:19 UTC   14d             etcd-ca                 no
+      front-proxy-client         Sep 24, 2021 15:21 UTC   14d             front-proxy-ca          no
+      scheduler.conf             Sep 24, 2021 15:21 UTC   14d             ca                      no
+
+      CERTIFICATE AUTHORITY   EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
+      ca                      Sep 02, 2030 15:21 UTC   8y              no
+      etcd-ca                 Sep 02, 2030 15:19 UTC   8y              no
+      front-proxy-ca          Sep 02, 2030 15:21 UTC   8y              no
+      ```
+
+      Depending on which certificates will expire, one of these procedures could be used for the renewal. The first procedure
+      will renew all certificates, but that may be more than needs to be renewed.
+
+      * See [Renew All Certificates](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#renew-all-certificates)
+      * See [Renew Etcd Certificate](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#renew-etcd-certificate)
+      * See [Update Client Certificates](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
+
+   1. (`ncn-m#`) Check the `kube-etcdbackup-etcd` certificate expiration.
+
+      ```bash
+      kubectl get secret -n kube-system kube-etcdbackup-etcd -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
+      ```
+
+      Example output:
+
+      ```text
+      notAfter=Apr 17 09:37:52 2025 GMT
+      ```
+
+      If the certificate has expired or will expire while the system is powered off, see the procedure steps for changing the `kube-etcdbackup-etcd` secret and then restarting Prometheus after the change.
+
+      * See [Update Client Secrets](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
+
+   1. (`ncn-m#`) Check the `etcd-ca` certificate expiration.
+
+      ```bash
+      kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r '.data."etcd-ca" | @base64d' | openssl x509 -noout -enddate
+      ```
+
+      Example output:
+
+      ```text
+      notAfter=Jan 13 18:01:48 2033 GMT
+      ```
+
+      If the `etcd-ca` certificate has expired or will expire while the system is powered off, see the procedure steps for changing the `etcd-client-cert` secret and then restarting Prometheus after the change.
+
+      * See [Update Client Secrets](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
+
+   1. (`ncn-m#`) Check the `etcd-client` certificate expiration.
+
+      ```bash
+      kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r '.data."etcd-client" | @base64d' | openssl x509 -noout -enddate
+      ```
+
+      Example output:
+
+      ```text
+      notAfter=Jan 16 18:01:49 2024 GMT
+      ```
+
+      If either the `etcd-client` certificate has expired or will expire while the system is powered off, see the procedure steps for changing the `etcd-client-cert` secret and then restarting Prometheus after the change.
+
+      * See [Update Client Secrets](../kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#update-client-secrets)
+
+### Check Nexus backup status
+
+1. (`ncn-mw#`) Check for a recent backup of Nexus data.
+
+   **Note:** Doing the Nexus backup may take multiple hours with Nexus being unavailable for the entire time.
+
+   Check whether an export PVC called `nexus-bak` exists and is recent.
+
+   ```bash
+   kubectl get pvc -n nexus
+   ```
+
+   Example output:
+
+   ```text
+   NAME         STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS           AGE
+   nexus-bak    Bound    pvc-09b6efe6-18e3-4681-8103-53590ad49d04   1000Gi     RWO            k8s-block-replicated   293d
+   nexus-data   Bound    pvc-bce9db69-d1a6-491d-89fc-d458c92f2895   1000Gi     RWX            ceph-cephfs-external   518d
+   ```
+
+   This output shows that the `nexus-bak` PVC was created 293 days ago.
+
+   * If there is no `nexus-bak` PVC, then use this Nexus export procedure to create one. This procedure does check that
+   there is enough space available for the copy of the `nexus-data` PVC and provides guidance on how to clean up space if
+   necessary or reduce the size of the existing `nexus-data` PVC.
+   See [Nexus Export](../package_repository_management/Nexus_Export_and_Restore.md#Export).
+
+   * If there is an existing `nexus-bak` PVC, but it is too old or the age is not recent enough to include the most recent
+   software update or otherwise not considered valid, then use the Nexus cleanup procedure before the export procedure.
+   See [Nexus Cleanup](../package_repository_management/Nexus_Export_and_Restore.md#Cleanup), then see
+   [Nexus Export](../package_repository_management/Nexus_Export_and_Restore.md#Export).
+
+### Identify BOS session templates for managed nodes
 
 1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
 
@@ -162,6 +307,12 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
        ]
        ```
 
+1. Confirm that the set of identified BOS session templates will affect all managed nodes in the
+   system. This is important to ensure all managed nodes are gracefully shut down during the system
+   power off.
+
+### Capture state and perform system health checks
+
 1. (`ncn-mw#`) Use SAT to capture state of the system before the shutdown.
 
     ```bash
@@ -234,24 +385,14 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     1. Check HSN status.
 
-        Determine the name of the `slingshot-fabric-manager` pod:
+       Run `fmn-show-status` in the `slingshot-fabric-manager` pod and save the output to a file.
 
         ```bash
-        kubectl get pods -l app.kubernetes.io/name=slingshot-fabric-manager -n services
-        ```
-
-        Example output:
-
-        ```text
-        NAME                                        READY   STATUS    RESTARTS   AGE
-        slingshot-fabric-manager-5dc448779c-d8n6q   2/2     Running   0          4d21h
-        ```
-
-        Run `fmn_status` in the `slingshot-fabric-manager` pod and save the output to a file:
-
-        ```bash
-        kubectl exec -it -n services slingshot-fabric-manager-5dc448779c-d8n6q \
-                     -c slingshot-fabric-manager -- fmn_status --details | tee -a fabric.status
+        kubectl exec -it -n services \
+            "$(kubectl get pod -l app.kubernetes.io/name=slingshot-fabric-manager
+            -n services --no-headers | head -1 | awk '{print $1}')" \
+             -c slingshot-fabric-manager -- fmn-show-status --details \
+           | tee -a fmn-show-status-details.txt
         ```
 
     1. Check management switches to verify they are reachable.
@@ -323,6 +464,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         lfs df
         ```
 
+### Check system activity
+
 1. (`ncn-mw#`) Check for running sessions.
 
     ```bash
@@ -359,7 +502,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
 1. (`ncn-mw#`) Cancel the running BOS sessions.
 
-    1. Identify the BOS Sessions to delete.
+    1. Identify the BOS sessions to delete.
 
         ```bash
         cray bos sessions list --format json
@@ -381,11 +524,19 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     There is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
+### Notify people of upcoming power off
+
+1. Notify users and operations staff about the upcoming full system power off.
+
+   The notification method will vary by system, but might be email, messaging applications, `/etc/motd` on UANs, `wall` commands on UANs, and so on.
+
+### Prepare workload managers
+
 1. Follow the vendor workload manager documentation to drain processes running on compute nodes.
 
     1. For Slurm, see the `scontrol` man page.
 
-       Below are examples of how to drain nodes using `slurm`. The list of nodes can be copy/pasted from the `sinfo` command for nodes in an `idle` state:
+       The following are examples of how to drain nodes using `slurm`. The list of nodes can be copy/pasted from the `sinfo` command for nodes in an `idle` state:
 
        ```bash
        scontrol update NodeName=nid[001001-001003,001005] State=DRAIN Reason="Shutdown"
@@ -395,7 +546,18 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
        scontrol update NodeName=ALL State=DRAIN Reason="Shutdown"
        ```
 
-    1. For PBS Professional, see the `pbsnodes` man page.
+    1. For PBS Professional, see the `qstat` and `qmgr` man pages.
+
+       The following is an example to list the available queues, disable a specific queue named `workq`, and check
+       that the queue has been disabled:
+
+       ```bash
+       qstat -q
+       qmgr -c 'set queue workq enabled = False'
+       qmgr -c 'list queue workq enabled'
+       ```
+
+       Each system might have many different queue names. There is no default queue name.
 
 ## Next step
 

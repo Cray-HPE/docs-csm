@@ -6,60 +6,61 @@ When new nodes are added to the HSM database, the `CFS-Hardware-Sync-Agent` ente
 Administrators are able to set a desired CFS configuration for each component, and the `CFS-Batcher` ensures the desired configuration state and the current configuration state match.
 See [Automatic Configuration Management](Automatic_Configuration_Management.md) for more information.
 
-* [Component data](#component-data)
-* [View components](#view-components)
-* [Set a desired component configuration](#set-a-desired-component-configuration)
-* [Disable component configuration](#disable-component-configuration)
-* [Force component reconfiguration](#force-component-reconfiguration)
-* [Update components in bulk](#update-components-in-bulk)
+- [Component data](#component-data)
+- [View components](#view-components)
+- [Set a desired component configuration](#set-a-desired-component-configuration)
+- [Disable component configuration](#disable-component-configuration)
+- [Force component reconfiguration](#force-component-reconfiguration)
+- [Update components in bulk](#update-components-in-bulk)
+- [Component with zero-length ID](#component-with-zero-length-id)
 
 ## Component data
 
 The following fields are tracked for each component to determine the status and state of the component:
 
-* **`configuration_status`**
+- **`configuration_status`**
 
-  The status of the component's configuration. Valid status values are:
+    The status of the component's configuration. Valid status values are:
 
-  * **`unconfigured`** - The component has no recorded state and no desired configuration or no valid desired configuration.
-  * **`failed`** - One of the configuration layers for the component has failed and the retry limit has been exceeded.
-  * **`pending`** - The component's desired state and actual state do not match. The component will be configured automatically if enabled.
-  * **`configured`** - The component's desired state and actual state match.
+    - **`unconfigured`** - The component has no recorded state and no desired configuration or no valid desired configuration.
+    - **`failed`** - One of the configuration layers for the component has failed and the retry limit has been exceeded.
+    - **`pending`** - The component's desired state and actual state do not match. The component will be configured automatically if enabled.
+    - **`configured`** - The component's desired state and actual state match.
 
-* **`desired_config`**
+- **`desired_config`**
 
-  The CFS configuration assigned to this component.
+    The CFS configuration assigned to this component.
 
-* **`enabled`**
+- **`enabled`**
 
-  Indicates whether the component will be automatically configured by CFS or not.
+    Indicates whether the component will be automatically configured by CFS or not.
 
-* **`error_count`**
+- **`error_count`**
 
-  The number of times configuration sessions have failed to configure this component.
+    The number of times configuration sessions have failed to configure this component.
 
-* **`retry_policy`**
+- **`retry_policy`**
 
-  The number of times the configuration will be attempted if it fails. If `error_count` \>= `retry_policy`, CFS will not continue attempts to apply the `desired_config`.
+    The number of times the configuration will be attempted if it fails. If `error_count` \>= `retry_policy`, CFS will not continue attempts to apply the `desired_config`.
 
-* **`state`**
+- **`state`**
 
-  The list of configuration layers that have been applied to the component. This information is not returned by default but can be requested by adding `--state-details true` to any components query.
-  For each layer in the component state the status can be one of the following:
+    The list of configuration layers that have been applied to the component. This information is not returned by default but can be requested by adding `--state-details true` to any components query.
+    For each layer in the component state the status can be one of the following:
 
-  * **`applied`** - The playbook completed successfully.
-  * **`failed`** - The playbook encountered an error while configuring this component.
-  * **`incomplete`** - The playbook exited due to an error on another component and will be re-run against this component.
-  * **`skipped`** - The playbook completed, but this component was not a valid target.
+    - **`applied`** - The playbook completed successfully.
+    - **`failed`** - The playbook encountered an error while configuring this component.
+    - **`incomplete`** - The playbook exited due to an error on another component and will be re-run against this component.
+    - **`skipped`** - The playbook completed, but this component was not a valid target.
 
-* **`desired_state`**
+- **`desired_state`**
 
-  The list of configuration layers that should be applied to the component based on the `desired_config`, and the status of each of these layers.
-  This information is not returned by default but can be requested by adding `--config-details true` to any components query.
+    The list of configuration layers that should be applied to the component based on the `desired_config`, and the status of each of these layers.
+    This information is not returned by default but can be requested by adding `--config-details true` to any components query.
 
-* **`logs`**
+- **`logs`**
 
-  A link to the ARA UI for all Ansible logs related to this component.
+    A link to the ARA UI for all Ansible logs related to this component.
 
 ## View components
 
@@ -163,3 +164,9 @@ cray cfs v3 components update <xname> --state [] --enabled true
 Updating multiple components at once is not currently available in the CLI due to limitations with the CLI.
 However for those programmatically interacting with the CFS API, it is possible to update multiple components at once by calling `/v3/components` with a `PATCH` operation.
 It is possible to either provide patches for multiple components in a list, or to provide a single patch and filters for which components to apply the patch to. See the [CFS API specification](../../api/cfs.md) for more information.
+
+## Component with zero-length ID
+
+It is possible for CFS to end up with an invalid component whose ID field is a zero-length string. See
+[CFS Component With Zero-Length ID](../../troubleshooting/known_issues/CFS_Component_With_Zero_Length_ID.md)
+for more details.

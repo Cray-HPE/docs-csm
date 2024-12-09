@@ -21,7 +21,7 @@ Creating a new BOS v2 session requires the following command-line options:
 (`ncn-mw#`): The following is a boot operation:
 
 ```bash
-cray bos v2 sessions create --template-name <TEMPLATE_NAME> --operation Boot --format json
+cray bos v2 sessions create --template-name <TEMPLATE_NAME> --operation boot --format json
 ```
 
 Example output:
@@ -59,7 +59,7 @@ Creating a new BOS v1 session requires the following command-line options:
 (`ncn-mw#`): The following is a boot operation:
 
 ```bash
-cray bos v1 session create --template-name <TEMPLATE_NAME> --operation Boot --format json
+cray bos v1 session create --template-name <TEMPLATE_NAME> --operation boot --format json
 ```
 
 Example output:

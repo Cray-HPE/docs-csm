@@ -72,7 +72,7 @@ these workflows.
     ```bash
         cray ims recipes create --name "My Recipe" \
             --recipe-type kiwi-ng --linux-distribution sles15 \
-            --arch = "aarch64" --require-dkms False --format toml
+            --arch "aarch64" --require-dkms False --format toml
     ```
 
     Expected output will look something like:

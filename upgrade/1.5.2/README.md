@@ -22,7 +22,6 @@ list of patch versions.
 ## Bug fixes and improvements
 
 * Added support for Paradise hardware
-    * A BMC firmware bug will prevent power capping on Paradise hardware from functioning. A future BMC firmware update will resolve the issue
 * Added support for Parry Peak hardware
 * Console: Fixed issue in `conman` in order to support Paradise hardware
 * HSM: Fixed issue in `run_hms_ct_tests.sh` which caused false positives for CDU switches
@@ -44,13 +43,6 @@ list of patch versions.
 * Fixed issue for `goss-servers.service` from being disabled when updating the `goss-servers`’s package.
 * DHCP: Boot filename can be overridden on a per-node basis.
 
-## Limitations
-
-* Power capping support for Paradise hardware
-    * Power caps are applied to the processor complex, not to the entire node
-    * A power cap cannot be applied when node power is off
-    * If a power cap is set when node power is on, it will be removed if the node is ever powered off. A new power cap must be applied after the node is powered back on
-
 ## Steps
 
 1. [Preparation](#preparation)
@@ -58,10 +50,11 @@ list of patch versions.
 1. [Upgrade services](#upgrade-services)
 1. [Upload NCN images](#upload-ncn-images)
 1. [Update management node CFS configuration](#update-management-node-cfs-configuration)
+1. [Update NCN images](#update-ncn-images)
 1. [Update test suite packages](#update-test-suite-packages)
 1. [Verification](#verification)
 1. [Take Etcd manual backup](#take-etcd-manual-backup)
-1. [NCN reboot](#ncn-reboot)
+1. [NCN upgrade](#ncn-upgrade)
 1. [Configure E1000 node and Redfish Exporter for SMART data](#configure-e1000-node-and-redfish-exporter-for-smart-data)
 1. [Complete upgrade](#complete-upgrade)
 
@@ -210,6 +203,80 @@ version of CSM being installed. It then waits for the components to reach a conf
    When configuration of all components is successful, the summary line will show all components
    with status "configured".
 
+### Update NCN images
+
+NCN images should be rebuilt at this time to acquire any changes from CSM config.
+
+This step does not rebuild NCNs. These new images are built and stored in S3 to facilitate the add and rebuild NCN procedures.
+
+#### Image customization
+
+1. Print the product catalog `ConfigMap`.
+
+    ```bash
+    kubectl -n services get cm cray-product-catalog -o jsonpath='{.data}' | jq '. | keys'
+    ```
+
+   Example outputs:
+
+    * CSM running with additional products:
+
+        ```json
+        [
+            "HFP-firmware",
+            "analytics",
+            "cos",
+            "cos-base",
+            "cpe",
+            "cpe-aarch64",
+            "cray-sdu-rda",
+            "csm",
+            "csm-diags",
+            "hfp",
+            "hpc-csm-software-recipe",
+            "pbs",
+            "sat",
+            "sle-os-backports-15-sp3",
+            "sle-os-backports-15-sp4",
+            "sle-os-backports-sle-15-sp3-x86_64",
+            "sle-os-backports-sle-15-sp4-x86_64",
+            "sle-os-backports-sle-15-sp5-aarch64",
+            "sle-os-backports-sle-15-sp5-x86_64",
+            "sle-os-products-15-sp3",
+            "sle-os-products-15-sp3-x86_64",
+            "sle-os-products-15-sp4",
+            "sle-os-products-15-sp4-x86_64",
+            "sle-os-products-15-sp5-aarch64",
+            "sle-os-products-15-sp5-x86_64",
+            "sle-os-updates-15-sp3",
+            "sle-os-updates-15-sp3-x86_64",
+            "sle-os-updates-15-sp4",
+            "sle-os-updates-15-sp4-x86_64",
+            "sle-os-updates-15-sp5-aarch64",
+            "sle-os-updates-15-sp5-x86_64",
+            "slingshot",
+            "slingshot-host-software",
+            "slurm",
+            "sma",
+            "uan",
+            "uss"
+        ]
+        ```
+
+    * CSM on a CSM-only system:
+
+        ```json
+        [
+          "csm"
+        ]
+        ```
+
+1. Choose one of the following options based on the output from the previous step.
+
+    * Option 1: [Upgrade of CSM on system with additional products](./CSM-With-Other-Products.md)
+    * Option 2: [Upgrade of CSM on CSM-only system](./CSM-Only.md#steps)
+      _(Do not use this procedure if more than CSM is installed on the system.\)_
+
 ### Update test suite packages
 
 (`ncn-m001#`) Update select RPMs on the NCNs.
@@ -279,11 +346,13 @@ SUCCESS
 These clusters are automatically backed up every 24 hours, but taking a manual backup at this stage in the upgrade
 enables restoring from backup later in this process if needed.
 
-### NCN reboot
+### NCN upgrade
 
-This is an optional step but is strongly recommended. As each patch release includes updated container images that may
-contain CVE fixes, it is recommended to reboot each NCN to refresh cached container images. For detailed instructions on
-how to gracefully reboot each NCN, refer to [Reboot NCNs](../../operations/node_management/Reboot_NCNs.md).
+This step is necessary so that nodes are using the correct images after running [Update NCN images](../1.5.2/README.md#update-ncn-images).
+
+The rebuild will also ensure that the NCN has the latest cached container images that often accompany a CSM patch release.
+
+Follow the [Upgrade NCNs during CSM `1.5.2` Patch](./Upgrade_NCN_images.md) instructions to perform the NCN node image upgrades.
 
 ### Configure E1000 node and Redfish Exporter for SMART data
 

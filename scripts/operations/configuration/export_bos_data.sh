@@ -28,10 +28,13 @@
 # This script exports all BOS data into JSON files. These files are then
 # compressed into an tgz archive.
 #
-# Usage: export_bos_data.sh [directory_to_create_archive_in]
+# Usage: export_bos_data.sh [--exclude-v1] [directory_to_create_archive_in]
 #
 # If no directory is specified, the archive will be created in the current
 # directory.
+#
+# If --exclude-v1 is specified, BOS v1 session data will not be included in
+# the export.
 #
 ################################################################################
 
@@ -41,7 +44,7 @@ err_exit() {
 }
 
 usage() {
-  echo "Usage: export_bos_data.sh [directory_to_create_archive_in]"
+  echo "Usage: export_bos_data.sh [--exclude-v1] [directory_to_create_archive_in]"
   echo
   err_exit "$@"
 }
@@ -62,7 +65,17 @@ bos_list() {
   bos_cli "$@" list
 }
 
-if [[ $# -eq 0 ]]; then
+EXCLUDE_V1=N
+
+if [[ $# -gt 0 && $1 == --exclude-v1 ]]; then
+  echo "User has requested to exclude BOS v1 data in the export"
+  EXCLUDE_V1=Y
+  shift
+fi
+
+if [[ $# -gt 1 ]]; then
+  usage "Too many arguments"
+elif [[ $# -eq 0 ]]; then
   OUTPUT_DIRECTORY=$(pwd)
 else
   [[ -n $1 ]] || usage "Directory name is optional, but if specified it may not be blank"
@@ -77,25 +90,27 @@ ARCHIVE_DIR=$(run_cmd mktemp -p "${OUTPUT_DIRECTORY}" -d "${ARCHIVE_PREFIX}-XXX"
 # Export all BOS data. Some of it (like sessions and components) are not intended to be
 # restored from this backup, but retaining the historical data may be useful in some situations.
 
-V1_DIR="${ARCHIVE_DIR}/v1"
-run_cmd mkdir -p "${V1_DIR}"
+if [[ ${EXCLUDE_V1} != Y ]]; then
+  V1_DIR="${ARCHIVE_DIR}/v1"
+  run_cmd mkdir -p "${V1_DIR}"
 
-# For BOS v1 the only thing to list is sessions. Every other thing that could be listed can be
-# listed using the v2 CLI.
+  # For BOS v1 the only thing to list is sessions. Every other thing that could be listed can be
+  # listed using the v2 CLI.
 
-echo "Exporting BOS v1 sessions..."
-V1_SESSION_LIST_JSON="${V1_DIR}/session.json"
-bos_list v1 session > "${V1_SESSION_LIST_JSON}"
+  echo "Exporting BOS v1 sessions..."
+  V1_SESSION_LIST_JSON="${V1_DIR}/session.json"
+  bos_list v1 session > "${V1_SESSION_LIST_JSON}"
 
-# For v1 sessions, we will also describe each, since in BOS v1, just listing them
-# does not show information about them.
+  # For v1 sessions, we will also describe each, since in BOS v1, just listing them
+  # does not show information about them.
 
-V1_SESSION_DIR="${V1_DIR}/session"
-run_cmd mkdir -p "${V1_SESSION_DIR}"
+  V1_SESSION_DIR="${V1_DIR}/session"
+  run_cmd mkdir -p "${V1_SESSION_DIR}"
 
-for SESSION_ID in $(jq -r '.[] | .' "${V1_SESSION_LIST_JSON}"); do
-  bos_cli v1 session describe "${SESSION_ID}" > "${V1_SESSION_DIR}/${SESSION_ID}.json"
-done
+  for SESSION_ID in $(jq -r '.[] | .' "${V1_SESSION_LIST_JSON}"); do
+    bos_cli v1 session describe "${SESSION_ID}" > "${V1_SESSION_DIR}/${SESSION_ID}.json"
+  done
+fi
 
 # For v2, listing is all we need for all of the types.
 

@@ -4,9 +4,9 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 - The two systems in this example are:
 
-  - Source system - Cray EX TDS cabinet `x9000` with a healthy `EX425` blade (Windom dual-injection) in chassis 3, slot 0
+    - Source system - Cray EX TDS cabinet `x9000` with a healthy `EX425` blade (Windom dual-injection) in chassis 3, slot 0
 
-  - Destination system - Cray EX cabinet `x1005` with a defective `EX425` blade (Windom dual-injection) in chassis 3, slot 0
+    - Destination system - Cray EX cabinet `x1005` with a defective `EX425` blade (Windom dual-injection) in chassis 3, slot 0
 
 - Substitute the correct component names (xnames) or other parameters in the command examples that follow.
 
@@ -24,8 +24,8 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 - The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
 
-  - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
-  - Review the *HPE Cray EX Hand Pump User Guide H-6200*
+    - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
+    - Review the *HPE Cray EX Hand Pump User Guide H-6200*
 
 - The System Admin Toolkit \(SAT\) is installed and configured on the system.
 
@@ -231,8 +231,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 ### Destination: Check DVS
 
-There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and their waiter, and at least one `cray-cps-cm-pm` pod. Usually there are two `cray-cps-cm-pm` pods:
-one on `ncn-w002` and one on another worker node.
+There should be one or more `cray-cps` pods.
 
 1. (`ncn-mw#`) Check the `cray-cps` pods on worker nodes and verify that they are `Running`.
 
@@ -244,12 +243,6 @@ one on `ncn-w002` and one on another worker node.
 
    ```text
    services   cray-cps-75cffc4b94-j9qzf    2/2  Running   0   42h 10.40.0.57  ncn-w001
-   services   cray-cps-cm-pm-g6tjx         5/5  Running   21  41h 10.42.0.77  ncn-w003
-   services   cray-cps-cm-pm-kss5k         5/5  Running   21  41h 10.39.0.80  ncn-w002
-   services   cray-cps-etcd-knt45b8sjf     1/1  Running   0   42h 10.42.0.67  ncn-w003
-   services   cray-cps-etcd-n76pmpbl5h     1/1  Running   0   42h 10.39.0.49  ncn-w002
-   services   cray-cps-etcd-qwdn74rxmp     1/1  Running   0   42h 10.40.0.42  ncn-w001
-   services   cray-cps-wait-for-etcd-jb95m 0/1  Completed
    ```
 
 1. (`ncn-w#`) SSH to each worker node running CPS/DVS and run `dmesg -T`.

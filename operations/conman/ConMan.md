@@ -16,6 +16,7 @@ There are multiple `cray-console-node` pods, scaled to the size of the system.
 - [Establish a Serial Connection to an NCN](Establish_a_Serial_Connection_to_NCNs.md)
 - [Disable ConMan After System Software Installation](Disable_ConMan_After_System_Software_Installation.md)
 - [Access Console Log Data Via the System Monitoring Framework (SMF)](Access_Console_Log_Data_Via_the_System_Monitoring_Framework_SMF.md)
+- [Configure Log Rotation](Configure_Log_Rotation.md)
 
 ## Troubleshooting
 

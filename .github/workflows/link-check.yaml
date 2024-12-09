@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -36,11 +36,11 @@ jobs:
   markdown-link-check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v37
+      uses: tj-actions/changed-files@v44
       with:
         files: "**/*.md"
         files_ignore: |
@@ -64,7 +64,7 @@ jobs:
 
     - name: Report errors
       if: ${{ steps.changed-files.outputs.deleted_files != '' || steps.changed-files.outputs.renamed_files != '' || inputs.force_full_scan }}
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         script: |
             const fs = require('fs');

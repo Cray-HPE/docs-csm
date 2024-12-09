@@ -2,23 +2,24 @@
 
 This document provides links to troubleshooting information for services and functionality provided by CSM.
 
-- [Helpful tips for navigating the CSM repository](#helpful-tips-for-navigating-the-csm-repository)
-- [Known issues](#known-issues)
-- [Booting](#booting)
-    - [UAN boot issues](#uan-boot-issues)
-    - [Compute node boot issues](#compute-node-boot-issues)
-- [Configuration management](#configuration-management)
-- [ConMan](#conman)
-- [Customer Management Network (CMN)](#customer-management-network-cmn)
-- [Grafana dashboards](#grafana-dashboards)
-- [Domain Name Service (DNS)](#domain-name-service-dns)
-- [Kubernetes](#kubernetes)
-- [MetalLB](#metallb)
-- [Node management](#node-management)
-- [Security and authentication](#security-and-authentication)
-- [Spire](#spire)
-- [User Access service UAS - Deprecated](#user-access-service-uas)
-- [Utility storage](#utility-storage)
+- [CSM Troubleshooting Information](#csm-troubleshooting-information)
+    - [Helpful tips for navigating the CSM repository](#helpful-tips-for-navigating-the-csm-repository)
+    - [Known issues](#known-issues)
+    - [Booting](#booting)
+        - [UAN boot issues](#uan-boot-issues)
+        - [Compute node boot issues](#compute-node-boot-issues)
+    - [Configuration management](#configuration-management)
+    - [ConMan](#conman)
+    - [Customer Management Network (CMN)](#customer-management-network-cmn)
+    - [Grafana dashboards](#grafana-dashboards)
+    - [Domain Name Service (DNS)](#domain-name-service-dns)
+    - [Kubernetes](#kubernetes)
+    - [MetalLB](#metallb)
+    - [Node management](#node-management)
+    - [Security and authentication](#security-and-authentication)
+    - [Spire](#spire)
+    - [User Access service UAS](#user-access-service-uas)
+    - [Utility storage](#utility-storage)
 
 ## Helpful tips for navigating the CSM repository
 
@@ -43,6 +44,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Software Management Services health check](known_issues/sms_health_check.md)
 - [QLogic driver crash](known_issues/qlogic_driver_crash.md)
 - [Nexus Fails Authentication with Keycloak Users](known_issues/Nexus_Fail_Authentication_with_Keycloak_Users.md)
+- [Keycloak Error "Cannot read properties" in Web UI](known_issues/Keycloak_Error_Cannot_read_properties.md)
 - [Gigabyte BMC Missing Redfish Data](known_issues/Gigabyte_BMC_Missing_Redfish_Data.md)
 - [`admin-client-auth` Not Found](known_issues/admin_client_auth_not_found.md)
 - [Ceph OSD latency](known_issues/ceph_osd_latency.md)
@@ -61,7 +63,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [RTS fails to restart after a worker node has been rebooted](known_issues/rts_fails_to_start_after_worker_node_restart.md)
 - [Spire database connection pool configuration in an air-gapped environment](known_issues/spire_database_airgap_configuration.md)
 - [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
-- [Spire Server Reports Database is in Recovery](known_issues/spire_server_database_recovery.md)
+- [Postgres Database is in Recovery](known_issues/postgres_database_recovery.md)
 - [Test Failures Due To No Discovered Compute Nodes In HSM](known_issues/test_failures_no_discovered_computes_in_hsm.md)
 - [Velero Version Mismatch](known_issues/velero_version_mismatch.md)
 - [wait for unbound hang](known_issues/wait_for_unbound_hang.md)
@@ -69,6 +71,11 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Hang Listing BOS V1 Sessions](known_issues/Hang_Listing_BOS_V1_Sessions.md)
 - [CFS V2 Failures On Large Systems](known_issues/CFS_V2_Failures_On_Large_Systems.md)
 - [Product Catalog Upgrade Error](known_issues/product_catalog_upgrade_error.md)
+- [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
+- [PCS and CAPMC Transaction Size Limitation](known_issues/pcs_and_capmc_transaction_size_limitation.md)
+- [IMS image delete loses the `arch` information](known_issues/ims_image_delete_loses_arch.md)
+- [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
+- [`sat bootprep` image customization error](known_issues/sat_bootprep_image_customization_error.md)
 
 ## Booting
 
@@ -137,6 +144,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Recover from Postgres WAL Event](../operations/kubernetes/Troubleshoot_Postgres_Database.md)
 - [Restore Postgres](../operations/kubernetes/Restore_Postgres.md)
 - [Disaster Recovery for Postgres](../operations/kubernetes/Disaster_Recovery_Postgres.md)
+- [Postgres Database is in Recovery](known_issues/postgres_database_recovery.md)
 
 ## MetalLB
 
@@ -160,7 +168,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Restore Spire Postgres without a Backup](../operations/spire/Restore_Spire_Postgres_without_a_Backup.md)
 - [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
 - [Spire Failing to Start on NCNs](../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
-- [Spire Server Report Database is in Recovery](known_issues/spire_server_database_recovery.md)
 
 ## User Access service UAS
 
@@ -184,3 +191,4 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Large Object Map Objects in Ceph Health](../operations/utility_storage/Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)
 - [Failure of RGW Health Check](../operations/utility_storage/Troubleshoot_RGW_Health_Check_Fail.md)
 - [Troubleshoot S3FS Mounts](../operations/utility_storage/Troubleshoot_S3FS_Mounts.md)
+- [Ceph New RGW Deployment Failing](../operations/utility_storage/Troubleshoot_Ceph_New_RGW_Deployment_Failing.md)

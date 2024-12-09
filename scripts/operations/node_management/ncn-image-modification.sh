@@ -423,6 +423,47 @@ function create_new_squashfs() {
   done
 }
 
+function csm_15X_gpg_patch {
+  local gpg_keys=()
+  local script_path
+  local scripts_path
+  local gpg_keys_path
+
+  script_path="$(rpm -ql docs-csm | grep "$(basename "$0")")"
+  scripts_path="$(dirname "$script_path")"
+  gpg_keys_path="${scripts_path}/../keys"
+
+  if [ ! -d "${gpg_keys_path}" ]; then
+    echo >&2 "Could not find GPG keys directory: $gpg_keys_path"
+    return 1
+  fi
+
+  while IFS= read -r -d '' gpg_key; do
+    gpg_keys+=("$gpg_key")
+  done < <(find "${gpg_keys_path}" -maxdepth 1 -type f -name '*.asc' -print0)
+  echo "Found [${#gpg_keys[@]}] GPG keys to import."
+
+  echo "Importing new RPM signing keys into NCN images ... "
+  for squash in "${SQUASH_PATHS[@]}"; do
+    (
+      dir="$(dirname "$squash")"
+      pushd "$dir" || exit
+      for gpg_key in "${gpg_keys[@]}"; do
+        cp -pv "$gpg_key" "./squashfs-root/tmp/"
+        key_name=$(basename "$gpg_key")
+        if ! unshare -R ./squashfs-root bash -c "rpm --import /tmp/${key_name}"; then
+          rc=$?
+          echo >&2 "Received return code: $rc"
+          echo >&2 "Failed to import $key_name"
+        fi
+        rm "./squashfs-root/tmp/${key_name}"
+      done
+      popd || exit
+      rm -f ./squashfs-root/tmp/*.asc
+    )
+  done
+}
+
 if [ "$#" -lt 2 ]; then
   usage
   exit 1
@@ -436,6 +477,9 @@ if ! tz_only; then
 fi
 
 set_timezone
+if [[ $CSM_RELEASE =~ ^1\.5\.[0-9]+ ]]; then
+  csm_15X_gpg_patch
+fi
 create_new_squashfs
 cleanup
 
