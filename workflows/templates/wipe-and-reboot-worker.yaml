@@ -124,7 +124,7 @@ spec:
                   
                   chmod +x set-next-boot-to-pxe.sh
                   scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null set-next-boot-to-pxe.sh $TARGET_NCN:/tmp/set-next-boot-to-pxe.sh
-                  ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $TARGET_NCN '/tmp/set-next-boot-to-pxe.sh'
+                  ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $TARGET_NCN '/tmp/set-next-boot-to-pxe.sh; rm /tmp/set-next-boot-to-pxe.sh'
         - name: "pxe-boot-node"
           dependencies:
             - get-bootscript-last-access-timestamp
