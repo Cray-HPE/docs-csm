@@ -91,14 +91,23 @@ The following highlights some of the areas that require manual configuration cha
 required for initial installation scenarios.
 
 - USS
-    - Configure DVS and LNet with appropriate Slingshot settings
-    - Configure DVS and LNet for use on application nodes
-    - Enable site-specific file system mounts
-    - Set the USS root password in HashiCorp Vault
-- UAN
-    - Enable CAN, LDAP, and set MOTD
-    - Move DVS and LNet settings to USS branch
-    - Set the UAN root password in HashiCorp Vault
+    - Compute Configuration
+        - Configure DVS and LNet with appropriate Slingshot settings
+        - Configure DVS and LNet for use on application nodes
+        - Enable site-specific file system mounts
+        - Set the USS root password in HashiCorp Vault
+    - UAN Configuration
+        - Enable CAN, LDAP, and set MOTD
+        - Move DVS and LNet settings to USS branch
+        - Set the UAN root password in HashiCorp Vault
+        - Enable UAIs on UAN
+    - SLURM Configuration
+        - CSM Diags
+            - Update CSM Diags network attachment definition
+    - PBS Pro Configuration
+        - CSM Diags
+            - Update CSM Diags network attachment definition
+
 - SHS
     - Update release information in `group_vars` (done for each product release)
 - CPE
@@ -109,18 +118,6 @@ required for initial installation scenarios.
     - Configure SAT authentication via `sat auth`
     - Generate SAT S3 credentials
     - Configure system revision information via `sat setrev`
-- SLURM
-    - UAS
-        - Configure UAS network settings
-            - The network settings for UAS must match the SLURM WLM to allow job submission from UAIs
-    - CSM Diags
-        - Update CSM Diags network attachment definition
-- PBS Pro
-    - UAS
-        - Configure UAS network settings
-            - The network settings for UAS must match the PBS Pro WLM to allow job submission from UAIs
-    - CSM Diags
-        - Update CSM Diags network attachment definition
 
 Once this step has completed:
 
