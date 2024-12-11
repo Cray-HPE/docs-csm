@@ -87,6 +87,7 @@ StatefulSets
 8325-48Y8C
 ACLs
 AOS-CX
+Alerta
 API
 APIs
 ASICs
@@ -260,6 +261,7 @@ MCDU-4U
 MCLAGs
 MLAG-LACP
 MLAG-VIP
+Monasca
 MPO
 MPOs
 MZ32-AR0-00
