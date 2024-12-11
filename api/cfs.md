@@ -614,8 +614,8 @@ Retrieve the list of configuration service options.
   "additionalInventoryUrl": "https://api-gw-service-nmn.local/vcs/cray/inventory.git",
   "batcherMaxBackoff": 3600,
   "batcherDisable": true,
-  "batcherPendingTimeout": 0,
-  "loggingLevel": "string"
+  "batcherPendingTimeout": 1,
+  "loggingLevel": "DEBUG"
 }
 ```
 
@@ -715,8 +715,8 @@ Update one or more of the configuration service options.
   "additionalInventoryUrl": "https://api-gw-service-nmn.local/vcs/cray/inventory.git",
   "batcherMaxBackoff": 3600,
   "batcherDisable": true,
-  "batcherPendingTimeout": 0,
-  "loggingLevel": "string"
+  "batcherPendingTimeout": 1,
+  "loggingLevel": "DEBUG"
 }
 ```
 
@@ -743,8 +743,8 @@ Update one or more of the configuration service options.
   "additionalInventoryUrl": "https://api-gw-service-nmn.local/vcs/cray/inventory.git",
   "batcherMaxBackoff": 3600,
   "batcherDisable": true,
-  "batcherPendingTimeout": 0,
-  "loggingLevel": "string"
+  "batcherPendingTimeout": 1,
+  "loggingLevel": "DEBUG"
 }
 ```
 
@@ -1072,9 +1072,9 @@ Retrieve all the configuration framework sessions on the system.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h" DEPRECATED: This field has been replaced by min_age and max_age|
-|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
+|age|query|string|false|Return only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h. DEPRECATED: This field has been replaced by min_age and max_age|
+|min_age|query|string|false|Return only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
+|max_age|query|string|false|Return only sessions younger than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
 |status|query|string|false|Return only sessions with the given status.|
 |name_contains|query|string|false|Return only sessions whose session name contains the given string.|
 |succeeded|query|string|false|Return only sessions that have succeeded/failed.|
@@ -1420,13 +1420,13 @@ Delete multiple configuration sessions.  If filters are provided, only sessions 
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|age|query|string|false|Deletes only sessions older than the given age.  Age is given in the format "1d" or "6h" DEPRECATED: This field has been replaced by min_age and max_age|
-|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
+|age|query|string|false|Deletes only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h. DEPRECATED: This field has been replaced by min_age and max_age|
+|min_age|query|string|false|Deletes only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
+|max_age|query|string|false|Deletes only sessions younger than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
 |status|query|string|false|Deletes only sessions with the given status.|
 |name_contains|query|string|false|Delete only sessions whose session name contains the given string.|
 |succeeded|query|string|false|Delete only sessions that have succeeded/failed.|
-|tags|query|string|false|Return only sessions whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list. Only sessions that match all tags will be deleted.|
+|tags|query|string|false|Deletes only sessions whose have the matching tags.  Key-value pairs should be separated using =, and tags can be a comma-separated list. Only sessions that match all tags will be deleted.|
 
 #### Enumerated Values
 
@@ -1923,8 +1923,8 @@ Retrieve all the configuration framework sessions on the system.
 |---|---|---|---|---|
 |limit|query|integer|false|When set, CFS will only return a number of sessions up to this limit.  Combined with after_id, this enables paging across results|
 |after_id|query|string|false|When set, CFS will only return the sessions after the session specified.  Combined with limit, this enables paging across results.|
-|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
+|min_age|query|string|false|Return only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
+|max_age|query|string|false|Return only sessions younger than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
 |status|query|string|false|Return only sessions with the given status.|
 |name_contains|query|string|false|Return only sessions whose session name contains the given string.|
 |succeeded|query|string|false|Return only sessions that have succeeded/failed.|
@@ -2285,8 +2285,8 @@ Delete multiple configuration sessions.  If filters are provided, only sessions 
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
+|min_age|query|string|false|Deletes only sessions older than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
+|max_age|query|string|false|Deletes only sessions younger than the given age. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h.|
 |status|query|string|false|Deletes only sessions with the given status.|
 |name_contains|query|string|false|Delete only sessions whose session name contains the given string.|
 |succeeded|query|string|false|Delete only sessions that have succeeded/failed.|
@@ -2933,8 +2933,8 @@ Update the state for a collection of components in the cfs database
 > Body parameter
 
 ```json
-{
-  "patch": {
+[
+  {
     "id": "string",
     "state": [
       {
@@ -2958,22 +2958,15 @@ Update the state for a collection of components in the cfs database
       "property1": "string",
       "property2": "string"
     }
-  },
-  "filters": {
-    "ids": "string",
-    "status": "unconfigured",
-    "enabled": true,
-    "configName": "string",
-    "tags": "string"
   }
-}
+]
 ```
 
 <h3 id="put_components_v2-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|any|true|The configuration/state for an array of components|
+|body|body|[V2ComponentStateArray](#schemav2componentstatearray)|true|The configuration/state for an array of components|
 
 > Example responses
 
@@ -3950,8 +3943,8 @@ Update the state for a collection of components in the cfs database
 > Body parameter
 
 ```json
-{
-  "patch": {
+[
+  {
     "id": "string",
     "state": [
       {
@@ -3977,22 +3970,15 @@ Update the state for a collection of components in the cfs database
       "property1": "string",
       "property2": "string"
     }
-  },
-  "filters": {
-    "ids": "string",
-    "status": "unconfigured",
-    "enabled": true,
-    "config_name": "string",
-    "tags": "string"
   }
-}
+]
 ```
 
 <h3 id="put_components_v3-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|any|true|The configuration/state for an array of components|
+|body|body|[V3ComponentDataArray](#schemav3componentdataarray)|true|The configuration/state for an array of components|
 
 > Example responses
 
@@ -6387,6 +6373,134 @@ To perform this operation, you must be authenticated by means of one of the foll
 bearerAuth
 </aside>
 
+## restore_source_v3
+
+<a id="opIdrestore_source_v3"></a>
+
+> Code samples
+
+```http
+POST https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id} HTTP/1.1
+Host: api-gw-service-nmn.local
+Content-Type: application/json
+Accept: application/json
+
+```
+
+```shell
+# You can also use wget
+curl -X POST https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id} \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H 'Authorization: Bearer {access-token}'
+
+```
+
+```python
+import requests
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'Authorization': 'Bearer {access-token}'
+}
+
+r = requests.post('https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id}', headers = headers)
+
+print(r.json())
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Content-Type": []string{"application/json"},
+        "Accept": []string{"application/json"},
+        "Authorization": []string{"Bearer {access-token}"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "https://api-gw-service-nmn.local/apis/cfs/v3/sources/{source_id}", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /v3/sources/{source_id}`
+
+*Restore a source*
+
+Restore a CFS source by providing the name of the Vault secret that contains the credentials. This does NOT create the secret in Vault, nor does it validate that the secret exists. This is intended to be used to restore CFS data in the case that it is lost or corrupted. This will NOT recover a source that has been deleted using CFS, because when CFS deletes a source, it also deletes its corresponding Vault secret. NOTE: This action is not available prior to CFS 1.18.10.
+
+> Body parameter
+
+```json
+{
+  "description": "string",
+  "clone_url": "string",
+  "credentials": {
+    "authentication_method": "password",
+    "secret_name": "string"
+  },
+  "ca_cert": {
+    "configmap_name": "string",
+    "configmap_namespace": "string"
+  }
+}
+```
+
+<h3 id="restore_source_v3-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[V3SourceRestoreData](#schemav3sourcerestoredata)|true|A source|
+|source_id|path|string|true|Name of the target source|
+
+> Example responses
+
+> 201 Response
+
+```json
+{
+  "name": "sample-source",
+  "description": "string",
+  "last_updated": "2019-07-28T03:26:00Z",
+  "clone_url": "string",
+  "credentials": {
+    "authentication_method": "password",
+    "secret_name": "string"
+  },
+  "ca_cert": {
+    "configmap_name": "string",
+    "configmap_namespace": "string"
+  }
+}
+```
+
+<h3 id="restore_source_v3-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|A single source|[V3SourceData](#schemav3sourcedata)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|A source with the same name already exists|[ProblemDetails](#schemaproblemdetails)|
+
+<aside class="warning">
+To perform this operation, you must be authenticated by means of one of the following methods:
+bearerAuth
+</aside>
+
 ## delete_source_v3
 
 <a id="opIddelete_source_v3"></a>
@@ -6582,8 +6696,8 @@ Information for requesting the next page of data
   "additionalInventoryUrl": "https://api-gw-service-nmn.local/vcs/cray/inventory.git",
   "batcherMaxBackoff": 3600,
   "batcherDisable": true,
-  "batcherPendingTimeout": 0,
-  "loggingLevel": "string"
+  "batcherPendingTimeout": 1,
+  "loggingLevel": "DEBUG"
 }
 
 ```
@@ -6594,19 +6708,19 @@ Configuration options for the configuration service.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|hardwareSyncInterval|integer|false|none|How frequently the CFS hardware-sync-agent checks with the Hardware State Manager to update its known hardware (in seconds)|
-|batcherCheckInterval|integer|false|none|How frequently the batcher checks the configuration states to see if work needs to be done (in seconds)|
-|batchSize|integer|false|none|The maximum number of nodes the batcher will run a single CFS session against.|
-|batchWindow|integer|false|none|The maximum number of seconds the batcher will wait to run a CFS session once a node has been detected that needs configuration.|
-|defaultBatcherRetryPolicy|integer|false|none|The default maximum number retries per node when configuration fails.|
+|hardwareSyncInterval|[V3Options/properties/hardware_sync_interval](#schemav3options/properties/hardware_sync_interval)|false|none|How frequently the CFS hardware-sync-agent checks with the Hardware State Manager to update its known hardware (in seconds)|
+|batcherCheckInterval|[V3Options/properties/batcher_check_interval](#schemav3options/properties/batcher_check_interval)|false|none|How frequently the batcher checks the configuration states to see if work needs to be done (in seconds)|
+|batchSize|[V3Options/properties/batch_size](#schemav3options/properties/batch_size)|false|none|The maximum number of nodes the batcher will run a single CFS session against.|
+|batchWindow|[V3Options/properties/batch_window](#schemav3options/properties/batch_window)|false|none|The maximum number of seconds the batcher will wait to run a CFS session once a node has been detected that needs configuration.|
+|defaultBatcherRetryPolicy|[V3Options/properties/default_batcher_retry_policy](#schemav3options/properties/default_batcher_retry_policy)|false|none|The default maximum number retries per node when configuration fails.|
 |defaultPlaybook|string|false|none|The default playbook to be used if not specified in a node's desired state.|
-|defaultAnsibleConfig|string|false|none|The Kubernetes ConfigMap which holds the default ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service.|
-|sessionTTL|string|false|none|A time-to-live applied to all completed CFS sessions.  Specified in hours or days. e.g. 3d or 24h.  Set to an empty string to disable.|
-|additionalInventoryUrl|string|false|none|The git clone URL of a repo with additional inventory files.  All files in the repo will be copied into the hosts directory of CFS.|
-|batcherMaxBackoff|integer|false|none|The maximum number of seconds that batcher will backoff from session creation if problems are detected.|
-|batcherDisable|boolean|false|none|Disables cfs-batcher's automatic session creation if set to True.|
-|batcherPendingTimeout|integer|false|none|How long cfs-batcher will wait on a pending session before deleting and recreating it (in seconds).|
-|loggingLevel|string|false|none|The logging level for core CFS services.  This does not affect the Ansible logging level.|
+|defaultAnsibleConfig|[V3Options/properties/default_ansible_config](#schemav3options/properties/default_ansible_config)|false|none|The Kubernetes ConfigMap which holds the default ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service.|
+|sessionTTL|[V3Options/properties/session_ttl](#schemav3options/properties/session_ttl)|false|none|A time-to-live applied to all completed CFS sessions. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h. Set to an empty string to disable.|
+|additionalInventoryUrl|[V3Options/properties/additional_inventory_url](#schemav3options/properties/additional_inventory_url)|false|none|The git clone URL of a repo with additional inventory files.  All files in the repo will be copied into the hosts directory of CFS. This is mutually exclusive with the additional_inventory_source option and only one can be set.|
+|batcherMaxBackoff|[V3Options/properties/batcher_max_backoff](#schemav3options/properties/batcher_max_backoff)|false|none|The maximum number of seconds that batcher will backoff from session creation if problems are detected.|
+|batcherDisable|[V3Options/properties/batcher_disable](#schemav3options/properties/batcher_disable)|false|none|Disables cfs-batcher's automatic session creation if set to True.|
+|batcherPendingTimeout|[V3Options/properties/batcher_pending_timeout](#schemav3options/properties/batcher_pending_timeout)|false|none|How long cfs-batcher will wait on a pending session before deleting and recreating it (in seconds).|
+|loggingLevel|[V3Options/properties/logging_level](#schemav3options/properties/logging_level)|false|none|The logging level for core CFS services.  This does not affect the Ansible logging level.|
 
 <h2 id="tocS_V3Options">V3Options</h2>
 <!-- backwards compatibility -->
@@ -6651,7 +6765,7 @@ Configuration options for the configuration service.
 |default_batcher_retry_policy|integer|false|none|The default maximum number retries per node when configuration fails.|
 |default_playbook|string|false|read-only|[DEPRECATED] The default playbook to be used if not specified in a node's desired state. This option is read-only via the v3 API and remains only for compatibility with the v2 API. This option will be removed from v3 when the v2 API is removed.|
 |default_ansible_config|string|false|none|The Kubernetes ConfigMap which holds the default ansible.cfg for a given CFS session. This ConfigMap must be present in the same Kubernetes namespace as the CFS service.|
-|session_ttl|string|false|none|A time-to-live applied to all completed CFS sessions.  Specified in hours or days. e.g. 3d or 24h.  Set to an empty string to disable.|
+|session_ttl|string|false|none|A time-to-live applied to all completed CFS sessions. Specified in minutes, hours, days, or weeks. e.g. 3d or 24h. Set to an empty string to disable.|
 |additional_inventory_url|string|false|none|The git clone URL of a repo with additional inventory files.  All files in the repo will be copied into the hosts directory of CFS. This is mutually exclusive with the additional_inventory_source option and only one can be set.|
 |additional_inventory_source|string|false|none|A CFS source with additional inventory files.  All files in the repo will be copied into the hosts directory of CFS. This is mutually exclusive with the additional_source_url option and only one can be set.|
 |batcher_max_backoff|integer|false|none|The maximum number of seconds that batcher will backoff from session creation if problems are detected.|
@@ -7477,13 +7591,15 @@ An inventory reference to include in a set of configurations.
 ```
 
 An inventory reference to include in a set of configurations.
+Either clone_url or source must be specified -- it is required to specify one,
+but they are mutually exclusive.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |name|string|false|none|The name of the inventory layer.|
-|clone_url|string|true|none|The clone URL of the configuration content repository.|
+|clone_url|string|false|none|The clone URL of the configuration content repository.|
 |source|string|false|none|A CFS source with directions to the configuration content repository|
 |commit|string|false|none|The commit hash of the configuration repository when the state is set.|
 |branch|string|false|none|The repository branch to use. This will automatically set `commit` to master on the branch<br>when the configuration is added.|
@@ -7546,6 +7662,8 @@ A single desired configuration state for a component.
 ```
 
 A single desired configuration state for a component.
+Either clone_url or source must be specified -- it is required to specify one,
+but they are mutually exclusive.
 
 ### Properties
 
@@ -7652,7 +7770,7 @@ A collection of ConfigurationLayers.
 |description|string|false|none|A user-defined description. This field is not used by CFS.|
 |last_updated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
 |layers|[[V3ConfigurationLayer](#schemav3configurationlayer)]|false|none|A list of ConfigurationLayer(s).|
-|additional_inventory|[V3AdditionalInventoryLayer](#schemav3additionalinventorylayer)|false|none|An inventory reference to include in a set of configurations.|
+|additional_inventory|[V3AdditionalInventoryLayer](#schemav3additionalinventorylayer)|false|none|An inventory reference to include in a set of configurations.<br>Either clone_url or source must be specified -- it is required to specify one,<br>but they are mutually exclusive.|
 
 <h2 id="tocS_V2ConfigurationArray">V2ConfigurationArray</h2>
 <!-- backwards compatibility -->
@@ -7750,6 +7868,26 @@ A collection of configuration data.
 |---|---|---|---|---|
 |configurations|[[V3ConfigurationData](#schemav3configurationdata)]|false|none|[A collection of ConfigurationLayers.]|
 |next|[V3NextData](#schemav3nextdata)|false|none|Information for requesting the next page of data|
+
+<h2 id="tocS_ComponentId">ComponentId</h2>
+<!-- backwards compatibility -->
+<a id="schemacomponentid"></a>
+<a id="schema_ComponentId"></a>
+<a id="tocScomponentid"></a>
+<a id="tocscomponentid"></a>
+
+```json
+"string"
+
+```
+
+The component's id. e.g. xname for hardware components
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|The component's id. e.g. xname for hardware components|
 
 <h2 id="tocS_V2ComponentsFilter">V2ComponentsFilter</h2>
 <!-- backwards compatibility -->
@@ -7953,7 +8091,7 @@ The configuration state and desired state for a component.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|string|false|none|The component's id. e.g. xname for hardware components|
+|id|[ComponentId](#schemacomponentid)|false|none|The component's id. e.g. xname for hardware components|
 |state|[[V2ConfigurationStateLayer](#schemav2configurationstatelayer)]|false|none|Information about the desired config and status of the layers|
 |stateAppend|object|false|write-only|A single state that will be appended to the list of current states.|
 |» cloneUrl|string|false|none|The clone URL of the configuration content repository.|
@@ -8035,7 +8173,7 @@ The configuration state and desired state for a component.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|string|false|none|The component's id. e.g. xname for hardware components|
+|id|[ComponentId](#schemacomponentid)|false|none|The component's id. e.g. xname for hardware components|
 |state|[[V3ConfigurationStateLayer](#schemav3configurationstatelayer)]|false|none|Information about the desired config and status of the layers|
 |state_append|object|false|write-only|A single state that will be appended to the list of current states.|
 |» clone_url|string|false|none|The clone URL of the configuration content repository.|
@@ -8273,7 +8411,7 @@ A collection of component ids.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|component_ids|[string]|false|none|none|
+|component_ids|[[ComponentId](#schemacomponentid)]|false|none|[The component's id. e.g. xname for hardware components]|
 
 <h2 id="tocS_V2ComponentsUpdate">V2ComponentsUpdate</h2>
 <!-- backwards compatibility -->
@@ -8583,6 +8721,36 @@ Information for retrieving the git credentials
 |---|---|
 |authentication_method|password|
 
+<h2 id="tocS_V3SourceRestoreCredentials">V3SourceRestoreCredentials</h2>
+<!-- backwards compatibility -->
+<a id="schemav3sourcerestorecredentials"></a>
+<a id="schema_V3SourceRestoreCredentials"></a>
+<a id="tocSv3sourcerestorecredentials"></a>
+<a id="tocsv3sourcerestorecredentials"></a>
+
+```json
+{
+  "authentication_method": "password",
+  "secret_name": "string"
+}
+
+```
+
+Information on a secret containing the username and password for accessing the git content
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|authentication_method|string|true|none|The git authentication method used.|
+|secret_name|string|true|none|The name of the credentials vault secret.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|authentication_method|password|
+
 <h2 id="tocS_V3SourceCreateData">V3SourceCreateData</h2>
 <!-- backwards compatibility -->
 <a id="schemav3sourcecreatedata"></a>
@@ -8618,6 +8786,40 @@ Information for retrieving git content from a source.
 |description|string|false|none|A user-defined description. This field is not used by CFS.|
 |clone_url|string|true|none|The url to access the git content|
 |credentials|[V3SourceCreateCredentials](#schemav3sourcecreatecredentials)|true|none|Information for retrieving the git credentials|
+|ca_cert|[V3SourceCert](#schemav3sourcecert)|false|none|Information on a configmap containing a CA certificate for authenticating to git|
+
+<h2 id="tocS_V3SourceRestoreData">V3SourceRestoreData</h2>
+<!-- backwards compatibility -->
+<a id="schemav3sourcerestoredata"></a>
+<a id="schema_V3SourceRestoreData"></a>
+<a id="tocSv3sourcerestoredata"></a>
+<a id="tocsv3sourcerestoredata"></a>
+
+```json
+{
+  "description": "string",
+  "clone_url": "string",
+  "credentials": {
+    "authentication_method": "password",
+    "secret_name": "string"
+  },
+  "ca_cert": {
+    "configmap_name": "string",
+    "configmap_namespace": "string"
+  }
+}
+
+```
+
+Information for retrieving git content from a source.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|description|string|false|none|A user-defined description. This field is not used by CFS.|
+|clone_url|string|true|none|The url to access the git content|
+|credentials|[V3SourceRestoreCredentials](#schemav3sourcerestorecredentials)|true|none|Information on a secret containing the username and password for accessing the git content|
 |ca_cert|[V3SourceCert](#schemav3sourcecert)|false|none|Information on a configmap containing a CA certificate for authenticating to git|
 
 <h2 id="tocS_V3SourceUpdateData">V3SourceUpdateData</h2>
