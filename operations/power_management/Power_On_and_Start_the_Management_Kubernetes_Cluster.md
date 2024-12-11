@@ -341,9 +341,9 @@ Some systems are configured with lazy mounts that do not have this requirement f
     Example output:
 
     ```text
-    cray-spire-jwks-6b97457548-gc7td    2/3  CrashLoopBackOff   9    23h   10.44.0.117  ncn-w002 <none>   <none>
-    cray-spire-jwks-6b97457548-jd7bd    2/3  CrashLoopBackOff   9    23h   10.36.0.123  ncn-w003 <none>   <none>
-    cray-spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
+    cray-spire-jwks-57bbb4f5c7-57j5k 2/3  CrashLoopBackOff   9    23h   10.44.0.31  ncn-w002 <none>   <none>
+    cray-spire-jwks-57bbb4f5c7-crb2m 2/3  CrashLoopBackOff   9    23h   10.36.0.34  ncn-w003 <none>   <none>
+    cray-spire-jwks-57bbb4f5c7-lq9ar 2/3  CrashLoopBackOff   9    23h   10.39.0.5   ncn-w001 <none>   <none>
     spire-jwks-6b97457548-gc7td    2/3  CrashLoopBackOff   9    23h   10.44.0.117  ncn-w002 <none>   <none>
     spire-jwks-6b97457548-jd7bd    2/3  CrashLoopBackOff   9    23h   10.36.0.123  ncn-w003 <none>   <none>
     spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
