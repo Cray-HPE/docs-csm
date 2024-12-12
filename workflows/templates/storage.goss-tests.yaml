@@ -60,4 +60,4 @@ spec:
                 - name: scriptContent
                   value: |
                     TARGET_NCN="{{inputs.parameters.targetNcn}}"
-                    ssh $TARGET_NCN -t 'sh /opt/cray/tests/install/ncn/automated/run-ncn-tests.sh run_goss_tests /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-storage.yaml'
+                    ssh $TARGET_NCN -t '/opt/cray/tests/install/ncn/automated/ncn-upgrade-tests-storage'
