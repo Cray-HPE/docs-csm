@@ -6708,6 +6708,7 @@ Update one or more of the BOS service options.
 
 ```json
 {
+  "cfs_read_timeout": 20,
   "cleanup_completed_session_ttl": "string",
   "clear_stage": true,
   "component_actual_state_ttl": "string",
@@ -6736,6 +6737,7 @@ Update one or more of the BOS service options.
 
 ```json
 {
+  "cfs_read_timeout": 20,
   "cleanup_completed_session_ttl": "string",
   "clear_stage": true,
   "component_actual_state_ttl": "string",
@@ -6938,6 +6940,7 @@ Retrieve the list of BOS service options.
 
 ```json
 {
+  "cfs_read_timeout": 20,
   "cleanup_completed_session_ttl": "string",
   "clear_stage": true,
   "component_actual_state_ttl": "string",
@@ -9228,6 +9231,7 @@ A list of components that should have their staged session applied.
 
 ```json
 {
+  "cfs_read_timeout": 20,
   "cleanup_completed_session_ttl": "string",
   "clear_stage": true,
   "component_actual_state_ttl": "string",
@@ -9251,6 +9255,7 @@ Options for the Boot Orchestration Service.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
+|cfs_read_timeout|integer|false|none|The amount of time (in seconds) to wait for a response before timing out a request to CFS|
 |cleanup_completed_session_ttl|string|false|none|Delete complete sessions that are older than cleanup_completed_session_ttl (in hours). 0h disables cleanup behavior.|
 |clear_stage|boolean|false|none|Allows components staged information to be cleared when the requested staging action has been started. Defaults to false.|
 |component_actual_state_ttl|string|false|none|The maximum amount of time a component's actual state is considered valid (in hours). 0h disables cleanup behavior for newly booted nodes and instructs bos-state-reporter to report once instead of periodically.|

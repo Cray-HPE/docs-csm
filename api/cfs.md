@@ -1786,8 +1786,8 @@ Update the state for a collection of components in the cfs database
 > Body parameter
 
 ```json
-{
-  "patch": {
+[
+  {
     "id": "string",
     "state": [
       {
@@ -1811,22 +1811,15 @@ Update the state for a collection of components in the cfs database
       "property1": "string",
       "property2": "string"
     }
-  },
-  "filters": {
-    "ids": "string",
-    "status": "unconfigured",
-    "enabled": true,
-    "configName": "string",
-    "tags": "string"
   }
-}
+]
 ```
 
 <h3 id="put_components-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|any|true|The configuration/state for an array of components|
+|body|body|[V2ComponentStateArray](#schemav2componentstatearray)|true|The configuration/state for an array of components|
 
 > Example responses
 
@@ -3638,6 +3631,26 @@ An array of configurations.
 |---|---|---|---|---|
 |*anonymous*|[[Configuration](#schemaconfiguration)]|false|none|An array of configurations.|
 
+<h2 id="tocS_ComponentId">ComponentId</h2>
+<!-- backwards compatibility -->
+<a id="schemacomponentid"></a>
+<a id="schema_ComponentId"></a>
+<a id="tocScomponentid"></a>
+<a id="tocscomponentid"></a>
+
+```json
+"string"
+
+```
+
+The component's id. e.g. xname for hardware components
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|The component's id. e.g. xname for hardware components|
+
 <h2 id="tocS_ConfigurationStateLayer">ConfigurationStateLayer</h2>
 <!-- backwards compatibility -->
 <a id="schemaconfigurationstatelayer"></a>
@@ -3721,7 +3734,7 @@ The configuration state and desired state for a component.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|string|false|none|The component's id. e.g. xname for hardware components|
+|id|[ComponentId](#schemacomponentid)|false|none|The component's id. e.g. xname for hardware components|
 |state|[[ConfigurationStateLayer](#schemaconfigurationstatelayer)]|false|none|Information about the desired config and status of the layers|
 |stateAppend|object|false|write-only|A single state that will be appended to the list of current states.|
 |» cloneUrl|string|false|none|The clone URL of the configuration content repository.|
