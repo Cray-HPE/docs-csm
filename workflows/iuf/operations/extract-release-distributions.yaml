@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -188,6 +188,14 @@ spec:
           echo "DEBUG Outputs for extract-tar-files are manifest.yaml and original_location=$media_dir/$dir_name"
           cat $MANIFEST_FILE > /tmp/manifest.yaml
           echo $media_dir/$dir_name > /tmp/original_location
+
+          if [ $? -eq 0 ]; then
+            echo "INFO Adding $tar_filename into .extract-done file to mark successful extraction."
+            echo "$tar_filename" >> "$media_dir/.extract-done"
+          else
+            echo "ERROR An unexpected issue occurred. Extraction was not completed successfully."
+            exit 1
+          fi
         volumeMounts:
           - name: iuf
             mountPath: /etc/cray/upgrade/csm
