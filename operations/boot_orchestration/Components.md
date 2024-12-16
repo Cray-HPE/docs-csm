@@ -6,19 +6,19 @@ This includes information on the desired state and some information on the curre
 Component records are created automatically and will include any components found in the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm).
 
 * [BOS component fields](#bos-component-fields)
-  * [`actual_state`](#actual_state)
-  * [`desired_state`](#desired_state)
-  * [`staged_state`](#staged_state)
-  * [`enabled`](#enabled)
-  * [`error`](#error)
-  * [`event_stats`](#event_stats)
-  * [`last_action`](#last_action)
-  * [`session`](#session)
-  * [`status`](#status)
+    * [`actual_state`](#actual_state)
+    * [`desired_state`](#desired_state)
+    * [`staged_state`](#staged_state)
+    * [`enabled`](#enabled)
+    * [`error`](#error)
+    * [`event_stats`](#event_stats)
+    * [`last_action`](#last_action)
+    * [`session`](#session)
+    * [`status`](#status)
 * [Managing BOS components](#managing-bos-components)
-  * [List all components](#list-all-components)
-  * [Show details for a component](#show-details-for-a-component)
-  * [Update a component](#update-a-component)
+    * [List all components](#list-all-components)
+    * [Show details for a component](#show-details-for-a-component)
+    * [Update a component](#update-a-component)
 
 ## BOS component fields
 
@@ -39,7 +39,14 @@ Stores information on the eventual desired boot artifacts and configuration for 
 
 ### `enabled`
 
-If the node is enabled (enabled == True), BOS will take action to make the actual state match the desired state. Disabled nodes may receive status updates from booted nodes, but BOS will not issue power commands to the nodes while they are disabled.
+If the node is enabled (enabled == True), BOS will take action to make the actual state match the desired state. If a node is disabled (enabled == False), BOS will take no action against a node. This is an internal state
+that BOS uses for tracking whether it has finished working on a node. Typically, users should **never** enable a node (enabled == True). BOS handles this during session creation. Because BOS session cancellation is poor, users
+are forced to disable nodes (enabled == False) when they want to cancel a BOS session. Thus, while it is still uncommon, it is more likely that users will disable nodes than enable them.
+
+Disabled nodes may receive status updates from booted nodes, but BOS will not issue power commands to the nodes while they are disabled. These status updates come from the `bos-reporter`, small program running periodically on the
+nodes, that updates the nodes' actual status.
+
+Both BOS and the Hardware State Manager (HSM) use the term disabled, but not in a consistent fashion. When the HSM says a node is disabled, it is out of service. This definition should not be confused with BOS' definition of disabled.
 
 ### `error`
 
@@ -73,7 +80,7 @@ Stores the session ID of the session that is currently tracking the component.
 This collection of fields stores status information that the BOS operators and other users can query to determine the status of the component. Status fields should generally not be manually updated and should be left to BOS. These fields include:
 
 * `phase` - Describes the general phase of the boot process the component is currently in, such as `powering_on`, `powering_off` and `configuring`.
-* `status` - A more specific description of where in the boot process the component is. This can be more detailed phases, such as `power_on_pending`, `power_on_called`, as well as final states such as `failed`.  
+* `status` - A more specific description of where in the boot process the component is. This can be more detailed phases, such as `power_on_pending`, `power_on_called`, as well as final states such as `failed`.
 * `on_hold` is a special value that indicates BOS is re-evaluating the status of the component, such as when a component is re-enabled and BOS needs to collect new information from other services to determine the state of the component.
 * `status_override` - A special status field that is used to override `status` when BOS would be unable to determine the status of the node with its current information. This includes the `on_hold` status.
 
@@ -200,11 +207,12 @@ Example output:
 ### Update a component
 
 Update a BOS component using `xname`. While most fields can be updated manually, users should restrict themselves to updating the `desired_state` and `enabled`. Altering other fields such as `status` or `last_action` may result in unintended behavior.
+See the [`enabled`](#enabled) section for cautions about updating a component's `enabled` state.
 
 (`ncn-mw#`):
 
 ```bash
-cray bos v2 components update <XNAME> --enabled True --format json
+cray bos v2 components update <XNAME> --enabled False --format json
 ```
 
 Example output:
