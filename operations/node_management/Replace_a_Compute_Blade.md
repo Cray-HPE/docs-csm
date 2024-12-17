@@ -144,7 +144,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
 ## Power on and boot the compute nodes
 
-1. (`ncn-mw#`) If you suspended the `hms-discovery` cronjob in Kubernetes when shutting down the blade, un-suspend it now:.
+1. (`ncn-mw#`) If you suspended the `hms-discovery` cronjob in Kubernetes when shutting down the blade, unsuspend it now:.
 
    ```bash
    kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
