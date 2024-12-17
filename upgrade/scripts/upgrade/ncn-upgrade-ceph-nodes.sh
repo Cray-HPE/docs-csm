@@ -81,6 +81,22 @@ else
   echo "====> ${state_name} has been completed"
 fi
 
+state_name="CLEANUP_LIVE_IMAGES"
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+if [[ $state_recorded == "0" ]]; then
+  echo "====> ${state_name} ..."
+  {
+    if [[ $ssh_keys_done == "0" ]]; then
+      ssh_keygen_keyscan "${target_ncn}"
+      ssh_keys_done=1
+    fi
+    ssh ${target_ncn} "/srv/cray/scripts/metal/cleanup-live-images.sh -y"
+  } >> ${LOG_FILE} 2>&1
+  record_state "${state_name}" ${target_ncn}
+else
+  echo "====> ${state_name} has been completed"
+fi
+
 ${basedir}/../common/ncn-rebuild-common.sh $target_ncn
 
 state_name="INSTALL_TARGET_SCRIPT"
