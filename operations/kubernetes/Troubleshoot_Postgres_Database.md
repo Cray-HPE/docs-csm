@@ -306,7 +306,7 @@ For example:
             Re-run the following command until it succeeds and reports that the leader pod is `running`.
 
             ```bash
-            kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patronictl list
+            kubectl exec cray-console-data-postgres-0 -c postgres -n services -it -- patronictl list
             ```
 
             Example output:
@@ -328,7 +328,7 @@ For example:
         1. (`ncn-mw#`) Determine which pods are reporting lag.
 
             ```bash
-            kubectl exec cray-console-postgres-0 -c postgres -n services -it -- patronictl list
+            kubectl exec cray-console-data-postgres-0 -c postgres -n services -it -- patronictl list
             ```
 
             Example output:
@@ -352,7 +352,7 @@ For example:
         1. (`ncn-mw#`) Once the pods restart, verify that the lag has resolved.
 
             ```bash
-            kubectl exec cray-console-postgres-0 -c postgres -n services -it -- patronictl list
+            kubectl exec cray-console-data-postgres-0 -c postgres -n services -it -- patronictl list
             ```
 
             Example output:
