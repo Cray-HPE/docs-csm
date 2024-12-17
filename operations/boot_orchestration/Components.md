@@ -41,12 +41,12 @@ Stores information on the eventual desired boot artifacts and configuration for 
 
 If the node is enabled (enabled == True), BOS will take action to make the actual state match the desired state. If a node is disabled (enabled == False), BOS will take no action against a node. This is an internal state
 that BOS uses for tracking whether it has finished working on a node. Typically, users should **never** enable a node (enabled == True). BOS handles this during session creation.
-Even if the BOS session is deleted, the nodes remain enabled in BOS, and BOS will continue to take action to make the node actual states match their desired states.
+Even if the BOS session is deleted, the nodes remain enabled in BOS, and BOS will continue to take action to make the nodes' actual states match their desired states.
 Because of this, if an administrator wishes to stop BOS from taking such actions on a node, then they must disable it (enabled == False).
 Thus, while it is still uncommon, it is more likely that users will disable nodes than enable them.
 
-Disabled nodes may receive status updates from booted nodes, but BOS will not issue power commands to the nodes while they are disabled. These status updates come from the `bos-reporter`, small program running periodically on the
-nodes, that updates the nodes' actual status.
+Even if a node is disabled in BOS, if it is booted, then BOS may receive status updates for it. However, BOS will not issue power commands to the nodes while they are disabled. These status updates come from the `bos-reporter`, small program running
+periodically on the nodes, that updates the nodes' actual status.
 
 Both BOS and the Hardware State Manager (HSM) use the term disabled, but not in a consistent fashion. When the HSM says a node is disabled, it is out of service. This definition should not be confused with BOS' definition of disabled.
 
