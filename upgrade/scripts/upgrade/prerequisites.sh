@@ -730,6 +730,14 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
       fi
     fi
 
+    # check if the cray-certmanager-issuers chart failed to deploy
+    # this will be entered if the certmanager upgrade failed on or before
+    # the certmanager-issuer chart install
+    if ! helm history -n cert-manager cray-certmanager-issuers > /dev/null 2>&1; then
+      printf "note: no helm install exists for cert-manager-issuers. Cert-manager upgrade is needed to install cert-manager-issuers\n"
+      ((needs_upgrade += 1))
+    fi
+
     # cert-manager will need to be upgraded if cray-drydock version is less than 2.18.4.
     # This will only be the case in some CSM 1.6 to CSM 1.6 upgrades.
     # It only needs to be checked if cert-manager is not already being upgraded.
@@ -757,12 +765,12 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
       fi
     fi
 
+    # make this name unique for CSM 1.6 in case CSM 1.5 secret still exists
+    backup_secret="cm-restore-data-16"
+
     # Only run if we need to and detected not 1.12.9 or ""
     if [ "${needs_upgrade}" -gt 0 ]; then
       cmns="cert-manager"
-
-      # make this name unique for CSM 1.6 in case CSM 1.5 secret still exists
-      backup_secret="cm-restore-data-16"
 
       # We need to backup before any helm uninstalls.
       needs_backup=0
@@ -882,9 +890,23 @@ EOF
     # The warning statement above needs to stay a warning. It does not exit 0 because Issuers should already exist.
     # 5 is an arbitrary number, expect ~21 certificates
     if [[ $(kubectl get certificates -A | wc -l) -lt 5 ]]; then
-      echo "ERROR: certificates were not restored after certmanager upgrade. 'kubectl get certificates -A' does not show certificates."
+      echo "WARNING: certificates were not restored after certmanager upgrade. 'kubectl get certificates -A' does not show certificates."
       echo "Certificates should have been restored from backup: 'kubectl get secret ${backup_secret?}'"
-      exit 1
+      if helm history -n cert-manager cray-certmanager-issuers > /dev/null 2>&1 && helm history -n cert-manager cray-certmanager > /dev/null 2>&1; then
+        echo "cray-certmanager and cray-certmanager-issuers have been installed. Attempting to restore cert-manager backup"
+        if kubectl get secret "${backup_secret?}" > /dev/null 2>&1; then
+          kubectl get secret "${backup_secret?}" -o jsonpath='{.data.data}' | base64 -d | kubectl apply -f -
+        fi
+        if [[ $(kubectl get certificates -A | wc -l) -lt 5 ]]; then
+          echo "ERROR: certificates failed to restore. 'kubectl get certificates -A' does not show certificates."
+          exit 1
+        else
+          echo "Certificates were successfully restored"
+        fi
+      else
+        echo "ERROR: cray-certmanager and/or cray-certmanager-issers charts failed to deploy"
+        exit 1
+      fi
     fi
     # delete CSM 1.5 cert-manager backup if it exists
     backup_secret_csm_15="cm-restore-data"
