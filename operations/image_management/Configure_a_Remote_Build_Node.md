@@ -269,7 +269,7 @@ image that is installed with CSM. This image may be used to boot multiple remote
     1. Create the CFS session.
 
         ```bash
-        cray cfs sessions create --target-group Application $BAREBONES_IMAGE_ID \
+        cray cfs sessions create --target-group Compute $BAREBONES_IMAGE_ID \
             --target-image-map $BAREBONES_IMAGE_ID $NEW_IMAGE_NAME \
             --target-definition image --name $CFS_SESSION_NAME \
             --configuration-name $IMS_REMOTE_CFS_CONFIGURATION
