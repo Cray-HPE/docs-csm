@@ -764,6 +764,8 @@ unregisters
 unset
 unsets
 unsquashed
+un-suspend
+unsuspend
 untainting
 untarred
 update-cfs-config

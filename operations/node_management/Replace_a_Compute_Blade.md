@@ -144,7 +144,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
 ## Power on and boot the compute nodes
 
-1. (`ncn-mw#`) Un-suspend the `hms-discovery` cronjob in Kubernetes.
+1. (`ncn-mw#`) If you suspended the `hms-discovery` cronjob in Kubernetes when shutting down the blade, unsuspend it now:.
 
    ```bash
    kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
@@ -180,7 +180,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
 1. Wait for 3-5 minutes for the blade to power on and the node BMCs to be discovered.
 
-1. (`ncn-mw#`) Verify that the affected nodes are enabled in the HSM.
+1. (`ncn-mw#`) Verify that the affected nodes are enabled in the HSM (repeat example below for all nodes).
 
     ```bash
     cray hsm state components describe x1000c3s0b0n0 --format toml
@@ -227,8 +227,6 @@ Replace an HPE Cray EX liquid-cooled compute blade.
     - If the last discovery state is `DiscoveryStarted` then the BMC is currently being inventoried by HSM.
     - If the last discovery state is `HTTPsGetFailed` or `ChildVerificationFailed`, then an error has
       occurred during the discovery process.
-
-1. Enable each node individually in the HSM database (in this example, the nodes are `x1000c3s0b0n0`-`n3`).
 
 1. (`ncn-mw#`) Rediscover the components in the chassis (the example shows cabinet 1000, chassis 3).
 
