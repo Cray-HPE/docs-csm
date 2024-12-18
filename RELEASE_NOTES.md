@@ -4,20 +4,24 @@
 documentation improvements. This page lists some of the highlights.
 
 ## Features
-- iSCSI (CASM-4525)
-- Multi-Tenancy (CASM-4437)
-- Bond HSN MacVLAN interfaces support Slingshot resiliency (CASM-3479)
-- HPE Cray OS 24.2
-- SLES 15 SP6
-- Ceph 18
-- SHS 11.1
-- CSM can now be upgraded with IUF. See [Upgrade CSM](upgrade/README.md) for more details.
-* The [BOS](glossary.md#boot-orchestration-service-bos) API now enforces limits that previously had  
-  only been recommended. When updating to CSM 1.6, BOS data is migrated to be in compliance with the  
+
+* iSCSI (CASM-4525)
+* Multi-Tenancy (CASM-4437)
+* Bond HSN MacVLAN interfaces support Slingshot resiliency (CASM-3479)
+* HPE Cray OS 24.2
+* SLES 15 SP6
+* Ceph 18
+* SHS 11.1
+* CSM can now be upgraded with IUF. See [Upgrade CSM](upgrade/README.md) for more details.
+* The [BOS](glossary.md#boot-orchestration-service-bos) API now enforces limits that previously had
+  only been recommended. When updating to CSM 1.6, BOS data is migrated to be in compliance with the
   API specification. See [BOS data notice](upgrade/README.md#bos-data-notice) for more details.
-* Please see [iSCSI SBPS](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/iscsi_sbps/iscsi_sbps.md) for  
+* Please see [iSCSI SBPS](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/iscsi_sbps/iscsi_sbps.md) for
   details on iSCSI based boot content projection for `rootfs` and `PE` images.
-    * The [System Admin Toolkit (SAT)](glossary.md#system-admin-toolkit-sat) is fully included in CSM. There is no longer a separate SAT product stream to install. SAT 2.6 releases, which accompanied CSM 1.5, are the last releases of SAT as a separate product. For more information, see [SAT in CSM](operations/system_admin_toolkit/about_sat/SAT_in_CSM.md).
+    * The [System Admin Toolkit (SAT)](glossary.md#system-admin-toolkit-sat) is fully included in CSM.
+      There is no longer a separate SAT product stream to install. SAT 2.6 releases, which accompanied CSM 1.5, are
+      the last releases of SAT as a separate product. For more information,
+      see [SAT in CSM](operations/system_admin_toolkit/about_sat/SAT_in_CSM.md).
     * v1 of Power Control Service (PCS) is active.
 
 ## New
@@ -94,52 +98,52 @@ information, see [SAT in CSM](operations/system_admin_toolkit/about_sat/SAT_in_C
 
 ### Documentation enhancements
 
-- Upgrade documentation modified to support CSM upgrade only through IUF
+* Upgrade documentation modified to support CSM upgrade only through IUF
 * Diagram and procedures for `Upgrade CSM and additional products with IUF` updated
 * Updated `Kyverno` documentation
 * Added documentation about iSCSI based boot content projection for `rootfs` and `PE` images
 * The SAT documentation moved to be fully included within the [System Admin Toolkit (SAT)](https://cray-hpe.github.io/docs-csm/en-16/operations/system_admin_toolkit/) section of the [CSM Administration Guide](https://cray-hpe.github.io/docs-csm/en-16/operations/).
-- CASMINST-5799 Replace remaining references to https://artifactory.algol60.net in docs for CSM tarball and docs RPM downloads
-- CASMTRIAGE-4891 Effect of "docs-csm" versions on directory structure
-- CASMTRIAGE-5734 Docs : Update CSM prerequisite version and CSM release version in docs for CSM-1.5
-- CASMINST-6606 Fix docs stating to deploy rgw on all nodes with '*', fix generate_haproxy script for future
-- CASMCMS-8673 Update CFS docs for 1.4 features
-- CASMTRIAGE-5937 DOCS: Steps to get "Authentication Token" from SLS docs
-- CASMTRIAGE-6208 update_tags.sh failure during docs-rpm install
-- CASMTRIAGE-6188 fanta: docs-csm rpm install failing, sed: no input files
-- CASMMON-350 Bug fixes for SMART data on UAN docs
-- CASMTRIAGE-6251 Error installing docs-csm rpm in 1.6 - cray-sat container image has moved
-- CRAYSAT-1782 Migrate docs-sat content into docs-csm
-- CASMCMS-8877 DOCS: Minor errors in CFS documentation in docs-csm
-- CASMINST-6776 Move API docs generator logic from csm to docs-csm
-- CASMCMS-8901 DOCS: Update CSM 1.6 docs for barebones test
-- CASMINST-6806 DOCS: Make 1.4.4 patch upgrade docs slightly less circuitous
-- CASMTRIAGE-6746 DOCS: bradi >> certs expiring, need help with updating and docs
-- CASMTRIAGE-6810 DOCS: CSM upgrade 1.4 to 1.5 lacks clear section to download latest 1.4 docs-csm and libcsm rpms
-- CASMTRIAGE-6811 DOCS: Review site-init docs to see if we can safe-guard against missing important steps.
-- CASMTRIAGE-6802 DOCS: question around iLO 6 support in FAS and docs
-- CASMNET-2099 DOCS: Changes in CANU docs caused broken links in CSM docs
-- CASMTRIAGE-7199 IUF docs> must supply options -sv and/or -bpcd or -rv during IUF deliver-product stage to install SLURM or PBS
-- CASMTRIAGE-7234 Update the docs to add this step if foxconn (Paradise) nodes
-- CASMHMS-6144 DOCS: Update CSM 1.6 docs to reflect CAPMC removal
-- CASMTRIAGE-7055 DOCS: Install or upgrade additional products with IUF Docs should specify to upgrade docs-csm before starting Product Upgrades
-- CASMTRIAGE-7016 DOCS: update_tags.sh script fails during docs-csm with sed error: No such file or directory
-- CASMMON-401 Upgrade and fresh install changes into csm and docs-csm for Victoriametrics
-- CASMINST-5556 DOCS: NTP resiliency page belongs with install docs
-- CASMTRIAGE-7188 DOCS: libcsm-latest.noarch.rpm and docs-csm-latest.noarch.rpm download path
-- CASMNET-2235 DOCS: Update docs-csm with recommended firmware versions
-- CASMINST-7000 hooks/pre-install-check-prehook.sh should call system copy of docs-csm scripts
-- CASM-4860 DOCS: Add a Note to check latest version of docs-csm is installed or not .Only Upgrading CSM manually
-- CASMCMS-9141 DOCS: Update multitenancy docs to use new BOS CLI shortcuts
-- CASMTRIAGE-7175 DOCS: "repo name unknown to registry" for docs-csm latest rpm
-- CASMTRIAGE-7324 DOCS: check for docs-csm rpm
-- CASMMON-447 CSM-1.6 - Docs: E1000 ClusterStor docs
-- CASMTRIAGE-7175 DOCS: "repo name unknown to registry" for docs-csm latest rpm
-- CASMINST-6992 DOCS: Update CSM upgrade docs with BOS migration info
-- SSI-13518 Update docs csm to match SBPS variable names
-- CASMMON-405 CSM 1.5.2 : Need to remove Grafterm.md from docs-csm as its no longer supported.
-- CASMTRIAGE-7372 DOCS: Remove references to CPS etcd cluster in docs-csm 1.5
-- STP-3667 Clean-up for docs-sat move to docs-csm
+* CASMINST-5799 Replace remaining references to <https://artifactory.algol60.net> in docs for CSM tarball and docs RPM downloads
+* CASMTRIAGE-4891 Effect of "docs-csm" versions on directory structure
+* CASMTRIAGE-5734 Docs : Update CSM prerequisite version and CSM release version in docs for CSM-1.5
+* CASMINST-6606 Fix docs stating to deploy rgw on all nodes with '*', fix generate_haproxy script for future
+* CASMCMS-8673 Update CFS docs for 1.4 features
+* CASMTRIAGE-5937 DOCS: Steps to get "Authentication Token" from SLS docs
+* CASMTRIAGE-6208 update_tags.sh failure during docs-rpm install
+* CASMTRIAGE-6188 fanta: docs-csm rpm install failing, sed: no input files
+* CASMMON-350 Bug fixes for SMART data on UAN docs
+* CASMTRIAGE-6251 Error installing docs-csm rpm in 1.6 - cray-sat container image has moved
+* CRAYSAT-1782 Migrate docs-sat content into docs-csm
+* CASMCMS-8877 DOCS: Minor errors in CFS documentation in docs-csm
+* CASMINST-6776 Move API docs generator logic from csm to docs-csm
+* CASMCMS-8901 DOCS: Update CSM 1.6 docs for barebones test
+* CASMINST-6806 DOCS: Make 1.4.4 patch upgrade docs slightly less circuitous
+* CASMTRIAGE-6746 DOCS: bradi >> certs expiring, need help with updating and docs
+* CASMTRIAGE-6810 DOCS: CSM upgrade 1.4 to 1.5 lacks clear section to download latest 1.4 docs-csm and libcsm rpms
+* CASMTRIAGE-6811 DOCS: Review site-init docs to see if we can safe-guard against missing important steps.
+* CASMTRIAGE-6802 DOCS: question around iLO 6 support in FAS and docs
+* CASMNET-2099 DOCS: Changes in CANU docs caused broken links in CSM docs
+* CASMTRIAGE-7199 IUF docs> must supply options -sv and/or -bpcd or -rv during IUF deliver-product stage to install SLURM or PBS
+* CASMTRIAGE-7234 Update the docs to add this step if foxconn (Paradise) nodes
+* CASMHMS-6144 DOCS: Update CSM 1.6 docs to reflect CAPMC removal
+* CASMTRIAGE-7055 DOCS: Install or upgrade additional products with IUF Docs should specify to upgrade docs-csm before starting Product Upgrades
+* CASMTRIAGE-7016 DOCS: update_tags.sh script fails during docs-csm with sed error: No such file or directory
+* CASMMON-401 Upgrade and fresh install changes into csm and docs-csm for Victoriametrics
+* CASMINST-5556 DOCS: NTP resiliency page belongs with install docs
+* CASMTRIAGE-7188 DOCS: libcsm-latest.noarch.rpm and docs-csm-latest.noarch.rpm download path
+* CASMNET-2235 DOCS: Update docs-csm with recommended firmware versions
+* CASMINST-7000 hooks/pre-install-check-prehook.sh should call system copy of docs-csm scripts
+* CASM-4860 DOCS: Add a Note to check latest version of docs-csm is installed or not .Only Upgrading CSM manually
+* CASMCMS-9141 DOCS: Update multitenancy docs to use new BOS CLI shortcuts
+* CASMTRIAGE-7175 DOCS: "repo name unknown to registry" for docs-csm latest rpm
+* CASMTRIAGE-7324 DOCS: check for docs-csm rpm
+* CASMMON-447 CSM-1.6 - Docs: E1000 ClusterStor docs
+* CASMTRIAGE-7175 DOCS: "repo name unknown to registry" for docs-csm latest rpm
+* CASMINST-6992 DOCS: Update CSM upgrade docs with BOS migration info
+* SSI-13518 Update docs csm to match SBPS variable names
+* CASMMON-405 CSM 1.5.2 : Need to remove Grafterm.md from docs-csm as its no longer supported.
+* CASMTRIAGE-7372 DOCS: Remove references to CPS etcd cluster in docs-csm 1.5
+* STP-3667 Clean-up for docs-sat move to docs-csm
 
 ## Bug fixes
 
@@ -183,18 +187,19 @@ see [Removals](introduction/deprecated_features/README.md#removals)
         * A workaround is presented in [iSCSI SBPS boot failure](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/troubleshooting/known_issues/SBPS_boot_fail.md)
 
 ## All Tickets
+
 CASMINST-5476 Evaluate latest zalando postres operator -- determine if we can use upstream without changes
 CASMSEC-374 Remove opa-gatekeeper for fresh installs by Jan 17 2023
 CASMTRIAGE-4693 vShasta v2: on SLES-15 SP4 NCNs modprobe on the RBD module fails with invalid execution format
 CASMTRIAGE-4762 fanta validate certifi is correct version failing
 CASMNET-2001 Unbound metrics missing from Prometheus
 CASMDIAG-914 Add values for helm charts into customizations.yaml
-MTL-2059 Update version of aaa_base* packages in node images to 10.3.1
+MTL-2059 Update version of `aaa_base` packages in node images to 10.3.1
 MTL-2063 Misc SP4 Updates
 CASMHMS-5626 HSM: Re-remove HSM v1 APIs
 CASMINST-5767 Update kubernetes / ceph version in file "prerequisites.sh"
 CASMTRIAGE-4793 Gamora: Ceph failing to start on S001 after image upgrade
-CASMINST-5799 Replace remaining references to https://artifactory.algol60.net in docs for CSM tarball and docs RPM downloads
+CASMINST-5799 Replace remaining references to <https://artifactory.algol60.net> in docs for CSM tarball and docs RPM downloads
 CASMPET-6223 Cilium:  coredns pods cannot reach kube-apiserver on fresh install
 CASMCMS-8336 Update cfs-debugger to handle new CFS session structure
 CASMCMS-8375 Remove beta tags from CFS in the manifest
@@ -271,7 +276,7 @@ MTL-2000 Install Packages onto NCNs with cloud-init zypper/packages module
 CASMINST-6518 Need to modify the sat command output of iuf
 CASMTRIAGE-5846 sysctl issues during prepare-images stage
 CASMINST-6608 iuf-cli needs to publish to SP5 or start using NOOS
-CASMPET-6748 boto3 calls to https://rgw-vip.nmn fail even when verify cert == false
+CASMPET-6748 boto3 calls to <https://rgw-vip.nmn> fail even when verify cert == false
 CASM-3983 Add the product-deletion-utility image to the list of Docker images that need to be included with CSM.
 CASMCMS-8568 TESTS: cmsdev: Update BOS test to cover good path multi-tenancy CLI queries
 CASMCMS-8691 Convert CMS RPMs to noos if possible
@@ -588,7 +593,7 @@ CASMTRIAGE-6644 DOCS: create_system_configuration_using_cluster_discovery_servic
 CASMTRIAGE-6671 DOCS: correct filename from /etc/shadows to /etc/shadow in Configure_the_root_Password_and_SSH_Keys_in_Vault
 CASMCMS-8917 TESTS: Only build barebones test for Python 3.11
 CASMTRIAGE-6611 DOCS: nexus-export.sh script prints status messages too frequently
-MTL-2282 CI/CD: Create /etc/<type>-release file earlier in the node-images pipeline
+MTL-2282 CI/CD: Create /etc/\<type\>-release file earlier in the node-images pipeline
 CASMCMS-8919 Invalid requirement version in cray-cmstools-crayctldeploy RPM
 CASMMON-369 New Thanos Service is configured without storage limits.
 CASMTRIAGE-6677 DOCS: CSM 1.5 doc to upgrade CSM and additional products - needs flow clarification in page for "Stage 1 - CSM service upgrade"
@@ -882,7 +887,7 @@ CASMCMS-9029 TESTS: cmsdev: VCS: Do not embed git credentials in the URL
 CASMINST-6897 Fixes/improvements to randstr sealed secret generator
 CASMINST-6902 DOCS: Improve PIT backup data & procedure
 MTL-2400 CSM V1.6.0 -- Add New DST Signing Key into node-image builds
-CASMPET-6980 [playbook] Enable/ start SBPS marshal agent systemd service during worker node personalization
+CASMPET-6980 \[playbook\] Enable/ start SBPS marshal agent systemd service during worker node personalization
 CASMCMS-9005 Pick up latest cray-services versions in cray-cfs-api chart
 CASMCMS-9030 Pick up latest cray-services versions in cfs-hwsync-agent
 CASMINST-6906 DOCS: During CSM upgrade update RPMs after updating services
