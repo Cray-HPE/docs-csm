@@ -71,6 +71,20 @@ if [[ -z ${CSM_RELEASE} ]]; then
   exit 1
 fi
 
+# Make sure this prerequisites.sh version matches the CSM_RELEASE version
+# This prerequisites script should only be run if upgrading to CSM 1.6
+prereq_vers_major=1
+prereq_vers_minor=6
+csm_release_spaced=$(echo "$CSM_RELEASE" | tr "." " ")
+csm_release_major=$(echo "$csm_release_spaced" | awk '{ print $1 }')
+csm_release_minor=$(echo "$csm_release_spaced" | awk '{ print $2 }')
+
+if [[ $prereq_vers_major -ne $csm_release_major ]] || [[ $prereq_vers_minor -ne $csm_release_minor ]]; then
+  echo "ERROR This version of the 'prerequisistes.sh' script should be run on CSM ${prereq_vers_major}.${prereq_vers_minor}."
+  echo "ERROR Make sure docs-csm for $CSM_RELEASE is installed so that the correct prerequisites.sh script is used."
+  exit 1
+fi
+
 if [[ -z ${CSM_ARTI_DIR} ]]; then
   echo "CSM_ARTI_DIR environment variable has not been set"
   echo "make sure you have run: prepare-assets.sh"
