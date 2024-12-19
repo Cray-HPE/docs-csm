@@ -85,6 +85,10 @@ else
   echo "====> ${state_name} has been completed"
 fi
 
+if [[ ${target_ncn} == ncn-m* ]]; then
+	drain_node ${target_ncn}
+fi
+
 state_name="SET rd.live.dir AND rd.live.overlay.reset"
 state_recorded=$(is_state_recorded "${state_name}" "${target_ncn}")
 if [[ ${state_recorded} == "0" ]]; then

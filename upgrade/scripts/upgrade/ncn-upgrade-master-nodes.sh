@@ -139,8 +139,6 @@ fi
   fi
 } >> ${LOG_FILE} 2>&1
 
-drain_node $target_ncn
-
 # Validate SLS health before calling csi handoff bss-update-*, since
 # it relies on SLS
 check_sls_health >> "${LOG_FILE}" 2>&1
