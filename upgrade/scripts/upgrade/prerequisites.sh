@@ -81,7 +81,7 @@ csm_release_major=$(echo "$csm_release_spaced" | awk '{ print $1 }')
 csm_release_minor=$(echo "$csm_release_spaced" | awk '{ print $2 }')
 
 if [[ $docs_major -ne $csm_release_major ]] || [[ $docs_minor -ne $csm_release_minor ]]; then
-  echo "ERROR This version of the 'prerequisistes.sh' script should be run when upgrading to CSM ${docs_major}.${docs_minor}."
+  echo "ERROR This version of the 'prerequisites.sh' script should be run when upgrading to CSM ${docs_major}.${docs_minor}."
   echo "ERROR Make sure docs-csm for CSM $CSM_RELEASE is installed so that the correct prerequisites.sh script is used."
   exit 1
 fi
