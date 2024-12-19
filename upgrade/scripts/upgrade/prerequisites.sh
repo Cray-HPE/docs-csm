@@ -72,16 +72,19 @@ if [[ -z ${CSM_RELEASE} ]]; then
 fi
 
 # Make sure this prerequisites.sh version matches the CSM_RELEASE version
-# This prerequisites script should only be run if upgrading to CSM 1.6
-prereq_vers_major=1
-prereq_vers_minor=6
+# This prerequisites script should only be if docs-csm and CSM_RELEASE vesion match
+docs_rpm_vers=$(rpm -qa docs-csm)
+docs_trimmed_vers=${docs_rpm_vers#"docs-csm-"}
+docs_spaced_vers=$(echo "$docs_trimmed_vers" | tr "." " ")
+docs_major=$(echo "$docs_spaced_vers" | awk '{ print $1 }')
+docs_minor=$(echo "$docs_spaced_vers" | awk '{ print $2 }')
 csm_release_spaced=$(echo "$CSM_RELEASE" | tr "." " ")
 csm_release_major=$(echo "$csm_release_spaced" | awk '{ print $1 }')
 csm_release_minor=$(echo "$csm_release_spaced" | awk '{ print $2 }')
 
-if [[ $prereq_vers_major -ne $csm_release_major ]] || [[ $prereq_vers_minor -ne $csm_release_minor ]]; then
-  echo "ERROR This version of the 'prerequisistes.sh' script should be run on CSM ${prereq_vers_major}.${prereq_vers_minor}."
-  echo "ERROR Make sure docs-csm for $CSM_RELEASE is installed so that the correct prerequisites.sh script is used."
+if [[ $docs_major -ne $csm_release_major ]] || [[ $docs_minor -ne $csm_release_minor ]]; then
+  echo "ERROR This version of the 'prerequisites.sh' script should be run when upgrading to CSM ${docs_major}.${docs_minor}."
+  echo "ERROR Make sure docs-csm for CSM $CSM_RELEASE is installed so that the correct prerequisites.sh script is used."
   exit 1
 fi
 
