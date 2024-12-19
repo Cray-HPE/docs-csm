@@ -136,8 +136,6 @@ if [[ ${first_master_hostname} == ${target_ncn} ]]; then
   fi
 fi
 
-drain_node $target_ncn
-
 # Validate SLS health before calling csi handoff bss-update-*, since
 # it relies on SLS
 check_sls_health
