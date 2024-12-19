@@ -122,7 +122,7 @@ spec:
                   for i in $(kubectl get netpol -A --no-headers | awk '{print $1}' | sort -u );do
                     echo "--- namespace ${i} ---"
                     # Not stashing network policies for cray-shared-kafka because they get recreated by the operator
-                    for j in $(kubectl -n ${i} get netpol --no-headers | grep -v cray-shared-kafka-network-policy | awk '{print $1}');do
+                    for j in $(kubectl -n ${i} get netpol --no-headers | grep -v cray-shared-kafka | awk '{print $1}');do
                       echo "Saving off network policy ${j}"
                       echo "---" >> /tmp/netpol.yaml
                       kubectl -n ${i} get netpol ${j} -o yaml >> /tmp/netpol.yaml
