@@ -3,9 +3,10 @@
 This section defines environment variables and directory content that is used throughout the workflow.
 
 - [1. Prepare for the install or upgrade](#1-prepare-for-the-install-or-upgrade)
-- [2. Use of `iuf activity`](#2-use-of-iuf-activity)
-- [3. Save system state before upgrade](#3-save-system-state-before-upgrade)
-- [4. Next steps](#4-next-steps)
+- [2. Install the latest documentation](#2-install-the-latest-documentation)
+- [3. Use of `iuf activity`](#3-use-of-iuf-activity)
+- [4. Save system state before upgrade](#4-save-system-state-before-upgrade)
+- [5. Next steps](#5-next-steps)
 
 ## 1. Prepare for the install or upgrade
 
@@ -35,15 +36,14 @@ This section defines environment variables and directory content that is used th
 
     - Environment variables have been set and required IUF directories have been created
 
-1. Ensure that the
-   [latest version of `docs-csm`](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/update_product_stream/README.md#check-for-latest-documentation)
-    is installed for the target CSM version being installed or upgraded.
+## 2. Install the latest documentation
 
-    **`NOTE`** When using IUF to upgrade CSM, please skip this subsection.
+Ensure that the [latest version of `docs-csm`](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/update_product_stream/README.md#check-for-latest-documentation)
+is installed. If CSM is being upgraded, install the **target** version of the CSM documentation.
 
-    For example: when upgrading from CSM version 1.5.0 to version 1.5.1, install `docs-csm-1.5.1.noarch`
+For example, when upgrading from CSM version 1.5.0 to version 1.6.0, install `docs-csm-1.6.0.noarch`.
 
-## 2. Use of `iuf activity`
+## 3. Use of `iuf activity`
 
 **`NOTE`** This section is informational only. There are no operations to perform.
 
@@ -60,7 +60,7 @@ iuf -a "${ACTIVITY_NAME}" activity --create --comment "download complete" waitin
 
 The install and upgrade workflow instructions will not use `iuf activity` in this manner, deferring to the administrator to use it as desired.
 
-## 3. Save system state before upgrade
+## 4. Save system state before upgrade
 
 (`ncn-m001#`) Before performing the install/upgrade, it is important to save specific system state information so that it can be referenced later if needed.
 Run the script below to save the state information. The information gathered by this script is SAT status, SAT site information,
@@ -70,7 +70,7 @@ HSN status, Ceph status, and SDU and RDA configurations. This information will b
 /usr/share/doc/csm/upgrade/scripts/upgrade/util/pre-upgrade-status.sh
 ```
 
-## 4. Next steps
+## 5. Next steps
 
 - If performing an initial install or an upgrade of non-CSM products only, return to the
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)
