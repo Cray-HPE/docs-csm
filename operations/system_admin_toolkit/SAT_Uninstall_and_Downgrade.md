@@ -77,7 +77,8 @@ of the `cray-sat` container image run by Podman when the `sat` command is execut
 1. (`ncn-mw#`) Determine the versions of the `cray-sat` container image which are available
    in the container image registry in Nexus.
 
-   There are multiple ways to do this, but one easy way is to use `podman search` because:
+   There are multiple ways to do this, but one easy way is to use `podman search` to find
+   the `cray-sat` container image within the following locations:
 
    - Versions of SAT which were available as a separate product stream uploaded the `cray-sat`
      container image to the path `cray/cray-sat` in the Nexus container image registry.

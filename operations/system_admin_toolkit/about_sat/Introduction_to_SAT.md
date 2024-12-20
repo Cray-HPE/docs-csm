@@ -7,7 +7,7 @@ boot and shutdown, and replacing hardware components.
 ## SAT Command-Line Utility
 
 The System Admin Toolkit (SAT) provides a command-line utility called `sat` that runs from
-Kubernetes control plane nodes (NCNs). The `sat` command-line utility is organized into
+Kubernetes control plane nodes (`ncn-m` nodes). The `sat` command-line utility is organized into
 multiple subcommands that perform different administrative tasks. For example, `sat status`
 provides a summary of the system component statuses while `sat bootprep` provides a way to
 create CFS configurations, IMS images, and session templates to prepare for booting the system. For
