@@ -57,7 +57,7 @@ features are listed first).
 
 ### Deprecated in CSM 1.6
 
-- The `sat swap cable` and `sat swap switch` commands are deprecated. Use [Slingshot](../../../glossary.md#slingshot) Orchestrated Maintenance to remove and add Slingshot switches and cables. For more information, see the *HPE Slingshot Operations Guide (S-9000)*.
+- The `sat swap cable` and `sat swap switch` commands are deprecated. Use [Slingshot](../../glossary.md#slingshot) Orchestrated Maintenance to remove and add Slingshot switches and cables. For more information, see the *HPE Slingshot Operations Guide (S-9000)*.
 
 ### Deprecated in CSM 1.5
 
