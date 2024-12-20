@@ -1,135 +1,135 @@
 # Introduction to SAT
 
-## About System Admin Toolkit (SAT)
-
 The System Admin Toolkit (SAT) is designed to assist administrators with common tasks, such as
 troubleshooting and querying information about the HPE Cray EX System and its components, system
 boot and shutdown, and replacing hardware components.
 
-### SAT Command Line Utility
+## SAT Command-Line Utility
 
-The System Admin Toolkit (SAT) provides a command-line utility called `sat` that can be run from
-Kubernetes control plane nodes (`ncn-m` nodes). The `sat` command-line utility is organized into
-multiple subcommands that perform different administrative tasks. For example, `sat status` provides
-a summary of the status of the components in the system while `sat bootprep` provides a way to
+The System Admin Toolkit (SAT) provides a command-line utility called `sat` that runs from
+Kubernetes control plane nodes (NCNs). The `sat` command-line utility is organized into
+multiple subcommands that perform different administrative tasks. For example, `sat status`
+provides a summary of the system component statuses while `sat bootprep` provides a way to
 create CFS configurations, IMS images, and session templates to prepare for booting the system. For
 more information on the available SAT commands, see [SAT Command Overview](SAT_Command_Overview.md).
-Most `sat` subcommands depend on services or components from other products in the HPE Cray EX software stack.
-For more details, refer to the [SAT Dependencies](SAT_Dependencies.md).
+
+Most `sat` subcommands depend on services or components from other products in the HPE Cray EX
+software stack. For more information, see [SAT Dependencies](SAT_Dependencies.md).
 
 In CSM 1.3 and newer, the `sat` command is automatically available on all the Kubernetes control
 plane nodes. For more information, see [SAT in CSM](SAT_in_CSM.md). Older versions of CSM do not
 have the `sat` command automatically available, and SAT must be installed as a separate product.
 
-### SAT Container Environment
+## SAT Container Environment
 
-The `sat` command-line utility runs in a container using Podman, a daemonless container runtime. SAT
-runs on Kubernetes control plane nodes. A few important points about the SAT container environment
-include the following:
+On Kubernetes control plane nodes, the `sat` command-line utility runs within a container using
+Podman, a daemonless container runtime. There are two options for running the `sat` command-line
+utility, interactive mode and non-interactive mode. In both options, a container is launched in the
+background to execute the command. It is important to note that:
 
-- Using either `sat` or `sat bash` always launches a container.
+- Using either the interactive mode with `sat bash` or the non-interactive mode with `sat` always
+  launches a container.
 - The SAT container does not have access to the NCN file system.
 
-There are two ways to run `sat`.
+### SAT Interactive Mode
 
-- **Interactive**: Launching a container using `sat bash`, followed by a `sat` command.
-- **Non-interactive**: Running a `sat` command directly on a Kubernetes control plane node.
+The SAT interactive mode involves executing `sat bash` to launch a container before executing the
+`sat` command. This option launches an interactive shell in which to enter `sat` commands. The
+interactive mode is useful for:
 
-In both of these cases, a container is launched in the background to execute the command. The first
-option, running `sat bash` first, gives an interactive shell, at which point `sat` commands can be
-run. In the second option, the container is launched, executes the command, and upon the command's
-completion the container exits. The following two examples show the same action, checking the system
-status, using both modes.
+- Allowing read and write access to local files on ephemeral container storage.
+- Saving time when using successive `sat` commands because a new container does not need to launch
+  for each command.
 
-(`ncn-m001#`) Here is an example using interactive mode:
+To check a system's status using the interactive mode:
 
-```bash
-sat bash
-```
+1. (`ncn-m001#`) Use `sat bash` to launch an interactive shell.
 
-(`(CONTAINER_ID) sat-container#`) Example `sat` command after a container is launched:
+   ```bash
+   sat bash
+   ```
+
+1. (`(CONTAINER_ID) sat-container#`) Use `sat status` to review the status of the system's components.
+
+   ```bash
+   sat status
+   ```
+
+### SAT Non-Interactive Mode
+
+The SAT non-interactive mode involves executing the `sat` command directly on a Kubernetes control
+plane node. This option launches a container, executes the `sat` command, and exits the container
+once the command completes. The non-interactive mode is useful for:
+
+- Calling `sat` with a script.
+- Running a single `sat` command as part of several steps that need to be executed from a management
+  NCN.
+
+To check a system's status using the non-interactive mode:
+
+(`ncn-m001#`) Use `sat status` to review the status of the system's components.
 
 ```bash
 sat status
 ```
 
-(`ncn-m001#`) Here is an example using non-interactive mode:
+### SAT Container Environment Man Page
 
-```bash
-sat status
-```
+To view the man page describing the SAT container environment, use either `man sat` or `man sat-podman`
+on the Kubernetes control plane nodes.
 
-#### Interactive Advantages
+**NOTE:** Only the man page for the SAT container environment is available with `man sat` and
+`man sat podman`. To view man pages for the actual `sat` commands used to perform system administration
+tasks, see [SAT Man Pages](#sat-man-pages).
 
-Running `sat` using the interactive command prompt gives the ability to read and write local files
-on ephemeral container storage. If multiple `sat` commands are being run in succession, use `sat
-bash` to launch the container beforehand. This will save time because the container does not need to
-be launched for each `sat` command.
+For example:
 
-#### Non-interactive Advantages
-
-The non-interactive mode is useful if calling `sat` with a script, or when running a single `sat`
-command as a part of several steps that need to be executed from a management NCN.
-
-#### SAT Container Environment Man Page
-
-A man page describing the SAT container environment is available on the Kubernetes control plane
-nodes, which can be viewed either with `man sat` or man `sat-podman` from the manager node.
-
-Note that this is only the man page for the SAT container environment, not for the actual `sat`
-commands which can be used to perform system administration tasks. See
-[SAT Man Pages](#sat-man-pages) for instructions on accessing those man pages.
-
-Either of the following options work to view the man page for the SAT container environment.
-
-- (`ncn-m#`) View the man page for the SAT container environment:
+- (`ncn-m#`) View the man page for the SAT container environment using its short name.
 
   ```bash
   man sat
   ```
 
-- (`ncn-m#`) View the man page for the SAT container environment using its long name:
+- (`ncn-m#`) View the man page for the SAT container environment using its long name.
 
   ```bash
   man sat-podman
   ```
 
-### SAT Man Pages
-
-To view a `sat` man page from a Kubernetes control plane node, use `sat-man` on the manager node or
-use `man` within a shell in the SAT container started by `sat bash`.
+## SAT Man Pages
 
 The top-level `sat` man page describes the command-line interface, documents the global options
 affecting all subcommands, documents configuration file options, and refers to the man pages for
-each subcommand. Each of these subcommands have their own options documented in their individual man
-pages.
+each subcommand. Each individual `sat` subcommand also has a man page describing its options.
 
-See the following examples showing how to view `sat` man pages directly on a manager node using
-`sat-man`.
+To view `sat` man pages when running SAT commands in interactive mode, use `man`. To view `sat`
+man pages when running SAT commands in non-interactive mode, use `sat-man`. For more information
+on interactive and non-interactive mode, see [SAT Container Environment](#sat-container-environment).
 
-- (`ncn-m#`) View the top-level `sat` man page:
+For example, in SAT interactive mode:
 
-  ```bash
-  sat-man sat
-  ```
-
-- (`ncn-m#`) View the man page for the `sat status` subcommand:
-
-  ```bash
-  sat-man sat-status
-  ```
-
-See the following examples showing how to view `sat` man pages within the shell in the SAT container
-started by `sat bash`.
-
-- (`(CONTAINER_ID) sat-container#`) View the top-level `sat` man page:
+- (`(CONTAINER_ID) sat-container#`) View the top-level `sat` man page.
 
   ```bash
   man sat
   ```
 
-- (`(CONTAINER_ID) sat-container#`) View the man page for the `sat status` subcommand:
+- (`(CONTAINER_ID) sat-container#`) View the man page for the `sat status` subcommand.
 
   ```bash
   man sat-status
+  ```
+
+For example, in SAT non-interactive mode:
+
+- (`ncn-m#`) View the top-level `sat` man page.
+
+  ```bash
+  sat-man sat
+  ```
+
+- (`ncn-m#`) View the man page for the `sat status` subcommand.
+
+  ```bash
+  sat-man sat-status
   ```
