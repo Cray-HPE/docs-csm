@@ -16,17 +16,6 @@ More information can be found on the [BICAN Technical Summary](../operations/net
 Review the BICAN summary before continuing with the CSM install.
 For detailed BICAN documentation, see [BICAN Technical Details](../operations/network/management_network/bican_technical_details.md).
 
-## NVIDIA CPU and GPU notice
-
-Servers with NVIDIA CPUs and GPUs are **not** supported by CSM 1.6.0.
-
-The January 2025 HPE HPC continuous software stack releases (CSM 1.6.0) are for HPE Cray EX systems without NVIDIA CPUs and GPUs.
-For HPE Cray EX systems with NVIDIA CPUs and GPUs, please use the August 2024 (CSM 1.5.x) HPE HPC continuous software stack.
-These software stacks were validated with NVIDIA HPC SDK 24.3.
-
-The March 2025 HPE HPC continuous and extended software stack releases will be validated with NVIDIA HPC SDK 24.11.
-The March 2025 (CSM 1.6.1) software stacks will support all HPE Cray EX systems.
-
 ## High-level overview of CSM install
 
 In the [Pre-installation](#pre-installation) section of the install, information about the HPE Cray

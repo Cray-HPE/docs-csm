@@ -4,7 +4,6 @@ There are several alternative procedures to perform an upgrade of Cray Systems M
 software. Choose the appropriate procedure from the sections below.
 
 * [Release Notes](#release-notes)
-    * [NVIDIA CPU and GPU notice](#nvidia-cpu-and-gpu-notice)
     * [BOS data notice](#bos-data-notice)
 * [CSM major/minor version upgrade](#csm-majorminor-version-upgrade)
     * [Option 1: Upgrade CSM with additional HPE Cray EX software products](#option-1-upgrade-csm-with-additional-hpe-cray-ex-software-products)
@@ -15,18 +14,6 @@ software. Choose the appropriate procedure from the sections below.
 ## Release Notes
 
 Before upgrading, review the [Release Notes](../RELEASE_NOTES.md)
-
-### NVIDIA CPU and GPU notice
-
-Servers with NVIDIA CPUs and GPUs are **not** supported by CSM 1.6.0. Systems with these servers should
-**not** be upgraded to CSM 1.6.0.
-
-The January 2025 HPE HPC continuous software stack releases (CSM 1.6.0) are for HPE Cray EX systems without NVIDIA CPUs and GPUs.
-For HPE Cray EX systems with NVIDIA CPUs and GPUs, please use the August 2024 (CSM 1.5.x) HPE HPC continuous software stack.
-These software stacks were validated with NVIDIA HPC SDK 24.3.
-
-The March 2025 HPE HPC continuous and extended software stack releases will be validated with NVIDIA HPC SDK 24.11.
-The March 2025 (CSM 1.6.1) software stacks will support all HPE Cray EX systems.
 
 ### BOS data notice
 
