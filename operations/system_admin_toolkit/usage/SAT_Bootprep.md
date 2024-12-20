@@ -5,9 +5,10 @@ and configuring images in IMS, and creating BOS session templates. The
 solution is based on a given input file that defines how those configurations,
 images, and session templates should be created. This automated process centers
 around the `sat bootprep` command. `man` page documentation for `sat bootprep`
-can be viewed similar to other SAT commands.
+can be viewed similar to other SAT commands. For more information, see
+[SAT Man Pages](../about_sat/Introduction_to_SAT.md#sat-man-pages).
 
-(`ncn-m001#`) Here is an example:
+(`ncn-m001#`) For example:
 
 ```bash
 sat-man sat-bootprep
@@ -68,7 +69,7 @@ The `sat bootprep run` command validates the schema version specified
 in the input file. The command also makes sure that the schema version
 of the input file is compatible with the schema version understood by the
 current version of `sat bootprep`. For more information on schema version
-validation, refer to the `schema_version` property description in the bootprep
+validation, see the `schema_version` property description in the bootprep
 input file schema. For more information on viewing the bootprep input file
 schema in either raw form or user-friendly HTML form, see [View SAT Bootprep
 Schema](#view-sat-bootprep-schema).
@@ -377,7 +378,7 @@ which are optional:
 
 As mentioned above, the parameters under `bos_parameters` are passed through
 directly to BOS. For more information on the properties of a BOS boot set,
-refer to [BOS Session Templates](../../boot_orchestration/Session_Templates.md).
+see [BOS Session Templates](../../boot_orchestration/Session_Templates.md).
 
 Here is an example of a BOS session template that refers to an existing IMS
 image by name and targets nodes with the role `Compute` and the architecture
@@ -423,7 +424,7 @@ session_templates:
         rootfs_provider_passthrough: sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.{{default.system-name}}.{{default.site-domain}}:300
 ```
 
-(**Note:** Make sure to define the values for `system-name`and `site-domain` in the `site-vars.yaml` file.)
+(**NOTE:** Make sure to define the values for `system-name`and `site-domain` in the `site-vars.yaml` file.)
 
 Here is an example of a BOS session template that refers to an image from the
 input file by its `ref_name` and targets nodes with the role `Compute` and the
@@ -542,7 +543,7 @@ input file support rendering as a Jinja2 template and thus support variables:
     - `bos_parameters.boot_sets.BOOT_SET_NAME.rootfs_provider_passthrough`
 
 Jinja2 built-in filters may be used in values of any of the keys listed above.
-(**Note:** When the value of a key in the bootprep input file is a Jinja2
+(**NOTE:** When the value of a key in the bootprep input file is a Jinja2
 expression, it must be quoted to pass YAML syntax checking.)
 
 In addition, Python string methods can be called on the string variables.
@@ -578,7 +579,7 @@ configurations:
       branch: "{{uss.working_branch}}"
 ```
 
-**Note:** When the value of a key in the bootprep input file is a Jinja2
+**NOTE:** When the value of a key in the bootprep input file is a Jinja2
 expression, it must be quoted to pass YAML syntax checking.
 
 Jinja2 expressions can also use filters and Python's built-in string methods to
@@ -615,7 +616,7 @@ include the following:
   under the `session_templates` key. The value of this variable is the name of
   the IMS image used in this session template.
 
-  **Note:** The name of a session template is restricted to 45 characters. Keep
+  **NOTE:** The name of a session template is restricted to 45 characters. Keep
   this in mind when using `image.name` in the name of a session template.
 
 These variables reduce the need to duplicate values throughout the `sat
@@ -798,7 +799,7 @@ materials and a formal specification of the JSON Schema metaschema, can be found
 
 ### View the exact schema specification
 
-(`ncn-m001#`) To view the exact schema specification, run `sat bootprep view-schema`.
+(`ncn-m001#`) To view the exact schema specification, use `sat bootprep view-schema`.
 
 ```bash
 sat bootprep view-schema
