@@ -86,7 +86,7 @@ else
 fi
 
 if [[ ${target_ncn} == ncn-m* ]]; then
-	drain_node ${target_ncn}
+  drain_node ${target_ncn}
 fi
 
 state_name="SET rd.live.dir AND rd.live.overlay.reset"
