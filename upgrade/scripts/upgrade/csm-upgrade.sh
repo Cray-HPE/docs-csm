@@ -206,6 +206,10 @@ if [[ $state_recorded == "0" ]] && k8s_job_exists "${ns}" "${job_name}"; then
       --insecure-skip-tls-verify-backend --tail=-1 \
       -l 'app.kubernetes.io/instance in (cray-bos, cray-bos-db)' > "${K8S_POD_LOGS}"
 
+    # Apply fix for CASMCMS-9234
+    echo "Applying fix for CASMCMS-9234, if needed"
+    "${basedir}/workarounds/CASMCMS-9234/fix.sh" "${SNAPSHOT_DIR}"
+
     SNAPSHOT_DIR_BASENAME=$(basename "${SNAPSHOT_DIR}")
     TARFILE_BASENAME="${SNAPSHOT_DIR_BASENAME}.tgz"
     TARFILE_FULLPATH="/tmp/${TARFILE_BASENAME}"
