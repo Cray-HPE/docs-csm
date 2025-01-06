@@ -43,7 +43,7 @@ The remedy to the situation is to manually delete the BOS v1 sessions from the u
 1. (`ncn-mw#`) Identify the name of a BOS etcd pod.
 
     ```bash
-    BOS_ETCD_POD=$(kubectl get pods -n services -l app=etcd,etcd_cluster=cray-bos-etcd \
+    BOS_ETCD_POD=$(kubectl get pods -n services -l app.kubernetes.io/name=etcd,app.kubernetes.io/instance=cray-bos \
                     | grep Running | head -1 | awk '{ print $1 }')
     echo "${BOS_ETCD_POD}"
     ```
@@ -51,7 +51,7 @@ The remedy to the situation is to manually delete the BOS v1 sessions from the u
     Example output:
 
     ```text
-    cray-bos-etcd-hwb88pqklg
+    cray-bos-bitnami-etcd-0
     ```
 
 1. (`ncn-mw#`) Optionally, list the number of entries in the BOS v1 session database.
