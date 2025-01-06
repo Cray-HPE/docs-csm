@@ -87,6 +87,8 @@ victoria
 5.15.itb
 64-port
 7060CX2-32S
+8.x
+8.x.x
 802.1Q
 802.1p
 802.1s
@@ -95,6 +97,8 @@ victoria
 802.3cd/bs
 8325-23C
 8325-48Y8C
+9.x
+9.x.x
 ACLs
 AOS-CX
 API
