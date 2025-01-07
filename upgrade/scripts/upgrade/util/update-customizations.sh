@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -162,7 +162,10 @@ if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-
   yq4 'del(.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.prometheus)' -i $c
   yq4 'del(.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.thanos)' -i $c
 fi
-
+#sma-vm-cluster
+if [ "$(yq4 eval '.spec.kubernetes.services.sma-vm-cluster' $upgrade_customizations)" != null ]; then
+  yq4 -i eval ".spec.kubernetes.services[\"sma-vm-cluster\"] += (load(\"${upgrade_customizations}\") | .spec.kubernetes.services[\"sma-vm-cluster\"])" "$c"
+fi
 #sma-pcim
 if [ "$(yq4 eval '.spec.kubernetes.services.sma-pcim' $c)" == null ]; then
   yq4 eval '.spec.proxiedWebAppExternalHostnames.customerManagement += [ "sma-pcim.cmn.{{network.dns.external}}" ]' -i $c
