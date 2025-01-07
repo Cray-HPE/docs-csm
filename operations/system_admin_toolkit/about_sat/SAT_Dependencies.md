@@ -32,14 +32,14 @@ CSM dependencies:
 
 CSM dependencies:
 
-- Boot Orchestration Service (BOS)
+- [Boot Orchestration Service (BOS)](../../../glossary.md#boot-orchestration-service-bos)
 - [Cray Advanced Platform Monitoring and Control (CAPMC)](../../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
 - Ceph
 - Etcd
 - [Firmware Action Service (FAS)](../../../glossary.md#firmware-action-service-fas)
 - [Hardware State Manager (HSM)](../../../glossary.md#hardware-state-manager-hsm)
 - Kubernetes
-- S3
+- [Simple Storage Service (S3)](../../../glossary.md#simple-storage-service-s3)
 
 HPE Cray Supercomputing [User Services Software (USS)](../../../glossary.md#user-services-software-uss) dependencies:
 
@@ -49,7 +49,7 @@ HPE Cray Supercomputing [User Services Software (USS)](../../../glossary.md#user
 
 CSM dependencies:
 
-- Hardware State Manager (HSM)
+- [Hardware State Manager (HSM)](../../../glossary.md#hardware-state-manager-hsm)
 
 CSM Diagnostics dependencies:
 
@@ -59,25 +59,25 @@ CSM Diagnostics dependencies:
 
 CSM dependencies:
 
-- Firmware Action Service (FAS)
+- [Firmware Action Service (FAS)](../../../glossary.md#firmware-action-service-fas)
 
 ## `sat hwhist`
 
 CSM dependencies:
 
-- Hardware State Manager (HSM)
+- [Hardware State Manager (HSM)](../../../glossary.md#hardware-state-manager-hsm)
 
 ## `sat hwinv`
 
 CSM dependencies:
 
-- Hardware State Manager (HSM)
+- H[Hardware State Manager (HSM)](../../../glossary.md#hardware-state-manager-hsm)
 
 ## `sat hwmatch`
 
 CSM dependencies:
 
-- Hardware State Manager (HSM)
+- [Hardware State Manager (HSM)](../../../glossary.md#hardware-state-manager-hsm)
 
 ## `sat init`
 
@@ -99,13 +99,13 @@ CSM dependencies:
 
 CSM dependencies:
 
-- Hardware State Manager (HSM)
+- [Hardware State Manager (HSM)](../../../glossary.md#hardware-state-manager-hsm)
 
 ## `sat sensors`
 
 CSM dependencies:
 
-- Hardware State Manager (HSM)
+- [Hardware State Manager (HSM)](../../../glossary.md#hardware-state-manager-hsm)
 - HM Collector
 
 [System Monitoring Application (SMA)](../../../glossary.md#system-monitoring-application-sma) dependencies:
@@ -116,57 +116,57 @@ CSM dependencies:
 
 CSM dependencies:
 
-- S3
+- [Simple Storage Service (S3)](../../../glossary.md#simple-storage-service-s3)
 
 ## `sat showrev`
 
 CSM dependencies:
 
-- Hardware State Manager (HSM)
+- [Hardware State Manager (HSM)](../../../glossary.md#hardware-state-manager-hsm)
 - Kubernetes
-- S3
+- [Simple Storage Service (S3)](../../../glossary.md#simple-storage-service-s3)
 
 ## `sat slscheck`
 
 CSM dependencies:
 
-- Hardware State Manager (HSM)
+- [Hardware State Manager (HSM)](../../../glossary.md#hardware-state-manager-hsm)
 - [System Layout Service (SLS)](../../../glossary.md#system-layout-service-sls)
 
 ## `sat status`
 
 CSM dependencies:
 
-- Boot Orchestration Service (BOS)
-- Configuration Framework Service (CFS)
-- Hardware State Manager (HSM)
-- Image Management Service (IMS)
-- System Layout Service (SLS)
+- [Boot Orchestration Service (BOS)](../../../glossary.md#boot-orchestration-service-bos)
+- [Configuration Framework Service (CFS)](../../../glossary.md#configuration-framework-service-cfs)
+- [Hardware State Manager (HSM)](../../../glossary.md#hardware-state-manager-hsm)
+- [Image Management Service (IMS)](../../../glossary.md#image-management-service-ims)
+- [System Layout Service (SLS)](../../../glossary.md#system-layout-service-sls)
 
 ## `sat swap`
 
-Note: Starting in CSM v1.6.0, the `sat swap cable` and `sat swap switch`
-commands are deprecated. Use [Slingshot](../../../glossary.md#slingshot) Orchestrated Maintenance to perform
-removal and addition of Slingshot switches and cables. See the HPE Slingshot
-Operations Guide for details.
+### `sat swap blade`
 
-The `sat swap switch` and `sat swap cable` commands have the following Slingshot
-dependencies:
+CSM dependencies:
 
-- Fabric Manager
-
-The `sat swap blade` command has the following CSM dependencies:
-
-- Hardware State Manager (HSM)
+- [Hardware State Manager (HSM)](../../../glossary.md#hardware-state-manager-hsm)
 - Kubernetes
 - [Power Control Service (PCS)](../../../glossary.md#power-control-service-pcs)
 
+### `sat swap cable` and `sat swap switch`
+
+**DEPRECATED:** For more information, see [Deprecated in CSM 1.6](../../../introduction/deprecated_features/README.md).
+
+Slingshot dependencies:
+
+- Fabric Manager
+
 ## `sat switch`
 
-*Deprecated*: See `sat swap`
+**DEPRECATED:** Instead, see [`sat swap`](#sat-swap).
 
 ## `sat xname2nid`
 
 CSM dependencies:
 
-- Hardware State Manager (HSM)
+- [Hardware State Manager (HSM)](../../../glossary.md#hardware-state-manager-hsm)

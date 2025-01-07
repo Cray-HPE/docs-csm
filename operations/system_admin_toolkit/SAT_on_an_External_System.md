@@ -33,7 +33,7 @@ use externally-accessible API endpoints exposed by CSM.
 - `kubectl`, `openssh`, `git`, and `curl` are installed on the external system.
 - The root CA certificates used when installing CSM have been added to the
   external system's trust store such that authenticated TLS connections can be
-  made to the CSM REST API gateway. For more information, refer to
+  made to the CSM REST API gateway. For more information, see
   [Certificate Authority](../../background/certificate_authority.md).
 
 ### Procedure
@@ -112,7 +112,7 @@ use externally-accessible API endpoints exposed by CSM.
       csm-api-client@git+https://github.com/Cray-HPE/python-csm-api-client@release/1.1
       ```
 
-      **Note:** For versions newer than 3.19, the output will show both
+      **NOTE:** For versions newer than 3.19, the output will show both
       `cray-product-catalog` and `csm-api-client`. For version 3.19 and older,
       the output will only show `cray-product-catalog`.
 
@@ -147,8 +147,8 @@ use externally-accessible API endpoints exposed by CSM.
 1. (`user@hostname>`) Copy the file `/etc/kubernetes/admin.conf` from `ncn-m001` to `~/.kube/config`
    on the external system.
 
-   Note that this file contains credentials to authenticate against the Kubernetes
-   API as the administrative user, so it should be treated as sensitive.
+   **NOTE:** This file contains credentials to authenticate against the Kubernetes
+   API as the administrative user, so treat it as sensitive information.
 
    ```bash
    mkdir -p ~/.kube
@@ -278,7 +278,7 @@ use externally-accessible API endpoints exposed by CSM.
    `subdomain.system-name.site-domain`. Here `system-name` and `site-domain` are
    replaced with the values specified during `csi config init`, and `subdomain`
    is the DNS name for the externally available service. For more information,
-   refer to [Externally Exposed Services](../network/customer_accessible_networks/Externally_Exposed_Services.md).
+   see [Externally Exposed Services](../network/customer_accessible_networks/Externally_Exposed_Services.md).
 
    The API gateway has the subdomain `api`, and S3 has the subdomain `s3`. The
    S3 endpoint runs on port 8080. The following options should be set in the
@@ -300,7 +300,7 @@ use externally-accessible API endpoints exposed by CSM.
    username = "user"
    ```
 
-1. (`user@hostname>`) Run `sat auth`, and enter the password when prompted.
+1. (`user@hostname>`) Use `sat auth` and enter the password when prompted.
 
    ```bash
    sat auth

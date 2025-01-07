@@ -9,10 +9,9 @@ For more general information on API gateway authentication, see
 
 The admin account used to authenticate with `sat auth` must be enabled in
 Keycloak and must have its *assigned role* set to *admin*. For more information
-on Keycloak accounts and changing *Role Mappings*, refer to the following sections:
-
-* [Configure Keycloak Account](../../CSM_product_management/Configure_Keycloak_Account.md)
-* [Create Internal User Accounts in the Keycloak Shasta Realm](../../security_and_authentication/Create_Internal_User_Accounts_in_the_Keycloak_Shasta_Realm.md)
+on Keycloak accounts and changing *Role Mappings*, see
+[Configure Keycloak Account](../../CSM_product_management/Configure_Keycloak_Account.md)
+and [Create Internal User Accounts in the Keycloak Shasta Realm](../../security_and_authentication/Create_Internal_User_Accounts_in_the_Keycloak_Shasta_Realm.md).
 
 ## Prerequisites
 
@@ -27,12 +26,12 @@ in order of higher precedence to lower precedence:
 * The `--username` global command-line option.
 * The `username` option in the `api_gateway` section of the configuration file
   at `~/.config/sat/sat.toml`.
-* The name of currently logged in user running the `sat` command.
+* The name of the user currently logged in and running the `sat` command.
 
 If credentials are entered correctly when prompted by `sat auth`, a token file
-will be obtained and saved to `~/.config/sat/tokens`. Subsequent sat commands
-will determine the username the same way as `sat auth` described above and will
-use the token for that username if it has been obtained and saved by `sat auth`.
+is obtained and saved to `~/.config/sat/tokens`. Subsequent `sat` commands
+determine the username the same way as `sat auth` described above and use the
+token for that username (if it was previously obtained and saved by `sat auth`).
 
 ## Procedure
 
@@ -51,7 +50,7 @@ configuration file and authenticate as that user to the API gateway.
    Configuration file "/root/.config/sat/sat.toml" generated.
    ```
 
-   **Note:** If the configuration file already exists, it will print out the
+   **NOTE:** If the configuration file already exists, it will print out the
    following error.
 
    ```text
@@ -66,7 +65,7 @@ configuration file and authenticate as that user to the API gateway.
    username = "crayadmin"
    ```
 
-1. (`ncn-m001#`) Run `sat auth`. Enter the password when prompted.
+1. (`ncn-m001#`) Use `sat auth` and enter the password when prompted.
 
    ```bash
    sat auth
