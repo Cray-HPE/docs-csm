@@ -1,7 +1,7 @@
 # Generate SAT S3 Credentials
 
 Generate S3 credentials and write them to a local file so the SAT user can access S3 storage. In
-order to use the SAT S3 bucket, the System Administrator must generate the S3 access key and secret
+order to use the SAT S3 bucket, the system administrator must generate the S3 access key and secret
 keys and write them to a local file. This must be done on every Kubernetes control plane node where
 SAT commands are run.
 
@@ -46,7 +46,7 @@ set with `sat setrev` (see [Set System Revision Information](Set_System_Revision
 
    1. (`ncn-m001#`) Get the SAT configuration file's endpoint value.
 
-      **Note:** If the command's output is commented out, indicated by an initial `#`
+      **NOTE:** If the command's output is commented out, indicated by an initial `#`
       character, the SAT configuration will take the default value – `"https://rgw-vip.nmn"`.
 
       ```bash
@@ -86,7 +86,7 @@ set with `sat setrev` (see [Set System Revision Information](Set_System_Revision
        scp -pr /root/.config/sat ${i}:/root/.config; done
    ```
 
-   **Note:** Depending on how many Kubernetes control plane (`ncn-m`) nodes are on the system, the
+   **NOTE:** Depending on how many Kubernetes control plane (`ncn-m`) nodes are on the system, the
    list of nodes may be different. This example assumes three `ncn-m` nodes, where the configuration
    files must be copied from `ncn-m001` to `ncn-m002` and `ncn-m003`. Therefore, the list of hosts
    above is `ncn-m002` and `ncn-m003`.

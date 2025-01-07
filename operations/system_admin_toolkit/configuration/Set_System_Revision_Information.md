@@ -12,7 +12,7 @@ systems in support cases.
 
 1. (`ncn-m001#`) Set System Revision Information.
 
-   Run `sat setrev` and follow the prompts to set the following site-specific values:
+   Use `sat setrev` and follow the prompts to set the following site-specific values:
 
    - Serial number
    - System name
@@ -53,7 +53,7 @@ systems in support cases.
 
 1. Verify System Revision Information.
 
-   (`ncn-m001#`) Run `sat showrev` and verify the output shown in the "System Revision Information table."
+   (`ncn-m001#`) Use `sat showrev` and verify the output shown in the "System Revision Information table."
 
    ```bash
    sat showrev
