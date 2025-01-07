@@ -2,7 +2,7 @@
 
 ## Introduction
 
-S3FS is being deployed as tool to provide temporary relief of space usage as well as supporting SDU/NMD services as a near-posix file system to provide a landing point for dumps.
+[S3FS](https://github.com/s3fs-fuse/s3fs-fuse) is a FUSE-based filesystem backed by Amazon S3. CSM uses it to provide temporary overflow storage, as well as to support SDU and NMD services to provide space for dumps.
 
 ## When to Use
 
@@ -17,6 +17,14 @@ S3FS is being deployed as tool to provide temporary relief of space usage as wel
   * This will put unnecessary load on the storage cluster as uncompressing a tar file will require a lot of reads and writes back to the object storage endpoints.
   * Running programs from the S3FS mount point.
     * Although this can be done but will eat into memory for long running programs and may not perform properly.
+
+## Cache Pruning
+
+S3fs maintains a [local cache](https://github.com/s3fs-fuse/s3fs-fuse/wiki/Fuse-Over-Amazon#details), which can fill up if left unchecked, so CSM periodically clears the cache. The s3fs cache parent directory is `/var/lib/s3fs_cache`, with a subdirectory corresponding to a given s3fs mount point. On management nodes, this will contain an `sds/` subdirectory. Otherwise, on all other nodes, it will contain a `boot-images/` subdirectory.
+
+Periodically, one of two cron jobs runs to clear out cache files. `sds/` is cleared at 00:05 daily when it surpasses 100 GiB, and `boot-images/` is cleared at 00:00 daily when it surpasses 150 GiB.
+
+**Note**: Other arbitrary files and directories directly under `/var/lib/s3fs_cache` will **not** be pruned, and will continue to occupy disk space until they are deleted manually. Do not store large files in this directory expecting them to be pruned.
 
 ## Additional Considerations
 
