@@ -1,11 +1,7 @@
 # Change the CFS Version
 
 SAT supports specifying the version of the Configuration Framework Service (CFS)
-API used by the `sat status` command. By default, the `sat status` command uses
-version three (V3) of the CFS API. Currently, the `sat bootsys` and `sat
-bootprep` commands can only use CFS V2, but support will be added for CFS V3 in
-the future.
-
+API used by the SAT commands. By default, it uses version three (`v3`) of the CFS API.
 Select the CFS version to use for individual commands with the `--cfs-version`
 option. For more information on this option, see the man page for a specific
 command.
@@ -65,11 +61,3 @@ section with the CFS version desired in the `api_version` setting.
 - If the system contains more than 1000 components, CFS V2 will return
   an error as the response size is too large for the system to handle in a
   single query.
-
-## Limitations on CFS V3 Support
-
-As mentioned above, usage of the CFS V3 API is only supported for the `sat
-status` command. The following commands use CFS V2:
-
-- `sat bootprep` uses the CFS V2 API to create configurations.
-- `sat bootsys` uses the CFS V2 API to check for active CFS sessions.
