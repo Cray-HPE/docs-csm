@@ -4,19 +4,19 @@ This topic describes nodes in the air-cooled cabinet with diagrams and pictures 
 nodes and how to cable the nodes to the management network switches.
 
 * [HPE Hardware](#hpe-hardware)
-  * [HPE DL385](#hpe-dl385)
-  * [HPE DL325](#hpe-dl325)
-  * [HPE Worker Node Cabling](#hpe-worker-node-cabling)
-  * [HPE Master Node Cabling](#hpe-master-node-cabling)
-  * [HPE Storage Node Cabling](#hpe-storage-node-cabling)
-  * [HPE UAN Cabling](#hpe-uan-cabling)
-  * [HPE Apollo 6500 XL645D](#hpe-apollo-6500-xl645d)
-  * [HPE Apollo 6500 XL675D](#hpe-apollo-6500-xl675d)
+    * [HPE DL385](#hpe-dl385)
+    * [HPE DL325](#hpe-dl325)
+    * [HPE Worker Node Cabling](#hpe-worker-node-cabling)
+    * [HPE Master Node Cabling](#hpe-master-node-cabling)
+    * [HPE Storage Node Cabling](#hpe-storage-node-cabling)
+    * [HPE UAN Cabling](#hpe-uan-cabling)
+    * [HPE Apollo 6500 XL645D](#hpe-apollo-6500-xl645d)
+    * [HPE Apollo 6500 XL675D](#hpe-apollo-6500-xl675d)
 * [Gigabyte/Intel Hardware](#gigabyteintel-hardware)
-  * [Worker Node Cabling](#worker-node-cabling)
-  * [Master Node Cabling](#master-node-cabling)
-  * [Storage Node Cabling](#storage-node-cabling)
-  * [UAN Cabling](#uan-cabling)
+    * [Worker Node Cabling](#worker-node-cabling)
+    * [Master Node Cabling](#master-node-cabling)
+    * [Storage Node Cabling](#storage-node-cabling)
+    * [UAN Cabling](#uan-cabling)
 
 ## HPE Hardware
 
@@ -25,20 +25,20 @@ nodes and how to cable the nodes to the management network switches.
 ![Diagram of Rear View of HPE ProLiant DL385 Gen10 Plus](../../../img/network/DL385-back.png)
 
 * The OCP Slot is noted (number 7) in the image above.
-  * This is the bottom middle slot to the left of the VGA port.
-  * Ports are numbered left-to-right: the far left port is port 1.
+    * This is the bottom middle slot to the left of the VGA port.
+    * Ports are numbered left-to-right: the far left port is port 1.
 * The PCIe Slot 1 is on the top left side of the image above (under number 1).
-  * Ports are numbered left-to-right: the far left port is port 1.
+    * Ports are numbered left-to-right: the far left port is port 1.
 
 ### HPE DL325
 
 ![Diagram of Rear View of HPE ProLiant DL325 with OCP](../../../img/network/DL325-back.png)
 
 * The OCP Slot is noted (number 9) in the image above.
-  * This is the slot on the bottom left of the node.
-  * Ports are numbered left-to-right: the far left port is port 1.
+    * This is the slot on the bottom left of the node.
+    * Ports are numbered left-to-right: the far left port is port 1.
 * The PCIE Slot 1 is on the top left side of the image above (under number 1).
-  * Ports are numbered left-to-right: the far left port is port 1.
+    * Ports are numbered left-to-right: the far left port is port 1.
 
 ### HPE Worker Node Cabling
 
@@ -179,10 +179,10 @@ SHCD Example
 
 * The XL645D has two servers in the same chassis.
 * The iLO BMC RJ45 port is a shared network port. Both iLO/BMC traffic and compute node traffic could transit this link.
-  * Isolating this port to iLO/BMC only traffic is not possible within firmware configuration alone.
-  * iLO configuration settings **must** be paired with management switch port settings to ensure only BMC traffic exits
-    the port.
-  * The iLO firmware must be set to tag traffic to VLAN 4. The switch port must be set to trunk VLAN 4.
+    * Isolating this port to iLO/BMC only traffic is not possible within firmware configuration alone.
+    * iLO configuration settings **must** be paired with management switch port settings to ensure only BMC traffic exits
+      the port.
+    * The iLO firmware must be set to tag traffic to VLAN 4. The switch port must be set to trunk VLAN 4.
 * Ports on the OCP card are numbered left-to-right: the far left port is port 1.
 
 #### Apollo XL645D Cabling (per server)
@@ -202,10 +202,10 @@ SHCD Example
 * Two PCIe slots (chassis slots 21 and 22) are highlighted. One will contain the `1Gb` management network card and one
   will be for the HSN.
 * The iLO BMC RJ45 port is a shared network port. Both iLO/BMC traffic and compute node traffic could transit this link.
-  * Isolating this port to iLO/BMC only traffic is not possible within firmware configuration alone.
-  * iLO configuration settings **must** be paired with management switch port settings to ensure only BMC traffic exits
-    the port.
-  * The iLO firmware must be set to tag traffic to VLAN 4. The switch port must be set to trunk VLAN 4.
+    * Isolating this port to iLO/BMC only traffic is not possible within firmware configuration alone.
+    * iLO configuration settings **must** be paired with management switch port settings to ensure only BMC traffic exits
+      the port.
+    * The iLO firmware must be set to tag traffic to VLAN 4. The switch port must be set to trunk VLAN 4.
 * Ports on the PCIe card are numbered left-to-right: the far left port is port 1.
 
 #### Apollo XL675D Cabling
