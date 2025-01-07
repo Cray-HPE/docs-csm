@@ -149,10 +149,10 @@ SHCD Example with four leaf switches.
 
 | Device      | Port | Linux Device | Destination    | Name | VLAN | LAG       |
 |:------------|------|:-------------|:---------------|:-----|:-----|:----------|
-| OCP         | 1    | `mgmt1`      | primary        | N/A  | NMN  | N/A       |
-| OCP         | 2    | `mgmt1`      | primary        | N/A  | CAN  | MLAG-LACP |
-| PCIe Slot 1 | 1    | `mgmt1`      | secondary      | N/A  | N/A  | N/A       |
-| PCIe Slot 1 | 2    | `mgmt1`      | secondary      | N/A  | CAN  | MLAG-LACP |
+| OCP         | 1    | `nmn0`       | primary        | N/A  | NMN  | N/A       |
+| OCP         | 2    | `net3`       | primary        | N/A  | CAN  | MLAG-LACP |
+| PCIe Slot 1 | 1    | `net0`       | secondary      | N/A  | N/A  | N/A       |
+| PCIe Slot 1 | 2    | `net1`       | secondary      | N/A  | CAN  | MLAG-LACP |
 | ILO         | 1    | None         | HMN `leaf-bmc` | N/A  | HMN  | N/A       |
 
 NOTES:
