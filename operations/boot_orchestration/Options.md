@@ -52,19 +52,19 @@ The following are the BOS global options:
 * `bss_read_timeout`
 
     The amount of time in seconds BOS will wait for a response from BSS to a request. After this time, the request will
-    time out. The default is 20 seconds.
+    time out. The default is 10 seconds.
     Note: This option is only available as a 'hotfix' in CSM 1.4.
 
 * `capmc_read_timeout`
 
     The amount of time in seconds BOS will wait for a response from CAPMC to a request. After this time, the request will
-    time out. The default is 20 seconds.
+    time out. The default is 10 seconds.
     Note: This option is only available as a 'hotfix' in CSM 1.4.
 
 * `cfs_read_timeout`
 
     The amount of time in seconds BOS will wait for a response from CFS to a request. After this time, the request will
-    time out. The default is 20 seconds.
+    time out. The default is 10 seconds.
     Note: This option is only available as a 'hotfix' in CSM 1.4.
 
 * `cleanup_completed_session_ttl`
@@ -100,7 +100,7 @@ The following are the BOS global options:
 * `hsm_read_timeout`
 
     The amount of time in seconds BOS will wait for a response from HSM to a request. After this time, the request will
-    time out. The default is 20 seconds.
+    time out. The default is 10 seconds.
     Note: This option is only available as a 'hotfix' in CSM 1.4.
 
 * `logging_level`
