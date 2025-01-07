@@ -33,7 +33,7 @@ cp "${workdir}/kubeadm-config.yaml" "${workdir}/kubeadm-config.yaml.back"
 yq4 eval -P '.data.ClusterConfiguration' "${workdir}/kubeadm-config.yaml" > "${workdir}/ClusterConfiguration.yaml"
 
 yq4 eval -i -P '.imageRepository = "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io"' "${workdir}/ClusterConfiguration.yaml"
-yq4 eval -i -P '.dns = {"type": "CoreDNS", "imageRepository": "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io/coredns"' "${workdir}/ClusterConfiguration.yaml"
+yq4 eval -i -P '.dns = {"type": "CoreDNS", "imageRepository": "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io/coredns"}' "${workdir}/ClusterConfiguration.yaml"
 yq4 eval -i -P '.apiServer.extraArgs.api-audiences = "api,istio-ca"' "${workdir}/ClusterConfiguration.yaml"
 yq4 eval -i -P '.controllerManager.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
 yq4 eval -i -P '.scheduler.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
