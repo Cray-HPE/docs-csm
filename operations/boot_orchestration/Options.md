@@ -23,6 +23,7 @@ Example output:
 ```json
 {
   "bss_read_timeout": 20,
+  "capmc_read_timeout": 20,
   "cfs_read_timeout": 20,
   "cleanup_completed_session_ttl": "7d",
   "component_actual_state_ttl": "4h",
@@ -35,7 +36,6 @@ Example output:
   "max_component_batch_size": 1800,  
   "max_power_off_wait_time": 180,
   "max_power_on_wait_time": 30,
-  "pcs_read_timeout": 20,
   "polling_frequency": 60,
   "session_limit_required": false
 }
@@ -53,13 +53,19 @@ The following are the BOS global options:
 
     The amount of time in seconds BOS will wait for a response from BSS to a request. After this time, the request will
     time out. The default is 20 seconds.
-    Note: This option is only available as a 'hotfix' in CSM 1.5.
+    Note: This option is only available as a 'hotfix' in CSM 1.4.
+
+* `capmc_read_timeout`
+
+    The amount of time in seconds BOS will wait for a response from CAPMC to a request. After this time, the request will
+    time out. The default is 20 seconds.
+    Note: This option is only available as a 'hotfix' in CSM 1.4.
 
 * `cfs_read_timeout`
 
     The amount of time in seconds BOS will wait for a response from CFS to a request. After this time, the request will
     time out. The default is 20 seconds.
-    Note: This option is only available as a 'hotfix' in CSM 1.5.
+    Note: This option is only available as a 'hotfix' in CSM 1.4.
 
 * `cleanup_completed_session_ttl`
 
@@ -95,7 +101,7 @@ The following are the BOS global options:
 
     The amount of time in seconds BOS will wait for a response from HSM to a request. After this time, the request will
     time out. The default is 20 seconds.
-    Note: This option is only available as a 'hotfix' in CSM 1.5.
+    Note: This option is only available as a 'hotfix' in CSM 1.4.
 
 * `logging_level`
 
@@ -109,7 +115,7 @@ The following are the BOS global options:
 
     The maximum number of components that BOS will group together in a single API request it makes. This can be used to limit the load
     on other services by forcing BOS to break up its requests into smaller chunks.
-    Note: This option is only available as a 'hotfix' in CSM 1.5.
+    Note: This option is only available as a 'hotfix' in CSM 1.4.
 
 * `max_power_off_wait_time`
 
@@ -118,12 +124,6 @@ The following are the BOS global options:
 * `max_power_on_wait_time`
 
     How long BOS will wait for a node to power on before calling power on again (in seconds).
-
-* `pcs_read_timeout`
-
-    The amount of time in seconds BOS will wait for a response from PCS to a request. After this time, the request will
-    time out. The default is 20 seconds.
-    Note: This option is only available as a 'hotfix' in CSM 1.5.
 
 * `polling_frequency`
 
@@ -136,4 +136,4 @@ The following are the BOS global options:
     If this option is enabled, it is still possible to effectively create a session with no limit
     by specifying `*` as the limit parameter (if this is done on the command line, it must be
     quoted it in order to prevent it from being interpreted by the shell).
-    Note: This option is only available as a 'hotfix' in CSM 1.5.
+    Note: This option is only available as a 'hotfix' in CSM 1.4.
