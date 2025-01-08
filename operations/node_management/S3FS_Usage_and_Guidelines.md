@@ -21,7 +21,7 @@
 ## Cache Pruning
 
 S3fs maintains a [local cache](https://github.com/s3fs-fuse/s3fs-fuse/wiki/Fuse-Over-Amazon#details), which can fill up if left unchecked, so CSM periodically clears the cache. The s3fs cache parent directory is `/var/lib/s3fs_cache`, with a subdirectory
-corresponding to a given s3fs mount point. On management nodes, this will contain an `sds/` subdirectory. Otherwise, on all other nodes, it will contain a `boot-images/` subdirectory.
+corresponding to a given s3fs mount point. On master nodes, this will contain an `sds/` subdirectory. Otherwise, on all other nodes, it will contain a `boot-images/` subdirectory.
 
 Periodically, one of two cron jobs runs to clear out cache files. `sds/` is cleared at 00:05 daily when it surpasses 100 GiB, and `boot-images/` is cleared at 00:00 daily when it surpasses 150 GiB.
 
