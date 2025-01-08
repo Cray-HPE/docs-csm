@@ -16,6 +16,11 @@ More information can be found on the [BICAN Technical Summary](../operations/net
 Review the BICAN summary before continuing with the CSM install.
 For detailed BICAN documentation, see [BICAN Technical Details](../operations/network/management_network/bican_technical_details.md).
 
+## NVIDIA CPU and GPU notice
+
+Servers with NVIDIA CPUs and GPUs are supported by CSM 1.6.1 and later versions.
+These servers are **not supported by CSM 1.6.0**.
+
 ## High-level overview of CSM install
 
 In the [Pre-installation](#pre-installation) section of the install, information about the HPE Cray

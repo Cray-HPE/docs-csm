@@ -4,6 +4,7 @@ There are several alternative procedures to perform an upgrade of Cray Systems M
 software. Choose the appropriate procedure from the sections below.
 
 * [Release Notes](#release-notes)
+    * [NVIDIA CPU and GPU notice](#nvidia-cpu-and-gpu-notice)
     * [BOS data notice](#bos-data-notice)
 * [CSM major/minor version upgrade](#csm-majorminor-version-upgrade)
     * [Option 1: Upgrade CSM with additional HPE Cray EX software products](#option-1-upgrade-csm-with-additional-hpe-cray-ex-software-products)
@@ -14,6 +15,11 @@ software. Choose the appropriate procedure from the sections below.
 ## Release Notes
 
 Before upgrading, review the [Release Notes](../RELEASE_NOTES.md)
+
+## NVIDIA CPU and GPU notice
+
+Servers with NVIDIA CPUs and GPUs are supported by CSM 1.6.1 and later versions.
+These servers are **not supported by CSM 1.6.0**.
 
 ### BOS data notice
 

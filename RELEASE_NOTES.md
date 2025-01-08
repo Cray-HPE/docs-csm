@@ -19,7 +19,7 @@ information, see [SAT in CSM](operations/system_admin_toolkit/about_sat/SAT_in_C
 
 ### New hardware support
 
-* Systems with NVIDIA CPUs and GPUs.
+* CSM 1.6.1 supports systems with NVIDIA CPUs and GPUs. CSM 1.6.0 does not support NVIDIA hardware.
 
 ### New software support
 
@@ -83,6 +83,8 @@ For a list of all features with an announced removal target, see [Removals](intr
 
 ## Known issues
 
+* CSM 1.6.0 does not support servers with NVIDIA CPUs and GPUs. Systems with these servers should not be upgraded to CSM 1.6.0.
+* CSM 1.6.1 and later supports servers with NVIDIA CPUs and GPUs.
 * After updating Paradise BMC firmware, the `hmcollector-poll` service will lose event subscriptions and must be restarted
     * See [Updating Foxconn Paradise Nodes with FAS](operations/firmware/FAS_Paradise.md) for details on how to do this
 * `cfs-api` pods in CLBO state during CSM install.
