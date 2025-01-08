@@ -4085,6 +4085,7 @@ Update one or more of the BOS service options.
 
 ```json
 {
+  "bss_read_timeout": 20,
   "cfs_read_timeout": 20,
   "cleanup_completed_session_ttl": "3d",
   "clear_stage": true,
@@ -4092,13 +4093,16 @@ Update one or more of the BOS service options.
   "default_retry_policy": 1,
   "disable_components_on_completion": true,
   "discovery_frequency": 33554432,
+  "hsm_read_timeout": 20,
   "ims_errors_fatal": true,
   "ims_images_must_exist": true,
+  "ims_read_timeout": 20,
   "logging_level": "string",
   "max_boot_wait_time": 1048576,
   "max_component_batch_size": 1000,
   "max_power_off_wait_time": 1048576,
   "max_power_on_wait_time": 1048576,
+  "pcs_read_timeout": 20,
   "polling_frequency": 1048576,
   "reject_nids": true,
   "session_limit_required": true
@@ -4117,6 +4121,7 @@ Update one or more of the BOS service options.
 
 ```json
 {
+  "bss_read_timeout": 20,
   "cfs_read_timeout": 20,
   "cleanup_completed_session_ttl": "3d",
   "clear_stage": true,
@@ -4124,13 +4129,16 @@ Update one or more of the BOS service options.
   "default_retry_policy": 1,
   "disable_components_on_completion": true,
   "discovery_frequency": 33554432,
+  "hsm_read_timeout": 20,
   "ims_errors_fatal": true,
   "ims_images_must_exist": true,
+  "ims_read_timeout": 20,
   "logging_level": "string",
   "max_boot_wait_time": 1048576,
   "max_component_batch_size": 1000,
   "max_power_off_wait_time": 1048576,
   "max_power_on_wait_time": 1048576,
+  "pcs_read_timeout": 20,
   "polling_frequency": 1048576,
   "reject_nids": true,
   "session_limit_required": true
@@ -4323,6 +4331,7 @@ Retrieve the list of BOS service options.
 
 ```json
 {
+  "bss_read_timeout": 20,
   "cfs_read_timeout": 20,
   "cleanup_completed_session_ttl": "3d",
   "clear_stage": true,
@@ -4330,13 +4339,16 @@ Retrieve the list of BOS service options.
   "default_retry_policy": 1,
   "disable_components_on_completion": true,
   "discovery_frequency": 33554432,
+  "hsm_read_timeout": 20,
   "ims_errors_fatal": true,
   "ims_images_must_exist": true,
+  "ims_read_timeout": 20,
   "logging_level": "string",
   "max_boot_wait_time": 1048576,
   "max_component_batch_size": 1000,
   "max_power_off_wait_time": 1048576,
   "max_power_on_wait_time": 1048576,
+  "pcs_read_timeout": 20,
   "polling_frequency": 1048576,
   "reject_nids": true,
   "session_limit_required": true
@@ -6559,6 +6571,7 @@ Mapping from Component staged Session statuses to Components with that status.
 
 ```json
 {
+  "bss_read_timeout": 20,
   "cfs_read_timeout": 20,
   "cleanup_completed_session_ttl": "3d",
   "clear_stage": true,
@@ -6566,13 +6579,16 @@ Mapping from Component staged Session statuses to Components with that status.
   "default_retry_policy": 1,
   "disable_components_on_completion": true,
   "discovery_frequency": 33554432,
+  "hsm_read_timeout": 20,
   "ims_errors_fatal": true,
   "ims_images_must_exist": true,
+  "ims_read_timeout": 20,
   "logging_level": "string",
   "max_boot_wait_time": 1048576,
   "max_component_batch_size": 1000,
   "max_power_off_wait_time": 1048576,
   "max_power_on_wait_time": 1048576,
+  "pcs_read_timeout": 20,
   "polling_frequency": 1048576,
   "reject_nids": true,
   "session_limit_required": true
@@ -6586,6 +6602,7 @@ Options for the Boot Orchestration Service.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
+|bss_read_timeout|integer|false|none|The amount of time (in seconds) to wait for a response before timing out a request to BSS|
 |cfs_read_timeout|integer|false|none|The amount of time (in seconds) to wait for a response before timing out a request to CFS|
 |cleanup_completed_session_ttl|string|false|none|Delete complete Sessions that are older than cleanup_completed_session_ttl (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior.|
 |clear_stage|boolean|false|none|Allows a Component's staged information to be cleared when the requested staging action has been started. Defaults to false.|
@@ -6593,13 +6610,16 @@ Options for the Boot Orchestration Service.
 |default_retry_policy|integer|false|none|The default maximum number attempts per node for failed actions.|
 |disable_components_on_completion|boolean|false|none|If true, when a Session has brought a Component to its desired state, that Component will be marked as disabled in BOS.<br>If false, BOS will continue to maintain the state of the nodes declaratively, even after a Session finishes.|
 |discovery_frequency|integer|false|none|How frequently the BOS discovery agent syncs new Components from HSM (in seconds)|
+|hsm_read_timeout|integer|false|none|The amount of time (in seconds) to wait for a response before timing out a request to HSM|
 |ims_errors_fatal|boolean|false|none|This option modifies how BOS behaves when validating the architecture of a boot image in a boot set.<br>Specifically, this option comes into play when BOS needs data from IMS in order to do this validation, but<br>IMS is unreachable.<br>In the above situation, if this option is true, then the validation will fail.<br>Otherwise, if the option is false, then a warning will be logged, but the validation will not<br>be failed because of this.|
 |ims_images_must_exist|boolean|false|none|This option modifies how BOS behaves when validating a boot set whose boot image appears to be from IMS.<br>Specifically, this option comes into play when the image does not actually exist in IMS.<br>In the above situation, if this option is true, then the validation will fail.<br>Otherwise, if the option is false, then a warning will be logged, but the validation will not<br>be failed because of this. Note that if ims_images_must_exist is true but ims_errors_fatal is false, then<br>a failure to determine whether or not an image is in IMS will NOT result in a fatal error.|
+|ims_read_timeout|integer|false|none|The amount of time (in seconds) to wait for a response before timing out a request to IMS|
 |logging_level|string|false|none|The logging level for all BOS services|
 |max_boot_wait_time|integer|false|none|How long BOS will wait for a node to boot into a usable state before rebooting it again (in seconds)|
 |max_component_batch_size|integer|false|none|The maximum number of Components that a BOS operator will process at once. 0 means no limit.|
 |max_power_off_wait_time|integer|false|none|How long BOS will wait for a node to power off before forcefully powering off (in seconds)|
 |max_power_on_wait_time|integer|false|none|How long BOS will wait for a node to power on before calling power on again (in seconds)|
+|pcs_read_timeout|integer|false|none|The amount of time (in seconds) to wait for a response before timing out a request to PCS|
 |polling_frequency|integer|false|none|How frequently the BOS operators check Component state for needed actions (in seconds)|
 |reject_nids|boolean|false|none|If true, then BOS will attempt to prevent Sessions and Session Templates that reference NIDs (which BOS does not support).<br>Specifically, if this option is true, then:<br>- When creating a Session, if the Session limit or a Session Template node list appear to contain NID values, then Session creation will fail.<br>- When creating a Session Template, if a node list appears to contain a NID value, then the Session Template creation will fail.<br>- When validating an existing Session Template, if a node list appears to contain a NID value, then the validation will report an error.<br><br>This option does NOT have an effect on Sessions that were created prior to it being enabled (even if they have not yet started).|
 |session_limit_required|boolean|false|none|If true, Sessions cannot be created without specifying the limit parameter.|
