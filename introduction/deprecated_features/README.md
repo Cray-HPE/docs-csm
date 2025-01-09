@@ -44,10 +44,6 @@ in chronological order.
 - [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) v1
     - When upgrading to CSM 1.6, all BOS v1 session data is deleted. See [BOS data notice](../../upgrade/README.md#bos-data-notice)
       for more details.
-- [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
-  is deprecated, starting in CSM 1.5, and may be removed in the future. It has been
-  replaced with the [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs).
-  Everyone is encouraged to transition to PCS as soon as possible.
 - User Access Service
 - User Access Instance
 
@@ -69,6 +65,8 @@ features are listed first).
 ### Deprecated in CSM 1.5
 
 - Remaining [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) v3 features
+    - CAPMC may be removed in the future. It has been replaced with the [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs).
+      Everyone is encouraged to transition to PCS as soon as possible.
     - See the [CAPMC Deprecation Notice](CAPMC_Deprecation_Notice.md) for more details.
 
 ### Deprecated in CSM 1.3
