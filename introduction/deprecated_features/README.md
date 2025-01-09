@@ -10,7 +10,10 @@ version for their planned removal, customers are still strongly encouraged to ma
   * [Removals in CSM 1.4](#removals-in-csm-14)
   * [Removals in CSM 1.5](#removals-in-csm-15)
   * [Removals in CSM 1.6](#removals-in-csm-16)
+  * [Removals in CSM 1.7](#removals-in-csm-17)
 * [Deprecations](#deprecations)
+  * [Deprecated in CSM 1.6](#deprecated-in-csm-16)
+  * [Deprecated in CSM 1.5](#deprecated-in-csm-15)
   * [Deprecated in CSM 1.3](#deprecated-in-csm-13)
   * [Deprecated in CSM 1.2](#deprecated-in-csm-12)
   * [Deprecated in CSM 1.0](#deprecated-in-csm-10)
@@ -39,13 +42,34 @@ in chronological order.
 ### Removals in CSM 1.6
 
 * [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) v1
+* [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
+  is deprecated, starting in CSM 1.5, and may be removed in the future. It has been
+  replaced with the [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs).
+  Everyone is encouraged to transition to PCS as soon as possible.
+* User Access Service
+* User Access Instance
+
+### Removals in CSM 1.7
+
+* The [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is planned to be removed in CSM 1.7.
 
 ## Deprecations
 
 This section groups the deprecated features by the CSM release in which they were deprecated, in reverse chronological order (the most recently deprecated
 features are listed first).
 
-## Deprecated in CSM 1.3
+### Deprecated in CSM 1.6
+
+* The `sat swap cable` and `sat swap switch` commands are deprecated.
+* The [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is deprecated in favor of the
+  Scalable Boot Projection Service.
+
+### Deprecated in CSM 1.5
+
+* Remaining [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) v3 features
+  * See the [CAPMC Deprecation Notice](CAPMC_Deprecation_Notice.md) for more details.
+
+### Deprecated in CSM 1.3
 
 * [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) v1
   * BOS v1 will be removed in CSM 1.6.
@@ -54,7 +78,7 @@ features are listed first).
   * The SLS `loadstate` and `dumpstate` no longer support the option to load or dump credential information. This includes the removal of the `public_key` and
     `private_key` options that were used for encryption and decryption.
 
-## Deprecated in CSM 1.2
+### Deprecated in CSM 1.2
 
 * [Hardware Management Notification Fanout Daemon (HMNFD)](../../glossary.md#hardware-management-notification-fanout-daemon-hmnfd) v1 REST API
   * The v1 HMNFD APIs are targeted for removal in the CSM 1.5 release.
@@ -63,11 +87,11 @@ features are listed first).
   * Enhanced BOS functionality will replace CRUS. See [Rolling Upgrades using BOS](../../operations/boot_orchestration/Rolling_Upgrades.md).
 * The `--template-body` option for the [BOS](../../glossary.md#boot-orchestration-service-bos) Cray CLI.
 
-## Deprecated in CSM 1.0
+### Deprecated in CSM 1.0
 
 * Many [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) v1 features
   * See the [CAPMC Deprecation Notice](CAPMC_Deprecation_Notice.md) for more details.
 
-## Deprecated in CSM 0.9.3
+### Deprecated in CSM 0.9.3
 
 * [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) v1 REST API
