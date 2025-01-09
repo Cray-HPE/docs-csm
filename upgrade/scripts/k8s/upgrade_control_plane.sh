@@ -35,9 +35,9 @@ yq4 eval -P '.data.ClusterConfiguration' "${workdir}/kubeadm-config.yaml" > "${w
 yq4 eval -i -P '.imageRepository = "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io"' "${workdir}/ClusterConfiguration.yaml"
 yq4 eval -i -P '.dns = {"type": "CoreDNS", "imageRepository": "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io/coredns"}' "${workdir}/ClusterConfiguration.yaml"
 yq4 eval -i -P '.apiServer.extraArgs.api-audiences = "api,istio-ca"' "${workdir}/ClusterConfiguration.yaml"
+yq4 eval -i -P '.apiServer.extraArgs.enable-admission-plugins = "NodeRestriction,PodSecurityPolicy"' "${workdir}/ClusterConfiguration.yaml"
 yq4 eval -i -P '.controllerManager.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
 yq4 eval -i -P '.scheduler.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
-yq4 eval -i -P '.scheduler.extraArgs.enable-admission-plugins = "NodeRestriction,PodSecurityPolicy"' "${workdir}/ClusterConfiguration.yaml"
 
 manifest_auditing_enabled=0
 if ! grep -q '/var/log/audit' /etc/kubernetes/manifests/kube-apiserver.yaml; then
