@@ -45,7 +45,7 @@ if ! grep -q '/var/log/audit' /etc/kubernetes/manifests/kube-apiserver.yaml; the
 fi
 
 cm_auditing_enabled=0
-if [ "$(yq4 eval '.audit-log-path' "${workdir}/ClusterConfiguration.yaml")" != "null" ]; then
+if [ "$(yq4 eval '.extraArgs.audit-log-path' "${workdir}/ClusterConfiguration.yaml")" != "null" ]; then
   cm_auditing_enabled=1
 fi
 
@@ -68,7 +68,7 @@ fi
 if IFS= read -rd '' -a cluster_configuration; then
   :
 fi <<< "$(cat "${workdir}/ClusterConfiguration.yaml")"
-cluster_configuration=$cluster_configuration yq4 eval '.data.ClusterConfiguration = strenv(cluster_configuration)' "${workdir}/kubeadm-config.yaml"
+cluster_configuration=$cluster_configuration yq4 eval -i '.data.ClusterConfiguration = strenv(cluster_configuration)' "${workdir}/kubeadm-config.yaml"
 
 # Apply the new Kubernetes config.
 kubectl -n kube-system apply -f "${workdir}/kubeadm-config.yaml"
