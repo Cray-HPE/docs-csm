@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -183,7 +183,24 @@ if [[ $state_recorded == "0" ]] && k8s_job_exists "${ns}" "${job_name}"; then
   {
     # Make sure the BOS migration job is complete (succeeded or failed)
     job_error=""
-    wait_for_k8s_job_to_succeed "${ns}" "${job_name}" || job_error="migration_job_not_successful."
+    wait_for_k8s_job_to_succeed "${ns}" "${job_name}" || job_error+="migration_job_not_successful."
+
+    # CASMCMS-9244: Wait for BOS database pod to be Running
+    db_running=N
+    attempt=1
+    while [[ $attempt -le 12 ]]; do
+      [[ $attempt -eq 1 ]] || sleep 5
+      let attempt+=1
+      kubectl get pods -n services -l 'app.kubernetes.io/instance=cray-bos-db' --no-headers | grep -w Running || continue
+      echo "BOS database pod found in Running state"
+      db_running=Y
+      break
+    done
+
+    if [[ ${db_running} != Y ]]; then
+      echo "ERROR: BOS database Kubernetes pod not running" >&2
+      exit 1
+    fi
 
     DATESTRING=$(date +%Y-%m-%d_%H-%M-%S)
     SNAPSHOT_DIR=$(mktemp -d --tmpdir=/root "csm_upgrade.post_bos_upgrade_snapshot.${job_error}${DATESTRING}.XXXXXX")
@@ -191,8 +208,16 @@ if [[ $state_recorded == "0" ]] && k8s_job_exists "${ns}" "${job_name}"; then
 
     # Record BOS data, because the upgrade to CSM 1.6 deleted all BOS v1 data, and sanitized
     # the BOS v2 data
-    echo "Backing up BOS data"
-    /usr/share/doc/csm/scripts/operations/configuration/export_bos_data.sh "${SNAPSHOT_DIR}"
+    attempt=1
+    backed_up=N
+    while [[ $attempt -le 3 ]]; do
+      [[ $attempt -eq 1 ]] || sleep 20
+      echo "Backing up BOS data (attempt $attempt)"
+      let attempt+=1
+      /usr/share/doc/csm/scripts/operations/configuration/export_bos_data.sh "${SNAPSHOT_DIR}" || continue
+      backed_up=Y
+      break
+    done
 
     # Record state of BOS Kubernetes pods.
     K8S_PODS_SNAPSHOT=${SNAPSHOT_DIR}/k8s_bos_pods.txt
@@ -202,9 +227,15 @@ if [[ $state_recorded == "0" ]] && k8s_job_exists "${ns}" "${job_name}"; then
 
     # Record pod logs
     K8S_POD_LOGS=${SNAPSHOT_DIR}/k8s_bos_pod_logs.txt
+    echo "Taking snapshot of current BOS Kubernetes pod logs to ${K8S_POD_LOGS}"
     kubectl logs -n services --ignore-errors --all-containers --timestamps --prefix --max-log-requests 500 \
       --insecure-skip-tls-verify-backend --tail=-1 \
       -l 'app.kubernetes.io/instance in (cray-bos, cray-bos-db)' > "${K8S_POD_LOGS}"
+
+    if [[ ${backed_up} != Y ]]; then
+      echo "ERROR: BOS data export not successful" >&2
+      exit 1
+    fi
 
     # Apply fix for CASMCMS-9234
     echo "Applying fix for CASMCMS-9234, if needed"
