@@ -10,6 +10,7 @@ version for their planned removal, customers are still strongly encouraged to ma
     - [Removals in CSM 1.4](#removals-in-csm-14)
     - [Removals in CSM 1.5](#removals-in-csm-15)
     - [Removals in CSM 1.6](#removals-in-csm-16)
+    - [Removals in CSM 1.7](#removals-in-csm-17)
 - [Deprecations](#deprecations)
     - [Deprecated in CSM 1.6](#deprecated-in-csm-16)
     - [Deprecated in CSM 1.5](#deprecated-in-csm-15)
@@ -50,6 +51,10 @@ in chronological order.
 - User Access Service
 - User Access Instance
 
+### Removals in CSM 1.7
+
+- The [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is planned to be removed in CSM 1.7.
+
 ## Deprecations
 
 This section groups the deprecated features by the CSM release in which they were deprecated, in reverse chronological order (the most recently deprecated
@@ -58,6 +63,8 @@ features are listed first).
 ### Deprecated in CSM 1.6
 
 - The `sat swap cable` and `sat swap switch` commands are deprecated. Use [Slingshot](../../glossary.md#slingshot) Orchestrated Maintenance to remove and add Slingshot switches and cables. For more information, see the *HPE Slingshot Operations Guide (S-9000)*.
+- The [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is deprecated in favor of the
+  [Scalable Boot Projection Service](../../glossary.md#scalable-boot-projection-service-sbps).
 
 ### Deprecated in CSM 1.5
 
