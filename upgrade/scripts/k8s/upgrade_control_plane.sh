@@ -66,7 +66,7 @@ fi
 if IFS= read -rd '' -a cluster_configuration; then
   :
 fi <<< "$(cat "${workdir}/ClusterConfiguration.yaml")"
-cluster_configuration=$cluster_configuration yq4 eval '.data.ClusterConfiguration = strenv(cluster_configuration)' "${workdir}/kubeadm-config.yaml"
+cluster_configuration=$cluster_configuration yq4 eval -i '.data.ClusterConfiguration = strenv(cluster_configuration)' "${workdir}/kubeadm-config.yaml"
 
 # Apply the new Kubernetes config.
 kubectl -n kube-system apply -f "${workdir}/kubeadm-config.yaml"
