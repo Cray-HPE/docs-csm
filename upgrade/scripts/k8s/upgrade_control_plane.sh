@@ -32,8 +32,12 @@ kubectl get configmap kubeadm-config -n kube-system -o yaml > "${workdir}/kubead
 cp "${workdir}/kubeadm-config.yaml" "${workdir}/kubeadm-config.yaml.back"
 yq4 eval -P '.data.ClusterConfiguration' "${workdir}/kubeadm-config.yaml" > "${workdir}/ClusterConfiguration.yaml"
 
-yq4 eval -i -P '.imageRepository = "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io"' "${workdir}/ClusterConfiguration.yaml"
-yq4 eval -i -P '.dns = {"type": "CoreDNS", "imageRepository": "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io/coredns"}' "${workdir}/ClusterConfiguration.yaml"
+if [ "$(yq4 eval '.dns' "${workdir}/ClusterConfiguration.yaml")" = "null" ] || [ "$(yq4 eval '.dns' "${workdir}/ClusterConfiguration.yaml")" == "{}" ]; then
+  yq4 eval -i -P '.dns = {"type": "CoreDNS", "imageRepository": "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io/coredns"}' "${workdir}/ClusterConfiguration.yaml"
+fi
+if [ "$(yq4 eval '.imageRepository' "${workdir}/ClusterConfiguration.yaml")" = 'k8s.gcr.io' ]; then
+  yq4 eval -i -P '.imageRepository = "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io"' "${workdir}/ClusterConfiguration.yaml"
+fi
 yq4 eval -i -P '.apiServer.extraArgs.api-audiences = "api,istio-ca"' "${workdir}/ClusterConfiguration.yaml"
 yq4 eval -i -P '.apiServer.extraArgs.enable-admission-plugins = "NodeRestriction,PodSecurityPolicy"' "${workdir}/ClusterConfiguration.yaml"
 yq4 eval -i -P '.controllerManager.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
