@@ -47,7 +47,7 @@ if [ "$(yq4 eval '.audit-log-path' "${workdir}/ClusterConfiguration.yaml")" != "
   cm_auditing_enabled=1
 fi
 
-if [[ ${manifest_auditing_enabled} -eq 1 && ${cm_auditing_enabled} -ne 1 ]]; then
+if [ ${manifest_auditing_enabled} -eq 1 ] && [ ${cm_auditing_enabled} -eq 1 ]; then
   echo "Updating kubeadm-config configmap with audit configuration"
   yq4 eval -i -P '.apiServer.extraArgs.audit-log-maxbackup = "100"' "${workdir}/ClusterConfiguration.yaml"
   yq4 eval -i -P '.apiServer.extraArgs.audit-log-path = "/var/log/audit/kl8s/apiserver/audit.log"' "${workdir}/ClusterConfiguration.yaml"
