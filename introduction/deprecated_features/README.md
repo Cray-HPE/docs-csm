@@ -6,12 +6,13 @@ When a feature is first deprecated, it may not yet be announced in which CSM ver
 been made, that information will be available on this page. For any deprecated features listed on this page that do not yet have an announced CSM
 version for their planned removal, customers are still strongly encouraged to make plans to migrate away from the deprecated feature.
 
-- [Deprecated Features](#deprecated-features)
-  - [Removals](#removals)
+- [Removals](#removals)
     - [Removals in CSM 1.4](#removals-in-csm-14)
     - [Removals in CSM 1.5](#removals-in-csm-15)
     - [Removals in CSM 1.6](#removals-in-csm-16)
-  - [Deprecations](#deprecations)
+    - [Removals in CSM 1.7](#removals-in-csm-17)
+- [Deprecations](#deprecations)
+    - [Deprecated in CSM 1.6](#deprecated-in-csm-16)
     - [Deprecated in CSM 1.5](#deprecated-in-csm-15)
     - [Deprecated in CSM 1.3](#deprecated-in-csm-13)
     - [Deprecated in CSM 1.2](#deprecated-in-csm-12)
@@ -43,10 +44,20 @@ in chronological order.
 - [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) v1
 - [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) v3 features
 
+### Removals in CSM 1.7
+
+- The [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is planned to be removed in CSM 1.7.
+
 ## Deprecations
 
 This section groups the deprecated features by the CSM release in which they were deprecated, in reverse chronological order (the most recently deprecated
 features are listed first).
+
+### Deprecated in CSM 1.6
+
+- The `sat swap cable` and `sat swap switch` commands are deprecated.
+- The [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is deprecated in favor of the
+  Scalable Boot Projection Service.
 
 ### Deprecated in CSM 1.5
 
