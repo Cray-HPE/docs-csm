@@ -7045,16 +7045,19 @@ Update one or more of the BOS service options.
 
 ```json
 {
+  "bss_read_timeout": 20,
   "cfs_read_timeout": 20,
   "cleanup_completed_session_ttl": "3d",
   "clear_stage": true,
   "component_actual_state_ttl": "6h",
   "disable_components_on_completion": true,
   "discovery_frequency": 33554432,
+  "hsm_read_timeout": 20,
   "logging_level": "string",
   "max_boot_wait_time": 1048576,
   "max_power_on_wait_time": 1048576,
   "max_power_off_wait_time": 1048576,
+  "pcs_read_timeout": 20,
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
   "max_component_batch_size": 1000,
@@ -7074,16 +7077,19 @@ Update one or more of the BOS service options.
 
 ```json
 {
+  "bss_read_timeout": 20,
   "cfs_read_timeout": 20,
   "cleanup_completed_session_ttl": "3d",
   "clear_stage": true,
   "component_actual_state_ttl": "6h",
   "disable_components_on_completion": true,
   "discovery_frequency": 33554432,
+  "hsm_read_timeout": 20,
   "logging_level": "string",
   "max_boot_wait_time": 1048576,
   "max_power_on_wait_time": 1048576,
   "max_power_off_wait_time": 1048576,
+  "pcs_read_timeout": 20,
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
   "max_component_batch_size": 1000,
@@ -7277,16 +7283,19 @@ Retrieve the list of BOS service options.
 
 ```json
 {
+  "bss_read_timeout": 20,
   "cfs_read_timeout": 20,
   "cleanup_completed_session_ttl": "3d",
   "clear_stage": true,
   "component_actual_state_ttl": "6h",
   "disable_components_on_completion": true,
   "discovery_frequency": 33554432,
+  "hsm_read_timeout": 20,
   "logging_level": "string",
   "max_boot_wait_time": 1048576,
   "max_power_on_wait_time": 1048576,
   "max_power_off_wait_time": 1048576,
+  "pcs_read_timeout": 20,
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
   "max_component_batch_size": 1000,
@@ -10698,16 +10707,19 @@ Mapping from Component staged Session statuses to Components with that status.
 
 ```json
 {
+  "bss_read_timeout": 20,
   "cfs_read_timeout": 20,
   "cleanup_completed_session_ttl": "3d",
   "clear_stage": true,
   "component_actual_state_ttl": "6h",
   "disable_components_on_completion": true,
   "discovery_frequency": 33554432,
+  "hsm_read_timeout": 20,
   "logging_level": "string",
   "max_boot_wait_time": 1048576,
   "max_power_on_wait_time": 1048576,
   "max_power_off_wait_time": 1048576,
+  "pcs_read_timeout": 20,
   "polling_frequency": 1048576,
   "default_retry_policy": 1,
   "max_component_batch_size": 1000,
@@ -10722,16 +10734,19 @@ Options for the Boot Orchestration Service.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
+|bss_read_timeout|integer|false|none|The amount of time (in seconds) to wait for a response before timing out a request to BSS|
 |cfs_read_timeout|integer|false|none|The amount of time (in seconds) to wait for a response before timing out a request to CFS|
 |cleanup_completed_session_ttl|string|false|none|Delete complete Sessions that are older than cleanup_completed_session_ttl (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior.|
 |clear_stage|boolean|false|none|Allows a Component's staged information to be cleared when the requested staging action has been started. Defaults to false.|
 |component_actual_state_ttl|string|false|none|The maximum amount of time a Component's actual state is considered valid (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior for newly booted nodes and instructs bos-state-reporter to report once instead of periodically.|
 |disable_components_on_completion|boolean|false|none|If true, when a Session has brought a Component to its desired state, that Component will be marked as disabled in BOS.<br>If false, BOS will continue to maintain the state of the nodes declaratively, even after a Session finishes.|
 |discovery_frequency|integer|false|none|How frequently the BOS discovery agent syncs new Components from HSM. (in seconds)|
+|hsm_read_timeout|integer|false|none|The amount of time (in seconds) to wait for a response before timing out a request to HSM|
 |logging_level|string|false|none|The logging level for all BOS services|
 |max_boot_wait_time|integer|false|none|How long BOS will wait for a node to boot into a usable state before rebooting it again (in seconds)|
 |max_power_on_wait_time|integer|false|none|How long BOS will wait for a node to power on before calling power on again (in seconds)|
 |max_power_off_wait_time|integer|false|none|How long BOS will wait for a node to power off before forcefully powering off (in seconds)|
+|pcs_read_timeout|integer|false|none|The amount of time (in seconds) to wait for a response before timing out a request to PCS|
 |polling_frequency|integer|false|none|How frequently the BOS operators check Component state for needed actions. (in seconds)|
 |default_retry_policy|integer|false|none|The default maximum number attempts per node for failed actions.|
 |max_component_batch_size|integer|false|none|The maximum number of Components that a BOS operator will process at once. 0 means no limit.|
