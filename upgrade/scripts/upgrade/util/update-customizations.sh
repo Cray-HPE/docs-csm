@@ -162,7 +162,10 @@ if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-
   yq4 'del(.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.prometheus)' -i $c
   yq4 'del(.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.thanos)' -i $c
 fi
-
+#sma-vm-cluster
+if [ "$(yq4 eval '.spec.kubernetes.services.sma-vm-cluster' $c)" == null ]; then
+  yq4 -i eval ".spec.kubernetes.services[\"sma-vm-cluster\"] += (load(\"${upgrade_customizations}\") | .spec.kubernetes.services[\"sma-vm-cluster\"])" "$c"
+fi
 #sma-pcim
 if [ "$(yq4 eval '.spec.kubernetes.services.sma-pcim' $c)" == null ]; then
   yq4 eval '.spec.proxiedWebAppExternalHostnames.customerManagement += [ "sma-pcim.cmn.{{network.dns.external}}" ]' -i $c
