@@ -73,13 +73,18 @@ information, see [SAT in CSM](operations/system_admin_toolkit/about_sat/SAT_in_C
 
 ## Deprecations
 
-For a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
+* `sat swap cable` and `sat swap switch` commands
+* [Data Virtualization Service (DVS)](glossary.md#data-virtualization-service-dvs)
+
+For more details and a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
 
 ## Removals
 
 * [BOS](glossary.md#boot-orchestration-service-bos) v1
+* User Access Service
+* User Access Instance
 
-For a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals).
+For more details and a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals).
 
 ## Known issues
 

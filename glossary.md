@@ -599,11 +599,13 @@ that supports higher rates of small messages).
 
 ## Scalable Boot Projection Service (SBPS)
 
-The Scalable Boot Projection Service (SBPS) provides the root filesystem for compute nodes and
-application nodes using iSCSI. In addition, the HPE Cray Programming Environment (CPE) and
-Analytics products leverage SBPS to provide content to compute nodes and application nodes
-(such as UANs). CPE and Analytics are provided
-as separately mounted filesystems that are mounted alongside the root filesystem.
+The Scalable Boot Projection Service (SBPS) provides the root filesystem for
+[compute nodes](#compute-node-cn) and [application nodes](#application-node-an)
+using iSCSI. In addition, the HPE [Cray Programming Environment (CPE)](#cray-programming-environment-cpe) and
+Analytics products leverage SBPS to provide content to compute nodes and application nodes (such as [UANs](#user-access-node-uan)).
+CPE and Analytics are provided as separately mounted filesystems that are mounted alongside the root filesystem.
+
+For more information, see [iSCSI SBPS (Scalable Boot Content Projection Service)](operations/iscsi_sbps/iscsi_sbps.md).
 
 ## Service/IO Cabinet
 

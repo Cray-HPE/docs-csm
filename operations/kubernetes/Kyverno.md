@@ -422,7 +422,7 @@ For more information on mutation policy, refer to the [Mutation Policy](https://
 
 If any changes are to be made to the policy, for example, including or excluding certain namespaces and adding
 a new public key, then the end user must change the CSM customizations and redeploy the `kyverno-policy` chart.
-For more information on customization and redeployment, refer to [Customization](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/CSM_product_management/Redeploying_a_Chart.md).
+For more information on customization and redeployment, see [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md).
 
 For more information on policy exception and matchings, refer to the Kyverno documentation at [Policy Exceptions](https://release-1-10-0.kyverno.io/docs/writing-policies/exceptions/)
 and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/match-exclude/).

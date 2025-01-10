@@ -27,8 +27,8 @@ SAT included in CSM 1.6. They are described below.
 - The `docs-sat` RPM is no longer provided.
 
   The SAT documentation moved to be fully included within the
-  [System Admin Toolkit (SAT) section](https://cray-hpe.github.io/docs-csm/en-16/operations/system_admin_toolkit/)
-  of the [CSM Administration Guide](https://cray-hpe.github.io/docs-csm/en-16/operations/).
+  [System Admin Toolkit (SAT) section](../README.md)
+  of the [CSM Administration Guide](../../README.md).
 
 - The `sat-config-management` repository in Gitea (VCS) is no longer used.
 
