@@ -29,7 +29,7 @@ import re
 
 import click
 
-from sls_utils.ipam import next_free_ipv4_address
+from sls_utils.ipam import next_free_ipv4_address, last_free_ipv4_address
 from sls_utils.Managers import NetworkManager
 from sls_utils.Reservations import Reservation
 
@@ -242,6 +242,10 @@ def main(
                 ),
             },
         )
+
+    dhcp_start = next_free_ipv4_address(chn_subnet)
+    click.secho(f"Updating DHCP start IPv4 address {dhcp_start}", fg="bright_white")
+    chn_subnet.dhcp_start_address(next_free_ipv4_address(chn_subnet))
 
     click.secho(
         f"CHN now has {len(chn_subnet.reservations()) + 1} IP reservations",
