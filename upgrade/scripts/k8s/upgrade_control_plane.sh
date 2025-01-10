@@ -32,12 +32,16 @@ kubectl get configmap kubeadm-config -n kube-system -o yaml > "${workdir}/kubead
 cp "${workdir}/kubeadm-config.yaml" "${workdir}/kubeadm-config.yaml.back"
 yq4 eval -P '.data.ClusterConfiguration' "${workdir}/kubeadm-config.yaml" > "${workdir}/ClusterConfiguration.yaml"
 
-yq4 eval -i -P '.imageRepository = "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io"' "${workdir}/ClusterConfiguration.yaml"
-yq4 eval -i -P '.dns = {"type": "CoreDNS", "imageRepository": "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io/coredns"}' "${workdir}/ClusterConfiguration.yaml"
+if [ "$(yq4 eval '.dns' "${workdir}/ClusterConfiguration.yaml")" = "null" ] || [ "$(yq4 eval '.dns' "${workdir}/ClusterConfiguration.yaml")" == "{}" ]; then
+  yq4 eval -i -P '.dns = {"type": "CoreDNS", "imageRepository": "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io/coredns"}' "${workdir}/ClusterConfiguration.yaml"
+fi
+if [ "$(yq4 eval '.imageRepository' "${workdir}/ClusterConfiguration.yaml")" = 'k8s.gcr.io' ]; then
+  yq4 eval -i -P '.imageRepository = "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io"' "${workdir}/ClusterConfiguration.yaml"
+fi
 yq4 eval -i -P '.apiServer.extraArgs.api-audiences = "api,istio-ca"' "${workdir}/ClusterConfiguration.yaml"
+yq4 eval -i -P '.apiServer.extraArgs.enable-admission-plugins = "NodeRestriction,PodSecurityPolicy"' "${workdir}/ClusterConfiguration.yaml"
 yq4 eval -i -P '.controllerManager.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
 yq4 eval -i -P '.scheduler.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
-yq4 eval -i -P '.scheduler.extraArgs.enable-admission-plugins = "NodeRestriction,PodSecurityPolicy"' "${workdir}/ClusterConfiguration.yaml"
 
 manifest_auditing_enabled=0
 if ! grep -q '/var/log/audit' /etc/kubernetes/manifests/kube-apiserver.yaml; then
@@ -45,11 +49,11 @@ if ! grep -q '/var/log/audit' /etc/kubernetes/manifests/kube-apiserver.yaml; the
 fi
 
 cm_auditing_enabled=0
-if [ "$(yq4 eval '.audit-log-path' "${workdir}/ClusterConfiguration.yaml")" != "null" ]; then
+if [ "$(yq4 eval '.extraArgs.audit-log-path' "${workdir}/ClusterConfiguration.yaml")" != "null" ]; then
   cm_auditing_enabled=1
 fi
 
-if [[ ${manifest_auditing_enabled} -eq 1 && ${cm_auditing_enabled} -ne 1 ]]; then
+if [ ${manifest_auditing_enabled} -eq 1 ] && [ ${cm_auditing_enabled} -eq 1 ]; then
   echo "Updating kubeadm-config configmap with audit configuration"
   yq4 eval -i -P '.apiServer.extraArgs.audit-log-maxbackup = "100"' "${workdir}/ClusterConfiguration.yaml"
   yq4 eval -i -P '.apiServer.extraArgs.audit-log-path = "/var/log/audit/kl8s/apiserver/audit.log"' "${workdir}/ClusterConfiguration.yaml"
@@ -68,7 +72,7 @@ fi
 if IFS= read -rd '' -a cluster_configuration; then
   :
 fi <<< "$(cat "${workdir}/ClusterConfiguration.yaml")"
-cluster_configuration=$cluster_configuration yq4 eval '.data.ClusterConfiguration = strenv(cluster_configuration)' "${workdir}/kubeadm-config.yaml"
+cluster_configuration=$cluster_configuration yq4 eval -i '.data.ClusterConfiguration = strenv(cluster_configuration)' "${workdir}/kubeadm-config.yaml"
 
 # Apply the new Kubernetes config.
 kubectl -n kube-system apply -f "${workdir}/kubeadm-config.yaml"
