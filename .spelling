@@ -455,6 +455,7 @@ behavior
 behaviors
 binfmt_misc
 blackhole
+bootprep
 bootscript
 buses
 c0
@@ -942,7 +943,7 @@ vsx-pair
 
 # Per-file spelling exceptions. Please keep this section sorted in order by filepath, to help make it easier to
 # see if a file already is listed.
-# 
+#
 # UAS/UAI are deprecated, so putting spelling exceptions here for easy removal later.
 - api/uas-mgr.md
 250Mi
