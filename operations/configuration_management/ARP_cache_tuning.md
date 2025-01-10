@@ -1,13 +1,13 @@
 # ARP Cache Tuning Guide
 
-To ensure smooth communication on your network, ARP (Address Resolution Protocol) cache settings must be adjusted to handle a larger number of nodes. This guide will help you calculate and set the appropriate values for your system.
+To ensure smooth communication on your network, Address Resolution Protocol (ARP) cache settings must be adjusted to handle a larger number of nodes. This guide will help you calculate and set the appropriate values for your system.
 
 ## Prerequisites
 
 The following information is required and will need to be gathered before performing the steps outlined in this guide.
 
 - Total number of communicating nodes (master, worker, storage, compute and application nodes).
-- Total number of network interface cards in each node.
+- Total number of network interface cards (NICs) in each node.
 
 ---
 
@@ -79,7 +79,7 @@ net.ipv4.neigh.default.base_reachable_time_ms = 1500000
 
 ## Host configuration
 
-The following steps describe how to use CFS to configure ARP cache settings for NCNs.
+The following steps describe how to use the Configuration Framework Service (CFS) to configure ARP cache settings for NCNs.
 
 ### Prepare VCS branch
 
@@ -116,11 +116,11 @@ The following steps describe how to use CFS to configure ARP cache settings for 
 
    > **`NOTE`** In this example, `integration-1.26.0` is the name of your new branch.
 
-   Refer to [VCS Branching Strategy](./VCS_Branching_Strategy.md) for more information about git branches.
+   See [VCS Branching Strategy](./VCS_Branching_Strategy.md) for more information about Git branches.
 
 #### Configure the `csm.ncn.sysctl` Ansible role
 
-1. Using the values calculated in [Formula for Tuning ARP cache settings](#formula-for-tuning-arp-cache-settings), update the appropriate variables in `roles/csm.ncn.sysctl/vars/main.yml` using the calculated values.
+1. Update the appropriate variables in `roles/csm.ncn.sysctl/vars/main.yml` using the values calculated in [Formula for Tuning ARP cache settings](#formula-for-tuning-arp-cache-settings).
 
    > **`NOTE`** The following values are only examples and MUST be updated using the calculated values.
 
@@ -263,9 +263,7 @@ The following steps describe how to use CFS to configure ARP cache settings for 
 
    The session status should be "complete" and succeeded should be "true". See the [troubleshooting](#troubleshooting) section if that is not the case.
 
-1. Verify ARP settings.
-
-   1. Run the following command from `ncn-m001`.
+1. (`ncn-m001`) Verify ARP settings.
 
       ```bash
       NCNS=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | tr '\r\n\t' ',')
