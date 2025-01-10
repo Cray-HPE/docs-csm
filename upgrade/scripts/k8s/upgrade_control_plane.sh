@@ -47,7 +47,7 @@ if [ "$(yq4 eval '.audit-log-path' "${workdir}/ClusterConfiguration.yaml")" != "
   cm_auditing_enabled=1
 fi
 
-if [[ ${manifest_auditing_enabled} -eq 1 && ${cm_auditing_enabled} -ne 1 ]]; then
+if [ ${manifest_auditing_enabled} -eq 1 ] && [ ${cm_auditing_enabled} -eq 1 ]; then
   echo "Updating kubeadm-config configmap with audit configuration"
   yq4 eval -i -P '.apiServer.extraArgs.audit-log-maxbackup = "100"' "${workdir}/ClusterConfiguration.yaml"
   yq4 eval -i -P '.apiServer.extraArgs.audit-log-path = "/var/log/audit/kl8s/apiserver/audit.log"' "${workdir}/ClusterConfiguration.yaml"
@@ -66,7 +66,7 @@ fi
 if IFS= read -rd '' -a cluster_configuration; then
   :
 fi <<< "$(cat "${workdir}/ClusterConfiguration.yaml")"
-cluster_configuration=$cluster_configuration yq4 eval '.data.ClusterConfiguration = strenv(cluster_configuration)' "${workdir}/kubeadm-config.yaml"
+cluster_configuration=$cluster_configuration yq4 eval -i '.data.ClusterConfiguration = strenv(cluster_configuration)' "${workdir}/kubeadm-config.yaml"
 
 # Apply the new Kubernetes config.
 kubectl -n kube-system apply -f "${workdir}/kubeadm-config.yaml"
