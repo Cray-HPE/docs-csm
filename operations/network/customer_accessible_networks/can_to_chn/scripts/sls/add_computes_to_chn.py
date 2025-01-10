@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023, 2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -29,7 +29,7 @@ import re
 
 import click
 
-from sls_utils.ipam import next_free_ipv4_address
+from sls_utils.ipam import next_free_ipv4_address, last_free_ipv4_address
 from sls_utils.Managers import NetworkManager
 from sls_utils.Reservations import Reservation
 
@@ -242,6 +242,10 @@ def main(
                 ),
             },
         )
+
+    dhcp_start = next_free_ipv4_address(chn_subnet)
+    click.secho(f"Updating DHCP start IPv4 address {dhcp_start}", fg="bright_white")
+    chn_subnet.dhcp_start_address(next_free_ipv4_address(chn_subnet))
 
     click.secho(
         f"CHN now has {len(chn_subnet.reservations()) + 1} IP reservations",
