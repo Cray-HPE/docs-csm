@@ -191,7 +191,7 @@ if [[ $state_recorded == "0" ]] && k8s_job_exists "${ns}" "${job_name}"; then
     while [[ $attempt -le 12 ]]; do
       [[ $attempt -eq 1 ]] || sleep 5
       let attempt+=1
-      kubectl get pods -n services -l 'app.kubernetes.io/instance=cray-bos-db' --no-headers | grep -w Running || continue
+      kubectl get pods -n services -l 'app.kubernetes.io/name=cray-bos-db' --no-headers | grep -w Running || continue
       echo "BOS database pod found in Running state"
       db_running=Y
       break
