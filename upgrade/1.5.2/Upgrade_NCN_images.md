@@ -62,6 +62,22 @@ upgrade procedure which could cause problems.
     echo "${CSM_ARTI_DIR}"
     ```
 
+1. (`ncn-m001#`) Ensure the `/etc/cray/upgrade/csm/myenv` file has the correct values for `CSM_RELEASE` and `CSM_ARTI_DIR`.
+
+    > NOTE: the `STORAGE_IMS_IMAGE_ID` and `K8S_IMS_IMAGE_ID` values in `/etc/cray/upgrade/csm/myenv` do not need to be correct when performing a patch procedure.
+
+    1. `cat` the `/etc/cray/upgrade/csm/myenv` file.
+
+        ```bash
+        cat /etc/cray/upgrade/csm/myenv
+        ```
+
+    1. If the `CSM_RELEASE` and `CSM_ARTI_DIR` values need to be corrected, then manually edit the file.
+
+        ```bash
+        vim /etc/cray/upgrade/csm/myenv
+        ```
+
 1. Upgrade master nodes and worker nodes using the following steps, these will walk through the [CSM Stage 3 Upgrade Kubernetes documentation](../Stage_3.md) steps.
 
     1. (`ncn-m001#`) Start with step [Stage 3.1 - Master node image upgrade](../Stage_3.md#stage-31---master-node-image-upgrade).
