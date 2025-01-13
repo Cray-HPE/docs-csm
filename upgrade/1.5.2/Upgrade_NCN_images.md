@@ -62,64 +62,50 @@ upgrade procedure which could cause problems.
     echo "${CSM_ARTI_DIR}"
     ```
 
-1. (`ncn-m001#`) Ensure the `/etc/cray/upgrade/csm/myenv` file has the correct values for `CSM_RELEASE` and `CSM_ARTI_DIR`.
+1. (`ncn-m001#`) Update the `/etc/cray/upgrade/csm/myenv` file with the correct `CSM_RELEASE`, `CSM_ARTI_DIR` and `CSM_REL_NAME` values.
 
-    > NOTE: the `STORAGE_IMS_IMAGE_ID` and `K8S_IMS_IMAGE_ID` values in `/etc/cray/upgrade/csm/myenv` do not need to be correct when performing a patch procedure.
+    1. Backup the previous `myenv` file.
 
-    1. `cat` the `/etc/cray/upgrade/csm/myenv` file.
+        ```bash
+        mv /etc/cray/upgrade/csm/myenv /etc/cray/upgrade/csm/myenv.old
+        ```
+
+    1. Create the new `myenv` file.
+
+        ```bash
+        cat << EOF > /etc/cray/upgrade/csm/myenv
+        export CSM_ARTI_DIR=${CSM_ARTI_DIR}
+        export CSM_RELEASE=${CSM_RELEASE}
+        export CSM_REL_NAME=${CSM_REL_NAME}
+        EOF
+        ```
+
+    1. `cat` the `/etc/cray/upgrade/csm/myenv` file to make sure it is correct.
 
         ```bash
         cat /etc/cray/upgrade/csm/myenv
-        ```
-
-    1. If the `CSM_RELEASE` and `CSM_ARTI_DIR` values need to be corrected, then manually edit the file.
-
-        ```bash
-        vim /etc/cray/upgrade/csm/myenv
         ```
 
 1. Upgrade master nodes and worker nodes using the following steps, these will walk through the [CSM Stage 3 Upgrade Kubernetes documentation](../Stage_3.md) steps.
 
     1. (`ncn-m001#`) Start with step [Stage 3.1 - Master node image upgrade](../Stage_3.md#stage-31---master-node-image-upgrade).
 
-    1. (`ncn-m001#`) Perform [Stage 3.2 - Master node image upgrade](../Stage_3.md#stage-32---worker-node-image-upgrade).
+    1. (`ncn-m001#`) Perform [Stage 3.2 - Worker node image upgrade](../Stage_3.md#stage-32---worker-node-image-upgrade).
 
     1. (`ncn-m002#`) From `ncn-m002`, commence the upgrade for `ncn-m001`.
 
-    1. (`ncn-m002#`) From `ncn-m002`, commence the upgrade for `ncn-m001`.
-
-        1. Backup the previous `myenv` file.
+        1. Source the `/etc/cray/upgrade/csm/myenv` file to set environment variables. Also, set the `CSM_RELEASE_VERSION` environment variable.
 
             ```bash
-            mv /etc/cray/upgrade/csm/myenv /etc/cray/upgrade/csm/myenv.old
+            source /etc/cray/upgrade/csm/myenv
+            export CSM_RELEASE_VERSION="${CSM_RELEASE}"
             ```
 
-        1. Set the following release variables to the same values they were set to on `ncn-m001`.
+        1. Verify that the `CSM_ARTI_DIR`, `CSM_RELEASE`, `CSM_RELEASE_VERSION`, and `CSM_REL_NAME` variables are set correctly.
 
-            * `CSM_DISTDIR`
-            * `CSM_RELEASE_VERSION`
-
-           See the [`CSM-1.5.2` patch preparation](./README.md#preparation) for details on setting these variables.
-
-        1. Write release variables to a new `/etc/cray/upgrade/csm/myenv` for the upgrade of `ncn-m001`.
-
-            1. Set the new variables.
-
-               ```bash
-               export CSM_ARTI_DIR="${CSM_DISTDIR}"
-               export CSM_RELEASE="${CSM_RELEASE_VERSION}"
-               export CSM_REL_NAME="csm-${CSM_RELEASE_VERSION}"
-               ```
-
-            1. Create the new `myenv` file.
-
-               ```bash
-               cat << EOF > /etc/cray/upgrade/csm/myenv
-               export CSM_ARTI_DIR=${CSM_ARTI_DIR}
-               export CSM_RELEASE=${CSM_RELEASE}
-               export CSM_REL_NAME=${CSM_REL_NAME}
-               EOF
-               ```
+            ```bash
+            echo -e "CSM_ARTI_DIR: $CSM_ARTI_DIR\nCSM_RELEASE: $CSM_RELEASE\nCSM_RELEASE_VERSION: $CSM_RELEASE_VERSION\nCSM_REL_NAME: $CSM_REL_NAME"
+            ```
 
         1. Perform [Stage 3.3 - `ncn-m001` upgrade](../Stage_3.md#stage-33---ncn-m001-upgrade) and return to this document.
 
