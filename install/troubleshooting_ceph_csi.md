@@ -19,7 +19,7 @@ Verify that the `ceph-csi` requirements are in place.
       ceph -s
       ```
 
-      If it returns a connection error, then assume Ceph is not installed. See [Rerun storage node `cloud-init`](#2-rerun-storage-node-cloud-init).
+      If it returns a connection error, then assume Ceph is not installed. See [Rerun storage node `cloud-init`](#3-rerun-storage-node-cloud-init).
 
    1. (`ncn-s001#`) Verify all post-Ceph-install tasks have run.
 
@@ -32,7 +32,7 @@ Verify that the `ceph-csi` requirements are in place.
 
       Check the results against this example.
 
-      If any components are missing, see [Rerun storage node `cloud-init`](#2-rerun-storage-node-cloud-init).
+      If any components are missing, see [Rerun storage node `cloud-init`](#3-rerun-storage-node-cloud-init).
 
    1. (`ncn#`) Check to see if `ceph-csi` prerequisites have been created in Kubernetes.
 
@@ -59,7 +59,8 @@ Verify that the `ceph-csi` requirements are in place.
 
 ## 2. Check if Ceph pools failed to create
 
-Follow the [Ceph OSD pool fails to create document](../troubleshooting/known_issues/ceph_osd_pool_fails_to_create.md). If that document resolves the `Ceph CSI` problems, then the next step can be skipped. If the that document did not solve the `Ceph CSI` problems, then continue to the next step.
+Follow the [Ceph OSD pool fails to create document](../troubleshooting/known_issues/ceph_osd_pool_fails_to_create.md). If that document resolves the `Ceph CSI` problems, then the next step can be skipped.
+If that document did not solve the `Ceph CSI` problems, then continue to the next step.
 
 ## 3. Rerun storage node `cloud-init`
 

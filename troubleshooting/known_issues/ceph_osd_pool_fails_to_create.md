@@ -9,7 +9,7 @@ Additionally, the `csi-kube-secret` and/or the `csi-sma-secret` will not exist i
 
 ## Observed Error
 
-(`ncn-s001#`) Look at `cloud-init-output.log` on `ncn-s001` and check if an ansible task `Create Ceph OSD pool` failed when creating the `kube` and/or `smf` pool..
+(`ncn-s001#`) Look at `cloud-init-output.log` on `ncn-s001` and check if an Ansible task `Create Ceph OSD pool` failed when creating the `kube` and/or `smf` pool..
 
 ```bash
 cat /var/log/cloud-init-output.log | grep -A 2 'Create Ceph OSD pool'
@@ -24,10 +24,12 @@ changed: [ncn-s001.nmn] => (item={'name': 'k8s-block-replicated', 'args': '64 64
 
 --
 TASK [ceph-rbd : Create Ceph OSD pool] *****************************************
-failed: [ncn-s001.nmn] (item={'name': 'sma-block-replicated', 'args': '64 64', 'user': 'sma-block-replicated', 'secret': 'ceph-rbd-sma', 'storage_class': 'sma-block-replicated', 'compression_algorithm': 'snappy', 'compression_mode': 'aggressive', 'compression_required_ratio': 0.7, 'namespace': 'sma-block', 'pool_name': 'smf'}) => {"ansible_loop_var": "item", "changed": false, "cmd": ["ceph", "osd", "pool", "create", "smf", "64", "64"], "delta": "0:00:01.414139", "end": "2025-01-14 03:06:55.659707", "item": {"args": "64 64", "compression_algorithm": "snappy", "compression_mode": "aggressive", "compression_required_ratio": 0.7, "name": "sma-block-replicated", "namespace": "sma-block", "pool_name": "smf", "secret": "ceph-rbd-sma", "storage_class": "sma-block-replicated", "user": "sma-block-replicated"}, "msg": "non-zero return code", "rc": 34, "start": "2025-01-14 03:06:54.245568", "stderr": "Error ERANGE:  pg_num 64 size 3 for this pool would result in 288 cumulative PGs per OSD (1155 total PG replicas on 4 'in' root OSDs by crush rule) which exceeds the mon_max_pg_per_osd value of 250", "stderr_lines": ["Error ERANGE:  pg_num 64 size 3 for this pool would result in 288 cumulative PGs per OSD (1155 total PG replicas on 4 'in' root OSDs by crush rule) which exceeds the mon_max_pg_per_osd value of 250"], "stdout": "", "stdout_lines": []}
+failed: [ncn-s001.nmn] (item={'name': 'sma-block-replicated', 'args': '64 64', 'user': 'sma-block-replicated', 'secret': 'ceph-rbd-sma', 'storage_class': 'sma-block-replicated', 'compression_algorithm': 'snappy', 'compression_mode': 'aggressive', 'compression_required_ratio': 0.7, 'namespace': 'sma-block', 'pool_name': 'smf'}) => {"ansible_loop_var": "item", "changed": false, "cmd": ["ceph", "osd", "pool", "create", "smf", "64", "64"], "delta": "0:00:01.414139", "end": "2025-01-14 03:06:55.659707",
+"item": {"args": "64 64", "compression_algorithm": "snappy", "compression_mode": "aggressive", "compression_required_ratio": 0.7, "name": "sma-block-replicated", "namespace": "sma-block", "pool_name": "smf", "secret": "ceph-rbd-sma", "storage_class": "sma-block-replicated", "user": "sma-block-replicated"}, "msg": "non-zero return code", "rc": 34, "start": "2025-01-14 03:06:54.245568",
+"stderr": "Error ERANGE:  pg_num 64 size 3 for this pool would result in 288 cumulative PGs per OSD (1155 total PG replicas on 4 'in' root OSDs by crush rule) which exceeds the mon_max_pg_per_osd value of 250", "stderr_lines": ["Error ERANGE:  pg_num 64 size 3 for this pool would result in 288 cumulative PGs per OSD (1155 total PG replicas on 4 'in' root OSDs by crush rule) which exceeds the mon_max_pg_per_osd value of 250"], "stdout": "", "stdout_lines": []}
 ```
 
-The above error would also cause the`csi-kube-secret` or `csi-rbd-secret` secret to be missing from the defult namespace and the `kube` and/or `smf` Ceph pools to not be created.
+The above error would also cause the`csi-kube-secret` or `csi-rbd-secret` secret to be missing from the default namespace and the `kube` and/or `smf` Ceph pools to not be created.
 
 1. (`ncn-m001#`) Check if both `csi-kube-secret` and `csi-rbd-secret` secrets exist in the default namespace.
 
@@ -43,17 +45,18 @@ The above error would also cause the`csi-kube-secret` or `csi-rbd-secret` secret
 
 ## Recovery Procedure
 
-If `cloud-init-output.log` on `ncn-s001` shows that a `Create Ceph OSD pool` task failed, then follow the steps below. All of the following steps should be run from `ncn-s001`. 
+If `cloud-init-output.log` on `ncn-s001` shows that a `Create Ceph OSD pool` task failed, then follow the steps below.
+All of the following steps should be run from `ncn-s001`.
 
-1. (`ncn-s001#`) Execute the ansible playbook to create OSD pools.
+1. (`ncn-s001#`) Execute the Ansible playbook to create OSD pools.
 
     ```bash
     . /etc/ansible/boto3_ansible/bin/activate
     ansible-playbook /etc/ansible/ceph-rgw-users/install.yml --start-at-task="Determine if running on cloud or metal"
     deactivate
-    ``` 
+    ```
 
-1. (`ncn-s001#`) Execute steps to create neccessary secrets and configmaps.
+1. (`ncn-s001#`) Execute steps to create necessary secrets and ConfigMaps.
 
     ```bash
     . /srv/cray/scripts/common/csi-configuration.sh
