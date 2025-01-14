@@ -71,6 +71,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [IMS image delete loses the `arch` information](known_issues/ims_image_delete_loses_arch.md)
 * [Spire pods stuck in `PodInitializing`](known_issues/spire_pod_initializing.md)
 * [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
+* [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
 
 ## Booting
 
