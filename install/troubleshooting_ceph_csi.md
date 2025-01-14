@@ -6,7 +6,8 @@ If there has been a failure to initialize all Ceph CSI components on `ncn-s001`,
 ## Topics
 
 1. [Verify Ceph CSI](#1-verify-ceph-csi)
-1. [Rerun storage node `cloud-init`](#2-rerun-storage-node-cloud-init)
+1. [Check if Ceph pools failed to create](#2-check-if-ceph-pools-failed-to-create)
+1. [Rerun storage node `cloud-init`](#3-rerun-storage-node-cloud-init)
 
 ## 1. Verify Ceph CSI
 
@@ -54,9 +55,13 @@ Verify that the `ceph-csi` requirements are in place.
 
       Check your results against the above examples.
 
-      If any components are missing, see [Rerun storage node `cloud-init`](#2-rerun-storage-node-cloud-init).
+      If any components are missing, continue to the next step.
 
-## 2. Rerun storage node `cloud-init`
+## 2. Check if Ceph pools failed to create
+
+Follow the [Ceph OSD pool fails to create document](../troubleshooting/known_issues/ceph_osd_pool_fails_to_create.md). If that document resolves the `Ceph CSI` problems, then the next step can be skipped. If the that document did not solve the `Ceph CSI` problems, then continue to the next step.
+
+## 3. Rerun storage node `cloud-init`
 
    This procedure will restart the storage node `cloud-init` process to prepare Ceph for use by the utility storage nodes.
 

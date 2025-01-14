@@ -46,6 +46,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Gigabyte BMC Missing Redfish Data](known_issues/Gigabyte_BMC_Missing_Redfish_Data.md)
 * [`admin*client-auth` Not Found](known_issues/admin_client_auth_not_found.md)
 * [Ceph OSD latency](known_issues/ceph_osd_latency.md)
+* [Ceph OSD pool fails to create](known_issues/ceph_osd_pool_fails_to_create.md)
 * [Cray CLI 403 Forbidden Errors](known_issues/craycli_403_forbidden_errors.md)
 * [Flags Set For Nodes In HSM](known_issues/flags_set_for_nodes_in_hsm.md)
 * [Goss Test Fails with Connection Refused](known_issues/goss_tests_fails_with_connection_refused.md)
