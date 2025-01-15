@@ -18,7 +18,7 @@ are not currently managed by IUF.
 The initial install workflow comprises the following procedures. The diagram shows the workflow and
 the steps below it provide detailed instructions which must be executed in the order shown.
 
-![Install or upgrade additional products with IUF](../../../img/operations/iuf_initial_install_workflow_14_04142023.png)
+![Install or upgrade additional products with IUF](../../../img/operations/iuf_initial_install_workflow_update_hsn_01132025.png)
 
 1. Perform an install of CSM
 
