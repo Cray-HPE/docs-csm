@@ -20,6 +20,7 @@ Example output:
 
 ```json
 {
+  "bss_read_timeout": 20,
   "cfs_read_timeout": 20,
   "cleanup_completed_session_ttl": "7d",
   "clear_stage": false,
@@ -27,13 +28,16 @@ Example output:
   "default_retry_policy": 3,
   "disable_components_on_completion": true,
   "discovery_frequency": 300,
+  "hsm_read_timeout": 20,
   "ims_errors_fatal": false,
   "ims_images_must_exist": false,
+  "ims_read_timeout": 20,
   "logging_level": "DEBUG",
   "max_boot_wait_time": 1200,
   "max_component_batch_size": 1800,
   "max_power_off_wait_time": 300,
   "max_power_on_wait_time": 120,
+  "pcs_read_timeout": 20,
   "polling_frequency": 15,
   "reject_nids": false,
   "session_limit_required": false
@@ -48,10 +52,15 @@ The values for all BOS global options can be modified with the `cray bos v2 opti
 
 The following are the BOS global options:
 
+* `bss_read_timeout`
+
+    The amount of time in seconds BOS will wait for a response from BSS to a request. After this time, the request will
+    time out. The default is 20 seconds.
+
 * `cfs_read_timeout`
 
     The amount of time in seconds BOS will wait for a response from CFS to a request. After this time, the request will
-    time out. The default is 10 seconds.
+    time out. The default is 20 seconds.
 
 * `cleanup_completed_session_ttl`
 
@@ -83,6 +92,11 @@ The following are the BOS global options:
 
     The frequency with which BOS checks HSM for new components and adds them to the BOS component database.
 
+* `hsm_read_timeout`
+
+    The amount of time in seconds BOS will wait for a response from HSM to a request. After this time, the request will
+    time out. The default is 20 seconds.
+
 * `ims_errors_fatal`
 
     This option modifies how BOS behaves when validating the architecture of a boot image in a boot set.
@@ -111,6 +125,11 @@ The following are the BOS global options:
     This boot set validation happens when creating a session template, validating a session
     template, or creating a session.
 
+* `ims_read_timeout`
+
+    The amount of time in seconds BOS will wait for a response from IMS to a request. After this time, the request will
+    time out. The default is 20 seconds.
+
 * `logging_level`
 
     The logging level for all BOS services. Valid values for this option are `DEBUG`, `INFO`, and `WARN`.
@@ -131,6 +150,11 @@ The following are the BOS global options:
 * `max_power_on_wait_time`
 
     How long BOS will wait for a node to power on before calling power on again (in seconds).
+
+* `pcs_read_timeout`
+
+    The amount of time in seconds BOS will wait for a response from PCS to a request. After this time, the request will
+    time out. The default is 20 seconds.
 
 * `polling_frequency`
 
