@@ -2669,6 +2669,8 @@ empty array is returned.
 |enabled|query|boolean|false|Retrieve the Components with the "enabled" state.|
 |phase|query|[V2ComponentPhase](#schemav2componentphase)|false|Retrieve the Components in the given phase.|
 |status|query|string|false|Retrieve the Components with the given status.|
+|start_after_id|query|[V2ComponentId](#schemav2componentid)|false|Begin listing Components after the specified ID. Used for paging.|
+|page_size|query|integer|false|Maximum number of Components to include in response. Used for paging. 0 means no limit|
 |Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 
 #### Detailed descriptions
@@ -2676,6 +2678,9 @@ empty array is returned.
 **ids**: Retrieve the Components with the given ID
 (e.g. xname for hardware Components). Can be chained
 for selecting groups of Components.
+
+**page_size**: Maximum number of Components to include in response. Used for paging. 0 means no limit
+(which is the same as not specifying this parameter).
 
 **Cray-Tenant-Name**: Tenant name.
 
