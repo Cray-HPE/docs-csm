@@ -10,7 +10,7 @@ This page provides guidance for systems with products installed that are perform
 
 The [`v1.5.3` upgrade page](README.md) will refer to this page during [Update NCN images](README.md#update-ncn-images).
 
-**If exclusively CSM is installed on the system, return to [Update NCN images](README.md#update-ncn-images) and choose option 2.**
+**If CSM is exclusively installed on the system, return to [Update NCN images](README.md#update-ncn-images) and choose option 2.**
 
 ## Requirements
 
