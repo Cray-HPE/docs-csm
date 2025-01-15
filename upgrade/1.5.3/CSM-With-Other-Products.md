@@ -4,15 +4,13 @@
 * [Overview](#overview)
 * [Steps](#steps)
     * [Using `sat bootprep` with IUF generated input files](#using-sat-bootprep-with-iuf-generated-input-files)
-* [Return to CSM `1.5.2` patch](#return-to-csm-152-patch)
+* [Return to CSM `1.5.3` patch](#return-to-csm-153-patch)
 
-This page provides guidance for systems with products installed that are performing an upgrade from a CSM `v1.5.X` release to the CSM `v1.5.2` release.
+This page provides guidance for systems with products installed that are performing an upgrade from a CSM `v1.5.X` release to the CSM `v1.5.3` release.
 
-The [`v1.5.2` upgrade page](README.md) will refer to this page
-during [Update NCN images](README.md#update-ncn-images).
+The [`v1.5.3` upgrade page](README.md) will refer to this page during [Update NCN images](README.md#update-ncn-images).
 
-**If exclusively CSM is installed on the system, return to [Update NCN images](README.md#update-ncn-images) and
-choose option 2.**
+**If exclusively CSM is installed on the system, return to [Update NCN images](README.md#update-ncn-images) and choose option 2.**
 
 ## Requirements
 
@@ -29,7 +27,7 @@ choose option 2.**
 
 This process creates new NCN node images and CFS configurations in order to acquire any changes from CSM config.
 These images and CFS configurations will be assigned to the NCNs during this process.
-Later in the CSM `v1.5.2` patch process, nodes will be rebooted into these images and the CFS configuration will be applied to the nodes.
+Later in the CSM `v1.5.3` patch process, nodes will be rebooted into these images and the CFS configuration will be applied to the nodes.
 
 ## Steps
 
@@ -279,6 +277,6 @@ example showing how to find the IUF activity.
       All components updated successfully.
       ```
 
-## Return to CSM `1.5.2` patch
+## Return to CSM `1.5.3` patch
 
-Return to [Update test suite packages](README.md#update-test-suite-packages).
+Return to [Update test suite packages](./README.md#update-test-suite-packages).

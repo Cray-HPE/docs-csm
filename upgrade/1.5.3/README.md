@@ -1,4 +1,4 @@
-# CSM 1.5.2 Patch Installation Instructions
+# CSM 1.5.3 Patch Installation Instructions
 
 * [Introduction](#introduction)
 * [Bug fixes and improvements](#bug-fixes-and-improvements)
@@ -6,8 +6,8 @@
 
 ## Introduction
 
-This document guides an administrator through the patch update to Cray Systems Management `v1.5.2`
-from an earlier version of CSM `v1.5`.
+This document guides an administrator through the patch update to Cray Systems Management `v1.5.3`
+from earlier versions of CSM `v1.5`.
 
 If upgrading from CSM `v1.4.x`,  then follow the procedures
 described in [CSM major/minor version upgrade](../README.md#csm-majorminor-version-upgrade) instead.
@@ -21,27 +21,16 @@ list of patch versions.
 
 ## Bug fixes and improvements
 
-* Added support for Paradise hardware
-* Added support for Parry Peak hardware
-* Console: Fixed issue in `conman` in order to support Paradise hardware
-* HSM: Fixed issue in `run_hms_ct_tests.sh` which caused false positives for CDU switches
-* HSM: Enhanced `hmcollector` logging
-* HSM: FAS now waits for the time limit to expire when verifying update. `FASUpdate.py` script also updated to accept a `--timeLimit` parameter to change the preset time limit
-* Required environment variables now set to address breaking changes in the latest ca-certificates RPM
-* Update IMS recipe builds to use new DST signing key
-* Multitenancy: Allowed tenant admins to list their BOS v2 sessions
-* CFS: Fixed error when updating multiple components using CFS v2
-* BOS: Changes to avoid pods being `OOMKilled`
-* HSM: Fixed bug preventing bulk updates of roles/subroles
-* BOS: Improved logging
-* BOS: v2 performance improvements, particularly at scale
-* BOS: Fix possible false BOS failure in `cmsdev` health check
-* CFS: Updated dependency version to prevent deprecation warnings in pod logs during image customization
-* BOS: Fixed some failures when multiple simultaneous BOS sessions are created soon after the service first starts
-* BOS: Perform better checking of age string arguments to relevant API endpoints
-* Fixed issue for `goss-servers` being able to be installed without `goss`, `goss-servers` now requires `goss` as a dependency
-* Fixed issue for `goss-servers.service` from being disabled when updating the `goss-servers`’s package.
-* DHCP: Boot filename can be overridden on a per-node basis.
+* Bug fixes, improved resiliency, and performance improvements for
+  [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos),
+  [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs),
+  [Firmware Action Service (FAS)](../../glossary.md#firmware-action-service-fas), `hmcollector`,
+  [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs), and
+  [Hardware State Manager (SMD)](../../glossary.md#hardware-state-manager-smd), particularly for large scale systems
+* Added [BOS options](../../operations/boot_orchestration/Options.md) to allow administrators to change default behaviors
+* Update [System Admin Toolkit (SAT)](../../glossary.md#system-admin-toolkit-sat) version to `3.25.16`
+* Improvements and fixes to CSM health checks
+* Resolved CVEs in multiple services
 
 ## Steps
 
@@ -75,7 +64,7 @@ list of patch versions.
    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
-1. Download and extract the CSM `v1.5.2` release to `ncn-m001`.
+1. Download and extract the CSM `v1.5.3` release to `ncn-m001`.
 
    See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract).
 
@@ -84,7 +73,7 @@ list of patch versions.
    **IMPORTANT**: If necessary, change this command to match the actual location of the extracted files.
 
    ```bash
-   export CSM_DISTDIR="$(pwd)/csm-1.5.2"
+   export CSM_DISTDIR="$(pwd)/csm-1.5.3"
    echo "${CSM_DISTDIR}"
    ```
 
@@ -117,8 +106,7 @@ setup-nexus.sh: OK
 RC=0
 ```
 
-In the event of an error,
-consult [Troubleshoot Nexus](../../operations/package_repository_management/Troubleshoot_Nexus.md)
+In the event of an error, consult [Troubleshoot Nexus](../../operations/package_repository_management/Troubleshoot_Nexus.md)
 to resolve potential problems and then try running `setup-nexus.sh` again. Note that subsequent runs of `setup-nexus.sh`
 may report `FAIL` when uploading duplicate assets. This is okay as long as `setup-nexus.sh` outputs `setup-nexus.sh: OK`
 and exits with status code `0`.
@@ -163,11 +151,6 @@ Updating image ids...
 This step updates the CFS configuration which is set as the desired configuration for the management
 nodes (NCNs). It ensures that the CFS configuration layers reference the correct commit hash for the
 version of CSM being installed. It then waits for the components to reach a configured state in CFS.
-
-1. **IMPORTANT**: The `update-mgmt-ncn-cfs-config.sh` script has a bug in CSM 1.5.2. This bug has
-   been addressed in a hotfix. See [customer advisory `a00144661en_us`](https://support.hpe.com/hpesc/docDisplay?docId=emr_na-a00144661en_us).
-   Download and apply the hotfix from that customer advisory before proceeding. If this hotfix is
-   not applied, certain properties of the CFS configuration will be lost during its modification.
 
 1. (`ncn-m001#`)
 
@@ -307,7 +290,7 @@ SUCCESS
    kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'to_entries[] | .key' | sort -V
    ```
 
-   Example output that includes the new CSM version (`1.5.2`):
+   Example output that includes the new CSM version (`1.5.3`):
 
    ```text
    0.9.2
@@ -330,6 +313,7 @@ SUCCESS
    1.5.0
    1.5.1
    1.5.2
+   1.5.3
    ```
 
 1. Confirm that the product catalog has an accurate timestamp for the CSM upgrade.
@@ -337,7 +321,7 @@ SUCCESS
    (`ncn-m001#`) Confirm that the `import_date` reflects the timestamp of the upgrade.
 
    ```bash
-   kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.5.2".configuration.import_date'
+   kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.5.3".configuration.import_date'
    ```
 
 ### Take Etcd manual backup
@@ -357,14 +341,15 @@ This step is necessary so that nodes are using the correct images after running 
 
 The rebuild will also ensure that the NCN has the latest cached container images that often accompany a CSM patch release.
 
-Follow the [Upgrade NCNs during CSM `1.5.2` Patch](Upgrade_NCN_images.md) instructions to perform the NCN node image upgrades.
+Follow the [Upgrade NCNs during CSM `1.5.3` Patch](Upgrade_NCN_images.md) instructions to perform the NCN node image upgrades.
 
 ### Configure E1000 node and Redfish Exporter for SMART data
 
 > **NOTE:** Please follow this step if SMART disk data is needed for E1000 node.
 
 This step is for getting the SMART data from the disks on E1000 node using the Redfish exporter into `prometheus` time-series database.
-To configure the LDAP instance on the E1000 primary management node and reconfigure the redfish-exporter instance running on the `ncn`, see [Configure E1000 node and Redfish Exporter](../../operations/system_management_health/E1000_SMART_data_configuration.md).
+To configure the LDAP instance on the E1000 primary management node and reconfigure the redfish-exporter instance running on the NCN,
+see [Configure E1000 node and Redfish Exporter](../../operations/system_management_health/E1000_SMART_data_configuration.md).
 
 ### Complete upgrade
 

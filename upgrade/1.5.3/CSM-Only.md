@@ -3,13 +3,11 @@
 * [Requirements](#requirements)
 * [Steps](#steps)
 
-This page provides guidance for systems with exclusively CSM installed that are performing an upgrade from a CSM `v1.5.X` release to the CSM `v1.5.2` release.
+This page provides guidance for systems with exclusively CSM installed that are performing an upgrade from a CSM `v1.5.X` release to the CSM `v1.5.3` release.
 
-The [`v1.5.2` upgrade page](README.md) will refer to this page
-during [Update NCN images](README.md#update-ncn-images).
+The [`v1.5.3` upgrade page](README.md) will refer to this page during [Update NCN images](README.md#update-ncn-images).
 
-**If other products are installed on the system, return to [Update NCN images](README.md#update-ncn-images) and
-choose option 1.**
+**If other products are installed on the system, return to [Update NCN images](README.md#update-ncn-images) and choose option 1.**
 
 ## Requirements
 
@@ -149,4 +147,4 @@ choose option 1.**
            -p "$NEW_STORAGE_IMAGE_ID"
        ```
 
-1. Return to [Update test suite packages](README.md#update-test-suite-packages)
+1. Return to [Update test suite packages](./README.md#update-test-suite-packages)

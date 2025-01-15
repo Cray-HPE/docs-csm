@@ -1,12 +1,12 @@
-# Upgrade NCNs during CSM `1.5.2` Patch
+# Upgrade NCNs during CSM `1.5.3` Patch
 
 * [Overview](#overview)
 * [Steps](#steps)
-* [Return to CSM `1.5.2` patch](#return-to-csm-152-patch)
+* [Return to CSM `1.5.3` patch](#return-to-csm-153-patch)
 
-This page provides guidance for systems that are performing an upgrade from a CSM `v1.5.X` release to the CSM `v1.5.2` release.
+This page provides guidance for systems that are performing an upgrade from a CSM `v1.5.X` release to the CSM `v1.5.3` release.
 
-The [`v1.5.2` upgrade page](README.md) will refer to this page
+The [`v1.5.3` upgrade page](README.md) will refer to this page
 during [NCN Upgrade](README.md#ncn-upgrade).
 
 ## Overview
@@ -109,6 +109,6 @@ upgrade procedure which could cause problems.
 
         1. Perform [Stage 3.3 - `ncn-m001` upgrade](../Stage_3.md#stage-33---ncn-m001-upgrade) and return to this document.
 
-## Return to CSM `1.5.2` patch
+## Return to CSM `1.5.3` patch
 
-Return to the next step of the CSM `1.5.2` patch procedure [Configure E1000 node and Redfish Exporter for SMART data](index.md#configure-e1000-node-and-redfish-exporter-for-smart-data).
+Return to the next step of the CSM `1.5.3` patch procedure [Configure E1000 node and Redfish Exporter for SMART data](index.md#configure-e1000-node-and-redfish-exporter-for-smart-data).
