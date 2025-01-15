@@ -53,13 +53,13 @@ The following are the BOS global options:
 
     The amount of time in seconds BOS will wait for a response from BSS to a request. After this time, the request will
     time out. The default is 10 seconds.
-    Note: This option is added in CSM 1.5.3; in earlier versions of CSM 1.5, it is only available in a hotfix.
+    Note: This option is added in CSM 1.5.3; in earlier versions of CSM 1.5, it is only available as a hotfix.
 
 * `cfs_read_timeout`
 
     The amount of time in seconds BOS will wait for a response from CFS to a request. After this time, the request will
     time out. The default is 10 seconds.
-    Note: This option is added in CSM 1.5.3; in earlier versions of CSM 1.5, it is only available in a hotfix.
+    Note: This option is added in CSM 1.5.3; in earlier versions of CSM 1.5, it is only available as a hotfix.
 
 * `cleanup_completed_session_ttl`
 
@@ -95,7 +95,7 @@ The following are the BOS global options:
 
     The amount of time in seconds BOS will wait for a response from HSM to a request. After this time, the request will
     time out. The default is 10 seconds.
-    Note: This option is added in CSM 1.5.3; in earlier versions of CSM 1.5, it is only available in a hotfix.
+    Note: This option is added in CSM 1.5.3; in earlier versions of CSM 1.5, it is only available as a hotfix.
 
 * `logging_level`
 
@@ -109,7 +109,7 @@ The following are the BOS global options:
 
     The maximum number of components that BOS will group together in a single API request it makes. This can be used to limit the load
     on other services by forcing BOS to break up its requests into smaller chunks.
-    Note: This option is added in CSM 1.5.3; in earlier versions of CSM 1.5, it is only available in a hotfix.
+    Note: This option is added in CSM 1.5.3; in earlier versions of CSM 1.5, it is only available as a hotfix.
 
 * `max_power_off_wait_time`
 
@@ -123,7 +123,7 @@ The following are the BOS global options:
 
     The amount of time in seconds BOS will wait for a response from PCS to a request. After this time, the request will
     time out. The default is 10 seconds.
-    Note: This option is added in CSM 1.5.3; in earlier versions of CSM 1.5, it is only available in a hotfix.
+    Note: This option is added in CSM 1.5.3; in earlier versions of CSM 1.5, it is only available as a hotfix.
 
 * `polling_frequency`
 
@@ -136,4 +136,4 @@ The following are the BOS global options:
     If this option is enabled, it is still possible to effectively create a session with no limit
     by specifying `*` as the limit parameter (if this is done on the command line, it must be
     quoted it in order to prevent it from being interpreted by the shell).
-    Note: This option is added in CSM 1.5.3; in earlier versions of CSM 1.5, it is only available in a hotfix.
+    Note: This option is added in CSM 1.5.3; in earlier versions of CSM 1.5, it is only available as a hotfix.
