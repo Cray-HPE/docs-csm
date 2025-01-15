@@ -38,10 +38,10 @@ This section defines environment variables and directory content that is used th
 
 ## 2. Install the latest documentation
 
-Ensure that the [latest version of `docs-csm`](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/update_product_stream/README.md#check-for-latest-documentation)
-is installed. If CSM is being upgraded, install the **target** version of the CSM documentation.
-
+Ensure that the latest documentation is installed. If CSM is being upgraded, install the **target** version of the CSM documentation.
 For example, when upgrading from CSM version 1.5.0 to version 1.6.0, install `docs-csm-1.6.0.noarch`.
+
+See [Check for latest documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
 
 ## 3. Use of `iuf activity`
 

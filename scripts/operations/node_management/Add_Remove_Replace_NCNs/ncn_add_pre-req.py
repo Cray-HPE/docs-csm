@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
+#
 # MIT License
 #
-# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022, 2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -20,7 +21,7 @@
 # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
-
+#
 from kubernetes import client, config
 import base64
 import sys
@@ -391,6 +392,10 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
         print()
         print(f'Checking {network}.')
         print(f'last_reserved_ip: {last_reserved_ip}    start_dhcp_pool:{start_dhcp_pool}')
+        if ip_white_space < 0:
+            print(f'FATAL last_reserved_ip {last_reserved_ip} exceeds start_dhcp_pool {start_dhcp_pool}')
+            print(f'Verify DHCPStart and DHCPEnd are correct for the {network} network in SLS.')
+            sys.exit(1)
         print(f'The space between last_reserved_ip and start_dhcp_pool is {ip_white_space} IP.\n')
         log.info(f'Unsorted static ips:'
                   f' {ip_set}')

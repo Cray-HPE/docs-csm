@@ -10,25 +10,35 @@
 ## Introduction
 
 iSCSI based boot content projection solution named Scalable Boot Content Projection Service (SBPS)
-is an alternate boot content projection solution and planning to replace current DVS (Cray Data Virtualization Service)
-to project boot content like `rootfs` and `programming environment` (PE) images. SBPS is aimed to offer better
-reliability, availability, security, ease and speed of deployment and ease of management than DVS.
-SBPS solution is offered from CSM 1.6 onwards and this solution is spread across different components BOS, USS/COS
-and the core service SBPS Marshal agent is delivered as an RPM gets deployed as part of CFS `ansible` play books.
-In CSM 1.6, both DVS and SBPS will co-exist, but SBPS will be the default. Note, DVS is planned to be deprecated in CSM 1.7.
+is an alternate boot content projection solution and planning to replace current Cray
+[Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) to project boot content like `rootfs`
+and [Cray Programming Environment (CPE)](../../glossary.md#cray-programming-environment-cpe) images. SBPS is aimed to offer
+better reliability, availability, security, ease and speed of deployment and ease of management than DVS.
+The SBPS solution is offered from CSM 1.6 onwards and this solution is spread across different components, including:
 
-**SBPS Key features:**
+* [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos)
+* [Cray Operating System (COS)](../../glossary.md#cray-operating-system-cos)
+* The core service SBPS Marshal Agent is delivered as an RPM that gets deployed by the
+  [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
+
+In CSM 1.6, both DVS and SBPS will coexist, but SBPS will be the default and DVS is deprecated.
+Note: DVS is planned to be removed in CSM 1.7.
+
+### Key features
 
 * Provides open source friendly solution for read-only content projection (`rootfs` and `PE`) as it uses LIO (Linux IO) which is open source.
 * Horizontally scalable content projection service (iSCSI target side)
 * Delivers active/active IO operation from iSCSI initiator(s) to content projection service
 * Delivers seamless failover and failback for iSCSI initiator(s) on iSCSI target(s) or partial network failure
-* Supports projection over HSN (High Speed Network) and NMN (Node Management Network) without significant reconfiguration
+* Supports projection over [High Speed Network (HSN)](../../glossary.md#high-speed-network-hsn) and
+  [Node Management Network (NMN)](../../glossary.md#node-management-network-nmn) without significant reconfiguration
 * Does not require additional hardware infrastructure (iSCSI target)
-* Co-exists with DVS until it is deprecated (Plan to deprecate DVS for `rootfs` projection in CSM 1.7)
-* Enables future work related to image access control, multi-tenancy, and related zero trust principles
-* Does not require duplication of images from S3
-* Supports monitoring of content projection service for performance and reliability engineering
+* Co-exists with DVS
+* Enables future work related to image access control, [multi-tenancy](../multi-tenancy/Overview.md),
+  and related zero trust principles
+* Does not require duplication of images from [S3](../../glossary.md#simple-storage-service-s3)
+* Supports monitoring of [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps)
+  for performance and reliability engineering
 * Aligns with future plans for similar functionality in next generation systems management solutions
 * Easy to deploy and manage
 
@@ -39,39 +49,46 @@ In the case that the HSN is not configured, use the NMN if it meets the bandwidt
 
 ![iSCSI SBPS Architecture](../../img/SBPS_Architecture_Diagram.jpg)
 
-As shown in figure #1, The basic configuration involves two iSCSI target/server (worker node) nodes
-and two iSCSI initiator/client (compute/UAN) nodes connected via HSN and/or NMN where I/O `multipathing`
-is configured. The `rootfs` and `PE` images are hosted in IMS and S3 respectively and both of these
-images are mapped to `boot-images` bucket of S3. DNS SRV and A [DNS - Domain Name Service, SRV - Service,
-A - Address] records are created and used for target node(s) discovery from initiator node during its boot.
+As shown in figure #1, the basic configuration involves two iSCSI target/server (worker node) nodes
+and two iSCSI initiators/clients (compute nodes or UANs) connected via HSN and/or NMN where I/O multipath
+is configured. The `rootfs` and `PE` images are hosted in the [Image Management Service (IMS)](../../glossary.md#image-management-service-ims)
+and S3 respectively and both of these images are mapped to `boot-images` bucket of S3. DNS records are created and used for target node
+discovery from an initiator node during its boot.
 
-**iSCSI Target/Server:**
-As shown in figure #1 this includes standard Linux kernel, `s3fs` to mount the `boot-images` bucket onto worker node,
-LIO (Linux IO) - an open-source implementation of SCSI target which supports `fileio` backing store, `targetcli` -
-LIO command-line interface to manage iSCSI devices like creation of `LUNs`, listing of `LUNs`, creation of `fileio backstore`,
-saving/clearing the configuration etc as shown in the Figure #1 and the SBPS core service named "SBPS Marshal Agent" runs as
-Linux `systemd` service. The Marshal agent scans IMS and S3 storage for `rootfs` and `PE` images, creates `fileio backing store`
-for the images to be projected. The `rootfs` images to be projected are tagged by BOS (Boot Orchestration Service) when the boot
-of initiator node(s) is triggered. Then the Marshal Agent creates iSCSI `LUNs` for each of the `fileio` backing store where the
-images to be projected are mapped to these `LUNs`.
+### iSCSI target/server
 
-**iSCSI Initiator/Client:**
-iSCSI initiator includes standard Linux kernel, user space iSCSI initiator services and DM (Device Mapper)
-`multipathing` software. DNS SRV and A records are used to discover the target nodes during the boot and
-are part of BOS (Boot orchestration service) session template boot parameters. This BOS session template
-is used to trigger the boot of initiator node(s). The `LUNs` created on the target node which has the
-`rootfs`/ `PE` images mapped are thus projected to initiator node(s) when the boot is triggered.
-Basically, the `rootfs` image projected is used as part of booting the initiator node and `PE` image(s)
-projected are used post boot. These `LUNs` get mounted onto the initiator node as DM multi-path `LUNs`
-as depicted in the figure #1. DM multipath software provides I/O `multipathing` for high availability
-(failover and failback) and I/O load balancing.
+* Standard Linux kernel
+* `s3fs` to mount the `boot-images` bucket onto the worker node
+* LIO (Linux IO) - an open-source implementation of SCSI target which supports `fileio` backing store
+* `targetcli` - LIO command-line interface to manage iSCSI devices like creation of `LUNs`, listing of `LUNs`, creation of `fileio backstore`,
+  saving/clearing the configuration, and so on
+* The SBPS core service named SBPS Marshal Agent runs as a Linux `systemd` service
+    * The agent scans IMS and S3 storage for `rootfs` and `PE` images
+    * It creates `fileio backing store` for the images to be projected
+    * The `rootfs` images to be projected are tagged by BOS when the boot of initiator nodes is triggered
+    * Then the agent creates iSCSI `LUNs` for each of the `fileio` backing store where the images to be projected are mapped to these `LUNs`
+
+### iSCSI initiator/client
+
+* Standard Linux kernel
+* User space iSCSI initiator services
+* DM (Device Mapper) multipath software
+* DNS SRV and A records are used to discover the target nodes during the boot and are part of BOS session template boot parameters
+    * This BOS session template is used to trigger the boot of initiator nodes
+    * The `LUNs` created on the target node which has the `rootfs`/ `PE` images mapped are thus projected to initiator nodes when the boot is triggered
+    * Basically, the `rootfs` image projected is used as part of booting the initiator node and `PE` images projected are used post boot
+    * These `LUNs` get mounted onto the initiator node as DM multipath `LUNs`
+    * DM multipath software provides I/O multipath for high availability (failover and failback) and I/O load balancing
 
 ![iSCSI SBPS workflow](../../img/SBPS_flow_diagram.jpg)
 
-Example output snippet of `targetcli ls` command on worker node where iSCSI LUNS are created for the images scanned:
+(`ncn-w#`) Example output snippet of `targetcli ls` command on worker node where iSCSI LUNS are created for the images scanned:
 
 ```bash
-ncn-w002:~ # targetcli ls
+targetcli ls
+```
+
+```text
 o- / ......................................................................................................................... [...]
   o- backstores .............................................................................................................. [...]
   | o- block .................................................................................................. [Storage Objects: 0]
@@ -204,15 +221,21 @@ o- / ...........................................................................
   o- xen-pvscsi ....................................................................................................... [Targets: 0]
 ```
 
-In the above `targetcli ls` command output, we can see that four `fileio` backing store are created for
-two `rootfs` images and two iSCSI `LUNs` are created which has the `rootfs` image id being mapped. And there
-are 26 `PE` or `squashfs` `fileio` backing store created and 26 iSCSI `LUNs` created which have `PE`
-or `squashfs` image id being mapped. Both of these iSCSI `LUNs` are ready for projection.
+The above `targetcli ls` command output shows the following:
 
-Sample initiator node snippet after the projection:
+* Four `fileio` backing store are created for two `rootfs` images
+* Two iSCSI `LUNs` are created which have the `rootfs` image ID being mapped
+* 26 `PE` or `squashfs` `fileio` backing store are created
+* 26 iSCSI `LUNs` created which have the `PE` or `squashfs` image ID being mapped
+* These iSCSI `LUNs` are ready for projection
+
+(`nid#`) Sample initiator node snippet after the projection:
 
 ```bash
-nid001032:~ # multipath -ll
+multipath -ll
+```
+
+```text
 11218.831779 | /etc/multipath.conf line 10: ignoring deprecated option "disable_changed_wwids", using built-in value: "yes"
 PE_CPE-base.x86_64-24.11.squashfs (36001405de4cc04e7dacfb9ada0a6b4cc) dm-0 LIO-ORG,de4cc04e7dacfb9
 size=7.7G features='1 queue_if_no_path' hwhandler='1 alua' wp=ro
@@ -232,101 +255,121 @@ size=11G features='1 queue_if_no_path' hwhandler='1 alua' wp=ro
 
 ## Steps to achieve SBPS
 
-1. Node personalization
-2. Run GOSS Test suite
-3. Creation of BOS session template
-4. Image tagging
-5. Boot compute / UAN's
-6. Monitor iSCSI Metrics
+1. [Worker node personalization](#1-worker-node-personalization)
+1. [Run GOSS test suite](#2-run-goss-test-suite)
+1. [Create BOS session template](#3-create-bos-session-template)
+1. [IMS image tagging](#4-ims-image-tagging)
+1. [Boot compute nodes or UANs](#5-boot-compute-nodes-or-uans)
+1. [Monitor iSCSI metrics](#6-monitor-iscsi-metrics)
 
-### Node Personalization (Worker node)
+### 1. Worker node personalization
 
-Node personalization is the pre-requisite step of SBPS solution where we need to first setup/configure worker nodes as iSCSI targets (servers)
-with necessary provisioning, configuration and enable required components. The required RPMs for `targetcli` command / LIO are part of NCN node image in CSM 1.6 and SBPS Marshal agent gets installed during node personalization via CFS Ansible play books.
+Node personalization is the prerequisite step of SBPS solution where we need to first setup/configure worker nodes as iSCSI targets (servers)
+with necessary provisioning, configuration and enable required components. The required RPMs for `targetcli` command / LIO are part of NCN node image in CSM 1.6.
+The SBPS Marshal Agent gets installed during node personalization using CFS.
 
 This can be done in two ways:
 
-a) Auto setup with bootprep:
+#### Automatic setup with bootprep
 
-By default worker node personalization of iSCSI SBPS is done during CSM install/upgrade (using IUF). It is initiated during bootprep
-(management-nodes-rollout) in order to do worker node personalization automatically during boot time.
+By default worker node personalization of iSCSI SBPS is done during CSM install/upgrade
+(using the [Install and Upgrade Framework (IUF)](../../glossary.md#install-and-upgrade-framework-iuf)).
+It is initiated during bootprep (`management-nodes-rollout`) in order to do worker node personalization
+automatically during boot time.
 
-b) Manual setup with CFS config/session:
+#### Manual setup with CFS session
 
-Worker node personalization can be done post CSM install with CFS config/session.
-Please refer to [Node Personalization](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/configuration_management/iSCSI_SBPS_Node_Personalization.md) for the details.
+Worker node personalization can be done post CSM install with CFS configuration session.
+Refer to [Node Personalization](../configuration_management/iSCSI_SBPS_Node_Personalization.md) for details.
 
-### Steps to configure and run GOSS tests
+### 2. Run GOSS test suite
 
-In order to verify the readiness of the iSCSI targets before triggering the boot of compute nodes/ UAN's, we need to run GOSS tests as
+In order to verify the readiness of the iSCSI targets before triggering the boot of compute nodes or UANs, it is important to run GOSS tests as
 sanity checks on iSCSI targets.
 
-Please refer [GOSS tests for SBPS](https://github.com/Cray-HPE/sbps-marshal/blob/main/GOSS_tests_for_sbps.md) for the details.
+Refer to [GOSS tests for SBPS](https://github.com/Cray-HPE/sbps-marshal/blob/main/GOSS_tests_for_sbps.md) for the details.
 
-### Creation of BOS session template
+### 3. Create BOS session template
 
 Once the node personalization is done and GOSS tests are run successfully, create BOS Session Template with SBPS boot parameters.
 
 There are two ways to create BOS session template:
 
-* Using `cray bos` command(manual). Please refer [BOS Session Template](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md) for the details
+#### Using BOS directly
 
-* Using `sat` command(automated). Below are the steps:
+For details, refer to
+[Create a Session Template to Boot Compute Nodes with SBPS](../boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md).
 
-a) obtain system name and site domain as below:
+#### Using SAT
 
-```bash
-(`ncn-mw#`) craysys metadata get system-name
-<my-system>
-(`ncn-mw#`) craysys metadata get site-domain
-<my-site-domain>
-```
+1. (`ncn-mw#`) Obtain system name and site domain.
 
-b)Populate above values into `product_vars.yaml` and then create BOS session template using 'sat' command.
+    * System name
 
-e.g.
+        ```bash
+        craysys metadata get system-name
+        ```
 
-```bash
-sat bootprep run --vars-file "session_vars.yaml" --format json --bos-version v2 .bootprep-csm-1.6.0/compute-and-uan-bootprep.yaml
-```
+    * Site domain
 
-Please refer [BOS Session Template](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/system_admin_toolkit/usage/SAT_Bootprep.md)
-for further details.
+        ```bash
+        craysys metadata get site-domain
+        ```
+
+1. (`ncn-mw#`) Populate above values into `product_vars.yaml` and then create BOS session template using `sat` command.
+
+    For example:
+
+    ```bash
+    sat bootprep run --vars-file "session_vars.yaml" --format json --bos-version v2 .bootprep-csm-1.6.0/compute-and-uan-bootprep.yaml
+    ```
+
+Refer to [SAT Bootprep](../system_admin_toolkit/usage/SAT_Bootprep.md) for further details.
 
 **Note:** This way of creating BOS session template uses `vcs/bootprep/compute-and-uan-bootprep.yaml` where SBPS will be chosen by default.
 
-### Image tagging
+### 4. IMS image tagging
 
-To initiate the boot of compute node/ UANs, the images (`rootfs`/ `PE` ) are tagged to determine which
-`rootfs`/ `PE` image to be projected for compute/ UANs as there will be many `rootfs`/ `PE` images.
-SBPS Marshal agent uses key/value pair of `sbps-project`/true to identify the image(s) tagged.
+To initiate the boot of compute nodes or UANs, the images (`rootfs`/ `PE` ) are tagged to determine which
+`rootfs`/ `PE` image is to be projected.
+The SBPS Marshal agent uses key/value pair of `sbps-project`/`true` to identify the images tagged.
 
-**`rootfs` image tagging:**
-The `rootfs` images are tagged by BOS automatically when the boot of compute / UAN's is initiated . Please refer
-[BOS Tagging](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/boot_orchestration/BOS_Workflows.md) for details.
-We can also tag the `rootfs` images using `cracli` utility of IMS manually.
+#### `rootfs` image tagging
 
-**PE image tagging:**
-To tag the `PE` images, we need to import the `PE` image to IMS and then use `craycli` utility of IMS to tag it.
-Please refer [Import Image to IMS](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/image_management/Import_External_Image_to_IMS.md) for the steps to import an image to IMS.
+The `rootfs` images are tagged by BOS automatically when the boot of computes nodes or UANs is initiated.
+Refer to
+[BOS Workflows](../boot_orchestration/BOS_Workflows.md) for details.
+It is also possible to tag the `rootfs` images in IMS manually using the Cray CLI.
 
-Please refer the section `Manage Image Labels` of the below document on details to `tag`/`untag` an image using `craycli` utility (manual):
-[Manage Image Labels](https://github.com/Cray-HPE/docs-csm/blob/release/1.6/operations/image_management/Image_Management_Workflows.md)
+#### PE image tagging
 
-As per this document below are few examples to `tag`/`untag` an image using `craycli`.
+To tag the `PE` images, first import the `PE` image to IMS, and then use the Cray CLI to tag it in IMS.
+Refer [Import External Image to IMS](../image_management/Import_External_Image_to_IMS.md) for the steps to import an image to IMS.
 
-Illustration to `tag`/`describe`/`untag` an image with image id `bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb` is as below:
+For details on how to add or remove an IMS image tag using the Cray CLI, refer to
+[Manage image labels](../image_management/Image_Management_Workflows.md#manage-image-labels).
 
-*Tag:*
+Below are few examples.
+
+##### Add IMS image tag
+
+(`ncn-mw#`) Tag IMS image with ID `bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb`.
 
 ```bash
-# cray ims images update bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb --metadata-operation set --metadata-key sbps-project --metadata-value true
+cray ims images update bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb --metadata-operation set --metadata-key sbps-project --metadata-value true
 ```
 
-*Describe:*
+##### Describe IMS image
+
+(`ncn-mw#`) Describe IMS image with ID `bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb`.
 
 ```bash
-# cray ims images describe bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb --format json
+cray ims images describe bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb --format json
+```
+
+Example output:
+
+```format json
 {
   "arch": "x86_64",
   "created": "2024-07-18T22:05:16.565885",
@@ -341,96 +384,78 @@ Illustration to `tag`/`describe`/`untag` an image with image id `bbe0e9eb-fa8f-4
   },
   "name": "secure-storage-ceph-6.1.94-x86_64.squashfs"
 }
-
-Or
-
-# cray ims images list --format=json | jq '.[] | select(.id == "bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb")'
- {
-  "arch": "x86_64",
-  "created": "2024-07-18T22:05:16.565885",
-  "id": "bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb",
-  "link": {
-    "etag": "3325f830ba9ec291005a4087be4f666f",
-    "path": "s3://boot-images/bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb/manifest.json",
-    "type": "s3"
-  },
-  "metadata": {
-    "name": "secure-storage-ceph-6.1.94-x86_64.squashfs",
-    "sbps-project": "true"
-  },
-  "name": "secure-storage-ceph-6.1.94-x86_64.squashfs"
-}
 ```
 
-*`untag:`*
+##### Remove IMS image tag
+
+(`ncn-mw#`) Remove tag from IMS image with ID `bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb`.
 
 ```bash
 cray ims images update bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb --metadata-operation remove --metadata-key sbps-project
 ```
 
-**Note #1:** Only run the `untag` command on images that are not currently in use. Untagging images that are currently in use will
-stop the content projection by SBPS Marshal agent causing undesirable behavior on compute/UAN nodes using the content.
+> * Only remove tags from images that are not currently in use. Removing tags from images that are currently in use will
+>   stop the content projection by SBPS Marshal agent, causing undesirable behavior on compute nodes or UANs using the content.
+> * As mentioned in [`rootfs` image tagging](#rootfs-image-tagging), BOS automatically tags the `rootfs` image for projection.
+>   BOS does not support automatically removing the tag, so it must be done manually.
 
-**Note #2:** As mentioned in the `Image tagging` step, BOS automatically tags the `rootfs` image for projection. To `untag` an image,
-use the aforementioned `craycli` utility of IMS because BOS does not support automatically untagging an image.
+### 5. Boot compute nodes or UANs
 
-### Steps to boot compute/ UAN node
+Follow the below steps in order to boot compute nodes or UANs.
 
-Follow the below steps in order to boot compute/ UANs.
+#### Single node
 
-#### To boot a single node
+(`ncn-mw#`) Use a command similar to the following to boot a single node.
 
 ```bash
 cray bos sessions create --template-name <bos_session_template_name> --operation reboot --limit <xname_of_the_node>
 ```
 
-e.g.
+For example, the following command creates a BOS session to boot the node with xname `x3000c0s19b2n0` using the BOS session template named `sbps-bos-template`.
 
 ```bash
 cray bos sessions create --template-name sbps-bos-template --operation reboot --limit x3000c0s19b2n0
 ```
 
-where `sbps-bos-template` is the name of the BOS session template and `x3000c0s19b2n0` is the xname of the compute node.
+#### Multiple nodes
 
-This command initiates the boot of a single node `x3000c0s19b2n0`, using `--limit` option.
-
-#### To boot all the compute nodes in the given cluster
+(`ncn-mw#`) Use a command similar to the following to boot every node targeted by a session template.
 
 ```bash
 cray bos sessions create --template-name <bos_session_template_name> --operation reboot
 ```
 
-Command to view console of the compute/UAN node:
+#### Node console
 
-e.g.
+For more information on accessing the consoles of the booting nodes, see:
 
-```bash
-kubectl -n services exec -it cray-console-node-0 -c cray-console-node -- conman -j x3000c0s19b2n0
-```
+* [Access Compute Node Logs](../conman/Access_Compute_Node_Logs.md)
+* [Log in to a Node Using ConMan](../conman/Log_in_to_a_Node_Using_ConMan.md)
 
-When the compute/ UANs boot is initiated without `--limit` option, boot is triggered for all the nodes, so we need to open the console for each node separately.
+When booting compute nodes or UANs without the `--limit` option, the boot is triggered for all the nodes targeted by the session template.
+It is necessary to open the console for each node separately.
 
-### Steps to retrieve iSCSI (LIO) metrics
+### 6. Monitor iSCSI metrics
 
-In order to monitor iSCSI SBPS target statistics, we need to monitor metrics series like aggregate LUN read rate, read rate per LUN, throughput
-statistics on LIO portal network endpoints etc.
+In order to monitor iSCSI SBPS target statistics, one may monitor metrics series like aggregate LUN read rate, read rate per LUN, throughput
+statistics on LIO portal network endpoints, and so on.
 
-Please refer [iSCSI Metrics](https://github.com/Cray-HPE/sbps-marshal/blob/main/iscsi_metrics.md) for details.
+Refer to [iSCSI Metrics](https://github.com/Cray-HPE/sbps-marshal/blob/main/iscsi_metrics.md) for details.
 
 ## Steps to continue using DVS based projection
 
-If a user wants to continue using DVS, then during the BOS session template creation (manually using `cray bos` command)
-these parameter values have to be used:
+If a user wants to continue using DVS, then during the BOS session template must use the following values in its boot sets:
 
 ```text
 rootfs_provider: "cpss3"
 rootfs_provider_passthrough: "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0"
 ```
 
-If the `sat` command is used to create the BOS session template, then please comment out the two lines marked SBPS and uncomment the above
-two lines marked CPS in `vcs/bootprep/compute-and-uan-bootprep.yaml` and then initiate the compute/UAN node boot. Please refer to the section
-`Content Projection Service` in the publication: `HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray
-EX Systems (S-8063)` for more details on DVS based boot content projection of `rootfs`/`PE` images.
+If the `sat` command is used to create the BOS session template, then comment out the two lines marked SBPS and uncomment the above
+two lines marked CPS in `vcs/bootprep/compute-and-uan-bootprep.yaml`, and then initiate the compute node/UAN boot. Refer to the section
+`Content Projection Service` in the publication
+`HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray EX Systems (S-8063)`
+for more details on DVS based boot content projection of `rootfs`/`PE` images.
 
 **Note:**: The steps in [Steps to achieve SBPS](#steps-to-achieve-sbps) are not relevant and should not be followed if DVS is used.
 
@@ -438,27 +463,14 @@ EX Systems (S-8063)` for more details on DVS based boot content projection of `r
 
 Follow this sequence of operations:
 
-* Disable DVS
-* Uninstall CPS
+1. Disable DVS
+1. Uninstall CPS
 
-To disable DVS, please refer to the section `DVS and SBPS` and to uninstall CPS, please refer to the section `Uninstall CPS`
+To disable DVS, refer to the section `DVS and SBPS` and to uninstall CPS, please refer to the section `Uninstall CPS`
 under the content `Scalable Boot Projection Service` documented in the publication
 `HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)`.
 
-### Glossary
+## Glossary
 
-**iSCSI target:** A server that responds to iSCSI commands and hosts storage resources
-
-**iSCSI client:** A client which initiates I/O requests and receives responses from iSCSI target
-
-**BOS:** Boot Orchestration Service
-
-**IMS:** Image Management Service
-
-**CPE:** Cray Programming Environment
-
-**CPS:** Content Projection Service
-
-**DVS:** Cray Data Virtualization Service
-
-**IUF:** Install and Upgrade Framework
+* iSCSI client: A client which initiates I/O requests and receives responses from iSCSI target
+* iSCSI target: A server that responds to iSCSI commands and hosts storage resources
