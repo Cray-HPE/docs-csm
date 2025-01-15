@@ -12,7 +12,6 @@ documentation improvements. This page lists some of the highlights.
 * Bonded HSN interfaces supporting Slingshot resiliency
 * HPE Cray OS 24.2
 * SLES 15 SP6
-* Ceph 18
 * SHS 11.1
 * CSM can now be upgraded with IUF. See [Upgrade CSM](upgrade/README.md) for more details.
 * The [BOS](glossary.md#boot-orchestration-service-bos) API now enforces limits that previously had
@@ -98,7 +97,19 @@ information, see [SAT in CSM](operations/system_admin_toolkit/about_sat/SAT_in_C
 ### Resolved CASTs
 
 ```text
-TODO: Curt
+* CAST-36655 – Fixed a failed regex test for sls in cray-hms-sls-test-functional
+* CAST-34561 – sat bootprep now supports functionality similar to the CFS Key ‘additional Inventory’
+* CAST-32623 – sat provides ability to generate longer and more complex BMC passwords through sat bmccreds
+* CAST-27383 – Additional utilities have been provided for the NCN post-crash environment
+* CAST-26583 – ‘cray-bos’ gives an error if provided nids instead of xnames
+* CAST-36997 – inotify-tools have been added to the helm chart for cray-console operator
+* CAST-36752 – Fixed Check bos service test failure with templates that don't belong to expected tenant 'cmsdev-tenant'
+* CAST-35618 – Fixed a python3 warning that blowfish is deprecated
+* CAST-36629 – Fixed an issue where ray-hms-smd-test-functional regex does not match RedfishSystemInfo/EthernetNICInfo/3/RedfishId
+* CAST-37016 – Fixed BOS sessions failing, nodes down when CFS component API is extremely slow
+* CAST-36209 - "canu" user hanging around after install
+* CAST-32130 – The script to create RBD devices checks if RBD0 already exists
+* CAST-33693 - Unbound - interface used for NID alias is configurable
 ```
 
 ### Documentation enhancements
