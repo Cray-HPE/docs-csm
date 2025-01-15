@@ -124,6 +124,7 @@ information, see [SAT in CSM](operations/system_admin_toolkit/about_sat/SAT_in_C
 * Updated `Kyverno` documentation
 * Added documentation about iSCSI based boot content projection for `rootfs` and `PE` images
 * The SAT documentation moved to be fully included within the [System Admin Toolkit (SAT)](operations/system_admin_toolkit/README.md) section of the [CSM Administration Guide](operations/README.md).
+* `CASMTRIAGE-6736` Add ARP cache tuning guide
 * `CASMINST-5799` Replace remaining references to `https://artifactory.algol60.net` in documentation for CSM tarball and documentation RPM downloads
 * `CASMTRIAGE-4891` Effect of `docs-csm` versions on directory structure
 * `CASMTRIAGE-5734` Update CSM prerequisite version and CSM release version in documentation
