@@ -27,7 +27,7 @@ the steps below it provide detailed instructions which must be executed in the o
 The CSM upgrade steps are run automatically, either directly through IUF stages or by a hook automatically executed at the beginning or end of an IUF stage.
 For more detail about about the CSM upgrade hooks, see the section [description of CSM upgrade hooks](#description-of-csm-upgrade-hooks).
 
-![Upgrade CSM and additional products with IUF](../../../img/operations/diagram_upgrade_csm_stack_with_IUF_101624.png)
+![Upgrade CSM and additional products with IUF](../../../img/operations/diagram_csm_stack_upgrade_01132025.png)
 
 1. CSM preparation
 
