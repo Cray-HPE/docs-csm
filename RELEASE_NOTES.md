@@ -62,7 +62,7 @@ information, see [SAT in CSM](operations/system_admin_toolkit/about_sat/SAT_in_C
 | `argo-workflow-controller`   | 3.4.5   |
 | `argo-workflows`             | 3.3.6   |
 | `bitnami-etcd` for clusters  | 3.5.9   |
-| `bitnami-etcd` on `ncn-mxxx` | 3.5.0   |
+| `etcd` on `ncn-mxxx`         | 3.5.0   |
 | `ceph`                       | 16.2.13 |
 | `containerd`                 | 1.5.16  |
 | `coredns`                    | 1.8.4   |
@@ -201,6 +201,9 @@ see [Removals](introduction/deprecated_features/README.md#removals)
       channel. The length of the outage is dependent on the time to apply new switch configurations to all management
       network switches - OSPF will propagate routes within seconds. As this affects liquid-cooled Mountain cabinets,
       running jobs may be affected. A dedicated outage window is highly recommended for applying these changes.
+* Services that use PostgreSQL may fail when a Kubernetes master node is rebooted or rebuilt.
+    * A PostgreSQL database may fail over without clients reconnecting to the new cluster leader.
+    * A workaround is presented in [PostgreSQL Database is in Recovery](troubleshooting/known_issues/postgres_database_recovery.md)
 
 ## All Tickets
 
