@@ -29,9 +29,9 @@ failed: [ncn-s001.nmn] (item={'name': 'sma-block-replicated', 'args': '64 64', '
 "stderr": "Error ERANGE:  pg_num 64 size 3 for this pool would result in 288 cumulative PGs per OSD (1155 total PG replicas on 4 'in' root OSDs by crush rule) which exceeds the mon_max_pg_per_osd value of 250", "stderr_lines": ["Error ERANGE:  pg_num 64 size 3 for this pool would result in 288 cumulative PGs per OSD (1155 total PG replicas on 4 'in' root OSDs by crush rule) which exceeds the mon_max_pg_per_osd value of 250"], "stdout": "", "stdout_lines": []}
 ```
 
-The above error would also cause the`csi-kube-secret` or `csi-rbd-secret` secret to be missing from the default namespace and the `kube` and/or `smf` Ceph pools to not be created.
+The above error would also cause the`csi-kube-secret` or `csi-sma-secret` secret to be missing from the default namespace and the `kube` and/or `smf` Ceph pools to not be created.
 
-1. (`ncn-m001#`) Check if both `csi-kube-secret` and `csi-rbd-secret` secrets exist in the default namespace.
+1. (`ncn-m001#`) Check if both `csi-kube-secret` and `csi-sma-secret` secrets exist in the default namespace.
 
     ```bash
     kubectl get secret -n default | grep 'csi-kube-secret\|csi-sma-secret'
@@ -78,7 +78,7 @@ All of the following steps should be run from `ncn-s001`.
     ceph osd pool ls | grep 'kube\|smf'
     ```
 
-1. (`ncn-m001#`) Verify both `csi-kube-secret` and `csi-rbd-secret` secrets exist in the default namespace.
+1. (`ncn-m001#`) Verify both `csi-kube-secret` and `csi-sma-secret` secrets exist in the default namespace.
 
     ```bash
     kubectl get secret -n default | grep 'csi-kube-secret\|csi-sma-secret'
