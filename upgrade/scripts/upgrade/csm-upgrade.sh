@@ -237,10 +237,6 @@ if [[ $state_recorded == "0" ]] && k8s_job_exists "${ns}" "${job_name}"; then
       exit 1
     fi
 
-    # Apply fix for CASMCMS-9234
-    echo "Applying fix for CASMCMS-9234, if needed"
-    "${basedir}/workarounds/CASMCMS-9234/fix.sh" "${SNAPSHOT_DIR}"
-
     SNAPSHOT_DIR_BASENAME=$(basename "${SNAPSHOT_DIR}")
     TARFILE_BASENAME="${SNAPSHOT_DIR_BASENAME}.tgz"
     TARFILE_FULLPATH="/tmp/${TARFILE_BASENAME}"
