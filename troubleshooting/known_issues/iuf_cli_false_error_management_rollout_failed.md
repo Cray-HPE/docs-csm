@@ -1,6 +1,6 @@
-# Known Issue: IUF CLI reports false error that `management-nodes-rollout` failed
+# IUF CLI reports false error that `management-nodes-rollout` failed
 
-## Problem Description
+## Problem description
 
 When upgrading master nodes with IUF during the CSM 1.6.0 upgrade, the IUF CLI may say that the master node upgrade failed.
 The specific error is: `The management-nodes-rollout stage failed, but argo must run to the completion of the stage`.
@@ -9,7 +9,7 @@ The IUF CLI erroneously reports that the `management-nodes-rollout stage failed`
 
 This problem has been resolved in CSM 1.6.1.
 
-## Observed Error
+## Observed error
 
 The following error can be seen when upgrading master nodes with IUF.
 
@@ -40,7 +40,7 @@ Error Summary:
 
 ## Resolution
 
-The error seen above is a false failure. There is no action needed other than to manually monitor the `management-nodes-rollout` Argo workflow that is continuing successfully in the background.
+The [Observed error](#observed-error) is a false negative. No action is needed other than manually monitoring the `management-nodes-rollout` Argo workflow continuing successfully in the background.
 The IUF workflow can be monitored in either of the following two ways.
 
 1. Use the Argo UI to monitor the workflow. See [using the Argo UI](../../operations/argo/Using_the_Argo_UI.md) for details on accessing the UI.
@@ -59,8 +59,8 @@ The IUF workflow can be monitored in either of the following two ways.
         kubectl logs -n argo <pod_name> -f
         ```
 
-Continue monitoring the `management-nodes-rollout` workflow until it completes. It should complete successfully.
-If it fails to complete successfully, investigate the logs from the sources above to find the error.
+Continue monitoring the `management-nodes-rollout` workflow until it completes successfully.
+If it fails, investigate the logs from the sources above to find the error.
 Additionally, a master node upgrade will print its upgrade output to `/root/output.log`.
 This file will be on `ncn-m001` when `ncn-m002` or `ncn-m003` are being upgraded and the file will be on `ncn-m002` when `ncn-m001` is being upgraded.
 This file can be used to debug a failed master node upgrade.
