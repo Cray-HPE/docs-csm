@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -205,7 +205,7 @@ function cfs_backup() {
 
 function bos_backup() {
   echo "---- Backing up BOS data ----"
-  execute_no_output_file /usr/share/doc/csm/scripts/operations/configuration/export_bos_data.sh --include-v1 "${FULL_OUTPUT_DIR}"
+  execute_no_output_file /usr/share/doc/csm/scripts/operations/configuration/export_bos_data.sh "${FULL_OUTPUT_DIR}"
 }
 
 function k8s_status() {
