@@ -128,6 +128,9 @@ Refer to that table and any corresponding product documents before continuing to
 
     > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
     then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+    >
+    > **Known Issue:** If the IUF CLI reports the error: `The management-nodes-rollout stage failed, but argo must run to the completion of the stage`,
+    then see [IUF CLI reports false error that `management-nodes-rollout` failed](../../../troubleshooting/known_issues/iuf_cli_false_error_management_rollout_failed.md).
 
     1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m002`. This will rebuild `ncn-m002` with the new CFS configuration and image built in
     previous steps of the workflow.
@@ -174,6 +177,9 @@ Refer to that table and any corresponding product documents before continuing to
 
     > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
     then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
+    >
+    > **Known Issue:** If the IUF CLI reports the error: `The management-nodes-rollout stage failed, but argo must run to the completion of the stage`,
+    then see [IUF CLI reports false error that `management-nodes-rollout` failed](../../../troubleshooting/known_issues/iuf_cli_false_error_management_rollout_failed.md).
 
     1. Authenticate with the Cray CLI on `ncn-m002`.
 
