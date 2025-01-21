@@ -114,6 +114,7 @@ required for initial installation scenarios.
     - Enable previous CPE versions or alternate 3rd party products (optional, done for each product release)
 - SDU
     - Configure SDU via `sdu setup`
+    - If this is an upgrade, you can refer to or copy from the stored backup you created in the [Preparation](preparation.md#4-save-system-state-before-upgrade) step.
 - SAT
     - Configure SAT authentication via `sat auth`
     - Generate SAT S3 credentials
