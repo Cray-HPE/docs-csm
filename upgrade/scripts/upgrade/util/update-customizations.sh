@@ -160,7 +160,7 @@ if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-
   yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.alertmanager.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['victoria-metrics-k8s-stack'].alertmanager.externalAuthority }}/\"" -i $c
   yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.grafana.externalAuthority = "grafana.cmn.{{ network.dns.external }}"' -i $c
   if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.prometheus' $c)" != null ]; then
-      yq4 eval 'del(.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.prometheus)' -i $c
+    yq4 eval 'del(.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.prometheus)' -i $c
   fi
 fi
 #sma-vm-cluster
