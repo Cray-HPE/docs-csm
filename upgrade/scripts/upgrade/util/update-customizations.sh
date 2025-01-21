@@ -151,16 +151,17 @@ if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-
   yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement += \"{{ kubernetes.services['cray-sysmgmt-health']['victoria-metrics-k8s-stack'].grafana.externalAuthority }}\"" -i $c
   yq4 eval 'del(.spec.proxiedWebAppExternalHostnames.customerManagement.[] | select(. == "*kube-prometheus-stack*"))' -i $c
   yq4 eval ".spec.kubernetes.services.cray-kiali.kiali-operator.cr.spec.external_services.grafana.url = \"https://{{ kubernetes.services['cray-sysmgmt-health']['victoria-metrics-k8s-stack'].grafana.externalAuthority }}/\"" -i $c
-  yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack = .spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack | del(.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack)" -i $c
+  yq4 eval 'del(.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack)' -i $c
   yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmagent.vmagentSpec.externalAuthority = "vmagent.cmn.{{ network.dns.external }}"' -i $c
   yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmselect.vmselectSpec.externalAuthority = "vmselect.cmn.{{ network.dns.external }}"' -i $c
   yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.alertmanager.externalAuthority = "alertmanager.cmn.{{ network.dns.external }}"' -i $c
   yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmagent.vmagentSpec.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['victoria-metrics-k8s-stack'].vmagent.vmagentSpec.externalAuthority }}/\"" -i $c
   yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.vmselect.vmselectSpec.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['victoria-metrics-k8s-stack'].vmselect.vmselectSpec.externalAuthority }}/\"" -i $c
   yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.alertmanager.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['victoria-metrics-k8s-stack'].alertmanager.externalAuthority }}/\"" -i $c
-  yq4 'del(.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.alertmanager.alertmanagerSpec)' -i $c
-  yq4 'del(.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.prometheus)' -i $c
-  yq4 'del(.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.thanos)' -i $c
+  yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.grafana.externalAuthority = "grafana.cmn.{{ network.dns.external }}"' -i $c
+  if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.prometheus' $c)" != null ]; then
+      yq4 eval 'del(.spec.kubernetes.services.cray-sysmgmt-health.victoria-metrics-k8s-stack.prometheus)' -i $c
+  fi
 fi
 #sma-vm-cluster
 if [ "$(yq4 eval '.spec.kubernetes.services.sma-vm-cluster' $c)" == null ]; then
