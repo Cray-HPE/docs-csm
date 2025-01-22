@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023-2025 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -64,7 +64,7 @@ spec:
             cat ${ts}.sh
           else
             scp -i /myssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${ts}.sh root@$HOST:/tmp/${ts}.sh
-            ssh -i /myssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$HOST "/tmp/${ts}.sh; rm /tmp/${ts}.sh"
+            ssh -i /myssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$HOST "/tmp/${ts}.sh"          
           fi
         volumeMounts:
           - name: ssh
