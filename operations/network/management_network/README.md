@@ -30,9 +30,9 @@ exactly match installed products.
 * [Minimum software version requirements](#minimum-software-version-requirements)
 * [Transceiver and cable guide](transceiver_cable_guide.md)
 * [Changes](#changes)
-  * [Enhancements](#enhancements-and-features)
-  * [Issues and workarounds](#issues-and-workarounds)
-  * [Security Bulletin Subscription Service](#security-bulletin-subscription-service)
+    * [Enhancements](#enhancements-and-features)
+    * [Issues and workarounds](#issues-and-workarounds)
+    * [Security Bulletin Subscription Service](#security-bulletin-subscription-service)
 
 ## Adding switch admin password to Vault
 
