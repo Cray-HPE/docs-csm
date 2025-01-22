@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -89,7 +89,7 @@ spec:
                     if [[ -f ${basedir}/standdown.sh ]]; then
                         chmod +x "${basedir}/standdown.sh"
                         scp "${basedir}/standdown.sh" "${TARGET_NCN}:/tmp/standdown.sh"
-                        ssh "${TARGET_NCN}" '/tmp/standdown.sh; rm /tmp/standdown.sh'
+                        ssh "${TARGET_NCN}" '/tmp/standdown.sh'
                     else
                         echo >&2 "${TARGET_NCN} has nothing to standdown! This is not expected."
                         exit 1
@@ -153,7 +153,7 @@ spec:
                     if [[ -f ${basedir}/standdown.sh ]]; then
                         chmod +x "${basedir}/standdown.sh"
                         scp "${basedir}/standdown.sh" "${TARGET_NCN}:/tmp/standdown.sh"
-                        ssh "${TARGET_NCN}" '/tmp/standdown.sh; rm /tmp/standdown.sh'
+                        ssh "${TARGET_NCN}" '/tmp/standdown.sh'
                     else
                         echo >&2 "${TARGET_NCN} has nothing to standdown! This is not expected."
                         exit 1
