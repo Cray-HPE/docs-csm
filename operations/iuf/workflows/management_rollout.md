@@ -90,7 +90,7 @@ Refer to that table and any corresponding product documents before continuing to
         ```
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
+        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
         ```
 
     1. (`ncn-m#`) Verify that the storage canary node booted successfully with the desired CFS configuration.
@@ -113,7 +113,7 @@ Refer to that table and any corresponding product documents before continuing to
         ```
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_NODES}
+        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_NODES}
         ```
 
     1. (`ncn-m001#`) Verify that all storage nodes configured successfully.
@@ -138,7 +138,7 @@ Refer to that table and any corresponding product documents before continuing to
         (`ncn-m001#`) Execute the `management-nodes-rollout` stage with `ncn-m002`.
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ncn-m002
+        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ncn-m002
         ```
 
         > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
@@ -158,7 +158,7 @@ Refer to that table and any corresponding product documents before continuing to
         (`ncn-m001#`) Execute the `management-nodes-rollout` stage with `ncn-m003`.
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ncn-m003
+        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ncn-m003
         ```
 
         > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
@@ -387,7 +387,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     ```
 
     ```bash
-    iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${WORKER_CANARY}
+    iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${WORKER_CANARY}
     ```
 
 1. Verify the canary node booted successfully with the desired image and CFS configuration.
@@ -421,7 +421,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     1. (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout Management_Worker
+        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout Management_Worker
         ```
 
     1. (`ncn-m001#`) Execute `management-nodes-rollout` on a group of worker nodes. The list of worker nodes can be manually edited if it is undesirable to rebuild/upgrade all of the workers with one execution.
@@ -432,7 +432,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
         ```
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout $WORKER_NODES
+        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout $WORKER_NODES
         ```
 
 1. (`ncn-m001#`) Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the canary node.
