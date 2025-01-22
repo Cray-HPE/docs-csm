@@ -39,12 +39,11 @@ list of patch versions.
 1. [Upgrade services](#upgrade-services)
 1. [Upload NCN images](#upload-ncn-images)
 1. [Update management node CFS configuration](#update-management-node-cfs-configuration)
-1. [Update NCN images](#update-ncn-images)
 1. [Update test suite packages](#update-test-suite-packages)
 1. [Verification](#verification)
 1. [Take Etcd manual backup](#take-etcd-manual-backup)
-1. [NCN upgrade](#ncn-upgrade)
 1. [Configure E1000 node and Redfish Exporter for SMART data](#configure-e1000-node-and-redfish-exporter-for-smart-data)
+1. [NCN reboot](#ncn-reboot)
 1. [Complete upgrade](#complete-upgrade)
 
 ### Preparation
@@ -191,80 +190,6 @@ version of CSM being installed. It then waits for the components to reach a conf
    When configuration of all components is successful, the summary line will show all components
    with status "configured".
 
-### Update NCN images
-
-NCN images should be rebuilt at this time to acquire any changes from CSM config.
-
-This step does not rebuild NCNs. These new images are built and stored in S3 to facilitate the add and rebuild NCN procedures.
-
-#### Image customization
-
-1. Print the product catalog `ConfigMap`.
-
-    ```bash
-    kubectl -n services get cm cray-product-catalog -o jsonpath='{.data}' | jq '. | keys'
-    ```
-
-   Example outputs:
-
-    * CSM running with additional products:
-
-        ```json
-        [
-            "HFP-firmware",
-            "analytics",
-            "cos",
-            "cos-base",
-            "cpe",
-            "cpe-aarch64",
-            "cray-sdu-rda",
-            "csm",
-            "csm-diags",
-            "hfp",
-            "hpc-csm-software-recipe",
-            "pbs",
-            "sat",
-            "sle-os-backports-15-sp3",
-            "sle-os-backports-15-sp4",
-            "sle-os-backports-sle-15-sp3-x86_64",
-            "sle-os-backports-sle-15-sp4-x86_64",
-            "sle-os-backports-sle-15-sp5-aarch64",
-            "sle-os-backports-sle-15-sp5-x86_64",
-            "sle-os-products-15-sp3",
-            "sle-os-products-15-sp3-x86_64",
-            "sle-os-products-15-sp4",
-            "sle-os-products-15-sp4-x86_64",
-            "sle-os-products-15-sp5-aarch64",
-            "sle-os-products-15-sp5-x86_64",
-            "sle-os-updates-15-sp3",
-            "sle-os-updates-15-sp3-x86_64",
-            "sle-os-updates-15-sp4",
-            "sle-os-updates-15-sp4-x86_64",
-            "sle-os-updates-15-sp5-aarch64",
-            "sle-os-updates-15-sp5-x86_64",
-            "slingshot",
-            "slingshot-host-software",
-            "slurm",
-            "sma",
-            "uan",
-            "uss"
-        ]
-        ```
-
-    * CSM on a CSM-only system:
-
-        ```json
-        [
-          "csm"
-        ]
-        ```
-
-1. Choose one of the following options based on the output from the previous step.
-
-    * Option 1: [Upgrade of CSM on system with additional products](CSM-With-Other-Products.md)
-    * Option 2: [Upgrade of CSM on CSM-only system](CSM-Only.md#steps)
-      _(Do not use this procedure if more than CSM is installed on the system.\)_
-
 ### Update test suite packages
 
 (`ncn-m001#`) Update select RPMs on the NCNs.
@@ -335,14 +260,6 @@ SUCCESS
 These clusters are automatically backed up every 24 hours, but taking a manual backup at this stage in the upgrade
 enables restoring from backup later in this process if needed.
 
-### NCN upgrade
-
-This step is necessary so that nodes are using the correct images after running [Update NCN images](README.md#update-ncn-images).
-
-The rebuild will also ensure that the NCN has the latest cached container images that often accompany a CSM patch release.
-
-Follow the [Upgrade NCNs during CSM `1.5.3` Patch](Upgrade_NCN_images.md) instructions to perform the NCN node image upgrades.
-
 ### Configure E1000 node and Redfish Exporter for SMART data
 
 > **NOTE:** Please follow this step if SMART disk data is needed for E1000 node.
@@ -350,6 +267,12 @@ Follow the [Upgrade NCNs during CSM `1.5.3` Patch](Upgrade_NCN_images.md) instru
 This step is for getting the SMART data from the disks on E1000 node using the Redfish exporter into `prometheus` time-series database.
 To configure the LDAP instance on the E1000 primary management node and reconfigure the redfish-exporter instance running on the NCN,
 see [Configure E1000 node and Redfish Exporter](../../operations/system_management_health/E1000_SMART_data_configuration.md).
+
+### NCN reboot
+
+This is an optional step but is strongly recommended. As each patch release includes updated container images that may
+contain CVE fixes, it is recommended to reboot each NCN to refresh cached container images. For detailed instructions on
+how to gracefully reboot each NCN, refer to [Reboot NCNs](../../operations/node_management/Reboot_NCNs.md).
 
 ### Complete upgrade
 
