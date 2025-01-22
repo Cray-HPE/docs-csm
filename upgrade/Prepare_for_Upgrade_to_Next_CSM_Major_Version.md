@@ -1,8 +1,7 @@
 <!-- markdownlint-disable MD013 -->
-# Prepare For Upgrade
+# Prepare for Upgrade to Next CSM Major Version
 
-Before beginning an upgrade to a new version of CSM, there are a few things to do on the system
-first.
+Before beginning an upgrade from CSM 1.6 to CSM 1.7, there are a few things to do on the system first.
 
 - [Reduced resiliency during upgrade](#reduced-resiliency-during-upgrade)
 - [Preparation steps]
@@ -51,6 +50,7 @@ When resuming a procedure after a break, always be sure that a typescript is run
 Before following the steps to prepare for the upgrade, make sure that the latest CSM documentation RPMs are
 installed on any NCNs where preparation procedures are being performed. These should be for the **`CURRENT`**
 CSM version on the system -- not the target version of the upgrade.
+
 See [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation) for instructions.
 
 ### 3. Export Nexus data
@@ -155,9 +155,7 @@ Return here after verifying that SNMP is properly configured on the management n
    starts. After the upgrade is completed, another health check is performed, and it is important to know
    if any problems observed at that time existed prior to the upgrade.
 
-   **`IMPORTANT`**: See the [`CSM Install Validation and Health Checks`](../operations/validate_csm_health.md) procedures in the
-   documentation for the **`CURRENT`** CSM version on the system. The validation procedures in the CSM
-   documentation are only intended to work with that specific version of CSM.
+   Reference [Validate CSM Health](../operations/validate_csm_health.md) for details.
 
 1. Validate Lustre health.
 

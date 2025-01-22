@@ -13,13 +13,12 @@ section of the [Upgrade CSM and additional products with IUF](../operations/iuf/
 
 ## Upgrade Procedure
 
-1. CSM preparation
-
-   Read the _Important Notes_ section of the
+1. Read the _Important Notes_ section of the
    [CSM 1.5.0 or later to 1.6.0 Upgrade Process](Upgrade_Management_Nodes_and_CSM_Services.md)
-   documentation and then follow only these CSM instructions in order:
+   documentation.
 
-   1. [Prepare for Upgrade](prepare_for_upgrade.md)
+1. [Prepare for Upgrade to Next CSM Major Version](https://github.com/Cray-HPE/docs-csm/tree/release/1.5/upgrade/Prepare_for_Upgrade_to_Next_CSM_Major_Version.md)
+   in the CSM 1.5 documentation.
 
 1. Prepare for the upgrade procedure and download product media
 
