@@ -22,7 +22,7 @@ sections, but there is also a general troubleshooting topic.
 
 ## 1. Prepare for upgrade
 
-See [Prepare for Upgrade](prepare_for_upgrade.md).
+See [Prepare for Upgrade to Next CSM Major Version](https://github.com/Cray-HPE/docs-csm/tree/release/1.4/upgrade/Prepare_for_Upgrade_to_Next_CSM_Major_Version.md) in the CSM 1.4 documentation.
 
 ## 2. Upgrade management nodes and CSM services
 
