@@ -1,8 +1,7 @@
 <!-- markdownlint-disable MD013 -->
-# Prepare For Upgrade
+# Prepare for Upgrade to Next CSM Major Version
 
-Before beginning an upgrade to a new version of CSM, there are a few things to do on the system
-first.
+Before beginning an upgrade from CSM 1.5 to CSM 1.6, there are a few things to do on the system first.
 
 - [Reduced resiliency during upgrade](#reduced-resiliency-during-upgrade)
 - [Preparation steps]
@@ -51,6 +50,7 @@ When resuming a procedure after a break, always be sure that a typescript is run
 Before following the steps to prepare for the upgrade, make sure that the latest CSM documentation RPMs are
 installed on any NCNs where preparation procedures are being performed. These should be for the **`CURRENT`**
 CSM version on the system -- not the target version of the upgrade.
+
 See [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation) for instructions.
 
 ### 3. Export Nexus data
@@ -67,35 +67,16 @@ for details.
 
 ### 4. Adding switch admin password to Vault
 
-If CSM has been installed and Vault is running, add the switch credentials into Vault. Certain
-tests (for example, `goss-switch-bgp-neighbor-aruba-or-mellanox`) use these credentials to test the
-state of the switch. This step is not required to configure the management network. If Vault is
-unavailable, then this step can be temporarily skipped. Any automated tests that depend on the switch
-credentials being in Vault will fail until they are added.
+If it has not been done previously, record in Vault the `admin` user password for the management switches in the system.
 
-1. (`ncn-mw#`) Write the switch admin password to the `SW_ADMIN_PASSWORD` variable if it is not already set.
-
-   ```bash
-   read -s SW_ADMIN_PASSWORD
-   ```
-
-   > Note: The use of `read -s` is a convention used throughout this documentation which allows for the
-   > user input of secrets without echoing them to the terminal or saving them in history.
-
-1. (`ncn-mw#`) Run the following commands to add the switch admin password to Vault.
-
-   ```bash
-   VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
-   alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
-   vault kv put secret/net-creds/switch_admin admin=$SW_ADMIN_PASSWORD
-   ```
+See [Adding switch admin password to Vault](../operations/network/management_network/README.md#adding-switch-admin-password-to-vault).
 
 ### 5. Ensure SNMP is configured on the management network switches
 <!-- snmp-authentication-tag -->
 <!-- When updating this information, search the docs for the snmp-authentication-tag to find related content -->
 <!-- These comments can be removed once we adopt HTTP/lw-dita/Generated docs with re-usable snippets -->
 
-To ensure proper operation of the [River Endpoint Discovery Service (REDS)](../glossary.md#river-endpoint-discovery-service-reds) hardware discovery process,
+To ensure proper operation of the HMS Discovery hardware discovery process,
 [Power Control Service (PCS)](../glossary.md#power-control-service-pcs)/[Redfish Translation Service (RTS)](../glossary.md#redfish-translation-service-rts)
 management switch availability monitoring, and the Prometheus SNMP Exporter, validate the following:
 
@@ -113,7 +94,7 @@ It is not uncommon for CSM upgrades to be paired with system maintenance such as
 or management network upgrades. If management network switches are reconfigured or new switches are added, and a
 custom CANU configuration with SNMP settings was not used, it is possible that an administrator may unknowingly push new switch
 configurations that omit SNMP. If in the process of fixing SNMP, an administrator then adds SNMP credentials to the switches
-that do not match what is stored in Vault and `customizations.yaml`, then the resulting REDS, PCS/RTS, and Prometheus errors can be
+that do not match what is stored in Vault and `customizations.yaml`, then the resulting HMS Discovery, PCS/RTS, and Prometheus errors can be
 difficult to diagnose and resolve.
 
 CANU custom configuration files should be stored in a version controlled repository so that they can be re-used for
@@ -123,7 +104,7 @@ For more information, see [Configure SNMP](../operations/network/management_netw
 contains the following relevant information:
 
 - Links to vendor-specific switch documentation, which provides more information about configuring SNMP on the management switches.
-- Other SNMP information related to REDS hardware discovery, PCS/RTS management switch availability monitoring, and the Prometheus SNMP Exporter
+- Other SNMP information related to HMS Discovery hardware discovery, PCS/RTS management switch availability monitoring, and the Prometheus SNMP Exporter
 - Links to related procedures with Vault, `customizations.yaml`, sealed secrets, and more.
 
 Return here after verifying that SNMP is properly configured on the management network switches.
@@ -132,7 +113,6 @@ Return here after verifying that SNMP is properly configured on the management n
 
 [Boot Orchestration Service (BOS)](../glossary.md#boot-orchestration-service-bos),
 [Configuration Framework Service (CFS)](../glossary.md#configuration-framework-service-cfs),
-[Compute Rolling Upgrade Service (CRUS)](../glossary.md#compute-rolling-upgrade-service-crus),
 [Firmware Action Service (FAS)](../glossary.md#firmware-action-service-fas), and
 [Node Memory Dump (NMD)](../glossary.md#node-memory-dump-nmd) sessions should not be started or underway during the CSM upgrade process.
 
@@ -175,9 +155,7 @@ Return here after verifying that SNMP is properly configured on the management n
    starts. After the upgrade is completed, another health check is performed, and it is important to know
    if any problems observed at that time existed prior to the upgrade.
 
-   **`IMPORTANT`**: See the `CSM Install Validation and Health Checks` procedures in the
-   documentation for the **`CURRENT`** CSM version on the system. The validation procedures in the CSM
-   documentation are only intended to work with that specific version of CSM.
+   Reference [Validate CSM Health](../operations/validate_csm_health.md) for details.
 
 1. Validate Lustre health.
 
