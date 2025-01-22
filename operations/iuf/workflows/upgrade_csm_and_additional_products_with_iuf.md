@@ -28,13 +28,15 @@ the steps below it provide detailed instructions which must be executed in the o
 
 ![Upgrade CSM and additional products with IUF](../../../img/operations/diagram_csm_stack_upgrade_14_04142023.png)
 
+1. [Prepare for Upgrade to Next CSM Major Version](https://github.com/Cray-HPE/docs-csm/tree/release/1.3/upgrade/Prepare_for_Upgrade_to_Next_CSM_Major_Version.md)
+   in the CSM 1.3 documentation.
+
 1. CSM preparation, Stage 0.1, and Stage 0.2
 
    Read the _Important Notes_ section of the
    [CSM 1.3.0 or later to 1.4.0 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
    documentation and then follow only these CSM instructions in order:
 
-   1. [Prepare for Upgrade](../../../upgrade/prepare_for_upgrade.md)
    1. [Stage 0.1 - Prepare assets](../../../upgrade/Stage_0_Prerequisites.md#stage-01---prepare-assets)
    1. [Stage 0.2 - Prerequisites](../../../upgrade/Stage_0_Prerequisites.md#stage-02---prerequisites)
 
