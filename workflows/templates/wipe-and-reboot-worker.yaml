@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -124,7 +124,7 @@ spec:
                   
                   chmod +x set-next-boot-to-pxe.sh
                   scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null set-next-boot-to-pxe.sh $TARGET_NCN:/tmp/set-next-boot-to-pxe.sh
-                  ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $TARGET_NCN '/tmp/set-next-boot-to-pxe.sh'
+                  ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $TARGET_NCN '/tmp/set-next-boot-to-pxe.sh; rm /tmp/set-next-boot-to-pxe.sh'
         - name: "pxe-boot-node"
           dependencies:
             - get-bootscript-last-access-timestamp
