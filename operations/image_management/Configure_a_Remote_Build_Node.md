@@ -485,7 +485,15 @@ NOTE: The Ceph storage described below has several important characteristics to 
     Running post-transaction scripts ...[done]
     ```
 
-1. (`ncn-mw#`) Copy the Ceph configuration and client admin keyring to the remote build node.
+1. (`ncn-m#`) Export the `ceph.client.kube.keyring` to a file if the file does not already exist.
+
+    ```bash
+    if [ ! -f /etc/ceph/ceph.client.kube.keyring ]; then
+      ceph auth export client.kube -o /etc/ceph/ceph.client.kube.keyring
+    fi
+    ```
+
+1. (`ncn-m#`) Copy the Ceph configuration and client admin keyring to the remote build node.
 
     ```bash
     scp /etc/ceph/ceph.conf ${IMS_REMOTE_NODE_XNAME}:/etc/ceph/ceph.conf
