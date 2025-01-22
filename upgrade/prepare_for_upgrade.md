@@ -2,6 +2,9 @@
 
 Before beginning an upgrade to a new version of CSM, there are a few things to do on the system first.
 
+> NOTE: Most documentation links on this page are to the CSM 1.2 documentation, as this procedure is
+> only done prior to the upgrade to CSM 1.3, when the system is still running CSM 1.2.
+
 - [Reduced resiliency during upgrade](#reduced-resiliency-during-upgrade)
 - [Preparation steps]
 
@@ -19,8 +22,8 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
 **Warning:** Management service resiliency is reduced during the upgrade.
 
-Although it is expected that [compute nodes](../glossary.md#compute-node-cn) and
-[application nodes](../glossary.md#application-node-an) will continue to provide their
+Although it is expected that [compute nodes](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/glossary.md#compute-node-cn) and
+[application nodes](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/glossary.md#application-node-an) will continue to provide their
 services without interruption, it is important to be aware that the degree of management services
 resiliency is reduced during the upgrade. While one node is being upgraded, if another node of the
 same type has an unplanned fault that removes it from service, then this may result in a degraded system. For
@@ -50,7 +53,7 @@ When resuming a procedure after a break, always be sure that a typescript is run
 Before following the steps to prepare for the upgrade, make sure that the latest CSM documentation RPMs are
 installed on any NCNs where preparation procedures are being performed. These should be for the **`CURRENT`**
 CSM version on the system -- not the target version of the upgrade.
-See [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation) for instructions.
+See [Check for latest documentation](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/update_product_stream/index.md#check-for-latest-documentation) for instructions.
 
 ### 3. Export Nexus data
 
@@ -58,9 +61,8 @@ See [Check for latest documentation](../update_product_stream/README.md#check-fo
 
 Prior to the upgrade it is recommended that a Nexus export is taken. This is not a required step but
 highly recommend to protect the data in Nexus.
-If there is no maintenance period available, then skip this step until after the upgrade process.
 
-Reference [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md) for details.
+Reference [Nexus Export and Restore Procedure](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/package_repository_management/Nexus_Export_and_Restore.md) for details.
 
 ### 4. Disable encryption for upgrade if enabled
 
@@ -72,15 +74,15 @@ Once the upgrade is complete, then encryption can be turned back on.
 
 ### 5. Running sessions
 
-[Boot Orchestration Service (BOS)](../glossary.md#boot-orchestration-service-bos),
-[Configuration Framework Service (CFS)](../glossary.md#configuration-framework-service-cfs),
-[Compute Rolling Upgrade Service (CRUS)](../glossary.md#compute-rolling-upgrade-service-crus),
-[Firmware Action Service (FAS)](../glossary.md#firmware-action-service-fas), and
-[Node Memory Dump (NMD)](../glossary.md#node-memory-dump-nmd) sessions should not be started or underway during the CSM upgrade process.
+[Boot Orchestration Service (BOS)](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/glossary.md#boot-orchestration-service-bos),
+[Configuration Framework Service (CFS)](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/glossary.md#configuration-framework-service-cfs),
+[Compute Rolling Upgrade Service (CRUS)](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/glossary.md#compute-rolling-upgrade-service-crus),
+[Firmware Action Service (FAS)](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/glossary.md#firmware-action-service-fas), and
+[Node Memory Dump (NMD)](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/glossary.md#node-memory-dump-nmd) sessions should not be started or underway during the CSM upgrade process.
 
 1. (`ncn-m001#`) Ensure that these services do not have any sessions in progress.
 
-   > This [System Admin Toolkit (SAT)](../glossary.md#system-admin-toolkit-sat) command has `shutdown` as one of the command line options,
+   > This [System Admin Toolkit (SAT)](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/glossary.md#system-admin-toolkit-sat) command has `shutdown` as one of the command line options,
    > but it will **not** start a shutdown process on the system.
 
    ```bash
@@ -116,9 +118,7 @@ Once the upgrade is complete, then encryption can be turned back on.
    starts. After the upgrade is completed, another health check is performed, and it is important to know
    if any problems observed at that time existed prior to the upgrade.
 
-   **`IMPORTANT`**: See the `CSM Install Validation and Health Checks` procedures in the
-   documentation for the **`CURRENT`** CSM version on the system. The validation procedures in the CSM
-   documentation are only intended to work with that specific version of CSM.
+   Reference [Validate CSM Health](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/validate_csm_health.md) for details.
 
 1. Validate Lustre health.
 
