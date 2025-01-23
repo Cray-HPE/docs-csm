@@ -204,6 +204,9 @@ see [Removals](introduction/deprecated_features/README.md#removals)
 * Services that use PostgreSQL may fail when a Kubernetes master node is rebooted or rebuilt.
     * A PostgreSQL database may fail over without clients reconnecting to the new cluster leader.
     * A workaround is presented in [PostgreSQL Database is in Recovery](troubleshooting/known_issues/postgres_database_recovery.md)
+* There are resource leaks in several HMS services ([PCS](glossary.md#power-control-service-pcs), [SMD](glossary.md#hardware-state-manager-smd), hmcollector, and [FAS](glossary.md#firmware-action-service-fas))
+    * This issue is partially resolved by a hotfix for the CSM 1.5.2 release and fully resolved in the CSM 1.5.3 and 1.6.1 releases
+    * For more information, including a workaround, see [HMS Resource Leaks](troubleshooting/known_issues/HMS_Resource_Leaks.md).
 
 ## All Tickets
 

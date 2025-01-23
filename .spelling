@@ -314,6 +314,8 @@ NetworkManager
 Nexus
 OAuth
 OAuth2
+OOM
+OOMs
 OSDs
 OpROM
 OpROMs
@@ -547,6 +549,7 @@ handoff
 haproxy
 heartbeating
 highspeed
+hmcollector
 hms-discovery
 honored
 hostname
@@ -573,6 +576,7 @@ inband
 init
 initrd
 iscsi
+istio-proxy
 keychain
 known_hosts
 labeled
