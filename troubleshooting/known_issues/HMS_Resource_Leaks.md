@@ -3,9 +3,9 @@
 Resource leaks have been discovered in several HMS services (PCS, SMD,
 hmcollector, and FAS).  The symptoms are quite varied and are generally not
 detrimental to system functionality due to the resiliency provided by
-Kubernetes.  On this page we document the symptoms, known impacts to
-functionality, and include some examples of how to proactively check your
-system for this issue.
+Kubernetes.  They are more likely to present on larger systems. On this
+page we document the symptoms, known impacts to functionality, and include
+some examples of how to proactively check your system for this issue.
 
 The fixes for these issues are included in the CSM 1.5.3 and CSM 1.6.1
 releases.
