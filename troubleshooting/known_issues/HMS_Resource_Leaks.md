@@ -1,22 +1,22 @@
 # HMS Resource Leaks
 
-Resource leaks have been discovered in several HMS services (PCS, SMD, 
-hmcollector, and FAS).  The symptoms are quite varied and are generally not 
-detrimental to system functionality due to the resiliency provided by 
-Kubernetes.  On this page we document the symptoms, known impacts to 
-functionality, and include some examples of how to proactively check your 
+Resource leaks have been discovered in several HMS services (PCS, SMD,
+hmcollector, and FAS).  The symptoms are quite varied and are generally not
+detrimental to system functionality due to the resiliency provided by
+Kubernetes.  On this page we document the symptoms, known impacts to
+functionality, and include some examples of how to proactively check your
 system for this issue.
 
-The fixes for these issues are included in the CSM 1.5.3 and CSM 1.6.1 
+The fixes for these issues are included in the CSM 1.5.3 and CSM 1.6.1
 releases.
 
-Additionally, there is a hotfix for the CSM 1.5.2 release that includes only 
+Additionally, there is a hotfix for the CSM 1.5.2 release that includes only
 the PCS fix.
 
 ## Symptoms
 
-The symptoms described below have been observed on some systems.  They can be 
-transient and may not ever be encountered on some systems.  There are many 
+The symptoms described below have been observed on some systems.  They can be
+transient and may not ever be encountered on some systems.  There are many
 possible additional symptoms that are not enumerated here.
 
 ### All Services
@@ -42,7 +42,7 @@ possible additional symptoms that are not enumerated here.
 
 ### Check for Pod Restarts
 
-In the following example we see that both PCS and SMD experienced pod 
+In the following example we see that both PCS and SMD experienced pod
 restarts because there are non-zero values in the RESTARTS column:
 
 ```console
@@ -82,13 +82,13 @@ logical-backup-cray-smd-postgres-28959850-gbrp8                   0/2     Comple
 
 ### Check Pod Resource Usage
 
-While we check the resource consumption in this section, please note that if 
-one pod has greater memory consumption than other pods that does not 
-necessarily mean there is a memory leak.  If the difference is substantial, 
-then it is more likely.  If you suspect a memory leak, capture the current 
+While we check the resource consumption in this section, please note that if
+one pod has greater memory consumption than other pods that does not
+necessarily mean there is a memory leak.  If the difference is substantial,
+then it is more likely.  If you suspect a memory leak, capture the current
 usage today and capture again in a few days or weeks to compare.
 
-In the following example we see one PCS pod with a larger memory footprint 
+In the following example we see one PCS pod with a larger memory footprint
 compared to the others:
 
 ```console
@@ -101,8 +101,8 @@ cray-power-control-bitnami-etcd-1                                 73m          1
 cray-power-control-5785fdf495-69mp8                               5m           99Mi
 ```
 
-The following example will show the memory usage for the containers inside 
-the pods.  Here we can see that the istio-proxy container is responsible 
+The following example will show the memory usage for the containers inside
+the pods.  Here we can see that the istio-proxy container is responsible
 for most of the excess memory consumption:
 
 ```console
@@ -136,8 +136,8 @@ cray-power-control-bitnami-etcd-2                                 istio-proxy   
 
 ### Check PCS for "undefined" Power Status
 
-Here we have an example of counting the power states for all components.  
-If more than a couple are in the "undefined" state, this may be a symptom 
+Here we have an example of counting the power states for all components.
+If more than a couple are in the "undefined" state, this may be a symptom
 of a PCS resource leak:
 
 ```console
@@ -149,14 +149,14 @@ of a PCS resource leak:
 
 ### Check Service Logs for "context deadline exceeded"
 
-Services can timeout when communicating with BMCs.  Here is an example 
+Services can timeout when communicating with BMCs.  Here is an example
 of checking for these in the PCS logs:
 
 ```console
 > kubectl logs -n services -l app.kubernetes.io/name=cray-power-control -c cray-power-control --tail -1 | grep -i "context deadline exceeded"
 ```
 
-The messages to look for can vary, but should always include the string 
+The messages to look for can vary, but should always include the string
 "context deadline exceeded".  A few examples:
 
 ```text
