@@ -40,6 +40,20 @@ nodes. This initial test node is referred to as the "canary node". Modify the pr
 **`NOTE`** Additional arguments are available to control the behavior of the `management-nodes-rollout` stage, for example `--limit-management-rollout` and `-cmrp`. See the
 [`management-nodes-rollout` stage documentation](../stages/management_nodes_rollout.md) for details and adjust the examples below if necessary.
 
+**`NOTE`** When using the option `--limit-management-rollout` to pass the list of nodes for `management-nodes-rollout` ensure that the label `iuf-prevent-rollout=true` is not set on any of the nodes passed in the list.
+
+1. (`ncn-m001#`) Verify if any nodes are labeled with `iuf-prevent-rollout=true`.
+
+    ```bash
+    kubectl get nodes --show-labels | grep iuf-prevent-rollout
+    ```
+
+1. (`ncn-m001#`) Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the node.
+
+    ```bash
+    kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
+    ```
+
 **`IMPORTANT`** There is a different procedure for `management-nodes-rollout` depending on whether or not CSM is being upgraded. The two procedures differ in the handling of NCN storage nodes and NCN master nodes. If CSM is not
 being upgraded, then NCN storage nodes and NCN master nodes will not be upgraded with new images and will be updated by the CFS configuration created in [update-cfs-config](../stages/update_cfs_config.md) only. If CSM is being
 upgraded, the NCN storage nodes and NCN master nodes will be upgraded with new images and the new CFS configuration. Both procedures use the same steps for rebuilding/upgrading NCN worker nodes. Select **one** of the following
