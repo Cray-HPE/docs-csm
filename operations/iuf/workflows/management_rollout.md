@@ -42,7 +42,7 @@ nodes. This initial test node is referred to as the "canary node". Modify the pr
 
 **`NOTE`** When using the option `--limit-management-rollout` to pass the list of nodes for `management-nodes-rollout` ensure that the label `iuf-prevent-rollout=true` is not set on any of the nodes passed in the list.
 
-1. (`ncn-m001#`) Verify the IUF node labels on the desired node.
+1. (`ncn-m001#`) Verify if any nodes are labeled with `iuf-prevent-rollout=true`.
 
     ```bash
     kubectl get nodes --show-labels | grep iuf-prevent-rollout
