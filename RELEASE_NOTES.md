@@ -237,3 +237,6 @@ see [Removals](introduction/deprecated_features/README.md#removals)
     * This is expected to be fixed in CSM 1.5.3.
 * After updating Paradise BMC firmware, the `hmcollector-poll` service will lose event subscriptions and must be restarted
     * See [Updating Foxconn Paradise Nodes with FAS](operations/firmware/FAS_Paradise.md) for details on how to do this
+* There are resource leaks in several HMS services ([PCS](glossary.md#power-control-service-pcs), [SMD](glossary.md#hardware-state-manager-smd), hmcollector, and [FAS](glossary.md#firmware-action-service-fas))
+    * This issue is partially resolved by a hotfix for the CSM 1.5.2 release and fully resolved in the CSM 1.5.3 and 1.6.1 releases
+    * For more information, including a workaround, see [HMS Resource Leaks](troubleshooting/known_issues/HMS_Resource_Leaks.md).
