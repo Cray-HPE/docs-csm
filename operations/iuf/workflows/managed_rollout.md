@@ -74,7 +74,7 @@ Refer to the "Configure `OpenSearch`" section in the _HPE Cray EX System Monitor
 
    ```bash
    XNAME=x3000c0s29b1n0
-   iuf -a "${ACTIVITY_NAME}" run -r managed-nodes-rollout --limit-managed-rollout "${XNAME}" -mrs reboot
+   iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r managed-nodes-rollout --limit-managed-rollout "${XNAME}" -mrs reboot
    ```
 
 1. Verify the canary node booted successfully with the desired image and CFS configuration.
@@ -92,7 +92,7 @@ Refer to the "Configure `OpenSearch`" section in the _HPE Cray EX System Monitor
         immediately reboot all compute nodes.
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r managed-nodes-rollout -mrs reboot
+        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r managed-nodes-rollout -mrs reboot
         ```
 
    - If Slurm is the workload manager:
@@ -106,7 +106,7 @@ Refer to the "Configure `OpenSearch`" section in the _HPE Cray EX System Monitor
         add `-mrs reboot` to the `iuf run` command.
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r managed-nodes-rollout
+        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r managed-nodes-rollout
         ```
 
         **NOTE:** If the `-mrs reboot` option is used with Slurm, skip the following step.
@@ -184,7 +184,7 @@ Once this step has completed:
    (`ncn-m001#`) Execute the `post-install-check` stage.
 
     ```bash
-    iuf -a "${ACTIVITY_NAME}" run -r post-install-check
+    iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r post-install-check
     ```
 
 Once this step has completed:
