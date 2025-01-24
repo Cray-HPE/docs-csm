@@ -58,7 +58,7 @@ nodes. This initial test node is referred to as the "canary node". Modify the pr
 **`NOTE`** Additional arguments are available to control the behavior of the `management-nodes-rollout` stage, for example `--limit-management-rollout` and `-cmrp`. See the
 [`management-nodes-rollout` stage documentation](../stages/management_nodes_rollout.md) for details and adjust the examples below if necessary.
 
-**`NOTE`** When using the option `--limit-management-rollout` to pass the list of nodes for `management-nodes-rollout` ensure that the label `iuf-prevent-rollout=true` is not set on any of the nodes passed in the list.
+**`NOTE`** When using the option `--limit-management-rollout` to pass the list of nodes for `management-nodes-rollout`, ensure that the label `iuf-prevent-rollout=true` is not set on any of the nodes passed in the list.
 
 1. (`ncn-m001#`) Verify if any nodes are labeled with `iuf-prevent-rollout=true`.
 
