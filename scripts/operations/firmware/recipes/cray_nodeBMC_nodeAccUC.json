@@ -9,7 +9,7 @@
     },
     "targetFilter": {
         "targets": [
-          "Node0.AccUC",
+          "Node0.AccUC"
         ]
     },
     "command": {
