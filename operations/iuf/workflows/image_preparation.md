@@ -29,9 +29,9 @@ Refer to that table and any corresponding product documents before continuing to
     iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run --site-vars "${ADMIN_DIR}/site_vars.yaml" -bpcd "${ADMIN_DIR}" -r update-cfs-config prepare-images
     ```
 
-    **`NOTE`:** If it is necessary to execute a `sat bootprep` command directly from management
-    nodes on CSM 1.5.2 systems to debug a failure, an error may occur during image customization.
-    To fix this issue, see the workaround documented in [`sat bootprep` image customization error](../../../troubleshooting/known_issues/sat_bootprep_image_customization_error.md)
+    **`NOTE`:** On CSM 1.5 systems running CSM 1.5.2 or higher, if it is necessary to execute a `sat bootprep` command directly from management
+    nodes to debug a failure, then an error may occur during image customization. For details and workaround, see
+    [`sat bootprep` image customization error](../../../troubleshooting/known_issues/sat_bootprep_image_customization_error.md)
 
 1. Inspect the newly-created management NCN and managed node images, CFS configurations, and BOS session templates to ensure they are correct before continuing with the next steps of the workflow. The artifacts can be identified
 by examining the output from `iuf run` or by examining the Kubernetes ConfigMap associated with the activity. See the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation for
