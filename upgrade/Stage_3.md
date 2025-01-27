@@ -60,6 +60,10 @@ then backup the `/etc/cray/kubernetes/encryption` directory on the master node b
 
 1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
+> **`NOTE`** If `ncn-upgrade-master-nodes.sh` fails, address the problems based on the failed test output then run `ncn-upgrade-master-nodes.sh` again.
+There are several common failures such as goss tests for clock skew. Some of these failures can be resolved by waiting several minutes before running `ncn-upgrade-master-nodes.sh` again.
+`ncn-upgrade-master-nodes.sh` does not repeat the steps that completed successfully, it runs only the failed and subsequent steps, so it can be executed numerous times without issue.
+
 ## Argo workflows
 
 Before starting [Stage 3.2 - Worker node image upgrade](#stage-32---worker-node-image-upgrade), access the Argo UI to view the progress of this stage.
