@@ -1,6 +1,9 @@
 # `sat bootprep` image customization error
 
-On CSM 1.5.2 systems, the following error occurs when you try to customize an image using the `sat bootprep` command directly from management nodes:
+## Symptom
+
+On CSM 1.5 systems running version CSM 1.5.2 or higher, the following error may occur
+when you try to customize an image using the `sat bootprep` command directly from management nodes:
 
 ```text
 Traceback (most recent call last):
@@ -26,8 +29,10 @@ Traceback (most recent call last):
     self.begin_image_configure()
   File "/sat/venv/lib/python3.9/site-packages/sat/cli/bootprep/input/image.py", line 405, in begin_image_configure
     self.image_configure_session = self.cfs_client.create_image_customization_session(
-TypeError: create_image_customization_session() missing 1 required positional argument: 'image_name' 
+TypeError: create_image_customization_session() missing 1 required positional argument: 'image_name'
 ```
+
+## Scope
 
 This affects versions 3.25.14 and 3.25.15 of the `sat` CLI. The version of the `sat` CLI can be
 viewed with `sat --version`. These versions of the `sat` CLI were included in SAT product versions
@@ -35,10 +40,31 @@ viewed with `sat --version`. These versions of the `sat` CLI were included in SA
 
 ## Workaround
 
-Set the environment variable `SAT_IMAGE` to point at the older version of
-`cray-sat` provided by CSM 1.5.2 instead of the version from the newer SAT product stream.
-Do this only for `sat bootprep` commands. For example,
+Set the environment variable `SAT_IMAGE` to point at different version of `cray-sat` that does not
+have this problem. Do this only for `sat bootprep` commands.
 
-```bash
-SAT_IMAGE="registry.local/artifactory.algol60.net/sat-docker/stable/cray-sat:3.25.11" sat bootprep run
-```
+1. (`ncn-mw#`) List and sort the available `cray-sat` versions, omitting those with this error.
+
+    ```bash
+    podman search --no-trunc --list-tags registry.local/artifactory.algol60.net/sat-docker/stable/cray-sat |
+        awk '{ print $NF }' |
+        grep -Ev '^3[.]25[.]1[45]$' |
+        grep -E '^[0-9]+[.][0-9]+[.][0-9]+' |
+        sort -V
+    ```
+
+    Example output:
+
+    ```text
+    3.25.11
+    3.25.16
+    ```
+
+1. (`ncn-mw#`) Run the `sat bootprep` command with the `SAT_IMAGE` environment variable set to the latest version
+   listed in the previous step.
+
+    For example:
+
+    ```bash
+    SAT_IMAGE="registry.local/artifactory.algol60.net/sat-docker/stable/cray-sat:3.25.16" sat bootprep run
+    ```
