@@ -405,8 +405,8 @@ If the firmware file you need is not listed, run the following command to copy t
 
 **IMPORTANT: Only perform this action if required!  Check Morpheus!**
 
-Run the following command prior to using FAS to update the BMC fw.  This will
-reset the BMC to factory defaults (`ncn#`):
+Run the following command prior to using FAS to update the BMC firmware.  This
+will reset the BMC to factory defaults (`ncn#`):
 
 ```bash
 ssh admin@$(xname) 'fw_setenv openbmconce "factory-reset"'
@@ -455,10 +455,9 @@ ssh admin@$(xname) 'ipmitool user set password 1 "password"'
 
 Before proceeding, you must have first used FAS to update the BIOS on the
 target node **before** resetting the BIOS factory defaults. The node should
-remain powered **OFF** after the update and remain off before resetting the
-factory defaults.
+remain powered **OFF** after the update.
 
-Run the following command to reset BIOS factory defaults after the BIOS hs
+Run the following command to reset BIOS factory defaults after the BIOS has
 been updated (`ncn#`):
 
 ```bash
@@ -470,6 +469,9 @@ The expected results should look like this:
 ```bash
 01 05 80 80 00 00 00
 ```
+
+If the results do not look like this, please consult with your HPE service
+representative before proceeding.
 
 Next, power the node on.
 
