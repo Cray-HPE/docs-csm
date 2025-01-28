@@ -412,13 +412,38 @@ reset the BMC to factory defaults (`ncn#`):
 ssh admin@$(xname) 'fw_setenv openbmconce "factory-reset"'
 ```
 
-Continue to update the BMC firmware using one of the methods above. **PLEASE
-NOTE** that the BMC credentials may have been reset along with the factory
-defaults.  Should this occur, FAS will no longer be able to verify the update
-after the BMC reboots and will fail after the time limit.
+Continue to update the BMC firmware using one of the methods above.
 
-If the password changed to something other than the what is stored in vault,
-update the BMC password (`ncn#`):
+**PLEASE NOTE** that the credentials for the `admin` account may have been
+reset along with the factory defaults.  Should this occur, FAS will no longer
+be able to verify the update after the BMC reboots and will fail after the
+time limit.  The BMC firmware update should still have succeeded despite
+this.  After the update is complete, return here to reset the `admin`
+password if necessary.
+
+If the `admin` password changed to something other than the what is stored in
+vault, you may see something like the following when attempting to log in to
+the BMC:
+
+```text
+> ssh admin@x3000c0s33b3
+admin@x3000c0s33b3's password:
+
+The account is locked due to 10 failed logins.
+
+(5 minutes left to unlock)
+Permission denied, please try again.
+```
+
+You will need to wait until the lockout period expires and time your next
+login attempt to occur prior to other system services attempting to log in
+with the wrong password, locking you out again.  The factory default
+password that you will need to log in with will not be mentioned here.
+Please request it from your HPE service representative.
+
+Time the following command to execute after the lockout period expires.
+Rather than specifying `password` for the new admin password, specify the
+correct password found in vault for your system (`ncn#`):
 
 ```bash
 ssh admin@$(xname) 'ipmitool user set password 1 "password"'
