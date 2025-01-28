@@ -405,10 +405,8 @@ If the firmware file you need is not listed, run the following command to copy t
 
 **IMPORTANT: Only perform this action if required!  Check Morpheus!**
 
-Ensure the nodes associated with the BMCs being updated are first powered
-**OFF** before continuing.
-
-Run the following command to reset BMC factory defaults (`ncn#`):
+Run the following command prior to using FAS to update the BMC fw.  This will
+reset the BMC to factory defaults (`ncn#`):
 
 ```bash
 ssh admin@$(xname) 'fw_setenv openbmconce "factory-reset"'
@@ -430,9 +428,13 @@ ssh admin@$(xname) 'ipmitool user set password 1 "password"'
 
 **IMPORTANT: Only perform this action if required!  Check Morpheus!**
 
-Ensure the nodes being updated are first powered **OFF** before continuing.
+Before proceeding, you must have first used FAS to update the BIOS on the
+target node **before** resetting the BIOS factory defaults. The node should
+remain powered **OFF** after the update and remain off before resetting the
+factory defaults.
 
-Run the following command to reset BIOS factory defaults (`ncn#`):
+Run the following command to reset BIOS factory defaults after the BIOS hs
+been updated (`ncn#`):
 
 ```bash
 ssh admin@$(bmc_xname) 'ipmitool raw 0x0 0x8 0x05 0x80 0x80 0x00 0x00 0x00 ; ipmitool raw 0x0 0x9 0x05 0x00 0x00'
@@ -444,8 +446,12 @@ The expected results should look like this:
 01 05 80 80 00 00 00
 ```
 
-Next, power the node on.  After node power is reported as **ON** then run
-the following command (`ncn#`):
+Next, power the node on.
+
+**IMPORTANT:** After the node has powered on, it must
+**REMAIN ON FOR AT LEAST 6 MINUTES** before proceeding to the next step.
+
+Next, run the following command (`ncn#`):
 
 ```bash
 ssh admin@$(bmc_xname) 'ipmitool chassis bootdev none clear-cmos=yes'
