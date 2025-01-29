@@ -18,7 +18,7 @@ dmesg -T | grep "SQUASHFS error" | head -n  1
 
 Example output:
 
-```
+```text
 [Sat Nov  2 22:32:41 2024] SQUASHFS error: xz decompression failed, data probably corrupt
 ```
 
