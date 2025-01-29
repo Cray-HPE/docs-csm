@@ -12,15 +12,20 @@ This issue can be identified by the following symptoms:
 
 On a compute node or UAN (iSCSI Initiator) we can observe the following SQUASHFS error messages in the console log:
 
-```text
-nid000004:~ # dmesg -T | grep "SQUASHFS error" | head -n  1
+```bash
+dmesg -T | grep "SQUASHFS error" | head -n  1
+```
+
+Example output:
+
+```
 [Sat Nov  2 22:32:41 2024] SQUASHFS error: xz decompression failed, data probably corrupt
 ```
 
 On a compute node or UAN (iSCSI Initiator) we can observe that the `iscsid` service is not active:
 
 ```bash
-nid000004:~ # systemctl status iscsid
+ncn-s004# systemctl status iscsid
 ● iscsid.service - Open-iSCSI
      Loaded: loaded (/usr/lib/systemd/system/iscsid.service; disabled; preset: disabled)
      Active: active (running) since Wed 2024-11-06 08:16:23 CST; 1 day 4h ago
