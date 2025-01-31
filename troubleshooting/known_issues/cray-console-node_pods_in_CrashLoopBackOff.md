@@ -2,7 +2,7 @@
 
 ## Issue description
 
-After installing CSM 1.6, `cray-console-node` Kubernetes pods intermittently go into a `CrashLoopBackOff` state.
+The `cray-console-node` Kubernetes pods may go into a `CrashLoopBackOff` state.
 This happens because of a permission issue with the `/var/log/conman` directory inside the container.
 
 ## Error identification
