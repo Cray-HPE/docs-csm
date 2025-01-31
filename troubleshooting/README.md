@@ -71,6 +71,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [IMS image delete loses the `arch` information](known_issues/ims_image_delete_loses_arch.md)
 * [Spire pods stuck in `PodInitializing`](known_issues/spire_pod_initializing.md)
 * [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
+* [`cray-console-node` pods in `CrashLoopBackOff`](known_issues/cray-console-node_pods_in_CrashLoopBackOff.md)
 
 ## Booting
 
@@ -100,6 +101,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [ConMan Failing to Connect to a Console](../operations/conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
 * [ConMan Asking for Password on SSH Connection](../operations/conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
 * [Console Node Pod Stuck in Terminating State](../operations/conman/Troubleshoot_ConMan_Node_Pod_Stuck_Terminating.md)
+* [`cray-console-node` pods in `CrashLoopBackOff`](known_issues/cray-console-node_pods_in_CrashLoopBackOff.md)
 
 ## Customer Management Network (CMN)
 
