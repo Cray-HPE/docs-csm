@@ -414,7 +414,7 @@ ssh admin@$(xname) 'fw_setenv openbmconce "factory-reset"'
 
 Continue to update the BMC firmware using one of the methods above.
 
-**PLEASE NOTE** that the credentials for the `admin` account may have been
+**NOTE:** The credentials for the `admin` account may have been
 reset along with the factory defaults.  Should this occur, FAS will no longer
 be able to verify the update after the BMC reboots and will fail after the
 time limit.  The BMC firmware update should still have succeeded despite
@@ -438,12 +438,13 @@ Permission denied, please try again.
 You will need to wait until the lockout period expires and time your next
 login attempt to occur prior to other system services attempting to log in
 with the wrong password, locking you out again.  The factory default
-password that you will need to log in with will not be mentioned here.
-Please request it from your HPE service representative.
+password that you will need to log in with to reset the password will not
+be mentioned here. Please request it from your HPE service representative.
 
 Time the following command to execute after the lockout period expires.
-Rather than specifying `password` for the new admin password, specify the
-correct password found in vault for your system (`ncn#`):
+Rather than specifying `password` for the new admin password, as showin
+in the example, specify the correct password found in vault for your
+system (`ncn#`):
 
 ```bash
 ssh admin@$(xname) 'ipmitool user set password 1 "password"'
@@ -457,33 +458,33 @@ Before proceeding, you must have first used FAS to update the BIOS on the
 target node **before** resetting the BIOS factory defaults. The node should
 remain powered **OFF** after the update.
 
-Run the following command to reset BIOS factory defaults after the BIOS has
-been updated (`ncn#`):
+1. (`ncn#`) Reset BIOS factory defaults using `ipmitool`:
 
-```bash
-ssh admin@$(bmc_xname) 'ipmitool raw 0x0 0x8 0x05 0x80 0x80 0x00 0x00 0x00 ; ipmitool raw 0x0 0x9 0x05 0x00 0x00'
-```
+    ```bash
+    ssh admin@$(bmc_xname) 'ipmitool raw 0x0 0x8 0x05 0x80 0x80 0x00 0x00 0x00 ; ipmitool raw 0x0 0x9 0x05 0x00 0x00'
+    ```
 
-The expected results should look like this:
+    The expected results should look like this:
 
-```bash
-01 05 80 80 00 00 00
-```
+    ```bash
+    01 05 80 80 00 00 00
+    ```
 
-If the results do not look like this, please consult with your HPE service
-representative before proceeding.
+    If the results do not look like this, please consult with your HPE service
+    representative before proceeding.
+1. Next, power the node on.
 
-Next, power the node on.
+    **IMPORTANT:** After the node has powered on, it must
+    **REMAIN ON FOR AT LEAST 6 MINUTES** before proceeding to the next step.
 
-**IMPORTANT:** After the node has powered on, it must
-**REMAIN ON FOR AT LEAST 6 MINUTES** before proceeding to the next step.
+1. (`ncn#`) Clear CMOS using `ipmitool`:
 
-Next, run the following command (`ncn#`):
+    ```bash
+    ssh admin@$(bmc_xname) 'ipmitool chassis bootdev none clear-cmos=yes'
+    ```
 
-```bash
-ssh admin@$(bmc_xname) 'ipmitool chassis bootdev none clear-cmos=yes'
-```
+1. Power the node off.
 
-Next, power the node off. After node power is reported as **OFF** then power
-it on again.  Once node power is reported as **ON** the BIOS update will be
-complete.
+1. After node power is reported as **OFF**, then power it on again.
+
+1. Once node power is reported as **ON**, the BIOS update will be complete.
