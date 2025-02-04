@@ -442,7 +442,7 @@ password that you will need to log in with to reset the password will not
 be mentioned here. Please request it from your HPE service representative.
 
 Time the following command to execute after the lockout period expires.
-Rather than specifying `password` for the new admin password, as showin
+Rather than specifying `password` for the new admin password, as shown
 in the example, specify the correct password found in vault for your
 system (`ncn#`):
 
