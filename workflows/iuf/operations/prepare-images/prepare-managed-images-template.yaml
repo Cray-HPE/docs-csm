@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023, 2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -79,6 +79,19 @@ spec:
                       echo "INFO Using bootprep file $BOOTPREP_FILE_PATH for preparing images on managed nodes" 1>&2
                     fi
 
+                    # Determine CFS version, to avoid CASMTRIAGE-7760
+                    SAT_CFS_ARGS=""
+                    CFS_VERSION=$(curl -s -k -H "Authorization: Bearer {{inputs.parameters.auth_token}}" https://api-gw-service-nmn.local/apis/cfs/versions | \
+                                  python -c "import json, sys; c = json.load(sys.stdin); print('.'.join([ c['major'], c['minor'], c['patch']]))")
+                    if [[ -z "$CFS_VERSION" ]]; then
+                      echo "WARNING Cannot determine CFS service version. Will not specify CFS version for SAT command" 1>&2
+                    elif [[ "$CFS_VERSION" =~ ^1\.18\.[0-4]$ ]]; then
+                      echo "INFO CFS service version is $CFS_VERSION. Forcing SAT to use CFS v2" 1>&2
+                      SAT_CFS_ARGS="--cfs-version v2"
+                    else
+                      echo "INFO CFS service version is $CFS_VERSION. Will not specify CFS version for SAT command" 1>&2
+                    fi
+
                     VARS_FILE_PATH=$(mktemp)
                     cat > $VARS_FILE_PATH <<- 'EOF'
                       {{=toJson(jsonpath(inputs.parameters.global_params, '$.site_params.products'))}}
@@ -89,11 +102,12 @@ spec:
                       --vars-file "$VARS_FILE_PATH" \
                       --format json \
                       --bos-version v2 \
+                      $SAT_CFS_ARGS \
                       $MEDIA_DIR/$BOOTPREP_FILE_PATH
                     rc=$?
                     if [ $rc -ne 0 ]; then
                       echo "ERROR Bootprep for managed nodes failed. Please refer to the operations > configuration_management > Accessing_Sat_Bootprep_Files section of the CSM documentation and then re-run the 'prepare-images' stage" 1>&2
-                      echo -e "ERROR <sat bootprep run --limit images --limit session_templates --overwrite-images --overwrite-templates --vars-file "$VARS_FILE_PATH" --format json --bos-version v2 $MEDIA_DIR/$BOOTPREP_FILE_PATH> failed" 1>&2
+                      echo -e "ERROR <sat bootprep run --limit images --limit session_templates --overwrite-images --overwrite-templates --vars-file $VARS_FILE_PATH --format json --bos-version v2 $SAT_CFS_ARGS $MEDIA_DIR/$BOOTPREP_FILE_PATH> failed" 1>&2
                       exit $rc
                     fi
         - - name: end-operation
