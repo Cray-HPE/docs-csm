@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -177,6 +177,10 @@ spec:
           secretKeyRef:
             name: "{{inputs.parameters.nexus_admin_credential_secret_name}}"
             key: password
+      - name: CURL_MAX_TIME
+        value: "1800"
+      - name: CURL_CONNECT_TIMEOUT
+        value: "600"
       volumeMounts:
       - name: product
         mountPath: /images
