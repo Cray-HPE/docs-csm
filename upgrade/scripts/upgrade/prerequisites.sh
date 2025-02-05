@@ -658,13 +658,6 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-# upgrade all charts dependent on cray-certmanager chart
-# it is neccessary to upgrade these before upgrade
-do_upgrade_csm_chart cray-istio-operator platform.yaml
-do_upgrade_csm_chart cray-istio-deploy platform.yaml
-do_upgrade_csm_chart cray-istio platform.yaml
-do_upgrade_csm_chart cray-kiali platform.yaml
-
 # Cleanup for Kiali configmaps
 state_name="KIALI_CLEANUP"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
@@ -710,7 +703,6 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-do_upgrade_csm_chart cray-certmanager platform.yaml
 do_upgrade_csm_chart cray-psp platform.yaml
 do_upgrade_csm_chart cray-postgres-operator platform.yaml
 do_upgrade_csm_chart cray-iuf platform.yaml
