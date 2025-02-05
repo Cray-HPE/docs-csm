@@ -86,7 +86,7 @@ The following S3 parameters are used to specify this file:
 * path: This is the path to the `manifest.json` file in S3. The path will follow the `s3://<BUCKET_NAME>/<KEY_NAME>` format.
     * `<BUCKET_NAME>` is set to `boot-images`
     * `<KEY_NAME>` is set to the image ID that the [Image Management Service (IMS)](../../glossary.md#image-management-service-ims) created when it generated the boot artifacts.
-* `etag`: This entity tag helps identify the version of the `manifest.json` file. Currently, it issues a warning if the manifest's `etag` does not match. This can be an empty string, but cannot be left blank.
+* `etag`: This entity tag helps identify the version of the `manifest.json` file. Its value can be an empty string, but cannot be left blank. However, the etag line can be omitted entirely.
 
 This boot artifact information from the files stored in S3 is then written to the
 [Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss) where it is retrieved when these nodes boot.
