@@ -1142,3 +1142,6 @@ enablement
 LUNs
 fileio
 iscsi-sbps-targets-config
+
+- troubleshooting/debugging_with_hms_pprof_images.md
+mutexes

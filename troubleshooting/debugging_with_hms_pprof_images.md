@@ -1,14 +1,14 @@
 # Debugging With HMS `PProf` Images
 
 - [Introduction](#introduction)
-- [Deploying PProf Enabled Container Images](#deploying-pprof-enabled-container-images)
+- [Deploying `PProf` Enabled Container Images](#deploying-pprof-enabled-container-images)
     - [Edit Deployment](#edit-deployment)
     - [Possibly Scale Down Replicas](#possibly-scale-down-replicas)
     - [Important Note On Persistence](#important-note-on-persistence)
     - [Restore Production Container Image](#restore-production-container-image)
 - [Gather Profiles](#gather-profiles)
 - [Sending Profiles To HPE Service](#sending-profiles-to-hpe-service)
-- [Deployment Name And PProf URL Reference](#deployment-name-and-pprof-url-reference)
+- [Deployment Name And `PProf` URL Reference](#deployment-name-and-pprof-url-reference)
 
 ## Introduction
 
@@ -29,7 +29,7 @@ that profiles can be gathered and sent back to HPE for review.
 Throughout this documentation, we will refer to PCS (Power Control
 Service) in the provided examples.
 
-## Deploying PProf Enabled Container Images
+## Deploying `PProf` Enabled Container Images
 
 ### Edit Deployment
 
@@ -64,9 +64,9 @@ completed restarting by watching them restart with:
     ```
 
 1. Once all of the pods have been restarted, `pprof` profiles may be
-gathered. However, it may take time for performance issues or resoure
+gathered. However, it may take time for performance issues or resource
 leaks to recur. HPE Support will communicate how long to wait before
-gathing any profiles.
+gathering any profiles.
 
 ### Possibly Scale Down Replicas
 
@@ -86,7 +86,7 @@ profile was generated on a specific replica.
   kubectl scale deployment -n services cray-power-control --replicas=1
   ```
 
-(`ncn#`) To scale it back up to the appropriate replica count (eg. 3):
+(`ncn#`) To scale it back up to the appropriate replica count (e.g. 3):
 
   ```bash
   kubectl scale deployment -n services cray-power-control --replicas=3
@@ -144,7 +144,6 @@ completed restarting by watching them restart with:
 
 1. Once all of the pods have been restarted you are complete.
 
-
 ## Gather Profiles
 
 In order to request a `pprof` profile, you must provide a valid
@@ -174,14 +173,14 @@ as well (deployment must have been scaled down).
 For the example above, we requested a "heap" `pprof` profile.  There are
 several different types of profiles that can be requested.  Some examples:
 
-- cmdline: The running program's command line
-- profile: A sampling of cpu usage
-- heap: A sampling of heap allocations
-- goroutine: Stack traces of all current goroutines
-- block: Stack traces that led to blocking on synchronization primitives
-- mutex: Stack traces of holder of contended mutexes
+- `cmdline`: The running program's command line
+- `profile`: A sampling of CPU usage
+- `heap`: A sampling of heap allocations
+- `goroutine`: Stack traces of all current go routines
+- `block`: Stack traces that led to blocking on synchronization primitives
+- `mutex`: Stack traces of holder of contended mutexes
 
-Refer to [Deployment Name And PProf URL Reference](#deployment-name-and-pprof-url-reference)
+Refer to [Deployment Name And `PProf` URL Reference](#deployment-name-and-pprof-url-reference)
 for the base `pprof` URL for each HMS service.  You would append the name
 of the profile type to the base URL.
 
@@ -209,21 +208,19 @@ kubectl get pods -n services | grep -e NAME -e cray-power-control
 kubectl top pod -n services --containers=true | grep -e NAME -e cray-power-control
 ```
 
-## Deployment Name And PProf URL Reference
+## Deployment Name And `PProf` URL Reference
 
-tbd
-
-| Service             | Deployment Name              | Base `PProf` URL                                                    |
-|---------------------|------------------------------|---------------------------------------------------------------------|
-| BSS                 | cray-bss                     | https://api-gw-service-nmn.local/apis/bss/debug/pprof/              |
-| FAS                 | cray-fas                     | https://api-gw-service-nmn.local/apis/fas/v1/debug/pprof/           |
-| HBTD                | cray-hbtd                    | https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/debug/pprof/      |
-| hmcollector-ingress | cray-hms-hmcollector-ingress | unavailable outside service mesh                                    |
-| hmcollector-poll    | cray-hms-hmcollector-poll    | not yet supported                                                   |
-| HMNFD               | cray-hmnfd                   | https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/debug/pprof/     |
-| MEDS                | cray-meds                    | not yet supported                                                   |
-| PCS                 | cray-power-control           | https://api-gw-service-nmn.local/apis/power-control/v1/debug/pprof/ |
-| RTS                 | cray-hms-rts                 | not yet supported                                                   |
-| SCSD                | cray-scsd                    | not yet supported                                                   |
-| SLS                 | cray-sls                     | https://api-gw-service-nmn.local/apis/sls/v1/debug/pprof/           |
-| SMD                 | cray-smd                     | https://api-gw-service-nmn.local/apis/smd/hsm/v2/debug/pprof/       |
+| Service             | Deployment Name                | Base `PProf` URL                                                      |
+|---------------------|--------------------------------|-----------------------------------------------------------------------|
+| BSS                 | `cray-bss`                     | `https://api-gw-service-nmn.local/apis/bss/debug/pprof/`              |
+| FAS                 | `cray-fas`                     | `https://api-gw-service-nmn.local/apis/fas/v1/debug/pprof/`           |
+| HBTD                | `cray-hbtd`                    | `https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/debug/pprof/`      |
+| hmcollector-ingress | `cray-hms-hmcollector-ingress` | unavailable outside service mesh                                      |
+| hmcollector-poll    | `cray-hms-hmcollector-poll`    | not yet supported                                                     |
+| HMNFD               | `cray-hmnfd`                   | `https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/debug/pprof/`     |
+| MEDS                | `cray-meds`                    | not yet supported                                                     |
+| PCS                 | `cray-power-control`           | `https://api-gw-service-nmn.local/apis/power-control/v1/debug/pprof/` |
+| RTS                 | `cray-hms-rts`                 | not yet supported                                                     |
+| SCSD                | `cray-scsd`                    | not yet supported                                                     |
+| SLS                 | `cray-sls`                     | `https://api-gw-service-nmn.local/apis/sls/v1/debug/pprof/`           |
+| SMD                 | `cray-smd`                     | `https://api-gw-service-nmn.local/apis/smd/hsm/v2/debug/pprof/`       |
