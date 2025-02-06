@@ -210,17 +210,17 @@ kubectl top pod -n services --containers=true | grep -e NAME -e cray-power-contr
 
 ## Deployment Name And `PProf` URL Reference
 
-| Service             | Deployment Name                | Base `PProf` URL                                                      |
-|---------------------|--------------------------------|-----------------------------------------------------------------------|
-| BSS                 | `cray-bss`                     | `https://api-gw-service-nmn.local/apis/bss/debug/pprof/`              |
-| FAS                 | `cray-fas`                     | `https://api-gw-service-nmn.local/apis/fas/v1/debug/pprof/`           |
-| HBTD                | `cray-hbtd`                    | `https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/debug/pprof/`      |
-| hmcollector-ingress | `cray-hms-hmcollector-ingress` | unavailable outside service mesh                                      |
-| hmcollector-poll    | `cray-hms-hmcollector-poll`    | not yet supported                                                     |
-| HMNFD               | `cray-hmnfd`                   | `https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/debug/pprof/`     |
-| MEDS                | `cray-meds`                    | not yet supported                                                     |
-| PCS                 | `cray-power-control`           | `https://api-gw-service-nmn.local/apis/power-control/v1/debug/pprof/` |
-| RTS                 | `cray-hms-rts`                 | not yet supported                                                     |
-| SCSD                | `cray-scsd`                    | not yet supported                                                     |
-| SLS                 | `cray-sls`                     | `https://api-gw-service-nmn.local/apis/sls/v1/debug/pprof/`           |
-| SMD                 | `cray-smd`                     | `https://api-gw-service-nmn.local/apis/smd/hsm/v2/debug/pprof/`       |
+| Service               | Deployment Name                | Base `PProf` URL                                                      |
+|-----------------------|--------------------------------|-----------------------------------------------------------------------|
+| BSS                   | `cray-bss`                     | `https://api-gw-service-nmn.local/apis/bss/debug/pprof/`              |
+| FAS                   | `cray-fas`                     | `https://api-gw-service-nmn.local/apis/fas/v1/debug/pprof/`           |
+| HBTD                  | `cray-hbtd`                    | `https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/debug/pprof/`      |
+| `hmcollector-ingress` | `cray-hms-hmcollector-ingress` | unavailable outside service mesh                                      |
+| `hmcollector-poll`    | `cray-hms-hmcollector-poll`    | not yet supported                                                     |
+| HMNFD                 | `cray-hmnfd`                   | `https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/debug/pprof/`     |
+| MEDS                  | `cray-meds`                    | not yet supported                                                     |
+| PCS                   | `cray-power-control`           | `https://api-gw-service-nmn.local/apis/power-control/v1/debug/pprof/` |
+| RTS                   | `cray-hms-rts`                 | not yet supported                                                     |
+| SCSD                  | `cray-scsd`                    | not yet supported                                                     |
+| SLS                   | `cray-sls`                     | `https://api-gw-service-nmn.local/apis/sls/v1/debug/pprof/`           |
+| SMD                   | `cray-smd`                     | `https://api-gw-service-nmn.local/apis/smd/hsm/v2/debug/pprof/`       |
