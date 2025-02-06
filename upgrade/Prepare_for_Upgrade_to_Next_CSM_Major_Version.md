@@ -3,18 +3,6 @@
 
 Before beginning an upgrade from CSM 1.5 to CSM 1.6, there are a few things to do on the system first.
 
-- [Reduced resiliency during upgrade](#reduced-resiliency-during-upgrade)
-- [Preparation steps]
-
-   1. [Start typescript](#1-start-typescript)
-   1. [Ensure latest documentation installed](#2-ensure-latest-documentation-is-installed)
-   1. [Export Nexus data](#3-export-nexus-data)
-   1. [Adding switch admin password to Vault](#4-adding-switch-admin-password-to-vault)
-   1. [Ensure SNMP is configured on the management network switches](#5-ensure-snmp-is-configured-on-the-management-network-switches)
-   1. [Running sessions](#6-running-sessions)
-   1. [Health validation](#7-health-validation)
-   1. [Stop typescript](#8-stop-typescript)
-
 ## Reduced resiliency during upgrade
 
 **Warning:** Management service resiliency is reduced during the upgrade.
@@ -29,6 +17,15 @@ maintained by the remaining two nodes. If one of those two nodes has a fault bef
 completes its upgrade, then quorum would be lost.
 
 ## Preparation steps
+
+1. [Start typescript](#1-start-typescript)
+1. [Ensure latest documentation installed](#2-ensure-latest-documentation-is-installed)
+1. [Export Nexus data](#3-export-nexus-data)
+1. [Adding switch admin password to Vault](#4-adding-switch-admin-password-to-vault)
+1. [Ensure SNMP is configured on the management network switches](#5-ensure-snmp-is-configured-on-the-management-network-switches)
+1. [Running sessions](#6-running-sessions)
+1. [Health validation](#7-health-validation)
+1. [Stop typescript](#8-stop-typescript)
 
 ### 1. Start typescript
 
