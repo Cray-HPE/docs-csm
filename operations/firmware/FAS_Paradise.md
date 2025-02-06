@@ -27,7 +27,13 @@ The following targets can be updated with FAS on Paradise Nodes:
 
 ## Update Paradise `bmc_active` procedure
 
-NOTE: If a reset of the BMC is required, follow [this procedure](#reset-bmc) before and after the update of each node.  *Only do this if required!*
+NOTE: Some BMC firmware updates will require that factory defaults, or a
+factory reset, be applied.  You can check for this requirement when you
+download a new HFP firmware release.  It is very important to check for
+and perform this action if it is required. If a factory reset of the BMC
+is required, follow
+[the BMC factory reset procedure](#reset-bmc-factory-defaults) at the
+bottom of this page before updating the BMC firmware.
 
 The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to update `bmc_active` - use recipe `foxconn_nodeBMC_bmc.json`
 
@@ -70,10 +76,6 @@ kubectl -n services rollout restart deployment cray-hms-hmcollector-poll
 
 The nodes must be **OFF** before updating the BIOS
 
-**IMPORTANT:** After the update has completed, the nodes must be turned on and **REMAIN ON FOR AT LEAST 6 MINUTES**  
-
-**NOTE:** The version number reported by Redfish will NOT be updated until the node has fully booted.
-
 The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to update `bios_active` - use recipe `foxconn_nodeBMC_bios.json`
 
 To update using a JSON file and the Cray CLI, use this example JSON file and follow the [Updating Paradise Firmware with JSON and the Cray CLI Procedure](#update-paradise-firmware-using-json-file-and-cray-cli)
@@ -99,6 +101,20 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
   }
 }
 ```
+
+Some BIOS versions will require that BIOS factory defaults are applied to
+clear all prior settings **AFTER** the BIOS is updated.  You can check for
+this requirement when you download a new HFP firmware release. It is very
+important to check for and perform this action if it is required. If
+resetting BIOS factory defaults is required, follow the
+[BIOS factory defaults procedure](#reset-bios-factory-defaults) at the
+bottom of this page.
+
+If resetting BIOS factory defaults is not required, simply power the node on.
+
+**IMPORTANT:** After the update has completed, the nodes must be turned on and **REMAIN ON FOR AT LEAST 6 MINUTES**
+
+**NOTE:** The version number reported by Redfish will NOT be updated until the node has fully booted.
 
 ## Update Paradise `erot_active` procedure
 
@@ -385,28 +401,90 @@ If the firmware file you need is not listed, run the following command to copy t
 /usr/share/doc/csm/scripts/operations/firmware/upload_foxconn_images_tftp.py
 ```
 
-## Reset BMC
+## Reset BMC Factory Defaults
 
-This will reset the BMC to factory resets - including resetting the BMC username and password.
-*Only do this if required!*
+**IMPORTANT: Only perform this action if required!  Check Morpheus!**
 
-Before BMC firmware update (`ncn#`):
-
-The nodes must be **OFF** before updating BMC (when doing a reset)
+Run the following command prior to using FAS to update the BMC firmware.  This
+will reset the BMC to factory defaults (`ncn#`):
 
 ```bash
 ssh admin@$(xname) 'fw_setenv openbmconce "factory-reset"'
 ```
 
-**Update BMC firmware using one of the methods above**
-NOTE: If the password changes after the boot of BMC, FAS will no longer be able to verify the update and will fail after the time limit.
+Continue to update the BMC firmware using one of the methods above.
 
-After firmware update(`ncn#`):
+**NOTE:** The credentials for the `admin` account may have been
+reset along with the factory defaults.  Should this occur, FAS will no longer
+be able to verify the update after the BMC reboots and will fail after the
+time limit.  The BMC firmware update should still have succeeded despite
+this.  After the update is complete, return here to reset the `admin`
+password if necessary.
 
-If the password changed to something other than the what is stored in vault, update the BMC password:
+If the `admin` password changed to something other than the what is stored in
+vault, you may see something like the following when attempting to log in to
+the BMC:
+
+```text
+> ssh admin@x3000c0s33b3
+admin@x3000c0s33b3's password:
+
+The account is locked due to 10 failed logins.
+
+(5 minutes left to unlock)
+Permission denied, please try again.
+```
+
+You will need to wait until the lockout period expires and time your next
+login attempt to occur prior to other system services attempting to log in
+with the wrong password, locking you out again.  The factory default
+password that you will need to log in with to reset the password will not
+be mentioned here. Please request it from your HPE service representative.
+
+Time the following command to execute after the lockout period expires.
+Rather than specifying `password` for the new admin password, as shown
+in the example, specify the correct password found in vault for your
+system (`ncn#`):
 
 ```bash
 ssh admin@$(xname) 'ipmitool user set password 1 "password"'
 ```
 
-Boot the node.
+## Reset BIOS Factory Defaults
+
+**IMPORTANT: Only perform this action if required!  Check Morpheus!**
+
+Before proceeding, you must have first used FAS to update the BIOS on the
+target node **before** resetting the BIOS factory defaults. The node should
+remain powered **OFF** after the update.
+
+1. (`ncn#`) Reset BIOS factory defaults using `ipmitool`:
+
+    ```bash
+    ssh admin@$(bmc_xname) 'ipmitool raw 0x0 0x8 0x05 0x80 0x80 0x00 0x00 0x00 ; ipmitool raw 0x0 0x9 0x05 0x00 0x00'
+    ```
+
+    The expected results should look like this:
+
+    ```bash
+    01 05 80 80 00 00 00
+    ```
+
+    If the results do not look like this, please consult with your HPE service
+    representative before proceeding.
+1. Next, power the node on.
+
+    **IMPORTANT:** After the node has powered on, it must
+    **REMAIN ON FOR AT LEAST 6 MINUTES** before proceeding to the next step.
+
+1. (`ncn#`) Clear CMOS using `ipmitool`:
+
+    ```bash
+    ssh admin@$(bmc_xname) 'ipmitool chassis bootdev none clear-cmos=yes'
+    ```
+
+1. Power the node off.
+
+1. After node power is reported as **OFF**, then power it on again.
+
+1. Once node power is reported as **ON**, the BIOS update will be complete.
