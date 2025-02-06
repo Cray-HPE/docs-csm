@@ -129,6 +129,21 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Connectivity to Services with External IP addresses](../operations/network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
 * [DNS Configuration Issues](../operations/network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
 
+## Hardware Management System (HMS)
+
+* [Antero Node NID Allocation](known_issues/antero_node_NID_allocation.md)
+* [Component Power State Mismatch for SAT/HSM/CAPMC/PCS](known_issues/component_power_state_mismatch.md)
+* [Debugging With HMS PPROF Images](debugging_with_hms_pprof_images.md)
+* [Discovery Job Not Creating RedfishEndpoints in HSM](known_issues/discovery_job_not_creating_redfish_endpoints.md)
+* [Flags Set For Nodes In HSM](troubleshooting/known_issues/flags_set_for_nodes_in_hsm.md)
+* [Gigabyte BMC Missing Redfish Data](known_issues/Gigabyte_BMC_Missing_Redfish_Data.md)
+* [HPE iLO dropping event subscriptions and not properly transitioning power state](known_issues/hpe_systems_not_transitioning_power_state.md)
+* [Interpreting HMS Health Check Results](interpreting_hms_health_check_results.md)
+* [Manual BMC SSH Key Setting Process](BMC_SSH_key_manual_fixup.md)
+* [Running HMS CT Tests Manually](hms_ct_manual_run.md)
+* [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
+* [Test Failures Due To No Discovered Compute Nodes](known_issues/test_failures_no_discovered_computes_in_hsm.md)
+
 ## Kubernetes
 
 * [General Kubernetes Commands for Troubleshooting](kubernetes/Kubernetes_Troubleshooting_Information.md)
