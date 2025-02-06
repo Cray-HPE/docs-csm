@@ -4,7 +4,7 @@ There was an issue where image files larger than 5Gb were not correctly deleted 
 was deleted through the IMS service. These artifacts are no longer referenced by IMS but are still
 left in the S3 `boot-images` bucket and need to be deleted manually.
 
-This issue is resolved in CSM V1.6.1 and V1.7.0 and will not produce additional orphaned artifacts
+This issue is resolved in CSM 1.6.1 and 1.7.0 and will not produce additional orphaned artifacts
 after these versions, but orphaned artifacts may still exist on the system from previous versions if
 they have not been cleaned up.
 
@@ -12,7 +12,7 @@ they have not been cleaned up.
 
 - The latest CSM documentation RPM must be installed on the node where the procedure is being performed.
     - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
-- Ensure thre is an environment variable `CRAY_CREDENTIALS` pointing to an authentication token.
+- Ensure there is an environment variable `CRAY_CREDENTIALS` pointing to an authentication token.
     - See [Authenticate an Account with the Command Line](../../operations/security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md).
 
 ## Fix
