@@ -403,7 +403,7 @@ If the firmware file you need is not listed, run the following command to copy t
 
 ## Reset BMC Factory Defaults
 
-**IMPORTANT: Only perform this action if required!  Check Morpheus!**
+**IMPORTANT: Only perform this action if required!  Check the HFP release notes!**
 
 Run the following command prior to using FAS to update the BMC firmware.  This
 will reset the BMC to factory defaults (`ncn#`):
@@ -452,7 +452,7 @@ ssh admin@$(xname) 'ipmitool user set password 1 "password"'
 
 ## Reset BIOS Factory Defaults
 
-**IMPORTANT: Only perform this action if required!  Check Morpheus!**
+**IMPORTANT: Only perform this action if required!  Check the HFP release notes!**
 
 Before proceeding, you must have first used FAS to update the BIOS on the
 target node **before** resetting the BIOS factory defaults. The node should
