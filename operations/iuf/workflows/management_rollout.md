@@ -58,6 +58,20 @@ nodes. This initial test node is referred to as the "canary node". Modify the pr
 **`NOTE`** Additional arguments are available to control the behavior of the `management-nodes-rollout` stage, for example `--limit-management-rollout` and `-cmrp`. See the
 [`management-nodes-rollout` stage documentation](../stages/management_nodes_rollout.md) for details and adjust the examples below if necessary.
 
+**`NOTE`** When using the option `--limit-management-rollout` to pass the list of nodes for `management-nodes-rollout`, ensure that the label `iuf-prevent-rollout=true` is not set on any of the nodes passed in the list.
+
+1. (`ncn-m001#`) Verify if any nodes are labeled with `iuf-prevent-rollout=true`.
+
+    ```bash
+    kubectl get nodes --show-labels | grep iuf-prevent-rollout
+    ```
+
+1. (`ncn-m001#`) Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the node.
+
+    ```bash
+    kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
+    ```
+
 **`NOTE`** Known Issue: If IUF reports that multiple sessions are in progress for an activity, refer to [IUF does not run the next stage for an activity.](../../../troubleshooting/known_issues/iuf_unable_to_run_next_stage.md)
 
 **`IMPORTANT`** There is a different procedure for `management-nodes-rollout` depending on whether or not CSM is being upgraded. The two procedures differ in the handling of NCN storage nodes and NCN master nodes. If CSM is not
@@ -90,7 +104,7 @@ Refer to that table and any corresponding product documents before continuing to
         ```
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
+        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
         ```
 
     1. (`ncn-m#`) Verify that the storage canary node booted successfully with the desired CFS configuration.
@@ -113,7 +127,7 @@ Refer to that table and any corresponding product documents before continuing to
         ```
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_NODES}
+        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_NODES}
         ```
 
     1. (`ncn-m001#`) Verify that all storage nodes configured successfully.
@@ -135,7 +149,7 @@ Refer to that table and any corresponding product documents before continuing to
         (`ncn-m001#`) Execute the `management-nodes-rollout` stage with `ncn-m002`.
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ncn-m002
+        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ncn-m002
         ```
 
         > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
@@ -155,7 +169,7 @@ Refer to that table and any corresponding product documents before continuing to
         (`ncn-m001#`) Execute the `management-nodes-rollout` stage with `ncn-m003`.
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ncn-m003
+        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ncn-m003
         ```
 
         > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
@@ -381,7 +395,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     ```
 
     ```bash
-    iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${WORKER_CANARY}
+    iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${WORKER_CANARY}
     ```
 
 1. Verify the canary node booted successfully with the desired image and CFS configuration.
@@ -415,7 +429,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     1. (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout Management_Worker
+        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout Management_Worker
         ```
 
     1. (`ncn-m001#`) Execute `management-nodes-rollout` on a group of worker nodes. The list of worker nodes can be manually edited if it is undesirable to rebuild/upgrade all of the workers with one execution.
@@ -426,7 +440,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
         ```
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout $WORKER_NODES
+        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout $WORKER_NODES
         ```
 
 1. (`ncn-m001#`) Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the canary node.

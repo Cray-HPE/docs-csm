@@ -1,20 +1,7 @@
 <!-- markdownlint-disable MD013 -->
-# Prepare For Upgrade
+# Prepare for Upgrade to Next CSM Major Version
 
-Before beginning an upgrade to a new version of CSM, there are a few things to do on the system
-first.
-
-- [Reduced resiliency during upgrade](#reduced-resiliency-during-upgrade)
-- [Preparation steps]
-
-   1. [Start typescript](#1-start-typescript)
-   1. [Ensure latest documentation installed](#2-ensure-latest-documentation-is-installed)
-   1. [Export Nexus data](#3-export-nexus-data)
-   1. [Adding switch admin password to Vault](#4-adding-switch-admin-password-to-vault)
-   1. [Ensure SNMP is configured on the management network switches](#5-ensure-snmp-is-configured-on-the-management-network-switches)
-   1. [Running sessions](#6-running-sessions)
-   1. [Health validation](#7-health-validation)
-   1. [Stop typescript](#8-stop-typescript)
+Before beginning an upgrade from CSM 1.7 to CSM 1.8, there are a few things to do on the system first.
 
 ## Reduced resiliency during upgrade
 
@@ -30,6 +17,15 @@ maintained by the remaining two nodes. If one of those two nodes has a fault bef
 completes its upgrade, then quorum would be lost.
 
 ## Preparation steps
+
+1. [Start typescript](#1-start-typescript)
+1. [Ensure latest documentation installed](#2-ensure-latest-documentation-is-installed)
+1. [Export Nexus data](#3-export-nexus-data)
+1. [Adding switch admin password to Vault](#4-adding-switch-admin-password-to-vault)
+1. [Ensure SNMP is configured on the management network switches](#5-ensure-snmp-is-configured-on-the-management-network-switches)
+1. [Running sessions](#6-running-sessions)
+1. [Health validation](#7-health-validation)
+1. [Stop typescript](#8-stop-typescript)
 
 ### 1. Start typescript
 
@@ -51,6 +47,7 @@ When resuming a procedure after a break, always be sure that a typescript is run
 Before following the steps to prepare for the upgrade, make sure that the latest CSM documentation RPMs are
 installed on any NCNs where preparation procedures are being performed. These should be for the **`CURRENT`**
 CSM version on the system -- not the target version of the upgrade.
+
 See [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation) for instructions.
 
 ### 3. Export Nexus data
@@ -155,9 +152,7 @@ Return here after verifying that SNMP is properly configured on the management n
    starts. After the upgrade is completed, another health check is performed, and it is important to know
    if any problems observed at that time existed prior to the upgrade.
 
-   **`IMPORTANT`**: See the [`CSM Install Validation and Health Checks`](../operations/validate_csm_health.md) procedures in the
-   documentation for the **`CURRENT`** CSM version on the system. The validation procedures in the CSM
-   documentation are only intended to work with that specific version of CSM.
+   Reference [Validate CSM Health](../operations/validate_csm_health.md) for details.
 
 1. Validate Lustre health.
 

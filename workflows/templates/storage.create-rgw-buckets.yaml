@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -48,7 +48,7 @@ spec:
                     TARGET_NCN="{{inputs.parameters.targetNcn}}"
                     if [[ ${TARGET_NCN} == "ncn-s001" ]]; then
                       scp /usr/share/doc/csm/upgrade/scripts/ceph/create_rgw_buckets.sh ${TARGET_NCN}:/tmp
-                      ssh ${TARGET_NCN} '/tmp/create_rgw_buckets.sh'
+                      ssh ${TARGET_NCN} '/tmp/create_rgw_buckets.sh; rm /tmp/create_rgw_buckets.sh'
                     else
                       echo "Creating rgw-buckets only needs to be done once on ncn-s001. Skipping this task on ${TARGET_NCN}"
                     fi

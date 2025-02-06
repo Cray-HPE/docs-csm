@@ -27,15 +27,14 @@ the steps below it provide detailed instructions which must be executed in the o
 The CSM upgrade steps are run automatically, either directly through IUF stages or by a hook automatically executed at the beginning or end of an IUF stage.
 For more detail about about the CSM upgrade hooks, see the section [description of CSM upgrade hooks](#description-of-csm-upgrade-hooks).
 
-![Upgrade CSM and additional products with IUF](../../../img/operations/diagram_upgrade_csm_stack_with_IUF_101624.png)
+![Upgrade CSM and additional products with IUF](../../../img/operations/diagram_csm_stack_upgrade_01132025.png)
 
-1. CSM preparation
-
-   Read the _Important Notes_ section of the
+1. Read the _Important Notes_ section of the
    [CSM 1.5.0 or later to 1.6.0 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
-   documentation and then follow only these CSM instructions in order:
+   documentation.
 
-   1. [Prepare for Upgrade](../../../upgrade/prepare_for_upgrade.md)
+1. [Prepare for Upgrade to Next CSM Major Version](https://github.com/Cray-HPE/docs-csm/tree/release/1.6/upgrade/Prepare_for_Upgrade_to_Next_CSM_Major_Version.md)
+   in the CSM 1.6 documentation.
 
 1. Prepare for the upgrade procedure and download product media
 

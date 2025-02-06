@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -60,5 +60,4 @@ spec:
                 - name: scriptContent
                   value: |
                     TARGET_NCN="{{inputs.parameters.targetNcn}}"
-                    ssh $TARGET_NCN -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-storage.yaml \
-                      --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
+                    ssh $TARGET_NCN -t '/opt/cray/tests/install/ncn/automated/ncn-upgrade-tests-storage' 

@@ -4,7 +4,7 @@
 
 PowerDNS replaces the CoreDNS server that earlier versions of CSM used to provide External DNS services.
 
-The `cray-dns-powerdns-can-tcp` and `cray-dns-powerdns-can-udp` `LoadBalancer` resources are configured to service external DNS requests using the IP address specified by the CSI `--cmn-external-dns` command line argument.
+The `cray-dns-powerdns-cmn-tcp` and `cray-dns-powerdns-cmn-udp` `LoadBalancer` resources are configured to service external DNS requests using the IP address specified by the CSI `--cmn-external-dns` command line argument.
 
 The CSI `--system-name` and `--site-domain` command line arguments are combined to form the subdomain used for External DNS.
 
@@ -21,8 +21,8 @@ Example output:
 ```text
 NAME                        TYPE           CLUSTER-IP      EXTERNAL-IP    PORT(S)        AGE
 cray-dns-powerdns-api       ClusterIP      10.24.24.29     <none>         8081/TCP       21d
-cray-dns-powerdns-can-tcp   LoadBalancer   10.27.91.157    10.101.8.113   53:30726/TCP   21d
-cray-dns-powerdns-can-udp   LoadBalancer   10.17.232.118   10.101.8.113   53:30810/UDP   21d
+cray-dns-powerdns-cmn-tcp   LoadBalancer   10.27.91.157    10.101.8.113   53:30726/TCP   21d
+cray-dns-powerdns-cmn-udp   LoadBalancer   10.17.232.118   10.101.8.113   53:30810/UDP   21d
 cray-dns-powerdns-hmn-tcp   LoadBalancer   10.31.228.190   10.94.100.85   53:31080/TCP   21d
 cray-dns-powerdns-hmn-udp   LoadBalancer   10.24.134.53    10.94.100.85   53:31338/UDP   21d
 cray-dns-powerdns-nmn-tcp   LoadBalancer   10.22.159.196   10.92.100.85   53:31996/TCP   21d
@@ -128,7 +128,7 @@ zone "8.101.10.in-addr.arpa" {
 
 `masters` should be set to the CMN IP address of the PowerDNS service. This is typically defined at install time by the `--cmn-external-dns` CSI option.
 
-`allow-notify` should contain the CAN IP addresses of all Kubernetes worker nodes.
+`allow-notify` should contain the CMN IP addresses of all Kubernetes worker nodes.
 
 ## DNS Security Extensions and zone transfer
 
@@ -235,7 +235,7 @@ key "system-key" {
         algorithm hmac-sha256;
         secret "dnFC5euKixIKXAr6sZhI7kVQbQCXoDG5R5eHSYZiBxY=";
 };
-# Primary server IP address (i.e., PowerDNS CAN ip)
+# Primary server IP address (i.e., PowerDNS CMN ip)
 server 10.101.8.113 {
         keys {
                 system-key;

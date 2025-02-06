@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -65,7 +65,7 @@ spec:
               path: "{{inputs.parameters.script_stdout_file}}"
       script:
         # Note that the tag is replaced at install time by update_tags.sh
-        image: artifactory.algol60.net/csm-docker/stable/cray-sat:3.26.0
+        image: artifactory.algol60.net/csm-docker/stable/cray-sat:3.33.10
         command: [sh]
         source: |
           #!/bin/sh

@@ -1063,6 +1063,13 @@ preconfig
 - operations/node_management/Configuration_of_NCN_Bonding.md
 NetPlan
 
+- operations/node_management/S3FS_Usage_and_Guidelines.md
+creds
+radosgw
+rpms
+s3
+s3fs
+
 - operations/power_management/Power_Off_Compute_and_IO_Cabinets.md
 lockout-tagout
 
