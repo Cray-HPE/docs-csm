@@ -161,7 +161,7 @@ The following `curl` command demonstrates how to request a `pprof` profile
 from the PCS service:
 
 ```bash
-curl -sk -H "Authorization: Bearer ${TOKEN}" https://localhost:8088/apis/power-control/v1/debug/pprof/heap -o pcs.heap.02062024.pprof
+curl -sk -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/power-control/v1/debug/pprof/heap -o pcs.heap.02062024.pprof
 ```
 
 Note the descriptive nature of the profile's output file.  It is always
