@@ -45,7 +45,7 @@ gathered and sent back to HPE for review.
 Throughout the documentation below, we will use PCS (Power Control
 Service) in the provided examples.
 
-## How To Deploy A `PProf` Enabled Container Image
+## Deploying `PProf` Enabled Container Images
 
 ### Edit Deployment
 
@@ -54,6 +54,9 @@ Service) in the provided examples.
     ```bash
     kubectl -n services edit deployment/cray-power-control
     ```
+
+    Refer to [Deployment Name And PProf URL Reference](#deployment-name-and-pprof-url-reference)
+    for the deployment names of other HMS services.
 
 1. (`ncn#`) Search for the container image by looking for the text
   string `image:`
@@ -104,6 +107,9 @@ image.
     kubectl -n services edit deployment/cray-power-control
     ```
 
+    Refer to [Deployment Name And PProf URL Reference](#deployment-name-and-pprof-url-reference)
+    for the deployment names of other HMS services.
+
 1. (`ncn#`) Search for the `pprof` enabled container image by looking for
 the text string `image:`
 
@@ -127,18 +133,36 @@ completed restarting by watching them with:
 
 1. Once the pods have been restarted you are complete.
 
+
 ## Gathering Profiles
-
-tbd
-
-### URL Reference
 
 tbd
 
 ### Using Curl
 
-tbd
+See [Deployment Name And PProf URL Reference](#deployment-name-and-pprof-url-reference)
+for the base `pprof` URL for each HMS service.
 
 ## Send Profile Back To HPE
 
+Any profiles gathered should be attached to your support case.  HPE will
+analyze and provide feedback.
+
+## Deployment Name And PProf URL Reference
+
 tbd
+
+| Service             | Deployment Name              | Base `PProf` URL                                                    |
+|---------------------|------------------------------|---------------------------------------------------------------------|
+| BSS                 | cray-bss                     | https://api-gw-service-nmn.local/apis/bss/debug/pprof/              |
+| FAS                 | cray-fas                     | https://api-gw-service-nmn.local/apis/fas/v1/debug/pprof/           |
+| HBTD                | cray-hbtd                    | https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/debug/pprof/      |
+| hmcollector-ingress | cray-hms-hmcollector-ingress | unavailable outside service mesh                                    |
+| hmcollector-poll    | cray-hms-hmcollector-poll    | not yet supported                                                   |
+| HMNFD               | cray-hmnfd                   | https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/debug/pprof/     |
+| MEDS                | cray-meds                    | not yet supported                                                   |
+| PCS                 | cray-power-control           | https://api-gw-service-nmn.local/apis/power-control/v1/debug/pprof/ |
+| RTS                 | cray-hms-rts                 | not yet supported                                                   |
+| SCSD                | cray-scsd                    | not yet supported                                                   |
+| SLS                 | cray-sls                     | https://api-gw-service-nmn.local/apis/sls/v1/debug/pprof/           |
+| SMD                 | cray-smd                     | https://api-gw-service-nmn.local/apis/smd/hsm/v2/debug/pprof/       |
