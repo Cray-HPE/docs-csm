@@ -29,7 +29,7 @@ The following targets can be updated with FAS on Paradise Nodes:
 
 NOTE: Some BMC firmware updates will require that factory defaults, or a
 factory reset, be applied.  You can check for this requirement when you
-download new firmware from Morpheus.  It is very important to check for
+download a new HFP firmware release.  It is very important to check for
 and perform this action if it is required. If a factory reset of the BMC
 is required, follow
 [the BMC factory reset procedure](#reset-bmc-factory-defaults) at the
@@ -103,8 +103,8 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
 ```
 
 Some BIOS versions will require that BIOS factory defaults are applied to
-clear all prior settings **AFTER** the BIOS is updated. You can check for
-this requirement when you download a new BIOS from Morpheus.  It is very
+clear all prior settings **AFTER** the BIOS is updated.  You can check for
+this requirement when you download a new HFP firmware release. It is very
 important to check for and perform this action if it is required. If
 resetting BIOS factory defaults is required, follow the
 [BIOS factory defaults procedure](#reset-bios-factory-defaults) at the
