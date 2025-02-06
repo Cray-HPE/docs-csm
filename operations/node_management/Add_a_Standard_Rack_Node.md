@@ -66,7 +66,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
         ```bash
         NID=1
         ALIAS=nid000001
-        jq -n --arg ALIAS "${ALIAS}" --arg NID "${NID}" '{
+        jq -n --arg ALIAS "${ALIAS}" --argjson NID "${NID}" '{
             Aliases:[$ALIAS],
             NID: $NID, 
             Role: "Compute"
@@ -80,7 +80,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
           "Aliases": [
             "nid000001"
           ],
-          "NID": "1",
+          "NID": 1,
           "Role": "Compute"
         }
         ```
