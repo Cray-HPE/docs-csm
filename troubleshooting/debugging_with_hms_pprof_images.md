@@ -1,31 +1,14 @@
 # Debugging With HMS `PProf` Images
 
-- [Interpreting HMS Health Check Results](#interpreting-hms-health-check-results)
-    - [Introduction](#introduction)
-    - [Prerequisites](#prerequisites)
-    - [Overview](#overview)
-    - [Execution](#execution)
-        - [Test all HMS services](#test-all-hms-services)
-        - [Test specific HMS service](#test-specific-hms-service)
-        - [Example output](#example-output)
-    - [Failure analysis](#failure-analysis)
-        - [Smoke test failure](#smoke-test-failure)
-        - [Functional test failure](#functional-test-failure)
-    - [Tavern output](#tavern-output)
-    - [Additional troubleshooting](#additional-troubleshooting)
-        - [`run_hms_ct_tests.sh`](#run_hms_ct_testssh)
-            - [`cray-hms-smd-test-functional`](#cray-hms-smd-test-functional)
-                - [`test_components.tavern.yaml` and `test_hardware.tavern.yaml`](#test_componentstavernyaml-and-test_hardwaretavernyaml)
-                - [`test_components.tavern.yaml`](#test_componentstavernyaml)
-            - [`cray-hms-firmware-action-test-functional`](#cray-hms-firmware-action-test-functional)
-                - [`test_actions.tavern.yaml`](#test_actionstavernyaml)
-            - [`cray-power-control-test-functional`](#cray-power-control-test-functional)
-                - [`test_power-status.tavern.yaml`](#test_power-statustavernyaml)
-        - [`hsm_discovery_status_test.sh`](#hsm_discovery_status_testsh)
-            - [`HTTPsGetFailed`](#httpsgetfailed)
-            - [`ChildVerificationFailed`](#childverificationfailed)
-            - [`DiscoveryStarted`](#discoverystarted)
-    - [Install blocking vs. Non-blocking failures](#install-blocking-vs-non-blocking-failures)
+- [Introduction](#introduction)
+- [Deploying PProf Enabled Container Images](#deploying-pprof-enabled-container-images)
+    - [Edit Deployment](#edit-deployment)
+    - [Possibly Scale Down Replicas](#possibly-scale-down-replicas)
+    - [Important Note On Persistence](#important-note-on-persistence)
+    - [Restore Production Container Image](#restore-production-container-image)
+- [Gather Profiles](#gather-profiles)
+- [Sending Profiles To HPE Service](#sending-profiles-to-hpe-service)
+- [Deployment Name And PProf URL Reference](#deployment-name-and-pprof-url-reference)
 
 ## Introduction
 
@@ -46,7 +29,7 @@ that profiles can be gathered and sent back to HPE for review.
 Throughout this documentation, we will refer to PCS (Power Control
 Service) in the provided examples.
 
-## Deploying `PProf` Enabled Container Images
+## Deploying PProf Enabled Container Images
 
 ### Edit Deployment
 
@@ -123,7 +106,7 @@ of that service, the change to the `pprof` enabled image will not persist.
 You must repeat the steps above after the upgrade or downgrade in order to
 put the `pprof` enabled container image back into place.
 
-### Restore The Non-`PProf` Enabled Container Image When Done
+### Restore Production Container Image
 
 After the necessary profiles have been collected and no further debugging
 with `pprof` is required, set the service's image back to its production
@@ -162,7 +145,7 @@ completed restarting by watching them restart with:
 1. Once all of the pods have been restarted you are complete.
 
 
-## Gathering Profiles
+## Gather Profiles
 
 In order to request a `pprof` profile, you must provide a valid
 authentication token along with your request.  Perform the following
@@ -208,7 +191,7 @@ profile.
 HPE Service will communicate which profiles to gather and any additional
 arguments that may be necessary.
 
-## Provide Profile To HPE Service
+## Sending Profiles To HPE Service
 
 Simply attach any gathered profiles to your open case. Invariably, HPE
 Service will also request output from the following commands.  Please
