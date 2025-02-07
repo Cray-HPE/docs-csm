@@ -22,7 +22,7 @@ all of the artifacts in the `boot-images` bucket in S3 and finds the artifacts t
 a valid IMS image. There is a `--dry-run` option which will only list the artifacts found; without that
 option the script will delete the orphaned artifacts.
 
-1. (`ncn-mw#`) Run the script in `dry run` mode
+1. (`ncn-mw#`) Run the script in `dry run` mode.
 
   Running the script with `--dry-run` as an argument will list the files that
   it finds that are orphaned without deleting anything. Do this first to inspect
@@ -56,7 +56,7 @@ option the script will delete the orphaned artifacts.
   Total orphaned: 303.84Gb
   ```
 
-1. (`ncn-mw#`) Delete the orphaned artifacts
+1. (`ncn-mw#`) Delete the orphaned artifacts.
 
   NOTE: This step is not reversible so make sure none of the files listed in the
   previous step are incorrectly identified.
