@@ -33,7 +33,7 @@ kubectl -n kube-system get pod -l name=weave-net -o wide
 
 Example output:
 
-```console
+```text
 NAME              READY   STATUS    RESTARTS      AGE   IP            NODE       NOMINATED NODE   READINESS GATES
 weave-net-9hvch   2/2     Running   1 (34h ago)   34h   10.252.1.13   ncn-w004   <none>           <none>
 weave-net-brsnc   2/2     Running   1 (34h ago)   34h   10.252.1.9    ncn-w001   <none>           <none>
@@ -60,7 +60,7 @@ weave --local status connections
 
 Example output:
 
-```console
+```text
 -> 10.252.1.10:6783      established fastdp 0a:71:c0:05:59:11(ncn-m003) mtu=1376
 -> 10.252.1.11:6783      established fastdp da:cf:fe:8a:46:28(ncn-m002) mtu=1376
 -> 10.252.1.14:6783      established fastdp d6:5c:7b:4d:80:4f(ncn-w005) mtu=1376
@@ -72,7 +72,7 @@ Example output:
 
 Example output if a node has degraded into Sleeve mode:
 
-```console
+```text
 <- 10.252.1.14:60853     established sleeve d6:5c:7b:4d:80:4f(ncn-w005) mtu=8938
 ```
 
@@ -80,7 +80,7 @@ The health checks run as part of [Validate CSM Health](../operations/validate_cs
 
 Example output:
 
-```console
+```text
 Result: FAIL
 Source: http://ncn-m001.hmn:9001/ncn-kubernetes-tests-master
 Test Name: Weave Health
@@ -95,7 +95,7 @@ command or the `/var/log/messages` file for neighbor table overflow messages.
 
 Example output:
 
-```console
+```text
 [Tue Jul 23 14:51:07 2024] neighbour: arp_cache: neighbor table overflow!
 ```
 
@@ -119,7 +119,7 @@ As indicated in [Check the status of the Weave connections](#check-the-status-of
 
    Example output:
 
-   ```console
+   ```text
    19: weave: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1376 qdisc noqueue state UP group default qlen 1000
    link/ether e2:92:46:1a:36:55 brd ff:ff:ff:ff:ff:ff
    inet 10.43.0.0/12 brd 10.47.255.255 scope global weave
@@ -136,7 +136,7 @@ As indicated in [Check the status of the Weave connections](#check-the-status-of
   
    Example output:
 
-   ```console
+   ```yaml
    - name: HOSTNAME
      valueFrom:
        fieldRef:
@@ -158,7 +158,7 @@ As indicated in [Check the status of the Weave connections](#check-the-status-of
 
    Example output:
 
-   ```console
+   ```text
    1376
    ```
 
