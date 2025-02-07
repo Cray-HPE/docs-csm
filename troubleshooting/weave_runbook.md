@@ -165,4 +165,4 @@ As indicated in [Check the status of the Weave connections](#check-the-status-of
 If the MTU on the `weave` network interface is incorrect but the MTU in the `weave-net` DaemonSet is configured correctly,
 restart the `weave-net` Pod on the affected node. If restarting the Pod fails to resolve the problem then reboot the node.
 
-If the DaemonSet or BSS metadata value is set incorrectly refer to [Cray FN #6636 - Shasta 1.4 Weave MTU Regression](https://support.hpe.com/hpesc/docDisplay?docLocale=en_US&docId=crsc6636en_us)
+If the DaemonSet or BSS metadata value is set incorrectly, refer to [Cray FN #6636 - Shasta 1.4 Weave MTU Regression](https://support.hpe.com/hpesc/docDisplay?docLocale=en_US&docId=crsc6636en_us)
