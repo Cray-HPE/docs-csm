@@ -13,17 +13,15 @@ nodes enabling Pod-to-Pod communication.
 
 Weave has two modes of operation.
 
-- Fast path mode (`fastdp`) which operates in kernel space and uses `VxLAN` for encapsulation.
+- Fast path mode (`fastdp`) which operates in kernel space and uses `VxLAN` for encapsulation. CSM uses Weave in this mode.
 - Sleeve mode which operates in user space. This mode can support features such as encryption of L2 traffic but has a
   noticeable performance impact.
 
-CSM uses Weave in `fastdp` mode.
-
 Weave problem can manifest themselves in a number of ways
 
-- DNS lookups may fail
-- `cray` CLI commands run on Kubernetes nodes may fail
-- Pods may show signs of network communication problems in their logs, for example connection timeouts
+- DNS lookups may fail.
+- `cray` CLI commands run on Kubernetes nodes may fail.
+- Pods may show signs of network communication problems in their logs, for example connection timeouts.
 
 ## Check the status of the Weave Pods
 
