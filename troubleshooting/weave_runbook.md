@@ -106,7 +106,7 @@ correctly for the system.
 
 ## Check the Weave maximum transmission unit (MTU)
 
-If the Weave MTU is mismatched between nodes poor performance may be observed and one or more of the Weave connections may degrade
+If the Weave MTU is mismatched between nodes, poor performance may be observed and one or more of the Weave connections may degrade
 into Sleeve mode.
 
 As indicated in [Check the status of the Weave connections](#check-the-status-of-the-weave-connections) the Weave MTU should be `1367`
