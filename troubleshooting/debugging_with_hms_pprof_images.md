@@ -45,13 +45,13 @@ Service) in the provided examples.
 1. (`ncn#`) Search for the container image by looking for the text
   string `image:`
 
-    ```bash
+    ```yaml
     image: artifactory.algol60.net/csm-docker/stable/cray-power-control:2.7.0
     ```
 
 1. (`ncn#`) Append the string `-pprof` to the end of the image name:
 
-    ```bash
+    ```yaml
     image: artifactory.algol60.net/csm-docker/stable/cray-power-control-pprof:2.7.0
     ```
 
@@ -124,13 +124,13 @@ image.
 1. (`ncn#`) Search for the `pprof` enabled container image by looking for
 the text string `image:`
 
-    ```bash
+    ```yaml
     image: artifactory.algol60.net/csm-docker/stable/cray-power-control-pprof:2.7.0
     ```
 
 1. (`ncn#`) Remove the substring `-pprof` from the end of the image name:
 
-    ```bash
+    ```yaml
     image: artifactory.algol60.net/csm-docker/stable/cray-power-control:2.7.0
     ```
 
