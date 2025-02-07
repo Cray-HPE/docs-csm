@@ -143,6 +143,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Restore Postgres](../operations/kubernetes/Restore_Postgres.md)
 * [Disaster Recovery for Postgres](../operations/kubernetes/Disaster_Recovery_Postgres.md)
 * [Postgres Database is in Recovery](known_issues/postgres_database_recovery.md)
+* [Weave Container Network Interface Troubleshooting](weave_runbook.md)
 
 ## MetalLB
 
