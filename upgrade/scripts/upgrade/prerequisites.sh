@@ -939,7 +939,6 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-do_upgrade_csm_chart cray-psp platform.yaml
 do_upgrade_csm_chart cray-postgres-operator platform.yaml
 do_upgrade_csm_chart cray-iuf platform.yaml
 do_upgrade_csm_chart cray-nls platform.yaml
