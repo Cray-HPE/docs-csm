@@ -99,7 +99,7 @@ Example output:
 [Tue Jul 23 14:51:07 2024] neighbour: arp_cache: neighbor table overflow!
 ```
 
-If the ARP cache is too small then performance will be poor as entries are continually purged from and added to the cache.
+If the ARP cache is too small, then performance will be poor as entries are continually purged from and added to the cache.
 
 See the [ARP Cache Tuning Guide](../operations/configuration_management/ARP_cache_tuning.md) for guidance on sizing the cache
 correctly for the system.
