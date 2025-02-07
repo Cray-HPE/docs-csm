@@ -45,10 +45,10 @@ weave-net-tzgzx   2/2     Running   1 (34h ago)   34h   10.252.1.11   ncn-m002  
 weave-net-w5r64   2/2     Running   1 (34h ago)   34h   10.252.1.10   ncn-m003   <none>           <none>
 ```
 
-Every CSM master and worker node should have a `weave-net` Pod. If a node is missing from the output verify it is a member of the Kubernetes cluster.
+Every CSM master and worker node should have a `weave-net` Pod. If a node is missing from the output, verify it is a member of the Kubernetes cluster.
 
 One commonly seen problem is that a `weave-net` Pod has been evicted from the node. The usual cause of this is the root file system filling up beyond 80% full.
-To correct this issue resolve the problem that caused the `weave-net` Pod to be evicted and the restart it if necessary.
+To correct this issue, resolve the problem that caused the `weave-net` Pod to be evicted and then restart it if necessary.
 
 ## Check the status of the Weave connections
 
@@ -99,14 +99,14 @@ Example output:
 [Tue Jul 23 14:51:07 2024] neighbour: arp_cache: neighbor table overflow!
 ```
 
-If the ARP cache is too small then performance will be poor as entries are continually purged from and added to the cache.
+If the ARP cache is too small, then performance will be poor as entries are continually purged from and added to the cache.
 
 See the [ARP Cache Tuning Guide](../operations/configuration_management/ARP_cache_tuning.md) for guidance on sizing the cache
 correctly for the system.
 
 ## Check the Weave maximum transmission unit (MTU)
 
-If the Weave MTU is mismatched between nodes poor performance may be observed and one or more of the Weave connections may degrade
+If the Weave MTU is mismatched between nodes, poor performance may be observed and one or more of the Weave connections may degrade
 into Sleeve mode.
 
 As indicated in [Check the status of the Weave connections](#check-the-status-of-the-weave-connections) the Weave MTU should be `1367`
@@ -162,7 +162,7 @@ As indicated in [Check the status of the Weave connections](#check-the-status-of
    1376
    ```
 
-If the MTU on the `weave` network interface is incorrect but the MTU in the `weave-net` DaemonSet is configured correctly
+If the MTU on the `weave` network interface is incorrect but the MTU in the `weave-net` DaemonSet is configured correctly,
 restart the `weave-net` Pod on the affected node. If restarting the Pod fails to resolve the problem then reboot the node.
 
-If the DaemonSet or BSS metadata value is set incorrectly refer to [Cray FN #6636 - Shasta 1.4 Weave MTU Regression](https://support.hpe.com/hpesc/docDisplay?docLocale=en_US&docId=crsc6636en_us)
+If the DaemonSet or BSS metadata value is set incorrectly, refer to [Cray FN #6636 - Shasta 1.4 Weave MTU Regression](https://support.hpe.com/hpesc/docDisplay?docLocale=en_US&docId=crsc6636en_us)
