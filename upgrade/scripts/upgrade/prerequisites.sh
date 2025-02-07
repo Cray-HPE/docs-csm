@@ -691,7 +691,6 @@ fi
 
 do_upgrade_csm_chart cray-keycloak platform.yaml
 do_upgrade_csm_chart cray-oauth2-proxies platform.yaml
-do_upgrade_csm_chart spire sysmgmt.yaml
 do_upgrade_csm_chart cray-spire sysmgmt.yaml
 do_upgrade_csm_chart cray-tapms-crd sysmgmt.yaml
 do_upgrade_csm_chart cray-tapms-operator sysmgmt.yaml
