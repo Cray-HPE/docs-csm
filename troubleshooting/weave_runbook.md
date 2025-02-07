@@ -17,7 +17,7 @@ Weave has two modes of operation.
 - Sleeve mode which operates in user space. This mode can support features such as encryption of L2 traffic but has a
   noticeable performance impact.
 
-Weave problem can manifest themselves in a number of ways
+Weave problems can manifest in a number of ways.
 
 - DNS lookups may fail.
 - `cray` CLI commands run on Kubernetes nodes may fail.
