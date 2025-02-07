@@ -45,7 +45,7 @@ weave-net-tzgzx   2/2     Running   1 (34h ago)   34h   10.252.1.11   ncn-m002  
 weave-net-w5r64   2/2     Running   1 (34h ago)   34h   10.252.1.10   ncn-m003   <none>           <none>
 ```
 
-Every CSM master and worker node should have a `weave-net` Pod. If a node is missing from the output verify it is a member of the Kubernetes cluster.
+Every CSM master and worker node should have a `weave-net` Pod. If a node is missing from the output, verify it is a member of the Kubernetes cluster.
 
 One commonly seen problem is that a `weave-net` Pod has been evicted from the node. The usual cause of this is the root file system filling up beyond 80% full.
 To correct this issue resolve the problem that caused the `weave-net` Pod to be evicted and the restart it if necessary.
