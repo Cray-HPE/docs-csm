@@ -76,6 +76,20 @@ Example output if a node has degraded into Sleeve mode:
 <- 10.252.1.14:60853     established sleeve d6:5c:7b:4d:80:4f(ncn-w005) mtu=8938
 ```
 
+The health checks run as part of [Validate CSM Health](../operations/validate_csm_health.md) also detect if a node is running in Sleeve mode.
+
+Example output:
+
+```console
+Result: FAIL
+Source: http://ncn-m001.hmn:9001/ncn-kubernetes-tests-master
+Test Name: Weave Health
+Description: Check that Weave is healthy. Run "weave --local status connections" on any unhealthy node and check the MTU.
+Test Summary: Command: k8s_check_weave_status: stdout: patterns not found: [!/.*sleeve/]
+Execution Time: 0.000059541 seconds
+Node: ncn-m001
+```
+
 A common cause of this problem is an incorrectly sized ARP cache. On the affected node check the output of the `dmesg`
 command or the `/var/log/messages` file for neighbor table overflow messages.
 
