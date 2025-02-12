@@ -34,6 +34,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 ## Known issues
 
+* [Barebones Boot Test Failure](known_issues/barebones_boot_test_failure.md)
 * [SAT/HSM/CAPMC/PCS Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
 * [HMS Discovery job not creating `RedfishEndpoint`s in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
 * [SSL Certificate Validation Issues](known_issues/ssl_certificate_validation_issues.md)

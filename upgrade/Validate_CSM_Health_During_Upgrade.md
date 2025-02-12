@@ -3,8 +3,8 @@
 - Before performing the health validation, be sure that at least 15 minutes have elapsed
   since the CSM services were upgraded. This allows the various Kubernetes resources to
   initialize and start.
-- Although it is not recommended, the [Booting CSM `barebones` image](../operations/validate_csm_health.md#5-booting-csm-barebones-image)
-  test may be skipped if all compute nodes are active running application workloads.
+- The [Booting CSM `barebones` image](../operations/validate_csm_health.md#5-booting-csm-barebones-image)
+  > This test is broken in CSM 1.6.0 and should be skipped for that release. For more information, see the known issue, [Barebones Boot Test Failure](../troubleshooting/known_issues/barebones_boot_test_failure.md).
 
 1. (`ncn-m002#`) If a typescript session is already running in the shell, then first stop it with the `exit` command.
 

@@ -524,6 +524,8 @@ For additional details and troubleshooting information, see
 
 ### 5.1 Run the test script
 
+> Note: In CSM 1.6.0, a known issue causes a [Barebones Boot Test Failure](../troubleshooting/known_issues/barebones_boot_test_failure.md). This issue has been resolved in CSM 1.6.1.
+
 This test can be run on any master or worker NCN, but not the PIT node.
 
 (`ncn-mw#`) The script is executable and can be run without any arguments. It returns zero on success and

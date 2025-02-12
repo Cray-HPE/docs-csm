@@ -8,18 +8,18 @@ PXE boot from the cluster.
 This page gives some information about the CSM barebones image and describes how the test script works.
 
 * [Notes on the CSM barebones images](#notes-on-the-csm-barebones-images)
-  * [Compute barebones images](#compute-barebones-images)
-  * [Minimal barebones image](#minimal-barebones-image)
+    * [Compute barebones images](#compute-barebones-images)
+    * [Minimal barebones image](#minimal-barebones-image)
 * [Test prerequisites](#test-prerequisites)
 * [Test overview](#test-overview)
 * [Test options](#test-options)
-  * [Controlling which node is used](#controlling-which-node-is-used)
-  * [Controlling which image is used](#controlling-which-image-is-used)
-  * [Controlling how the image is customized](#controlling-how-the-image-is-customized)
-  * [Controlling which product catalog entry is used](#controlling-which-product-catalog-entry-is-used)
-  * [Controlling which architecture is used](#controlling-which-architecture-is-used)
-  * [Controlling test script output level](#controlling-test-script-output-level)
-  * [Preventing resource deletion](#preventing-resource-deletion)
+    * [Controlling which node is used](#controlling-which-node-is-used)
+    * [Controlling which image is used](#controlling-which-image-is-used)
+    * [Controlling how the image is customized](#controlling-how-the-image-is-customized)
+    * [Controlling which product catalog entry is used](#controlling-which-product-catalog-entry-is-used)
+    * [Controlling which architecture is used](#controlling-which-architecture-is-used)
+    * [Controlling test script output level](#controlling-test-script-output-level)
+    * [Preventing resource deletion](#preventing-resource-deletion)
 
 ## Notes on the CSM barebones images
 
@@ -91,6 +91,8 @@ COS product stream is installed on the system.
 * The test script is installed as part of the `cray-cmstools-crayctldeploy` RPM.
 
 ## Test overview
+
+> Note: In CSM 1.6.0, a known issue causes a [Barebones Boot Test Failure](known_issues/barebones_boot_test_failure.md). This issue has been resolved in CSM 1.6.1.
 
 The script file location is `/opt/cray/tests/integration/csm/barebones_image_test`.
 Review the [Test prerequisites](#test-prerequisites) before proceeding.
