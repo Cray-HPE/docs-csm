@@ -281,10 +281,40 @@ spec:
           memory: 512Mi
 ```
 
- > **Note:**
- >
- > - Container versions must be customized to the versions installed on the system
- > - Please set `spec.munge.uid` to 498 and `spec.munge.gid` to 484 if using munger container version `cray/munge-munge:1.6.0`
+Container versions must be customized to the versions installed on the system.
+List the available versions with the following commands:
+
+```bash
+curl -s https://registry.local/v2/cray/cray-slurmctld/tags/list | jq -r .tags[]
+curl -s https://registry.local/v2/cray/cray-slurmdbd/tags/list | jq -r .tags[]
+curl -s https://registry.local/v2/cray/munge-munge/tags/list | jq -r .tags[]
+curl -s https://registry.local/v2/cray/cray-sssd/tags/list | jq -r .tags[]
+curl -s https://registry.local/v2/cray/cray-slurm-config/tags/list | jq -r .tags[]
+curl -s https://registry.local/v2/cray/cray-pxc/tags/list | jq -r .tags[]
+```
+
+Typically, the highest available version should be used.
+For the `slurmctld` and `slurmdbd` containers, use versions with a `-slurm`
+postfix if available. For example, use `cray/cray-slurmctld:1.8.0-slurm` rather
+than `cray/cray-slurmctld:1.8.0`.
+
+If using munge container version `cray/munge-munge:1.6.0`, set `spec.munge.uid`
+to 498 and `spec.munge.gid` to 484.
+
+## Configuring the Virtual Network Identifier (VNI) range
+
+If USS 1.3.0 or newer is installed, the HPE Slingshot VNI range used for the tenant
+may be configured using these settings:
+
+- `spec.config.vniPartition` - HPE Slingshot Fabric Manager VNI partition name for
+  this tenant. The HPE Slingshot network operator creates a partition when the
+  `SlingshotTenant` custom resource is applied.
+- `spec.config.vniRange` - VNI range to use for this tenant, in format
+  `start-end`. Must not overlap with any other tenant's VNI range.
+  If `vniPartition` is set, the partition's VNI range overrides this value.
+- `spec.config.vniPartitionCreate` - If true, create a new HPE Slingshot Fabric
+  Manager VNI partition with name `vniPartition` and range `vniRange` if it
+  does not exist.
 
 ## Apply the `slurm` operator CR
 
