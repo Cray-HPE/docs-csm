@@ -32,7 +32,7 @@ kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" 
    ```
 
 1. After the `spire.spire.ca-tls` secret in the `spire` namespace has been
-   repopulated, roll the cray-spire-server to make sure all of them pick up
+   repopulated, roll the `cray-spire-server` to make sure all of them pick up
    the new CA.
 
    ```bash

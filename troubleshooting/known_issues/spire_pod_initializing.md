@@ -55,7 +55,7 @@ without restarting `Containerd` to forcefully clean up the running container.
    ssh ncn-w004 systemctl restart containerd
    ```
 
-1. Check that the cray-spire-server started up.
+1. Check that the `cray-spire-server` started up.
 
    ```bash
    kubectl get pods -n spire

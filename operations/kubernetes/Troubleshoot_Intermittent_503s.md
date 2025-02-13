@@ -17,13 +17,13 @@ For general Kubernetes troubleshooting information, including more information o
 This page is broken into different sections, based on the errors found in the log.
 
 - [`UF,URX` with TLS error](#ufurx-with-tls-error)
-  - [Symptom](#symptom-ufurx-with-tls-error)
-  - [Description](#description-ufurx-with-a-tls-error)
-  - [Remediation](#remediation-ufurx-with-a-tls-error)
+    - [Symptom](#symptom-ufurx-with-tls-error)
+    - [Description](#description-ufurx-with-a-tls-error)
+    - [Remediation](#remediation-ufurx-with-a-tls-error)
 - [`UAEX`](#uaex)
-  - [Symptom](#symptom-uaex)
-  - [Description](#description-uaex)
-  - [Remediation](#remediation-uaex)
+    - [Symptom](#symptom-uaex)
+    - [Description](#description-uaex)
+    - [Remediation](#remediation-uaex)
 - [Other error codes](#other-error-codes)
 
 ## `UF,URX` with TLS error
