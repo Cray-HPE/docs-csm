@@ -57,6 +57,8 @@ If the percentage is not decreasing, then continue to the following troubleshoot
 >   The crash should be evaluated to determine if there is an issue that should be addressed.
 > - Refer to [storage troubleshooting documentation](../operations/utility_storage/Utility_Storage.md#storage-troubleshooting-references) for Ceph related issues.
 > - Refer to [troubleshoot Ceph image with tag:'\<none\>'](../operations/utility_storage/Troubleshoot_ceph_image_with_none_tag.md) if running `podman images` on a storage node shows an image with tag:\<none\>.
+> - If storage nodes have already been upgraded to CSM 1.5 but the node images have been rebuilt and storage nodes are being upgraded again,
+refer to [storage node fails to boot on re-upgrade](../troubleshooting/known_issues/storage_node_fails_to_boot_on_reupgrade.md).
 
 ## Update ceph node-exporter config for SNMP counters
 

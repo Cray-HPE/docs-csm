@@ -78,6 +78,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [`sat bootprep` image customization error](known_issues/sat_bootprep_image_customization_error.md)
 - [`cray-console-node` pods in `CrashLoopBackOff`](known_issues/cray-console-node_pods_in_CrashLoopBackOff.md)
 - [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
+- [Storage node fails to boot on re-upgrade](known_issues/storage_node_fails_to_boot_on_reupgrade.md)
 
 ## Booting
 
@@ -95,6 +96,10 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Log File Locations and Ports Used](../operations/boot_orchestration/Log_File_Locations_and_Ports_Used_in_Compute_Node_Boot_Troubleshooting.md)
 - [Issues Related to Slow Boot Times](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
 - [CFS V2 Failures On Large Systems](known_issues/CFS_V2_Failures_On_Large_Systems.md)
+
+### Storage node boot issues
+
+- [Storage node fails to boot on re-upgrade](known_issues/storage_node_fails_to_boot_on_reupgrade.md)
 
 ## Configuration management
 
