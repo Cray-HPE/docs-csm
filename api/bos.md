@@ -192,7 +192,7 @@ Return list of versions currently running.
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Versions|Inline|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An Internal Server Error occurred handling the request.|[ProblemDetails](#schemaproblemdetails)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An Internal Server Error occurred handling the request.|Inline|
 
 <h3 id="root_get-responseschema">Response Schema</h3>
 
@@ -207,6 +207,12 @@ Status Code **200**
 |» links|[[Link](#schemalink)]|false|none|List of links to other resources|
 |»» href|string|false|none|none|
 |»» rel|string|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|An Internal Server Error occurred handling the request|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -308,7 +314,15 @@ The versioning system uses [semver](https://semver.org/).
 ## Link Relationships
 * self : Link to itself
 * versions : Link back to the versions resource|[Version](#schemaversion)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An Internal Server Error occurred handling the request.|[ProblemDetails](#schemaproblemdetails)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An Internal Server Error occurred handling the request.|Inline|
+
+<h3 id="get_v2-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|An Internal Server Error occurred handling the request|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -397,8 +411,23 @@ Get BOS health details.
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Service Health information|[Healthz](#schemahealthz)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|Service Unavailable|[ProblemDetails](#schemaproblemdetails)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|Inline|
+|503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|Service Unavailable|Inline|
+
+<h3 id="get_v2_healthz-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Service Unavailable|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -672,7 +701,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template validity details|[V2SessionTemplateValidation](#schemav2sessiontemplatevalidation)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|Inline|
+
+<h3 id="validate_v2_sessiontemplate-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource was not found|
+|status|404|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -841,7 +879,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|Inline|
+
+<h3 id="get_v2_sessiontemplate-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource was not found|
+|status|404|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -1075,7 +1122,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|Inline|
+
+<h3 id="put_v2_sessiontemplate-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -1309,8 +1365,24 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|Inline|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|Inline|
+
+<h3 id="patch_v2_sessiontemplate-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource was not found|
+|status|404|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -1409,8 +1481,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 ```json
 {
   "type": "about:blank",
-  "title": "string",
-  "status": 400,
+  "title": "The resource was not found",
+  "status": 404,
   "instance": "http://example.com",
   "detail": "string"
 }
@@ -1421,7 +1493,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|Inline|
+
+<h3 id="delete_v2_sessiontemplate-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource was not found|
+|status|404|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -1709,7 +1790,24 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Session details|[V2Session](#schemav2session)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|Inline|
+|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|The resource to be created already exists|Inline|
+
+<h3 id="post_v2_session-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource to be created already exists|
+|status|409|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -1950,7 +2048,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 ```json
 {
   "type": "about:blank",
-  "title": "string",
+  "title": "Bad Request",
   "status": 400,
   "instance": "http://example.com",
   "detail": "string"
@@ -1962,7 +2060,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|Inline|
+
+<h3 id="delete_v2_sessions-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -2082,7 +2189,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details|[V2Session](#schemav2session)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|Inline|
+
+<h3 id="get_v2_session-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource was not found|
+|status|404|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -2222,8 +2338,24 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details|[V2Session](#schemav2session)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|Inline|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|Inline|
+
+<h3 id="patch_v2_session-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource was not found|
+|status|404|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -2322,8 +2454,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 ```json
 {
   "type": "about:blank",
-  "title": "string",
-  "status": 400,
+  "title": "The resource was not found",
+  "status": 404,
   "instance": "http://example.com",
   "detail": "string"
 }
@@ -2334,7 +2466,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|Inline|
+
+<h3 id="delete_v2_session-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource was not found|
+|status|404|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -2457,7 +2598,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session status details|[V2SessionExtendedStatus](#schemav2sessionextendedstatus)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|Inline|
+
+<h3 id="get_v2_session_status-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource was not found|
+|status|404|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -2577,7 +2727,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details|[V2Session](#schemav2session)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|Inline|
+
+<h3 id="save_v2_session_status-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource was not found|
+|status|404|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -2753,7 +2912,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Component states|[V2ComponentArray](#schemav2componentarray)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|Inline|
+
+<h3 id="get_v2_components-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -2967,7 +3135,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Component states|[V2ComponentArray](#schemav2componentarray)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|Inline|
+
+<h3 id="put_v2_components-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -3185,8 +3362,24 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Component states|[V2ComponentArray](#schemav2componentarray)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|Inline|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|Inline|
+
+<h3 id="patch_v2_components-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource was not found|
+|status|404|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -3341,8 +3534,24 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single Component state|[V2Component](#schemav2component)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|Inline|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|Inline|
+
+<h3 id="get_v2_component-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource was not found|
+|status|404|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -3553,7 +3762,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single Component state|[V2Component](#schemav2component)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|Inline|
+
+<h3 id="put_v2_component-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -3764,9 +3982,31 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single Component state|[V2Component](#schemav2component)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
-|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|The update was not allowed due to a conflict.|[ProblemDetails](#schemaproblemdetails)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|Inline|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|Inline|
+|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|The update was not allowed due to a conflict.|Inline|
+
+<h3 id="patch_v2_component-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource was not found|
+|status|404|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The update was not allowed due to a conflict|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -3865,8 +4105,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 ```json
 {
   "type": "about:blank",
-  "title": "string",
-  "status": 400,
+  "title": "The resource was not found",
+  "status": 404,
   "instance": "http://example.com",
   "detail": "string"
 }
@@ -3877,7 +4117,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|Inline|
+
+<h3 id="delete_v2_component-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource was not found|
+|status|404|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -4009,7 +4258,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of xnames that should have their staged Session applied.|[V2ApplyStagedStatus](#schemav2applystagedstatus)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|Inline|
+
+<h3 id="post_v2_apply_staged-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -4155,7 +4413,16 @@ Update one or more of the BOS service options.
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of service-wide options|[V2Options](#schemav2options)|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|Inline|
+
+<h3 id="patch_v2_options-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -4255,7 +4522,16 @@ The versioning system uses [semver](https://semver.org/).
 ## Link Relationships
 * self : Link to itself
 * versions : Link back to the versions resource|[Version](#schemaversion)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Bad Request|Inline|
+
+<h3 id="get_version_v2-responseschema">Response Schema</h3>
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -4855,36 +5131,6 @@ Node role list. Allows actions against nodes with associated roles.
 ### Properties
 
 *None*
-
-<h2 id="tocS_ProblemDetails">ProblemDetails</h2>
-<!-- backwards compatibility -->
-<a id="schemaproblemdetails"></a>
-<a id="schema_ProblemDetails"></a>
-<a id="tocSproblemdetails"></a>
-<a id="tocsproblemdetails"></a>
-
-```json
-{
-  "type": "about:blank",
-  "title": "string",
-  "status": 400,
-  "instance": "http://example.com",
-  "detail": "string"
-}
-
-```
-
-An error response for RFC 7807 problem details.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|type|string(uri)|false|none|Relative URI reference to the type of problem which includes human<br>readable documentation.|
-|title|string|false|none|Short, human-readable summary of the problem, should not change by<br>occurrence.|
-|status|integer|false|none|HTTP status code|
-|instance|string(uri)|false|none|A relative URI reference that identifies the specific occurrence of<br>the problem|
-|detail|string|false|none|A human-readable explanation specific to this occurrence of the<br>problem. Focus on helping correct the problem, rather than giving<br>debugging information.|
 
 <h2 id="tocS_SessionLimit">SessionLimit</h2>
 <!-- backwards compatibility -->
@@ -6628,4 +6874,199 @@ Options for the Boot Orchestration Service.
 |polling_frequency|integer|false|none|How frequently the BOS operators check Component state for needed actions (in seconds)|
 |reject_nids|boolean|false|none|If true, then BOS will attempt to prevent Sessions and Session Templates that reference NIDs (which BOS does not support).<br>Specifically, if this option is true, then:<br>- When creating a Session, if the Session limit or a Session Template node list appear to contain NID values, then Session creation will fail.<br>- When creating a Session Template, if a node list appears to contain a NID value, then the Session Template creation will fail.<br>- When validating an existing Session Template, if a node list appears to contain a NID value, then the validation will report an error.<br><br>This option does NOT have an effect on Sessions that were created prior to it being enabled (even if they have not yet started).|
 |session_limit_required|boolean|false|none|If true, Sessions cannot be created without specifying the limit parameter.|
+
+<h2 id="tocS_ProblemDetails">ProblemDetails</h2>
+<!-- backwards compatibility -->
+<a id="schemaproblemdetails"></a>
+<a id="schema_ProblemDetails"></a>
+<a id="tocSproblemdetails"></a>
+<a id="tocsproblemdetails"></a>
+
+```json
+{
+  "type": "about:blank",
+  "title": "string",
+  "status": 400,
+  "instance": "http://example.com",
+  "detail": "string"
+}
+
+```
+
+An error response for RFC 7807 problem details.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|type|string(uri)|false|none|Relative URI reference to the type of problem which includes human<br>readable documentation.|
+|title|string|false|none|Short, human-readable summary of the problem, should not change by<br>occurrence.|
+|status|integer|false|none|HTTP status code|
+|instance|string(uri)|false|none|A relative URI reference that identifies the specific occurrence of<br>the problem|
+|detail|string|false|none|A human-readable explanation specific to this occurrence of the<br>problem. Focus on helping correct the problem, rather than giving<br>debugging information.|
+
+<h2 id="tocS_ProblemAlreadyExists">ProblemAlreadyExists</h2>
+<!-- backwards compatibility -->
+<a id="schemaproblemalreadyexists"></a>
+<a id="schema_ProblemAlreadyExists"></a>
+<a id="tocSproblemalreadyexists"></a>
+<a id="tocsproblemalreadyexists"></a>
+
+```json
+{
+  "title": "The resource to be created already exists",
+  "status": 409
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|title|string|false|none|none|
+|status|integer|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource to be created already exists|
+|status|409|
+
+<h2 id="tocS_ProblemBadRequest">ProblemBadRequest</h2>
+<!-- backwards compatibility -->
+<a id="schemaproblembadrequest"></a>
+<a id="schema_ProblemBadRequest"></a>
+<a id="tocSproblembadrequest"></a>
+<a id="tocsproblembadrequest"></a>
+
+```json
+{
+  "title": "Bad Request",
+  "status": 400
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|title|string|false|none|none|
+|status|integer|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Bad Request|
+|status|400|
+
+<h2 id="tocS_ProblemResourceNotFound">ProblemResourceNotFound</h2>
+<!-- backwards compatibility -->
+<a id="schemaproblemresourcenotfound"></a>
+<a id="schema_ProblemResourceNotFound"></a>
+<a id="tocSproblemresourcenotfound"></a>
+<a id="tocsproblemresourcenotfound"></a>
+
+```json
+{
+  "title": "The resource was not found",
+  "status": 404
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|title|string|false|none|none|
+|status|integer|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The resource was not found|
+|status|404|
+
+<h2 id="tocS_ProblemUpdateConflict">ProblemUpdateConflict</h2>
+<!-- backwards compatibility -->
+<a id="schemaproblemupdateconflict"></a>
+<a id="schema_ProblemUpdateConflict"></a>
+<a id="tocSproblemupdateconflict"></a>
+<a id="tocsproblemupdateconflict"></a>
+
+```json
+{
+  "title": "The update was not allowed due to a conflict"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|title|string|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|The update was not allowed due to a conflict|
+
+<h2 id="tocS_ProblemServiceUnavailable">ProblemServiceUnavailable</h2>
+<!-- backwards compatibility -->
+<a id="schemaproblemserviceunavailable"></a>
+<a id="schema_ProblemServiceUnavailable"></a>
+<a id="tocSproblemserviceunavailable"></a>
+<a id="tocsproblemserviceunavailable"></a>
+
+```json
+{
+  "title": "Service Unavailable"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|title|string|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|Service Unavailable|
+
+<h2 id="tocS_ProblemInternalError">ProblemInternalError</h2>
+<!-- backwards compatibility -->
+<a id="schemaprobleminternalerror"></a>
+<a id="schema_ProblemInternalError"></a>
+<a id="tocSprobleminternalerror"></a>
+<a id="tocsprobleminternalerror"></a>
+
+```json
+{
+  "title": "An Internal Server Error occurred handling the request"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|title|string|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|title|An Internal Server Error occurred handling the request|
 
