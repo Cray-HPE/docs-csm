@@ -284,7 +284,7 @@ spec:
 Container versions must be customized to the versions installed on the system.
 List the available versions with the following commands:
 
-```
+```bash
 curl -s https://registry.local/v2/cray/cray-slurmctld/tags/list | jq -r .tags[]
 curl -s https://registry.local/v2/cray/cray-slurmdbd/tags/list | jq -r .tags[]
 curl -s https://registry.local/v2/cray/munge-munge/tags/list | jq -r .tags[]
@@ -294,9 +294,9 @@ curl -s https://registry.local/v2/cray/cray-pxc/tags/list | jq -r .tags[]
 ```
 
 Typically, the highest available version should be used.
-For the slurmctld and slurmdbd containers, use versions with a `-slurm` postfix
-if available. For example, use `cray/cray-slurmctld:1.8.0-slurm` rather than
-`cray/cray-slurmctld:1.8.0`.
+For the `slurmctld` and `slurmdbd` containers, use versions with a `-slurm`
+postfix if available. For example, use `cray/cray-slurmctld:1.8.0-slurm` rather
+than `cray/cray-slurmctld:1.8.0`.
 
 If using munge container version `cray/munge-munge:1.6.0`, set `spec.munge.uid`
 to 498 and `spec.munge.gid` to 484.
