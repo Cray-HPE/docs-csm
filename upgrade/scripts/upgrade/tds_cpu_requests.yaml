@@ -36,12 +36,6 @@ spec:
             resources:
               requests:
                 cpu: "1"
-      spire:
-        cray-postgresql:
-          sqlCluster:
-            resources:
-              requests:
-                cpu: "1"
       cray-dhcp-kea:
         cray-postgresql:
           sqlCluster:

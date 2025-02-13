@@ -218,7 +218,7 @@ Follow the [Redeploying a Chart](Redeploying_a_Chart.md) procedure **with the fo
 
 ### Postgres pods are `OOMKilled` or CPU throttled
 
-Update resources associated with `spire-postgres` in the `spire` namespace.
+Update resources associated with `cray-spire-postgres` in the `spire` namespace.
 This example is based on what was needed for a system with 4000 compute nodes.
 Trial and error may be needed to determine what is best for a given system at scale.
 
@@ -232,7 +232,7 @@ experiencing problems.
 | `cray-sls-postgres`  | `core-services`    | `cray-hms-sls`     | `services`           |
 | `cray-smd-postgres`  | `core-services`    | `cray-hms-smd`     | `services`           |
 | `gitea-vcs-postgres` | `sysmgmt`          | `gitea`            | `services`           |
-| `spire-postgres`     | `sysmgmt`          | `spire`            | `spire`              |
+| `cray-spire-postgres`| `sysmgmt`          | `cray-spire`       | `spire`              |
 
 Using the values from the above table, follow the [Redeploying a Chart](Redeploying_a_Chart.md) **with the following specifications**:
 
@@ -449,7 +449,7 @@ Increase the PVC volume size associated with `cray-smd-postgres` cluster in the 
 This example is based on what was needed for a system with 4000 compute nodes.
 Trial and error may be needed to determine what is best for a given system at scale. The PVC size can only ever be increased.
 
-A similar flow can be used to update the resources for `cray-sls-postgres`, `gitea-vcs-postgres`, or `spire-postgres`.
+A similar flow can be used to update the resources for `cray-sls-postgres`, `gitea-vcs-postgres`, or `cray-spire-postgres`.
 
 The following table provides values the administrator will need based on which pods are
 experiencing problems.
@@ -459,7 +459,7 @@ experiencing problems.
 | `cray-sls-postgres`  | `core-services`    | `cray-hms-sls`     | `services`           |
 | `cray-smd-postgres`  | `core-services`    | `cray-hms-smd`     | `services`           |
 | `gitea-vcs-postgres` | `sysmgmt`          | `gitea`            | `services`           |
-| `spire-postgres`     | `sysmgmt`          | `spire`            | `spire`              |
+| `cray-spire-postgres`| `sysmgmt`          | `cray-spire`       | `spire`              |
 
 Using the values from the above table, follow the [Redeploying a Chart](Redeploying_a_Chart.md) **with the following specifications**:
 

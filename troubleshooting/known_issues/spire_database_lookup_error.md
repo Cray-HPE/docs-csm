@@ -2,16 +2,16 @@
 
 ## Description
 
-There is a known issue where if Unbound is configured to forward to an invalid or inaccessible site DNS server, the Spire server may be unable to resolve the hostname of its PostgreSQL cluster.
+There is a known issue where if Unbound is configured to forward to an invalid or inaccessible site DNS server, the Cray Spire server may be unable to resolve the hostname of its PostgreSQL cluster.
 
 ## Symptoms
 
-* The `spire-server` pods may be in a `CrashLoopBackOff` state.
+* The `cray-spire-server` pods may be in a `CrashLoopBackOff` state.
 * API calls to services may fail with HTTP `503` errors.
-* The `spire-server` pods contain the following error in the logs.
+* The `cray-spire-server` pods contain the following error in the logs.
 
   ```text
-  time="2022-06-13T15:43:49Z" level=error msg="Fatal run error" error="datastore-sql: dial tcp: lookup spire-postgres-pooler.spire.svc.cluster.local: Try again"
+  time="2022-06-13T15:43:49Z" level=error msg="Fatal run error" error="datastore-sql: dial tcp: lookup cray-spire-postgres-pooler.spire.svc.cluster.local: Try again"
   ```
 
 ## Solution
@@ -26,7 +26,7 @@ There is a known issue where if Unbound is configured to forward to an invalid o
 
    Example output:
 
-   ```yaml  
+   ```yaml
    forward-addr: 172.30.84.40
    ```
 
@@ -43,7 +43,7 @@ There is a known issue where if Unbound is configured to forward to an invalid o
      ```text
      PING 172.30.84.40 (172.30.84.40) 56(84) bytes of data.
      64 bytes from 172.30.84.40: icmp_seq=1 ttl=58 time=0.175 ms
-     
+
      --- 172.30.84.40 ping statistics ---
      1 packets transmitted, 1 received, 0% packet loss, time 0ms
      rtt min/avg/max/mdev = 0.175/0.175/0.175/0.000 ms
@@ -62,7 +62,7 @@ There is a known issue where if Unbound is configured to forward to an invalid o
      Name: 172.30.84.40
      Address: 172.30.84.40#53
      Aliases:
-     
+
      www.google.com has address 209.85.234.106
      www.google.com has address 209.85.234.103
      www.google.com has address 209.85.234.147

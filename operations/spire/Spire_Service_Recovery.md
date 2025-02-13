@@ -11,32 +11,7 @@ The following covers redeploying the Spire service and restoring the data.
 
 ## Service recovery for Spire
 
-1. (`ncn-mw#`) Uninstall the `spire` and `cray-spire` charts and wait for the resources to terminate.
-
-   1. Note the version of the `spire` chart that is currently deployed.
-
-      ```bash
-      helm history -n spire spire
-      ```
-
-      Example output:
-
-      ```text
-      REVISION  UPDATED                    STATUS    CHART          APP VERSION  DESCRIPTION
-      1         Wed Nov 15 12:41:47 2023   deployed  spire-2.14.2   0.12.2       Install complete
-      ```
-
-   1. Uninstall the `spire` chart.
-
-      ```bash
-      helm uninstall -n spire spire
-      ```
-
-      Example output:
-
-      ```text
-      release "spire" uninstalled
-      ```
+1. (`ncn-mw#`) Uninstall the `cray-spire` chart and wait for the resources to terminate.
 
    1. Note the version of the `cray-spire` chart that is currently deployed.
 
@@ -90,9 +65,6 @@ The following covers redeploying the Spire service and restoring the data.
          persistentvolumeclaim "data-cray-spire-server-0" deleted
          persistentvolumeclaim "data-cray-spire-server-1" deleted
          persistentvolumeclaim "data-cray-spire-server-2" deleted
-         persistentvolumeclaim "spire-data-spire-server-0" deleted
-         persistentvolumeclaim "spire-data-spire-server-1" deleted
-         persistentvolumeclaim "spire-data-spire-server-2" deleted
          ```
 
       1. Clean up `spire-agent`.
@@ -105,18 +77,13 @@ The following covers redeploying the Spire service and restoring the data.
          done
          ```
 
-1. (`ncn-mw#`) Redeploy the `spire` and `cray-spire` charts and wait for the resources to start.
+1. (`ncn-mw#`) Redeploy the `cray-spire` chart and wait for the resources to start.
 
    1. Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure to redeploy the `spire` chart:
 
-      - Name of chart to be redeployed: `spire`
-      - Base name of manifest: `sysmgmt`
-      - When reaching the step to update customizations, no edits need to be made to the customizations file.
-
-   1. Repeat the above procedure for the `cray-spire` chart:
-
       - Name of chart to be redeployed: `cray-spire`
       - Base name of manifest: `sysmgmt`
+      - When reaching the step to update customizations, no edits need to be made to the customizations file.
 
    1. Wait for the resources to start.
 
@@ -151,22 +118,6 @@ The following covers redeploying the Spire service and restoring the data.
       request-ncn-join-token-q56zm                  2/2     Running   0              15m
       request-ncn-join-token-tmz4l                  2/2     Running   0              15m
       request-ncn-join-token-z87pl                  2/2     Running   0              15m
-      spire-agent-42gb2                             1/1     Running   0              15m
-      spire-agent-6lxv9                             1/1     Running   0              15m
-      spire-agent-hhbqm                             1/1     Running   0              15m
-      spire-agent-sztjm                             1/1     Running   0              15m
-      spire-jwks-6cd9d5b5b5-6bmcb                   3/3     Running   0              15m
-      spire-jwks-6cd9d5b5b5-gz2tl                   3/3     Running   0              15m
-      spire-jwks-6cd9d5b5b5-pds25                   3/3     Running   0              15m
-      spire-postgres-0                              3/3     Running   0              15m
-      spire-postgres-1                              3/3     Running   0              15m
-      spire-postgres-2                              3/3     Running   0              15m
-      spire-postgres-pooler-75964fbc66-6hvvq        2/2     Running   0              15m
-      spire-postgres-pooler-75964fbc66-d52mg        2/2     Running   0              15m
-      spire-postgres-pooler-75964fbc66-nm6v6        2/2     Running   0              15m
-      spire-server-0                                2/2     Running   0              15m
-      spire-server-1                                2/2     Running   0              15m
-      spire-server-2                                2/2     Running   0              15m
       tpm-provisioner-0                             2/2     Running   0              17d
       ```
 
