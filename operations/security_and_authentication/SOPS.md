@@ -50,10 +50,11 @@ created for them.
    CMN_NAME=cmn.$SYSTEM_NAME.$DOMAIN_NAME
     ```
 
-2. (`ncn-m001#`) Retrieve and set tenant's `transitname`.
+2. (`ncn-m001#`) Retrieve and set tenant's `transitname` and `keyname`.
 
     ```bash
     TRANSIT_NAME=`kubectl get tenants.tapms.hpe.com -n tenants $TENANT_NAME -ojson | jq -r .status.tenantkms.transitname`
+    KEY_NAME=`kubectl get tenants.tapms.hpe.com -n tenants $TENANT_NAME -ojson | jq -r .status.tenantkms.keyname`
     ```
 
     This value includes a UUID that is different from a tenant's UUID.
@@ -64,7 +65,7 @@ created for them.
     the format:
 
     ```text
-    export VAULT_ADDR=${PROTOCOL}://vault.${CMN_NAME}/v1/${TRANSIT_NAME}/keys/key1
+    export VAULT_ADDR=${PROTOCOL}://vault.${CMN_NAME}/v1/${TRANSIT_NAME}/keys/${KEY_NAME}
     ```
 
     Example output from checking this variable:
@@ -116,9 +117,10 @@ created for them.
    DOMAIN_NAME=`craysys metadata get site-domain`
    CMN_NAME=cmn.$SYSTEM_NAME.$DOMAIN_NAME
    TRANSIT_NAME=`kubectl get tenants.tapms.hpe.com -n tenants $TENANT_NAME -ojson | jq -r .status.tenantkms.transitname`
+   KEY_NAME=`kubectl get tenants.tapms.hpe.com -n tenants $TENANT_NAME -ojson | jq -r .status.tenantkms.keyname`
    TOKEN=`kubectl get secret -n ${TENANT_NAME} -ojson | jq -r .items[].data.token | base64 -d`
    VAULT_LOGIN=$PROTOCOL://vault.$CMN_NAME/v1/auth/kubernetes/login
-   export VAULT_ADDR=${PROTOCOL}://vault.${CMN_NAME}/v1/${TRANSIT_NAME}/keys/key1
+   export VAULT_ADDR=${PROTOCOL}://vault.${CMN_NAME}/v1/${TRANSIT_NAME}/keys/${KEY_NAME}
    export VAULT_TOKEN=$(curl -s --data '{"jwt": "'"$TOKEN"'", "role": "'"$TRANSIT_NAME"'"}' $VAULT_LOGIN | jq -r '.auth.client_token')
    ```
 
