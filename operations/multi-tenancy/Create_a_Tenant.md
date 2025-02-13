@@ -303,17 +303,17 @@ to 498 and `spec.munge.gid` to 484.
 
 ## Configuring the Virtual Network Identifier (VNI) range
 
-If USS 1.3.0 or newer is installed, the Slingshot VNI range used for the tenant
+If USS 1.3.0 or newer is installed, the HPE Slingshot VNI range used for the tenant
 may be configured using these settings:
 
-- `spec.config.vniPartition` - Slingshot fabric manager VNI partition name for
-  this tenant. The Slingshot operator creates a partition when the
+- `spec.config.vniPartition` - HPE Slingshot Fabric Manager VNI partition name for
+  this tenant. The HPE Slingshot network operator creates a partition when the
   `SlingshotTenant` custom resource is applied.
 - `spec.config.vniRange` - VNI range to use for this tenant, in format
   `start-end`. Must not overlap with any other tenant's VNI range.
   If `vniPartition` is set, the partition's VNI range overrides this value.
-- `spec.config.vniPartitionCreate` - If true, create a new Slingshot fabric
-  manager VNI partition with name `vniPartition` and range `vniRange` if it
+- `spec.config.vniPartitionCreate` - If true, create a new HPE Slingshot Fabric
+  Manager VNI partition with name `vniPartition` and range `vniRange` if it
   does not exist.
 
 ## Apply the `slurm` operator CR
