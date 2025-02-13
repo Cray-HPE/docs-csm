@@ -301,7 +301,7 @@ than `cray/cray-slurmctld:1.8.0`.
 If using munge container version `cray/munge-munge:1.6.0`, set `spec.munge.uid`
 to 498 and `spec.munge.gid` to 484.
 
-## Configuring the VNI range
+## Configuring the Virtual Network Identifier (VNI) range
 
 If USS 1.3.0 or newer is installed, the Slingshot VNI range used for the tenant
 may be configured using these settings:
@@ -314,7 +314,7 @@ may be configured using these settings:
   If `vniPartition` is set, the partition's VNI range overrides this value.
 - `spec.config.vniPartitionCreate` - If true, create a new Slingshot fabric
   manager VNI partition with name `vniPartition` and range `vniRange` if it
-  doesn't exist.
+  does not exist.
 
 ## Apply the `slurm` operator CR
 
