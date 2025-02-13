@@ -39,7 +39,7 @@ kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" 
    kubectl rollout restart -n spire statefulset cray-spire-server
    ```
 
-   Any `spire-agent` in the `CrashLoopBackOff` state should come back into a `Running` state the
+   Any `cray-spire-agent` pod in the `CrashLoopBackOff` state should come back into a `Running` state the
    next time they are started. If you do not wish to wait for them to be restarted
    automatically, then you can delete the `cray-spire-agent` pod, which will cause a new
    one to start up in its place.
