@@ -341,8 +341,6 @@ Hardware State Manager (HSM) has two important parts:
 
 #### System Layout Service
 
-1. [Get an API token](#get-an-api-token).
-
 1. (`ncn-mw#`) Retrieve SLS data.
 
    ```bash
@@ -369,8 +367,6 @@ Hardware State Manager (HSM) has two important parts:
    ```
 
 #### State Manager Daemon
-
-1. [Get an API token](#get-an-api-token).
 
 1. (`ncn-mw#`) Query SMD.
 
@@ -472,8 +468,6 @@ dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252
 
 This indicates that an IP address being allocated is already being used. If that is the case, use the following procedure to
 troubleshoot and remediate the problem.
-
-1. [Get an API token](#get-an-api-token).
 
 1. (`ncn-mw#`) Determine the IP address that is supposed to be set for node.
 
