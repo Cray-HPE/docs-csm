@@ -330,12 +330,12 @@ Some systems are configured with lazy mounts that do not have this requirement f
 
     To resolve the space issue, see [Troubleshoot Ceph OSDs Reporting Full](../utility_storage/Troubleshoot_Ceph_OSDs_Reporting_Full.md).
 
-1. (`ncn-m001#`) Check that `spire` and `cray-spire`  pods have started.
+1. (`ncn-m001#`) Check that `cray-spire` pods have started.
 
-    Monitor the status of the `spire-jwks` pods to ensure they restart and enter the `Running` state.
+    Monitor the status of the `cray-spire-jwks` pods to ensure they restart and enter the `Running` state.
 
     ```bash
-    kubectl get pods -n spire -o wide | grep spire-jwks
+    kubectl get pods -n spire -o wide | grep cray-spire-jwks
     ```
 
     Example output:
@@ -344,16 +344,7 @@ Some systems are configured with lazy mounts that do not have this requirement f
     cray-spire-jwks-57bbb4f5c7-57j5k 2/3  CrashLoopBackOff   9    23h   10.44.0.31  ncn-w002 <none>   <none>
     cray-spire-jwks-57bbb4f5c7-crb2m 2/3  CrashLoopBackOff   9    23h   10.36.0.34  ncn-w003 <none>   <none>
     cray-spire-jwks-57bbb4f5c7-lq9ar 2/3  CrashLoopBackOff   9    23h   10.39.0.5   ncn-w001 <none>   <none>
-    spire-jwks-6b97457548-gc7td    2/3  CrashLoopBackOff   9    23h   10.44.0.117  ncn-w002 <none>   <none>
-    spire-jwks-6b97457548-jd7bd    2/3  CrashLoopBackOff   9    23h   10.36.0.123  ncn-w003 <none>   <none>
-    spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
     ```
-
-   1. (`ncn-m001#`) If the `spire-jwks` pods indicate `CrashLoopBackOff`, then restart the Spire deployment.
-
-       ```bash
-       kubectl rollout restart -n spire deployment spire-jwks
-       ```
 
    1. (`ncn-m001#`) If the `cray-spire-jwks` pods indicate `CrashLoopBackOff`, then restart the Cray Spire deployment.
 

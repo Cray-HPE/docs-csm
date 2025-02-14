@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -61,7 +61,6 @@ enable_xname_in_charts() {
   yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.dvs' 'true'
   yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.heartbeat' 'true'
   yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.enabled' 'true'
-  yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.spire.server.tokenService.enableXNameWorkloads' 'true'
   yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-spire.server.tokenService.enableXNameWorkloads' 'true'
 }
 
@@ -74,7 +73,6 @@ disable_xname_in_charts() {
   yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.dvs' 'false'
   yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.heartbeat' 'false'
   yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.enabled' 'false'
-  yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.spire.server.tokenService.enableXNameWorkloads' 'false'
   yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-spire.server.tokenService.enableXNameWorkloads' 'false'
 }
 
@@ -85,7 +83,7 @@ create_manifest() {
   yq m -a append "${PWD}/manifests/sysmgmt.yaml" "${PWD}/manifests/platform.yaml" > "${TMPDIR}/xnamevalidation.yaml"
   yq w -i "${TMPDIR}/xnamevalidation.yaml" "metadata.name" "xnamevalidation"
 
-  for chart in $(yq r "${TMPDIR}/xnamevalidation.yaml" 'spec.charts[*].name' | grep -Ev '(^cray-opa$|^spire$|^cray-spire$)'); do
+  for chart in $(yq r "${TMPDIR}/xnamevalidation.yaml" 'spec.charts[*].name' | grep -Ev '(^cray-opa$|^cray-spire$)'); do
     yq d -i "${TMPDIR}/xnamevalidation.yaml" 'spec.charts(name=='"$chart"')'
   done
 
@@ -126,12 +124,6 @@ validate_prereqs() {
     exit 3
   fi
 
-  # validate that spire is included in sysmgmt.yaml
-  if ! yq r "${PWD}/manifests/sysmgmt.yaml" 'spec.charts(name==spire)' | grep -q spire; then
-    echo "The spire chart is missing from ${PWD}/manifests/sysmgmt.yaml"
-    exit 3
-  fi
-
   # validate that cray-spire is included in sysmgmt.yaml
   if ! yq r "${PWD}/manifests/sysmgmt.yaml" 'spec.charts(name==cray-spire)' | grep -q cray-spire; then
     echo "The cray-spire chart is missing from ${PWD}/manifests/sysmgmt.yaml"
@@ -166,22 +158,6 @@ validate_prereqs() {
   fi
 }
 
-wait_for_spire() {
-  RETRY=0
-  MAX_RETRIES=30
-  RETRY_SECONDS=30
-  until kubectl get -n spire statefulset spire-server | grep -q '3/3'; do
-    if [[ $RETRY -lt $MAX_RETRIES ]]; then
-      RETRY="$((RETRY + 1))"
-      echo "spire-server is not ready. Will retry after $RETRY_SECONDS seconds. ($RETRY/$MAX_RETRIES)"
-    else
-      echo "spire-server did not start after $(echo "$RETRY_SECONDS" \* "$MAX_RETRIES" | bc) seconds."
-      exit 1
-    fi
-    sleep "$RETRY_SECONDS"
-  done
-}
-
 wait_for_cray_spire() {
   RETRY=0
   MAX_RETRIES=30
@@ -199,18 +175,16 @@ wait_for_cray_spire() {
 }
 
 validate_disable() {
-  spire=$(helm get values -n spire spire -o json | jq -r '.server.tokenService.enableXNameWorkloads')
   cray_spire=$(helm get values -n spire cray-spire -o json | jq -r '.server.tokenService.enableXNameWorkloads')
-  if [ "${spire}" = "true" ] && [ "${cray_spire}" = "true" ]; then
+  if [ "${cray_spire}" = "true" ]; then
     echo "component name (xname) validation is already enabled"
     exit 1
   fi
 }
 
 validate_enable() {
-  spire="$(helm get values -n spire spire -o json | jq -r '.server.tokenService.enableXNameWorkloads')"
   cray_spire="$(helm get values -n spire cray-spire -o json | jq -r '.server.tokenService.enableXNameWorkloads')"
-  if [ ! "${spire}" = "true" ] && [ ! "${cray_spire}" = "true" ]; then
+  if [ ! "${cray_spire}" = "true" ]; then
     echo "component name (xname) validation is already disabled"
     exit 1
   fi
@@ -242,20 +216,6 @@ enable_spire_on_NCNs() {
   /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
 }
 
-uninstall_spire() {
-  echo "Uninstalling spire"
-  helm uninstall -n spire spire
-  while ! [ "$(kubectl get pods -n spire --no-headers | egrep -E "^spire-.*$" | wc -l)" -eq 0 ]; do
-    echo "Waiting for all spire pods to be terminated."
-    sleep 30
-  done
-
-  echo "Removing spire-server PVCs"
-  for pvc in $(kubectl get pvc -n spire --no-headers -o custom-columns=":metadata.name" | egrep -E 'spire|cray-spire' | egrep -Ev "cray-spire"); do
-    kubectl delete pvc -n spire "$pvc"
-  done
-}
-
 uninstall_cray_spire() {
   echo "Uninstalling cray-spire"
   helm uninstall -n spire cray-spire
@@ -278,11 +238,9 @@ enable_xnameValidation() {
   enable_xname_in_charts
   create_manifest
   disable_spire_on_NCNs
-  uninstall_spire
   uninstall_cray_spire
   run_loftsman
   update_customizations
-  wait_for_spire
   wait_for_cray_spire
   enable_spire_on_NCNs
   echo "component name (xname) validation has been enabled."
@@ -296,11 +254,9 @@ disable_xnameValidation() {
   disable_xname_in_charts
   create_manifest
   disable_spire_on_NCNs
-  uninstall_spire
   uninstall_cray_spire
   run_loftsman
   update_customizations
-  wait_for_spire
   wait_for_cray_spire
   enable_spire_on_NCNs
   echo "component name (xname) validation has been disabled."
