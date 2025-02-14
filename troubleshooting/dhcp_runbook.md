@@ -346,7 +346,7 @@ Hardware State Manager (HSM) has two important parts:
 1. (`ncn-mw#`) Retrieve SLS data.
 
    ```bash
-   curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v2/hardware | jq | less
+   cray sls hardware list --format json | less
    ```
 
    The output from SLS should look similar to the following:
@@ -379,7 +379,7 @@ Hardware State Manager (HSM) has two important parts:
    - List all interfaces
 
       ```bash
-      curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces | jq 
+      cray hsm inventory ethernetInterfaces list --format json
       ```
 
    - Lookup by MAC address
@@ -388,21 +388,21 @@ Hardware State Manager (HSM) has two important parts:
 
       ```bash
       MAC=<MAC address>
-      curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/${MAC} | jq 
+      cray hsm inventory ethernetInterfaces list --mac-address ${MAC} --format json
       ```
 
    - Lookup by xname
 
       ```bash
       XNAME=<xname>
-      curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces?ComponentID=${XNAME} | jq 
+      cray hsm inventory ethernetInterfaces list --component-id ${XNAME} --format json
       ```
 
    - Lookup by IP address
 
       ```bash
       IP=<IP address>
-      curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces?IPAddress=${IP} | jq 
+      cray hsm inventory ethernetInterfaces list --ip-address ${IP} --format json
       ```
 
    Output from SMD should look similar to the following:
@@ -479,16 +479,16 @@ troubleshoot and remediate the problem.
 
    Example commands:
 
-   - Check by MAC address (no colons).
+   - Check by MAC address.
 
       ```bash
-      curl -f -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/18c04d13d73c
+      cray hsm inventory ethernetInterfaces list --mac-address 18:c0:4d:13:d7:3c --format json
       ```
 
    - Check by xname.
 
       ```bash
-      curl -f -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces?ComponentID=x3000c0s25b0n0
+      cray hsm inventory ethernetInterfaces list --component-id x3000c0s25b0n0 --format json
       ```
 
    Output should look similar to the following:
@@ -532,7 +532,7 @@ troubleshoot and remediate the problem.
    Example:
 
     ```bash
-    curl -f -X DELETE -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces/18c04d13d73c
+    cray hsm inventory ethernetInterfaces delete 18c04d13d73c
     ```
 
 1. Wait five minutes for HMS discovery to recreate the SMD Ethernet table entry.
