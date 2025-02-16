@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -93,23 +93,9 @@ spec:
                       bootscript_last_epoch=0
                       echo $bootscript_last_epoch
                     fi
-          - name: "cleanup-live-images"
-            dependencies:
-              - get-bootscript-last-access-timestamp
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{inputs.parameters.dryRun}}"
-                - name: scriptContent
-                  value: |
-                    TARGET_NCN={{inputs.parameters.targetNcn}}
-                    ssh $TARGET_NCN '/srv/cray/scripts/metal/cleanup-live-images.sh -y -a -o'
           - name: "pxe-boot-node"
             dependencies:
-              - cleanup-live-images
+              - get-bootscript-last-access-timestamp
             templateRef:
               name: ssh-template
               template: shell-script
