@@ -222,6 +222,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
   - [Enable Ansible Profiling](configuration_management/Enable_Ansible_Profiling.md)
 - [CFS Global Options](configuration_management/CFS_Global_Options.md)
 - [Version Control Service \(VCS\)](configuration_management/Version_Control_Service_VCS.md)
+  - [VCS Administrative User](configuration_management/VCS_Administrative_User.md)
   - [Git Operations](configuration_management/Git_Operations.md)
   - [VCS Branching Strategy](configuration_management/VCS_Branching_Strategy.md)
   - [Customize Configuration Values](configuration_management/Customize_Configuration_Values.md)

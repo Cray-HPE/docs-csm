@@ -49,6 +49,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Gigabyte BMC Missing Redfish Data](known_issues/Gigabyte_BMC_Missing_Redfish_Data.md)
 * [Hang Listing BOS Sessions](known_issues/Hang_Listing_BOS_Sessions.md)
 * [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
+* [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 
 ## Kubernetes
 
@@ -105,11 +106,13 @@ See [Deprecated features](../introduction/differences.md#deprecated_features) fo
 
 * [Ansible Play Failures in CFS Sessions](../operations/configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
 * [CFS Session Failing to Complete](../operations/configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
+* [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 
 ## Security and authentication
 
 * [Common Vault Cluster Issues](../operations/security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
 * [Keycloak User Localization](../operations/security_and_authentication/Keycloak_User_Localization.md)
+* [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 
 ## ConMan
 
