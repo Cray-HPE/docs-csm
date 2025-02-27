@@ -2,8 +2,13 @@
 
 * [VCS web interface](#vcs-web-interface)
 * [Cloning a VCS repository](#cloning-a-vcs-repository)
-* [VCS administrative user](#vcs-administrative-user)
+* [Git Operations](Git_Operations.md)
+* [VCS Branching Strategy](VCS_Branching_Strategy.md)
+* [Create and Populate a VCS Configuration Repository](Create_and_Populate_a_VCS_Configuration_Repository.md)
+* [Update the Privacy Settings for Gitea Configuration Content Repositories](Update_the_Privacy_Settings_for_Gitea_Configuration_Content_Repositories.md)
+* [VCS Administrative User](VCS_Administrative_User.md)
 * [Access the `cray` Gitea organization](#access-the-cray-gitea-organization)
+* [Managing Sensitive Information in VCS](Secure_Sensitive_Information_in_VCS.md)
 * [Backup and restore data](#backup-and-restore-data)
     * [Automated backup and restore](#automated-backup-and-restore)
         * [Automated backup](#automated-backup)
@@ -38,17 +43,13 @@ Example output:
 ## Cloning a VCS repository
 
 On cluster nodes, the VCS service can be accessed through the gateway. VCS credentials for the `crayvcs` user are required before cloning a repository \(see
-[VCS administrative user](#vcs-administrative-user) below\).
+[VCS Administrative User](VCS_Administrative_User.md)\).
 
 (`ncn#`) To clone a repository in the `cray` organization, use the following command:
 
 ```bash
 git clone https://api-gw-service-nmn.local/vcs/cray/REPO_NAME.git
 ```
-
-## VCS administrative user
-
-See [VCS Administrative User](VCS_Administrative_User.md).
 
 ## Access the `cray` Gitea organization
 
