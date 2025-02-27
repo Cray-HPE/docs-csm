@@ -76,6 +76,8 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [IUF CLI reports false error that `management-nodes-rollout` failed](known_issues/iuf_cli_false_error_management_rollout_failed.md)
 * [`cray-console-node` pods in `CrashLoopBackOff`](known_issues/cray-console-node_pods_in_CrashLoopBackOff.md)
 * [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
+* [CFS-API pods in CLBO state](known_issues/cfs-api_pods_in_CLBO_state.md)
+* [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 
 ## Booting
 
@@ -97,6 +99,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md)
 * [Incrementally Configuring Images](incrementally_configuring_images.md)
 * [CFS-API pods in CLBO state](known_issues/cfs-api_pods_in_CLBO_state.md)
+* [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 
 ## ConMan
 
@@ -178,6 +181,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Common Vault Cluster Issues](../operations/security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
 * [Keycloak User Localization](../operations/security_and_authentication/Keycloak_User_Localization.md)
 * [Troubleshoot Kyverno configuration manually](../operations/security_and_authentication/Troubleshoot_Kyverno_Configuration_manually.md)
+* [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 
 ## Spire
 
