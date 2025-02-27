@@ -2,13 +2,13 @@
 
 * [What is `kdump`?](#what-is-kdump)
 * [Usage](#usage)
-  * [Configuration](#configuration)
-  * [Dracut](#dracut)
-  * [Enabling / disabling](#enabling--disabling)
+    * [Configuration](#configuration)
+    * [Dracut](#dracut)
+    * [Enabling / disabling](#enabling--disabling)
 * [Analyzing a dump](#analyzing-a-dump)
 * [Troubleshooting](#troubleshooting)
-  * [`kdump` has hung](#kdump-has-hung)
-  * [Resetting `kdump`](#resetting-kdump)
+    * [`kdump` has hung](#kdump-has-hung)
+    * [Resetting `kdump`](#resetting-kdump)
 
 ## What is `kdump`?
 
