@@ -2,13 +2,13 @@
 
 * [What is `kdump`?](#what-is-kdump)
 * [Usage](#usage)
-  * [Configuration](#configuration)
-  * [Dracut](#dracut)
-  * [Enabling / disabling](#enabling--disabling)
+    * [Configuration](#configuration)
+    * [Dracut](#dracut)
+    * [Enabling / disabling](#enabling--disabling)
 * [Analyzing a dump](#analyzing-a-dump)
 * [Troubleshooting](#troubleshooting)
-  * [`kdump` has hung](#kdump-has-hung)
-  * [Resetting `kdump`](#resetting-kdump)
+    * [`kdump` has hung](#kdump-has-hung)
+    * [Resetting `kdump`](#resetting-kdump)
 
 ## What is `kdump`?
 
@@ -72,9 +72,9 @@ to be installed; the `crash` command can not thoroughly analyze a dump without t
 
 1. SSH to the node that has the dump.
 
-1. (`ncn#`) Install `kernel-default-debug` on the node with the dump.
+1. (`ncn#`) Install `kernel-default-debuginfo` on the node with the dump.
 
-   > ***NOTE*** The `kernel-default-debug` package for the current kernel (the kernel associated with the dump) must be installed.
+   > ***NOTE*** The `kernel-default-debuginfo` package for the current kernel (the kernel associated with the dump) must be installed.
    > The steps below load the `dracut-lib.sh` library which sets the `KVER` variable; this variable contains that value.
 
     * Install from the embedded repository.
