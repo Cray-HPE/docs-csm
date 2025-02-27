@@ -62,6 +62,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [NCN resource checks known issues](known_issues/ncn_resource_checks.md)
 * [Spire database connection pool configuration in an air*gapped environment](known_issues/spire_database_airgap_configuration.md)
 * [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
+* [Enable Spire xname validation error](known_issues/spire_xname_validation_error.md)
 * [Postgres Database is in Recovery](known_issues/postgres_database_recovery.md)
 * [Test Failures Due To No Discovered Compute Nodes In HSM](known_issues/test_failures_no_discovered_computes_in_hsm.md)
 * [Velero Version Mismatch](known_issues/velero_version_mismatch.md)
