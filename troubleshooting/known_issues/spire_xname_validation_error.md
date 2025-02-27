@@ -2,7 +2,7 @@
 
 ## Description
 
-There is a known issue when the Spire servers are configured to use xname validation in CSM 1.6 where once validation is enabled the `request-ncn-join` pods enter a crash loop.
+There is a known issue when the Spire servers are configured to use xname validation in CSM 1.6, where once validation is enabled, the `request-ncn-join` pods enter a crash loop.
 
 There is a misconfiguration of the workloads configuration file that is used when xname validation is turned on. This leads to the Spire registration servers unable to give new
 tokens to any workload attempting to join spire.
