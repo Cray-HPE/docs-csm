@@ -70,7 +70,8 @@ Glossary of terms used in CSM documentation.
 * [Redfish Translation Service (RTS)](#redfish-translation-service-rts)
 * [River Cabinet](#river-cabinet)
 * [Rosetta ASIC](#rosetta-asic)
-* [Scalable Boot Projection Service](#scalable-boot-projection-service-sbps)
+* [Scalable Boot Projection Service (SBPS)](#scalable-boot-projection-service-sbps)
+* [Secrets OPerationS (SOPS)](#secrets-operations-sops)
 * [Service/IO Cabinet](#serviceio-cabinet)
 * [Shasta Cabling Diagram (SHCD)](#shasta-cabling-diagram-shcd)
 * [Simple Storage Service (S3)](#simple-storage-service-s3)
@@ -606,6 +607,12 @@ Analytics products leverage SBPS to provide content to compute nodes and applica
 CPE and Analytics are provided as separately mounted filesystems that are mounted alongside the root filesystem.
 
 For more information, see [iSCSI SBPS (Scalable Boot Content Projection Service)](operations/iscsi_sbps/iscsi_sbps.md).
+
+## Secrets OPerationS (SOPS)
+
+Secrets OPerationS (SOPS) is an editor for managing secure data.
+
+For more information, see [SOPS Introduction](operations/security_and_authentication/SOPS.md).
 
 ## Service/IO Cabinet
 
