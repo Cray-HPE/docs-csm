@@ -4,9 +4,10 @@
 - [Interpreting `cmsdev` Results](#interpreting-cmsdev-results)
 - [Known issues with SMS tests](#known-issues-with-sms-tests)
   - [Cray CLI](#cray-cli)
-  - [Etcd-restores](#etcd-restores)
+  - [Etcd restores](#etcd-restores)
   - [BOS subtest hangs](#bos-subtest-hangs)
   - [Invalid CFS component](#invalid-cfs-component)
+  - [VCS subtest command failure](#vcs-subtest-command-failure)
 
 ## SMS test execution
 
@@ -48,6 +49,12 @@ Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
 
 ## Known issues with SMS tests
 
+- [Cray CLI](#cray-cli)
+- [Etcd restores](#etcd-restores)
+- [BOS subtest hangs](#bos-subtest-hangs)
+- [Invalid CFS component](#invalid-cfs-component)
+- [VCS subtest command failure](#vcs-subtest-command-failure)
+
 ### Cray CLI
 
 Some of the subtests may fail if the Cray CLI is not configured on the management NCN where `cmsdev` is executed.
@@ -87,3 +94,22 @@ ERROR (run tag fhn3C-cfs): First list item has empty value for "id" field
 ```
 
 For details on how to correct this problem, see [CFS Component With Zero-Length ID](CFS_Component_With_Zero_Length_ID.md).
+
+### VCS subtest command failure
+
+If the VCS administrative password contains illegal characters, it can cause the VCS subtest to fail with an error
+message that resembles the following:
+
+```text
+ERROR (run tag Xe9tC-vcs): Command failed
+```
+
+If the test is run in verbose mode, or the `cmsdev` log file is examined, a line similar to the following is found:
+
+```text
+fatal: unable to access 'https://crayvcs:BPuN/M846JL5XKTTWVqcV2mhuZfzOC64nnZ/e54ri1M=@api-gw-service-nmn.local/vcs/test-cmsdev-zvkEP50G/harf-zEK1SuiP.git/': URL using bad/illegal format or missing URL
+```
+
+See [VCS Password With Illegal Characters](VCS_Password_With_Illegal_Characters.md) for more information on this problem, including
+remediation steps.
+See [SMS test execution](#sms-test-execution) for more information on running the test in verbose mode and locating its log file.
