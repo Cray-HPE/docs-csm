@@ -1,13 +1,12 @@
 # Create and Populate a VCS Configuration Repository
 
-Create a new repository in the VCS and populate it with content for site customizations in a custom Configuration Framework Service
-\(CFS\) configuration layer.
+Create a new repository in the Version Control Service (VCS) and populate it with content for site customizations in a custom
+Configuration Framework Service \(CFS\) configuration layer.
 
 ## Prerequisites
 
-* The Version Control Service \(VCS\) login credentials for the `crayvcs` user are set up.
-  See [VCS Administrative User](Version_Control_Service_VCS.md#vcs-administrative-user) in
-  [Version Control Service (VCS)](Version_Control_Service_VCS.md) for more information.
+* The VCS login credentials for the `crayvcs` user are set up.
+  See [VCS administrative user](Version_Control_Service_VCS.md#vcs-administrative-user) for more information.
 
 ## Procedure
 

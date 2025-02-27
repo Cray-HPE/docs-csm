@@ -2,6 +2,10 @@
 
 * [VCS overview](#vcs-overview)
 * [Cloning a VCS repository](#cloning-a-vcs-repository)
+* [Git Operations](Git_Operations.md)
+* [VCS Branching Strategy](VCS_Branching_Strategy.md)
+* [Create and Populate a VCS Configuration Repository](Create_and_Populate_a_VCS_Configuration_Repository.md)
+* [Update the Privacy Settings for Gitea Configuration Content Repositories](Update_the_Privacy_Settings_for_Gitea_Configuration_Content_Repositories.md)
 * [VCS administrative user](#vcs-administrative-user)
   * [Change VCS administrative user password](#change-vcs-administrative-user-password)
 * [Access the `cray` Gitea organization](#access-the-cray-gitea-organization)
@@ -35,7 +39,7 @@ Example output:
 ## Cloning a VCS repository
 
 On cluster nodes, the VCS service can be accessed through the gateway. VCS credentials for the `crayvcs` user are required before cloning a repository \(see
-[VCS administrative user](#vcs_administrative_user) below\).
+[VCS administrative user](#vcs-administrative-user) below\).
 
 To clone a repository in the `cray` organization, use the following command:
 
