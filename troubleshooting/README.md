@@ -54,6 +54,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Product Catalog Upgrade Error](known_issues/product_catalog_upgrade_error.md)
 * [PCS and CAPMC Transaction Size Limitation](known_issues/pcs_and_capmc_transaction_size_limitation.md)
 * [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
+* [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 
 ## Booting
 
@@ -84,6 +85,7 @@ CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. See [Depre
 
 * [Ansible Play Failures in CFS Sessions](../operations/configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
 * [CFS Session Failing to Complete](../operations/configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
+* [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 
 ## ConMan
 
@@ -146,6 +148,7 @@ CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. See [Depre
 * [Common Vault Cluster Issues](../operations/security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
 * [Keycloak User Localization](../operations/security_and_authentication/Keycloak_User_Localization.md)
 * [Troubleshoot Kyverno configuration manually](../operations/security_and_authentication/Troubleshoot_Kyverno_Configuration_manually.md)
+* [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 
 ## Spire
 
