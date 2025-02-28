@@ -99,7 +99,7 @@ by the `cray-sls-postgresql-db-backup` Kubernetes cronjob.
 3. (`ncn-mw#`) Re-run the SLS loader job:
 
     ```bash
-    kubectl -n services get job cray-sls-init-load -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | kubectl replace --force -f -
+    kubectl -n services get job cray-sls-init-load -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.spec.template.metadata.labels."batch.kubernetes.io/controller-uid")' | kubectl replace --force -f -
     ```
 
     Wait for the job to complete:
