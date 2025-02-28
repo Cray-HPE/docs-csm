@@ -21,11 +21,11 @@ that are owned by that tenant. No other tenant specific interactions are intende
 Tenants may use the standard set of version control tools in concert with best practices outlined in instructions for
 encrypting variables using the SOPS binary to perform encryption.
 
-While using version control system to author and encrypt variables, the standard ansible inventory and directory layout
+While using version control system to author and encrypt variables, the standard Ansible inventory and directory layout
 applies for issuing `host_vars` and `group_vars` in the top level directory of your checkout. By convention, Ansible's
 SOPS module denotes files that contain a `.sops.` suffix in concert with their file format suffixes (e.g. `.yaml`,
 `.ini`, `.json`) in order to denote that the contents of the files are encrypted and require decryption before use as
-ansible runs.
+Ansible runs.
 
 Here is an example of how this might look within a check-in in a way that takes advantage of this encryption:
 
@@ -57,11 +57,11 @@ using Ansible tasks with `no_log: True` should be used in conjunction with any t
 information that would otherwise output sensitive information during task execution.
 
 SOPS provides a means to secure information within a VCS checkout or checkouts, however the global administrator must
-ensure that ansible configurations run against the cluster are not considered harmful or inappropriate for a given
+ensure that Ansible configurations run against the cluster are not considered harmful or inappropriate for a given
 tenant.
 
 Currently, no mechanism exists to completely separate launched CFS sessions against cluster resources that a particular
 tenant does not own or should not access. This includes accessing cluster internal system resources to affect resources
-that do not belong to a tenant, as well as ansible tasks that are authored to use the `delegate_to` stanza within
+that do not belong to a tenant, as well as Ansible tasks that are authored to use the `delegate_to` stanza within
 defined roles and tasks that target resources outside the associated tenancy. For this reason, system  administrators
 have a global view of all configurations defined within CFS to better aid in auditing.
