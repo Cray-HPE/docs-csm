@@ -719,6 +719,6 @@ tokens to any workload attempting to join spire.
 
   Output:
 
-  ```bash
+  ```text
   statefulset.apps/cray-spire-server restarted
   ```
