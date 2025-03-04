@@ -111,7 +111,7 @@ ncn-mgmt-node-auditing-enabled: false
    * Host audit logging
 
       ```console
-       csi handoff bss-update-cloud-init --set meta-data.ncn-mgmt-node-auditing-enabled=true --limit Global
+      csi handoff bss-update-cloud-init --set meta-data.ncn-mgmt-node-auditing-enabled=true --limit Global
       ```
 
    * Kubernetes API audit logging
