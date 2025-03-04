@@ -122,8 +122,8 @@ done
 * `ipmitool` can set and edit boot order; it works better for some vendors based on their BMC implementation
 * `efibootmgr` speaks directly to the node's UEFI; it can only be ignored by new BIOS activity
 
-> **NOTE:** `cloud-init` will set boot order when it runs, but this does not always work with certain hardware vendors. An administrator can invoke the `cloud-init` script at
-> `/srv/cray/scripts/metal/set-efi-bbs.sh` on any NCN.
+> **NOTE:** `cloud-init` will set boot order and trim boot devices during its `runcmd` module, but this does not always work with certain hardware vendors. An administrator may invoke the `cloud-init` script on
+> any NCN or PIT by loading `/srv/cray/scripts/metal/metal-lib.sh` (this should be loaded in a sub-shell as the library has a `set -e` flag.)
 
 ## Setting boot order
 
@@ -185,47 +185,24 @@ This is the end of the `Setting boot order` procedure.
 
 ## Trimming boot order
 
-This section gives the procedure for removing unwanted entries from the boot order on NCNs and the PIT node.
+This procedure prunes the list of boot devices, optimizing the boot order to align with CSM's requirements.
 
-This section will only advise on removing other PXE entries. There are too many
-vendor-specific entries beyond disks and NICs to cover in this section (e.g. BIOS entries, iLO entries, etc.).
+(`ncn#` or `pit#`) Load the metal tools library and invoke the boot trim function.
 
-In this case, the instructions are the same regardless of node type (management, storage, or worker):
+```bash
+TEMP=$(mktemp -d)
+efibootmgr > "${TEMP}/original.log"
+(
+. /srv/cray/scripts/metal/metal-lib.sh
+setup_uefi_bootorder >"${TEMP}/run.log"
+)
+```
 
-1. (`ncn#` or `pit#`) Make lists of the unwanted boot entries.
+> ***NOTE*** The above snippet is `pdsh` friendly for bulk trims.
 
-    * Gigabyte Technology
+The `${TEMP}/run.log` file will show the output from each `efibootmgr` call to trim the boot order.
 
-        ```bash
-        efibootmgr | grep -ivP '(pxe ipv?4.*)' | grep -iP '(adapter|connection|nvme|sata)' | tee /tmp/rbbs1
-        efibootmgr | grep -iP '(pxe ipv?4.*)' | grep -i connection | tee /tmp/rbbs2
-        ```
-
-    * Hewlett-Packard Enterprise
-
-        > **NOTE:** This does not trim HSN Mellanox cards; these should disable their OpROMs using [the high speed network snippets](../operations/node_management/Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md#high-speed-network).
-
-        ```bash
-        efibootmgr | grep -vi 'pxe ipv4' | grep -i adapter |tee /tmp/rbbs1
-        efibootmgr | grep -iP '(sata|nvme)' | tee /tmp/rbbs2
-        ```
-
-    * Intel Corporation
-
-        ```bash
-        efibootmgr | grep -vi 'ipv4' | grep -iP '(sata|nvme|uefi)' | tee /tmp/rbbs1
-        efibootmgr | grep -i baseboard | tee /tmp/rbbs2
-        ```
-
-1. (`ncn#` or `pit#`) Remove them.
-
-    ```bash
-    cat /tmp/rbbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -t -i efibootmgr -b {} -B
-    ```
-
-The boot menu should be trimmed down to contain only relevant entries.
-
-This is the end of the `Trimming boot order` procedure.
+The boot order has been trimmed.
 
 ## Example boot orders
 
