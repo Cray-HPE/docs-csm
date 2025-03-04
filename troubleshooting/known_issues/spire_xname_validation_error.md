@@ -338,7 +338,7 @@ tokens to any workload attempting to join spire.
             value: gid:0
           - type: unix
             value: path:/usr/bin/heartbeat-spire-agent
-      - spiffeID: spiffe://shasta/ncn/workload/sbps-marshal
+      - spiffeID: spiffe://shasta/ncn/XNAME/workload/sbps-marshal
         selectors:
           - type: unix
             value: uid:0
@@ -443,7 +443,7 @@ tokens to any workload attempting to join spire.
             value: gid:0
           - type: unix
             value: path:/opt/cray/cray-spire/tpm-provisioner
-      - spiffeID: spiffe://shasta/ncn/workload/sbps-marshal
+      - spiffeID: spiffe://shasta/ncn/XNAME/workload/sbps-marshal
         selectors:
           - type: unix
             value: uid:0
@@ -707,4 +707,18 @@ tokens to any workload attempting to join spire.
 
   ```bash
   configmap/cray-spire-workloads serverside-applied
+  ```
+
+1. Restart the `cray-spire-server` stateful set.
+
+  Command:
+
+  ```bash
+  kubectl rollout restart sts -n spire cray-spire-server
+  ```
+
+  Output:
+
+  ```text
+  statefulset.apps/cray-spire-server restarted
   ```
