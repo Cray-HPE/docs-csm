@@ -22,9 +22,9 @@ list of patch versions.
 ## Bug fixes and improvements
 
 * Improved performance and scalability of [Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss) and `cfs-trust`
-* Fixed issue with false positive goss test failure ([`CASMPET-7088`](https://jira-pro.it.hpe.com:8443/browse/CASMPET-7088) Bo Quan)
-* Fixed bug in `cfs-debugger` ([`CASMCMS-9247`](https://jira-pro.it.hpe.com:8443/browse/CASMCMS-9247) - Mitch Harding)
-* Fixed bug when validating a non-existent session template ([`CASMCMS-9270`](https://jira-pro.it.hpe.com:8443/browse/CASMCMS-9270) - Mitch Harding)
+* Fixed issue with false positive goss test failure
+* Fixed bug in `cfs-debugger` (from [`CASMCMS-9247`](https://jira-pro.it.hpe.com:8443/browse/CASMCMS-9247) to be reviewed by Mitch Harding)
+* Fixed bug when validating a non-existent session template (from [`CASMCMS-9270`](https://jira-pro.it.hpe.com:8443/browse/CASMCMS-9270) to be reviewed by Mitch Harding)
 
 ## Steps
 
