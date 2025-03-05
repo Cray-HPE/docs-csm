@@ -53,6 +53,7 @@ procedures).
 If there are multiple patch versions available, note that there is no need to perform intermediate
 CSM 1.5 patch upgrades. Instead, consider upgrading to the latest CSM 1.5 patch release.
 
+* [CSM 1.5.4 Patch Installation Instructions](1.5.4/README.md)
 * [CSM 1.5.3 Patch Installation Instructions](1.5.3/README.md)
 * [CSM 1.5.2 Patch Installation Instructions](1.5.2/README.md)
 * [CSM 1.5.1 Patch Installation Instructions](1.5.1/README.md)
