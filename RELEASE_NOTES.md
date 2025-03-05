@@ -175,6 +175,7 @@ documentation improvements. This page lists some of the highlights.
 * Fixed an issue where Weave pods were not starting after upgrading to CSM V1.4 content
 * Fixed PowerDNS server TLD is missing NS delegation records for subdomains
 * Fixed an issue where FRU Tracking doesn't create a detected event after a removed event
+* Fixed an issue where `kdump` would freeze while writing the `vmcore` and other dump files
 
 ## Deprecations
 
