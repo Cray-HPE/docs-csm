@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -1100,8 +1100,11 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     # Loop through one at a time. If `--limit` isn't provided, we will error out on the 'Global' key.
     for ncn_xname in "${NCN_XNAMES[@]}"; do
 
+      # 's/crashkernel=360M/crashkernel=512M,high crashkernel=72M,low/g' is a catch-all for systems upgrading to 1.5
+      # from 1.5.0-1.5.2 or 1.4. It is not needed for 1.6 and up, but it is safe to run.
       params=$(cray bss bootparameters list --hosts "${ncn_xname}" --format json | jq '.[] |."params"' \
         | sed -E 's/ip=hsn[0-9]+:auto6//g' \
+        | sed -E 's/crashkernel=360M/crashkernel=512M,high crashkernel=72M,low/g' \
         | tr -d \")
 
       if ! cray bss bootparameters update --hosts "${ncn_xname}" \
