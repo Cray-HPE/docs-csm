@@ -66,6 +66,10 @@ spec:
             resources:
               requests:
                 cpu: "1"
+          controller:
+            resources:
+              requests:
+                cpu: "100m"
       cray-hms-capmc:
         cray-service:
           containers:
@@ -73,6 +77,59 @@ spec:
               resources:
                 requests:
                   cpu: "500m"
+      cray-istio:
+        deployments:
+          istio-ingressgateway:
+            resources:
+              requests:
+                cpu: "50m"
+          istio-ingressgateway-customer-admin:
+            resources:
+              requests:
+                cpu: "50m"
+          istio-ingressgateway-customer-user:
+            resources:
+              requests:
+                cpu: "50m"
+          istio-ingressgateway-hmn:
+            resources:
+              requests:
+                cpu: "50m"
+      cray-keycloak:
+        keycloak:
+          resources:
+            requests:
+              cpu: "20m"
+      cray-kyverno:
+        kyverno:
+          admissionController:
+            container:
+              resources:
+                requests:
+                  cpu: "1"
+          reportsController:
+            resources:
+              requests:
+                cpu: "20m"
+          cleanupController:
+            resources:
+              requests:
+                cpu: "20m"
+          backgroundController:
+            resources:
+              requests:
+                cpu: "20m"
+      cray-opa:
+        opa:
+          resources:
+            requests:
+              cpu: "10m"
+      cray-sysmgmt-health:
+        victoria-metrics-k8s-stack:
+          prometheus-node-exporter:
+            resources:
+              requests:
+                cpu: "10m"
       sma-elasticsearch:
         resources:
           requests:

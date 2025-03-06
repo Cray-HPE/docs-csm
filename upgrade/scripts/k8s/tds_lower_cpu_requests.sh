@@ -38,6 +38,10 @@ if [ ! -f $yaml ]; then
   exit 1
 fi
 
+TMP_CUST_YAML=$(mktemp --tmpdir="/tmp" lower.XXXXXX.yaml)
+kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${TMP_CUST_YAML}"
+cp "${TMP_CUST_YAML}" "${TMP_CUST_YAML}.bak"
+
 function roll_postgres() {
   ns=$1
   cluster=$2
@@ -52,6 +56,12 @@ function roll_postgres() {
   echo ""
 }
 
+function update_customizations() {
+  key=$1
+  value=$2
+  yq write -i $TMP_CUST_YAML $key $value
+}
+
 function fail_if_empty() {
   key=$1
   value=$2
@@ -60,6 +70,8 @@ function fail_if_empty() {
     echo "       $key"
     echo "       Ensure the latest docs-csm rpm is installed on this system."
     exit 1
+  else
+    update_customizations $key $value
   fi
 }
 
@@ -114,6 +126,50 @@ fail_if_empty $yaml_path $nexus_new_cpu_request
 yaml_path="$base.cray-metallb.metallb.speaker.resources.requests.cpu"
 cray_metallb_speaker_new_cpu_request=$(yq r $yaml -pv $yaml_path)
 fail_if_empty $yaml_path $cray_metallb_speaker_new_cpu_request
+
+yaml_path="$base.cray-metallb.metallb.controller.resources.requests.cpu"
+cray_metallb_controller_new_cpu_request=$(yq r $yaml -pv $yaml_path)
+fail_if_empty $yaml_path $cray_metallb_controller_new_cpu_request
+
+yaml_path="$base.cray-istio.deployments.istio-ingressgateway.resources.requests.cpu"
+cray_istio_ingressgateway_new_cpu_request=$(yq r $yaml -pv $yaml_path)
+fail_if_empty $yaml_path $cray_istio_ingressgateway_new_cpu_request
+
+yaml_path="$base.cray-istio.deployments.istio-ingressgateway-customer-admin.resources.requests.cpu"
+cray_istio_admin_new_cpu_request=$(yq r $yaml -pv $yaml_path)
+fail_if_empty $yaml_path $cray_istio_admin_new_cpu_request
+
+yaml_path="$base.cray-istio.deployments.istio-ingressgateway-customer-user.resources.requests.cpu"
+cray_istio_user_new_cpu_request=$(yq r $yaml -pv $yaml_path)
+fail_if_empty $yaml_path $cray_istio_user_new_cpu_request
+
+yaml_path="$base.cray-istio.deployments.istio-ingressgateway-hmn.resources.requests.cpu"
+cray_istio_hmn_new_cpu_request=$(yq r $yaml -pv $yaml_path)
+fail_if_empty $yaml_path $cray_istio_hmn_new_cpu_request
+
+yaml_path="$base.cray-keycloak.keycloak.resources.requests.cpu"
+cray_keycloak_new_cpu_request=$(yq r $yaml -pv $yaml_path)
+fail_if_empty $yaml_path $cray_keycloak_new_cpu_request
+
+yaml_path="$base.cray-kyverno.kyverno.admissionController.container.resources.requests.cpu"
+cray_kyverno_admission_new_cpu_request=$(yq r $yaml -pv $yaml_path)
+fail_if_empty $yaml_path $cray_kyverno_admission_new_cpu_request
+
+yaml_path="$base.cray-kyverno.kyverno.reportsController.resources.requests.cpu"
+cray_kyverno_reports_new_cpu_request=$(yq r $yaml -pv $yaml_path)
+fail_if_empty $yaml_path $cray_kyverno_reports_new_cpu_request
+
+yaml_path="$base.cray-kyverno.kyverno.cleanupController.resources.requests.cpu"
+cray_kyverno_cleanup_new_cpu_request=$(yq r $yaml -pv $yaml_path)
+fail_if_empty $yaml_path $cray_kyverno_cleanup_new_cpu_request
+
+yaml_path="$base.cray-kyverno.kyverno.backgroundController.resources.requests.cpu"
+cray_kyverno_background_new_cpu_request=$(yq r $yaml -pv $yaml_path)
+fail_if_empty $yaml_path $cray_kyverno_background_new_cpu_request
+
+yaml_path="$base.cray-opa.opa.resources.requests.cpu"
+cray_opa_new_cpu_request=$(yq r $yaml -pv $yaml_path)
+fail_if_empty $yaml_path $cray_opa_new_cpu_request
 
 if kubectl get postgresqls -n spire cray-spire-postgres > /dev/null 2>&1; then
   if [ ! -z $cray_spire_postgres_new_request ]; then
@@ -209,7 +265,7 @@ if [[ $kafkaDeployed -ne 0 ]]; then
 
   if [ ! -z $cluster_zookeeper_new_cpu_request ]; then
     current_req=$(kubectl get kafkas -n sma cluster -o json | jq -r '.spec.zookeeper.resources.requests.cpu')
-    echo "Patching cluster-zookeeper statefulset with new cpu request of $cluster_zookeeper_new_cpu_request (from $current_req)"
+    echo "Patching cluster-zookeeper with new cpu request of $cluster_zookeeper_new_cpu_request (from $current_req)"
     kubectl patch kafkas cluster -n sma --type=json -p="[{'op' : 'replace', 'path':'/spec/zookeeper/resources/requests/cpu', 'value' : \"$cluster_zookeeper_new_cpu_request\" }]"
     sleep 10
     until [[ $(kubectl -n sma get "${resource}" cluster-zookeeper -o json | jq --arg status $status -r "$status") -eq 3 ]]; do
@@ -235,13 +291,170 @@ if [ ! -z $nexus_new_cpu_request ]; then
   echo ""
 fi
 
-crayMetallbDeployed=$(kubectl get pods -n metallb-system | grep metallb-speaker | wc -l)
-if [[ $crayMetallbDeployed -ne 0 ]]; then
+crayMetallbSpeakerDeployed=$(kubectl get pods -n metallb-system | grep metallb-speaker | wc -l)
+if [[ $crayMetallbSpeakerDeployed -ne 0 ]]; then
   if [ ! -z $cray_metallb_speaker_new_cpu_request ]; then
     current_req=$(kubectl get daemonset metallb-speaker -n metallb-system -o json | jq -r '.spec.template.spec.containers[] | select(.name== "speaker") | .resources.requests.cpu')
-    echo "Patching metallb deployment with new cpu request of $cray_metallb_speaker_new_cpu_request (from $current_req)"
+    echo "Patching metallb-speaker daemonset with new cpu request of $cray_metallb_speaker_new_cpu_request (from $current_req)"
     kubectl patch daemonset metallb-speaker -n metallb-system --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_metallb_speaker_new_cpu_request\" }]"
     kubectl rollout status daemonset -n metallb-system metallb-speaker
     echo ""
   fi
 fi
+
+crayMetallbControllerDeployed=$(kubectl get pods -n metallb-system | grep metallb-controller | wc -l)
+if [[ $crayMetallbControllerDeployed -ne 0 ]]; then
+  if [ ! -z $cray_metallb_controller_new_cpu_request ]; then
+    current_req=$(kubectl get deployment metallb-controller -n metallb-system -o json | jq -r '.spec.template.spec.containers[] | select(.name== "controller") | .resources.requests.cpu')
+    echo "Patching metallb-controller deployment with new cpu request of $cray_metallb_controller_new_cpu_request (from $current_req)"
+    kubectl patch deployment metallb-controller -n metallb-system --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_metallb_controller_new_cpu_request\" }]"
+    kubectl rollout status deployment -n metallb-system metallb-controller
+    echo ""
+  fi
+fi
+
+crayIstioIngressDeployed=$(kubectl get pods -n istio-system | grep istio-ingressgateway | wc -l)
+if [[ $crayIstioIngressDeployed -ne 0 ]]; then
+  if [ ! -z $cray_istio_ingressgateway_new_cpu_request ]; then
+    current_req=$(kubectl get deployment istio-ingressgateway -n istio-system -o json | jq -r '.spec.template.spec.containers[] | select(.name== "istio-proxy") | .resources.requests.cpu')
+    echo "Patching istio-ingressgateway deployment with new cpu request of $cray_istio_ingressgateway_new_cpu_request (from $current_req)"
+    kubectl patch deployment istio-ingressgateway -n istio-system --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_istio_ingressgateway_new_cpu_request\" }]"
+    kubectl rollout status deployment -n istio-system istio-ingressgateway
+    echo ""
+  fi
+fi
+
+crayIstioAdminDeployed=$(kubectl get pods -n istio-system | grep istio-ingressgateway-customer-admin | wc -l)
+if [[ $crayIstioAdminDeployed -ne 0 ]]; then
+  if [ ! -z $cray_istio_admin_new_cpu_request ]; then
+    current_req=$(kubectl get deployment istio-ingressgateway-customer-admin -n istio-system -o json | jq -r '.spec.template.spec.containers[] | select(.name== "istio-proxy") | .resources.requests.cpu')
+    echo "Patching istio-ingressgateway deployment with new cpu request of $cray_istio_admin_new_cpu_request (from $current_req)"
+    kubectl patch deployment istio-ingressgateway-customer-admin -n istio-system --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_istio_admin_new_cpu_request\" }]"
+    kubectl rollout status deployment -n istio-system istio-ingressgateway-customer-admin
+    echo ""
+  fi
+fi
+
+crayIstioUserDeployed=$(kubectl get pods -n istio-system | grep istio-ingressgateway-customer-user | wc -l)
+if [[ $crayIstioUserDeployed -ne 0 ]]; then
+  if [ ! -z $cray_istio_user_new_cpu_request ]; then
+    current_req=$(kubectl get deployment istio-ingressgateway-customer-user -n istio-system -o json | jq -r '.spec.template.spec.containers[] | select(.name== "istio-proxy") | .resources.requests.cpu')
+    echo "Patching istio-ingressgateway-customer-user deployment with new cpu request of $cray_istio_user_new_cpu_request (from $current_req)"
+    kubectl patch deployment istio-ingressgateway-customer-user -n istio-system --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_istio_user_new_cpu_request\" }]"
+    kubectl rollout status deployment -n istio-system istio-ingressgateway-customer-user
+    echo ""
+  fi
+fi
+
+crayIstioHmnDeployed=$(kubectl get pods -n istio-system | grep istio-ingressgateway-hmn | wc -l)
+if [[ $crayIstioHmnDeployed -ne 0 ]]; then
+  if [ ! -z $cray_istio_hmn_new_cpu_request ]; then
+    current_req=$(kubectl get deployment istio-ingressgateway-hmn -n istio-system -o json | jq -r '.spec.template.spec.containers[] | select(.name== "istio-proxy") | .resources.requests.cpu')
+    echo "Patching istio-ingressgateway-hmn deployment with new cpu request of $cray_istio_hmn_new_cpu_request (from $current_req)"
+    kubectl patch deployment istio-ingressgateway-hmn -n istio-system --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_istio_hmn_new_cpu_request\" }]"
+    kubectl rollout status deployment -n istio-system istio-ingressgateway-hmn
+    echo ""
+  fi
+fi
+
+if [ ! -z $cray_keycloak_new_cpu_request ]; then
+  current_req=$(kubectl get statefulset -n services cray-keycloak -o json | jq -r '.spec.template.spec.containers[] | select(.name== "keycloak") | .resources.requests.cpu')
+  echo "Patching cray-keycloak statefulset with new cpu request of $cray_keycloak_new_cpu_request (from $current_req)"
+  kubectl patch statefulset cray-keycloak -n services --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_keycloak_new_cpu_request\" }]"
+  kubectl rollout status statefulset -n services cray-keycloak
+  echo ""
+fi
+
+crayKyvernoAdmissionDeployed=$(kubectl get pods -n kyverno | grep kyverno-admission-controller | wc -l)
+if [[ $crayKyvernoAdmissionDeployed -ne 0 ]]; then
+  if [ ! -z $cray_kyverno_admission_new_cpu_request ]; then
+    current_req=$(kubectl get deployment kyverno-admission-controller -n kyverno -o json | jq -r '.spec.template.spec.containers[] | select(.name== "kyverno") | .resources.requests.cpu')
+    echo "Patching kyverno-admission-controller deployment with new cpu request of $cray_kyverno_admission_new_cpu_request (from $current_req)"
+    kubectl patch deployment kyverno-admission-controller -n kyverno --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_kyverno_admission_new_cpu_request\" }]"
+    kubectl rollout status deployment -n kyverno kyverno-admission-controller
+    echo ""
+  fi
+fi
+
+crayKyvernoReportsDeployed=$(kubectl get pods -n kyverno | grep kyverno-reports-controller | wc -l)
+if [[ $crayKyvernoReportsDeployed -ne 0 ]]; then
+  if [ ! -z $cray_kyverno_reports_new_cpu_request ]; then
+    current_req=$(kubectl get deployment kyverno-reports-controller -n kyverno -o json | jq -r '.spec.template.spec.containers[] | select(.name== "controller") | .resources.requests.cpu')
+    echo "Patching kyverno-reports-controller deployment with new cpu request of $cray_kyverno_reports_new_cpu_request (from $current_req)"
+    kubectl patch deployment kyverno-reports-controller -n kyverno --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_kyverno_reports_new_cpu_request\" }]"
+    kubectl rollout status deployment -n kyverno kyverno-reports-controller
+    echo ""
+  fi
+fi
+
+crayKyvernoCleanupDeployed=$(kubectl get pods -n kyverno | grep kyverno-cleanup-controller | wc -l)
+if [[ $crayKyvernoCleanupDeployed -ne 0 ]]; then
+  if [ ! -z $cray_kyverno_cleanup_new_cpu_request ]; then
+    current_req=$(kubectl get deployment kyverno-cleanup-controller -n kyverno -o json | jq -r '.spec.template.spec.containers[] | select(.name== "controller") | .resources.requests.cpu')
+    echo "Patching kyverno-cleanup-controller deployment with new cpu request of $cray_kyverno_cleanup_new_cpu_request (from $current_req)"
+    kubectl patch deployment kyverno-cleanup-controller -n kyverno --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_kyverno_cleanup_new_cpu_request\" }]"
+    kubectl rollout status deployment -n kyverno kyverno-cleanup-controller
+    echo ""
+  fi
+fi
+
+crayKyvernoBackgroundDeployed=$(kubectl get pods -n kyverno | grep kyverno-background-controller | wc -l)
+if [[ $crayKyvernoBackgroundDeployed -ne 0 ]]; then
+  if [ ! -z $cray_kyverno_background_new_cpu_request ]; then
+    current_req=$(kubectl get deployment kyverno-background-controller -n kyverno -o json | jq -r '.spec.template.spec.containers[] | select(.name== "controller") | .resources.requests.cpu')
+    echo "Patching kyverno-background-controller deployment with new cpu request of $cray_kyverno_background_new_cpu_request (from $current_req)"
+    kubectl patch deployment kyverno-background-controller -n kyverno --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_kyverno_background_new_cpu_request\" }]"
+    kubectl rollout status deployment -n kyverno kyverno-background-controller
+    echo ""
+  fi
+fi
+
+crayOpaIngressDeployed=$(kubectl get pods -n opa | grep opa-ingressgateway | wc -l)
+if [[ $crayOpaIngressDeployed -ne 0 ]]; then
+  if [ ! -z $cray_opa_new_cpu_request ]; then
+    current_req=$(kubectl get daemonset cray-opa-ingressgateway -n opa -o json | jq -r '.spec.template.spec.containers[] | select(.name== "opa-istio") | .resources.requests.cpu')
+    echo "Patching cray-opa-ingressgateway daemonset with new cpu request of $cray_opa_new_cpu_request (from $current_req)"
+    kubectl patch daemonset cray-opa-ingressgateway -n opa --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_opa_new_cpu_request\" }]"
+    kubectl rollout status daemonset -n opa cray-opa-ingressgateway
+    echo ""
+  fi
+fi
+
+crayOpaAdminDeployed=$(kubectl get pods -n opa | grep opa-ingressgateway-customer-admin | wc -l)
+if [[ $crayOpaAdminDeployed -ne 0 ]]; then
+  if [ ! -z $cray_opa_new_cpu_request ]; then
+    current_req=$(kubectl get daemonset cray-opa-ingressgateway-customer-admin -n opa -o json | jq -r '.spec.template.spec.containers[] | select(.name== "opa-istio") | .resources.requests.cpu')
+    echo "Patching cray-opa-ingressgateway-customer-admin daemonset with new cpu request of $cray_opa_new_cpu_request (from $current_req)"
+    kubectl patch daemonset cray-opa-ingressgateway-customer-admin -n opa --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_opa_new_cpu_request\" }]"
+    kubectl rollout status daemonset -n opa cray-opa-ingressgateway-customer-admin
+    echo ""
+  fi
+fi
+
+crayOpaUserDeployed=$(kubectl get pods -n opa | grep opa-ingressgateway-customer-user | wc -l)
+if [[ $crayOpaUserDeployed -ne 0 ]]; then
+  if [ ! -z $cray_opa_new_cpu_request ]; then
+    current_req=$(kubectl get daemonset cray-opa-ingressgateway-customer-user -n opa -o json | jq -r '.spec.template.spec.containers[] | select(.name== "opa-istio") | .resources.requests.cpu')
+    echo "Patching cray-opa-ingressgateway-customer-user daemonset with new cpu request of $cray_opa_new_cpu_request (from $current_req)"
+    kubectl patch daemonset cray-opa-ingressgateway-customer-user -n opa --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_opa_new_cpu_request\" }]"
+    kubectl rollout status daemonset -n opa cray-opa-ingressgateway-customer-user
+    echo ""
+  fi
+fi
+
+crayOpaHmnDeployed=$(kubectl get pods -n opa | grep opa-ingressgateway-hmn | wc -l)
+if [[ $crayOpaHmnDeployed -ne 0 ]]; then
+  if [ ! -z $cray_opa_new_cpu_request ]; then
+    current_req=$(kubectl get daemonset cray-opa-ingressgateway-hmn -n opa -o json | jq -r '.spec.template.spec.containers[] | select(.name== "opa-istio") | .resources.requests.cpu')
+    echo "Patching cray-opa-ingressgateway-hmn daemonset with new cpu request of $cray_opa_new_cpu_request (from $current_req)"
+    kubectl patch daemonset cray-opa-ingressgateway-hmn -n opa --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_opa_new_cpu_request\" }]"
+    kubectl rollout status daemonset -n opa cray-opa-ingressgateway-hmn
+    echo ""
+  fi
+fi
+
+# push updated customizations.yaml to k8s
+cp ${TMP_CUST_YAML} /tmp/customizations.yaml
+echo "Update site-init secret"
+kubectl delete secret -n loftsman site-init
+kubectl create secret -n loftsman generic site-init --from-file=/tmp/customizations.yaml
