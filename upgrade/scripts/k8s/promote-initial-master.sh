@@ -31,6 +31,7 @@ if [[ $rc -ne 0 ]]; then
   cloud-init init > /dev/null 2>&1
 fi
 
+source /srv/cray/resources/common/vars.sh
 source /srv/cray/scripts/metal/lib.sh
 #shellcheck disable=SC2155
 export KUBERNETES_VERSION="v$(cat /etc/cray/kubernetes/version)"
