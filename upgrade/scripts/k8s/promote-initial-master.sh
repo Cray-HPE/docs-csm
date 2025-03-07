@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -31,6 +31,7 @@ if [[ $rc -ne 0 ]]; then
   cloud-init init > /dev/null 2>&1
 fi
 
+source /srv/cray/resources/common/vars.sh
 source /srv/cray/scripts/metal/lib.sh
 #shellcheck disable=SC2155
 export KUBERNETES_VERSION="v$(cat /etc/cray/kubernetes/version)"
