@@ -17,14 +17,13 @@ The Kubernetes API audit logs are stored in the `/var/log/audit/kl8s/apiserver` 
 Kubernetes API audit logging uses a maximum of 1GB on each master NCN when using log rotation settings.
 
 * [Enable or disable audit logging for host and Kubernetes APIs](#enable-or-disable-audit-logging-for-host-and-kubernetes-apis)
-  * [During CSM install, from the PIT node](#enable-audit-logging-during-csm-install-from-the-pit-node)
-    * [Use `csi` tool](#use-csi-tool)
-    * [Edit `system_config.yaml`](#edit-system_configyaml)
-  * [After CSM install](#enable-audit-logging-after-csm-install)
-    * [Use `csi` tool from `ncn-m001`](#use-csi-tool-from-ncn-m001)
-    * [Modify BSS from a Kubernetes NCN](#modify-bss-from-a-kubernetes-ncn)
+    * [During CSM install, from the PIT node](#enable-audit-logging-during-csm-install-from-the-pit-node)
+        * [Use the `csi` tool](#use-the-csi-tool)
+        * [Edit `system_config.yaml`](#edit-system_configyaml)
+    * [After CSM install](#enable-audit-logging-after-csm-install)
+        * [Use the `csi` tool after CSM install](#use-the-csi-tool-after-csm-install)
+* [Rebuild NCNs to make settings take effect](#rebuild-ncns-in-order-to-make-settings-take-effect)
 * [Verify that audit logging is enabled](#verify-that-audit-logging-is-enabled)
-* [Restart NCNs to make settings take effect](#restart-ncns-in-order-to-make-settings-take-effect)
 
 ## Enable or disable audit logging for host and Kubernetes APIs
 
@@ -38,14 +37,14 @@ For each of the following options, only enable the desired level of audit loggin
 
 ### Enable audit logging during CSM install, from the PIT node
 
-**NOTE:** This step needs to happen at the same time that `csi config init` is normally run during the install.
+**NOTE:** This step needs to happen at the same time that `csi config init` is normally run during system installation.
 
 (`pit#`) To update the audit log settings during the installation, use one of the following options:
 
-* [Use `csi` tool](#use-csi-tool)
-* [Edit `system_config.yaml`](#edit-systemconfigyaml)
+* [Use the `csi` tool](#use-the-csi-tool)
+* [Edit `system_config.yaml`](#edit-system_configyaml)
 
-#### Use `csi` tool
+#### Use the `csi` tool
 
 During the installation, audit logging is enabled or disabled by modifying the CSI settings.
 To enable or disable audit logging, use the following flags with the `csi config init` command.
@@ -87,77 +86,65 @@ ncn-mgmt-node-auditing-enabled: false
 
 ### Enable audit logging after CSM install
 
-Choose either of the following options:
+#### Use the `csi` tool after CSM install
 
-* [Use `csi` tool from `ncn-m001`](#use-csi-tool-from-ncn-m001)
-* [Modify BSS from a Kubernetes NCN](#modify-bss-from-a-kubernetes-ncn)
+(`ncn-mw#`) Enable audit logging using the `csi` tool on `ncn-m001`.
 
-#### Use `csi` tool from `ncn-m001`
+1. Install the `csi` tool if it is not already installed.
 
-(`ncn-m001#`) Enable audit logging using the `csi` tool on `ncn-m001`.
-
-1. Install the `csi` tool on `ncn-m001`, if it is not already installed.
-
-   If the `csi` command is not installed on `ncn-m001`, then locate the `cray-site-init` RPM on `ncn-m001` and install it.
+   If the `csi` command is not installed, then install the `cray-site-init` RPM.
 
    ```console
-   find /mnt/pitdata -name cray-site-init*
-   rpm -Uvh --force <rpm file path>
+   zypper install cray-site-init
    ```
 
-   It is also possible to enable audit logging without `csi`. See [Modify BSS from a Kubernetes NCN](#modify-bss-from-a-kubernetes-ncn).
+1. Acquire an authentication token.
+
+   ```console
+   TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client \
+           -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')  
+   ```
 
 1. Enable audit logging.
 
    * Host audit logging
 
       ```console
-      TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client \
-                -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token') \
-                csi handoff bss-update-param --limit <mgmt-node-xname> --set ncn-mgmt-node-auditing-enabled=true
+      csi handoff bss-update-cloud-init --set meta-data.ncn-mgmt-node-auditing-enabled=true --limit Global
       ```
 
    * Kubernetes API audit logging
 
-      ```console
-      TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client \
-                -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token') \
-                csi handoff bss-update-param --limit <mgmt-node-xname> --set k8s-api-auditing-enabled=true
-      ```
+     ```console
+     csi handoff bss-update-param --limit <mgmt-node-xname> --set k8s-api-auditing-enabled=true
+     ```
 
-#### Modify BSS from a Kubernetes NCN
+   Example output:
 
-(`ncn-mw#`) Enable audit logging with Boot Script Service (BSS) parameters.
+   ```console
+   2025/03/03 11:30:25 Getting management NCNs from SLS...
+   2025/03/03 11:30:25 Done getting management NCNs from SLS.
+   2025/03/03 11:30:25 Updating NCN cloud-init parameters...
+   2025/03/03 11:30:25 Successfully PUT BSS entry for Global
+   2025/03/03 11:30:25 Done updating NCN cloud-init parameters.
+   ```
 
-1. Configure the Cray CLI, if it is not already.
+## Rebuild NCNs in order to make settings take effect
 
-   See [Configure the Cray CLI](../configure_cray_cli.md).
+This section is only necessary if the audit logging settings were changed after the CSM install.
+If the desired audit logging settings were made as part of the CSM install, then skip this section.
 
-1. Enable audit logging.
+Rebuild each NCN to apply the new settings after the CSI setting is changed.
 
-   * Host audit logging
+Follow the [Rebuild NCNs](../node_management/Rebuild_NCNs/Rebuild_NCNs.md) procedure.
 
-      ```console
-      XNAME=<node_xname>
-      PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | tr -d \")
-      PARAMS="$PARAMS ncn-mgmt-node-auditing-enabled=true"
-      cray bss bootparameters update --hosts "${XNAME}" --params "${PARAMS}"
-      ```
-
-   * Kubernetes API audit logging
-
-      ```console
-      XNAME=<node_xname>
-      PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | tr -d \")
-      PARAMS="$PARAMS k8s-api-auditing-enabled=true"
-      cray bss bootparameters update --hosts "${XNAME}" --params "${PARAMS}"
-      ```
+The Install and Upgrade Framework (IUF) can also be used to rebuild the NCNs. Refer to the IUF [Management Node Rollout](../iuf/workflows/management_rollout.md)
+documentation for more information.
 
 ## Verify that audit logging is enabled
 
-> Changes made post-install will not be reflected until after the NCN is rebooted.
+> Changes made post-install will not be reflected until after the NCN is rebuilt.
 
 * (`ncn#`) Host audit logging
 
@@ -170,12 +157,4 @@ Choose either of the following options:
    ```console
    craysys metadata get k8s-api-auditing-enabled
    ```
-
-## Restart NCNs in order to make settings take effect
-
-This section is only necessary if the audit logging settings were changed after the CSM install.
-If the desired audit logging settings were made as part of the CSM install, then skip this section.
-
-Restart each NCN to apply the new settings after the CSI setting is changed.
-
-Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
+  
