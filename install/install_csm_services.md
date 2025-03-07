@@ -98,6 +98,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
    SPIRE_JOB=$(kubectl -n spire get jobs -l app.kubernetes.io/name=cray-spire-update-bss -o name)
    kubectl -n spire get "${SPIRE_JOB}" -o json | jq 'del(.spec.selector)' \
        | jq 'del(.spec.template.metadata.labels."controller-uid")' \
+       | jq 'del(.spec.template.metadata.labels."batch.kubernetes.io/controller-uid")' \
        | kubectl replace --force -f -
    ```
 

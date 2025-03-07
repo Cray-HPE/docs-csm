@@ -1,20 +1,20 @@
 # Restore Spire Postgres without an Existing Backup
 
-Reinstall the Spire Helm chart in the event that `spire-postgres` databases cannot be restored from a backup.
+Reinstall the Cray Spire Helm chart in the event that `cray-spire-postgres` databases cannot be restored from a backup.
 
-## Uninstall Spire
+## Uninstall Cray Spire
 
-1. (`ncn-mw#`) Uninstall the Spire Helm chart.
+1. (`ncn-mw#`) Uninstall the Cray Spire Helm chart.
 
    ```bash
-   helm uninstall -n spire spire
+   helm uninstall -n spire cray-spire
    ```
 
 1. (`ncn-mw#`) Wait for the pods in the `spire` namespace to terminate. Once that is done, remove
-   the `spire-data-server` `PVCs`.
+   the `cray-spire-data-server` `PVCs`.
 
    ```bash
-   kubectl get pvc -n spire | grep spire-data-spire-server | awk '{print $1}' | xargs kubectl delete -n spire pvc
+   kubectl get pvc -n spire | grep data-cray-spire-server | awk '{print $1}' | xargs kubectl delete -n spire pvc
    ```
 
 1. (`ncn-mw#`) Disable `spire-agent` on all of the Kubernetes NCNs (all worker nodes and
@@ -28,7 +28,7 @@ Reinstall the Spire Helm chart in the event that `spire-postgres` databases cann
 
 1. (`ncn-mw#`) Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure with the following specifications:
 
-   * Name of chart to be redeployed: `spire`
+   * Name of chart to be redeployed: `cray-spire`
    * Base name of manifest: `sysmgmt`
    * When reaching the step to update customizations, no edits need to be made to the customizations file.
    * When reaching the step to validate that the redeploy was successful, perform the following step:

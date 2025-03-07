@@ -28,7 +28,7 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
 1. Re-run the HSM loader job.
 
     ```bash
-    kubectl -n services get job cray-smd-init -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | kubectl replace --force -f -
+    kubectl -n services get job cray-smd-init -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.spec.template.metadata.labels."batch.kubernetes.io/controller-uid")' | kubectl replace --force -f -
     ```
 
     Wait for the job to complete:

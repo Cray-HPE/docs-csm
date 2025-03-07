@@ -19,10 +19,10 @@ specify which charts should be redeployed and what customizations (if any) shoul
 * The latest CSM documentation RPMs are installed on the node where this procedure is being performed. See
   [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 * If this procedure was linked from another page, the administrator must have the following information from that other page:
-  * The name of the charts to be redeployed (for example, `cray-hms-bss`, `cray-sysmgmt-health`, or `spire`).
-  * The base name of the manifest for each of these charts (for example, `sysmgmt`, `platform`, or `storage`).
-  * The customization changes to make, if any.
-  * The steps to validate that the chart deployment was successful.
+    * The name of the charts to be redeployed (for example, `cray-hms-bss`, `cray-sysmgmt-health`, or `cray-spire`).
+    * The base name of the manifest for each of these charts (for example, `sysmgmt`, `platform`, or `storage`).
+    * The customization changes to make, if any.
+    * The steps to validate that the chart deployment was successful.
 
 ## Procedure
 
@@ -65,7 +65,7 @@ If redeploying more than one chart at once, perform the steps in this section fo
     1. Set variable with the name of the chart.
 
         **If this procedure was linked from another page, that page should provide the chart name.**
-        Examples of chart names are `cray-hms-bss`, `cray-sysmgmt-health`, or `spire`.
+        Examples of chart names are `cray-hms-bss`, `cray-sysmgmt-health`, or `cray-spire`.
 
         ```bash
         CHART_NAME=<put actual name here>
@@ -176,7 +176,7 @@ If redeploying more than one chart at once, perform the steps in this section fo
     **This must be done whether or not any changes were made to the customizations in the previous section.**
 
     ```bash
-    manifestgen -c "${CUSTOMIZATIONS}" -i "${BASE_CHART_FILE}" -o "${CUSTOMIZED_CHART_FILE}"    
+    manifestgen -c "${CUSTOMIZATIONS}" -i "${BASE_CHART_FILE}" -o "${CUSTOMIZED_CHART_FILE}"
     ```
 
 1. (`ncn-mw#`) Review the customized manifest file to verify that it contains the expected version numbers and customizations.

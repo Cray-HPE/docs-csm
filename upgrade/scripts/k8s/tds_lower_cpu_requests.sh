@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -63,10 +63,6 @@ function fail_if_empty() {
   fi
 }
 
-yaml_path="$base.spire.cray-postgresql.sqlCluster.resources.requests.cpu"
-spire_postgres_new_request=$(yq r $yaml -pv $yaml_path)
-fail_if_empty $yaml_path $spire_postgres_new_request
-
 yaml_path="$base.cray-spire.cray-postgresql.sqlCluster.resources.requests.cpu"
 cray_spire_postgres_new_request=$(yq r $yaml -pv $yaml_path)
 fail_if_empty $yaml_path $cray_spire_postgres_new_request
@@ -118,12 +114,6 @@ fail_if_empty $yaml_path $nexus_new_cpu_request
 yaml_path="$base.cray-metallb.metallb.speaker.resources.requests.cpu"
 cray_metallb_speaker_new_cpu_request=$(yq r $yaml -pv $yaml_path)
 fail_if_empty $yaml_path $cray_metallb_speaker_new_cpu_request
-
-if kubectl get postgresqls -n spire spire-postgres > /dev/null 2>&1; then
-  if [ ! -z $spire_postgres_new_request ]; then
-    roll_postgres "spire" "spire-postgres" $spire_postgres_new_request
-  fi
-fi
 
 if kubectl get postgresqls -n spire cray-spire-postgres > /dev/null 2>&1; then
   if [ ! -z $cray_spire_postgres_new_request ]; then

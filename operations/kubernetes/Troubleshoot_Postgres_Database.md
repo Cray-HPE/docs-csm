@@ -524,12 +524,16 @@ encounters issues syncing updates to the `postgresql` cluster.
 
     ```text
     NAMESPACE   NAME                         TEAM                VERSION   PODS   VOLUME   CPU-REQUEST   MEMORY-REQUEST   AGE     STATUS
-    services    cray-console-data-postgres   cray-console-data   11        3      2Gi                                     4h10m   Running
-    services    cray-sls-postgres            cray-sls            11        3      1Gi                                     4h12m   SyncFailed
-    services    cray-smd-postgres            cray-smd            11        3      30Gi     500m          8Gi              4h12m   Updating
-    services    gitea-vcs-postgres           gitea-vcs           11        3      50Gi                                    4h11m   Running
-    services    keycloak-postgres            keycloak            11        3      1Gi                                     4h13m   Running
-    spire       spire-postgres               spire               11        3      20Gi     1             4Gi              4h10m   Running
+    argo        cray-nls-postgres            cray-nls            14        3      2Gi                                     209d   Running
+    services    cfs-ara-postgres             cfs-ara             14        3      50Gi                                    209d   Running
+    services    cray-console-data-postgres   cray-console-data   14        3      2Gi                                     209d   Running
+    services    cray-dhcp-kea-postgres       cray-dhcp-kea       14        3      10Gi     2             1Gi              209d   Running
+    services    cray-dns-powerdns-postgres   cray-dns-powerdns   14        3      10Gi                                    209d   Running
+    services    cray-sls-postgres            cray-sls            14        3      1Gi                                     209d   Running
+    services    cray-smd-postgres            cray-smd            14        3      100Gi    4             8Gi              100d   Running
+    services    gitea-vcs-postgres           gitea-vcs           14        3      50Gi                                    209d   Running
+    services    keycloak-postgres            keycloak            14        3      10Gi                                    209d   Running
+    spire       cray-spire-postgres          cray-spire          14        3      60Gi     4             4Gi              209d   Running
     ```
 
 1. (`ncn-mw#`) Find the `postgres-operator` pod name.

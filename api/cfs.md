@@ -5369,6 +5369,7 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
     {
       "name": "sample-config",
       "description": "string",
+      "tenant_name": "blue-tenant",
       "last_updated": "2019-07-28T03:26:00Z",
       "layers": [
         {
@@ -5491,6 +5492,7 @@ Retrieve the given configuration
 {
   "name": "sample-config",
   "description": "string",
+  "tenant_name": "blue-tenant",
   "last_updated": "2019-07-28T03:26:00Z",
   "layers": [
     {
@@ -5602,6 +5604,7 @@ Add a configuration to CFS or replace an existing configuration.
 ```json
 {
   "description": "string",
+  "tenant_name": "blue-tenant",
   "layers": [
     {
       "name": "sample-config",
@@ -5641,6 +5644,7 @@ Add a configuration to CFS or replace an existing configuration.
 {
   "name": "sample-config",
   "description": "string",
+  "tenant_name": "blue-tenant",
   "last_updated": "2019-07-28T03:26:00Z",
   "layers": [
     {
@@ -5757,6 +5761,7 @@ Updates the commits for all layers that specify a branch
 {
   "name": "sample-config",
   "description": "string",
+  "tenant_name": "blue-tenant",
   "last_updated": "2019-07-28T03:26:00Z",
   "layers": [
     {
@@ -7735,6 +7740,7 @@ A collection of ConfigurationLayers.
 {
   "name": "sample-config",
   "description": "string",
+  "tenant_name": "blue-tenant",
   "last_updated": "2019-07-28T03:26:00Z",
   "layers": [
     {
@@ -7768,6 +7774,7 @@ A collection of ConfigurationLayers.
 |---|---|---|---|---|
 |name|string|false|read-only|The name of the configuration.|
 |description|string|false|none|A user-defined description. This field is not used by CFS.|
+|tenant_name|string|false|none|The name of a tenant that owns this set of configuration.|
 |last_updated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
 |layers|[[V3ConfigurationLayer](#schemav3configurationlayer)]|false|none|A list of ConfigurationLayer(s).|
 |additional_inventory|[V3AdditionalInventoryLayer](#schemav3additionalinventorylayer)|false|none|An inventory reference to include in a set of configurations.<br>Either clone_url or source must be specified -- it is required to specify one,<br>but they are mutually exclusive.|
@@ -7829,6 +7836,7 @@ An array of configurations.
     {
       "name": "sample-config",
       "description": "string",
+      "tenant_name": "blue-tenant",
       "last_updated": "2019-07-28T03:26:00Z",
       "layers": [
         {

@@ -17,13 +17,13 @@ For general Kubernetes troubleshooting information, including more information o
 This page is broken into different sections, based on the errors found in the log.
 
 - [`UF,URX` with TLS error](#ufurx-with-tls-error)
-  - [Symptom](#symptom-ufurx-with-tls-error)
-  - [Description](#description-ufurx-with-a-tls-error)
-  - [Remediation](#remediation-ufurx-with-a-tls-error)
+    - [Symptom](#symptom-ufurx-with-tls-error)
+    - [Description](#description-ufurx-with-a-tls-error)
+    - [Remediation](#remediation-ufurx-with-a-tls-error)
 - [`UAEX`](#uaex)
-  - [Symptom](#symptom-uaex)
-  - [Description](#description-uaex)
-  - [Remediation](#remediation-uaex)
+    - [Symptom](#symptom-uaex)
+    - [Description](#description-uaex)
+    - [Remediation](#remediation-uaex)
 - [Other error codes](#other-error-codes)
 
 ## `UF,URX` with TLS error
@@ -88,11 +88,8 @@ This error code typically indicates an issue with the authorization service (for
 
     ```bash
     kubectl rollout restart -n istio-system deployment istio-ingressgateway
-    kubectl rollout restart -n spire statefulset spire-postgres spire-server
-    kubectl rollout restart -n spire daemonset spire-agent request-ncn-join-token
-    kubectl rollout restart -n spire deployment spire-jwks spire-postgres-pooler
     kubectl rollout restart -n spire statefulset cray-spire-postgres cray-spire-server
-    kubectl rollout restart -n spire daemonset cray-spire-agent
+    kubectl rollout restart -n spire daemonset cray-spire-agent request-ncn-join-token
     kubectl rollout restart -n spire deployment cray-spire-jwks cray-spire-postgres-pooler
     kubectl rollout restart -n opa daemonset cray-opa-ingressgateway
     ```
@@ -101,11 +98,7 @@ This error code typically indicates an issue with the authorization service (for
 
     ```bash
     kubectl rollout status -n istio-system deployment istio-ingressgateway
-    kubectl rollout status -n spire statefulset spire-server
-    kubectl rollout status -n spire daemonset spire-agent
     kubectl rollout status -n spire daemonset request-ncn-join-token
-    kubectl rollout status -n spire deployment spire-jwks
-    kubectl rollout status -n spire deployment spire-postgres-pooler
     kubectl rollout status -n spire statefulset cray-spire-server
     kubectl rollout status -n spire daemonset cray-spire-agent
     kubectl rollout status -n spire deployment cray-spire-jwks
