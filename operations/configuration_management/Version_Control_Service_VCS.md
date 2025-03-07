@@ -8,7 +8,7 @@
 * [Update the Privacy Settings for Gitea Configuration Content Repositories](Update_the_Privacy_Settings_for_Gitea_Configuration_Content_Repositories.md)
 * [VCS Administrative User](VCS_Administrative_User.md)
 * [Access the `cray` Gitea organization](#access-the-cray-gitea-organization)
-* [Managing Sensitive Information in VCS](Secure_Sensitive_Information_in_VCS.md)
+* [Managing Sensitive Information in VCS](Managing_Sensitive_Tenant_Information_in_VCS_with_SOPS.md)
 * [Backup and restore data](#backup-and-restore-data)
     * [Automated backup and restore](#automated-backup-and-restore)
         * [Automated backup](#automated-backup)
