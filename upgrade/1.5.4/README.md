@@ -22,9 +22,9 @@ list of patch versions.
 ## Bug fixes and improvements
 
 * Improved performance and scalability of [Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss) and `cfs-trust`
-* Increase validate_certifi_version goss test timeout to 20 seconds
-* Fixed bug in `cfs-debugger` (from [`CASMCMS-9247`](https://jira-pro.it.hpe.com:8443/browse/CASMCMS-9247) to be reviewed by Mitch Harding)
-* Fixed bug when validating a non-existent session template (from [`CASMCMS-9270`](https://jira-pro.it.hpe.com:8443/browse/CASMCMS-9270) to be reviewed by Mitch Harding)
+* Increased validate_certifi_version goss test timeout to 20 seconds
+* Fixed bug in `cfs-debugger`
+* Fixed bug in [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) when validating a non-existent session template
 
 ## Steps
 
