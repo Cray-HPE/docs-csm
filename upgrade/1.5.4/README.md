@@ -25,6 +25,7 @@ list of patch versions.
 * Increased `validate_certifi_version` goss test timeout to 20 seconds
 * Fixed bug in `cfs-debugger`
 * Fixed bug in [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) when validating a non-existent session template
+* Disable `TLS1.2` support in `oauth2` proxies
 
 ## Steps
 
