@@ -114,6 +114,12 @@ run_loftsman() {
 
 # validate_prereqs makes sure everything is available for this script to work
 validate_prereqs() {
+  # validate helm chart exists
+  if ! [[ -d "${PWD}/helm" && -d "${PWD}/manifests" ]]; then
+    echo "Error: helm or manifests directory is not found under ${PWD}. Make sure you run this from the extracted CSM tar file."
+    exit 3
+  fi
+
   # validate site-init secret exists
   if ! kubectl get secret -n loftsman site-init > /dev/null 2>&1; then
     echo "Error: missing site-init secret in loftsman namespace."
@@ -135,12 +141,6 @@ validate_prereqs() {
   # validate that cray-spire is included in sysmgmt.yaml
   if ! yq r "${PWD}/manifests/sysmgmt.yaml" 'spec.charts(name==cray-spire)' | grep -q cray-spire; then
     echo "The cray-spire chart is missing from ${PWD}/manifests/sysmgmt.yaml"
-    exit 3
-  fi
-
-  # validate helm chart exists
-  if ! [ -d "$PWD/helm" ]; then
-    echo "Error: $PWD/helm is missing. Make sure you run this from the extracted CSM tar file"
     exit 3
   fi
 
