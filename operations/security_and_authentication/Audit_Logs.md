@@ -117,7 +117,7 @@ ncn-mgmt-node-auditing-enabled: false
    * Kubernetes API audit logging
 
      ```console
-     csi handoff bss-update-param --limit <mgmt-node-xname> --set k8s-api-auditing-enabled=true
+     csi handoff bss-update-cloud-init --set meta-data.k8s-api-auditing-enabled=true --limit Global
      ```
 
    Example output:
