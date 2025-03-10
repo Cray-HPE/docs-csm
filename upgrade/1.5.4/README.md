@@ -22,7 +22,7 @@ list of patch versions.
 ## Bug fixes and improvements
 
 * Improved performance and scalability of [Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss) and `cfs-trust`
-* Increased validate_certifi_version goss test timeout to 20 seconds
+* Increased `validate_certifi_version` goss test timeout to 20 seconds
 * Fixed bug in `cfs-debugger`
 * Fixed bug in [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) when validating a non-existent session template
 
