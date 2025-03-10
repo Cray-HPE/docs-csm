@@ -23,7 +23,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-set -e -o pipefail
+set -eo pipefail
 
 # After postgresql-operator upgrade, a few issues may happen:
 # - operator will try to perform rolling restart of all postgresql clusters to add new mount to each pod, by setting
