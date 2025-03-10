@@ -3,26 +3,26 @@
 CSM 1.2.5 supports the ability to require API calls that contain xnames to be
 from the node with that xname. This is done by assigning unique workloads per
 node. This may impact performance and require the replica count of the
-spire-server statefulset to be increased.
+spire-server `statefulset` to be increased.
 
 Note: While spire is being reinstalled during the enable or disable process the
 OPA validation will fail. This will cause all API requests that go through the
-API Gateway to fail until the spire-jwks service is running again.
+API Gateway to fail until the `spire-jwks` service is running again.
 
 ## Enable Xname Validation
 
-In order to enable xname validation you need the docs-csm RPM installed and the
+In order to enable xname validation, you need the `docs-csm` RPM installed and the
 CSM 1.2.5 or newer tarball extracted somewhere on the node you are enabling it
-from. In the command example below the CSM 1.2.5 tarball is extracted to
+from. In the command example below, the CSM 1.2.5 tarball is extracted to
 `/etc/cray/upgrade/csm/csm-1.2.5/tarball`.
 
 Enabling xname validation requires the reinstallation of the spire server and
 rejoining all nodes to spire. The `xnamevalidation.sh` script handles this for
-NCNs and Storage nodes. Compute and UAN nodes will need to be restarted after
-the `xnamevalidation.sh` script has finished running. If you do not restart
-these nodes then they will be unable to acquire JWTs from spire.
+NCNs and Storage nodes. Compute and UAN nodes will need to be rebooted after
+the `xnamevalidation.sh` script has finished running. If you do not reboot
+Compute or UAN nodes, they will be unable to acquire JWTs from spire.
 
-### Example Commands
+### Example Commands To Enable
 
 ```bash
 CSM_RELEASE=1.2.5
@@ -104,7 +104,7 @@ Warning: Permanently added 'ncn-s003,10.252.1.4' (ECDSA) to the list of known ho
 component name (xname) validation has been enabled.
 ```
 
-### Validation
+### Validation After Enabling
 
 To validate that xname validation is enabled, request a test JWT using the
 `heartbeat-spire-agent` command. The token shown will include an xname.
@@ -119,24 +119,25 @@ token(spiffe://shasta/ncn/x3000c0s2b0n0/workload/heartbeat):
 
 ## Disable Xname Validation
 
-In order to disable xname validation you need the docs-csm RPM installed and the
-CSM 1.2.5 or newer tarball extracted somewhere on the node you are enabling it
-from. In the command example below the CSM 1.2.5 tarball is extracted to
+In order to disable xname validation, you need the `docs-csm` RPM installed and the
+CSM 1.2.5 or newer tarball extracted somewhere on the node you are disabling it
+from. In the command example below, the CSM 1.2.5 tarball is extracted to
 `/etc/cray/upgrade/csm/csm-1.2.5/tarball`.
 
 Disabling xname validation requires the reinstallation of the spire server and
 rejoining all nodes to spire. The `xnamevalidation.sh` script handles this for
-NCNs and Storage nodes. Compute and UAN nodes will need to be restarted after
-the `xnamevalidation.sh` script has finished running. If you do not restart
-these nodes then they will be unable to acquire JWTs from spire.
+NCNs and Storage nodes. Compute and UAN nodes will need to be rebooted after
+the `xnamevalidation.sh` script has finished running. If you do not reboot
+Compute or UAN nodes, they will be unable to acquire JWTs from spire.
 
-### Example Commands
+### Example Commands To Disable
 
 ```bash
 CSM_RELEASE=1.2.5
 cd /etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}
 /usr/share/doc/csm/scripts/operations/xnamevalidation.sh disable
 ```
+
 Example Output
 
 ```bash
@@ -208,7 +209,7 @@ Warning: Permanently added 'ncn-s003,10.252.1.4' (ECDSA) to the list of known ho
 component name (xname) validation has been disabled.
 ```
 
-### Validation
+### Validation After Disabling
 
 To validate that xname validation is disabled, request a test JWT using the
 `heartbeat-spire-agent` command. The token shown will not include an xname.
