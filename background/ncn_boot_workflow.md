@@ -122,8 +122,8 @@ done
 * `ipmitool` can set and edit boot order; it works better for some vendors based on their BMC implementation
 * `efibootmgr` speaks directly to the node's UEFI; it can only be ignored by new BIOS activity
 
-> **NOTE:** `cloud-init` will set boot order when it runs, but this does not always work with certain hardware vendors. An administrator can invoke the `cloud-init` script at
-> `/srv/cray/scripts/metal/set-efi-bbs.sh` on any NCN.
+> **NOTE:** `cloud-init` will set boot order and trim boot devices during its `runcmd` module, but this does not always work with certain hardware vendors. An administrator may invoke the `cloud-init` script on
+> any NCN or PIT by loading `/srv/cray/scripts/metal/metal-lib.sh` (this should be loaded in a sub-shell as the library has a `set -e` flag.)
 
 ## Setting boot order
 
@@ -185,47 +185,24 @@ This is the end of the `Setting boot order` procedure.
 
 ## Trimming boot order
 
-This section gives the procedure for removing unwanted entries from the boot order on NCNs and the PIT node.
+This procedure prunes the list of boot devices, optimizing the boot order to align with CSM's requirements.
 
-This section will only advise on removing other PXE entries. There are too many
-vendor-specific entries beyond disks and NICs to cover in this section (e.g. BIOS entries, iLO entries, etc.).
+(`ncn#` or `pit#`) Load the metal tools library and invoke the boot trim function.
 
-In this case, the instructions are the same regardless of node type (management, storage, or worker):
+```bash
+TEMP=$(mktemp -d)
+efibootmgr > "${TEMP}/original.log"
+(
+. /srv/cray/scripts/metal/metal-lib.sh
+setup_uefi_bootorder >"${TEMP}/run.log"
+)
+```
 
-1. (`ncn#` or `pit#`) Make lists of the unwanted boot entries.
+> ***NOTE*** The above snippet is `pdsh` friendly for bulk trims.
 
-    * Gigabyte Technology
+The `${TEMP}/run.log` file will show the output from each `efibootmgr` call to trim the boot order.
 
-        ```bash
-        efibootmgr | grep -ivP '(pxe ipv?4.*)' | grep -iP '(adapter|connection|nvme|sata)' | tee /tmp/rbbs1
-        efibootmgr | grep -iP '(pxe ipv?4.*)' | grep -i connection | tee /tmp/rbbs2
-        ```
-
-    * Hewlett-Packard Enterprise
-
-        > **NOTE:** This does not trim HSN Mellanox cards; these should disable their OpROMs using [the high speed network snippets](../operations/node_management/Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md#high-speed-network).
-
-        ```bash
-        efibootmgr | grep -vi 'pxe ipv4' | grep -i adapter |tee /tmp/rbbs1
-        efibootmgr | grep -iP '(sata|nvme)' | tee /tmp/rbbs2
-        ```
-
-    * Intel Corporation
-
-        ```bash
-        efibootmgr | grep -vi 'ipv4' | grep -iP '(sata|nvme|uefi)' | tee /tmp/rbbs1
-        efibootmgr | grep -i baseboard | tee /tmp/rbbs2
-        ```
-
-1. (`ncn#` or `pit#`) Remove them.
-
-    ```bash
-    cat /tmp/rbbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -t -i efibootmgr -b {} -B
-    ```
-
-The boot menu should be trimmed down to contain only relevant entries.
-
-This is the end of the `Trimming boot order` procedure.
+The boot order has been trimmed.
 
 ## Example boot orders
 
@@ -234,53 +211,102 @@ Each section shows example output of the `efibootmgr` command.
 * Master node (with onboard NICs enabled)
 
     ```text
-    BootCurrent: 0009
-    Timeout: 2 seconds
-    BootOrder: 0004,0000,0007,0009,000B,000D,0012,0013,0002,0003,0001
-    Boot0000* cray (sda1)
-    Boot0001* UEFI: Built-in EFI Shell
-    Boot0002* UEFI OS
-    Boot0003* UEFI OS
-    Boot0004* cray (sdb1)
-    Boot0007* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
-    Boot0009* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:34:89:62
-    Boot000B* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:34:89:63
-    Boot000D* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
-    Boot0012* UEFI: PNY USB 3.1 FD PMAP
-    Boot0013* UEFI: PNY USB 3.1 FD PMAP, Partition 2
+    BootCurrent: 0002
+    Timeout: 0 seconds
+    BootOrder: 0000,0013,001A,0002,000F,0012,0014,0015
+    Boot0000* System Utilities
+    Boot0001  Non bootable Hotkey
+    Boot0002* CRAY UEFI OS 0
+    Boot0003  Intelligent Provisioning
+    Boot0004  Embedded UEFI Shell
+    Boot0005  Embedded iPXE
+    Boot0006  Diagnose Error
+    Boot0007  Boot Menu
+    Boot0008  Network Boot
+    Boot0009  View Integrated Management Log
+    Boot000A  View GUI mode Integrated Management Log
+    Boot000B  View BIOS Event Log
+    Boot000C  HTTP Boot
+    Boot000D  PXE Boot
+    Boot000E  Embedded Diagnostics
+    Boot000F* CRAY UEFI OS 1
+    Boot0010* Generic USB Boot
+    Boot0012  SATA Drive  Box 1 Bay 1 : VK000480GWTHA
+    Boot0013* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (PXE IPv4)
+    Boot0014  SATA Drive  Box 1 Bay 2 : VK000480GWTHA
+    Boot0015  SATA Drive  Box 1 Bay 3 : VK000480GWTHA
+    Boot0016* Rear USB 1 : PNY USB 3.1 FD
+    Boot001A* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (PXE IPv4)
     ```
 
 * Storage node (with onboard NICs enabled)
 
     ```text
-    BootNext: 0005
-    BootCurrent: 0006
-    Timeout: 2 seconds
-    BootOrder: 0007,0009,0000,0002
-    Boot0000* cray (sda1)
-    Boot0001* UEFI: Built-in EFI Shell
-    Boot0002* cray (sdb1)
-    Boot0005* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
-    Boot0007* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:34:88:76
-    Boot0009* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:34:88:77
-    Boot000B* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
+    BootCurrent: 0014
+    Timeout: 0 seconds
+    BootOrder: 0000,0014,0015,0016,0010,0011,0012
+    Boot0000* System Utilities
+    Boot0001  Non bootable Hotkey
+    Boot0002  Intelligent Provisioning
+    Boot0003  Embedded UEFI Shell
+    Boot0004  Embedded iPXE
+    Boot0005  Diagnose Error
+    Boot0006  Boot Menu
+    Boot0007  Network Boot
+    Boot0008  View Integrated Management Log
+    Boot0009  View GUI mode Integrated Management Log
+    Boot000A  View BIOS Event Log
+    Boot000B  HTTP Boot
+    Boot000C  PXE Boot
+    Boot000D  Embedded Diagnostics
+    Boot000E* Generic USB Boot
+    Boot000F* OCP Slot 10 Port 2 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (PXE IPv4)
+    Boot0010  SATA Drive  Box 1 Bay 1 : VK000480GWTHA
+    Boot0011  SATA Drive  Box 1 Bay 2 : VK000480GWTHA
+    Boot0012  SATA Drive  Box 1 Bay 3 : VK001920GWTHC
+    Boot0013  Temporary Legacy Boot Option
+    Boot0014* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (PXE IPv4)
+    Boot0015* CRAY UEFI OS 0
+    Boot0016* CRAY UEFI OS 1
     ```
 
 * Worker node (with onboard NICs enabled)
 
     ```text
-    BootNext: 0005
-    BootCurrent: 0008
-    Timeout: 2 seconds
-    BootOrder: 0007,0009,000B,0000,0002
-    Boot0000* cray (sda1)
-    Boot0001* UEFI: Built-in EFI Shell
-    Boot0002* cray (sdb1)
-    Boot0005* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
-    Boot0007* UEFI: PXE IP4 Mellanox Network Adapter - 98:03:9B:AA:88:30
-    Boot0009* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:34:89:2A
-    Boot000B* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:34:89:2B
-    Boot000D* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
+    BootCurrent: 0019
+    Timeout: 20 seconds
+    BootOrder: 0000,0019,001E,001C,001D,0010,0011,0012,0013,0014,0015,0016,0017,0018,001A
+    Boot0000* System Utilities
+    Boot0001  Non bootable Hotkey
+    Boot0002  Intelligent Provisioning
+    Boot0003  Embedded UEFI Shell
+    Boot0004  Embedded iPXE
+    Boot0005  Diagnose Error
+    Boot0006  Boot Menu
+    Boot0007  Network Boot
+    Boot0008  View Integrated Management Log
+    Boot0009  View GUI mode Integrated Management Log
+    Boot000A  View BIOS Event Log
+    Boot000B  HTTP Boot
+    Boot000C  PXE Boot
+    Boot000D  Embedded Diagnostics
+    Boot000E* Generic USB Boot
+    Boot000F  Temporary Legacy Boot Option
+    Boot0010  SATA Drive  Box 4 Bay 2 : VK001920GWTTC
+    Boot0011  SATA Drive  Box 4 Bay 1 : VK001920GWTTC
+    Boot0012  SATA Drive  Box 1 Bay 5 : VK001920GWTTC
+    Boot0013  SATA Drive  Box 1 Bay 6 : VK001920GWTTC
+    Boot0014  SATA Drive  Box 1 Bay 7 : VK001920GWTTC
+    Boot0015  SATA Drive  Box 1 Bay 8 : VK001920GWTTC
+    Boot0016  SATA Drive  Box 1 Bay 1 : VK000480GWTHA
+    Boot0017  SATA Drive  Box 1 Bay 2 : VK000480GWTHA
+    Boot0018  SATA Drive  Box 1 Bay 3 : VK001920GWTTC
+    Boot0019* OCP Slot 10 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HQCU-HC OCP3 Adapter - PXE (PXE IPv4)
+    Boot001A  SATA Drive  Box 1 Bay 4 : VK001920GWTTC
+    Boot001B* Generic USB Boot
+    Boot001C* CRAY UEFI OS 0
+    Boot001D* CRAY UEFI OS 1
+    Boot001E* Slot 1 Port 1 : Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - NIC - Marvell FastLinQ 41000 Series - 2P 25GbE SFP28 QL41232HLCU-HC MD2 Adapter - PXE (PXE IPv4)
     ```
 
 ## Reverting changes
