@@ -126,20 +126,6 @@ else
   echo "====> ${state_name} has been completed"
 fi
 
-state_name="POST_CSM_ENABLE_PSP"
-#shellcheck disable=SC2046
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
-  echo "====> ${state_name} ..."
-  {
-    /usr/share/doc/csm/upgrade/scripts/k8s/enable-psp.sh
-  } >> ${LOG_FILE} 2>&1
-  #shellcheck disable=SC2046
-  record_state ${state_name} $(hostname)
-else
-  echo "====> ${state_name} has been completed"
-fi
-
 state_name="FIX_SPIRE_ON_STORAGE"
 #shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
