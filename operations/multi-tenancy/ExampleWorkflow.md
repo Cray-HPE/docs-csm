@@ -86,6 +86,7 @@ For the purposes of this guide, the tenant configuration settings are made in ea
     kind: Tenant
     metadata:
       name: devten01a
+      namespace: tenants
     spec:
       childnamespaces:
       - slurm
