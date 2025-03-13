@@ -87,7 +87,7 @@ spec:
                   export CILIUM_MIGRATION_TUNNEL_PORT=8473
                   export CILIUM_MIGRATION_POD_CIDR=10.48.0.0/16
                   envsubst < /srv/cray/resources/common/cilium-cli-helm-values-migration.yaml > /etc/cray/kubernetes/cilium-cli-helm-values.yaml
-                  helm upgrade -f /etc/cray/kubernetes/cilium-cli-helm-values.yaml cilium /srv/cray/resources/common/cilium-${CILIUM_CNI_VERSION} --namespace kube-system --set prometheus.enabled=true --set operator.prometheus.enabled=true --set hubble.enabled=true --set hubble.metrics.enableOpenMetrics=true --set hubble.metrics.enabled="{dns,drop,tcp,flow,port-distribution,icmp,httpV2:exemplars=true;labelsContext=source_ip\,source_namespace\,source_workload\,destination_ip\,destination_namespace\,destination_workload\,traffic_direction}" --set operator.unmanagedPodWatcher.restart=true --set cni.customConf=false   --set policyEnforcementMode=default   --set bpf.hostLegacyRouting=false
+                  helm upgrade -f /etc/cray/kubernetes/cilium-cli-helm-values.yaml cilium /srv/cray/resources/common/cilium-${CILIUM_CNI_VERSION} --namespace kube-system --set operator.unmanagedPodWatcher.restart=true --set cni.customConf=false --set policyEnforcementMode=default --set bpf.hostLegacyRouting=false
                   kubectl wait deployment -n kube-system cilium-operator --for condition=Available=True --timeout=30s
                   kubectl wait pods -n kube-system -l k8s-app=cilium --for condition=Ready --timeout=90s
         - name: delete-cilium-node-config
