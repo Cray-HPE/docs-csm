@@ -21,37 +21,37 @@ list of patch versions.
 
 ## Bug fixes and improvements
 
-* Upgrade Victoria metrics to 0.24.5 in cray-sysmgmt-health
-* Upgrade HMS projects to golang 1.23
-* BSS and HMETCD - upgrade golang and go based 3rd party software
-* Update cray-keycloak for new JobConditionType SuccessCriteriaMet
-* Update iuf-cli,cray-nls and cray-nls-charts version in CSM
+* Upgrade Victoria metrics to 0.24.5 in `cray-sysmgmt-health`
+* Upgrade HMS projects to `golang` 1.23
+* BSS and HMETCD - upgrade `golang` and go based 3rd party software
+* Update `cray-keycloak` for new `JobConditionType` `SuccessCriteriaMet`
+* Update `iuf-cli`, `cray-nls` and `cray-nls-charts` version in CSM
 * goss-servers should delay start until hostname is set
 * CMS add explicit check for blank CFS ID field
-* After installing csm-testing RPM, automatically restart goss-servers
+* After installing `csm-testing` RPM, automatically restart goss-servers
 * Update CFS API spec to reject invalid component creation/update requests
 * Bypass needless work in some CFS queries
 * Make CFS Options class thread-safe and more performant
-* Add ability to create CFS source and specify secret name instead of username/pw
+* Add ability to create CFS source and specify secret name instead of username/password
 * Update CFS API spec with actual status code for successful source restore
-* CMS decode source_name when restoring source
+* CMS decode `source_name` when restoring source
 * Improve CFS config delete performance on scale systems
 * PCS/TRS: Mitigate resource leaks / heavy usage
 * Goss testing: minimize use of system Python packages in virtual environment
-* Add pylint to csm-testing build pipeline
-* Pin cni / cni-plugins RPM's to the latest version from SLE-Module-Containers
+* Add `pylint` to `csm-testing` build pipeline
+* Pin `cni` / `cni-plugins` RPM's to the latest version from `SLE-Module-Containers`
 * Update "sat bootprep" to support CFS v2 or v3
 * Update CSM 1.6 configuration page to include USS product changes.
 * Update "sat bootsys" to support CFS v2 or v3
-* Add ability to sort reports by multiple fields
+* Add ability to SAT to sort reports by multiple fields
 * Cleanup previous/old SquashFS images during upgrade
-* Drop internal default values for rootfs_provider{,passthrough} from sat bootprep
+* Drop internal default values for `rootfs_provider` and `rootfs_provider_passthrough` from sat bootprep
 * Add context managers around BOS requests/sessions; enable paging of BOS components
-* Update customization.yaml for sma victoria metrics pvc size
-* Allow customization of ipxe debug options
-* Replace `sed` calls with `yq` in upgrade_control_plane.sh
+* Update `customizations.yaml` for SMA victoria metrics PVC size
+* Allow customization of iPXE debug options
+* Replace `sed` calls with `yq` in `upgrade_control_plane.sh`
 * Make BOS migration pod more polite
-* Make cray-hms-rts version consistent in csm manifest
+* Make `cray-hms-rts` version consistent in CSM manifest
 
 ## Steps
 
@@ -259,6 +259,7 @@ SUCCESS
    1.5.1
    1.5.2
    1.5.3
+   1.6.0
    1.6.1
    ```
 
