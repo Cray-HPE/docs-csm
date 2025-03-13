@@ -434,7 +434,7 @@ with system-specific customizations.
 1. (`pit#`) Generate secrets.
 
     ```bash
-    "${SITE_INIT}/utils/secrets-seed-customizations.sh" "${SITE_INIT}/customizations.yaml"
+    /usr/share/doc/csm/install/scripts/generate-customization-secrets.sh "${SITE_INIT}/customizations.yaml"
     ```
 
 1. Leave the `site-init` directory.
