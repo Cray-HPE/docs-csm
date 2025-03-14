@@ -171,7 +171,7 @@ spec:
           factor: "2"
           maxDuration: "1m"
       script:
-        image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+        image: artifactory.algol60.net/csm-docker/unstable/docker.io/portainer/kubectl-shell:2.27.0
         command: [bash]
         source: |
           function sync_item() {
@@ -287,7 +287,7 @@ spec:
         annotations:
           sidecar.istio.io/inject: "false"
       script:
-        image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+        image: artifactory.algol60.net/csm-docker/unstable/docker.io/portainer/kubectl-shell:2.27.0
         command: [bash]
         source: |
           vcs_secret_name={{inputs.parameters.vcs_user_credentials_secret_name}}

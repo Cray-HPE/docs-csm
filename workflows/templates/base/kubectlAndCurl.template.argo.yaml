@@ -45,7 +45,7 @@ spec:
       script:
         # use portainer/kubectl-shell that has:
         #  - kubectl, jq, curl and csi 
-        image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+        image: artifactory.algol60.net/csm-docker/unstable/docker.io/portainer/kubectl-shell:2.27.0
         command: [sh]
         source: |
           #!/bin/sh
