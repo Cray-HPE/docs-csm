@@ -40,7 +40,7 @@ of any changes that were made during the migration. This pod log is also collect
 
 ## CSM major/minor version upgrade
 
-Follow one of these procedures when upgrading from CSM 1.5 to CSM 1.6 (regardless of patch version).
+Follow one of these procedures when upgrading from CSM 1.5 to CSM 1.6 (regardless of patch version) or when upgrading from CSM 1.6.0 to CSM 1.6.1.
 (Additionally, in the unusual situation of upgrading from a pre-release version of CSM 1.6.0, then one of these
 procedure should be followed.)
 
@@ -74,12 +74,5 @@ uncommon upgrade scenario.
 
 ## CSM patch version upgrade
 
-Follow one of these procedures when upgrading from CSM 1.6 to a newer patch version of CSM 1.6.
-(The one exception is in the unusual situation of upgrading from a pre-release version of CSM 1.6.0;
-in that case, follow the [CSM major/minor version upgrade](#csm-majorminor-version-upgrade)
-procedures).
-
-If there are multiple patch versions available, note that there is no need to perform intermediate
-CSM 1.6 patch upgrades. Instead, consider upgrading to the latest CSM 1.6 patch release.
-
-* [CSM 1.6.1 Patch Installation Instructions](1.6.1/README.md)
+If upgrading from CSM 1.6.0 to CSM 1.6.1, follow the [CSM major/minor version upgrade](#csm-majorminor-version-upgrade) instructions.
+There is no specific patch procedure for the CSM 1.6.1 upgrade. This CSM upgrade is expected to be done along with the upgrade of other products and should be done through IUF.
