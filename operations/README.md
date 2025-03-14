@@ -176,15 +176,12 @@ Additional links to power on sub-procedures provided for reference. Refer to the
 HPE Cray System Management (CSM) software manages and controls power out-of-band through Redfish APIs.
 
 - [Power Management](power_management/power_management.md)
-- [Cray Advanced Platform Monitoring and Control (CAPMC)](power_management/Cray_Advanced_Platform_Monitoring_and_Control_CAPMC.md)
 - [Power Control Service (PCS)](power_management/Power_Control_Service/Power_Control_Service_PCS.md)
 - [Liquid Cooled Node Power Management](power_management/Liquid_Cooled_Node_Card_Power_Management.md)
     - [User Access to Compute Node Power Data](power_management/User_Access_to_Compute_Node_Power_Data.md)
 - [Standard Rack Node Power Management](power_management/Standard_Rack_Node_Power_Management.md)
 - [Node Card Power Management](power_management/Power_Control_Service/Node_Card_Power_Management.md)
-- [Ignore Nodes with CAPMC](power_management/Ignore_Nodes_with_CAPMC.md)
 - [Set the Turbo Boost Limit](power_management/Set_the_Turbo_Boost_Limit.md)
-- [CAPMC API](../api/capmc.md)
 - [PCS API](../api/power-control.md)
 
 ## Artifact management

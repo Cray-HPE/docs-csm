@@ -254,6 +254,9 @@ See:
 
 ## Cray Advanced Platform Monitoring and Control (CAPMC)
 
+CAPMC was deprecated in CSM 1.5 and may be removed in the future.
+[Power Control Service (PCS)](#power-control-service-pcs) is the replacement for CAPMC.
+
 The Cray Advanced Platform Monitoring and Control (CAPMC) service enables direct hardware control of
 power on/off, power monitoring, or system-wide power telemetry and configuration parameters from Redfish.
 CAPMC implements a simple interface for powering on/off [compute nodes](#compute-node-cn) and [application nodes](#application-node-an), querying
@@ -263,9 +266,6 @@ replaced by [Power Control Service (PCS)](#power-control-service-pcs).
 
 * For more information on CAPMC, see [Cray Advanced Platform Monitoring and Control](operations/power_management/Cray_Advanced_Platform_Monitoring_and_Control_CAPMC.md).
 * For more information on the CAPMC API, see [CAPMC API](api/capmc.md).
-
-CAPMC was deprecated in CSM 1.5 and may be removed in the future.
-[Power Control Service (PCS)](#power-control-service-pcs) is the replacement for CAPMC.
 
 ## Cray CLI (`cray`)
 

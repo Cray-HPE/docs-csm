@@ -6,19 +6,18 @@ This section only covers using locks with the Hardware State Manager (HSM). For 
 on ignoring nodes, refer to the following sections:
 
 * Firmware Action Service (FAS): See [Ignore Node within FAS](../firmware/FAS_Admin_Procedures.md#ignore-management-nodes-within-fas).
-* Cray Advanced Platform Monitoring and Control (CAPMC): See [Ignore Nodes with CAPMC](../power_management/Ignore_Nodes_with_CAPMC.md)
 
 The following actions can be prevented when a node and its BMC is locked.
 
 * Firmware upgrades with FAS
-* Power off operations with PCS/CAPMC
-* Reset operations with PCS/CAPMC
+* Power off operations with PCS
+* Reset operations with PCS
 
 Doing any of these actions by accident will shut down a management node. If the node is a Kubernetes master or worker
 node, this can have serious negative effects on system operations. If a single node is taken down by mistake, it is
 possible that services will recover. If all management nodes are taken down, or all Kubernetes worker nodes are taken down by mistake, the system must be restarted.
 
-After critical nodes are locked, power/reset (PCS/CAPMC) or firmware (FAS) operations cannot affect the nodes unless
+After critical nodes are locked, power/reset (PCS) or firmware (FAS) operations cannot affect the nodes unless
 they are unlocked. For example, any locked node that is included in a list of nodes to be reset will result in a
 failure.
 

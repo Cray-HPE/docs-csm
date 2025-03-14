@@ -162,7 +162,6 @@ Token successfully retrieved at https://api-gw-service-nmn.local/keycloak/realms
 api-gw-service-nmn.local is reachable
 PASS - [cray-bos]: https://api-gw-service-nmn.local/apis/bos/v2/sessions - 200
 PASS - [cray-bss]: https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters - 200
-PASS - [cray-capmc]: https://api-gw-service-nmn.local/apis/capmc/capmc/get_node_rules - 200
 PASS - [cray-cfs-api]: https://api-gw-service-nmn.local/apis/cfs/v3/sessions - 200
 PASS - [cray-console-data]: https://api-gw-service-nmn.local/apis/consoledata/liveness - 204
 PASS - [cray-console-node]: https://api-gw-service-nmn.local/apis/console-node/console-node/liveness - 204
@@ -187,7 +186,6 @@ SKIP - [sma-telemetry]: https://api-gw-service-nmn.local/apis/sma-telemetry-api/
 api.cmn.eniac.dev.cray.com is reachable
 PASS - [cray-bos]: https://api.cmn.eniac.dev.cray.com/apis/bos/v2/sessions - 200
 PASS - [cray-bss]: https://api.cmn.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 200
-PASS - [cray-capmc]: https://api.cmn.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 200
 PASS - [cray-cfs-api]: https://api.cmn.eniac.dev.cray.com/apis/cfs/v3/sessions - 200
 PASS - [cray-console-data]: https://api.cmn.eniac.dev.cray.com/apis/consoledata/liveness - 204
 PASS - [cray-console-node]: https://api.cmn.eniac.dev.cray.com/apis/console-node/console-node/liveness - 204
@@ -217,7 +215,6 @@ can is not reachable and is not expected to be
 api.chn.eniac.dev.cray.com is reachable
 PASS - [cray-bos]: https://api.chn.eniac.dev.cray.com/apis/bos/v2/sessions - 404
 PASS - [cray-bss]: https://api.chn.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 404
-PASS - [cray-capmc]: https://api.chn.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 404
 PASS - [cray-cfs-api]: https://api.chn.eniac.dev.cray.com/apis/cfs/v3/sessions - 404
 PASS - [cray-console-data]: https://api.chn.eniac.dev.cray.com/apis/consoledata/liveness - 404
 PASS - [cray-console-node]: https://api.chn.eniac.dev.cray.com/apis/console-node/console-node/liveness - 404
@@ -246,7 +243,6 @@ Token successfully retrieved at https://auth.cmn.eniac.dev.cray.com/keycloak/rea
 api-gw-service-nmn.local is reachable
 PASS - [cray-bos]: https://api-gw-service-nmn.local/apis/bos/v2/sessions - 200
 PASS - [cray-bss]: https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters - 200
-PASS - [cray-capmc]: https://api-gw-service-nmn.local/apis/capmc/capmc/get_node_rules - 200
 PASS - [cray-cfs-api]: https://api-gw-service-nmn.local/apis/cfs/v3/sessions - 200
 PASS - [cray-console-data]: https://api-gw-service-nmn.local/apis/consoledata/liveness - 204
 PASS - [cray-console-node]: https://api-gw-service-nmn.local/apis/console-node/console-node/liveness - 204
@@ -271,7 +267,6 @@ SKIP - [sma-telemetry]: https://api-gw-service-nmn.local/apis/sma-telemetry-api/
 api.cmn.eniac.dev.cray.com is reachable
 PASS - [cray-bos]: https://api.cmn.eniac.dev.cray.com/apis/bos/v2/sessions - 200
 PASS - [cray-bss]: https://api.cmn.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 200
-PASS - [cray-capmc]: https://api.cmn.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 200
 PASS - [cray-cfs-api]: https://api.cmn.eniac.dev.cray.com/apis/cfs/v3/sessions - 200
 PASS - [cray-console-data]: https://api.cmn.eniac.dev.cray.com/apis/consoledata/liveness - 204
 PASS - [cray-console-node]: https://api.cmn.eniac.dev.cray.com/apis/console-node/console-node/liveness - 204
@@ -301,7 +296,6 @@ can is not reachable and is not expected to be
 api.chn.eniac.dev.cray.com is reachable
 PASS - [cray-bos]: https://api.chn.eniac.dev.cray.com/apis/bos/v2/sessions - 404
 PASS - [cray-bss]: https://api.chn.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 404
-PASS - [cray-capmc]: https://api.chn.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 404
 PASS - [cray-cfs-api]: https://api.chn.eniac.dev.cray.com/apis/cfs/v3/sessions - 404
 PASS - [cray-console-data]: https://api.chn.eniac.dev.cray.com/apis/consoledata/liveness - 404
 PASS - [cray-console-node]: https://api.chn.eniac.dev.cray.com/apis/console-node/console-node/liveness - 404
@@ -334,7 +328,6 @@ Token successfully retrieved at https://auth.chn.eniac.dev.cray.com/keycloak/rea
 api-gw-service-nmn.local is reachable
 PASS - [cray-bos]: https://api-gw-service-nmn.local/apis/bos/v2/sessions - 403
 PASS - [cray-bss]: https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters - 403
-PASS - [cray-capmc]: https://api-gw-service-nmn.local/apis/capmc/capmc/get_node_rules - 403
 PASS - [cray-cfs-api]: https://api-gw-service-nmn.local/apis/cfs/v3/sessions - 403
 PASS - [cray-console-data]: https://api-gw-service-nmn.local/apis/consoledata/liveness - 403
 PASS - [cray-console-node]: https://api-gw-service-nmn.local/apis/console-node/console-node/liveness - 403
@@ -359,7 +352,6 @@ SKIP - [sma-telemetry]: https://api-gw-service-nmn.local/apis/sma-telemetry-api/
 api.cmn.eniac.dev.cray.com is reachable
 PASS - [cray-bos]: https://api.cmn.eniac.dev.cray.com/apis/bos/v2/sessions - 403
 PASS - [cray-bss]: https://api.cmn.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 403
-PASS - [cray-capmc]: https://api.cmn.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 403
 PASS - [cray-cfs-api]: https://api.cmn.eniac.dev.cray.com/apis/cfs/v3/sessions - 403
 PASS - [cray-console-data]: https://api.cmn.eniac.dev.cray.com/apis/consoledata/liveness - 403
 PASS - [cray-console-node]: https://api.cmn.eniac.dev.cray.com/apis/console-node/console-node/liveness - 403
@@ -389,7 +381,6 @@ can is not reachable and is not expected to be
 api.chn.eniac.dev.cray.com is reachable
 PASS - [cray-bos]: https://api.chn.eniac.dev.cray.com/apis/bos/v2/sessions - 404
 PASS - [cray-bss]: https://api.chn.eniac.dev.cray.com/apis/bss/boot/v1/bootparameters - 404
-PASS - [cray-capmc]: https://api.chn.eniac.dev.cray.com/apis/capmc/capmc/get_node_rules - 404
 PASS - [cray-cfs-api]: https://api.chn.eniac.dev.cray.com/apis/cfs/v3/sessions - 404
 PASS - [cray-console-data]: https://api.chn.eniac.dev.cray.com/apis/consoledata/liveness - 404
 PASS - [cray-console-node]: https://api.chn.eniac.dev.cray.com/apis/console-node/console-node/liveness - 404

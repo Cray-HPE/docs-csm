@@ -89,7 +89,7 @@ Example output:
 Log file for run is: /opt/cray/tests/hms_ct_test-<datetime>.log
 Running all tests...
 DONE.
-SUCCESS: All 9 service tests passed: bss, capmc, fas, hbtd, hmnfd, hsm, scsd, sls
+SUCCESS: All 9 service tests passed: bss, fas, hbtd, hmnfd, hsm, scsd, sls
 ```
 
 The following is example output reporting a single service failure:
@@ -98,7 +98,7 @@ The following is example output reporting a single service failure:
 Log file for run is: /opt/cray/tests/hms_ct_test-<datetime>.log
 Running all tests...
 DONE.
-FAILURE: 1 service test FAILED (hsm), 8 passed (bss, capmc, fas, hbtd, hmnfd, scsd, sls)
+FAILURE: 1 service test FAILED (hsm), 8 passed (bss, fas, hbtd, hmnfd, scsd, sls)
 For troubleshooting and manual steps, see: https://github.com/Cray-HPE/docs-csm/blob/main/troubleshooting/hms_ct_manual_run.md
 ```
 
@@ -108,7 +108,7 @@ The following is an example output reporting multiple service failures:
 Log file for run is: /opt/cray/tests/hms_ct_test-<datetime>.log
 Running all tests...
 DONE.
-FAILURE: All 9 service tests FAILED: bss, capmc, fas, hbtd, hmnfd, hsm, scsd, sls
+FAILURE: All 9 service tests FAILED: bss, fas, hbtd, hmnfd, hsm, scsd, sls
 For troubleshooting and manual steps, see: https://github.com/Cray-HPE/docs-csm/blob/main/troubleshooting/hms_ct_manual_run.md
 ```
 
