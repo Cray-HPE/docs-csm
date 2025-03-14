@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -42,7 +42,7 @@ spec:
         - name: get-after-each-hooks
           inline:
             script:
-              image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+              image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:2.27.0
               command: [sh]
               source: |
                 kubectl get hooks -n argo -l after-each=true -o jsonpath='{.items}' | jq -c 'map(.metadata.name)'
