@@ -82,4 +82,5 @@ procedures).
 If there are multiple patch versions available, note that there is no need to perform intermediate
 CSM 1.6 patch upgrades. Instead, consider upgrading to the latest CSM 1.6 patch release.
 
-* [CSM 1.6.1 Patch Installation Instructions](1.6.1/README.md)
+There are no CSM 1.6 patch versions currently available. When any become available, they will
+be listed here.
