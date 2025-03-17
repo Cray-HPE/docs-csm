@@ -177,9 +177,7 @@ HPE Cray System Management (CSM) software manages and controls power out-of-band
 
 - [Power Management](power_management/power_management.md)
 - [Power Control Service (PCS)](power_management/Power_Control_Service/Power_Control_Service_PCS.md)
-- [Liquid Cooled Node Power Management](power_management/Liquid_Cooled_Node_Card_Power_Management.md)
-    - [User Access to Compute Node Power Data](power_management/User_Access_to_Compute_Node_Power_Data.md)
-- [Standard Rack Node Power Management](power_management/Standard_Rack_Node_Power_Management.md)
+- [User Access to Compute Node Power Data](power_management/User_Access_to_Compute_Node_Power_Data.md)
 - [Node Card Power Management](power_management/Power_Control_Service/Node_Card_Power_Management.md)
 - [Set the Turbo Boost Limit](power_management/Set_the_Turbo_Boost_Limit.md)
 - [PCS API](../api/power-control.md)
