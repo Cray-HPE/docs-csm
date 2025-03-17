@@ -1087,7 +1087,7 @@ if [[ ${state_recorded} == "0" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    rpm_list=(csm-testing hpe-csm-goss-package platform-utils goss-servers cray-cmstools-crayctldeploy)
+    rpm_list=(csm-testing hpe-csm-goss-package goss-servers cray-cmstools-crayctldeploy)
     url_list=()
     for rpm_name in "${rpm_list[@]}"; do
       rpm_path=$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*${rpm_name}\*.rpm | sort -V | tail -1)
