@@ -6,37 +6,36 @@ This section only covers using locks with the Hardware State Manager (HSM). For 
 on ignoring nodes, refer to the following sections:
 
 * Firmware Action Service (FAS): See [Ignore Node within FAS](../firmware/FAS_Admin_Procedures.md#ignore-management-nodes-within-fas).
-* Cray Advanced Platform Monitoring and Control (CAPMC): See [Ignore Nodes with CAPMC](../power_management/Ignore_Nodes_with_CAPMC.md)
 
 The following actions can be prevented when a node and its BMC is locked.
 
 * Firmware upgrades with FAS
-* Power off operations with PCS/CAPMC
-* Reset operations with PCS/CAPMC
+* Power off operations with PCS
+* Reset operations with PCS
 
 Doing any of these actions by accident will shut down a management node. If the node is a Kubernetes master or worker
 node, this can have serious negative effects on system operations. If a single node is taken down by mistake, it is
 possible that services will recover. If all management nodes are taken down, or all Kubernetes worker nodes are taken down by mistake, the system must be restarted.
 
-After critical nodes are locked, power/reset (PCS/CAPMC) or firmware (FAS) operations cannot affect the nodes unless
+After critical nodes are locked, power/reset (PCS) or firmware (FAS) operations cannot affect the nodes unless
 they are unlocked. For example, any locked node that is included in a list of nodes to be reset will result in a
 failure.
 
 ## Topics
 
 * [Lock and Unlock Management Nodes](#lock-and-unlock-management-nodes)
-  * [Topics](#topics)
-  * [When To Lock Management Nodes](#when-to-lock-management-nodes)
-  * [When To Unlock Management Nodes](#when-to-unlock-management-nodes)
-  * [How To Lock Management Nodes](#how-to-lock-management-nodes)
-    * [Script](#script)
-      * [Manual Steps](#manual-steps)
-      * [To lock all nodes (and their BMCs) with the _Management_ role](#to-lock-all-nodes-and-their-bmcs-with-the-management-role)
-      * [To lock single nodes or lists of specific nodes (and their BMCs)](#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs)
-  * [How To Check For Locked Management Nodes](#how-to-check-for-locked-management-nodes)
-  * [How To Unlock Management Nodes](#how-to-unlock-management-nodes)
-    * [To unlock all nodes (and their BMCs) with the _Management_ role](#to-unlock-all-nodes-and-their-bmcs-with-the-management-role)
-    * [To unlock single or lists of specific nodes (and their BMCs)](#to-unlock-single-or-lists-of-specific-nodes-and-their-bmcs)
+    * [Topics](#topics)
+    * [When To Lock Management Nodes](#when-to-lock-management-nodes)
+    * [When To Unlock Management Nodes](#when-to-unlock-management-nodes)
+    * [How To Lock Management Nodes](#how-to-lock-management-nodes)
+        * [Script](#script)
+            * [Manual Steps](#manual-steps)
+            * [To lock all nodes (and their BMCs) with the _Management_ role](#to-lock-all-nodes-and-their-bmcs-with-the-management-role)
+            * [To lock single nodes or lists of specific nodes (and their BMCs)](#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs)
+    * [How To Check For Locked Management Nodes](#how-to-check-for-locked-management-nodes)
+    * [How To Unlock Management Nodes](#how-to-unlock-management-nodes)
+        * [To unlock all nodes (and their BMCs) with the _Management_ role](#to-unlock-all-nodes-and-their-bmcs-with-the-management-role)
+        * [To unlock single or lists of specific nodes (and their BMCs)](#to-unlock-single-or-lists-of-specific-nodes-and-their-bmcs)
 
 ## When To Lock Management Nodes
 

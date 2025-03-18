@@ -7,7 +7,6 @@ HTTP transports used for Redfish communications to use a CA trust bundle.
 The following services communicate with Redfish BMCs:
 
 - State Manager Daemon \(SMD\) aka Hardware State Manager \(HSM\)
-- Cray Advanced Platform Monitoring and Control \(CAPMC\)
 - Power Control Service \(PCS\)
 - Firmware Action Service \(FAS\)
 - HMS Collector

@@ -9,11 +9,9 @@ This section only covers marking BMCs of management nodes with the `Management` 
 For more information on locking or ignoring nodes, refer to the following sections:
 
 * Hardware State Manager (HSM)
-  * See [Lock and Unlock Nodes](Lock_and_Unlock_Management_Nodes.md).
+    * See [Lock and Unlock Nodes](Lock_and_Unlock_Management_Nodes.md).
 * Firmware Action Service (FAS)
-  * See [Ignore Node within FAS](../firmware/FAS_Admin_Procedures.md#ignore-management-nodes-within-fas).
-* Cray Advanced Platform Monitoring and Control (CAPMC)
-  * See [Ignore Nodes with CAPMC](../power_management/Ignore_Nodes_with_CAPMC.md).
+    * See [Ignore Node within FAS](../firmware/FAS_Admin_Procedures.md#ignore-management-nodes-within-fas).
 
 ## Topics
 

@@ -34,7 +34,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 ## Known issues
 
-* [SAT/HSM/CAPMC/PCS Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
+* [SAT/HSM/PCS Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
 * [HMS Discovery job not creating `RedfishEndpoint`s in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
 * [SSL Certificate Validation Issues](known_issues/ssl_certificate_validation_issues.md)
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
@@ -134,7 +134,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 ## Hardware Management System (HMS)
 
 * [Antero Node NID Allocation](known_issues/antero_node_NID_allocation.md)
-* [Component Power State Mismatch for SAT/HSM/CAPMC/PCS](known_issues/component_power_state_mismatch.md)
+* [Component Power State Mismatch for SAT/HSM/PCS](known_issues/component_power_state_mismatch.md)
 * [Debugging With HMS PPROF Images](debugging_with_hms_pprof_images.md)
 * [Discovery Job Not Creating `RedfishEndpoints` in HSM](known_issues/discovery_job_not_creating_redfish_endpoints.md)
 * [Flags Set For Nodes In HSM](known_issues/flags_set_for_nodes_in_hsm.md)

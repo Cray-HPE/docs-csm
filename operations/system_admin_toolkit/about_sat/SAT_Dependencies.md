@@ -33,7 +33,7 @@ CSM dependencies:
 CSM dependencies:
 
 - [Boot Orchestration Service (BOS)](../../../glossary.md#boot-orchestration-service-bos)
-- [Cray Advanced Platform Monitoring and Control (CAPMC)](../../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
+- [Power Control Service (PCS)](../../../glossary.md#power-control-service-pcs)
 - Ceph
 - Etcd
 - [Firmware Action Service (FAS)](../../../glossary.md#firmware-action-service-fas)
