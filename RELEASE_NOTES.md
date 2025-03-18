@@ -241,3 +241,6 @@ see [Removals](introduction/deprecated_features/README.md#removals)
 * There are resource leaks in several HMS services ([PCS](glossary.md#power-control-service-pcs), [SMD](glossary.md#hardware-state-manager-smd), hmcollector, and [FAS](glossary.md#firmware-action-service-fas))
     * This issue is partially resolved by a hotfix for the CSM 1.5.2 release and fully resolved in the CSM 1.5.3 and 1.6.1 releases
     * For more information, including a workaround, see [HMS Resource Leaks](troubleshooting/known_issues/HMS_Resource_Leaks.md).
+* `sat bootprep` image customization error
+    * The SAT product should be upgraded to 2.6.23 to avoid this issue.
+    * For more information, including a workaround, see [sat bootprep image customization error](troubleshooting/known_issues/sat_bootprep_image_customization_error.md).
