@@ -13,6 +13,7 @@ This document provides links to troubleshooting information for services and fun
 * [Customer Management Network (CMN)](#customer-management-network-cmn)
 * [Domain Name Service (DNS)](#domain-name-service-dns)
 * [Grafana dashboards](#grafana-dashboards)
+* [Image management](#image-management)
 * [Kubernetes](#kubernetes)
 * [MetalLB](#metallb)
 * [Node management](#node-management)
@@ -55,6 +56,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [PCS and CAPMC Transaction Size Limitation](known_issues/pcs_and_capmc_transaction_size_limitation.md)
 * [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
+* [IMS image creation failure](known_issues/ims_image_creation_failure.md)
 
 ## Booting
 
@@ -110,14 +112,18 @@ CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. See [Depre
 * [Troubleshoot BGP services without an allocated IP address](../operations/network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
 * [Troubleshoot PXE boot](../install/troubleshooting_pxe_boot.md)
 
-## Grafana dashboards
-
-* [Grafana Dashboards](../operations/system_management_health/Troubleshoot_Grafana_Dashboard.md)
-
 ## Domain Name Service (DNS)
 
 * [Connectivity to Services with External IP addresses](../operations/network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
 * [DNS Configuration Issues](../operations/network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
+
+## Grafana dashboards
+
+* [Grafana Dashboards](../operations/system_management_health/Troubleshoot_Grafana_Dashboard.md)
+
+## Image management
+
+* [IMS image creation failure](known_issues/ims_image_creation_failure.md)
 
 ## Kubernetes
 
@@ -156,7 +162,7 @@ CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. See [Depre
 * [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
 * [Spire Failing to Start on NCNs](../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
 
-## User Access service UAS
+## User Access Service (UAS)
 
 * [Viewing UAI Log Output](../operations/UAS_user_and_admin_topics/Troubleshoot_UAIs_by_Viewing_Log_Output.md)
 * [Stale Brokered UAIs](../operations/UAS_user_and_admin_topics/Troubleshoot_Stale_Brokered_UAIs.md)
