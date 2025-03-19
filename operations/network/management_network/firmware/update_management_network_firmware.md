@@ -15,10 +15,10 @@ Dell and Mellanox firmware must be downloaded from the manufacturer.
 
 | Model                         | software version |
 |-------------------------------|-----------------:|
-| Aruba 8320 Switch Series      |     `10.13.1040` |
-| Aruba 8325 Switch Series      |     `10.13.1040` |
-| Aruba 8360 Switch Series      |     `10.13.1040` |
-| Aruba 6300 Switch Series      |     `10.13.1040` |
+| Aruba 8320 Switch Series      |     `10.13.1080` |
+| Aruba 8325 Switch Series      |     `10.13.1080` |
+| Aruba 8360 Switch Series      |     `10.13.1080` |
+| Aruba 6300 Switch Series      |     `10.13.1080` |
 | Mellanox SN2100 Switch Series |       `3.9.3210` |
 | Mellanox SN2700 Switch Series |       `3.9.3210` |
 | Dell S3048-ON Switch Series   |       `10.5.1.4` |
@@ -42,9 +42,9 @@ Example output:
 ------------------------------------------------------------------
     STATUS  IP              HOSTNAME            FIRMWARE
 ------------------------------------------------------------------
- ❌ Fail    10.254.0.2      sw-spine-001        LL.10.11.1010       Firmware should be in range ['LL.10.13.1040']
- ❌ Fail    10.254.0.3      sw-spine-002        LL.10.11.1010       Firmware should be in range ['LL.10.13.1040']
- ❌ Fail    10.254.0.4      sw-leaf-bmc-001     FL.10.11.1010       Firmware should be in range ['FL.10.13.1040']
+ ❌ Fail    10.254.0.2      sw-spine-001        LL.10.11.1010       Firmware should be in range ['LL.10.13.1080']
+ ❌ Fail    10.254.0.3      sw-spine-002        LL.10.11.1010       Firmware should be in range ['LL.10.13.1080']
+ ❌ Fail    10.254.0.4      sw-leaf-bmc-001     FL.10.11.1010       Firmware should be in range ['FL.10.13.1080']
 
 Summary
 ------------------------------------------------------------------
