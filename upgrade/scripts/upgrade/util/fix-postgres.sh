@@ -86,14 +86,11 @@ wait_for postgres_operator_running "postgres-operator pod running"
 # Only restart postgres clusters in argo, services, spire namespaces - but wait for all clusters (such as sma) to be healthy, as
 # preflight checks at the end of prerequisites script will need all clusters anyway.
 kubectl get sts -A -l application=spilo -o json \
-  | jq -r '.items[] | select(.metadata.namespace == "argo" or .metadata.namespace == "services") | (.metadata.namespace + ":" + .metadata.name)' \
+  | jq -r '.items[] | select(.metadata.namespace == "argo" or .metadata.namespace == "services" or .metadata.namespace == "spire") | (.metadata.namespace + ":" + .metadata.name)' \
   | while IFS=: read -r namespace sts; do
     echo "Rolling restart ${sts} in namespace ${namespace} ..."
     kubectl rollout restart -n "${namespace}" statefulset "${sts}"
   done
-# restart cray-spire-postgres, kubectl rollout restart does not work for this cluster
-echo "Restarting all cray-spire-postgres members"
-kubectl exec -n spire cray-spire-postgres-0 -c postgres -- patronictl restart cray-spire-postgres --force
 echo "Waiting for 300 seconds for postgres statefulsets rolling restart to commence ..."
 sleep 300
 wait_for postgres_pods_running "all postgres pods running"
