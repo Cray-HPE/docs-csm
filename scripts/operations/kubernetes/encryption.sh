@@ -33,6 +33,12 @@ RUNDIR="${TMPDIR:-/tmp}/encryption-tmp-$$"
 # Let us control how long we wait for deletes or other kubectl ... --timeout actions
 KUBETIMEOUT="${KUBETIMEOUT:-300s}"
 
+if [ -f /etc/cray/kubernetes/upgrade ]; then
+  export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/upgrade_version)
+else
+  export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/version)
+fi
+
 cleanup() {
   rm -fr "${RUNDIR}"
 }
@@ -225,7 +231,17 @@ writeconfig() {
     src="${PREFIX?}/${shasum?}.yaml"
   fi
 
-  if ! updatek8sconfig "${src}" /etc/kubernetes/manifests/kube-apiserver.yaml /srv/cray/resources/common/kubeadm.cfg /etc/cray/kubernetes/kubeadm.yaml; then
+  if [[ "${KUBERNETES_MINOR_VERSION}" -lt 25 ]]; then
+    kubeadmcfg="/srv/cray/resources/common/1.24/kubeadm.cfg"
+  elif [[ "${KUBERNETES_MINOR_VERSION}" -lt 27 ]]; then
+    kubeadmcfg="/srv/cray/resources/common/1.25/kubeadm.cfg"
+  elif [[ "${KUBERNETES_MINOR_VERSION}" -lt 31 ]]; then
+    kubeadmcfg="/srv/cray/resources/common/1.27/kubeadm.cfg"
+  else
+    kubeadmcfg="/srv/cray/resources/common/1.31/kubeadm.cfg"
+  fi
+
+  if ! updatek8sconfig "${src}" /etc/kubernetes/manifests/kube-apiserver.yaml "${kubeadmcfg}" /etc/cray/kubernetes/kubeadm.yaml; then
     printf "fatal: Update of k8s config to use %s failed\n" "${src}" >&2
     return 1
   fi

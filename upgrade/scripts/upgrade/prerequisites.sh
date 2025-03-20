@@ -1168,6 +1168,36 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="PREPARE_KUBEADM"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    tmpdir=$(mktemp -d)
+
+    # This is necessary for the initial 1.24.17 to 1.26.15 bump. Otherwise,
+    # kubeadm commands in kubernetes-cloudinit.sh fail.
+    echo "Patching kubeadm-config configmap to update kubernetesVersion from 1.24.17 to 1.26.15 ..."
+    kubectl -n kube-system get configmap kubeadm-config -o go-template --template '{{ .data.ClusterConfiguration }}' \
+      | yq4 e '.kubernetesVersion="v1.26.15"' \
+        > "${tmpdir}/kubeadm-config.yaml"
+    patch=$(jq -c -n --rawfile text "${tmpdir}/kubeadm-config.yaml" '.data["ClusterConfiguration"]=$text')
+    kubectl -n kube-system patch configmap kubeadm-config --type merge --patch "${patch}"
+
+    echo "Patching kube-proxy configmap to remove udpIdleTimeout ..."
+    kubectl -n kube-system get configmap kube-proxy -o go-template --template '{{ index .data "config.conf" }}' \
+      | yq4 e 'del(.udpIdleTimeout)' \
+        > "${tmpdir}/kube-proxy.yaml"
+    patch=$(jq -c -n --rawfile text "${tmpdir}/kube-proxy.yaml" '.data["config.conf"]=$text')
+    kubectl -n kube-system patch configmap kube-proxy --type merge --patch "${patch}"
+
+    rm -rf "${tmpdir}"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 # Disable CFS on the NCNs, to prevent new sessions from being launched during the upgrade.
 # Note that it is possible CFS sessions are currently underway on the NCNs. Disabling them
 # will not prevent currently scheduled CFS sessions from executing -- it will just prevent
