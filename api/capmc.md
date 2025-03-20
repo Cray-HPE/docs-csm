@@ -2,9 +2,6 @@
 
 <h1 id="cray-advanced-platform-monitoring-and-control-capmc-">Cray Advanced Platform Monitoring and Control (CAPMC) v3</h1>
 
-<B>CAPMC was deprecated in CSM 1.5 and may be removed in the future.
-[Power Control Service (PCS)](#power-control-service-pcs) is the replacement for CAPMC.</B>
-
 > Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
 
 ## Deprecation Notice: many CAPMC v1 features are being partially deprecated
