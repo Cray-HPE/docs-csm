@@ -104,6 +104,10 @@ Warning: Permanently added 'ncn-s003,10.252.1.4' (ECDSA) to the list of known ho
 component name (xname) validation has been enabled.
 ```
 
+#### Troubleshoot Enabling Xname Validation
+
+If Spire fails to start, see the troubleshooting page [Spire server pods stuck in pod initializing](../../troubleshooting/known_issues/spire_pod_initializing.md).
+
 ### Validation After Enabling
 
 To validate that xname validation is enabled, request a test JWT using the
@@ -208,6 +212,10 @@ ncn-s003 is being joined to spire.
 Warning: Permanently added 'ncn-s003,10.252.1.4' (ECDSA) to the list of known hosts.
 component name (xname) validation has been disabled.
 ```
+
+#### Troubleshoot Disabling Xname Validation
+
+If Spire fails to start, see the troubleshooting page [Spire server pods stuck in pod initializing](../../troubleshooting/known_issues/spire_pod_initializing.md).
 
 ### Validation After Disabling
 
