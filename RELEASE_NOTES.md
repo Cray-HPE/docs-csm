@@ -201,6 +201,9 @@ see [Removals](introduction/deprecated_features/README.md#removals)
       channel. The length of the outage is dependent on the time to apply new switch configurations to all management
       network switches - OSPF will propagate routes within seconds. As this affects liquid-cooled Mountain cabinets,
       running jobs may be affected. A dedicated outage window is highly recommended for applying these changes.
+* SMA 1.10.15 and later includes an upgraded LDMS that introduces an incompatibility with configuration files used in prior versions.
+    * While the `sma_ldms_config` Kubernetes job updates the LDMS configuration files, it does so after they need to be used in IUF image              creation. When upgrading from an older SMA version to a version with this new LDMS, the administrator must change the configuration files.
+    * A workaround is presented as Action in deliver-product stage in the “IUF Stage Details for SMA” section in _HPE Cray Supercomputing EX           System Monitoring Application Installation Guide_.
 * Services that use PostgreSQL may fail when a Kubernetes master node is rebooted or rebuilt.
     * A PostgreSQL database may fail over without clients reconnecting to the new cluster leader.
     * A workaround is presented in [PostgreSQL Database is in Recovery](troubleshooting/known_issues/postgres_database_recovery.md)
