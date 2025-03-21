@@ -481,7 +481,8 @@ section for links to the relevant procedures.
 1. (`pit#`) Generate secrets.
 
     ```bash
-    "${SITE_INIT}/utils/secrets-seed-customizations.sh" "${SITE_INIT}/customizations.yaml"
+    script="$(rpm -ql docs-csm | grep -E '/generate-customization-secrets\.sh$')"
+    "$script" "${SITE_INIT}/customizations.yaml"
     ```
 
 1. Leave the `site-init` directory.
