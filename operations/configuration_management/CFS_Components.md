@@ -161,9 +161,7 @@ cray cfs v3 components update <xname> --state [] --enabled true
 
 ## Update components in bulk
 
-Updating multiple components at once is not currently available in the CLI due to limitations with the CLI.
-However for those programmatically interacting with the CFS API, it is possible to update multiple components at once by calling `/v3/components` with a `PATCH` operation.
-It is possible to either provide patches for multiple components in a list, or to provide a single patch and filters for which components to apply the patch to. See the [CFS API specification](../../api/cfs.md) for more information.
+See [Managing many components](CFS_Commands_Cheat_Sheet.md#managing-many-components).
 
 ## Component with zero-length ID
 

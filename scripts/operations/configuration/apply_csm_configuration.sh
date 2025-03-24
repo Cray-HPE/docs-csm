@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -264,9 +264,7 @@ if [[ ${CONFIG_CHANGE} == true ]]; then
   ## UPDATING CFS ##
 
   echo "Disabling all listed components in CFS"
-  for xname in ${XNAME_LIST}; do
-    run_cmd cray cfs v3 components update ${xname} --enabled false
-  done
+  run_cmd cray cfs v3 components updatemany --filter-ids "${XNAMES}" --enabled false
 
   # Before updating the configuration, make a backup of the existing configuration (if it exists)
   echo "Backing up existing ${CONFIG_NAME} configuration (if any) to ${BACKUP_NCN_CONFIG_FILE}"
@@ -300,14 +298,10 @@ fi
 
 if [[ -z ${NO_ENABLE} ]]; then
   echo "${CFS_COMP_UPDATE_MSG}, enabling components in CFS"
-  for xname in ${XNAME_LIST}; do
-    run_cmd cray cfs v3 components update ${xname} --enabled true ${CFS_COMP_UPDATE_ARGS} --desired-config "${CONFIG_NAME}"
-  done
+  run_cmd cray cfs v3 components updatemany --filter-ids "${XNAMES}" --enabled true ${CFS_COMP_UPDATE_ARGS} --desired-config "${CONFIG_NAME}"
 else
   echo "${CFS_COMP_UPDATE_MSG} components in CFS"
-  for xname in ${XNAME_LIST}; do
-    run_cmd cray cfs v3 components update ${xname} --enabled false ${CFS_COMP_UPDATE_ARGS} --desired-config "${CONFIG_NAME}"
-  done
+  run_cmd cray cfs v3 components updatemany --filter-ids "${XNAMES}" --enabled false ${CFS_COMP_UPDATE_ARGS} --desired-config "${CONFIG_NAME}"
   echo "All components updated successfully."
   exit 0
 fi

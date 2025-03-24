@@ -6,8 +6,8 @@ These changes will not immediately take effect, and will instead be applied when
 * [Creating a staged session](#creating-a-staged-session)
 * [Applying a staged state](#applying-a-staged-state)
 * [Stage changes without BOS](#stage-changes-without-bos)
-  * [Stage boot artifacts](#stage-boot-artifacts)
-  * [Stage a configuration](#stage-a-configuration)
+    * [Stage boot artifacts](#stage-boot-artifacts)
+    * [Stage a configuration](#stage-a-configuration)
 
 ## Creating a staged session
 
@@ -62,8 +62,10 @@ For information on staging boot artifacts, see the section [Upload Node Boot Inf
    for all nodes receiving the staged configuration. Nodes will automatically re-enable configuration when they are rebooted and will be configured with any staged changes.
 
     ```bash
-    cray cfs v3 components update <xname> --enabled false
+    cray cfs v3 components updatemany --filter-ids <xname1>,<xname2>,... --enabled false
     ```
+
+    Use the `--filter-ids` argument to specify a comma-separated list of component IDs.
 
 1. (`ncn-mw#`) Either set the new desired configuration or update the existing configuration.
 
