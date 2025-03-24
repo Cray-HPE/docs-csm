@@ -10,7 +10,7 @@ and includes options for speeding up the jobs.
 - [Remote build nodes](#remote-build-nodes)
 - [Kata](#kata)
 - [PVCs](#pvcs)
-- [Different content](#different-content)
+- [Increased Ansible content](#increased-ansible-content)
 
 ## Emulation
 
@@ -137,12 +137,16 @@ The use of these PVCs may be disabled by using the following procedure:
 
 To re-enable PVCs, perform the same procedure, but reverse the edits.
 
-## Different content
+## Increased Ansible content
+
+A large part of the reason that image customization jobs generally take longer in CSM 1.5 is because there is more content in many of
+the image customization Ansible playbooks (when compared to the corresponding Ansible playbooks in earlier CSM releases).
 
 Prior to CSM 1.5, there were some configuration tasks which could only be performed on a live node (not during image customization).
 These tasks would be run after the node booted by the
 [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) as part of the live node personalization.
-Because of improvements to IMS in CSM 1.5, many of these tasks are able to run during image customization. This leads to the image
-customization jobs taking longer to run. This is preferable to the previous behavior. Instead of every single node having to run those
-steps after they boot, the steps can be done just once to the image used by those nodes. This means that after the images are customized,
-the time required for a node to boot and begin doing work is usually significantly less than it was prior to CSM 1.5.
+Because of improvements to IMS in CSM 1.5, many of these tasks are able to run during image customization. Adding these tasks to the image
+customization plays leads to the image customization jobs taking longer to run. This is preferable to the previous behavior. Instead of
+every single node having to run those steps after they boot, the steps can be done just once to the image used by those nodes. This
+means that after the images are customized, the time required for a node to boot and begin doing work is usually significantly less than
+it was prior to CSM 1.5.
