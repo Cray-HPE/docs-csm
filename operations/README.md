@@ -64,6 +64,7 @@ General information on what needs to be done before the initial install of CSM.
 - [Bare-Metal Steps](bare_metal/Bare-Metal.md)
 - [Change Air-Cooled BMC Credentials](bare_metal/Change_River_BMC_Credentials.md)
 - [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
+- [HMS known issues](../troubleshooting/README.md#hardware-management-system-hms)
 
 ## Image management
 
@@ -71,6 +72,7 @@ Build and customize image recipes with the Image Management Service (IMS).
 
 - [Image Management](image_management/Image_Management.md)
 - [Image Management Workflows](image_management/Image_Management_Workflows.md)
+- [Image Job Performance](image_management/Image_Job_Performance.md)
 - [Upload and Register an Image Recipe](image_management/Upload_and_Register_an_Image_Recipe.md)
 - [Build a New UAN Image Using the Default Recipe](image_management/Build_a_New_UAN_Image_Using_the_Default_Recipe.md)
 - [Build an Image Using IMS REST Service](image_management/Build_an_Image_Using_IMS_REST_Service.md)
@@ -89,6 +91,7 @@ Build and customize image recipes with the Image Management Service (IMS).
 - [Troubleshoot Remote Build Node](image_management/Troubleshoot_Remote_Build_Node.md)
 - [Troubleshoot zypper interaction](image_management/Troubleshoot_zypper_interaction.md)
 - [IMS API](../api/ims.md)
+- [IMS known issues](../troubleshooting/README.md#image-management)
 
 ## Boot orchestration
 
@@ -141,6 +144,7 @@ Use the Boot Orchestration Service \(BOS\) to boot, reboot, and shut down collec
     - [Edit the iPXE Embedded Boot Script](boot_orchestration/Edit_the_iPXE_Embedded_Boot_Script.md)
     - [Redeploy the iPXE and TFTP Services](boot_orchestration/Redeploy_the_IPXE_and_TFTP_Services.md)
     - [Upload Node Boot Information to Boot Script Service (BSS)](boot_orchestration/Upload_Node_Boot_Information_to_Boot_Script_Service_BSS.md)
+- [BOS known issues](../troubleshooting/README.md#booting)
 
 ## System power off procedures
 
@@ -156,6 +160,7 @@ Additional links to power off sub-procedures provided for reference. Refer to th
 - [Power Off Compute Cabinets](power_management/Power_Off_Compute_Cabinets.md) using PCS
 - [Shut Down and Power Off the Management Kubernetes Cluster](power_management/Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md)
 - [Power Off the External Lustre File System](power_management/Power_Off_the_External_Lustre_File_System.md)
+- [HMS known issues](../troubleshooting/README.md#hardware-management-system-hms)
 
 ## System power on procedures
 
@@ -170,6 +175,7 @@ Additional links to power on sub-procedures provided for reference. Refer to the
 - [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
 - [Power On and Boot Managed Nodes](power_management/Power_On_and_Boot_Managed_Nodes.md)
 - [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Power_Control_Service/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md) using PCS
+- [HMS known issues](../troubleshooting/README.md#hardware-management-system-hms)
 
 ## Power management
 
@@ -181,6 +187,7 @@ HPE Cray System Management (CSM) software manages and controls power out-of-band
 - [Node Card Power Management](power_management/Power_Control_Service/Node_Card_Power_Management.md)
 - [Set the Turbo Boost Limit](power_management/Set_the_Turbo_Boost_Limit.md)
 - [PCS API](../api/power-control.md)
+- [HMS known issues](../troubleshooting/README.md#hardware-management-system-hms)
 
 ## Artifact management
 
@@ -249,6 +256,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
     - [Customize Configuration Values](configuration_management/Customize_Configuration_Values.md)
     - [Update the Privacy Settings for Gitea Configuration Content Repositories](configuration_management/Update_the_Privacy_Settings_for_Gitea_Configuration_Content_Repositories.md)
     - [Create and Populate a VCS Configuration Repository](configuration_management/Create_and_Populate_a_VCS_Configuration_Repository.md)
+- [CFS known issues](../troubleshooting/README.md#configuration-management)
 
 ## Kubernetes
 
@@ -292,6 +300,7 @@ As a result, the system's micro-services are modular, resilient, and can be upda
 - [TDS Lower CPU Requests](kubernetes/TDS_Lower_CPU_Requests.md)
 - [Fix `Failed to start etcd` on Master NCN](kubernetes/Fix_Failed_to_start_etcd_on_Master.md)
 - [Kubernetes and Bare Metal EtcD Certificate Renewal](kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md)
+- [Kubernetes known issues](../troubleshooting/README.md#kubernetes)
 
 ## Package repository management
 
@@ -371,6 +380,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
 - [Audit Logs](security_and_authentication/Audit_Logs.md)
 - [Cray STS Token Generator API](../api/sts.md)
 - [Configure root user on HPE iLO BMCs](security_and_authentication/Configure_root_user_on_HPE_iLO_BMCs.md)
+- [Security and authentication known issues](../troubleshooting/README.md#security-and-authentication)
 
 ## Resiliency
 
@@ -400,6 +410,7 @@ troubleshooting node boot issues.
 - [Troubleshoot ConMan Asking for Password on SSH Connection](conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
 - [Troubleshoot Console Node Pod Stuck in Terminating State](conman/Troubleshoot_ConMan_Node_Pod_Stuck_Terminating.md)
 - [Complete Reset of the Console Services](conman/Complete_Reset_of_the_Console_Services.md)
+- [Console known issues](../troubleshooting/README.md#conman)
 
 ## Utility storage
 
@@ -444,6 +455,7 @@ services running on Kubernetes, as well as for telemetry data coming from the co
 - [Troubleshoot Insufficient Standby MDS Daemons Available](utility_storage/Troubleshoot_Insufficient_Standby_MDS_Daemons_Available.md)
 - [Troubleshoot S3FS Mount Issues](utility_storage/Troubleshoot_S3FS_Mounts.md)
 - [Fixing incorrect number of PG Issues](utility_storage/Troubleshoot_Pools_Have_Many_More_Objects_Per_Pg_Than_Average.md)
+- [Utility storage known issues](../troubleshooting/README.md#utility-storage)
 
 ## System management health
 
@@ -456,6 +468,7 @@ confident that a lack of issues indicates the system is operating normally.
 - [Configure Prometheus Email Alert Notifications](system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
 - [Grafana Dashboards by Component](system_management_health/Grafana_Dashboards_by_Component.md)
     - [Troubleshoot Grafana Dashboard](system_management_health/Troubleshoot_Grafana_Dashboard.md)
+    - [Grafana dashboards known issues](../troubleshooting/README.md#grafana-dashboards)
 - [Remove Kiali](system_management_health/Remove_Kiali.md)
 - [`prometheus-kafka-adapter` errors during installation](system_management_health/Prometheus_Kafka_Error.md)
 - [`grok-exporter` errors during installation](system_management_health/Grok-Exporter_Error.md)
@@ -478,6 +491,7 @@ stores information about the network, such as which port on which switch should 
 - [Restore SLS Postgres Database from Backup](system_layout_service/Restore_SLS_Postgres_Database_from_Backup.md)
 - [Restore SLS Postgres without an Existing Backup](system_layout_service/Restore_SLS_Postgres_without_an_Existing_Backup.md)
 - [SLS API](../api/sls.md)
+- [HMS known issues](../troubleshooting/README.md#hardware-management-system-hms)
 
 ## System configuration service
 
@@ -489,6 +503,7 @@ this tool enables parameters to be set before or after discovery. The operations
 - [Manage Parameters with the SCSD Service](system_configuration_service/Manage_Parameters_with_the_scsd_Service.md)
 - [Set BMC Credentials](system_configuration_service/Set_BMC_Credentials.md)
 - [SCSD API](../api/scsd.md)
+- [HMS known issues](../troubleshooting/README.md#hardware-management-system-hms)
 
 ## Hardware State Manager (HSM)
 
@@ -516,12 +531,14 @@ making it available via REST queries and message bus events when changes occur.
 - [HSM API](../api/smd.md)
 - [Heartbeat Tracker Daemon (HBTD) API](../api/hbtd.md)
 - [Hardware Management Notification Fanout Daemon (HMNFD) API](../api/hmnfd.md)
+- [HMS known issues](../troubleshooting/README.md#hardware-management-system-hms)
 
 ## Hardware Management (HM) collector
 
 The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system.
 
 - [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
+- [HMS known issues](../troubleshooting/README.md#hardware-management-system-hms)
 
 ## HPE Power Distribution Unit (PDU)
 
@@ -603,6 +620,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
 - [Update the HPE Node BIOS Time](node_management/Update_the_HPE_Node_BIOS_Time.md)
 - [Switch PXE Boot from Onboard NIC to PCIe](node_management/Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md)
 - [NCN NIC Replacement](node_management/NCN_NIC_Replacement.md)
+- [Node management known issues](../troubleshooting/README.md#node-management)
 
 ## Network
 
@@ -640,6 +658,7 @@ The customer accessible networks \(CMN/CAN/CHN\) provide access from outside the
 - [MetalLB Peering with Arista Edge Router](network/customer_accessible_networks/bi-can_arista_metallb_peering.md)
 - [CAN/CMN with Dual-Spine Configuration](network/customer_accessible_networks/Dual_Spine_Configuration.md)
 - [Troubleshoot CMN Issues](network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
+- [CMN known issues](../troubleshooting/README.md#customer-management-network-cmn)
 
 ### Dynamic Host Configuration Protocol (DHCP)
 
@@ -660,6 +679,7 @@ The central DNS infrastructure provides the structural networking hierarchy and 
 - [PowerDNS Migration Guide](network/dns/PowerDNS_migration.md)
 - [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)
 - [Troubleshoot PowerDNS](network/dns/Troubleshoot_PowerDNS.md)
+- [DNS known issues](../troubleshooting/README.md#domain-name-service-dns)
 
 ### External DNS
 
@@ -687,6 +707,7 @@ MetalLB can run in either `Layer2-mode` or `BGP-mode` for each address pool it m
 - [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
 - [Troubleshoot Services without an Allocated IP Address](network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
 - [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
+- [MetalLB known issues](../troubleshooting/README.md#metallb)
 
 ## Spire
 
@@ -698,6 +719,7 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 - [Xname Validation](spire/xname_validation.md)
 - [Restore Missing Spire Meta-Data](spire/Restore_Missing_Spire_Metadata.md)
 - [Create a Backup of the Spire Postgres Database](spire/Create_a_backup_of_the_Spire_Postgres_Database.md)
+- [Spire known issues](../troubleshooting/README.md#spire)
 
 ## Update firmware with FAS
 
@@ -719,6 +741,7 @@ stream to update firmware on other components.
 - [Updating Firmware on `m001`](firmware/Updating_Firmware_m001.md)
 - [Updating Firmware without FAS](firmware/Updating_Firmware_without_FAS.md)
 - [Update iLO 5 firmware above `v2.78`](firmware/FAS_Update_iLO5_2.78.md)
+- [HMS known issues](../troubleshooting/README.md#hardware-management-system-hms)
 
 ## System Admin Toolkit (SAT)
 
