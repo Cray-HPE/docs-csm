@@ -122,6 +122,7 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down col
 - [Redeploy the iPXE and TFTP Services](boot_orchestration/Redeploy_the_IPXE_and_TFTP_Services.md)
 - [Upload Node Boot Information to Boot Script Service (BSS)](boot_orchestration/Upload_Node_Boot_Information_to_Boot_Script_Service_BSS.md)
 - [Hang Listing BOS Sessions](../troubleshooting/known_issues/Hang_Listing_BOS_Sessions.md)
+- [BOS known issues](../troubleshooting/index.md#booting)
 
 ## System power off procedures
 
@@ -232,6 +233,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
   - [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
 - [CFS Key Management](configuration_management/CFS_Key_Management.md)
 - [NCN Worker Image Customization](configuration_management/NCN_Worker_Image_Customization.md)
+- [CFS known issues](../troubleshooting/index.md#configuration-management)
 
 ## Kubernetes
 
@@ -272,6 +274,7 @@ As a result, the system's micro-services are modular, resilient, and can be upda
 - [TDS Lower CPU Requests](kubernetes/TDS_Lower_CPU_Requests.md)
 - [Kubernetes and Bare Metal EtcD Certificate Renewal](kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md)
 - [Configure API Audit Log Retention](kubernetes/Limit_Kubernetes_API_Audit_Log_Maxbackups.md)
+- [Kubernetes known issues](../troubleshooting/index.md#kubernetes)
 
 ## Package repository management
 
@@ -350,6 +353,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
 - [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
 - [Audit Logs](security_and_authentication/Audit_Logs.md)
 - [Restrict Network Access to the `ncn-images` S3 Bucket](security_and_authentication/Restrict_Access_to_NCN_Images_S3_Bucket.md)
+- [Security and authentication known issues](../troubleshooting/index.md#security-and-authentication)
 
 ## Resiliency
 
@@ -377,6 +381,7 @@ troubleshooting node boot issues.
 - [Troubleshoot ConMan Blocking Access to a Node BMC](conman/Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md)
 - [Troubleshoot ConMan Failing to Connect to a Console](conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
 - [Troubleshoot ConMan Asking for Password on SSH Connection](conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
+- [Console known issues](../troubleshooting/index.md#conman)
 
 ## Utility storage
 
@@ -416,6 +421,7 @@ services running on Kubernetes, as well as for telemetry data coming from the co
 - [Troubleshoot Ceph Services Not Starting After a Server Crash](utility_storage/Troubleshoot_Ceph_Services_Not_Starting.md)
 - [Troubleshoot Insufficient Standby MDS Daemons Available](utility_storage/Troubleshoot_Insufficient_Standby_MDS_Daemons_Available.md)
 - [Troubleshoot S3FS Mount Issues](utility_storage/Troubleshoot_S3FS_Mounts.md)
+- [Utility storage known issues](../troubleshooting/index.md#utility-storage)
 
 ## System management health
 
@@ -428,6 +434,7 @@ confident that a lack of issues indicates the system is operating normally.
 - [Configure Prometheus Email Alert Notifications](system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
 - [Grafana Dashboards by Component](system_management_health/Grafana_Dashboards_by_Component.md)
   - [Troubleshoot Grafana Dashboard](system_management_health/Troubleshoot_Grafana_Dashboard.md)
+  - [Grafana dashboards known issues](../troubleshooting/index.md#grafana-dashboards)
 - [Grafterm](system_management_health/Grafterm.md)
 - [Remove Kiali](system_management_health/Remove_Kiali.md)
 - [Troubleshoot Prometheus Alerts](system_management_health/Troubleshoot_Prometheus_Alerts.md)
@@ -552,6 +559,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
 - [NCN Drive Identification](node_management/NCN_Identify_Drives_Using_ledctl.md)
 - [Build NCN Images Locally](node_management/Build_NCN_Images_Locally.md)
 - [Replace a Compute Blade](node_management/Replace_a_Compute_Blade.md)
+- [Node management known issues](../troubleshooting/index.md#node-management)
 
 ## Network
 
@@ -587,6 +595,7 @@ The customer accessible networks \(CMN/CAN/CHN\) provide access from outside the
 - [MetalLB Peering with Arista Edge Router](network/customer_accessible_networks/bi-can_arista_metallb_peering.md)
 - [CAN/CMN with Dual-Spine Configuration](network/customer_accessible_networks/Dual_Spine_Configuration.md)
 - [Troubleshoot CMN Issues](network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
+- [CMN known issues](../troubleshooting/index.md#customer-management-network-cmn)
 
 ### Dynamic Host Configuration Protocol (DHCP)
 
@@ -606,6 +615,7 @@ The central DNS infrastructure provides the structural networking hierarchy and 
 - [PowerDNS Migration Guide](network/dns/PowerDNS_migration.md)
 - [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)
 - [Troubleshoot PowerDNS](network/dns/Troubleshoot_PowerDNS.md)
+- [DNS known issues](../troubleshooting/index.md#domain-name-service-dns)
 
 ### External DNS
 
@@ -633,6 +643,7 @@ MetalLB can run in either `Layer2-mode` or `BGP-mode` for each address pool it m
 - [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
 - [Troubleshoot Services without an Allocated IP Address](network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
 - [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
+- [MetalLB known issues](../troubleshooting/index.md#metallb)
 
 ## Spire
 
@@ -643,6 +654,7 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 - [Update Spire Intermediate CA Certificate](spire/Update_Spire_Intermediate_CA_Certificate.md)
 - [Restore Missing Spire Meta-Data](spire/Restore_Missing_Spire_Metadata.md)
 - [Create a Backup of the Spire Postgres Database](spire/Create_a_backup_of_the_Spire_Postgres_Database.md)
+- [Spire known issues](../troubleshooting/index.md#spire)
 
 ## Update firmware with FAS
 
@@ -739,3 +751,4 @@ a User Access Instance \(UAI\) using the `cray` command. Users can also transfer
   - [Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](UAS_user_and_admin_topics/Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
   - [Troubleshoot Broker UAI SSSD Cannot Use `/etc/sssd/sssd.conf`](UAS_user_and_admin_topics/Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)
   - [Troubleshoot UAS / CLI Authentication Issues](UAS_user_and_admin_topics/Troubleshoot_UAI_Authentication_Issues.md)
+- [UAS known issues](../troubleshooting/index.md#user-access-service-uas)
