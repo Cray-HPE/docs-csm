@@ -483,9 +483,9 @@ Administrators should enable CFS for UAN, ensure plays run successfully and then
    done
    ```
 
-    Alternatively, if running CSM 1.6.2 or higher, enable multiple components at once by using the `updatemany` command. Refer to
-    [Managing many components](../../../../configuration_management/CFS_Commands_Cheat_Sheet.md#managing-many-components)
-    for complete `updatemany` command requirements and usage.
+   Alternatively, if running CSM 1.6.2 or higher, enable multiple components at once by using the `updatemany` command. Refer to
+   [Managing many components](../../../../configuration_management/CFS_Commands_Cheat_Sheet.md#managing-many-components)
+   for complete `updatemany` command requirements and usage.
 
    ```bash
    xname=`cray hsm state components list --role Application --subrole UAN --type Node --format json | jq -r '[.Components[].ID]|join(",")'`
