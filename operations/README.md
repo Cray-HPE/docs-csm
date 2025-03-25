@@ -261,6 +261,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
     - [Customize Configuration Values](configuration_management/Customize_Configuration_Values.md)
     - [Update the Privacy Settings for Gitea Configuration Content Repositories](configuration_management/Update_the_Privacy_Settings_for_Gitea_Configuration_Content_Repositories.md)
     - [Create and Populate a VCS Configuration Repository](configuration_management/Create_and_Populate_a_VCS_Configuration_Repository.md)
+    - [Backup and Restore VCS Data](configuration_management/Backup_and_Restore_VCS_Data.md)
 - [CFS known issues](../troubleshooting/README.md#configuration-management)
 
 ## Kubernetes
@@ -828,7 +829,7 @@ these backups.
 
 ### Backup and recovery: Version Control Service (VCS)
 
-- [Backup and restore data](configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data)
+- [Backup and Restore VCS Data](configuration_management/Backup_and_Restore_VCS_Data.md)
 
 ### Backup and recovery: Boot Orchestration Service (BOS)
 
