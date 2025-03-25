@@ -1,9 +1,10 @@
-# iSCSI SBPS projection will fail over NMN when NMN DNS "A" records are failed to be created or not present
+# iSCSI SBPS projection over NMN will fail if DNS "A" (address) records for NMN are not created
 
 ## Issue Description
 
-iSCSI based boot content projection which is also known as "Scalable Boot Content Projection" (SBPS) for `rootfs` and `PE` images is supported in CSM version CSM 1.6.0 and later. 
-On a customer system, using `CSM-1.6.0` and later with fresh install, DNS SRV "A" records will not be present due to underlining failure.
+iSCSI based boot content projection which is also known as "Scalable Boot Content Projection" (SBPS) for `rootfs` and `PE` images is 
+supported in CSM version CSM 1.6.0 and later. On a customer system, using `CSM-1.6.0` and later with fresh install, DNS SRV "A" records 
+for NMN may not be created due to trailing CRLFs(Carriage Return Line Feed) with NMN IPs.
 
 ## Issue Identification
 
