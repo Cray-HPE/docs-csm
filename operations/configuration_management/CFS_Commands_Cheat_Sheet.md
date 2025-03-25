@@ -34,7 +34,10 @@ For more information about the CFS API, see [Configuration Framework Service](..
     cray cfs v3 components update <xname> --desired-config <example-config>
     ```
 
-* (`ncn-mw#`) Clear the state and trigger configuration on a component:
+* (`ncn-mw#`) Clear the state of a component:
+
+    > If this component has a desired configuration set, then this will trigger automatic configuration.
+    > See [Automatic Configuration Management](Automatic_Configuration_Management.md) for more details.
 
     ```bash
     cray cfs v3 components update <xname> --enabled true --state []
@@ -50,6 +53,66 @@ For more information about the CFS API, see [Configuration Framework Service](..
 
     ```bash
     cray cfs v3 components describe <xname> --state-details true
+    ```
+
+## Managing many components
+
+With `CSM` release `1.6.2` or later and `craycli` version `0.90.1` or later, users can update multiple components at once by using the `updatemany` command.
+To check the version of the installed `craycli` run following command.
+
+```bash
+rpm -q craycli
+```
+
+* (`ncn-mw#`) Enable or disable automatic configuration for a list of components:
+
+    ```bash
+    cray cfs v3 components updatemany --filter-ids <xname1>,<xname2>,... --enabled <true/false>
+    ```
+
+* (`ncn-mw#`) Set the desired configuration for a list of components:
+
+    ```bash
+    cray cfs v3 components updatemany --filter-ids <xname1>,<xname2>,... --desired-config <example-config>
+    ```
+
+* (`ncn-mw#`) Clear the state on a list of components:
+
+    > For any of these components with a desired configuration set, this will trigger automatic configuration.
+    > See [Automatic Configuration Management](Automatic_Configuration_Management.md) for more details.
+
+    ```bash
+    cray cfs v3 components updatemany --filter-ids <xname1>,<xname2>,... --enabled true --state []
+    ```
+
+* (`ncn-mw#`) Enable or disable automatic configuration for a list of components based on status:
+
+    ```bash
+    cray cfs v3 components updatemany --filter-status <status> --enabled <true/false>
+    ```
+
+* (`ncn-mw#`) Enable or disable automatic configuration for a list of components based on their configuration flag:
+
+    ```bash
+    cray cfs v3 components updatemany --filter-enabled <true/false> --enabled <true/false>
+    ```
+
+* (`ncn-mw#`) Enable or disable automatic configuration for a list of components based on their tag:
+
+    ```bash
+    cray cfs v3 components updatemany --filter-tags <key1=value1>,<key2=value2>,... --enabled <true/false>
+    ```
+
+* (`ncn-mw#`) Enable or disable automatic configuration for a list of components based on configuration name:
+
+    ```bash
+    cray cfs v3 components updatemany --filter-config-name <configuration name> --enabled <true/false>
+    ```
+
+* (`ncn-mw#`) Enable or disable automatic configuration for a list of components based on ID and their configuration flag:
+
+    ```bash
+    cray cfs v3 components updatemany --filter-ids <xname1>,<xname2>,... --filter-enabled <true/false> --enabled <true/false>
     ```
 
 See [CFS Components](CFS_Components.md) for more information.

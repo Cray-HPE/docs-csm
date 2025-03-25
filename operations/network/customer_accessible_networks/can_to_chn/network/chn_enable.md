@@ -159,6 +159,16 @@ Copying and storing all data in `${BACKUPDIR}` off-system in a version control r
    done
    ```
 
+   Alternatively, if running CSM 1.6.2 or higher, disable multiple components at once by using the `updatemany` command. Refer to
+   [Managing many components](../../../../configuration_management/CFS_Commands_Cheat_Sheet.md#managing-many-components)
+   for complete `updatemany` command requirements and usage.
+
+   ```bash
+   xname=`cray hsm state components list --role Application --subrole UAN --type Node --format json | jq -r '[.Components[].ID]|join(",")'`
+   echo "Disabling CFS on: ${xname}"
+   cray cfs v3 components updatemany --filter-ids "${xname}" --enabled false --format json
+   ```
+
 ### Update SLS
 
 1. (`ncn-m001#`) Move to the update directory.
@@ -473,6 +483,16 @@ Administrators should enable CFS for UAN, ensure plays run successfully and then
    done
    ```
 
+   Alternatively, if running CSM 1.6.2 or higher, enable multiple components at once by using the `updatemany` command. Refer to
+   [Managing many components](../../../../configuration_management/CFS_Commands_Cheat_Sheet.md#managing-many-components)
+   for complete `updatemany` command requirements and usage.
+
+   ```bash
+   xname=`cray hsm state components list --role Application --subrole UAN --type Node --format json | jq -r '[.Components[].ID]|join(",")'`
+   echo "Enabling CFS on: ${xname}"
+   cray cfs v3 components updatemany --filter-ids "${xname}" --enabled true --state "[]" --format json
+   ```
+
 1. Reboot UANs.
 
    When the UAN comes back up it should now have the CHN interface and updated default route configured.
@@ -551,6 +571,16 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    for xname in $(cray hsm state components list --role Compute --type Node --format json | jq -r .Components[].ID) ; do
       cray cfs v3 components update --enabled true --state "[]" --format json "${xname}"
    done
+   ```
+
+   Alternatively, if running CSM 1.6.2 or higher, enable multiple components at once by using the `updatemany` command. Refer to
+   [Managing many components](../../../../configuration_management/CFS_Commands_Cheat_Sheet.md#managing-many-components)
+   for complete `updatemany` command requirements and usage.
+
+   ```bash
+   xname=`cray hsm state components list --role Compute --type Node --format json | jq -r '[.Components[].ID]|join(",")'`
+   echo "Enabling CFS on: ${xname}"
+   cray cfs v3 components updatemany --filter-ids "${xname}" --enabled true --state "[]" --format json
    ```
 
 1. Determine the CFS configuration that is currently in use on the compute nodes.
