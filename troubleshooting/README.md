@@ -12,6 +12,8 @@ This document provides links to troubleshooting information for services and fun
 * [Customer Management Network (CMN)](#customer-management-network-cmn)
 * [Domain Name Service (DNS)](#domain-name-service-dns)
 * [Grafana dashboards](#grafana-dashboards)
+* [Hardware Management System (HMS)](#hardware-management-system-hms)
+* [Image management](#image-management)
 * [Kubernetes](#kubernetes)
 * [MetalLB](#metallb)
 * [Node management](#node-management)
@@ -79,6 +81,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
 * [CFS-API pods in CLBO state](known_issues/cfs-api_pods_in_CLBO_state.md)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
+* [IMS Image Job Performance](../operations/image_management/Image_Job_Performance.md)
 
 ## Booting
 
@@ -126,14 +129,14 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Troubleshoot BGP services without an allocated IP address](../operations/network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
 * [Troubleshoot PXE boot](../install/troubleshooting_pxe_boot.md)
 
-## Grafana dashboards
-
-* [Grafana Dashboards](../operations/system_management_health/Troubleshoot_Grafana_Dashboard.md)
-
 ## Domain Name Service (DNS)
 
 * [Connectivity to Services with External IP addresses](../operations/network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
 * [DNS Configuration Issues](../operations/network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
+
+## Grafana dashboards
+
+* [Grafana Dashboards](../operations/system_management_health/Troubleshoot_Grafana_Dashboard.md)
 
 ## Hardware Management System (HMS)
 
@@ -149,6 +152,17 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Running HMS CT Tests Manually](hms_ct_manual_run.md)
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
 * [Test Failures Due To No Discovered Compute Nodes](known_issues/test_failures_no_discovered_computes_in_hsm.md)
+
+## Image management
+
+* [Image Job Performance](../operations/image_management/Image_Job_Performance.md)
+* [IMS image creation failure](known_issues/ims_image_creation_failure.md)
+* [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
+* [IMS image delete loses the `arch` information](known_issues/ims_image_delete_loses_arch.md)
+* [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
+* [Troubleshoot Issues with Large Images](../operations/image_management/Troubleshoot_Large_Image.md)
+* [Troubleshoot Remote Build Node](../operations/image_management/Troubleshoot_Remote_Build_Node.md)
+* [Troubleshoot Interactions with zypper](../operations/image_management/Troubleshoot_zypper_interaction.md)
 
 ## Kubernetes
 
