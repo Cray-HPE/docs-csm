@@ -212,6 +212,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
   - [Customize Configuration Values](configuration_management/Customize_Configuration_Values.md)
   - [Update the Privacy Settings for Gitea Configuration Content Repositories](configuration_management/Update_the_Privacy_Settings_for_Gitea_Configuration_Content_Repositories.md)
   - [Create and Populate a VCS Configuration Repository](configuration_management/Create_and_Populate_a_VCS_Configuration_Repository.md)
+  - [Backup and Restore VCS Data](configuration_management/Backup_and_Restore_VCS_Data.md)
 - [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
   - [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
 - [CFS Key Management](configuration_management/CFS_Key_Management.md)
