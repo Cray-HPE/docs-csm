@@ -204,6 +204,8 @@ see [Removals](introduction/deprecated_features/README.md#removals)
 
 ## Known issues
 
+* Image build and customization jobs generally take longer than they did in previous CSM versions. For more details, see
+  [Image Job Performance](operations/image_management/Image_Job_Performance.md).
 * [Firmware Action Service (FAS)](glossary.md#firmware-action-service-fas) Loader / HFP script `post-deliver-product.sh`
     * Loading firmware from Nexus using the FAS Loader will intermittently crash with HFP release 23.12 or later. Rerunning the FAS Loader will be required.
     * This affects the HFP script `post-deliver-product.sh` which will hang when the FAS Loader crashes. Rerunning the script will be required.

@@ -10,14 +10,15 @@ This document provides links to troubleshooting information for services and fun
 - [Configuration management](#configuration-management)
 - [ConMan](#conman)
 - [Customer Management Network (CMN)](#customer-management-network-cmn)
-- [Grafana dashboards](#grafana-dashboards)
 - [Domain Name Service (DNS)](#domain-name-service-dns)
+- [Grafana dashboards](#grafana-dashboards)
+- [Image management](#image-management)
 - [Kubernetes](#kubernetes)
 - [MetalLB](#metallb)
 - [Node management](#node-management)
 - [Security and authentication](#security-and-authentication)
 - [Spire](#spire)
-- [User Access service UAS](#user-access-service-uas)
+- [User Access Service UAS](#user-access-service-uas)
 - [Utility storage](#utility-storage)
 
 ## Helpful tips for navigating the CSM repository
@@ -78,6 +79,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [`cray-console-node` pods in `CrashLoopBackOff`](known_issues/cray-console-node_pods_in_CrashLoopBackOff.md)
 - [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
 - [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
+- [IMS Image Job Performance](../operations/image_management/Image_Job_Performance.md)
 
 ## Booting
 
@@ -127,14 +129,25 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Troubleshoot BGP services without an allocated IP address](../operations/network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
 - [Troubleshoot PXE boot](../install/troubleshooting_pxe_boot.md)
 
-## Grafana dashboards
-
-- [Grafana Dashboards](../operations/system_management_health/Troubleshoot_Grafana_Dashboard.md)
-
 ## Domain Name Service (DNS)
 
 - [Connectivity to Services with External IP addresses](../operations/network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
 - [DNS Configuration Issues](../operations/network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
+
+## Grafana dashboards
+
+- [Grafana Dashboards](../operations/system_management_health/Troubleshoot_Grafana_Dashboard.md)
+
+## Image management
+
+- [Image Job Performance](../operations/image_management/Image_Job_Performance.md)
+- [IMS image creation failure](known_issues/ims_image_creation_failure.md)
+- [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
+- [IMS image delete loses the `arch` information](known_issues/ims_image_delete_loses_arch.md)
+- [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
+- [Troubleshoot Issues with Large Images](../operations/image_management/Troubleshoot_Large_Image.md)
+- [Troubleshoot Remote Build Node](../operations/image_management/Troubleshoot_Remote_Build_Node.md)
+- [Troubleshoot Interactions with zypper](../operations/image_management/Troubleshoot_zypper_interaction.md)
 
 ## Kubernetes
 
@@ -175,7 +188,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
 - [Spire Failing to Start on NCNs](../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
 
-## User Access service UAS
+## User Access Service UAS
 
 **NOTE:** UAS and UAI are deprecated in CSM 1.5.2 and will be removed in CSM 1.6
 
