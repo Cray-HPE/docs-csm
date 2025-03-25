@@ -176,6 +176,16 @@ Execute the rolling NCN reboot procedure steps for the particular node type bein
    done
    ```
 
+   Alternatively, if running CSM 1.6.2 or higher, disable multiple components at once by using the `updatemany` command. Refer to
+   [Managing many components](../configuration_management/CFS_Commands_Cheat_Sheet.md#managing-many-components)
+   for complete `updatemany` command requirements and usage.
+
+   ```bash
+   xname=`cray cfs v3 components list --status failed --format json | jq -r '[.components[].id]|join(",")'`
+   echo "Enabling CFS on: ${xname}"
+   cray cfs v3 components updatemany --filter-ids "${xname}" --enabled false --error-count 0
+   ```
+
    Alternatively, this can be done manually. To get a list of nodes in the failed state:
 
    ```bash

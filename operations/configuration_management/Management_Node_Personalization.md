@@ -34,9 +34,9 @@ This procedure has a scripted option and a manual option. Use the scripted optio
 ### Prerequisites to re-run node personalization on management nodes
 
 - The Cray CLI must be configured and authenticated.
-  - See [Configure the Cray CLI](../configure_cray_cli.md).
+    - See [Configure the Cray CLI](../configure_cray_cli.md).
 - The latest CSM documentation RPM must be installed.
-  - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+    - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 ### Scripted procedure to re-run node personalization on management nodes
 
@@ -93,20 +93,10 @@ The first step of this procedure checks whether all management nodes use the sam
 This procedure manually clears the CFS configuration state and error count across all the management
 node components at once. This causes CFS to reconfigure these components.
 
-1. (`ncn-mw#`) To re-run NCN personalization on all management NCNs at once, use the following loop:
+1. (`ncn-mw#`) To re-run NCN personalization on all management NCNs at once, run the following script to perform the operation:
 
     ```bash
-    FAILED="" ; COUNT=0 ; \
-    for xname in $(cray hsm state components list \
-                        --role Management --type node \
-                        --format json |
-                jq -r .Components[].ID)
-    do
-        echo "Clearing CFS state of ${xname}"
-        cray cfs v3 components update --error-count 0 --state '[]' --format json "${xname}" && let COUNT+=1 || FAILED+=" ${xname}"
-    done ; \
-    echo "Cleared CFS state on ${COUNT} nodes" ; \
-    [[ -z ${FAILED} ]] && echo "No errors" || echo "ERROR: There were errors clearing the CFS state for the following nodes:${FAILED}"
+    /usr/share/doc/csm/scripts/operations/configuration/re_run_node_personalization.sh
     ```
 
 ## Re-run node personalization on a specific management node
@@ -124,7 +114,7 @@ for more information on the CFS Batcher.
 ### Prerequisites to re-run node personalization on a specific management node
 
 - The Cray CLI must be configured and authenticated.
-  - See [Configure the Cray CLI](../configure_cray_cli.md).
+    - See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ### Manual procedure to re-run node personalization on a specific management node
 

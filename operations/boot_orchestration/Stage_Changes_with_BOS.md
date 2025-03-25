@@ -6,8 +6,8 @@ These changes will not immediately take effect, and will instead be applied when
 * [Creating a staged session](#creating-a-staged-session)
 * [Applying a staged state](#applying-a-staged-state)
 * [Stage changes without BOS](#stage-changes-without-bos)
-  * [Stage boot artifacts](#stage-boot-artifacts)
-  * [Stage a configuration](#stage-a-configuration)
+    * [Stage boot artifacts](#stage-boot-artifacts)
+    * [Stage a configuration](#stage-a-configuration)
 
 ## Creating a staged session
 
@@ -64,6 +64,15 @@ For information on staging boot artifacts, see the section [Upload Node Boot Inf
     ```bash
     cray cfs v3 components update <xname> --enabled false
     ```
+
+    Alternatively, if running CSM 1.6.2 or higher, disable multiple components at once by using the `updatemany` command.
+    Refer to [Managing many components](../configuration_management/CFS_Commands_Cheat_Sheet.md#managing-many-components) for complete `updatemany` command requirements and usage.
+
+    ```bash
+    cray cfs v3 components updatemany --filter-ids <xname1>,<xname2>,... --enabled false
+    ```
+
+    Use the `--filter-ids` argument to specify a comma-separated list of component IDs.
 
 1. (`ncn-mw#`) Either set the new desired configuration or update the existing configuration.
 
