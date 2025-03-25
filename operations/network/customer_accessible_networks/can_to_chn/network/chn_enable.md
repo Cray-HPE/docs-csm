@@ -154,9 +154,9 @@ Copying and storing all data in `${BACKUPDIR}` off-system in a version control r
 1. (`ncn-m001#`) Disable CFS changes on UAN to prevent migration to the CHN.
 
    ```bash
-   for xname in $(cray hsm state components list --role Application --subrole UAN --type Node --format json | jq -r .Components[].ID) ; do
-       cray cfs v3 components update --enabled false --format json "${xname}"
-   done
+   xname=`cray hsm state components list --role Application --subrole UAN --type Node --format json | jq -r '[.Components[].ID]|join(",")'`
+   echo "Disabling CFS on: ${xname}"
+   cray cfs v3 components updatemany --filter-ids "${xname}" --enabled false --format json
    ```
 
 ### Update SLS
@@ -468,9 +468,9 @@ Administrators should enable CFS for UAN, ensure plays run successfully and then
 1. (`ncn-m001#`) Enable CFS changes on UAN.
 
    ```bash
-   for xname in $(cray hsm state components list --role Application --subrole UAN --type Node --format json | jq -r .Components[].ID) ; do
-      cray cfs v3 components update --enabled true --state "[]" --format json "${xname}"
-   done
+   xname=`cray hsm state components list --role Application --subrole UAN --type Node --format json | jq -r '[.Components[].ID]|join(",")'`
+   echo "Enabling CFS on: ${xname}"
+   cray cfs v3 components updatemany --filter-ids "${xname}" --enabled true --state "[]" --format json
    ```
 
 1. Reboot UANs.
@@ -548,9 +548,9 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
 1. (`ncn-m001#`) Enable CFS changes on compute nodes.
 
    ```bash
-   for xname in $(cray hsm state components list --role Compute --type Node --format json | jq -r .Components[].ID) ; do
-      cray cfs v3 components update --enabled true --state "[]" --format json "${xname}"
-   done
+   xname=`cray hsm state components list --role Compute --type Node --format json | jq -r '[.Components[].ID]|join(",")'`
+   echo "Enabling CFS on: ${xname}"
+   cray cfs v3 components updatemany --filter-ids "${xname}" --enabled true --state "[]" --format json
    ```
 
 1. Determine the CFS configuration that is currently in use on the compute nodes.
