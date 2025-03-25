@@ -36,10 +36,14 @@ locOfScript=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 # shellcheck source=./bash_lib/common.sh
 . "${locOfScript}/bash_lib/common.sh"
 
+set -o pipefail
+
 DIFF_SCRIPT="${locOfScript}/json_str_list_diff.py"
-xnames_list=$(cray hsm state components list --role Management --type Node --format json | jq -r '[.Components[].ID]')
+xnames_list=$(cray hsm state components list --role Management --type Node --format json | jq -r '[.Components[].ID]') \
+  || err_exit "Command failed: cray hsm state components list --role Management --type Node --format json | jq -r '[.Components[].ID]'"
 # comma-separated list of xnames to be passed to the updatemany command
-xnames=$(echo "$xnames_list" | jq -r 'join(",")')
+xnames=$(echo "$xnames_list" | jq -r 'join(",")') \
+  || errr_exit "Command failed: echo '$xnames_list' | jq -r 'join(\",\")'"
 echo "Clearing CFS state for ${xnames}"
 output=$(cray cfs v3 components updatemany --filter-ids "${xnames}" --error-count 0 --state '[]' --format json) \
   || err_exit "Command failed: cray cfs v3 components updatemany --filter-ids '${xnames}' --error-count 0 --state '[]' --format json"
@@ -53,9 +57,5 @@ echo "Cleared CFS state on ${no_of_updated_components} nodes: ${component_list}"
 difference=$("${DIFF_SCRIPT}" "${xnames_list}" "${component_list}") \
   || err_exit "Command failed: '{DIFF_SCRIPT}' '${xnames_list}' '${component_list}'"
 
-if [ -z "$difference" ]; then
-  echo "Cleared CFS state for all the selected nodes"
-else
-  echo "Unable to clear CFS state for ${difference}"
-  exit 1
-fi
+[[ -z $difference ]] || err_exit "Unable to clear CFS state for ${difference}"
+echo "Cleared CFS state for all the selected nodes"
