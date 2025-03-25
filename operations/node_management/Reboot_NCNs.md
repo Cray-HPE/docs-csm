@@ -170,10 +170,9 @@ Execute the rolling NCN reboot procedure steps for the particular node type bein
    This can be run on any NCN where the Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
    ```bash
-   cray cfs v3 components list --status failed --format json | jq .[].id -r | while read -r xname ; do
-       echo "${xname}"
-       cray cfs v3 components update "${xname}" --enabled False --error-count 0
-   done
+   xname=`cray cfs v3 components list --status failed --format json | jq -r '[.components[].id]|join(",")'`
+   echo "Enabling CFS on: ${xname}"
+   cray cfs v3 components updatemany --filter-ids "${xname}" --enabled false --error-count 0
    ```
 
    Alternatively, this can be done manually. To get a list of nodes in the failed state:
