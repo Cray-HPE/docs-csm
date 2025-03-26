@@ -1566,7 +1566,7 @@ Filters to limit which nodes have their power status returned.
 |transitionStatus|[transition_status](#schematransition_status)|false|none|The status of the power transition.|
 |operation|[power_operation](#schemapower_operation)|false|none|An operation to be applied to the hardware.|
 |taskCounts|[task_counts](#schematask_counts)|false|none|none|
-|tasks|[[transition_task_data](#schematransition_task_data)]|false|none|Present only if transition not yet compressed|
+|tasks|[[transition_task_data](#schematransition_task_data)]|false|none|none|
 
 <h2 id="tocS_transitions_getAll">transitions_getAll</h2>
 <!-- backwards compatibility -->
