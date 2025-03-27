@@ -23,6 +23,8 @@ See [upgrade management nodes and CSM services](../upgrade/Upgrade_Management_No
 
 Storage node upgrades are done using an IUF Argo workflow. See [using the Argo UI](../operations/argo/Using_the_Argo_UI.md) to access the UI and [using Argo workflows](../operations/argo/Using_Argo_Workflows.md) for more information about Argo workflows.
 
+If the storage node is being upgraded to a new image outside of a CSM upgrade, see the [boot a storage node into new image without upgrading CSM](../operations/node_management/Boot_storage_node_into_new_image.md) document.
+
 1. (`ncn-m001#`) Set the storage node name for the node that is being upgraded.
 
     ```bash
