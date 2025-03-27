@@ -2584,7 +2584,16 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
   "percent_successful": 0,
   "percent_failed": 0,
   "percent_staged": 0,
-  "error_summary": {},
+  "error_summary": {
+    "property1": {
+      "count": 0,
+      "list": "string"
+    },
+    "property2": {
+      "count": 0,
+      "list": "string"
+    }
+  },
   "timing": {
     "start_time": "string",
     "end_time": "string",
@@ -5966,6 +5975,30 @@ Detailed information on the timing of a Session.
 |end_time|[V2SessionEndTime](#schemav2sessionendtime)|false|none|When the Session was completed. A null value means the Session has not ended.|
 |duration|string|false|none|The current duration of the ongoing Session or final duration of the completed Session.|
 
+<h2 id="tocS_V2SessionExtendedStatusErrorComponents">V2SessionExtendedStatusErrorComponents</h2>
+<!-- backwards compatibility -->
+<a id="schemav2sessionextendedstatuserrorcomponents"></a>
+<a id="schema_V2SessionExtendedStatusErrorComponents"></a>
+<a id="tocSv2sessionextendedstatuserrorcomponents"></a>
+<a id="tocsv2sessionextendedstatuserrorcomponents"></a>
+
+```json
+{
+  "count": 0,
+  "list": "string"
+}
+
+```
+
+Summary of Components impacted by an error.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|count|integer|false|none|The number of Components impacted by the error.|
+|list|string|false|none|A comma-separated list of the impacted Components.<br>If more than 10 Components are impacted, the first 10 are shown, following by a trailing '...'|
+
 <h2 id="tocS_V2SessionExtendedStatus">V2SessionExtendedStatus</h2>
 <!-- backwards compatibility -->
 <a id="schemav2sessionextendedstatus"></a>
@@ -5986,7 +6019,16 @@ Detailed information on the timing of a Session.
   "percent_successful": 0,
   "percent_failed": 0,
   "percent_staged": 0,
-  "error_summary": {},
+  "error_summary": {
+    "property1": {
+      "count": 0,
+      "list": "string"
+    },
+    "property2": {
+      "count": 0,
+      "list": "string"
+    }
+  },
   "timing": {
     "start_time": "string",
     "end_time": "string",
@@ -6008,7 +6050,8 @@ Detailed information on the status of a Session.
 |percent_successful|number|false|none|The percent of Components currently in a successful state|
 |percent_failed|number|false|none|The percent of Components currently in a failed state|
 |percent_staged|number|false|none|The percent of Components currently still staged for this Session|
-|error_summary|object|false|none|A summary of the errors currently listed by all Components|
+|error_summary|object|false|none|A mapping from error messages to a summary of the impacted Components.|
+|» **additionalProperties**|[V2SessionExtendedStatusErrorComponents](#schemav2sessionextendedstatuserrorcomponents)|false|none|Summary of Components impacted by an error.|
 |timing|[V2SessionExtendedStatusTiming](#schemav2sessionextendedstatustiming)|false|none|Detailed information on the timing of a Session.|
 
 <h2 id="tocS_V2BootArtifacts">V2BootArtifacts</h2>
