@@ -108,6 +108,7 @@ this step may be skipped.
    > - To enable or disable audit logging, refer to [Audit Logs](../operations/security_and_authentication/Audit_Logs.md)
    >   for more information.
    > - If the system is using a `cabinets.yaml` file, be sure to update the `cabinets-yaml` field with `'cabinets.yaml'` as its value.
+   > - If the system will use the Customer High Speed Network (CHN) and has edge switches add `edge` to the `bgp-peer-types` list.
 
    ```bash
    vim system_config.yaml
