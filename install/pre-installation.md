@@ -556,7 +556,7 @@ This section provides directions for system discovery and generating system conf
    vim system_config.yaml
    ```
 
-### 3.2. Create the system configuration using one of the following options:
+### 3.2. Create the system configuration using one of the following options
 
 Re-installations may skip this section and jump to [3.3. Generate system configuration](#33-generate-system-configuration).
 
