@@ -166,15 +166,15 @@ The following steps will verify if IP addresses are assigned to the BMC nodes an
     ncn-m001:/opt/src/cluster-config-verification-tool/cds # ./discover_start.py -u root -l
     Enter the password:
     File /var/lib/misc/dnsmasq.leases exists and has contents.
-    
+
     ===== Detected BMC MAC info:
     IP: A.B.C.D BMC_MAC: AA-BB-CC-DD-EE-FF
-    
+
     ==== Count check:
     No of BMC Detected: 1
-    
+
     ====================================================================================
-    
+
     If BMC count matches the expected river node count, proceed with rebooting the nodes
     ./discovery_start.py --bmc_username <username> --bmc_passwprd <password> --reset
     ```
@@ -242,10 +242,10 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
     ncn-m001:/opt/src/cluster-config-verification-tool/cds # ./discover_status.py fabric --username root --out
     Enter the password for fabric:
     File /var/lib/misc/dnsmasq.leases exists and has contents.
-    
+
     fabricswlist:
     A.B.C.D
-    
+
     ===== Save list components in a file:
     Created fabricswlist file: /opt/src/cluster-config-verification-tool/cds/fabricswlist
     ```
