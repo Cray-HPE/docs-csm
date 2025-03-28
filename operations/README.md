@@ -570,6 +570,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
     - [Final Validation Steps](node_management/Rebuild_NCNs/Final_Validation_Steps.md)
 - [Reboot NCNs](node_management/Reboot_NCNs.md)
     - [Check and Set the `metalno-wipe` Setting on NCNs](node_management/Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md)
+- [Boot a storage node into new image without upgrading CSM](node_management/Boot_storage_node_into_new_image.md)
 - [Enable Nodes](node_management/Enable_Nodes.md)
 - [Disable Nodes](node_management/Disable_Nodes.md)
 - [Find Node Type and Manufacturer](node_management/Find_Node_Type_and_Manufacturer.md)
