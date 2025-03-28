@@ -15,7 +15,8 @@ This procedure is beneficial in that it will not wipe the storage nodes and Ceph
 When a storage node is booted into a new node image, the storage node is not wiped.
 Because the storage node is not wiped, the `rd.live.dir` still exists when the node is rebooted.
 This is due to a change in how `rd.live.overlay.reset` works in CSM 1.5 and 1.6.
-If the `rd.live.dir` is not changed when booting a storage node to a new node image, the new image will not be pulled since the `rd.live.dir` still exists. This causes `cloud-init` to fail on the storage node.
+If the `rd.live.dir` is not changed when booting a storage node to a new node image, the new image will not be pulled since the `rd.live.dir` still exists.
+This can cause `cloud-init` to fail on the storage node or the node will boot but will use the previous `/run/initramfs/live/<CSM_version>` directory that still contains the previous image.
 To avoid this issue and ensure the new node image is pulled, the `rd.live.dir` should be set to unique value.
 In this procedure, the `STORAGE_NODE_IMAGE_ID` is used as the unique value.
 
