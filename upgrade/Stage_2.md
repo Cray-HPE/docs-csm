@@ -57,6 +57,7 @@ If the percentage is not decreasing, then continue to the following troubleshoot
 >   The crash should be evaluated to determine if there is an issue that should be addressed.
 > - Refer to [storage troubleshooting documentation](../operations/utility_storage/Utility_Storage.md#storage-troubleshooting-references) for Ceph related issues.
 > - Refer to [troubleshoot Ceph image with tag:'\<none\>'](../operations/utility_storage/Troubleshoot_ceph_image_with_none_tag.md) if running `podman images` on a storage node shows an image with tag:\<none\>.
+> - Refer to [Storage node `cloud-init` fails with 'Timed out waiting for device' error](./known_issues/storage_node_cloud_init_fails_with_timed_out.md) if the storage node is failing in `cloud-init`.
 
 ## Update ceph node-exporter config for SNMP counters
 
