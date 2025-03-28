@@ -719,7 +719,6 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 - [Update Spire Intermediate CA Certificate](spire/Update_Spire_Intermediate_CA_Certificate.md)
 - [Xname Validation](spire/xname_validation.md)
 - [Restore Missing Spire Meta-Data](spire/Restore_Missing_Spire_Metadata.md)
-- [Create a Backup of the Spire Postgres Database](spire/Create_a_backup_of_the_Spire_Postgres_Database.md)
 - [Spire known issues](../troubleshooting/README.md#spire)
 
 ## Update firmware with FAS
@@ -818,7 +817,6 @@ these backups.
 
 ### Backup and recovery: Spire
 
-- [Create a Backup of the Spire Postgres Database](spire/Create_a_backup_of_the_Spire_Postgres_Database.md)
 - [Restore Spire Postgres without a Backup](spire/Restore_Spire_Postgres_without_a_Backup.md)
 - [Spire Service Recovery](spire/Spire_Service_Recovery.md)
 
