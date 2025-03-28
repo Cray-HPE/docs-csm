@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -1593,6 +1593,26 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
     kubectl apply -f ${locOfScript}/postgres-pod.yaml
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+  echo
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+# the coredns container image needs to be verified. Once nodes are upgraded, k8s.gcr.io/coredns:v1.8.4 will not be available
+# coredns needs to be using k8s.gcr.io/coredns/coredns:v1.8.4 before node upgrades
+state_name="CHECK_COREDNS_CONTAINER_IMAGE"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    if [[ -n $(kubectl get deployment -n kube-system coredns -o yaml | grep "k8s.gcr.io/coredns:v1.8.4") ]]; then
+      echo 'Setting coredns deployment to use image: "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io/coredns/coredns:v1.8.4"'
+      kubectl set image deployment coredns -n kube-system coredns=artifactory.algol60.net/csm-docker/stable/k8s.gcr.io/coredns/coredns:v1.8.4
+    else
+      echo "Coredns is using the correct contianer image. Nothing to do."
+    fi
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
   echo
