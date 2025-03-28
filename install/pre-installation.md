@@ -11,8 +11,9 @@ The page walks a user through setting up the Cray LiveCD with the intention of i
     1. [Exit the console and log in with SSH](#16-exit-the-console-and-log-in-with-ssh)
 1. [Download and extract the CSM tarball](#2-download-and-extract-the-csm-tarball)
 1. [Create system configuration](#3-create-system-configuration)
-1. [Import the CSM Tarball](#4-import-the-csm-tarball)
-1. [Validate the LiveCD](#5-validate-the-livecd)
+1. [Initialize the LiveCD](#4-initialize-the-livecd)
+1. [Import the CSM Tarball](#5-import-the-csm-tarball)
+1. [Validate the LiveCD](#6-validate-the-livecd)
 1. [Next topic](#next-topic)
 
 ## 1. Boot installation environment
@@ -519,14 +520,121 @@ These variables will need to be set for many procedures within the CSM installat
 
 ## 3. Create system configuration
 
-Create the system configuration using one of the following options:
+This section provides directions for system discovery and generating system configuration input files.
+
+1. (`pit#`) Make the `prep` directory.
+
+   ```bash
+   mkdir -pv "${PITDATA}/prep"
+   ```
+
+1. (`pit#`) Change into the `prep` directory.
+
+   ```bash
+   cd "${PITDATA}/prep"
+   ```
+
+### 3.1. Customize `system_config.yaml`
+
+1. (`pit#`) Create or copy `system_config.yaml`.
+
+    - If one does not exist from a prior installation, then create an empty one:
+
+      ```bash
+      csi config init empty
+      ```
+
+    - Otherwise, copy the existing `system_config.yaml` file into the working directory.
+
+1. (`pit#`) Edit the `system_config.yaml` file with the appropriate values.
+
+   > **NOTE**:
+   >
+   > - For a short description of each key in the file, run `csi config init --help`.
+   > - For more description of these settings and the default values, see
+       >   [Default IP Address Ranges](../introduction/csm_overview.md#2-default-ip-address-ranges) and the other topics in
+       >   [CSM Overview](../introduction/csm_overview.md).
+   > - To enable or disable audit logging, refer to [Audit Logs](../operations/security_and_authentication/Audit_Logs.md)
+       >   for more information.
+   > - If the system is using a `cabinets.yaml` file, be sure to update the `cabinets-yaml` field with `'cabinets.yaml'` as its value.
+   > - If the system will use the Customer High Speed Network (CHN) and has edge switches add `edge` to the `bgp-peer-types` list.
+
+   ```bash
+   vim system_config.yaml
+   ```
+
+### 3.2. Create the system configuration using one of the following options:
+
+Re-installations may skip this section and jump to [3.3. Generate system configuration](#33-generate-system-configuration).
 
 - [Create System Configuration Using Cluster Discovery Service](create_system_configuration_using_cluster_discovery_service.md): This is a dynamic discovery process, the system and its connections are dynamically discovered and compared
 with the SHCD to create the system configuration files. This method is highly recommended for the new installations.
 
 - [Create System Configuration Using SHCD](create_system_configuration_using_shcd.md): This method relies on the SHCD data to create the system configuration files.
 
-## 4 Import the CSM Tarball
+### 3.3. Generate system configuration
+
+#### 3.2.1. Run `cray-site-init`
+
+This stage will take an initial pass at validating the `system_config.yaml` file, and generating a `customizations.yaml` file
+necessary for [prepare site init](#322-prepare-site-init).
+
+1. (`pit#`) Change into the `prep` directory.
+
+   ```bash
+   cd "${PITDATA}/prep"
+   ```
+
+1. (`pit#`) Generate the initial configuration for CSI.
+
+   This will validate whether the inputs for CSI are correct.
+
+   ```bash
+   csi config init
+   ```
+
+#### 3.2.2. Prepare Site Init
+
+This step will generate CA certificates, LDAP configuration, and other site customizations for the CSM installation.
+
+Follow the [Prepare Site Init](prepare_site_init.md) procedure and then return for [initialize the LiveCD](#4-initialize-the-livecd).
+
+## 4. Initialize the LiveCD
+
+> **NOTE:** If starting an installation at this point, then be sure to copy the previous `prep` directory back onto the system.
+
+1. (`pit#`) Initialize the PIT.
+
+   The `pit-init.sh` script will prepare the PIT server for deploying NCNs.
+
+   ```bash
+   /root/bin/pit-init.sh
+   ```
+
+1. (`pit#`) Set the `IPMI_PASSWORD` variable.
+
+   ```bash
+   read -r -s -p "NCN BMC root password: " IPMI_PASSWORD
+   ```
+
+1. (`pit#`) Export the `IPMI_PASSWORD` variable.
+
+   ```bash
+   export IPMI_PASSWORD
+   ```
+
+1. (`pit#`) Setup links to the boot artifacts extracted from the CSM tarball.
+
+   > **NOTE**
+   >
+   > - This will also set all the BMCs to DHCP.
+   > - Changing into the `$HOME` directory ensures the proper operation of the script.
+
+   ```bash
+   cd $HOME && /root/bin/set-sqfs-links.sh
+   ```
+
+## 5. Import the CSM Tarball
 
 The following steps require [create system configuration](#3-create-system-configuration) to have completed
 successfully.
@@ -559,7 +667,7 @@ successfully.
    zypper --no-gpg-checks install -y canu craycli csm-testing hpe-csm-goss-package iuf-cli platform-utils
    ```
 
-## 5 Validate the LiveCD
+## 6. Validate the LiveCD
 
 1. (`pit#`) Verify that the LiveCD is ready by running the preflight tests.
 
@@ -569,7 +677,7 @@ successfully.
 
    If any tests fail, they need to be investigated. After actions have been taken to rectify the tests
    (for example, editing configuration or CSI inputs), then restart from the beginning of the
-   [Initialize the LiveCD](create_system_configuration_using_shcd.md#6-initialize-the-livecd) procedure.
+   [Initialize the LiveCD](#4-initialize-the-livecd) procedure.
 
    The following test failure may be ignored if the management network switches have not been configured.
    This is often the case when the system is being installed with CSM for the first time.
@@ -594,4 +702,4 @@ successfully.
 
 After completing this procedure, proceed to configure the management network switches.
 
-See [Configure management network switches](README.md#5-configure-management-network-switches).
+See [Configure management network switches](README.md#7-configure-management-network-switches).
