@@ -521,10 +521,10 @@ These variables will need to be set for many procedures within the CSM installat
 
 Create the system configuration using one of the following options:
 
-- [Create System Configuration Using Cluster Discovery Service](Create_System_Configuration_Using_Cluster_Discovery_Service.md): This is a dynamic discovery process, the system and its connections are dynamically discovered and compared
+- [Create System Configuration Using Cluster Discovery Service](create_system_configuration_using_cluster_discovery_service.md): This is a dynamic discovery process, the system and its connections are dynamically discovered and compared
 with the SHCD to create the system configuration files. This method is highly recommended for the new installations.
 
-- [Create System Configuration Using SHCD](Create_System_Configuration_Using_SHCD.md): This method relies on the SHCD data to create the system configuration files.
+- [Create System Configuration Using SHCD](create_system_configuration_using_shcd.md): This method relies on the SHCD data to create the system configuration files.
 
 ## 4 Import the CSM Tarball
 
@@ -569,7 +569,7 @@ successfully.
 
    If any tests fail, they need to be investigated. After actions have been taken to rectify the tests
    (for example, editing configuration or CSI inputs), then restart from the beginning of the
-   [Initialize the LiveCD](Create_System_Configuration_Using_SHCD.md#6-initialize-the-livecd) procedure.
+   [Initialize the LiveCD](create_system_configuration_using_shcd.md#6-initialize-the-livecd) procedure.
 
    The following test failure may be ignored if the management network switches have not been configured.
    This is often the case when the system is being installed with CSM for the first time.
