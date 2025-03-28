@@ -36,19 +36,19 @@ It is okay if the workflow has already been stopped, a step will provide instruc
 
 ## Procedure
 
-1. (`ncn-m001#`) Set `TARGET_NCN` to the storage node hostname for the node that will be booted into a new image
+1. (`ncn-m001#`) Set `TARGET_NCN` to the storage node hostname for the node that will be booted into a new image.
 
     ```bash
     TARGET_NCN=ncn-s00X
     ```
 
-1. (`ncn-m001#`) Set the image id of the image that the node should be booted into
+1. (`ncn-m001#`) Set the image ID of the image that the node should be booted into.
 
     ```bash
     STORAGE_NODE_IMAGE_ID=<image_id>
     ```
 
-1. (`ncn-m001#`) Set `TOKEN` and `TARGET_XNAME` variables. These variables are needed in subsequent steps.
+1. (`ncn-m001#`) Set the `TOKEN` and `TARGET_XNAME` variables. These variables are needed in subsequent steps.
 
     ```bash
     export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
@@ -68,9 +68,9 @@ It is okay if the workflow has already been stopped, a step will provide instruc
     csi handoff bss-update-param --set rd.live.dir=${STORAGE_NODE_IMAGE_ID} --limit "${TARGET_XNAME}"
     ```
 
-1. (`ncn-m001#`) Follow one of the two options below
+1. (`ncn-m001#`) Follow the steps for one of the two options depending on the status of the storage node.
 
-    1. **Option 1:** Start a new storage node upgrade if one has not already been started
+    * **Option 1:** Start a new storage node upgrade if one has not already been started.
 
         > Note: if a new CFS configuration is also necessary, append the argument `--desired-cfs-conf <configuration>` to the command below.
 
@@ -78,7 +78,7 @@ It is okay if the workflow has already been stopped, a step will provide instruc
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh $TARGET_NCN --upgrade --image-id $STORAGE_NODE_IMAGE_ID
         ```
 
-    1. **Option 2:** If a storage node has already attempted to boot into a new image and `cloud-init` has failed, manually power cycle the node.
+    * **Option 2:** If a storage node has already attempted to boot into a new image and `cloud-init` has failed, manually power cycle the node.
 
         The following error will be seen in `cloud-init` if a storage node has already been attempted to be upgraded without setting `rd.live.dir` to a new unique value.
         This error can be seen for the node's console. See [log in to a node using ConMan](../conman/Log_in_to_a_Node_Using_ConMan.md).

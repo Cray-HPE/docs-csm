@@ -2,7 +2,7 @@
 
 ## Observed Error
 
-This error can be observed from a storage node's console
+This error can be observed from a storage node's console.
 
 ```text
 [ TIME ] Timed out waiting for device /dev/disk/by-label/CEPHETC.
