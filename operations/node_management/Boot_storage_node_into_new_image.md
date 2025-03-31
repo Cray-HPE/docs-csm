@@ -3,10 +3,10 @@
 ## Purpose
 
 This procedure is needed anytime a storage node is booted into a new image except for during a CSM upgrade.
-For example, if a storage node image been rebuilt, then this procedure is necessary to boot storage nodes into the newly built image.
+For example, if a storage node image has been rebuilt, then this procedure is necessary to boot storage nodes into the newly built image.
 This procedure is not necessary when upgrading a storage node from one CSM major release to the next major release.
 
-Instead of following this procedure to upgrade the storage nodes into the new image, the storage nodes could also be rebuilt into the new image.
+Instead of following this procedure which boots a storage node into a new image by using the storage node upgrade Argo workflow, the storage node could also be rebuilt into the new image.
 A storage node rebuild means that the storage node will be wiped and it will take Ceph longer to recover once the node is rebooted.
 This procedure is beneficial in that it will not wipe the storage nodes and Ceph should recover quicker than if the nodes were rebuilt.
 
@@ -26,8 +26,8 @@ This issue is not hit when upgrading from one CSM major release to the next CSM 
 
 ## Procedure overview
 
-This procedure will upgrade storage nodes using the normal Argo workflow framework.
-Prior to upgrading the storage node, the `rd.live.dir` will be set to the `STORAGE_NODE_IMAGE_ID`. Because this is a unique value, the node image will be pulled successfully during `cloud-init`.
+This procedure will boot a storage node into a new image using the Argo workflow framework that is normally used for storage node upgrades during a CSM upgrade.
+Prior to starting the storage node upgrade workflow, the `rd.live.dir` will be set to the `STORAGE_NODE_IMAGE_ID`. Because this is a unique value, the node image will be pulled successfully during `cloud-init`.
 
 This procedure can be followed prior to booting a storage node into a new image or
 if a storage node has already attempted to boot into a new image and it failed in `cloud-init` due to `rd.live.dir` already existing.
