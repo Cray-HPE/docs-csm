@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -331,11 +331,11 @@ def get_session(session_name: str, expected_to_exist: bool = True) -> Union[Json
         log_error_raise_exception("Response from CFS has unexpected format", exc)
     return json_object
 
-def list_sessions() -> List[JsonObject]:
+def list_sessions(params: Union[JsonDict, None]=None) -> List[JsonObject]:
     """
     Queries CFS to list all sessions, and returns the list.
     """
-    return __list_and_merge("sessions", CFS_V3_SESSIONS_URL)
+    return __list_and_merge("sessions", CFS_V3_SESSIONS_URL, params=params)
 
 # CFS sources functions
 
