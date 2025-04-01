@@ -155,7 +155,7 @@ Refer to that table and any corresponding product documents before continuing to
         cray cfs components describe "${XNAME}"
         ```
 
-1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [4.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
+1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [2.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
 1. Perform the NCN master node upgrade of `ncn-m001`.
 
@@ -218,7 +218,7 @@ Follow the following steps to complete the `management-nodes-rollout` stage.
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. Rebuild the NCN worker nodes. Follow the procedure in section [4.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
+1. Rebuild the NCN worker nodes. Follow the procedure in section [2.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
 1. Configure NCN master nodes.
 
@@ -342,7 +342,7 @@ Once this step has completed:
 - Management NCN storage and NCN master nodes have be updated with the CFS configuration created in the previous steps of this workflow.
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [5. Restart `goss-servers` on all NCNs](#3-restart-goss-servers-on-all-ncns).
+Continue to the next section [3. Restart `goss-servers` on all NCNs](#3-restart-goss-servers-on-all-ncns).
 
 ### 2.3 NCN worker nodes
 
