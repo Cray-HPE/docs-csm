@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -215,10 +215,6 @@ function createWorkflowPayload() {
 {
 "dryRun": ${dryRun},
 "hosts": ${jsonArray},
-"switchPassword": "$(kubectl -n vault exec -i cray-vault-0 -c vault -- env \
-      VAULT_TOKEN="$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' | base64 -d)" \
-      VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json \
-      vault kv get secret/net-creds/switch_admin | jq -r '.data.admin')",
 "imageId": "${imageId}",
 "bootTimeoutInSeconds": ${rebootTimeout},
 "desiredCfsConfig": "${desiredCfsConfig}"$(if [[ -n ${labels} ]]; then echo ", \"labels\": ${labels}"; fi)
