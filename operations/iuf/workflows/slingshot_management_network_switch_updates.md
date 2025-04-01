@@ -5,6 +5,8 @@ This section updates the Slingshot switch and management network switch firmware
 - [1. Perform Slingshot switch firmware updates](#1-perform-slingshot-switch-firmware-updates)
 - [2. Perform management network switch firmware updates](#2-perform-management-network-switch-firmware-updates)
 
+> **NOTE:** Switch firmware updates may cause temporary interrupts in network traffic during the upgrade procedure.
+
 ## 1. Perform Slingshot switch firmware updates
 
 **`NOTE`** This subsection is only required if a new version of the slingshot product is being installed by IUF
