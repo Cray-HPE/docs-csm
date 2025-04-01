@@ -209,7 +209,7 @@ Once this step has completed:
 - All management NCNs have been upgraded to the image and CFS configuration created in the previous steps of this workflow
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [4. Restart `goss-servers` on all NCNs](#4-restart-goss-servers-on-all-ncns).
+Continue to the next section [2. Restart `goss-servers` on all NCNs](#2-restart-goss-servers-on-all-ncns).
 
 ### 1.2 `management-nodes-rollout` without CSM upgrade
 
@@ -348,7 +348,7 @@ Once this step has completed:
 - Management NCN storage and NCN master nodes have be updated with the CFS configuration created in the previous steps of this workflow.
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [4. Restart `goss-servers` on all NCNs](#4-restart-goss-servers-on-all-ncns).
+Continue to the next section [2. Restart `goss-servers` on all NCNs](#2-restart-goss-servers-on-all-ncns).
 
 ### 1.3 NCN worker nodes
 
