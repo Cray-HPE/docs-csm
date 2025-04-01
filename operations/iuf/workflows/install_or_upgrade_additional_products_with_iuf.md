@@ -56,7 +56,7 @@ the steps below it provide detailed instructions which must be executed in the o
 
    Follow these IUF instructions in order:
 
-   1. [Perform Slingshot switch and management network switch firmware updates](slingshot_management_network_switch_updates.md)
+   1. [Perform Slingshot switch firmware updates](slingshot_switch_updates.md)
    1. [Management rollout](management_rollout.md)
 
 1. Validate deployment
