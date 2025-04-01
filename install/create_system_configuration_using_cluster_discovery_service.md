@@ -2,7 +2,22 @@
 
 This stage walks the user through creating the configuration payload for the system using Cluster Discovery Service (CDS) to generate seed files and paddle file.
 
-Run the following steps before starting any of the system configuration procedures.
+## Topics
+
+1. [Prepare](#1-prepare)
+1. [Configure the management network](#2-configure-the-management-network)
+1. [Configure auto-discovery](#3-configure-auto-discovery)
+    1. [Configure `dnsmasq`](#31-configure-dnsmasq)
+    1. [Verify and reset the BMCs](#32-verify-and-reset-the-bmcs)
+    1. [Verify the discover status](#33-verify-the-discover-status)
+    1. [Collect and compare the inventory data](#34-collect-and-compare-the-inventory-data)
+1. [Generate seed files and paddle file](#4-generate-seed-files-and-paddle-file)
+1. [Stop discovery](#5-stop-discovery)
+1. [Next topic](#next-topic)
+
+## 1. Prepare
+
+1. This document requires that a `system_config.yaml` file is present on the system from [customize `system_config.yaml`](pre-installation.md#31-customize-system_configyaml) in the pre-installation document.
 
 1. (`pit#`) Create the `prep` and `cds` directory.
 
@@ -19,58 +34,7 @@ Run the following steps before starting any of the system configuration procedur
 1. (`pit#`) Set `CVT_PATH` variable.
 
    ```bash
-   CVT_PATH=/opt/src/cluster-config-verification-tool/
-   ```
-
-## Topics
-
-1. [Customize `system_config.yaml`](#1-customize-system_configyaml)
-1. [Configure the management network](#2-configure-the-management-network)
-1. [Configure auto-discovery](#3-configure-auto-discovery)
-    1. [Configure `dnsmasq`](#31-configure-dnsmasq)
-    1. [Verify and reset the BMCs](#32-verify-and-reset-the-bmcs)
-    1. [Verify the discover status](#33-verify-the-discover-status)
-    1. [Collect and compare the inventory data](#34-collect-and-compare-the-inventory-data)
-1. [Generate seed files and paddle file](#4-generate-seed-files-and-paddle-file)
-1. [Stop discovery](#5-stop-discovery)
-1. [Run CSI](#6-run-csi)
-1. [Prepare Site Init](#7-prepare-site-init)
-1. [Initialize the LiveCD](#8-initialize-the-livecd)
-1. [Next topic](#next-topic)
-
-## 1. Customize `system_config.yaml`
-
-1. (`pit#`) Change into the `prep` directory.
-
-   ```bash
-   cd "${PITDATA}/prep"
-   ```
-
-1. (`pit#`) Create or copy `system_config.yaml`.
-
-   - If one does not exist from a prior installation, then create an empty one:
-
-     ```bash
-     csi config init empty
-     ```
-
-   - Otherwise, copy the existing `system_config.yaml` file into the working directory.
-
-1. (`pit#`) Edit the `system_config.yaml` file with the appropriate values.
-
-   > **NOTE**:
-   >
-   > - For a short description of each key in the file, run `csi config init --help`.
-   > - For more description of these settings and the default values, see
-   >   [Default IP Address Ranges](../introduction/csm_overview.md#2-default-ip-address-ranges) and the other topics in
-   >   [CSM Overview](../introduction/csm_overview.md).
-   > - To enable or disable audit logging, refer to [Audit Logs](../operations/security_and_authentication/Audit_Logs.md)
-   >   for more information.
-   > - If the system is using a `cabinets.yaml` file, be sure to update the `cabinets-yaml` field with `'cabinets.yaml'` as its value.
-   > - If the system is using the Customer High Speed Network (CHN) and has edge switches add `edge` to the `bgp-peer-types` list.
-
-   ```bash
-   vim system_config.yaml
+   CVT_PATH=/opt/src/cluster-config-verification-tool
    ```
 
 ## 2. Configure the management network
@@ -166,15 +130,15 @@ The following steps will verify if IP addresses are assigned to the BMC nodes an
     ncn-m001:/opt/src/cluster-config-verification-tool/cds # ./discover_start.py -u root -l
     Enter the password:
     File /var/lib/misc/dnsmasq.leases exists and has contents.
-    
+
     ===== Detected BMC MAC info:
     IP: A.B.C.D BMC_MAC: AA-BB-CC-DD-EE-FF
-    
+
     ==== Count check:
     No of BMC Detected: 1
-    
+
     ====================================================================================
-    
+
     If BMC count matches the expected river node count, proceed with rebooting the nodes
     ./discovery_start.py --bmc_username <username> --bmc_passwprd <password> --reset
     ```
@@ -242,10 +206,10 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
     ncn-m001:/opt/src/cluster-config-verification-tool/cds # ./discover_status.py fabric --username root --out
     Enter the password for fabric:
     File /var/lib/misc/dnsmasq.leases exists and has contents.
-    
+
     fabricswlist:
     A.B.C.D
-    
+
     ===== Save list components in a file:
     Created fabricswlist file: /opt/src/cluster-config-verification-tool/cds/fabricswlist
     ```
@@ -399,63 +363,6 @@ The following steps verify the status and lists the IP addresses of nodes, fabri
 
 > A prompt to enter the password will appear, enter the correct BMC password.
 
-## 6. Run CSI
-
-1. (`pit#`) Change into the `prep` directory.
-
-   ```bash
-   cd "${PITDATA}/prep"
-   ```
-
-1. (`pit#`) Generate the initial configuration for CSI.
-
-   This will validate whether the inputs for CSI are correct.
-
-   ```bash
-   csi config init
-   ```
-
-## 7. Prepare Site Init
-
-Follow the [Prepare Site Init](prepare_site_init.md) procedure.
-
-## 8. Initialize the LiveCD
-
-> **NOTE:** If starting an installation at this point, then be sure to copy the previous `prep` directory back onto the system.
-
-1. (`pit#`) Initialize the PIT.
-
-   The `pit-init.sh` script will prepare the PIT server for deploying NCNs.
-
-   ```bash
-   /root/bin/pit-init.sh
-   ```
-
-1. (`pit#`) Set the `IPMI_PASSWORD` variable.
-
-   ```bash
-   read -r -s -p "NCN BMC root password: " IPMI_PASSWORD
-   ```
-
-1. (`pit#`) Export the `IPMI_PASSWORD` variable.
-
-   ```bash
-   export IPMI_PASSWORD
-   ```
-
-1. (`pit#`) Setup links to the boot artifacts extracted from the CSM tarball.
-
-   > **NOTE**
-   >
-   > - This will also set all the BMCs to DHCP.
-   > - Changing into the `$HOME` directory ensures the proper operation of the script.
-
-   ```bash
-   cd $HOME && /root/bin/set-sqfs-links.sh
-   ```
-
 ## Next topic
 
-After completing this procedure, proceed to import the CSM tarball.
-
-See [Import the CSM Tarball](pre-installation.md#4-import-the-csm-tarball).
+After completing this procedure, return to the pre-installation document to [generate system configuration](pre-installation.md#33-generate-system-configuration).
