@@ -75,6 +75,7 @@ For more detail about about the CSM upgrade hooks, see the section [description 
 
    1. [Deploy product](deploy_product.md)
    1. [Validate deployment](validate_deployment.md)
+   1. [Perform Slingshot switch and management network switch firmware updates](slingshot_management_network_switch_updates.md)
 
 1. Managed rollout
 
