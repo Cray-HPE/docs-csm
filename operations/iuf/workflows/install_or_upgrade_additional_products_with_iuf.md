@@ -58,7 +58,10 @@ the steps below it provide detailed instructions which must be executed in the o
 
 1. Validate deployment
 
-   Follow the IUF [Validate deployment](validate_deployment.md) instructions
+   Follow these IUF instructions in order:
+
+   1. [Validate deployment](validate_deployment.md)
+   1. [Perform Slingshot switch and management network switch firmware updates](slingshot_management_network_switch_updates.md)
 
 1. Managed rollout
 

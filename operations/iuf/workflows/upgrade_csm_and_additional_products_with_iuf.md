@@ -86,7 +86,8 @@ the steps below it provide detailed instructions which must be executed in the o
 
    1. [Deploy product](deploy_product.md)
    1. [Stage 3.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_3.md#stage-36---complete-kubernetes-upgrade)
-   1. [Validate deployment and perform Slingshot switch FW updates](validate_deployment.md)
+   1. [Validate deployment](validate_deployment.md)
+   1. [Perform Slingshot switch and management network switch firmware updates](slingshot_management_network_switch_updates.md)
 
 1. Managed rollout
 
