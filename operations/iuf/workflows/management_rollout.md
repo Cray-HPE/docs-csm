@@ -2,43 +2,16 @@
 
 This section updates the software running on management NCNs.
 
-- [1. Perform Slingshot switch firmware updates](#1-perform-slingshot-switch-firmware-updates)
-- [2. Perform management network switch firmware updates](#2-perform-management-network-switch-firmware-updates)
-- [3. Update management host firmware (FAS)](#3-update-management-host-firmware-fas)
-- [4. Execute the IUF `management-nodes-rollout` stage](#4-execute-the-iuf-management-nodes-rollout-stage)
-    - [4.1 `management-nodes-rollout` with CSM upgrade](#41-management-nodes-rollout-with-csm-upgrade)
-    - [4.2 `management-nodes-rollout` without CSM upgrade](#42-management-nodes-rollout-without-csm-upgrade)
-    - [4.3 NCN worker nodes](#43-ncn-worker-nodes)
-- [5. Restart `goss-servers` on all NCNs](#5-restart-goss-servers-on-all-ncns)
-- [6. Update management host Slingshot NIC firmware](#6-update-management-host-slingshot-nic-firmware)
-- [7. Next steps](#7-next-steps)
+- [1. Update management host firmware (FAS)](#1-update-management-host-firmware-fas)
+- [2. Execute the IUF `management-nodes-rollout` stage](#2-execute-the-iuf-management-nodes-rollout-stage)
+    - [2.1 `management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
+    - [2.2 `management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
+    - [2.3 NCN worker nodes](#23-ncn-worker-nodes)
+- [3. Restart `goss-servers` on all NCNs](#3-restart-goss-servers-on-all-ncns)
+- [4. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware)
+- [5. Next steps](#5-next-steps)
 
-## 1. Perform Slingshot switch firmware updates
-
-**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
-
-Instructions to perform Slingshot switch firmware updates are provided in the "Upgrade HPE Slingshot switch firmware in a CSM environment" section of the _HPE Slingshot Installation Guide for CSM_.
-
-Once this step has completed:
-
-- Slingshot switch firmware has been updated
-
-## 2. Perform management network switch firmware updates
-
-**`NOTE`** This section is optional and can be skipped or deferred unless network configuration that requires updated firmware is being applied to the system.
-
-Management network switch firmware is shipped in the HPC Firmware Pack (HFP) product tarball.
-
-Refer to [Update Management Network Firmware](../../network/management_network/firmware/update_management_network_firmware.md) for instructions on performing the switch firmware update.
-
-**`NOTE`** The firmware on spine, leaf, and CDU switches can be updated without disruption. Air-cooled compute nodes, their BMCs, and other air-cooled devices
-such as Slingshot switches will experience a loss of connectivity while the leaf-bmc switch the device is connected to restarts.
-
-Once this step has been completed:
-
-- Management network switch firmware has been updated
-
-## 3. Update management host firmware (FAS)
+## 1. Update management host firmware (FAS)
 
 **`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
@@ -48,7 +21,7 @@ Once this step has completed:
 
 - Host firmware has been updated on management nodes
 
-## 4. Execute the IUF `management-nodes-rollout` stage
+## 2. Execute the IUF `management-nodes-rollout` stage
 
 This section describes how to update software on management nodes. It describes how to test a new image and CFS configuration on a single node first to ensure they work as expected before rolling the changes out to the other management
 nodes. This initial test node is referred to as the "canary node". Modify the procedure as necessary to accommodate site preferences for rebuilding management nodes. The images and CFS configurations used are created by the
@@ -82,7 +55,7 @@ procedures based on whether or not CSM is being upgraded:
 - [`management-nodes-rollout` with CSM upgrade](#41-management-nodes-rollout-with-csm-upgrade)
 - [`management-nodes-rollout` without CSM upgrade](#42-management-nodes-rollout-without-csm-upgrade)
 
-### 4.1 `management-nodes-rollout` with CSM upgrade
+### 2.1 `management-nodes-rollout` with CSM upgrade
 
 All management nodes will be upgraded to a new image because CSM itself is being upgraded.
 This section describes how to test a new image and CFS configuration on a single canary node first before rolling it out to the other management nodes of the same management type.
@@ -238,7 +211,7 @@ Refer to that table and any corresponding product documents before continuing to
 
 Continue to the next section [5. Restart `goss-servers` on all NCNs](#5-restart-goss-servers-on-all-ncns).
 
-### 4.2 `management-nodes-rollout` without CSM upgrade
+### 2.2 `management-nodes-rollout` without CSM upgrade
 
 This is the procedure to rollout management nodes if CSM is not being upgraded. NCN worker node images contain kernel module content from non-CSM products and need to be rebuilt as part of the workflow.
 Unlike NCN worker nodes, NCN master nodes and storage nodes do not contain kernel module content from non-CSM products. However, user-space non-CSM product content is still provided on NCN master nodes and storage nodes and thus the `prepare-images` and `update-cfs-config`
@@ -377,7 +350,7 @@ Once this step has completed:
 
 Continue to the next section [5. Restart `goss-servers` on all NCNs](#5-restart-goss-servers-on-all-ncns).
 
-### 4.3 NCN worker nodes
+### 2.3 NCN worker nodes
 
 NCN worker node images contain kernel module content from non-CSM products and need to be rebuilt as part of the workflow. This section describes how to test a new image and CFS configuration on a single canary node (`ncn-w001`) first before
 rolling it out to the other NCN worker nodes. Modify the procedure as necessary to accommodate site preferences for rebuilding NCN worker nodes.
@@ -471,7 +444,7 @@ Once this step has completed:
 Return to the procedure that was being followed for `management-nodes-rollout` to complete the next step, either [Management-nodes-rollout with CSM upgrade](#41-management-nodes-rollout-with-csm-upgrade) or
 [Management-nodes-rollout without CSM upgrade](#42-management-nodes-rollout-without-csm-upgrade).
 
-## 5. Restart `goss-servers` on all NCNs
+## 3. Restart `goss-servers` on all NCNs
 
 **`NOTE`** Skip this step if the CSM version is 1.6.1 or above. This step will cause no harm if done on CSM 1.6.1 or higher, but it is unnecessary.
 
@@ -485,7 +458,7 @@ ncn_nodes=${ncn_nodes%,}
 pdsh -S -b -w $ncn_nodes 'systemctl restart goss-servers'
 ```
 
-## 6. Update management host Slingshot NIC firmware
+## 4. Update management host Slingshot NIC firmware
 
 **`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
@@ -500,7 +473,7 @@ Once this step has completed:
 - Service checks have been run to verify product microservices are executing as expected
 - Per-stage product hooks have executed for the `deploy-product` and `post-install-service-check` stages
 
-## 7. Next steps
+## 5. Next steps
 
 - If performing an initial install or an upgrade of non-CSM products only, return to the
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)
