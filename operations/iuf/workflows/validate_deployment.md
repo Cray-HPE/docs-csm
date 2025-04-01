@@ -1,4 +1,4 @@
-# Validate deployment and perform Slingshot switch FW updates
+# Validate deployment
 
 - [1. Execute the IUF `post-install-service-check` stage](#1-execute-the-iuf-post-install-service-check-stage)
 - [2. Next steps](#2-next-steps)
