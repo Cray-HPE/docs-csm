@@ -52,8 +52,8 @@ being upgraded, then NCN storage nodes and NCN master nodes will not be upgraded
 upgraded, the NCN storage nodes and NCN master nodes will be upgraded with new images and the new CFS configuration. Both procedures use the same steps for rebuilding/upgrading NCN worker nodes. Select **one** of the following
 procedures based on whether or not CSM is being upgraded:
 
-- [`management-nodes-rollout` with CSM upgrade](#41-management-nodes-rollout-with-csm-upgrade)
-- [`management-nodes-rollout` without CSM upgrade](#42-management-nodes-rollout-without-csm-upgrade)
+- [`management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
+- [`management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
 
 ### 2.1 `management-nodes-rollout` with CSM upgrade
 
@@ -158,7 +158,7 @@ Refer to that table and any corresponding product documents before continuing to
         cray cfs components describe "${XNAME}"
         ```
 
-1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [4.3 NCN worker nodes](#43-ncn-worker-nodes) and then return to this procedure to complete the next step.
+1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [4.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
 1. Perform the NCN master node upgrade of `ncn-m001`.
 
@@ -209,7 +209,7 @@ Refer to that table and any corresponding product documents before continuing to
      - All management NCNs have been upgraded to the image and CFS configuration created in the previous steps of this workflow
      - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [5. Restart `goss-servers` on all NCNs](#5-restart-goss-servers-on-all-ncns).
+Continue to the next section [3. Restart `goss-servers` on all NCNs](#3-restart-goss-servers-on-all-ncns).
 
 ### 2.2 `management-nodes-rollout` without CSM upgrade
 
@@ -224,7 +224,7 @@ Follow the following steps to complete the `management-nodes-rollout` stage.
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. Rebuild the NCN worker nodes. Follow the procedure in section [4.3 NCN worker nodes](#43-ncn-worker-nodes) and then return to this procedure to complete the next step.
+1. Rebuild the NCN worker nodes. Follow the procedure in section [4.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
 1. Configure NCN master nodes.
 
@@ -348,7 +348,7 @@ Once this step has completed:
 - Management NCN storage and NCN master nodes have be updated with the CFS configuration created in the previous steps of this workflow.
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [5. Restart `goss-servers` on all NCNs](#5-restart-goss-servers-on-all-ncns).
+Continue to the next section [5. Restart `goss-servers` on all NCNs](#3-restart-goss-servers-on-all-ncns).
 
 ### 2.3 NCN worker nodes
 
@@ -441,8 +441,8 @@ Once this step has completed:
 - Management NCN worker nodes have been rebuilt with the image and CFS configuration created in previous steps of this workflow
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Return to the procedure that was being followed for `management-nodes-rollout` to complete the next step, either [Management-nodes-rollout with CSM upgrade](#41-management-nodes-rollout-with-csm-upgrade) or
-[Management-nodes-rollout without CSM upgrade](#42-management-nodes-rollout-without-csm-upgrade).
+Return to the procedure that was being followed for `management-nodes-rollout` to complete the next step, either [Management-nodes-rollout with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade) or
+[Management-nodes-rollout without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade).
 
 ## 3. Restart `goss-servers` on all NCNs
 
