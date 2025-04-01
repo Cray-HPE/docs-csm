@@ -9,7 +9,7 @@ This section updates the Slingshot switch and management network switch firmware
 
 ## 1. Perform Slingshot switch firmware updates
 
-**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
+**`NOTE`** This subsection is only required if a new version of the slingshot product is being installed by IUF
 
 Instructions to perform Slingshot switch firmware updates are provided in the "Upgrade HPE Slingshot switch firmware in a CSM environment" section of the _HPE Slingshot Installation Guide for CSM_.
 
