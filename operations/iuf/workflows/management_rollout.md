@@ -78,6 +78,8 @@ Refer to that table and any corresponding product documents before continuing to
     **`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN storage nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`.
     If monitoring progress with the Argo UI, remember to include these workflows.
 
+    > **Known Issue:** If `cloud-init` fails on the storage node with a timed out error, see [storage node `cloud-init` fails with 'Timed out waiting for device' error](../../../troubleshooting/known_issues/storage_node_cloud_init_fails_with_timed_out.md).
+
     1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage with a single NCN storage node.
 
         ```bash
