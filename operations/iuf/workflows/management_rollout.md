@@ -2,16 +2,16 @@
 
 This section updates the software running on management NCNs.
 
-- [1. Update management host firmware (FAS)](#2-update-management-host-firmware-fas)
+- [1. Update management host firmware (FAS)](#1-update-management-host-firmware-fas)
 - [2. Execute the IUF `management-nodes-rollout` stage](#2-execute-the-iuf-management-nodes-rollout-stage)
     - [2.1 `management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
     - [2.2 `management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
     - [2.3 NCN worker nodes](#23-ncn-worker-nodes)
         - [2.3.1 DVS workaround upgrading from COS prior to 2.5.146](#231-dvs-workaround-upgrading-from-cos-prior-to-25146)
-- [3. Restart `goss-servers` on all NCNs](#2-restart-goss-servers-on-all-ncns)
-- [4. Update ceph node-exporter config for SNMP counters](#3-update-ceph-node-exporter-config-for-snmp-counters)
-- [5. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware)
-- [6. Next steps](#5-next-steps)
+- [3. Restart `goss-servers` on all NCNs](#3-restart-goss-servers-on-all-ncns)
+- [4. Update ceph node-exporter config for SNMP counters](#4-update-ceph-node-exporter-config-for-snmp-counters)
+- [5. Update management host Slingshot NIC firmware](#5-update-management-host-slingshot-nic-firmware)
+- [6. Next steps](#6-next-steps)
 
 ## 1. Update management host firmware (FAS)
 
@@ -154,7 +154,7 @@ Refer to that table and any corresponding product documents before continuing to
         cray cfs components describe "${XNAME}"
         ```
 
-1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [1.3 NCN worker nodes](#13-ncn-worker-nodes) and then return to this procedure to complete the next step.
+1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [2.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
 1. Upgrade `ncn-m001`.
 
@@ -233,7 +233,7 @@ Follow the following steps to complete the `management-nodes-rollout` stage.
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. Rebuild the NCN worker nodes. Follow the procedure in section [1.3 NCN worker nodes](#13-ncn-worker-nodes) and then return to this procedure to complete the next step.
+1. Rebuild the NCN worker nodes. Follow the procedure in section [2.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
 1. Configure NCN master nodes.
 
@@ -370,8 +370,8 @@ for details on how to query the images and CFS configurations and see the [updat
 **`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN worker nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI,
 remember to include these workflows.
 
-**`NOTE`** If upgrading from CSM 1.4 to CSM 1.5 with a COS release prior to 2.5.146 currently installed, a workaround is needed to roll out the management nodes.  See the later subsection [3.3.1 DVS workaround upgrading from COS prior to
-2.5.146](#331-dvs-workaround-upgrading-from-cos-prior-to-25146).  If the installed COS version is 2.5.146 or later, this is not needed.
+**`NOTE`** If upgrading from CSM 1.4 to CSM 1.5 with a COS release prior to 2.5.146 currently installed, a workaround is needed to roll out the management nodes.  See the later subsection [2.3.1 DVS workaround upgrading from COS prior to
+2.5.146](#231-dvs-workaround-upgrading-from-cos-prior-to-25146).  If the installed COS version is 2.5.146 or later, this is not needed.
 
 1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
