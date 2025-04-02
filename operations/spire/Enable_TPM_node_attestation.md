@@ -8,14 +8,14 @@ join token.
 
 ## Enable TPM node attestation
 
-To enable TPM node attestation on the mangement nodes there is a simple script
+To enable TPM node attestation on the management nodes there is a simple script
 that can enable it for all nodes that have a TPM. To reverse enabling TPM attestation
-for mangement nodes there is a manual process that needs to be run.
+for management nodes there is a manual process that needs to be run.
 
-To enable TPM node attestation on managed nodes there is a multi-step process requireing
+To enable TPM node attestation on managed nodes there is a multi-step process requiring
 the node to be rebooted multiple times. During the attestation process on a managed
-node, the node will not be accessable until it has finished joining spire. Reversing
-the process requires another set of node reboots where the node is not accesable.
+node, the node will not be accessible until it has finished joining spire. Reversing
+the process requires another set of node reboots where the node is not accessible.
 
 ### Enable TPM node attestation for Management nodes
 
@@ -126,34 +126,38 @@ Warning: Permanently added 'ncn-w004' (ED25519) to the list of known hosts.
 
 ### Disable TPM attestation on management nodes
 
-To disable the TPM attestation on managment nodes the `spire-agent.conf`
-file must be returned to its orignal configuration on each node TPM attestation
+To disable the TPM attestation on management nodes the `spire-agent.conf`
+file must be returned to its original configuration on each node TPM attestation
 is turned on. Then a new join token must be created and the node then needs
 to be joined to spire.
 
 On each node that you want to disable TPM attestation on:
 
-1. (ncn-mw#) Stop the `spire-agent` service
+1. (`ncn-mw#`) Stop the `spire-agent` service
+
    ```bash
    systemctl stop spire-agent
    ```
 
-1. (ncn-mw#) Remove old Spire data
+1. (`ncn-mw#`) Remove old Spire data
+
    ```bash
    rm /var/lib/spire/conf/spire-agent.conf /var/lib/spire/data/keys.json /var/lib/spire/data/svid.key /var/lib/spire/bundle.der /var/lib/spire/agent_svid.der
    ```
 
-1. (ncn-mw#) Restart the `request-ncn-join-token` Daemon Set
+1. (`ncn-mw#`) Restart the `request-ncn-join-token` Daemon Set
+
    ```bash
    kubectl rollout restart -n spire DaemonSet/request-ncn-join-token
    ```
 
-1. (ncn-mw#) Restart the `spire-agent` service
+1. (`ncn-mw#`) Restart the `spire-agent` service
+
    ```bash
    systemctl start spire-agent
    ```
 
-### Enable TPM node attestation on manged nodes
+### Enable TPM node attestation on managed nodes
 
 To enable TPM node attestation on managed nodes the node
 needs to be rebooted at least 2 times. This also requires making
@@ -162,23 +166,29 @@ each reboot so the node can attest with Spire properly.
 
 For each node that needs TPM node attestation:
 
-1. (ncn-mw#) Whitelist the nodes xname
+1. (`ncn-mw#`) Whitelist the nodes xname
+
    ```bash
    XNAME=x3000c0s19b1n0
    KC_TOKEN=$(jq -r '.access_token' /root/.config/cray/tokens/api_gw_service_nmn_local.* | head -1)
    curl -H "Authorization: Bearer $KC_TOKEN" -d "xname=$XNAME" https://api-gw-service-nmn.local/apis/tpm-provisioner/whitelist/add
    ```
 
-1. (ncn-mw#) Create the bos templates with different kernel parameters
-   1. The enroll parameters:
+1. (`ncn-mw#`) Create the BOS templates with different kernel parameters
+   1. The enrollment parameters:
+
       ```text
       kernel_parameters = "ip=dhcp quiet spire_join_token=${SPIRE_JOIN_TOKEN} tpm=enroll"
       ```
+
    1. The enable parameters:
+
       ```text
       kernel_parameters = "ip=dhcp quiet tpm=enable"
       ```
+
    1. Example SAT Bootprep templates
+
       ```text
       session_templates:
       - name: tpm-2.6.102-sles15sp5.x86_64
@@ -210,22 +220,24 @@ For each node that needs TPM node attestation:
               - Compute
         ```
 
-1. Reboot the node with the enroll parameters then wait for it to finish booting.
+1. Reboot the node with the enrollment parameters then wait for it to finish booting.
+
    ```bash
    cray bos v2 sessions create --template-name tpm-2.6.102-sles15sp5.x86_64-enroll --operation reboot --limit $XNAME
    ```
 
 1. Reboot the node with the enable.
+
    ```bash
    cray bos v2 sessions create --template-name tpm-2.6.102-sles15sp5.x86_64-enable --operation reboot --limit $XNAME
    ```
 
 1. Ensure the node has booted and is ready.
 
-### Disbable TPM node attestation on managed nodes
+### Disable TPM node attestation on managed nodes
 
 1. Reboot the node with the standard kernel parameters
+
    ```bash
    cray bos v2 sessions create --template-name tpm-2.6.102-sles15sp5.x86_64 --operation reboot --limit $XNAME
    ```
-
