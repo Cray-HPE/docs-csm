@@ -430,10 +430,6 @@ def clear_cfs(current_cfs_data: CfsData) -> None:
     """
     Clear select CFS data
     """
-    for config_name in list(current_cfs_data.configurations):
-        print(f"Deleting configuration '{config_name}'")
-        cfs.delete_configuration(config_name)
-        del current_cfs_data.configurations[config_name]
 
     comp_clear_data = {"error_count": 0, "state": [], "desired_config": "", "tags": {}}
     for comp_sublist in chunk_list(list(current_cfs_data.components)):
@@ -443,6 +439,11 @@ def clear_cfs(current_cfs_data: CfsData) -> None:
                                                              update_data=comp_clear_data)
         for comp_id in updated_comp_response['component_ids']:
             current_cfs_data.components[comp_id].update(comp_clear_data)
+
+    for config_name in list(current_cfs_data.configurations):
+        print(f"Deleting configuration '{config_name}'")
+        cfs.delete_configuration(config_name)
+        del current_cfs_data.configurations[config_name]
 
     if current_cfs_data.sources:
         # No sources to clear
