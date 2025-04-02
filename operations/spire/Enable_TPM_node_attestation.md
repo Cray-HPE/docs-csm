@@ -129,7 +129,7 @@ Warning: Permanently added 'ncn-w004' (ED25519) to the list of known hosts.
 To disable the TPM attestation on management nodes the `spire-agent.conf`
 file must be returned to its original configuration on each node TPM attestation
 is turned on. Then a new join token must be created and the node then needs
-to be joined to spire.
+to be joined to Spire.
 
 On each node that you want to disable TPM attestation on:
 
