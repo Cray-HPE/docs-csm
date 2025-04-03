@@ -8,11 +8,11 @@ join token.
 
 ## Enable TPM node attestation
 
-To enable TPM node attestation on the management nodes there is a simple script
+To enable TPM node attestation on the management nodes, there is a simple script
 that can enable it for all nodes that have a TPM. To reverse enabling TPM attestation
-for management nodes there is a manual process that needs to be run.
+for management nodes, there is a manual process that needs to be run.
 
-To enable TPM node attestation on managed nodes there is a multi-step process requiring
+To enable TPM node attestation on managed nodes, there is a multi-step process requiring
 the node to be rebooted multiple times. During the attestation process on a managed
 node, the node will not be accessible until it has finished joining spire. Reversing
 the process requires another set of node reboots where the node is not accessible.
@@ -126,8 +126,8 @@ Warning: Permanently added 'ncn-w004' (ED25519) to the list of known hosts.
 
 ### Disable TPM attestation on management nodes
 
-To disable the TPM attestation on management nodes the `spire-agent.conf`
-file must be returned to its original configuration on each node TPM attestation
+To disable the TPM attestation on management nodes, the `spire-agent.conf`
+file must be returned to its original configuration on each node where TPM attestation
 is turned on. Then a new join token must be created and the node then needs
 to be joined to Spire.
 
@@ -162,7 +162,7 @@ On each node that you want to disable TPM attestation on:
 To enable TPM node attestation on managed nodes the node
 needs to be rebooted at least 2 times. This also requires making
 multiple BOS session templates and changing the session template
-each reboot so the node can attest with Spire properly.
+during each reboot so the node can attest with Spire properly.
 
 For each node that needs TPM node attestation:
 
@@ -226,7 +226,7 @@ For each node that needs TPM node attestation:
    cray bos v2 sessions create --template-name tpm-2.6.102-sles15sp5.x86_64-enroll --operation reboot --limit $XNAME
    ```
 
-1. Reboot the node with the enable.
+1. Reboot the node with TPM enabled.
 
    ```bash
    cray bos v2 sessions create --template-name tpm-2.6.102-sles15sp5.x86_64-enable --operation reboot --limit $XNAME
