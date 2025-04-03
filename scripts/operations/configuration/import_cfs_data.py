@@ -491,7 +491,7 @@ def main() -> None:
     parser.add_argument(metavar="json_directory", type=json_data_from_directory, dest="json_data",
                         help=f"Directory containing {CMP_JSON}, {CFG_JSON}, and {OPT_JSON}")
     parser.add_argument("--ignore-running-sessions", action='store_true',
-                        help="Ignore running CFS sessions when  importing CFS data")
+                        help="Ignore running CFS sessions when importing CFS data")
     parsed_args = parser.parse_args()
 
     cfs_data_to_import = parsed_args.json_data
