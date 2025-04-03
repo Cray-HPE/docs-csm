@@ -502,6 +502,8 @@ def main() -> None:
     current_cfs_data = load_cfs_data()
 
     if parsed_args.clear_cfs:
+        if not parsed_args.ignore_running_sessions:
+            check_for_running_cfs_sessions("CFS data")
         # Take a snapshot of the CFS data before clearing it
         print("Taking a snapshot of system CFS data before clearing it")
         snapshot_cfs_data()
