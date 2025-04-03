@@ -459,6 +459,7 @@ def clear_cfs(current_cfs_data: CfsData) -> None:
         del current_cfs_data.sources[source_name]
 
 
+
 def check_for_running_cfs_sessions(resource_type: str) -> None:
     print(f"{resource_type} are being updated. Checking for running and pending CFS sessions...")
     cfs_sessions = []
@@ -469,9 +470,9 @@ def check_for_running_cfs_sessions(resource_type: str) -> None:
         cfs_sessions.extend(cfs.list_sessions(params=session_params))
 
     if cfs_sessions:
-        print(f"The following CFS sessions are not complete; aborting import. Run with --ignore-running-sessions to override.")
+        print(f"Following CFS sessions are running,aborting import. Run with --ignore-running-sessions to override.")
         print(", ".join(session["name"] for session in cfs_sessions))
-        raise CfsError("There are CFS sessions that are not complete. Aborting import.")
+        raise CfsError("There are running CFS sessions. Aborting import.")
 
 
 def main() -> None:
@@ -490,7 +491,7 @@ def main() -> None:
     parser.add_argument(metavar="json_directory", type=json_data_from_directory, dest="json_data",
                         help=f"Directory containing {CMP_JSON}, {CFG_JSON}, and {OPT_JSON}")
     parser.add_argument("--ignore-running-sessions", action='store_true',
-                        help="Ignore non-completed CFS sessions when importing CFS data")
+                        help="Ignore running CFS sessions when importing CFS data")
     parsed_args = parser.parse_args()
 
     cfs_data_to_import = parsed_args.json_data
@@ -502,8 +503,6 @@ def main() -> None:
     current_cfs_data = load_cfs_data()
 
     if parsed_args.clear_cfs:
-        if not parsed_args.ignore_running_sessions:
-            check_for_running_cfs_sessions("CFS data")
         # Take a snapshot of the CFS data before clearing it
         print("Taking a snapshot of system CFS data before clearing it")
         snapshot_cfs_data()
@@ -519,14 +518,14 @@ def main() -> None:
                                           current_cfs_data.components,
                                           current_cfs_data.configurations, configs_to_create)
 
-    # Check for non-complete (pending or running) sessions if we have components to update
+    # Check for running sessions if we have components to update
     if not parsed_args.ignore_running_sessions and comps_to_update:
         check_for_running_cfs_sessions("components")
 
     print("\nExamining CFS options...")
     options_to_change = get_options_to_change(cfs_data_to_import.options, current_cfs_data.options)
 
-    # Check for non-complete (pending or running) sessions if options are being updated
+    # Check for running sessions if options are being updated
     if not parsed_args.ignore_running_sessions and options_to_change:
         check_for_running_cfs_sessions("options")
 
