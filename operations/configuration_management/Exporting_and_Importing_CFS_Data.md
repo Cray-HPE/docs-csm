@@ -99,13 +99,6 @@ criteria listed above.
       /usr/share/doc/csm/scripts/operations/configuration/import_cfs_data.sh /tmp/cfs-export-20230410170613-Tg0nap.tgz
       ```
 
-   - If there are running or pending CFS sessions then the import will fail. In such cases, the import can be forced by using the
-     `--ignore-running-sessions` option.
-
-      ```bash
-      /usr/share/doc/csm/scripts/operations/configuration/import_cfs_data.sh --ignore-running-sessions /tmp/cfs-export-20230410170613-Tg0nap.tgz
-      ```
-
    - If the CFS import is being done after a reinstall of CSM AND if VCS data from a prior CSM install has been imported, then
      invoke the tool with the `--clear-cfs` option. This is because the CFS data created during the reinstall of
      CSM will not match the re-imported VCS data.
