@@ -88,19 +88,15 @@ criteria listed above.
 1. (`ncn-mw#`) Run the following script to import the data from the archive file.
 
    > Modify the following example commands to specify the path to the output file from the automated export script.
+     The import tool will abort if it detects incomplete CFS sessions which could potentially be impacted
+     by the import; to override this behavior and import anyway, the `--ignore-running-sessions` argument
+     may be added when invoking the import script.
 
    - If this import is not happening after a reinstall of CSM, OR if VCS data was not imported from a previous CSM install,
      then invoke the tool as follows:
 
       ```bash
       /usr/share/doc/csm/scripts/operations/configuration/import_cfs_data.sh /tmp/cfs-export-20230410170613-Tg0nap.tgz
-      ```
-
-   - If there are running or pending CFS sessions then the import will fail. In such cases, the import can be forced by using the
-     `--ignore-running-sessions` option.
-
-      ```bash
-      /usr/share/doc/csm/scripts/operations/configuration/import_cfs_data.sh --ignore-running-sessions /tmp/cfs-export-20230410170613-Tg0nap.tgz
       ```
 
    - If the CFS import is being done after a reinstall of CSM AND if VCS data from a prior CSM install has been imported, then
