@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -315,6 +315,15 @@ def delete_all_sessions_and_templates(current_template_map: SessionTemplateMap) 
     delete_all_v2_sessions(v2_session_ids)
     delete_all_templates(list(current_template_map))
 
+def check_for_running_bos_sessions(resource_type: str) -> None:
+    print(f"{resource_type} are being updated. Checking for running and pending BOS sessions...")
+    bos_sessions =  list_sessions()
+    active_bos_sessions = [session for session in bos_sessions if session["status"]["status"] != "complete"]
+    if active_bos_sessions:
+        print(f"The following BOS sessions are not complete; aborting import. Run with --ignore-running-sessions to override.")
+        print(", ".join(session["name"] for session in active_bos_sessions))
+        raise BosError("There are BOS sessions that are not complete. Aborting import.")
+
 def main() -> None:
     """
     Parses the command line arguments, does the stuff.
@@ -351,6 +360,9 @@ def main() -> None:
     parser.add_argument("file_or_directory",
                         help="JSON file containing session templates or directory containing "
                              "such JSON files")
+    parser.add_argument("--ignore-running-sessions", action='store_true',
+                        help="Ignore non-completed BOS sessions when importing BOS data")
+
     parsed_args = parser.parse_args()
 
     exported_template_map = load_templates_from_import_data(parsed_args.file_or_directory)
@@ -363,6 +375,8 @@ def main() -> None:
         # Get current BOS options on system
         current_bos_options = list_options()
         options_to_change = get_options_to_change(imported_bos_options, current_bos_options)
+        if not parsed_args.ignore_running_sessions and options_to_change:
+            check_for_running_bos_sessions("options")
     else:
         options_to_change = None
 
@@ -370,6 +384,8 @@ def main() -> None:
     current_template_map = load_current_templates()
 
     if parsed_args.clear_bos:
+        if not parsed_args.ignore_running_sessions:
+            check_for_running_bos_sessions("BOS data")
         # Take a snapshot of the BOS data before we begin.
         print("Taking a snapshot of system BOS data before clearing BOS")
         snapshot_bos_data()
@@ -379,6 +395,8 @@ def main() -> None:
         current_template_map = {}
 
     template_import_map = get_templates_to_import(exported_template_map, current_template_map)
+    if not parsed_args.ignore_running_sessions and template_import_map:
+        check_for_running_bos_sessions("sessiontemplates")
 
     print("")
     # If there are no changes to make, we are already done
