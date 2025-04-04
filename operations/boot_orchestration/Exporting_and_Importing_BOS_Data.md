@@ -2,19 +2,19 @@
 
 - [Prerequisites](#prerequisites)
 - [Automated procedures](#automated-procedures)
-    - [Export](#automated-bos-data-export)
-    - [Import](#automated-bos-data-import)
+  - [Export](#automated-bos-data-export)
+  - [Import](#automated-bos-data-import)
 - [Manual procedures](#manual-procedures)
-    - [Export](#manually-export-bos-data)
-    - [Import](#manually-import-bos-data)
+  - [Export](#manually-export-bos-data)
+  - [Import](#manually-import-bos-data)
 - [BOS database PVCs](#bos-database-pvcs)
 
 ## Prerequisites
 
 - Ensure that the `cray` command line interface (CLI) is authenticated and configured to talk to system management services.
-    - See [Configure the Cray CLI](../configure_cray_cli.md).
+  - See [Configure the Cray CLI](../configure_cray_cli.md).
 - In order to use the automated procedures, the latest CSM documentation RPM must be installed on the node where the procedure is being performed.
-    - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+  - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 ## Automated procedures
 
