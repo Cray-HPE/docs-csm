@@ -7,9 +7,9 @@
 ## Prerequisites
 
 - Ensure that the `cray` command line interface (CLI) is authenticated and configured to talk to system management services.
-  - See [Configure the Cray CLI](../configure_cray_cli.md).
+    - See [Configure the Cray CLI](../configure_cray_cli.md).
 - The latest CSM documentation RPM must be installed on the node where the procedure is being performed.
-  - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+    - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 - If importing both CFS and VCS data, the VCS import should be done before the CFS import.
 
 ## Export
@@ -44,14 +44,14 @@ This tool does the following things:
 - The live system will have its CFS options modified to match those in the archive file, for any that differ.
 - For all CFS configurations in the archive file, if a CFS configuration with the same name does not exist on the live
   system, then the CFS configuration will be created on the live system.
-  - Note: No validation is performed of the layers of these configurations to ensure that their repository links and commit hashes
+    - Note: No validation is performed of the layers of these configurations to ensure that their repository links and commit hashes
     exist on the system.
 - For all CFS components in the archive file, their desired configurations will be updated onto the corresponding component on the live
   system if all of the following criteria are met:
-  - The component exists in CFS on the live system.
-  - The CFS component in the archive has a desired configuration set.
-  - The CFS component on the live system does NOT have a desired configuration set.
-  - The desired configuration for this component in the archive either already exists on the live system, or is going to be created
+    - The component exists in CFS on the live system.
+    - The CFS component in the archive has a desired configuration set.
+    - The CFS component on the live system does NOT have a desired configuration set.
+    - The desired configuration for this component in the archive either already exists on the live system, or is going to be created
     as part of this import process.
 - If the `--clear-cfs` option is specified, then before deciding which changes need to be imported, the tool will delete all
   configurations in CFS and will clear the state, desired configuration, and error counts of all components in CFS.
