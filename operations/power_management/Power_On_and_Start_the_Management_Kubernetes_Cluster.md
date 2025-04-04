@@ -476,6 +476,123 @@ Some systems are configured with lazy mounts that do not have this requirement f
         cray-console-node-1      3/3     Running            0          2m
         ```
 
+1. (`ncn-m001#`) Check if `sma-timescaledb-single` is in `CrashLoopBackOff` state.
+
+    When the system powers up, some pods such as `sma-timescaledb-single-1` or `sma-timescaledb-single-2` might enter a `CrashLoopBackOff` state.
+
+    For example, the following shows `sma-timescaledb-single` pod 0 started, but pod 1 and 2 show the `CrashLoopBackOff` status.
+
+    ```text
+    NAMESPACE     NAME                 READY       STATUS
+    sma    sma-timescaledb-single-1     0/1     CrashLoopBackOff
+    sma    sma-timescaledb-single-2     0/1     CrashLoopBackOff
+    ```
+
+    Run the following command to resolve this issue:
+
+    ```bash
+    kubectl delete pod -n sma sma-timescaledb-single-1
+    ```
+
+    This command will fix `sma-timescaledb-single-1` pod and then it fixes pod 2 automatically.
+
+1. Check if SMA Alerta and Monasca fail to start.
+
+    SMA Alerta and Monasca may fail to start when the system is powered up.
+    The job `sma-pgdb-init-job-1` is missing which prevents `sma-alerta-*` from starting.
+    `sma-monasca-*` pod shows `CrashBackLoopOff` status waiting for Alerta to initialize.
+
+    (`ncn-m001#`)
+
+    ```bash
+    kubectl get pods -A -o wide | grep -Ev " (Completed|Running|(cray-dns-unbound-manager|hms-discovery)-.* (Pending|Init:0/[1-9]|PodInitializing|NotReady|Terminating)) "
+    ```
+
+    Example output:
+
+    ```text
+    NAMESPACE     NAME                                     READY   STATUS
+    sma     sma-aiops-enable-disable-models-28891714-v8pcf  0/1 ContainerCreating
+    sma     sma-alerta-54b657ccb9-ptx4s                     0/1     Init:0/1
+    sma     sma-monasca-notification-0                      0/1 CrashLoopBackOff    
+    --- WARNING --- not all pods are in a 'Running' or 'Completed' state.
+    ```
+
+    The `wait-for-sma-pgdb-init-job` container appears to be waiting for this pod which does not exist.
+
+    (`ncn-m001#`)
+
+    ```bash
+    kubectl logs -n sma sma-alerta-54b657ccb9-ptx4s -c wait-for-sma-pgdb-init-job --timestamps | head -20
+    ```
+
+    Example output:
+
+    ```text
+    2024-12-05T22:15:34.783970586Z Error from server (NotFound): jobs.batch "sma-pgdb-init-job1" not found
+    2024-12-05T22:15:34.847387533Z Waiting for sma-pgdb-init job to complete
+    ```
+
+    To resolve this issue, use the following workaround steps:
+
+    1. (`ncn#`) Check how many helm versions exist.
+
+        ```bash
+        helm history -n sma sma-pgdb-init
+        ```
+
+        Example output:
+
+        ```text
+        REVISION   UPDATED   STATUS     CHART        APP VERSION  DESCRIPTION     
+            1    Sep 23 2024   deployed sma-pgdb-init-1.7.1 1.7.1  Install complete
+        ```
+
+    1. (`ncn#`) This command works when there is one or more versions that have single digit version numbers.
+        It will fail if there is a version 1,10,2,3,4,5,6,7,9 because of the non-numerical sort.
+        If there are any two digit versions, then the helm rollback command should be used with a specific older version.
+
+        ```bash
+        helm rollback -n sma sma-pgdb-init $(helm history -n sma sma-pgdb-init | awk '{print $1}' |  tail -c 2)
+        ```
+
+    1. Once the `sma-pgdb-init` job is complete, confirm that the `sma-alerta` and `sma-monasca-notification-0` pods have started normally.
+
+    1. (`ncn#`) Confirm how long the `ttlSecondsAfterFinished` value is set in the new job.
+
+        ```bash
+        kubectl -n sma get job sma-pgdb-init-job1 -o yaml > sma-pgdb-init-job1.yaml
+        grep ttl sma-pgdb-init-job1.yaml
+                cluster-job-ttl.cluster-job-ttl.kyverno.io: added /spec/ttlSecondsAfterFinished
+            ttlSecondsAfterFinished: 259200
+        ```
+
+        This is the number of seconds that a system can be powered off before the job will be deleted. 259200 seconds is only 72 hours so the job will be deleted by Kubernetes after 72 hours.
+        If the system is powered off for more than 72 hours, this job will be purged and hence preventing these SMA pods from starting correctly. So increase the value.
+
+    1. (`ncn#`) Use the already collected YAML file for `sma-pgdb-init-job1` to delete the current job.
+
+        ```bash
+        kubectl -n sma delete -f sma-pgdb-init-job1.yaml
+        ```
+
+    1. (`ncn#`) Modify the YAML file and make these changes:
+
+       * remove status section
+       * remove all UID(s)
+       * change `ttlSecondsAfterFinished` value to `maxint`
+       * `ttlSecondsAfterFinished: 2147483647`
+
+       ```bash
+       vi sma-pgdb-init-job1.yaml
+       ```
+
+    1. (`ncn#`) Apply new settings.
+
+        ```bash
+        kubectl -n sma apply -f sma-pgdb-init-job1.yaml
+        ```
+
 1. (`ncn-m001#`) Determine whether the `cfs-state-reporter` service is failing to start on each manager/master and worker NCN while trying to contact CFS.
 
     **Note:** The `systemctl` command run on each node may have `exit code 3` reported. This does not indicate a problem with `cfs-state-reporter` on that node.
