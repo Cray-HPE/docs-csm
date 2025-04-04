@@ -795,6 +795,7 @@ all cronjobs are being scheduled on time after running `sat bootsys boot --stage
 ### Validate CSM Health
 
 1. To check the health and status of the management cluster after a power cycle, refer to the sections 1-4 in [Validate CSM Health](../validate_csm_health.md).
+
 ## Next step
 
 Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.
