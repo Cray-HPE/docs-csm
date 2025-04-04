@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -325,6 +325,21 @@ def update_components(comps_map: NameObjectMap, comp_ids_to_update: List[str]) -
         print(f"Updating component {comp_id} to desired configuration '{desired_config_name}'")
         cfs.update_component_desired_config(comp_id, desired_config_name)
 
+def check_for_running_cfs_sessions(resource_type: str) -> None:
+    print(f"{resource_type} are being updated. Checking for running and pending CFS sessions...")
+    cfs_sessions = []
+    for status in ["pending", "running"]:
+        session_params = {
+            "status": status
+        }
+        cfs_sessions.extend(cfs.list_sessions(params=session_params))
+
+    if cfs_sessions:
+        print(f"The following CFS sessions are not complete; aborting import. Run with --ignore-running-sessions to override.")
+        print(", ".join(session["name"] for session in cfs_sessions))
+        raise CfsError("There are CFS sessions that are not complete. Aborting import.")
+
+
 def main() -> None:
     """
     Parses the command line arguments, does the stuff.
@@ -339,6 +354,8 @@ def main() -> None:
     parser.add_argument("--clear-cfs", action='store_true', help="Delete CFS configurations and clear CFS components before importing")
     parser.add_argument(metavar="json_directory", type=json_data_from_directory, dest="json_data",
                         help=f"Directory containing {CMP_JSON}, {CFG_JSON}, and {OPT_JSON}")
+    parser.add_argument("--ignore-running-sessions", action='store_true',
+                        help="Ignore non-completed CFS sessions when importing CFS data")
     parsed_args = parser.parse_args()
 
     cfs_data_to_import = parsed_args.json_data
@@ -347,14 +364,11 @@ def main() -> None:
     current_cfs_data = load_cfs_data()
 
     if parsed_args.clear_cfs:
+        if not parsed_args.ignore_running_sessions:
+            check_for_running_cfs_sessions("CFS data")
         # Take a snapshot of the CFS data before clearing it
         print("Taking a snapshot of system CFS data before clearing it")
         snapshot_cfs_data()
-
-        for config_name in list(current_cfs_data.configurations):
-            print(f"Deleting configuration '{config_name}'")
-            cfs.delete_configuration(config_name)
-            del current_cfs_data.configurations[config_name]
 
         for comp_name, comp_data in list(current_cfs_data.components.items()):
             if "tags" in comp_data and comp_data["tags"]:
@@ -364,6 +378,11 @@ def main() -> None:
                 print(f"Clearing error count, desired configuration, and state for component '{comp_name}'")
                 updated_comp = cfs.update_component(comp_name, errorCount=0, state=[], desiredConfig="", tags={})
             current_cfs_data.components[comp_name] = updated_comp
+
+        for config_name in list(current_cfs_data.configurations):
+            print(f"Deleting configuration '{config_name}'")
+            cfs.delete_configuration(config_name)
+            del current_cfs_data.configurations[config_name]
 
     # Determine the necessary updates
     print("\nExamining CFS configurations...")
@@ -375,8 +394,16 @@ def main() -> None:
                                           current_cfs_data.components,
                                           current_cfs_data.configurations, configs_to_create)
 
+    # Check for non-complete (pending or running) sessions if we have components to update
+    if not parsed_args.ignore_running_sessions and comps_to_update:
+        check_for_running_cfs_sessions("components")
+
     print("\nExamining CFS options...")
     options_to_change = get_options_to_change(cfs_data_to_import.options, current_cfs_data.options)
+
+    # Check for non-complete (pending or running) sessions if options are being updated
+    if not parsed_args.ignore_running_sessions and options_to_change:
+        check_for_running_cfs_sessions("options")
 
     print("")
     # If there are no changes to make, we are already done
