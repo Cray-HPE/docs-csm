@@ -2,19 +2,19 @@
 
 - [Prerequisites](#prerequisites)
 - [Automated procedures](#automated-procedures)
-  - [Export](#automated-bos-data-export)
-  - [Import](#automated-bos-data-import)
+    - [Export](#automated-bos-data-export)
+    - [Import](#automated-bos-data-import)
 - [Manual procedures](#manual-procedures)
-  - [Export](#manually-export-bos-data)
-  - [Import](#manually-import-bos-data)
+    - [Export](#manually-export-bos-data)
+    - [Import](#manually-import-bos-data)
 - [BOS database PVCs](#bos-database-pvcs)
 
 ## Prerequisites
 
 - Ensure that the `cray` command line interface (CLI) is authenticated and configured to talk to system management services.
-  - See [Configure the Cray CLI](../configure_cray_cli.md).
+    - See [Configure the Cray CLI](../configure_cray_cli.md).
 - In order to use the automated procedures, the latest CSM documentation RPM must be installed on the node where the procedure is being performed.
-  - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+    - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 ## Automated procedures
 
@@ -41,8 +41,11 @@ the automated export script.
 1. (`ncn-mw#`) Import all BOS session templates and BOS v2 options.
 
    > Modify the following example commands to specify the path to the output file from the automated BOS export script.
-   > The file may be a JSON file or a `tgz` file, depending on when the backup was made, because the BOS export tools
-   > have had multiple versions. Any file produced by any version of these tools will work as input for this restore procedure.
+     The file may be a JSON file or a `tgz` file, depending on when the backup was made, because the BOS export tools
+     have had multiple versions. Any file produced by any version of these tools will work as input for this restore procedure.
+     The import tool will abort if it detects incomplete BOS sessions which could potentially be impacted
+     by the import; to override this behavior and import anyway, the `--ignore-running-sessions` argument
+     may be added when invoking the import script.
 
    ```bash
    /usr/share/doc/csm/scripts/operations/configuration/import_bos_data.sh /root/bos-export-20230417181409-oK4WMw.tgz
