@@ -189,7 +189,7 @@ For each node that needs TPM node attestation:
 
    1. Example SAT Bootprep templates
 
-      ```text
+      ```yaml
       session_templates:
       - name: tpm-2.6.102-sles15sp5.x86_64
         image: tpm-2.6.102-sles15sp5.x86_64
