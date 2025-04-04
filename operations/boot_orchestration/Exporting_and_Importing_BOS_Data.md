@@ -42,7 +42,7 @@ the automated export script.
    > Modify the following example commands to specify the path to the output file from the automated BOS export script.
      The file may be a JSON file or a `tgz` file, depending on when the backup was made, because the BOS export tools
      have had multiple versions. Any file produced by any version of these tools will work as input for this restore procedure.
-     The import tool will abort if it detects incomplete CFS sessions which could potentially be impacted
+     The import tool will abort if it detects incomplete BOS sessions which could potentially be impacted
      by the import; to override this behavior and import anyway, the `--ignore-running-sessions` argument
      may be added when invoking the import script.
 
