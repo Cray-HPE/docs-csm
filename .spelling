@@ -1097,6 +1097,9 @@ SNMP-backed
 # To allow Site Init
 Init
 
+- operations/spire/Enable_TPM_node_attestation.md
+enrollment
+
 - operations/system_configuration_service/Set_BMC_Credentials.md
 # To allow System Admin Toolkit
 Admin

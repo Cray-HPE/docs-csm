@@ -719,6 +719,7 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 - [Update Spire Intermediate CA Certificate](spire/Update_Spire_Intermediate_CA_Certificate.md)
 - [Xname Validation](spire/xname_validation.md)
 - [Restore Missing Spire Meta-Data](spire/Restore_Missing_Spire_Metadata.md)
+- [Enable TPM node attestation](spire/Enable_TPM_node_attestation.md)
 - [Spire known issues](../troubleshooting/README.md#spire)
 
 ## Update firmware with FAS
