@@ -119,6 +119,12 @@ configurations:
       branch: main
 ```
 
+A CFS configuration may also contain the following keys:
+
+- Use `if_exists` key to specify the behaviour when an image already exists on
+the system with the same name, as described in [Set behavior when items already
+exist](#set-behavior-when-items-already-exist).
+
 When `sat bootprep` is run against an input file, a CFS configuration is created
 corresponding to each configuration in the `configurations` section. For
 example, the configuration created from an input file with the layers listed
@@ -177,6 +183,9 @@ Images may also contain the following keys:
   [Dynamic Variable Substitutions](#dynamic-variable-substitutions).
 - Use a `description` key to describe the image in the bootprep input file.
   Note that this key is not currently used.
+- Use `if_exists` key to specify the behaviour when an image already exists on
+the system with the same name, as described in [Set behavior when items already
+exist](#set-behavior-when-items-already-exist).
 
 #### Use base images or recipes from IMS
 
@@ -375,6 +384,9 @@ which are optional:
 - Use a `rootfs_provider` key to specify the root file system provider.
 - Use a `rootfs_provider_passthrough` key to specify the parameters to add to
   the `rootfs=` kernel parameter.
+- Use `if_exists` key to specify the behaviour when an image already exists on
+the system with the same name, as described in [Set behavior when items already
+exist](#set-behavior-when-items-already-exist).
 
 As mentioned above, the parameters under `bos_parameters` are passed through
 directly to BOS. For more information on the properties of a BOS boot set,
@@ -787,6 +799,40 @@ INFO: Validating given input file example-bootprep-input-file.yaml
 INFO: Input file successfully validated against schema
 INFO: Skipping creation of CFS configurations based on value of --limit option.
 ```
+
+## Set behavior when items already exist
+
+The following is an example of how to use the `if_exists` key on an image. This
+key can be used to specify the action taken when an item (a configuration,
+image, or session template) has a name that conflicts with an item that already
+exists on the system.
+
+- `if_exists` options
+    - `skip` skip the creation of the image in the bootprep file and keep
+   the existing image
+    - `overwrite` overwrite the existing image with the image in the
+   bootprep file
+    - `abort` abort the `sat bootprep`
+
+Example image:
+
+```yaml
+images:
+- name: example-compute-image
+  if_exists: 'skip' # options: 'skip' | 'overwrite' | 'abort'
+  description: >
+    An example compute node image built from an existing IMS recipe.
+  base:
+    ims:
+      name: example-compute-image-recipe
+      type: recipe
+  configuration: example-compute-config
+  configuration_group_names:
+  - Compute
+```
+
+This key works for `configurations` and `session-templates` in addition to `images` as
+shown in the example above.
 
 ## View SAT `bootprep` schema
 
