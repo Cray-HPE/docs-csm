@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -33,7 +33,7 @@
 # the Python script completes, the expanded files from the archive are
 # cleaned up by this shell script, unless --no-cleanup is specified.
 #
-# Usage: import_cfs_data.sh [--clear-cfs] [--no-cleanup] <CFS export file.tgz>
+# Usage: import_cfs_data.sh [--clear-cfs] [--no-cleanup] [--ignore-running-sessions] <CFS export file.tgz>
 #
 ################################################################################
 
@@ -41,6 +41,7 @@ CLEANUP=YES
 OUTPUT_DIR=""
 CLEAR_CFS=""
 ARCHIVE=""
+IGNORE_RUNNING_SESSIONS=""
 
 cleanup() {
   [[ $CLEANUP == YES ]] || return
@@ -59,7 +60,7 @@ err_exit() {
 }
 
 usage() {
-  echo "Usage: import_cfs_data.sh [--clear-cfs] [--no-cleanup] <CFS export file.tgz>"
+  echo "Usage: import_cfs_data.sh [--clear-cfs] [--no-cleanup] [--ignore-running-sessions] <CFS export file.tgz>"
   echo
   err_exit "$@"
 }
@@ -76,6 +77,7 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     "--no-cleanup") CLEANUP="" ;;
     "--clear-cfs") CLEAR_CFS="$1" ;;
+    "--ignore-running-sessions") IGNORE_RUNNING_SESSIONS="$1" ;;
     *)
       [[ $# -eq 1 ]] || usage "Unrecognized argument: $1"
       ARCHIVE="$1"
@@ -113,8 +115,8 @@ for FNAME in configurations.json options.json; do
 done
 
 # Call the Python importer script on this directory
-# CLEAR_CFS is deliberately not quoted because if it is empty, we don't want to pass in an empty argument to the Python script
-run_cmd "${import_python_script}" ${CLEAR_CFS} "${JSON_DIR}"
+# CLEAR_CFS and IGNORE_RUNNING_SESSIONS are deliberately not quoted because if it is empty, we don't want to pass in an empty argument to the Python script
+run_cmd "${import_python_script}" ${CLEAR_CFS} ${IGNORE_RUNNING_SESSIONS} "${JSON_DIR}"
 
 # Call cleanup (which will clean up the output directory unless --no-cleanup was specified)
 cleanup
