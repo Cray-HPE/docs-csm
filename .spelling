@@ -39,6 +39,8 @@ vmstorage
 vmalert
 vmselect
 victoria
+RoleBinding
+ServiceAccount
 
 1.0.x
 1.2.x
@@ -256,6 +258,7 @@ Jetstack
 Jinja
 Jinja2
 Kafka
+cray-kafka-operator
 Kata
 Kea
 Keepalived
@@ -670,6 +673,7 @@ pre-uprade
 preboot
 prebuilt
 preempted
+Preemptive
 preemptively
 provisioners
 PXEboot
