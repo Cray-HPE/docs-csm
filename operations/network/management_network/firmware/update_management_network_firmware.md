@@ -76,8 +76,6 @@ Run the `enable` command followed by `show system type` to identify the switch m
 Example output:
 
 ```console
-sw-spine-001 [mlag-domain: standby] > enable
-sw-spine-001 [mlag-domain: standby] # show system type
 MSN2100
 ```
 
@@ -88,7 +86,6 @@ Run the command `show inventory` to identify the switch model.
 Example output:
 
 ```console
-sw-leaf-bmc-001# show inventory
 Product               : S3048ON
 Description           : S3048-ON 48x1GbE copper, 4x10GbE SFP+ Interface Module
 Software version      : 10.5.1.4
@@ -267,7 +264,7 @@ Login into the switch being upgraded.
 1. Once the upload is complete, check the images:
 
    ```console
-   show image
+   show images
    ```
 
    Example output:
@@ -425,7 +422,6 @@ In this example we are pre-staging the firmware to `sw-spine-001` and `sw-spine-
    Example output:
 
    ```console
-   sw-spine-001# show image
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
@@ -482,7 +478,7 @@ In this example we are pre-staging the firmware to `sw-spine-001` and `sw-spine-
 1. Verify uploaded image is correct.
 
    ```console
-   show image
+   show images
    ```
 
    Example output:
@@ -635,7 +631,7 @@ SSH into the switch being upgraded.
    show images
    ```
 
-   Expected output:
+   Example output:
 
    ```console
    Installed images:
@@ -670,7 +666,7 @@ SSH into the switch being upgraded.
    show image status
    ```
 
-   Potential output:
+   Example output:
 
    ```console
    Image Upgrade State:     download
@@ -699,7 +695,7 @@ SSH into the switch being upgraded.
    show version
    ```
 
-   Potential output:
+   Example output:
 
    ```console
    Dell EMC Networking OS10 Enterprise
