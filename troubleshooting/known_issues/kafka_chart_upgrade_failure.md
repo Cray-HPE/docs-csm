@@ -2,13 +2,13 @@
 
 ## [Issue description](#issue-description)
 
-If a cluster which was initially installed with CSM 1.3 or earlier, and is now getting upgraded to CSM 1.6.0 or CSM 1.6.1 from CSM 1.5.x, the upgrade of the cray-kafka-operator helm chart would fail as part of the CSM services upgrade process.
+If a cluster which was initially installed with CSM 1.3 or earlier, and is now getting upgraded to CSM 1.6.x from CSM 1.5.x, the upgrade of the cray-kafka-operator helm chart would fail as part of the CSM services upgrade process.
 
 Note - This issue would not affect clusters that were freshly installed with CSM 1.4.x or CSM 1.5.x and are being upgraded to CSM 1.6.x version.
 
 ## [Error identification](#error-identification)
 
-CSM services upgrade fails when upgrading to CSM 1.6.x with the following error -
+CSM services upgrade fails when upgrading to CSM 1.6.x with the following error:
 
 ```text
 2025-03-27T13:50:50Z ERR  error="Some charts did not release successfully, see above and/or the output log file for more info" command=ship
@@ -22,7 +22,7 @@ CSM services upgrade fails when upgrading to CSM 1.6.x with the following error 
 2025-03-27T13:50:50Z ERR Error releasing chart cray-kafka-operator v1.2.1: Shell error: Error: UPGRADE FAILED: pre-upgrade hooks failed: timed out waiting for the condition chart=cray-kafka-operator command=ship namespace=operators version=1.2.1
 ```
 
-There would be failed Kubernetes jobs for Kafka as follows -
+There would be failed Kubernetes jobs for Kafka as follows:
 
 ```text
 ncn-m001:~/cray-kafka-operator # kubectl get job -A|grep kafka
@@ -64,13 +64,15 @@ Similar type of errors could be seen on other Strimzi CRDs too.
 
 (`ncn-mw#`) To resolve this issue, update the Strimzi CRDs on the cluster by removing references to the older versions - `v1alpha1` and `v1beta1`.
 After this update, the Strimzi CRDs (except `kafkatopics` and `kafkausers`) will retain only the latest supported version `v1beta2` which eliminates the upgrade failure.
-Run the following script to fix the issue -
+Run the following script to fix the issue:
 
-[`kafka_crd_fix.sh`](../scripts/kafka_crd_fix.sh)
+```bash
+/usr/share/doc/csm/troubleshooting/scripts/kafka_crd_fix.sh
+```
 
 Example output:
 
-```bash
+```console
 ncn-m001:~ # ./kafka_crd_fix.sh
 Checking for old kafka CRD versions
 old version present in kafkabridges.kafka.strimzi.io storedVersions: v1alpha1
@@ -134,7 +136,7 @@ serviceaccount "crd-updater" deleted
 
 Verify if the fix is applied as expected by re-running the script again.
 
-```bash
+```console
 ncn-m001:~ # ./kafka_crd_fix.sh
 Checking for old kafka CRD versions
 kafkabridges.kafka.strimzi.io: okay

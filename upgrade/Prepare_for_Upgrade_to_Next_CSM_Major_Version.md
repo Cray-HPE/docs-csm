@@ -53,13 +53,15 @@ See [Check for latest documentation](../update_product_stream/README.md#check-fo
 
 ### 3. Fix Kafka CRD issue
 
-If a cluster which was initially installed with CSM 1.3 or earlier, and is now getting upgraded to CSM 1.6.0 or CSM 1.6.1 from CSM 1.5.x, the upgrade of the `cray-kafka-operator` helm chart would fail as part of the CSM services upgrade process.
+If a cluster which was initially installed with CSM 1.3 or earlier, and is now getting upgraded to CSM 1.6.x from CSM 1.5.x, the upgrade of the cray-kafka-operator helm chart would fail as part of the CSM services upgrade process.
 
 **Note:**  This issue would not affect clusters that were freshly installed with CSM 1.4.x or CSM 1.5.x and are being upgraded to CSM 1.6.x versions.
 
-If the cluster has followed the upgrade path mentioned above, run the following script to apply the fix -
+If the cluster has followed the upgrade path mentioned above, run the following script to apply the fix:
 
-[`kafka_crd_fix.sh`](../troubleshooting/scripts/kafka_crd_fix.sh)
+```bash
+/usr/share/doc/csm/troubleshooting/scripts/kafka_crd_fix.sh
+```
 
 Reference [cray-kafka-operator chart upgrade failure](../troubleshooting/known_issues/kafka_chart_upgrade_failure.md) workaround document for additional details.
 
