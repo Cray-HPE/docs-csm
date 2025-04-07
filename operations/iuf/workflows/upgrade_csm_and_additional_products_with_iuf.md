@@ -50,8 +50,8 @@ For more detail about about the CSM upgrade hooks, see the section [description 
    Follow the IUF [Product delivery](product_delivery.md) instructions.
 
    SMA 1.10.15 and later includes an upgraded LDMS that introduces an incompatibility with configuration files used in prior versions.
-    * When upgrading from an older SMA version to a version with this new LDMS, the administrator must change the configuration files.
-    * A workaround is presented as an Action in the deliver-product stage in the **IUF Stage Details for SMA** section of the _HPE Cray Supercomputing EX System Monitoring Application Installation Guide_.
+    - When upgrading from an older SMA version to a version with this new LDMS, the administrator must change the configuration files.
+    - A workaround is presented as an Action in the deliver-product stage in the **IUF Stage Details for SMA** section of the _HPE Cray Supercomputing EX System Monitoring Application Installation Guide_.
 
 1. Configuration
 
