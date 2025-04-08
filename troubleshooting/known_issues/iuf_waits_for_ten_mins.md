@@ -36,61 +36,61 @@ When IUF attempts to retrieve the workflow status, it fails because the workflow
 
 To resolve this issue, follow these steps:
 
-Step 1: Locate the `activity_dict.yaml` file in the state directory of the activity.
+1. Locate the `activity_dict.yaml` file in the state directory of the activity.
 
-```sh
-cd /etc/cray/upgrade/csm/iuf/${ACTIVITY_NAME}/state
-```
+    ```sh
+    cd /etc/cray/upgrade/csm/iuf/${ACTIVITY_NAME}/state
+    ```
 
-Step 2: Identify the workflow with the **"Unknown"** status. For example, for the workflow  `install-products-2kh2l-management-nodes-rollout-gnqzj` with "Unknown" status, the entry would look  like this:
+2. Identify the workflow with the **"Unknown"** status. For example, for the workflow  `install-products-2kh2l-management-nodes-rollout-gnqzj` with "Unknown" status, the entry would look  like this:
 
-```sh
-'2025-03-06t10:44:08':
-      args:
-        activity: install-products
-        base_dir: null
-        begin_stage: null
-        bootprep_config_dir: /etc/cray/upgrade/csm/admin
-        bootprep_config_managed: /etc/cray/upgrade/csm/admin/bootprep/compute-and-uan-bootprep.yaml
-        bootprep_config_management: /etc/cray/upgrade/csm/admin/bootprep/management-bootprep.yaml
-        concurrency: null
-        concurrent_management_rollout_percentage: 20
-        dryrun: false
-        end_stage: null
-        force: false
-        func: *id001
-        input_file: null
-        level: INFO
-        limit_managed_rollout:
-        - Compute
-        limit_management_rollout:
-        - ncn-w001
-        log_dir: /etc/cray/upgrade/csm/iuf/install-products/log
-        managed_rollout_strategy: stage
-        mask_recipe_prods: null
-        media_dir: /etc/cray/upgrade/csm/media/install-products
-        media_host: ncn-m001
-        recipe_vars: /etc/cray/upgrade/csm/admin/product_vars.yaml
-        relative_bootprep_config_dir: .bootprep-install-products/admin
-        relative_bootprep_config_managed: .bootprep-install-products/compute-and-uan-bootprep.yaml
-        relative_bootprep_config_management: .bootprep-install-products/management-bootprep.yaml
-        run_stages:
-        - management-nodes-rollout
-        site_vars: /etc/cray/upgrade/csm/admin/site_vars.yaml
-        skip_stages: []
-        state_dir: /etc/cray/upgrade/csm/iuf/install-products/state
-verbose: false
-        write_input_file: false
-      command: iuf -a install-products -m /etc/cray/upgrade/csm/media/install-products
-        run --site-vars /etc/cray/upgrade/csm/admin/site_vars.yaml -bpcd /etc/cray/upgrade/csm/admin
-        -r management-nodes-rollout --limit-management-rollout ncn-w001
-      comment: Run management-nodes-rollout
-      session: install-products-2kh2l
-      state: in_progress
-      status: Unknown
-      workflow_id: install-products-2kh2l-management-nodes-rollout-gnqzj 
-```
+    ```sh
+    '2025-03-06t10:44:08':
+          args:
+            activity: install-products
+            base_dir: null
+            begin_stage: null
+            bootprep_config_dir: /etc/cray/upgrade/csm/admin
+            bootprep_config_managed: /etc/cray/upgrade/csm/admin/bootprep/compute-and-uan-bootprep.yaml
+            bootprep_config_management: /etc/cray/upgrade/csm/admin/bootprep/management-bootprep.yaml
+            concurrency: null
+            concurrent_management_rollout_percentage: 20
+            dryrun: false
+            end_stage: null
+            force: false
+            func: *id001
+            input_file: null
+            level: INFO
+            limit_managed_rollout:
+            - Compute
+            limit_management_rollout:
+            - ncn-w001
+            log_dir: /etc/cray/upgrade/csm/iuf/install-products/log
+            managed_rollout_strategy: stage
+            mask_recipe_prods: null
+            media_dir: /etc/cray/upgrade/csm/media/install-products
+            media_host: ncn-m001
+            recipe_vars: /etc/cray/upgrade/csm/admin/product_vars.yaml
+            relative_bootprep_config_dir: .bootprep-install-products/admin
+            relative_bootprep_config_managed: .bootprep-install-products/compute-and-uan-bootprep.yaml
+            relative_bootprep_config_management: .bootprep-install-products/management-bootprep.yaml
+            run_stages:
+            - management-nodes-rollout
+            site_vars: /etc/cray/upgrade/csm/admin/site_vars.yaml
+            skip_stages: []
+            state_dir: /etc/cray/upgrade/csm/iuf/install-products/state
+    verbose: false
+            write_input_file: false
+          command: iuf -a install-products -m /etc/cray/upgrade/csm/media/install-products
+            run --site-vars /etc/cray/upgrade/csm/admin/site_vars.yaml -bpcd /etc/cray/upgrade/csm/admin
+            -r management-nodes-rollout --limit-management-rollout ncn-w001
+          comment: Run management-nodes-rollout
+          session: install-products-2kh2l
+          state: in_progress
+          status: Unknown
+          workflow_id: install-products-2kh2l-management-nodes-rollout-gnqzj 
+    ```
 
-Step 3: Remove the workflow entry with the "Unknown" status from the file.
+3. Remove the workflow entry with the "Unknown" status from the file which is the entire block shown above.
 
-Step 4: Re-run the IUF command.
+4. Re-run the IUF command.
