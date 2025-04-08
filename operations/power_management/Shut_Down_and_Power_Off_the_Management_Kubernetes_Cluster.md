@@ -217,6 +217,15 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
       workers: []
 
       Are the above NCN groupings and exclusions correct? [yes,no] yes
+      INFO: Successfully unmounted ceph volumes on ncn-w001
+      INFO: Successfully unmounted s3fs volumes on ncn-w001
+      INFO: Successfully unmounted rbd volumes on ncn-w001
+      INFO: Successfully unmounted ceph volumes on ncn-w002
+      INFO: Successfully unmounted s3fs volumes on ncn-w002
+      INFO: Successfully unmounted rbd volumes on ncn-w002
+      INFO: Successfully unmounted ceph volumes on ncn-w003
+      INFO: Successfully unmounted s3fs volumes on ncn-w003
+      INFO: Successfully unmounted rbd volumes on ncn-w003
       INFO: Successfully set next boot device to disk (Boot0014) for ncn-w001
       INFO: Successfully set next boot device to disk (Boot0012) for ncn-w002
       INFO: Successfully set next boot device to disk (Boot0014) for ncn-w003
@@ -287,6 +296,15 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
       Manual intervention may be required in the above command if a timeout occurs while waiting for
       nodes to gracefully power down or if mount points provided by Ceph are in use. See the
       following sub-steps for how to proceed in either of those cases.
+
+      1. If a warning is encountered while unmounting ceph, s3fs or rbd volumes, such as:
+
+            ```text
+            WARNING: Failed to unmount s3fs volumes on ncn-w001: umount: /var/lib/cps-local/boot-images: target is busy.
+            ```
+
+            This warning is not critical. However, it may prolong the overall shutdown process
+            as the Ceph freeze operation could take additional time to complete.
 
       1. If any nodes fail to reach a powered off state, log messages and a prompt like the
          following will be displayed:
