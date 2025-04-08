@@ -919,6 +919,7 @@ vcs-user-credentials
 Xcvr
 Canu
 VSX-pair
+vsx-pair
 vlan
 
 # Per-file spelling exceptions. Please keep this section sorted in order by filepath, to help make it easier to
