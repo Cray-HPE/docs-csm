@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -168,7 +168,7 @@ spec:
           factor: "2"
           maxDuration: "1m"
     script:
-      image: registry.local/artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+      image: registry.local/artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:2.27.0
       command: [bash]
       source: |
         function sync_item() {
@@ -303,7 +303,7 @@ spec:
       annotations:
         sidecar.istio.io/inject: "false"
     script:
-      image: registry.local/artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+      image: registry.local/artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:2.27.0
       command: [bash]
       source: |
         s3_secret_name={{inputs.parameters.s3_credentials_secret_name}}
