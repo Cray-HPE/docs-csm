@@ -116,6 +116,10 @@ yq4 -i eval 'del(.spec.kubernetes.services.*.cray-service.sqlCluster)' "$c"
 # kyverno-policy did not have configurable customization prior to 1.6. Import kyverno-policy.checkImageSettings from upgrade customizations file during upgrade.
 yq4 -i eval ".spec.kubernetes.services[\"kyverno-policy\"].checkImagePolicy += (load(\"${upgrade_customizations}\") | .spec.kubernetes.services[\"kyverno-policy\"].checkImagePolicy)" "$c"
 
+# Add entries for Cilium Hubble observability GUI (CASMNET-2194)
+yq4 -i eval '.spec.kubernetes.services.["cray-hubble"].externalHostname = "hubble.cmn.{{ network.dns.external }}"' "$c"
+yq4 -i eval ".spec.proxiedWebAppExternalHostnames.customerManagement |= (. + [\"{{ kubernetes.services['cray-hubble'].externalHostname }}\"] | unique)" "$c"
+
 # lower cpu request for tds systems (4 workers)
 num_workers=$(kubectl get nodes | grep ncn-w | wc -l)
 if [ $num_workers -le 4 ]; then
