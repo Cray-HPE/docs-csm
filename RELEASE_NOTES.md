@@ -36,7 +36,6 @@ documentation improvements. This page lists some of the highlights.
 * `CASMHMS-6299` PCS/TRS: Mitigate resource leaks / heavy usage
 * `CASMHMS-6360` Make cray-hms-rts version consistent in csm manifest
 * `CASMINST-6968` Replace `sed` calls with `yq` in upgrade_control_plane.sh
-* `CASMINST-6968` Replace `sed` calls with `yq` in upgrade_control_plane.sh
 * `CASMINST-7039` Cleanup previous/old SquashFS images during upgrade
 * `CASMMON-463` Update customization.yaml for sma victoria metrics pvc size
 * `CASMPET-7262` TESTS: After installing csm-testing RPM, automatically restart goss-servers
@@ -100,7 +99,6 @@ documentation improvements. This page lists some of the highlights.
 * `CASMCMS-9232` DOCS: Improve BOS' documentation around the term `enabled`
 * `CASMCMS-9234` DOCS: BOS migration code can result in inaccessible templates
 * `CASMCMS-9242` DOCS: BOS: Make CAPMC/PCS timeout configurable, like with CFS
-* `CASMCMS-9242` DOCS: BOS: Make CAPMC/PCS timeout configurable, like with CFS
 * `CASMCMS-9244` DOCS: Make CASMCMS-9234 workaround more resilient
 * `CASMCMS-9246` DOCS: CSM upgrade failed: BOS database Kubernetes pod not running
 * `CASMCMS-9253` DOCS: IMS artifacts remained orphaned with CSM 1.5.2 systems
@@ -142,10 +140,8 @@ documentation improvements. This page lists some of the highlights.
 * `CASMTRIAGE-6736` DOCS: Fresh install workflow lacks documentation for ARP tuning
 * `CASMTRIAGE-7226` DOCS: vShasta: cfs-api pods in CLBO due to absence of cray-shared-kafka-kafka-bootstrap service
 * `CASMTRIAGE-7358` DOCS: Storage node cloud-init fails, mon_max_pg_per_osd exceeded
-* `CASMTRIAGE-7358` DOCS: Storage node cloud-init fails, mon_max_pg_per_osd exceeded
 * `CASMTRIAGE-7458` DOCS: Odin 1.6.0-rc.4 install - cannot boot any image (1.6 or previous 1.5.2)
 * `CASMTRIAGE-7470` DOCS: Odin : 1.6.0-rc.4 upgrade : cray-site-init path doesn't exist.
-* `CASMTRIAGE-7471` DOCS: IUF documentation needs to state when and how to create site_vars.yaml
 * `CASMTRIAGE-7471` DOCS: IUF documentation needs to state when and how to create site_vars.yaml
 * `CASMTRIAGE-7475` DOCS: Import of IMS data terminated with message " Multiple images data files found in /app/src/server/app.py"
 * `CASMTRIAGE-7503` DOCS: configuring remote build node customization of barebones image failed with missing repos
@@ -234,7 +230,6 @@ documentation improvements. This page lists some of the highlights.
 * `CASMTRIAGE-7469` while configuring remote build node customization of barebones image failed with missing repos
 * `CASMTRIAGE-7489` odin 1.6.0-rc.4 boots Computes via DVS but iSCSI fails
 * `CASMTRIAGE-7490` Couple of Iscsi metrics values are not correct.
-* `CASMTRIAGE-7559` Lemondrop: CFS layer fails when upgraded to 25.3
 * `CASMTRIAGE-7559` Lemondrop: CFS layer fails when upgraded to 25.3
 * `CASMTRIAGE-7567` Observed several thousand restarts of cray-sysmgmt-health-redfish-exporter on fanta
 * `CASMTRIAGE-7594` cray-console pods keep disconnecting conman sessions.
