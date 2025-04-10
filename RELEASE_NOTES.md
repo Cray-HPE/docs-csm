@@ -272,6 +272,11 @@ see [Removals](introduction/deprecated_features/README.md#removals)
 
 ## Known issues
 
+* CSM 1.5.4 included fixes to `BSS` and `cfs-trust` to allow large scale parallel boots of compute nodes.
+  These changes did not make it into CSM 1.6.1 but will be present in CSM 1.6.2 and CSM 1.7.0. Workarounds until then include:
+    * Boot in smaller sets of compute nodes
+    * Disable debug logging in BSS by changing `BSS_DEBUG` from "true" to "false" in the cray-bss deployment.
+    This may allow slightly larger sets of compute nodes to boot in parallel.
 * CSM 1.6.0 does not support servers with NVIDIA CPUs and GPUs. Systems with these servers should not be upgraded to CSM 1.6.0.
 * CSM 1.6.1 and later supports servers with NVIDIA CPUs and GPUs.
 * After updating Paradise BMC firmware, the `hmcollector-poll` service will lose event subscriptions and must be restarted
