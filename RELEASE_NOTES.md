@@ -1,184 +1,282 @@
 # Cray System Management (CSM) - Release Notes
 
-[CSM](glossary.md#cray-system-management-csm) 1.6 contains many changes spanning bug fixes, new feature development, and
+[CSM](glossary.md#cray-system-management-csm) 1.6.1 contains many changes spanning bug fixes, new feature development, and
 documentation improvements. This page lists some of the highlights.
 
 ## Features
 
-* iSCSI
-    * See [iSCSI SBPS](operations/iscsi_sbps/iscsi_sbps.md) for
-      details on iSCSI based boot content projection for `rootfs` and `PE` images.
-* Multi-Tenancy
-* Bonded HSN interfaces supporting Slingshot resiliency
-* HPE Cray OS 24.2
-* SLES 15 SP6
-* SHS 11.1
-* CSM can now be upgraded with IUF. See [Upgrade CSM](upgrade/README.md) for more details.
-* The [BOS](glossary.md#boot-orchestration-service-bos) API now enforces limits that previously had
-  only been recommended. When updating to CSM 1.6, BOS data is migrated to be in compliance with the
-  API specification. See [BOS data notice](upgrade/README.md#bos-data-notice) for more details.
-* The [System Admin Toolkit (SAT)](glossary.md#system-admin-toolkit-sat) is fully included in CSM.
-  There is no longer a separate SAT product stream to install. SAT 2.6 releases, which accompanied CSM 1.5, are
-  the last releases of SAT as a separate product. For more information,
-  see [SAT in CSM](operations/system_admin_toolkit/about_sat/SAT_in_CSM.md).
+### New software support
 
-## New
-
-### Monitoring
-
-### Networking
-
-### Miscellaneous functionality
-
-* SAT: The [System Admin Toolkit (SAT)](glossary.md#system-admin-toolkit-sat) is fully included
-in CSM. There is no longer a separate SAT product stream to install. SAT 2.6 releases,
-which accompanied CSM 1.5, are the last releases of SAT as a separate product. For more
-information, see [SAT in CSM](operations/system_admin_toolkit/about_sat/SAT_in_CSM.md).
+* `CASM-5107` Update iuf-cli,cray-nls and cray-nls-charts version in CSM
+* `CASMHMS-6303` BSS and HMETCD - upgrade golang and go based 3rd party software
+* `CASMHMS-6317` Upgrade HMS projects to golang 1.23
+* `CASMMON-458` Upgrade Victoria metrics to 0.24.5 in cray-sysmgmt-health
+* `CASMPET-7251` Update cray-keycloak for new JobConditionType SuccessCriteriaMet
 
 ### New hardware support
 
-* CSM 1.6.1 supports systems with NVIDIA CPUs and GPUs. CSM 1.6.0 does not support NVIDIA hardware.
-
-### New software support
-
-* Bump `iuf-cli` version to 1.6.15
-* Bump `cray-nls` version to 4.0.15
-* Added support to upgrade CSM through IUF
-* Added support for iSCSI based boot content projection for `rootfs` and `PE` images
+> ***`IMPORTANT`*** For systems with NVIDIA CPUs and GPUs must see [Known issues](#known-issues)
 
 ## Improvements
 
-### Automation improvements
+### General improvements
 
-* CSM can now be upgraded with IUF.
+* `CASM-5267` Avoid infinite loop while uploading artifacts with cray-nexus-setup image
+* `CASMCMS-9068` Allow customization of ipxe debug options
+* `CASMCMS-9177` Make BOS migration pod more polite
+* `CASMCMS-9188` TESTS: cmsdev: Add explicit check for blank CFS ID field
+* `CASMCMS-9189` Update CFS API spec to reject invalid component creation/update requests
+* `CASMCMS-9197` Bypass needless work in some CFS queries
+* `CASMCMS-9200` Make CFS Options class thread-safe and more performant
+* `CASMCMS-9202` Add ability to create CFS source and specify secret name instead of username/pw
+* `CASMCMS-9207` Update CFS API spec with actual status code for successful source restore
+* `CASMCMS-9208` Decode source_name when restoring source
+* `CASMCMS-9211` Improve CFS config delete performance on scale systems
+* `CASMCMS-9225` Add context managers around BOS requests/sessions; enable paging of BOS components
+* `CASMHMS-6299` PCS/TRS: Mitigate resource leaks / heavy usage
+* `CASMHMS-6360` Make cray-hms-rts version consistent in csm manifest
+* `CASMINST-6968` Replace `sed` calls with `yq` in upgrade_control_plane.sh
+* `CASMINST-7039` Cleanup previous/old SquashFS images during upgrade
+* `CASMMON-463` Update customization.yaml for sma victoria metrics pvc size
+* `CASMPET-7262` TESTS: After installing csm-testing RPM, automatically restart goss-servers
+* `CASMPET-7263` TESTS: goss-servers should delay start until hostname is set
+* `CASMPET-7288` TESTS: Minimize use of system Python packages in virtual environment
+* `CASMPET-7290` TESTS: Add pylint to csm-testing build pipeline
+* `CRAYSAT-1896` Update "sat bootprep" to support CFS v2 or v3
+* `CRAYSAT-1923` Update "sat bootsys" to support CFS v2 or v3
+* `CRAYSAT-1936` Add ability to sort reports by multiple fields
+* `CRAYSAT-1942` Drop internal default values for rootfs_provider{,passthrough} from sat bootprep
+* `MTL-2514` Pin cni / cni-plugins RPM's to the latest version from SLE-Module-Containers
+* `SSI-14310` Update CSM 1.6 configuration page to include USS product changes.
 
 ### Base platform component upgrades
 
-| Platform Component           | Version |
-|------------------------------|---------|
-| `Kubernetes`                 | 1.24.17 |
-| `Kyverno`                    | 1.10.7  |
-| `Strimzi Kafka`              | 0.41.0  |
-| `argo-workflow-controller`   | 3.4.5   |
-| `argo-workflows`             | 3.3.6   |
-| `bitnami-etcd` for clusters  | 3.5.9   |
-| `etcd` on `ncn-mxxx`         | 3.5.0   |
-| `ceph`                       | 16.2.13 |
-| `containerd`                 | 1.5.16  |
-| `coredns`                    | 1.8.4   |
-| `cray-certmanager`           | 1.5.5   |
-| `cray-spire`                 | 1.5.5   |
-| `helm`                       | 3.11.2  |
-| `istio`                      | 1.19.10 |
-| `keycloak`                   | 21.1.1  |
-| `kiali`                      | 1.75.0  |
-| `metrics-server`             | 0.6.3   |
-| `postgres-operator`          | 1.8.2   |
-| `postgresql`                 | 14.8    |
-| `spire-intermediate`         | 1.0.0   |
-| `spire`                      | 0.12.2  |
-
-### Hardware Management System (HMS) improvements
-
-* More than 75% reduction in OS noise generated by the heartbeat client that runs on compute nodes.
-
-### Scale improvements
-
-* Performance improvements in BOS and CFS on large scale systems.
+| Platform Component              | Version |
+|---------------------------------|---------|
+| Kubernetes                      | 1.24.17 |
+| `Kyverno`                       | 1.10.7  |
+| `Strimzi Kafka`                 | 0.41.0  |
+| `argo-workflow-controller`      | 3.4.5   |
+| `argo-workflows`                | 3.3.6   |
+| `bitnami-etcd` for clusters     | 3.5.9   |
+| `bare-metal-etcd` on `ncn-mxx`  | 3.5.0   |
+| `ceph`                          | 16.2.13 |
+| `containerd`                    | 1.5.16  |
+| `coredns`                       | 1.8.4   |
+| `cray-certmanager`              | 1.5.5   |
+| `cray-spire`                    | 1.5.5   |
+| `helm`                          | 3.11.2  |
+| `istio`                         | 1.19.10 |
+| `keycloak`                      | 21.1.1  |
+| `kiali`                         | 1.75.0  |
+| `metrics-server`                | 0.6.3   |
+| `postgres-operator`             | 1.8.2   |
+| `postgresql`                    | 14.8    |
+| `spire-intermediate`            | 1.0.0   |
+| `spire`                         | 0.12.2  |
 
 ### Security improvements
 
+* `CASMCMS-9035` Remove sshd from cray-console-operator image
+* `CASMHMS-6282` Fix CVE's in artifactory.algol60.net/csm-docker/stable/cray-firmware-action:1.34.0
 * `Kyverno` is upgraded from 1.9.5 version to 1.10.7 version to address CVEs.
 
 ### Customer-requested enhancements
 
+* `CASMNET-2240` CSCS - CSM 1.5.1 canu generated switch config security concern
 * iSCSI based boot content projection for `rootfs` and `PE` images.
-
-### Resolved CASTs
-
-```text
-* CAST-26583 – ‘cray-bos’ gives an error if provided nids instead of xnames
-* CAST-27383 – Additional utilities have been provided for the NCN post-crash environment
-* CAST-32130 – The script to create RBD devices checks if RBD0 already exists
-* CAST-32623 – sat provides ability to generate longer and more complex BMC passwords through sat bmccreds
-* CAST-33693 - Unbound - interface used for NID alias is configurable
-* CAST-34561 – sat bootprep now supports functionality similar to the CFS Key ‘additional Inventory’
-* CAST-35618 – Fixed a python3 warning that blowfish is deprecated
-* CAST-36209 - "canu" user hanging around after install
-* CAST-36629 – Fixed an issue where ray-hms-smd-test-functional regex does not match RedfishSystemInfo/EthernetNICInfo/3/RedfishId
-* CAST-36655 – Fixed a failed regex test for sls in cray-hms-sls-test-functional
-* CAST-36752 – Fixed Check bos service test failure with templates that don't belong to expected tenant 'cmsdev-tenant'
-* CAST-36997 – inotify-tools have been added to the helm chart for cray-console operator
-* CAST-37016 – Fixed BOS sessions failing, nodes down when CFS component API is extremely slow
-```
 
 ### Documentation enhancements
 
-* Upgrade documentation modified to support CSM upgrade only through IUF
-* Diagram and procedures for `Upgrade CSM and additional products with IUF` updated
-* Updated `Kyverno` documentation
-* Added documentation about iSCSI based boot content projection for `rootfs` and `PE` images
-* The SAT documentation moved to be fully included within the [System Admin Toolkit (SAT)](operations/system_admin_toolkit/README.md) section of the [CSM Administration Guide](operations/README.md).
-* `CASM-4860` Add a note to check latest version of `docs-csm` is installed or not
-* `CASMCMS-8673` Update CFS documentation
-* `CASMCMS-8877` Minor errors in CFS documentation in `docs-csm`
-* `CASMCMS-8901` Update CSM 1.6 documentation for barebones test
-* `CASMCMS-9141` Update Multi-Tenancy documentation to use new BOS CLI shortcuts
-* `CASMHMS-6144` Update CSM 1.6 documentation to reflect CAPMC removal
-* `CASMINST-5556` NTP resiliency page belongs with install documentation
-* `CASMINST-5799` Replace remaining references to `https://artifactory.algol60.net` in documentation for CSM tarball and documentation RPM downloads
-* `CASMINST-6606` Fix deploy `rgw` documentation; fix `generate_haproxy` script for future
-* `CASMINST-6776` Move API documentation generator logic
-* `CASMINST-6806` Make patch upgrade documentation slightly less circuitous
-* `CASMINST-6992` Update CSM upgrade documentation with BOS migration information
-* `CASMINST-7000` `hooks/pre-install-check-prehook.sh` should call system copy of `docs-csm` scripts
-* `CASMMON-350` Bug fixes for SMART data on UAN documentation
-* `CASMMON-401` Upgrade and fresh install changes for `Victoriametrics`
-* `CASMMON-405` Remove `Grafterm.md` from `docs-csm` as it's no longer supported.
-* `CASMMON-447` `E1000` `ClusterStor` documentation
-* `CASMNET-2099` Changes in CANU documentation caused broken links in CSM documentation
-* `CASMNET-2235` Update `docs-csm` with recommended firmware versions
-* `CASMTRIAGE-4891` Effect of `docs-csm` versions on directory structure
-* `CASMTRIAGE-5734` Update CSM prerequisite version and CSM release version in documentation
-* `CASMTRIAGE-5937` Steps to get "Authentication Token" from SLS documentation
-* `CASMTRIAGE-6188` `docs-csm` RPM install failing, `sed: no input files`
-* `CASMTRIAGE-6208` `update_tags.sh` failure during `docs-csm` RPM install
-* `CASMTRIAGE-6251` Error installing `docs-csm` RPM in 1.6 - `cray-sat` container image has moved
-* `CASMTRIAGE-6736` Add ARP cache tuning guide
-* `CASMTRIAGE-6746` Update documentation related to expiring certificates
-* `CASMTRIAGE-6802` iLO 6 support in FAS and documentation
-* `CASMTRIAGE-6810` CSM upgrade lacks clear section to download latest `docs-csm` and `libcsm` RPMs
-* `CASMTRIAGE-6811` Review `site-init` documentation to see if we can safeguard against missing important steps.
-* `CASMTRIAGE-7016` `update_tags.sh` script fails during `docs-csm` with `sed` error: No such file or directory
-* `CASMTRIAGE-7055` Install or upgrade additional products with IUF documentation should specify to upgrade `docs-csm` before starting Product Upgrades
-* `CASMTRIAGE-7175` `repo name unknown to registry` for `docs-csm` latest RPM
-* `CASMTRIAGE-7188` `libcsm` and `docs-csm` download paths
-* `CASMTRIAGE-7199` IUF documentation must supply options `-sv` and/or `-bpcd` or `-rv` during IUF `deliver-product` stage to install SLURM or PBS
-* `CASMTRIAGE-7234` Update the documentation to add this step if Foxconn (Paradise) nodes
-* `CASMTRIAGE-7324` check for `docs-csm` RPM
-* `CASMTRIAGE-7372` Remove references to CPS etcd cluster
-* `CRAYSAT-1782` Migrate `docs-sat` content into `docs-csm`
-* `SSI-13518` Update `docs-csm` to match SBPS variable names
-* `STP-3667` Cleanup for `docs-sat` move to `docs-csm`
+* `CASMCMS-8164` DOCS: BOS: Allow the etag to not be specified in the boot set
+* `CASMCMS-8712` DOCS: Document how to reference secrets in Vault using SOPS in Ansible.
+* `CASMCMS-9191` DOCS: Document how to delete CFS components with ID fields that are empty strings
+* `CASMCMS-9194` DOCS: Update CFS export tools for v3 changes
+* `CASMCMS-9195` DOCS: CFS import tool should handle case where node has empty ID field value
+* `CASMCMS-9204` DOCS: Update CFS import tool to handle v3 options
+* `CASMCMS-9205` DOCS: Update CFS import tool with missing config fields
+* `CASMCMS-9209` DOCS: Update CFS import tool to handle altered v3 component update response
+* `CASMCMS-9232` DOCS: Improve BOS' documentation around the term `enabled`
+* `CASMCMS-9234` DOCS: BOS migration code can result in inaccessible templates
+* `CASMCMS-9242` DOCS: BOS: Make CAPMC/PCS timeout configurable, like with CFS
+* `CASMCMS-9244` DOCS: Make CASMCMS-9234 workaround more resilient
+* `CASMCMS-9246` DOCS: CSM upgrade failed: BOS database Kubernetes pod not running
+* `CASMCMS-9253` DOCS: IMS artifacts remained orphaned with CSM 1.5.2 systems
+* `CASMCMS-9279` DOCS: Known Issue: Barebones boot image won't fully boot in CSM-1.6.0
+* `CASMHMS-6286` DOCS: CAST-36961 changes for replacing a compute blade
+* `CASMHMS-6298` DOCS: Fix hsm backup restore docs
+* `CASMHMS-6322` DOCS: Need to remove notice about NVIDIA GPU not being supported
+* `CASMHMS-6366` DOCS: Document pprof in the CSM admin guide
+* `CASMHMS-6367` DOCS: Document HSM memory leaks in 1.5.3 and 1.6.1 release notes
+* `CASMHMS-6370` DOCS: Document resetting BIOS factory defaults for Paradise
+* `CASMHMS-6371` DOCS: Update Add a Standard Rock Node doc to remove quotes around NID
+* `CASMINST-6426` DOCS: LDAP cacert looking for wrong issuer
+* `CASMINST-6711` DOCS: Command Mismatch When Setting up SNMP on Dell and Mellanox switches
+* `CASMINST-6893` DOCS: Weave troubleshooting
+* `CASMINST-6922` DOCS: Add Information for QLogic Driver & Firmware
+* `CASMINST-7035` DOCS: Rework IUF documentation to remove manual CSM upgrade option
+* `CASMINST-7038` DOCS: Ensure CLI/test RPMs updated during CSM upgrade before doing post-service-upgrade health checks
+* `CASMINST-7041` DOCS: add manual node upgrade procedure if manual intervention is needed
+* `CASMINST-7042` DOCS: minor wording changes in the IUF CSM upgrade process
+* `CASMINST-7088` DOCS: add note when creating site vars if USS is 1.1 or later
+* `CASMINST-7106` DOCS: Fix bad UAN ethernet naming for HPE nodes
+* `CASMINST-7110` DOCS: Fix IUF diagram for CSM upgrade
+* `CASMINST-7112` DOCS: Linting
+* `CASMINST-7116` DOCS: add document for when IUF can't find master node upgrade workflow
+* `CASMINST-7138` DOCS: Prepare for upgrade procedures should link to previous release
+* `CASMINST-7163` DOCS: IUF: Force SAT to use CFS v2 during upgrades from 1.5.0
+* `CASMINST-7165` DOCS: Linting
+* `CASMINST-7178` DOCS: Remove Rapid Rebuild content
+* `CASMMON-461` DOCS: Modify upgrade fresh install scripts and change the documentation for victoriametrics upgrade
+* `CASMMON-467` DOCS: Update customization.yaml for sma victoria metrics in update-customizations.sh
+* `CASMMON-468` DOCS: update-customizations.sh breaks customizations template for 1.6 > 1.6 and 1.6 > 1.7 upgrades
+* `CASMNET-2238` DOCS Add switch firmware upgrade step to CSM upgrade procedure
+* `CASMNET-2277` DOCS: update CAN reference to CMN in PowerDNS docs
+* `CASMNET-2288` doc update/fixes for DHCP troubleshooting doc
+* `CASMPET-6863` DOCS: etcd-base-chart has rollback issues in CSM 1.6
+* `CASMPET-7207` DOCS: Add in Tenant aware authorization to vault endpoints
+* `CASMPET-7280` DOCS: Create MDS fail troubleshooting pageCASMTRIAGE-7545 DOCS: cray-externaldns-external-dns in CLBO due to duplicate vault annotations
+* `CASMPET-7286` DOCS: Update CSM 1.6 Release Notes with kafka PET component
+* `CASMTRIAGE-6736` DOCS: Fresh install workflow lacks documentation for ARP tuning
+* `CASMTRIAGE-7226` DOCS: vShasta: cfs-api pods in CLBO due to absence of cray-shared-kafka-kafka-bootstrap service
+* `CASMTRIAGE-7358` DOCS: Storage node cloud-init fails, mon_max_pg_per_osd exceeded
+* `CASMTRIAGE-7458` DOCS: Odin 1.6.0-rc.4 install - cannot boot any image (1.6 or previous 1.5.2)
+* `CASMTRIAGE-7470` DOCS: Odin : 1.6.0-rc.4 upgrade : cray-site-init path doesn't exist.
+* `CASMTRIAGE-7471` DOCS: IUF documentation needs to state when and how to create site_vars.yaml
+* `CASMTRIAGE-7475` DOCS: Import of IMS data terminated with message " Multiple images data files found in /app/src/server/app.py"
+* `CASMTRIAGE-7503` DOCS: configuring remote build node customization of barebones image failed with missing repos
+* `CASMTRIAGE-7504` DOCS: needs a correction on 'kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patronictl list'
+* `CASMTRIAGE-7509` DOCS: Create workaround for CASMTRIAGE-7459 for USS-1.1 customers
+* `CASMTRIAGE-7570` DOCS: Error setting ip address while adding storage node to cluster
+* `CASMTRIAGE-7577` DOCS: full system power up documentation needs cray-spire added to spire troubleshooting
+* `CASMTRIAGE-7616` DOCS: #rocket : cert-manager helm chart version 1.12.9 note: no cert-manager upgrade steps needed, cert-manager 1.5.5 is not installed
+* `CASMTRIAGE-7618` DOCS: loki >> pre-install-check failing on csm-1-6-0-pre-hook
+* `CASMTRIAGE-7705` DOCS: iuf management-rollout to canary worker node fails without MEDIA_DIR and refuses to run on canary node
+* `CASMTRIAGE-7719` DOCS:ceph configuration "ceph.client.kube.keyring" is missing which is required to add storage to remote build node
+* `CASMTRIAGE-7734` DOCS: FASUpdate.py recipe troubles for ERoT and nodeAccUC  (Vidar)
+* `CASMTRIAGE-7735` DOCS: Tyr: cray_shasta_64k aarch rpm stuck uploading during deliver-product
+* `CASMTRIAGE-7739` DOCS: ncn-upgrade-master-nodes.sh ncn-m001 failed due to time synch problem
+* `CASMTRIAGE-7763` DOCS: cray-console-node pods intermittently are in  CLBO state
+* `CAST-32468` DOCS: 22.11.2 ncn-m001 upgrade fails
+* `CRAYSAT-1951` DOCS: update SAT documentation describing support for CFS v3 in CSM 1.6.1
+* `HPCCHT3-5144` DOCS: Document how SDU should be reinitialized following a master node upgrade
+* `MTL-2455` DOCS: Update kdump documentation in docs-csm
+* `TECHPUBS-4619` Slingshot documentation for multitenancy to be added in csm-docs
+* `USS-2050` DOCS: Multitenancy example documentation needs changes
+* `USS-2317` DOCS: Document multi-tenancy VNI enforcement
+* `USS-2479` DOCS: Odin 1.6.0-rc4 tenant pods not in expected state
+
+## Bug fixes
+
+* `CASM-5042` product-deletion-utility version change
+* `CASMCMS-9037` Remove sshd from cray-ims-utils image
+* `CASMCMS-9068` Allow customization of ipxe debug options
+* `CASMCMS-9126` Console - log permissions get set incorrectly
+* `CASMCMS-9144` Add SOPS binary to Worker and Master Node Images
+* `CASMCMS-9166` IMS - deleted image always gets assigned arch=x86_64
+* `CASMCMS-9190` cfs-hwsync-agent should discard components with blank ID fields
+* `CASMCMS-9196` CFS exception creating source if authentication_method omitted
+* `CASMCMS-9198` CFS in CLBO if log level set to an invalid value
+* `CASMCMS-9199` Restore Python 3.6 support for Cray Product Catalog Python package
+* `CASMCMS-9201`  IMS artifacts remained orphaned with CSM 1.5.2 systems
+* `CASMCMS-9206` Unable to create CFS v3 additional inventory with source specified
+* `CASMCMS-9210` CFS does not correctly determine in-use sources
+* `CASMCMS-9217` Evaluate console-node code for memory leaks
+* `CASMCMS-9226` Mis-spelled output in IMS job startup logging
+* `CASMCMS-9236` Fix BOS migration bug in CSM 1.6.1
+* `CASMCMS-9241` cfs-debugger: 'NoneType' object has no attribute 'group'
+* `CASMCMS-9245` Limit requests_retry_session version
+* `CASMCMS-9255` BOS: Image Regular Expression Fragile
+* `CASMHMS-6239` PCS: ETCD requests are too large at scale
+* `CASMHMS-6277` FAS: Investigate security fix from Dependabot
+* `CASMHMS-6288` PCS: Set http timeout/retries configurable in helm chart and update TRS module to latest version
+* `CASMHMS-6294` SMD: Investigate Scaling Issues in CSM 1.5
+* `CASMHMS-6295` hmcollector: Investigate Scaling Issues in CSM 1.5
+* `CASMHMS-6310` FAS: Investigate Scaling Issues in CSM 1.5
+* `CASMHMS-6324` Set up and run 'pprof' against HMS services to find memory leaks
+* `CASMHMS-6325` vShasta: HSM and PCS tests fail after 1.4 > 1.5 upgrade
+* `CASMINST-2551` kea and unbound should not have externaldns annotations until we start exposing NMN and HMN services in externalDNS
+* `CASMINST-3816` manually copying large files into s3fs cache directory prevents prune from pruning them
+* `CASMINST-6951` TESTS: csm-testing: add python virtualenv to avoid dependency conflicts
+* `CASMINST-7108` Simplify license checker filename pattern override
+* `CASMINST-7114` TESTS: rgw_endpoint_check throwing python error
+* `CASMMON-469` delete SMa postgres VMscrapeserive  for SMA
+* `CASMMON-475` seeing errors in the log systmgmt-health-redfish-exporter after configuring E100-smart-data
+* `CASMNET-2241` Resolve external DNS test fails with port present in URL
+* `CASMNET-2270` Exclude cray-shared-kafka-entity-operator network policy during Cilium live migration
+* `CASMPET-6707` Nexus Keycloak integration nexus-keycloak-realm-config does not set properly if nexus starts too fast
+* `CASMPET-7033` Investigate duplicates docker.io/weaveworks/weave-kube
+* `CASMPET-7034` Investigate duplicates docker.io/weaveworks/weave-npc
+* `CASMPET-7037` Investigate duplicates ghcr.io/k8snetworkplumbingwg/multus-cni
+* `CASMPET-7104` k8s_kyverno_pods_running.sh fails
+* `CASMPET-7261` TESTS: iSCSI test regex does not work as intended
+* `CASMPET-7266` TESTS: Bad hostname regex breaks goss-servers service on PIT
+* `CASMPET-7269` TESTS: csm-testing creating Python test/tool symlinks with wrong names
+* `CASMPET-7270` TESTS: Upgrade failed trying to install csm-testing RPM
+* `CASMPET-7271` TESTS: csm-testing: Remove urllib3 and certifi from virtual environment
+* `CASMPET-7273` TESTS: k8s_verify_cluster_2 fails during kube-etcdbackup container creation
+* `CASMPET-7291` Review csm-rie:1.4.0 (142 days)
+* `CASMSEC-505` Kyverno background policy scans are ignoring resourceFilters
+* `CASMSMF-8370` Remove cli command dependency from postgresDB
+* `CASMTRIAGE-7346` Upgrade of ncn-m001 to csm-1.6.0-beta.1 is failing setting NTP
+* `CASMTRIAGE-7413` hash of the CPC 2.4.1 is getting updated frequently which causing build failure on python-csm-api-client
+* `CASMTRIAGE-7425` deliver-products stage is failing to run due to non-existent running workflows
+* `CASMTRIAGE-7428` At the initiator iscsi sessions are displayed only for one worker node while SBPS is configured on all 4 worker nodes
+* `CASMTRIAGE-7440` TESTS: cmsdev BOS test fails during CSM upgrade
+* `CASMTRIAGE-7445` iSCSI is reporting "SQUASHFS errors" on gamora for unknown reasons
+* `CASMTRIAGE-7447` CMN iSCSI portal can be used off system without authentication
+* `CASMTRIAGE-7457` TESTS: Shortcut to compare_k8s_ncns test script not created
+* `CASMTRIAGE-7459` SBPS disconnected from all computes on gamora during rolling worker node upgrades
+* `CASMTRIAGE-7469` while configuring remote build node customization of barebones image failed with missing repos
+* `CASMTRIAGE-7489` odin 1.6.0-rc.4 boots Computes via DVS but iSCSI fails
+* `CASMTRIAGE-7490` Couple of Iscsi metrics values are not correct.
+* `CASMTRIAGE-7559` Lemondrop: CFS layer fails when upgraded to 25.3
+* `CASMTRIAGE-7567` Observed several thousand restarts of cray-sysmgmt-health-redfish-exporter on fanta
+* `CASMTRIAGE-7594` cray-console pods keep disconnecting conman sessions.
+* `CASMTRIAGE-7607` vShasta: upgrade 1.5 > 1.6: cray-nexus deployment fails in prerequisites.sh
+* `CASMTRIAGE-7627` check if cray-spire jwks and velero backup tests need additional logic
+* `CASMTRIAGE-7663` Compute node CFS configuration failing with key issue
+* `CASMTRIAGE-7682` Tyr:  March product set - ARM image fails to customize with CFS.
+* `CASMTRIAGE-7715` log files permissions changed manually remain unchanged
+* `CASMTRIAGE-7735` DOCS: Tyr: cray_shasta_64k aarch rpm stuck uploading during deliver-product
+* `CASMTRIAGE-7823` Install Pipeline -  management-nodes-rollout failed with 503
+* `CASMTRIAGE-7901` sbps-marshall is not projecting any images from IMS  due to a 403 error (marshall issue)
+* `CASMTRIAGE-7910` sbps-marshall is not projecting any images from IMS  due to a 403 error (marshall issue)
+* `CASMTRIAGE-7926` WASP: Unable to get workflow status after intermediate termination
+* `CRAYSAT-1551` Fix sorting of "sat showrev --products" by product version
+* `CRAYSAT-1649` Silent failure when FileNotFoundError is raised when opening a token file
+* `CRAYSAT-1847` Update outdated attributes used in unit test
+* `CRAYSAT-1875` Add new HSM types to sat status
+* `CRAYSAT-1895` sat bootprep - empty string handling for rootfs_provider key of boot_set
+* `CRAYSAT-1913` Remove printing of VCS password from python-csm-api-client
+* `CRAYSAT-1916` Remove or fix unused code in get_config_value for handling infinite BOS timeouts
+* `CRAYSAT-1917` Fix issues with Jinja2 template rendering of rootfs_provider_passthrough in sat bootprep
+* `CRAYSAT-1929` vidar >> sat not showing CFS related values
+* `CRAYSAT-1941` sat bootprep - allow for missing rootfs_provider key when handling empty strings
+* `CRAYSAT-1945` Bug: For lesser page size, cfs v2 session throws traceback error
+* `CRAYSAT-1947` Fix sorting warnings on sat --showrev
+* `CRAYSAT-1948` Baldar- Castle Blade Removal using SAT; Error "Could not determine slot class: multiple node classes: Hill, Mountain"
+* `CRAYSAT-1974` Resolve dependabot alerts (Jinja2)
+* `MTL-2484` CSI: Remove kube-api from all but NMN
+* `MTL-2513` Remove remaining COS packages from stock SLES compute image / fix network configuration
+* `STP-3724` Finalize docs-sat move to docs-csm
 
 ## Deprecations
-
-* `sat swap cable` and `sat swap switch` commands
-* [Data Virtualization Service (DVS)](glossary.md#data-virtualization-service-dvs)
 
 For a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
 
 ## Removals
-
-* [BOS](glossary.md#boot-orchestration-service-bos) v1
-* User Access Service
-* User Access Instance
 
 For a list of all features with an announced removal target,
 see [Removals](introduction/deprecated_features/README.md#removals)
 
 ## Known issues
 
+* CSM 1.5.4 included fixes to `BSS` and `cfs-trust` to allow large scale parallel boots of compute nodes.
+  These changes did not make it into CSM 1.6.1 but will be present in CSM 1.6.2 and CSM 1.7.0. Workarounds until then include:
+    * Boot in smaller sets of compute nodes
+    * Disable debug logging in BSS by changing `BSS_DEBUG` from "true" to "false" in the cray-bss deployment.
+    This may allow slightly larger sets of compute nodes to boot in parallel.
 * CSM 1.6.0 does not support servers with NVIDIA CPUs and GPUs. Systems with these servers should not be upgraded to CSM 1.6.0.
 * CSM 1.6.1 and later supports servers with NVIDIA CPUs and GPUs.
 * After updating Paradise BMC firmware, the `hmcollector-poll` service will lose event subscriptions and must be restarted
@@ -203,1127 +301,10 @@ see [Removals](introduction/deprecated_features/README.md#removals)
       running jobs may be affected. A dedicated outage window is highly recommended for applying these changes.
 * SMA 1.10.15 and later includes an upgraded LDMS that introduces an incompatibility with configuration files used in prior versions.
     * When upgrading from an older SMA version to a version with this new LDMS, the administrator must change the configuration files.
-    * A workaround is presented as an Action in the deliver-product stage in the **IUF Stage Details for SMA** section of the _HPE Cray Supercomputing EX System Monitoring Application Installation Guide_.
+    * A workaround is presented as an Action in the deliver-product stage in the **IUF Stage Details for SMA** section of the *HPE Cray Supercomputing EX System Monitoring Application Installation Guide*.
 * Services that use PostgreSQL may fail when a Kubernetes master node is rebooted or rebuilt.
     * A PostgreSQL database may fail over without clients reconnecting to the new cluster leader.
     * A workaround is presented in [PostgreSQL Database is in Recovery](troubleshooting/known_issues/postgres_database_recovery.md)
 * There are resource leaks in several HMS services ([PCS](glossary.md#power-control-service-pcs), [SMD](glossary.md#hardware-state-manager-smd), hmcollector, and [FAS](glossary.md#firmware-action-service-fas))
     * This issue is partially resolved by a hotfix for the CSM 1.5.2 release and fully resolved in the CSM 1.5.3 and 1.6.1 releases
     * For more information, including a workaround, see [HMS Resource Leaks](troubleshooting/known_issues/HMS_Resource_Leaks.md).
-
-## All Tickets
-
-```text
-ALT-683 Update OPA policy for PBS provisioning
-CASM-3981 Add S3 artifacts and loftsman manifests to the Product Catalog Schema
-CASM-3983 Add the product-deletion-utility image to the list of Docker images that need to be included with CSM.
-CASM-4095 As an iuf developer I should be able to run my operation on any nodes via ssh
-CASM-4266 Create  SMH Framework for monitoring Critical SMF monitoring Logstash subsystems.
-CASM-4350 Implement a proto type of Split config maps, to store cray-product-catalog data...
-CASM-4367 Adding test cases for split logic proposed
-CASM-4368 Implement a proto type to delete from main and sub config map
-CASM-4427 Implement a prototype to have granular query from main and sub config map
-CASM-4474 TESTS: As a developer I would like to add unit tests for CM split during update.
-CASM-4475 TESTS: Adding UTs into delete logic of cray-product-catalog
-CASM-4501 roll back and exit handling
-CASM-4504 Add label "type=cray-product-catalog" for all cray-product-catalog related ConfigMaps
-CASM-4545 Helm Chart Creation
-CASM-4546 Migrate cray-product-catalog ConfigMap to multiple product ConfigMaps before upgrading cray-product-catalog helm chart
-CASM-4548 CSM upgrade through IUF
-CASM-4557 CSM Upgrade: Changes in nls-backend
-CASM-4576 CIS: Ensure that the --profiling argument is set to false
-CASM-4586 Log message changes for deploy products hook scripts
-CASM-4606 Execution of management-nodes-rollout on m002
-CASM-4669 Enable container image signing during CSM build and include image signatures, public keys into the CSM release
-CASM-4670 Verify CSM container images signed by HPE
-CASM-4673 Documentation for Kyverno signature validation policy
-CASM-4673 Documentation for Kyverno signature validation policy
-CASM-4679 OPA Policy: Disable allow-list of (access to) /phone-home, limit HTTP verbs for other cloud-init endpoints
-CASM-4696 Failed to Skip the 'skopeo sync' operation for docker_dir if docker_dir is empty
-CASM-4703 During management-nodes-rollout workflow fails while doing node reboot
-CASM-4729 Solve iuf-cli bug related to reading cray-product-catalog
-CASM-4731 Adapt cray-product-catalog to include empty dictionary objects
-CASM-4805 Implement "cm" commands for AIOps features.
-CASM-4818 Creation of post install hook for Kyverno deployment to enable trust between Kyverno and Nexus
-CASM-4819 Create Kubernetes secrets from the helm customizations public keys
-CASM-4820 KYVERNO chart upgrade needed for CSM version 1.6.x
-CASM-4821 Remove WLM backup step from CSM upgrade procedure
-CASM-4852 Add Check in management-nodes-rollout pre-hook to make sure Upgrade of CSM applications and services happens only once per CSM Release Version .
-CASM-4855 Provide custom config for policy exceptions and keys through the customization file
-CASM-4860 Add a Note to check latest version of docs-csm is installed or not .Only Upgrading CSM manually
-CASM-4861 Provide custom config for DST public key through the customization file
-CASM-4871 Track diagram updates for CSM Upgrade with IUF
-CASMCMS-5793 The cfs-api should allow the paging of results
-CASMCMS-7329 Retire and remove BOS V1.
-CASMCMS-7687 CAST-26853"cray bos" doesn't give an error if you accidentally feed it nids and not xnames
-CASMCMS-7707 need reasonable way to debug image customization sessions
-CASMCMS-8086 TESTS: Modify barebones boot test to use BOS v2
-CASMCMS-8186 BOS v2 api/cli has an incorrect description for disable_components_on_completion
-CASMCMS-8336 Update cfs-debugger to handle new CFS session structure
-CASMCMS-8353 Build failures using cms-meta-tools latest_version after arti upgrade
-CASMCMS-8375 Remove beta tags from CFS in the manifest
-CASMCMS-8379 Fix CFS rpms in manifest
-CASMCMS-8384 CFS operator was OOM killed
-CASMCMS-8385 CFS got backed up and stopped creating sessions
-CASMCMS-8393 Console - add troubleshooting section for changing log rotation settings
-CASMCMS-8395 cfs-debugger install doesn't include dependencies
-CASMCMS-8397 TESTS: Remove CRUS from cmsdev tests
-CASMCMS-8398 Remove CRUS from CSM 1.5 manifests
-CASMCMS-8425 BOS checks to see whether the image is assigned to the right type of node, x86-64 vs. ARM
-CASMCMS-8451 Multi-tenancy: BOS warnings when nodes are specified that the tenant does not own
-CASMCMS-8501 cfs-debugger install doesn't install dependencies
-CASMCMS-8507 Write some 'welcome to ARM nodes' documentation.
-CASMCMS-8551 BOS v1 cannot list sessions if a lot exist
-CASMCMS-8556 BOS import/export: Make BOS import procedure & tools multi-tenant capable
-CASMCMS-8557 Add a "clear desired state" option to the BOS v2 cli
-CASMCMS-8568 TESTS: cmsdev: Update BOS test to cover good path multi-tenancy CLI queries
-CASMCMS-8592 TESTS: cmsdev: Remove BOSv1
-CASMCMS-8650 Update BOS Swagger spec in Cray CLI
-CASMCMS-8669 Create runbook to help troubleshoot process
-CASMCMS-8673 Update CFS docs for 1.4 features
-CASMCMS-8681 Add inotify-tools to helm chart cray-console-operator-1.6.0, image artifactory.algol60.net/csm-docker/stable/cray-console-operator:1.6.0
-CASMCMS-8691 Convert CMS RPMs to noos if possible
-CASMCMS-8694 BOS: Enforce previously-recommended field limits
-CASMCMS-8715 SECURITY: Improper Certificate Validation CVE in cfs-operator
-CASMCMS-8718 SECURITY: Improper Certificate Validation CVE in cfs
-CASMCMS-8722 Use update_external_versions for Python modules in CMS repos
-CASMCMS-8742 Document the new process for remote builds
-CASMCMS-8749 cfs-ara has duplicate external DNS entries
-CASMCMS-8770 bos-reporter, cfs-state-reporter RPMs require spire-agent
-CASMCMS-8784 Update IMS backup/restore to preserve IMS IDs
-CASMCMS-8787 Configure Kata File Memory Backend
-CASMCMS-8789 CFS should cleanup abandonded IMS image customization jobs
-CASMCMS-8794 Add new options for using branches when patching CFS configurations
-CASMCMS-8799 BOS V1 Session Templates
-CASMCMS-8801 IMS - configure customize and build to use PVC's
-CASMCMS-8806 Remove deprecated BOS v1 cfs fields from session templates
-CASMCMS-8808 IMS - document fix for interactive zypper use in non-dkms customize env
-CASMCMS-8809 cfs-hwsync-agent can fail out of the main loop and get stuck
-CASMCMS-8812 TESTS: Skip conman test when running on vshasta
-CASMCMS-8813 Move to Ansible 2.11.x results in mismatch of provided ansible modules
-CASMCMS-8814 CSM 1.5: Storage node upgrade is failing during cfs configuration
-CASMCMS-8827 bosv2 command for creating session template is incorrect
-CASMCMS-8828 IMS image builds of the COS-2.6.115 kiwi NG recipe are failing with "killed" message
-CASMCMS-8830 BOS Error when no nodes are present for a session
-CASMCMS-8831 Update the CLI for CFS sources
-CASMCMS-8833 Add IMS image tagging and enablement in CrayCLI
-CASMCMS-8861 Add "no tar" option to IMS exporter tool
-CASMCMS-8863 Add --clear-bos option to BOS importer
-CASMCMS-8864 Remove nonexistent argument from BOS import shell script
-CASMCMS-8865 REGRESSION: Deleting multiple BOS v2 sessions with filters not working
-CASMCMS-8868 Document procedure for incrementally configuring images
-CASMCMS-8872 TESTS: cmsdev: Add --no-cleanup option to make debugging failures easier
-CASMCMS-8873 IMS large image tuning document
-CASMCMS-8875 Updating branches in CFS configuration with "update_branches" is broken in CFS v2
-CASMCMS-8876 Error when creating CFS configuration with v3 API
-CASMCMS-8877 Minor errors in CFS documentation in docs-csm
-CASMCMS-8879 BOS Build Fails due to PEP-668 'Externally Managed"
-CASMCMS-8880 Rebuild cray-bos with ETCD chart chart update for CASMPET-6876
-CASMCMS-8884 cf-gitea-update: Pin Alpine version to prevent build issues
-CASMCMS-8885 Fix bug in cf-gitea-import version sorting
-CASMCMS-8886 CFS API behavior/spec discrepancies
-CASMCMS-8887 Deleting multiple CFS sessions succeeds but returns 500
-CASMCMS-8888 Error patching multiple CFS v3 components
-CASMCMS-8890 TESTS: Install barebones boot test in Python virtual env
-CASMCMS-8894 Document How to Add IMS image tags to image for the purpose of iSCSI projection
-CASMCMS-8898 Code Cleanup, cray cli checkin, push to release
-CASMCMS-8899 ConMan doesn't work on Paradise
-CASMCMS-8901 Update CSM 1.6 docs for barebones test
-CASMCMS-8903 Remove BOSv1 from Cray CLI
-CASMCMS-8905 Updating a BOS v2 session to change its name results in bad state
-CASMCMS-8913 TESTS: Move cmstools RPM back to being noos
-CASMCMS-8914 Use appropriate version of Python Kubernetes client
-CASMCMS-8915 IMS Needs API changes for metadata CRUD operations
-CASMCMS-8916 BOS v2 components bug and API spec issue
-CASMCMS-8917 TESTS: Only build barebones test for Python 3.11
-CASMCMS-8918 Build using SLES packages from artifactory instead of slemaster
-CASMCMS-8919 Invalid requirement version in cray-cmstools-crayctldeploy RPM
-CASMCMS-8920 ARA link returned by CFS sessions is incorrect
-CASMCMS-8922 Include additional S3 artifacts in IMS import/export script
-CASMCMS-8924 Fix typo in csm-config ansible/ims_computes.yml
-CASMCMS-8927 Add option to IMS export tool to estimate size of exported data
-CASMCMS-8938 Correct 2 errors in BOS API spec
-CASMCMS-8941 BOS v2 can send excessively large queries to CFS
-CASMCMS-8944 Reduce superfluous S3 calls during BOSv2 session creation
-CASMCMS-8946 BOS operators sad when all nodes exceed retry limit
-CASMCMS-8947 BOS server: uWSGI error after moving to Alpine 3.19
-CASMCMS-8949 Enhance BOSv2 logging
-CASMCMS-8950 Update Python Kubernetes client initialization
-CASMCMS-8951 BOS asks for too many nodes from PCS
-CASMCMS-8952 BOS should not request the status of no nodes from CAPMC/PCS.
-CASMCMS-8953 BOS v2 broken on CSM 1.5+ systems with more than 1000 nodes
-CASMCMS-8954 Make BOS v2 slightly more efficient at patching CFS components
-CASMCMS-8958 TESTS: Update cmsdev test to handle CFS pagination issues
-CASMCMS-8959 Correct errors in CFS API spec
-CASMCMS-8961 Parallelize S3 uploads during IMS restores
-CASMCMS-8962 CFS: Fix calls to DB.get_all()
-CASMCMS-8964 CFS: Body property 'stateAppend' not defined in body schema
-CASMCMS-8966 CFS v3 API spec is missing specialParameters.imsRequireDkms in Configuration layers
-CASMCMS-8968 IMS import/export tools should retry most commands
-CASMCMS-8970 Procedure for supporting images on Parry Peak
-CASMCMS-8971 Apparent discrepancy between multitenancy OPA policy and BOS itself
-CASMCMS-8973 image-recipes builds are failing with permission error
-CASMCMS-8974 Our multi-tenancy documentation does not describe how to include a tenant header in a curl call.
-CASMCMS-8975 Optimize barebones remote image build
-CASMCMS-8976 Update DST signing keys in ims
-CASMCMS-8977 Add check for ssh key prior to looking for remote nodes
-CASMCMS-8978 Patching CFS components fails, logs TypeError
-CASMCMS-8979 IMS - add 'status' endpoint for remote build nodes
-CASMCMS-8979 IMS - add 'status' endpoint for remote build nodes
-CASMCMS-8997 Further improve BOS logging
-CASMCMS-8998 BOS: Add more checks to avoid operating on empty lists
-CASMCMS-9001 Pin pytest version to prevent IMS unit test failures
-CASMCMS-9005 Pick up latest cray-services versions in cray-cfs-api chart
-CASMCMS-9006 Pick up latest cray-services versions in cfs-trust chart
-CASMCMS-9010 Investigate duplicates cf-gitea-update
-CASMCMS-9011 Investigate duplicates cray-keycloak-setup
-CASMCMS-9014 Backup BOS data before updating to CSM 1.6
-CASMCMS-9015 BOS S3 client instantiation is not thread safe
-CASMCMS-9018 Update paramiko version to avoid Blowfish deprecation warning
-CASMCMS-9019 BOS: Resolve SNYK-PYTHON-CERTIFI-5805047 CVE
-CASMCMS-9020 BOS: Resolve SNYK-PYTHON-FLASK-5490129 CVE
-CASMCMS-9022 Fix mistake in BOS API spec
-CASMCMS-9023 Investigate duplicates cray-product-catalog-update
-CASMCMS-9026 Sanitize BOS v2 data during BOS migration
-CASMCMS-9027 Resolve CVEs
-CASMCMS-9028 DOCS - update the section on using rbd devices
-CASMCMS-9029 TESTS: cmsdev: VCS: Do not embed git credentials in the URL
-CASMCMS-9030 Pick up latest cray-services versions in cfs-hwsync-agent
-CASMCMS-9039 Applystage operation does not work now that multi-tenancy has been added to BOS
-CASMCMS-9040 Recipe build leaves kiwi config file in resulting image.
-CASMCMS-9041 IPXE-TPSW 3.0.0 does not work with istio upgraded to 1.19.10
-CASMCMS-9045 Update remote build node configuration document
-CASMCMS-9049 AARCH64 builds will not work in 1.5 Emulation mode due to QEMU issue
-CASMCMS-9052 Backport requests timeout code to BOS reporter
-CASMCMS-9055 Validate age/TTL parameters in CFS API
-CASMCMS-9056 cray-console-node is using outdated SLES15-SP4 base image
-CASMCMS-9058 Resolve CVEs in cfs-operator
-CASMCMS-9059 Resolve CVEs in cfs-ara
-CASMCMS-9060 Resolve CVEs in aee
-CASMCMS-9061 Resolve CVEs in cms-ipxe
-CASMCMS-9062 Resolve CVEs in ims-utils
-CASMCMS-9063 Resolve CVEs in ims-load-artifacts
-CASMCMS-9064 Resolve CVEs in ims-kiwi-ng-opensuse-x86_64-builder
-CASMCMS-9065 Resolve CVEs in ims
-CASMCMS-9066 image-recipes builds failing
-CASMCMS-9067 Add BOS option to require session limits
-CASMCMS-9078 BOS: To support iSCSI BOS should automatically tag an image with the sbps-project: true flag
-CASMCMS-9081 bos-reporter does not supply authorization token.
-CASMCMS-9082 Move csm-config Docker image to SLES15 SP6
-CASMCMS-9083 Update cray-aee dependencies
-CASMCMS-9084 cray-tftp does not work on SLES15-SP6
-CASMCMS-9098 Product Catalog: restore data removed by CASMCMS-9012
-CASMCMS-9100 cfs-operator: Use requests_retry_session module instead of duplicating code
-CASMCMS-9101 cfs-trust: Use requests_retry_session module instead of duplicating code
-CASMCMS-9112 Change CSM software recipe to use iSCSI
-CASMCMS-9113 cfs-state-reporter: Use requests_retry_session module instead of duplicating code
-CASMCMS-9115 Move aee Docker image to SLES15 SP6
-CASMCMS-9116 BOS: Cannot create a session template due to invalid validation rules
-CASMCMS-9117 Improve the iSCSI documentation by explaining how to get the name of the system and the site-domain.
-CASMCMS-9118 bos: Use requests_retry_session module instead of duplicating code
-CASMCMS-9119 CFS import tool: Use bulk patch operations
-CASMCMS-9121 TESTS: cmsdev/barebones image test: Dependency updates
-CASMCMS-9122 Upgrade console-data's cray-service chart to cray-service: 11.0
-CASMCMS-9123 cfs-hwsync-agent: Use requests_retry_session module instead of duplicating code
-CASMCMS-9124 cfs-debugger: Use requests_retry_session module instead of duplicating code
-CASMCMS-9125 BOS: Use new TAPMS endpoint for CSM 1.6
-CASMCMS-9128 Change remote build node instructions since BOS no longer allows an empty string for rootfs_provider
-CASMCMS-9129 TESTS: cmsdev: BOS test should pass if migration pod is Succeeded
-CASMCMS-9132 Cray-product-catalog - upgrade docker-kubectl image to latest
-CASMCMS-9133 Gitea - upgrade cray-service chart to 11.0.0 for postgres
-CASMCMS-9134 Update cfs-ara cray-service chart to 11.0.0
-CASMCMS-9135 Update service base chart version for CSM 1.6
-CASMCMS-9135 Update service base chart version for CSM 1.6
-CASMCMS-9138 Resolve CVEs
-CASMCMS-9139 Resolve CVEs in ims-kiwi-ng-opensuse-x86_64-builder
-CASMCMS-9140 Resolve CVEs in console-operator
-CASMCMS-9141 Update multitenancy docs to use new BOS CLI shortcuts
-CASMCMS-9142 Fix build failures: cray-product-catalog, ims-python-helper
-CASMCMS-9143 BOS: Check all boot sets before returning only warnings
-CASMCMS-9145 BOS: Add option to make arch validation error fatal if IMS inaccessible
-CASMCMS-9146 BOS: Add option to make validation error fatal if image not in IMS
-CASMCMS-9146 BOS: Add option to make validation error fatal if image not in IMS
-CASMCMS-9147 Stop using alpine:latest in CMS owned charts
-CASMCMS-9148 Document the fact that BOS automatically tag an image with the sbps-project: true flag
-CASMCMS-9160 Remove BOS v1 references; add missing operations index link
-CASMCMS-9161 BOS: Correct type hint, change Enum to IntEnum to allow inequalities
-CASMCMS-9162 Make the amount of time BOS waits for CFS to respond before timing out configurable via an option
-CASMCMS-9165 BOS per-bootset CFS configuration broken
-CASMCMS-9167 IMS - document known issue - deleted image always gets assigned arch=x86_64
-CASMCMS-9176 Make BOS importer tolerate unknown options
-CASMCMS-9191 Document how to delete CFS components with ID fields that are empty strings
-CASMCMS-9194 Update CFS export tools for v3 changes
-CASMCMS-9195 CFS import tool should handle case where node has empty ID field value
-CASMCVT-252 Add latest version noos CVT RPM
-CASMDIAG-914 Add values for helm charts into customizations.yaml
-CASMHMS-5626 HSM: Re-remove HSM v1 APIs
-CASMHMS-5630 Remove references to cray-reds-init job and MEDS from the repopulate data in ETCD
-CASMHMS-5831 Collector: CrayTelemetry.Metric is unknown
-CASMHMS-5831 Collector: CrayTelemetry.Metric is unknown
-CASMHMS-5838 HSM: /State/Components/BulkRole PATCH not working with SubRoles
-CASMHMS-5854 Remove the TRS operator for fresh installs and on upgrades
-CASMHMS-5864 Clear BMC event subscriptions needs to come before disabling the redfish endpoint step
-CASMHMS-6015 Add cabinet procedure can cause BSS problems since BOS has not configured the new nodes
-CASMHMS-6058 PCS: ETCD storage usage can grow to large sizes with many requests.
-CASMHMS-6058 PCS: ETCD storage usage can grow to large sizes with many requests.
-CASMHMS-6069 KEA: Make KEA resilient
-CASMHMS-6071 SLS: Support Virtual Node type
-CASMHMS-6072 HMS Discovery: Populate HSM with the known Management VMs
-CASMHMS-6073 HSM: Support VirtualNode type
-CASMHMS-6074 HBTD: Support VirtualNode type
-CASMHMS-6075 HMNFD: Support VirtualNode type
-CASMHMS-6089 Heartbeat daemon has error on all workers and shows them down.
-CASMHMS-6094 SLS update ct tests for Virtual Nodes
-CASMHMS-6096 HSM: FRU Tracking doesn't create a detected event after a removed event.
-CASMHMS-6099 Add TTL setting to cray-hms-rts-init job
-CASMHMS-6101 qD:  Nid Defragmentation process require for Antero fails on x1033
-CASMHMS-6108 Lemondrop:  'hb_ref' is not talking to the correct URI in the filtering case
-CASMHMS-6110 re-build/re-release cray-hms-sls to pickup cray-postgresql-1.0.4 basechart
-CASMHMS-6116 Wrong csm-node-heartbeat being used in CSM 1.5
-CASMHMS-6122 Update ETCD chart in bss, fas, hbtd, hmnfd, and power-control for CSM 1.6
-CASMHMS-6123 cray-hms-hmcollector-ingress error parsing data from "FabricHealth" due to signed int
-CASMHMS-6125 Change the way missing vault data is handled
-CASMHMS-6126 FAS: Add support for Paradise Firmware Update
-CASMHMS-6127 Paradise - Incorrectly trying to create Redfish subscriptions
-CASMHMS-6129 hms-discovery blindly puts default creds into vault preventing non-default creds
-CASMHMS-6130 Paradise needs to have its architecture set properly
-CASMHMS-6131 PCS seems to be adding invalid components to power operations
-CASMHMS-6133 HMCOLLECTOR: Support Paradise
-CASMHMS-6140 State manager not parsing ActionInfo correctly (Paradise & Gigabyte)
-CASMHMS-6144 Update CSM 1.6 docs to reflect CAPMC removal
-CASMHMS-6146 Tyr power capping data seems to be invalid
-CASMHMS-6147 SMD test_component_endpoints.tavern.yaml not accounting for CDU switches
-CASMHMS-6148 Adapt SMD to fully discover Paradise hardware and correctly power cap
-CASMHMS-6150 Temporarily handle alternative Paradise system model string
-CASMHMS-6154 hsm patch should not require the hostname
-CASMHMS-6156 BOS asks for too many nodes from PCS
-CASMHMS-6157 Update CAPMC documentation to warn about URL character limits
-CASMHMS-6161 csm-node-hearbeat cleanup
-CASMHMS-6162 FAS Create Docs for Paradise Flashing
-CASMHMS-6163 Discover Paradise MACs using alternate redfish endpoint
-CASMHMS-6180 Reduce noise from csm-node-heartbeat.service
-CASMHMS-6182 FAS: Update of Paradise BMC firmware returns an error 500
-CASMHMS-6184 FAS: loader fails to load .zip files
-CASMHMS-6189 Rapid Restore updates to procedures and scripts
-CASMHMS-6195 cray redfishEndpoints update fails due to wrong hostname
-CASMHMS-6199 Node enclosure randomized on Paradise
-CASMHMS-6201 Paradise ethernet interface names cause tavern tests to fail
-CASMHMS-6202 HMCOLLECTOR: Improve logging
-CASMHMS-6206 Paradise: Procedure for randomized password discovery
-CASMHMS-6207 FAS does not wait for timelimit
-CASMHMS-6208 Paradise - hmcollector - Change to handle paradise power on and off events
-CASMHMS-6209 Paradise - smd - Change to handle paradise power on and off events
-CASMHMS-6211 Pick up latest cray-services versions in cray-hms-meds and cray-hms-scsd chart
-CASMHMS-6219 Paradise: Power endpoint not rediscovered after node power on event received
-CASMHMS-6225 Suggested improvement to 'remove standard rack node' script
-CASMHMS-6228 Fix add_cdu_switch to handle CMN network_hardware coming after bootstrap_dhcp
-CASMHMS-6232 Rebuild HMS charts that use ETCD for CASMPET-6904
-CASMHMS-6233 Paradise: Rework power on discovery for power capping
-CASMHMS-6234 Rebuild HMS charts to update cray-service to 10.0.6
-CASMHMS-6237 SLS: Resolve virtual node issue in SLS in CSM 1.6
-CASMHMS-6238 Create script / documentation for backing up / restoring FAS Images
-CASMHMS-6241 Document PCS/CAPMC request/transaction size limitation
-CASMHMS-6255 "Update Firmware with FAS" should reference Paradise/Foxconn FAS procedure
-CASMHMS-6256 hmcollector-poll needs to be restarted after BMC update
-CASMHMS-6259 FAS Snapshots does not always include imageID
-CASMHMS-6260 SLS: update tests to allow IPv6 CIDRs in the sls data
-CASMHMS-6261 Update HMS charts for K8s 1.24 upgrade in CSM 1.6
-CASMHMS-6262 SLS: Update HMS charts for K8s 1.24 upgrade in CSM 1.6
-CASMHMS-6278 FAS: Create a script that will delete old actions and snapshots.
-CASMHMS-6279 CAST-36629: cray-hms-smd-test-functional regex does not match RedfishSystemInfo/EthernetNICInfo/3/RedfishId
-CASMHMS-6281 Print image information before boot
-CASMHMS-6283 cms-ipxe bootloop
-CASMHMS-6284 Update CSM manifest for missed CASMHMS-6261 PR
-CASMHMS-6287 Error in PCS API spec
-CASMHMS-6287 Error in PCS API spec
-CASMINST-1960 CSM V1.6.0 -- Validate RPM package signing in air-gapped environment (includes new DST Signing Key)
-CASMINST-5476 Evaluate latest zalando postres operator -- determine if we can use upstream without changes
-CASMINST-5556 NTP resiliency page belongs with install docs
-CASMINST-5674 Create Argo workflow template for update_cfs_config stage
-CASMINST-5675 Create Argo workflow template for prepare_images stage
-CASMINST-5767 Update kubernetes / ceph version in file "prerequisites.sh"
-CASMINST-5799 Replace remaining references to https://artifactory.algol60.net in docs for CSM tarball and docs RPM downloads
-CASMINST-5819 TESTS:  Add a goss test to check that required taints are in place
-CASMINST-5845 CSM Main - External DNS Health Check is failing
-CASMINST-5850 TESTS: baldar: EX2500 cabinet having goss test failure with river networks.
-CASMINST-5858 baldar: verify_hsm_discovery.py test failing with traceback in genMountainDetails
-CASMINST-5860 PARALLEL WORKER UPGRADES (Fanta):  With 4 workers upgraded in parallel, potential timing/scheduling issue with nexus
-CASMINST-5861 bump ceph-common version fo 17.2.5 because 17.2.3 is no longer available.
-CASMINST-5865 need to ensure the IUF CLI RPM is installed on master nodes in a persistent manner
-CASMINST-5866 Handle non semver branches in vcs-upload (cf-gitea-import)
-CASMINST-5874 TESTS: Update goss tests for CRUS removal
-CASMINST-5875 Remove CRUS during upgrades to CSM 1.5
-CASMINST-5898 main - Add platform CA bundle to argo namespace
-CASMINST-5905 CSI: CAN gateway is needed even if CHN specified
-CASMINST-6512 Circumvent IUF container security concerns by ceasing the mapping of cray-cli into it and instead have init container copy it over
-CASMINST-6518 Need to modify the sat command output of iuf
-CASMINST-6522 TESTS: Modify Goss iPXE check for upgrades to CSM 1.6
-CASMINST-6555 Add progress indicator to ncn image upload script for usability
-CASMINST-6574 Revise procedure for updating BMC firmware and BIOS for NCN-M001
-CASMINST-6582 Linting
-CASMINST-6602 Enable DKMS by default in CSM 1.5
-CASMINST-6606 Fix docs stating to deploy rgw on all nodes with '*', fix generate_haproxy script for future
-CASMINST-6608 iuf-cli needs to publish to SP5 or start using NOOS
-CASMINST-6617 Fix Kubernetes output example
-CASMINST-6622 add recent cani fixes and features
-CASMINST-6623 Update spire procedures with new paths
-CASMINST-6624 Provide RPMs needed for enabling SMART data on UAN in 14x patch (also in 13x patch, if needed)
-CASMINST-6625 TESTS: Do not require users to export switch password
-CASMINST-6633 provide kernel-source RPM in CSM repo for NCNs
-CASMINST-6639 Create reproducible patch builds
-CASMINST-6641 update cani rpm to version to be included in 1.5
-CASMINST-6649 Node-exporter errors during storage node upgrade
-CASMINST-6650 Storage goss tests failing because admin keyring is not on ncn-s004+ nodes
-CASMINST-6654 TESTS: Prevent silent failures that cause cmsdev tests not to run
-CASMINST-6657 Correct RPM versions
-CASMINST-6658 TESTS: Add Goss endpoint for ncn-kubernetes-tests-cluster suite
-CASMINST-6659 TESTS: Add Goss tests to vshasta runs
-CASMINST-6666 Ansible that installs smartmon on storage nodes doesn't work on ncn-s00[4+]
-CASMINST-6677 cfs-state-reporter needs to update the spire-agent path reference
-CASMINST-6678 CSM-1.5 - pit-init RPM is not found when running zypper install
-CASMINST-6680 Remove check for kea pod before worker node rebuild/upgrade
-CASMINST-6683 Connection resets from some storage nodes and PIT
-CASMINST-6688 prerequisites.sh: UPDATE_VIRTIOFSD failed
-CASMINST-6692 CSM vShasta Upgrade Pipeline
-CASMINST-6694 update rpms for CVE-2023-38545 (curl & libcurl) on NCNs
-CASMINST-6699 Healthcheck failing even though all the tests are successful
-CASMINST-6700 cray-nls upgrade error during pipeline runs
-CASMINST-6714 Run certifi goss test on storage nodes.
-CASMINST-6715 Linting
-CASMINST-6723 IUF: indentation error in management-m001-rollout.yaml
-CASMINST-6727 Create new product catalog version for CSM 1.6-only features
-CASMINST-6730 TESTS: Create Goss test to ensure Kubernetes NCNs match
-CASMINST-6731 SW_ADMIN_PASSWORD no longer required
-CASMINST-6735 TESTS: Add output to BGP Goss test to help debug
-CASMINST-6736 TESTS: Improve logging of some Goss tests
-CASMINST-6759 include cani 0.4.0 in csm 1.6 with improvements for multiple-providers
-CASMINST-6766 Suppress/Remediate false negative errors during /srv/cray/metal-provision/scripts/nexus/setup-nexus.sh -s
-CASMINST-6769 Add instructions for creating a new repo in Nexus and adding RPMs
-CASMINST-6773 Worker rebuild workflow: wait after drain
-CASMINST-6775 DOCS:Upgraded environments have PSPs turned off
-CASMINST-6776 Move API docs generator logic from csm to docs-csm
-CASMINST-6778 workflows/update_tags.sh fails when run on PIT after Nexus is populated
-CASMINST-6781 Linting
-CASMINST-6782 apply_csm_configuration.sh should include the ncn-initrd.yml playbook
-CASMINST-6794 Better describe the post-install-check
-CASMINST-6796 Improve "NCN pre-reboot health checks" section
-CASMINST-6797 Improve backup workflow
-CASMINST-6799 Race condition causes IUF to not automatically proceed to next stage or partial workflow
-CASMINST-6806 Make 1.4.4 patch upgrade docs slightly less circuitous
-CASMINST-6807 Wait condition is needed before processing rebuild.after-each-ncn hooks for worker rebuild
-CASMINST-6811 MEDIA_DIR option need to included with post-install-service-check
-CASMINST-6813 Add IUF documentation to reboot NCNs after updating HSN NIC FW
-CASMINST-6815 Improve preparation commands for IUF workflow
-CASMINST-6819 TESTS: k8s-resolve-external-dns does not handle multiple LDAP servers
-CASMINST-6824 CSM build: stop using images from arti.hpc
-CASMINST-6825 Remove incorrect WLM direction for product-delivery during upgrades
-CASMINST-6828 Improve procedure to save switch configs in CSM power down procedure
-CASMINST-6829 CSM health checks should detect when Weave has a peer in "sleeve" mode
-CASMINST-6832 IUF prepare-images stage should not clear image metadata
-CASMINST-6834 CSI generates blank CAN dnsmasq configuration if system configured for CHN
-CASMINST-6836 Create tools needed to update DR procedure to preserve expected NCN root credentials
-CASMINST-6839 Linting, add SMA to glossary
-CASMINST-6840 Include aarch64 versions of docker images if they exist.
-CASMINST-6841 More linting
-CASMINST-6842 Add retry logic to setup-nexus.sh script
-CASMINST-6843 Even more linting
-CASMINST-6846 Clarify CSM upgrade paths
-CASMINST-6847 Even still more linting
-CASMINST-6849 Minor fixes and linting
-CASMINST-6851 Linting
-CASMINST-6852 CFS errors during upgrade prevent CLI from being updated
-CASMINST-6854 IMS import/export: Log command line arguments
-CASMINST-6855 Configure SNMP exporter procedure uses wrong network by default
-CASMINST-6856 Linting
-CASMINST-6857 DR: Create script to copy IMS data out of minio
-CASMINST-6861 IMS DR: Do not store temporary files in /var/lib/etcd
-CASMINST-6879 install-goss-tests.sh on PIT needs CSM_PATH OR CSM_RELEASE
-CASMINST-6897 Fixes/improvements to randstr sealed secret generator
-CASMINST-6898 upgrade.sh loops due to failed jobs not deleted
-CASMINST-6902 Improve PIT backup data & procedure
-CASMINST-6906 During CSM upgrade update RPMs after updating services
-CASMINST-6916 Create  CPC exporter & combined CMS/CPC export script
-CASMINST-6919 CSM V1.6.0 -- Update GPG Keys
-CASMINST-6930 check_bios_firmware_versions.sh expected versions need updating to HFP 24.4.0 versions
-CASMINST-6932 Simplify disk wiping safeguard instructions
-CASMINST-6949 upgrade_control_plane.sh script doesn't create auditing volumes properly
-CASMINST-6954 Create CPC restore tool
-CASMINST-6959 Create tarfile with --sparse option during m001 redeploy
-CASMINST-6961 DR: Automate iPXE redeploy procedure
-CASMINST-6966 Add timeouts to cms-ipxe linkups
-CASMINST-6968 Replace sed calls with yq in upgrade_control_plane.sh
-CASMINST-6988 DR scripts: Extend timeouts
-CASMINST-6992 Update CSM upgrade docs with BOS migration info
-CASMINST-6993 Linting
-CASMINST-7000 hooks/pre-install-check-prehook.sh should call system copy of docs-csm scripts
-CASMINST-7001 Update image-recipes for CSM 1.6 and SP6
-CASMINST-7006 Need to document in Readme that NVIDIA GPU is not supported in 1.6
-CASMINST-7008 DOCS "Upgrade CSM and additional products with IUF" presents non-IUF option first
-CASMINST-7009 hardware-topology-assistant finds duplicate xname which doesn't exist
-CASMINST-7010 Linting
-CASMINST-7017 Update wording for NVIDIA not supported in 1.6 notice
-CASMINST-7024 Omission in mixed manual/IUF upgrade path
-CASMINST-7025 Ensure that BOS data is backed up on all upgrade paths
-CASMINST-7027 Incorrect variable name causing scripts to fail
-CASMINST-7035 Rework IUF documentation to remove manual CSM upgrade option
-CASMINST-7038 Ensure CLI/test RPMs updated during CSM upgrade before doing post-service-upgrade health checks
-CASMMON-250 Failed to start prometheus and grok-exporter
-CASMMON-256 Create IUF Timing Grafana dashboard to record timing data for each stage in the install/upgrade of shasta products
-CASMMON-260 Update prometheus-kafka-adapter error doc for CSM 1.4+
-CASMMON-337 Smartmon role should not run during image customization
-CASMMON-339 Ansible Playbook changes for enabling SMART data on UAN for 1.4, 1.5 & 1.6
-CASMMON-340 create endpoint,service and service monitor to  enabling SMART data on UAN
-CASMMON-342 Fix thanos-ruler-kube-prometheus-stack-thanos-ruler pod disruption budget
-CASMMON-344 create time scale grafana dashboard
-CASMMON-345 CSM 1.5: Grafana dashboard for smartmon , instances name is not listing instead ip is listing
-CASMMON-349 Post-install doc for enabling SMART data on UANs for CSM-1.4, 1.5 & 1.6
-CASMMON-350 Bug fixes for SMART data on UAN docs
-CASMMON-352 Fresh install customization.yaml changes to autorize PCIM CDU GUI in shasta environment
-CASMMON-353 Update customization changes for CSM upgrade to view PCIM GUI
-CASMMON-356 CSM 1.5-beta5 upgrade - duplicate record sma-pcim.cmn in customizations.yaml
-CASMMON-359 CSM 1.5: Not getting UAN node metrics on grafana smartmon dashboard.
-CASMMON-369 New Thanos Service is configured without storage limits.
-CASMMON-373 Update node-exporter config to monitor snmp counters
-CASMMON-374 Restructure Persistent Volume Grafana dashboard
-CASMMON-394 CSM1.5.1: "grok-exporter" pod status showing as "ContainerStatusUnknown" and "Error"
-CASMMON-397 CSM-1.6: Retrieve SMART metrics from E1000 via redfish and send via Prometheus
-CASMMON-401 Upgrade and fresh install changes into csm and docs-csm for Victoriametrics
-CASMMON-405 CSM 1.5.2 : Need to remove Grafterm.md from docs-csm as its no longer supported.
-CASMMON-409 k8s, etcd, spire certificate expiry needs prior warning to avoid heavy impact on system
-CASMMON-411 Conversion to victoria-metrics broke metallb deployment
-CASMMON-412 Conversion to victoria-metrics broke cray-oauth2-proxies upgrade
-CASMMON-413 Investigate Node_exporter API exposes management plane details to users
-CASMMON-415 Conversion to victoria-metrics broke spire chart upgrade
-CASMMON-416 cray-sysmgmt-health will not install with SNMP monitoring enabled
-CASMMON-417 Fix CVEs in artifactory.algol60.net/csm-docker/stable/docker.io/victoriametrics/operator:v0.35.1
-CASMMON-421 Fix CVEs in artifactory.algol60.net/csm-docker/stable/docker.io/victoriametrics/vminsert:v1.93.1-cluster
-CASMMON-424 Fix CVE's in artifactory.algol60.net/csm-docker/stable/gcr.io/google_containers/hyperkube:v1.18.0
-CASMMON-430 create url for vmagent
-CASMMON-430 create url for vmagent
-CASMMON-432 Validate victoria metrics pods logs
-CASMMON-434 Add sma-1.10 & diags-1.6.0 release paths into dst-sync repo
-CASMMON-435 fix metallb rules issues and vmselect pod  metallb  errors
-CASMMON-436 Migrate all the VM Rules to maintain consistency.
-CASMMON-439 victoria vmagent ui not working
-CASMMON-440 Create VMscrape services and update resourecs
-CASMMON-441 Add VMRule records to solve grafana panel issues
-CASMMON-442 Create VMscrape services and update resourecs
-CASMMON-446 Create victoriametrics documentation
-CASMMON-447 CSM-1.6 - E1000 ClusterStor docs
-CASMMON-449 fix VMscrape services
-CASMMON-450 CSM 1.6:  SMH :  Some of the grafana dashboards data showing as N/A .
-CASMNET-1791  ncn_add_pre-req.py script. Didn't delete entries from HSM as expected.
-CASMNET-1807 BREAK/FIX: PowerDNS server TLD is missing NS delegation records for subdomains
-CASMNET-1943 Support for adding custom DNS records
-CASMNET-2001 Unbound metrics missing from Prometheus
-CASMNET-2031 CANU:  Add EX2500 to CANU without a CDU
-CASMNET-2099 Changes in CANU docs caused broken links in CSM docs
-CASMNET-2143 Add procedure to persist replica count in Unbound documentation
-CASMNET-2169 Add cray-dhcp-kea-helper job to the cronjob-kicker
-CASMNET-2170 Increase cray-dhcp-kea-init job backoffLimit
-CASMNET-2175 BREAK/FIX: Unbound - make interface used for NID alias configurable.
-CASMNET-2177 BREAK/FIX: cray-dns-unbound should leave existing config in place it if fails to load new config
-CASMNET-2180 SECURITY: Upgrade PowerDNS to latest version
-CASMNET-2181 cray-dns-unbound-manager stderr handling can corrupt configuration
-CASMNET-2185 CNI Live Migration from weave to cilium
-CASMNET-2185 CNI Live Migration from weave to cilium
-CASMNET-2193 Create service health goss suite for cilium live migration
-CASMNET-2196 Update cilium chart to 1.14.1
-CASMNET-2207 csi handoff bss-metadata should ignore Cilium lxc interfaces
-CASMNET-2208 Change kube-proxy-replacement to cilium-kube-proxy-replacement in CSI
-CASMNET-2209 Don't use digest for hubble-ui deployment
-CASMNET-2210 generateCiliumLiveMigration.py does not generate rendered output in stated location
-CASMNET-2211 DOCS Cilium migration workflow label is too long on larger systems
-CASMNET-2221 BUG: cray-dhcp-kea node specific boot file override is broken
-CASMNET-2223 cray-dns-unbound: UID insonsistency between chart and image
-CASMNET-2224 Fix CVE's in artifactory.algol60.net/csm-docker/stable/quay.io/cilium/json-mock:v1.3.3
-CASMNET-2233 Update Aruba device firmware to 10.13.1040
-CASMNET-2235 Update docs-csm with recommended firmware versions
-CASMNET-2239 Update cray-services version in cray-dhcp-kea chart
-CASMNET-2249 Fix CVE's in artifactory.algol60.net/csm-docker/stable/canu:1.7.6
-CASMPET-5081 FEATURE: Downgrade spire (needed for TPM) in the image - Spire Upgrade will be csm 1.4.1 or Chesire Cat
-CASMPET-6126 Move spire jwks URL in cray-opa to ingress gateway
-CASMPET-6216 Ensure we've doc'd that we've only tested simultaneous worker NCN upgrades/rebuilds in small numbers
-CASMPET-6221 Install : Inject logical backup secrets for cray-postgres-operator
-CASMPET-6223 Cilium:  coredns pods cannot reach kube-apiserver on fresh install
-CASMPET-6228 Update cray-keycloak to support cray-postgres-operator:1.8.x changes
-CASMPET-6260 TEST: nexus-keycloak-realm-config does not set properly if nexus starts too fast
-CASMPET-6265 Fix helm output for cray-postgres-operator deployment and other minor improvements
-CASMPET-6277 increase hnc replicas for redundancy webhook endpoints
-CASMPET-6280 Add rbac for delete pod for cray-postgres-operator inject-secret job
-CASMPET-6318 TAPMS: webhook support to trigger/inform external orchestration on tenant change events
-CASMPET-6346 BUG: Disable istio tracing
-CASMPET-6408 Nexus keycloak integration: Test to ensure proper configuration
-CASMPET-6650 Bootstrap storage nodes with pit-nexus on install
-CASMPET-6687 fresh install changes for smartmon on storage nodes
-CASMPET-6696 Update cray-certmanager-issuers to use /v1/ cert-manager apis
-CASMPET-6706 Update 1.5 storage node upgrade procedure base on changes from CASMPET-6516
-CASMPET-6721 FEATURE: Upgrade istio to support k8s 1.24
-CASMPET-6732 IUF fails on management-nodes-rollout looking for incorrect workflow
-CASMPET-6733 Management-nodes-rollout fails to start workflow because of labels parameter
-CASMPET-6748 boto3 calls to https://rgw-vip.nmn fail even when verify cert == false
-CASMPET-6755 Setup-Nexus should fail if nexus-upload-docker-images has an error
-CASMPET-6758 update bitnami-etcd container with upstream merge
-CASMPET-6762 TAPMS: Add api to query tenant(s) by xname(s)
-CASMPET-6764 yaml parsing issue with testing rpms fix
-CASMPET-6785 haproxy rgw endpoints causing connection resets errors
-CASMPET-6797 CFS ansible plays to provision LIO services on worker node(s)
-CASMPET-6798 Update Spire OPA Policy for SBPS Marshal Agent
-CASMPET-6807 Fix Storage node rebuild procedure to check for node to exit maintenance mode
-CASMPET-6811 add webhook registration support in tapms for internal services
-CASMPET-6811 add webhook registration support in tapms for internal services
-CASMPET-6814 Add new RPMs for spire TPM work
-CASMPET-6818 review TDS CPU limits customization
-CASMPET-6820 Add LIO metrics to node-exporter for iSCSI-based projection
-CASMPET-6827 etcd cluster balance check needs to avoid defrag pods
-CASMPET-6829 Upgrade failure due to spire xname filtering being enabled
-CASMPET-6860 apply node-exporter smartmon changes from within cephadm shell
-CASMPET-6861 need procedure for increasing etcd pvc storage
-CASMPET-6865 Fix state file for master node upgrades with IUF
-CASMPET-6868 Postgres investigations
-CASMPET-6869 re-build/re-release cray-nls to pickup cray-postgresql-1.0.4 basechart
-CASMPET-6873 Add loop to ceph-health-check in argo workflows so it doesn't fail right away
-CASMPET-6875 Add links to workaround for 'kubectl logs -f' indicating 'no space' known issue
-CASMPET-6883 Remove CPU limit of cray-opa for scalability
-CASMPET-6893 Update containerd configuration to use overlay snapshotter from native after /var/lib/containerd is not an overlayfs filesystem
-CASMPET-6898 fix option 2 of CSM upgrade procedure to set correct CFS config on storage nodes
-CASMPET-6899 slice >> "trustedcerts-operator" in CrashLoopBackOff state
-CASMPET-6904 Upgrade cert-manager to 1.12
-CASMPET-6904 Upgrade cert-manager to 1.12
-CASMPET-6911 VPA: Add cray-vpa to CSM
-CASMPET-6912 fix Adjust_Ceph_Pool_Quotas.md to reference correct ansible role
-CASMPET-6915 Change OPA ingressgateway to daemonset
-CASMPET-6924 Bash syntax error in ncnHealthChecks.sh; remove superfluous Kubernetes calls
-CASMPET-6926 Fix unclear process in fix_failed_to_start_etcd_on_master process
-CASMPET-6935 Use the latest OPA Envoy plugin for cray-opa
-CASMPET-6936 Management Infrastructure - Upgrade Kafka and Related strimzi Components
-CASMPET-6939 update reference of cray-opa deployment to be daemonset
-CASMPET-6940 Automate import of resourcequotas and limitranges
-CASMPET-6946 Remove old cephcsi version in CSM release
-CASMPET-6979 Fix subcommand in Storage node upgrade
-CASMPET-6980 \[playbook\] Enable/ start SBPS marshal agent systemd service during worker node personalization
-CASMPET-6996 Review cray-keycloak-setup:3.7.4 (162 days)
-CASMPET-6997 Review cray-node-discovery:1.2.4 (305 days)
-CASMPET-6998 Review cray-postgres-db-backup:0.2.3 (305 days)
-CASMPET-7020 Investigate duplicates cray-capmc
-CASMPET-7021 Investigate duplicates cray-dhcp-kea
-CASMPET-7052 Investigate duplicates registry.opensource.zalan.do/acid/pgbouncer
-CASMPET-7057 Fix loftsman manifest deploy logging
-CASMPET-7058 vShasta: failing goss test dnsmasq-lease-count from pre-csm-install.livecd-preflight-tests suite
-CASMPET-7059 Make SBPS Marshal agent RPM part of CSM release distribution
-CASMPET-7061 Pick up latest cray-services versions in cray-nls-chart
-CASMPET-7062 Pick up latest cray-services versions in cray-sts chart
-CASMPET-7063 Pick up latest cray-services versions in cray-sts chart
-CASMPET-7064 Pick up latest cray-services versions in cray-cfs-operator chart
-CASMPET-7065 Pick up latest cray-services versions in cray-cfs-batcher chart
-CASMPET-7068 Upgrade Nexus to 3.68.1
-CASMPET-7069 Timing issue with Nexus upgrade in prerequisites.sh
-CASMPET-7075 Fix master upgrade state files
-CASMPET-7078 Update cray-nls for k8s 1.24 node-role.kubernetes.io/control-plane
-CASMPET-7080 cray-k8s-encryption chart needs updates for control-plane taint
-CASMPET-7081 Update spire for k8s 1.24 node-role.kubernetes.io/control-plane
-CASMPET-7082 Update cray-spire for k8s 1.24 node-role.kubernetes.io/control-plane
-CASMPET-7084 Update cray-node-problem-detector for k8s 1.24 node-role.kubernetes.io/control-plane
-CASMPET-7085 Update cray-sysmgmt-health for k8s 1.24 node-role.kubernetes.io/control-plane
-CASMPET-7086 Update cray-metallb for k8s 1.24 node-role.kubernetes.io/control-plane
-CASMPET-7093 Spire pods not coming up due to missed image
-CASMPET-7102 Builds failing due to Centos 8 Stream EOL
-CASMPET-7113 Spire agent is returning a non xname jwt when xname filtering is enabled
-CASMPET-7114 Fix CVE's in artifactory.algol60.net/csm-docker/stable/cray-console-node:2.2.1
-CASMPET-7117 iSCSI configuration to add IQN fails if HSN is not configured
-CASMPET-7131 Create node images for k8s 1.24
-CASMPET-7133 Create cert-manager namespace using cray-drydock
-CASMPET-7142 tpm-provisioner-client RPM is not istallable on SLES15-SP5
-CASMPET-7152 Add documentation about backing up encryption files before upgrade
-CASMPET-7153 As a Sysadmin , I need a user document describing the iscsi feature and its usage
-CASMPET-7154 sbps-marshal agent failure due to syntax error in agent
-CASMPET-7175 iSCSI CPS: radosgw-admin cmd fails with "auth: unable to find a keyring..." part of s3fs mount for "boot-images"
-CASMPET-7176 SBPS Marshall Agent Key:Value mismatch to IMS Image Records
-CASMPET-7178 LDAP service change commands seem to have an issue
-CASMPET-7180 Add CFS Ansible play book for spire enablement
-CASMPET-7192 Update cray-precache-images to work with k8s 1.24
-CASMPET-7195 Auto install of SBPS Marshal Agent rpm
-CASMPET-7196 Update SBPS Marshal Agent s3 access to new s3 user read only policy
-CASMPET-7198 VPA: add psp to cray-vpa
-CASMPET-7201 Add control-plane:NoSchedule to IUF workflows for CSM 1.6
-CASMPET-7206 Argo service account missing token in CSM 1.6, k8s 1.24
-CASMPET-7207 Add in Tenant aware authorization to vault endpoints
-CASMPET-7209 add steps to remount admin-tools s3 bucket
-CASMPET-7214 Add documentation for GOSS and LIO metrics (SBPS)
-CASMPET-7219 Make charts with cray-service dependency pick up version 11.0.0
-CASMPET-7221 Update docker-kubectl container image version to 1.24.17 in charts
-CASMPET-7221 Update docker-kubectl container image version to 1.24.17 in charts
-CASMPET-7224 update kubernetes cert renewal instructions to remove unnecessary checking
-CASMPET-7225 iSCSI SBPS: Fallback to default IMS user policy for CPS
-CASMPET-7242 "spire" and "cray-spire" are referencing old images
-CASMPET-7252 Clean and update the tapms multi-tenancy documentation
-CASMPET-7254 Update SPBS Ansible to only run at run time not during image build
-CASMPET-7256 Tenant documentation incomplete - need upgrade info
-CASMPET-7265 Need to add workaround step to execute iscsi GOSS tests
-CASMREL-1613 CSM Release - Express - 1.5.0-beta.44
-CASMREL-1618 CSM Release - Express - 1.5.0-beta.47
-CASMREL-1620 CSM Release - Express - 1.5.0-beta.48
-CASMREL-1625 CSM Release - Express - 1.5.0-beta.50
-CASMREL-1649 CSM Release - Express - 1.5.0-beta.59
-CASMSEC-374 Remove opa-gatekeeper for fresh installs by Jan 17 2023
-CASMSEC-402 Kyverno chart needs to handle a large amount of change requests during CSM upgrade
-CASMSEC-411 CIS: Ensure that the --terminated-pod-gc-threshold argument is set as appropriate
-CASMSEC-412 CIS: Ensure that the --profiling argument is set to false
-CASMSEC-412 CIS: Ensure that the --profiling argument is set to false
-CASMSEC-490 Investigate artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git image for OpenSSH daemon usage
-CASMSEC-499 Fix CVEs in artifactory.algol60.net/csm-docker/stable/docker.io/bitnami/kubectl:1.26.4
-CASMSMF-7282 Opensearch - ceph pvc quotas
-CASMSMF-7462 Add noos sma-cli-utils RPM into csm
-CASMSMF-7493 cm health report command observations : link degraded
-CASMSMF-7515 cm health -h command displays ModuleNotFoundError
-CASMSMF-7626 SMA 1.9:   Getting traceback error with  "cm health report slingshot refresh" and slingshot indices having no data in opensearch.
-CASMSMF-7865 Need updated procedure for console logs with sma-dashboards (OpenSearch) instead of sma-kibana
-CASMSMF-8237 Create alertman cli for alertmanager
-CASMSMF-8262 cm health alertman commands bug fixes
-CASMSMF-8300 CSM 1.6: "cm aiops aiops trainer" help page need to be mentioned supported duration range is  1-7 days.
-CASMSMF-8327 SMA 1.10: Getting traceback error with "cm health report slingshot refresh"
-CASMSMF-8337 SMA 1.10: Getting traceback error with "cm health" cmds.
-CASMTRIAGE-4693 vShasta v2: on SLES-15 SP4 NCNs modprobe on the RBD module fails with invalid execution format
-CASMTRIAGE-4762 fanta validate certifi is correct version failing
-CASMTRIAGE-4793 Gamora: Ceph failing to start on S001 after image upgrade
-CASMTRIAGE-4850 HPE BMC's not getting set to static in cloud-init in SP4
-CASMTRIAGE-4866 CSM 1.4.0-beta.42 sysmgmt.yaml manifest cray-console-data chart missing namespace
-CASMTRIAGE-4867 fanta: 1.4 worker node upgrade failure
-CASMTRIAGE-4870 Fanta: wait-for-cfs-after-rebuild hangs on workers waiting for CFS component to become enabled
-CASMTRIAGE-4891 Effect of "docs-csm" versions on directory structure
-CASMTRIAGE-4892 lemondrop: Install, setting no-wipe failed, unable to get csi command.
-CASMTRIAGE-5695 Skipped test in internal SSH access tests
-CASMTRIAGE-5704 etcdDatabaseHighFragmentationRatio alert
-CASMTRIAGE-5719 mug: csm-1.5.0-beta.22: ssh access test is skipping the sw-spine tests
-CASMTRIAGE-5734 Docs : Update CSM prerequisite version and CSM release version in docs for CSM-1.5
-CASMTRIAGE-5735 Exclude all internal networks from Unbound forwarding
-CASMTRIAGE-5737 "csi pit validate --ceph" suggested remediation reports error for invalid date
-CASMTRIAGE-5738 "Install csm services" iuf version updated to "v0.1.11"
-CASMTRIAGE-5739 Update CSM Release value to "1.5.0"
-CASMTRIAGE-5750 Baldar pre-integration - cannot boot any computes
-CASMTRIAGE-5846 sysctl issues during prepare-images stage
-CASMTRIAGE-5853 1.5 causes malformed certs on storage nodes
-CASMTRIAGE-5894 Upgrade of w001 failed with no url to install csi
-CASMTRIAGE-5907 Health check failure post Upgrade of CSM
-CASMTRIAGE-5914 State manager fails to discover HPE nodes with four HSN NIC's
-CASMTRIAGE-5927 Tyr 1.5.0-beta.37 install - IUF deliver-product hung
-CASMTRIAGE-5933 csm-1.5.0-beta.40: pre-install-toolkit image location needs updating
-CASMTRIAGE-5935 surtur: lost access to BMCs
-CASMTRIAGE-5937 Steps to get "Authentication Token" from SLS docs
-CASMTRIAGE-5953 DOCS Remove PostgreSQL restore step from Spire recovery procedure
-CASMTRIAGE-5960 csm 1.5.0-beta.30 fails to customize with cert reference (again)
-CASMTRIAGE-5988 PIT can't mount the root filesystem
-CASMTRIAGE-5999 csm-node-heartbeat is missing 'Obsoletes' line
-CASMTRIAGE-6000 System was not accessible after bringing up system following the shutdown procedure
-CASMTRIAGE-6023 fanta: cfs-ara helm chart upgrade failing
-CASMTRIAGE-6032 fanta: CFS did not run properly on ncn-m002
-CASMTRIAGE-6041 prepare images failing during 1.5 IUF Installation
-CASMTRIAGE-6053 CSM_ARTI_DIR value and ceph mount
-CASMTRIAGE-6061 Tyr 1.5 upgrade - Spire/Orca issues Workers
-CASMTRIAGE-6085 csm-service upgrade failed
-CASMTRIAGE-6086 Goss package version for "get" function
-CASMTRIAGE-6092 Docs - Tracking success of prerequisites.sh for csm-upgrade.sh
-CASMTRIAGE-6093 cray-spire-server error for csm-upgrade.sh
-CASMTRIAGE-6098 Storage node image upgrade and Ceph upgrade loops for fix-spire-on-storage-nodes
-CASMTRIAGE-6116 cray-dhcp-kea-helper pods log a KeyError when the BSS Global metadata is missing
-CASMTRIAGE-6117 ncn health check failed
-CASMTRIAGE-6127 apply_csm_configuration.sh: ERROR: No git commit found
-CASMTRIAGE-6131 CFS skipped running for all products on a customized CSM-1.5.0-beta.55 worker node
-CASMTRIAGE-6152 IUF: seeing "overwriting /content failed"
-CASMTRIAGE-6158 CFS v2 sessions are using the wrong configuration
-CASMTRIAGE-6159 repair-ceph-latency.sh causes noout,nobackfill,norecover flag(s) set and loops
-CASMTRIAGE-6164 IUF warnings for -bc and -bm flags for "prepare-images" appear to be reversed
-CASMTRIAGE-6178 Error observed during "deploy storage ncn"
-CASMTRIAGE-6179 Invalid password generates stacktrace
-CASMTRIAGE-6179 Invalid password generates stacktrace
-CASMTRIAGE-6184 vault pod getting permission denied because running as nobody
-CASMTRIAGE-6187 Lemomdrop: 'prerequisites.sh' failed during csm upgrade
-CASMTRIAGE-6188 fanta: docs-csm rpm install failing, sed: no input files
-CASMTRIAGE-6195 CFS Node Personalization fails to find the playbook
-CASMTRIAGE-6201 rpm "csm-testing-1.16.59-1.noarch" and "canu-1.7.6-1.x86_64" need manual install on some worker nodes.
-CASMTRIAGE-6206 IUF/argo workflows with a full set of products fails to run to completion
-CASMTRIAGE-6208 update_tags.sh failure during docs-rpm install
-CASMTRIAGE-6214 IUF does not provide useful guidance for VCS merge conflicts
-CASMTRIAGE-6216 sma-dashboards external URL issue
-CASMTRIAGE-6225 Storage node upgrade fails if ceph files fail to restore
-CASMTRIAGE-6226 cray-power-control v2.0.4 post-upgrade hook failed due to timeout during CSM upgrade
-CASMTRIAGE-6231 Goss etcd test timed out running the underlying command.
-CASMTRIAGE-6233 management-nodes-rollout failed on ncn-m002 with during CSM-1.5.0-beta.73 upgrade
-CASMTRIAGE-6235 surtur: take-etcd-manual-backups.sh failing, platform-utils not yet installed
-CASMTRIAGE-6251 Error installing docs-csm rpm in 1.6 - cray-sat container image has moved
-CASMTRIAGE-6254 IUF ignores Helm chart deploy errors
-CASMTRIAGE-6256 IUF output has incorrect log paths: Backporting
-CASMTRIAGE-6274 postgres pods failing to show as "Running" on ncn-w001 after booting new worker image
-CASMTRIAGE-6283 Docs - Save network config instructions references .nmn rather than .hmn names
-CASMTRIAGE-6288 Process  to start kubernetes and other services during startup failing on first instance
-CASMTRIAGE-6292 ims failure post csm 1.5.0-beta.70 upgrade
-CASMTRIAGE-6296 Docs - Multiple Power Off pages makes CSM documentation confusing
-CASMTRIAGE-6300 "sat bootsys boot --stage platform-services --ceph-timeout 60" crashed with exception on power on
-CASMTRIAGE-6331 IUF log messages confuse -bc and -bm options
-CASMTRIAGE-6333 Kubernetes Velero No Failed Backups test is failing during final validation
-CASMTRIAGE-6345 IUF output has incorrect log paths
-CASMTRIAGE-6368 Baldar seeing MANY "[WARNING]: sftp transfer mechanism failed on [cray-ims...]" in cfs image customization pod log during cn/uan image build
-CASMTRIAGE-6370 Storage node upgrade was stuck due to CFS configuration failure.
-CASMTRIAGE-6379 Additional pods getting listed after deleting spire chart
-CASMTRIAGE-6380 svid.key is missing during spire deletion
-CASMTRIAGE-6381 Tyr 1.5 - iuf deliver-products of new Slurm fails loftsman-manifest-upload; no log file
-CASMTRIAGE-6389 Facing issue redeploying nexus chart during Nexus Recovery
-CASMTRIAGE-6403 TypeError when creating CFS configuration with additional_inventory on mug
-CASMTRIAGE-6413 Bad error message from iuf cli
-CASMTRIAGE-6426 drax-compute and uan image building are failing, Container teardown transitioned to failed for both
-CASMTRIAGE-6432 drax-NCN health check for BOS service is failing for w001, and displaying Errors for s003
-CASMTRIAGE-6463 JWT Token for DVS Node Map will require access to SLS
-CASMTRIAGE-6464 SCSD bmc creds apparently got altered during NCN upgrades
-CASMTRIAGE-6470 update-cfs-config failing with special_parameters unexpected
-CASMTRIAGE-6489 v3 is invalid in cray cfs command
-CASMTRIAGE-6490 IUF management rollout of s001 stuck at update cfs
-CASMTRIAGE-6502 ncn-upgrade-master-nodes.sh fails when there are 2 USB devices mounted
-CASMTRIAGE-6538 updating BSS with new image info sets no-wipe to 0 for storage nodes.
-CASMTRIAGE-6550 spire agent on lemondrop not working for DVS MQTT client.
-CASMTRIAGE-6571 save_management_network_switch_configurations needs better method to run "write memory"
-CASMTRIAGE-6578 Running cray-upload-recovery-images fails to upload recovery firmware
-CASMTRIAGE-6582  CSM Change to handle SKERN packages are using SKERN spire-agent rather than the CSM version
-CASMTRIAGE-6588 creation of image failed using sat bootprep command
-CASMTRIAGE-6596 DOC:Add new NCN-Add Switch Configuration steps are not available
-CASMTRIAGE-6598 unable to boot the customized stock sles os on to the arm compute node
-CASMTRIAGE-6599 No spire backup present on cluster with fresh install
-CASMTRIAGE-6611 nexus-export.sh script prints status messages too frequently
-CASMTRIAGE-6625 vidar> Fresh CSM-1.5.0, cray-spire-update-bss job is not found
-CASMTRIAGE-6627 example SYSTEM_DOMAIN_NAME has double periods in host/domain name.
-CASMTRIAGE-6643 customizations.yaml install-ncn-bond-members has no guidance on values for HPE nodes
-CASMTRIAGE-6644 create_system_configuration_using_cluster_discovery_service topic has unreadable PNG files instead of markdown command output examples
-CASMTRIAGE-6646 snmp_exporter_configs should generate switch names/IP addresses rather than using generic snmp1-snmpX names
-CASMTRIAGE-6647 check_bios_firmware_versions.sh has stale recommended firmware versions and documentation link
-CASMTRIAGE-6649 canu generate switch config has misleading names for tabs in SHCD
-CASMTRIAGE-6650 canu validate shcd-cabling fails with traceback IndexError: list index out of range
-CASMTRIAGE-6662 From PIT node, cray-sysmgmt-health-grok-exporter pod is in Pending state
-CASMTRIAGE-6671 correct filename from /etc/shadows to /etc/shadow in Configure_the_root_Password_and_SSH_Keys_in_Vault
-CASMTRIAGE-6677 CSM 1.5 doc to upgrade CSM and additional products - needs flow clarification in page for "Stage 1 - CSM service upgrade"
-CASMTRIAGE-6680 ansible not in path on storage nodes for Troubleshoot_System_Clock_Skew.md
-CASMTRIAGE-6687 slice >> csm 1.5 upgrade failing: post-upgrade hook timed out for cray-uas-mgr and cray-hms-hbtd
-CASMTRIAGE-6688 manage_artifacts_with_the_cray_cli section has example errors and is badly ordered
-CASMTRIAGE-6698 venado: cray-hms-rts-snmp pod stuck in CLBO
-CASMTRIAGE-6704 Loki winter upgrade - NCNs in/out of Standby, csm-node-heartbeat service shows get-auth-token error
-CASMTRIAGE-6708 Test "ca-certs patched into data.json" displays error.
-CASMTRIAGE-6711 Groot-w003 rollout stuck on waiting for pod cray-keycloak-2
-CASMTRIAGE-6714 Specified password displays error for "write_sw_admin_pw_to_vault.py"
-CASMTRIAGE-6715 Loki winter upgrade - aarch64 compute image build fails in TASK [Apply WAR for SKERN-9187]
-CASMTRIAGE-6716 iuf not exiting with an error when failed
-CASMTRIAGE-6728 IUF management_rollout has OR phrase with 3 Management_Storage in description
-CASMTRIAGE-6730 apply_csm_configuration.sh loops with 2 components remaining
-CASMTRIAGE-6734 Change in name of the script "env.vars.sh" to env-vars.sh
-CASMTRIAGE-6738 Worker node rolling reboot procedure has a dangerous reboot command
-CASMTRIAGE-6742 IUF rolling reboot of worker nodes failing on ncn-w001
-CASMTRIAGE-6744 Encryption enable-disable-restart displays error msg
-CASMTRIAGE-6746 bradi >> certs expiring, need help with updating and docs
-CASMTRIAGE-6748 artifacts-created topic has two issues finding CFS configuration names
-CASMTRIAGE-6749 management-nodes-rollout-without-csm-upgrade has bad example command for assigning CFS config to storage and master nodes
-CASMTRIAGE-6778 Adding cabinet procedure lacks step to check/upgrade CDU switch firmware
-CASMTRIAGE-6787 Surtur: CFS setting net.ipv4.conf.all.rp_filter=2 breaks Cilium
-CASMTRIAGE-6791 deliver-product chart used by argo is out of sync with provided chart
-CASMTRIAGE-6794 deliver-product stage is reporting Error calling read_namespaced_config_map
-CASMTRIAGE-6796 Fanta: problems with loading rpms on workers during fresh install
-CASMTRIAGE-6797 sls_not_working_during_node_rebuild has stale link to 1.2 remediation
-CASMTRIAGE-6799 shasta_s3_creds ansible module is reporting connection refused on CSM-1.6.0-alpha.40
-CASMTRIAGE-6802 question around iLO 6 support in FAS and docs
-CASMTRIAGE-6807 nexus_export_and_restore needs better check for existing Nexus backup  job and PVC
-CASMTRIAGE-6808 import_cfs_data.sh displays error ScriptException / KeyError
-CASMTRIAGE-6809 export_ims_data displays error AttributeError list_v2_session_templates
-CASMTRIAGE-6810 CSM upgrade 1.4 to 1.5 lacks clear section to download latest 1.4 docs-csm and libcsm rpms
-CASMTRIAGE-6811 Review site-init docs to see if we can safe-guard against missing important steps.
-CASMTRIAGE-6813 IUF stacktrace from process-media/pre-install-check dislikes PDF file
-CASMTRIAGE-6826 IMS export procedure is failing
-CASMTRIAGE-6830 defragment_nid_numbering has link to DVS procedure that should be USS admin guide
-CASMTRIAGE-6835 Tyr 1.5.0 Winter upgrade - silent failure in prerequisites.sh
-CASMTRIAGE-6843 postgres_replication_lag.sh -p destroys replica with unknown lag when State=creating replica
-CASMTRIAGE-6854 Update management node CFS configuration (missing update-mgmt-ncn-cfs-config.sh in csm 1.5.1 tarball)
-CASMTRIAGE-6855 Update test suite packages (missing /usr/share/doc/csm/upgrade/scripts/upgrade/util/upgrade-test-rpms.sh)
-CASMTRIAGE-6862 IUF workflows seem to hang around indefinitely in Argo after the workflow completes.
-CASMTRIAGE-6863 spire problems during air-gapped install
-CASMTRIAGE-6870 No Kubectl job output for "cray-smd-init"
-CASMTRIAGE-6876 No Kubectl job output for "cray-sls-init-load"
-CASMTRIAGE-6890 formatting problem with step 6 validate_csm_health_during_upgrade
-CASMTRIAGE-6891 BMC xname command for FASUpdate.py improperly formatted
-CASMTRIAGE-6893 Canary storage node ncn-s001 in loop for upgrade to CSM 1.5.0
-CASMTRIAGE-6896 Usability enhancements for management_rollout procedure during upgrade to CSM 1.5.0
-CASMTRIAGE-6898 Update needed for step to check for backup.
-CASMTRIAGE-6899 ncn-upgrade-master-nodes.sh ncn-m001 fails with clock not in sync
-CASMTRIAGE-6917 Starlord: Image build via sat bootprep failing
-CASMTRIAGE-6932 Doc fixes required for slurm reboot of computes after managed-nodes-rollout
-CASMTRIAGE-6936 Remote Build Node Configuration Missing noos repo
-CASMTRIAGE-6941 Media dir command needs to be added to worker nodes rollout and deploy-products
-CASMTRIAGE-6945 rocket : Workers going into failed  state .
-CASMTRIAGE-6947 IUF ls command incorrectly shows failed stage as passed
-CASMTRIAGE-6948 Need to be able to SSH into Remote Build Node from NCN
-CASMTRIAGE-6953 import_ims_data with option update failed
-CASMTRIAGE-6969 Management nodes rollout without CSM upgrade assumes master and storage will have the same configuration name
-CASMTRIAGE-6982 Loki CSM-1.5.1 upgrade.sh error releasing chart cray-product-catalog: timed out or BackoffLimitExceeded
-CASMTRIAGE-6983 To retrieve cfs session's status need to add --format json to the command in the document
-CASMTRIAGE-6990 Update IUF documentation to show "manual configuration" steps for UAS and Badger
-CASMTRIAGE-6991 fanta: Goss servers not running after NCN reboot
-CASMTRIAGE-6993 UKMET QuadC: cray-bos (uwsgi) processes OOMkill'd
-CASMTRIAGE-7003 SAT dependency - port to CSM-1.6
-CASMTRIAGE-7008 Clarify encription.sh needs to run from EACH management node
-CASMTRIAGE-7011 metal-ipxe 1.6.0 pre-install hotfix
-CASMTRIAGE-7012 chn-gateway value in file "system_config.yaml" for starlord cluster
-CASMTRIAGE-7013 Rocket : gitea/VCS giving issues while upgrade.
-CASMTRIAGE-7016 update_tags.sh script fails during docs-csm with sed error: No such file or directory
-CASMTRIAGE-7017 TESTS: Error for "ncn-gateway-test.sh"
-CASMTRIAGE-7019 BOS state reporter missing dependency
-CASMTRIAGE-7055 Install or upgrade additional products with IUF Docs should specify to upgrade docs-csm before starting Product Upgrades
-CASMTRIAGE-7061 "Cannot read properties" error for keycloak user creation steps
-CASMTRIAGE-7069 deprecated option warning - Porting to csm-1.6
-CASMTRIAGE-7078 Porting to csm-1.6
-CASMTRIAGE-7079 Paradise: Test 'Retrieve the hardware information for a given node xname from the Hardware Query collection' failed during hms ct test
-CASMTRIAGE-7081 Value of SYSTEM_DOMAIN_NAME
-CASMTRIAGE-7092 gamora> prerequisites.sh is failing for Upgrade CSM-1.6.0-alpha.53
-CASMTRIAGE-7093 mug: csm-1.6.0-alpha.53 PIT iso image failure bringing up lan0
-CASMTRIAGE-7099 Port CSM 1.4 improvements from  CASMTRIAGE-7027 to CSM 1.5 (and later) power down/up documentation
-CASMTRIAGE-7107 Odin: aarch64 image customization failing on repo signing key issue
-CASMTRIAGE-7120 PostgreSQL cannot set transaction read-write mode during recovery errors
-CASMTRIAGE-7122 INSTALL_DOCS_NEW_MASTER phase of ncn-upgrade-master-nodes.sh conflict with CFS session
-CASMTRIAGE-7131 Issues in boot_orchestration/Cheatsheet.md file
-CASMTRIAGE-7138 fix errors in IMS documentation
-CASMTRIAGE-7147 PCS etcd transactions too big
-CASMTRIAGE-7151 istio-proxy is failing to start with too many open files
-CASMTRIAGE-7151 istio-proxy is failing to start with too many open files
-CASMTRIAGE-7156 csi pit format command now requires -w option
-CASMTRIAGE-7163 configured CFS session TTL isn't honoured by CFS Kubernetes job
-CASMTRIAGE-7166 Tyr 1.5.2 three attempts to deploy tenant all hang 'Deploying'
-CASMTRIAGE-7168 Iuf abort with no args generates a python traceback
-CASMTRIAGE-7169 IMS image build using kiwi NG failing with broken pipe
-CASMTRIAGE-7171 prodmgr delete fails on csm-1.6.0-alpha.55 and higher due to missing container image
-CASMTRIAGE-7175 "repo name unknown to registry" for docs-csm latest rpm
-CASMTRIAGE-7175 "repo name unknown to registry" for docs-csm latest rpm
-CASMTRIAGE-7184 SURTUR: Kiali does not work in csm-1.6-alpha.58
-CASMTRIAGE-7185 systerm power off documentation lacks procedure for powering off management cabinets
-CASMTRIAGE-7186 Update the document which replaces Foxconn username and password in vault
-CASMTRIAGE-7187 pre-install-check displays "failed to upgrade kyverno-policy chart"
-CASMTRIAGE-7188 libcsm-latest.noarch.rpm and docs-csm-latest.noarch.rpm download path
-CASMTRIAGE-7189 Pre-requisites for IUF commands
-CASMTRIAGE-7198 mgmt rollout for storage canary displays "unexpected error occurred: 'NoneType' object has no attribute 'items'"
-CASMTRIAGE-7199 IUF docs> must supply options -sv and/or -bpcd or -rv during IUF deliver-product stage to install SLURM or PBS
-CASMTRIAGE-7215 keytool error: java.lang.Exception: Certificate not imported for "Create certs.jks"
-CASMTRIAGE-7217 DNS check failing in 5.setup_nexus.yaml stage
-CASMTRIAGE-7220 Facing kernel failure when trying to boot pit to m001
-CASMTRIAGE-7224 Check tftp service error in ncn-k8s-combined-healthcheck
-CASMTRIAGE-7228 DCLDAP changes in September
-CASMTRIAGE-7233 Tyr 1.6 CFS won't run (enabled and 'pending' forever)
-CASMTRIAGE-7234 Update the docs to add this step if foxconn (Paradise) nodes
-CASMTRIAGE-7245 TESTS: barebones_image_test received return code 400 but expected 200
-CASMTRIAGE-7250 Storage canary node upgrade loops due to HEALTH_WARN Degraded data redundancy
-CASMTRIAGE-7252 Need DEFAULT_IMS_IMAGE_SIZE in ConfigMap for IMS image customization increased to 60
-CASMTRIAGE-7256 drain of worker node loops during rebuild NCN
-CASMTRIAGE-7259 Noname 1.5.2 tapms CLBO after second tenant created
-CASMTRIAGE-7260 CSM-1.6.0-alpha.64 is hanging waiting for cray-dvs-mqtt-ss to have 2/2 running
-CASMTRIAGE-7262 kubeadm config unmarshal error
-CASMTRIAGE-7263 join_ceph_cluster.sh command takes longer to execute
-CASMTRIAGE-7266 starlord: Install of CSM Services failure on retry of yapl command
-CASMTRIAGE-7269 starlord: Upgrade to alpha.65, PREPARE_KUBEADM state or prerequisites.sh failing
-CASMTRIAGE-7272 update-cfs-config and prepare images stage is failing after hanging during CSM only upgrade using IUF
-CASMTRIAGE-7274 fanta: ssh-type problems while building images
-CASMTRIAGE-7277 update-customizations.sh breaks Jinja2 template for cray-sysmgmt-health.victoria-metrics-k8s-stack.vmagent.vmagentSpec
-CASMTRIAGE-7277 update-customizations.sh breaks Jinja2 template for cray-sysmgmt-health.victoria-metrics-k8s-stack.vmagent.vmagentSpec
-CASMTRIAGE-7281 vShasta: upgrade 1.6.0-alpha.65 fails on kyverno-policy
-CASMTRIAGE-7282 Unable to scrape metrics from kube-proxy on fanta
-CASMTRIAGE-7284 vShasta: spire-server does not start, goss tests failing
-CASMTRIAGE-7286 Update IUF documentation to show "manual configuration" steps for WLM and Diags before "Deliver products" stage
-CASMTRIAGE-7287 Kyverno image signature validation randomly fails fresh install, even in Audit mode
-CASMTRIAGE-7291 Kyverno image signature validation blocks fresh install due to timeout
-CASMTRIAGE-7294 fanta: cray-drydock chart upgrade failing during prerequisites.sh
-CASMTRIAGE-7295 fanta: Stuck in TDS_LOWER_CPU_REQUEST: cluster-kafka not found
-CASMTRIAGE-7296 cubs_tool path
-CASMTRIAGE-7301 Ansible play to create iscsi-sbps-targets should not delegate to localhost
-CASMTRIAGE-7308 Steps / details to handle scenario - node died and rebooted mid-upgrade
-CASMTRIAGE-7310 Issue found with the join ceph cluster script
-CASMTRIAGE-7314 fanta: check_bootloader.sh script failing
-CASMTRIAGE-7316 During worker node rebuild, post check stuck with canu issue which is passing when manually run
-CASMTRIAGE-7318 CSM upgrade is seeing cluster-kafka not found errors
-CASMTRIAGE-7320 Option 2 - NCN master node upgrade on ncn-m001 with IUF error
-CASMTRIAGE-7324 check for docs-csm rpm
-CASMTRIAGE-7327 CSM 1.6.0-alpha.67 is encountering IMS errors where the pod exits with error code 255
-CASMTRIAGE-7334 Upgrade control plane script fails claiming unterminated curly brace
-CASMTRIAGE-7337 Doc improvements for IUF Upgrade
-CASMTRIAGE-7342 Tyr 1.6.0-beta.1 regression CASMTRIAGE-7120
-CASMTRIAGE-7345 cray-console-node-0 pod is reporting repeated "ps": executable file not found in $PATH messages
-CASMTRIAGE-7348 Ceph seeing some disks as removable is CSM-1.6.0
-CASMTRIAGE-7349 Management-nodes-rollout not finding images created during prepare images
-CASMTRIAGE-7355 Tenants can not be deleted
-CASMTRIAGE-7358 Storage node cloud-init fails, mon_max_pg_per_osd exceeded
-CASMTRIAGE-7359 CSM upgrade 1.5 > 1.6 fails pulling docker.io/bitnami/kubectl:1.26.4 image
-CASMTRIAGE-7364 Section "Upgrade Kubernetes" optional during only install products (i.e. csm untouched)
-CASMTRIAGE-7372 Remove references to CPS etcd cluster in docs-csm 1.5
-CASMTRIAGE-7373 SBPS is adding spire hard link in /usr/bin rather than /opt/cray
-CASMTRIAGE-7375 full system power down procedure preparation missing 3 certificate expiration checks
-CASMTRIAGE-7380 HSN interfaces names have changed and are now incorrect.
-CASMTRIAGE-7392 m001 rollout is failing during IUF Upgrade
-CASMTRIAGE-7401 Stage prepare-images displays "Failed to connect to the host via ssh: kex_exchange_identification"
-CASMTRIAGE-7402 deliver-products stage is failing to run due to non-existent running workflows
-CASMTRIAGE-7404 After rebooting worker node 1 LIO targets are not active and iSCSI Portals do not exist
-CASMTRIAGE-7405 wasp: management-nodes-rollout failing health-checks after CSM services upgrade
-CASMTRIAGE-7420 Dracut error while rebooting into pit-mode
-CASMTRIAGE-7421 WLM pre-deploy-product hook failed to save spool directories due to missing cray token on ncn-m001
-CASMTRIAGE-7423 drax: SMA/Net related validation failures after upgrade to csm 1.6.0-rc.2
-CASMTRIAGE-7424 node not PXE booting from the PIT
-CASMTRIAGE-7427 Multi tenancy - TAPMS is not creating the tenant group as documented
-CASMTRIAGE-7428 At the initiator iscsi sessions are displayed only for one worker node while SBPS is configured on all 4 worker nodes
-CASMTRIAGE-7431 update-cfs-config and prepare-images failing after running
-CASMTRIAGE-7437 the templating work correctly after the prepare-images stage
-CASMTRIAGE-7440 TESTS: cmsdev BOS test fails during CSM upgrade
-CASMTRIAGE-7445 iSCSI is reporting "SQUASHFS errors" on gamora for unknown reasons
-CASMTRIAGE-7446 Are documented workaround needed for "Spire  in PodInitializing state"
-CASMTRIAGE-7447 CMN iSCSI portal can be used off system without authentication
-CASMTRIAGE-7459 SBPS disconnected from all computes on gamora during rolling worker node upgrades
-CASMUSER-3327 Remove UAI/UAS Docs in CSM 1.6.0.
-CASMUSER-3330 Remove UAS/UAI from CSM for CSM 1.6
-CRAYSAT-1330 Replace custom image rename code with CFS session parameter
-CRAYSAT-1661 Merge integration to master and update SAT 2.5 release
-CRAYSAT-1666 Use cray-sat version 3.21.1 in IUF (sat-general-template)
-CRAYSAT-1706 sat bootsys does not stop waiting if BOS session is deleted
-CRAYSAT-1711 Improve documentation for finding BOS session templates during system shutdown
-CRAYSAT-1715 Improve command that mounts s3fs filesystems during power on procedure
-CRAYSAT-1755 DOCS - command error in step 5.2 "capture the state of all nodes"
-CRAYSAT-1764 sat status giving "WARNING: Could not retrieve BOS session ..."
-CRAYSAT-1767 Move SAT Ansible content into csm-config repository
-CRAYSAT-1767 Move SAT Ansible content into csm-config repository
-CRAYSAT-1774 Add cray-sat-podman RPM to CSM release
-CRAYSAT-1780 sat bootprep loses arch field when renaming images
-CRAYSAT-1782 Migrate docs-sat content into docs-csm
-CRAYSAT-1789 Add additional_inventory to CFS configurations created by "sat bootprep"
-CRAYSAT-1790 Update "SAT Dependencies" to include other APIs used by "sat status"
-CRAYSAT-1792 Resolve dependabot alerts (Cryptography)
-CRAYSAT-1795 Update paramiko to resolve CVE-2023-48795
-CRAYSAT-1798 sat swap switch only saves first portPolicyLink
-CRAYSAT-1800 Invalid sat filter queries produce traceback and dashes not allowed in filter RHS
-CRAYSAT-1816 Resolve dependabot alerts jinja2
-CRAYSAT-1819 Resolve dependabot alerts for cryptography
-CRAYSAT-1820 "sat status" unnecessarily queries BOS for session template for every component
-CRAYSAT-1821 Resolve dependabot alerts for cryptography
-CRAYSAT-1823 Resolve dependabot alerts for cryptography
-CRAYSAT-1824 Backport cray-sat 3.27.4 through 3.27.9 changes to SAT 2.5/CSM 1.4 and SAT 2.6/CSM 1.5
-CRAYSAT-1841 Update "sat status" to support CFS v2 or v3
-CRAYSAT-1843 Update SAT documentation for CFS v2 vs. v3
-CRAYSAT-1849 Update version of kubernetes Python package used by sat to match Kubernetes 1.24
-CRAYSAT-1852 Resolve dependabot alerts for pydantic, idna, urllib3 in cfs-config-util repository
-CRAYSAT-1859 sat bootsys boot --stage bos-operations gave traceback for 3rd BOS sessiontemplate
-CRAYSAT-1873 Update the version of cray-sat included in the CSM 1.6 release
-CRAYSAT-1877 Improve sat bootsys shutdown --stage platform-services
-CRAYSAT-1881 Resolve dependabot alerts certifi in sat and cfs-config-util repo
-CRAYSAT-1882 Update the shutdown and power on procedures to include all the changes
-CRAYSAT-1884 Update the version of the cray-product-catalog Python package used by sat and cfs-config-util
-CRAYSAT-1885 Backport the improvements from feature/1740 to CSM 1.6
-CRAYSAT-1888 Boot Kubernetes master and worker nodes simultaneously in "sat bootsys boot --stage ncn-power"
-CRAYSAT-1891 Correct inconsistencies in cabinet power documentation involving "sat bootsys"
-CRAYSAT-1892 Update "sat bootsys boot --stage ncn-power" with new output
-CRAYSAT-1893 Make default BOS timeouts infinite in "sat bootsys"
-CRAYSAT-1893 Make default BOS timeouts infinite in "sat bootsys"
-CRAYSAT-1902 Bug: Replace inconsistent classnames(CFSClient) with updated classes from cfs in sat bootprep
-CRAYSAT-1909 Verify access to Lustre file system step is missing any steps or relevant information
-CRAYSAT-1911 Update the csm-manifest PR
-CRAYSAT-1912 The SAT container image does not have the correct kubectl version
-CRAYSAT-1915 Update documentation now that CRAYSAT-1900 is finished.
-CRAYSAT-1919 Update version of cfs-config-util included in CSM used by update-mgmt-ncn-cfs-config.sh
-CRAYSAT-1922 Add iSCSI examples to the sat boot prep
-CRAYSAT-1924 Sat unable to pull image
-CRAYSAT-1928 CRAYSAT-1924 change to prerequisites.sh needs a minor change.
-CRAYSAT-1929 vidar >> sat not showing CFS related values
-MTL-1476 LiveCD Packer ISO
-MTL-1766 RFE: Create pdsh groups for NCNs
-MTL-1832 Get /var/lib/kubelet and /var/lib/containerd off the root overlay on master nodes
-MTL-1980 Configure a bonded HSN connection on an NCN
-MTL-1981 Document operational procedure for configuring NCNs with bonded HSN connections
-MTL-2000 Install Packages onto NCNs with cloud-init zypper/packages module
-MTL-2000 Install Packages onto NCNs with cloud-init zypper/packages module
-MTL-2035 CSM 1.4:  CSM-PIT iso image is failing   during pxe boot.
-MTL-2059 Update version of `aaa_base` packages in node images to 10.3.1
-MTL-2063 Misc SP4 Updates
-MTL-2064 Fix dracut warnings regarding spacing
-MTL-2067 Extraneous XML files in /root/
-MTL-2068 Need to pin cri-tools version
-MTL-2071 New libCSM framework
-MTL-2092 Fix cloud-init packaging - Stop CVE Flags
-MTL-2104 Refresh ipxe-tpsw-clone and use ubiquitous iPXE codebases
-MTL-2193 Fix/Suppress Erroneous Messages during Linux Startup
-MTL-2197 Create /etc/node-release
-MTL-2198 Breakout the Hypervisor LiveCD - Slim Hypervisor Packages Down
-MTL-2209 Default 256M Socket Buffers allow Weave to consume Memory
-MTL-2213 Reinstate or install audit packages for apparmor in NCN images in CSM 1.5+ (apparmor logs currently flooding dmesg)
-MTL-2253 Patch systemd/udev - Fix Failed RemoteISO Boots
-MTL-2258 csm-heartbeat and csm-node-identity not enabled
-MTL-2260 storage image contains an /etc/pit-release file
-MTL-2262 SURTUR: Pods evicted from ncn-w003, volume mounts incorrect
-MTL-2272 Get XFS mount and Kata pathway changes into the NCN images
-MTL-2273 incorrect fstab entry for xfs
-MTL-2279 Add msr-tools to CSM >= 1.5
-MTL-2282 CI/CD: Create /etc/\<type\>-release file earlier in the node-images pipeline
-MTL-2296 use correct version of metal-ipxe
-MTL-2325 CVE-2023-31484: update perl-doc package
-MTL-2342 python3-virtualenv RPM has broken install
-MTL-2346 cloud-init ModuleNotFoundError
-MTL-2350 CSM 1.5.0/1.6.0 Kernel Change + New Marvell/QLogic Driver
-MTL-2351 Add Broadcom support to iPXE
-MTL-2362 virtualenv broken
-MTL-2363 fix "one one" typo in dracut
-MTL-2364 Change /var/lib/containerd to a simple partition on workers
-MTL-2368 Proxy fails on vshasta
-MTL-2369 CVE-2022-2084 CVE-2023-1786 NCN cloud-init
-MTL-2371 Optimize CMS-iPXE Script - Remove Hardcode of 5 NICs
-MTL-2375 fastlinq.conf is including qedr
-MTL-2377 Weave issues with Broadcom
-MTL-2380 Corrupted BSS iPXE script structure
-MTL-2383 Package Updates - New Kernel 5.14.21-150500.55.52.1
-MTL-2384 Stop importing RPMs from deprecated Backports/SLE-15-SP2 repo
-MTL-2385 Incompatible instruction in haproxy config file
-MTL-2386 "Move container image pulls into cloud-init" breaks fresh install
-MTL-2388 Include createrepo_c in NCN images
-MTL-2389 "Move container image pulls into cloud-init" breaks fresh install
-MTL-2391 Set statedir variable to accommodate new ca-certificates RPM
-MTL-2392 Remove cephcsi 3.5.1 and csi-resizer 1.3.0 from precache list
-MTL-2393 goss-servers should require goss
-MTL-2395 Package update sweep CSM 1.6
-MTL-2396 Fix Cobra+Viper Integration in CSI and Refactor Flags
-MTL-2398 Package update sweep CSM 1.6
-MTL-2399 metal-provision: ignore RPM's that aren't pinned to a specific version
-MTL-2400 CSM V1.6.0 -- Add New DST Signing Key into node-image builds
-MTL-2402 CVE script (openscap.sh) leaks artifactory credentials in log files
-MTL-2403 Add shell completion to CSI
-MTL-2404 --kubeconfig parameter is not recognized for "automate ncn kubernetes"
-MTL-2407 fix silent failure in setup-nexus.sh
-MTL-2414 Add Additional Debug Utilities into the node-images initrd
-MTL-2418 DNSMasq statics.conf is always using CHN template
-MTL-2421 Persistent Disabling of Broadcom Offloading VxPort Tunnel
-MTL-2422 Move node-image builds to 15-SP6
-MTL-2424 Validating ceph and k8s failed post deployment of management nodes
-MTL-2433 Update node-images when Slingshot 11.1 RPMs are available for SP6
-MTL-2434 Update node-images when COS-3.2 / USS-1.2 RPMs are available for SP6
-MTL-2435 Fix backwards incompatible metal-ipxe RPMs
-MTL-2437 BREAK/FIX: csi must not permit vlan duplication
-MTL-2441 cryptsetup usage breaks k8s-master boots
-MTL-2450 CSI Remove unused hsn-dynamic-pool and hsn-static-pool parameters
-MTL-2451 kdump stalls and does not create a dump (SLES-15-SP6)
-MTL-2452 Build node-images that includes kubernetes 1.24
-MTL-2454 overlayfs kdump 1.9+ support
-MTL-2457 Adopt Maintenance Kernel
-MTL-2458 Update reference to master node label for k8s 1.24
-MTL-2458 Update reference to master node label for k8s 1.24
-MTL-2461 CVE Response - 2024-09-03
-MTL-2487 CVE Response - 2024-09-17
-MTL-2488 /etc/kubernetes/manifest directory is missing
-MTL-2491 CVE Response - 2024-10-01
-MTL-2493 Incompatible csi parameters
-MTL-2494 kdump timeout waiting for disks - qlogic
-MTL-2495 prerequisites.sh fails to patch cloud-init data in BSS
-MTL-2500 SLES 15.6 package updates -- 1.6
-MTL-2508 Fix hard coded MTL VLAN
-SCICD-578 branch IUF CLI for release
-SKERN-9239 Need to determine how to handle rpms for CSM ansible roles
-SSHOTCP-7438 Promote cray-keycloak 5.1.1 Chart to CSM 1.6
-SSHOTCP-7488 Promote cray-opa 1.34.4 Chart to CSM 1.6
-SSI-13518 Update docs csm to match SBPS variable names
-STP-3667 Clean-up for docs-sat move to docs-csm
-USS-1132 Obtain validation exceptions in CSM for unsigned container images
-USS-119 populate-admin-directory-with-files-defining-site-preferences has incorrect description of gpu recipe and gpu-image
-USS-1472 Tyr 1.6 tenant slurmcluster IPBO
-USS-1970 Tyr 1.6.0-beta.2 tenant no longer works - upgrade issue?
-USS-2050 Multitenancy example documentation needs changes
-```
