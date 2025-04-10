@@ -145,9 +145,18 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
    INFO: Command output: norecover is unset
    INFO: Running command: ceph osd unset nobackfill
    INFO: Command output: nobackfill is unset
-   INFO: Waiting up to 60 seconds for Ceph to become healthy after unfreeze
+   INFO: Waiting up to 180 seconds for Ceph to become healthy after unfreeze
+   INFO: Detected MON_CLOCK_SKEW warning.
+   INFO: Affected monitors: mon.ncn-s002
+   INFO: Restarting time synchronization service on ncn-s002
+   INFO: Successfully restarted time synchronization service on ncn-s002
+   INFO: Waiting 60 seconds for clocks to synchronize...
+   INFO: Restarting monitor daemon: mon.ncn-s002
+   Scheduled to restart mon.ncn-s002 on host 'ncn-s002'
+   INFO: Successfully restarted monitor daemon: mon.ncn-s002
+   INFO: Waiting 60 seconds after restarting monitor daemons...
    INFO: Checking Ceph health
-   ...
+   INFO: Ceph is healthy.
    INFO: Ceph unfreeze completed successfully on storage NCNs.
    INFO: Checking whether ceph filesystem is mounted on /etc/cray/upgrade/csm.
    INFO: Mounting ceph filesystem on /etc/cray/upgrade/csm.
