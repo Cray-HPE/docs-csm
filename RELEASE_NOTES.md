@@ -51,29 +51,29 @@ documentation improvements. This page lists some of the highlights.
 
 ### Base platform component upgrades
 
-| Platform Component           | Version |
-|------------------------------|---------|
-| Kubernetes                   | 1.24.17 |
-| `Kyverno`                    | 1.10.7  |
-| `Strimzi Kafka`              | 0.41.0  |
-| `argo-workflow-controller`   | 3.4.5   |
-| `argo-workflows`             | 3.3.6   |
-| `bitnami-etcd` for clusters  | 3.5.9   |
-| `bitnami-etcd` on `ncn-mxxx` | 3.5.0   |
-| `ceph`                       | 16.2.13 |
-| `containerd`                 | 1.5.16  |
-| `coredns`                    | 1.8.4   |
-| `cray-certmanager`           | 1.5.5   |
-| `cray-spire`                 | 1.5.5   |
-| `helm`                       | 3.11.2  |
-| `istio`                      | 1.19.10 |
-| `keycloak`                   | 21.1.1  |
-| `kiali`                      | 1.75.0  |
-| `metrics-server`             | 0.6.3   |
-| `postgres-operator`          | 1.8.2   |
-| `postgresql`                 | 14.8    |
-| `spire-intermediate`         | 1.0.0   |
-| `spire`                      | 0.12.2  |
+| Platform Component              | Version |
+|---------------------------------|---------|
+| Kubernetes                      | 1.24.17 |
+| `Kyverno`                       | 1.10.7  |
+| `Strimzi Kafka`                 | 0.41.0  |
+| `argo-workflow-controller`      | 3.4.5   |
+| `argo-workflows`                | 3.3.6   |
+| `bitnami-etcd` for clusters     | 3.5.9   |
+| `bare-metal-etcd` on `ncn-mxx`  | 3.5.0   |
+| `ceph`                          | 16.2.13 |
+| `containerd`                    | 1.5.16  |
+| `coredns`                       | 1.8.4   |
+| `cray-certmanager`              | 1.5.5   |
+| `cray-spire`                    | 1.5.5   |
+| `helm`                          | 3.11.2  |
+| `istio`                         | 1.19.10 |
+| `keycloak`                      | 21.1.1  |
+| `kiali`                         | 1.75.0  |
+| `metrics-server`                | 0.6.3   |
+| `postgres-operator`             | 1.8.2   |
+| `postgresql`                    | 14.8    |
+| `spire-intermediate`            | 1.0.0   |
+| `spire`                         | 0.12.2  |
 
 ### Security improvements
 
