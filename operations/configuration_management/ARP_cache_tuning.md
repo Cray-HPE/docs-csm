@@ -29,7 +29,7 @@ To calculate the base `gc_thresh1` value:
 
 **`gc_thresh1`**:
 
-$`gc\_thresh1 = (number\ of\ nodes) × ((NICS\ per\ node)²)`$
+`gc_thresh1 = (number of nodes) × ((NICS per node)²)`
 
 Where:
 
@@ -40,8 +40,8 @@ Where:
 
 ### Calculate Remaining Values
 
-- $`gc\_thresh2\ =\ 1.5\ ×\ gc\_thresh1`$
-- $`gc\_thresh3\ =\ 2\ ×\ gc\_thresh2`$
+- `gc_thresh2 = 1.5 × gc_thresh1`
+- `gc_thresh3 = 2 × gc_thresh2`
 
 ---
 
@@ -53,19 +53,19 @@ Where:
 - Each node has:
     - 4 HSN NICs.
     - 1 NMN NIC.
-    - $`NICS\ per\ node\ =\ 4\ +\ 1\ =\ 5`$
+    - `NICS per node = 4 + 1 = 5`
 
 **`gc_thresh1`**:
 
-$`gc\_thresh1\ =\ 1000\ ×\ (5²)\ =\ 25000`$
+`gc_thresh1 = 1000 × (5²) = 25000`
 
 **`gc_thresh2`**:
 
-$`gc\_thresh2\ =\ 1.5\ ×\ 25000\ =\ 37500`$
+`gc_thresh2 = 1.5 × 25000 = 37500`
 
 **`gc_thresh3`**:
 
-$`gc\_thresh3\ =\ 2\ ×\ 37500\ =\ 75000`$
+`gc_thresh3 = 2 × 37500 = 75000`
 
 **Example settings**:
 
@@ -134,7 +134,7 @@ The following steps describe how to use the Configuration Framework Service (CFS
        value: 75000
      - name: net.ipv4.neigh.default.gc_stale_time
        value: 240
-     - name: net.ipv4.base_reachable_time_ms
+     - name: net.ipv4.neigh.default.base_reachable_time_ms
        value: 1500000
    ```
 
@@ -268,7 +268,7 @@ The following steps describe how to use the Configuration Framework Service (CFS
       ```bash
       NCNS=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | tr '\r\n\t' ',')
 
-      pdsh -w ${NCNS} "sysctl -a | grep -E 'net.ipv4.neigh.default.gc_thresh[1-3]|net.ipv4.neigh.default.gc_stale_time|net.ipv4.neigh.default.base_reachable_time_ms'"
+      pdsh -w ${NCNS} "sysctl -a | grep -E 'net.ipv4.neigh.default.gc_thresh[1-3]|net.ipv4.neigh.default.gc_stale_time|net.ipv4.neigh.default.base_reachable_time_ms'" | dshbak -c
       ```
 
       Example output:
