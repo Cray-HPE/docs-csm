@@ -289,9 +289,6 @@ sanity checks on iSCSI targets.
 
 Refer to [GOSS tests for SBPS](https://github.com/Cray-HPE/sbps-marshal/blob/main/GOSS_tests_for_sbps.md) for the details.
 
-Verify the test log from goss tests and check whether all the DNS SRV and A records are listed. If NMN A records are not created, then please follow
-the steps in the WAR doc: [NMN records missing](https://github.com/Cray-HPE/docs-csm/tree/release/1.6/troubleshooting/known_issues/nmn_dns_a_records_missing.md)
-
 ### 3. Create BOS session template
 
 Once the node personalization is done and GOSS tests are run successfully, create BOS Session Template with SBPS boot parameters.
