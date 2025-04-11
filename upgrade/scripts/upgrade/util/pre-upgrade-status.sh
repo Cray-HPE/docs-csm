@@ -144,6 +144,11 @@ function sat_status() {
 
 function hsn_status() {
   echo "---- Recording HSN Status ----"
+  if [[ ${HSN_REQUIRED} == N ]]; then
+    msg="Skipping HSN status checks due to --hsn-not-required flag."
+    echo "WARNING ${msg}"
+    return
+  fi
   if [[ -n $(kubectl get pods -A | grep slingshot-fabric-manager | awk '{print $2}') ]]; then
     execute "kubectl exec -it -n services $(kubectl get pods -A | grep slingshot-fabric-manager | awk '{print $2}') -c slingshot-fabric-manager -- fmn_status" "fmn.show.status"
     execute "kubectl exec -it -n services $(kubectl get pods -A | grep slingshot-fabric-manager | awk '{print $2}') -c slingshot-fabric-manager -- fmn_status --details" "fmn.show.status.detail"
