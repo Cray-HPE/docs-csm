@@ -55,6 +55,57 @@ procedures based on whether or not CSM is being upgraded:
 - [`management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
 - [`management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
 
+### **Note for CSM V1.7.0**
+
+Starting with CSM V1.7.0, administrators can use an IMS image and configuration from CFS built outside of IUF to perform the `management-nodes-rollout` stage. The image and configuration can be explicitly passed in the iuf-cli command.
+
+For example, to upgrade a storage node using an image and CFS configuration created outside of the `prepare-images` stage, the command could look like this:
+
+```bash
+iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run \
+    --set-management-config "configuration_name" \
+    --set-management-image "image_ID" \
+    -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
+```
+
+The CFS configuration and IMS image being used can be described like shown below:
+
+```bash
+ncn-m001:~ # cray cfs configurations describe management-main-1.7-1715924
+lastUpdated = "2025-04-14T19:22:00Z"
+name = "management-main-1.7-1715924"
+[[layers]]
+cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
+commit = "c5b9a27fd4ab86bb38e03346b4ed464a04d3799c"
+name = "csm-ncn-nodes-1.7.0-alpha.11"
+playbook = "ncn_nodes.yml"
+
+[[layers]]
+cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/slingshot-host-software-config-management.git"
+commit = "caa82a0b793288aeedfa75f8804dd528cae08bcd"
+name = "shs-mellanox_install-integration-12.0.0"
+playbook = "shs_mellanox_install.yml"
+```
+
+```bash
+ncn-m001:~ # cray ims images describe f9fb3b2b-5527-47cb-a2de-8fa9dec7cec6
+arch = "x86_64"
+created = "2025-04-14T19:44:21.862319"
+id = "f9fb3b2b-5527-47cb-a2de-8fa9dec7cec6"
+name = "master-secure-kubernetes-7.1.6-x86_64.squashfs-1715924"
+
+[link]
+etag = "b49ef59b6c0099cd6e237b1e44bf19e8"
+path = "s3://boot-images/f9fb3b2b-5527-47cb-a2de-8fa9dec7cec6/manifest.json"
+type = "s3"
+
+[metadata]
+```
+
+> **Important:** There is no built-in mechanism to validate the image and configuration being passed belong to the same role and subrole. Administrators must ensure that the correct image and configuration are used for the corresponding node and subrole.
+
+For the new parameters added, please refer to the command information in the [IUF run command details](../IUF.md#run) documentation.
+
 ### 2.1 `management-nodes-rollout` with CSM upgrade
 
 All management nodes will be upgraded to a new image because CSM itself is being upgraded.

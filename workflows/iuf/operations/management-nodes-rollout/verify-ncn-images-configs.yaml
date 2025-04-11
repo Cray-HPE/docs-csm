@@ -51,9 +51,20 @@ spec:
                   value: |
                     nodeType="{{inputs.parameters.nodeType}}"
                     role_subrole="Management_${nodeType}"
-                    prepare_images_output=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+
+                    cfs_config="{{=jsonpath(inputs.parameters.global_params,'$.input_params.cfs_configuration_management')}}"
+                    ims_image="{{=jsonpath(inputs.parameters.global_params,'$.input_params.boot_image_management')}}"
+
+                    if [[ -n $cfs_config && -n $ims_image ]]; then
+                      config=$cfs_config
+                      image=$ims_image
+                    else
+                      prepare_images_output=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                      config=$(echo $prepare_images_output | jq --arg ROLE_SUBROLE "${role_subrole}" '.images | map(select(.configuration_group_names[] == $ROLE_SUBROLE)) | .[].configuration' | tr -d '"')
+                      image=$(echo $prepare_images_output | jq --arg ROLE_SUBROLE "${role_subrole}" '.images | map(select(.configuration_group_names[] == $ROLE_SUBROLE)) | .[].final_image_id' | tr -d '"')
+                    fi
+
                     # Check config exists
-                    config=$(echo $prepare_images_output | jq --arg ROLE_SUBROLE "${role_subrole}" '.images | map(select(.configuration_group_names[] == $ROLE_SUBROLE)) | .[].configuration' | tr -d '"')
                     if [[ -z $config ]]; then
                       echo "ERROR No CFS configuration was received for '${role_subrole}' from 'prepare-images' stage. Retry by running from 'prepare-images' stage"
                       exit 1
@@ -69,7 +80,6 @@ spec:
                     fi
 
                     # Check image exists
-                    image=$(echo $prepare_images_output | jq --arg ROLE_SUBROLE "${role_subrole}" '.images | map(select(.configuration_group_names[] == $ROLE_SUBROLE)) | .[].final_image_id' | tr -d '"')
                     if [[ -z $image ]]; then
                       echo "ERROR No image was received for '${role_subrole}' from 'prepare-images' stage. Retry by running from 'prepare-images' stage"
                       exit 1
