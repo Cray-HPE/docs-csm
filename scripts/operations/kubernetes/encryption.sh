@@ -227,8 +227,10 @@ writeconfig() {
     src="${PREFIX?}/${shasum?}.yaml"
   fi
 
-  if [[ "${KUBERNETES_MINOR_VERSION}" -lt 31 ]]; then
+  if [[ "${KUBERNETES_MINOR_VERSION}" -lt 25 ]]; then
     kubeadmcfg="/srv/cray/resources/common/1.24/kubeadm.cfg"
+  elif [[ "${KUBERNETES_MINOR_VERSION}" -ge 25 || "${KUBERNETES_MINOR_VERSION}" -lt 31 ]]; then
+    kubeadmcfg="/srv/cray/resources/common/1.25/kubeadm.cfg"
   else
     kubeadmcfg="/srv/cray/resources/common/1.31/kubeadm.cfg"
   fi
