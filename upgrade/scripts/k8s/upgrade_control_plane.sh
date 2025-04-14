@@ -27,6 +27,8 @@ set -euo pipefail
 workdir="$(mktemp -d)"
 [ -z "${DEBUG:-}" ] && trap 'rm -fr '"${workdir}"'' ERR INT EXIT RETURN || echo "DEBUG was set in environment, $workdir will not be cleaned up."
 
+export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/version)
+
 echo "Updating imageRepository and extraArgs in kubeadm-config configmap"
 kubectl get configmap kubeadm-config -n kube-system -o yaml > "${workdir}/kubeadm-config.yaml"
 cp "${workdir}/kubeadm-config.yaml" "${workdir}/kubeadm-config.yaml.back"
@@ -39,7 +41,15 @@ if [ "$(yq4 eval '.imageRepository' "${workdir}/ClusterConfiguration.yaml")" = '
   yq4 eval -i -P '.imageRepository = "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io"' "${workdir}/ClusterConfiguration.yaml"
 fi
 yq4 eval -i -P '.apiServer.extraArgs.api-audiences = "api,istio-ca"' "${workdir}/ClusterConfiguration.yaml"
-yq4 eval -i -P '.apiServer.extraArgs.enable-admission-plugins = "NodeRestriction,PodSecurityPolicy"' "${workdir}/ClusterConfiguration.yaml"
+
+# Enable pod security policies only for K8s <1.25. As of K8s 1.25, pod security
+# policies are unavailable.
+if [[ "${KUBERNETES_MINOR_VERSION}" -lt 25 ]]; then
+  yq4 eval -i -P '.apiServer.extraArgs.enable-admission-plugins = "NodeRestriction,PodSecurityPolicy"' "${workdir}/ClusterConfiguration.yaml"
+else
+  yq4 eval -i -P '.apiServer.extraArgs.enable-admission-plugins = "NodeRestriction"' "${workdir}/ClusterConfiguration.yaml"
+fi
+
 yq4 eval -i -P '.controllerManager.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
 yq4 eval -i -P '.scheduler.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
 
