@@ -27,6 +27,8 @@ set -euo pipefail
 workdir="$(mktemp -d)"
 [ -z "${DEBUG:-}" ] && trap 'rm -fr '"${workdir}"'' ERR INT EXIT RETURN || echo "DEBUG was set in environment, $workdir will not be cleaned up."
 
+export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/version)
+
 echo "Updating imageRepository and extraArgs in kubeadm-config configmap"
 kubectl get configmap kubeadm-config -n kube-system -o yaml > "${workdir}/kubeadm-config.yaml"
 cp "${workdir}/kubeadm-config.yaml" "${workdir}/kubeadm-config.yaml.back"
