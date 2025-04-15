@@ -526,10 +526,10 @@ managed nodes, including compute nodes and User Access Nodes (UANs).
 
 1. (`ncn-mw#`) Cancel the running BOS sessions.
 
-    1. Identify the BOS sessions to delete.
+    1. Identify the running BOS sessions to delete.
 
         ```bash
-        cray bos sessions list --format json
+        cray bos sessions list --format json | jq '[.[] | select(.status.status == "running")]'
         ```
 
     1. Delete each running BOS session.
