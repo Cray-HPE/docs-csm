@@ -178,3 +178,5 @@ and many more...
 * Power capping Olympus and River compute hardware via CAPMC is not supported.
 * On fresh install, API calls to Gitea/VCS may give 401 Errors. See [Gitea/VCS 401 Errors](troubleshooting/known_issues/gitea_vcs_401_errors.md) for more information.
 * Console logging may fill all available space for console log files. See [Console logs filling up availble storage](troubleshooting/known_issues/console_log_storage_filling.md) for more information.
+
+For a full list of known issues, see [Known issues](troubleshooting/index.md#known-issues).
