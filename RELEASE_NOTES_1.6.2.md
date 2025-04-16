@@ -25,6 +25,7 @@ see [CSM 1.6 release notes](RELEASE_NOTES.md).
 ### Test
 
 * Add CFS node personalization to the [Barebones Image Boot Test](troubleshooting/cms_barebones_image_boot.md)
+* Improved testing resilience in the `spire_check_key_id_in_jwks` goss test
 * Modified `adjust k8s_nodes_ready_check.sh` to not fail when a node is in `Ready,SchedulingDisabled` state
 * Modified `velero_backups_check.sh` to not fail if a newer, successful backup exists
 * Modified `run_hms_ct_tests.sh` to handle concurrency better
@@ -39,6 +40,7 @@ see [CSM 1.6 release notes](RELEASE_NOTES.md).
 * Fix bug preventing [CFS batcher](operations/configuration_management/Automatic_Configuration_Management.md#cfs-batcher-scheduling)
   from starting sessions on very large scale systems
 * [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos): Gracefully handle requests to validate session templates which do not exist
+* Fix bug preventing [Spire xname Validation](operations/spire/xname_validation.md) from being enabled due to workloads files.
 * Fixes for several concurrency issues in [Redfish Translation Service (RTS)](glossary.md#redfish-translation-service-rts) that will reduce the number of pod restarts
 
 ## Known issues
