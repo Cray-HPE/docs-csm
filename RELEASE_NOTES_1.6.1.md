@@ -3,7 +3,8 @@
 This page documents the changes introduced by this patch, compared to the previous patch
 version of CSM.
 
-For the main CSM 1.6 release notes page, see [CSM 1.6 release notes](RELEASE_NOTES.md).
+For the main CSM 1.6 release notes page, including links to other patch release notes,
+see [CSM 1.6 release notes](RELEASE_NOTES.md).
 
 * [Additions and improvements](#additions-and-improvements)
 * [Bug fixes](#bug-fixes)
@@ -21,27 +22,33 @@ For the main CSM 1.6 release notes page, see [CSM 1.6 release notes](RELEASE_NOT
 * Update `cray-keycloak` for new `JobConditionType` `SuccessCriteriaMet`
 * Avoid infinite loop while uploading artifacts with `cray-nexus-setup` image
 * Allow customization of `ipxe` debug options
-* Make BOS migration pod more polite
-* TESTS: `cmsdev`: Add explicit check for blank CFS ID field
-* Update CFS API spec to reject invalid component creation/update requests
-* Bypass needless work in some CFS queries
-* Make CFS Options class thread-safe and more performant
-* Add ability to create CFS source and specify secret name instead of username/password
-* Update CFS API spec with actual status code for successful source restore
-* Improve CFS config delete performance on scale systems
-* Add context managers around BOS requests/sessions; enable paging of BOS components
-* PCS/TRS: Mitigate resource leaks / heavy usage
+* [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos)
+    * Make BOS migration pod more polite
+    * Add context managers around BOS requests/sessions; enable paging of BOS components
+* [Configuration Framework Service (CFS)](glossary.md#configuration-framework-service-cfs)
+    * Update CFS API spec to reject invalid component creation/update requests
+    * Bypass needless work in some CFS queries
+    * Make CFS Options class thread-safe and more performant
+    * Add ability to create CFS source and specify secret name instead of username/password
+    * Update CFS API spec with actual status code for successful source restore
+    * Improve CFS config delete performance on scale systems
+* [Power Control Service (PCS)](glossary.md#power-control-service-pcs)/TRS: Mitigate resource leaks / heavy usage
 * Cleanup previous/old SquashFS images during upgrade
-* Update `customization.yaml` for SMA Victoria metrics PVC size
-* Update "sat bootprep" to support CFS v2 or v3
-* Update "sat bootsys" to support CFS v2 or v3
-* SAT: Add ability to sort reports by multiple fields
+* Update `customization.yaml` for [System Monitoring Application (SMA)](glossary.md#system-monitoring-application-sma) Victoria metrics PVC size
+* [System Admin Toolkit (SAT)](glossary.md#system-admin-toolkit-sat)
+    * Update "sat bootprep" to support CFS v2 or v3
+    * Update "sat bootsys" to support CFS v2 or v3
+    * SAT: Add ability to sort reports by multiple fields
 
 ### Security
 
 * Remove `sshd` from `cray-console-operator` image
-* Fix CVEs in `artifactory.algol60.net/csm-docker/stable/cray-firmware-action:1.34.0`
-* Fix CANU generated switch configuration security concern
+* Fix CVEs in [Firmware Action Service (FAS)](glossary.md#firmware-action-service-fas) image `artifactory.algol60.net/csm-docker/stable/cray-firmware-action:1.34.0`
+* Fix [CSM Automatic Network Utility (CANU)](glossary.md#csm-automatic-network-utility-canu) generated switch configuration security concern
+
+### Tests
+
+* [`cmsdev`](troubleshooting/known_issues/sms_health_check.md): Add explicit check for blank CFS ID field
 
 ## Customer-requested
 
@@ -146,12 +153,12 @@ For the main CSM 1.6 release notes page, see [CSM 1.6 release notes](RELEASE_NOT
 
 ## Known issues
 
-* CSM 1.5.4 included fixes to `BSS` and `cfs-trust` to allow large scale parallel boots of compute nodes.
+* CSM 1.5.4 included fixes to the [Boot Script Service (BSS)](glossary.md#boot-script-service-bss) and `cfs-trust` to allow large scale parallel boots of compute nodes.
   These changes did not make it into CSM 1.6.1 but will be present in CSM 1.6.2 and CSM 1.7.0. Workarounds until then include:
     * Boot in smaller sets of compute nodes
     * Disable debug logging in BSS by changing `BSS_DEBUG` from "true" to "false" in the `cray-bss` deployment.
       This may allow slightly larger sets of compute nodes to boot in parallel.
-* After updating Paradise BMC firmware, the `hmcollector-poll` service will lose event subscriptions and must be restarted
+* After updating Paradise [BMC](glossary.md#baseboard-management-controller-bmc) firmware, the `hmcollector-poll` service will lose event subscriptions and must be restarted
     * See [Updating Foxconn Paradise Nodes with FAS](operations/firmware/FAS_Paradise.md) for details on how to do this
 * `cfs-api` pods in CLBO state during CSM install.
     * When installing CSM 1.6, `cray-shared-kafka-kafka-` pods in the services namespace fail to come up which results in `cfs-api` pods in CLBO state.
@@ -159,12 +166,12 @@ For the main CSM 1.6 release notes page, see [CSM 1.6 release notes](RELEASE_NOT
 * `istio-proxy` containers fail with too many open files.
     * This may happen when any pod with `istio injection` enabled is started.
     * A workaround is presented in [Istio-Proxy failing with too many open files](troubleshooting/known_issues/Istio-Proxy_failing_with_too_many_open_files.md)
-* IUF does not run the next stage for an activity
+* [Install and Upgrade Framework (IUF)](glossary.md#install-and-upgrade-framework-iuf) does not run the next stage for an activity
     * During CSM upgrade, IUF reports that multiple sessions are in progress for an activity.
     * A workaround is presented in [IUF does not run the next stage for an activity](troubleshooting/known_issues/iuf_unable_to_run_next_stage.md)
 * iSCSI based boot content projection may fail if the image to be projected does not have an `etag`
     * A workaround is presented in [iSCSI SBPS boot failure](troubleshooting/known_issues/SBPS_boot_fail.md)
-* CANU 1.8.0 and later is known to cause a brief NMN network outage.
+* CANU 1.8.0 and later is known to cause a brief [Node Management Network (NMN)](glossary.md#node-management-network-nmn) network outage.
     * CANU 1.8.0 and later introduce a separation of administrative traffic and user traffic on the management network
       via addition of a new VRF and OSPF area. Until all switches are updated and new routes are propagated, there is a
       brief NMN network outage. IP addressing does not change, but NMN traffic will flow over a new isolated VRF
@@ -177,3 +184,5 @@ For the main CSM 1.6 release notes page, see [CSM 1.6 release notes](RELEASE_NOT
 * Services that use PostgreSQL may fail when a Kubernetes master node is rebooted or rebuilt.
     * A PostgreSQL database may fail over without clients reconnecting to the new cluster leader.
     * A workaround is presented in [PostgreSQL Database is in Recovery](troubleshooting/known_issues/postgres_database_recovery.md)
+
+For a full list of known issues, see [Known issues](troubleshooting/README.md#known-issues).
