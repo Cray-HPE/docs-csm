@@ -208,6 +208,8 @@ For a list of all features with an announced removal target, see [Removals](intr
 * On some systems, Ceph can begin to exhibit latency over time, and if this occurs it can eventually cause services like `slurm` and services that are backed by `etcd` clusters to exhibit slowness and possible timeouts.
 See [Known Issue: Ceph OSD latency](troubleshooting/known_issues/ceph_osd_latency.md) for a workaround.
 
+For a full list of known issues, see [Known issues](troubleshooting/README.md#known-issues).
+
 ### Security vulnerability exceptions in CSM 1.3
 
 Significant effort went into the tracking, elimination, and/or reduction of critical or high (and lower) security vulnerabilities of container images included in the CSM 1.3 release.
