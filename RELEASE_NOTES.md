@@ -223,4 +223,6 @@ For a list of all features with an announced removal target, see [Removals](intr
 * The CRUS subcommands are inadvertently missing from the Cray CLI. See
   [CRUS Subcommands Missing From Cray CLI](troubleshooting/known_issues/CRUS_Subcommands_Missing_From_Cray_CLI.md).
 
+For a full list of known issues, see [Known issues](troubleshooting/README.md#known-issues).
+
 ### Security vulnerability exceptions in CSM 1.4
