@@ -19,6 +19,7 @@ documentation improvements. This page lists some of the highlights.
 This is the release notes page for CSM 1.6.0. Each patch for CSM 1.6 has its own release notes, detailing what
 changes it includes.
 
+* [CSM 1.6.2 Release Notes](RELEASE_NOTES_1.6.2.md)
 * [CSM 1.6.1 Release Notes](RELEASE_NOTES_1.6.1.md)
 
 ## Features
@@ -26,13 +27,14 @@ changes it includes.
 * iSCSI
     * See [iSCSI SBPS](operations/iscsi_sbps/iscsi_sbps.md) for
       details on iSCSI based boot content projection for `rootfs` and `PE` images.
-* Multi-Tenancy
-* Bonded HSN interfaces supporting Slingshot resiliency
-* HPE Cray OS 24.2
+* [Multi-Tenancy](operations/multi-tenancy/Overview.md)
+* Bonded [High Speed Network (HSN)](glossary.md#high-speed-network-hsn) interfaces supporting [Slingshot](glossary.md#slingshot) resiliency
+* [HPE Cray OS (COS)](glossary.md#cray-operating-system-cos) 24.2
 * SLES 15 SP6
-* SHS 11.1
-* CSM can now be upgraded with IUF. See [Upgrade CSM](upgrade/README.md) for more details.
-* The [BOS](glossary.md#boot-orchestration-service-bos) API now enforces limits that previously had
+* [Slingshot Host Software (SHS)](glossary.md#slingshot-host-software-shs) 11.1
+* CSM can now be upgraded with the [Install and Upgrade Framework (IUF)](glossary.md#install-and-upgrade-framework-iuf).
+    * See [Upgrade CSM](upgrade/README.md) for more details.
+* The [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos) API now enforces limits that previously had
   only been recommended. When updating to CSM 1.6, BOS data is migrated to be in compliance with the
   API specification. See [BOS data notice](upgrade/README.md#bos-data-notice) for more details.
 * The [System Admin Toolkit (SAT)](glossary.md#system-admin-toolkit-sat) is fully included in CSM.
@@ -97,7 +99,7 @@ information, see [SAT in CSM](operations/system_admin_toolkit/about_sat/SAT_in_C
 
 ### Scale
 
-* Performance improvements in BOS and CFS on large scale systems.
+* Performance improvements in BOS and the [Configuration Framework Service (CFS)](glossary.md#configuration-framework-service-cfs) on large scale systems.
 
 ### Security
 
@@ -129,13 +131,13 @@ see [Removals](introduction/deprecated_features/README.md#removals)
 * CSM 1.6.0 does not support servers with NVIDIA CPUs and GPUs.
     * Systems with these servers should not be upgraded to CSM 1.6.0.
     * CSM 1.6.1 and later support servers with NVIDIA CPUs and GPUs.
-* CSM 1.5.4 included fixes to `BSS` and `cfs-trust` to allow large scale parallel boots of compute nodes.
+* CSM 1.5.4 included fixes to the [Boot Script Service (BSS)](glossary.md#boot-script-service-bss) and `cfs-trust` to allow large scale parallel boots of compute nodes.
   These changes did not make it into CSM 1.6.0 or CSM 1.6.1, but will be present in CSM 1.6.2 and CSM 1.7.0.
   Workarounds until then include:
     * Boot in smaller sets of compute nodes
     * Disable debug logging in BSS by changing `BSS_DEBUG` from "true" to "false" in the `cray-bss` deployment.
       This may allow slightly larger sets of compute nodes to boot in parallel.
-* After updating Paradise BMC firmware, the `hmcollector-poll` service will lose event subscriptions and must be restarted
+* After updating Paradise [BMC](glossary.md#baseboard-management-controller-bmc) firmware, the `hmcollector-poll` service will lose event subscriptions and must be restarted
     * See [Updating Foxconn Paradise Nodes with FAS](operations/firmware/FAS_Paradise.md) for details on how to do this
 * `cfs-api` pods in CLBO state during CSM install.
     * When installing CSM 1.6, `cray-shared-kafka-kafka-` pods in the services namespace fail to come up which results in `cfs-api` pods in CLBO state.
@@ -148,14 +150,16 @@ see [Removals](introduction/deprecated_features/README.md#removals)
     * A workaround is presented in [IUF does not run the next stage for an activity](troubleshooting/known_issues/iuf_unable_to_run_next_stage.md)
 * iSCSI based boot content projection may fail if the image to be projected does not have an `etag`
     * A workaround is presented in [iSCSI SBPS boot failure](troubleshooting/known_issues/SBPS_boot_fail.md)
-* CANU 1.8.0 and later is known to cause a brief NMN network outage.
+* [CSM Automatic Network Utility (CANU)](glossary.md#csm-automatic-network-utility-canu) 1.8.0 and later is known to cause a brief
+  [Node Management Network (NMN)](glossary.md#node-management-network-nmn) network outage.
     * CANU 1.8.0 and later introduce a separation of administrative traffic and user traffic on the management network
       via addition of a new VRF and OSPF area. Until all switches are updated and new routes are propagated, there is a
       brief NMN network outage. IP addressing does not change, but NMN traffic will flow over a new isolated VRF
       channel. The length of the outage is dependent on the time to apply new switch configurations to all management
       network switches - OSPF will propagate routes within seconds. As this affects liquid-cooled Mountain cabinets,
       running jobs may be affected. A dedicated outage window is highly recommended for applying these changes.
-* SMA 1.10.15 and later includes an upgraded LDMS that introduces an incompatibility with configuration files used in prior versions.
+* [System Monitoring Application (SMA)](glossary.md#system-monitoring-application-sma) 1.10.15 and later includes an upgraded LDMS that introduces an incompatibility with
+  configuration files used in prior versions.
     * When upgrading from an older SMA version to a version with this new LDMS, the administrator must change the configuration files.
     * A workaround is presented as an Action in the deliver-product stage in the **IUF Stage Details for SMA** section of the _HPE Cray Supercomputing EX System Monitoring Application Installation Guide_.
 * Services that use PostgreSQL may fail when a Kubernetes master node is rebooted or rebuilt.
@@ -164,6 +168,8 @@ see [Removals](introduction/deprecated_features/README.md#removals)
 * There are resource leaks in several HMS services ([PCS](glossary.md#power-control-service-pcs), [SMD](glossary.md#hardware-state-manager-smd), hmcollector, and [FAS](glossary.md#firmware-action-service-fas))
     * This issue is partially resolved by a hotfix for the CSM 1.5.2 release and fully resolved in the CSM 1.5.3 and 1.6.1 releases
     * For more information, including a workaround, see [HMS Resource Leaks](troubleshooting/known_issues/HMS_Resource_Leaks.md).
+
+For a full list of known issues, see [Known issues](troubleshooting/README.md#known-issues).
 
 ## Resolved CASTs
 
