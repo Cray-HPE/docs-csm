@@ -38,4 +38,6 @@ For more details and a list of all features with an announced removal target, se
 
 ## Known issues
 
+For a full list of known issues, see [Known issues](troubleshooting/README.md#known-issues).
+
 ### Security vulnerability exceptions in CSM 1.7
