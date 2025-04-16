@@ -24,7 +24,7 @@ see [CSM 1.6 release notes](RELEASE_NOTES.md).
 ### Test
 
 * Add CFS node personalization to the [Barebones Image Boot Test](troubleshooting/cms_barebones_image_boot.md)
-* Added fix to prevent false positives in the [Hardware State Manager (SMD)](#hardware-state-manager-smd) CT tests when components are in the `DiscoveryStarted` state when the tests are launched
+* Added fix to prevent false positives in the [Hardware State Manager (SMD)](glossary.md#hardware-state-manager-smd) CT tests when components are in the `DiscoveryStarted` state when the tests are launched
 
 ## Bug fixes
 
@@ -32,7 +32,7 @@ see [CSM 1.6 release notes](RELEASE_NOTES.md).
 * Fix bug preventing [CFS batcher](operations/configuration_management/Automatic_Configuration_Management.md#cfs-batcher-scheduling)
   from starting sessions on very large scale systems
 * [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos): Gracefully handle requests to validate session templates which do not exist
-* Fixes for several concurrancy issues in [Redfish Translation Service (RTS)](glossary.md#redfish-translation-service-rts) that will reduce the number of pod restarts
+* Fixes for several concurrency issues in [Redfish Translation Service (RTS)](glossary.md#redfish-translation-service-rts) that will reduce the number of pod restarts
 
 ## Known issues
 
