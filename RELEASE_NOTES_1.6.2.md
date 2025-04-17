@@ -20,6 +20,7 @@ see [CSM 1.6 release notes](RELEASE_NOTES.md).
 ### Security
 
 * Fixed CVEs in [the `cmsdev` test tool](troubleshooting/known_issues/sms_health_check.md), `cray-console-node`, and `cray-console-operator`
+* Fixed CVEs in `oauth2` proxies by disabling `TLS1.2` support
 
 ### Test
 
