@@ -170,6 +170,8 @@ See [Deprecated features](introduction/differences.md#deprecated_features).
 
 ## Known issues
 
+For a full list of known issues, see [Known issues](troubleshooting/index.md#known-issues).
+
 ### Security vulnerability exceptions
 
 A great deal of emphasis was placed on elimination or reduction of critical or high security vulnerabilities of container images included in the CSM 1.2 release.
