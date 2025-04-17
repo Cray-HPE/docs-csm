@@ -26,6 +26,15 @@
 
 ## Noteworthy changes
 
+## Test
+
+* Modified `adjust k8s_nodes_ready_check.sh` to not fail when a node is in `Ready,SchedulingDisabled` state
+* Modified `velero_backups_check.sh` to not fail if a newer, successful backup exists
+* Modified `run_hms_ct_tests.sh` to handle concurrency better
+* Fixed intermittent failures sometimes seen when running `check_key_id_in_jwks.sh`
+* Added retry logic to `goss-postgresql-syncfailed.yaml` to prevent intermittent false positives
+* Added retry logic to `postgres_clusters_running.sh to prevent` intermittent false positives
+
 ## Bug fixes
 
 ## Deprecations
