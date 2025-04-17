@@ -21,7 +21,7 @@ The User Access Service for managing User Access Instances was removed in CSM 1.
 
 ### Apply workaround
 
-1. Verify the `cray-uas-mgr` and `update-uas` Helm charts are installed.
+1. (`ncn-mw#`) Verify the `cray-uas-mgr` and `update-uas` Helm charts are installed.
 
    ```bash
    helm -n services ls --filter uas
@@ -35,7 +35,7 @@ The User Access Service for managing User Access Instances was removed in CSM 1.
    update-uas      services     7           2024-06-27 14:14:23.862427488 +0000 UTC    deployed    update-uas-1.8.1       1.8.1
    ```
 
-2. Remove the `cray-uas-mgr` and `update-uas` Helm charts.
+2. (`ncn-mw#`) Remove the `cray-uas-mgr` and `update-uas` Helm charts.
 
    ```bash
    helm -n services uninstall cray-uas-mgr update-uas
