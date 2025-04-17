@@ -25,6 +25,12 @@ see [CSM 1.6 release notes](RELEASE_NOTES.md).
 ### Test
 
 * Add CFS node personalization to the [Barebones Image Boot Test](troubleshooting/cms_barebones_image_boot.md)
+* Modified `adjust k8s_nodes_ready_check.sh` to not fail when a node is in `Ready,SchedulingDisabled` state
+* Modified `velero_backups_check.sh` to not fail if a newer, successful backup exists
+* Modified `run_hms_ct_tests.sh` to handle concurrency better
+* Fixed intermittent failures sometimes seen when running `check_key_id_in_jwks.sh`
+* Added retry logic to `goss-postgresql-syncfailed.yaml` to prevent intermittent false positives
+* Added retry logic to `postgres_clusters_running.sh to prevent` intermittent false positives
 * Added fix to prevent false positives in the [Hardware State Manager (SMD)](glossary.md#hardware-state-manager-smd) CT tests when components are in the `DiscoveryStarted` state when the tests are launched
 
 ## Bug fixes
