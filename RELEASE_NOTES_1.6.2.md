@@ -62,5 +62,8 @@ see [CSM 1.6 release notes](RELEASE_NOTES.md).
 * Services that use PostgreSQL may fail when a Kubernetes master node is rebooted or rebuilt.
     * A PostgreSQL database may fail over without clients reconnecting to the new cluster leader.
     * A workaround is presented in [PostgreSQL Database is in Recovery](troubleshooting/known_issues/postgres_database_recovery.md)
+* `cray-uas-mgr` may still be running on a system upgraded from CSM 1.5.
+    * UAI was removed in CSM 1.6.0 but systems upgraded from CSM 1.5 may still have the `cray-uas-mgr` service and associated etcd cluster present.
+    * A workaround is presented in [Remove User Access Service](troubleshooting/known_issues/remove_uas_service.md).
 
 For a full list of known issues, see [Known issues](troubleshooting/README.md#known-issues).

@@ -168,6 +168,9 @@ see [Removals](introduction/deprecated_features/README.md#removals)
 * There are resource leaks in several HMS services ([PCS](glossary.md#power-control-service-pcs), [SMD](glossary.md#hardware-state-manager-smd), hmcollector, and [FAS](glossary.md#firmware-action-service-fas))
     * This issue is partially resolved by a hotfix for the CSM 1.5.2 release and fully resolved in the CSM 1.5.3 and 1.6.1 releases
     * For more information, including a workaround, see [HMS Resource Leaks](troubleshooting/known_issues/HMS_Resource_Leaks.md).
+* `cray-uas-mgr` may still be running on a system upgraded from CSM 1.5.
+    * UAI was removed in CSM 1.6.0 but systems upgraded from CSM 1.5 may still have the `cray-uas-mgr` service and associated etcd cluster present.
+    * A workaround is presented in [Remove User Access Service](troubleshooting/known_issues/remove_uas_service.md).
 
 For a full list of known issues, see [Known issues](troubleshooting/README.md#known-issues).
 
