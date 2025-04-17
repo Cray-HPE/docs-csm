@@ -335,13 +335,7 @@ managed nodes, including compute nodes and User Access Nodes (UANs).
    system. This is important to ensure all managed nodes are gracefully shut down during the system
    power off.
 
-### Capture state and perform system health checks
-
-1. (`ncn-mw#`) Use SAT to capture state of the system before the shutdown.
-
-    ```bash
-    sat bootsys shutdown --stage capture-state
-    ```
+### Perform system health checks
 
 1. (`ncn-mw#`) Optional system health checks.
 
