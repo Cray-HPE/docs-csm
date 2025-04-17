@@ -246,3 +246,5 @@ see [Removals](introduction/deprecated_features/README.md#removals)
 * `sat bootprep` image customization error
     * The SAT product should be upgraded to 2.6.23 to avoid this issue.
     * For more information, including a workaround, see [sat bootprep image customization error](troubleshooting/known_issues/sat_bootprep_image_customization_error.md).
+
+For a full list of known issues, see [Known issues](troubleshooting/README.md#known-issues).
