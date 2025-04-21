@@ -120,6 +120,20 @@ yq4 -i eval ".spec.kubernetes.services[\"kyverno-policy\"].checkImagePolicy += (
 yq4 -i eval '.spec.kubernetes.services.["cray-hubble"].externalHostname = "hubble.cmn.{{ network.dns.external }}"' "$c"
 yq4 -i eval ".spec.proxiedWebAppExternalHostnames.customerManagement |= (. + [\"{{ kubernetes.services['cray-hubble'].externalHostname }}\"] | unique)" "$c"
 
+metallb_path='.spec.kubernetes.services."cray-metallb".metallb'
+config_inline_key='configInline'
+config_inline_new_key='configInlineHistorical'
+
+# Remove MetalLB configInline due to this feature being depracated in MetalLB upstream,
+# moving value to configInlineHistorical in case is needed to restore old configuration
+# information.
+if [ "$(yq4 eval "${metallb_path}.${config_inline_key}" "$c")" != "null" ]; then
+  # Copy the value from the old key to the new key
+  yq4 eval -i "${metallb_path}.${config_inline_new_key} = ${metallb_path}.${config_inline_key}" "$c"
+  # Delete the old key
+  yq4 eval -i "del(${metallb_path}.${config_inline_key})" "$c"
+fi
+
 if yq4 eval '.spec.network.metallb.peers' "$c" &> /dev/null; then
 
   # 1. Get SLS Authentication Token
