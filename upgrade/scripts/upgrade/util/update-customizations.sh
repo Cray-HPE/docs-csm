@@ -120,6 +120,51 @@ yq4 -i eval ".spec.kubernetes.services[\"kyverno-policy\"].checkImagePolicy += (
 yq4 -i eval '.spec.kubernetes.services.["cray-hubble"].externalHostname = "hubble.cmn.{{ network.dns.external }}"' "$c"
 yq4 -i eval ".spec.proxiedWebAppExternalHostnames.customerManagement |= (. + [\"{{ kubernetes.services['cray-hubble'].externalHostname }}\"] | unique)" "$c"
 
+if yq4 eval '.spec.network.metallb.peers' "$c" &> /dev/null; then
+
+  # 1. Get SLS Authentication Token
+  # shellcheck disable=SC2046,SC2155
+  export SLS_TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+
+  # shellcheck disable=SC2166
+  if [ -z "${SLS_TOKEN}" -o "${SLS_TOKEN}" == "" -o "${SLS_TOKEN}" == "null" ]; then
+    echo >&2 "error: failed to obtain token from keycloak"
+    exit 1
+  fi
+
+  # 2. Fetch Network Data from SLS
+  SLS_NETWORKS_JSON=$(curl -s -k -H "Authorization: Bearer ${SLS_TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/networks)
+
+  # 3. Get the number of peers currently in customizations.yaml
+  num_peers=$(yq4 eval '.spec.network.metallb.peers | length' "$c")
+
+  for i in $(seq 0 $((num_peers - 1))); do
+    # 4. Get the peer-address for the current peer from the temp file
+    current_peer_ip=$(yq4 eval ".spec.network.metallb.peers[$i].\"peer-address\"" "$c")
+    [[ -z $current_peer_ip || $current_peer_ip == "null" ]] && continue
+
+    # 5. Search SLS data for the reservation matching the current_peer_ip
+    match_info=$(echo "$SLS_NETWORKS_JSON" | jq -c --arg ip "$current_peer_ip" '
+            first(
+                .[] | select(.ExtraProperties.Subnets) | . as $network |
+                .ExtraProperties.Subnets[] | select(.IPReservations and (.Name == "network_hardware" or .Name == "bootstrap_dhcp")) |
+                .IPReservations[] | select(.Name? and .IPAddress?) | select(.IPAddress == $ip) |
+                {deviceName: .Name, deviceNetwork: ($network.Name | ascii_downcase)}
+            )
+        ')
+
+    # 6. Extract device name and network
+    if [[ -n $match_info ]]; then
+      device_name=$(echo "$match_info" | jq -r '.deviceName')
+      device_network=$(echo "$match_info" | jq -r '.deviceNetwork')
+
+      # 7. Add the fields for the current peer index in the temp file
+      yq4 eval -i ".spec.network.metallb.peers[$i].\"device-name\" = \"${device_name}\"" "$c"
+      yq4 eval -i ".spec.network.metallb.peers[$i].\"device-network\" = \"${device_network}\"" "$c"
+    fi
+  done
+fi
+
 # lower cpu request for tds systems (4 workers)
 num_workers=$(kubectl get nodes | grep ncn-w | wc -l)
 if [ $num_workers -le 4 ]; then
