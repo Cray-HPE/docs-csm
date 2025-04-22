@@ -83,6 +83,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [IMS Image Job Performance](../operations/image_management/Image_Job_Performance.md)
 * [Storage node `cloud-init` fails with 'Timed out waiting for device' error](./known_issues/storage_node_cloud_init_fails_with_timed_out.md)
+* [Console SSH Key Permissions](./known_issues/console_ssh_key_permissions.md)
 
 ## Booting
 
