@@ -40,9 +40,10 @@ of any changes that were made during the migration. This pod log is also collect
 
 ## CSM major/minor version upgrade
 
-Follow one of these procedures when upgrading from CSM 1.5 to CSM 1.6 (regardless of patch version) or when upgrading from CSM 1.6.0 to CSM 1.6.1.
-(Additionally, in the unusual situation of upgrading from a pre-release version of CSM 1.6.0, then one of these
-procedure should be followed.)
+Follow one of these procedures when upgrading from CSM 1.5 to CSM 1.6 (regardless of patch version) or when upgrading from CSM 1.6.0
+to a newer patch version.
+(Additionally, in the unusual situation of upgrading from a pre-release version of CSM 1.6.0, then one of these procedure should be followed.)
+If the starting CSM version of the upgrade is 1.6.1 or later, then see [CSM patch version upgrade](#csm-patch-version-upgrade).
 
 There is no need to upgrade from CSM 1.5 to CSM 1.6.0, and then separately upgrade from CSM 1.6.0 to the
 latest patch release. The procedures in this section can be used to upgrade from CSM 1.5 directly to the
@@ -74,5 +75,15 @@ uncommon upgrade scenario.
 
 ## CSM patch version upgrade
 
-If upgrading from CSM 1.6.0 to CSM 1.6.1, follow the [CSM major/minor version upgrade](#csm-majorminor-version-upgrade) instructions.
-There is no specific patch procedure for the CSM 1.6.1 upgrade. This CSM upgrade is expected to be done along with the upgrade of other products and should be done through IUF.
+If the starting version of the upgrade is CSM 1.6.0, then follow the [CSM major/minor version upgrade](#csm-majorminor-version-upgrade) instructions.
+CSM upgrades starting from 1.6.0 are expected to be done along with the upgrade of other products and should be done through IUF.
+
+If the starting version of the upgrade is CSM 1.6.1 or later, then perform the upgrade using one of the following procedures. These procedures only upgrade
+CSM itself, and not any other products.
+
+If there are multiple patch versions available, note that there is no need to perform intermediate CSM 1.6 patch upgrades (provided that the starting
+version is at least 1.6.1). Instead, consider upgrading to the latest CSM 1.6 patch release.
+
+| *CSM Version* | *Release Notes*                            | *Patch Installation Instructions*                  |
+|---------------|--------------------------------------------|----------------------------------------------------|
+| 1.6.2         | [Release Notes](../RELEASE_NOTES_1.6.2.md) | [Patch Installation Instructions](1.6.2/README.md) |
