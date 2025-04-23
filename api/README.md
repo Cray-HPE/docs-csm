@@ -9,6 +9,7 @@
  * [Image Management Service v3](./ims.md)
  * [NCN Lifecycle Service v1](./nls.md)
  * [Power Control Service (PCS) v1](./power-control.md)
+ * [Rack Resiliency Service (RRS) v1](./rrs.md)
  * [System Configuration Service v1](./scsd.md)
  * [System Layout Service v2](./sls.md)
  * [Hardware State Manager API v2](./smd.md)
