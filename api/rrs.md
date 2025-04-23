@@ -23,36 +23,44 @@ The service exposes a RESTful API and is designed to run inside a Kubernetes clu
 
 ## Workflows
 
-### Zone Information:
+### Listing Information:
     
 #### `GET /zones`
 
     Obtain a list of all discovered zones across Kubernetes and Ceph.
 
+#### `GET /criticalservices`
+
+    Obtain a list of all the criticalservices pertaining to rack resiliency service.
+
+#### `GET /criticalservices/status`
+
+    Obtain a list of status of all the criticalservices pertaining to rack resiliency service.
+
 ---
+
+### Describing resource:
 
 #### `GET /zones/<zone-name>`
 
     Obtain the detailed information about a specific zone, including nodes, status and OSDs.
 
----
-
-### Manage criticalservices:
-
-#### `GET /criticalservices`
-
-    Obtain a list of all the criticalservices pertaining to rack resiliency service.
----
-
 #### `GET /criticalservices/<service-name>`
 
     Obtain the detailed information about a specific criticalservice.
 
+
+#### `GET /criticalservices/status/<service-name>`
+
+    Obtain the detailed information about the status a specific criticalservice.
+
 ---
+
+### Updating information:
 
 #### `PATCH /criticalservices`
 
-    Registers a new criticalservice with the system. Requires the service name, namespace and type in a json file in the given format.
+    Registers new criticalservice(s) with the system. Requires the service name, namespace and type in a json file in the given format.
 
 **file format:**
 
@@ -70,20 +78,6 @@ The service exposes a RESTful API and is designed to run inside a Kubernetes clu
   }
 }
 ```
-
----
-
-### Criticalservices status information:
-
-#### `GET /criticalservices/status`
-
-    Obtain a list of status of all the criticalservices pertaining to rack resiliency service.
-
----
-
-#### `GET /criticalservices/status/<service-name>`
-
-    Obtain the detailed information about the status a specific criticalservice.
 
 ---
 
@@ -214,13 +208,13 @@ Status Code **200**
 
 | Name | Type | Required | Restrictions | Description |
 |------|------|----------|--------------|-------------|
-| Zones | array of object | Yes | | List of zone objects |
-| Zones[].Zone Name | string | Yes | | Name of the zone |
-| Zones[].Kubernetes Topology Zone | object | Yes | | Kubernetes-related nodes grouped by roles |
-| Zones[].Kubernetes Topology Zone.Management Master Nodes | array of string | Yes | | List of Kubernetes master nodes in the zone |
-| Zones[].Kubernetes Topology Zone.Management Worker Nodes | array of string | Yes | | List of Kubernetes worker nodes in the zone |
-| Zones[].CEPH Zone | object | Yes | | Ceph-related storage node details |
-| Zones[].CEPH Zone.Management Storage Nodes | array of string | Yes | | List of Ceph storage nodes in the zone |
+| » Zones | array of object | Yes | | List of zone objects |
+| »» Zone Name | string | Yes | | Name of the zone |
+| »» Kubernetes Topology Zone | object | Yes | | Kubernetes-related nodes grouped by roles |
+| »»» Management Master Nodes | array of string | Yes | | List of Kubernetes master nodes in the zone |
+| »»» Management Worker Nodes | array of string | Yes | | List of Kubernetes worker nodes in the zone |
+| »» CEPH Zone | object | Yes | | Ceph-related storage node details |
+| »»» Management Storage Nodes | array of string | Yes | | List of Ceph storage nodes in the zone |
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -370,27 +364,27 @@ Status Code **200**
 
 | Name | Type | Required | Restrictions | Description |
 |------|------|----------|--------------|-------------|
-| Zone Name | string | Yes | | Name of the requested zone |
-| Management Masters | integer | Yes | ≥ 0 | Number of master nodes in the zone |
-| Management Workers | integer | Yes | ≥ 0 | Number of worker nodes in the zone |
-| Management Storages | integer | Yes | ≥ 0 | Number of storage nodes in the zone |
-| Management Master | object | Yes | | Kubernetes master node details |
-| Management Master.Type | string | Yes | "Kubernetes Topology Zone" | Type of zone for master nodes |
-| Management Master.Nodes | array of object | Yes | | List of master nodes |
-| Management Master.Nodes[].Name | string | Yes | | Name of the master node |
-| Management Master.Nodes[].Status | string | Yes | "Ready", "NotReady" | Status of the master node |
-| Management Worker | object | Yes | | Kubernetes worker node details |
-| Management Worker.Type | string | Yes | "Kubernetes Topology Zone" | Type of zone for worker nodes |
-| Management Worker.Nodes | array of object | Yes | | List of worker nodes |
-| Management Worker.Nodes[].Name | string | Yes | | Name of the worker node |
-| Management Worker.Nodes[].Status | string | Yes | "Ready", "NotReady" | Status of the worker node |
-| Management Storage | object | Yes | | Ceph storage node details |
-| Management Storage.Type | string | Yes | "CEPH Zone" | Type of zone for storage nodes |
-| Management Storage.Nodes | array of object | Yes | | List of storage nodes |
-| Management Storage.Nodes[].Name | string | Yes | | Name of the storage node |
-| Management Storage.Nodes[].Status | string | Yes | "Ready", "NotReady" | Status of the storage node |
-| Management Storage.Nodes[].OSDs | object | Yes | | OSD status summary |
-| Management Storage.Nodes[].OSDs.up | array of string | Yes | | List of OSDs that are up |
+| » Zone Name | string | Yes | | Name of the requested zone |
+| » Management Masters | integer | Yes | ≥ 0 | Number of master nodes in the zone |
+| » Management Workers | integer | Yes | ≥ 0 | Number of worker nodes in the zone |
+| » Management Storages | integer | Yes | ≥ 0 | Number of storage nodes in the zone |
+| » Management Master | object | Yes | | Kubernetes master node details |
+| »» Type | string | Yes | "Kubernetes Topology Zone" | Type of zone for master nodes |
+| »» Nodes | array of object | Yes | | List of master nodes |
+| »»» Name | string | Yes | | Name of the master node |
+| »»» Status | string | Yes | "Ready", "NotReady" | Status of the master node |
+| » Management Worker | object | Yes | | Kubernetes worker node details |
+| »» Type | string | Yes | "Kubernetes Topology Zone" | Type of zone for worker nodes |
+| »» Nodes | array of object | Yes | | List of worker nodes |
+| »»» Name | string | Yes | | Name of the worker node |
+| »»» Status | string | Yes | "Ready", "NotReady" | Status of the worker node |
+| » Management Storage | object | Yes | | Ceph storage node details |
+| »» Type | string | Yes | "CEPH Zone" | Type of zone for storage nodes |
+| »» Nodes | array of object | Yes | | List of storage nodes |
+| »»» Name | string | Yes | | Name of the storage node |
+| »»» Status | string | Yes | "Ready", "NotReady" | Status of the storage node |
+| »»» OSDs | object | Yes | | OSD status summary |
+| »»»» Stauts | array of string | Yes | up/down | List of OSDs that are up/down |
 
 
 <aside class="warning">
@@ -515,13 +509,13 @@ Status Code **200**
 
 | Name | Type | Required | Restrictions | Description |
 |------|------|----------|--------------|-------------|
-| critical-services | object | Yes | | Root object containing critical services info |
-| critical-services.namespace | object | Yes | | Map of namespaces to their critical services |
-| critical-services.namespace.<namespace> | array of object | Yes | | List of critical services in the namespace |
-| critical-services.namespace.<namespace>[].name | string | Yes | | Name of the critical service |
-| critical-services.namespace.<namespace>[].type | string | Yes | "Deployment", "StatefulSet" | Type of the Kubernetes workload |
+| » critical-services | object | Yes | | Root object containing critical services info |
+| »» namespace | object | Yes | | Map of namespaces to their critical services |
+| »»» {namespace} | array of object | Yes | | List of critical services in the namespace |
+| »»»» name | string | Yes | | Name of the critical service |
+| »»»» type | string | Yes | "Deployment", "StatefulSet" | Type of the Kubernetes workload |
 
-> Replace <namespace> dynamically with actual namespace keys like ns-1, ns-2, etc.
+> Replace {namespace} dynamically with actual namespace keys like ns-1, ns-2, etc.
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -636,12 +630,12 @@ Status Code **200**
 
 | Name | Type | Required | Restrictions | Description |
 |------|------|----------|--------------|-------------|
-| Critical Service | object | Yes | | Details of the critical service |
-| Critical Service.Name | string | Yes | | Name of the critical service |
-| Critical Service.Namespace | string | Yes | | Namespace in which the service is deployed |
-| Critical Service.Type | string | Yes | Deployment, StatefulSet, DaemonSet | Type of Kubernetes workload |
-| Critical Service.Configured Instances | integer | Yes | ≥ 0 | Number of instances configured for the service |
-| Critical Service.Currently Running Instances | integer | Yes | ≥ 0 | Number of instances currently running |
+| » Critical Service | object | Yes | | Details of the critical service |
+| »» Name | string | Yes | | Name of the critical service |
+| »» Namespace | string | Yes | | Namespace in which the service is deployed |
+| »» Type | string | Yes | Deployment, StatefulSet, DaemonSet | Type of Kubernetes workload |
+| »» Configured Instances | integer | Yes | ≥ 0 | Number of instances configured for the service |
+| »» Currently Running Instances | integer | Yes | ≥ 0 | Number of instances currently running |
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -908,13 +902,13 @@ Status Code **200**
 
 | Name | Type | Required | Restrictions | Description |
 |------|------|----------|--------------|-------------|
-| critical-services | object | Yes | | Root object containing critical services information |
-| critical-services.namespace | object | Yes | | Map of namespaces to their critical services |
-| critical-services.namespace.<namespace> | array of object | Yes | | List of critical services within the given namespace |
-| critical-services.namespace.<namespace>[].name | string | Yes | | Name of the critical service |
-| critical-services.namespace.<namespace>[].type | string | Yes | Deployment, StatefulSet, DaemonSet | Type of Kubernetes workload |
-| critical-services.namespace.<namespace>[].status | string | Yes | Configured, PartiallyConfigured, NotConfigured | Configuration status of the service |
-| critical-services.namespace.<namespace>[].balanced | string (boolean) | Yes | "true", "false" | Indicates if service is balanced across zones |
+| » critical-services | object | Yes | | Root object containing critical services information |
+| »» namespace | object | Yes | | Map of namespaces to their critical services |
+| »»» {namespace} | array of object | Yes | | List of critical services within the given namespace |
+| »»»» name | string | Yes | | Name of the critical service |
+| »»»» type | string | Yes | Deployment, StatefulSet, DaemonSet | Type of Kubernetes workload |
+| »»»» status | string | Yes | Configured, PartiallyConfigured, NotConfigured | Configuration status of the service |
+| »»»» balanced | string (boolean) | Yes | "true", "false" | Indicates if service is balanced across zones |
 
 > Replace <namespace> dynamically with actual namespace keys like ns-1, ns-2, etc.
 
@@ -1032,19 +1026,19 @@ Status Code **200**
 
 | Name | Type | Required | Restrictions | Description |
 |------|------|----------|--------------|-------------|
-| Critical Service | object | Yes | | Contains details about the critical service |
-| Critical Service.Name | string | Yes | | Name of the critical service |
-| Critical Service.Namespace | string | Yes | | Namespace in which the service is deployed |
-| Critical Service.Type | string | Yes | Deployment, StatefulSet, DaemonSet | Type of the Kubernetes workload |
-| Critical Service.Status | string | Yes | Configured, Partially Configured, Running | Overall configuration or runtime status of the service |
-| Critical Service.Balanced | string (boolean) | Yes | "true", "false" | Whether the service is balanced across zones |
-| Critical Service.Configured Instances | integer | Yes | ≥ 0 | Number of instances configured |
-| Critical Service.Currently Running Instances | integer | Yes | ≥ 0 | Number of instances currently running |
-| Critical Service.Pods | array of object | Yes | | List of pods under the service |
-| Critical Service.Pods[].Name | string | Yes | | Name of the pod |
-| Critical Service.Pods[].Status | string | Yes | "Running", "Pending", "Failed" | Current status of the pod |
-| Critical Service.Pods[].Node | string | Yes | | Name of the node the pod is running on |
-| Critical Service.Pods[].Zone | string | Yes | | Zone (e.g., rack name) where the pod's node resides |
+| » Critical Service | object | Yes | | Contains details about the critical service |
+| »» Name | string | Yes | | Name of the critical service |
+| »» Namespace | string | Yes | | Namespace in which the service is deployed |
+| »» Type | string | Yes | Deployment, StatefulSet, DaemonSet | Type of the Kubernetes workload |
+| »» Status | string | Yes | Configured, Partially Configured, Running | Overall configuration or runtime status of the service |
+| »» Balanced | string (boolean) | Yes | "true", "false" | Whether the service is balanced across zones |
+| »» Configured Instances | integer | Yes | ≥ 0 | Number of instances configured |
+| »» Currently Running Instances | integer | Yes | ≥ 0 | Number of instances currently running |
+| »» Pods | array of object | Yes | | List of pods under the service |
+| »»» Name | string | Yes | | Name of the pod |
+| »»» Status | string | Yes | "Running", "Pending", "Failed" | Current status of the pod |
+| »»» Node | string | Yes | | Name of the node the pod is running on |
+| »»» Zone | string | Yes | | Zone (e.g., rack name) where the pod's node resides |
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
