@@ -2,11 +2,19 @@
 
 - [Introduction](#introduction)
 - [Deploying `PProf` Enabled Container Images](#deploying-pprof-enabled-container-images)
-    - [Edit Deployment](#edit-deployment)
+    - [Edit The Deployment](#edit-the-deployment)
+        - [Important Note On Image Persistence](#important-note-on-image-persistence)
     - [Possibly Scale Down Replicas](#possibly-scale-down-replicas)
-    - [Important Note On Persistence](#important-note-on-persistence)
     - [Restore Production Container Image](#restore-production-container-image)
-- [Gather Profiles](#gather-profiles)
+- [Gathering Profiles](#gathering-profiles)
+    - [Service Mesh Considerations](#service-mesh-considerations)
+        - [Gathering Profiles From Outside the Service Mesh](#gathering-profiles-from-outside-the-service-mesh)
+        - [Gathering Profiles From Inside the Service Mesh](#gathering-profiles-from-insideoutside-the-service-mesh)
+            - [`hmcollector-ingress`](#hmcollector-ingress)
+            - [`hmcollector-poll`](#hmcollector-poll)
+            - [MEDS](#meds)
+            - [RTS](#rts)
+            - [`RTS-SNMP`](#rts-snmp)
 - [Sending Profiles To HPE Service](#sending-profiles-to-hpe-service)
 - [Deployment Name And `PProf` URL Reference](#deployment-name-and-pprof-url-reference)
 
@@ -243,7 +251,6 @@ kubectl -n services cp cray-hms-hmcollector-ingress-6b7fd6566c-9kcvp:/tmp/hmcoll
 ```
 
 ##### `hmcollector-poll`
-
 (`ncn#`) Abbreviated example after identifying the target pod:
 
 ```bash
@@ -272,7 +279,7 @@ kubectl -n services exec -it cray-hms-rts-6df8f8859d-fb4f7 -c cray-hms-rts -- cu
 kubectl -n services cp cray-hms-rts-6df8f8859d-fb4f7:/tmp/rts.heap.04242025.pprof -c cray-hms-rts rts.heap.04242025.pprof
 ```
 
-##### RTS-SNMP
+##### `RTS-SNMP`
 
 (`ncn#`) Abbreviated example after identifying the target pod:
 
@@ -313,7 +320,7 @@ kubectl top pod -n services --containers=true | grep -e NAME -e cray-power-contr
 | MEDS                  | `cray-meds`                    | unavailable outside service mesh
 | PCS                   | `cray-power-control`           | `https://api-gw-service-nmn.local/apis/power-control/v1/debug/pprof/` |
 | RTS                   | `cray-hms-rts`                 | unavailable outside service mesh
-| RTS-SNMP              | `cray-hms-rts-snmp`            | unavailable outside service mesh
+| `RTS-SNMP`            | `cray-hms-rts-snmp`            | unavailable outside service mesh
 | SCSD                  | `cray-scsd`                    | `https://api-gw-service-nmn.local/apis/scsd/v1/debug/pprof/`           |
 | SLS                   | `cray-sls`                     | `https://api-gw-service-nmn.local/apis/sls/v1/debug/pprof/`           |
 | SMD                   | `cray-smd`                     | `https://api-gw-service-nmn.local/apis/smd/hsm/v2/debug/pprof/`       |
