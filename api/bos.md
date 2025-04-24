@@ -3295,10 +3295,18 @@ Update the state for a collection of Components in the BOS database
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
+|skip_bad_ids|query|boolean|false|If false, if the patch request explicitly lists a BOS component ID that|
 |body|body|any|true|The state for an array of Components|
 |Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 
 #### Detailed descriptions
+
+**skip_bad_ids**: If false, if the patch request explicitly lists a BOS component ID that
+does not exist, it will be considered a fatal error. The patch operation
+will fail and return a 404 status.
+If true, the patch request will skip any IDs that do not exist, and
+patch the remaining items. The response will only include the components
+that were actually updated.
 
 **Cray-Tenant-Name**: Tenant name.
 
