@@ -40,14 +40,13 @@ e() {
   ETCDCTL_API=3 etcdctl "${CERTS}" "$@"
 }
 
-
 fix_resource() {
   resource=$1
 
   echo "Updating apiVersion in ${resource} v1beta1 -> v1beta2"
   e get --print-value-only "${resource}" \
-     | sed 's;kafka.strimzi.io/v1beta1;kafka.strimzi.io/v1beta2;' \
-     | e put "${resource}"
+    | sed 's;kafka.strimzi.io/v1beta1;kafka.strimzi.io/v1beta2;' \
+    | e put "${resource}"
 }
 
 fix_strimzi_resources_in_etcd() {
