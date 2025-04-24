@@ -54,7 +54,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Helm Chart Deploy Timeouts](known_issues/helm_chart_deploy_timeouts.md)
 * [HPE iLO dropping event subscriptions and not properly transitioning power state in CSM software](known_issues/hpe_systems_not_transitioning_power_state.md)
 * [IMS image creation failure](known_issues/ims_image_creation_failure.md)
-* [`initrd.img.xz` Not Found](known_issues/initrd.img.zx_not_found.md)
 * [NCN health checks known issues](known_issues/issues_with_ncn_health_checks.md)
 * [`kubectl logs -f` returns no space left on device](known_issues/kubectl_logs_no_space_left_on_device.md)
 * [Kubernetes Master or Worker node's root filesystem is out of space](known_issues/kubernetes_node_rootFS_out_of_space.md)
