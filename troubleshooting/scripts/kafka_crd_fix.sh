@@ -34,20 +34,20 @@ delete_auth() {
 }
 
 e() {
-    CERTS="--cacert /etc/kubernetes/pki/etcd/ca.crt"
-    CERTS="${CERTS} --cert /etc/kubernetes/pki/etcd/peer.crt"
-    CERTS="${CERTS} --key /etc/kubernetes/pki/etcd/peer.key"
-    ETCDCTL_API=3 etcdctl "${CERTS}" "$@"
+  CERTS="--cacert /etc/kubernetes/pki/etcd/ca.crt"
+  CERTS="${CERTS} --cert /etc/kubernetes/pki/etcd/peer.crt"
+  CERTS="${CERTS} --key /etc/kubernetes/pki/etcd/peer.key"
+  ETCDCTL_API=3 etcdctl "${CERTS}" "$@"
 }
 
 
 fix_resource() {
-    resource=$1
+  resource=$1
 
-    echo "Updating apiVersion in ${resource} v1beta1 -> v1beta2"
-    e get --print-value-only "${resource}" \
-       | sed 's;kafka.strimzi.io/v1beta1;kafka.strimzi.io/v1beta2;' \
-       | e put "${resource}"
+  echo "Updating apiVersion in ${resource} v1beta1 -> v1beta2"
+  e get --print-value-only "${resource}" \
+     | sed 's;kafka.strimzi.io/v1beta1;kafka.strimzi.io/v1beta2;' \
+     | e put "${resource}"
 }
 
 fix_strimzi_resources_in_etcd() {
@@ -212,7 +212,7 @@ cleanup() {
   # Remove last-applied-configuration in annotations and also preserveUnknownFields field in spec
   CRDS=$(kubectl get crds -lapp=strimzi -o jsonpath='{.items[*].metadata.name}')
 
-  cat <<EOF
+  cat << EOF
 Removing
     metadata.annotations.last-applied-configuration
     spec.preserveUnknownFields
@@ -224,12 +224,12 @@ EOF
 
     has_last_applied=$(echo "$crd_json" | jq -e '.metadata.annotations["kubectl.kubernetes.io/last-applied-configuration"]' > /dev/null && echo true || echo false)
     has_preserve_unknown=$(echo "$crd_json" | jq -e 'has("spec") and .spec | has("preserveUnknownFields")' > /dev/null && echo true || echo false)
-    if [[ "$has_last_applied" == "true" ]]; then
+    if [[ $has_last_applied == "true" ]]; then
       echo "Removing last-applied-configuration from CRD ${crd}"
       kubectl patch --type merge crd "${crd}" -p '{"metadata":{"annotations":{"kubectl.kubernetes.io/last-applied-configuration": null}}}'
     fi
 
-    if [[ "$has_preserve_unknown" == "true" ]]; then
+    if [[ $has_preserve_unknown == "true" ]]; then
       echo "Setting preserveUnknownFields to null in CRD ${crd}"
       kubectl patch --type merge crd "${crd}" -p '{"spec":{"preserveUnknownFields": null}}'
     fi
