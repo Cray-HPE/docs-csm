@@ -229,7 +229,7 @@ EOF
     fi
 
     if [[ $has_preserve_unknown == "true" ]]; then
-      echo "Setting preserveUnknownFields to null in CRD ${crd}"
+      echo "Removing preserveUnknownFields from CRD ${crd}"
       kubectl patch --type merge crd "${crd}" -p '{"spec":{"preserveUnknownFields": null}}'
     fi
   done
