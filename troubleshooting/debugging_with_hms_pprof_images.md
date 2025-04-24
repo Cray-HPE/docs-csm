@@ -9,7 +9,7 @@
 - [Gathering Profiles](#gathering-profiles)
     - [Service Mesh Considerations](#service-mesh-considerations)
         - [Gathering Profiles From Outside the Service Mesh](#gathering-profiles-from-outside-the-service-mesh)
-        - [Gathering Profiles From Inside the Service Mesh](#gathering-profiles-from-insideoutside-the-service-mesh)
+        - [Gathering Profiles From Inside the Service Mesh](#gathering-profiles-from-inside-the-service-mesh)
             - [`hmcollector-ingress`](#hmcollector-ingress)
             - [`hmcollector-poll`](#hmcollector-poll)
             - [MEDS](#meds)
@@ -251,6 +251,7 @@ kubectl -n services cp cray-hms-hmcollector-ingress-6b7fd6566c-9kcvp:/tmp/hmcoll
 ```
 
 ##### `hmcollector-poll`
+
 (`ncn#`) Abbreviated example after identifying the target pod:
 
 ```bash
