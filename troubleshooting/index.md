@@ -39,7 +39,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 * [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
 * [HMS Discovery job not creating `RedfishEndpoint`s in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
-* [`initrd.img.xz` not found](known_issues/initrd.img.zx_not_found.md)
 * [Platform CA Issues](known_issues/platform_ca_issues.md)
 * [Kafka Failure after CSM 1.2 Upgrade](known_issues/kafka_upgrade_failure.md)
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
