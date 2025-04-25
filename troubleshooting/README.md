@@ -43,7 +43,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
 * [Antero node NID allocation](known_issues/antero_node_NID_allocation.md)
 * [Software Management Services health check](known_issues/sms_health_check.md)
-* [QLogic driver crash](known_issues/qlogic_driver_crash.md)
 * [Nexus Fails Authentication with Keycloak Users](known_issues/Nexus_Fail_Authentication_with_Keycloak_Users.md)
 * [Keycloak Error "Cannot read properties" in Web UI](known_issues/Keycloak_Error_Cannot_read_properties.md)
 * [Gigabyte BMC Missing Redfish Data](known_issues/Gigabyte_BMC_Missing_Redfish_Data.md)
