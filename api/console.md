@@ -82,7 +82,7 @@ written to the node's console.
 |403|[Forbidden Response](https://tools.ietf.org/html/rfc7231#section-6.5.3)|User does not have permission to access the node.|Inline|
 |404|[Not Found Response](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The node does not exist.|Inline|
 
-<h2 id="schematenantname">V2TenantName</h2>
+<h2 id="schematenantname">TenantName</h2>
 
 ```json
 "string"
