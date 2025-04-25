@@ -186,3 +186,11 @@ The upgrade to CSM 1.6 is done through IUF. Follow one of the following two proc
    <line number> /usr/share/doc/csm/upgrade/scripts/upgrade/prerequisites.sh
    rsync -aq "${CSM_ARTI_DIR}"/chrony "${target_ncn}":/srv/cray/scripts/common/
    ```
+
+- Console Mountain SSH key permissions
+
+   Sometimes after the worker node rollout, the permissions of the private key file used to connect with the Mountain nodes via SSH
+   are not set correctly. This can cause the SSH connection to the node to fail. The log file will not
+   contain the console output and interactive sessions will fail.
+
+   To resolve this issue see [Console SSH Key Permissions](../troubleshooting/known_issues/console_ssh_key_permissions.md).
