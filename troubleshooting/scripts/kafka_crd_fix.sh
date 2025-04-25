@@ -37,7 +37,7 @@ e() {
   CERTS="--cacert /etc/kubernetes/pki/etcd/ca.crt"
   CERTS="${CERTS} --cert /etc/kubernetes/pki/etcd/peer.crt"
   CERTS="${CERTS} --key /etc/kubernetes/pki/etcd/peer.key"
-  ETCDCTL_API=3 etcdctl "${CERTS}" "$@"
+  ETCDCTL_API=3 etcdctl ${CERTS} "$@"
 }
 
 fix_resource() {
@@ -50,6 +50,9 @@ fix_resource() {
 }
 
 fix_strimzi_resources_in_etcd() {
+  echo
+  echo "Fixing strimzi resource versions in etcd"
+  echo
   KAFKAS=$(e get /registry/kafka.strimzi.io/kafkas --prefix --keys-only)
   KAFKATOPICS=$(e get /registry/kafka.strimzi.io/kafkatopics --prefix --keys-only)
   echo "KAFKAS=${KAFKAS}"
@@ -136,12 +139,14 @@ have_old_kakfa_crd() {
 }
 
 update_storage_fields() {
+  echo
+  echo "Updating storage fields for strimzi CRDs"
+  echo
   strimzi_kafka_crd_list=$(kubectl get crds -l app=strimzi -o jsonpath='{.items[*].metadata.name}')
 
   # Update the "storage" fields to true for v1beta2 version and false to other versions
   # Update the "served" field to true for v1beta2
   for crd in ${strimzi_kafka_crd_list}; do
-    echo "Updating storage fields for crd ${crd}"
     crd_json=$(kubectl get crd "${crd}" -o json)
     modified_spec=$(echo "${crd_json}" | jq '
       (.spec.versions) |= map(
@@ -162,6 +167,9 @@ update_storage_fields() {
 }
 
 remove_old_crd_versions() {
+  echo
+  echo "Removing older versions from strimzi CRDs"
+  echo
   strimzi_kafka_crd_list=$(kubectl get crds -l app=strimzi -o jsonpath='{.items[*].metadata.name}')
 
   # Grab the Kubernetes API server URL from your current kubeconfig
@@ -219,25 +227,12 @@ from kafka CRDs
 EOF
 
   for crd in ${CRDS}; do
-    crd_json=$(kubectl get crd "${crd}" -o json)
-
-    has_last_applied=$(echo "$crd_json" | jq -e '.metadata.annotations["kubectl.kubernetes.io/last-applied-configuration"]' > /dev/null && echo true || echo false)
-    has_preserve_unknown=$(echo "$crd_json" | jq -e 'has("spec") and .spec | has("preserveUnknownFields")' > /dev/null && echo true || echo false)
-    if [[ $has_last_applied == "true" ]]; then
-      echo "Removing last-applied-configuration from CRD ${crd}"
-      kubectl patch --type merge crd "${crd}" -p '{"metadata":{"annotations":{"kubectl.kubernetes.io/last-applied-configuration": null}}}'
-    fi
-
-    if [[ $has_preserve_unknown == "true" ]]; then
-      echo "Removing preserveUnknownFields from CRD ${crd}"
-      kubectl patch --type merge crd "${crd}" -p '{"spec":{"preserveUnknownFields": null}}'
-    fi
+    kubectl patch --type merge crd ${crd} -p '{"metadata":{"annotations":{"kubectl.kubernetes.io/last-applied-configuration": null}},"spec":{"preserveUnknownFields": null}}'
   done
 }
 
 echo "Checking for old versions in Strimzi kafka CRDs"
 if have_old_kakfa_crd; then
-  echo "Removing old kafka CRD versions"
   create_auth
   update_storage_fields
   fix_strimzi_resources_in_etcd
