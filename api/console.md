@@ -35,6 +35,7 @@ over the websocket connection.
 {
   "message": "string"
 }
+```
 
 <h3 id="interact_get-responses">Responses</h3>
 
@@ -72,6 +73,7 @@ written to the node's console.
 {
   "message": "string"
 }
+```
 
 <h3 id="tail_get-responses">Responses</h3>
 
