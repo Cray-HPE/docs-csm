@@ -31,29 +31,23 @@ over the websocket connection.
 
 > 403 Forbidden Response
 
-This is typically returned when the user does not have permission to access the node.
-
 ```json
 {
   "message": "string"
 }
 
+<h3 id="interact_get-responses">Responses</h3>
 
-> 404 Not Found Response
-
-This is typically returned when the node does not exist.
-
-```json
-{
-  "message": "string"
-}
-```
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|403|[Forbidden Response](https://tools.ietf.org/html/rfc7231#section-6.5.3)|User does not have permission to access the node.|Inline|
+|404|[Not Found Response](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The node does not exist.|Inline|
 
 ## Workflow: Following Console Logs
 
-`GET /interact/{node_id}`
+`GET /tail/{node_id}`
 
-*Interact with the console of `node_id`*
+*Tail the console's log file of `node_id`*
 
 A successful interaction will not return a response. Instead, the connection will be
 upgraded to a websocket connection. The client can then receive messages when content is
@@ -74,22 +68,35 @@ written to the node's console.
 
 > 403 Forbidden Response
 
-This is typically returned when the user does not have permission to access the node.
-
 ```json
 {
   "message": "string"
 }
 
-> 404 Not Found Response
+<h3 id="tail_get-responses">Responses</h3>
 
-This is typically returned when the node does not exist.
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|403|[Forbidden Response](https://tools.ietf.org/html/rfc7231#section-6.5.3)|User does not have permission to access the node.|Inline|
+|404|[Not Found Response](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The node does not exist.|Inline|
+
+<h2 id="schematenantname">V2TenantName</h2>
 
 ```json
-{
-  "message": "string"
-}
+"string"
+
 ```
+
+Name of the tenant that owns this resource. Only used in environments
+with multi-tenancy enabled. An empty string or null value means the resource
+is not owned by a tenant. The absence of this field from a resource indicates
+the same.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string¦null|false|read-only|Name of the tenant that owns this resource. Only used in environments<br>with multi-tenancy enabled. An empty string or null value means the resource<br>is not owned by a tenant. The absence of this field from a resource indicates<br>the same.|
 
 ## Code Samples
 
