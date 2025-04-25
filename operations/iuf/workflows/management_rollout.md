@@ -45,8 +45,6 @@ nodes. This initial test node is referred to as the "canary node". Modify the pr
     kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
     ```
 
-**`NOTE`** Known Issue: If IUF reports that multiple sessions are in progress for an activity, refer to [IUF does not run the next stage for an activity.](../../../troubleshooting/known_issues/iuf_unable_to_run_next_stage.md)
-
 **`IMPORTANT`** There is a different procedure for `management-nodes-rollout` depending on whether or not CSM is being upgraded. The two procedures differ in the handling of NCN storage nodes and NCN master nodes. If CSM is not
 being upgraded, then NCN storage nodes and NCN master nodes will not be upgraded with new images and will be updated by the CFS configuration created in [update-cfs-config](../stages/update_cfs_config.md) only. If CSM is being
 upgraded, the NCN storage nodes and NCN master nodes will be upgraded with new images and the new CFS configuration. Both procedures use the same steps for rebuilding/upgrading NCN worker nodes. Select **one** of the following
