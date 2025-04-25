@@ -36,7 +36,7 @@ in environments with intermittent network issues.
 
     ```bash
     sat --api-retries 3 --api-backoff 0.5 <sub-command>
-   ```
+    ```
 
    This will retry API calls up to 3 times with a `backoff` factor of 0.5 seconds.
 
