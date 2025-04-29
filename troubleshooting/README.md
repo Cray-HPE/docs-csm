@@ -62,7 +62,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Postgres Database is in Recovery](known_issues/postgres_database_recovery.md)
 * [Test Failures Due To No Discovered Compute Nodes In HSM](known_issues/test_failures_no_discovered_computes_in_hsm.md)
 * [Velero Version Mismatch](known_issues/velero_version_mismatch.md)
-* [wait for unbound hang](known_issues/wait_for_unbound_hang.md)
 * [Product Catalog Upgrade Error](known_issues/product_catalog_upgrade_error.md)
 * [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
 * [PCS and CAPMC Transaction Size Limitation](known_issues/pcs_and_capmc_transaction_size_limitation.md)
