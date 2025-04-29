@@ -2,7 +2,6 @@
  * [Boot Orchestration Service v2](./bos.md)
  * [Boot Script Service v1](./bss.md)
  * [Cray Advanced Platform Monitoring and Control (CAPMC) v3](./capmc.md)
- * [Configuration Framework Service v1](./cfs.md)
  * [Firmware Action Service v1](./firmware-action.md)
  * [Heartbeat Tracker Service v1](./hbtd.md)
  * [HMS Notification Fanout Daemon v1](./hmnfd.md)
