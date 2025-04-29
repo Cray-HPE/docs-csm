@@ -856,23 +856,23 @@ The following actions may be useful if errors are encountered when executing `iu
 
  1. IUF workflow does not start after the reinstallation of Keycloak.
 
-    - IUF stores the client-id and client-secret used to authorize with keycloak during initialization of IUF backend. When keycloak is reinstalled, the `client_secret` is regenerated and the `client_secret` stored by IUF is no longer valid.
+    - IUF stores the `client_id` and `client_secret` used to authorize with Keycloak during initialization of IUF backend. When Keycloak is reinstalled, the `client_secret` is regenerated and the `client_secret` stored by IUF is no longer valid.
 
-    - The following error is seen in cray-nls pod (IUF backend) when IUF uses the stored `client_id` and `client_secret` to authorize with Keycloak:
+    - The following error is seen in `cray-nls` pod (IUF backend) when IUF uses the stored `client_id` and `client_secret` to authorize with Keycloak:
 
-         ```text
-         2025-04-14T06:25:58.143Z        ERROR   iuf/sessions_workflow_gen.go:210        Could not generate authToken Could not retrieve OIDC token:
-         Expected 200 response but instead got 401
-         {"error":"unauthorized_client","error_description":"Invalid client or Invalid client credentials"}
-         ```
+        ```text
+        2025-04-14T06:25:58.143Z        ERROR   iuf/sessions_workflow_gen.go:210        Could not generate authToken Could not retrieve OIDC token:
+        Expected 200 response but instead got 401
+        {"error":"unauthorized_client","error_description":"Invalid client or Invalid client credentials"}
+        ```
 
-    - To start IUF workflows again, restart the cray-nls pods in argo namespace using the following command:
+    - To start IUF workflows again, restart the `cray-nls` pods in `argo` namespace using the following command:
 
          ```bash
          kubectl rollout restart deployment cray-nls -n argo
          ```
 
-    - After cray-nls pods are restarted, reissue the iuf command that was previously being attempted.
+    - After `cray-nls` pods are restarted, reissue the `iuf` command that was previously being attempted.
 
 ## Install and Upgrade Observability Framework
 
