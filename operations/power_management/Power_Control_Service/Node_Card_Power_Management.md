@@ -378,7 +378,7 @@ Example output:
 
 ## Enable and Disable Power Limiting
 
-_NOTE: 
+_NOTE:
 Power limiting on `HPE Cray EX4252` (Antero) and `HPE Cray EX255a`
 (Parry Peak) hardware cannot be disabled.  To effectively accomplish
 the same thing, set the power limit value to the max value returned
