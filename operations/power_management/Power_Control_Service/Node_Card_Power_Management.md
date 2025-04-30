@@ -299,7 +299,9 @@ cray power cap set --xnames XNAME_LIST --control CONTROL_NAME 0 --format json
 cray power cap describe TASK_ID --format json
 ```
 
-Reset the power limit to the default maximum. Alternatively, using the max
+Reset the power limit to the default maximum by setting the limit to 0
+(except for `HPE Cray EX4252` Antero and `HPE Cray EX255a` Parry Peak
+hardware). Alternatively, using the max
 value returned from power cap snapshot may also be used. Multiple controls
 can be set at the same time on multiple nodes, but all target nodes must
 have the same set of controls available, otherwise the call will fail.
@@ -375,6 +377,12 @@ Example output:
 ```
 
 ## Enable and Disable Power Limiting
+
+_Caveat to this section:
+Power limiting on `HPE Cray EX4252` (Antero) and `HPE Cray EX255a`
+(Parry Peak) hardware cannot be disabled.  To effectively accomplish
+the same thing, set the power limit value to the max value returned
+from power cap snapshot._
 
 ### Enable Power Limiting
 
