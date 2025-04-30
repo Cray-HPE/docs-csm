@@ -6,9 +6,11 @@ the tabs above or the mobile navigation menu.
 The Console Service provides access to node console logs and interactive console sessions
 for nodes in the system. These are accessed via websocket connections.
 
-# Base URL
+## Base URL
 
-* <a href="wss://api-gw-service-nmn.local/apis/console-operator/console-operator">wss://api-gw-service-nmn.local/apis/console-operator/console-operator</a>
+The Console Service is available at the following base URL:
+["wss://api-gw-service-nmn.local/apis/console-operator/console-operator"](wss://api-gw-service-nmn.local/apis/console-operator/console-operator)
+
 
 ## Workflow: Opening an Interactive Console Session
 

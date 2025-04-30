@@ -3,11 +3,11 @@
 ConMan is a tool used for connecting to remote consoles and collecting console logs. These node logs can then be used for various administrative purposes, such as troubleshooting node boot issues.
 
 ConMan runs on the system as a containerized service. It runs in a set of Docker containers within Kubernetes pods
-named `cray-console-operator` and `cray-console-node`.
+in the `services` namespace named `cray-console-operator` and `cray-console-node`.
 Node console logs are stored locally within the `cray-console-node` pods in the `/var/log/conman/` directory, as well as being collected by
 the System Monitoring Framework \(SMF\).
 
-In CSM versions 1.7.0 and later, the ConMan logs and interactive consoles are accessible through the Cray CLI. The `cray conman` command
+In CSM versions 1.7.0 and later, the ConMan logs and interactive consoles are accessible through the Cray CLI. The `cray console` command
 provides a set of subcommands for managing the ConMan service and
 
 ## How to use

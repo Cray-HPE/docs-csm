@@ -10,7 +10,7 @@ This procedure shows how the ConMan utility can be used to retrieve compute node
 ## Limitations
 
 * Encryption of compute node logs is not enabled, so the passwords may be passed in clear text.
-* If the user is a member of a tenant only the logs for that tenant are available.
+* If the user is a member of a tenant, then only the logs for that tenant are available.
 
 ## Procedure
 
@@ -20,10 +20,10 @@ This procedure shows how the ConMan utility can be used to retrieve compute node
 
 1. (`ncn-mw#`) Start tailing the console log.
 
-    Execute the `cray conman tail` command to start tailing the console log for a specific node.
+    Execute the `cray console tail` command to start tailing the console log for a specific node.
 
     ```bash
-    cray conman tail \
+    cray console tail \
         --lines 20 \
         --follow \
         XNAME

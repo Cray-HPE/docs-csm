@@ -10,7 +10,7 @@ This procedure shows how to connect to the node's Serial Over LAN (SOL) via ConM
 ## Limitations
 
 * Encryption of compute node logs is not enabled, so the passwords may be passed in clear text.
-* If the user is a member of a tenant only the logs for that tenant are available.
+* If the user is a member of a tenant, then only the logs for that tenant are available.
 
 ## Procedure
 
