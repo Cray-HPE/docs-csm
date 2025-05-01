@@ -62,17 +62,17 @@ if [ ${k8s_minor_version} -gt 24 ]; then
 fi
 
 # If there are post-upgrade-*-<k8s_version>.yaml files, deploy charts in those files.
-manifests_dir="${CSM_ARTI_DIR}/manifests"
+manifests_dir="${CSM_ARTI_DIR}/build/manifests"
 find "${manifests_dir}/" -name "post-upgrade-*-${k8s_version}.yaml" | sort | while read -r manifest; do
   echo "INFO Deploying ${manifest} ..."
   deploy "${manifest}"
 done
 
-if [ "${k8s_version}" = "v1.32"]; then
-  # We've reached our destination k8s version so run the csm upgrade.sh script to deploy
-  # the same manifests as on install.
-  source ${CSM_ARTI_DIR}/upgrade.sh
-fi
+# if [ "${k8s_version}" = "v1.32" ]; then
+#   # We've reached our destination k8s version so run the csm upgrade.sh script to deploy
+#   # the same manifests as on install.
+#   source ${CSM_ARTI_DIR}/upgrade.sh
+# fi
 
 # Return to previous working directory
 popd
