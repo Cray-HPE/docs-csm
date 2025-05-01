@@ -172,7 +172,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Kubernetes Node `NotReady`](kubernetes/Troubleshoot_Kubernetes_Node_NotReady.md)
 * [Kubernetes Pods not Starting](kubernetes/Troubleshoot_Kubernetes_Pods_Not_Starting.md)
 * [Postgres Database](../operations/kubernetes/Troubleshoot_Postgres_Database.md)
-* [Recover from Postgres WAL Event](../operations/kubernetes/Troubleshoot_Postgres_Database.md)
+* [Recover from Postgres WAL Event](../operations/kubernetes/Recover_from_Postgres_WAL_Event.md)
 * [Restore Postgres](../operations/kubernetes/Restore_Postgres.md)
 * [Disaster Recovery for Postgres](../operations/kubernetes/Disaster_Recovery_Postgres.md)
 * [Postgres Database is in Recovery](known_issues/postgres_database_recovery.md)
