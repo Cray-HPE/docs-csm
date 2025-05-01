@@ -103,6 +103,6 @@ set +o pipefail
 echo "Updating image ids..."
 touch /etc/cray/upgrade/csm/myenv
 sed -i 's/^export STORAGE_IMS_IMAGE_ID.*//' /etc/cray/upgrade/csm/myenv
-sed -i 's/^export KUBERNETES_IMS_IMAGE_ID.*//' /etc/cray/upgrade/csm/myenv
+sed -i 's/^export K8S_IMS_IMAGE_ID.*//' /etc/cray/upgrade/csm/myenv
 echo "export STORAGE_IMS_IMAGE_ID=${STORAGE_IMS_IMAGE_ID}" >> /etc/cray/upgrade/csm/myenv
 echo "export K8S_IMS_IMAGE_ID=${K8S_IMS_IMAGE_ID}" >> /etc/cray/upgrade/csm/myenv
