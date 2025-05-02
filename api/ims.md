@@ -210,8 +210,8 @@ Retrieve a list of ImageRecords indicating images that are registered with IMS. 
     },
     "arch": "aarch64",
     "metadata": {
-      "property1": "string",
-      "property2": "string"
+      "key": "includes_additional_packages",
+      "value": "foo,bar,baz"
     }
   }
 ]
@@ -231,7 +231,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[ImageRecord](#schemaimagerecord)]|false|none|[An Image Record]|
-|» id|string(uuid)|true|read-only|Unique ID of the image.|
+|» id|string(uuid)|false|read-only|Unique ID of the image.|
 |» created|string(date-time)|false|read-only|Time the image record was created|
 |» name|string|true|none|Name of the image|
 |» link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
@@ -239,8 +239,9 @@ Status Code **200**
 |»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
 |»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
 |» arch|string|false|none|Target architecture for the recipe.|
-|» metadata|object|false|none|User supplied annotations about an image, in the form of string key-value pairs|
-|»» **additionalProperties**|string|false|none|none|
+|» metadata|object|false|none|User supplied annotations about an image|
+|»» key|string|false|none|Template variable to associate with the IMS image|
+|»» value|string|false|none|Value variable to associate with the IMS image|
 
 #### Enumerated Values
 
@@ -346,7 +347,7 @@ Create a new ImageRecord and register the new image with IMS.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[ImageCreateRecord](#schemaimagecreaterecord)|true|Image record to create|
+|body|body|[ImageRecord](#schemaimagerecord)|true|Image record to create|
 
 > Example responses
 
@@ -364,8 +365,8 @@ Create a new ImageRecord and register the new image with IMS.
   },
   "arch": "aarch64",
   "metadata": {
-    "property1": "string",
-    "property2": "string"
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
   }
 }
 ```
@@ -565,8 +566,8 @@ Retrieve an image by image_id.
   },
   "arch": "aarch64",
   "metadata": {
-    "property1": "string",
-    "property2": "string"
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
   }
 }
 ```
@@ -695,8 +696,8 @@ Update an ImageRecord in IMS.
   },
   "arch": "aarch64",
   "metadata": {
-    "property1": "string",
-    "property2": "string"
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
   }
 }
 ```
@@ -901,8 +902,8 @@ Retrieve a list of DeletedImageRecords indicating images that have been deleted 
     },
     "arch": "aarch64",
     "metadata": {
-      "property1": "string",
-      "property2": "string"
+      "key": "includes_additional_packages",
+      "value": "foo,bar,baz"
     }
   }
 ]
@@ -931,8 +932,9 @@ Status Code **200**
 |»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
 |»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
 |» arch|string|false|none|Target architecture for the recipe.|
-|» metadata|object|false|none|User supplied annotations about an image, in the form of string key-value pairs|
-|»» **additionalProperties**|string|false|none|none|
+|» metadata|object|false|none|User supplied annotations about an image|
+|»» key|string|false|none|Template variable to associate with the IMS image|
+|»» value|string|false|none|Value variable to associate with the IMS image|
 
 #### Enumerated Values
 
@@ -1243,8 +1245,8 @@ Retrieve deleted image details by using deleted_image_id.
   },
   "arch": "aarch64",
   "metadata": {
-    "property1": "string",
-    "property2": "string"
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
   }
 }
 ```
@@ -1561,8 +1563,8 @@ Retrieve a list of ImageRecords indicating images that are registered with the I
     },
     "arch": "aarch64",
     "metadata": {
-      "property1": "string",
-      "property2": "string"
+      "key": "includes_additional_packages",
+      "value": "foo,bar,baz"
     }
   }
 ]
@@ -1582,7 +1584,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[ImageRecord](#schemaimagerecord)]|false|none|[An Image Record]|
-|» id|string(uuid)|true|read-only|Unique ID of the image.|
+|» id|string(uuid)|false|read-only|Unique ID of the image.|
 |» created|string(date-time)|false|read-only|Time the image record was created|
 |» name|string|true|none|Name of the image|
 |» link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
@@ -1590,8 +1592,9 @@ Status Code **200**
 |»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
 |»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
 |» arch|string|false|none|Target architecture for the recipe.|
-|» metadata|object|false|none|User supplied annotations about an image, in the form of string key-value pairs|
-|»» **additionalProperties**|string|false|none|none|
+|» metadata|object|false|none|User supplied annotations about an image|
+|»» key|string|false|none|Template variable to associate with the IMS image|
+|»» value|string|false|none|Value variable to associate with the IMS image|
 
 #### Enumerated Values
 
@@ -1697,7 +1700,7 @@ Create a new ImageRecord and register the new image with IMS.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[ImageCreateRecord](#schemaimagecreaterecord)|true|Image record to create|
+|body|body|[ImageRecord](#schemaimagerecord)|true|Image record to create|
 
 > Example responses
 
@@ -1707,6 +1710,7 @@ Create a new ImageRecord and register the new image with IMS.
 {
   "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
   "created": "2018-07-28T03:26:01.234Z",
+  "deleted": "2018-07-28T03:26:01.234Z",
   "name": "centos7.5_barebones",
   "link": {
     "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
@@ -1715,8 +1719,8 @@ Create a new ImageRecord and register the new image with IMS.
   },
   "arch": "aarch64",
   "metadata": {
-    "property1": "string",
-    "property2": "string"
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
   }
 }
 ```
@@ -1725,7 +1729,7 @@ Create a new ImageRecord and register the new image with IMS.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New image record|[ImageRecord](#schemaimagerecord)|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New image record|[DeletedImageRecord](#schemadeletedimagerecord)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
@@ -1922,8 +1926,8 @@ Retrieve an image by image_id.
   },
   "arch": "aarch64",
   "metadata": {
-    "property1": "string",
-    "property2": "string"
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
   }
 }
 ```
@@ -2052,8 +2056,8 @@ Update an ImageRecord in IMS.
   },
   "arch": "aarch64",
   "metadata": {
-    "property1": "string",
-    "property2": "string"
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
   }
 }
 ```
@@ -8987,54 +8991,6 @@ Values to update a RecipeRecord with
 |arch|aarch64|
 |arch|x86_64|
 
-<h2 id="tocS_ImageCreateRecord">ImageCreateRecord</h2>
-<!-- backwards compatibility -->
-<a id="schemaimagecreaterecord"></a>
-<a id="schema_ImageCreateRecord"></a>
-<a id="tocSimagecreaterecord"></a>
-<a id="tocsimagecreaterecord"></a>
-
-```json
-{
-  "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
-  "created": "2018-07-28T03:26:01.234Z",
-  "name": "centos7.5_barebones",
-  "link": {
-    "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
-    "etag": "f04af5f34635ae7c507322985e60c00c-131",
-    "type": "s3"
-  },
-  "arch": "aarch64",
-  "metadata": {
-    "key": "includes_additional_packages",
-    "value": "foo,bar,baz"
-  }
-}
-
-```
-
-Values used to create an IMS Image Record
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|id|string(uuid)|false|read-only|Unique ID of the image.|
-|created|string(date-time)|false|read-only|Time the image record was created|
-|name|string|true|none|Name of the image|
-|link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
-|arch|string|false|none|Target architecture for the recipe.|
-|metadata|object|false|none|User supplied annotations about an image|
-|» key|string|false|none|Template variable to associate with the IMS image|
-|» value|string|false|none|Value variable to associate with the IMS image|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|arch|aarch64|
-|arch|x86_64|
-
 <h2 id="tocS_ImagePatchRecord">ImagePatchRecord</h2>
 <!-- backwards compatibility -->
 <a id="schemaimagepatchrecord"></a>
@@ -9100,8 +9056,8 @@ Values used to update an existing IMS Image Record
   },
   "arch": "aarch64",
   "metadata": {
-    "property1": "string",
-    "property2": "string"
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
   }
 }
 
@@ -9113,13 +9069,14 @@ An Image Record
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|string(uuid)|true|read-only|Unique ID of the image.|
+|id|string(uuid)|false|read-only|Unique ID of the image.|
 |created|string(date-time)|false|read-only|Time the image record was created|
 |name|string|true|none|Name of the image|
 |link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
 |arch|string|false|none|Target architecture for the recipe.|
-|metadata|object|false|none|User supplied annotations about an image, in the form of string key-value pairs|
-|» **additionalProperties**|string|false|none|none|
+|metadata|object|false|none|User supplied annotations about an image|
+|» key|string|false|none|Template variable to associate with the IMS image|
+|» value|string|false|none|Value variable to associate with the IMS image|
 
 #### Enumerated Values
 
@@ -9148,8 +9105,8 @@ An Image Record
   },
   "arch": "aarch64",
   "metadata": {
-    "property1": "string",
-    "property2": "string"
+    "key": "includes_additional_packages",
+    "value": "foo,bar,baz"
   }
 }
 
@@ -9167,8 +9124,9 @@ A Deleted Image Record
 |name|string|true|none|Name of the image|
 |link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
 |arch|string|false|none|Target architecture for the recipe.|
-|metadata|object|false|none|User supplied annotations about an image, in the form of string key-value pairs|
-|» **additionalProperties**|string|false|none|none|
+|metadata|object|false|none|User supplied annotations about an image|
+|» key|string|false|none|Template variable to associate with the IMS image|
+|» value|string|false|none|Value variable to associate with the IMS image|
 
 #### Enumerated Values
 
