@@ -412,6 +412,7 @@ troubleshooting node boot issues.
 - [Troubleshoot Console Node Pod Stuck in Terminating State](conman/Troubleshoot_ConMan_Node_Pod_Stuck_Terminating.md)
 - [Complete Reset of the Console Services](conman/Complete_Reset_of_the_Console_Services.md)
 - [Console known issues](../troubleshooting/README.md#conman)
+- [Console API](../api/console.md)
 
 ## Utility storage
 
