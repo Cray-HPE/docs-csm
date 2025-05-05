@@ -47,7 +47,7 @@ tmp_dir=$(mktemp -d)
 mkdir -p "${dest_dir}" "${tmp_dir}"
 
 echo "Preparing yq container ..."
-docker run -u "$(id -u):$(id -g)" --rm --name yq-swagger --entrypoint sh --detach -i -v "${manifest_dir}:/manifests" -v "${tmp_dir}:/swagger" artifactory.algol60.net/docker.io/mikefarah/yq:4 > /dev/null
+docker run -u "$(id -u):$(id -g)" --rm --name yq-swagger --entrypoint sh --detach -i -v "${manifest_dir}:/manifests" -v "${tmp_dir}:/swagger" artifactory.algol60.net/csm-docker/stable/docker.io/mikefarah/yq:4 > /dev/null
 yq="docker exec yq-swagger yq"
 
 echo "Preparing widdershins container ..."
