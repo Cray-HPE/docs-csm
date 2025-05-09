@@ -10,7 +10,7 @@
 
 ### Miscellaneous functionality
 
-* Console logs and interaction is now available and tenant aware through the cray cli, see [console](operations/conman/ConMan.md#console) for more information.
+* Console logs and interaction is now available and tenant aware through the `cray` CLI, see [console](operations/conman/ConMan.md#console) for more information.
 
 ### New hardware support
 
