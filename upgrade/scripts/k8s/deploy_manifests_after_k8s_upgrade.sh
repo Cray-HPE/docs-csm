@@ -46,33 +46,12 @@ function deploy() {
     loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path "$1"
 }
 
-# Undeploy the chart if it exists on the system.
-# Use this if a chart has been removed from a manifest and needs
-# to be removed from the system as part of an upgrade.
-function undeploy() {
-    # If the chart is missing (rc==1) just return success.
-    helm status "$@" || return 0
-    # Remove the chart.
-    helm uninstall "$@"
-}
-
-# cray-psp is removed in CSM 1.7 with upgrade to K8s >= 1.25, if it exists
-if [ ${k8s_minor_version} -gt 24 ]; then
-  undeploy -n services cray-psp
-fi
-
 # If there are post-upgrade-*-<k8s_version>.yaml files, deploy charts in those files.
 manifests_dir="${CSM_ARTI_DIR}/build/manifests"
 find "${manifests_dir}/" -name "post-upgrade-*-${k8s_version}.yaml" | sort | while read -r manifest; do
   echo "INFO Deploying ${manifest} ..."
   deploy "${manifest}"
 done
-
-# if [ "${k8s_version}" = "v1.32" ]; then
-#   # We've reached our destination k8s version so run the csm upgrade.sh script to deploy
-#   # the same manifests as on install.
-#   source ${CSM_ARTI_DIR}/upgrade.sh
-# fi
 
 # Return to previous working directory
 popd
