@@ -1,0 +1,546 @@
+#
+# MIT License
+#
+# (C) Copyright 2025 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: management-worker-nodes-reboot
+spec:
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Exists"
+      effect: "NoSchedule"
+  entrypoint: main
+  templates:
+    - name: main
+      metrics:
+        prometheus:
+        - name: operation_counter
+          help: "Count of step execution by result status"
+          labels:
+            - key: "opname"
+              value: "management-worker-nodes-reboot"
+            - key: stage
+              value: "management-nodes-rollout"
+            - key: type
+              value: "global"
+            - key: pname
+              value: "global"
+            - key: pversion
+              value: "global"
+            - key: status
+              value: "{{status}}"
+          counter:
+            value: "1"
+      inputs:
+        parameters:
+          - name: auth_token
+          - name: global_params
+      dag:
+        tasks:
+          - name: start-operation
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+          - name: INFO-to-read
+            dependencies:
+              - start-operation
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                  
+                - name: scriptContent
+                  value: |
+                    echo "NOTICE This workflow will reboot worker nodes according to --limit-management-rollout parameter."
+          - name: verify-pre-reboot-checks
+            dependencies:
+              - INFO-to-read
+            templateRef:
+              name: ncn-reboot-common
+              template: verify-pre-reboot-checks
+            arguments:
+              parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+          - name: get-worker-reboot-sets
+            dependencies:
+              - verify-pre-reboot-checks
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: mediaHost
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                  
+                - name: scriptContent
+                  value: |
+                    echo '{{inputs.parameters.global_params}}' > global.params.data
+                    limit_management_nodes=$(cat global.params.data | jq -r '.input_params.limit_management_nodes[]')
+                    percent_rollout=$(cat global.params.data | jq -r '.input_params.concurrent_management_rollout_percentage')
+                    total_worker_nodes=$(kubectl get node --selector='!node-role.kubernetes.io/control-plane' --no-headers=true | awk '{print $1}' | tr "\n", " ")
+                    array_total_worker_nodes=($total_worker_nodes)
+                    num_total_worker_nodes=${#array_total_worker_nodes[@]}
+
+                    # set the number of worker nodes that should be reboot concurrently
+                    workers_per_set=$(( $(( percent_rollout * num_total_worker_nodes )) / 100 ))
+                    if [[ $workers_per_set -eq 0 ]]; then
+                      workers_per_set=1
+                    elif [ $workers_per_set -eq $num_total_worker_nodes ] && [ $workers_per_set -gt 1 ]; then
+                      workers_per_set=$((workers_per_set-1))
+                    fi
+
+                    # get workers to reboot
+                    if [[ -n $(echo $limit_management_nodes | grep 'Management_Worker') ]]; then
+                      worker_nodes_to_reboot=$(kubectl get node --selector='!node-role.kubernetes.io/control-plane' --no-headers=true | awk '{print $1}' | tr "\n", " ")
+                      labeled_workers=$(kubectl get nodes --selector='iuf-prevent-reboot=true' -o jsonpath='{range .items[*]}{@.metadata.name}{" "}')
+                      for labeled_worker in $labeled_workers; do
+                        worker_nodes_to_reboot=$(echo $worker_nodes_to_reboot | sed s/"$labeled_worker"//)
+                      done
+                    else
+                      # reboot worker nodes specified by hostnames
+                      worker_nodes_to_reboot="${limit_management_nodes}"
+                      labeled_workers=$(kubectl get nodes --selector='iuf-prevent-reboot=true' -o jsonpath='{range .items[*]}{@.metadata.name}{" "}')
+                      for labeled_worker in $labeled_workers; do
+                        worker_nodes_to_reboot=$(echo $worker_nodes_to_reboot | sed s/"$labeled_worker"//)
+                      done
+                    fi
+
+                    index=0
+                    set=""
+                    output=""
+                    for node in $worker_nodes_to_reboot; do
+                      index=$(( index + 1 ))
+                      set="${set},${node}"
+                      if [[ $index -eq $workers_per_set ]]; then
+                        output="${output} ${set#?}"
+                        index=0
+                        set=""
+                      fi
+                    done
+                    if [[ -n ${set} ]]; then
+                      output="${output} ${set#?}"
+                    fi
+                    echo "${output#?}"
+          - name: process-worker-reboot-sets
+            dependencies:
+              - get-worker-reboot-sets
+            template: process-sets
+            arguments:
+              parameters:
+                - name: sets
+                  value: "{{tasks.get-worker-reboot-sets.outputs.result}}"
+          - name: reboot-worker-sets
+            dependencies:
+              - process-worker-reboot-sets
+            template: reboot-set-of-workers
+            arguments:
+              parameters:
+                - name: sets
+                  value: "{{tasks.process-worker-reboot-sets.outputs.parameters.sets}}"
+                - name: counter
+                  value: "0"
+                - name: limit
+                  value: "{{tasks.process-worker-reboot-sets.outputs.parameters.num_sets}}"
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+          - name: end-operation
+            dependencies:
+              - reboot-worker-sets
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+          - name: prom-metrics
+            dependencies:
+              - start-operation
+              - end-operation
+            template: prom-metrics
+            arguments:
+              parameters:
+              - name: opstart
+                value: "{{tasks.start-operation.outputs.result}}"
+              - name: opend
+                value: "{{tasks.end-operation.outputs.result}}"
+    - name: process-sets
+      inputs:
+        parameters:
+          - name: sets
+      script:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh]
+        source: |
+          #!/bin/sh
+          sets="{{inputs.parameters.sets}}"
+          echo $sets > /tmp/sets
+          num_sets=$(echo $sets | wc -w)
+          echo $num_sets > /tmp/num_sets
+      outputs:
+        parameters:
+          - name: sets
+            valueFrom:
+              path: "/tmp/sets"
+          - name: num_sets
+            valueFrom:
+              path: "/tmp/num_sets"
+    - name: reboot-set-of-workers
+      inputs:
+        parameters:
+          - name: sets
+          - name: counter
+          - name: limit
+          - name: global_params
+      dag:
+        tasks:
+          - name: get-reboot-set
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: mediaHost
+                value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                
+              - name: scriptContent
+                value: |
+                  sets="{{inputs.parameters.sets}}"
+                  current_count="{{inputs.parameters.counter}}"
+                  IFS=' ' read -ra set_array  <<< "$sets"
+                  reboot_set=${set_array[$current_count]}
+                  if [[ -z $reboot_set ]]; then
+                    echo "NOTICE This step received no nodes to reboot. Continuing without rebooting any worker nodes"
+                    exit 0
+                  fi
+                  echo $reboot_set | jq -R 'split(",")'
+          - name: drain-reboot-set
+            dependencies:
+              - get-reboot-set
+            template: drain-set
+            arguments:
+              parameters:
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+                - name: targetNcns
+                  value: "{{tasks.get-reboot-set.outputs.result}}"
+          - name: reboot-and-post-check
+            dependencies:
+              - drain-reboot-set
+            template: reboot-worker
+            arguments:
+              parameters:
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+                - name: targetNcn
+                  value: "{{item}}"
+            withParam: "{{tasks.get-reboot-set.outputs.result}}"
+          - name: platform-health-checks
+            dependencies: 
+              - reboot-and-post-check
+            templateRef:
+              name: ncn-reboot-common
+              template: platform-health-checks
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+          - name: check-bgp-session
+            dependencies: 
+              - reboot-and-post-check
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    echo "INFO Validating BGP peering sessions"
+                    if ! GOSS_BASE=/opt/cray/tests/install/ncn goss \
+                      -g /opt/cray/tests/install/ncn/tests/goss-switch-bgp-neighbor-aruba-or-mellanox.yaml \
+                      --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate >/dev/null 2>&1; then
+                      echo "ERROR Validation connection to the BGP neighbors of a switch. run 'canu validate network bgp --verbose' to see the status of all BGP neighbors"
+                      exit 1
+                    else
+                      echo "INFO Successfully Validated connection to the BGP neighbors of a switch"
+                    fi
+          - name: move-to-next-set
+            template: move-to-next-set
+            dependencies:
+              -  platform-health-checks
+              - check-bgp-session
+            arguments:
+              parameters:
+                - name: count
+                  value: "{{inputs.parameters.counter}}"
+          - name: continue
+            dependencies:
+              - move-to-next-set
+            template: reboot-set-of-workers
+            when: "{{tasks.move-to-next-set.outputs.result}} < {{inputs.parameters.limit}}"
+            arguments:
+              parameters:
+                - name: sets
+                  value: "{{inputs.parameters.sets}}"
+                - name: counter
+                  value: "{{tasks.move-to-next-set.outputs.result}}"
+                - name: limit
+                  value: "{{inputs.parameters.limit}}"
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+    - name: drain-set
+      inputs:
+        parameters:
+          - name: global_params
+          - name: targetNcns
+      parallelism: 1
+      dag:
+        tasks:
+          - name: drain
+            template: drain-reboot-set
+            arguments:
+              parameters:
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+                - name: targetNcn
+                  value: '{{item}}'
+            withParam: '{{inputs.parameters.targetNcns}}'
+    - name: drain-reboot-set
+      inputs:
+        parameters:
+          - name: global_params
+          - name: targetNcn
+      dag:
+        tasks:    
+          - name: failover-leader
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: '{{$.DryRun}}'
+                - name: mediaHost
+                  value: ncn-m001
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    echo "INFO Fail Over pods on node '${TARGET_NCN}'"
+                    /usr/share/doc/csm/upgrade/scripts/k8s/failover-leader.sh $TARGET_NCN
+          - name: drain-worker
+            templateRef:
+              name: kubectl-and-curl-template
+              template: shell-script
+            dependencies:
+              - failover-leader
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: '{{$.DryRun}}'
+                - name: mediaHost
+                  value: ncn-m001
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    echo "INFO Draining node '${TARGET_NCN}'"
+                    result=$(csi automate ncn kubernetes --action drain-ncn --ncn "$TARGET_NCN" --kubeconfig mykubeconfig/admin.conf 2>&1)
+                    if [[ $? -eq 0 ]] || [[ "$result" == *"Pod disruption budgets satisfied"* ]]; then
+                      echo "INFO: Node $TARGET_NCN drained successfully"
+                    else
+                      echo "WARNING: Initial drain did not succeed due to Pod disruption budgets. Retrying after deleting pods."
+                      PODS_TO_DELETE=$(echo "$result" | grep -oP 'Cannot evict pod \K[^:]*')
+
+                      # Delete each offending pod
+                      for pod in $PODS_TO_DELETE; do
+                        # Attempt to find the namespace of the pod
+                        NS=$(kubectl get pod --all-namespaces --field-selector spec.nodeName=$TARGET_NCN -o json | \
+                              jq -r ".items[] | select(.metadata.name==\"$pod\") | .metadata.namespace")
+
+                        if [[ -n "$NS" ]]; then
+                          echo "Force deleting pod $pod in namespace $NS..."
+                          kubectl delete pod "$pod" -n "$NS" --grace-period=0 --force
+                        else
+                          echo "WARNING: Could not find namespace for pod $pod; skipping"
+                        fi
+                      done
+
+                      result=$(csi automate ncn kubernetes --action drain-ncn --ncn "$TARGET_NCN" --kubeconfig mykubeconfig/admin.conf 2>&1)
+
+                      if [[ "$result" == *"Pod disruption budgets satisfied"* ]]; then
+                        echo "INFO: Node $TARGET_NCN drained successfully on retry"
+                        echo $result
+                      else
+                        echo "ERROR: Failed to drain node $TARGET_NCN after retry"
+                        echo "INFO: Uncordoning node $TARGET_NCN to restore scheduling"
+                        kubectl uncordon "$TARGET_NCN"
+                        exit 1
+                      fi
+                    fi
+    - name: reboot-worker
+      inputs:
+        parameters:
+          - name: global_params
+          - name: targetNcn
+      dag:
+        tasks:
+        - name: reboot-node
+          templateRef:
+            name: ncn-reboot-common
+            template: reboot-ncn
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: global_params
+                value: "{{inputs.parameters.global_params}}"
+              - name: targetNcn
+                value: "{{inputs.parameters.targetNcn}}"
+        - name: wait-for-cloud-init
+          dependencies: 
+            - reboot-node
+          templateRef:
+            name: ncn-reboot-common
+            template: wait-for-cloud-init
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: targetNcn
+                value: "{{inputs.parameters.targetNcn}}"
+              - name: mediaHost
+                value: 'ncn-m001'
+        - name: wait-for-k8s
+          dependencies: 
+            - wait-for-cloud-init
+          templateRef:
+            name: kubectl-and-curl-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: mediaHost
+                value: 'ncn-m001'
+              - name: scriptContent
+                value: |
+                  TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                  # Wait for Kubernetes membership
+                  echo "INFO Waiting for node to rejoin Kubernetes: ${TARGET_NCN}"
+                  MAX_RETRY=45
+                  n=0
+                  until csi automate ncn kubernetes --action is-member --ncn "$TARGET_NCN" --kubeconfig mykubeconfig/admin.conf; do
+                    n=$((n+1))
+                    if [[ $n -ge $MAX_RETRY ]]; then
+                      echo "ERROR: Node did not rejoin Kubernetes in time."
+                      exit 1
+                    fi
+                    echo "DEBUG Waiting for node to rejoin Kubernetes: ${TARGET_NCN}"
+                    sleep 15
+                  done
+        - name: wait-for-cfs
+          dependencies: 
+            - wait-for-cloud-init
+          templateRef:
+            name: ncn-reboot-common
+            template: wait-for-cfs
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: targetNcn
+                value: "{{inputs.parameters.targetNcn}}"
+        - name: uncordon-node
+          dependencies: 
+            - wait-for-k8s
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: mediaHost
+                value: 'ncn-m001'
+              - name: scriptContent
+                value: |
+                  TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                  # Uncordon the node
+                  kubectl uncordon "$TARGET_NCN"
+                  echo "INFO Successfully Uncordon: ${TARGET_NCN}"
+    - name: move-to-next-set
+      inputs:
+        parameters:
+          - name: count
+      script:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh]
+        source: |
+          #!/bin/sh
+          current_count="{{inputs.parameters.count}}"
+          counter=$((current_count + 1 ))
+          echo $counter
+    - name: prom-metrics
+      inputs:
+        parameters:
+        - name: opstart
+        - name: opend
+      metrics:
+        prometheus:
+          - name: operation_time
+            help: "Duration gauge by operation name in seconds"
+            labels:
+              - key: "opname"
+                value: "management-worker-nodes-rollout"
+              - key: stage
+                value: "management-nodes-rollout"
+              - key: type
+                value: "global"
+              - key: pdname
+                value: "global"
+              - key: pdversion
+                value: "global"
+              - key: "opstart"
+                value: "{{inputs.parameters.opstart}}"
+              - key: "opend"
+                value: "{{inputs.parameters.opend}}"
+            gauge:
+              value: "{{outputs.parameters.diff-time-value}}"
+      outputs:
+        parameters:
+          - name: diff-time-value
+            globalName: diff-time-value
+            valueFrom:
+              path: /tmp/diff_time.txt
+      container:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh, -c]
+        args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]
