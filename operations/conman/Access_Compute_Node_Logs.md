@@ -26,7 +26,7 @@ This procedure shows how the ConMan utility can be used to retrieve compute node
     cray console tail \
         --lines 20 \
         --follow \
-        XNAME
+        $XNAME
     ```
 
     Example output:
