@@ -34,8 +34,13 @@ fi
 source /srv/cray/resources/common/vars.sh
 source /srv/cray/scripts/metal/lib.sh
 #shellcheck disable=SC2155
-export KUBERNETES_VERSION="v$(cat /etc/cray/kubernetes/version)"
-export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/version)
+if [ -f /etc/cray/kubernetes/upgrade ]; then
+  export KUBERNETES_VERSION="$(cat /etc/cray/kubernetes/version)"
+  export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/version)
+else
+  export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/version)
+  export KUBERNETES_VERSION="$(cat /etc/cray/kubernetes/version)"
+fi
 #shellcheck disable=SC2046
 echo $(kubeadm init phase upload-certs --upload-certs 2>&1 | tail -1) > /etc/cray/kubernetes/certificate-key
 #shellcheck disable=SC2155
@@ -51,8 +56,10 @@ export SERVICES_CIDR=$(craysys metadata get kubernetes-services-cidr)
 # version. Otherwise, use kubeadm.k8s.io/v1beta4.
 if [[ "${KUBERNETES_MINOR_VERSION}" -lt 25 ]]; then
   k8scfg="/srv/cray/resources/common/1.24/kubeadm.cfg"
-elif [[ "${KUBERNETES_MINOR_VERSION}" -ge 25 || "${KUBERNETES_MINOR_VERSION}" -lt 31 ]]; then
+elif [[ "${KUBERNETES_MINOR_VERSION}" -ge 25 && "${KUBERNETES_MINOR_VERSION}" -lt 27 ]]; then
   k8scfg="/srv/cray/resources/common/1.25/kubeadm.cfg"
+elif [[ "${KUBERNETES_MINOR_VERSION}" -ge 27 && "${KUBERNETES_MINOR_VERSION}" -lt 31 ]]; then
+  k8scfg="/srv/cray/resources/common/1.27/kubeadm.cfg"
 else
   k8scfg="/srv/cray/resources/common/1.31/kubeadm.cfg"
 fi
