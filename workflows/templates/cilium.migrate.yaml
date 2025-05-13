@@ -69,9 +69,39 @@ spec:
                     echo "draining {{inputs.parameters.targetNcn}}"
                     kubectl drain --ignore-daemonsets --delete-emptydir-data {{inputs.parameters.targetNcn}}
                   fi
-        - name: promote-cilium 
+        - name: archive-weave-multus
           dependencies:
             - drain
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                  ssh "${TARGET_NCN}" mv /etc/cni/net.d/10-weave.conflist /etc/cni/net.d/10-weave.conflist.cilium_bak
+        - name: migrate-multus-config
+          dependencies:
+            - drain
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                  MULTUS_CONF=$(ssh "${TARGET_NCN}" cat /srv/cray/resources/common/multus/multus-cilium.conf)
+                  ssh "${TARGET_NCN}" "echo '{${MULTUS_CONF}'} > /etc/cni/net.d/00-multus.conf"
+        - name: promote-cilium
+          dependencies:
+            - archive-weave-multus
+            - migrate-multus-config
           templateRef:
             name: kubectl-and-curl-template
             template: shell-script

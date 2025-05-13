@@ -51,9 +51,23 @@ spec:
                   fi
                   kubectl get netpol -A
                   rm -f /tmp/netpol-out.yaml
+        - name: update-multus-configmap
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  . /srv/cray/resources/common/vars.sh
+                  export MULTUS_CONF=$(cat /srv/cray/resources/common/multus/multus-cilium.conf)
+                  envsubst < /srv/cray/resources/common/multus/multus-daemonset.yml | yq4 'select(.kind=="ConfigMap")' | kubectl apply -f -
         - name: validate-cilium-content
           dependencies:
             - restore-network-policies
+            - update-multus-configmap
           templateRef:
             name: ssh-template
             template: shell-script
