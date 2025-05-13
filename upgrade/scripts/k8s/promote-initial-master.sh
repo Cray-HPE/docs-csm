@@ -35,8 +35,8 @@ source /srv/cray/resources/common/vars.sh
 source /srv/cray/scripts/metal/lib.sh
 #shellcheck disable=SC2155
 if [ -f /etc/cray/kubernetes/upgrade ]; then
-  export KUBERNETES_VERSION="$(cat /etc/cray/kubernetes/upgrade_version)"
   export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/upgrade_version)
+  export KUBERNETES_VERSION="$(cat /etc/cray/kubernetes/upgrade_version)"
 else
   export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/version)
   export KUBERNETES_VERSION="$(cat /etc/cray/kubernetes/version)"
