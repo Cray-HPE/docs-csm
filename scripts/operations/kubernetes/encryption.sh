@@ -33,7 +33,11 @@ RUNDIR="${TMPDIR:-/tmp}/encryption-tmp-$$"
 # Let us control how long we wait for deletes or other kubectl ... --timeout actions
 KUBETIMEOUT="${KUBETIMEOUT:-300s}"
 
-export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/version)
+if [ -f /etc/cray/kubernetes/upgrade ]; then
+  export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/upgrade_version)
+else
+  export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/version)
+fi
 
 cleanup() {
   rm -fr "${RUNDIR}"
@@ -229,8 +233,10 @@ writeconfig() {
 
   if [[ "${KUBERNETES_MINOR_VERSION}" -lt 25 ]]; then
     kubeadmcfg="/srv/cray/resources/common/1.24/kubeadm.cfg"
-  elif [[ "${KUBERNETES_MINOR_VERSION}" -ge 25 || "${KUBERNETES_MINOR_VERSION}" -lt 31 ]]; then
+  elif [[ "${KUBERNETES_MINOR_VERSION}" -ge 25 && "${KUBERNETES_MINOR_VERSION}" -lt 27 ]]; then
     kubeadmcfg="/srv/cray/resources/common/1.25/kubeadm.cfg"
+  elif [[ "${KUBERNETES_MINOR_VERSION}" -ge 27 && "${KUBERNETES_MINOR_VERSION}" -lt 31 ]]; then
+    kubeadmcfg="/srv/cray/resources/common/1.27/kubeadm.cfg"
   else
     kubeadmcfg="/srv/cray/resources/common/1.31/kubeadm.cfg"
   fi
