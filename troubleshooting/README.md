@@ -49,7 +49,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Ceph OSD latency](known_issues/ceph_osd_latency.md)
 * [Cray CLI 403 Forbidden Errors](known_issues/craycli_403_forbidden_errors.md)
 * [Flags Set For Nodes In HSM](known_issues/flags_set_for_nodes_in_hsm.md)
-* [Goss Test Fails with Connection Refused](known_issues/goss_tests_fails_with_connection_refused.md)
 * [Helm Chart Deploy Timeouts](known_issues/helm_chart_deploy_timeouts.md)
 * [HPE iLO dropping event subscriptions and not properly transitioning power state in CSM software](known_issues/hpe_systems_not_transitioning_power_state.md)
 * [IMS image creation failure](known_issues/ims_image_creation_failure.md)
