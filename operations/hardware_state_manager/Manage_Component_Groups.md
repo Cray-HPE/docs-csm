@@ -85,6 +85,12 @@ The following examples show different ways to create and modify a group.
     cray hsm groups members create --id XNAME GROUP_LABEL
     ```
 
+* (`ncn-mw#`) Remove a component from a group:
+
+    ```bash
+    cray hsm groups members delete XNAME GROUP_LABEL
+    ```
+
 ## Retrieve a group
 
 Retrieve the complete group object to learn more about a group. This is also submitted when the group is created, except it is up-to-date with any additions or deletions from the members set.
