@@ -38,10 +38,25 @@ fi
 if [ "$(yq4 eval '.imageRepository' "${workdir}/ClusterConfiguration.yaml")" = 'k8s.gcr.io' ]; then
   yq4 eval -i -P '.imageRepository = "artifactory.algol60.net/csm-docker/stable/k8s.gcr.io"' "${workdir}/ClusterConfiguration.yaml"
 fi
-yq4 eval -i -P '.apiServer.extraArgs.api-audiences = "api,istio-ca"' "${workdir}/ClusterConfiguration.yaml"
-yq4 eval -i -P '.apiServer.extraArgs.enable-admission-plugins = "NodeRestriction,PodSecurityPolicy"' "${workdir}/ClusterConfiguration.yaml"
-yq4 eval -i -P '.controllerManager.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
-yq4 eval -i -P '.scheduler.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
+
+# What version of kubeadm are we working with?
+version_v1beta4=0
+if [ "$(yq4 eval '.apiVersion' "${workdir}/ClusterConfiguration.yaml")" = 'kubeadm.k8s.io/v1beta4' ]; then
+  version_v1beta4=1
+  yq4 eval -i -P '.apiServer.extraArgs.[] |= select(.name == "api-audiences").value = "api,istio-ca"' "${workdir}/ClusterConfiguration.yaml"
+  # The following currently don't exist in kubeadm apiVersion kubeadm.k8s.io/v1beta4, but attempt to modify just in case
+  yq4 eval -i -P '.apiServer.extraArgs.[] |= select(.name == "enable-admission-plugins").value = "NodeRestriction"' "${workdir}/ClusterConfiguration.yaml"
+  yq4 eval -i -P '.controllerManager.extraArgs.[] |= select(.name == "bind-address").value = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
+  yq4 eval -i -P '.scheduler.extraArgs.[] |= select(.name == "bind-address").value = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
+  # Set caCertificateValidityPeriod to 87600h (10 years) and certificateValidityPeriod to 26280h (3 years)
+  yq4 eval -i -P '.caCertificateValidityPeriod = "87600h"' "${workdir}/ClusterConfiguration.yaml"
+  yq4 eval -i -P '.certificateValidityPeriod = "26280h"' "${workdir}/ClusterConfiguration.yaml"
+else
+  yq4 eval -i -P '.apiServer.extraArgs.api-audiences = "api,istio-ca"' "${workdir}/ClusterConfiguration.yaml"
+  yq4 eval -i -P '.apiServer.extraArgs.enable-admission-plugins = "NodeRestriction"' "${workdir}/ClusterConfiguration.yaml"
+  yq4 eval -i -P '.controllerManager.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
+  yq4 eval -i -P '.scheduler.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
+fi
 
 manifest_auditing_enabled=0
 if ! grep -q '/var/log/audit' /etc/kubernetes/manifests/kube-apiserver.yaml; then
@@ -49,15 +64,27 @@ if ! grep -q '/var/log/audit' /etc/kubernetes/manifests/kube-apiserver.yaml; the
 fi
 
 cm_auditing_enabled=0
-if [ "$(yq4 eval '.extraArgs.audit-log-path' "${workdir}/ClusterConfiguration.yaml")" != "null" ]; then
-  cm_auditing_enabled=1
+if [ ${version_v1beta4} -eq 1 ]; then
+  if [ "$(yq4 eval -P '.extraArgs[] | select(.name=="audit-log-path")' "${workdir}/ClusterConfiguration.yaml")" ]; then
+    cm_auditing_enabled=1
+  fi
+else
+  if [ "$(yq4 eval '.extraArgs.audit-log-path' "${workdir}/ClusterConfiguration.yaml")" != "null" ]; then
+    cm_auditing_enabled=1
+  fi
 fi
 
 if [ ${manifest_auditing_enabled} -eq 1 ] && [ ${cm_auditing_enabled} -eq 1 ]; then
   echo "Updating kubeadm-config configmap with audit configuration"
-  yq4 eval -i -P '.apiServer.extraArgs.audit-log-maxbackup = "100"' "${workdir}/ClusterConfiguration.yaml"
-  yq4 eval -i -P '.apiServer.extraArgs.audit-log-path = "/var/log/audit/kl8s/apiserver/audit.log"' "${workdir}/ClusterConfiguration.yaml"
-  yq4 eval -i -P '.apiServer.extraArgs.audit-policy-file = "/etc/kubernetes/audit/audit-policy.yaml"' "${workdir}/ClusterConfiguration.yaml"
+  if [ ${version_v1beta4} -eq 1 ]; then
+    yq4 eval -i -P '.apiServer.extraArgs += [{"name": "audit-log-maxbackup", "value": "100"}]' "${workdir}/ClusterConfiguration.yaml"
+    yq4 eval -i -P '.apiServer.extraArgs += [{"name": "audit-log-path", "value": "/var/log/audit/kl8s/apiserver/audit.log"}]' "${workdir}/ClusterConfiguration.yaml"
+    yq4 eval -i -P '.apiServer.extraArgs += [{"name": "audit-policy-file", "value": "/etc/kubernetes/audit/audit-policy.yaml"}]' "${workdir}/ClusterConfiguration.yaml"
+  else
+    yq4 eval -i -P '.apiServer.extraArgs.audit-log-maxbackup = "100"' "${workdir}/ClusterConfiguration.yaml"
+    yq4 eval -i -P '.apiServer.extraArgs.audit-log-path = "/var/log/audit/kl8s/apiserver/audit.log"' "${workdir}/ClusterConfiguration.yaml"
+    yq4 eval -i -P '.apiServer.extraArgs.audit-policy-file = "/etc/kubernetes/audit/audit-policy.yaml"' "${workdir}/ClusterConfiguration.yaml"
+  fi
 
   if [ -z "$(yq4 eval -P '.apiServer.extraVolumes[] | select(.name=="k8s-audit")' "${workdir}/ClusterConfiguration.yaml")" ]; then
     yq4 eval -i -P '.apiServer.extraVolumes += [{"hostPath": "/etc/kubernetes/audit", "mountPath": "/etc/kubernetes/audit", "name": "k8s-audit", "pathType": "DirectoryOrCreate", "readOnly": true}]' "${workdir}/ClusterConfiguration.yaml"
@@ -83,12 +110,12 @@ masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u)
 # get version of new k8s
 # note: this is running on m002 which should have newer version already
 #       so we can query "next" version here
-k8sVersionUpgradeTo=$(kubeadm version -o json | jq -r '.clientVersion.gitVersion')
+k8s_version_upgrade_to=$(kubeadm version -o json | jq -r '.clientVersion.gitVersion')
 
 for master in $masters; do
   echo "DEBUG Upgrading kube-system pods for $master:"
   echo ""
-  pdsh -b -S -w $master "kubeadm upgrade apply ${k8sVersionUpgradeTo} -y"
+  pdsh -b -S -w $master "kubeadm upgrade apply ${k8s_version_upgrade_to} -y"
   rc=$?
   if [ "$rc" -ne 0 ]; then
     echo ""
@@ -117,3 +144,45 @@ for master in $masters; do
   echo "INFO Successfully upgraded apiserver-etcd-client certificate for $master."
   echo ""
 done
+
+# Do we have additional charts to deploy after the K8s upgrade?
+# Source /etc/cray/upgrade/csm/myenv to get CSM_ARTI_DIR
+source /etc/cray/upgrade/csm/myenv
+k8s_version=$(kubeadm version -o json | jq -r '.clientVersion.gitVersion' | grep -o "v1.[^.]*")
+k8s_minor_version=$(echo ${k8s_version} | cut -d "." -f2)
+
+# Change working directory to CSM_ARTI_DIR
+pushd ${CSM_ARTI_DIR}
+
+# Deploy charts in given manifest
+function deploy() {
+    # Loftsman may not be able to connect to $NEXUS_URL due to certificate
+    # trust issues, so use --charts-path instead of --charts-repo.
+    loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path "$1"
+}
+
+# Undeploy the chart if it exists on the system.
+# Use this if a chart has been removed from a manifest and needs
+# to be removed from the system as part of an upgrade.
+function undeploy() {
+    # If the chart is missing (rc==1) just return success.
+    helm status "$@" || return 0
+    # Remove the chart.
+    helm uninstall "$@" --keep-history
+}
+
+# Undeploy services if they exist
+if [ ${k8s_minor_version} -gt 24 ]; then
+  # cray-psp is removed in CSM 1.7 with upgrade to K8s >= 1.25, if it exists
+  undeploy -n services cray-psp
+fi
+
+# If there are post-upgrade-*-<k8s_version>.yaml files, deploy charts in those files.
+manifests_dir="${CSM_ARTI_DIR}/manifests"
+find "${manifests_dir}/" -name "post-upgrade-*-${k8s_version}.yaml" | sort | while read -r manifest; do
+  echo "INFO Deploying ${manifest} ..."
+  deploy "${manifest}"
+done
+
+# Return to previous working directory
+popd
