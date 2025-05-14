@@ -56,8 +56,11 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [IMS image creation failure](known_issues/ims_image_creation_failure.md)
+* [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
 
 ## Booting
+
+* [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
 
 ### UAN boot issues
 
