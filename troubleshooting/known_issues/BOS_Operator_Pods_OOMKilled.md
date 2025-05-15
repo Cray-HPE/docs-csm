@@ -11,17 +11,30 @@ On large scale systems with thousands of nodes, if the [Boot Orchestration Servi
 has debug logging enabled, then it is possible for some [BOS operator](../../operations/boot_orchestration/BOS_Services.md#bos-operators)
 Kubernetes pods to be `OOMKilled` when trying to log particularly large API responses.
 
+On large enough systems, it is possible for this to happen even without debug logging enabled.
+
 ## Details
 
 The BOS logging level is one of numerous [Options](../../operations/boot_orchestration/Options.md) that an administrator may customize.
 
 ## Workaround
 
-(`ncn-mw#`) The only workaround in this case is to set the BOS logging level to `INFO` or higher.
+(`ncn-mw#`) Use the following procedure to work around the problem.
+
+Check if debug logging is enabled.
 
 ```bash
-cray bos v2 options update --logging-level INFO
+cray bos v2 options list --format json
 ```
+
+* If debug logging is enabled, then the easiest workaround is to set the BOS logging level to `INFO` or higher.
+
+    ```bash
+    cray bos v2 options update --logging-level INFO
+    ```
+
+* If debug logging is not enabled, or if the problem persists after disabling it, then the only other option is to increase the
+  memory limits for the pods experiencing this problem. See [Increase Pod Resource Limits](../../operations/kubernetes/Increase_Pod_Resource_Limits.md).
 
 ## Fix
 
