@@ -129,7 +129,7 @@ required for initial installation scenarios.
     version: "{{csm.version}}"
 #END_CHN_SUPPORT         
 ```
-In order to check whether the system is using CHN, refer to the steps mentioned in [steps](/operations/network/management_network/chn_test.md)
+In order to check whether the system is using CHN, refer to the steps mentioned [here](/operations/network/management_network/chn_test.md)
 
 Once this step has completed:
 
