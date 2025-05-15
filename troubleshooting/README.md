@@ -80,10 +80,12 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [IMS Image Job Performance](../operations/image_management/Image_Job_Performance.md)
 - [Storage node `cloud-init` fails with 'Timed out waiting for device' error](known_issues/storage_node_cloud_init_fails_with_timed_out.md)
 - [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
+- [BOS Operator Pods `OOMKilled`](known_issues/BOS_Operator_Pods_OOMKilled.md)
 
 ## Booting
 
 - [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
+- [BOS Operator Pods `OOMKilled`](known_issues/BOS_Operator_Pods_OOMKilled.md)
 
 ### UAN boot issues
 
