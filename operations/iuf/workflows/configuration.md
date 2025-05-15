@@ -119,6 +119,18 @@ required for initial installation scenarios.
     - Generate SAT S3 credentials
     - Configure system revision information via `sat setrev`
 
+***Note:*** If the system is using CHN, uncomment the following playbook in `management-bootprep.yaml`.
+```bash
+#BEGIN_CHN_SUPPORT
+  - name: enabled_chn-{{csm.version}}
+  playbook: enable_chn.yml
+  product:
+    name: csm
+    version: "{{csm.version}}"
+#END_CHN_SUPPORT         
+```
+In order to check whether the system is using CHN, refer to the steps mentioned in [steps](/operations/network/management_network/chn_test.md)
+
 Once this step has completed:
 
 - Product configuration has been completed
