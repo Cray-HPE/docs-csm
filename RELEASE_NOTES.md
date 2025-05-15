@@ -39,6 +39,11 @@
 
 ## Bug fixes
 
+* The [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos)
+  [`session-setup` operator](operations/boot_orchestration/BOS_Services.md#session-setup) now ignores invalid
+  [xnames](glossary.md#xname) referenced by [session templates](operations/boot_orchestration/Session_Templates.md),
+  fixing a bug that caused BOS [sessions](operations/boot_orchestration/Sessions.md) to be stuck in `pending` state.
+
 ## Deprecations
 
 For more details and a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
