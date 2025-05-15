@@ -2,11 +2,13 @@
 
 ConMan is a tool used for connecting to remote consoles and collecting console logs. These node logs can then be used for various administrative purposes, such as troubleshooting node boot issues.
 
-ConMan runs on the system as a containerized service. It runs in a set of Docker containers within Kubernetes pods named `cray-console-operator` and `cray-console-node`.
-Node console logs are stored locally within the `cray-console-node` pods in the `/var/log/conman/` directory, as well as being collected by the System Monitoring Framework \(SMF\).
+ConMan runs on the system as a containerized service. It runs in a set of Docker containers within Kubernetes pods
+in the `services` namespace named `cray-console-operator` and `cray-console-node`.
+Node console logs are stored locally within the `cray-console-node` pods in the `/var/log/conman/` directory, as well as being collected by
+the System Monitoring Framework \(SMF\).
 
-In CSM versions 1.0 and later, the ConMan logs and interactive consoles are accessible through one of the `cray-console-node` pods.
-There are multiple `cray-console-node` pods, scaled to the size of the system.
+In CSM versions 1.7.0 and later, the ConMan logs and interactive consoles are accessible through the Cray CLI. The `cray console` command
+provides a set of subcommands for accessing the logs and interactive consoles.
 
 ## How to use
 
@@ -26,3 +28,7 @@ There are multiple `cray-console-node` pods, scaled to the size of the system.
 - [Troubleshoot ConMan Failing to Connect to a Console](Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
 - [Troubleshoot ConMan Node Pod Stuck in Terminating](Troubleshoot_ConMan_Node_Pod_Stuck_Terminating.md)
 - [Complete Reset of the Console Services](Complete_Reset_of_the_Console_Services.md)
+
+## Web interface
+
+- [Accessing the Console Web Interface](../../api/console.md)
