@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023, 2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -65,6 +65,10 @@ spec:
                     
                     # BELOW IS TEMPORARY UNTIL LIBCSM IS UPDATED
                     image_manifest_str=$(cray ims images describe $IMAGE_ID --format json | jq '.link.path')
+                    if [[ -z $image_manifest_str ]]; then
+                      echo "ERROR IMS is not reachable or image: $IMAGE_ID does not exist. Exiting and will retry."
+                      exit 1
+                    fi
                     image_manifest_str=${image_manifest_str#*s3://}
                     bucket="$( cut -d '/' -f 1 <<< "$image_manifest_str" )"
                     bucket_rm="${bucket}/"
