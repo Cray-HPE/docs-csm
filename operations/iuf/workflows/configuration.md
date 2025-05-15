@@ -123,8 +123,8 @@ required for initial installation scenarios.
 ```bash
 #BEGIN_CHN_SUPPORT
   - name: enabled_chn-{{csm.version}}
-  playbook: enable_chn.yml
-  product:
+    playbook: enable_chn.yml
+    product:
     name: csm
     version: "{{csm.version}}"
 #END_CHN_SUPPORT         
