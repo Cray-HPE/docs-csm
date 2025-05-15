@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023, 2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -34,31 +34,7 @@ spec:
           - name: dryRun
       dag:
         tasks:
-          - name: upgrade-ceph-version
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{inputs.parameters.dryRun}}"
-                - name: scriptContent
-                  value: |
-                    ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-                    for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
-                      if [[ -z $(ssh ${storage_node} ${ssh_options} 'cat /etc/os-release' | grep 'VERSION="15-SP5"') ]]; then
-                        echo "Not all storage nodes have been upgraded and are running SP5."
-                        echo "Waiting to upgrade Ceph until all storage nodes have been upgraded."
-                        exit 0
-                      fi
-                    done
-                    export TERM=linux
-                    # setting PYTHONUNBUFFERED forces python to print output
-                    export PYTHONUNBUFFERED=1
-                    /usr/share/doc/csm/upgrade/scripts/ceph/ceph-upgrade-tool.py --version '17.2.6'
           - name: upgrade-ceph-monitoring-stack
-            dependencies:
-              - upgrade-ceph-version
             templateRef:
               name: ssh-template
               template: shell-script
