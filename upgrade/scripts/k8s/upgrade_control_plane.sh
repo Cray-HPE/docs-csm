@@ -156,19 +156,19 @@ pushd ${CSM_ARTI_DIR}
 
 # Deploy charts in given manifest
 function deploy() {
-    # Loftsman may not be able to connect to $NEXUS_URL due to certificate
-    # trust issues, so use --charts-path instead of --charts-repo.
-    loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path "$1"
+  # Loftsman may not be able to connect to $NEXUS_URL due to certificate
+  # trust issues, so use --charts-path instead of --charts-repo.
+  loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path "$1"
 }
 
 # Undeploy the chart if it exists on the system.
 # Use this if a chart has been removed from a manifest and needs
 # to be removed from the system as part of an upgrade.
 function undeploy() {
-    # If the chart is missing (rc==1) just return success.
-    helm status "$@" || return 0
-    # Remove the chart.
-    helm uninstall "$@" --keep-history
+  # If the chart is missing (rc==1) just return success.
+  helm status "$@" || return 0
+  # Remove the chart.
+  helm uninstall "$@" --keep-history
 }
 
 # Undeploy services if they exist
