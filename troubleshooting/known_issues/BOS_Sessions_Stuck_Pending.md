@@ -10,7 +10,7 @@
 
 If a [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) [Session](../../operations/boot_orchestration/Sessions.md)
 is created using a [Session Template](../../operations/boot_orchestration/Session_Templates.md) that indirectly refers to invalid
-xnames, then this can prevent the BOS [`session-setup` operator](../../operations/boot_orchestration/BOS_Services.md#session-setup)
+[xnames](../../glossary.md#xname), then this can prevent the BOS [`session-setup` operator](../../operations/boot_orchestration/BOS_Services.md#session-setup)
 from moving any sessions out of the `pending` state.
 
 ## Symptoms
