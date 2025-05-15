@@ -1,7 +1,7 @@
 #!/bin/bash
 # MIT License
 #
-# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -127,6 +127,11 @@ for THIS_IMAGE in $(get_list_of_images_to_update); do
     THIS_IMAGE=$(update_cray_sat_image $THIS_IMAGE)
   fi
   LATEST_TAG=$(get_latest_tag_for_image $THIS_IMAGE)
+  if [[ ${THIS_IMAGE} == *"kubectl-shell" ]]; then
+    # The sorting function does not work for kubectl-shell so hardcode the correct image
+    # 2.27.0 is the image that should be used in CSM 1.7
+    LATEST_TAG="2.27.0"
+  fi
   # CASMTRIAGE-6188 retry for up to 60 seconds if LATEST_TAG is empty
   i=1
   while [[ -z ${LATEST_TAG} ]]; do
