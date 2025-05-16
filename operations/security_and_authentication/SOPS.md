@@ -43,7 +43,6 @@ created for them.
 
    ```bash
    TENANT_NAME=vcluster-testing-tenant
-   TENANT_NAME=vcluster-eholen-testing-tenant
    PROTOCOL=https
    SYSTEM_NAME=`craysys metadata get system-name`
    DOMAIN_NAME=`craysys metadata get site-domain`
@@ -81,12 +80,12 @@ created for them.
 1. (`ncn-mw#`) Retrieve the tenant's Kubernetes token from the tenant's secret.
 
     When TAPMS creates a new tenant, a new Kubernetes namespace is created bearing
-    the same name. Within that namespace, there should be exactly one tenant name.
+    the same name. Within that namespace, there should be a default service account.
 
-    Retrieve, parse, and decrypt the tenant's Kubernetes service account token.
+    Generate the tenant's Kubernetes service account token.
 
     ```bash
-    TOKEN=`kubectl get secret -n ${TENANT_NAME} -ojson | jq -r .items[].data.token | base64 -d`
+    TOKEN=`kubectl create token -n ${TENANT_NAME} default`
     ```
 
 1. (`ncn-mw#`) Using the tenant's service account token, obtain a `VAULT_TOKEN` from Vault.
@@ -115,7 +114,7 @@ created for them.
    CMN_NAME=cmn.$SYSTEM_NAME.$DOMAIN_NAME
    TRANSIT_NAME=`kubectl get tenants.tapms.hpe.com -n tenants $TENANT_NAME -ojson | jq -r .status.tenantkms.transitname`
    KEY_NAME=`kubectl get tenants.tapms.hpe.com -n tenants $TENANT_NAME -ojson | jq -r .status.tenantkms.keyname`
-   TOKEN=`kubectl get secret -n ${TENANT_NAME} -ojson | jq -r .items[].data.token | base64 -d`
+   TOKEN=`kubectl create token -n ${TENANT_NAME} default`
    VAULT_LOGIN=$PROTOCOL://vault.$CMN_NAME/v1/auth/kubernetes/login
    export VAULT_ADDR=${PROTOCOL}://vault.${CMN_NAME}/v1/${TRANSIT_NAME}/keys/${KEY_NAME}
    export VAULT_TOKEN=$(curl -s --data '{"jwt": "'"$TOKEN"'", "role": "'"$TRANSIT_NAME"'"}' $VAULT_LOGIN | jq -r '.auth.client_token')
