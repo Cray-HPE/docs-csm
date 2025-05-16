@@ -39,6 +39,13 @@
 
 ## Bug fixes
 
+* The [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos)
+  [`session-setup` operator](operations/boot_orchestration/BOS_Services.md#session-setup) now ignores invalid
+  [xnames](glossary.md#xname) referenced by [session templates](operations/boot_orchestration/Session_Templates.md),
+  fixing a bug that caused BOS [sessions](operations/boot_orchestration/Sessions.md) to be stuck in `pending` state.
+* BOS logging is significantly more memory efficient, fixing a problem where logging on large scale systems
+  could cause [BOS operator](operations/boot_orchestration/BOS_Services.md#bos-operators) Kubernetes pods to be `OOMKilled`.
+
 ## Deprecations
 
 For more details and a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
