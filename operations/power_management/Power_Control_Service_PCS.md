@@ -9,10 +9,10 @@ consumption.
 
 Administrators can use the `cray` CLI for power operations from any system that
 has HTTPS access to the
-[System Management Services](../../network/Access_to_System_Management_Services.md).
+[System Management Services](../network/Access_to_System_Management_Services.md).
 
 Third party software can access the API directly. Refer to the
-[PCS API documentation](../../../api/power-control.md)
+[PCS API documentation](../../api/power-control.md)
 for detailed information about API options and features.
 
 The `cray power` command (see `--help`) can be used to control power to
@@ -138,5 +138,5 @@ The `managementState` can be used to determine if the component's management end
 the last hardware scan and can be used to monitor system hardware readiness and availability.
 
 See the `/power-status` section in the
-[PCS API documentation](../../../api/power-control.md)
+[PCS API documentation](../../api/power-control.md)
 for detailed information about the API options and features.

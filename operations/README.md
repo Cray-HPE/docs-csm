@@ -174,7 +174,7 @@ Additional links to power on sub-procedures provided for reference. Refer to the
 - [Power On Compute Cabinets](power_management/Power_On_Compute_Cabinets.md) using PCS
 - [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
 - [Power On and Boot Managed Nodes](power_management/Power_On_and_Boot_Managed_Nodes.md)
-- [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Power_Control_Service/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md) using PCS
+- [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md) using PCS
 - [HMS known issues](../troubleshooting/README.md#hardware-management-system-hms)
 
 ## Power management
@@ -182,9 +182,9 @@ Additional links to power on sub-procedures provided for reference. Refer to the
 HPE Cray System Management (CSM) software manages and controls power out-of-band through Redfish APIs.
 
 - [Power Management](power_management/power_management.md)
-- [Power Control Service (PCS)](power_management/Power_Control_Service/Power_Control_Service_PCS.md)
+- [Power Control Service (PCS)](power_management/Power_Control_Service_PCS.md)
 - [User Access to Compute Node Power Data](power_management/User_Access_to_Compute_Node_Power_Data.md)
-- [Node Card Power Management](power_management/Power_Control_Service/Node_Card_Power_Management.md)
+- [Node Card Power Management](power_management/Node_Card_Power_Management.md)
 - [Set the Turbo Boost Limit](power_management/Set_the_Turbo_Boost_Limit.md)
 - [PCS API](../api/power-control.md)
 - [HMS known issues](../troubleshooting/README.md#hardware-management-system-hms)
