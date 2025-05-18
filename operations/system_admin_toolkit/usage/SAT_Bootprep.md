@@ -657,7 +657,7 @@ configurations:
 - name: "{{default.note}}compute-{{recipe.version}}{{default.suffix}}"
   layers:
   - name: uss-compute-{{uss.working_branch}}
-    playbook: cos-compute.yml
+    playbook: uss-compute.yml
     product:
       name: uss
       version: "{{uss.version}}"

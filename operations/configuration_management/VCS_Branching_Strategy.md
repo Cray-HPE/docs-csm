@@ -44,14 +44,14 @@ If the `update-vcs-config` stage of IUF fails due to git merge conflicts, they m
         --template={{.data.vcs_password}} | base64 -d)
     ```
 
-1. (`ncn-mw#`) Clone the VCS repository. This example uses the COS repo, but this procedure can be applied for any VCS repo.
+1. (`ncn-mw#`) Clone the VCS repository. This example uses the USS repo, but this procedure can be applied for any VCS repo.
 
     ```bash
     git clone https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git
     cd uss-config-management
     ```
 
-1. (`ncn-mw#`) Get the name of the previous integration branch, new integration branch, and pristine branch (e.g. `integration-2.4.109`, `integration-2.4.118`, `origin/cray/cos/2.5.132`).
+1. (`ncn-mw#`) Get the name of the previous integration branch, new integration branch, and pristine branch (e.g. `integration-1.3.0`, `integration-1.4.0`, `origin/cray/uss/1.4.0-87`).
     Use `git branch -r` to list the available branches.
 
     ```bash

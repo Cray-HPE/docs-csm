@@ -274,7 +274,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
     Reload DVS if it is running over the NMN. The recommendation is to run DVS over the HSN for simplified management and significant performance benefits.
 
-    For more information, see *HPE Cray Operating System Administration Guide: CSM on HPE Cray EX Systems (S-8024)*.
+    For more information, see *HPE User Services Software Administration Guide: CSM on HPE Cray EX Systems (S-8063)*.
 
 1. (`ncn-mw#`) Use boot orchestration to power on and boot the nodes.
 

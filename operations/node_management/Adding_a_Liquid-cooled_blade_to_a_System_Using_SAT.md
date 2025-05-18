@@ -153,7 +153,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    a comma-separated list of the BOS session templates determined in the previous step.
 
    ```bash
-   BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
+   BOS_TEMPLATES=uss-1.4.0-slurm-healthy-compute
    sat bootsys boot --stage bos-operations --bos-limit x9000c3s0 --recursive --bos-templates $BOS_TEMPLATES
    ```
 

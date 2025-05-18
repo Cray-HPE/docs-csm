@@ -149,9 +149,9 @@ The `rootfs` is the root file system.
 
 `rootfs_provider` identifies the mechanism that provides the root file system for the node.
 
-In the case of the [Cray Operating System (COS)](../../glossary.md#cray-operating-system-cos) image, the `rootfs_provider` is HPE's
+In the case of the [User Services Software (USS)](../../glossary.md#user-services-software-uss) image, the `rootfs_provider` is HPE's
 [iSCSI SBPS (Scalable Boot Content Projection Service)](../iscsi_sbps/iscsi_sbps.md) to deliver the content.
-CPS projects the root file system onto the nodes as a SquashFS image. This is provided via an overlay file system which is set up in dracut.
+SBPS projects the root file system onto the nodes as a SquashFS image. This is provided via an overlay file system which is set up in dracut.
 
 `rootfs_provider_passthrough` is a string that is passed through to the provider of the `rootfs`. This string can contain additional information that the provider will act upon.
 
@@ -184,7 +184,7 @@ The following table explains the different pieces in the preceding example.
 | Protocol                                 | `sbps-s3`                                                                  | The protocol used to mount the root file system, using SBPS in this example.                                            |
 | `rootfs_provider` location               | `s3://boot-images/4fab0408-0bfe-4668-b957-964f8ff0e4e9/rootfs`             | The `rootfs_provider` location is a SquashFS image stored in S3.                                                        |
 | `etag`                                   | `b6ea7a2314d54dead0c94223863b3488-1977`                                    | The `Etag` (entity tag) is the identifier of the SquashFS image in S3.                                                  |
-| `rootfs_provider_passthrough` parameters | `sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:30` | These are additional parameters passed through to CPS in this example, which it uses to properly mount the file system. |
+| `rootfs_provider_passthrough` parameters | `sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:30` | These are additional parameters passed through to SBPS in this example, which it uses to properly mount the file system. |
 
 ### Overriding configuration
 

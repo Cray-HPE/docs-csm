@@ -32,12 +32,14 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
 
 ### BOS
 
-Reconstruct boot session templates for impacted product streams to repopulate data.
+BOS Session Templates
 
-Boot preparation information for other product streams can be found in the following locations:
+Boot preparation information can be found in the following locations:
 
-- UANs: Refer to the UAN product stream repository and search for the "PREPARE UAN BOOT SESSION TEMPLATES" header in the "Install and Configure UANs" procedure.
-- Cray Operating System \(COS\): Refer to the "Create a Boot Session Template" header in the "Boot COS" procedure in the COS product stream documentation.
+- [BOS Session Templates](../../operations/boot_orchestration/Manage_a_Session_Template.md)
+- [Boot UANs](../../operations/boot_orchestration/Boot_UANs.md)
+
+Always consult the latest USS Administration Guide and CSM documentation for authoritative steps and best practices.
 
 ### BSS
 

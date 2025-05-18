@@ -468,7 +468,7 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate [
     However, if they are referenced by component name (xname), then these new nodes should added to the BOS session template.
 
     ```bash
-    BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+    BOS_TEMPLATE=uss-1.4.0-slurm-healthy-compute
     cray bos v2 sessiontemplates describe $BOS_TEMPLATE --format json|jq '.boot_sets[] | select(.node_list)'
     ```
 

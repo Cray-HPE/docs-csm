@@ -93,7 +93,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    Specify the appropriate component name (xname) and BOS template for the node type in the following command.
 
    ```bash
-   BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+   BOS_TEMPLATE=uss-1.4.0-slurm-healthy-compute
    cray bos v2 sessions create --template-name $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
    ```
 
@@ -268,7 +268,7 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 1. (`ncn-mw#`) Use BOS to shut down the affected nodes in the destination blade (in this example, `x1005c3s0`).
 
     ```bash
-    BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+    BOS_TEMPLATE=uss-1.4.0-slurm-healthy-compute
     cray bos v2 sessions create --template-name $BOS_TEMPLATE --operation shutdown \
             --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
@@ -719,7 +719,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     Specify the appropriate BOS template for the node type.
 
     ```bash
-    BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+    BOS_TEMPLATE=uss-1.4.0-slurm-healthy-compute
     cray bos v2 sessions create --template-name $BOS_TEMPLATE \
             --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```

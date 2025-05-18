@@ -110,7 +110,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    name (xname) for the slot, and a comma-separated list of the BOS session templates determined in the previous step.
 
    ```bash
-   BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
+   BOS_TEMPLATES=uss-4809
    sat bootsys shutdown --stage bos-operations --bos-limit x9000c3s0 --recursive --bos-templates $BOS_TEMPLATES
    ```
 
@@ -163,7 +163,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    The appropriate BOS session templates should be determined using the same procedure as was used to [determine the appropriate BOS session templates on the source system](#source-prepare-the-blade-for-removal).
 
    ```bash
-   BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
+   BOS_TEMPLATES=uss-2.0.30-slurm-healthy-compute
    sat bootsys shutdown --stage bos-operations --bos-limit x1005c0s3 --recursive --bos-templates $BOS_TEMPLATES
    ```
 
@@ -211,7 +211,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    Use `sat bootsys` to power on and boot the nodes. Specify the appropriate BOS template for the node type.
 
    ```bash
-   BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+   BOS_TEMPLATE=uss-2.0.30-slurm-healthy-compute
    sat bootsys boot --stage bos-operations --bos-limit x1005c0s3 --recursive --bos-templates $BOS_TEMPLATE
    ```
 
@@ -262,7 +262,7 @@ There should be one or more `cray-cps` pods.
    [Tue Jul 21 13:09:54 2020] DVS: merge_one#358:   Ignoring.
    ```
 
-1. Make sure that the Configuration Framework Service (CFS) finished successfully. Review *HPE Cray Operating System Administration Guide: CSM on HPE Cray EX Systems (S-8024)*.
+1. Make sure that the Configuration Framework Service (CFS) finished successfully. Review *HPE User Services Software Administration Guide: CSM on HPE Cray EX Systems.
 
 1. (`nid#`) SSH to the node and check each DVS mount.
 

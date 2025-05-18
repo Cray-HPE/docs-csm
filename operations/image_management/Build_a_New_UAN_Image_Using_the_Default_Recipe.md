@@ -11,7 +11,7 @@ product stream installer.
 
 ## Prerequisites
 
-* Both the Cray Operation System (COS) and UAN product streams must be installed.
+* The User Services Software (USS) product must be installed.
 * The Cray administrative CLI must be initialized.
 
 ## Overview
@@ -28,7 +28,7 @@ the default recipe if the Slingshot product is not installed.
 This procedure does not need to be followed if the Slingshot package is installed.
 
 1. Perform [Upload and Register an Image Recipe](Upload_and_Register_an_Image_Recipe.md) procedure to download and extract the UAN image
-   recipe, `cray-sles15sp1-uan-cos`, but stop before the step that modifies the recipe.
+   recipe, `cray-sles15sp1-uan-uss`, but stop before the step that modifies the recipe.
 
 1. Edit the file `config-template.xml.j2` within the recipe by removing these lines:
 
@@ -67,7 +67,7 @@ This procedure does not need to be followed if choosing to build the UAN image m
         "type": "s3"
       },
       "linux_distribution": "sles15",
-      "name": "cray-shasta-uan-cos-sles15sp1.x86_64-@product_version@",
+      "name": "uss-@product_version@-csm.x86_64",
       "recipe_type": "kiwi-ng"
     }
     ```

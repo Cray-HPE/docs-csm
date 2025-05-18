@@ -4,7 +4,7 @@ Boot UANs with an image so that they are ready for user logins.
 
 ## Prerequisites
 
-UAN boot images and a BOS session template have been created. See [Create UAN Boot Images](../image_management/Create_UAN_Boot_Images.md).
+UAN boot images and a BOS session template have been created. See [Image Preparation](../../operations/iuf/workflows/image_preparation.md).
 
 ## Procedure
 
@@ -75,34 +75,14 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
     cray cfs v3 sessions list --tags bos_session=$BOS_SESSION --status running --format json
     ```
 
-1. Verify that the Day Zero patch was applied correctly during [Create UAN Boot Images](../image_management/Create_UAN_Boot_Images.md).
+1. (`ncn-mw#`) SSH into a newly booted UAN.
 
-    > Skip this step if the patch has already been verified.
+    ```bash
+    ssh uan01-nmn
+    ```
 
-    1. (`ncn-mw#`) SSH into a newly booted UAN.
+1. (`uan01#`) Log out of the UAN.
 
-        ```bash
-        ssh uan01-nmn
-        ```
-
-    1. (`uan01#`) Verify that the DVS RPM versions match what exists in the `1.4.0-p2/rpms` directory.
-
-        ```bash
-        rpm -qa | grep 'cray-dvs.*' | sort
-        ```
-
-        Example output:
-
-        ```text
-        cray-dvs-common-<version>.x86_64
-        cray-dvs-csm-<version>.x86_64
-        cray-dvs-devel-<version>.x86_64
-        cray-dvs-dkms-<version>.noarch
-        ...
-        ```
-
-    1. (`uan01#`) Log out of the UAN.
-
-        ```bash
-        exit
-        ```
+    ```bash
+    exit
+    ```

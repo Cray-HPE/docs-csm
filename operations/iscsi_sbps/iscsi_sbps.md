@@ -17,7 +17,7 @@ better reliability, availability, security, ease and speed of deployment and eas
 The SBPS solution is offered from CSM 1.6 onwards and this solution is spread across different components, including:
 
 * [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos)
-* [Cray Operating System (COS)](../../glossary.md#cray-operating-system-cos)
+* [User Services Software (USS)](../../glossary.md#user-services-software-uss)
 * The core service SBPS Marshal Agent is delivered as an RPM that gets deployed by the
   [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
 
