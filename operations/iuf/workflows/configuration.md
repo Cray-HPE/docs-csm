@@ -119,8 +119,9 @@ required for initial installation scenarios.
     - Generate SAT S3 credentials
     - Configure system revision information via `sat setrev`
 
-***Note:*** If the system is using Customer High Speed Network(CHN), uncomment the following playbook in `management-bootprep.yaml`.
-```bash
+***`NOTE`*** If the system is using Customer High Speed Network(CHN), uncomment the following playbook in `management-bootprep.yaml`.
+
+ ```bash
 #BEGIN_CHN_SUPPORT
   - name: enabled_chn-{{csm.version}}
     playbook: enable_chn.yml
@@ -129,6 +130,7 @@ required for initial installation scenarios.
     version: "{{csm.version}}"
 #END_CHN_SUPPORT         
 ```
+
 In order to check whether the system is using Customer High Speed Network(CHN), refer to the steps mentioned [here](/operations/network/management_network/chn_test.md)
 
 Once this step has completed:

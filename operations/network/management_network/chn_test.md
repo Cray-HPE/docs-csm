@@ -1,9 +1,11 @@
+#
+
 In order to check whether the system is using CHN run the following command on ncn:
 
 ```bash
 cray sls search networks list --name BICAN --format json
-
 ```
+
 Example output:
 
 ```text
@@ -29,3 +31,4 @@ Example output:
   }
 ]
 ```
+
