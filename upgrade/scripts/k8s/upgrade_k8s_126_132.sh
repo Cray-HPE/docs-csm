@@ -24,7 +24,7 @@
 #
 set -euo pipefail
 
-# We should be at K8s 1.25 by this point, so upgrade control planes to 1.27.
+# We should be at K8s 1.26 by this point, so upgrade control planes to 1.29
 
 function prefix(){
   echo -n "$(date --iso-8601=seconds) $(basename "$0")"
@@ -35,11 +35,11 @@ echo "$(prefix) Beginning Kubernetes 1.25 to 1.27 upgrade."
 masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u)
 workers=$(grep -oP 'ncn-w\d+' /etc/hosts | sort -u)
 
-versions=("1.26.15" "1.27.16")
+versions=("1.27.16" "1.28.15" "1.29.15")
 
 # TODO(fluckdav): make this idempotent so you can restart it at any version.
-for host in "${masters}"; do
-  for version in "${versions[@]}"; do
+for version in "${versions[@]}"; do
+  for host in "${masters}"; do
 	echo "$(prefix) Installing [kubeadm-${version}] on [${host}]."
 	ssh "${host}" zypper --non-interactive install "kubeadm-${version}"
 
@@ -51,20 +51,42 @@ for host in "${masters}"; do
 	  ssh "${host}" kubeadm upgrade plan
 
 	  echo "$(prefix) Running kubeadm upgrade apply v${version} on [${host}]."
-	  ssh "${host}" kubeadm upgrade apply "v${version}"
+	  ssh "${host}" kubeadm upgrade apply -y "v${version}" --force
 	else
 	  # Subsequent control planes can be upgraded this way.
 	  echo "$(prefix) Running kubeadm upgrade node on [${host}]."
 	  ssh "${host}" kubeadm upgrade node
 	fi
   done
+done
 
+# Upgrade kubelet on master nodes for K8s 1.29.
+
+# First, update kubelet-config configmap to add containerRuntimeEndpoint. This
+# is necessary because --container-runtime-endpoint was deprecated as a kubelet
+# command line argument in K8s 1.27.
+kubectl get configmap kubelet-config -n kube-system -o yaml > kubelet-config.yaml
+yq4 eval -P '.data.kubelet' "kubelet-config.yaml" > kubelet-config-kubelet.yaml
+yq4 eval -i -P '.containerRuntimeEndpoint = "unix:///run/containerd/containerd.sock"' kubelet-config-kubelet.yaml
+
+# Merge our kubelet config back into the kubelet-config manifest.
+if IFS= read -rd '' -a kubelet_config; then
+  :
+fi <<< "$(cat "kubelet-config-kubelet.yaml")"
+kubelet_config=$kubelet_config yq4 eval -i '.data.kubelet = strenv(kubelet_config)' "kubelet-config.yaml"
+
+# Update the kubelet-config configmap.
+kubectl -n kube-system apply -f "${workdir}/kubelet-config.yaml"
+
+version="1.29.15"
+for host in "${master}"; do
   # Drain the node, ignoring daemonsets and deleting emptydir data.
+  echo "$(prefix) Draining node: [${host}]."
   kubectl drain "${host}" --ignore-daemonsets --delete-emptydir-data
 
   # Update kubelet and kubectl. We don't need to update these one at a
   # time; we can skip up to three versions at a time.
-  version="${versions[-1]}"
+  echo "$(prefix) Installing [kubelet-${version}] and [kubectl-${version}] on [${host}]."
   ssh "${host}" zypper --non-interactive install "kubelet-${version}" "kubectl-${version}"
 
   # Reload daemons and restart kubelet.
@@ -72,5 +94,6 @@ for host in "${masters}"; do
   ssh "${host}" systemctl restart kubelet
 
   # Mark the node ready for scheduling.
+  echo "$(prefix) Uncordoning node: [${host}]."
   kubectl uncordon "${host}"
 done
