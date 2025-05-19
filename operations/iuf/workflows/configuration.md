@@ -131,7 +131,7 @@ required for initial installation scenarios.
 #END_CHN_SUPPORT         
 ```
 
-In order to check whether the system is using Customer High Speed Network(CHN), refer to the steps mentioned [here](/operations/network/management_network/chn_test.md#procedure-to-check-chn)
+In order to check whether the system is using Customer High Speed Network(CHN), refer to the steps mentioned [here](../../../operations/network/management_network/chn_test.md#procedure-to-check-chn)
 
 Once this step has completed:
 
