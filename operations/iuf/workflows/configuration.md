@@ -119,7 +119,7 @@ required for initial installation scenarios.
     - Generate SAT S3 credentials
     - Configure system revision information via `sat setrev`
 
-***`NOTE`*** If the system is using Customer High Speed Network(CHN), uncomment the following playbook in `management-bootprep.yaml`.
+**`NOTE`** If the system is using Customer High Speed Network(CHN), uncomment the following playbook in `management-bootprep.yaml`.
 
  ```bash
 #BEGIN_CHN_SUPPORT

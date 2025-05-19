@@ -1,4 +1,4 @@
-#
+# Procedure to check CHN
 
 In order to check whether the system is using CHN run the following command on ncn:
 
@@ -31,4 +31,3 @@ Example output:
   }
 ]
 ```
-
