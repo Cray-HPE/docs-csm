@@ -1284,6 +1284,7 @@ CASMTRIAGE-7445 iSCSI is reporting "SQUASHFS errors" on gamora for unknown reaso
 CASMTRIAGE-7446 Are documented workaround needed for "Spire  in PodInitializing state"
 CASMTRIAGE-7447 CMN iSCSI portal can be used off system without authentication
 CASMTRIAGE-7459 SBPS disconnected from all computes on gamora during rolling worker node upgrades
+CASMTRIAGE-8203 NCN heathchecks fails with cray-spire
 CASMUSER-3327 Remove UAI/UAS Docs in CSM 1.6.0.
 CASMUSER-3330 Remove UAS/UAI from CSM for CSM 1.6
 CRAYSAT-1330 Replace custom image rename code with CFS session parameter

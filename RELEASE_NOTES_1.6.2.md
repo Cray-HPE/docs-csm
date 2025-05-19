@@ -76,5 +76,6 @@ see [CSM 1.6 release notes](RELEASE_NOTES.md).
 * `cray-uas-mgr` may still be running on a system upgraded from CSM 1.5.
     * UAI was removed in CSM 1.6.0 but systems upgraded from CSM 1.5 may still have the `cray-uas-mgr` service and associated etcd cluster present.
     * A workaround is presented in [Remove User Access Service](troubleshooting/known_issues/remove_uas_service.md).
+* `/opt/cray/tests/install/ncn/scripts/check_key_id_in_jwks.sh` can potentially fail in certain situations, but the script can be patched.  See [NCN Health Checks Fail With Cray Spire](troubleshooting/known_issues/ncn_healthchecks_fail_with_cray_spire.md).
 
 For a full list of known issues, see [Known issues](troubleshooting/README.md#known-issues).
