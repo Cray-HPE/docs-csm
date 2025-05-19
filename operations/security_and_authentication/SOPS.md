@@ -82,10 +82,26 @@ created for them.
     When TAPMS creates a new tenant, a new Kubernetes namespace is created bearing
     the same name. Within that namespace, there should be a default service account.
 
+    If this is the first time using the SOPs tool with a tenant the service account
+    token will need to be generated and saved.
+
+    ```bash
+    kubectl apply -f - <<EOF
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: default-token
+      namespace: ${TENANT_NAME}
+      annotations:
+        kubernetes.io/service-account.name: default
+    type: kubernetes.io/service-account-token
+    EOF
+    ```
+
     Generate the tenant's Kubernetes service account token.
 
     ```bash
-    TOKEN=`kubectl create token -n ${TENANT_NAME} default`
+    TOKEN=`kubectl get secret -n ${TENANT_NAME} -ojson | jq -r .items[].data.token | base64 -d`
     ```
 
 1. (`ncn-mw#`) Using the tenant's service account token, obtain a `VAULT_TOKEN` from Vault.
@@ -114,7 +130,17 @@ created for them.
    CMN_NAME=cmn.$SYSTEM_NAME.$DOMAIN_NAME
    TRANSIT_NAME=`kubectl get tenants.tapms.hpe.com -n tenants $TENANT_NAME -ojson | jq -r .status.tenantkms.transitname`
    KEY_NAME=`kubectl get tenants.tapms.hpe.com -n tenants $TENANT_NAME -ojson | jq -r .status.tenantkms.keyname`
-   TOKEN=`kubectl create token -n ${TENANT_NAME} default`
+   kubectl apply -f - <<EOF
+   apiVersion: v1
+   kind: Secret
+   metadata:
+     name: default-token
+     namespace: ${TENANT_NAME}
+     annotations:
+       kubernetes.io/service-account.name: default
+   type: kubernetes.io/service-account-token
+   EOF
+   TOKEN=`kubectl get secret -n ${TENANT_NAME} -ojson | jq -r .items[].data.token | base64 -d`
    VAULT_LOGIN=$PROTOCOL://vault.$CMN_NAME/v1/auth/kubernetes/login
    export VAULT_ADDR=${PROTOCOL}://vault.${CMN_NAME}/v1/${TRANSIT_NAME}/keys/${KEY_NAME}
    export VAULT_TOKEN=$(curl -s --data '{"jwt": "'"$TOKEN"'", "role": "'"$TRANSIT_NAME"'"}' $VAULT_LOGIN | jq -r '.auth.client_token')
