@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -27,6 +27,7 @@ import traceback
 
 import base64
 import logging
+from typing import Union
 
 from . import api_requests
 from . import common
@@ -39,6 +40,8 @@ K8S_SECRET_NAME = "cray-vault-unseal-keys"
 K8S_SERVICE_NAME = "cray-vault"
 
 CSM_ROOT_SECRET_KEY = "csm/users/root"
+CSM_SSH_CONFIG_KEY = "csm/ssh-config/root"
+CSM_SSH_CONFIG_FIELD = "config"
 SW_ADMIN_PW_KEY = "net-creds/switch_admin"
 SW_ADMIN_PW_FIELD = "admin"
 
@@ -284,6 +287,12 @@ class Vault():
         """
         return self.get_secret(secret_key=CSM_ROOT_SECRET_KEY, **kwargs)
 
+    def write_csm_root_secret(self, **kwargs) -> None:
+        """
+        Wrapper function that supplies the CSM root secret key to write_secret()
+        """
+        self.write_secret(secret_key=CSM_ROOT_SECRET_KEY, **kwargs)
+
     def get_sw_admin_password(self) -> str:
         """
         Wrapper function that supplies the switch admin password key to get_secret(),
@@ -291,14 +300,29 @@ class Vault():
         """
         return self.get_secret(secret_key=SW_ADMIN_PW_KEY, must_exist=True)[SW_ADMIN_PW_FIELD]
 
-    def write_csm_root_secret(self, **kwargs) -> None:
-        """
-        Wrapper function that supplies the CSM root secret key to write_secret()
-        """
-        self.write_secret(secret_key=CSM_ROOT_SECRET_KEY, **kwargs)
-
     def write_sw_admin_password(self, pw_string: str) -> None:
         """
         Wrapper function that supplies the switch admin password key to write_secret()
         """
         self.write_secret(secret_key=SW_ADMIN_PW_KEY, secret_data={ SW_ADMIN_PW_FIELD: pw_string })
+
+    def delete_csm_root_ssh_config(self) -> None:
+        """
+        Wrapper function that supplies the CSM root SSH config key to delete_secret()
+        """
+        self.delete_secret(secret_key=CSM_SSH_CONFIG_KEY)
+
+    def get_csm_root_ssh_config(self, **kwargs) -> Union[str, None]:
+        """
+        Wrapper function that supplies the CSM root SSH config key to get_secret()
+        """
+        ssh_config = self.get_secret(secret_key=CSM_SSH_CONFIG_KEY, **kwargs)
+        if ssh_config is None:
+            return None
+        return ssh_config[CSM_SSH_CONFIG_FIELD]
+
+    def write_csm_root_ssh_config(self, ssh_config: str) -> None:
+        """
+        Wrapper function that supplies the CSM root SSH config key to write_secret()
+        """
+        self.write_secret(secret_key=CSM_SSH_CONFIG_KEY, secret_data={ CSM_SSH_CONFIG_FIELD: ssh_config })
