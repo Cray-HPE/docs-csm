@@ -1,6 +1,6 @@
 # Procedure to check CHN
 
-In order to check whether the system is using CHN run the following command on NCN:
+In order to check whether the system is using CHN, run the following command on an NCN:
 
 ```bash
 cray sls search networks list --name BICAN --format json
