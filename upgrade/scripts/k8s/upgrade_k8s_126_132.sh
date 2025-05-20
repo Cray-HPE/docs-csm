@@ -117,5 +117,24 @@ echo "$(prefix) Upgrading kubelet on worker nodes."
 
 for host in "${workers}"; do
   echo "$(prefix) Installing [kubeadm-${version}] on [${host}]."
-  ssh "${host}" zypper --non-interactive install "kubeadm-${version}"  
+  ssh "${host}" zypper --non-interactive install "kubeadm-${version}"
+
+  ssh "{host}" kubeadm upgrade node
+  kubectl drain --ignore-daemonsets --delete-emptydir-data "${host}"
+
+  fix_sysconfig "${host}"
+
+  # Remove --container-runtime=remote argument from KUBELET_KUBEADM_ARGS.
+  echo 'KUBELET_KUBEADM_ARGS="--container-runtime-endpoint=/run/containerd/containerd.sock --pod-infra-container-image=artifactory.algol60.net/csm-docker/stable/k8s.gcr.io/pause:3.9"' > /var/lib/kubelet/kubeadm-flags.env
+
+  # Update kubelet and kubectl. We don't need to update these one at a
+  # time; we can skip up to three versions at a time.
+  echo "$(prefix) Installing [kubelet-${version}] and [kubectl-${version}] on [${host}]."
+  ssh "${host}" zypper --non-interactive install "kubelet-${version}" "kubectl-${version}"
+
+  # Reload daemons and restart kubelet.
+  ssh "${host}" systemctl daemon-reload
+  ssh "${host}" systemctl restart kubelet
+
+  kubectl uncordon "${host}"
 done
