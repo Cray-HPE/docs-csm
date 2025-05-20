@@ -39,7 +39,7 @@ KUBELET_EXTRA_ARGS=\"--node-ip ${NODE_IP}\"
 EOF"
 }
 
-echo "$(prefix) Beginning Kubernetes 1.25 to 1.27 upgrade."
+echo "$(prefix) Beginning Kubernetes 1.26 to 1.32 upgrade."
 
 masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u)
 workers=$(grep -oP 'ncn-w\d+' /etc/hosts | sort -u)
@@ -51,6 +51,11 @@ for version in "${versions[@]}"; do
   for host in "${masters}"; do
 	echo "$(prefix) Installing [kubeadm-${version}] on [${host}]."
 	ssh "${host}" zypper --non-interactive install "kubeadm-${version}"
+
+	if [[ "${version}" == "1.29.15" ]]; then
+	  # TODO(fluckdav): Parameterize the package version with a hashmap.
+	  ssh "${host}" zypper --non-interactive install kubernetes-cni-1.3.0
+	fi
 
 	ssh "${host}" kubeadm version
 
@@ -137,4 +142,45 @@ for host in "${workers}"; do
   ssh "${host}" systemctl restart kubelet
 
   kubectl uncordon "${host}"
+done
+
+versions=("1.30.12" "1.31.8" "1.32.2")
+
+for version in "${versions[@]}"; do
+  for host in "${masters}"; do
+	echo "$(prefix) Installing [kubeadm-${version}] on [${host}]."
+	ssh "${host}" zypper --non-interactive install "kubeadm-${version}"
+
+	if [[ "${version}" == "1.30.12" ]]; then
+	  zypper --non-interactive install kubernetes-cni-1.4.0
+	elif [[ "${version}" == "1.31.8" ]]; then
+	  zypper --non-interactive install kubernetes-cni-1.5.1
+
+	  # Kubernetes 1.31.8 requires a pause image version bump from 3.9 to 3.10.
+	  ssh "${host}" sed -i -e 's/pause:3.9/pause:3.10/g' /etc/containerd/config.toml
+
+	  # Restart containerd.
+	  ssh "${host}" systemctl restart containerd
+	  ssh "${host}" systemctl status containerd
+	fi
+
+	ssh "${host}" kubeadm version
+
+	if [[ "${host}" == "ncn-m001" ]]; then
+	  # Only the first control plane node needs an upgrade plan and upgrade apply.
+	  echo "$(prefix) Running kubeadm upgrade plan on [${host}]."
+	  ssh "${host}" kubeadm upgrade plan
+
+	  echo "$(prefix) Running kubeadm upgrade apply v${version} on [${host}]."
+	  ssh "${host}" kubeadm upgrade apply -y "v${version}" --force
+	else
+	  # Subsequent control planes can be upgraded this way.
+	  echo "$(prefix) Running kubeadm upgrade node on [${host}]."
+	  ssh "${host}" kubeadm upgrade node
+	fi
+
+	if [[ "${version}" == "1.31.8"]]; then
+	  ssh "${host}" yq4 eval -i -P '.kubernetesVersion = "v1.31.8"' "/etc/kubernetes/kubeadmcfg.yaml"
+	fi
+  done
 done
