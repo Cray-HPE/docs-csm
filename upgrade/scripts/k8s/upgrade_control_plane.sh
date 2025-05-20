@@ -58,22 +58,6 @@ else
   yq4 eval -i -P '.scheduler.extraArgs.bind-address = "0.0.0.0"' "${workdir}/ClusterConfiguration.yaml"
 fi
 
-# Necessary for K8s 1.26.
-echo "Removing udpIdleTimeout from kube-proxy configmap."
-
-kubectl get configmap kube-proxy -n kube-system -o yaml > kube-proxy.yaml
-yq4 eval -P '.data."config.conf"' "kube-proxy.yaml" > kube-proxy-config.yaml
-yq4 eval -i -P 'del(.udpIdleTimeout)' kube-proxy-config.yaml
-
-# Merge our kube-proxy config.conf back into the kube-proxy manifest.
-if IFS= read -rd '' -a kube_proxy; then
-  :
-fi <<< "$(cat "kube-proxy-config.yaml")"
-kube_proxy=$kube_proxy yq4 eval -i '.data."config.conf" = strenv(kube_proxy)' "kube-proxy.yaml"
-
-# Update the kube-proxy configmap.
-kubectl -n kube-system apply -f "${workdir}/kube-proxy.yaml"
-
 manifest_auditing_enabled=0
 if ! grep -q '/var/log/audit' /etc/kubernetes/manifests/kube-apiserver.yaml; then
   manifest_auditing_enabled=1
