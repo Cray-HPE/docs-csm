@@ -26,8 +26,17 @@ set -euo pipefail
 
 # We should be at K8s 1.26 by this point, so upgrade control planes to 1.29
 
-function prefix(){
+function prefix() {
   echo -n "$(date --iso-8601=seconds) $(basename "$0")"
+}
+
+function fix_sysconfig() {
+  # fix_sysconfig ncn-m002
+  NODE_IP=$(ssh $1 "dig +short \$(hostname).nmn | grep -v -E '^;;'")
+
+  ssh "$1" "cat > /etc/sysconfig/kubelet <<EOF
+KUBELET_EXTRA_ARGS=\"--node-ip ${NODE_IP}\"
+EOF"
 }
 
 echo "$(prefix) Beginning Kubernetes 1.25 to 1.27 upgrade."
@@ -78,11 +87,17 @@ kubelet_config=$kubelet_config yq4 eval -i '.data.kubelet = strenv(kubelet_confi
 # Update the kubelet-config configmap.
 kubectl -n kube-system apply -f "${workdir}/kubelet-config.yaml"
 
+echo "$(prefix) Upgrading kubelet on master nodes."
+
 version="1.29.15"
-for host in "${master}"; do
+for host in "${masters}"; do
   # Drain the node, ignoring daemonsets and deleting emptydir data.
   echo "$(prefix) Draining node: [${host}]."
   kubectl drain "${host}" --ignore-daemonsets --delete-emptydir-data
+
+  # Update /etc/sysconfig/kubelet to remove deprecated flags. Do this by
+  # reconstructing the arguments from scratch.
+  fix_sysconfig "${host}"
 
   # Update kubelet and kubectl. We don't need to update these one at a
   # time; we can skip up to three versions at a time.
@@ -96,4 +111,11 @@ for host in "${master}"; do
   # Mark the node ready for scheduling.
   echo "$(prefix) Uncordoning node: [${host}]."
   kubectl uncordon "${host}"
+done
+
+echo "$(prefix) Upgrading kubelet on worker nodes."
+
+for host in "${workers}"; do
+  echo "$(prefix) Installing [kubeadm-${version}] on [${host}]."
+  ssh "${host}" zypper --non-interactive install "kubeadm-${version}"  
 done
