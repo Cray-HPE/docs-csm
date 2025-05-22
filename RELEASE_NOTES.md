@@ -22,6 +22,9 @@
 
 ### Security improvements
 
+* Spire node attestation can now be setup to use TPM chips on supported platforms, see [Enable TPM node attestation with Spire](operations/spire/Enable_TPM_node_attestation.md) for more information.
+* The old version of the Spire server was removed to fully transition to the newer version of Spire.
+
 ### Customer-requested enhancements
 
 ### Documentation enhancements
