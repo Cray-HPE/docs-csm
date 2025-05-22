@@ -208,6 +208,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Restore Spire Postgres without a Backup](../operations/spire/Restore_Spire_Postgres_without_a_Backup.md)
 * [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
 * [Spire Failing to Start on NCNs](../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
+* [NCN Health Checks Fail With Cray Spire](known_issues/ncn_healthchecks_fail_with_cray_spire.md)
 
 ## Utility storage
 
