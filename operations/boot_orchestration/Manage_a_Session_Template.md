@@ -10,6 +10,7 @@ and the CLI will print the underlying call to the API in the output.
 * [List all session templates](#list-all-session-templates)
 * [View a session template](#view-a-session-template)
 * [Delete a session template](#delete-a-session-template)
+* [Modify a session template](#modify-a-session-template)
 
 ## Session template framework
 
@@ -164,3 +165,17 @@ cray bos v2 sessiontemplates delete <SESSION_TEMPLATE_NAME>
 ```bash
 cray bos v1 sessiontemplate delete <SESSION_TEMPLATE_NAME>
 ```
+
+## Modify a session template
+
+In BOS v1, there is no special operation to modify a session template -- instead, just follow the
+[Create a session template](#create-a-session-template) using the name of the existing template, and the
+existing template will be overwritten.
+
+(`ncn-mw#`) For BOS v2, the following command takes a JSON input file that contains the information required to modify the BOS session template.
+
+```bash
+cray bos v2 sessiontemplates update --file <INPUT_FILE> <TEMPLATE_NAME>
+```
+
+The format of this input file is the same as the one used to [Create a session template](#create-a-session-template).
