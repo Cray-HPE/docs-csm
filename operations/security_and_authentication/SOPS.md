@@ -43,7 +43,6 @@ created for them.
 
    ```bash
    TENANT_NAME=vcluster-testing-tenant
-   TENANT_NAME=vcluster-eholen-testing-tenant
    PROTOCOL=https
    SYSTEM_NAME=`craysys metadata get system-name`
    DOMAIN_NAME=`craysys metadata get site-domain`
@@ -81,9 +80,25 @@ created for them.
 1. (`ncn-mw#`) Retrieve the tenant's Kubernetes token from the tenant's secret.
 
     When TAPMS creates a new tenant, a new Kubernetes namespace is created bearing
-    the same name. Within that namespace, there should be exactly one tenant name.
+    the same name. Within that namespace, there should be a default service account.
 
-    Retrieve, parse, and decrypt the tenant's Kubernetes service account token.
+    If this is the first time using the SOPs tool with a tenant the service account
+    token will need to be generated and saved.
+
+    ```bash
+    kubectl apply -f - <<EOF
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: default-token
+      namespace: ${TENANT_NAME}
+      annotations:
+        kubernetes.io/service-account.name: default
+    type: kubernetes.io/service-account-token
+    EOF
+    ```
+
+    Generate the tenant's Kubernetes service account token.
 
     ```bash
     TOKEN=`kubectl get secret -n ${TENANT_NAME} -ojson | jq -r .items[].data.token | base64 -d`
@@ -115,6 +130,16 @@ created for them.
    CMN_NAME=cmn.$SYSTEM_NAME.$DOMAIN_NAME
    TRANSIT_NAME=`kubectl get tenants.tapms.hpe.com -n tenants $TENANT_NAME -ojson | jq -r .status.tenantkms.transitname`
    KEY_NAME=`kubectl get tenants.tapms.hpe.com -n tenants $TENANT_NAME -ojson | jq -r .status.tenantkms.keyname`
+   kubectl apply -f - <<EOF
+   apiVersion: v1
+   kind: Secret
+   metadata:
+     name: default-token
+     namespace: ${TENANT_NAME}
+     annotations:
+       kubernetes.io/service-account.name: default
+   type: kubernetes.io/service-account-token
+   EOF
    TOKEN=`kubectl get secret -n ${TENANT_NAME} -ojson | jq -r .items[].data.token | base64 -d`
    VAULT_LOGIN=$PROTOCOL://vault.$CMN_NAME/v1/auth/kubernetes/login
    export VAULT_ADDR=${PROTOCOL}://vault.${CMN_NAME}/v1/${TRANSIT_NAME}/keys/${KEY_NAME}
