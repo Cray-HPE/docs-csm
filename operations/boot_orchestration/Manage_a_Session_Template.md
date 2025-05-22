@@ -10,6 +10,7 @@ and the CLI will print the underlying call to the API in the output.
 * [List all session templates](#list-all-session-templates)
 * [View a session template](#view-a-session-template)
 * [Delete a session template](#delete-a-session-template)
+* [Modify a session template](#modify-a-session-template)
 
 ## Session template framework
 
@@ -131,3 +132,13 @@ Example output:
 ```bash
 cray bos v2 sessiontemplates delete <SESSION_TEMPLATE_NAME>
 ```
+
+## Modify a session template
+
+(`ncn-mw#`) The following command takes a JSON input file that contains the information required to modify the BOS session template.
+
+```bash
+cray bos v2 sessiontemplates update --file <INPUT_FILE> <TEMPLATE_NAME>
+```
+
+The format of this input file is the same as the one used to [Create a session template](#create-a-session-template).

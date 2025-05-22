@@ -79,10 +79,15 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [CFS-API pods in CLBO state](known_issues/cfs-api_pods_in_CLBO_state.md)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [IMS Image Job Performance](../operations/image_management/Image_Job_Performance.md)
-* [Storage node `cloud-init` fails with 'Timed out waiting for device' error](./known_issues/storage_node_cloud_init_fails_with_timed_out.md)
-* [Console SSH Key Permissions](./known_issues/console_ssh_key_permissions.md)
+* [Storage node `cloud-init` fails with 'Timed out waiting for device' error](known_issues/storage_node_cloud_init_fails_with_timed_out.md)
+* [Console SSH Key Permissions](known_issues/console_ssh_key_permissions.md)
+* [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
+* [BOS Operator Pods `OOMKilled`](known_issues/BOS_Operator_Pods_OOMKilled.md)
 
 ## Booting
+
+* [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
+* [BOS Operator Pods `OOMKilled`](known_issues/BOS_Operator_Pods_OOMKilled.md)
 
 ### UAN boot issues
 
@@ -189,7 +194,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Interfaces with IP Address Issues](../operations/node_management/Troubleshoot_Interfaces_with_IP_Address_Issues.md)
 * [Loss of Console Connections and Logs on Gigabyte Nodes](../operations/node_management/Troubleshoot_Loss_of_Console_Connections_and_Logs_on_Gigabyte_Nodes.md)
 * [Manual NCN Upgrade](../upgrade/manual_ncn_upgrade.md)
-* [Storage node `cloud-init` fails with 'Timed out waiting for device' error](./known_issues/storage_node_cloud_init_fails_with_timed_out.md)
+* [Storage node `cloud-init` fails with 'Timed out waiting for device' error](known_issues/storage_node_cloud_init_fails_with_timed_out.md)
 
 ## Security and authentication
 
