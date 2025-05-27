@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -27,14 +27,14 @@ set -eo pipefail
 
 PYSCRIPT_BLOBS='
 import os, requests
-resp=requests.get("https://packages.local/service/rest/v1/blobstores", 
+resp=requests.get("https://packages.local/service/rest/v1/blobstores",
                   auth=(os.environ["NEXUS_USERNAME"], os.environ["NEXUS_PASSWORD"]))
 print(resp.text)
 '
 
 PYSCRIPT_REPOS='
 import os, requests
-resp=requests.get("https://packages.local/service/rest/beta/repositories", 
+resp=requests.get("https://packages.local/service/rest/beta/repositories",
                   auth=(os.environ["NEXUS_USERNAME"], os.environ["NEXUS_PASSWORD"]))
 print(resp.text)
 '
