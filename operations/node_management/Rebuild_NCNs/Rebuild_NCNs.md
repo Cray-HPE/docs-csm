@@ -5,6 +5,7 @@ or some other issue with the node has occurred that warrants rebuilding the node
 
 - [Prerequisites](#prerequisites)
 - [Procedure](#procedure)
+- [Restore manual configuration](#restore-manual-configuration)
 - [Validation](#validation)
 
 ## Prerequisites
@@ -130,6 +131,11 @@ Follow each step below:
 1. [Re-add Storage Node to Ceph](Re-add_Storage_Node_to_Ceph.md)
 1. [Validate Boot Loader](Validate_Boot_Loader.md)
 1. [Storage Node Validation](Post_Rebuild_Storage_Node_Validation.md)
+
+## Restore manual configuration
+
+Restore any configurations for the node that are not automatically performed by [CFS](../../../glossary.md#configuration-framework-service-cfs)
+live node personalization. For example, [SSH configuration files](../../CSM_product_management/Set_Up_Passwordless_SSH.md#ssh-configuration-files).
 
 ## Validation
 
