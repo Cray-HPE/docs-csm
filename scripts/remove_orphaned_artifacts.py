@@ -41,7 +41,7 @@ class Artifact:
         # if already computed, use it
         if self._is_ims is not None:
             return self._is_ims
-        
+
         # we expect the first part of the key to be the IMS id which is a
         # hash in in the format of 'fdca156c-19b2-4453-983d-45f8ee96fbcb'
         self._is_ims = False
@@ -50,8 +50,8 @@ class Artifact:
             self._is_ims = True
             self.id = parts[0]
 
-        return self._is_ims        
-        
+        return self._is_ims
+
 
 def get_token() -> str:
     token_file = os.getenv("CRAY_CREDENTIALS")
@@ -97,15 +97,15 @@ def get_s3_artifacts(s3_client):
     artifacts = []
     if s3_r['KeyCount'] > 0:
         for artifact in s3_r['Contents']:
-           artifacts.append(Artifact(artifact)) 
+           artifacts.append(Artifact(artifact))
     page=1
     while s3_r['IsTruncated']:
         page+=1
         s3_r = s3_client.list_objects_v2(Bucket='boot-images', ContinuationToken=s3_r['NextContinuationToken'])
-        
+
         if s3_r['KeyCount'] > 0:
             for artifact in s3_r['Contents']:
-               artifacts.append(Artifact(artifact)) 
+               artifacts.append(Artifact(artifact))
     return artifacts
 
 # https://stackoverflow.com/a/15485265
@@ -130,16 +130,16 @@ def options():
 def main():
     # read any command line arguments
     args = options()
-    
+
     # get the auth token
     token = get_token()
 
     # get the defined images in IMS and set up a lookup table with the ids
     ims_image_ids = get_ims_images(token)
-    
+
     # get the boto3 client to interact with S3
     s3_client, s3_resource = get_s3_client(token)
-        
+
     # get the items in the S3 'boot-images' bucket
     artifacts = get_s3_artifacts(s3_client)
 
@@ -154,9 +154,9 @@ def main():
             else:
                 action = "Deleted"
                 s3_resource.Object('boot-images', artifact.key).delete()
-            
+
             print(f"{action}: {artifact.key}, size: {sizeof_fmt(artifact.size)}")
-    
+
     print(f"Total orphaned: {sizeof_fmt(byte_count)}")
 
 if __name__ == '__main__':

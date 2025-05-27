@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # MIT License
 #
-# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -62,7 +62,7 @@ def clear_bmc_subscriptions(username, password, target_bmc):
     with requests.Session() as session:
         session.verify = False
         session.auth = requests.auth.HTTPBasicAuth(username, password)
- 
+
         # Retrieve subscriptions from the BMC
         url = f'https://{target_bmc}/redfish/v1/EventService/Subscriptions'
         print(f"Retrieving Redfish Event subscriptions from the BMC: {url}")
@@ -104,7 +104,7 @@ if __name__ == "__main__":
 
 
     args = parser.parse_args()
-    
+
     if re.match("^x([0-9]{1,4})c([0-7])b([0])$", args.target_bmc) is not None:
         # This is a ChassisBMC
         print(f"Clearing subscriptions from ChassisBMC {args.target_bmc}")
@@ -124,6 +124,6 @@ if __name__ == "__main__":
     if creds is None:
         print("Failed to retrieve credentials from SCSD")
         sys.exit(1)
-    
+
     # Clear the subscriptions from the BMC
     clear_bmc_subscriptions(creds["Username"], creds["Password"], args.target_bmc)

@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -23,10 +23,10 @@
 #
 """Shared Python function library: Vault"""
 
-import traceback
-
 import base64
 import logging
+import traceback
+from typing import NoReturn
 
 from . import api_requests
 from . import common
@@ -47,7 +47,7 @@ API_STATUS_OK_EMPTY = 204
 API_STATUS_NOT_FOUND = 404
 
 
-def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> None:
+def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> NoReturn:
     """
     1) If a parent exception is passed in, make a debug log entry with its stack trace.
     2) Log an error with the specified message.
@@ -108,7 +108,7 @@ def get_api_url(k8s_client: k8s.CoreV1API) -> str:
         for vault_port in vault_service.spec.ports:
             if vault_port.name == 'http-api-port':
                 api_url = f"http://{vault_ip}:{vault_port.port}"
-                logging.debug(f"API URL = {api_url}")
+                logging.debug("API URL = %s", api_url)
                 return api_url
     except (AttributeError, KeyError, TypeError) as exc:
         log_error_raise_exception(
@@ -230,8 +230,8 @@ class Vault():
         Raises an exception if anything goes wrong.
         """
         secret_url = self.get_secret_api_url(secret_key)
-        logging.debug(f"{secret_key} secret URL = {secret_url}")
-        logging.debug(f"Deleting {secret_key} secret from Vault")
+        logging.debug("%s secret URL = %s", secret_key, secret_url)
+        logging.debug("Deleting %s secret from Vault", secret_key)
         self.api_delete(
             url=secret_url, expected_status_codes=API_STATUS_OK_EMPTY)
 
@@ -244,14 +244,14 @@ class Vault():
         An exception is raised if any problems occur
         """
         secret_url = self.get_secret_api_url(secret_key)
-        logging.debug(f"{secret_key} secret URL = {secret_url}")
+        logging.debug("%s secret URL = %s", secret_key, secret_url)
         if must_exist:
             expected_status_codes = {API_STATUS_OK_WITH_DATA}
         else:
             expected_status_codes = {
                 API_STATUS_OK_WITH_DATA, API_STATUS_NOT_FOUND}
 
-        logging.debug(f"Reading {secret_key} secret from Vault")
+        logging.debug("Reading %s secret from Vault", secret_key)
         resp = self.api_get(
             url=secret_url, expected_status_codes=expected_status_codes)
         if resp.status_code == API_STATUS_NOT_FOUND:
@@ -267,8 +267,8 @@ class Vault():
         Raises an exception if anything goes wrong.
         """
         secret_url = self.get_secret_api_url(secret_key)
-        logging.debug(f"{secret_key} secret URL = {secret_url}")
-        logging.debug(f"Writing {secret_key} secret to Vault")
+        logging.debug("%s secret URL = %s", secret_key, secret_url)
+        logging.debug("Writing %s secret to Vault", secret_key)
         self.api_post(
             url=secret_url, expected_status_codes=API_STATUS_OK_EMPTY, json=secret_data)
 
