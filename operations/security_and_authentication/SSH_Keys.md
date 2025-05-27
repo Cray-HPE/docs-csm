@@ -26,49 +26,9 @@ skip any updates.
 
    Use `ssh-keygen` to generate a new pair or stage an existing pair, as per site security policies and procedures.
 
-1. (`ncn-mw#`) Get the [HashiCorp Vault](HashiCorp_Vault.md) root token.
-
-   ```bash
-   kubectl get secrets -n vault cray-vault-unseal-keys -o jsonpath='{.data.vault-root}' | base64 -d; echo
-   ```
-
 1. Write the private and public halves of the key pair to the [HashiCorp Vault](HashiCorp_Vault.md).
 
-   > ***WARNING***: The CSM instance of Vault does not support the `patch` operation. Ensure that if the
-   > `ssh_private_key` and `ssh_public_key` fields in the `secret/csm/users/root` secret are being updated,
-   > then any other desired fields are also included in the `write` command. For example the user's password hash.
-   > See [Update NCN Passwords](Update_NCN_Passwords.md).
-   > **Any fields omitted from the `write` command will be cleared from Vault.**
-
-   The path to the secret and the SSH key fields are configurable locations in
-   the CSM `csm.ssh_keys` Ansible role located in the CSM configuration
-   management Git repository that is in use. If not using the defaults as shown
-   in the command examples, ensure that the paths are consistent between Vault and
-   the values in the Ansible role. See `roles/csm.ssh_keys/README.md` in the
-   repository for more information.
-
-   1. (`ncn-mw#`) Open an interactive shell in the Vault Kubernetes pod.
-
-      ```bash
-      kubectl exec -itn vault cray-vault-0 -c vault -- sh
-      ```
-
-   1. (`cray-vault#`) Write the SSH keys to Vault.
-
-      * The `vault login` command will request the token value from the output of the previous step.
-      * Use the SSH keys from the earlier step.
-        * The `ssh_private_key` and `ssh_public_key` fields should contain the exact content from the
-          `id_rsa` and `id_rsa.pub` files (if using RSA key types).
-        * **`NOTE`**: It is important to enclose the key content in single quotes to preserve any special characters.
-      * The `vault read` command allows the administrator to verify that the contents of the secret were stored correctly.
-
-      ```bash
-      export VAULT_ADDR=http://cray-vault:8200
-      vault login
-      vault write secret/csm/users/root ssh_private_key='...' ssh_public_key='...' [... other fields (see warning below) ...]
-      vault read secret/csm/users/root
-      exit
-      ```
+    See [Update Root Secrets In Vault](Update_Root_Secrets_In_Vault.md).
 
 ## Procedure: Apply root SSH keys to NCNs (standalone)
 

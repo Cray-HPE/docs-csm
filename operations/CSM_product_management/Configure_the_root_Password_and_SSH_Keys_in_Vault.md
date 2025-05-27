@@ -29,6 +29,8 @@ Specifically, the `write_root_secrets_to_vault.py` script reads the following fr
 - The private SSH key from `/root/.ssh/id_rsa`.
 - The public SSH key from `/root/.ssh/id_rsa.pub`.
 
+For more information on this script, see [Update Root Secrets In Vault](../security_and_authentication/Update_Root_Secrets_In_Vault.md).
+
 This script can be run on any Kubernetes management NCN (master or worker). It only needs to be run once for
 the cluster, because the same Vault credentials are used for all management NCNs.
 
@@ -41,18 +43,9 @@ the cluster, because the same Vault credentials are used for all management NCNs
 /usr/share/doc/csm/scripts/operations/configuration/write_root_secrets_to_vault.py
 ```
 
-A successful execution will exit with return code 0 and will have output similar to the following:
+A successful execution will exit with return code 0 and will end with output similar to the following:
 
 ```text
-Reading in SSH private key from '/root/.ssh/id_rsa' file
-Reading in SSH public key from '/root/.ssh/id_rsa.pub' file
-Reading in file '/etc/shadow'
-Found root user line in /etc/shadow
-Initializing Kubernetes client
-Making GET request to http://10.22.183.206:8200/v1/secret/csm/users/root
-Writing updated CSM root secret to Vault
-Making POST request to http://10.22.183.206:8200/v1/secret/csm/users/root
-Making GET request to http://10.22.183.206:8200/v1/secret/csm/users/root
 Secrets read back from Vault match desired values
 SUCCESS
 ```
