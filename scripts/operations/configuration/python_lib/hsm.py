@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -23,11 +23,9 @@
 #
 """Shared Python function library: HSM"""
 
-import traceback
-
 import logging
-
-from typing import List
+import traceback
+from typing import List, NoReturn
 
 from . import api_requests
 from . import common
@@ -37,7 +35,7 @@ SMD_BASE_URL = f"{api_requests.API_GW_BASE_URL}/apis/smd"
 SMD_HSM_COMPONENTS_URL = f"{SMD_BASE_URL}/hsm/v2/State/Components"
 
 
-def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> None:
+def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> NoReturn:
     """
     1) If a parent exception is passed in, make a debug log entry with its stack trace.
     2) Log an error with the specified message.

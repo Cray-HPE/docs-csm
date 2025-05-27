@@ -25,7 +25,7 @@
 
 import logging
 import traceback
-from typing import Dict, List, NamedTuple, Union
+from typing import Dict, List, NamedTuple, NoReturn, Union
 import urllib.parse
 
 from . import api_requests
@@ -73,7 +73,7 @@ class CfsVersion(NamedTuple):
         """
         return f"{self.major}.{self.minor}.{self.patch}"
 
-def log_error_raise_exception(msg: str, parent_exception: Union[Exception, None] = None) -> None:
+def log_error_raise_exception(msg: str, parent_exception: Union[Exception, None] = None) -> NoReturn:
     """
     1) If a parent exception is passed in, make a debug log entry with its stack trace.
     2) Log an error with the specified message.

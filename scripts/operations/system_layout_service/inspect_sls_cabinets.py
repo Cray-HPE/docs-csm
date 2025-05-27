@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # MIT License
 #
-# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -59,7 +59,7 @@ def get_nid_ranges(nids):
             ranges.append(str(consecutive_nids[0]))
         else:
             ranges.append("{}-{}".format(consecutive_nids[0], consecutive_nids[-1]))
-    
+
     return ranges
 
 
@@ -106,7 +106,7 @@ for networks in [("HMN_MTN", "NMN_MTN"), ("HMN_RVR", "NMN_RVR")]:
 cabinet_xnames = []
 for xname in cabinets:
     cabinet_xnames.append(xname)
-    cabinets[xname]["class"] = allHardware[xname]["Class"] 
+    cabinets[xname]["class"] = allHardware[xname]["Class"]
 
 cabinet_xnames.sort()
 
