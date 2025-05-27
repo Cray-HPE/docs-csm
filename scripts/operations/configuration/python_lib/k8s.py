@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -25,6 +25,7 @@
 
 import logging
 import traceback
+from typing import NoReturn
 
 import kubernetes
 import kubernetes.client
@@ -42,7 +43,7 @@ V1Secret = kubernetes.client.models.v1_secret.V1Secret
 V1Service = kubernetes.client.models.v1_service.V1Service
 
 
-def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> None:
+def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> NoReturn:
     """
     1) If a parent exception is passed in, make a debug log entry with its stack trace.
     2) Log an error with the specified message.

@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -88,7 +88,7 @@ def run_bos_cli_command(args: List[str], tenant: Tenant = None,
             tmp_config.write(TENANT_CLI_CONFIG_TEMPLATE.format(tenant=tenant))
             # Make sure the data has been written to the file so the CLI command can read it.
             tmp_config.flush()
-            
+
             # We want to run the CLI command with the CRAY_CONFIG environment variable pointing to
             # this temporary file
             add_env_var_to_subprocess_run_kwargs("CRAY_CONFIG", tmp_config.name, subprocess_run_kwargs)
