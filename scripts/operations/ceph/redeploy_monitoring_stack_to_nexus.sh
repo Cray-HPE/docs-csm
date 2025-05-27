@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -69,7 +69,7 @@ function redeploy_failed_monitoring_daemons() {
   until [[ $should_recheck == 0 ]]; do
     should_recheck=0
     for daemon in "prometheus" "node-exporter" "alertmanager" "grafana"; do
-        # using grep to get the info below. jq cannot be used 
+        # using grep to get the info below. jq cannot be used
         # because some ceph 'event' values are incorrectly formatted and jq fails to filter json
         daemons_not_running=$(ceph orch ps --daemon_type $daemon | grep -v 'running' | tail -n+2 | awk '{print $1}')
         for each in $daemons_not_running; do

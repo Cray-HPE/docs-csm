@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -62,7 +62,7 @@ fi
 # Get the Base Directory
 BASEDIR=$(dirname $0)
 
-# Get the SYSTEM_DOMAIN from cloud-init 
+# Get the SYSTEM_DOMAIN from cloud-init
 SYSTEM_NAME=$(craysys metadata get system-name)
 SITE_DOMAIN=$(craysys metadata get site-domain)
 
@@ -104,7 +104,7 @@ echo "Got admin client secret"
 # Prepare the run script
 cat > /tmp/run-gateway-test-${UAN_NAME}.sh <<EOF
 #!/bin/bash
-    
+
 export ADMIN_CLIENT_SECRET=$ADMIN_SECRET
 
 echo "Running gateway tests on the UAN...(this may take 1-2 minutes)"
@@ -121,7 +121,7 @@ if [ $? -ne 0 ]; then
   error "Failed to transfer files to UAN ${UAN_NAME}"
 fi
 
-# Running tests on the UAN and cleaning up 
+# Running tests on the UAN and cleaning up
 printf "\nRunning tests on the UAN\n"
 #shellcheck disable=SC2088
 ssh ${UAN_NAME} "~/run-gateway-test-${UAN_NAME}.sh;rm gateway-test.py gateway-test-defn.yaml run-gateway-test-${UAN_NAME}.sh;exit 0"

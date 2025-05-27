@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -147,7 +147,7 @@ fi
 echo "Waiting for ${UAI_NAME} to be ready"
 UAI_READY=0
 #shellcheck disable=SC2034
-for i in `seq 1 10`;do 
+for i in `seq 1 10`;do
   UAI_STATUS=$(cray uas list --format json | jq --arg n "${UAI_NAME}" '.[] | select(.uai_name == $n) | .uai_status' | sed -e 's/"//g')
   echo "status = $UAI_STATUS"
   if [ "$UAI_STATUS" == "Running: Ready" ]; then
@@ -167,7 +167,7 @@ if [[ -z ${UAI_POD} ]]; then
   error "Could not find pod for UAI ${UAI_NAME}"
 fi
 
-# Set the variables in the UAI 
+# Set the variables in the UAI
 kubectl -n user exec ${UAI_POD} -- sh -c "echo 'export ADMIN_CLIENT_SECRET=$ADMIN_CLIENT_SECRET' > /test/vars.sh"
 kubectl -n user exec ${UAI_POD} -- sh -c "echo 'export SYSTEM_DOMAIN=$SYSTEM_DOMAIN' >> /test/vars.sh"
 kubectl -n user exec ${UAI_POD} -- sh -c "echo 'export USER_NETWORK=$USER_NETWORK' >> /test/vars.sh"

@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -102,13 +102,13 @@ def get_access_token(adminSecret, tokenNet, nmn_override):
         tokendomain = "auth.{}.{}".format(tokenNet, SYSTEM_DOMAIN)
 
     url = "https://{}/keycloak/realms/shasta/protocol/openid-connect/token".format(tokendomain)
- 
+
     if not resolvable(tokendomain):
         return None
 
     if not reachable(tokendomain):
         return None
-   
+
     try:
       r = requests.post(url, data = payload, verify = False)
     except Exception as err:
@@ -163,7 +163,7 @@ def get_sls_networks(adminSecret, systemDomain, nets):
 
 def get_vs(service):
 
-    result = None	
+    result = None
     try:
         logging.debug("Getting gateways for service {}.".format(service['name']))
         command_line = ['kubectl', 'get', 'vs', service['name'], '-n', service['namespace'], '-o', 'yaml']
@@ -199,7 +199,7 @@ if __name__ == '__main__':
       logging.critical("{} does not exist.".format(test_defn_file))
       sys.exit(1)
 
-    SYSTEM_DOMAIN = (sys.argv[1]).lower() 
+    SYSTEM_DOMAIN = (sys.argv[1]).lower()
     NODE_TYPE = (sys.argv[2]).lower()
     ADMIN_SECRET = os.environ.get("ADMIN_CLIENT_SECRET", "")
 
@@ -349,14 +349,14 @@ if __name__ == '__main__':
               'Authorization': "Bearer " + mytok
           }
 
-   
+
           try:
               response = requests.request("GET", url, headers=headers, verify = False)
           except Exception as err:
               print("{}".format(err))
               logging.error(f"An unanticipated exception occurred while retrieving {url} {err}")
               break
-    
+
           if response.status_code == svcexp:
               print("PASS - [" + svcname + "]: " + url + " - " + str(response.status_code))
           else:

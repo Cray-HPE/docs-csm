@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# (C) Copyright [2023] Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -25,7 +25,7 @@
 """
 	Attempt to rearrange NIDs for specified nodes to create a numerically (NID)
 	and lexicographically (xname) contiguous block of NIDs at the specified start.
-	
+
 	This script makes a few assumptions:
 	1) Inventory data is up to date (nothing has changed since the last HSM discovery).
 	2) Chassis entries in SLS are correct and exist for all Mountain and Hill hardware.
