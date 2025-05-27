@@ -49,7 +49,8 @@ in chronological order.
 
 ### Removals in CSM 1.7
 
-- The [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is planned to be removed in CSM 1.7.
+- The [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) support for `rootfs` projection has been removed in
+  CSM 1.7 in favor of the [Scalable Boot Projection Service](../../glossary.md#scalable-boot-projection-service-sbps).
 
 ## Deprecations
 
