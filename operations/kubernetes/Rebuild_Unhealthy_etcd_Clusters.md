@@ -20,13 +20,13 @@ The automated script will restore the cluster from a backup if it finds a backup
 * (`ncn-mw#`) Rebuild/restore a single cluster
 
     ```bash
-    /opt/cray/platform-utils/etcd/etcd_restore_rebuild.sh -s cray-bos
+    /opt/cray/platform-utils/etcd/etcd_restore_rebuild.sh -s cray-bss
     ```
 
 * (`ncn-mw#`) Rebuild/restore multiple clusters
 
     ```bash
-    /opt/cray/platform-utils/etcd/etcd_restore_rebuild.sh -m cray-bos,cray-bss
+    /opt/cray/platform-utils/etcd/etcd_restore_rebuild.sh -m cray-bss,cray-fas
     ```
 
 * (`ncn-mw#`) Rebuild/restore all clusters
@@ -38,7 +38,7 @@ The automated script will restore the cluster from a backup if it finds a backup
 ### Example command and output
 
 ```bash
-/opt/cray/platform-utils/etcd/etcd_restore_rebuild.sh -s cray-bos
+/opt/cray/platform-utils/etcd/etcd_restore_rebuild.sh -s cray-bss
 ```
 
 Example output:
@@ -46,7 +46,7 @@ Example output:
 ```text
 The following etcd clusters will be restored/rebuilt:
 
-cray-bos
+cray-bss
 
 You will be accepting responsibility for any missing data if there is a
 restore/rebuild over a running etcd k/v. HPE assumes no responsibility.
@@ -55,23 +55,23 @@ yes
 
 Proceeding: restoring/rebuilding etcd clusters.
 The following etcd clusters did not have backups so they will need to be rebuilt:
-cray-bos
+cray-bss
 Would you like to proceed rebuilding all of these etcd clusters? (yes/no)
 yes
 
 
- ----- Rebuilding cray-bos -----
-statefulset.apps/cray-bos-bitnami-etcd scaled
+ ----- Rebuilding cray-bss -----
+statefulset.apps/cray-bss-bitnami-etcd scaled
 Waiting for statefulset spec update to be observed...
-statefulset rolling update complete 0 pods at revision cray-bos-bitnami-etcd-6977fdd4b7...
+statefulset rolling update complete 0 pods at revision cray-bss-bitnami-etcd-6977fdd4b7...
 Deleting existing PVC's...
-persistentvolumeclaim "data-cray-bos-bitnami-etcd-0" deleted
-persistentvolumeclaim "data-cray-bos-bitnami-etcd-1" deleted
-persistentvolumeclaim "data-cray-bos-bitnami-etcd-2" deleted
-Setting cluster state for cray-bos to 'new'
-statefulset.apps/cray-bos-bitnami-etcd env updated
-statefulset.apps/cray-bos-bitnami-etcd scaled
-waiting for statefulset rolling update to complete 0 pods at revision cray-bos-bitnami-etcd-747d7d97b4...
+persistentvolumeclaim "data-cray-bss-bitnami-etcd-0" deleted
+persistentvolumeclaim "data-cray-bss-bitnami-etcd-1" deleted
+persistentvolumeclaim "data-cray-bss-bitnami-etcd-2" deleted
+Setting cluster state for cray-bss to 'new'
+statefulset.apps/cray-bss-bitnami-etcd env updated
+statefulset.apps/cray-bss-bitnami-etcd scaled
+waiting for statefulset rolling update to complete 0 pods at revision cray-bss-bitnami-etcd-747d7d97b4...
 Waiting for 1 pods to be ready...
 Waiting for 2 pods to be ready...
 Waiting for 3 pods to be ready...
@@ -79,11 +79,11 @@ Waiting for 3 pods to be ready...
 Waiting for 3 pods to be ready...
 Waiting for 2 pods to be ready...
 Waiting for 1 pods to be ready...
-statefulset rolling update complete 3 pods at revision cray-bos-bitnami-etcd-747d7d97b4...
-Setting cluster state for cray-bos to 'existing'
-statefulset.apps/cray-bos-bitnami-etcd env updated
+statefulset rolling update complete 3 pods at revision cray-bss-bitnami-etcd-747d7d97b4...
+Setting cluster state for cray-bss to 'existing'
+statefulset.apps/cray-bss-bitnami-etcd env updated
 Checking endpoint health.
-cray-bos etcd cluster health verified from cray-bos-bitnami-etcd-0
+cray-bss etcd cluster health verified from cray-bss-bitnami-etcd-0
 ```
 
 ## Final checks
