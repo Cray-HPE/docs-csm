@@ -25,38 +25,37 @@ The HPE Cray EX system has two types of nodes:
 `nidXXXXXX`, that is, `nid` followed by six digits. These six digits will be padded with zeroes at the beginning.
 All other nodes provide supporting functions to these compute nodes.
 * **Non-Compute Nodes (NCNs)**, which carry out system functions and come in many types:
-  * Management nodes in a Kubernetes cluster which host system services.
-    * Kubernetes master nodes, with names in the form of `ncn-mXXX`. Every system has three or more master nodes.
-    * Kubernetes worker nodes, with names in the form of `ncn-wXXX`. Every system has three or more worker nodes.
-    * Utility Storage nodes providing Ceph storage to Kubernetes nodes, with names in the form of `ncn-sXXX`. Every system has three or more storage nodes.
-  * Application nodes (ANs) which are not part of the Kubernetes management cluster
-    * User Access Nodes (UANs), known by some as login or front-end nodes
-    * Other site-defined types:
-      * Gateway nodes
-      * Data Mover nodes
-      * Visualization nodes
+    * Management nodes in a Kubernetes cluster which host system services.
+        * Kubernetes master nodes, with names in the form of `ncn-mXXX`. Every system has three or more master nodes.
+        * Kubernetes worker nodes, with names in the form of `ncn-wXXX`. Every system has three or more worker nodes.
+        * Utility Storage nodes providing Ceph storage to Kubernetes nodes, with names in the form of `ncn-sXXX`. Every system has three or more storage nodes.
+    * Application nodes (ANs) which are not part of the Kubernetes management cluster
+        * User Access Nodes (UANs), known by some as login or front-end nodes
+        * Other site-defined types:
+            * Gateway nodes
+            * Data Mover nodes
+            * Visualization nodes
 
 The following system networks connect the devices listed:
 
 * Networks external to the system:
-  * Customer Network (Data Center)
-    * `ncn-m001` BMC is connected by the customer network switch to the customer management network
-    * ClusterStor System Management Unit (SMU) interfaces
-    * User Access Nodes (UANs)
+    * Customer Network (Data Center)
+        * `ncn-m001` BMC is connected by the customer network switch to the customer management network
+        * ClusterStor System Management Unit (SMU) interfaces
+        * User Access Nodes (UANs)
 * System networks:
-  * Hardware Management Network (HMN)
-    * BMCs for Admin tasks
-    * Power distribution units (PDU)
-    * Keyboard/video/mouse (KVM)
-  * Node Management Network (NMN)
-    * All NCNs and compute nodes
-  * ClusterStor Management Network
-    * ClusterStor controller management interfaces of all ClusterStor components (SMU, Metadata
-Management Unit (MMU), and Scalable Storage Unit (SSU))
-  * High-Speed Network (HSN), which connects the following devices:
-    * Kubernetes worker nodes
-    * UANs
-    * ClusterStor controller data interfaces of all ClusterStor components (SMU, MMU, and SSU)
+    * Hardware Management Network (HMN)
+        * BMCs for Admin tasks
+        * Power distribution units (PDU)
+        * Keyboard/video/mouse (KVM)
+    * Node Management Network (NMN)
+        * All NCNs and compute nodes
+    * ClusterStor Management Network
+        * ClusterStor controller management interfaces of all ClusterStor components (SMU, Metadata Management Unit (MMU), and Scalable Storage Unit (SSU))
+    * High-Speed Network (HSN), which connects the following devices:
+        * Kubernetes worker nodes
+        * UANs
+        * ClusterStor controller data interfaces of all ClusterStor components (SMU, MMU, and SSU)
 
 During initial installation, several of those networks are created with default IP address ranges. See
 [Default IP Address Ranges](#2-default-ip-address-ranges)
@@ -130,8 +129,8 @@ There are several network values and other pieces of system information that are
 
   For more information on the CMN, see [Customer Accessible Networks](../operations/network/customer_accessible_networks/Customer_Accessible_Networks.md).
 
-  * Subnet for the MetalLB static address pool (`cmn-static-pool`), which is used for services that need to be pinned to the same IP address, such as the system DNS service.
-  * Subnet for the MetalLB dynamic address pool (`cmn-dynamic-pool`), which is used for services such as Prometheus and Nexus that can be reached by DNS.
+    * Subnet for the MetalLB static address pool (`cmn-static-pool`), which is used for services that need to be pinned to the same IP address, such as the system DNS service.
+    * Subnet for the MetalLB dynamic address pool (`cmn-dynamic-pool`), which is used for services such as Prometheus and Nexus that can be reached by DNS.
 * HPE Cray EX Domain: The value of the subdomain that is used to access externally exposed services.
   For example, if the system is named `TestSystem`, and the site is `example.com`, the HPE Cray EX domain
   would be `testsystem.example.com`. Central DNS would need to be configured to delegate requests for
