@@ -27,7 +27,7 @@ If it does not discover a backup within the last 7 days, it will ask the user if
 * (`ncn-mw#`) Rebuild/restore multiple clusters
 
     ```bash
-    /opt/cray/platform-utils/etcd/etcd_restore_rebuild.sh -m cray-bos,cray-uas-mgr
+    /opt/cray/platform-utils/etcd/etcd_restore_rebuild.sh -m cray-bos,cray-bss
     ```
 
 * (`ncn-mw#`) Rebuild/restore all clusters

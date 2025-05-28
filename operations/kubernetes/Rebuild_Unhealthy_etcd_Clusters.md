@@ -26,7 +26,7 @@ The automated script will restore the cluster from a backup if it finds a backup
 * (`ncn-mw#`) Rebuild/restore multiple clusters
 
     ```bash
-    /opt/cray/platform-utils/etcd/etcd_restore_rebuild.sh -m cray-bos,cray-uas-mgr
+    /opt/cray/platform-utils/etcd/etcd_restore_rebuild.sh -m cray-bos,cray-bss
     ```
 
 * (`ncn-mw#`) Rebuild/restore all clusters

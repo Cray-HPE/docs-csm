@@ -19,7 +19,6 @@ The following services are backed up daily \(one week of backups retained\) as p
 - Heartbeat Tracking Daemon \(HBTD\)
 - HMS Notification Fanout Daemon \(HMNFD\)
 - Power Control Service \(PCS\)
-- User Access Service \(UAS\)
 
 ## Test for recent etcd cluster backups
 
@@ -60,9 +59,6 @@ PASS: backup found less than 24 hours old.
 PASS: backup found less than 24 hours old.
 
 -- cray-power-control -- backups
-PASS: backup found less than 24 hours old.
-
--- cray-uas-mgr -- backups
 PASS: backup found less than 24 hours old.
  --- PASSED --- 
 ```
@@ -117,7 +113,6 @@ cray-fox/db-2024-09-30_23-00
 cray-hbtd/db-2024-09-30_23-00
 cray-hmnfd/db-2024-09-30_23-01
 cray-power-control/db-2024-09-30_23-00
-cray-uas-mgr/db-2024-09-30_23-00
 cray-bos/db-2024-10-01_23-00
 cray-bss/db-2024-10-01_23-00
 cray-fas/db-2024-10-01_23-00
