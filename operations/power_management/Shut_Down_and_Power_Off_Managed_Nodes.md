@@ -140,22 +140,6 @@ to ensure that the file system and its quorum nodes are quiesced before shutting
       +----------------+------+----------+--------+------+---------+------+-----------+-------------+-----------+----------+
       ```
 
-1. Check for User Access Instance (UAI) pods and remove them.
-
-   > Not all systems have been configured to use the containerized user environment (UAI) on worker nodes, but if they are in use, they should be stopped now.
-
-   1. (`ncn-m#`) Check for any UAI pods. This will show the username for each pod.
-
-   ```bash
-   cray uas uais list
-   ```
-
-   1. (`ncn-m#`) Remove any UAI pods using the usernames found in the previous step.
-
-   ```bash
-   cray uas uais delete --username USERNAME
-   ```
-
 1. If any external filesystems are mounted on the worker nodes, unmount them.
 
    Lustre, Spectrum Scale (GPFS), and NFS filesystems are usually defined in VCS cos-config-management in the `group_vars`
