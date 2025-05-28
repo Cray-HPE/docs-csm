@@ -26,13 +26,13 @@ Defragging the database cluster and clearing the etcd cluster `NOSPACE` alarm wi
 
         === Check the health of Etcd Cluster's database in the Services Namespace. ===
         === PASS or FAIL status returned. ===
-        ### cray-bos-bitnami-etcd-0 Etcd Database Check: ###
+        ### cray-bss-bitnami-etcd-0 Etcd Database Check: ###
         FAILED DATABASE CHECK - EXPECTED: OK foo fooCheck 1
         {"level":"warn","ts":"2020-10-23T23:56:48.408Z","caller":"clientv3/retry_interceptor.go:62","msg":"retrying of unary invoker failed","target":"endpoint://client-208534eb-2ab4-4c58-8853-58bff088c394/127.0.0.1:2379","attempt":0,"error":"rpc error: code = ResourceExhausted desc = etcdserver: mvcc: database space exceeded"}
         Error: etcdserver: mvcc: database space exceeded
-        ### cray-bos-bitnami-etcd-1 Etcd Database Check: ###
+        ### cray-bss-bitnami-etcd-1 Etcd Database Check: ###
         PASS: OK foo fooCheck 1
-        ### cray-bos-bitnami-etcd-2 Etcd Database Check: ###
+        ### cray-bss-bitnami-etcd-2 Etcd Database Check: ###
         PASS: OK foo fooCheck 1
          --- PASSED ---
         ```
@@ -46,15 +46,15 @@ Defragging the database cluster and clearing the etcd cluster `NOSPACE` alarm wi
         Example output:
 
         ```text
-        ### cray-bos-bitnami-etcd-0 PVC Usage: ###
+        ### cray-bss-bitnami-etcd-0 PVC Usage: ###
         Filesystem   Size   Used   Avail   Use%   Mounted   on
         /dev/rbd14   7.8G   123M   7.7G   2%   /bitnami/etcd
 
-        ### cray-bos-bitnami-etcd-1 PVC Usage: ###
+        ### cray-bss-bitnami-etcd-1 PVC Usage: ###
         Filesystem   Size   Used   Avail   Use%   Mounted   on
         /dev/rbd11   7.8G   123M   7.7G   2%   /bitnami/etcd
 
-        ### cray-bos-bitnami-etcd-2 PVC Usage: ###
+        ### cray-bss-bitnami-etcd-2 PVC Usage: ###
         Filesystem   Size   Used   Avail   Use%   Mounted   on
         /dev/rbd10   7.8G   123M   7.7G   2%   /bitnami/etcd
         ```
@@ -68,12 +68,12 @@ Defragging the database cluster and clearing the etcd cluster `NOSPACE` alarm wi
        Example output:
 
        ```text
-       ### cray-bos-bitnami-etcd-0 Disarmed Alarms: ###
+       ### cray-bss-bitnami-etcd-0 Disarmed Alarms: ###
        memberID:6004340417806974740 alarm:NOSPACE
        memberID:10618826089438871005 alarm:NOSPACE
        memberID:6927946043724325475 alarm:NOSPACE
-       ### cray-bos-bitnami-etcd-1 Disarmed Alarms: ###
-       ### cray-bos-bitnami-etcd-2 Disarmed Alarms: ###
+       ### cray-bss-bitnami-etcd-1 Disarmed Alarms: ###
+       ### cray-bss-bitnami-etcd-2 Disarmed Alarms: ###
        ```
 
     1. Verify that a new key-value can now be successfully stored.
@@ -89,11 +89,11 @@ Defragging the database cluster and clearing the etcd cluster `NOSPACE` alarm wi
         
         === Check the health of Etcd Cluster's database in the Services Namespace. ===
         === PASS or FAIL status returned. ===
-        ### cray-bos-bitnami-etcd-0 Etcd Database Check: ###
+        ### cray-bss-bitnami-etcd-0 Etcd Database Check: ###
         PASS: OK foo fooCheck 1
-        ### cray-bos-bitnami-etcd-1 Etcd Database Check: ###
+        ### cray-bss-bitnami-etcd-1 Etcd Database Check: ###
         PASS: OK foo fooCheck 1
-        ### cray-bos-bitnami-etcd-2 Etcd Database Check: ###
+        ### cray-bss-bitnami-etcd-2 Etcd Database Check: ###
         PASS: OK foo fooCheck 1
          --- PASSED ---
         ```
@@ -109,15 +109,15 @@ Defragging the database cluster and clearing the etcd cluster `NOSPACE` alarm wi
         Example output:
 
         ```text
-        ### cray-bos-bitnami-etcd-0 PVC Usage: ###
+        ### cray-bss-bitnami-etcd-0 PVC Usage: ###
         Filesystem   Size   Used   Avail   Use%   Mounted   on
         /dev/rbd14   7.8G   123M   7.7G   2%   /bitnami/etcd
 
-        ### cray-bos-bitnami-etcd-1 PVC Usage: ###
+        ### cray-bss-bitnami-etcd-1 PVC Usage: ###
         Filesystem   Size   Used   Avail   Use%   Mounted   on
         /dev/rbd11   7.8G   123M   7.7G   2%   /bitnami/etcd
 
-        ### cray-bos-bitnami-etcd-2 PVC Usage: ###
+        ### cray-bss-bitnami-etcd-2 PVC Usage: ###
         Filesystem   Size   Used   Avail   Use%   Mounted   on
         /dev/rbd10   7.8G   123M   7.7G   2%   /bitnami/etcd
         ```
@@ -165,9 +165,9 @@ Defragging the database cluster and clearing the etcd cluster `NOSPACE` alarm wi
         Running etcd defrag for: all
         Skip defrag for: cray-hbtd-etcd
         Skipping defrag for: cray-hbtd-etcd
-        Defragging cray-bos-bitnami-etcd-0
-        Defragging cray-bos-bitnami-etcd-1
-        Defragging cray-bos-bitnami-etcd-2
+        Defragging cray-bss-bitnami-etcd-0
+        Defragging cray-bss-bitnami-etcd-1
+        Defragging cray-bss-bitnami-etcd-2
 
         [...]
         ```
@@ -181,15 +181,15 @@ Defragging the database cluster and clearing the etcd cluster `NOSPACE` alarm wi
         Example output:
 
         ```text
-        ### cray-bos-bitnami-etcd-0 PVC Usage: ###
+        ### cray-bss-bitnami-etcd-0 PVC Usage: ###
         Filesystem   Size   Used   Avail   Use%   Mounted   on
         /dev/rbd14   7.8G   123M   7.7G   2%   /bitnami/etcd
 
-        ### cray-bos-bitnami-etcd-1 PVC Usage: ###
+        ### cray-bss-bitnami-etcd-1 PVC Usage: ###
         Filesystem   Size   Used   Avail   Use%   Mounted   on
         /dev/rbd11   7.8G   123M   7.7G   2%   /bitnami/etcd
 
-        ### cray-bos-bitnami-etcd-2 PVC Usage: ###
+        ### cray-bss-bitnami-etcd-2 PVC Usage: ###
         Filesystem   Size   Used   Avail   Use%   Mounted   on
         /dev/rbd10   7.8G   123M   7.7G   2%   /bitnami/etcd
         ```
@@ -203,10 +203,10 @@ Defragging the database cluster and clearing the etcd cluster `NOSPACE` alarm wi
         Example output:
 
         ```text
-        ### cray-bos-bitnami-etcd-0 Disarmed Alarms: ###
+        ### cray-bss-bitnami-etcd-0 Disarmed Alarms: ###
         memberID:6004340417806974740 alarm:NOSPACE
         memberID:10618826089438871005 alarm:NOSPACE
         memberID:6927946043724325475 alarm:NOSPACE
-        ### cray-bos-bitnami-etcd-1 Disarmed Alarms: ###
-        ### cray-bos-bitnami-etcd-2 Disarmed Alarms: ###
+        ### cray-bss-bitnami-etcd-1 Disarmed Alarms: ###
+        ### cray-bss-bitnami-etcd-2 Disarmed Alarms: ###
         ```
