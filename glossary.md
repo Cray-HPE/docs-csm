@@ -237,6 +237,10 @@ inventory and node targeting options.
 
 ## Content Projection Service (CPS)
 
+> CPS is deprecated in CSM 1.6 and removed in CSM 1.7. Its replacement is the
+> [Scalable Boot Projection Service (SBPS)](#scalable-boot-projection-service-sbps).
+> See [Deprecated Features](introduction/deprecated_features/README.md).
+
 The Content Projection Service (CPS) provides the root filesystem for [compute nodes](#compute-node-cn) and [application nodes](#application-node-an)
 in conjunction with the [Data Virtualization Service (DVS)](#data-virtualization-service-dvs).
 Using CPS and DVS, the HPE Cray Programming Environment (CPE) and Analytics products are provided as separately mounted filesystems
@@ -346,6 +350,10 @@ For more information on the CHN, see [Customer Accessible Networks](operations/n
 For more information on the CMN, see [Customer Accessible Networks](operations/network/customer_accessible_networks/Customer_Accessible_Networks.md).
 
 ## Data Virtualization Service (DVS)
+
+> DVS is deprecated in CSM 1.6 and removed in CSM 1.7. Its replacement is the
+> [Scalable Boot Projection Service (SBPS)](#scalable-boot-projection-service-sbps).
+> See [Deprecated Features](introduction/deprecated_features/README.md).
 
 The Data Virtualization Service (DVS) is a distributed network service that projects file systems
 mounted on [Non-Compute Nodes (NCNs)](#non-compute-node-ncn) to other nodes within the HPE Cray EX system. Projecting is
