@@ -57,6 +57,10 @@ For more details and a list of all deprecated CSM features, see [Deprecations](i
 
 ## Removals
 
+* The [Content Projection Service (CPS)](glossary.md#content-projection-service-cps) and the
+  [Data Virtualization Service (DVS)](glossary.md#data-virtualization-service-dvs)
+    * These are replaced by the [Scalable Boot Projection Service](../../glossary.md#scalable-boot-projection-service-sbps)
+
 For more details and a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals).
 
 ## Known issues
