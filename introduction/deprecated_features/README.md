@@ -47,7 +47,9 @@ in chronological order.
 
 ### Removals in CSM 1.7
 
-- The [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is planned to be removed in CSM 1.7.
+- The [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and the
+  [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs)
+    - Replaced by the Scalable Boot Projection Service.
 
 ## Deprecations
 
@@ -57,8 +59,9 @@ features are listed first).
 ### Deprecated in CSM 1.6
 
 - The `sat swap cable` and `sat swap switch` commands are deprecated.
-- The [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is deprecated in favor of the
-  Scalable Boot Projection Service.
+- The [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and
+  [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs)
+    - These are being replaced by the Scalable Boot Projection Service.
 
 ### Deprecated in CSM 1.5
 
