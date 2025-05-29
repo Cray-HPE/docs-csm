@@ -50,7 +50,7 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
     How many NCNs would you like to add? Do not include NCNs to be removed or moved.
     10
 
-    You are about to make DESTRUCTIVE changes to the system and will need to restart DVS.
+    You are about to make DESTRUCTIVE changes to the system.
 
     If you are sure you want to proceed.  Please type: PROCEED
 
@@ -140,27 +140,12 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
     2022-04-01 21:21:09,870 - __main__ - WARNING - Deleting 10.252.1.22 from kea active leases.
     2022-04-01 21:21:09,934 - __main__ - WARNING - Deleting {"ID": "a4bf013eeb4f", "MACAddress": "a4:bf:01:3e:eb:4f", "IPAddress": []} from SMD EthernetInterfaces.
     2022-04-01 21:21:09,935 - __main__ - WARNING - Deleting 10.252.1.20 from kea active leases.
-    Please restart DVS and rebooting the following nodes before proceeding to the next step.:["x3000c0s21b4", "x3000c0s19b0", "x3000c0s21b3", "x3000c0s21b1", "x3000c0s21b2", "x3000c0s21b2n0", "x3000c0s21b3n0", "x3000c0s21b1n0"]
     prerequisite to prepare NCNs for removal, move and add
     Network expansion COMPLETED
     Log and backup of SLS, BSS and SMD can be found at: /tmp/ncn_task_backups2022-04-01_21-21-04
 
     Restarting cray-dhcp-kea
    ```
-
-   1. When adding new NCNs, there will be network configuration changes that will impact changing IP addresses on computes.
-
-      **That will require a DVS restart to update the IP addresses in the DVS `node_map`.**
-
-      `ncn_add_pre-req.py` will make the network adjustments and will list the component names (xnames) that will need to be
-      rebooted after DVS is restarted. See example below:
-
-      ```text
-      Please restart DVS and rebooting the following nodes before proceeding to the next step.:["x3000c0s21b4", "x3000c0s19b0", "x3000c0s21b3", "x3000c0s21b1", "x3000c0s21b2", "x3000c0s21b2n0", "x3000c0s21b3n0", "x3000c0s21b1n0"]
-      prerequisite to prepare NCNs for removal, move and add
-      Network expansion COMPLETED
-      Log and backup of SLS, BSS and SMD can be found at: /tmp/ncn_task_backups2022-04-01_21-21-04
-      ```
 
 ## Add worker, storage, or master NCNs
 

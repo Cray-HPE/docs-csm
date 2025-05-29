@@ -19,7 +19,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
 - The System Admin Toolkit \(SAT\) is installed and configured on the system.
 
-- DVS must be running over the HSN.
+- SBPS must be running over the HSN.
 
 ## Shutdown nodes on the compute blade
 

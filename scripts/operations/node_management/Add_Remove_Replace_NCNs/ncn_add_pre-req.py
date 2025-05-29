@@ -201,7 +201,7 @@ def confirmation_question():
     :return:
     """
     while (True):
-        print('\nYou are about to make DESTRUCTIVE changes to the system and will need to restart DVS.\n')
+        print('\nYou are about to make DESTRUCTIVE changes to the system.\n')
         print('If you are sure you want to proceed.  Please type: PROCEED\n')
         print('If you want to stop.  Type: exit or press ctrl-c\n')
         answer = input()
@@ -569,9 +569,6 @@ def main():
         f'Log and backup of SLS, BSS and SMD can be found at: {backup_folder}\n')
         sys.exit(0)
 
-    if xname_list != []:
-        print(f'Please restart DVS and rebooting the following nodes before proceeding to the next step.:'
-              f'{json.dumps(xname_list)}')
     print(f'prerequisite to prepare NCNs for removal, move and add\n'
           f'Network expansion COMPLETED\n'
           f'Log and backup of SLS, BSS and SMD can be found at: {backup_folder}\n')

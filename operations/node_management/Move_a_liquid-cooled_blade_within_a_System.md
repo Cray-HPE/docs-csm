@@ -10,7 +10,7 @@ Blade movement scenarios:
 
 ## Prerequisites
 
-* Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
+* Knowledge of whether SBPS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
 * The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.
 * The System Layout Service (SLS) must have the desired HSN configuration.
 * Check the status of the high-speed network (HSN) and record link status before the procedure.

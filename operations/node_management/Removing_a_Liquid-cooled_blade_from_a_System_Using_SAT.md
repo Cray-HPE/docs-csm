@@ -6,7 +6,7 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
 
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
 
-- Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
+- Knowledge of whether SBPS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
 
 - The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.
 

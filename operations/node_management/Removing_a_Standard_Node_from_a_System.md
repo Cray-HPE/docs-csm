@@ -11,7 +11,7 @@ This procedure is applicable for the following types of standard rack nodes:
 ## Prerequisites
 
 * The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
-* Knowledge of whether Data Virtualization Service (DVS) is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
+* Knowledge of whether the Scalable Boot Projection Service (SBPS) is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
 * The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.
 * The System Layout Service (SLS) must have the desired HSN configuration.
 * Check the status of the HSN and record link status before the procedure.

@@ -40,7 +40,6 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
 
 1. Edit the `compute-and-uan-bootprep.yaml` and `management-bootprep.yaml` files to account for any site deviations from the default values. For example:
     - Comment out the `slurm-site` CFS configuration layer and uncomment the `pbs-site` CFS configuration layer in `compute-and-uan-bootprep.yaml` if PBS is the preferred workload manager
-    - Comment out the SBPS `rootfs_provider` and `rootfs_provider_passthrough` parameters and uncomment the CPS `rootfs_provider` and `rootfs_provider_passthrough` parameters, if DVS with CPS is the preferred method to project content.
     - Comment the several sections with GPU_SUPPORT (between BEGIN_GPU_SUPPORT and END_GPU_SUPPORT) tags if the system has no GPU hardware.
         The sections are identified with BEGIN_GPU_SUPPORT and END_GPU_SUPPORT comments like this example.
 

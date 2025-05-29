@@ -39,8 +39,8 @@ Modify the Boot Orchestration Service \(BOS\) template for the nodes. This examp
       "node_roles_groups": [
         "compute"
       ],
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     },
   },
   "cfs": {

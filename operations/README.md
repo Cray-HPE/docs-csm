@@ -107,7 +107,6 @@ Use the Boot Orchestration Service \(BOS\) to boot, reboot, and shut down collec
       - [Component Status](boot_orchestration/Component_Status.md)
 - [BOS Session Templates](boot_orchestration/Session_Templates.md)
       - [Manage a Session Template](boot_orchestration/Manage_a_Session_Template.md)
-      - [Create a Session Template to Boot Compute Nodes with CPS](boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_CPS.md)
       - [Create a Session Template to Boot Compute Nodes with SBPS](boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md)
       - [Boot UANs](boot_orchestration/Boot_UANs.md)
 - [BOS Sessions](boot_orchestration/Sessions.md)

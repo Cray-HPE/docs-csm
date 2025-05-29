@@ -53,9 +53,7 @@ The following devices are connected to the [HSN](../../glossary.md#high-speed-ne
 - Kubernetes worker nodes
 - UANs
 - ClusterStor controller data interfaces of all ClusterStor components \(SMU, MMU, and SSU\)
-- At least two NCNs whose BMCs are on the HMN. If these are not present, there cannot be multiple [DVS](../../glossary.md#data-virtualization-service-dvs)
-  servers that function correctly, which will have an adverse effect on compute node root file system and [CPE](../../glossary.md#cray-programming-environment-cpe)
-  scaling, performance, and reliability.
+- At least two NCNs whose BMCs are on the HMN.
 
 ## IP address ranges
 

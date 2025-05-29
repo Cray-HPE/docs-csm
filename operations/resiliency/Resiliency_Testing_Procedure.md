@@ -109,14 +109,14 @@ In order to keep watch on various items during and after the fault has been intr
 1. (`ncn-mw#`) Set up a `watch` command to repeatedly run with the Cray CLI (that will hit the service API) to ensure that critical services can ride through a fault. Note that there is not more than a window of 5-10 minutes where a
    service would intermittently fail to respond.
 
-   In the examples below, the CLI commands are checking the BOS and CPS APIs. It may be desired to choose additional Cray CLI commands to run in this manner. The ultimate proof of system resiliency lies in the ability to
+   In the examples below, the CLI commands are checking the BOS and BSS APIs. It may be desired to choose additional Cray CLI commands to run in this manner. The ultimate proof of system resiliency lies in the ability to
    perform system level use cases and to, further, prove that can be done at scale. If there are errors being returned consistently (and without recovery) with respect to these commands, then it is likely that business critical
    use cases (that utilize the same APIs) will also fail.
 
    It may be useful to reference instructions for [Configuring the Cray CLI](../configure_cray_cli.md).
 
    ```bash
-   watch -n 5 "date; cray cps contents"
+   watch -n 5 "date; cray bss bootscript list --name ncn-w001"
    ```
 
    ```bash

@@ -114,8 +114,8 @@ BOS session templates or BOS options can also be manually exported and imported 
               "x3000c0s15b0n0"
             ],
             "path": "s3://boot-images/c23f3d5e-223a-4fb9-b305-0c2be8e63615/manifest.json",
-            "rootfs_provider": "cpss3",
-            "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
+            "rootfs_provider": "sbps",
+            "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-nmn._tcp.my-system.my-site-domain:300",
             "type": "s3"
           }
         },

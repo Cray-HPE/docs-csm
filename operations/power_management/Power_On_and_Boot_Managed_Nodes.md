@@ -96,7 +96,7 @@ This procedure boots all managed nodes in the context of a full system power-up.
 
 1. (`ncn-m001#`) Check that the HPE Slingshot switches are all online.
 
-    If BOS will be used to boot computes and if DVS is configured to use HSN, then check the fabric manager switches to ensure the switches are all online
+    If BOS will be used to boot computes and if SBPS is configured to use HSN, then check the fabric manager switches to ensure the switches are all online
     before attempting to boot computes.
 
     ```bash
