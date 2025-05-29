@@ -51,7 +51,7 @@ The following is an example BOS session template:
   "cfs": {
       "configuration": "example-configuration"
   },
-  "enable_cfs": true,
+  "enable_cfs": true
 }
 ```
 
