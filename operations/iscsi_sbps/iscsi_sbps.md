@@ -10,19 +10,20 @@
 ## Introduction
 
 iSCSI based boot content projection solution named Scalable Boot Content Projection Service (SBPS)
-is an alternate boot content projection solution and planning to replace current Cray
-[Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) to project boot content like `rootfs`
-and [Cray Programming Environment (CPE)](../../glossary.md#cray-programming-environment-cpe) images. SBPS is aimed to offer
-better reliability, availability, security, ease and speed of deployment and ease of management than DVS.
-The SBPS solution is offered from CSM 1.6 onwards and this solution is spread across different components, including:
+is a boot content projection solution and future replacement of the current Cray
+[Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and
+[Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs).
+SBPS projects boot content like `rootfs` and [Cray Programming Environment (CPE)](../../glossary.md#cray-programming-environment-cpe) images.
+SBPS is aimed to offer better reliability, availability, security, ease and speed of deployment and ease of management than CPS/DVS.
+SBPS is introduced in CSM 1.6, where it coexists with CPS/DVS; however, SBPS is the default and CPS/DVS are deprecated.
+CPS and DVS are removed in CSM 1.7.
+
+The SBPS solution is spread across different components, including:
 
 * [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos)
 * [Cray Operating System (COS)](../../glossary.md#cray-operating-system-cos)
 * The core service SBPS Marshal Agent is delivered as an RPM that gets deployed by the
   [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
-
-In CSM 1.6, both DVS and SBPS will coexist, but SBPS will be the default and DVS is deprecated.
-Note: DVS is planned to be removed in CSM 1.7.
 
 ### Key features
 

@@ -36,7 +36,7 @@ The following value needs to be set in the boot set of the session template in o
 In a BOS session template, the `rootfs_provider_passthrough` parameter should be set to the following string.
 
 ```text
-rootfs_provider_passthrough=sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
+sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
 ```
 
 The two parameters/strings that need to be customized are 'my-system' and 'my-site-domain'.
@@ -62,13 +62,13 @@ Here is a detailed explanation of each of the elements of the `rootfs_provider_p
 For SBPS, the `rootfs_provider_passthrough` string should adhere to this format:
 
 ```text
-rootfs_provider_passthrough=<transport>:<schema version>:<IQN Domain>:<DNS SRV record>:<client discovery timeout in seconds>:<ramroot>
+<transport>:<schema version>:<IQN Domain>:<DNS SRV record>:<client discovery timeout in seconds>:<ramroot>
 ```
 
 Here is an example string for reference.
 
 ```text
-rootfs_provider_passthrough=sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
+sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
 ```
 
 The variables used in this parameter represent the following:
@@ -160,7 +160,7 @@ This can be left empty. Any string except `"0"` is interpreted as true. The exam
 Here is the example once again.
 
 ```text
-rootfs_provider_passthrough=sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
+sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
 ```
 
 ## Example session template input file

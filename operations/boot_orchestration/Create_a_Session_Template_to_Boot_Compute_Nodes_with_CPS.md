@@ -1,7 +1,11 @@
 # Create a Session Template to Boot Compute Nodes with CPS
 
-When [compute nodes](../../glossary.md#compute-node-cn) are booted, the [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and
-[Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) project the root file system (`rootfs`) over the network to the compute nodes by default.
+> The [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and
+> [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) are deprecated in CSM 1.6 and removed in CSM 1.7.
+> Their replacement is the [Scalable Boot Projection Service (SBPS)](../../glossary.md#scalable-boot-projection-service-sbps).
+> See [Deprecated Features](../../introduction/deprecated_features/README.md).
+
+When [compute nodes](../../glossary.md#compute-node-cn) are booted, CPS and DVS project the root file system (`rootfs`) over the network to the compute nodes by default.
 
 Another option when compute nodes are booted is to download their `rootfs` into RAM.
 
