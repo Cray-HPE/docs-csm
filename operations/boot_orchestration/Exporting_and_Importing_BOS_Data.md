@@ -123,7 +123,8 @@ BOS session templates or BOS options can also be manually exported and imported 
           "configuration": "uan-config-2.0.0"
         },
         "enable_cfs": true,
-        "name": "uan-sessiontemplate-2.0.27"
+        "name": "uan-sessiontemplate-2.0.27",
+        "tenant": null
       }
       ```
 
