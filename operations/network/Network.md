@@ -3,12 +3,12 @@
 There are several different networks supported by the HPE Cray EX system. This page outlines the available internal and external networks, as well as the devices that connect to each network.
 
 - [External networks](#external-networks)
-  - [Customer network \(data center\)](#customer-network-data-center)
+    - [Customer network \(data center\)](#customer-network-data-center)
 - [System networks](#system-networks)
-  - [Hardware Management Network \(HMN\)](#hardware-management-network-hmn)
-  - [Node Management Network \(NMN\)](#node-management-network-nmn)
-  - [ClusterStor Management Network](#clusterstor-management-network)
-  - [High Speed Network \(HSN\)](#high-speed-network-hsn)
+    - [Hardware Management Network \(HMN\)](#hardware-management-network-hmn)
+    - [Node Management Network \(NMN\)](#node-management-network-nmn)
+    - [ClusterStor Management Network](#clusterstor-management-network)
+    - [High Speed Network \(HSN\)](#high-speed-network-hsn)
 - [IP address ranges](#ip-address-ranges)
 - [Access Control Lists \(ACLs\)](#access-control-lists-acls)
 

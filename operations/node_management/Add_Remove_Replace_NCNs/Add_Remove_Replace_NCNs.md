@@ -12,13 +12,13 @@ The following workflows are available:
 
 * [Prerequisites](#prerequisites)
 * [Add worker, storage, or master NCNs](#add-worker-storage-or-master-ncns)
-  * [Add NCN prerequisites](#add-ncn-prerequisites)
-  * [Add NCN procedure](#add-ncn-procedure)
+    * [Add NCN prerequisites](#add-ncn-prerequisites)
+    * [Add NCN procedure](#add-ncn-procedure)
 * [Remove worker, storage, or master NCNs](#remove-worker-storage-or-master-ncns)
-  * [Remove NCN prerequisites](#remove-ncn-prerequisites)
-  * [Remove NCN procedure](#remove-ncn-procedure)
+    * [Remove NCN prerequisites](#remove-ncn-prerequisites)
+    * [Remove NCN procedure](#remove-ncn-procedure)
 * [Replace or move worker, storage, or master NCNs](#replace-or-move-worker-storage-or-master-ncns)
-  * [Replace NCN procedure](#replace-ncn-procedure)
+    * [Replace NCN procedure](#replace-ncn-procedure)
 
 ## Prerequisites
 
@@ -192,9 +192,9 @@ XNAME=<xname>
    ```
 
 * Ensure that the NCN BMC is configured to use DHCP.
-  * This does not apply to the BMC for `ncn-m001`, because it is statically configured for the site.
+    * This does not apply to the BMC for `ncn-m001`, because it is statically configured for the site.
 * Ensure that the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs.
-  * See the [Switch PXE Boot from Onboard NIC to PCIe](../Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md) procedure.
+    * See the [Switch PXE Boot from Onboard NIC to PCIe](../Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md) procedure.
 
 ### Add NCN procedure
 
