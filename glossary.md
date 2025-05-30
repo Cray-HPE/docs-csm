@@ -342,7 +342,7 @@ For more information on the CMN, see [Customer Accessible Networks](operations/n
 > [Scalable Boot Projection Service (SBPS)](#scalable-boot-projection-service-sbps).
 > See [Deprecated Features](introduction/deprecated_features/README.md).
 
-The Data Virtualization Service (DVS) was a distributed network service that projected file systems
+The Data Virtualization Service (DVS) is a distributed network service that projects file systems
 mounted on [Non-Compute Nodes (NCNs)](#non-compute-node-ncn) to other nodes within the HPE Cray EX system.
 DVS was integrated with the [Content Projection Service (CPS)](#content-projection-service-cps).
 
