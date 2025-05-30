@@ -59,9 +59,9 @@ features are listed first).
 ### Deprecated in CSM 1.6
 
 - The `sat swap cable` and `sat swap switch` commands are deprecated.
-- The [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and
+- Support for projecting root filesystems and PE images using the [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and the
   [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs)
-  - These are being replaced by the Scalable Boot Projection Service.
+  - This projection should instead be done using the Scalable Boot Projection Service
 
 ### Deprecated in CSM 1.5
 
