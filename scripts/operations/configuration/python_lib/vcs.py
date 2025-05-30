@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -23,12 +23,10 @@
 #
 """Shared Python function library: VCS"""
 
-import traceback
-
 import base64
 import logging
-
-from typing import Tuple
+import traceback
+from typing import NoReturn, Tuple
 
 from . import common
 from . import k8s
@@ -38,7 +36,7 @@ K8S_NAMESPACE = "services"
 K8S_SECRET_NAME = "vcs-user-credentials"
 
 
-def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> None:
+def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> NoReturn:
     """
     1) If a parent exception is passed in, make a debug log entry with its stack trace.
     2) Log an error with the specified message.

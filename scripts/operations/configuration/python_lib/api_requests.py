@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -28,7 +28,7 @@ import copy
 import logging
 import time
 import traceback
-from typing import Callable, Container, Tuple, Union
+from typing import Callable, Container, NoReturn, Tuple, Union
 
 import requests
 
@@ -46,7 +46,7 @@ AUTH_TOKEN_URL = f"{API_GW_BASE_URL}/keycloak/realms/shasta/protocol/openid-conn
 ApiResponse = requests.models.Response
 
 
-def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> None:
+def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> NoReturn:
     """
     1) If a parent exception is passed in, make a debug log entry with its stack trace.
     2) Log an error with the specified message.
