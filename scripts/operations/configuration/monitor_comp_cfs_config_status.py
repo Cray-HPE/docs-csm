@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -42,7 +42,7 @@ from python_lib.types import JsonDict
 
 def datestr(msg: str) -> str:
     """
-    Return the string with a timestamp prepended    
+    Return the string with a timestamp prepended
     """
     return datetime.datetime.now().strftime("%Y%m%d%H%M%S ") + msg
 
