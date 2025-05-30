@@ -343,8 +343,12 @@ For more information on the CMN, see [Customer Accessible Networks](operations/n
 > See [Deprecated Features](introduction/deprecated_features/README.md).
 
 The Data Virtualization Service (DVS) is a distributed network service that projects file systems
-mounted on [Non-Compute Nodes (NCNs)](#non-compute-node-ncn) to other nodes within the HPE Cray EX system.
-DVS was integrated with the [Content Projection Service (CPS)](#content-projection-service-cps).
+mounted on [Non-Compute Nodes (NCNs)](#non-compute-node-ncn) to other nodes within the HPE Cray EX system. Projecting is
+the process of making a file system available on nodes where it does not physically reside.
+DVS-specific configuration settings enable clients to access a file system projected by DVS
+servers. These clients include [compute nodes](#compute-node-cn), [User Access Nodes (UANs)](#user-access-node-uan),
+Thus DVS, while not a file system, represents a
+software layer that provides transport for file system services.
 
 ## EX Compute Cabinet
 
