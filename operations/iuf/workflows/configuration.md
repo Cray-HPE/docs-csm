@@ -92,13 +92,13 @@ required for initial installation scenarios.
 
 - USS
     - Compute Configuration
-        - Configure LNet with appropriate Slingshot settings
-        - Configure LNet for use on application nodes
+        - Configure DVS and LNet with appropriate Slingshot settings
+        - Configure DVS and LNet for use on application nodes
         - Enable site-specific file system mounts
         - Set the USS root password in HashiCorp Vault
     - UAN Configuration
         - Enable CAN, LDAP, and set MOTD
-        - Move LNet settings to USS branch
+        - Move DVS and LNet settings to USS branch
         - Set the UAN root password in HashiCorp Vault
     - SLURM Configuration
         - CSM Diags

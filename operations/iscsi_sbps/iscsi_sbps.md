@@ -8,12 +8,12 @@
 ## Introduction
 
 iSCSI based boot content projection solution named Scalable Boot Content Projection Service (SBPS)
-is a boot content projection solution that replaces the former Cray
+is a boot content projection solution that replaces the Cray
 [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and
 [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs).
 SBPS projects boot content like `rootfs` and [Cray Programming Environment (CPE)](../../glossary.md#cray-programming-environment-cpe) images.
 SBPS is aimed to offer better reliability, availability, security, ease and speed of deployment and ease of management than CPS/DVS.
-SBPS was introduced in CSM 1.6. CPS and DVS are removed in CSM 1.7.
+SBPS was introduced in CSM 1.6. In CSM 1.7, support is removed for projecting root filesystems and PE images using CPS and DVS.
 
 The SBPS solution is spread across different components, including:
 
