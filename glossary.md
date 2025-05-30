@@ -338,7 +338,7 @@ For more information on the CMN, see [Customer Accessible Networks](operations/n
 
 ## Data Virtualization Service (DVS)
 
-> DVS was deprecated in CSM 1.6 and removed in CSM 1.7. It has been replaced by the
+> Support for projection of root filesystems and PE images using DVS was deprecated in CSM 1.6 and removed in CSM 1.7. Projection for these images has been replaced by the
 > [Scalable Boot Projection Service (SBPS)](#scalable-boot-projection-service-sbps).
 > See [Deprecated Features](introduction/deprecated_features/README.md).
 
