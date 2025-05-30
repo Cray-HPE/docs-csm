@@ -57,8 +57,6 @@ For more details and a list of all deprecated CSM features, see [Deprecations](i
 
 ## Removals
 
-* The [Content Projection Service (CPS)](glossary.md#content-projection-service-cps) and the
-  [Data Virtualization Service (DVS)](glossary.md#data-virtualization-service-dvs)
 * Support for projecting root filesystems and PE images using the [Content Projection Service (CPS)](glossary.md#content-projection-service-cps) and the
   [Data Virtualization Service (DVS)](glossary.md#data-virtualization-service-dvs)
     * This projection is now done using the [Scalable Boot Projection Service](glossary.md#scalable-boot-projection-service-sbps)
