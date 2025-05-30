@@ -47,9 +47,9 @@ in chronological order.
 
 ### Removals in CSM 1.7
 
-- The [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and the
+- Support for projecting root filesystems and PE images using the [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and the
   [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs)
-    - Replaced by the Scalable Boot Projection Service.
+    - This projection is now done using the Scalable Boot Projection Service
 
 ## Deprecations
 
