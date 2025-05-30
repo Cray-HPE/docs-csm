@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -38,7 +38,6 @@ import copy
 import crypt
 import logging
 import sys
-import traceback
 
 from python_lib import args
 from python_lib import common
@@ -56,21 +55,6 @@ MINIMUM_PW_LENGTH = 8
 PASSWORD_HASH_FIELD_NAME = "password"
 PRIVATE_KEY_FIELD_NAME = "ssh_private_key"
 PUBLIC_KEY_FIELD_NAME = "ssh_public_key"
-
-
-def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> None:
-    """
-    1) If a parent exception is passed in, make a debug log entry with its stack trace.
-    2) Log an error with the specified message.
-    3) Raise a ScriptException with the specified message (from the parent exception, if
-       specified)
-    """
-    if parent_exception is not None:
-        logging.debug(traceback.format_exc())
-    logging.error(msg)
-    if parent_exception is None:
-        raise common.ScriptException(msg)
-    raise common.ScriptException(msg) from parent_exception
 
 
 def root_hash_from_etc_shadow() -> str:
@@ -104,8 +88,7 @@ def pw_env_var(env_var_name: str) -> str:
     Wrapper for args.get_env_var_value with appropriate arguments for password environment
     variables. This will require passwords to be at least 8 characters long.
     """
-    logging.info(
-        f"Reading in plaintext password from {env_var_name} environment variable")
+    logging.info("Reading in plaintext password from %s environment variable", env_var_name)
     return args.get_env_var_value(
         env_var_name=env_var_name,
         value_validator=lambda s: args.validate_string(s, min_length=MINIMUM_PW_LENGTH))
@@ -120,8 +103,7 @@ def pw_hash_env_var(env_var_name: str) -> str:
     For our purposes, we will look for an 8 character minimum, and make sure that it
     begins with a $ character.
     """
-    logging.info(
-        f"Reading in password hash from {env_var_name} environment variable")
+    logging.info("Reading in password hash from %s environment variable", env_var_name)
     return args.get_env_var_value(
         env_var_name=env_var_name,
         value_validator=lambda s: args.validate_string(s, min_length=8, required_prefix='$'))
@@ -132,8 +114,7 @@ def pri_ssh_key_file(file_name: str) -> str:
     Wrapper for args.get_text_file_contents with appropriate arguments for SSH key files.
     At this point, we just make sure that the files are at least 256 characters long.
     """
-    logging.info(
-        f"Reading in SSH private key from '{file_name}' file")
+    logging.info("Reading in SSH private key from '%s' file", file_name)
     return args.get_text_file_contents(
         file_name=file_name,
         value_validator=lambda s: args.validate_string(s, min_length=256))
@@ -144,8 +125,7 @@ def pub_ssh_key_file(file_name: str) -> str:
     Wrapper for args.get_text_file_contents with appropriate arguments for SSH key files.
     At this point, we just make sure that the files are at least 256 characters long.
     """
-    logging.info(
-        f"Reading in SSH public key from '{file_name}' file")
+    logging.info("Reading in SSH public key from '%s' file", file_name)
     return args.get_text_file_contents(
         file_name=file_name,
         value_validator=lambda s: args.validate_string(s, min_length=256))
@@ -162,12 +142,11 @@ def update_secret_fields(secret: JsonObject, field_changes: JsonObject) -> JsonO
             # This means the field should be removed, if it is set
             try:
                 del updated_secret[field_name]
-                logging.debug(
-                    f"CSM root secret {field_name} in Vault will be deleted")
+                logging.debug("CSM root secret %s in Vault will be deleted", field_name)
             except KeyError:
                 # Not a problem, but let's note it for the log
-                logging.debug(
-                    f"Asked to delete CSM root secret {field_name} in Vault, but it isn't set")
+                logging.debug("Asked to delete CSM root secret %s in Vault, but it isn't set",
+                              field_name)
             continue
         # Record the new value
         updated_secret[field_name] = new_field_value
@@ -182,8 +161,7 @@ def compare_root_secrets(secret_written: JsonObject, secret_read: JsonObject) ->
     secrets_match = True
 
     # Validate that Vault values match what we wrote
-    logging.debug(
-        "Validating that Vault contents match what was written to it")
+    logging.debug("Validating that Vault contents match what was written to it")
 
     fields_not_written = secret_written.keys() - secret_read.keys()
     extra_fields = secret_read.keys() - secret_written.keys()
@@ -192,25 +170,23 @@ def compare_root_secrets(secret_written: JsonObject, secret_read: JsonObject) ->
     if fields_not_written:
         secrets_match = False
         logging.error("Fields were written to the CSM root secret, but were not present"
-                      f" when it was read back: {fields_not_written}")
+                      " when it was read back: %s", fields_not_written)
     else:
-        logging.debug(
-            "All written secret fields were present when read back")
+        logging.debug("All written secret fields were present when read back")
 
     if extra_fields:
         secrets_match = False
         logging.error("Fields were not written to the CSM root secret, but were present"
-                      f" when it was read back: {extra_fields}")
+                      " when it was read back: %s", extra_fields)
     else:
         logging.debug("All read secret fields were present when written")
 
     for field in common_fields:
         if secret_read[field] == secret_written[field]:
-            logging.debug(f"Vault value for {field} matches what was written")
+            logging.debug("Vault value for %s matches what was written", field)
         else:
             secrets_match = False
-            logging.error(
-                f"Vault value for {field} DOES NOT MATCH what was written")
+            logging.error("Vault value for %s DOES NOT MATCH what was written", field)
 
     if not secrets_match:
         raise common.ScriptException(
@@ -284,7 +260,11 @@ def parse_args() -> JsonObject:
     [--pri-key-file FILEPATH | --pri-key-no-change | --pri-key-remove]
     [--pub-key-file FILEPATH | --pub-key-no-change | --pub-key-remove]
     """
-    logging.debug(f"Command line arguments: {sys.argv}")
+    logging.debug("Command line arguments: %s", sys.argv)
+
+    # Sentinel values
+    NO_CHANGE = object()
+    REMOVE = object()
 
     parser = argparse.ArgumentParser(
         description="Update CSM root secrets in Vault with specified SSH keys and password hash")
@@ -309,22 +289,27 @@ def parse_args() -> JsonObject:
 
     # Private key source arguments are mutually exclusive
     pri_key_group = parser.add_mutually_exclusive_group()
-    pri_key_group.add_argument("--pri-key-no-change", action='store_true',
+    # Have to use argparse.SUPPRESS to avoid a default value being set
+    pri_key_group.add_argument("--pri-key-no-change", action='store_const', const=NO_CHANGE,
+                               dest='pri_key', default=argparse.SUPPRESS,
                                help="Do not change saved private key (if any) in Vault")
     pri_key_group.add_argument("--pri-key-file", type=pri_ssh_key_file,
-                               metavar='private_key_file', default=PRI_KEY_PATH, dest='pri_key',
-                               help=f"Path to private key file (default: {PRI_KEY_PATH})")
-    pri_key_group.add_argument("--pri-key-remove", action='store_true',
+                               metavar='private_key_file', dest='pri_key', default=PRI_KEY_PATH,
+                               help=f"Read key from private_key_file (default: {PRI_KEY_PATH})")
+    pri_key_group.add_argument("--pri-key-remove", action='store_const', const=REMOVE,
+                               dest='pri_key', default=argparse.SUPPRESS,
                                help="Remove saved private key (if any) from Vault")
 
     # Public key source arguments are mutually exclusive
     pub_key_group = parser.add_mutually_exclusive_group()
-    pub_key_group.add_argument("--pub-key-no-change", action='store_true',
+    pub_key_group.add_argument("--pub-key-no-change", action='store_const', const=NO_CHANGE,
+                               dest='pub_key', default=argparse.SUPPRESS,
                                help="Do not change saved public key (if any) in Vault")
     pub_key_group.add_argument("--pub-key-file", type=pub_ssh_key_file,
-                               metavar='public_key_file', default=PUB_KEY_PATH, dest='pub_key',
-                               help=f"Path to public key file (default: {PUB_KEY_PATH})")
-    pub_key_group.add_argument("--pub-key-remove", action='store_true',
+                               metavar='public_key_file', dest='pub_key', default=PUB_KEY_PATH,
+                               help=f"Read key from public_key_file (default: {PUB_KEY_PATH})")
+    pub_key_group.add_argument("--pub-key-remove", action='store_const', const=REMOVE,
+                               dest='pub_key', default=argparse.SUPPRESS,
                                help="Remove saved public key (if any) from Vault")
 
     parsed_args = parser.parse_args()
@@ -351,16 +336,16 @@ def parse_args() -> JsonObject:
         # Default is to read it from the system
         field_changes[PASSWORD_HASH_FIELD_NAME] = root_hash_from_etc_shadow()
 
-    if parsed_args.pri_key_remove:
+    if parsed_args.pri_key is REMOVE:
         # Clear the field in Vault, if it is set
         field_changes[PRIVATE_KEY_FIELD_NAME] = None
-    elif not parsed_args.pri_key_no_change:
+    elif parsed_args.pri_key is not NO_CHANGE:
         field_changes[PRIVATE_KEY_FIELD_NAME] = parsed_args.pri_key
 
-    if parsed_args.pub_key_remove:
+    if parsed_args.pub_key is REMOVE:
         # Clear the field in Vault, if it is set
         field_changes[PUBLIC_KEY_FIELD_NAME] = None
-    elif not parsed_args.pub_key_no_change:
+    elif parsed_args.pub_key is not NO_CHANGE:
         field_changes[PUBLIC_KEY_FIELD_NAME] = parsed_args.pub_key
 
     return field_changes

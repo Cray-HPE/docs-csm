@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -60,7 +60,7 @@ def update_password_in_vault(pw_string: str) -> None:
 
     logging.info("Password read from Vault matches what was written")
     return
-        
+
 
 def prompt_user_for_password() -> str:
     """
