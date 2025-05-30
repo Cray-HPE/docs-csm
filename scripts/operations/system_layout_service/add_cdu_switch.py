@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -36,7 +36,7 @@ def find_subnet(sls_network, name):
         if subnet["Name"] == name:
             network_hardware_subnet = subnet
             break
-    
+
     return  network_hardware_subnet
 
 def find_next_available_ip(sls_subnet):
@@ -148,10 +148,10 @@ for xname in allHardware:
 
     if hardware["Type"] != "comptype_cdu_mgmt_switch" and hardware["Type"] != "comptype_hl_switch":
         continue
-    
+
     if "ExtraProperties" not in hardware:
         continue
-    
+
     if "Aliases" not in hardware["ExtraProperties"]:
         print("Error {} is missing Alias extra property!".format(xname))
         exit(1)

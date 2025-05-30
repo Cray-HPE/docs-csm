@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -41,7 +41,7 @@ for node in ncn-s001 ncn-s002 ncn-s003; do
   fi
   # add new authorized_hosts entry for the node
   ssh-keyscan -H "${node},${ncn_ip}" >> ~/.ssh/known_hosts
-  
+
   if [[ "$host" != "$node" ]]; then
     ssh $node "if [[ ! -f ~/.ssh/known_hosts ]]; then > ~/.ssh/known_hosts; fi; ssh-keygen -R $host -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keygen -R $host_ip -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keyscan -H ${host},${host_ip} >> ~/.ssh/known_hosts"
   fi

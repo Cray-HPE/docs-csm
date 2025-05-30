@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -55,7 +55,7 @@ done
 for ncn in "${NCNS[@]}"; do
     printf "Uploading new metal-lib.sh to $ncn:/srv/cray/scripts/metal/ ... "
     scp ${workdir}/metal-lib.sh ${ncn}:/srv/cray/scripts/metal/metal-lib.sh >/dev/null
-    echo "Done" 
+    echo "Done"
 done
 
 printf "Refreshing the bootorder on [${#NCNS[@]}] NCNs ... "

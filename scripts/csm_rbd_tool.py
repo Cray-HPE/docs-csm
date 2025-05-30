@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -132,7 +132,7 @@ def dir_exists(local_host, mnt_path, manager):
             is_dir = mkdir_results.stdout
             if is_dir == '0':
                  return is_dir
-                 
+
 def fs_exists(local_host, device, watcher_name):
     if local_host == watcher_name:
         results = subprocess.getoutput("file -s %s" % device)
@@ -261,7 +261,7 @@ def device_map(local_host, pool, rbd_name, target_host):
         if device not in is_mapped(pool, rbd_name):
             results = subprocess.getoutput("rbd map %s" % device )
             return results;
-    else: 
+    else:
         results = Connection(target_host,
                      connect_kwargs={"key_filename":"/root/.ssh/id_rsa"}).run('rbd map -p %s %s' % (pool, rbd_name))
         return results.stdout;
@@ -387,7 +387,7 @@ def disable_node_auto_mount(local_host, watcher_name, mnt_path):
             conn.run('systemctl stop rbdmap.service', hide=True)
             conn.run('systemctl disable rbdmap.service', hide=True)
 
-    
+
     if os.path.isfile('/tmp/tmp_fstab'):
         os.remove('/tmp/tmp_fstab')
     if os.path.isfile('/tmp/tmp_rbdmap'):
@@ -564,7 +564,7 @@ def main():
                device_mount(local_host, rbd_device, device[0], mnt_path, watcher_name[0])
                if is_mounted(local_host, mnt_path, watcher_name[0]):
                    print('RBD device mounted at - %s:%s' % (watcher_name[0], mnt_path))
-            
+
 
     if args.rbd_action == "move":
         if dev_exists:

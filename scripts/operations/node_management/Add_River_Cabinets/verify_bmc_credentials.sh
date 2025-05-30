@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -28,7 +28,7 @@ for endpoint in $(cray hsm inventory redfishEndpoints list --laststatus HTTPsGet
     echo
     echo "------------------------------------------------------------"
     echo "Redfish Endpoint $endpoint has discovery state HTTPsGetFailed"
-    # Ignore the failure if it is a master node    
+    # Ignore the failure if it is a master node
     mgmtSwitchConnectorCount=$(cray sls search hardware list --node-nics "$endpoint" --format json  | jq -s 'if . == [] then null else .[0] end | length')
     if [[ "$mgmtSwitchConnectorCount" == "0" ]]; then
         echo "Has no connection to HMN, ignoring"
@@ -40,7 +40,7 @@ for endpoint in $(cray hsm inventory redfishEndpoints list --laststatus HTTPsGet
     if ! nslookup "$endpoint" > /dev/null; then
         echo "  Hostname does not resolve"
         continue
-    else 
+    else
         echo "  Hostname resolves"
     fi
 
@@ -57,7 +57,7 @@ for endpoint in $(cray hsm inventory redfishEndpoints list --laststatus HTTPsGet
 
     echo "Testing stored BMC credentials against the BMC"
     curl_result=$(curl -k -s -u "$username:$password" "https://${endpoint}/redfish/v1/Managers" -i | head -n 1)
-    
+
     if echo "$curl_result" | grep "200" > /dev/null; then
         echo "  BMC credentials are OK."
         echo "  ERROR Additional investigation is required!"

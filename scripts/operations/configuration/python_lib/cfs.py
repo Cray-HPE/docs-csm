@@ -23,10 +23,9 @@
 #
 """Shared Python function library: CFS"""
 
-import traceback
 import logging
-
-from typing import Dict, List, Union
+import traceback
+from typing import Dict, List, NoReturn, Union
 
 from . import api_requests
 from . import common
@@ -42,7 +41,7 @@ CFS_V2_SESSIONS_URL = f"{CFS_V2_BASE_URL}/sessions"
 
 CfsOptions = Dict[str, Union[bool, int, str]]
 
-def log_error_raise_exception(msg: str, parent_exception: Union[Exception, None] = None) -> None:
+def log_error_raise_exception(msg: str, parent_exception: Union[Exception, None] = None) -> NoReturn:
     """
     1) If a parent exception is passed in, make a debug log entry with its stack trace.
     2) Log an error with the specified message.
