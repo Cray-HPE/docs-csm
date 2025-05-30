@@ -237,7 +237,7 @@ inventory and node targeting options.
 
 ## Content Projection Service (CPS)
 
-> CPS is deprecated in CSM 1.6 and removed in CSM 1.7. Its replacement is the
+> Support for projection of root filesystems and PE images using CPS is deprecated in CSM 1.6 and removed in CSM 1.7. Projection for these images should instead use the
 > [Scalable Boot Projection Service (SBPS)](#scalable-boot-projection-service-sbps).
 > See [Deprecated Features](introduction/deprecated_features/README.md).
 
