@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# (C) Copyright [2022-2023] Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -112,7 +112,7 @@ elif args.cabinet_type == "EX2500":
     if args.liquid_cooled_chassis_count == None:
         print("Error --liquid-cooled-chassis-count argument is required for EX2500 cabinet", args.cabinet)
         exit(1)
-    
+
     if (args.liquid_cooled_chassis_count < 1) or (3 < args.liquid_cooled_chassis_count):
         print("Error --liquid-cooled-chassis-count argument is out of range: {} Expected range is 1 to 3".format(args.liquid_cooled_chassis_count))
         exit(1)
@@ -183,7 +183,7 @@ for chassis in chassis_list:
     # Start with the CMM
     chassisXname = "{}{}".format(args.cabinet, chassis)
     chassisBMCXname = "{}b0".format(chassisXname)
-    
+
     # ChassisBMC SLS Object
     chassisBMC = {
         "Parent": chassisXname,
@@ -227,7 +227,7 @@ for chassis in chassis_list:
                 currentNID += 1
 
 for hardware in hardwareToAdd:
-    xname = hardware["Xname"] 
+    xname = hardware["Xname"]
     if xname in allHardware:
         print("Error {} already exists in {}!".format(xname, args.sls_state_file))
         exit(1)

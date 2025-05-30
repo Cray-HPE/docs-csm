@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -104,7 +104,7 @@ echo "Got admin client secret"
 # Prepare the run script
 cat > /tmp/run-gateway-test-${UAN_NAME}.sh << EOF
 #!/bin/bash
-    
+
 export ADMIN_CLIENT_SECRET=$ADMIN_SECRET
 
 echo "Running gateway tests on the UAN...(this may take 1-2 minutes)"
