@@ -10,6 +10,12 @@ see [CSM 1.6 release notes](RELEASE_NOTES.md).
 * [Bug fixes](#bug-fixes)
 * [Known issues](#known-issues)
 
+## Prerequisites
+
+Before upgrading from CSM 1.5.x to any CSM 1.6.x release, CSM 1.5.3 is
+required at a bare minimum. If attempting to upgrade from CSM 1.5.2 or
+earlier, major problems may be experienced during the upgrade.
+
 ## Additions and improvements
 
 ### General
