@@ -66,7 +66,7 @@ done
 
 # Wait for 2 minutes if any pods were deleted
 if [ "$pods_deleted" = true ]; then
-  echo "Waiting for $(($VAULT_PODS_WAIT_TIME / 60)) minutes for pods to restart..."
+  echo "Waiting for $((VAULT_PODS_WAIT_TIME / 60)) minutes for pods to restart..."
   sleep $VAULT_PODS_WAIT_TIME
 
   # Check the status of the pods after restart
@@ -184,7 +184,7 @@ restart_and_check_status() {
     fi
   done
 
-  echo "Waiting for $(($RESOURCE_RESTART_WAIT_TIME / 60)) minutes..."
+  echo "Waiting for $((RESOURCE_RESTART_WAIT_TIME / 60)) minutes..."
   sleep $RESOURCE_RESTART_WAIT_TIME
 
   for resource in "${resources[@]}"; do
