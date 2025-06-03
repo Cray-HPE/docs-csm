@@ -3,6 +3,12 @@
 
 Before beginning an upgrade from CSM 1.5 to CSM 1.6, there are a few things to do on the system first.
 
+## Beginning upgrade version
+
+Before beginning a CSM 1.6 upgrade, the system being upgraded should be
+running CSM 1.5.3 or later. If attempting to upgrade from CSM 1.5.2 or
+earlier, major problems may be experienced during the upgrade.
+
 ## Reduced resiliency during upgrade
 
 **Warning:** Management service resiliency is reduced during the upgrade.
