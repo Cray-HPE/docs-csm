@@ -60,6 +60,9 @@ For more details and a list of all deprecated CSM features, see [Deprecations](i
 * Support for projecting root filesystems and PE images using the [Content Projection Service (CPS)](glossary.md#content-projection-service-cps) and the
   [Data Virtualization Service (DVS)](glossary.md#data-virtualization-service-dvs)
     * This projection is now done using the [Scalable Boot Projection Service](glossary.md#scalable-boot-projection-service-sbps)
+* Top-level Ansible playbooks `ncn-master.yaml`, `ncn-storage.yaml`, and `ncn-worker.yaml` in `csm-config-management` repository in the
+  [Version Control Service (VCS)](glossary.md#version-control-service-vcs).
+    * These have been replaced by the unified `ncn_nodes.yaml` top-level playbook.
 
 For more details and a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals).
 
