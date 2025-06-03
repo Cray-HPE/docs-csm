@@ -254,7 +254,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
 ### Verify Access to External File Systems
 
-If the worker nodes host User Access Instance (UAI) pods or normally mount the external Lustre or Spectrum Scale (GPFS) file systems,
+If the worker nodes normally mount the external Lustre or Spectrum Scale (GPFS) file systems,
 then verify that the external file system is ready to be mounted by the worker nodes.
 
 Some systems are configured with lazy mounts that do not have this requirement for the worker nodes.

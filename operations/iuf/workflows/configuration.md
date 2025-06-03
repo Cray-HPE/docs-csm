@@ -100,7 +100,6 @@ required for initial installation scenarios.
         - Enable CAN, LDAP, and set MOTD
         - Move DVS and LNet settings to USS branch
         - Set the UAN root password in HashiCorp Vault
-        - Enable UAIs on UAN
     - SLURM Configuration
         - CSM Diags
             - Update CSM Diags network attachment definition

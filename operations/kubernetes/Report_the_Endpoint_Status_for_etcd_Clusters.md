@@ -20,19 +20,19 @@ This procedure provides the ability to view the etcd cluster endpoint status.
     Example output:
 
     ```text
-    ### cray-bos-bitnami-etcd-1 Endpoint Status: ###
+    ### cray-bss-bitnami-etcd-1 Endpoint Status: ###
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
     |    ENDPOINT    |        ID        | VERSION | DB SIZE | IS LEADER | IS LEARNER | RAFT TERM | RAFT INDEX | RAFT APPLIED INDEX | ERRORS |
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
     | 127.0.0.1:2379 | 6a95fcc74f1f8616 |   3.5.7 |   25 kB |     false |      false |         7 |        420 |                420 |        |
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
-    ### cray-bos-bitnami-etcd-2 Endpoint Status: ###
+    ### cray-bss-bitnami-etcd-2 Endpoint Status: ###
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
     |    ENDPOINT    |        ID        | VERSION | DB SIZE | IS LEADER | IS LEARNER | RAFT TERM | RAFT INDEX | RAFT APPLIED INDEX | ERRORS |
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
     | 127.0.0.1:2379 | 2b4984dc5c79bd55 |   3.5.7 |   25 kB |      true |      false |         7 |        424 |                424 |        |
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
-    ### cray-bos-bitnami-etcd-0 Endpoint Status: ###
+    ### cray-bss-bitnami-etcd-0 Endpoint Status: ###
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
     |    ENDPOINT    |        ID        | VERSION | DB SIZE | IS LEADER | IS LEARNER | RAFT TERM | RAFT INDEX | RAFT APPLIED INDEX | ERRORS |
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
@@ -45,25 +45,25 @@ This procedure provides the ability to view the etcd cluster endpoint status.
 1. Report the endpoint status for a singe etcd cluster.
 
     ```bash
-    /opt/cray/platform-utils/etcd/etcd-util.sh endpoint_status cray-bos
+    /opt/cray/platform-utils/etcd/etcd-util.sh endpoint_status cray-bss
     ```
 
     Example output:
 
     ```text
-    ### cray-bos-bitnami-etcd-1 Endpoint Status: ###
+    ### cray-bss-bitnami-etcd-1 Endpoint Status: ###
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
     |    ENDPOINT    |        ID        | VERSION | DB SIZE | IS LEADER | IS LEARNER | RAFT TERM | RAFT INDEX | RAFT APPLIED INDEX | ERRORS |
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
     | 127.0.0.1:2379 | 6a95fcc74f1f8616 |   3.5.7 |   25 kB |     false |      false |         7 |        420 |                420 |        |
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
-    ### cray-bos-bitnami-etcd-2 Endpoint Status: ###
+    ### cray-bss-bitnami-etcd-2 Endpoint Status: ###
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
     |    ENDPOINT    |        ID        | VERSION | DB SIZE | IS LEADER | IS LEARNER | RAFT TERM | RAFT INDEX | RAFT APPLIED INDEX | ERRORS |
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
     | 127.0.0.1:2379 | 2b4984dc5c79bd55 |   3.5.7 |   25 kB |      true |      false |         7 |        424 |                424 |        |
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
-    ### cray-bos-bitnami-etcd-0 Endpoint Status: ###
+    ### cray-bss-bitnami-etcd-0 Endpoint Status: ###
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
     |    ENDPOINT    |        ID        | VERSION | DB SIZE | IS LEADER | IS LEARNER | RAFT TERM | RAFT INDEX | RAFT APPLIED INDEX | ERRORS |
     +----------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+

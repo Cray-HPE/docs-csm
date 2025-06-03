@@ -617,8 +617,7 @@ For more information, see [SOPS Introduction](operations/security_and_authentica
 ## Service/IO Cabinet
 
 An Air-Cooled service/IO cabinet houses a cluster of [NCNs](#non-compute-node-ncn), [Slingshot ToR switches](#slingshot-top-of-rack-tor-switch),
-and management network ToR switches to support the managed ecosystem storage,
-network, user access services (UAS), and other IO services such as LNet and gateways.
+and management network ToR switches to support the managed ecosystem storage, network, and other IO services such as LNet and gateways.
 
 ## Shasta Cabling Diagram (SHCD)
 
