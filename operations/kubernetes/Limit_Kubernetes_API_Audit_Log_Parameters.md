@@ -173,5 +173,3 @@ This procedure requires administrative privileges and assumes that the device be
    ```
 
 6. Repeat steps 2-5 for all other master nodes.
-
-
