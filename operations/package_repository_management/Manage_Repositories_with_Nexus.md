@@ -67,11 +67,13 @@ with the `nx-admin` role.
 
 ## Access Nexus with the REST API
 
-The [Nexus REST API](https://help.sonatype.com/repomanager3/rest-and-integration-api) is available from NCNs or compute nodes at `https://packages.local/service/rest`,
+The Nexus REST API is available from NCNs or compute nodes at `https://packages.local/service/rest`,
 as well as over the Customer Access Network (CAN) at `https://nexus.cmn.SYSTEM_DOMAIN_NAME/service/rest` (requires authentication with username and password).
 
 Download the Open API document at `/service/rest/swagger.json` for details about the API, including specific options
-to available endpoints. By default, the REST API endpoints return (or accept) JSON.
+to available endpoints. For additional information, check in the Nexus API documentation in [Sonatype Help](https://help.sonatype.com/).
+
+By default, the REST API endpoints return (or accept) JSON.
 
 The examples in the following sections use `curl` to exercise the REST API endpoints and `jq` to parse and manipulate the
 output. It is reasonable to use `curl` and `jq` to facilitate management tasks when necessary, but more complex actions may
@@ -92,8 +94,7 @@ The following actions are described in this section:
 
 ### Pagination
 
-Various API endpoints use the external [pagination](https://help.sonatype.com/repomanager3/rest-and-integration-api/pagination) tool to return results. When a
-`continuationToken` is included in the results and is non-null, it indicates additional items are available.
+Various API endpoints use the external pagination tool to return results. When a non-null `continuationToken` is included in the results, it indicates additional items are available.
 
 The following is some example output:
 
