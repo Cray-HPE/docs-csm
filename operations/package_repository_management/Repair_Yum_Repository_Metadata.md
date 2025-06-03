@@ -6,7 +6,7 @@ This is not typically needed, so it is considered to be a repair task.
 
 The example in this procedure is for creating a repair task to rebuild Yum metadata for the `mirror-1.4.0-opensuse-leap-15` repository.
 
-See the [Nexus documentation on tasks](https://help.sonatype.com/repomanager3/system-configuration/tasks) for more information.
+For more information, search for "tasks" in the Nexus documentation in [Sonatype Help](https://help.sonatype.com/).
 
 - [Prerequisites](#prerequisites)
 - [System domain name](#system-domain-name)
