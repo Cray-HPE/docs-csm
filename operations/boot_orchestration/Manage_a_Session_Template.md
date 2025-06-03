@@ -142,3 +142,5 @@ cray bos v2 sessiontemplates update --file <INPUT_FILE> <TEMPLATE_NAME>
 ```
 
 The format of this input file is the same as the one used to [Create a session template](#create-a-session-template).
+Note that due to a regression in CSM 1.6, this includes a requirement that the `boot_sets` field be specified (even if no changes are being made to its contents).
+This regression bug is corrected in CSM 1.7. In CSM 1.6, the workaround is to specify the current `boot_set` contents in the input file.
