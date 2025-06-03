@@ -51,47 +51,9 @@ location is `secret/csm/users/root password=...`.
    fi ; unset PW1 PW2
    ```
 
-1. (`ncn-mw#`) Get the [HashiCorp Vault](HashiCorp_Vault.md) root token.
-
-   ```bash
-   kubectl get secrets -n vault cray-vault-unseal-keys -o jsonpath='{.data.vault-root}' | base64 -d; echo
-   ```
-
 1. Write the password hash to the [HashiCorp Vault](HashiCorp_Vault.md).
 
-   > ***WARNING***: The CSM instance of Vault does not support the `patch` operation. Ensure that if the
-   > `password` field in the `secret/csm/users/root` secret is being updated,
-   > then any other desired fields are also included in the `write` command. For example the user's SSH keys.
-   > See [SSH keys](SSH_Keys.md).
-   > **Any fields omitted from the `write` command will be cleared from Vault.**
-
-   The path to the secret and the password field are configurable locations in
-   the CSM `csm.password` Ansible role located in the CSM configuration
-   management Git repository that is in use. If not using the defaults as shown
-   in the command examples, ensure that the paths are consistent between Vault and
-   the values in the Ansible role. See `roles/csm.password/README.md` in the
-   repository for more information.
-
-   1. (`ncn-mw#`) Open an interactive shell in the Vault Kubernetes pod.
-
-      ```bash
-      kubectl exec -itn vault cray-vault-0 -c vault -- sh
-      ```
-
-   1. (`cray-vault#`) Write the password hash to Vault.
-
-      * The `vault login` command will request the token value from the output of the previous step.
-      * Use the password hash generated in the earlier step.
-        * **`NOTE`**: It is important to enclose the hash in single quotes to preserve any special characters.
-      * The `vault read` command allows the administrator to verify that the contents of the secret were stored correctly.
-
-      ```bash
-      export VAULT_ADDR=http://cray-vault:8200
-      vault login
-      vault write secret/csm/users/root password='<INSERT HASH HERE>' [... other fields (see warning above) ...]
-      vault read secret/csm/users/root
-      exit
-      ```
+   See [Update Root Secrets In Vault](Update_Root_Secrets_In_Vault.md).
 
 ## Procedure: Apply `root` password to NCNs (standalone)
 
