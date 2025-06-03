@@ -37,29 +37,8 @@ from python_lib import common
 from python_lib import logger
 from python_lib.vault import Vault
 
-
-def update_password_in_vault(pw_string: str) -> None:
-    """
-    Writes the switch admin password to Vault.
-    Then read it back to verify it matches what was written
-    """
-
-    vault = Vault()
-
-    logging.info("Writing switch admin password to Vault")
-    vault.write_sw_admin_password(pw_string)
-
-    # Read back PW from Vault.
-    pw_from_vault = vault.get_sw_admin_password()
-
-    # Compare what we wrote to what we read back
-    if pw_string != pw_from_vault:
-        msg = "Password read back from Vault does NOT match what was written to Vault"
-        logging.error(msg)
-        raise common.ScriptException(msg)
-
-    logging.info("Password read from Vault matches what was written")
-    return
+SW_ADMIN_PW_KEY = "net-creds/switch_admin"
+SW_ADMIN_PW_FIELD = "admin"
 
 
 def prompt_user_for_password() -> str:
@@ -85,7 +64,10 @@ def main():
     Prompt the user for the password, write it to Vault.
     """
     admin_pw = prompt_user_for_password()
-    update_password_in_vault(admin_pw)
+    logging.info("Writing switch admin password to Vault")
+    Vault().write_secret(secret_key=SW_ADMIN_PW_KEY,
+                         secret_data={ SW_ADMIN_PW_FIELD: admin_pw },
+                         verify=True)
 
 
 if __name__ == '__main__':
