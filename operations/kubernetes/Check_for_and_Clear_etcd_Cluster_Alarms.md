@@ -28,9 +28,6 @@ For example, a cluster's database `NOSPACE` alarm is set when database storage s
 
     === Check if any "alarms" are set for any of the Etcd Clusters in all Namespaces. ===
     === An empty list is returned if no alarms are set ===
-    ### cray-bos-bitnami-etcd-1 Alarms Set: ###
-    ### cray-bos-bitnami-etcd-2 Alarms Set: ###
-    ### cray-bos-bitnami-etcd-0 Alarms Set: ###
     ### cray-bss-bitnami-etcd-1 Alarms Set: ###
     ### cray-bss-bitnami-etcd-2 Alarms Set: ###
     ### cray-bss-bitnami-etcd-0 Alarms Set: ###
@@ -53,9 +50,6 @@ For example, a cluster's database `NOSPACE` alarm is set when database storage s
         Example output:
 
         ```text
-        ### cray-bos-bitnami-etcd-0 Disarmed Alarms: ###
-        ### cray-bos-bitnami-etcd-1 Disarmed Alarms: ###
-        ### cray-bos-bitnami-etcd-2 Disarmed Alarms: ###
         ### cray-bss-bitnami-etcd-0 Disarmed Alarms: ###
         ### cray-bss-bitnami-etcd-1 Disarmed Alarms: ###
         ### cray-bss-bitnami-etcd-2 Disarmed Alarms: ###
@@ -66,16 +60,16 @@ For example, a cluster's database `NOSPACE` alarm is set when database storage s
     - Clear all alarms in one particular etcd cluster.
 
         ```bash
-        /opt/cray/platform-utils/etcd/etcd-util.sh clear_alarms cray-bos
+        /opt/cray/platform-utils/etcd/etcd-util.sh clear_alarms cray-bss
         ```
 
         Example output:
 
         ```text
-        ### cray-bos-bitnami-etcd-0 Disarmed Alarms: ###
+        ### cray-bss-bitnami-etcd-0 Disarmed Alarms: ###
         memberID:14039380531903955557 alarm:NOSPACE
         memberID:10060051157615504224 alarm:NOSPACE
         memberID:9418794810465807950 alarm:NOSPACE
-        ### cray-bos-bitnami-etcd-1 Disarmed Alarms: ###
-        ### cray-bos-bitnami-etcd-2 Disarmed Alarms: ###
+        ### cray-bss-bitnami-etcd-1 Disarmed Alarms: ###
+        ### cray-bss-bitnami-etcd-2 Disarmed Alarms: ###
         ```

@@ -103,15 +103,6 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
    pdsh -w ncn-m001,$MASTERS,$WORKERS 'zypper -n install psmisc'
    ```
 
-1. If the worker nodes have been supporting the containerized User Access Instance (UAI) pods, then the DVS mounted
-   Cray Programming Environment (CPE) filesystems should be unmounted.
-
-   1. (`ncn-m001#`) Unmount the CPE content on the worker nodes.
-
-      ```bash
-      pdsh -w $WORKERS bash /etc/cray-pe.d/pe_cleanup.sh | dshbak -c
-      ```
-
 1. (`ncn-m001#`) Shut down platform services.
 
    > NOTE: There are some interactive questions which need answers before the shutdown process can progress.
