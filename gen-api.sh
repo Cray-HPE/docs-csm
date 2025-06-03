@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2024-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -62,33 +62,38 @@ find "${manifest_dir}" -name "*.yaml" | while read -r manifest_file; do
     IFS='|' read -r endpoint_name endpoint_url endpoint_version endpoint_title <<< "${swagger_def}"
     echo ""
     echo "Downloading from ${endpoint_url} ..."
-    curl -SsL -o "${tmp_dir}/${endpoint_name}.yaml" "${endpoint_url}"
-    openapi_version=$(${yq} e '.openapi // .swagger' "/swagger/${endpoint_name}.yaml")
-    if [ -n "${endpoint_title}" ]; then
-      ${yq} e -i ".info.title=\"${endpoint_title}\"" "/swagger/${endpoint_name}.yaml"
-    fi
-    if [ -n "${endpoint_version}" ]; then
-      ${yq} e -i ".info.version=\"${endpoint_version}\"" "/swagger/${endpoint_name}.yaml"
-    fi
-    if [[ ${openapi_version} == 3.* ]]; then
-      ${yq} e -i '.components.securitySchemes.bearerAuth={"type": "http", "scheme": "bearer"}' "/swagger/${endpoint_name}.yaml"
-      ${yq} e -i '.security=[{"bearerAuth": []}]' "/swagger/${endpoint_name}.yaml"
-      # Many services have both external (through API Gateway, requires auth) and internal (does not require auth) sample URLs.
-      # Auth requirement can not be scoped to URL, we remove all sample URLs and set one mandatory external URL instead.
-      base_url=$(${yq} e '.servers[] | select(.url == "*/apis/*") | .url | sub(".+/apis/", "/apis/")' "/swagger/${endpoint_name}.yaml" | sort -u | head -1)
-      if [ -z "${base_url}" ]; then
-        base_url="/apis/${endpoint_name}"
-        echo "WARNING: unable to identify sample URL for ${endpoint_name}, guessed as ${base_url}."
+    if [[ ${endpoint_url} == *.md ]]; then
+      echo "Endpoint ${endpoint_url} delivers markdown, does not require conversion."
+      curl -SsL -o "${dest_dir}/${endpoint_name}.md" "${endpoint_url}"
+    else
+      curl -SsL -o "${tmp_dir}/${endpoint_name}.yaml" "${endpoint_url}"
+      openapi_version=$(${yq} e '.openapi // .swagger' "/swagger/${endpoint_name}.yaml")
+      if [ -n "${endpoint_title}" ]; then
+        ${yq} e -i ".info.title=\"${endpoint_title}\"" "/swagger/${endpoint_name}.yaml"
       fi
-      ${yq} e -i ".servers=[{\"url\": \"https://api-gw-service-nmn.local${base_url}\"}]" "/swagger/${endpoint_name}.yaml"
-    elif [[ ${openapi_version} == 2.* ]]; then
-      ${yq} e -i '.securityDefinitions.bearerAuth={"type": "http", "scheme": "bearer"}' "/swagger/${endpoint_name}.yaml"
-      ${yq} e -i '.security=[{"bearerAuth": []}]' "/swagger/${endpoint_name}.yaml"
-      ${yq} e -i '.host="api-gw-service-nmn.local"' "/swagger/${endpoint_name}.yaml"
-      ${yq} e -i '.schemes=["https"]' "/swagger/${endpoint_name}.yaml"
+      if [ -n "${endpoint_version}" ]; then
+        ${yq} e -i ".info.version=\"${endpoint_version}\"" "/swagger/${endpoint_name}.yaml"
+      fi
+      if [[ ${openapi_version} == 3.* ]]; then
+        ${yq} e -i '.components.securitySchemes.bearerAuth={"type": "http", "scheme": "bearer"}' "/swagger/${endpoint_name}.yaml"
+        ${yq} e -i '.security=[{"bearerAuth": []}]' "/swagger/${endpoint_name}.yaml"
+        # Many services have both external (through API Gateway, requires auth) and internal (does not require auth) sample URLs.
+        # Auth requirement can not be scoped to URL, we remove all sample URLs and set one mandatory external URL instead.
+        base_url=$(${yq} e '.servers[] | select(.url == "*/apis/*") | .url | sub(".+/apis/", "/apis/")' "/swagger/${endpoint_name}.yaml" | sort -u | head -1)
+        if [ -z "${base_url}" ]; then
+          base_url="/apis/${endpoint_name}"
+          echo "WARNING: unable to identify sample URL for ${endpoint_name}, guessed as ${base_url}."
+        fi
+        ${yq} e -i ".servers=[{\"url\": \"https://api-gw-service-nmn.local${base_url}\"}]" "/swagger/${endpoint_name}.yaml"
+      elif [[ ${openapi_version} == 2.* ]]; then
+        ${yq} e -i '.securityDefinitions.bearerAuth={"type": "http", "scheme": "bearer"}' "/swagger/${endpoint_name}.yaml"
+        ${yq} e -i '.security=[{"bearerAuth": []}]' "/swagger/${endpoint_name}.yaml"
+        ${yq} e -i '.host="api-gw-service-nmn.local"' "/swagger/${endpoint_name}.yaml"
+        ${yq} e -i '.schemes=["https"]' "/swagger/${endpoint_name}.yaml"
+      fi
+      echo "Producing markdown for ${endpoint_name} out of ${endpoint_url} ..."
+      docker exec widdershins widdershins "/swagger/${endpoint_name}.yaml" -o "/api/${endpoint_name}.md" --omitHeader --language_tabs http shell python go
     fi
-    echo "Producing markdown for ${endpoint_name} out of ${endpoint_url} ..."
-    docker exec widdershins widdershins "/swagger/${endpoint_name}.yaml" -o "/api/${endpoint_name}.md" --omitHeader --language_tabs http shell python go
   done < <(${yq} e '.spec.charts[].swagger[] | (.name + "|" + .url + "|" + (.version // "") + "|" + (.title // ""))' "/manifests/$(basename "${manifest_file}")")
 done
 
