@@ -141,4 +141,5 @@ cray bos v2 sessiontemplates delete <SESSION_TEMPLATE_NAME>
 cray bos v2 sessiontemplates update --file <INPUT_FILE> <TEMPLATE_NAME>
 ```
 
-The format of this input file is the same as the one used to [Create a session template](#create-a-session-template).
+The format of this input file is the same as the one used to [Create a session template](#create-a-session-template), except that
+the `boot_sets` field is NOT required (unlike when creating a session template).
