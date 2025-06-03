@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# (C) Copyright 2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2024-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -22,17 +22,26 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-# When upgrading from Istio 1.11.8 to 1.19.10 we need to rollout-restart because
+# When upgrading from Istio 1.19.10 to 1.26.0, we need to rollout-restart because
 # the istio-injection enabled namespaces doesn't get the latest image of istio.
 #
 
 set -x
 
-# This part of script is to delete the pods on vault namespace which do not have proxyv2:1.19.10
+# Define the Istio version
+ISTIO_VERSION="1.26.0"
+ISTIO_PROXYV2_IMAGE="istio/proxyv2:${ISTIO_VERSION}"
+ISTIO_PILOT_IMAGE="istio/pilot:${ISTIO_VERSION}"
+
+# Define wait times in seconds
+VAULT_PODS_WAIT_TIME=120
+RESOURCE_RESTART_WAIT_TIME=180
+
+# This part of script is to delete the pods on vault namespace which do not have the correct proxyv2 version
 # This is done because the vault is not updated in CSM1.6, this restart of vault may not be needed in future
 
 NAMESPACE="vault"
-CORRECT_VERSION="proxyv2:1.19.10"
+CORRECT_VERSION="${ISTIO_PROXYV2_IMAGE}"
 pods_deleted=false
 
 # Get all pods in the namespace
@@ -57,8 +66,8 @@ done
 
 # Wait for 2 minutes if any pods were deleted
 if [ "$pods_deleted" = true ]; then
-  echo "Waiting for 2 minutes for pods to restart..."
-  sleep 120
+  echo "Waiting for $((VAULT_PODS_WAIT_TIME / 60)) minutes for pods to restart..."
+  sleep $VAULT_PODS_WAIT_TIME
 
   # Check the status of the pods after restart
   new_pods=$(kubectl get pods -n "$NAMESPACE" -o jsonpath='{.items[*].metadata.name}')
@@ -92,13 +101,13 @@ else
   echo "No pods were deleted. Skipping wait."
 fi
 
-# The fuctionality of the script is:
+# The functionality of the script is:
 # This script is to restart the vault pods separately.
 # Because vault was not upgraded in this release that is why we need this script.
 # Get all istio-injection=enabled namespaces.
 # For each namespace we are keeping the record of the sts/deploys/ds which we need to restart by following way:
 #   Get all the pods in the namespace, and check istio image version.
-#   if image is not in 1.19.10 then
+#   if image is not correct version then
 #       Keep the name of the corresponding ds/sts/deploy in a list.
 #   Else move to another pod.
 # After iterating over all the namespaces we will have the list of sts/ds/deploys that needs to be restarted.
@@ -113,7 +122,7 @@ check_pod_istio_versions() {
   images=$(kubectl get pod "$pod" -n "$namespace" -o jsonpath="{.spec.containers[*].image}")
 
   # Check if any of the images is the latest Istio version
-  if echo "$images" | grep -q -e "istio/pilot:1.19.10" -e "istio/proxyv2:1.19.10"; then
+  if echo "$images" | grep -q -e "${ISTIO_PILOT_IMAGE}" -e "${ISTIO_PROXYV2_IMAGE}"; then
     return 0 # Pod has the latest Istio versions
   else
     return 1 # Pod does not have the latest Istio versions
@@ -175,8 +184,8 @@ restart_and_check_status() {
     fi
   done
 
-  echo "Waiting for 3 minutes..."
-  sleep 180
+  echo "Waiting for $((RESOURCE_RESTART_WAIT_TIME / 60)) minutes..."
+  sleep $RESOURCE_RESTART_WAIT_TIME
 
   for resource in "${resources[@]}"; do
     resource_type=$(echo "$resource" | cut -d'/' -f1)
@@ -208,7 +217,7 @@ for ns in $namespaces; do
 
   for pod in $pods; do
     if ! check_pod_istio_versions "$ns" "$pod"; then
-      echo "Pod $pod in namespace $ns does not have the latest Istio version. Checking its controlling resource..."
+      echo "Pod $pod in namespace $ns does not have the latest Istio version ${ISTIO_VERSION}. Checking its controlling resource..."
       controlling_resource=$(get_controlling_resource "$ns" "$pod")
 
       # Extract resource type and name from controlling_resource
@@ -227,7 +236,7 @@ for ns in $namespaces; do
         echo "Skipping unknown or unhandled resource type: $controlling_resource for pod $pod"
       fi
     else
-      echo "Pod $pod in namespace $ns already has the latest Istio image versions"
+      echo "Pod $pod in namespace $ns already has the latest Istio image version ${ISTIO_VERSION}"
     fi
   done
 done
