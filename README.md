@@ -1,8 +1,15 @@
 # Cray System Management Documentation
 
+* [Prerequisites](#prerequisites)
 * [Scope and audience](#scope-and-audience)
 * [Table of contents](#table-of-contents)
 * [Copyright and license](#copyright-and-license)
+
+## Prerequisites
+
+Before upgrading from CSM 1.5.x to any CSM 1.6.x release, CSM 1.5.3 is
+required at a bare minimum. If attempting to upgrade from CSM 1.5.2 or
+earlier, major problems may be experienced during the upgrade.
 
 ## Scope and audience
 
