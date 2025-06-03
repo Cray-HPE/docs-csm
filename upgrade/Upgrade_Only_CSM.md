@@ -15,8 +15,6 @@ other operational tasks like the check and update of firmware on system componen
 Note: If problems are encountered during the upgrade, some of the topics do have their own troubleshooting
 sections, but there is also a general troubleshooting topic.
 
-- If IMS image creation CFS jobs fail, see [Known Issue: IMS image creation failure](../troubleshooting/known_issues/ims_image_creation_failure.md) for a possible workaround.
-
 - On some systems, Ceph can begin to exhibit latency over time, and if this occurs it can eventually cause services like `slurm` and services that are backed by `etcd` clusters to exhibit slowness and possible timeouts.
   See [Known Issue: Ceph OSD latency](../troubleshooting/known_issues/ceph_osd_latency.md) for a workaround.
 
