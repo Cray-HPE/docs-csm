@@ -21,8 +21,7 @@ To create the bootable LiveCD image use `dd` command. Before creating the media,
 
 1. (`external#`) Obtain the cluster manager software (HPCM version 1.9) from HPE for all the required ISO files.
 
-    Obtain the cluster manager installation software, including patches and updates,from [My HPE Software Center
-](https://www.hpe.com/downloads/software).
+    Obtain the cluster manager installation software, including patches and updates,from [My HPE Software Center](https://www.hpe.com/downloads/software).
 
     > **NOTE:** User needs to have a HPE Passport account and its login credentials to access the customer portal website.
 
@@ -366,7 +365,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
       - For Aruba switches.
 
-         See the "Using Aruba Switches" section in [HPE Performance Cluster Manager Installation Guide for Clusters Without Leader Nodes](https://www.hpe.com/support/hpcm-inst-no-leaders-006)
+         See the "Using Aruba Switches" section in `HPE Performance Cluster Manager Installation Guide for Clusters Without Leader Nodes`
          for the procedure to configure the Aruba switches.
 
    1. (`pit#`) Run `YaST-Firstboot`.

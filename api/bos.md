@@ -4759,7 +4759,7 @@ Get session details by session ID.
 **session_id**: Session ID
 
 BOS v2 session IDs must be 1-45 characters in length and match the
-following regular expression: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+following regular expression: `^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`
 
 These restrictions are not enforced in this version of BOS, but it is
 targeted to start being enforced in an upcoming BOS version.
@@ -4900,7 +4900,7 @@ Update the state for a given session in the BOS database
 **session_id**: Session ID
 
 BOS v2 session IDs must be 1-45 characters in length and match the
-following regular expression: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+following regular expression: `^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`
 
 These restrictions are not enforced in this version of BOS, but it is
 targeted to start being enforced in an upcoming BOS version.
@@ -5017,7 +5017,7 @@ Delete session by session ID.
 **session_id**: Session ID
 
 BOS v2 session IDs must be 1-45 characters in length and match the
-following regular expression: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+following regular expression: `^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`
 
 These restrictions are not enforced in this version of BOS, but it is
 targeted to start being enforced in an upcoming BOS version.
@@ -5125,7 +5125,7 @@ Get session extended status information by ID
 **session_id**: Session ID
 
 BOS v2 session IDs must be 1-45 characters in length and match the
-following regular expression: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+following regular expression: `^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`
 
 These restrictions are not enforced in this version of BOS, but it is
 targeted to start being enforced in an upcoming BOS version.
@@ -5245,7 +5245,7 @@ Saves the current session to database.  For use at session completion.
 **session_id**: Session ID
 
 BOS v2 session IDs must be 1-45 characters in length and match the
-following regular expression: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+following regular expression: `^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`
 
 These restrictions are not enforced in this version of BOS, but it is
 targeted to start being enforced in an upcoming BOS version.
@@ -9087,7 +9087,7 @@ Information for patching multiple components.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |ids|string|false|none|A comma-separated list of component IDs<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|session|string|false|none|A session name.  All components part of this session will be patched.<br><br>BOS v2 session names must be 1-45 characters in length and match the<br>following regular expression: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$<br><br>These restrictions are not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|session|string|false|none|A session name.  All components part of this session will be patched.<br><br>BOS v2 session names must be 1-45 characters in length and match the<br>following regular expression: `^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`<br><br>These restrictions are not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 
 <h2 id="tocS_V2ComponentsUpdate">V2ComponentsUpdate</h2>
 <!-- backwards compatibility -->
