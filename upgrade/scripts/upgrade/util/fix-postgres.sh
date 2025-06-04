@@ -92,10 +92,6 @@ kubectl get sts -A -l application=spilo -o json \
     kubectl rollout restart -n "${namespace}" statefulset "${sts}"
   done
 # restart cray-spire-postgres, kubectl rollout restart does not work for this cluster
-echo "Waiting for 300 seconds for cray-spire-postgres to be ready"
-sleep 300
-echo "Restarting all cray-spire-postgres members"
-kubectl exec -n spire cray-spire-postgres-0 -c postgres -- patronictl restart cray-spire-postgres --force
 echo "Waiting for 300 seconds for postgres statefulsets rolling restart to commence ..."
 sleep 300
 wait_for postgres_pods_running "all postgres pods running"
