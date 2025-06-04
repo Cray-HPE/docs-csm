@@ -760,7 +760,7 @@ Some sites refer to their UANs as Login nodes.
 ## User Services Software (USS)
 
 HPE Cray Supercomputing User Services Software (or USS) contains user space packages, kernel modules, microservices, configuration content, and other components.
-USS adds content on top of SLES or RHEL without modifying the kernel directly.
+USS adds content on top of SLES without modifying the kernel directly.
 
 ## Version Control Service (VCS)
 
