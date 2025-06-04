@@ -135,7 +135,7 @@ Follow each step below:
 ## Restore manual configuration
 
 Restore any configurations for the node that are not automatically performed by [CFS](../../../glossary.md#configuration-framework-service-cfs)
-live node personalization. For example, [SSH configuration files](../../CSM_product_management/Set_Up_Passwordless_SSH.md#ssh-configuration-files).
+live node personalization.
 
 ## Validation
 
