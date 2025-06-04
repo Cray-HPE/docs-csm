@@ -161,12 +161,12 @@ workers=$(grep -oP 'ncn-w\d+' /etc/hosts | sort -u)
 # which is the last version in the KUBERNETES_VERSIONS list
 target_version="${KUBERNETES_VERSIONS[-1]}"
 v_target_version="v${target_version}"
-minor_target_version=$(echo "$target_version" | cut -d'.' -f1-2)
+minor_target_version=${target_version%.*}
 
 echo "$(prefix) Beginning Kubernetes upgrade to ${target_version}."
 
 for version in "${KUBERNETES_VERSIONS[@]}"; do
-  minor_version=$(echo "$version" | cut -d'.' -f1-2)
+  minor_version=${version%.*}
 
   if [[ $(bc -l <<< "${minor_version} < 1.27") -eq 1 ]]; then
     echo "$(prefix) ERROR Upgrade version cannot be less than v1.27. Exiting ..." >&2
@@ -219,7 +219,7 @@ for host in ${masters}; do
 
     # Update pause version in containerd
     pause_version="pause:${pause[${minor_target_version}]}"
-    ssh "${host}" sed -i -e "s/pause:3.9/$pause_version/g" /etc/containerd/config.toml
+    ssh "${host}" sed -i -e "s/pause:[0-9]*.[0-9]*/$pause_version/g" /etc/containerd/config.toml
     # Restart containerd.
     ssh "${host}" systemctl restart containerd
 
@@ -265,7 +265,7 @@ for host in ${workers}; do
 
     # Update pause version in containerd
     pause_version="pause:${pause[${minor_target_version}]}"
-    ssh "${host}" sed -i -e "s/pause:3.9/$pause_version/g" /etc/containerd/config.toml
+    ssh "${host}" sed -i -e "s/pause:[0-9]*.[0-9]*/$pause_version/g" /etc/containerd/config.toml
     # Restart containerd.
     ssh "${host}" systemctl restart containerd
 
@@ -296,7 +296,8 @@ BAD_NODES=0
 for host in ${all_ncns}; do
   # Check kubeadm version on all nodes and make sure it matches v_target_version
   current_version=$(ssh $host kubeadm version -o json | jq -r '.clientVersion.gitVersion')
-  current_minor_version=$(echo "$current_version" | cut -c 2-5)
+  current_minor_version=${current_version%.*}
+  current_minor_version=${current_minor_version#v}
   if [ "${current_minor_version}" = "1.32" ]; then
     echo "$(prefix) ${host} version is already at ${current_version}"
   elif [ "${current_version}" != "${v_target_version}" ]; then
