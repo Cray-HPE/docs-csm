@@ -28,7 +28,28 @@ import sys
 
 import requests
 
+# This script removes the following runcmd lines from BSS for all master and
+# worker nodes:
+#
+#    mkdir -p /etc/cray/kubernetes
+#    touch /etc/cray/kubernetes/upgrade
+#
+# These are added at the beginning of the upgrade process, in CSM upgrade.sh, to
+# signal to later stages that an upgrade is occurring, mostly for
+# Kubernetes-specific behavior. There is an additional file,
+# /etc/cray/kubernetes/upgrade_version, which is added via the node image, and
+# which specifies the initial Kubernetes upgrade target, 1.26.15. We don't need
+# to do anything for this file.
+#
+# If /etc/cray/kubernetes/upgrade is not removed, subsequent node reboots will
+# cause kubernetes-cloudinit.sh (and potentially other scripts) to assume an
+# upgrade to Kubernetes 1.26.15 is occurring, which will do things like
+# downgrade Kubernetes RPMs. Removing these two lines from runcmd ensures that
+# that does not happen.
+#
 # This script is idempotent; it can be run multiple times without consequence.
+# If the runcmd blocks have already been modified for a given node, the script
+# will PUT the original config back to the BSS API.
 def main():
     token = os.getenv("TOKEN")
     if not token:
