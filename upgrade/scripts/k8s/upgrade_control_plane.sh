@@ -149,7 +149,6 @@ done
 # Source /etc/cray/upgrade/csm/myenv to get CSM_ARTI_DIR
 source /etc/cray/upgrade/csm/myenv
 k8s_version=$(kubeadm version -o json | jq -r '.clientVersion.gitVersion' | grep -o "v1.[^.]*")
-k8s_minor_version=$(echo ${k8s_version} | cut -d "." -f2)
 
 # Change working directory to CSM_ARTI_DIR
 pushd ${CSM_ARTI_DIR}

@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -34,10 +34,11 @@ RUNDIR="${TMPDIR:-/tmp}/encryption-tmp-$$"
 KUBETIMEOUT="${KUBETIMEOUT:-300s}"
 
 if [ -f /etc/cray/kubernetes/upgrade ]; then
-  export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/upgrade_version)
+  KUBERNETES_MINOR_VERSION="$(cut -d'.' -f2 /etc/cray/kubernetes/upgrade_version)"
 else
-  export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/version)
+  KUBERNETES_MINOR_VERSION="$(cut -d'.' -f2 /etc/cray/kubernetes/version)"
 fi
+export KUBERNETES_MINOR_VERSION
 
 cleanup() {
   rm -fr "${RUNDIR}"
@@ -231,11 +232,11 @@ writeconfig() {
     src="${PREFIX?}/${shasum?}.yaml"
   fi
 
-  if [[ "${KUBERNETES_MINOR_VERSION}" -lt 25 ]]; then
+  if [ ${KUBERNETES_MINOR_VERSION} -lt 25 ]; then
     kubeadmcfg="/srv/cray/resources/common/1.24/kubeadm.cfg"
-  elif [[ "${KUBERNETES_MINOR_VERSION}" -lt 27 ]]; then
+  elif [ ${KUBERNETES_MINOR_VERSION} -lt 27 ]; then
     kubeadmcfg="/srv/cray/resources/common/1.25/kubeadm.cfg"
-  elif [[ "${KUBERNETES_MINOR_VERSION}" -lt 31 ]]; then
+  elif [ ${KUBERNETES_MINOR_VERSION} -lt 31 ]; then
     kubeadmcfg="/srv/cray/resources/common/1.27/kubeadm.cfg"
   else
     kubeadmcfg="/srv/cray/resources/common/1.31/kubeadm.cfg"

@@ -25,8 +25,7 @@
 set -euo pipefail
 
 PROG=$(basename "$0")
-usage()
-{
+usage() {
   echo "Usage: ${PROG} [-h] -v <kubernetes_versions_array>"
   echo "    -h                Print this help message"
   echo "    -v                Array containing all kubernetes intermediate versions along with from and to versions needed"
@@ -61,8 +60,12 @@ while getopts "v:dh" opt; do
       ;;
   esac
 done
-shift $((OPTIND-1))
-[ $# -gt 0 ] && { echo "${PROG}: Too many arguments" >&2; usage >&2; exit 1; }
+shift $((OPTIND - 1))
+[ $# -gt 0 ] && {
+  echo "${PROG}: Too many arguments" >&2
+  usage >&2
+  exit 1
+}
 
 if [[ ! -v KUBERNETES_VERSIONS ]]; then
   echo "Missing option '-v' which is required" >&2
@@ -202,7 +205,7 @@ done
 echo "$(prefix) Upgrading kubelet on master nodes to ${target_version}."
 
 for host in ${masters}; do
-  # Check current kubelet version. If less than 
+  # Check current kubelet version.
   current_version=$(ssh $host kubelet --version | awk '{ print $2 }' | cut -c 2-5)
   if [[ $(bc -l <<< "${minor_target_version} > ${current_version}") -eq 1 ]]; then
     if [ "$DRAIN" = "true" ]; then
@@ -245,7 +248,7 @@ done
 echo "$(prefix) Upgrading kubelet on worker nodes to ${target_version}."
 
 for host in ${workers}; do
-  # Check current kubelet version. If less than 
+  # Check current kubelet version.
   current_version=$(ssh $host kubelet --version | awk '{ print $2 }' | cut -c 2-5)
   if [[ $(bc -l <<< "${minor_target_version} > ${current_version}") -eq 1 ]]; then
     echo "$(prefix) Installing [kubeadm-${target_version}] on [${host}]."
