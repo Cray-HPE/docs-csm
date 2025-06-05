@@ -81,7 +81,7 @@ spec:
         arguments:
           parameters:
           - name: nexus_setup_image
-            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.12.1
+            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.12.0
           - name: nexus_admin_credential_secret_name
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
           - name: content
