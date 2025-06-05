@@ -35,7 +35,7 @@ spec:
           - name: targetNcn
       dag:
         tasks:
-          - name: create-rgw-buckets-task 
+          - name: create-rgw-buckets-task
             templateRef:
               name: ssh-template
               template: shell-script
