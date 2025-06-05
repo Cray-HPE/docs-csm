@@ -28,7 +28,3 @@ provides a set of subcommands for accessing the logs and interactive consoles.
 - [Troubleshoot ConMan Failing to Connect to a Console](Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
 - [Troubleshoot ConMan Node Pod Stuck in Terminating](Troubleshoot_ConMan_Node_Pod_Stuck_Terminating.md)
 - [Complete Reset of the Console Services](Complete_Reset_of_the_Console_Services.md)
-
-## Web interface
-
-- [Accessing the Console Web Interface](../../api/console.md)

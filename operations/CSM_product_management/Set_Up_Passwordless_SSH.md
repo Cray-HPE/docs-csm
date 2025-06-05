@@ -15,7 +15,7 @@
 ## Overview
 
 This procedure sets up passwordless SSH from management nodes to other management nodes and from
-management nodes to managed nodes such as compute nodes running Cray Operating System (COS) software
+management nodes to managed nodes such as compute nodes running User Services Software (USS)
 and User Access Nodes (UANs). This procedure **does not** configure passwordless SSH from managed
 nodes to management nodes.
 

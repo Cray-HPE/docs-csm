@@ -101,53 +101,39 @@ If a recipe record is created with the incorrect architecture, that field can be
 
     ```toml
     arch = "x86_64"
-    created = "2023-06-26T19:18:50.618917+00:00"
-    id = "da4121c2-2681-40f9-8007-4dcccf379e24"
+    created = "2025-06-02T15:31:47.099725"
+    id = "aa79ef4f-5508-4903-b4fc-7dffdba76aa1"
     linux_distribution = "sles15"
-    name = "cos-2.6.71-20230622190918-sles15sp5.aarch64"
+    name = "uss-1.4.0-93-csm.x86_64"
     recipe_type = "kiwi-ng"
-    require_dkms = false
+    require_dkms = true
     [[template_dictionary]]
-    key = "COS_PRODUCT_VERSION"
-    value = "2.6.71-20230622190918"
-
-    [[template_dictionary]]
-    key = "SHS_VERSION"
-    value = "master"
+    key = "USS_VERSION"
+    value = "1.4.0-93"
 
     [link]
-    etag = "38dcc9d03b8bf1fcd1bb4fd660607bc0"
-    path = "s3://ims/recipes/da4121c2-2681-40f9-8007-4dcccf379e24/recipe.tar.gz"
+    etag = "064c7652aea9e7bb2317fccf543e64a6"
+    path = "s3://ims/recipes/aa79ef4f-5508-4903-b4fc-7dffdba76aa1/recipe.tar.gz"
     type = "s3"
     ```
 
 1. (`ncn-mw#`) If the architecture is wrong, update it.
 
-    ```bash
-    cray ims recipes update --arch aarch64 $IMS_RECIPE_ID --format toml
-    ```
-
-    Expected output will look something like:
-
     ```toml
     arch = "aarch64"
-    created = "2023-06-26T19:18:50.618917+00:00"
-    id = "da4121c2-2681-40f9-8007-4dcccf379e24"
+    created = "2025-06-02T15:31:47.099725"
+    id = "aa79ef4f-5508-4903-b4fc-7dffdba76aa1"
     linux_distribution = "sles15"
-    name = "cos-2.6.71-20230622190918-sles15sp5.aarch64"
+    name = "uss-1.4.0-93-csm.aarch64"
     recipe_type = "kiwi-ng"
-    require_dkms = false
+    require_dkms = true
     [[template_dictionary]]
-    key = "COS_PRODUCT_VERSION"
-    value = "2.6.71-20230622190918"
-
-    [[template_dictionary]]
-    key = "SHS_VERSION"
-    value = "master"
+    key = "USS_VERSION"
+    value = "1.4.0-93"
 
     [link]
-    etag = "38dcc9d03b8bf1fcd1bb4fd660607bc0"
-    path = "s3://ims/recipes/da4121c2-2681-40f9-8007-4dcccf379e24/recipe.tar.gz"
+    etag = "064c7652aea9e7bb2317fccf543e64a6"
+    path = "s3://ims/recipes/aa79ef4f-5508-4903-b4fc-7dffdba76aa1/recipe.tar.gz"
     type = "s3"
     ```
 

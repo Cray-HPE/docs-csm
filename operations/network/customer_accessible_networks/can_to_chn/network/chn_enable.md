@@ -326,14 +326,8 @@ Add CHN to `customizations.yaml`
        {
          "clone_url": "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git",
          "commit": "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7",
-         "name": "cos-integration-2.3.75",
+         "name": "uss-integration-1.4.0",
          "playbook": "ncn.yml"
-       },
-       {
-         "clone_url": "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git",
-         "commit": "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7",
-         "name": "cos-integration-2.3.75",
-         "playbook": "ncn-final.yml"
        }
      ]
    }
@@ -353,9 +347,6 @@ Add CHN to `customizations.yaml`
      "playbook": "enable_chn.yml"
    }
    ```
-
-   **Important:** This new layer *must* run after the COS `ncn-final.yml` layers, otherwise the HSN interfaces will not be configured correctly and this playbook will fail.
-   Typically, placing the new layer at the end of the list is okay.
 
 1. (`ncn#`) Update the CFS configuration.
 
@@ -389,14 +380,8 @@ Add CHN to `customizations.yaml`
    [[layers]]
    clone_url = "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git"
    commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
-   name = "cos-integration-2.3.75"
+   name = "integration-1.4.0"
    playbook = "ncn.yml"
-
-   [[layers]]
-   clone_url = "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git"
-   commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
-   name = "cos-integration-2.3.75"
-   playbook = "ncn-final.yml"
 
    [[layers]]
    clone_url = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
@@ -580,7 +565,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
 
       ```toml
       configuration_status = "configured"
-      desired_config = "cos-config-full-2.3-integration"
+      desired_config = "uss-config-full-1.4-integration"
       enabled = true
       error_count = 0
       id = "x1000c5s1b0n1"
@@ -589,7 +574,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    1. (`ncn-m001#`) Extract the CFS configuration.
 
       ```bash
-      cray cfs v3 configurations describe cos-config-full-2.3-integration --format json | jq 'del(.last_updated) | del(.name)' > "${UPDATEDIR}/cos-config-full-2.3-integration.json"
+      cray cfs v3 configurations describe uss-config-full-1.4-integration --format json | jq 'del(.last_updated) | del(.name)' > "${UPDATEDIR}/uss-config-full-1.4-integration.json"
       ```
 
 1. Identify the UAN CFS configuration.
@@ -652,14 +637,14 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
 1. (`ncn-m001#`) Update the compute node CFS configuration.
 
    ```bash
-   cray cfs v3 configurations update cos-config-full-2.3-integration --file "${UPDATEDIR}/cos-config-full-2.3-integration.json" --format toml
+   cray cfs v3 configurations update uss-config-full-1.4-integration --file "${UPDATEDIR}/uss-config-full-1.4-integration.json" --format toml
    ```
 
    Example output:
 
    ```toml
    last_updated = "2022-05-27T20:47:18Z"
-   name = "cos-config-full-2.3-integration"
+   name = "uss-config-full-1.4-integration"
    [[layers]]
    clone_url = "https://api-gw-service-nmn.local/vcs/cray/   slingshot-host-software-config-management.git"
    commit = "dd428854a04a652f825a3abbbf5ae2ff9842dd55"
@@ -675,8 +660,8 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    [[layers]]
    clone_url = "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git"
    commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
-   name = "cos-compute-integration-2.3.75"
-   playbook = "cos-compute.yml"
+   name = "uss-compute-integration-1.4.75"
+   playbook = "uss-compute.yml"
 
    [[layers]]
    clone_url = "https://api-gw-service-nmn.local/vcs/cray/sma-config-management.git"
@@ -711,8 +696,8 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    [[layers]]
    clone_url = "https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git"
    commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
-   name = "cos-compute-last-integration-2.3.75"
-   playbook = "cos-compute-last.yml"
+   name = "uss-compute-last-integration-1.4.75"
+   playbook = "uss-compute-last.yml"
 
    [[layers]]
    clone_url = "https://api-gw-service-nmn.local/vcs/cray/uan-config-management.git"
@@ -733,7 +718,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
 
    ```toml
    configuration_status = "pending"
-   desired_config = "cos-config-full-2.3-integration"
+   desired_config = "uss-config-full-1.4-integration"
    enabled = true
    error_count = 0
    id = "x1000c5s1b0n1"

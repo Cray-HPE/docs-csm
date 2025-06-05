@@ -21,8 +21,6 @@ Glossary of terms used in CSM documentation.
 * [Coolant Distribution Unit (CDU)](#coolant-distribution-unit-cdu)
 * [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control-capmc)
 * [Cray CLI (`cray`)](#cray-cli-cray)
-* [Cray Operating System (COS)](#cray-operating-system-cos)
-* [Cray Operating System Base (COS Base)](#cray-operating-system-base-cos-base)
 * [Cray Programming Environment (CPE)](#cray-programming-environment-cpe)
 * [Cray Security Token Service (STS)](#cray-security-token-service-sts)
 * [Cray Site Init (CSI)](#cray-site-init-csi)
@@ -272,15 +270,6 @@ replaced by [Power Control Service (PCS)](#power-control-service-pcs).
 
 The `cray` command line interface (CLI) is a framework created to integrate all of the system management
 REST APIs into easily usable commands.
-
-## Cray Operating System (COS)
-
-HPE Cray Supercomputing Operating System Software (or COS) is a Cray product that may be installed on CSM systems.
-COS is comprised of [COS Base](#cray-operating-system-base-cos-base), HPE SUSE Linux Enterprise Operating System (SLE), and [User Services Software](#user-services-software-uss) components.
-
-## Cray Operating System Base (COS Base)
-
-COS Base software consists of the COS modified kernel and dependent packages.
 
 ## Cray Programming Environment (CPE)
 
@@ -771,7 +760,7 @@ Some sites refer to their UANs as Login nodes.
 ## User Services Software (USS)
 
 HPE Cray Supercomputing User Services Software (or USS) contains user space packages, kernel modules, microservices, configuration content, and other components.
-USS adds content on top of [COS Base](#cray-operating-system-base-cos-base) (the modified COS kernel) without modifying the kernel directly.
+USS adds content on top of SLES without modifying the kernel directly.
 
 ## Version Control Service (VCS)
 

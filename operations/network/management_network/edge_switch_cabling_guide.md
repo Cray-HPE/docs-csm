@@ -9,7 +9,7 @@ In some larger systems site connections are moved from spine to dedicated edge s
 
 Currently supported edge switch models:
 
-* [Aruba 8325-32C 32 port 100G QSFP+/QSFP28 JL627A](https://buy.hpe.com/us/en/networking/switches/fixed-port-l3-managed-ethernet-switches/aruba-8325-switch-products/aruba-cx-8325-switch-series/p/1011156780?pageSize=50&sku=JL627A)
+* [Aruba 8325-32C 32 port 100G QSFP+/QSFP28 JL627A](https://buy.hpe.com/us/en/networking/switches/fixed-port-l3-managed-ethernet-switches/networking-cx-switch-series/hpe-aruba-networking-cx-8325%E2%80%9132c-32p-100g-qsfp-qsfp28-back%E2%80%91to%E2%80%91front-6-fans-2-power-supply-bundle/p/jl627a)
 
 * [Arista 7060CX2](https://www.arista.com/en/products/7060x-series)
 

@@ -354,7 +354,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
           "type": "s3"
         },
         "linux_distribution": "sles15",
-        "name": "cos-2.1.51-slingshot-1.2.1",
+        "name": "uss-1.4.0-93-csm.x86_64",
         "recipe_type": "kiwi-ng"
       },
 

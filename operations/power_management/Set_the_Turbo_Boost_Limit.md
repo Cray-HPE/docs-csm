@@ -8,7 +8,7 @@ Turbo boost can be limited by setting the `turbo_boost_limit` kernel parameter t
 - 0 - Disable turbo boost
 - 999 - \(default\) No limit is applied.
 
-The following values are not supported in COS v1.4:
+The following values are not supported in USS v1.4:
 
 - 100 - Limits turbo boost to 100 MHz
 - 200 - Limits turbo boost to 200 MHz

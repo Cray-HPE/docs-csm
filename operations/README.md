@@ -79,7 +79,6 @@ Build and customize image recipes with the Image Management Service (IMS).
 - [Import External Image to IMS](image_management/Import_External_Image_to_IMS.md)
 - [Import NCN Image to IMS](image_management/Import_NCN_Image_to_IMS.md)
 - [Customize an Image Root Using IMS](image_management/Customize_an_Image_Root_Using_IMS.md)
-      - [Create UAN Boot Images](image_management/Create_UAN_Boot_Images.md)
       - [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
 - [Configure a Remote Build Node](image_management/Configure_a_Remote_Build_Node.md)
 - [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
@@ -412,7 +411,6 @@ troubleshooting node boot issues.
 - [Troubleshoot Console Node Pod Stuck in Terminating State](conman/Troubleshoot_ConMan_Node_Pod_Stuck_Terminating.md)
 - [Complete Reset of the Console Services](conman/Complete_Reset_of_the_Console_Services.md)
 - [Console known issues](../troubleshooting/README.md#conman)
-- [Console API](../api/console.md)
 
 ## Utility storage
 
@@ -676,7 +674,6 @@ The central DNS infrastructure provides the structural networking hierarchy and 
 
 - [DNS](network/dns/DNS.md)
 - [Manage the DNS Unbound Resolver](network/dns/Manage_the_DNS_Unbound_Resolver.md)
-- [Enable `ncsd` on UANs](network/dns/Enable_ncsd_on_UANs.md)
 - [PowerDNS Configuration](network/dns/PowerDNS_Configuration.md)
 - [PowerDNS Migration Guide](network/dns/PowerDNS_migration.md)
 - [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)

@@ -17,7 +17,7 @@ can be adapted for other image types.
 1. (`ncn-mw#`) Find the path to the IUF logs printed by the `iuf` command. It will look like this:
 
    ```text
-   2023-11-01T14:06:36.128255Z INFO All logs will be stored in /etc/cray/upgrade/csm/iuf/cos-products-20231031/log/20231101140636
+   2023-11-01T14:06:36.128255Z INFO All logs will be stored in /etc/cray/upgrade/csm/iuf/uss-products-20231031/log/20231101140636
    ```
 
    See `install.log` in this directory when subsequent steps reference the IUF logs.
@@ -26,14 +26,14 @@ can be adapted for other image types.
 
    ```text
    2023-11-01T14:58:22.874482Z INFO [prepare-managed-images] END sat-bootprep-run [Failed]
-   2023-11-01T14:58:22.874567Z DBG  [prepare-managed-images] LOG FILE FOR sat-bootprep-run: argo/cos-products-20231031-gdm63-prepare-images-2rkds/cos-products-20231031-gdm63-prepare-images-2rkds-sat-wrapper-2664865581/main.log
+   2023-11-01T14:58:22.874567Z DBG  [prepare-managed-images] LOG FILE FOR sat-bootprep-run: argo/uss-products-20231031-gdm63-prepare-images-2rkds/uss-products-20231031-gdm63-prepare-images-2rkds-sat-wrapper-2664865581/main.log
    ```
 
    The string starting with `argo/` is the key within the `config-data` bucket of the [S3](../glossary.md#simple-storage-service-s3) object
    which contains the log output from `sat bootprep`. Save this S3 key to an environment variable:
 
    ```bash
-   LOGS_S3_KEY="argo/cos-products-20231031-gdm63-prepare-images-2rkds/cos-products-20231031-gdm63-prepare-images-2rkds-sat-wrapper-2664865581/main.log"
+   LOGS_S3_KEY="argo/uss-products-20231031-gdm63-prepare-images-2rkds/uss-products-20231031-gdm63-prepare-images-2rkds-sat-wrapper-2664865581/main.log"
    ```
 
 1. (`ncn-mw#`) Download the workflow SAT logs.
@@ -63,7 +63,7 @@ can be adapted for other image types.
 1. (`ncn-mw#`) Find the `update-managed-cfs-config` SAT logs by looking for a line like the following in the IUF logs:
 
    ```text
-   2023-11-03T17:31:50.121175Z DBG  [update-managed-cfs-config] LOG FILE FOR sat-bootprep-run: argo/cos-products-20231031-sm5qz-update-cfs-config-hh522/cos-products-20231031-sm5qz-update-cfs-config-hh522-sat-wrapper-1367779725/main.log
+   2023-11-03T17:31:50.121175Z DBG  [update-managed-cfs-config] LOG FILE FOR sat-bootprep-run: argo/uss-products-20231031-sm5qz-update-cfs-config-hh522/uss-products-20231031-sm5qz-update-cfs-config-hh522-sat-wrapper-1367779725/main.log
    ```
 
    Note that this may have been logged in a different session within the IUF activity, so a
@@ -73,7 +73,7 @@ can be adapted for other image types.
    which contains the log output from `sat bootprep`. Save this S3 key to an environment variable:
 
    ```bash
-   LOGS_S3_KEY="argo/cos-products-20231031-gdm63-prepare-images-2rkds/cos-products-20231031-gdm63-prepare-images-2rkds-sat-wrapper-2664865581/main.log"
+   LOGS_S3_KEY="argo/uss-products-20231031-gdm63-prepare-images-2rkds/uss-products-20231031-gdm63-prepare-images-2rkds-sat-wrapper-2664865581/main.log"
    ```
 
 1. (`ncn-mw#`) Download the workflow SAT logs.
@@ -255,7 +255,7 @@ can be adapted for other image types.
    - name: "compute-{{base.name}}"
      ref_name: compute_image.aarch64
      base:
-       image_ref: base_cos_image.aarch64
+       image_ref: base_uss_image.aarch64
      configuration: "{{default.note}}compute-{{recipe.version}}{{default.suffix}}"
      configuration_group_names:
      - Compute
@@ -268,12 +268,12 @@ can be adapted for other image types.
 
    ```yaml
    - name: "{{default.note}}{{base.name}}{{default.suffix}}"
-     ref_name: base_cos_image.aarch64
+     ref_name: base_uss_image.aarch64
      base:
        product:
-         name: cos
+         name: uss
          type: recipe
-         version: "{{cos.version}}"
+         version: "{{uss.version}}"
          filter:
            arch: aarch64
    ```
@@ -288,7 +288,7 @@ can be adapted for other image types.
    - name: "uan-{{base.name}}"
      ref_name: uan_image.aarch64
      base:
-       image_ref: base_cos_image.aarch64
+       image_ref: base_uss_image.aarch64
      configuration: "{{default.note}}uan-{{recipe.version}}{{default.suffix}}"
      configuration_group_names:
      - Application

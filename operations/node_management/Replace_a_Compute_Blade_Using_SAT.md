@@ -14,8 +14,8 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
 - The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
 
-  - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
-  - Review the *HPE Cray EX Hand Pump User Guide H-6200*
+    - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
+    - Review the *HPE Cray EX Hand Pump User Guide H-6200*
 
 - The System Admin Toolkit \(SAT\) is installed and configured on the system.
 
@@ -98,7 +98,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    for the slot, and a comma-separated list of the BOS session templates determined in the previous step.
 
    ```bash
-   BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
+   BOS_TEMPLATES=uss-4809
    sat bootsys shutdown --stage bos-operations --bos-limit x9000c3s0 --recursive --bos-templates $BOS_TEMPLATES
    ```
 
@@ -177,6 +177,6 @@ sat swap blade --action enable x9000c3s0
    Use `sat bootsys` to power on and boot the nodes. Specify the appropriate BOS template for the node type.
 
     ```bash
-    BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+    BOS_TEMPLATE=uss-1.4.0-slurm-healthy-compute
     sat bootsys boot --stage bos-operations --bos-limit x9000c3s0 --recursive --bos-templates $BOS_TEMPLATE
     ```

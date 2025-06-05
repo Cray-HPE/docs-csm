@@ -13,8 +13,8 @@ to the following:
 
 * **Barebones Image Recipes**: The barebones recipes contain only the upstream Linux packages needed to successfully
 boot the image on an HPE Cray compute node using upstream packages. Bare-bones recipes are primarily meant to be used
-to validate the IMS tools, without requiring HPE Cray Operating System (COS) content.
-* **COS Recipes**: COS recipes contain a Linux environment with an HPE Cray customized kernel and optimized HPE Cray
+to validate the IMS tools, without requiring HPE User Services Software (USS) content.
+* **USS Image Recipes**: USS image recipes contain a Linux environment with optimized HPE Cray
 services for our most demanding customers and workloads.
 
 HPE Cray provided recipes are uploaded to the Simple Storage Service \(S3\) and registered with IMS as part of the install.

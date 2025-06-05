@@ -125,12 +125,12 @@ The commands in this procedure must be run as the `root` user.
    job to customize an image. These are just default names. Please consult with the site administrator to determine if
    these names have been changed for a given image or recipe.
 
-   | Recipe                          | Recipe Name                                    | Kernel File Name | `initrd` File Name |
-   |---------------------------------|------------------------------------------------|------------------|--------------------|
-   | SLES 15 SP5 `x86_64` Barebones  | `cray-sles15sp3-barebones`                     | `vmlinuz`        | `initrd`           |
-   | SLES 15 SP5 `aarch64` Barebones | `cray-sles15sp3-barebones`                     | `Image`          | `initrd`           |
-   | COS                             | `cray-shasta-compute-sles15sp5.x86_64-1.4.66`  | `vmlinuz`        | `initrd`           |
-   | COS                             | `cray-shasta-compute-sles15sp5.aarch64-1.4.66` | `Image`          | `initrd`           |
+    | Recipe                        | Recipe Name                                            | Kernel File Name | `initrd` File Name |
+    |-------------------------------|--------------------------------------------------------|------------------|--------------------|
+    | SLES 15 SP6 Barebones x86     | `cray-shasta-csm-sles15sp6-barebones-csm-1.7-x86_64`   | `vmlinuz`        | `initrd`           |
+    | SLES 15 SP6 Barebones aarch64 | `cray-shasta-csm-sles15sp6-barebones-csm-1.7-aarch64`  | `Image`          | `initrd`           |
+    | USS x86                       | `uss-1.4.0-93-csm.x86_64`                              | `vmlinuz`        | `initrd`           |
+    | USS aarch64                   | `uss-1.4.0-93-csm.aarch64`                             | `Image`          | `initrd`           |
 
    ```bash
     cray ims jobs create \
