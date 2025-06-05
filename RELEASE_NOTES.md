@@ -48,6 +48,8 @@
   fixing a bug that caused BOS [sessions](operations/boot_orchestration/Sessions.md) to be stuck in `pending` state.
 * BOS logging is significantly more memory efficient, fixing a problem where logging on large scale systems
   could cause [BOS operator](operations/boot_orchestration/BOS_Services.md#bos-operators) Kubernetes pods to be `OOMKilled`.
+* When using the API or CLI to [Modify a BOS session template](operations/boot_orchestration/Manage_a_Session_Template.md#modify-a-session-template),
+  it is no longer required to specify `boot_sets` in the update data (this fixes a regression bug present in CSM 1.6).
 
 ## Deprecations
 
