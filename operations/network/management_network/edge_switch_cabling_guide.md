@@ -9,7 +9,7 @@ This in turn allows for an alternative path to connect storage to the customer s
 
 Currently supported edge switch models:
 
-* [Aruba 8325-32C 32 port 100G QSFP+/QSFP28 JL627A](https://buy.hpe.com/us/en/networking/switches/fixed-port-l3-managed-ethernet-switches/networking-cx-switch-series/hpe-aruba-networking-cx-8325%E2%80%9132c-32p-100g-qsfp-qsfp28-back%E2%80%91to%E2%80%91front-6-fans-2-power-supply-bundle/p/jl627a)
+* [Aruba 8325-32C 32 port 100G QSFP+/QSFP28 JL627A](https://buy.hpe.com/us/en/networking/switches/fixed-port-l3-managed-ethernet-switches/networking-cx-switch-series/hpe-aruba-networking-cx-8325-switch-series/p/jl627a)
 * [Arista 7060CX2](https://www.arista.com/en/products/7060x-series)
 
 ## Network topology
