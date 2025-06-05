@@ -26,7 +26,7 @@ A Kubernetes operator manages the deployment of Vault, based on this definition.
 For more information, refer to the following resources:
 
 - [HashiCorp Vault](HashiCorp_Vault.md)
-- [`Bank-Vaults` home page](https://bank-vaults.dev/)
+- [`Bank-vault` external documentation](https://bank-vaults.dev/docs/concepts/)
 - [Vault external documentation](https://www.vaultproject.io/docs)
 
 ## Jetstack Cert-manager
