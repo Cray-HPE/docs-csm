@@ -26,7 +26,7 @@ The resulting instance is deployed to the `vault` namespace.
 
 For more information, refer to the following resources:
 
-- [`Bank-Vaults` home page](https://bank-vaults.dev/)
+- [`Bank-vaults` external documentation](https://bank-vaults.dev/docs/concepts/)
 - [Vault external documentation](https://www.vaultproject.io/docs)
 
 ## Storage model
