@@ -12,5 +12,4 @@ Refer to the following vendor-specific user guides for more information on Aruba
 
 ## Mellanox
 
-- [NVIDIA Onyx Documentation](https://docs.nvidia.com/networking/spaces/viewspace.action?key=Onyxv393210)
-- [NVIDIA Switch Software (Infiniband/Ethernet)](https://docs.nvidia.com/networking/software/switch-software/index.html#infiniband-ethernet-switch-sw)
+- [NVIDIA Switch Software (Infiniband/Ethernet)](https://docs.nvidia.com/networking/switches/index.html)
