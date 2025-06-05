@@ -34,7 +34,13 @@ fi
 source /srv/cray/resources/common/vars.sh
 source /srv/cray/scripts/metal/lib.sh
 #shellcheck disable=SC2155
-export KUBERNETES_VERSION="v$(cat /etc/cray/kubernetes/version)"
+if [ -f /etc/cray/kubernetes/upgrade ]; then
+  export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/upgrade_version)
+  export KUBERNETES_VERSION="$(cat /etc/cray/kubernetes/upgrade_version)"
+else
+  export KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/version)
+  export KUBERNETES_VERSION="$(cat /etc/cray/kubernetes/version)"
+fi
 #shellcheck disable=SC2046
 echo $(kubeadm init phase upload-certs --upload-certs 2>&1 | tail -1) > /etc/cray/kubernetes/certificate-key
 #shellcheck disable=SC2155
@@ -46,9 +52,20 @@ export PODS_CIDR=$(craysys metadata get kubernetes-pods-cidr)
 #shellcheck disable=SC2155
 export SERVICES_CIDR=$(craysys metadata get kubernetes-services-cidr)
 
+# For K8s 1.24 through 1.30, use the kubeadm.k8s.io/v1beta3 API
+# version. Otherwise, use kubeadm.k8s.io/v1beta4.
+if [[ ${KUBERNETES_MINOR_VERSION} -lt 25 ]]; then
+  k8scfg="/srv/cray/resources/common/1.24/kubeadm.cfg"
+elif [[ ${KUBERNETES_MINOR_VERSION} -lt 27 ]]; then
+  k8scfg="/srv/cray/resources/common/1.25/kubeadm.cfg"
+elif [[ ${KUBERNETES_MINOR_VERSION} -lt 31 ]]; then
+  k8scfg="/srv/cray/resources/common/1.27/kubeadm.cfg"
+else
+  k8scfg="/srv/cray/resources/common/1.31/kubeadm.cfg"
+fi
+
 # Note: for pre 1.3 the kubeadm source file had a .yaml suffix for 1.3+ it is
 # .cfg if we have the .yaml file symlink .cfg to that for 1.2 upgrades.
-k8scfg="/srv/cray/resources/common/kubeadm.cfg"
 k8syaml="/srv/cray/resources/common/kubeadm.yaml"
 if [ -f "${k8syaml}" ]; then
   ln -sf "${k8syaml}" "${k8scfg}"

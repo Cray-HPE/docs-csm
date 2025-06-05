@@ -149,7 +149,6 @@ done
 # Source /etc/cray/upgrade/csm/myenv to get CSM_ARTI_DIR
 source /etc/cray/upgrade/csm/myenv
 k8s_version=$(kubeadm version -o json | jq -r '.clientVersion.gitVersion' | grep -o "v1.[^.]*")
-k8s_minor_version=$(echo ${k8s_version} | cut -d "." -f2)
 
 # Change working directory to CSM_ARTI_DIR
 pushd ${CSM_ARTI_DIR}
@@ -160,27 +159,6 @@ function deploy() {
   # trust issues, so use --charts-path instead of --charts-repo.
   loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path "$1"
 }
-
-# Undeploy the chart if it exists on the system.
-# Use this if a chart has been removed from a manifest and needs
-# to be removed from the system as part of an upgrade.
-function undeploy() {
-  # Now that we're using --keep-history, helm status will return with a STATUS
-  # of "uninstalled" if the chart has already been uninstalled.
-  # If the chart is missing (rc==1) or if uninstalled, return success.
-  helm status "$@" || return 0
-  if [ "$(helm status "$@" | grep STATUS | awk '{print $2}')" = "uninstalled" ]; then
-    return 0
-  fi
-  # Remove the chart.
-  helm uninstall "$@" --keep-history
-}
-
-# Undeploy services if they exist
-if [ ${k8s_minor_version} -gt 24 ]; then
-  # cray-psp is removed in CSM 1.7 with upgrade to K8s >= 1.25, if it exists
-  undeploy -n services cray-psp
-fi
 
 # If there are post-upgrade-*-<k8s_version>.yaml files, deploy charts in those files.
 manifests_dir="${CSM_ARTI_DIR}/build/manifests"
