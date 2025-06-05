@@ -54,7 +54,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Goss Test Fails with Connection Refused](known_issues/goss_tests_fails_with_connection_refused.md)
 * [Helm Chart Deploy Timeouts](known_issues/helm_chart_deploy_timeouts.md)
 * [HPE iLO dropping event subscriptions and not properly transitioning power state in CSM software](known_issues/hpe_systems_not_transitioning_power_state.md)
-* [IMS image creation failure](known_issues/ims_image_creation_failure.md)
 * [NCN health checks known issues](known_issues/issues_with_ncn_health_checks.md)
 * [`kubectl logs -f` returns no space left on device](known_issues/kubectl_logs_no_space_left_on_device.md)
 * [Mellanox `lacp-individual` Limitations](known_issues/mellanox_lacp_individual.md)
@@ -162,7 +161,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 ## Image management
 
 * [Image Job Performance](../operations/image_management/Image_Job_Performance.md)
-* [IMS image creation failure](known_issues/ims_image_creation_failure.md)
 * [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
 * [IMS image delete loses the `arch` information](known_issues/ims_image_delete_loses_arch.md)
 * [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
