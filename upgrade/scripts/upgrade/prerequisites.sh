@@ -586,11 +586,13 @@ fi
 # to be removed from the system as part of an upgrade.
 function undeploy() {
   # Check if the chart exists by running helm status
-  if helm status "$@"; then
+  if [[ $(helm status -o json "$@" 2> /dev/null | jq -r .info.status) == "deployed" ]]; then
+    echo "Chart ${*: -1} exists. Uninstalling it now."
     # Remove the chart completely without keeping history.
     helm uninstall "$@"
     return $?
   else
+    echo "Chart ${*: -1} doesn't exist"
     return 0
   fi
 }
