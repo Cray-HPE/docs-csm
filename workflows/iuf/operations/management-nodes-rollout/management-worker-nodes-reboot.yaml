@@ -76,7 +76,7 @@ spec:
                 - name: dryRun
                   value: "{{$.DryRun}}"
                 - name: mediaHost
-                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                  
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"
                 - name: scriptContent
                   value: |
                     echo "NOTICE This workflow will reboot worker nodes according to --limit-management-rollout parameter."
@@ -101,7 +101,7 @@ spec:
                 - name: dryRun
                   value: "{{$.DryRun}}"
                 - name: mediaHost
-                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                  
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"
                 - name: scriptContent
                   value: |
                     echo '{{inputs.parameters.global_params}}' > global.params.data
@@ -229,12 +229,12 @@ spec:
               - name: dryRun
                 value: "{{$.DryRun}}"
               - name: mediaHost
-                value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                
+                value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"
               - name: scriptContent
                 value: |
                   sets="{{inputs.parameters.sets}}"
                   current_count="{{inputs.parameters.counter}}"
-                  IFS=' ' read -ra set_array  <<< "$sets"
+                  IFS=' ' read -ra set_array <<< "$sets"
                   reboot_set=${set_array[$current_count]}
                   if [[ -z $reboot_set ]]; then
                     echo "NOTICE This step received no nodes to reboot. Continuing without rebooting any worker nodes"
@@ -263,7 +263,7 @@ spec:
                   value: "{{item}}"
             withParam: "{{tasks.get-reboot-set.outputs.result}}"
           - name: platform-health-checks
-            dependencies: 
+            dependencies:
               - reboot-and-post-check
             templateRef:
               name: ncn-reboot-common
@@ -273,7 +273,7 @@ spec:
                 - name: dryRun
                   value: "{{$.DryRun}}"
           - name: check-bgp-session
-            dependencies: 
+            dependencies:
               - reboot-and-post-check
             templateRef:
               name: ssh-template
@@ -296,7 +296,7 @@ spec:
           - name: move-to-next-set
             template: move-to-next-set
             dependencies:
-              -  platform-health-checks
+              - platform-health-checks
               - check-bgp-session
             arguments:
               parameters:
@@ -340,7 +340,7 @@ spec:
           - name: global_params
           - name: targetNcn
       dag:
-        tasks:    
+        tasks:
           - name: failover-leader
             templateRef:
               name: ssh-template
@@ -425,7 +425,7 @@ spec:
               - name: targetNcn
                 value: "{{inputs.parameters.targetNcn}}"
         - name: wait-for-cloud-init
-          dependencies: 
+          dependencies:
             - reboot-node
           templateRef:
             name: ncn-reboot-common
@@ -439,7 +439,7 @@ spec:
               - name: mediaHost
                 value: 'ncn-m001'
         - name: wait-for-k8s
-          dependencies: 
+          dependencies:
             - wait-for-cloud-init
           templateRef:
             name: kubectl-and-curl-template
@@ -467,7 +467,7 @@ spec:
                     sleep 15
                   done
         - name: wait-for-cfs
-          dependencies: 
+          dependencies:
             - wait-for-cloud-init
           templateRef:
             name: ncn-reboot-common
@@ -479,7 +479,7 @@ spec:
               - name: targetNcn
                 value: "{{inputs.parameters.targetNcn}}"
         - name: uncordon-node
-          dependencies: 
+          dependencies:
             - wait-for-k8s
           templateRef:
             name: ssh-template

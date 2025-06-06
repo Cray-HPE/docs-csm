@@ -45,7 +45,7 @@ spec:
                 - name: dryRun
                   value: "{{inputs.parameters.dryRun}}"
                 - name: mediaHost
-                  value: "{{inputs.parameters.media_host}}"                         
+                  value: "{{inputs.parameters.media_host}}"
                 - name: scriptContent
                   value: |
                     echo "INFO NCN pre-reboot checks"
@@ -58,7 +58,7 @@ spec:
                     else
                       echo "INFO Successfully completed platform health check"
                     fi
-                    
+
                     echo "INFO Checking the status of the slurmctld pod"
                     result=$(kubectl get pod -n user -lapp=slurmctld -o jsonpath="{.items[*].status.phase}" 2>&1)
                     if [[ "$result" != "Running" ]]; then
@@ -67,7 +67,7 @@ spec:
                     else
                       echo "INFO $(kubectl get pod -n user -lapp=slurmctld -o jsonpath="{.items[*].metadata.name}") is running"
                     fi
-                    
+
                     echo "INFO Checking the status of the slurmdbd pod"
                     result=$(kubectl get pod -n user -lapp=slurmdbd -o jsonpath="{.items[*].status.phase}" 2>&1)
                     if [[ "$result" != "Running" ]]; then
@@ -87,7 +87,7 @@ spec:
                     else
                       echo "INFO Successfully Validated connection to the BGP neighbors of a switch"
                     fi
-                    
+
                     echo "INFO Checking if any nodes are in a failed state in CFS"
                     failed_nodes=$(cray cfs v3 components list --status failed --format json | jq -r '[.components[].id]|join(",")' 2>&1)
                     if [ -z "$failed_nodes" ]; then
@@ -125,7 +125,7 @@ spec:
                 - name: dryRun
                   value: "{{inputs.parameters.dryRun}}"
                 - name: mediaHost
-                  value: "{{inputs.parameters.media_host}}"                         
+                  value: "{{inputs.parameters.media_host}}"
                 - name: scriptContent
                   value: |
                     TARGET_NCN="{{inputs.parameters.targetNcn}}"
@@ -259,7 +259,7 @@ spec:
                     while ! ssh "${TARGET_NCN}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'ls /var/log/cloud-init-output.log'
                     do
                       echo "DEBUG wait for ssh: $TARGET_NCN"
-                      sleep $(( ( RANDOM % 10 )  + 1 ))
+                      sleep $(( ( RANDOM % 10 ) + 1 ))
                     done
 
                     # wait for cloud-init

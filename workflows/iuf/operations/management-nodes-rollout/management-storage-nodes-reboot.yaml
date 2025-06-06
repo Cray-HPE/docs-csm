@@ -24,7 +24,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name:  management-storage-nodes-reboot
+  name: management-storage-nodes-reboot
 spec:
   tolerations:
     - key: "node-role.kubernetes.io/master"
@@ -76,7 +76,7 @@ spec:
                 - name: dryRun
                   value: "{{$.DryRun}}"
                 - name: mediaHost
-                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                  
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"
                 - name: scriptContent
                   value: |
                     echo "NOTICE This workflow will reboot storage nodes according to --limit-management-rollout parameter."
@@ -101,7 +101,7 @@ spec:
                 - name: dryRun
                   value: "{{$.DryRun}}"
                 - name: mediaHost
-                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                  
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"
                 - name: scriptContent
                   value: |
                     echo '{{inputs.parameters.global_params}}' > global.params.data
@@ -179,13 +179,13 @@ spec:
               - name: dryRun
                 value: "{{$.DryRun}}"
               - name: mediaHost
-                value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"                
+                value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"
               - name: scriptContent
                 value: |
                   sets="{{inputs.parameters.sets}}"
                   current_count="{{inputs.parameters.counter}}"
                   # Storage Nodes reboot sequentially. Add single node to set
-                  IFS=' ' read -ra set_array  <<< "$sets"
+                  IFS=' ' read -ra set_array <<< "$sets"
                   reboot_set=${set_array[$current_count]}
                   if [[ -z $reboot_set ]]; then
                     echo "NOTICE This step received no nodes to reboot. Exiting without rebooting any storage nodes"
@@ -268,7 +268,7 @@ spec:
                 - name: dryRun
                   value: 'false'
           - name: wait-for-cfs
-            dependencies: 
+            dependencies:
               - wait-for-cloud-init
             templateRef:
               name: ncn-reboot-common
@@ -280,7 +280,7 @@ spec:
                 - name: targetNcn
                   value: "{{inputs.parameters.targetNcn}}"
           - name: platform-health-checks
-            dependencies: 
+            dependencies:
               - wait-for-cfs
               - wait-for-node-health
             templateRef:
