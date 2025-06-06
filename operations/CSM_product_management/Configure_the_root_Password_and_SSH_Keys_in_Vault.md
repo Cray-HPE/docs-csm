@@ -29,7 +29,9 @@ Specifically, the `write_root_secrets_to_vault.py` script reads the following fr
 - The private SSH key from `/root/.ssh/id_rsa`.
 - The public SSH key from `/root/.ssh/id_rsa.pub`.
 
+If the `--config-file` argument is used, the script will also read in the `root` user's SSH configuration file.
 For more information on this script, see [Update Root Secrets In Vault](../security_and_authentication/Update_Root_Secrets_In_Vault.md).
+For more information on creating an SSH configuration file, see [SSH configuration files](Set_Up_Passwordless_SSH.md#ssh-configuration-files).
 
 This script can be run on any Kubernetes management NCN (master or worker). It only needs to be run once for
 the cluster, because the same Vault credentials are used for all management NCNs.

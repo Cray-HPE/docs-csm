@@ -241,6 +241,8 @@ CSM provides some tools to help backup and restore the contents of this file.
 - [Back up the SSH configuration to Vault](#back-up-the-ssh-configuration-to-vault)
 - [Delete the SSH configuration from Vault](#delete-the-ssh-configuration-from-vault)
 - [Restore the SSH configuration from Vault](#restore-the-ssh-configuration-from-vault)
+    - [Automatic restore](#automatic-restore)
+    - [Manual restore](#manual-restore)
 
 ### Back up the SSH configuration to Vault
 
@@ -272,6 +274,19 @@ each will overwrite the data from the previous. The expectation is that all NCNs
 ```
 
 ### Restore the SSH configuration from Vault
+
+#### Automatic restore
+
+In CSM 1.7, if the SSH configuration has been saved in Vault, then it is restored on management nodes when
+[Management Node Personalization](../configuration_management/Management_Node_Personalization.md) occurs,
+by the CSM-provided `csm.ssh_config` Ansible role.
+
+Although this role is not included prior to CSM 1.7, an administrator could manually add it into a
+configuration management Git repository in the [Version Control Service (VCS)](../../glossary.md#version-control-service-vcs),
+and include it the [CFS configurations](../configuration_management/CFS_Configurations.md) for their management nodes.
+For the contents of the role, see [`csm.ssh_config`](https://github.com/Cray-HPE/csm-config/tree/master/ansible/roles/csm.ssh_config).
+
+#### Manual restore
 
 (`ncn#`) The contents of the root SSH configuration file can be restored from Vault using the following script:
 
