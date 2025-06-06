@@ -25,9 +25,7 @@ Two parameters need to be set to configure SBPS, the `rootfs_provider` and the `
 
 ## Boot set `rootfs_provider` parameter
 
-The following value needs to be set in the boot set of the session template in order to make SBPS the `rootfs` provider:
-
-`"rootfs_provider":` Set to `"sbps"`
+In the boot set of the session template, the `rootfs_provider` field must be set to `sbps` in order to make SBPS the `rootfs` provider.
 
 ## Boot set `rootfs_provider_passthrough` parameter
 
@@ -36,18 +34,16 @@ The following value needs to be set in the boot set of the session template in o
 In a BOS session template, the `rootfs_provider_passthrough` parameter should be set to the following string.
 
 ```text
-rootfs_provider_passthrough=sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
+sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
 ```
 
 The two parameters/strings that need to be customized are 'my-system' and 'my-site-domain'.
-Use the following commands to find the values for these parameters/strings.
+(`ncn-mw#`) Use the following commands to find the values for these parameters/strings.
 
-```bash
-(`ncn-mw#`) craysys metadata get system-name
-<my-system>
-(`ncn-mw#`) craysys metadata get site-domain
-<my-site-domain>
-```
+| Parameter        | Command                            |
+| ---------------- | ---------------------------------- |
+| `my-system`      | `craysys metadata get system-name` |
+| `my-site-domain` | `craysys metadata get site-domain` |
 
 **Note:** These two elements should be joined with a '.' in the `rootfs_provider_passthrough` string.
 
@@ -62,13 +58,13 @@ Here is a detailed explanation of each of the elements of the `rootfs_provider_p
 For SBPS, the `rootfs_provider_passthrough` string should adhere to this format:
 
 ```text
-rootfs_provider_passthrough=<transport>:<schema version>:<IQN Domain>:<DNS SRV record>:<client discovery timeout in seconds>:<ramroot>
+<transport>:<schema version>:<IQN Domain>:<DNS SRV record>:<client discovery timeout in seconds>:<ramroot>
 ```
 
 Here is an example string for reference.
 
 ```text
-rootfs_provider_passthrough=sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
+sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
 ```
 
 The variables used in this parameter represent the following:
@@ -160,7 +156,7 @@ This can be left empty. Any string except `"0"` is interpreted as true. The exam
 Here is the example once again.
 
 ```text
-rootfs_provider_passthrough=sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
+sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
 ```
 
 ## Example session template input file
