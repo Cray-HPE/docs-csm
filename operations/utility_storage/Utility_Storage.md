@@ -53,8 +53,8 @@ Ceph tools' usage documentation
 - [Ceph Orchestrator Usage](Ceph_Orchestrator_Usage.md)
 - [CSM RBD Tool Usage](CSM_rbd_tool_Usage.md)
 - [Ceph Service Check Script Usage](Ceph_Service_Check_Script_Usage.md)
-- [cubs_tool Usage](Cubs_tool_Usage.md)
-- [`ceph-upgrade-tool` Usage](utility_storage/Ceph_upgrade_tool_Usage.md)
+- [`cubs_tool` Usage](Cubs_tool_Usage.md)
+- [`ceph-upgrade-tool` Usage](Ceph_upgrade_tool_Usage.md)
 
 ## Storage troubleshooting references
 
@@ -67,7 +67,7 @@ Ceph tools' usage documentation
 RGW
 
 - [Troubleshoot if RGW Health Check Fails](Troubleshoot_RGW_Health_Check_Fail.md)
-- [Troubleshoot an Unresponsive Rados-Gateway (radosgw) S3 Endpoint](Troubleshoot_an_Unresponsive_S3_Endpoint.md)
+- [Troubleshoot an Unresponsive Rados-Gateway (`radosgw`) S3 Endpoint](Troubleshoot_an_Unresponsive_S3_Endpoint.md)
 
 OSD
 

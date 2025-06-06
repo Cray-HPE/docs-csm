@@ -724,6 +724,12 @@ VRFs
 - operations/network/management_network/aruba/bgp_basic.md
 ASes
 
+- operations/network/management_network/firmware/update_management_network_firmware.md
+S3048-ON
+S4148T-ON
+S4148F-ON
+vsx-pair
+
 - operations/network/management_network/mellanox/bgp_basic.md
 ASes
 
