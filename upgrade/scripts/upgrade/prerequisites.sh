@@ -586,16 +586,29 @@ fi
 # to be removed from the system as part of an upgrade.
 function undeploy() {
   # Check if the chart exists by running helm status
-  # If the chart is missing (rc==1), return success.
-  helm status "$@" || return 0
-  # Remove the chart completely without keeping history.
-  helm uninstall "$@"
+  if helm status "$@"; then
+    # Remove the chart completely without keeping history.
+    helm uninstall "$@"
+    return $?
+  else
+    return 0
+  fi
 }
 
 # Undeploy Istio charts if they exist
 # cray-istio-operator and cray-istio-deploy are removed with upgrade to Istio 1.26.0
-undeploy -n istio-system cray-istio-operator
-undeploy -n istio-system cray-istio-deploy
+state_name="UNDEPLOY_ISTIO_CHARTS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    undeploy -n istio-system cray-istio-operator
+    undeploy -n istio-system cray-istio-deploy
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
 
 # Apply labels to Istio Base Resources
 # Running the label-istio-resources script to apply necessary labels to cray-istio-base chart resources.
@@ -666,7 +679,19 @@ function delete_helm_secrets() {
   done <<< "$secrets"
 }
 
-delete_helm_secrets cray-istio
+# State for deleting Helm secrets
+state_name="DELETE_CRAY_ISTIO_HELM_SECRETS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    # Delete all Helm secrets for a given chart across all namespaces and versions
+    delete_helm_secrets cray-istio
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
 
 # Restart vault pods because pods were having the older proxyv2 image version.
 # Running the rollout restart script to restart the required resources in istio-injection=enabled namespaces.
