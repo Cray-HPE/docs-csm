@@ -270,12 +270,6 @@ Replace an HPE Cray EX liquid-cooled compute blade.
     cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
     ```
 
-1. Optional: If necessary, reload DVS on NCNs.
-
-    Reload DVS if it is running over the NMN. The recommendation is to run DVS over the HSN for simplified management and significant performance benefits.
-
-    For more information, see *HPE User Services Software Administration Guide: CSM on HPE Cray EX Systems (S-8063)*.
-
 1. (`ncn-mw#`) Use boot orchestration to power on and boot the nodes.
 
     Specify the appropriate BOS template for the node type.

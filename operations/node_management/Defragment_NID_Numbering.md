@@ -16,8 +16,6 @@ The example in this procedure removes NID gaps from 2 cabinets of compute nodes 
 * [Prerequisites](#prerequisites)
 * [Defragment NID script functionality and limitations](#defragment-nid-script-functionality-and-limitations)
 * [NID defragmentation procedure](#nid-defragmentation-procedure)
-    * [Step 1: Run the defragmentation script](#step-1-run-the-defragmentation-script)
-    * [Step 2: Perform reload of DVS/LNet service](#step-2-perform-reload-of-dvslnet-service)
 * [Troubleshooting](#troubleshooting)
     * [Discovery errors](#discovery-errors)
     * [Invalid NID range](#invalid-nid-range)
@@ -46,8 +44,6 @@ Limitations of the `defragment_nids.py` script:
 * SLS node entries that do not exist in HSM are only removed if their NID falls within the specified NID block.
 
 ## NID defragmentation procedure
-
-### Step 1: Run the defragmentation script
 
 1. (`ncn-mw#`) Choose the starting NID for the NID block (e.g., 1000).
 
@@ -285,15 +281,6 @@ Limitations of the `defragment_nids.py` script:
     Nodes Removed From SLS:
         x1000c0s2b0n1,x1000c0s2b1n1
     ```
-
-### Step 2: Perform reload of DVS/LNet service
-
-DVS node maps on NCN worker nodes and gateway nodes have entries of compute nodes that include their NIDs. Because of that, the
-NID defragmentation process will impact the NCN worker and gateway nodes.
-
-Carry out the _Procedure To Perform After CSM Defragmentation of Compute Node Identifiers_ documented in publication
-_HPE Cray Supercomputing User Services Software Administration
-Guide: CSM on HPE Cray EX Systems (1.0.0 Rev A) (S-8063)_.
 
 ## Troubleshooting
 

@@ -6,7 +6,7 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 
-- Knowledge of whether Data Virtualization Service (DVS) is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
+- Knowledge of whether the Scalable Boot Projection Service (SBPS) is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
 
 - The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.
 
@@ -133,12 +133,12 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 
 ### 7. Record MAC and IP addresses for nodes
 
-**IMPORTANT**: Record the NMN MAC and IP addresses for each node in the blade (labeled `Node Maintenance Network`). To prevent disruption in DVS when over operating the NMN, these addresses must
+**IMPORTANT**: Record the NMN MAC and IP addresses for each node in the blade (labeled `Node Maintenance Network`). To prevent disruption in SBPS when over operating the NMN, these addresses must
 be maintained in the HSM when the blade is swapped and discovered.
 
 The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be deleted* from the HSM.
 
-1. (`ncn-mw#`) **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.** Query HSM to determine the `ComponentID`, MAC addresses, and IP addresses for each node in the blade.
+1. (`ncn-mw#`) **Skip this step if SBPS is operating over the HSN, otherwise proceed with this step.** Query HSM to determine the `ComponentID`, MAC addresses, and IP addresses for each node in the blade.
 
     The prerequisites show an example of how to gather HSM values and store them to a file.
 

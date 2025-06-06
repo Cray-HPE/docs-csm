@@ -143,47 +143,8 @@ to ensure that the file system and its quorum nodes are quiesced before shutting
 1. If any external filesystems are mounted on the worker nodes, unmount them.
 
    Lustre, Spectrum Scale (GPFS), and NFS filesystems are usually defined in VCS cos-config-management in the `group_vars`
-   directory structure, such as `group_vars/all/filesystems.yml` or `group_vars/Management_Worker/filesystems.yml`. These steps
-   will run the `cos-config-management` Ansible playbook `configure_fs_unload.yml` using the variables set in `filesystems.yml`.
+   directory structure, such as `group_vars/all/filesystems.yml` or `group_vars/Management_Worker/filesystems.yml`.
 
-   1. (`ncn-m#`) Copy the `dvs_reload_ncn script` from `ncn-w001` to a master node.
-
-   ```bash
-   scp ncn-w001:/opt/cray/dvs/default/sbin/dvs_reload_ncn /tmp
-   ```
-
-   1. (`ncn-m#`) Get a list of worker nodes.
-
-   ```bash
-   WORKERS=$(cray hsm state components list --subrole Worker --type Node --format json | jq -r .Components[].ID | xargs)
-   echo $WORKERS
-   ```
-
-   1. (`ncn-m#`) Determine CFS configuration assigned to worker nodes. This is expected to be the same for all worker nodes.
-
-   ```bash
-   for node in $WORKERS; do cray cfs components describe $node --format json | jq -r ' .id+" "+.desiredConfig'; done
-   ```
-
-   1. (`ncn-m#`) Set variable for the configuration assigned to worker nodes found in the previous step.
-
-   ```bash
-   CONFIGURATION=
-   echo $CONFIGURATION
-   ```
-
-   1. (`ncn-m#`) Run CFS `configure_fs_unload` Ansible playbook on worker nodes.
-
-   ```bash
-   /tmp/dvs_reload_ncn -c $CONFIGURATION -p configure_fs_unload.yml $WORKERS
-   ```
-
-   1. (`ncn-m#`) Wait for the resulting Kubernetes CFS job (`CFSSESSION`) from the previous step to complete before continuing.
-
-   ```bash
-   kubectl logs -f -n services -c ansible CFSSESSION
-   ```
-
-## Next Steps
+## Next steps
 
 Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.

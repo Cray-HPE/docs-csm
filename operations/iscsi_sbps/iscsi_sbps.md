@@ -3,26 +3,24 @@
 * [Introduction](#introduction)
 * [iSCSI SBPS solution details](#iscsi-sbps-solution-details)
 * [Steps to achieve SBPS](#steps-to-achieve-sbps)
-* [Steps to continue using DVS based projection](#steps-to-continue-using-dvs-based-projection)
-* [Steps to disable DVS and CPS](#steps-to-disable-dvs-and-cps)
 * [Glossary](#glossary)
 
 ## Introduction
 
 iSCSI based boot content projection solution named Scalable Boot Content Projection Service (SBPS)
-is an alternate boot content projection solution and planning to replace current Cray
-[Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) to project boot content like `rootfs`
-and [Cray Programming Environment (CPE)](../../glossary.md#cray-programming-environment-cpe) images. SBPS is aimed to offer
-better reliability, availability, security, ease and speed of deployment and ease of management than DVS.
-The SBPS solution is offered from CSM 1.6 onwards and this solution is spread across different components, including:
+is a boot content projection solution that replaces the Cray
+[Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and
+[Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs).
+SBPS projects boot content like `rootfs` and [Cray Programming Environment (CPE)](../../glossary.md#cray-programming-environment-cpe) images.
+SBPS is aimed to offer better reliability, availability, security, ease and speed of deployment and ease of management than CPS/DVS.
+SBPS was introduced in CSM 1.6. In CSM 1.7, support is removed for projecting root filesystems and PE images using CPS and DVS.
+
+The SBPS solution is spread across different components, including:
 
 * [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos)
 * [User Services Software (USS)](../../glossary.md#user-services-software-uss)
 * The core service SBPS Marshal Agent is delivered as an RPM that gets deployed by the
   [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
-
-In CSM 1.6, both DVS and SBPS will coexist, but SBPS will be the default and DVS is deprecated.
-Note: DVS is planned to be removed in CSM 1.7.
 
 ### Key features
 
@@ -37,8 +35,7 @@ Note: DVS is planned to be removed in CSM 1.7.
 * Enables future work related to image access control, [multi-tenancy](../multi-tenancy/Overview.md),
   and related zero trust principles
 * Does not require duplication of images from [S3](../../glossary.md#simple-storage-service-s3)
-* Supports monitoring of [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps)
-  for performance and reliability engineering
+* Supports monitoring for performance and reliability engineering
 * Aligns with future plans for similar functionality in next generation systems management solutions
 * Easy to deploy and manage
 
@@ -441,34 +438,6 @@ In order to monitor iSCSI SBPS target statistics, one may monitor metrics series
 statistics on LIO portal network endpoints, and so on.
 
 Refer to [iSCSI Metrics](https://github.com/Cray-HPE/sbps-marshal/blob/main/iscsi_metrics.md) for details.
-
-## Steps to continue using DVS based projection
-
-If a user wants to continue using DVS, then during the BOS session template must use the following values in its boot sets:
-
-```text
-rootfs_provider: "cpss3"
-rootfs_provider_passthrough: "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0"
-```
-
-If the `sat` command is used to create the BOS session template, then comment out the two lines marked SBPS and uncomment the above
-two lines marked CPS in `vcs/bootprep/compute-and-uan-bootprep.yaml`, and then initiate the compute node/UAN boot. Refer to the section
-`Content Projection Service` in the publication
-`HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray EX Systems (S-8063)`
-for more details on DVS based boot content projection of `rootfs`/`PE` images.
-
-**Note:**: The steps in [Steps to achieve SBPS](#steps-to-achieve-sbps) are not relevant and should not be followed if DVS is used.
-
-## Steps to disable DVS and CPS
-
-Follow this sequence of operations:
-
-1. Disable DVS
-1. Uninstall CPS
-
-To disable DVS, refer to the section `DVS and SBPS` and to uninstall CPS, please refer to the section `Uninstall CPS`
-under the content `Scalable Boot Projection Service` documented in the publication
-`HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)`.
 
 ## Glossary
 

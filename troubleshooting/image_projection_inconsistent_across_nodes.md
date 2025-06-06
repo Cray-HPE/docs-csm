@@ -8,7 +8,6 @@
 ## Introduction
 
 This issue described is for content projection not working consistently across nodes.
-This has been observed with iSCSI SBPS but it is also possible that this could happen when using DVS.
 
 ## Example of Error
 

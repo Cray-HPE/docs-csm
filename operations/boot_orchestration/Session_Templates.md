@@ -51,7 +51,7 @@ The following is an example BOS session template:
   "cfs": {
       "configuration": "example-configuration"
   },
-  "enable_cfs": true,
+  "enable_cfs": true
 }
 ```
 
@@ -150,7 +150,7 @@ The `rootfs` is the root file system.
 `rootfs_provider` identifies the mechanism that provides the root file system for the node.
 
 In the case of the [User Services Software (USS)](../../glossary.md#user-services-software-uss) image, the `rootfs_provider` is HPE's
-[iSCSI SBPS (Scalable Boot Content Projection Service)](../iscsi_sbps/iscsi_sbps.md) to deliver the content.
+[iSCSI SBPS (Scalable Boot Content Projection Service)](../iscsi_sbps/iscsi_sbps.md).
 SBPS projects the root file system onto the nodes as a SquashFS image. This is provided via an overlay file system which is set up in dracut.
 
 `rootfs_provider_passthrough` is a string that is passed through to the provider of the `rootfs`. This string can contain additional information that the provider will act upon.
@@ -167,9 +167,8 @@ BOS fills in the protocol based on the value provided in `rootfs_provider`. If B
 BOS finds the `rootfs_provider` and `etag` values in the manifest file in the session template in the boot set.
 The `rootfs_provider_passthrough` parameters are appended to the `root` parameter without modification. They are "passed through", as the name implies.
 
-Currently, the only `rootfs` providers that BOS recognizes are `sbps`.
-
-* For more information on `sbps`, see [Create a Session Template to Boot Compute Nodes with SBPS](Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md).
+Currently, the only `rootfs` provider that BOS recognizes is `sbps`.
+For more information on `sbps`, see [Create a Session Template to Boot Compute Nodes with SBPS](Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md).
 
 #### `root` kernel parameter example
 
@@ -184,7 +183,7 @@ The following table explains the different pieces in the preceding example.
 | Protocol                                 | `sbps-s3`                                                                  | The protocol used to mount the root file system, using SBPS in this example.                                            |
 | `rootfs_provider` location               | `s3://boot-images/4fab0408-0bfe-4668-b957-964f8ff0e4e9/rootfs`             | The `rootfs_provider` location is a SquashFS image stored in S3.                                                        |
 | `etag`                                   | `b6ea7a2314d54dead0c94223863b3488-1977`                                    | The `Etag` (entity tag) is the identifier of the SquashFS image in S3.                                                  |
-| `rootfs_provider_passthrough` parameters | `sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:30` | These are additional parameters passed through to SBPS in this example, which it uses to properly mount the file system. |
+| `rootfs_provider_passthrough` parameters | `sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:30` | These are additional parameters passed through to SBPS in this example.                                                 |
 
 ### Overriding configuration
 

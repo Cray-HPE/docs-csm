@@ -34,29 +34,6 @@ UAN boot images and a BOS session template have been created. See [Image Prepara
     }
     ```
 
-    The first attempt to reboot the UANs will most likely fail. The UAN boot may hang and the UAN console will look similar to the following:
-
-    ```text
-    2021-03-19 01:32:41 dracut-initqueue[420]: DVS: node map generated.
-    2021-03-19 01:32:41 katlas: init_module: katlas loaded, currently disabled
-    2021-03-19 01:32:41
-    2021-03-19 01:32:41 DVS: Revision: kbuild Built: Mar 17 2021 @ 15:14:05 against LNet 2.12.4
-    2021-03-19 01:32:41 DVS debugfs: Revision: kbuild Built: Mar 17 2021 @ 15:14:05 against LNet 2.12.4
-    2021-03-19 01:32:41 dracut-initqueue[420]: DVS: loadDVS: successfully added 10 new nodes into map.
-    2021-03-19 01:32:41 ed dvsproc module.
-    2021-03-19 01:32:41 DVS: message size checks complete.
-    2021-03-19 01:32:41 dracut-initqueuedvs_thread_generator: Watching pool DVS-IPC_msg (id 0)
-    2021-03-19 01:32:41 [420]: DVS: loaded dvs module.
-    2021-03-19 01:32:41 dracut-initqueue[420]: mount is: /opt/cray/cps-utils/bin/cpsmount.sh -a api-gw-service-nmn.local -t dvs -T 300 -i nmn0 -e 3116cf653e84d265cf8da94956f34d9e-181 s3://boot-images/763213c7-3d5f-4f2f-9d8a-ac6086583f43/rootfs /tmp/cps
-    2021-03-19 01:32:41 dracut-initqueue[420]: 2021/03/19 01:31:01 cpsmount_helper Version: 1.0.0
-    2021-03-19 01:32:47 dracut-initqueue[420]: 2021/03/19 01:31:07 Adding content: s3://boot-images/763213c7-3d5f-4f2f-9d8a-ac6086583f43/rootfs 3116cf653e84d265cf8da94956f34d9e-181 dvs
-    2021-03-19 01:33:02 dracut-initqueue[420]: 2021/03/19 01:31:22 WARN: readyForMount=false type=dvs ready=0 total=2
-    2021-03-19 01:33:18 dracut-initqueue[420]: 2021/03/19 01:31:38 WARN: readyForMount=false type=dvs ready=0 total=2
-    2021-03-19 01:33:28 dracut-initqueue[420]: 2021/03/19 01:31:48 2 dvs servers [10.252.1.7 10.252.1.8]
-    ```
-
-    If this occurs, repeat the BOS command.
-
 1. (`ncn-mw#`) Retrieve the BOS session name from the output of the `cray bos v2 session create` command in the previous step.
 
     ```bash

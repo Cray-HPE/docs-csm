@@ -166,7 +166,6 @@ PASS - [cray-cfs-api]: https://api-gw-service-nmn.local/apis/cfs/v3/sessions - 2
 PASS - [cray-console-data]: https://api-gw-service-nmn.local/apis/consoledata/liveness - 204
 PASS - [cray-console-node]: https://api-gw-service-nmn.local/apis/console-node/console-node/liveness - 204
 PASS - [cray-console-operator]: https://api-gw-service-nmn.local/apis/console-operator/console-operator/liveness - 204
-SKIP - [cray-cps]: https://api-gw-service-nmn.local/apis/v2/cps/contents - virtual service not found
 PASS - [cray-fas]: https://api-gw-service-nmn.local/apis/fas/v1/snapshots - 200
 PASS - [cray-hbtd]: https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/health - 200
 PASS - [cray-hmnfd]: https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/health - 200
@@ -190,7 +189,6 @@ PASS - [cray-cfs-api]: https://api.cmn.eniac.dev.cray.com/apis/cfs/v3/sessions -
 PASS - [cray-console-data]: https://api.cmn.eniac.dev.cray.com/apis/consoledata/liveness - 204
 PASS - [cray-console-node]: https://api.cmn.eniac.dev.cray.com/apis/console-node/console-node/liveness - 204
 PASS - [cray-console-operator]: https://api.cmn.eniac.dev.cray.com/apis/console-operator/console-operator/liveness - 204
-SKIP - [cray-cps]: https://api.cmn.eniac.dev.cray.com/apis/v2/cps/contents - virtual service not found
 PASS - [cray-fas]: https://api.cmn.eniac.dev.cray.com/apis/fas/v1/snapshots - 200
 PASS - [cray-hbtd]: https://api.cmn.eniac.dev.cray.com/apis/hbtd/hmi/v1/health - 200
 PASS - [cray-hmnfd]: https://api.cmn.eniac.dev.cray.com/apis/hmnfd/hmi/v2/health - 200
@@ -219,7 +217,6 @@ PASS - [cray-cfs-api]: https://api.chn.eniac.dev.cray.com/apis/cfs/v3/sessions -
 PASS - [cray-console-data]: https://api.chn.eniac.dev.cray.com/apis/consoledata/liveness - 404
 PASS - [cray-console-node]: https://api.chn.eniac.dev.cray.com/apis/console-node/console-node/liveness - 404
 PASS - [cray-console-operator]: https://api.chn.eniac.dev.cray.com/apis/console-operator/console-operator/liveness - 404
-SKIP - [cray-cps]: https://api.chn.eniac.dev.cray.com/apis/v2/cps/contents - virtual service not found
 PASS - [cray-fas]: https://api.chn.eniac.dev.cray.com/apis/fas/v1/snapshots - 404
 PASS - [cray-hbtd]: https://api.chn.eniac.dev.cray.com/apis/hbtd/hmi/v1/health - 404
 PASS - [cray-hmnfd]: https://api.chn.eniac.dev.cray.com/apis/hmnfd/hmi/v2/health - 404
@@ -247,7 +244,6 @@ PASS - [cray-cfs-api]: https://api-gw-service-nmn.local/apis/cfs/v3/sessions - 2
 PASS - [cray-console-data]: https://api-gw-service-nmn.local/apis/consoledata/liveness - 204
 PASS - [cray-console-node]: https://api-gw-service-nmn.local/apis/console-node/console-node/liveness - 204
 PASS - [cray-console-operator]: https://api-gw-service-nmn.local/apis/console-operator/console-operator/liveness - 204
-SKIP - [cray-cps]: https://api-gw-service-nmn.local/apis/v2/cps/contents - virtual service not found
 PASS - [cray-fas]: https://api-gw-service-nmn.local/apis/fas/v1/snapshots - 200
 PASS - [cray-hbtd]: https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/health - 200
 PASS - [cray-hmnfd]: https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/health - 200
@@ -271,7 +267,6 @@ PASS - [cray-cfs-api]: https://api.cmn.eniac.dev.cray.com/apis/cfs/v3/sessions -
 PASS - [cray-console-data]: https://api.cmn.eniac.dev.cray.com/apis/consoledata/liveness - 204
 PASS - [cray-console-node]: https://api.cmn.eniac.dev.cray.com/apis/console-node/console-node/liveness - 204
 PASS - [cray-console-operator]: https://api.cmn.eniac.dev.cray.com/apis/console-operator/console-operator/liveness - 204
-SKIP - [cray-cps]: https://api.cmn.eniac.dev.cray.com/apis/v2/cps/contents - virtual service not found
 PASS - [cray-fas]: https://api.cmn.eniac.dev.cray.com/apis/fas/v1/snapshots - 200
 PASS - [cray-hbtd]: https://api.cmn.eniac.dev.cray.com/apis/hbtd/hmi/v1/health - 200
 PASS - [cray-hmnfd]: https://api.cmn.eniac.dev.cray.com/apis/hmnfd/hmi/v2/health - 200
@@ -300,7 +295,6 @@ PASS - [cray-cfs-api]: https://api.chn.eniac.dev.cray.com/apis/cfs/v3/sessions -
 PASS - [cray-console-data]: https://api.chn.eniac.dev.cray.com/apis/consoledata/liveness - 404
 PASS - [cray-console-node]: https://api.chn.eniac.dev.cray.com/apis/console-node/console-node/liveness - 404
 PASS - [cray-console-operator]: https://api.chn.eniac.dev.cray.com/apis/console-operator/console-operator/liveness - 404
-SKIP - [cray-cps]: https://api.chn.eniac.dev.cray.com/apis/v2/cps/contents - virtual service not found
 PASS - [cray-fas]: https://api.chn.eniac.dev.cray.com/apis/fas/v1/snapshots - 404
 PASS - [cray-hbtd]: https://api.chn.eniac.dev.cray.com/apis/hbtd/hmi/v1/health - 404
 PASS - [cray-hmnfd]: https://api.chn.eniac.dev.cray.com/apis/hmnfd/hmi/v2/health - 404
@@ -332,7 +326,6 @@ PASS - [cray-cfs-api]: https://api-gw-service-nmn.local/apis/cfs/v3/sessions - 4
 PASS - [cray-console-data]: https://api-gw-service-nmn.local/apis/consoledata/liveness - 403
 PASS - [cray-console-node]: https://api-gw-service-nmn.local/apis/console-node/console-node/liveness - 403
 PASS - [cray-console-operator]: https://api-gw-service-nmn.local/apis/console-operator/console-operator/liveness - 403
-SKIP - [cray-cps]: https://api-gw-service-nmn.local/apis/v2/cps/contents - virtual service not found
 PASS - [cray-fas]: https://api-gw-service-nmn.local/apis/fas/v1/snapshots - 403
 PASS - [cray-hbtd]: https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/health - 403
 PASS - [cray-hmnfd]: https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/health - 403
@@ -356,7 +349,6 @@ PASS - [cray-cfs-api]: https://api.cmn.eniac.dev.cray.com/apis/cfs/v3/sessions -
 PASS - [cray-console-data]: https://api.cmn.eniac.dev.cray.com/apis/consoledata/liveness - 403
 PASS - [cray-console-node]: https://api.cmn.eniac.dev.cray.com/apis/console-node/console-node/liveness - 403
 PASS - [cray-console-operator]: https://api.cmn.eniac.dev.cray.com/apis/console-operator/console-operator/liveness - 403
-SKIP - [cray-cps]: https://api.cmn.eniac.dev.cray.com/apis/v2/cps/contents - virtual service not found
 PASS - [cray-fas]: https://api.cmn.eniac.dev.cray.com/apis/fas/v1/snapshots - 403
 PASS - [cray-hbtd]: https://api.cmn.eniac.dev.cray.com/apis/hbtd/hmi/v1/health - 403
 PASS - [cray-hmnfd]: https://api.cmn.eniac.dev.cray.com/apis/hmnfd/hmi/v2/health - 403
@@ -385,7 +377,6 @@ PASS - [cray-cfs-api]: https://api.chn.eniac.dev.cray.com/apis/cfs/v3/sessions -
 PASS - [cray-console-data]: https://api.chn.eniac.dev.cray.com/apis/consoledata/liveness - 404
 PASS - [cray-console-node]: https://api.chn.eniac.dev.cray.com/apis/console-node/console-node/liveness - 404
 PASS - [cray-console-operator]: https://api.chn.eniac.dev.cray.com/apis/console-operator/console-operator/liveness - 404
-SKIP - [cray-cps]: https://api.chn.eniac.dev.cray.com/apis/v2/cps/contents - virtual service not found
 PASS - [cray-fas]: https://api.chn.eniac.dev.cray.com/apis/fas/v1/snapshots - 404
 PASS - [cray-hbtd]: https://api.chn.eniac.dev.cray.com/apis/hbtd/hmi/v1/health - 404
 PASS - [cray-hmnfd]: https://api.chn.eniac.dev.cray.com/apis/hmnfd/hmi/v2/health - 404

@@ -152,17 +152,6 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
    Executing step: Stop containerd on all Kubernetes NCNs.
    ```
 
-1. (`ncn-m001#`) Unload DVS and `Lnet` kernel modules from worker nodes.
-
-   > This step helps to avoid error messages in the console log while Linux is shutting down similar to "DVS: task XXX exiting on a signal"
-
-   ```bash
-   pdsh -w $WORKERS 'lsmod | egrep "^dvs\s+"; rm -rf /run/dvs; \
-      echo quiesce / > /sys/fs/dvs/quiesce; modprobe -r dvs; sleep 5; \
-      modprobe -r dvsipc dvsipc_lnet dvsproc; lsmod | egrep "^lnet\s"; \
-      lsmod | egrep "^lustre\s"; systemctl stop lnet; lsmod | egrep "^lnet\s"'
-   ```
-
 1. (`ncn-m001#`) Shut down and power off all management NCNs except `ncn-m001`.
 
     This command requires input for the IPMI username and password for the management nodes.

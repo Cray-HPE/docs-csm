@@ -36,5 +36,13 @@
         {
             "pattern": "https://jira-pro\\.its\\.hpecorp\\.net:8443(/.*)?"
         }
+    ],
+    "httpHeaders": [
+        {
+            "urls": ["https://buy.hpe.com/us/en/"],
+            "headers": {
+                "Accept-Encoding": "UTF-8"
+            }
+        }
     ]
 }
