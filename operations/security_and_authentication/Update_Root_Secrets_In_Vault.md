@@ -2,7 +2,14 @@
 
 * [Overview](#overview)
 * [Automated tools](#automated-tools)
+    * [`write_root_secrets_to_vault.py`](#write_root_secrets_to_vaultpy)
+    * [`write_ssh_config_to_vault.py`](#write_ssh_config_to_vaultpy)
+    * [`restore_ssh_config_from_vault.py`](#restore_ssh_config_from_vaultpy)
+    * [Related tools](#related-tools)
 * [Manual procedures](#manual-procedures)
+    * [Password hash](#password-hash)
+    * [SSH keys](#ssh-keys)
+    * [SSH configuration](#ssh-configuration)
 
 ## Overview
 
@@ -20,6 +27,10 @@ The path to the secret and the SSH key fields are configurable locations in the 
 Ansible role located in the CSM configuration management Git repository that is in use.
 See `roles/csm.ssh_keys/README.md` in the repository for more information.
 
+The path to the secret and the configuration field are configurable locations in the CSM `csm.ssh_config`
+Ansible role located in the CSM configuration management Git repository that is in use.
+See `roles/csm.ssh_config/README.md` in the repository for more information.
+
 The path to the secret and the password field are configurable locations in
 the CSM `csm.password` Ansible role located in the CSM configuration
 management Git repository that is in use. See `roles/csm.password/README.md` in the
@@ -35,6 +46,11 @@ to safely update the data in Vault.
 
 > The `docs-csm` RPM must be installed in order to use these tools. See
 > [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation)
+
+* [`write_root_secrets_to_vault.py`](#write_root_secrets_to_vaultpy)
+* [`write_ssh_config_to_vault.py`](#write_ssh_config_to_vaultpy)
+* [`restore_ssh_config_from_vault.py`](#restore_ssh_config_from_vaultpy)
+* [Related tools](#related-tools)
 
 ### `write_root_secrets_to_vault.py`
 
@@ -59,6 +75,10 @@ see its usage.
 See [Adding switch admin password to Vault](../network/management_network/README.md#adding-switch-admin-password-to-Vault).
 
 ## Manual procedures
+
+* [Password hash](#password-hash)
+* [SSH keys](#ssh-keys)
+* [SSH configuration](#ssh-configuration)
 
 ### Password hash
 
@@ -86,7 +106,7 @@ the values in the Ansible role. See `roles/csm.password/README.md` in the reposi
    > ***WARNING***: The CSM instance of Vault does not support the `patch` operation. Ensure that if the
    > `password` field in the `secret/csm/users/root` secret is being updated,
    > then any other desired fields are also included in the `write` command. For example the user's
-   > [SSH keys](#ssh-keys).
+   > [SSH keys](#ssh-keys) and/or [SSH configuration](#ssh-configuration).
    > **Any fields omitted from the `write` command will be cleared from Vault.**
 
     * The `vault login` command will request the token value from the output of the previous step.
@@ -127,7 +147,7 @@ the values in the Ansible role. See `roles/csm.ssh_keys/README.md` in the reposi
    > ***WARNING***: The CSM instance of Vault does not support the `patch` operation. Ensure that if the
    > `ssh_private_key` and `ssh_public_key` fields in the `secret/csm/users/root` secret are being updated,
    > then any other desired fields are also included in the `write` command. For example the user's
-   > [password hash](#password-hash).
+   > [password hash](#password-hash) and/or [SSH configuration](#ssh-configuration).
    > **Any fields omitted from the `write` command will be cleared from Vault.**
 
     * The `vault login` command will request the token value from the output of the previous step.
@@ -140,6 +160,48 @@ the values in the Ansible role. See `roles/csm.ssh_keys/README.md` in the reposi
     export VAULT_ADDR=http://cray-vault:8200
     vault login
     vault write secret/csm/users/root ssh_private_key='...' ssh_public_key='...' [... other fields (see warning above) ...]
+    vault read secret/csm/users/root
+    exit
+    ```
+
+### SSH configuration
+
+The path to the secret and the SSH configuration field are configurable locations in
+the CSM `csm.ssh_config` Ansible role located in the CSM configuration
+management Git repository that is in use.
+
+If not using the defaults as shown in the command examples, ensure that the paths are consistent between Vault and
+the values in the Ansible role. See `roles/csm.ssh_config/README.md` in the repository for more information.
+
+1. (`ncn-mw#`) Get the Vault root token.
+
+    ```bash
+    kubectl get secrets -n vault cray-vault-unseal-keys -o jsonpath='{.data.vault-root}' | base64 -d; echo
+    ```
+
+1. (`ncn-mw#`) Open an interactive shell in the Vault Kubernetes pod.
+
+    ```bash
+    kubectl exec -itn vault cray-vault-0 -c vault -- sh
+    ```
+
+1. (`cray-vault#`) Write the SSH configuration to Vault.
+
+   > ***WARNING***: The CSM instance of Vault does not support the `patch` operation. Ensure that if the
+   > `ssh_config` field in the `secret/csm/users/root` secret is being updated,
+   > then any other desired fields are also included in the `write` command. For example the user's
+   > [password hash](#password-hash) and/or [SSH keys](#ssh-keys).
+   > **Any fields omitted from the `write` command will be cleared from Vault.**
+
+    * The `vault login` command will request the token value from the output of the previous step.
+    * The `ssh_config` field should contain the exact content from the SSH configuration file.
+    * **`NOTE`**: It is important to enclose the key content in single quotes to preserve any special characters.
+    * The `vault read` command allows the administrator to verify that the contents of the secret were stored correctly.
+
+    ```bash
+    export VAULT_ADDR=http://cray-vault:8200
+    vault login
+    vault write secret/csm/users/root ssh_config='...' [... other fields (see warning above) ...]
     vault read secret/csm/users/root
     exit
     ```

@@ -27,6 +27,10 @@
 
 ### Customer-requested enhancements
 
+* CSM now provides the `csm.ssh_config` Ansible role to automatically restore the root user's SSH configuration file during
+  [Management Node Personalization](operations/configuration_management/Management_Node_Personalization.md).
+  For more details, see [SSH configuration files](operations/CSM_product_management/Set_Up_Passwordless_SSH.md#ssh-configuration-files).
+
 ### Documentation enhancements
 
 ## Noteworthy changes

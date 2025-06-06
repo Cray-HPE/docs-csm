@@ -235,12 +235,16 @@ Host x*c?s*b?n?
   StrictHostKeyChecking no
 ```
 
-This file must be manually created by administrators. Note that this file does not persist across node rebuilds.
+This file must be manually created by administrators. Note that after a node rebuild, if this file is not
+saved to Vault, then it must be manually restored.
+
 CSM provides some tools to help backup and restore the contents of this file.
 
 - [Back up the SSH configuration to Vault](#back-up-the-ssh-configuration-to-vault)
 - [Delete the SSH configuration from Vault](#delete-the-ssh-configuration-from-vault)
 - [Restore the SSH configuration from Vault](#restore-the-ssh-configuration-from-vault)
+    - [Automatic restore](#automatic-restore)
+    - [Manual restore](#manual-restore)
 
 ### Back up the SSH configuration to Vault
 
@@ -273,7 +277,15 @@ each will overwrite the data from the previous. The expectation is that all NCNs
 
 ### Restore the SSH configuration from Vault
 
-(`ncn#`) The contents of the root SSH configuration file can be restored from Vault using the following script:
+#### Automatic restore
+
+If the SSH configuration has been saved in Vault, then it is restored on management nodes when
+[Management Node Personalization](../configuration_management/Management_Node_Personalization.md) occurs,
+by the CSM-provided `csm.ssh_config` Ansible role.
+
+#### Manual restore
+
+(`ncn#`) The contents of the root SSH configuration file can be manually restored from Vault using the following script:
 
 > The `docs-csm` RPM must be installed in order to use this script. See
 > [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation)
