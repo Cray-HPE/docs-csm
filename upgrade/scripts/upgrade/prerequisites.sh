@@ -558,6 +558,130 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Pre-cache images needed for istio upgrade. As soon as cray-istio-pilot is upgraded, network
+# connection to nexus will be broken, due to istio proxy and istiod versions mismatch. Upgrade of
+# cray-istio will fix that, but images must be pre-cached for it to succeed.
+state_name="PRECACHE_ISTIO_IMAGES"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  # Grab istio and docker-kubectl images from cacheImages list, remove duplicates.
+  {
+    istio_images=$(yq r -j "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-precache-images).values.cacheImages' | jq -r '.[] | select( . | (contains("istio", "docker-kubectl")))' | sort | uniq)
+    worker_nodes=$(grep -oP "(ncn-w\d+)" /etc/hosts | sort -u)
+    while read -r istio_image; do
+      while read -r worker_node; do
+        echo "Pre-caching image ${istio_image} on node ${worker_node}"
+        ssh -n "${worker_node}" "crictl pull ${istio_image}"
+      done <<< "${worker_nodes}"
+    done <<< "${istio_images}"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+# Undeploy the chart if it exists on the system.
+# Use this if a chart has been removed from a manifest and needs
+# to be removed from the system as part of an upgrade.
+function undeploy() {
+  # Check if the chart exists by running helm status
+  # If the chart is missing (rc==1), return success.
+  helm status "$@" || return 0
+  # Remove the chart completely without keeping history.
+  helm uninstall "$@"
+}
+
+# Undeploy Istio charts if they exist
+# cray-istio-operator and cray-istio-deploy are removed with upgrade to Istio 1.26.0
+undeploy -n istio-system cray-istio-operator
+undeploy -n istio-system cray-istio-deploy
+
+# Apply labels to Istio Base Resources
+# Running the label-istio-resources script to apply necessary labels to cray-istio-base chart resources.
+state_name="LABEL_ISTIO_BASE_RESOURCES"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    "${locOfScript}/label-istio-resources.sh" cray-istio-base
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+do_upgrade_csm_chart cray-istio-base platform.yaml
+
+# Apply labels to Istio Pilot Resources
+# Running the label-istio-resources script to apply necessary labels to cray-istio-pilot chart resources.
+state_name="LABEL_ISTIO_PILOT_RESOURCES"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    "${locOfScript}/label-istio-resources.sh" cray-istio-pilot
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+do_upgrade_csm_chart cray-istio-pilot platform.yaml
+
+# Apply labels to Istio Ingress Resources
+# Running the label-istio-resources script to apply necessary labels to cray-istio-ingress chart resources.
+state_name="LABEL_ISTIO_INGRESS_RESOURCES"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    "${locOfScript}/label-istio-resources.sh" cray-istio-ingress
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+do_upgrade_csm_chart cray-istio-ingress platform.yaml
+do_upgrade_csm_chart cray-kiali platform.yaml
+
+# Delete all Helm secrets for a given chart across all namespaces and versions
+function delete_helm_secrets() {
+  local chart_name secrets
+  chart_name="$1"
+
+  # Find all secrets matching the Helm release pattern for the given chart across all namespaces
+  secrets=$(kubectl get secrets --all-namespaces --no-headers -o custom-columns="NAMESPACE:.metadata.namespace,NAME:.metadata.name" | grep "sh\.helm\.release\.v1\.$chart_name\.v[0-9]\+$")
+
+  if [[ -z $secrets ]]; then
+    echo "No Helm secrets found for chart '$chart_name' in any namespace"
+    return 0
+  fi
+
+  # Delete each secret
+  while read -r namespace secret_name; do
+    echo "Deleting Helm secret: $secret_name in namespace: $namespace"
+    kubectl delete secret -n "$namespace" "$secret_name"
+  done <<< "$secrets"
+}
+
+delete_helm_secrets cray-istio
+
+# Restart vault pods because pods were having the older proxyv2 image version.
+# Running the rollout restart script to restart the required resources in istio-injection=enabled namespaces.
+state_name="RESTART_SERVICES_REFRESH_ISTIO"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    "${locOfScript}/rollout-restart.sh"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="UPDATE_CRAY_POSTGRES_OPERATOR_CRDS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
