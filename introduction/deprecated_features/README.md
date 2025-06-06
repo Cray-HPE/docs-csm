@@ -14,6 +14,7 @@ version for their planned removal, customers are still strongly encouraged to ma
 - [Deprecations](#deprecations)
     - [Deprecated in CSM 1.6](#deprecated-in-csm-16)
     - [Deprecated in CSM 1.5](#deprecated-in-csm-15)
+    - [Deprecated in CSM 1.4](#deprecated-in-csm-14)
     - [Deprecated in CSM 1.3](#deprecated-in-csm-13)
     - [Deprecated in CSM 1.2](#deprecated-in-csm-12)
     - [Deprecated in CSM 1.0](#deprecated-in-csm-10)
@@ -47,7 +48,12 @@ in chronological order.
 
 ### Removals in CSM 1.7
 
-- The [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is planned to be removed in CSM 1.7.
+- Support for projecting root filesystems and PE images using the [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and the
+  [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs)
+    - This projection is now done using the Scalable Boot Projection Service
+- Top-level Ansible playbooks `ncn-master.yaml`, `ncn-storage.yaml`, and `ncn-worker.yaml` in `csm-config-management` repository in the
+  [Version Control Service (VCS)](../../glossary.md#version-control-service-vcs).
+    - These have been replaced by the unified `ncn_nodes.yaml` top-level playbook.
 
 ## Deprecations
 
@@ -57,8 +63,9 @@ features are listed first).
 ### Deprecated in CSM 1.6
 
 - The `sat swap cable` and `sat swap switch` commands are deprecated.
-- The [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is deprecated in favor of the
-  Scalable Boot Projection Service.
+- Support for projecting root filesystems and PE images using the [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and the
+  [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs)
+    - This projection should instead be done using the Scalable Boot Projection Service
 
 ### Deprecated in CSM 1.5
 
@@ -66,6 +73,13 @@ features are listed first).
     - CAPMC may be removed in the future. It has been replaced with the [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs).
       Everyone is encouraged to transition to PCS as soon as possible.
     - See the [CAPMC Deprecation Notice](CAPMC_Deprecation_Notice.md) for more details.
+
+### Deprecated in CSM 1.4
+
+- Top-level Ansible playbooks `ncn-master.yaml`, `ncn-storage.yaml`, and `ncn-worker.yaml` in `csm-config-management` repository in the
+  [Version Control Service (VCS)](../../glossary.md#version-control-service-vcs).
+    - These are replaced by the unified `ncn_nodes.yaml` top-level playbook.
+    - The deprecated playbooks are removed in CSM 1.7.
 
 ### Deprecated in CSM 1.3
 

@@ -1,21 +1,20 @@
 # Update Management Network Firmware
 
-- [Update Management Network Firmware](#update-management-network-firmware)
-    - [Prerequisites](#prerequisites)
-    - [Switch Firmware](#switch-firmware)
-    - [Identifying switch models](#identifying-switch-models)
-        - [Aruba](#aruba)
-        - [Mellanox](#mellanox)
-        - [Dell](#dell)
-    - [Verify current switch firmware levels](#verify-current-switch-firmware-levels)
-    - [Aruba Firmware Best Practices](#aruba-firmware-best-practices)
-    - [Aruba Firmware Update - Standalone](#aruba-firmware-update---standalone)
-    - [Aruba Firmware Update - VSX Software Upgrade](#aruba-firmware-update---vsx-software-upgrade)
-    - [Mellanox Firmware Update](#mellanox-firmware-update)
-    - [Dell Firmware Update](#dell-firmware-update)
+- [Prerequisites](#prerequisites)
+- [Switch firmware](#switch-firmware)
+- [Identifying switch models](#identifying-switch-models)
+    - [Aruba](#aruba)
+    - [Mellanox](#mellanox)
+    - [Dell](#dell)
+- [Verify current switch firmware levels](#verify-current-switch-firmware-levels)
+- [Aruba firmware best practices](#aruba-firmware-best-practices)
+- [Aruba firmware update - Standalone](#aruba-firmware-update---standalone)
+- [Aruba firmware update - VSX software upgrade](#aruba-firmware-update---vsx-software-upgrade)
+- [Mellanox firmware update](#mellanox-firmware-update)
+- [Dell firmware update](#dell-firmware-update)
 
 This page describes how to update firmware on the management network switches. More details and other options to upgrade
-firmware can be found in the switch [External User Guides](../external_user_guides.md).
+firmware can be found in the switch user guides, available from the specific switch manufacturer.
 
 ## Prerequisites
 
@@ -26,7 +25,7 @@ firmware can be found in the switch [External User Guides](../external_user_guid
 Aruba firmware can be found in the HFP package provided with the HPE Cray EX release.
 Dell and Mellanox firmware must be downloaded from the manufacturer.
 
-## Switch Firmware
+## Switch firmware
 
 | Model                         | software version |
 |-------------------------------|-----------------:|
@@ -131,7 +130,7 @@ LL.10.11.1010 - 2 switches
 FL.10.11.1010 - 1 switches
 ```
 
-## Aruba Firmware Best Practices
+## Aruba firmware best practices
 
 Aruba software version number explained:
 
@@ -183,7 +182,7 @@ option for standalone and vsx-pair upgrade.
 - Aruba 8325, 8320, and 8360 switches that are deployed as `sw-spine`, `sw-leaf`, or `sw-cdu` devices should use the
   [Aruba Firmware Update - VSX Software Upgrade](#aruba-firmware-update---vsx-software-upgrade) procedure.
 
-## Aruba Firmware Update - Standalone
+## Aruba firmware update - Standalone
 
 This procedure applicable to Aruba 6300 series switches that are deployed as `sw-leaf-bmc` devices.
 
@@ -345,7 +344,7 @@ Login into the switch being upgraded.
    BIOS Version       : FL.01.0007
    ```
 
-## Aruba Firmware Update - VSX Software Upgrade
+## Aruba firmware update - VSX software upgrade
 
 Login to both VSX switches and pre-stage the firmware.
 
@@ -596,7 +595,7 @@ In this example we are pre-staging the firmware to `sw-spine-001` and `sw-spine-
    Device Role         primary             secondary
    ```
 
-## Mellanox Firmware Update
+## Mellanox firmware update
 
 SSH into the switch being upgraded.
 
@@ -606,26 +605,26 @@ SSH into the switch being upgraded.
    image fetch scp://root@10.252.1.4/root/firmware/onyx-X86_64-3.9.3210.img
    ```
 
-2. Install the image.
+1. Install the image.
 
    ```console
    image install onyx-X86_64-3.9.3210.img
    ```
 
-3. Select the image to boot next.
+1. Select the image to boot next.
 
    ```console
    image boot next
    ```
 
-4. Write memory and reload.
+1. Write memory and reload.
 
    ```console
    write memory
    reload
    ```
 
-5. Once the switch is available, verify the image is installed.
+1. Once the switch is available, verify the image is installed.
 
    ```console
    show images
@@ -650,7 +649,7 @@ SSH into the switch being upgraded.
      Version: X86_64 3.9.1014 2020-08-05 18:06:58 x86_64
    ```
 
-## Dell Firmware Update
+## Dell firmware update
 
 SSH into the switch being upgraded.
 
@@ -660,7 +659,7 @@ SSH into the switch being upgraded.
    image install http://10.252.1.4/root/firmware/OS10_Enterprise_10.5.1.4.stable.tar
    ```
 
-2. Check the image upload status.
+1. Check the image upload status.
 
    ```console
    show image status
@@ -682,14 +681,14 @@ SSH into the switch being upgraded.
      Transfer Rate:         869 kbps
    ```
 
-3. Reboot after the image is uploaded.
+1. Reboot after the image is uploaded.
 
    ```console
    write memory
    reload
    ```
 
-4. Once the switch is available, verify the image is installed.
+1. Once the switch is available, verify the image is installed.
 
    ```console
    show version
