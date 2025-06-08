@@ -65,14 +65,8 @@ spec:
                     # BELOW IS TEMPORARY UNTIL LIBCSM IS UPDATED
                     image_manifest_str=$(cray ims images describe $IMAGE_ID --format json | jq '.link.path')
                     if [[ -z $image_manifest_str ]]; then
-                      echo "WARN IMS is not reachable or image: $IMAGE_ID does not exist. Will retry."
-                      count=0
-                      while [[ -z $image_manifest_str && $count -lt 30 ]]; do
-                        sleep 10
-                        image_manifest_str=$(cray ims images describe $IMAGE_ID --format json | jq '.link.path')
-                        ((count++))
-                      done
-                      echo "INFO Tried ${count} times before reaching IMS."
+                      echo "ERROR IMS is not reachable or image: $IMAGE_ID does not exist. Exiting and will retry."
+                      exit 1
                     fi
                     echo "INFO Moving on with image '$image_manifest_str'"
                     image_manifest_str=${image_manifest_str#*s3://}
