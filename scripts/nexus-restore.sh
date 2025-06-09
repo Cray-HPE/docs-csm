@@ -30,6 +30,9 @@ if [[ "Bound" != $(kubectl get pvc -n nexus nexus-bak -o jsonpath='{.status.phas
   exit 1
 fi
 
+source nexus_helper.sh
+alpine_version=$(get_latest_alpine)
+
 kubectl -n nexus scale deployment nexus --replicas=0
 
 cat << EOF | kubectl -n nexus apply -f -
