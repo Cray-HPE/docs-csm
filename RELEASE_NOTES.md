@@ -54,6 +54,19 @@
   could cause [BOS operator](operations/boot_orchestration/BOS_Services.md#bos-operators) Kubernetes pods to be `OOMKilled`.
 * When using the API or CLI to [Modify a BOS session template](operations/boot_orchestration/Manage_a_Session_Template.md#modify-a-session-template),
   it is no longer required to specify `boot_sets` in the update data (this fixes a regression bug present in CSM 1.6).
+* Previously, the CSM 1.5.3 and CSM 1.6.1 releases included changes to resolve resource leaks found in the [PCS](glossary.md#power-control-service-pcs), [SMD](glossary.md#hardware-state-manager-smd), hmcollector, and [FAS](glossary.md#firmware-action-service-fas) services.  This reduced instances of pods being restarted due to `OOMKilled` and failed liveness and/or readiness probes.  These changes also improved the responsiveness and scalability of these services.
+  * In the CSM 1.7.0 release, additional resource leaks in these same services were found and resolved.
+  * Additionally, similar resource leaks were found and resolved in the following HMS services:
+    [BSS](glossary.md#boot-script-service-bss),
+    [CAPMC](glossary.md#cray-advanced-platform-monitoring-and-control-capmc),
+    River Discovery,
+    [HBTD](glossary.md#heartbeat-tracker-daemon-hbtd),
+    [MEDS](glossary.md#mountain-endpoint-discovery-service-meds),
+    [RTS](glossary.md#redfish-translation-service-rts),
+    [HMNFD](glossary.md#hardware-management-notification-fanout-daemon-hmnfd),
+    [SCSD](glossary.md#system-configuration-service-scsd),
+    [SLS](glossary.md#system-layout-service-sls)
+* A bug was fixed in the `hmcollector-poll` service so that event subscriptions are no longer lost after updating Paradise BMC firmware.  The service no longer needs to be restarted after performing firmware updates.
 
 ## Deprecations
 
