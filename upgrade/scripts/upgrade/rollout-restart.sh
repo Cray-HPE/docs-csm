@@ -278,18 +278,11 @@ for ns in $namespaces; do
 
         # Check if the resource uses Istio proxy
         if check_pod_uses_istio_proxy "$ns" "$pod"; then
-          if [[ $resource_type == "StatefulSet" ]]; then
-            # Check if StatefulSet has OnDelete update strategy
-            if check_statefulset_update_strategy "$ns" "$resource_name"; then
-              # For StatefulSets with OnDelete strategy, collect pods to delete
-              statefulset_pods_to_delete["$ns"]+="$pod "
-              echo "Added StatefulSet pod $pod to deletion list for namespace $ns (OnDelete strategy)"
-            else
-              # For StatefulSets with RollingUpdate strategy, add to restart list
-              resource_key="$ns/$resource_type/$resource_name"
-              resources_to_restart["$resource_key"]=$resource_type
-              echo "Added $resource_type/$resource_name to restart list for namespace $ns (RollingUpdate strategy)"
-            fi
+          # Check if StatefulSet has OnDelete update strategy
+          if [[ $resource_type == "StatefulSet" ]] && check_statefulset_update_strategy "$ns" "$resource_name"; then
+            # For StatefulSets with OnDelete strategy, collect pods to delete
+            statefulset_pods_to_delete["$ns"]+="$pod "
+            echo "Added StatefulSet pod $pod to deletion list for namespace $ns (OnDelete strategy)"
           else
             # For other resources, add to restart list
             resource_key="$ns/$resource_type/$resource_name"
