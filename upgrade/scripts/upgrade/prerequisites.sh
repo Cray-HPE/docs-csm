@@ -581,6 +581,13 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Annotate Velero backup storage location
+kubectl annotate backupstoragelocations default -n velero \
+  meta.helm.sh/release-name=cray-velero \
+  meta.helm.sh/release-namespace=velero --overwrite \
+  && echo "Successfully annotated Velero BSL" \
+  || echo "Failed to annotate Velero BSL"
+
 # Undeploy the chart if it exists on the system.
 # Use this if a chart has been removed from a manifest and needs
 # to be removed from the system as part of an upgrade.
