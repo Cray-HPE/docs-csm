@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023, 2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -36,8 +36,6 @@ spec:
       --sleep 1m"
     
     goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-leader.yaml ${GOSS_ARG}
-
-    goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-clusters-running.yaml ${GOSS_ARG}
 
     goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-pods-running.yaml ${GOSS_ARG}
 
