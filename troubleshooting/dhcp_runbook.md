@@ -534,11 +534,7 @@ troubleshoot and remediate the problem.
 1. Reboot the node and let the node get an IP address from DHCP.
 
    The standard discovery/DHCP/DNS process should complete in about 5 minutes.
-   This will get the node to boot up until DVS is needed (if the node is using DVS).
-
-1. If the node is using DVS, follow the DVS node map update procedure.
-
-   See `Troubleshoot Node Map IP Change Issues` in the `Cray Shasta DVS Administration Guide`.
+   This will get the node to boot up.
 
 ## 3 Network troubleshooting
 

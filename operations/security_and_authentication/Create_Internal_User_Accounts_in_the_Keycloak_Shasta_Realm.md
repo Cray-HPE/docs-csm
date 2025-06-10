@@ -40,7 +40,7 @@ kubectl get secret -n services keycloak-master-admin-auth --template={{.data.pas
 
 1. Create a user and group ID for this user.
 
-    The User Access Service \(UAS\) requires these attributes. In the `Attributes` tab, performing the following steps for both the `uid` and `gid` attributes:
+    In the `Attributes` tab, performing the following steps for both the `uid` and `gid` attributes:
 
     1. Add the attribute name to the `Key` column and its value to the `Value` column.
 

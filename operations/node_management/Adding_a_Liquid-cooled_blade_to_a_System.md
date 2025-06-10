@@ -6,7 +6,7 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
 
 * [Add a blade to a cabinet using CANI using CANI](../cani/Add_A_Blade_To_A_Cabinet_In_SLS.md).
 * The [Cray command line interface \(CLI\) tool](../../glossary.md#cray-cli-cray) is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
-* Knowledge of whether [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is operating over the
+* Knowledge of whether the [Scalable Boot Projection Service (SBPS)](../../glossary.md#scalable-boot-projection-service-sbps) is operating over the
   [Node Management Network (NMN)](../../glossary.md#node-management-network-nmn) or the [High Speed Network (HSN)](../../glossary.md#high-speed-network-hsn).
 * Blade is being added to an existing liquid-cooled cabinet in the system.
 * The [Slingshot](../../glossary.md#slingshot) fabric must be configured with the desired topology for desired state of the blades in the system.
@@ -154,9 +154,9 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
 
 ### Preserve node component name (xname) to IP address mapping
 
-1. (`ncn-mw#`) **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.**
+1. (`ncn-mw#`) **Skip this step if SBPS is operating over the HSN, otherwise proceed with this step.**
 
-   When DVS is operating over the NMN and a blade is being replaced, the mapping of node component name (xname) to node IP address must be preserved.
+   When SBPS is operating over the NMN and a blade is being replaced, the mapping of node component name (xname) to node IP address must be preserved.
    Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes).
    To prevent Kea from automatically adding MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
 
@@ -468,7 +468,7 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate [
     However, if they are referenced by component name (xname), then these new nodes should added to the BOS session template.
 
     ```bash
-    BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+    BOS_TEMPLATE=uss-1.4.0-slurm-healthy-compute
     cray bos v2 sessiontemplates describe $BOS_TEMPLATE --format json|jq '.boot_sets[] | select(.node_list)'
     ```
 
@@ -530,139 +530,6 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate [
     1. Review [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) to perform a dry run using FAS to verify firmware versions.
 
     1. If necessary update firmware with FAS. See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) for more information.
-
-#### Check DVS
-
-There should be one or more `cray-cps` pods.
-
-1. (`ncn-mw#`) Verify that the `cray-cps` pods on worker nodes are `Running`.
-
-    ```bash
-    kubectl get pods -Ao wide | grep cps
-    ```
-
-    Example output:
-
-    ```text
-    services   cray-cps-75cffc4b94-j9qzf    2/2  Running   0   42h 10.40.0.57  ncn-w001
-    ```
-
-1. (`ncn-w#`) SSH to each worker node running [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps)/DVS, and
-   ensure that there are no recurring `"DVS: merge_one"` error messages as shown.
-
-    If found, these error messages indicate that DVS is detecting an IP address change for one of the client nodes.
-
-    ```bash
-    dmesg -T | grep "DVS: merge_one"
-    ```
-
-    Example output:
-
-    ```text
-    [Tue Jul 21 13:09:54 2020] DVS: merge_one#351: New node map entry does not match the existing entry
-    [Tue Jul 21 13:09:54 2020] DVS: merge_one#353:   nid: 8 -> 8
-    [Tue Jul 21 13:09:54 2020] DVS: merge_one#355:   name: 'x3000c0s19b1n0' -> 'x3000c0s19b1n0'
-    [Tue Jul 21 13:09:54 2020] DVS: merge_one#357:   address: '10.252.0.26@tcp99' -> '10.252.0.33@tcp99'
-    [Tue Jul 21 13:09:54 2020] DVS: merge_one#358:   Ignoring.
-    ```
-
-1. (`ncn-mw#`) **If the `"DVS: merge_one"` error messages is shown**, then the IP address of the node needs to be corrected. This will prevent the need to reload DVS.
-
-    1. Set the following environment variables based on the output collected in the previous step.
-
-        ```bash
-        NODE_XNAME=x3000c0s19b1n0
-        CURRENT_IP_ADDRESS=10.252.0.33
-        DESIRED_IP_ADDRESS=10.252.0.26
-        ```
-
-    1. Determine the HSM EthernetInterface entry holding onto the desired IP address.
-
-        ```bash
-        cray hsm inventory ethernetInterfaces list --ip-address "${DESIRED_IP_ADDRESS}" --output toml
-        ```
-
-        * **If no EthernetInterfaces are found**, then continue on to the next step.
-
-            Example output:
-
-            ```bash
-            results = []
-            ```
-
-        * **If an EthernetInterface is found**, then it needs to be removed from HSM.
-
-            Example output:
-
-            ```toml
-            [[results]]
-            ID = "b42e99dfecf0"
-            Description = "Ethernet Interface Lan2"
-            MACAddress = "b4:2e:99:df:ec:f0"
-            LastUpdate = "2022-08-08T10:10:57.527819Z"
-            ComponentID = "x3000c0s17b2n0"
-            Type = "Node"
-            [[results.IPAddresses]]
-            IPAddress = "10.252.1.26"
-            ```
-
-            1. Record the returned `ID` value into the `EI_ID` environment variable.
-
-                ```bash
-                OLD_EI_ID=b42e99dfecf0
-                ```
-
-            1. Delete the EthernetInterfaces from HSM.
-
-                ```bash
-                cray hsm inventory ethernetInterfaces delete ${OLD_EI_ID}
-                ```
-
-    1. Determine the HSM EthernetInterface entry holding onto the current IP address.
-
-        ```bash
-        cray hsm inventory ethernetInterfaces list --component-id "${NODE_XNAME}" --ip-address "${CURRENT_IP_ADDRESS}" --output toml
-        ```
-
-        Example output:
-
-        ```toml
-        [[results]]
-        ID = "b42e99dff35f"
-        Description = "Ethernet Interface Lan1"
-        MACAddress = "b4:2e:99:df:f3:5f"
-        LastUpdate = "2022-08-18T16:38:21.13173Z"
-        ComponentID = "x3000c0s17b1n0"
-        Type = "Node"
-        [[results.IPAddresses]]
-        IPAddress = "10.252.1.69"
-        ```
-
-        Record the returned `ID` value into the `EI_ID` environment variable.
-
-        ```bash
-        CURRENT_EI_ID=b42e99dff35f
-        ```
-
-    1. Update the EthernetInterface to have the desired IP address:
-
-        ```bash
-        cray hsm inventory ethernetInterfaces update "$CURRENT_EI_ID" --component-id "${NODE_XNAME}" --ip-addresses--ip-address "${DESIRED_IP_ADDRESS}"
-        ```
-
-1. Reboot the node.
-
-1. (`nid#`) SSH to the node and check each DVS mount.
-
-    ```bash
-    mount | grep dvs | head -1
-    ```
-
-    Example output:
-
-    ```text
-    /var/lib/cps-local/0dbb42538e05485de6f433a28c19e200 on /var/opt/cray/gpu/nvidia-squashfs-21.3 type dvs (ro,relatime,blksize=524288,statsfile=/sys/kernel/debug/dvs/mounts/1/stats,attrcache_timeout=14400,cache,nodatasync,noclosesync,retry,failover,userenv,noclusterfs,killprocess,noatomic,nodeferopens,no_distribute_create_ops,no_ro_cache,loadbalance,maxnodes=1,nnodes=6,nomagic,hash_on_nid,hash=modulo,nodefile=/sys/kernel/debug/dvs/mounts/1/nodenames,nodename=x3000c0s6b0n0:x3000c0s5b0n0:x3000c0s4b0n0:x3000c0s9b0n0:x3000c0s8b0n0:x3000c0s7b0n0)
-    ```
 
 #### Check the HSN for the affected nodes
 

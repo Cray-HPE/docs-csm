@@ -6,7 +6,7 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 
-- Knowledge of whether Data Virtualization Service (DVS) is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
+- Knowledge of whether the Scalable Boot Projection Service (SBPS) is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
 
 - The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.
 
@@ -32,7 +32,7 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
     template for the node type in the following command.
 
     ```bash
-    BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+    BOS_TEMPLATE=uss-1.4.0-slurm-healthy-compute
     cray bos v2 sessions create --template-name $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
     ```
 
@@ -133,12 +133,12 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 
 ### 7. Record MAC and IP addresses for nodes
 
-**IMPORTANT**: Record the NMN MAC and IP addresses for each node in the blade (labeled `Node Maintenance Network`). To prevent disruption in DVS when over operating the NMN, these addresses must
+**IMPORTANT**: Record the NMN MAC and IP addresses for each node in the blade (labeled `Node Maintenance Network`). To prevent disruption in SBPS when over operating the NMN, these addresses must
 be maintained in the HSM when the blade is swapped and discovered.
 
 The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be deleted* from the HSM.
 
-1. (`ncn-mw#`) **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.** Query HSM to determine the `ComponentID`, MAC addresses, and IP addresses for each node in the blade.
+1. (`ncn-mw#`) **Skip this step if SBPS is operating over the HSN, otherwise proceed with this step.** Query HSM to determine the `ComponentID`, MAC addresses, and IP addresses for each node in the blade.
 
     The prerequisites show an example of how to gather HSM values and store them to a file.
 

@@ -64,7 +64,7 @@ spec:
             cat ${ts}.sh
           else
             scp -i /myssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${ts}.sh root@$HOST:/tmp/${ts}.sh
-            ssh -i /myssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$HOST "/tmp/${ts}.sh; rm /tmp/${ts}.sh"
+            ssh -i /myssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$HOST "/tmp/${ts}.sh; exit_code=\$?; rm /tmp/${ts}.sh; exit \$exit_code"
           fi
         volumeMounts:
           - name: ssh

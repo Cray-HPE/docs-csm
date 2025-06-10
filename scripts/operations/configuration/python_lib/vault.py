@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -23,10 +23,10 @@
 #
 """Shared Python function library: Vault"""
 
-import traceback
-
 import base64
 import logging
+import traceback
+from typing import Any, Dict, NoReturn
 
 from . import api_requests
 from . import common
@@ -38,16 +38,12 @@ K8S_NAMESPACE = "vault"
 K8S_SECRET_NAME = "cray-vault-unseal-keys"
 K8S_SERVICE_NAME = "cray-vault"
 
-CSM_ROOT_SECRET_KEY = "csm/users/root"
-SW_ADMIN_PW_KEY = "net-creds/switch_admin"
-SW_ADMIN_PW_FIELD = "admin"
-
 API_STATUS_OK_WITH_DATA = 200
 API_STATUS_OK_EMPTY = 204
 API_STATUS_NOT_FOUND = 404
 
 
-def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> None:
+def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> NoReturn:
     """
     1) If a parent exception is passed in, make a debug log entry with its stack trace.
     2) Log an error with the specified message.
@@ -108,7 +104,7 @@ def get_api_url(k8s_client: k8s.CoreV1API) -> str:
         for vault_port in vault_service.spec.ports:
             if vault_port.name == 'http-api-port':
                 api_url = f"http://{vault_ip}:{vault_port.port}"
-                logging.debug(f"API URL = {api_url}")
+                logging.debug("API URL = %s", api_url)
                 return api_url
     except (AttributeError, KeyError, TypeError) as exc:
         log_error_raise_exception(
@@ -139,7 +135,7 @@ def get_secret_data_from_response(api_response: api_requests.ApiResponse) -> Jso
             "Vault response to read secret request is not in expected format", exc)
 
 
-class Vault():
+class Vault:
     """
     Used as an interface into Vault.
     This object assumes that the Vault secret token is not
@@ -147,7 +143,7 @@ class Vault():
     will need to be made to handle it. The same is true of the service IP addresses and ports.
     """
 
-    def __init__(self, k8s_client: k8s.CoreV1API = None):
+    def __init__(self, k8s_client: k8s.CoreV1API = None) -> None:
         """
         Obtains and stores the Vault token from the Kubernetes secret.
         Obtains and stores the service IP address and port from Kubernetes, and saves
@@ -222,20 +218,34 @@ class Vault():
         request_headers = self.get_api_request_headers(additional_headers)
         return api_requests.post_retry_validate(headers=request_headers, **kwargs)
 
-    def delete_secret(self, secret_key: str) -> None:
+    def delete_secret(self, secret_key: str, verify:bool=False) -> None:
         """
         Deletes the specified secret key from Vault. This is also required in the case where the
         last field of data in a secret is being removed, because Vault does not allow for empty
         secrets.
+
         Raises an exception if anything goes wrong.
+        Note that the Vault API does not consider it an error to delete a secret that does not
+        exist, so no exception is raised in that case.
+
+        If verify is True, after the delete, attempt to read the secret from Vault, and
+        ensure that it is not found.
         """
         secret_url = self.get_secret_api_url(secret_key)
-        logging.debug(f"{secret_key} secret URL = {secret_url}")
-        logging.debug(f"Deleting {secret_key} secret from Vault")
+        logging.debug("%s secret URL = %s", secret_key, secret_url)
+        logging.debug("Deleting %s secret from Vault", secret_key)
         self.api_delete(
             url=secret_url, expected_status_codes=API_STATUS_OK_EMPTY)
 
-    def get_secret(self, secret_key: str, must_exist: bool = False) -> JsonObject:
+        if not verify:
+            return
+
+        if self.get_secret(secret_key, must_exist=False) is None:
+            return
+
+        log_error_raise_exception(f"Deleted {secret_key} from Vault, but it still exists")
+
+    def get_secret(self, secret_key: str, must_exist: bool = False) -> Dict[str, Any]:
         """
         Retrieves the Vault secret with the specified key and returns its contents.
         The must_exist argument governs whether a 404 response status code results
@@ -244,61 +254,93 @@ class Vault():
         An exception is raised if any problems occur
         """
         secret_url = self.get_secret_api_url(secret_key)
-        logging.debug(f"{secret_key} secret URL = {secret_url}")
+        logging.debug("%s secret URL = %s", secret_key, secret_url)
         if must_exist:
             expected_status_codes = {API_STATUS_OK_WITH_DATA}
         else:
             expected_status_codes = {
                 API_STATUS_OK_WITH_DATA, API_STATUS_NOT_FOUND}
 
-        logging.debug(f"Reading {secret_key} secret from Vault")
+        logging.debug("Reading %s secret from Vault", secret_key)
         resp = self.api_get(
             url=secret_url, expected_status_codes=expected_status_codes)
         if resp.status_code == API_STATUS_NOT_FOUND:
             # Since an exception was not raised, this must mean we are in the case where
             #  this is okay. So return None.
+            logging.debug("%s not found in Vault", secret_key)
             return None
         # Return the secret data from the response
         return get_secret_data_from_response(resp)
 
-    def write_secret(self, secret_key: str, secret_data: JsonObject) -> None:
+    def write_secret(self, secret_key: str, secret_data: Dict[str, Any],
+                     verify: bool=False) -> None:
         """
         Writes the specified secret data to Vault using the specified secret key.
         Raises an exception if anything goes wrong.
         """
+        if not secret_data:
+            # For Vault, writing an empty secret means deleting that secret
+            logging.info("Vault does not support writing empty secret data; deleting %s instead",
+                         secret_key)
+            self.delete_secret(secret_key, verify=verify)
+            return
         secret_url = self.get_secret_api_url(secret_key)
-        logging.debug(f"{secret_key} secret URL = {secret_url}")
-        logging.debug(f"Writing {secret_key} secret to Vault")
+        logging.debug("%s secret URL = %s", secret_key, secret_url)
+        logging.debug("Writing %s secret to Vault", secret_key)
         self.api_post(
             url=secret_url, expected_status_codes=API_STATUS_OK_EMPTY, json=secret_data)
 
-    def delete_csm_root_secret(self) -> None:
-        """
-        Wrapper function that supplies the CSM root secret key to delete_secret()
-        """
-        self.delete_secret(secret_key=CSM_ROOT_SECRET_KEY)
+        if not verify:
+            return
 
-    def get_csm_root_secret(self, **kwargs) -> JsonObject:
-        """
-        Wrapper function that supplies the CSM root secret key to get_secret()
-        """
-        return self.get_secret(secret_key=CSM_ROOT_SECRET_KEY, **kwargs)
+        secret_data_after_write = self.get_secret(secret_key, must_exist=False)
+        if secret_data_after_write is None:
+            log_error_raise_exception(f"Wrote {secret_key}, but it still does not exist in Vault")
+        compare_secrets(secret_key, secret_written=secret_data,
+                        secret_read=secret_data_after_write)
 
-    def get_sw_admin_password(self) -> str:
-        """
-        Wrapper function that supplies the switch admin password key to get_secret(),
-        and extracts the SW_ADMIN_PW_FIELD field from the result
-        """
-        return self.get_secret(secret_key=SW_ADMIN_PW_KEY, must_exist=True)[SW_ADMIN_PW_FIELD]
 
-    def write_csm_root_secret(self, **kwargs) -> None:
-        """
-        Wrapper function that supplies the CSM root secret key to write_secret()
-        """
-        self.write_secret(secret_key=CSM_ROOT_SECRET_KEY, **kwargs)
+def compare_secrets(secret_key: str, secret_written: Dict[str, Any],
+                    secret_read: Dict[str, Any]) -> None:
+    """
+    Compare the secret we wrote to what we read back. If there are any differences,
+    log them and raise an exception. Note that this assumes the two secrets
+    are simple shallow dicts.
+    """
+    secrets_match = True
 
-    def write_sw_admin_password(self, pw_string: str) -> None:
-        """
-        Wrapper function that supplies the switch admin password key to write_secret()
-        """
-        self.write_secret(secret_key=SW_ADMIN_PW_KEY, secret_data={ SW_ADMIN_PW_FIELD: pw_string })
+    # Validate that Vault values match what we wrote
+    logging.debug(
+        "Validating that Vault contents match what was written to %s", secret_key)
+
+    fields_not_written = secret_written.keys() - secret_read.keys()
+    extra_fields = secret_read.keys() - secret_written.keys()
+    common_fields = secret_read.keys() & secret_written.keys()
+
+    if fields_not_written:
+        secrets_match = False
+        logging.error("Fields were written to %s, but were not present when it was read back: %s",
+                      secret_key, fields_not_written)
+    else:
+        logging.debug("All written fields were present when %s was read back", secret_key)
+
+    if extra_fields:
+        secrets_match = False
+        logging.error("Fields were not written to %s, but were present when it was read back: %s",
+                      secret_key, extra_fields)
+    else:
+        logging.debug("All read fields in %s were present when written", secret_key)
+
+    for field in common_fields:
+        if secret_read[field] == secret_written[field]:
+            logging.debug("Vault value for %s in %s matches what was written", field, secret_key)
+        else:
+            secrets_match = False
+            logging.error("Vault value for %s in %s DOES NOT MATCH what was written", field,
+                          secret_key)
+
+    if not secrets_match:
+        raise common.ScriptException(
+            f"Secret {secret_key} read back from Vault does not match what was written")
+
+    logging.info("Secret %s read back from Vault matches desired values", secret_key)

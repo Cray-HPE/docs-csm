@@ -22,7 +22,7 @@ Contact HPE Cray service in order to obtain the default usernames and passwords 
 - [HPE Cray EX liquid-cooled cabinet hardware](#hpe-cray-ex-liquid-cooled-cabinet-hardware)
 - [Gigabyte](#gigabyte)
 - [Passwords managed in other product streams](#passwords-managed-in-other-product-streams)
-    - [Cray Operating System (COS)](#cray-operating-system-cos)
+    - [User Services Software (USS)](#user-services-software-uss)
     - [User Access Node (UAN)](#user-access-node-uan)
 
 ## Keycloak
@@ -313,9 +313,11 @@ The default username is `admin`.
 
 Refer to the following product stream documentation for detailed procedures about updating passwords for compute nodes and User Access Nodes (UANs).
 
-### Cray Operating System (COS)
+### User Services Software (USS)
 
-To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the COS product stream documentation for more information.
+USS has replaced the deprecated Cray Operating System (COS) for compute nodes.
+
+To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the USS product stream documentation for more information.
 
 ### User Access Node (UAN)
 

@@ -335,13 +335,7 @@ managed nodes, including compute nodes and User Access Nodes (UANs).
    system. This is important to ensure all managed nodes are gracefully shut down during the system
    power off.
 
-### Capture state and perform system health checks
-
-1. (`ncn-mw#`) Use SAT to capture state of the system before the shutdown.
-
-    ```bash
-    sat bootsys shutdown --stage capture-state
-    ```
+### Perform system health checks
 
 1. (`ncn-mw#`) Optional system health checks.
 
@@ -526,10 +520,10 @@ managed nodes, including compute nodes and User Access Nodes (UANs).
 
 1. (`ncn-mw#`) Cancel the running BOS sessions.
 
-    1. Identify the BOS sessions to delete.
+    1. Identify the running BOS sessions to delete.
 
         ```bash
-        cray bos sessions list --format json
+        cray bos sessions list --format json | jq '[.[] | select(.status.status == "running")]'
         ```
 
     1. Delete each running BOS session.

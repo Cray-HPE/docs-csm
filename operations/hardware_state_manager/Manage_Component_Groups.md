@@ -5,8 +5,8 @@ The creation, deletion, and modification of groups is enabled by the Hardware St
 * [Example group](#example-group)
 * [Prerequisites](#prerequisites)
 * [Create and modify a group](#create-and-modify-a-group)
-  * [Create a group](#create-a-group)
-  * [Modify a group](#modify-a-group)
+    * [Create a group](#create-a-group)
+    * [Modify a group](#modify-a-group)
 * [Retrieve a group](#retrieve-a-group)
 * [Delete a group](#delete-a-group)
 
@@ -83,6 +83,12 @@ The following examples show different ways to create and modify a group.
 
     ```bash
     cray hsm groups members create --id XNAME GROUP_LABEL
+    ```
+
+* (`ncn-mw#`) Remove a component from a group:
+
+    ```bash
+    cray hsm groups members delete XNAME GROUP_LABEL
     ```
 
 ## Retrieve a group

@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -43,19 +43,6 @@ if [[ $state_recorded == "0" ]]; then
     exit 1
   fi
   rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
-  #shellcheck disable=SC2046
-  record_state ${state_name} $(hostname)
-else
-  echo "====> ${state_name} has been completed"
-fi
-
-state_name="SNAPSHOT_CPS_DEPLOYMENT"
-#shellcheck disable=SC2046
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
-  echo "====> ${state_name} ..."
-  ${basedir}/../cps/snapshot-cps-deployment.sh
-
   #shellcheck disable=SC2046
   record_state ${state_name} $(hostname)
 else

@@ -394,28 +394,6 @@ see [BOS Session Templates](../../boot_orchestration/Session_Templates.md).
 
 Here is an example of a BOS session template that refers to an existing IMS
 image by name and targets nodes with the role `Compute` and the architecture
-`X86` in HSM. This session template uses CPS as the `rootfs_provider`:
-
-```yaml
-session_templates:
-- name: example-session-template
-  image:
-    ims:
-      name: example-image
-  configuration: example-configuration
-  bos_parameters:
-    boot_sets:
-      example_boot_set:
-        arch: X86
-        kernel_parameters: ip=dhcp quiet
-        node_roles_groups:
-        - Compute
-        rootfs_provider: cpss3
-        rootfs_provider_passthrough: dvs:api-gw-service-nmn.local:300:nmn0
-```
-
-Here is an example of a BOS session template that refers to an existing IMS
-image by name and targets nodes with the role `Compute` and the architecture
 `X86` in HSM. This session template uses SBPS as the `rootfs_provider`:
 
 ```yaml
@@ -457,9 +435,11 @@ session_templates:
         kernel_parameters: ip=dhcp quiet
         node_roles_groups:
         - Compute
-        rootfs_provider: cpss3
-        rootfs_provider_passthrough: dvs:api-gw-service-nmn.local:300:nmn0
+        rootfs_provider: sbps
+        rootfs_provider_passthrough: sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.{{default.system-name}}.{{default.site-domain}}:300
 ```
+
+(**NOTE:** Make sure to define the values for `system-name`and `site-domain` in the `site-vars.yaml` file.)
 
 ### Variable substitutions
 
@@ -657,7 +637,7 @@ configurations:
 - name: "{{default.note}}compute-{{recipe.version}}{{default.suffix}}"
   layers:
   - name: uss-compute-{{uss.working_branch}}
-    playbook: cos-compute.yml
+    playbook: uss-compute.yml
     product:
       name: uss
       version: "{{uss.version}}"
@@ -697,8 +677,10 @@ session_templates:
         kernel_parameters: ip=dhcp quiet spire_join_token=${SPIRE_JOIN_TOKEN}
         node_roles_groups:
         - Compute
-        rootfs_provider_passthrough: "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0"
+        rootfs_provider_passthrough: "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.{{default.system-name}}.{{default.site-domain}}:300"
 ```
+
+(**NOTE:** Make sure to define the values for `system-name`and `site-domain` in the `site-vars.yaml` file.)
 
 ### Access default `bootprep` input files
 

@@ -21,8 +21,6 @@ Glossary of terms used in CSM documentation.
 * [Coolant Distribution Unit (CDU)](#coolant-distribution-unit-cdu)
 * [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control-capmc)
 * [Cray CLI (`cray`)](#cray-cli-cray)
-* [Cray Operating System (COS)](#cray-operating-system-cos)
-* [Cray Operating System Base (COS Base)](#cray-operating-system-base-cos-base)
 * [Cray Programming Environment (CPE)](#cray-programming-environment-cpe)
 * [Cray Security Token Service (STS)](#cray-security-token-service-sts)
 * [Cray Site Init (CSI)](#cray-site-init-csi)
@@ -237,10 +235,12 @@ inventory and node targeting options.
 
 ## Content Projection Service (CPS)
 
-The Content Projection Service (CPS) provides the root filesystem for [compute nodes](#compute-node-cn) and [application nodes](#application-node-an)
+> Support for projection of root filesystems and PE images using CPS was deprecated in CSM 1.6 and removed in CSM 1.7. Projection for these images has been replaced by the
+> [Scalable Boot Projection Service (SBPS)](#scalable-boot-projection-service-sbps).
+> See [Deprecated Features](introduction/deprecated_features/README.md).
+
+The Content Projection Service (CPS) was one option for providing the root filesystem for [compute nodes](#compute-node-cn) and [application nodes](#application-node-an)
 in conjunction with the [Data Virtualization Service (DVS)](#data-virtualization-service-dvs).
-Using CPS and DVS, the HPE Cray Programming Environment (CPE) and Analytics products are provided as separately mounted filesystems
-to compute nodes, application nodes (such as [UANs](#user-access-node-uan)), and worker nodes.
 
 ## Coolant Distribution Unit (CDU)
 
@@ -272,15 +272,6 @@ replaced by [Power Control Service (PCS)](#power-control-service-pcs).
 
 The `cray` command line interface (CLI) is a framework created to integrate all of the system management
 REST APIs into easily usable commands.
-
-## Cray Operating System (COS)
-
-HPE Cray Supercomputing Operating System Software (or COS) is a Cray product that may be installed on CSM systems.
-COS is comprised of [COS Base](#cray-operating-system-base-cos-base), HPE SUSE Linux Enterprise Operating System (SLE), and [User Services Software](#user-services-software-uss) components.
-
-## Cray Operating System Base (COS Base)
-
-COS Base software consists of the COS modified kernel and dependent packages.
 
 ## Cray Programming Environment (CPE)
 
@@ -347,14 +338,17 @@ For more information on the CMN, see [Customer Accessible Networks](operations/n
 
 ## Data Virtualization Service (DVS)
 
+> Support for projection of root filesystems and PE images using DVS was deprecated in CSM 1.6 and removed in CSM 1.7. Projection for these images has been replaced by the
+> [Scalable Boot Projection Service (SBPS)](#scalable-boot-projection-service-sbps).
+> See [Deprecated Features](introduction/deprecated_features/README.md).
+
 The Data Virtualization Service (DVS) is a distributed network service that projects file systems
 mounted on [Non-Compute Nodes (NCNs)](#non-compute-node-ncn) to other nodes within the HPE Cray EX system. Projecting is
 the process of making a file system available on nodes where it does not physically reside.
 DVS-specific configuration settings enable clients to access a file system projected by DVS
 servers. These clients include [compute nodes](#compute-node-cn), [User Access Nodes (UANs)](#user-access-node-uan),
 Thus DVS, while not a file system, represents a
-software layer that provides scalable transport for file system services. DVS is integrated
-with the [Content Projection Service (CPS)](#content-projection-service-cps).
+software layer that provides transport for file system services.
 
 ## EX Compute Cabinet
 
@@ -538,7 +532,7 @@ on/off [compute nodes](#compute-node-cn) and [application nodes](#application-no
 external software to more intelligently manage system-wide power consumption. PCS is the
 replacement for [CAPMC](#cray-advanced-platform-monitoring-and-control-capmc).
 
-* For more information on PCS, see [Power Control Service](operations/power_management/Power_Control_Service/Power_Control_Service_PCS.md).
+* For more information on PCS, see [Power Control Service](operations/power_management/Power_Control_Service_PCS.md).
 * For more information on the PCS API, see [PCS API](api/power-control.md).
 
 ## Power Distribution Unit (PDU)
@@ -617,8 +611,7 @@ For more information, see [SOPS Introduction](operations/security_and_authentica
 ## Service/IO Cabinet
 
 An Air-Cooled service/IO cabinet houses a cluster of [NCNs](#non-compute-node-ncn), [Slingshot ToR switches](#slingshot-top-of-rack-tor-switch),
-and management network ToR switches to support the managed ecosystem storage,
-network, user access services (UAS), and other IO services such as LNet and gateways.
+and management network ToR switches to support the managed ecosystem storage, network, and other IO services such as LNet and gateways.
 
 ## Shasta Cabling Diagram (SHCD)
 
@@ -772,7 +765,7 @@ Some sites refer to their UANs as Login nodes.
 ## User Services Software (USS)
 
 HPE Cray Supercomputing User Services Software (or USS) contains user space packages, kernel modules, microservices, configuration content, and other components.
-USS adds content on top of [COS Base](#cray-operating-system-base-cos-base) (the modified COS kernel) without modifying the kernel directly.
+USS adds content on top of SLES without modifying the kernel directly.
 
 ## Version Control Service (VCS)
 

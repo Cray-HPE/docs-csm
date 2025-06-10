@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -31,46 +31,30 @@ Reads in:
 
 Writes these to the secret/csm/users/root in Vault, and then
 reads them back to verify that they match what was written.
+
+The user can optionally include the SSH config file as well.
 """
 
 import argparse
-import copy
 import crypt
 import logging
 import sys
-import traceback
 
 from python_lib import args
 from python_lib import common
 from python_lib import logger
-from python_lib.types import JsonObject
-from python_lib.vault import Vault
-
+from python_lib.csm_root_secret import (csm_root_secret,
+                                        CsmUserSecretUpdateData,
+                                        PW_FIELD,
+                                        SSH_CONFIG_FIELD,
+                                        SSH_PRI_KEY_FIELD,
+                                        SSH_PUB_KEY_FIELD)
+from python_lib.root_ssh_config import CONFIG_PATH, ssh_config_file
 
 # Default values
 PRI_KEY_PATH = "/root/.ssh/id_rsa"
 PUB_KEY_PATH = "/root/.ssh/id_rsa.pub"
 MINIMUM_PW_LENGTH = 8
-
-# Constants
-PASSWORD_HASH_FIELD_NAME = "password"
-PRIVATE_KEY_FIELD_NAME = "ssh_private_key"
-PUBLIC_KEY_FIELD_NAME = "ssh_public_key"
-
-
-def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> None:
-    """
-    1) If a parent exception is passed in, make a debug log entry with its stack trace.
-    2) Log an error with the specified message.
-    3) Raise a ScriptException with the specified message (from the parent exception, if
-       specified)
-    """
-    if parent_exception is not None:
-        logging.debug(traceback.format_exc())
-    logging.error(msg)
-    if parent_exception is None:
-        raise common.ScriptException(msg)
-    raise common.ScriptException(msg) from parent_exception
 
 
 def root_hash_from_etc_shadow() -> str:
@@ -104,8 +88,7 @@ def pw_env_var(env_var_name: str) -> str:
     Wrapper for args.get_env_var_value with appropriate arguments for password environment
     variables. This will require passwords to be at least 8 characters long.
     """
-    logging.info(
-        f"Reading in plaintext password from {env_var_name} environment variable")
+    logging.info("Reading in plaintext password from %s environment variable", env_var_name)
     return args.get_env_var_value(
         env_var_name=env_var_name,
         value_validator=lambda s: args.validate_string(s, min_length=MINIMUM_PW_LENGTH))
@@ -120,8 +103,7 @@ def pw_hash_env_var(env_var_name: str) -> str:
     For our purposes, we will look for an 8 character minimum, and make sure that it
     begins with a $ character.
     """
-    logging.info(
-        f"Reading in password hash from {env_var_name} environment variable")
+    logging.info("Reading in password hash from %s environment variable", env_var_name)
     return args.get_env_var_value(
         env_var_name=env_var_name,
         value_validator=lambda s: args.validate_string(s, min_length=8, required_prefix='$'))
@@ -132,8 +114,7 @@ def pri_ssh_key_file(file_name: str) -> str:
     Wrapper for args.get_text_file_contents with appropriate arguments for SSH key files.
     At this point, we just make sure that the files are at least 256 characters long.
     """
-    logging.info(
-        f"Reading in SSH private key from '{file_name}' file")
+    logging.info("Reading in SSH private key from '%s' file", file_name)
     return args.get_text_file_contents(
         file_name=file_name,
         value_validator=lambda s: args.validate_string(s, min_length=256))
@@ -144,134 +125,13 @@ def pub_ssh_key_file(file_name: str) -> str:
     Wrapper for args.get_text_file_contents with appropriate arguments for SSH key files.
     At this point, we just make sure that the files are at least 256 characters long.
     """
-    logging.info(
-        f"Reading in SSH public key from '{file_name}' file")
+    logging.info("Reading in SSH public key from '%s' file", file_name)
     return args.get_text_file_contents(
         file_name=file_name,
         value_validator=lambda s: args.validate_string(s, min_length=256))
 
 
-def update_secret_fields(secret: JsonObject, field_changes: JsonObject) -> JsonObject:
-    """
-    Takes the current CSM root secret values (secret) and determines the desired new CSM root secret
-    values. Returns a dictionary of the new values.
-    """
-    updated_secret = copy.deepcopy(secret)
-    for field_name, new_field_value in field_changes.items():
-        if new_field_value is None:
-            # This means the field should be removed, if it is set
-            try:
-                del updated_secret[field_name]
-                logging.debug(
-                    f"CSM root secret {field_name} in Vault will be deleted")
-            except KeyError:
-                # Not a problem, but let's note it for the log
-                logging.debug(
-                    f"Asked to delete CSM root secret {field_name} in Vault, but it isn't set")
-            continue
-        # Record the new value
-        updated_secret[field_name] = new_field_value
-    return updated_secret
-
-
-def compare_root_secrets(secret_written: JsonObject, secret_read: JsonObject) -> None:
-    """
-    Compare the secret we wrote to what we read back. If there are any differences,
-    log them and raise an exception.
-    """
-    secrets_match = True
-
-    # Validate that Vault values match what we wrote
-    logging.debug(
-        "Validating that Vault contents match what was written to it")
-
-    fields_not_written = secret_written.keys() - secret_read.keys()
-    extra_fields = secret_read.keys() - secret_written.keys()
-    common_fields = secret_read.keys() & secret_written.keys()
-
-    if fields_not_written:
-        secrets_match = False
-        logging.error("Fields were written to the CSM root secret, but were not present"
-                      f" when it was read back: {fields_not_written}")
-    else:
-        logging.debug(
-            "All written secret fields were present when read back")
-
-    if extra_fields:
-        secrets_match = False
-        logging.error("Fields were not written to the CSM root secret, but were present"
-                      f" when it was read back: {extra_fields}")
-    else:
-        logging.debug("All read secret fields were present when written")
-
-    for field in common_fields:
-        if secret_read[field] == secret_written[field]:
-            logging.debug(f"Vault value for {field} matches what was written")
-        else:
-            secrets_match = False
-            logging.error(
-                f"Vault value for {field} DOES NOT MATCH what was written")
-
-    if not secrets_match:
-        raise common.ScriptException(
-            "Secret read back from Vault does not match what was written")
-
-    logging.info("Secrets read back from Vault match desired values")
-
-
-def update_root_secret_in_vault(field_changes: JsonObject) -> None:
-    """
-    Write the SSH keys and passwords to the csm root secret in Vault.
-    If the result is that the secret no longer contains any data, it is deleted from Vault.
-    Then read secret the back to verify it matches what was written (or verify that it
-    no longer exists in Vault, if applicable).
-    """
-
-    vault = Vault()
-
-    # Get the current CSM root secrets from Vault. It is possible that the secret is not in Vault.
-    csm_root_secret_before = vault.get_csm_root_secret(must_exist=False)
-    if csm_root_secret_before is None:
-        logging.debug("CSM root secret does not currently exist in Vault")
-        csm_root_secret_before = dict()
-
-    # Generate the new desired root secret based on the current secret contents and the
-    # arguments to this function
-    csm_root_secret_to_write = update_secret_fields(secret=csm_root_secret_before,
-                                                    field_changes=field_changes)
-
-    if not csm_root_secret_to_write:
-        logging.info("Based on inputs, the desired CSM root secret is empty")
-        if not csm_root_secret_before:
-            logging.info(
-                "The CSM root secret in Vault is already empty, so nothing to do.")
-            return
-
-        # Vault does not allow empty secrets do be written. Instead, they must be deleted.
-        logging.info("Deleting CSM root secret from Vault")
-        vault.delete_csm_root_secret()
-
-        # Now attempt to read the CSM root secret from Vault.
-        csm_root_secret_after = vault.get_csm_root_secret(must_exist=False)
-        if csm_root_secret_after is not None:
-            common.log_error_raise_exception(
-                "CSM root secret appears to exist in Vault even after deleting it")
-        logging.info("CSM root secret deleted from Vault")
-        return
-
-    # We are left with the case where we are writing secret data to Vault
-    logging.info("Writing updated CSM root secret to Vault")
-    vault.write_csm_root_secret(secret_data=csm_root_secret_to_write)
-
-    # Read back CSM root secret from Vault. It should exist, since we just wrote it.
-    csm_root_secret_after = vault.get_csm_root_secret(must_exist=True)
-
-    # Compare what we wrote to what we read back
-    compare_root_secrets(csm_root_secret_to_write, csm_root_secret_after)
-    return
-
-
-def parse_args() -> JsonObject:
+def parse_args() -> CsmUserSecretUpdateData:
     """
     Parses the command line arguments.
     Returns a dictionary mapping secret field names to the value they should be
@@ -283,8 +143,13 @@ def parse_args() -> JsonObject:
      --pw-prompt | --pw-remove | --pw-sys]
     [--pri-key-file FILEPATH | --pri-key-no-change | --pri-key-remove]
     [--pub-key-file FILEPATH | --pub-key-no-change | --pub-key-remove]
+    [--config-file [FILEPATH] | --config-no-change | --config-remove]
     """
-    logging.debug(f"Command line arguments: {sys.argv}")
+    logging.debug("Command line arguments: %s", sys.argv)
+
+    # Sentinel values
+    NO_CHANGE = object()
+    REMOVE = object()
 
     parser = argparse.ArgumentParser(
         description="Update CSM root secrets in Vault with specified SSH keys and password hash")
@@ -309,59 +174,86 @@ def parse_args() -> JsonObject:
 
     # Private key source arguments are mutually exclusive
     pri_key_group = parser.add_mutually_exclusive_group()
-    pri_key_group.add_argument("--pri-key-no-change", action='store_true',
+    # Have to use argparse.SUPPRESS to avoid a default value being set
+    pri_key_group.add_argument("--pri-key-no-change", action='store_const', const=NO_CHANGE,
+                               dest='pri_key', default=argparse.SUPPRESS,
                                help="Do not change saved private key (if any) in Vault")
     pri_key_group.add_argument("--pri-key-file", type=pri_ssh_key_file,
-                               metavar='private_key_file', default=PRI_KEY_PATH, dest='pri_key',
-                               help=f"Path to private key file (default: {PRI_KEY_PATH})")
-    pri_key_group.add_argument("--pri-key-remove", action='store_true',
+                               metavar='private_key_file', dest='pri_key', default=PRI_KEY_PATH,
+                               help=f"Read key from private_key_file (default: {PRI_KEY_PATH})")
+    pri_key_group.add_argument("--pri-key-remove", action='store_const', const=REMOVE,
+                               dest='pri_key', default=argparse.SUPPRESS,
                                help="Remove saved private key (if any) from Vault")
 
     # Public key source arguments are mutually exclusive
     pub_key_group = parser.add_mutually_exclusive_group()
-    pub_key_group.add_argument("--pub-key-no-change", action='store_true',
+    pub_key_group.add_argument("--pub-key-no-change", action='store_const', const=NO_CHANGE,
+                               dest='pub_key', default=argparse.SUPPRESS,
                                help="Do not change saved public key (if any) in Vault")
     pub_key_group.add_argument("--pub-key-file", type=pub_ssh_key_file,
-                               metavar='public_key_file', default=PUB_KEY_PATH, dest='pub_key',
-                               help=f"Path to public key file (default: {PUB_KEY_PATH})")
-    pub_key_group.add_argument("--pub-key-remove", action='store_true',
+                               metavar='public_key_file', dest='pub_key', default=PUB_KEY_PATH,
+                               help=f"Read key from public_key_file (default: {PUB_KEY_PATH})")
+    pub_key_group.add_argument("--pub-key-remove", action='store_const', const=REMOVE,
+                               dest='pub_key', default=argparse.SUPPRESS,
                                help="Remove saved public key (if any) from Vault")
+
+    # SSH config source arguments are mutually exclusive
+    config_group = parser.add_mutually_exclusive_group()
+    config_group.add_argument("--config-no-change", action='store_const', const=NO_CHANGE,
+                              dest='ssh_config', default=NO_CHANGE,
+                              help="Do not change saved SSH config (if any) in Vault (default)")
+    config_group.add_argument("--config-file", nargs='?', type=ssh_config_file, const=CONFIG_PATH,
+                              default=argparse.SUPPRESS, metavar='ssh_config_file',
+                              dest='ssh_config',
+                              help=f"Read key from ssh_config_file or {CONFIG_PATH}")
+    config_group.add_argument("--config-remove", action='store_const', const=REMOVE,
+                              dest='ssh_config', default=argparse.SUPPRESS,
+                              help="Remove saved SSH config (if any) from Vault")
 
     parsed_args = parser.parse_args()
 
-    field_changes = dict()
+    field_changes = CsmUserSecretUpdateData()
 
     if parsed_args.pw_remove:
         # Clear the field in Vault, if it is set
-        field_changes[PASSWORD_HASH_FIELD_NAME] = None
+        field_changes[PW_FIELD] = None
     elif parsed_args.pw_hash_env_var is not None:
         # We have already read in the hashed value from the environment variable
-        field_changes[PASSWORD_HASH_FIELD_NAME] = parsed_args.pw_hash_env_var
+        field_changes[PW_FIELD] = parsed_args.pw_hash_env_var
     elif parsed_args.pw_env_var is not None:
         # Generate the hash
         logging.debug("Generating password hash")
-        field_changes[PASSWORD_HASH_FIELD_NAME] = crypt.crypt(
+        field_changes[PW_FIELD] = crypt.crypt(
             parsed_args.pw_env_var)
     elif parsed_args.pw_prompt is not None:
         # Generate the hash
         logging.debug("Generating password hash")
-        field_changes[PASSWORD_HASH_FIELD_NAME] = crypt.crypt(
+        field_changes[PW_FIELD] = crypt.crypt(
             parsed_args.pw_prompt)
     elif not parsed_args.pw_no_change:
         # Default is to read it from the system
-        field_changes[PASSWORD_HASH_FIELD_NAME] = root_hash_from_etc_shadow()
+        field_changes[PW_FIELD] = root_hash_from_etc_shadow()
 
-    if parsed_args.pri_key_remove:
+    if parsed_args.pri_key is REMOVE:
         # Clear the field in Vault, if it is set
-        field_changes[PRIVATE_KEY_FIELD_NAME] = None
-    elif not parsed_args.pri_key_no_change:
-        field_changes[PRIVATE_KEY_FIELD_NAME] = parsed_args.pri_key
+        field_changes[SSH_PRI_KEY_FIELD] = None
+    elif parsed_args.pri_key is not NO_CHANGE:
+        # Use file contents
+        field_changes[SSH_PRI_KEY_FIELD] = parsed_args.pri_key
 
-    if parsed_args.pub_key_remove:
+    if parsed_args.pub_key is REMOVE:
         # Clear the field in Vault, if it is set
-        field_changes[PUBLIC_KEY_FIELD_NAME] = None
-    elif not parsed_args.pub_key_no_change:
-        field_changes[PUBLIC_KEY_FIELD_NAME] = parsed_args.pub_key
+        field_changes[SSH_PUB_KEY_FIELD] = None
+    elif parsed_args.pub_key is not NO_CHANGE:
+        # Use file contents
+        field_changes[SSH_PUB_KEY_FIELD] = parsed_args.pub_key
+
+    if parsed_args.ssh_config is REMOVE:
+        # Clear the field in Vault, if it is set
+        field_changes[SSH_CONFIG_FIELD] = None
+    elif parsed_args.ssh_config is not NO_CHANGE:
+        # Use file contents
+        field_changes[SSH_CONFIG_FIELD] = parsed_args.ssh_config
 
     return field_changes
 
@@ -371,7 +263,7 @@ def main():
     Parses the command line arguments, read in the secrets, write them to Vault.
     """
     field_changes = parse_args()
-    update_root_secret_in_vault(field_changes)
+    csm_root_secret().update(field_changes, verify=True)
 
 
 if __name__ == '__main__':

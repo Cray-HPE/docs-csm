@@ -7,50 +7,9 @@ which causes the node boot to drop into the `dracut` emergency shell.
 
 ## Procedure
 
-1. (`ncn-mw#`) Retrieve the `cray-console-operator` pod ID.
+1. (`ncn-mw#`) Connect to the node's console.
 
-    ```bash
-    CONPOD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}'); echo ${CONPOD}
-    ```
-
-    Example output:
-
-    ```text
-    cray-console-operator-79bf95964-qpcpp
-    ```
-
-The following steps should be repeated for each Gigabyte node which needs to have its BIOS time reset.
-
-1. (`ncn-mw#`) Set the `XNAME` variable to the component name (xname) of the node whose console you wish to open.
-
-    ```bash
-    XNAME=x3001c0s24b1n0
-    ```
-
-1. (`ncn-mw#`) Find the `cray-console-node` pod that is connected to that node.
-
-    ```bash
-    NODEPOD=$(kubectl -n services exec "${CONPOD}" -c cray-console-operator -- \
-            sh -c "/app/get-node ${XNAME}" | jq .podname | sed 's/"//g') ; echo ${NODEPOD}
-    ```
-
-    Example output:
-
-    ```text
-    cray-console-node-1
-    ```
-
-1. (`ncn-mw#`) Connect to the node's console using ConMan on the identified `cray-console-node` pod.
-
-    ```bash
-    kubectl exec -it -n services "${NODEPOD}" -- conman -j "${XNAME}"
-    ```
-
-    Example output:
-
-    ```text
-    <ConMan> Connection to console [x3001c0s24b1] opened.
-    ```
+    Follow the steps in the [Log in to a Node Using ConMan](../conman/Log_in_to_a_Node_Using_ConMan.md) procedure to connect to the node's console.
 
 1. (`ncn-mw#`) In another terminal, boot the node to BIOS.
 
@@ -87,6 +46,6 @@ The following steps should be repeated for each Gigabyte node which needs to hav
 
 1. Enter the `F10` key followed by the `Enter` key to save the BIOS time.
 
-1. Exit the connection to the console by entering `&.`.
+1. Exit the connection to the console by entering `&.``[Enter]`.
 
 1. Repeat the above steps for other nodes which need their BIOS time reset.

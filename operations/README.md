@@ -79,7 +79,6 @@ Build and customize image recipes with the Image Management Service (IMS).
 - [Import External Image to IMS](image_management/Import_External_Image_to_IMS.md)
 - [Import NCN Image to IMS](image_management/Import_NCN_Image_to_IMS.md)
 - [Customize an Image Root Using IMS](image_management/Customize_an_Image_Root_Using_IMS.md)
-      - [Create UAN Boot Images](image_management/Create_UAN_Boot_Images.md)
       - [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
 - [Configure a Remote Build Node](image_management/Configure_a_Remote_Build_Node.md)
 - [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
@@ -108,7 +107,6 @@ Use the Boot Orchestration Service \(BOS\) to boot, reboot, and shut down collec
       - [Component Status](boot_orchestration/Component_Status.md)
 - [BOS Session Templates](boot_orchestration/Session_Templates.md)
       - [Manage a Session Template](boot_orchestration/Manage_a_Session_Template.md)
-      - [Create a Session Template to Boot Compute Nodes with CPS](boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_CPS.md)
       - [Create a Session Template to Boot Compute Nodes with SBPS](boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md)
       - [Boot UANs](boot_orchestration/Boot_UANs.md)
 - [BOS Sessions](boot_orchestration/Sessions.md)
@@ -174,7 +172,7 @@ Additional links to power on sub-procedures provided for reference. Refer to the
 - [Power On Compute Cabinets](power_management/Power_On_Compute_Cabinets.md) using PCS
 - [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
 - [Power On and Boot Managed Nodes](power_management/Power_On_and_Boot_Managed_Nodes.md)
-- [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Power_Control_Service/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md) using PCS
+- [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md) using PCS
 - [HMS known issues](../troubleshooting/README.md#hardware-management-system-hms)
 
 ## Power management
@@ -182,9 +180,9 @@ Additional links to power on sub-procedures provided for reference. Refer to the
 HPE Cray System Management (CSM) software manages and controls power out-of-band through Redfish APIs.
 
 - [Power Management](power_management/power_management.md)
-- [Power Control Service (PCS)](power_management/Power_Control_Service/Power_Control_Service_PCS.md)
+- [Power Control Service (PCS)](power_management/Power_Control_Service_PCS.md)
 - [User Access to Compute Node Power Data](power_management/User_Access_to_Compute_Node_Power_Data.md)
-- [Node Card Power Management](power_management/Power_Control_Service/Node_Card_Power_Management.md)
+- [Node Card Power Management](power_management/Node_Card_Power_Management.md)
 - [Set the Turbo Boost Limit](power_management/Set_the_Turbo_Boost_Limit.md)
 - [PCS API](../api/power-control.md)
 - [HMS known issues](../troubleshooting/README.md#hardware-management-system-hms)
@@ -675,7 +673,6 @@ The central DNS infrastructure provides the structural networking hierarchy and 
 
 - [DNS](network/dns/DNS.md)
 - [Manage the DNS Unbound Resolver](network/dns/Manage_the_DNS_Unbound_Resolver.md)
-- [Enable `ncsd` on UANs](network/dns/Enable_ncsd_on_UANs.md)
 - [PowerDNS Configuration](network/dns/PowerDNS_Configuration.md)
 - [PowerDNS Migration Guide](network/dns/PowerDNS_migration.md)
 - [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)

@@ -5,6 +5,7 @@ or some other issue with the node has occurred that warrants rebuilding the node
 
 - [Prerequisites](#prerequisites)
 - [Procedure](#procedure)
+- [Restore manual configuration](#restore-manual-configuration)
 - [Validation](#validation)
 
 ## Prerequisites
@@ -68,10 +69,6 @@ make sure that the following conditions are met:
 
     In this case, the rebuild should be split into multiple requests, with each request specifying no more than five workers.
 
-- No single rebuild request should include all of the worker nodes that have DVS running on them. For High Availability, DVS requires at least two workers running DVS and CPS at all times.
-
-- When rebuilding worker nodes which are running DVS, it is not recommended to simultaneously reboot compute nodes. This is to avoid restarting DVS clients and servers at the same time.
-
 ##### Example
 
 (`ncn-m001#`) An example of a single request to rebuild multiple worker nodes simultaneously:
@@ -130,6 +127,11 @@ Follow each step below:
 1. [Re-add Storage Node to Ceph](Re-add_Storage_Node_to_Ceph.md)
 1. [Validate Boot Loader](Validate_Boot_Loader.md)
 1. [Storage Node Validation](Post_Rebuild_Storage_Node_Validation.md)
+
+## Restore manual configuration
+
+Restore any configurations for the node that are not automatically performed by [CFS](../../../glossary.md#configuration-framework-service-cfs)
+live node personalization.
 
 ## Validation
 

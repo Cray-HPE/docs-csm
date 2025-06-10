@@ -93,7 +93,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    Specify the appropriate component name (xname) and BOS template for the node type in the following command.
 
    ```bash
-   BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+   BOS_TEMPLATE=uss-1.4.0-slurm-healthy-compute
    cray bos v2 sessions create --template-name $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
    ```
 
@@ -194,7 +194,7 @@ cray hsm state components enabled update --enabled false x9000c3s0
 ### Source: Record MAC and IP addresses for nodes
 
 **IMPORTANT:** Record the node management network (NMN) MAC and IP addresses for each node in the blade (labeled `Node Maintenance Network`). To prevent disruption in the
-data virtualization service (DVS), these addresses must be maintained in the HSM when the blade is swapped and discovered.
+Scalable Boot Project Service (SBPS), these addresses must be maintained in the HSM when the blade is swapped and discovered.
 
 The hardware management network MAC and IP addresses are assigned algorithmically and **must not be deleted** from the HSM.
 
@@ -268,7 +268,7 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 1. (`ncn-mw#`) Use BOS to shut down the affected nodes in the destination blade (in this example, `x1005c3s0`).
 
     ```bash
-    BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+    BOS_TEMPLATE=uss-1.4.0-slurm-healthy-compute
     cray bos v2 sessions create --template-name $BOS_TEMPLATE --operation shutdown \
             --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
@@ -374,8 +374,8 @@ cray hsm state components enabled update --enabled false x1005c3s0 --id x1005c3s
 
 ### Destination: Record the NIC MAC and IP addresses
 
-**IMPORTANT:** Record the component ID, MAC addresses, and IP addresses for each node in the blade in the destination system. To prevent disruption in the data virtualization
-service (DVS), these addresses must be maintained in the HSM when the replacement blade is swapped and discovered.
+**IMPORTANT:** Record the component ID, MAC addresses, and IP addresses for each node in the blade in the destination system. To prevent disruption in the
+Scalable Boot Project Service (SBPS), these addresses must be maintained in the HSM when the replacement blade is swapped and discovered.
 
 The hardware management network NIC MAC addresses for liquid-cooled blades are assigned algorithmically and **must not be deleted** from the HSM.
 
@@ -719,7 +719,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     Specify the appropriate BOS template for the node type.
 
     ```bash
-    BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+    BOS_TEMPLATE=uss-1.4.0-slurm-healthy-compute
     cray bos v2 sessions create --template-name $BOS_TEMPLATE \
             --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
@@ -734,62 +734,6 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
     ```bash
     cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
-    ```
-
-### Check DVS
-
-There should be one or more `cray-cps` pods.
-
-1. (`ncn-mw#`) Verify that the `cray-cps` pods on worker nodes are `Running`.
-
-    ```bash
-    kubectl get pods -Ao wide | grep cps
-    ```
-
-    Example output:
-
-    ```text
-    services   cray-cps-75cffc4b94-j9qzf    2/2  Running   0   42h 10.40.0.57  ncn-w001
-    ```
-
-1. (`ncn-w#`) SSH to each worker node running CPS/DVS, and run `dmesg -T` to ensure that there are no recurring `"DVS: merge_one"` error messages as shown.
-
-   The error messages indicate that DVS is detecting an IP address change for one of the client nodes.
-
-    ```bash
-    dmesg -T | grep "DVS: merge_one"
-    ```
-
-    ```text
-    [Tue Jul 21 13:09:54 2020] DVS: merge_one#351: New node map entry does not match the existing entry
-    [Tue Jul 21 13:09:54 2020] DVS: merge_one#353:   nid: 8 -> 8
-    [Tue Jul 21 13:09:54 2020] DVS: merge_one#355:   name: 'x3000c0s19b1n0' -> 'x3000c0s19b1n0'
-    [Tue Jul 21 13:09:54 2020] DVS: merge_one#357:   address: '10.252.0.26@tcp99' -> '10.252.0.33@tcp99'
-    [Tue Jul 21 13:09:54 2020] DVS: merge_one#358:   Ignoring.
-    ```
-
-1. Make sure the Configuration Framework Service (CFS) finished successfully. Review *HPE Cray EX DVS Administration Guide 1.4.1 `S-8004`*.
-
-1. (`nid#`) SSH to the node and check each DVS mount.
-
-    ```bash
-    mount | grep dvs | head -1
-    ```
-
-    Example output:
-
-    ```text
-    /var/lib/cps-local/0dbb42538e05485de6f433a28c19e200 on /var/opt/cray/gpu/nvidia-squashfs-21.3 type dvs (ro,relatime,blksize=524288,statsfile=/sys/kernel/debug/dvs/mounts/1/stats,attrcache_timeout=14400,cache,nodatasync,noclosesync,retry,failover,userenv,noclusterfs,killprocess,noatomic,nodeferopens,no_distribute_create_ops,no_ro_cache,loadbalance,maxnodes=1,nnodes=6,nomagic,hash_on_nid,hash=modulo,nodefile=/sys/kernel/debug/dvs/mounts/1/nodenames,nodename=x3000c0s6b0n0:x3000c0s5b0n0:x3000c0s4b0n0:x3000c0s9b0n0:x3000c0s8b0n0:x3000c0s7b0n0)
-    ```
-
-    ```bash
-    ls /var/opt/cray/gpu/nvidia-squashfs-21.3
-    ```
-
-    Example output:
-
-    ```text
-    rootfs
     ```
 
 ### Check the HSN for the affected nodes

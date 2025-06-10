@@ -6,7 +6,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
 
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
 
-- Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
+- Knowledge of whether SBPS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
 
 - Blade is being added to an existing liquid-cooled cabinet in the system.
 
@@ -153,7 +153,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    a comma-separated list of the BOS session templates determined in the previous step.
 
    ```bash
-   BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
+   BOS_TEMPLATES=uss-1.4.0-slurm-healthy-compute
    sat bootsys boot --stage bos-operations --bos-limit x9000c3s0 --recursive --bos-templates $BOS_TEMPLATES
    ```
 
@@ -166,52 +166,6 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    1. Review [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) to perform a dry run using FAS to verify firmware versions.
 
    1. If necessary, update firmware with FAS. See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) for more information.
-
-## Check DVS
-
-There should be one or more `cray-cps` pods.
-
-1. (`ncn-mw#`) Check the `cray-cps` pods on worker nodes and verify they are `Running`.
-
-   ```bash
-   kubectl get pods -Ao wide | grep cps
-   ```
-
-   Example output:
-
-   ```text
-   services   cray-cps-75cffc4b94-j9qzf    2/2  Running   0   42h 10.40.0.57  ncn-w001
-   ```
-
-1. (`ncn-w#`) SSH to each worker node running CPS/DVS and run `dmesg -T`.
-
-   Ensure that there are no recurring `"DVS: merge_one"` error messages shown. These error messages indicate that DVS is detecting an IP address change for one of the client nodes.
-
-   ```bash
-   dmesg -T | grep "DVS: merge_one"
-   ```
-
-   Example output:
-
-   ```text
-   [Tue Jul 21 13:09:54 2020] DVS: merge_one#351: New node map entry does not match the existing entry
-   [Tue Jul 21 13:09:54 2020] DVS: merge_one#353:   nid: 8 -> 8
-   [Tue Jul 21 13:09:54 2020] DVS: merge_one#355:   name: 'x3000c0s19b1n0' -> 'x3000c0s19b1n0'
-   [Tue Jul 21 13:09:54 2020] DVS: merge_one#357:   address: '10.252.0.26@tcp99' -> '10.252.0.33@tcp99'
-   [Tue Jul 21 13:09:54 2020] DVS: merge_one#358:   Ignoring.
-   ```
-
-1. (`nid#`) SSH to the client node and check each DVS mount.
-
-   ```bash
-   mount | grep dvs | head -1
-   ```
-
-   Example output:
-
-   ```text
-   /var/lib/cps-local/0dbb42538e05485de6f433a28c19e200 on /var/opt/cray/gpu/nvidia-squashfs-21.3 type dvs (ro,relatime,blksize=524288,statsfile=/sys/kernel/debug/dvs/mounts/1/stats,attrcache_timeout=14400,cache,nodatasync,noclosesync,retry,failover,userenv,noclusterfs,killprocess,noatomic,nodeferopens,no_distribute_create_ops,no_ro_cache,loadbalance,maxnodes=1,nnodes=6,nomagic,hash_on_nid,hash=modulo,nodefile=/sys/kernel/debug/dvs/mounts/1/nodenames,nodename=x3000c0s6b0n0:x3000c0s5b0n0:x3000c0s4b0n0:x3000c0s9b0n0:x3000c0s8b0n0:x3000c0s7b0n0)
-   ```
 
 ## Check the HSN for the affected nodes
 

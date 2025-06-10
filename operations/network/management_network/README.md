@@ -30,9 +30,9 @@ exactly match installed products.
 * [Minimum software version requirements](#minimum-software-version-requirements)
 * [Transceiver and cable guide](transceiver_cable_guide.md)
 * [Changes](#changes)
-  * [Enhancements](#enhancements-and-features)
-  * [Issues and workarounds](#issues-and-workarounds)
-  * [Security Bulletin Subscription Service](#security-bulletin-subscription-service)
+    * [Enhancements](#enhancements-and-features)
+    * [Issues and workarounds](#issues-and-workarounds)
+    * [Security Bulletin Subscription Service](#security-bulletin-subscription-service)
 
 ## Adding switch admin password to Vault
 
@@ -48,12 +48,9 @@ to verify that it was written correctly.
 /usr/share/doc/csm/scripts/operations/configuration/write_sw_admin_pw_to_vault.py
 ```
 
-On success, the script will exit with return code 0 and have the following final lines
-of output:
+On success, the script will exit with return code 0 and have the following final line of output:
 
 ```text
-Writing switch admin password to Vault
-Password read from Vault matches what was written
 SUCCESS
 ```
 

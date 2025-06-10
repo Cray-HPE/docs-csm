@@ -11,7 +11,7 @@ This procedure will detail how to increase the size of the Persistent Volume Cla
 
 ## Procedure
 
-NOTE: The examples below use `cray-power-control` as the example etcd cluster. If inspecting another cluster, replace the cluster name with the appropriate cluster name (`cray-bos`, `cray-bss`, etc..).
+NOTE: The examples below use `cray-power-control` as the example etcd cluster. If inspecting another cluster, replace the cluster name with the appropriate cluster name (`cray-bss`, `cray-fas`, etc..).
 
 1. (`ncn-mw#`) Check the current PVC usage in the running pods. Note that the following script will only report usage for pods that are running,
 so it may be necessary to run this command multiple times in order to catch the pod(s) while they are briefly up and trying to start.

@@ -8,7 +8,7 @@ A CFS session or pod is failing to complete, and the Ansible logs are not showin
 
 ## Check for filesystem issues
 
-Hung sessions are usually a result of filesystem issues, such as problems with DVS, on the nodes that CFS is attempting to configure.
+Hung sessions are usually a result of filesystem issues on the nodes that CFS is attempting to configure.
 An issue on even one of the nodes that a session is attempting to configure can cause the whole session to hang (unless Ansible is specifically configured to use a `free` rather than `linear` strategy).
 
 1. (`ncn-mw#`) Find all the nodes that the Ansible session is targeting.

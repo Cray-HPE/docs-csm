@@ -26,32 +26,32 @@ The following is an example BOS session template:
   "boot_sets": {
     "boot_set1": {
       "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node  oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
-      "rootfs_provider": "cpss3",
+      "rootfs_provider": "sbps",
       "node_list": [
         "x3000c0s19b1n0"
       ],
       "etag": "foo",
       "path": "s3://boot-images/e06530f1-fde2-4ca5-9148-7e84f4857d17/manifest_sans_boot_parameters.json",
-      "rootfs_provider_passthrough": "66666666:dvs:api-gw-service-nmn.local:300:eth0",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300",
       "type": "s3"
     },
     "boot_set2": {
       "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node  oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
-      "rootfs_provider": "cpss3",
+      "rootfs_provider": "sbps",
       "node_list": [
         "x3000c0s21b1n0",
         "x3000c0s22b1n0"
       ],
       "etag": "bar",
       "path": "s3://boot-images/f17631a1-fed1-5cb5-0aa8-7aaaf4123411/manifest.json",
-      "rootfs_provider_passthrough": "66666666:dvs:api-gw-service-nmn.local:300:eth0",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300",
       "type": "s3"
     }
   },
   "cfs": {
       "configuration": "example-configuration"
   },
-  "enable_cfs": true,
+  "enable_cfs": true
 }
 ```
 
@@ -149,10 +149,9 @@ The `rootfs` is the root file system.
 
 `rootfs_provider` identifies the mechanism that provides the root file system for the node.
 
-In the case of the [Cray Operating System (COS)](../../glossary.md#cray-operating-system-cos) image, the `rootfs_provider` is HPE's
-[Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps), which uses HPE's
-[Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) to deliver the content.
-CPS projects the root file system onto the nodes as a SquashFS image. This is provided via an overlay file system which is set up in dracut.
+In the case of the [User Services Software (USS)](../../glossary.md#user-services-software-uss) image, the `rootfs_provider` is HPE's
+[iSCSI SBPS (Scalable Boot Content Projection Service)](../iscsi_sbps/iscsi_sbps.md).
+SBPS projects the root file system onto the nodes as a SquashFS image. This is provided via an overlay file system which is set up in dracut.
 
 `rootfs_provider_passthrough` is a string that is passed through to the provider of the `rootfs`. This string can contain additional information that the provider will act upon.
 
@@ -168,42 +167,23 @@ BOS fills in the protocol based on the value provided in `rootfs_provider`. If B
 BOS finds the `rootfs_provider` and `etag` values in the manifest file in the session template in the boot set.
 The `rootfs_provider_passthrough` parameters are appended to the `root` parameter without modification. They are "passed through", as the name implies.
 
-Currently, the only `rootfs` providers that BOS recognizes are `cpss3` and `sbps`.
-
-* For more information on `cpss3`, see [Create a Session Template to Boot Compute Nodes with CPS](Create_a_Session_Template_to_Boot_Compute_Nodes_with_CPS.md).
-* For more information on `sbps`, see [Create a Session Template to Boot Compute Nodes with SBPS](Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md).
+Currently, the only `rootfs` provider that BOS recognizes is `sbps`.
+For more information on `sbps`, see [Create a Session Template to Boot Compute Nodes with SBPS](Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md).
 
 #### `root` kernel parameter example
 
 ```text
-root=craycps-s3:s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs:f040d70bd6fabaf91838fe4e484563cf-211:dvs:api-gw-service-nmn.local:300:nmn0
+root=sbps-s3:s3://boot-images/4fab0408-0bfe-4668-b957-964f8ff0e4e9/rootfs:b6ea7a2314d54dead0c94223863b3488-1977:sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300
 ```
 
 The following table explains the different pieces in the preceding example.
 
-| Field                                    | Example Value                                                  | Explanation                                                                                                             |
-|------------------------------------------|----------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
-| Protocol                                 | `craycps-s3`                                                   | The protocol used to mount the root file system, using CPS in this example.                                             |
-| `rootfs_provider` location               | `s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs` | The `rootfs_provider` location is a SquashFS image stored in S3.                                                        |
-| `etag`                                   | `f040d70bd6fabaf91838fe4e484563cf-211`                         | The `Etag` (entity tag) is the identifier of the SquashFS image in S3.                                                  |
-| `rootfs_provider` passthrough parameters | `dvs:api-gw-service-nmn.local:300:nmn0`                        | These are additional parameters passed through to CPS in this example, which it uses to properly mount the file system. |
-
-The `rootfs_provider_passthrough` parameters are explained in the following table.
-
-| Parameter | Example                    | Explanation                                                                                                   |
-|-----------|----------------------------|---------------------------------------------------------------------------------------------------------------|
-| Transport | `dvs`                      | Use DVS to project the SquashFS image down to the node.                                                       |
-| Gateway   | `api-gw-service-nmn.local` | This is the URL that identifies the gateway where the DVS servers are located.                                |
-| Time-out  | `300`                      | The number of seconds to wait to establish a contact.                                                         |
-| Interface | `nmn0`                     | The IP interface on the node to use to contact the DVS server; This interface must be up to continue booting. |
-
-Regarding the interface to use for contacting DVS, the possible values are:
-
-* `nmn0` -- Ensures that the `nmn0` interface is up
-* `nmn0,hsn0` -- Ensures that both the `nmn0` and `hsn0` interfaces are up. This is required for booting over the [High Speed Network (HSN)](../../glossary.md#high-speed-network-hsn).
-* `hsn0` -- Ensures that the `hsn0` interface is up.
-
-The DVS configuration files determine which interface to use (NMN or HSN). However, the CPS `dracut` ensures the that requested interfaces are up.
+| Field                                    | Example Value                                                              | Explanation                                                                                                             |
+|------------------------------------------|----------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| Protocol                                 | `sbps-s3`                                                                  | The protocol used to mount the root file system, using SBPS in this example.                                            |
+| `rootfs_provider` location               | `s3://boot-images/4fab0408-0bfe-4668-b957-964f8ff0e4e9/rootfs`             | The `rootfs_provider` location is a SquashFS image stored in S3.                                                        |
+| `etag`                                   | `b6ea7a2314d54dead0c94223863b3488-1977`                                    | The `Etag` (entity tag) is the identifier of the SquashFS image in S3.                                                  |
+| `rootfs_provider_passthrough` parameters | `sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:30` | These are additional parameters passed through to SBPS in this example.                                                 |
 
 ### Overriding configuration
 

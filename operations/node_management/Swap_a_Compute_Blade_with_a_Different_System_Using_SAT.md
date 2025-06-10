@@ -110,7 +110,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    name (xname) for the slot, and a comma-separated list of the BOS session templates determined in the previous step.
 
    ```bash
-   BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
+   BOS_TEMPLATES=uss-4809
    sat bootsys shutdown --stage bos-operations --bos-limit x9000c3s0 --recursive --bos-templates $BOS_TEMPLATES
    ```
 
@@ -163,7 +163,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    The appropriate BOS session templates should be determined using the same procedure as was used to [determine the appropriate BOS session templates on the source system](#source-prepare-the-blade-for-removal).
 
    ```bash
-   BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
+   BOS_TEMPLATES=uss-2.0.30-slurm-healthy-compute
    sat bootsys shutdown --stage bos-operations --bos-limit x1005c0s3 --recursive --bos-templates $BOS_TEMPLATES
    ```
 
@@ -211,7 +211,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    Use `sat bootsys` to power on and boot the nodes. Specify the appropriate BOS template for the node type.
 
    ```bash
-   BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+   BOS_TEMPLATE=uss-2.0.30-slurm-healthy-compute
    sat bootsys boot --stage bos-operations --bos-limit x1005c0s3 --recursive --bos-templates $BOS_TEMPLATE
    ```
 
@@ -227,63 +227,6 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
    ```bash
    cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
-   ```
-
-### Destination: Check DVS
-
-There should be one or more `cray-cps` pods.
-
-1. (`ncn-mw#`) Check the `cray-cps` pods on worker nodes and verify that they are `Running`.
-
-   ```bash
-   kubectl get pods -Ao wide | grep cps
-   ```
-
-   Example output:
-
-   ```text
-   services   cray-cps-75cffc4b94-j9qzf    2/2  Running   0   42h 10.40.0.57  ncn-w001
-   ```
-
-1. (`ncn-w#`) SSH to each worker node running CPS/DVS and run `dmesg -T`.
-
-   Ensure that there are no recurring `"DVS: merge_one"` error messages shown. These error messages indicate that DVS
-   is detecting an IP address change for one of the client nodes.
-
-   ```bash
-   dmesg -T | grep "DVS: merge_one"
-   ```
-
-   ```text
-   [Tue Jul 21 13:09:54 2020] DVS: merge_one#351: New node map entry does not match the existing entry
-   [Tue Jul 21 13:09:54 2020] DVS: merge_one#353:   nid: 8 -> 8
-   [Tue Jul 21 13:09:54 2020] DVS: merge_one#355:   name: 'x3000c0s19b1n0' -> 'x3000c0s19b1n0'
-   [Tue Jul 21 13:09:54 2020] DVS: merge_one#357:   address: '10.252.0.26@tcp99' -> '10.252.0.33@tcp99'
-   [Tue Jul 21 13:09:54 2020] DVS: merge_one#358:   Ignoring.
-   ```
-
-1. Make sure that the Configuration Framework Service (CFS) finished successfully. Review *HPE Cray Operating System Administration Guide: CSM on HPE Cray EX Systems (S-8024)*.
-
-1. (`nid#`) SSH to the node and check each DVS mount.
-
-   ```bash
-   mount | grep dvs | head -1
-   ```
-
-   Example output:
-
-   ```text
-   /var/lib/cps-local/0dbb42538e05485de6f433a28c19e200 on /var/opt/cray/gpu/nvidia-squashfs-21.3 type dvs (ro,relatime,blksize=524288,statsfile=/sys/kernel/debug/dvs/mounts/1/stats,attrcache_timeout=14400,cache,nodatasync,noclosesync,retry,failover,userenv,noclusterfs,killprocess,noatomic,nodeferopens,no_distribute_create_ops,no_ro_cache,loadbalance,maxnodes=1,nnodes=6,nomagic,hash_on_nid,hash=modulo,nodefile=/sys/kernel/debug/dvs/mounts/1/nodenames,nodename=x3000c0s6b0n0:x3000c0s5b0n0:x3000c0s4b0n0:x3000c0s9b0n0:x3000c0s8b0n0:x3000c0s7b0n0)
-   ```
-
-   ```bash
-   ls /var/opt/cray/gpu/nvidia-squashfs-21.3
-   ```
-
-   Example output:
-
-   ```text
-   rootfs
    ```
 
 ### Destination: Check the HSN for the affected nodes

@@ -1127,19 +1127,6 @@ Expat-15
 # To allow Site Init
 Init
 
-- troubleshooting/known_issues/iuf_unable_to_run_next_stage.md
-_cm_backup.yaml
-activity
-argo
-cli
-configmap
-cray-nls
-current_state
-iuf
-kubectl
-o
-session_name
-yaml
 
 - operations/configuration_management/iSCSI_SBPS_Node_Personalization.md
 enablement
@@ -1149,3 +1136,13 @@ iscsi-sbps-targets-config
 
 - troubleshooting/debugging_with_hms_pprof_images.md
 mutexes
+
+- operations/network/Connect_to_Switch_Over_USB_Serial_Cable.md
+USB-DB-9
+USB-RJ-45
+rs232
+
+- operations/network/management_network/external_user_guides.md
+S4048-ON
+SmartFabric
+Infiniband

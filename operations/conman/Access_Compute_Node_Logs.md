@@ -4,59 +4,51 @@ This procedure shows how the ConMan utility can be used to retrieve compute node
 
 ## Prerequisites
 
-The user performing this procedure needs to have access permission to the `cray-console-operator` pod.
+* The Cray CLI is configured.
+    * See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Limitations
 
-Encryption of compute node logs is not enabled, so the passwords may be passed in clear text.
+* Encryption of compute node logs is not enabled, so the passwords may be passed in clear text.
+* If the user is a member of a tenant, then only the logs for that tenant are available.
 
 ## Procedure
 
-> **`NOTE`** this procedure has changed since the CSM 0.9 release.
+> **`NOTE`** this procedure has changed since the CSM 1.6.x releases.
 
 1. Log on to a Kubernetes master or worker node.
 
-1. (`ncn-mw#`) Find the `cray-console-operator` pod.
+1. (`ncn-mw#`) Start tailing the console log.
+
+    Execute the `cray console tail` command to start tailing the console log for a specific node.
 
     ```bash
-    OP_POD=$(kubectl get pods -n services \
-            -o wide|grep cray-console-operator|awk '{print $1}')
-    echo $OP_POD
+    cray console tail \
+        --lines 20 \
+        --follow \
+        $XNAME
     ```
 
     Example output:
 
     ```text
-    cray-console-operator-6cf89ff566-kfnjr
+    Connected to wss://api-gw-service-nmn.local/apis/console-operator/console-operator/tail/x3000c0s19b1n0
+    <ConMan> Console [x3000c0s19b1n0] log at 2025-04-22 11:00:00 UTC.
+    <ConMan> Console [x3000c0s19b1n0] log at 2025-04-22 12:00:00 UTC.
+    <ConMan> Console [x3000c0s19b1n0] log at 2025-04-22 13:00:00 UTC.
+    <ConMan> Console [x3000c0s19b1n0] log at 2025-04-22 14:00:00 UTC.
+    <ConMan> Console [x3000c0s19b1n0] log at 2025-04-22 15:00:00 UTC.
+    <ConMan> Console [x3000c0s19b1n0] log at 2025-04-22 16:00:00 UTC.
     ```
 
-1. (`ncn-mw#`) Log on to the pod.
+1. (`ncn-mw#`) Stop the tailing of the console log.
 
-    ```bash
-    kubectl exec -it -n services $OP_POD  -c cray-console-operator -- sh
-    ```
+    Press `Ctrl-C` twice to stop the tailing of the console log.
 
-1. The console log file for each node is labeled with the component name (xname) of that node.
+    Example output:
 
-    List the log directory contents.
-
-    ```bash
-    # ls -la /var/log/conman
-    total 44
-    -rw------- 1 root root 1415 Nov 30 20:00 console.XNAME
-    ...
-    ```
-
-    > The log directory is also accessible from the `cray-console-node` pods.
-
-1. The log files are plain text files which can be viewed with commands like `cat` or `tail`.
-
-    ```bash
-    tail /var/log/conman/console.XNAME
-    ```
-
-1. Exit out of the pod.
-
-    ```bash
-    exit
+    ```text
+    <ConMan> Console [x3000c0s19b1n0] log at 2025-04-22 15:00:00 UTC.
+    ^C^C
+    Aborted!
     ```

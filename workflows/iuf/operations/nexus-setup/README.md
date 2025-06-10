@@ -63,7 +63,7 @@ of the product at `$PRODUCTS_DIR`/`$PRODUCT` and requires the `$SKOPEO_IMAGE` to
 
 ```bash
 PRODUCTS_DIR=/admin/rnoska/argo-nexus/nexus-upload/products
-PRODUCT=cos-2.5.38-20221024172946
+PRODUCT=uss-1.4.0-20221024172946
 artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.8.1-20221101230212_86ad20d
 
 argo -n argo submit --from workflowtemplate/nexus-docker-upload-template \

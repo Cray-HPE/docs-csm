@@ -96,7 +96,7 @@ This procedure boots all managed nodes in the context of a full system power-up.
 
 1. (`ncn-m001#`) Check that the HPE Slingshot switches are all online.
 
-    If BOS will be used to boot computes and if DVS is configured to use HSN, then check the fabric manager switches to ensure the switches are all online
+    If BOS will be used to boot computes and if SBPS is configured to use HSN, then check the fabric manager switches to ensure the switches are all online
     before attempting to boot computes.
 
     ```bash
@@ -424,28 +424,28 @@ the UANs and compute nodes.
       Example output:
 
       ```text
-      +----------------+-------------+--------------------------------------+------------------------------+--------------------------------------------+
-      | xname          | Boot Status | Most Recent BOS Session              | Most Recent Session Template | Most Recent Image                          |
-      +----------------+-------------+--------------------------------------+------------------------------+--------------------------------------------+
-      | x3209c0s13b0n0 | stable      | dacad888-e077-41f3-9ab0-65a5a45c64e5 | uan-23.7.0                   | uan-cos-2.5.120-sles15sp4.x86_64           |
-      | x3209c0s15b0n0 | stable      | dacad888-e077-41f3-9ab0-65a5a45c64e5 | uan-23.7.0                   | uan-cos-2.5.120-sles15sp4.x86_64           |
-      | x3209c0s17b0n0 | stable      | dacad888-e077-41f3-9ab0-65a5a45c64e5 | uan-23.7.0                   | uan-cos-2.5.120-sles15sp4.x86_64           |
-      | x3209c0s19b0n0 | stable      | dacad888-e077-41f3-9ab0-65a5a45c64e5 | uan-23.7.0                   | uan-cos-2.5.120-sles15sp4.x86_64           |
-      | x3209c0s22b0n0 | failed      | dacad888-e077-41f3-9ab0-65a5a45c64e5 | uan-23.7.0                   | MISSING                                    |
-      | x3209c0s23b0n0 | failed      | dacad888-e077-41f3-9ab0-65a5a45c64e5 | uan-23.7.0                   | MISSING                                    |
-      | x9002c1s0b0n0  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-cos-2.5.120-sles15sp4.x86_64       |
-      | x9002c1s0b0n1  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-cos-2.5.120-sles15sp4.x86_64       |
-      | x9002c1s0b1n0  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-cos-2.5.120-sles15sp4.x86_64       |
-      | x9002c1s0b1n1  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-cos-2.5.120-sles15sp4.x86_64       |
-      | x9002c1s1b0n0  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-cos-2.5.120-sles15sp4.x86_64       |
-      | x9002c1s1b0n1  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-cos-2.5.120-sles15sp4.x86_64       |
-      | x9002c1s1b1n0  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-cos-2.5.120-sles15sp4.x86_64       |
-      | x9002c1s1b1n1  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-cos-2.5.120-sles15sp4.x86_64       |
-      | x9002c1s2b0n0  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-cos-2.5.120-sles15sp4.x86_64       |
-      | x9002c1s2b0n1  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-cos-2.5.120-sles15sp4.x86_64       |
-      | x9002c1s2b1n0  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-cos-2.5.120-sles15sp4.x86_64       |
-      | x9002c1s2b1n1  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-cos-2.5.120-sles15sp4.x86_64       |
-      +----------------+-------------+--------------------------------------+------------------------------+--------------------------------------------+
+      +----------------+-------------+--------------------------------------+------------------------------+----------------------------------------+
+      | xname          | Boot Status | Most Recent BOS Session              | Most Recent Session Template | Most Recent Image                      |
+      +----------------+-------------+--------------------------------------+------------------------------+----------------------------------------+
+      | x3209c0s13b0n0 | stable      | dacad888-e077-41f3-9ab0-65a5a45c64e5 | uan-23.7.0                   | uan-uss-1.4-sles15sp6.x86_64           |
+      | x3209c0s15b0n0 | stable      | dacad888-e077-41f3-9ab0-65a5a45c64e5 | uan-23.7.0                   | uan-uss-1.4-sles15sp6.x86_64           |
+      | x3209c0s17b0n0 | stable      | dacad888-e077-41f3-9ab0-65a5a45c64e5 | uan-23.7.0                   | uan-uss-1.4-sles15sp6.x86_64           |
+      | x3209c0s19b0n0 | stable      | dacad888-e077-41f3-9ab0-65a5a45c64e5 | uan-23.7.0                   | uan-uss-1.4-sles15sp6.x86_64           |
+      | x3209c0s22b0n0 | failed      | dacad888-e077-41f3-9ab0-65a5a45c64e5 | uan-23.7.0                   | MISSING                                |
+      | x3209c0s23b0n0 | failed      | dacad888-e077-41f3-9ab0-65a5a45c64e5 | uan-23.7.0                   | MISSING                                |
+      | x9002c1s0b0n0  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-uss-1.4-sles15sp6.x86_64       |
+      | x9002c1s0b0n1  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-uss-1.4-sles15sp6.x86_64       |
+      | x9002c1s0b1n0  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-uss-1.4-sles15sp6.x86_64       |
+      | x9002c1s0b1n1  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-uss-1.4-sles15sp6.x86_64       |
+      | x9002c1s1b0n0  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-uss-1.4-sles15sp6.x86_64       |
+      | x9002c1s1b0n1  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-uss-1.4-sles15sp6.x86_64       |
+      | x9002c1s1b1n0  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-uss-1.4-sles15sp6.x86_64       |
+      | x9002c1s1b1n1  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-uss-1.4-sles15sp6.x86_64       |
+      | x9002c1s2b0n0  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-uss-1.4-sles15sp6.x86_64       |
+      | x9002c1s2b0n1  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-uss-1.4-sles15sp6.x86_64       |
+      | x9002c1s2b1n0  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-uss-1.4-sles15sp6.x86_64       |
+      | x9002c1s2b1n1  | stable      | 76d4d98e-814d-4235-b756-4bdfaf3a2cb3 | compute-23.7.0               | compute-uss-1.4-sles15sp6.x86_64       |
+      +----------------+-------------+--------------------------------------+------------------------------+----------------------------------------+
       ```
 
       In this example, two of the application nodes have a `Most Recent Image` of `MISSING` which means that they did not boot Linux.

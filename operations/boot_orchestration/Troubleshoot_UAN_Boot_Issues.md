@@ -22,11 +22,7 @@ UAN boots are performed in three phases:
 
 1. PXE booting an iPXE binary that will load the `initrd` of the chosen UAN image to boot.
 1. Booting the `initrd` \(dracut\) image which configures the UAN for booting the UAN image. This process consists of two phases:
-    1. Configuring the UAN node to use the [Content Projection Service \(CPS\)](../../glossary.md#content-projection-service-cps) and
-       [Data Virtualization Service \(DVS\)](../../glossary.md#data-virtualization-service-dvs).
-       These services manage the UAN image `rootfs` mounting and make that image available to the UANs.
-    1. Mounting the `rootfs`.
-1. Booting the UAN image `rootfs`.
+1. Booting the UAN image `rootfs`, which is projected using the [Scalable Boot Projection Service (SBPS)](../../glossary.md#scalable-boot-projection-service-sbps).
 
 ## PXE issues
 
@@ -37,44 +33,12 @@ connected to the first port of the OCP card,on HPE DL325 and DL385 nodes, or to 
 ## `initrd` (dracut) issues
 
 Failures in dracut are often caused by the wrong interface being named `nmn0`, or by having multiple entries for the UAN component name (xname) in DNS. The latter is a result of
-multiple interfaces making DHCP requests. Either condition can cause IP address mismatches in the `dvs_node_map`. DNS configures entries based on DHCP leases.
+multiple interfaces making DHCP requests.
 
 When dracut starts, it renames the network device named by the `ifmap=netX:nmn0` kernel parameter to `nmn0`. This interface is the only one dracut will enable DHCP on.
 The `ip=nmn0:dhcp` kernel parameter limits dracut to DHCP only `nmn0`. The `ifmap` value must be set correctly in the `kernel_parameters` field of the BOS session template.
 
 For UAN nodes that have more than one PCI card installed, `ifmap=net2:nmn0` is the correct setting. If only one PCI card is installed, `ifmap=net0:nmn0` is normally the correct setting.
-
-UANs require CPS and DVS to boot from images. These services are configured in dracut to retrieve the `rootfs` and mount it. If the image fails to download,
-check that DVS and CPS are both healthy, and that DVS is running on all worker nodes.
-
-(`ncn-mw#`) Run the following commands to check DVS and CPS:
-
-```bash
-kubectl get nodes -l cps-pm-node=True -o custom-columns=":metadata.name" --no-headers
-```
-
-Example output:
-
-```text
-ncn-w001
-ncn-w002
-```
-
-```bash
-for node in `kubectl get nodes -l cps-pm-node=True -o custom-columns=":metadata.name" --no-headers`; do
-    ssh $node "lsmod | grep '^dvs '"
-done
-```
-
-Example output:
-
-```text
-ncn-w001
-ncn-w002
-```
-
-If DVS and CPS are both healthy, then both of these commands will return all the worker
-[Non-Compute Nodes (NCNs)](../../glossary.md#non-compute-node-ncn) in the HPE Cray EX system.
 
 ## Image boot issues
 

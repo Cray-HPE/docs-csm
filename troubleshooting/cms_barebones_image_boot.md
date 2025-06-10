@@ -8,18 +8,18 @@ PXE boot from the cluster.
 This page gives some information about the CSM barebones image and describes how the test script works.
 
 * [Notes on the CSM barebones images](#notes-on-the-csm-barebones-images)
-  * [Compute barebones images](#compute-barebones-images)
-  * [Minimal barebones image](#minimal-barebones-image)
+    * [Compute barebones images](#compute-barebones-images)
+    * [Minimal barebones image](#minimal-barebones-image)
 * [Test prerequisites](#test-prerequisites)
 * [Test overview](#test-overview)
 * [Test options](#test-options)
-  * [Controlling which node is used](#controlling-which-node-is-used)
-  * [Controlling which image is used](#controlling-which-image-is-used)
-  * [Controlling how the image is customized](#controlling-how-the-image-is-customized)
-  * [Controlling which product catalog entry is used](#controlling-which-product-catalog-entry-is-used)
-  * [Controlling which architecture is used](#controlling-which-architecture-is-used)
-  * [Controlling test script output level](#controlling-test-script-output-level)
-  * [Preventing resource deletion](#preventing-resource-deletion)
+    * [Controlling which node is used](#controlling-which-node-is-used)
+    * [Controlling which image is used](#controlling-which-image-is-used)
+    * [Controlling how the image is customized](#controlling-how-the-image-is-customized)
+    * [Controlling which product catalog entry is used](#controlling-which-product-catalog-entry-is-used)
+    * [Controlling which architecture is used](#controlling-which-architecture-is-used)
+    * [Controlling test script output level](#controlling-test-script-output-level)
+    * [Preventing resource deletion](#preventing-resource-deletion)
 
 ## Notes on the CSM barebones images
 
@@ -71,7 +71,7 @@ the minimal barebones image.
 
 This image contains only the minimal set of RPMs and configuration required to boot a compute node, and is not
 suitable for production usage. To run production work loads, it is suggested that an image from the
-[Cray Operating System (COS)](../glossary.md#cray-operating-system-cos) product, or similar, be used.
+[User Services Software (USS)](../glossary.md#user-services-software-uss) product, or similar, be used.
 
 Unlike the [compute barebones images](#compute-barebones-images),
 this image **will not successfully complete a boot** beyond the `dracut` stage of the boot process.
@@ -82,7 +82,7 @@ In addition to the minimal barebones image, the CSM release also includes an
 [Image Management Service (IMS)](../glossary.md#image-management-service-ims) recipe that
 can be used to build the CSM barebones image. However, the CSM barebones recipe currently requires
 RPMs that are not installed with the CSM product. The CSM barebones recipe can be built after the
-COS product stream is installed on the system.
+USS product stream is installed on the system.
 
 ## Test prerequisites
 

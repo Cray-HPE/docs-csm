@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# (C) Copyright 2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2024-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -22,17 +22,27 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-# When upgrading from Istio 1.11.8 to 1.19.10 we need to rollout-restart because
+# When upgrading from Istio 1.19.10 to 1.26.0, we need to rollout-restart because
 # the istio-injection enabled namespaces doesn't get the latest image of istio.
 #
 
 set -x
 
-# This part of script is to delete the pods on vault namespace which do not have proxyv2:1.19.10
+# Define the Istio version
+ISTIO_VERSION="1.26.0"
+ISTIO_PROXYV2_IMAGE="istio/proxyv2:${ISTIO_VERSION}"
+ISTIO_PILOT_IMAGE="istio/pilot:${ISTIO_VERSION}"
+
+# Define wait times in seconds
+VAULT_PODS_WAIT_TIME=120
+RESOURCE_RESTART_WAIT_TIME=180
+STATEFULSET_POD_WAIT_TIME=180
+
+# This part of script is to delete the pods on vault namespace which do not have the correct proxyv2 version
 # This is done because the vault is not updated in CSM1.6, this restart of vault may not be needed in future
 
 NAMESPACE="vault"
-CORRECT_VERSION="proxyv2:1.19.10"
+CORRECT_VERSION="${ISTIO_PROXYV2_IMAGE}"
 pods_deleted=false
 
 # Get all pods in the namespace
@@ -57,8 +67,8 @@ done
 
 # Wait for 2 minutes if any pods were deleted
 if [ "$pods_deleted" = true ]; then
-  echo "Waiting for 2 minutes for pods to restart..."
-  sleep 120
+  echo "Waiting for $((VAULT_PODS_WAIT_TIME / 60)) minutes for pods to restart..."
+  sleep $VAULT_PODS_WAIT_TIME
 
   # Check the status of the pods after restart
   new_pods=$(kubectl get pods -n "$NAMESPACE" -o jsonpath='{.items[*].metadata.name}')
@@ -92,13 +102,13 @@ else
   echo "No pods were deleted. Skipping wait."
 fi
 
-# The fuctionality of the script is:
+# The functionality of the script is:
 # This script is to restart the vault pods separately.
 # Because vault was not upgraded in this release that is why we need this script.
 # Get all istio-injection=enabled namespaces.
 # For each namespace we are keeping the record of the sts/deploys/ds which we need to restart by following way:
 #   Get all the pods in the namespace, and check istio image version.
-#   if image is not in 1.19.10 then
+#   if image is not correct version then
 #       Keep the name of the corresponding ds/sts/deploy in a list.
 #   Else move to another pod.
 # After iterating over all the namespaces we will have the list of sts/ds/deploys that needs to be restarted.
@@ -113,7 +123,7 @@ check_pod_istio_versions() {
   images=$(kubectl get pod "$pod" -n "$namespace" -o jsonpath="{.spec.containers[*].image}")
 
   # Check if any of the images is the latest Istio version
-  if echo "$images" | grep -q -e "istio/pilot:1.19.10" -e "istio/proxyv2:1.19.10"; then
+  if echo "$images" | grep -q -e "${ISTIO_PILOT_IMAGE}" -e "${ISTIO_PROXYV2_IMAGE}"; then
     return 0 # Pod has the latest Istio versions
   else
     return 1 # Pod does not have the latest Istio versions
@@ -140,6 +150,55 @@ check_pod_uses_istio_proxy() {
   else
     return 1 # Pod does not use Istio proxy
   fi
+}
+
+# Function to check if a StatefulSet has OnDelete update strategy
+check_statefulset_update_strategy() {
+  local namespace=$1
+  local statefulset_name=$2
+  local update_strategy
+  update_strategy=$(kubectl get statefulset "$statefulset_name" -n "$namespace" -o jsonpath="{.spec.updateStrategy.type}" 2> /dev/null)
+
+  if [[ $update_strategy == "OnDelete" ]]; then
+    return 0 # StatefulSet has OnDelete strategy
+  else
+    return 1 # StatefulSet has RollingUpdate or other strategy
+  fi
+}
+
+# Function to delete StatefulSet pods and wait for them to be recreated
+delete_statefulset_pods() {
+  local namespace=$1
+  shift
+  local pods_to_delete=("$@")
+
+  echo "Deleting StatefulSet pods in namespace: $namespace"
+  for pod in "${pods_to_delete[@]}"; do
+    echo "Deleting pod: $pod in namespace: $namespace"
+    kubectl delete pod "$pod" -n "$namespace" --grace-period=30
+  done
+
+  echo "Waiting for $((STATEFULSET_POD_WAIT_TIME / 60)) minutes for StatefulSet pods to be recreated..."
+  sleep $STATEFULSET_POD_WAIT_TIME
+
+  # Verify that all deleted pods have been recreated and are running
+  echo "Verifying recreated StatefulSet pods..."
+  for pod in "${pods_to_delete[@]}"; do
+    echo "Checking status of recreated pod: $pod"
+    pod_status=$(kubectl get pod "$pod" -n "$namespace" -o jsonpath='{.status.phase}' 2> /dev/null || echo "NotFound")
+    if [[ $pod_status == "Running" ]]; then
+      echo "Pod $pod is running successfully"
+      # Check if it has the correct Istio version
+      images=$(kubectl get pod "$pod" -n "$namespace" -o jsonpath="{.spec.containers[*].image}")
+      if echo "$images" | grep -q -e "${ISTIO_PILOT_IMAGE}" -e "${ISTIO_PROXYV2_IMAGE}"; then
+        echo "Pod $pod now has the correct Istio version"
+      else
+        echo "WARNING: Pod $pod still does not have the correct Istio version"
+      fi
+    else
+      echo "WARNING: Pod $pod status is: $pod_status"
+    fi
+  done
 }
 
 # Function to perform rollout restart and check status for a given resource
@@ -175,8 +234,8 @@ restart_and_check_status() {
     fi
   done
 
-  echo "Waiting for 3 minutes..."
-  sleep 180
+  echo "Waiting for $((RESOURCE_RESTART_WAIT_TIME / 60)) minutes..."
+  sleep $RESOURCE_RESTART_WAIT_TIME
 
   for resource in "${resources[@]}"; do
     resource_type=$(echo "$resource" | cut -d'/' -f1)
@@ -198,8 +257,9 @@ restart_and_check_status() {
 # Get all namespaces
 namespaces=$(kubectl get namespaces -l istio-injection=enabled -o jsonpath="{.items[*].metadata.name}")
 
-# Initialize an associative array to keep track of resources to restart
+# Initialize associative arrays to keep track of resources to restart and StatefulSet pods to delete
 declare -A resources_to_restart
+declare -A statefulset_pods_to_delete
 
 # Loop through each namespace
 for ns in $namespaces; do
@@ -208,7 +268,7 @@ for ns in $namespaces; do
 
   for pod in $pods; do
     if ! check_pod_istio_versions "$ns" "$pod"; then
-      echo "Pod $pod in namespace $ns does not have the latest Istio version. Checking its controlling resource..."
+      echo "Pod $pod in namespace $ns does not have the latest Istio version ${ISTIO_VERSION}. Checking its controlling resource..."
       controlling_resource=$(get_controlling_resource "$ns" "$pod")
 
       # Extract resource type and name from controlling_resource
@@ -218,8 +278,17 @@ for ns in $namespaces; do
 
         # Check if the resource uses Istio proxy
         if check_pod_uses_istio_proxy "$ns" "$pod"; then
-          resource_key="$ns/$resource_type/$resource_name"
-          resources_to_restart["$resource_key"]=$resource_type
+          # Check if StatefulSet has OnDelete update strategy
+          if [[ $resource_type == "StatefulSet" ]] && check_statefulset_update_strategy "$ns" "$resource_name"; then
+            # For StatefulSets with OnDelete strategy, collect pods to delete
+            statefulset_pods_to_delete["$ns"]+="$pod "
+            echo "Added StatefulSet pod $pod to deletion list for namespace $ns (OnDelete strategy)"
+          else
+            # For other resources, add to restart list
+            resource_key="$ns/$resource_type/$resource_name"
+            resources_to_restart["$resource_key"]=$resource_type
+            echo "Added $resource_type/$resource_name to restart list for namespace $ns"
+          fi
         else
           echo "Pod $pod does not use Istio proxy. Skipping restart for its controlling resource."
         fi
@@ -227,7 +296,7 @@ for ns in $namespaces; do
         echo "Skipping unknown or unhandled resource type: $controlling_resource for pod $pod"
       fi
     else
-      echo "Pod $pod in namespace $ns already has the latest Istio image versions"
+      echo "Pod $pod in namespace $ns already has the latest Istio image version ${ISTIO_VERSION}"
     fi
   done
 done
@@ -238,7 +307,19 @@ for resource_key in "${!resources_to_restart[@]}"; do
   echo "$resource_key"
 done
 
-# Restart resources at the end
+# Print the list of StatefulSet pods to delete
+echo "StatefulSet pods to delete:"
+for namespace in "${!statefulset_pods_to_delete[@]}"; do
+  echo "Namespace: $namespace - Pods: ${statefulset_pods_to_delete[$namespace]}"
+done
+
+# Delete StatefulSet pods first
+for namespace in "${!statefulset_pods_to_delete[@]}"; do
+  IFS=' ' read -r -a pods <<< "${statefulset_pods_to_delete[$namespace]}"
+  delete_statefulset_pods "$namespace" "${pods[@]}"
+done
+
+# Restart other resources
 declare -A namespace_resources
 
 for resource_key in "${!resources_to_restart[@]}"; do

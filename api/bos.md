@@ -553,8 +553,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
           "string"
         ],
         "arch": "X86",
-        "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+        "rootfs_provider": "sbps",
+        "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
       },
       "property2": {
         "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
@@ -576,8 +576,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
           "string"
         ],
         "arch": "X86",
-        "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+        "rootfs_provider": "sbps",
+        "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
       }
     },
     "links": [
@@ -838,8 +838,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     },
     "property2": {
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
@@ -861,8 +861,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     }
   },
   "links": [
@@ -1000,8 +1000,8 @@ Create a new Session Template.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     },
     "property2": {
       "name": "compute",
@@ -1024,8 +1024,8 @@ Create a new Session Template.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     }
   }
 }
@@ -1081,8 +1081,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     },
     "property2": {
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
@@ -1104,8 +1104,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     }
   },
   "links": [
@@ -1243,8 +1243,8 @@ Update an existing Session Template.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     },
     "property2": {
       "name": "compute",
@@ -1267,8 +1267,8 @@ Update an existing Session Template.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     }
   }
 }
@@ -1278,7 +1278,7 @@ Update an existing Session Template.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V2SessionTemplate](#schemav2sessiontemplate)|true|A JSON object for updating a Session Template|
+|body|body|[V2SessionTemplatePatch](#schemav2sessiontemplatepatch)|true|A JSON object for updating a Session Template|
 |session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
 |Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 
@@ -1324,8 +1324,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     },
     "property2": {
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
@@ -1347,8 +1347,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     }
   },
   "links": [
@@ -1611,8 +1611,8 @@ Session Templates.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     },
     "property2": {
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
@@ -1634,8 +1634,8 @@ Session Templates.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     }
   },
   "links": [
@@ -2856,6 +2856,15 @@ Requests with a non-empty tenant name will restict the context of the operation 
 
 Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
+#### Enumerated Values
+
+|Parameter|Value|
+|---|---|
+|phase|configuring|
+|phase|powering_off|
+|phase|powering_on|
+|phase||
+
 > Example responses
 
 > 200 Response
@@ -2895,7 +2904,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
     },
     "last_action": {
       "last_updated": "2019-07-28T03:26:00Z",
-      "action": "string",
+      "action": "actual_state_cleanup",
       "failed": true
     },
     "event_stats": {
@@ -2904,7 +2913,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
       "power_off_forceful_attempts": 1048576
     },
     "status": {
-      "phase": "string",
+      "phase": "configuring",
       "status": "string",
       "status_override": "string"
     },
@@ -3044,7 +3053,7 @@ Update the state for a collection of Components in the BOS database
       "session": "session-20190728032600"
     },
     "last_action": {
-      "action": "string",
+      "action": "actual_state_cleanup",
       "failed": true
     },
     "event_stats": {
@@ -3053,7 +3062,7 @@ Update the state for a collection of Components in the BOS database
       "power_off_forceful_attempts": 1048576
     },
     "status": {
-      "phase": "string",
+      "phase": "configuring",
       "status_override": "string"
     },
     "enabled": true,
@@ -3118,7 +3127,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
     },
     "last_action": {
       "last_updated": "2019-07-28T03:26:00Z",
-      "action": "string",
+      "action": "actual_state_cleanup",
       "failed": true
     },
     "event_stats": {
@@ -3127,7 +3136,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
       "power_off_forceful_attempts": 1048576
     },
     "status": {
-      "phase": "string",
+      "phase": "configuring",
       "status": "string",
       "status_override": "string"
     },
@@ -3267,7 +3276,7 @@ Update the state for a collection of Components in the BOS database
       "session": "session-20190728032600"
     },
     "last_action": {
-      "action": "string",
+      "action": "actual_state_cleanup",
       "failed": true
     },
     "event_stats": {
@@ -3276,7 +3285,7 @@ Update the state for a collection of Components in the BOS database
       "power_off_forceful_attempts": 1048576
     },
     "status": {
-      "phase": "string",
+      "phase": "configuring",
       "status_override": "string"
     },
     "enabled": true,
@@ -3295,10 +3304,18 @@ Update the state for a collection of Components in the BOS database
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
+|skip_bad_ids|query|boolean|false|If false, if the patch request explicitly lists a BOS component ID that|
 |body|body|any|true|The state for an array of Components|
 |Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 
 #### Detailed descriptions
+
+**skip_bad_ids**: If false, if the patch request explicitly lists a BOS component ID that
+does not exist, it will be considered a fatal error. The patch operation
+will fail and return a 404 status.
+If true, the patch request will skip any IDs that do not exist, and
+patch the remaining items. The response will only include the components
+that were actually updated.
 
 **Cray-Tenant-Name**: Tenant name.
 
@@ -3345,7 +3362,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
     },
     "last_action": {
       "last_updated": "2019-07-28T03:26:00Z",
-      "action": "string",
+      "action": "actual_state_cleanup",
       "failed": true
     },
     "event_stats": {
@@ -3354,7 +3371,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
       "power_off_forceful_attempts": 1048576
     },
     "status": {
-      "phase": "string",
+      "phase": "configuring",
       "status": "string",
       "status_override": "string"
     },
@@ -3518,7 +3535,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
   },
   "last_action": {
     "last_updated": "2019-07-28T03:26:00Z",
-    "action": "string",
+    "action": "actual_state_cleanup",
     "failed": true
   },
   "event_stats": {
@@ -3527,7 +3544,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
     "power_off_forceful_attempts": 1048576
   },
   "status": {
-    "phase": "string",
+    "phase": "configuring",
     "status": "string",
     "status_override": "string"
   },
@@ -3673,7 +3690,7 @@ Update the state for a given Component in the BOS database
     "session": "session-20190728032600"
   },
   "last_action": {
-    "action": "string",
+    "action": "actual_state_cleanup",
     "failed": true
   },
   "event_stats": {
@@ -3682,7 +3699,7 @@ Update the state for a given Component in the BOS database
     "power_off_forceful_attempts": 1048576
   },
   "status": {
-    "phase": "string",
+    "phase": "configuring",
     "status_override": "string"
   },
   "enabled": true,
@@ -3746,7 +3763,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
   },
   "last_action": {
     "last_updated": "2019-07-28T03:26:00Z",
-    "action": "string",
+    "action": "actual_state_cleanup",
     "failed": true
   },
   "event_stats": {
@@ -3755,7 +3772,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
     "power_off_forceful_attempts": 1048576
   },
   "status": {
-    "phase": "string",
+    "phase": "configuring",
     "status": "string",
     "status_override": "string"
   },
@@ -3893,7 +3910,7 @@ Update the state for a given Component in the BOS database
     "session": "session-20190728032600"
   },
   "last_action": {
-    "action": "string",
+    "action": "actual_state_cleanup",
     "failed": true
   },
   "event_stats": {
@@ -3902,7 +3919,7 @@ Update the state for a given Component in the BOS database
     "power_off_forceful_attempts": 1048576
   },
   "status": {
-    "phase": "string",
+    "phase": "configuring",
     "status_override": "string"
   },
   "enabled": true,
@@ -3966,7 +3983,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
   },
   "last_action": {
     "last_updated": "2019-07-28T03:26:00Z",
-    "action": "string",
+    "action": "actual_state_cleanup",
     "failed": true
   },
   "event_stats": {
@@ -3975,7 +3992,7 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
     "power_off_forceful_attempts": 1048576
   },
   "status": {
-    "phase": "string",
+    "phase": "configuring",
     "status": "string",
     "status_override": "string"
   },
@@ -4810,7 +4827,7 @@ The Boot Set name.
 <a id="tocsbootsetrootfsprovider"></a>
 
 ```json
-"cpss3"
+"sbps"
 
 ```
 
@@ -4830,7 +4847,7 @@ The root file system provider.
 <a id="tocsbootsetrootfsproviderpassthrough"></a>
 
 ```json
-"dvs:api-gw-service-nmn.local:300:nmn0"
+"sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
 
 ```
 
@@ -5352,8 +5369,8 @@ a Session Template, or individually within a Boot Set.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     },
     "property2": {
       "name": "compute",
@@ -5376,8 +5393,8 @@ a Session Template, or individually within a Boot Set.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     }
   },
   "links": [
@@ -5410,6 +5427,86 @@ group of Components.
 |boot_sets|object|true|none|Mapping from Boot Set names to Boot Sets.<br><br>* Boot Set names must be 1-127 characters in length.<br>* Boot Set names must use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names must begin and end with a letter or digit.|
 |» **additionalProperties**|[V2BootSet](#schemav2bootset)|false|none|A Boot Set is a collection of nodes defined by an explicit list, their functional<br>role, and their logical groupings. This collection of nodes is associated with one<br>set of boot artifacts and optional additional records for configuration and root<br>filesystem provisioning.<br><br>A boot set requires at least one of the following fields to be specified:<br>node_list, node_roles_groups, node_groups<br><br>If specified, the name field must match the key mapping to this boot set in the<br>boot_sets field of the containing V2SessionTemplate.|
 |links|[LinkListReadOnly](#schemalinklistreadonly)|false|none|List of links to other resources|
+
+<h2 id="tocS_V2SessionTemplatePatch">V2SessionTemplatePatch</h2>
+<!-- backwards compatibility -->
+<a id="schemav2sessiontemplatepatch"></a>
+<a id="schema_V2SessionTemplatePatch"></a>
+<a id="tocSv2sessiontemplatepatch"></a>
+<a id="tocsv2sessiontemplatepatch"></a>
+
+```json
+{
+  "description": "string",
+  "enable_cfs": true,
+  "cfs": {
+    "configuration": "compute-23.4.0"
+  },
+  "boot_sets": {
+    "property1": {
+      "name": "compute",
+      "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "cfs": {
+        "configuration": "compute-23.4.0"
+      },
+      "type": "s3",
+      "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "node_list": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ],
+      "node_roles_groups": [
+        "Compute",
+        "Application"
+      ],
+      "node_groups": [
+        "string"
+      ],
+      "arch": "X86",
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
+    },
+    "property2": {
+      "name": "compute",
+      "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
+      "cfs": {
+        "configuration": "compute-23.4.0"
+      },
+      "type": "s3",
+      "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "node_list": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ],
+      "node_roles_groups": [
+        "Compute",
+        "Application"
+      ],
+      "node_groups": [
+        "string"
+      ],
+      "arch": "X86",
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
+    }
+  }
+}
+
+```
+
+Data to update an existing Session Template record.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|description|[SessionTemplateDescription](#schemasessiontemplatedescription)|false|none|An optional description for the Session Template.|
+|enable_cfs|[EnableCfs](#schemaenablecfs)|false|none|Whether to enable the Configuration Framework Service (CFS).|
+|cfs|[V2CfsParameters](#schemav2cfsparameters)|false|none|This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a Boot Set.|
+|boot_sets|object|false|none|Mapping from Boot Set names to Boot Sets.<br><br>* Boot Set names must be 1-127 characters in length.<br>* Boot Set names must use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names must begin and end with a letter or digit.|
+|» **additionalProperties**|[V2BootSet](#schemav2bootset)|false|none|A Boot Set is a collection of nodes defined by an explicit list, their functional<br>role, and their logical groupings. This collection of nodes is associated with one<br>set of boot artifacts and optional additional records for configuration and root<br>filesystem provisioning.<br><br>A boot set requires at least one of the following fields to be specified:<br>node_list, node_roles_groups, node_groups<br><br>If specified, the name field must match the key mapping to this boot set in the<br>boot_sets field of the containing V2SessionTemplate.|
 
 <h2 id="tocS_V2SessionTemplateValidation">V2SessionTemplateValidation</h2>
 <!-- backwards compatibility -->
@@ -5675,8 +5772,8 @@ Information on the status of a Session.
     "string"
   ],
   "arch": "X86",
-  "rootfs_provider": "cpss3",
-  "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+  "rootfs_provider": "sbps",
+  "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
 }
 
 ```
@@ -5757,8 +5854,8 @@ boot_sets field of the containing V2SessionTemplate.
           "string"
         ],
         "arch": "X86",
-        "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+        "rootfs_provider": "sbps",
+        "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
       },
       "property2": {
         "name": "compute",
@@ -5781,8 +5878,8 @@ boot_sets field of the containing V2SessionTemplate.
           "string"
         ],
         "arch": "X86",
-        "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+        "rootfs_provider": "sbps",
+        "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
       }
     },
     "links": [
@@ -6268,7 +6365,7 @@ may be set which can be triggered at a later time against this Component.
 ```json
 {
   "last_updated": "2019-07-28T03:26:00Z",
-  "action": "string",
+  "action": "actual_state_cleanup",
   "failed": true
 }
 
@@ -6281,7 +6378,7 @@ Information on the most recent action taken against the node.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |last_updated|[V2ComponentLastUpdated](#schemav2componentlastupdated)|false|none|The date/time when the state was last updated in RFC 3339 format.|
-|action|string|false|none|A description of the most recent operator/action to impact the Component.|
+|action|[V2ComponentAction](#schemav2componentaction)|false|none|A description of the most recent operator/action to impact the Component.|
 |failed|boolean|false|none|Denotes if the last action failed to accomplish its task|
 
 <h2 id="tocS_V2ComponentEventStats">V2ComponentEventStats</h2>
@@ -6310,6 +6407,38 @@ Information on the most recent attempt to return the node to its desired state.
 |power_off_graceful_attempts|integer|false|none|How many attempts have been made to power-off gracefully since the last time the node was in the desired state.|
 |power_off_forceful_attempts|integer|false|none|How many attempts have been made to power-off forcefully since the last time the node was in the desired state.|
 
+<h2 id="tocS_V2ComponentAction">V2ComponentAction</h2>
+<!-- backwards compatibility -->
+<a id="schemav2componentaction"></a>
+<a id="schema_V2ComponentAction"></a>
+<a id="tocSv2componentaction"></a>
+<a id="tocsv2componentaction"></a>
+
+```json
+"actual_state_cleanup"
+
+```
+
+A description of the most recent operator/action to impact the Component.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|A description of the most recent operator/action to impact the Component.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|*anonymous*|actual_state_cleanup|
+|*anonymous*|apply_staged|
+|*anonymous*|newly_discovered|
+|*anonymous*|powering_off_forcefully|
+|*anonymous*|powering_off_gracefully|
+|*anonymous*|powering_on|
+|*anonymous*|session_setup|
+
 <h2 id="tocS_V2ComponentPhase">V2ComponentPhase</h2>
 <!-- backwards compatibility -->
 <a id="schemav2componentphase"></a>
@@ -6318,7 +6447,7 @@ Information on the most recent attempt to return the node to its desired state.
 <a id="tocsv2componentphase"></a>
 
 ```json
-"string"
+"configuring"
 
 ```
 
@@ -6330,6 +6459,15 @@ The current phase of the Component in the boot process.
 |---|---|---|---|---|
 |*anonymous*|string|false|none|The current phase of the Component in the boot process.|
 
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|*anonymous*|configuring|
+|*anonymous*|powering_off|
+|*anonymous*|powering_on|
+|*anonymous*||
+
 <h2 id="tocS_V2ComponentStatus">V2ComponentStatus</h2>
 <!-- backwards compatibility -->
 <a id="schemav2componentstatus"></a>
@@ -6339,7 +6477,7 @@ The current phase of the Component in the boot process.
 
 ```json
 {
-  "phase": "string",
+  "phase": "configuring",
   "status": "string",
   "status_override": "string"
 }
@@ -6397,7 +6535,7 @@ Status information for the Component
   },
   "last_action": {
     "last_updated": "2019-07-28T03:26:00Z",
-    "action": "string",
+    "action": "actual_state_cleanup",
     "failed": true
   },
   "event_stats": {
@@ -6406,7 +6544,7 @@ Status information for the Component
     "power_off_forceful_attempts": 1048576
   },
   "status": {
-    "phase": "string",
+    "phase": "configuring",
     "status": "string",
     "status_override": "string"
   },
@@ -6478,7 +6616,7 @@ the Session responsible for the Component's current state.
   },
   "last_action": {
     "last_updated": "2019-07-28T03:26:00Z",
-    "action": "string",
+    "action": "actual_state_cleanup",
     "failed": true
   },
   "event_stats": {
@@ -6487,7 +6625,7 @@ the Session responsible for the Component's current state.
     "power_off_forceful_attempts": 1048576
   },
   "status": {
-    "phase": "string",
+    "phase": "configuring",
     "status": "string",
     "status_override": "string"
   },
@@ -6560,7 +6698,7 @@ the Session responsible for the Component's current state.
     },
     "last_action": {
       "last_updated": "2019-07-28T03:26:00Z",
-      "action": "string",
+      "action": "actual_state_cleanup",
       "failed": true
     },
     "event_stats": {
@@ -6569,7 +6707,7 @@ the Session responsible for the Component's current state.
       "power_off_forceful_attempts": 1048576
     },
     "status": {
-      "phase": "string",
+      "phase": "configuring",
       "status": "string",
       "status_override": "string"
     },
@@ -6632,7 +6770,7 @@ An array of Component states.
     },
     "last_action": {
       "last_updated": "2019-07-28T03:26:00Z",
-      "action": "string",
+      "action": "actual_state_cleanup",
       "failed": true
     },
     "event_stats": {
@@ -6641,7 +6779,7 @@ An array of Component states.
       "power_off_forceful_attempts": 1048576
     },
     "status": {
-      "phase": "string",
+      "phase": "configuring",
       "status": "string",
       "status_override": "string"
     },
@@ -6753,7 +6891,7 @@ All Components part of this Session will be patched.
     },
     "last_action": {
       "last_updated": "2019-07-28T03:26:00Z",
-      "action": "string",
+      "action": "actual_state_cleanup",
       "failed": true
     },
     "event_stats": {
@@ -6762,7 +6900,7 @@ All Components part of this Session will be patched.
       "power_off_forceful_attempts": 1048576
     },
     "status": {
-      "phase": "string",
+      "phase": "configuring",
       "status": "string",
       "status_override": "string"
     },

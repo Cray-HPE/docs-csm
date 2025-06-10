@@ -22,8 +22,6 @@ To increase the overall resiliency of system management services and software wi
 
 - Capsules services have implemented replicas for added resiliency.
 - Added support for new storage class that supports Read-Write-Many and in doing so, eliminated some of the errors we encountered on pods which could not seamlessly start up on other worker NCNs upon termination \(because of a PVC unmount error\).
-- Modified procedures for reloading DVS on NCNs to reduce DVS service interruptions.
-- DVS now retries DNS queries in `dvs_generate_map`, which improves boot resiliency at scale.
 - Additional retries implemented in the BOS, IMS, and CFS services for increased protection around outages of dependent services.
 - Image-based installs emphasizing "non-special" node types eliminated single points of failure previously encountered with DNS, administrative and installation tooling, and gathering of Cray System Management \(CSM\) logging for Ceph and Kubernetes.
 

@@ -11,7 +11,7 @@ This procedure is applicable for the following types of standard rack nodes:
 ## Prerequisites
 
 * The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
-* Knowledge of whether Data Virtualization Service (DVS) is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
+* Knowledge of whether the Scalable Boot Projection Service (SBPS) is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
 * The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.
 * The System Layout Service (SLS) must have the desired HSN configuration.
 * Check the status of the HSN and record link status before the procedure.
@@ -41,7 +41,7 @@ This procedure is applicable for the following types of standard rack nodes:
     template for the node type in the following command.
 
     ```bash
-    BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+    BOS_TEMPLATE=uss-1.4.0-slurm-healthy-compute
     cray bos v2 sessions create --template-name $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
     ```
 

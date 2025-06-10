@@ -129,12 +129,12 @@ to boot a node\) to the artifact repository.
     Use the following table to help determine the default kernel and `initrd` file names to specify when submitting the job to customize an image. These are just default names.
     Consult with the site administrator to determine if these names have been changed for a given image or recipe.
 
-    | Recipe                        | Recipe Name                             | Kernel File Name | `initrd` File Name |
-    |-------------------------------|-----------------------------------------|------------------|--------------------|
-    | SLES 15 SP5 Barebones x86     | `cray-sles15sp5-barebones`              | `vmlinuz`        | `initrd`           |
-    | SLES 15 SP5 Barebones aarch64 | `cray-sles15sp5-barebones`              | `Image`          | `initrd`           |
-    | COS x86                       | `cray-shasta-compute-sles15sp5.x86_646` | `vmlinuz`        | `initrd`           |
-    | COS aarch64                   | `cray-shasta-compute-sles15sp5.aarch64` | `Image`          | `initrd`           |
+    | Recipe                        | Recipe Name                                            | Kernel File Name | `initrd` File Name |
+    |-------------------------------|--------------------------------------------------------|------------------|--------------------|
+    | SLES 15 SP6 Barebones x86     | `cray-shasta-csm-sles15sp6-barebones-csm-1.7-x86_64`   | `vmlinuz`        | `initrd`           |
+    | SLES 15 SP6 Barebones aarch64 | `cray-shasta-csm-sles15sp6-barebones-csm-1.7-aarch64`  | `Image`          | `initrd`           |
+    | USS x86                       | `uss-1.4.0-93-csm.x86_64`                              | `vmlinuz`        | `initrd`           |
+    | USS aarch64                   | `uss-1.4.0-93-csm.aarch64`                             | `Image`          | `initrd`           |
 
     > Under normal circumstances, IMS customization jobs will download and mount the `rootfs` for the specified IMS image under the `/mnt/image/image-root` directory within the SSH
     > shell. After SSHing into the job container, `cd` or `chroot` into the `/mnt/image/image-root` directory in order to interact with the image root being customized.

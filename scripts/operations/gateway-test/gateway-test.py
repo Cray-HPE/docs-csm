@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -34,6 +34,7 @@ import yaml
 import base64
 import subprocess
 import os.path
+import socket
 
 try:
   from kubernetes import client, config
@@ -66,13 +67,15 @@ def resolvable(service):
         return True
 
 def reachable(service):
-    ret = os.system("ping -q -c 3 {} >/dev/null".format(service))
-    if ret != 0:
-        print("{} is NOT reachable".format(service))
-        return False
-    else:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(1)
+    try:
+        sock.connect((service, 443))
         print("{} is reachable".format(service))
         return True
+    except:
+        print("{} is NOT reachable".format(service))
+        return False
 
 def get_admin_secret(k8sClientApi):
     """

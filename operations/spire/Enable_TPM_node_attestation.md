@@ -131,7 +131,17 @@ file must be returned to its original configuration on each node where TPM attes
 is turned on. Then a new join token must be created and the node then needs
 to be joined to Spire.
 
-On each node that you want to disable TPM attestation on:
+Disabling TPM attestation on all management nodes at the same time can be done with a
+script that is installed on the master nodes. If only one node is required to be changed
+back to standard attestation then it can be manually changed with a few steps.
+
+To disable TPM node attestation on all nodes and return it to standard:
+
+```bash
+/opt/cray/platform-utils/spire/spire-disable-tpm.sh
+```
+
+Or on each node that you want to disable TPM attestation on:
 
 1. (`ncn-mw#`) Stop the `spire-agent` service
 

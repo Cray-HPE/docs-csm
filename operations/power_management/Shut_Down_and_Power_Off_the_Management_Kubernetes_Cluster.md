@@ -103,15 +103,6 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
    pdsh -w ncn-m001,$MASTERS,$WORKERS 'zypper -n install psmisc'
    ```
 
-1. If the worker nodes have been supporting the containerized User Access Instance (UAI) pods, then the DVS mounted
-   Cray Programming Environment (CPE) filesystems should be unmounted.
-
-   1. (`ncn-m001#`) Unmount the CPE content on the worker nodes.
-
-      ```bash
-      pdsh -w $WORKERS bash /etc/cray-pe.d/pe_cleanup.sh | dshbak -c
-      ```
-
 1. (`ncn-m001#`) Shut down platform services.
 
    > NOTE: There are some interactive questions which need answers before the shutdown process can progress.
@@ -159,17 +150,6 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
    Retrying container stop procedure on ncn-w001
    All containers stopped on ncn-w001.
    Executing step: Stop containerd on all Kubernetes NCNs.
-   ```
-
-1. (`ncn-m001#`) Unload DVS and `Lnet` kernel modules from worker nodes.
-
-   > This step helps to avoid error messages in the console log while Linux is shutting down similar to "DVS: task XXX exiting on a signal"
-
-   ```bash
-   pdsh -w $WORKERS 'lsmod | egrep "^dvs\s+"; rm -rf /run/dvs; \
-      echo quiesce / > /sys/fs/dvs/quiesce; modprobe -r dvs; sleep 5; \
-      modprobe -r dvsipc dvsipc_lnet dvsproc; lsmod | egrep "^lnet\s"; \
-      lsmod | egrep "^lustre\s"; systemctl stop lnet; lsmod | egrep "^lnet\s"'
    ```
 
 1. (`ncn-m001#`) Shut down and power off all management NCNs except `ncn-m001`.

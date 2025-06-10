@@ -23,12 +23,11 @@ The `system-pxe` persona is authorized to make `GET`, `HEAD`, or `POST` calls to
 
 ## `system-compute`
 
-Authorized for endpoints required by the [Cray Operating System (COS)](../../glossary.md#cray-operating-system-cos) to manage compute nodes and NCN services.
+Authorized for endpoints required by the [User Services Software (USS)](../../glossary.md#user-services-software-uss) to manage compute nodes and NCN services.
 
 The `system-compute` persona is authorized to make:
 
 - `GET`, `HEAD`, or `PATCH` calls to any [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) endpoint (`/apis/cfs/*`).
-- `GET`, `HEAD`, or `POST` calls to any [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) endpoint (`/apis/v2/cps/*`).
 - `GET`, `HEAD`, or `POST` calls to any [Heartbeat Tracker Daemon (HBTD)](../../glossary.md#heartbeat-tracker-daemon-hbtd) endpoint (`/apis/hbtd/*`).
 - `GET`, `HEAD`, `POST`, or `PUT` calls to any [Node Memory Dump (NMD)](../../glossary.md#node-memory-dump-nmd) endpoint (`/apis/v2/nmd/*`).
 - `GET` or `HEAD` calls to any [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) endpoint (`/apis/smd/*`).

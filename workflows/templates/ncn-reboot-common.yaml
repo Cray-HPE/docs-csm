@@ -1,0 +1,303 @@
+#
+# MIT License
+#
+# (C) Copyright 2025 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: ncn-reboot-common
+  namespace: argo
+spec:
+  templates:
+    - name: verify-pre-reboot-checks
+      inputs:
+        parameters:
+          - name: dryRun
+          - name: media_host
+            value: 'ncn-m001'
+      dag:
+        tasks:
+          - name: verify-pre-reboot-checks
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: mediaHost
+                  value: "{{inputs.parameters.media_host}}"
+                - name: scriptContent
+                  value: |
+                    echo "INFO NCN pre-reboot checks"
+
+                    echo "INFO Starting platform health check"
+                    result=$(/opt/cray/platform-utils/ncnHealthChecks.sh 2>&1)
+                    if [[ "$result" == *"FAILED"* ]]; then
+                      echo "ERROR platform health check has failed"
+                      exit 1
+                    else
+                      echo "INFO Successfully completed platform health check"
+                    fi
+
+                    echo "INFO Checking the status of the slurmctld pod"
+                    result=$(kubectl get pod -n user -lapp=slurmctld -o jsonpath="{.items[*].status.phase}" 2>&1)
+                    if [[ "$result" != "Running" ]]; then
+                      echo "ERROR slurmctld Pod is not running"
+                      exit 1
+                    else
+                      echo "INFO $(kubectl get pod -n user -lapp=slurmctld -o jsonpath="{.items[*].metadata.name}") is running"
+                    fi
+
+                    echo "INFO Checking the status of the slurmdbd pod"
+                    result=$(kubectl get pod -n user -lapp=slurmdbd -o jsonpath="{.items[*].status.phase}" 2>&1)
+                    if [[ "$result" != "Running" ]]; then
+                      echo "ERROR slurmdbd pod is not running"
+                      exit 1
+                    else
+                      echo "INFO $(kubectl get pod -n user -lapp=slurmdbd -o jsonpath="{.items[*].metadata.name}") is running"
+                    fi
+
+                    echo "INFO Validating BGP peering sessions"
+                    if ! GOSS_BASE=/opt/cray/tests/install/ncn goss \
+                      -g /opt/cray/tests/install/ncn/tests/goss-switch-bgp-neighbor-aruba-or-mellanox.yaml \
+                      --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate >/dev/null 2>&1
+                    then
+                      echo "ERROR Validation connection to the BGP neighbors of a switch. run 'canu validate network bgp --verbose' to see the status of all BGP neighbors"
+                      exit 1
+                    else
+                      echo "INFO Successfully Validated connection to the BGP neighbors of a switch"
+                    fi
+
+                    echo "INFO Checking if any nodes are in a failed state in CFS"
+                    failed_nodes=$(cray cfs v3 components list --status failed --format json | jq -r '[.components[].id]|join(",")' 2>&1)
+                    if [ -z "$failed_nodes" ]; then
+                      echo "INFO All nodes are in configured state in CFS"
+                    else
+                      echo "ERROR $failed_nodes is/are in failed state in CFS"
+                      exit 1
+                    fi
+
+                    echo "INFO Starting Postgres health check"
+                    if ! /opt/cray/tests/install/ncn/automated/ncn-postgres-tests >/dev/null 2>&1
+                    then
+                      echo "ERROR NCN Postgres health check has failed"
+                      echo "ERROR run the script "/opt/cray/tests/install/ncn/scripts/postgresql_backups_check.sh -p" to see a printed description of the errors"
+                      exit 1
+                    else
+                      echo "INFO Successfully completed NCN Postgres health check"
+                    fi
+    - name: reboot-ncn
+      inputs:
+        parameters:
+          - name: dryRun
+          - name: global_params
+          - name: targetNcn
+          - name: media_host
+            value: 'ncn-m001'
+      dag:
+        tasks:
+          - name: reboot-node
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: mediaHost
+                  value: "{{inputs.parameters.media_host}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    TARGET_NCN_mgmt_host="${TARGET_NCN}-mgmt"
+                    # Get Keycloak token
+                    CLIENT_SECRET=$(kubectl get secret admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)
+                    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret="$CLIENT_SECRET" \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+
+                    # Get xnames
+                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" \
+                      "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" |
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"${TARGET_NCN}\")) | .Xname")
+
+                    TARGET_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" \
+                      "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" |
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"${TARGET_NCN}\")) | .Parent")
+
+                    # Get IPMI credentials
+                    IPMI_USERNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" \
+                      "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds" |
+                      jq -r ".Targets[] | select(.Xname == \"$TARGET_MGMT_XNAME\") | .Username")
+
+                    IPMI_PASSWORD=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" \
+                      "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds" |
+                      jq -r ".Targets[] | select(.Xname == \"$TARGET_MGMT_XNAME\") | .Password")
+
+                    # Power functions
+                    check_power_status() {
+                      output=$(ipmitool -I lanplus -U "${IPMI_USERNAME}" -P "${IPMI_PASSWORD}" -H "${TARGET_NCN_mgmt_host}" power status 2>&1)
+                      if [[ $? -ne 0 ]]; then
+                        echo "ERROR Failed getting power status $TARGET_NCN"
+                        exit 1
+                      else
+                        echo "$output" | awk '{print $4}'
+                      fi
+                    }
+
+                    echo "Powering off ${TARGET_NCN_mgmt_host}"
+                    if ! ipmitool -I lanplus -U "${IPMI_USERNAME}" -P "${IPMI_PASSWORD}" -H "${TARGET_NCN_mgmt_host}" power off; then
+                      echo "ERROR Failed powering off $TARGET_NCN"
+                      exit 1
+                    else
+                      echo "INFO powering off $TARGET_NCN"
+                    fi
+                    while [[ "$(check_power_status)" != "off" ]]; do
+                      echo "INFO: Waiting for node power off"
+                      sleep 5
+                    done
+                    echo "INFO Successfully power off $TARGET_NCN"
+                    if ! ipmitool -I lanplus -U "${IPMI_USERNAME}" -P "${IPMI_PASSWORD}" -H "${TARGET_NCN_mgmt_host}" power on; then
+                      echo "ERROR Failed powering on $TARGET_NCN"
+                      exit 1
+                    else
+                      echo "INFO powering on $TARGET_NCN"
+                    fi
+                    while [[ "$(check_power_status)" != "on" ]]; do
+                      echo "INFO: Waiting for node power on"
+                      sleep 5
+                    done
+                    echo "INFO Successfully rebooted $TARGET_NCN"
+    - name: wait-for-cfs
+      inputs:
+        parameters:
+          - name: targetNcn
+          - name: dryRun
+      dag:
+        tasks:
+        - name: wait-for-cfs
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: mediaHost
+                value: 'ncn-m001'
+              - name: scriptContent
+                value: |
+                  TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                  # Get Keycloak token
+                  CLIENT_SECRET=$(kubectl get secret admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)
+                  TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                    -d client_id=admin-client \
+                    -d client_secret="$CLIENT_SECRET" \
+                    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                  TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" \
+                    "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" |
+                    jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"${TARGET_NCN}\")) | .Xname")
+                  # Wait for CFS configuration
+                  echo "INFO: Waiting for CFS configuration for $TARGET_XNAME..."
+                  while true; do
+                    CONFIG_STATUS=$(cray cfs v3 components describe "$TARGET_XNAME" --format json | jq -r .configuration_status)
+                    if [[ "$CONFIG_STATUS" == "failed" ]]; then
+                      echo "ERROR: Node configuration failed"
+                      exit 1
+                    elif [[ "$CONFIG_STATUS" == "configured" ]]; then
+                      echo "INFO: Node successfully configured"
+                      break
+                    else
+                      echo "DEBUG: Waiting for node configuration to complete..."
+                      sleep 10
+                    fi
+                  done
+    - name: wait-for-cloud-init
+      inputs:
+        parameters:
+          - name: dryRun
+          - name: targetNcn
+          - name: media_host
+            value: 'ncn-m001'
+      dag:
+        tasks:
+          - name: wait-for-cloud-init
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN={{inputs.parameters.targetNcn}}
+
+                    # wait random seconds (1-10s) until ssh is working
+                    echo "INFO wait for ssh: $TARGET_NCN"
+                    while ! ssh "${TARGET_NCN}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'ls /var/log/cloud-init-output.log'
+                    do
+                      echo "DEBUG wait for ssh: $TARGET_NCN"
+                      sleep $(( ( RANDOM % 10 ) + 1 ))
+                    done
+
+                    # wait for cloud-init
+                    # ssh commands are expected to fail for a while, so we temporarily disable set -e
+                    set +e
+                    echo "INFO waiting for cloud-init: $TARGET_NCN "
+                    while true ; do
+                        ssh "${TARGET_NCN}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cat /var/log/cloud-init-output.log | grep "The system is finally up"' &> /dev/null && break
+                        echo "DEBUG waiting for cloud-init: $TARGET_NCN"
+                        sleep 20
+                    done
+                    # Restore set -e
+                    set -e
+    - name: platform-health-checks
+      inputs:
+        parameters:
+          - name: dryRun
+          - name: media_host
+            value: 'ncn-m001'
+      dag:
+        tasks:
+        - name: platform-health-checks
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: mediaHost
+                value: "{{inputs.parameters.media_host}}"
+              - name: scriptContent
+                value: |
+                    echo "INFO Starting platform health check"
+                    result=$(/opt/cray/platform-utils/ncnHealthChecks.sh 2>&1)
+                    if [[ "$result" == *"FAILED"* ]]; then
+                      echo "ERROR platform health check has failed"
+                      exit 1
+                    else
+                      echo "INFO Successfully completed platform health check"
+                    fi

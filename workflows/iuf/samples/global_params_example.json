@@ -1,11 +1,11 @@
 {
   "product_manifest": {
     "products": {
-      "cos": {
+      "uss": {
         "manifest": {
           "iuf_version": "^0.1.0",
-          "name": "cos",
-          "description": "The Cray Operating System (COS).\n",
+          "name": "uss",
+          "description": "The User Services Software (USS).\n",
           "version": "2.5.34-20221012230953",
           "content": {
             "docker": [
@@ -28,8 +28,8 @@
     "current_product": {
       "manifest": {
         "iuf_version": "^0.1.0",
-        "name": "cos",
-        "description": "The Cray Operating System (COS).\n",
+        "name": "uss",
+        "description": "The User Services Software (USS).\n",
         "version": "2.5.34-20221012230953",
         "content": {
           "docker": [
@@ -43,7 +43,7 @@
     }
   },
   "input_params": {
-    "products": ["cos", "sdu"],
+    "products": ["uss", "sdu"],
     "media_dir": "/etc/iuf/alice_230116",
     "bootprep_config_managed": [
       "media_dir/relative/path/to/bootprep/config/managed/file"
@@ -58,9 +58,9 @@
       "some_global_site_parameter": "lorem ipsum"
     },
     "products": {
-      "cos": {
-        "working_branch": "integration-2.5.34",
-        "some_cos_site_parameter": "lorem ipsum"
+      "uss": {
+        "working_branch": "integration-1.4.34",
+        "some_uss_site_parameter": "lorem ipsum"
       },
       "sdu": {
         "working_branch": "integration-1.2.3",
@@ -69,22 +69,22 @@
     },
     "current_product": {
       "working_branch": "integration-2.5.34",
-      "some_cos_site_parameter": "lorem ipsum"
+      "some_uss_site_parameter": "lorem ipsum"
     }
   },
   "stage_params": {
     "process_media": {
       "global": {},
       "products": {
-        "cos": {
-          "parent_directory": "/etc/iuf/alice_230116/cos-2.5.34-20221012230953"
+        "uss": {
+          "parent_directory": "/etc/iuf/alice_230116/uss-1.4.0-20221012230953"
         },
         "sdu": {
           "parent_directory": "/etc/iuf/alice_230116/sdu-1.2.3"
         }
       },
       "current_product": {
-        "parent_directory": "/etc/iuf/alice_230116/cos-2.5.34-20221012230953"
+        "parent_directory": "/etc/iuf/alice_230116/uss-1.4.0-20221012230953"
       }
     },
     "pre_install_check": {
