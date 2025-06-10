@@ -8,7 +8,7 @@ cray sls search networks list --name BICAN --format json
 
 Example output:
 
-```text
+```json
 [
   {
     "Name": "BICAN",

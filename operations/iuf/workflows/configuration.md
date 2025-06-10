@@ -121,7 +121,7 @@ required for initial installation scenarios.
 
 **`NOTE`** If the system is using the Customer High Speed Network(CHN), uncomment the following playbook in the `management-bootprep.yaml` file.
 
- ```bash
+ ```yaml
 #BEGIN_CHN_SUPPORT
   - name: enabled_chn-{{csm.version}}
     playbook: enable_chn.yml
