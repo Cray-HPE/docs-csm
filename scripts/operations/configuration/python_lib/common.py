@@ -32,7 +32,7 @@ import time
 import traceback
 
 from contextlib import contextmanager
-from typing import Any, List, NoReturn, Union
+from typing import List, NoReturn, Optional
 
 WAIT_SECONDS_BETWEEN_COMMAND_RETRIES=2
 
@@ -47,7 +47,7 @@ class InsufficientSpace(ScriptException):
     """
 
 
-def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> NoReturn:
+def log_error_raise_exception(msg: str, parent_exception: Optional[Exception] = None) -> NoReturn:
     """
     1) If a parent exception is passed in, make a debug log entry with its stack trace.
     2) Log an error with the specified message.
@@ -97,7 +97,7 @@ def read_file(filename: str, min_length: int = 4) -> str:
     Reads contents of text file, verifies it is more than the specified length,
     and returns it as a string.
     """
-    logging.info("Reading in file '{%s}'", filename)
+    logging.info("Reading in file '%s'", filename)
     try:
         with open(filename, "rt", encoding="utf-8") as textfile:
             contents = textfile.read()
@@ -122,7 +122,6 @@ def set_directory(path: str):
     Yields:
         None
     """
-
     origin = os.getcwd()
     try:
         os.chdir(path)
@@ -132,7 +131,7 @@ def set_directory(path: str):
 
 
 # https://stackoverflow.com/a/15485265
-def sizeof_fmt(num):
+def sizeof_fmt(num: float) -> str:
     """
     Given a number of bytes, returns a human-friendly string
     representation of the size.
@@ -145,7 +144,7 @@ def sizeof_fmt(num):
     return f"{num:.3f} peta{suffix}"
 
 
-def expected_format(obj: Any, obj_desc: str, expected_type: type) -> None:
+def expected_format(obj: object, obj_desc: str, expected_type: type) -> None:
     """
     Validates that obj is of the expected type. Otherwise an exception is raised.
     obj_desc is a string to describe the object in the exception.
@@ -211,7 +210,7 @@ def validate_file_readable(filepath: str) -> None:
     if not os.access(filepath, os.R_OK):
         raise ScriptException(f"File exists but is not readable: '{filepath}'")
 
-def run_command(command: List[str], num_retries: int=0, timeout: Union[int, None]=None) -> bytes:
+def run_command(command: List[str], num_retries: int=0, timeout: Optional[int]=None) -> bytes:
     """
     Runs the specified command and returns the output.
     If num_retries is non-0, if the command fails, it will be retried up to the
@@ -220,7 +219,8 @@ def run_command(command: List[str], num_retries: int=0, timeout: Union[int, None
     while True:
         logging.debug(command)
         try:
-            cmd_result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
+            cmd_result = subprocess.run(command, check=True, stdout=subprocess.PIPE,
+                                        stderr=subprocess.PIPE, timeout=timeout)
             logging.debug("stdout: %s", cmd_result.stdout)
             logging.debug("stderr: %s", cmd_result.stderr)
             return cmd_result.stdout
@@ -236,6 +236,7 @@ def run_command(command: List[str], num_retries: int=0, timeout: Union[int, None
             logging.debug("stderr: %s", exc.stderr)
             if num_retries == 0:
                 raise exc
-        logging.debug("Retrying command after %d seconds (%d retries remaining)", WAIT_SECONDS_BETWEEN_COMMAND_RETRIES, num_retries)
+        logging.debug("Retrying command after %d seconds (%d retries remaining)",
+                      WAIT_SECONDS_BETWEEN_COMMAND_RETRIES, num_retries)
         time.sleep(WAIT_SECONDS_BETWEEN_COMMAND_RETRIES)
         num_retries-=1
