@@ -581,12 +581,12 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-# Annotate Velero backup storage location
+# Annotate Velero backup storage location for CSM upgrade to 1.7
 kubectl annotate backupstoragelocations default -n velero \
   meta.helm.sh/release-name=cray-velero \
   meta.helm.sh/release-namespace=velero --overwrite \
-  && echo "Successfully annotated Velero BSL" \
-  || echo "Failed to annotate Velero BSL"
+  && echo "Successfully annotated Velero Backup Storage Locations" \
+  || echo "Failed to annotate Velero Backup Storage Locations"
 
 # Undeploy the chart if it exists on the system.
 # Use this if a chart has been removed from a manifest and needs
