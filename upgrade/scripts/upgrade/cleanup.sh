@@ -30,4 +30,4 @@ TOKEN=$(curl -s -S -d grant_type=client_credentials \
   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 export TOKEN
 
-python3 ./cleanup.py
+python3 /usr/share/doc/csm/upgrade/scripts/upgrade/cleanup.py
