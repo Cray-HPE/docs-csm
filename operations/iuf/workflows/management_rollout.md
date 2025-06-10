@@ -53,9 +53,9 @@ procedures based on whether or not CSM is being upgraded:
 - [`management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
 - [`management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
 
-### **Note for CSM V1.7.0**
+### Note for CSM `V1.7.0`
 
-Starting with CSM V1.7.0, administrators can use an IMS image and configuration from CFS built outside of IUF to perform the `management-nodes-rollout` stage. The image and configuration can be explicitly passed in the iuf-cli command.
+Starting with CSM `V1.7.0`, administrators can use an IMS image and configuration from CFS built outside of IUF to perform the `management-nodes-rollout` stage. The image and configuration can be explicitly passed in the IUF CLI command.
 
 For example, to upgrade a storage node using an image and CFS configuration created outside of the `prepare-images` stage, the command could look like this:
 
