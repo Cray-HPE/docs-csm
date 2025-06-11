@@ -65,26 +65,9 @@ spec:
             templateRef:
               name: workflow-template-record-time-template
               template: record-time-template
-          - name: remove-previous-done-files
-            dependencies:
-              - start-operation
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{$.DryRun}}"
-                - name: mediaHost
-                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_host')}}"
-                - name: scriptContent
-                  value: |
-                    . /etc/cray/upgrade/csm/myenv                    
-                    #Remove .done check files of previous activity at start of new activity
-                    rm -f /etc/cray/upgrade/csm/${CSM_REL_NAME}/*.done
           - name: list-tar-files
             dependencies:
-              - remove-previous-done-files
+              - start-operation
             inline:
               script:
                 image: artifactory.algol60.net/csm-docker/stable/iuf:v0.1.13
