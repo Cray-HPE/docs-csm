@@ -122,8 +122,8 @@ spec:
                     else
                       echo "INFO Starting rebuild of $rebuild_set using image built in the prepare images stage"
                       prepare_images_ouput=$(cat global.params.data | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
-                      image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Storage")) | .[].final_image_id' | tr -d '"')
-                      configuration=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Storage")) | .[].configuration' | tr -d '"')
+                      image=$(echo $prepare_images_ouput | jq -r '.images | map(select(.configuration_group_names[] == "Management_Storage")) | .[].final_image_id')
+                      configuration=$(echo $prepare_images_ouput | jq -r '.images | map(select(.configuration_group_names[] == "Management_Storage")) | .[].configuration')
                     fi
 
                     limit_management_nodes=$(cat global.params.data | jq -r '.input_params.limit_management_nodes[]')

@@ -149,8 +149,8 @@ spec:
                     else
                       echo "INFO Starting rebuild of $rebuild_set using image built in the prepare images stage"
                       prepare_images_output=$(cat global.params.data | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
-                      config=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration' | tr -d '"')
-                      IMAGE_ID=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
+                      config=$(echo $prepare_images_output | jq -r '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration')
+                      IMAGE_ID=$(echo $prepare_images_output | jq -r '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id')
                     fi
 
                     echo "DEBUG Updating CFS config $config on $TARGET_NCN ($TARGET_XNAME)"
@@ -272,8 +272,8 @@ spec:
                     else
                       echo "INFO Starting rebuild of $rebuild_set using image built in the prepare images stage"
                       prepare_images_output=$(cat global.params.data | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
-                      config=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration' | tr -d '"')
-                      IMAGE_ID=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
+                      config=$(echo $prepare_images_output | jq -r '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration')
+                      IMAGE_ID=$(echo $prepare_images_output | jq -r '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id')
                     fi
 
                     echo "DEBUG Updating CFS config $config on $TARGET_NCN ($TARGET_XNAME)"

@@ -261,8 +261,8 @@ spec:
                   else
                     echo "INFO Starting rebuild of $rebuild_set using image built in the prepare images stage"
                     prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
-                    image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].final_image_id' | tr -d '"')
-                    configuration=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].configuration' | tr -d '"')
+                    image=$(echo $prepare_images_ouput | jq -r '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].final_image_id')
+                    configuration=$(echo $prepare_images_ouput | jq -r '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].configuration')
                   fi
 
                   export TERM=linux

@@ -157,8 +157,8 @@ spec:
                       else
                         echo "INFO Starting rebuild of $rebuild_set using image built in the prepare images stage"
                         prepare_images_output=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
-                        CFS_CONFIG_NAME=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration' | tr -d '"')
-                        IMAGE_ID=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
+                        CFS_CONFIG_NAME=$(echo $prepare_images_output | jq -r '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration')
+                        IMAGE_ID=$(echo $prepare_images_output | jq -r '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id')
                       fi
 
                       XNAME=$(cat /etc/cray/xname)

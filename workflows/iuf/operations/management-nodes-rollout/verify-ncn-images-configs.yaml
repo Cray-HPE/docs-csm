@@ -60,8 +60,8 @@ spec:
                       image=$ims_image
                     else
                       prepare_images_output=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
-                      config=$(echo $prepare_images_output | jq --arg ROLE_SUBROLE "${role_subrole}" '.images | map(select(.configuration_group_names[] == $ROLE_SUBROLE)) | .[].configuration' | tr -d '"')
-                      image=$(echo $prepare_images_output | jq --arg ROLE_SUBROLE "${role_subrole}" '.images | map(select(.configuration_group_names[] == $ROLE_SUBROLE)) | .[].final_image_id' | tr -d '"')
+                      config=$(echo $prepare_images_output | jq -r --arg ROLE_SUBROLE "${role_subrole}" '.images | map(select(.configuration_group_names[] == $ROLE_SUBROLE)) | .[].configuration')
+                      image=$(echo $prepare_images_output | jq -r --arg ROLE_SUBROLE "${role_subrole}" '.images | map(select(.configuration_group_names[] == $ROLE_SUBROLE)) | .[].final_image_id')
                     fi
 
                     # Check config exists
