@@ -320,8 +320,8 @@ This procedure can be performed on any master or worker NCN.
          ```yaml
          listen_port: 9220
          timeout: 30
-         username: "abcdef"
-         password: "Abcd@123"
+         username: "abxyz"
+         password: "Abcxyz@123"
          rf_port: 8081
          ```
 
@@ -334,6 +334,20 @@ This procedure can be performed on any master or worker NCN.
                 | base64 -w0)/g" /tmp/redfish-secret.yaml \
                 | kubectl replace --force -f -
     ```
+
+1. (`ncn-mw#`) Delete the redfish-exporter pod so that latest configuration is picked up.
+
+    1. Delete the redfish-exporter pod.
+
+        ```bash
+        kubectl delete pod -n sysmgmt-health cray-sysmgmt-health-redfish-exporter-86f7596c5-g6lxl --force
+        ```
+
+    1. Validate that the pod is running again after some time.
+
+        ```bash
+        kubectl get pod -n sysmgmt-health | grep redfish
+        ```
 
 1. (`ncn-mw#`) Validate the configuration changes.
 
@@ -360,20 +374,6 @@ This procedure can be performed on any master or worker NCN.
 
         ```bash
         kubectl logs -f -n sysmgmt-health pod/cray-sysmgmt-health-redfish-exporter-86f7596c5-g6lxl
-        ```
-
-1. (`ncn-mw#`) Delete the redfish-exporter pod so that latest configuration is picked up.
-
-    1. Delete the redfish-exporter pod.
-
-        ```bash
-        kubectl delete pod -n sysmgmt-health cray-sysmgmt-health-redfish-exporter-86f7596c5-g6lxl --force
-        ```
-
-    1. Validate that the pod is running again after some time.
-
-        ```bash
-        kubectl get pod -n sysmgmt-health | grep redfish
         ```
 
 Metrics Information:
