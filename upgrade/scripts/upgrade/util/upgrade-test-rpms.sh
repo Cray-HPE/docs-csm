@@ -35,7 +35,7 @@ if [[ $# -eq 0 ]]; then
   ncns=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | tr -t '\n' ',')
 
   echo "Installing updated versions of RPMs on all NCNs: ${RPM_LIST}"
-  pdsh -S -b -w ${ncns} "zypper install -y --allow-vendor-change ${RPM_LIST}"
+  pdsh -S -b -w ${ncns} ssh -o StrictHostKeyChecking=no %h zypper install -y --allow-vendor-change ${RPM_LIST}
 
   echo "Enabling and restarting goss-servers"
   pdsh -S -b -w ${ncns} 'systemctl enable goss-servers && systemctl restart goss-servers'
