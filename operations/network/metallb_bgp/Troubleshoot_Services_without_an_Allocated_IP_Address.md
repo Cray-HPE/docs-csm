@@ -55,26 +55,40 @@ This procedure requires administrative privileges.
     ```text
     Name:                     istio-ingressgateway-cmn
     Namespace:                istio-system
-    Labels:                   app=istio-ingressgateway
-                              chart=cray-istio
-                              heritage=Tiller
-                              istio=ingressgateway
-                              release=cray-istio
+    Labels:                   app=istio-ingressgateway-customer-admin
+                              app.kubernetes.io/instance=cray-istio-ingress
+                              app.kubernetes.io/managed-by=Helm
+                              app.kubernetes.io/name=istio-ingressgateway
+                              app.kubernetes.io/part-of=istio
+                              app.kubernetes.io/version=1.26.0
+                              helm.sh/chart=cray-istio-ingress-4.0.0
+                              install.operator.istio.io/owning-resource=unknown
+                              istio=ingressgateway-customer-admin
+                              istio.io/rev=default
+                              operator.istio.io/component=IngressGateways
+                              peerauthentication=ingressgateway
+                              release=cray-istio-ingress
     Annotations:              external-dns.alpha.kubernetes.io/hostname: api.cmn.SYSTEM_DOMAIN_NAME,auth.cmn.SYSTEM_DOMAIN_NAME,nexus.cmn.SYSTEM_DOMAIN_NAME
+                              meta.helm.sh/release-name: cray-istio-ingress
+                              meta.helm.sh/release-namespace: istio-system
                              ** metallb.universe.tf/address-pool: customer-management**
-    Selector:                 app=istio-ingressgateway,istio=ingressgateway,release=cray-istio
+    Selector:                 app=istio-ingressgateway-customer-admin,istio=ingressgateway-customer-admin
     Type:                     LoadBalancer
-    IP:                       10.28.192.172
-    Port:                     http2 80/TCP
-    TargetPort:               80/TCP
-    NodePort:                 http2 30708/TCP
-    Endpoints:                10.39.0.5:80
-    Port:                     https 443/TCP
-    TargetPort:               443/TCP
-    NodePort:                 https 31430/TCP
-    Endpoints:                10.39.0.5:443
+    IP Family Policy:         SingleStack
+    IP Families:              IPv4
+    IP:                       10.16.148.118
+    IPs:                      10.16.148.118
+    Port:                     http2  80/TCP
+    TargetPort:               8080/TCP
+    NodePort:                 http2  32458/TCP
+    Endpoints:                10.32.3.74:8080,10.32.1.197:8080,10.32.5.106:8080
+    Port:                     https  443/TCP
+    TargetPort:               8443/TCP
+    NodePort:                 https  32076/TCP
+    Endpoints:                10.32.3.74:8443,10.32.1.197:8443,10.32.5.106:8443
     Session Affinity:         None
     External Traffic Policy:  Cluster
+    Internal Traffic Policy:  Cluster
     Events:                   <none>
     ```
 

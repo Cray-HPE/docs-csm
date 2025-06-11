@@ -120,6 +120,20 @@ yq4 -i eval ".spec.kubernetes.services[\"kyverno-policy\"].checkImagePolicy += (
 yq4 -i eval '.spec.kubernetes.services.["cray-hubble"].externalHostname = "hubble.cmn.{{ network.dns.external }}"' "$c"
 yq4 -i eval ".spec.proxiedWebAppExternalHostnames.customerManagement |= (. + [\"{{ kubernetes.services['cray-hubble'].externalHostname }}\"] | unique)" "$c"
 
+# From CSM 1.7, cray-istio is no longer used for ingress, so we need to update the customizations.yaml
+# to reflect this change. We will rename cray-istio to cray-istio-ingress and update the
+# proxiedWebAppExternalHostnames to use cray-istio-ingress instead of cray-istio.
+if [ "$(yq4 eval '.spec.kubernetes.services."cray-istio"' "$c")" != "null" ]; then
+  # Copy the cray-istio configuration to cray-istio-ingress
+  yq4 eval -i '.spec.kubernetes.services."cray-istio-ingress" = .spec.kubernetes.services."cray-istio"' "$c"
+  # Delete the old cray-istio key
+  yq4 eval -i 'del(.spec.kubernetes.services."cray-istio")' "$c"
+fi
+
+# Update proxiedWebAppExternalHostnames references from cray-istio to cray-istio-ingress
+yq4 eval -i 'del(.spec.proxiedWebAppExternalHostnames.customerManagement.[] | select(. == "*cray-istio*"))' "$c"
+yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement += \"{{ kubernetes.services['cray-istio-ingress'].istio.tracing.externalAuthority }}\"" -i "$c"
+
 metallb_path='.spec.kubernetes.services."cray-metallb".metallb'
 config_inline_key='configInline'
 config_inline_new_key='configInlineHistorical'

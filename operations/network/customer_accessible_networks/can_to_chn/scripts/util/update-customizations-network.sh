@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -232,8 +232,8 @@ fi
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-hmn.issuers.shasta-hmn' 'https://api.hmnlb.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-hmn.issuers.keycloak-hmn' 'https://auth.hmnlb.{{ network.dns.external }}/keycloak/realms/shasta'
 
-# cray-istio
-yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.hmnlb.{{ network.dns.external }},auth.hmnlb.{{ network.dns.external }},hmcollector.hmnlb.{{ network.dns.external }}'
+# cray-istio-ingress
+yq w -i "$c" 'spec.kubernetes.services.cray-istio-ingress.services.istio-ingressgateway-hmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.hmnlb.{{ network.dns.external }},auth.hmnlb.{{ network.dns.external }},hmcollector.hmnlb.{{ network.dns.external }}'
 
 # cray-ims
 # Note to future developers: This is needed to address CASMTRIAGE-4098. It is only needed on upgrades to csm-1.2 and csm-1.3.
