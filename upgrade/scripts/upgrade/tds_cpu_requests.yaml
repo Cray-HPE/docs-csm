@@ -77,7 +77,7 @@ spec:
               resources:
                 requests:
                   cpu: "500m"
-      cray-istio:
+      cray-istio-ingress:
         deployments:
           istio-ingressgateway:
             resources:

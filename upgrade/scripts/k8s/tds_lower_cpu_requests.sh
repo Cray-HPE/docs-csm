@@ -131,19 +131,19 @@ yaml_path="$base.cray-metallb.metallb.controller.resources.requests.cpu"
 cray_metallb_controller_new_cpu_request=$(yq r $yaml -pv $yaml_path)
 fail_if_empty $yaml_path $cray_metallb_controller_new_cpu_request
 
-yaml_path="$base.cray-istio.deployments.istio-ingressgateway.resources.requests.cpu"
+yaml_path="$base.cray-istio-ingress.deployments.istio-ingressgateway.resources.requests.cpu"
 cray_istio_ingressgateway_new_cpu_request=$(yq r $yaml -pv $yaml_path)
 fail_if_empty $yaml_path $cray_istio_ingressgateway_new_cpu_request
 
-yaml_path="$base.cray-istio.deployments.istio-ingressgateway-customer-admin.resources.requests.cpu"
+yaml_path="$base.cray-istio-ingress.deployments.istio-ingressgateway-customer-admin.resources.requests.cpu"
 cray_istio_admin_new_cpu_request=$(yq r $yaml -pv $yaml_path)
 fail_if_empty $yaml_path $cray_istio_admin_new_cpu_request
 
-yaml_path="$base.cray-istio.deployments.istio-ingressgateway-customer-user.resources.requests.cpu"
+yaml_path="$base.cray-istio-ingress.deployments.istio-ingressgateway-customer-user.resources.requests.cpu"
 cray_istio_user_new_cpu_request=$(yq r $yaml -pv $yaml_path)
 fail_if_empty $yaml_path $cray_istio_user_new_cpu_request
 
-yaml_path="$base.cray-istio.deployments.istio-ingressgateway-hmn.resources.requests.cpu"
+yaml_path="$base.cray-istio-ingress.deployments.istio-ingressgateway-hmn.resources.requests.cpu"
 cray_istio_hmn_new_cpu_request=$(yq r $yaml -pv $yaml_path)
 fail_if_empty $yaml_path $cray_istio_hmn_new_cpu_request
 
