@@ -59,7 +59,7 @@ function roll_postgres() {
 function update_customizations() {
   key=$1
   value=$2
-  yq write -i $TMP_CUST_YAML $key $value
+  yq write -i $TMP_CUST_YAML $key --style=double $value
 }
 
 function fail_if_empty() {
