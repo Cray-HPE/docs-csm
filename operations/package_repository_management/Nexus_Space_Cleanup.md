@@ -110,3 +110,45 @@ If no other methods of cleaning work, then submit a help request to expand the `
 to proceed. Expanding the PVC will also require future work to allow for further upgrades.
 
 **CAUTION:** This is an irreversible step and is not recommended.
+
+1. Scale Nexus to 0
+
+    ```bash
+    kubectl scale deployment nexus -n nexus --replicas=0
+    ```
+
+1. Increase nexus-data `pvc` storage size
+
+    ```bash
+    kubectl edit pvc nexus-data -n nexus
+    ```
+
+    ```yaml
+    spec:
+      resources:
+        requests:
+          storage: 1500Gi  (was 1000Gi)
+    ```
+
+1. Scale nexus back to 1
+
+    ```bash
+    kubectl scale deployment nexus -n nexus --replicas=1
+    ```
+
+1. Update the customizations.yaml to persist the `pvc` size change.
+
+    ```bash
+    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+    ```
+
+    Edit customizations.yaml to add cray-nexus sonatype-nexus.persistence.storageSize
+          cray-nexus:
+            sonatype-nexus:
+              persistence:
+                storageSize: 1500Gi
+
+    ```bash
+    kubectl delete secret -n loftsman site-init
+    kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+    ```
