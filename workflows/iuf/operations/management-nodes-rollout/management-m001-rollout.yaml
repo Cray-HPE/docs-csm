@@ -119,16 +119,27 @@ spec:
                       sed 's_^/__' |
                       xargs tar -C / -czvf "/root/${BACKUP_TARFILE}"
                       cray artifacts create config-data "${BACKUP_TARFILE}" "/root/${BACKUP_TARFILE}"
-                      # Check for cray artifact create command result
                       if [[ $? -ne 0 ]]; then
                         echo "ERROR master node ncn-m001 backup has failed"
                         exit 1
                       else
                         echo "INFO Successfully completed master node ncn-m001 backup"
                       fi
-                      prepare_images_output=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
-                      CFS_CONFIG_NAME=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration' | tr -d '"')
-                      IMAGE_ID=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
+                    
+                      cfs_config="{{=jsonpath(inputs.parameters.global_params,'$.input_params.cfs_configuration_management')}}"
+                      ims_image="{{=jsonpath(inputs.parameters.global_params,'$.input_params.boot_image_management')}}"
+
+                      if [[ -n $cfs_config && -n $ims_image ]]; then
+                        echo "INFO Rebuilding $rebuild_set using passed parameters $ims_image and $cfs_config"
+                        CFS_CONFIG_NAME=$cfs_config
+                        IMAGE_ID=$ims_image
+                      else
+                        echo "INFO Starting rebuild of $rebuild_set using image built in the prepare images stage"
+                        prepare_images_output=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                        CFS_CONFIG_NAME=$(echo $prepare_images_output | jq -r '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration')
+                        IMAGE_ID=$(echo $prepare_images_output | jq -r '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id')
+                      fi
+
                       XNAME=$(cat /etc/cray/xname)
                       # Check for the XNAME variable
                       echo "DEBUG Setting CFS config $config on ncn-m001 ($XNAME)"
@@ -224,10 +235,37 @@ spec:
                         exit 1
                     else
                         rm /etc/cray/upgrade/csm/iuf/ncn-m001-bootparameters-update.done
-                    fi
-          - name: end-operation
+                    fi          
+          - name: rebuild-config-image-update
             dependencies:
               - upgrade-m001
+            templateRef:
+              name: iuf-base-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "false"
+                - name: global_params
+                  value: '{{inputs.parameters.global_params}}'
+                - name: scriptContent
+                  value: |
+                    cfs_config="{{=jsonpath(inputs.parameters.global_params,'$.input_params.cfs_configuration_management')}}"
+                    ims_image="{{=jsonpath(inputs.parameters.global_params,'$.input_params.boot_image_management')}}"
+
+                    if [[ -n $cfs_config && -n $ims_image ]]; then
+                        output_json=$(jq -n \
+                          --arg cfs_config "$cfs_config" \
+                          --arg ims_image "$ims_image" \
+                          '{cfs_config: $cfs_config, ims_image: $ims_image}')
+                        echo $output_json | tee {{inputs.parameters.script_output_file}}
+                    else
+                        echo {} | tee {{inputs.parameters.script_output_file}}
+                    fi
+            when: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.boot_image_management') != '' && jsonpath(inputs.parameters.global_params, '$.input_params.cfs_configuration_management') != ''}}"
+          - name: end-operation
+            dependencies:
+              - rebuild-config-image-update
             templateRef:
               name: workflow-template-record-time-template
               template: record-time-template

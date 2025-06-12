@@ -59,6 +59,7 @@ fi
 
 function get_list_of_images_to_update() {
   grep -rhPo "(?<=image: )[a-z].*(?=:)" . | sort | uniq
+  grep -rhPo "(?<=value: )[a-z].*(?=:)" . | sort | uniq
 }
 
 function get_latest_tag_for_image() {

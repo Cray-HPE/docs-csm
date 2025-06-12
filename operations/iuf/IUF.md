@@ -348,6 +348,7 @@ The following arguments may be specified when invoking `iuf run`:
 usage: iuf run [-h] [-b BEGIN_STAGE] [-e END_STAGE] [-r RUN_STAGES [RUN_STAGES ...]] [-s SKIP_STAGES [SKIP_STAGES ...]] [-f]
                [-bc BOOTPREP_CONFIG_MANAGED] [-bm BOOTPREP_CONFIG_MANAGEMENT] [-bpcd BOOTPREP_CONFIG_DIR] [-rv RECIPE_VARS]
                [-sv SITE_VARS] [-mrs {reboot,stage}] [-cmrp CONCURRENT_MANAGEMENT_ROLLOUT_PERCENTAGE]
+               [-smc SET_MANAGEMENT_CONFIG] [-smi SET_MANAGEMENT_IMAGE]
                [--limit-managed-rollout LIMIT_MANAGED_ROLLOUT [LIMIT_MANAGED_ROLLOUT ...]]
                [--limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT [LIMIT_MANAGEMENT_ROLLOUT ...]]
                [-mrp MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...]]
@@ -398,6 +399,16 @@ options:
                         Limit the number of management nodes that roll out
                         concurrently based on the percentage specified. Must be an integer
                         between 1-100. Defaults to 20 (percent).
+  -smc, --set-management-config
+                        Specify the configuration name to be used for rebuilding the management node.
+                        If this parameter is provided, an image ID must also be specified using '--set-management-image'.
+                        Defaults to None, in which case the configuration created during prepare-images stage of the
+                        activity will be used.
+  -smi, --set-management-image
+                        Specify the image ID to be used for rebuilding the management node. If this parameter is provided,
+                        a configuration name must also be specified using '--set-management-config'.
+                        Defaults to None, in which case the image created during prepare-images stage of the activity
+                        will be used.
   --limit-managed-rollout LIMIT_MANAGED_ROLLOUT [LIMIT_MANAGED_ROLLOUT ...]
                         Override list used to target specific nodes only when rolling out managed nodes. Arguments
                         should be xnames or HSM node groups. Defaults to the Compute role.
