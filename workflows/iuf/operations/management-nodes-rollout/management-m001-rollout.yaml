@@ -110,8 +110,7 @@ spec:
                   value: 'ncn-m001'
                 - name: scriptContent
                   value: |
-                    . /etc/cray/upgrade/csm/myenv
-                    if [ ! -f /etc/cray/upgrade/csm/${CSM_REL_NAME}/ncn-m001-backup.done ]; then
+                    if [ ! -f /etc/cray/upgrade/csm/iuf/ncn-m001-bootparameters-update.done ]; then
                       BACKUP_TARFILE="csm_upgrade.pre_m001_reboot_artifacts.$(date +%Y%m%d_%H%M%S).tgz"
                       ls -d \
                           /root/apply_csm_configuration.* \
@@ -125,28 +124,8 @@ spec:
                         exit 1
                       else
                         echo "INFO Successfully completed master node ncn-m001 backup"
-                        touch /etc/cray/upgrade/csm/${CSM_REL_NAME}/ncn-m001-backup.done
                       fi
-                    else
-                      echo "INFO Skipping master node ncn-m001 backup. It has previously been completed"
-                      echo "INFO Note: To Re-run master node ncn-m001 backup, run the command: 'rm -f /etc/cray/upgrade/csm/${CSM_REL_NAME}/ncn-m001-backup.done' "
-                    fi
-          - name: update-bootparams-m001
-            dependencies:
-              - backup-m001
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{$.DryRun}}"
-                - name: mediaHost
-                  value: 'ncn-m001'
-                - name: scriptContent
-                  value: |
-                    . /etc/cray/upgrade/csm/myenv
-                    if [ ! -f /etc/cray/upgrade/csm/${CSM_REL_NAME}/ncn-m001-bootparameters-update.done ]; then
+                    
                       cfs_config="{{=jsonpath(inputs.parameters.global_params,'$.input_params.cfs_configuration_management')}}"
                       ims_image="{{=jsonpath(inputs.parameters.global_params,'$.input_params.boot_image_management')}}"
 
@@ -191,15 +170,19 @@ spec:
                         exit 1
                       else
                         echo "INFO Successfully completed master node ncn-m001 bootparameters update" 
-                        touch /etc/cray/upgrade/csm/${CSM_REL_NAME}/ncn-m001-bootparameters-update.done
+                        touch /etc/cray/upgrade/csm/iuf/ncn-m001-bootparameters-update.done
                       fi
                     else
-                      echo "INFO Skipping master node ncn-m001 bootparameters update. It has previously been completed"
-                      echo "INFO Note: To Re-run master node ncn-m001 bootparameters update, run the command: 'rm -f /etc/cray/upgrade/csm/${CSM_REL_NAME}/ncn-m001-bootparameters-update.done' "
+                      echo "WARNING "
+                      echo "WARNING Note: master node ncn-m001 has not been successfully upgraded during previous run." 
+                      echo "WARNING To Re-run ncn-m001 upgrade, run the command: 'rm -f ncn-m001-bootparameters-update.done' "
+                      echo "WARNING This should be done only if the conditions causing upgrade failure during previous run has been fixed."
+                      echo "WARNING "
+                      exit 1
                     fi
           - name: upgrade-m001
             dependencies:
-              - update-bootparams-m001
+              - backup-m001
             templateRef:
               name: ssh-template
               template: shell-script
@@ -251,9 +234,7 @@ spec:
                         echo "ERROR master node ncn-m001 upgrade has failed"
                         exit 1
                     else
-                        . /etc/cray/upgrade/csm/myenv
-                        rm /etc/cray/upgrade/csm/${CSM_REL_NAME}/ncn-m001-backup.done
-                        rm /etc/cray/upgrade/csm/${CSM_REL_NAME}/ncn-m001-bootparameters-update.done
+                        rm /etc/cray/upgrade/csm/iuf/ncn-m001-bootparameters-update.done
                     fi          
           - name: rebuild-config-image-update
             dependencies:
