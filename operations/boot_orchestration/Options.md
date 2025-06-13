@@ -26,7 +26,6 @@ Example output:
   "clear_stage": false,
   "component_actual_state_ttl": "4h",
   "default_retry_policy": 3,
-  "disable_components_on_completion": true,
   "discovery_frequency": 300,
   "hsm_read_timeout": 20,
   "ims_errors_fatal": false,
@@ -81,12 +80,6 @@ The following are the BOS global options:
 * `default_retry_policy`
 
     The default maximum number of attempts per node for failed actions.
-
-* `disable_components_on_completion`
-
-    Determines if a component will be marked as disabled after its desired state matches its current state.
-    If false, BOS will continue to maintain the state of the nodes declaratively.
-    This is an experimental feature and is not fully supported.
 
 * `discovery_frequency`
 
