@@ -54,6 +54,8 @@ in chronological order.
 - Top-level Ansible playbooks `ncn-master.yaml`, `ncn-storage.yaml`, and `ncn-worker.yaml` in `csm-config-management` repository in the
   [Version Control Service (VCS)](../../glossary.md#version-control-service-vcs).
   - These have been replaced by the unified `ncn_nodes.yaml` top-level playbook.
+- Experimental `disable_components_on_completion` [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos)
+  [option](../../operations/boot_orchestration/Options.md)
 
 ## Deprecations
 
