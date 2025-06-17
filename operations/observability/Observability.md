@@ -11,23 +11,23 @@ For installs of each product stream, the observability framework records the tim
 The following is a list of the most important features of the framework:
 
 - Provides a consistent framework for health checks/validation, metrics, and reporting for all product stream  installs and upgrades.
-  - Inside-out views
-    - Timing dashboard view that focuses on a single operation, and from that operation an administrator can zoom out to view the total product installation details.
-    - Goss test dashboard view that focuses on a single test, and from that test an administrator can zoom out to view the total product test details.
-  - Outside-in views
-    - Timing dashboard view that shows total product details, and from that view an administrator can zoom in to focus on details of a single installation operation.
-    - Goss test dashboard view that shows total product test details, and from that view an administrator can zoom in to focus on details of a single test.
-  - Product stream health
+    - Inside-out views
+        - Timing dashboard view that focuses on a single operation, and from that operation an administrator can zoom out to view the total product installation details.
+        - Goss test dashboard view that focuses on a single test, and from that test an administrator can zoom out to view the total product test details.
+    - Outside-in views
+        - Timing dashboard view that shows total product details, and from that view an administrator can zoom in to focus on details of a single installation operation.
+        - Goss test dashboard view that shows total product test details, and from that view an administrator can zoom in to focus on details of a single test.
+    - Product stream health
 
 - Drill down health dashboard with roll up summary of health checks.
-  - Aggregate checks
-    - Problem/OK counts across each product stream.
-  - Functional checks
-    - Product stream functional Goss suites for key areas.
-    - For example: REST API, micro-service, Kubernetes, network, and database health checks for a specific product stream.
-  - Granular checks
-    - Individual Goss tests for component level health checks within a functional area of a given product stream.
-    - For example: management switch configuration verification, routing table checks on the OS, gateway tests, and Container Network Interface (CNI) tests.
+    - Aggregate checks
+        - Problem/OK counts across each product stream.
+    - Functional checks
+        - Product stream functional Goss suites for key areas.
+        - For example: REST API, micro-service, Kubernetes, network, and database health checks for a specific product stream.
+    - Granular checks
+        - Individual Goss tests for component level health checks within a functional area of a given product stream.
+        - For example: management switch configuration verification, routing table checks on the OS, gateway tests, and Container Network Interface (CNI) tests.
 
 - Boot, install, and upgrade duration monitoring.
   This does automatic calculating and reporting of the time a given section of install/upgrade has taken as well as metrics on Goss test successes and failures.
@@ -46,22 +46,22 @@ The following is a list of the most important features of the framework:
 The following IUF topics are discussed in the following subsections.
 
 - [Observability Framework during CSM installs](#observability-framework-during-csm-installs)
-  - [Overview](#overview-of-observability-framework-on-pit-node)
-  - [Observability workflow](#observability-framework-workflow-on-pit-node)
-  - [`systemd` services](#observability-framework-systemd-services-on-pit-node)
+    - [Overview](#overview-of-observability-framework-on-pit-node)
+    - [Observability workflow](#observability-framework-workflow-on-pit-node)
+    - [`systemd` services](#observability-framework-systemd-services-on-pit-node)
 - [IUF timing dashboard](#iuf-timing-dashboard)
-  - [Features](#timing-dashboard-features)
-  - [Collected timing metrics](#collected-timing-metrics)
+    - [Features](#timing-dashboard-features)
+    - [Collected timing metrics](#collected-timing-metrics)
 - [Goss tests for PIT and NCN](#goss-tests-for-pit-and-ncn)
-  - [Overview](#goss-test-overview)
-  - [Workflow](#workflow)
-  - [Log file format](#log-file-format)
-  - [Grok-exporter deployment, service, and service-monitor](#grok-exporter-deployment-service-and-service-monitor)
-  - [Configuration file for the grok-exporter](#configuration-file-for-the-grok-exporter)
-  - [Prometheus metrics and Grafana dashboard](#prometheus-metrics-and-grafana-dashboard)
+    - [Overview](#goss-test-overview)
+    - [Workflow](#workflow)
+    - [Log file format](#log-file-format)
+    - [Grok-exporter deployment, service, and service-monitor](#grok-exporter-deployment-service-and-service-monitor)
+    - [Configuration file for the grok-exporter](#configuration-file-for-the-grok-exporter)
+    - [Prometheus metrics and Grafana dashboard](#prometheus-metrics-and-grafana-dashboard)
 - [Error dashboard](#error-dashboard)
-  - [Features](#error-dashboards-features)
-  - [Error dashboards](#error-dashboards)
+    - [Features](#error-dashboards-features)
+    - [Error dashboards](#error-dashboards)
 
 ## Observability Framework during CSM installs
 
@@ -177,6 +177,18 @@ Feb 08 23:06:38 redbull-pit grafana[82549]: logger=ngalert.multiorg.alertmanager
 Feb 08 23:06:38 redbull-pit grafana[82549]: logger=http.server t=2023-02-08T23:06:38.55+0000 lvl=info msg="HTTP Server Listen" address=[::]:3000 protocol=http>
 ```
 
+#### Access Grafana GUI on PIT node
+
+Run the following command on the new terminal in order to access Grafana GUI using port-forward method.
+
+```bash
+ssh -L 3000:127.0.0.1:3000 root@SYSTEM_IP
+```
+
+Note: `SYSTEM_IP` is the IP Address of the host system.
+
+Open `http://localhost:3000/` in the browser to access the GUI.
+
 ## IUF timing dashboard
 
 The IUF timing dashboard provides timing information for installs and upgrades.
@@ -190,24 +202,24 @@ The IUF timing dashboard provides timing information for installs and upgrades.
 ### Collected timing metrics
 
 - Operation timing metrics
-  - Start time
-  - End time
-  - Duration
-  - Status
-  - Product name
-  - Product version
+    - Start time
+    - End time
+    - Duration
+    - Status
+    - Product name
+    - Product version
 - Stage timing metrics
-  - Stage name
-  - Stage type
-  - Stage start time (the earliest start time of the all the operations in the stage)
-  - Stage end time (the latest end time of the all the operations in the stage)
-  - Stage duration (the difference between the stage end time and stage start time)
-  - Stage status (status is marked as succeeded if all the operations' statuses are succeeded, otherwise it is marked as failed)
+    - Stage name
+    - Stage type
+    - Stage start time (the earliest start time of the all the operations in the stage)
+    - Stage end time (the latest end time of the all the operations in the stage)
+    - Stage duration (the difference between the stage end time and stage start time)
+    - Stage status (status is marked as succeeded if all the operations' statuses are succeeded, otherwise it is marked as failed)
 - Product timing metrics
-  - Product name
-  - Product start time (start time of the process-media stage)
-  - Product end time (start time of the post-install-check stage)
-  - Product status (status is marked as succeeded if all the stages' statuses are succeeded, otherwise it is marked as failed)
+    - Product name
+    - Product start time (start time of the process-media stage)
+    - Product end time (start time of the post-install-check stage)
+    - Product status (status is marked as succeeded if all the stages' statuses are succeeded, otherwise it is marked as failed)
 
 ## Goss tests for PIT and NCN
 
@@ -316,9 +328,9 @@ Error dashboards have data such as total counts of errors, warnings, and failure
 
 - The error dashboards provide the ability to examine errors in the cluster across multiple dimensions.
 - The error dashboards pull in information from a variety of sources, including the following:
-  - Errors and failures encountered during upgrades and installs.
-  - ConMan logs on the PIT node.
-  - Goss test logs.
+    - Errors and failures encountered during upgrades and installs.
+    - ConMan logs on the PIT node.
+    - Goss test logs.
 
 ### Error dashboards
 
