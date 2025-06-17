@@ -70,3 +70,33 @@ Example configuration:
   }
 }
 ```
+
+## Using sources in additional inventory
+
+When adding additional inventory to a configuration, either the `clone_url` or `source` values can be used to reference a Git repo.
+`clone_url` can be used for repos where CFS can use the default username, password and CA certificate, such as internal repos.
+`source` allows the layer to reference a CFS source which can include information beyond a single `clone_url`. See [CFS Sources](CFS_Sources.md) for more information.
+
+In the following example, a `source` is specified for the additional inventory rather than a
+`clone_url`. The `layers` still use `clone_url` in this example. A source named "inventory" must
+exist in CFS in order for this example to work. See [Create a CFS Source](CFS_Sources.md#create-a-cfs-source)
+for instructions on creating a CFS source.
+
+Example configuration:
+
+```json
+{
+  "layers": [
+    {
+      "name": "configurations-layer-example-1",
+      "clone_url": "https://api-gw-service-nmn.local/vcs/cray/example-repo.git",
+      "playbook": "site.yml",
+      "commit": "<git commit id>"
+    }
+  ],
+  "additional_inventory": {
+    "source": "inventory",
+    "commit": "a7d08b6e1be590ac01711e39c684b6893c1da0a9"
+  }
+}
+```
