@@ -56,6 +56,13 @@ export SERVICES_CIDR=$(craysys metadata get kubernetes-services-cidr)
 # version. Otherwise, use kubeadm.k8s.io/v1beta4.
 if [[ ${KUBERNETES_MINOR_VERSION} -lt 25 ]]; then
   k8scfg="/srv/cray/resources/common/1.24/kubeadm.cfg"
+
+  # Special case for K8s 1.24 -> 1.26 upgrade. Use existing kubeadm.cfg that is
+  # present on the previous node image.
+  if [ ! -f "${k8scfg}" ]; then
+    export KUBERNETES_VERSION="v${KUBERNETES_VERSION}"
+    k8scfg="/srv/cray/resources/common/kubeadm.cfg"
+  fi
 elif [[ ${KUBERNETES_MINOR_VERSION} -lt 27 ]]; then
   k8scfg="/srv/cray/resources/common/1.25/kubeadm.cfg"
 elif [[ ${KUBERNETES_MINOR_VERSION} -lt 31 ]]; then
