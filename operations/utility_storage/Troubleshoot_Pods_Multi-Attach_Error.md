@@ -1,10 +1,16 @@
 # Troubleshoot Pods Failing to Restart on Other Worker Nodes
 
-Troubleshoot an issue where pods cannot restart on another worker node because of the "Volume is already exclusively attached to one node and can't be attached to another" error. Kubernetes does not currently support "readwritemany" access mode for Rados Block Device \(RBD\) devices, which causes an issue where devices fail to unmap correctly.
+Troubleshoot an issue where pods cannot restart on another worker node because of the
+"Volume is already exclusively attached to one node and can't be attached to another" error.
+Kubernetes does not currently support `readwritemany` access mode for
+Rados Block Device \(RBD\) devices, which causes an issue where devices fail to unmap correctly.
 
-The issue occurs when unmounting the mounts tied to the RBD devices, which causes the rbd-task \(watcher\) to not stop for the RBD device.
+The issue occurs when unmounting the mounts tied to the RBD devices, which causes the`rbd-task`
+\(watcher\) to not stop for the RBD device.
 
-**WARNING:** If this process is followed and there are mount points that cannot be unmounted without using the force option, then a process may still be writing to them. If mount points are forcefully unmounted, there is a high probability of data loss or corruption.
+**WARNING:** If this process is followed and there are mount points that cannot be unmounted
+without using the force option, then a process may still be writing to them. If mount points
+are forcefully unmounted, there is a high probability of data loss or corruption.
 
 ## Prerequisites
 
@@ -17,7 +23,9 @@ This procedure requires administrative privileges.
     This may not be successful, but it is important to try before proceeding.
 
     ```bash
-    kubectl delete pod -n NAMESPACE POD_NAME --force --grace-period=0
+    NAMESPACE=vault
+    POD_NAME=cray-vault-0
+    kubectl delete pod -n $NAMESPACE $POD_NAME --force --grace-period=0
     ```
 
 1. Log in to a manager node and proceed if the previous step did not fix the issue.
@@ -27,58 +35,69 @@ This procedure requires administrative privileges.
     The returned Persistent Volume Claim \(PVC\) information will be needed in future steps.
 
     ```bash
-    kubectl -n services describe pod POD_ID
+    kubectl -n services describe pod $POD_NAME
     ```
 
     Example output:
 
-    ```
+    ```text
     [...]
 
     Events:
       Type     Reason              Age   From                     Message
       ----     ------              ----  ----                     -------
-      Normal   Scheduled           23s   default-scheduler        Successfully assigned services/cray-ims-6578bf7874-twwp7 to ncn-w002
-      Warning  FailedAttachVolume  23s   attachdetach-controller  Multi-Attach error for volume "**pvc-6ac68e32-de91-4e21-ac9f-c743b3ecb776**" Volume is already exclusively attached to one node and can't be attached to another
+      Normal   Scheduled           23s   default-scheduler        Successfully assigned services/cray-vault-0 to ncn-w003
+      Warning  FailedAttachVolume  23s   attachdetach-controller  Multi-Attach error for volume "**pvc-186dc7a5-9c9a-450b-b856-4308c331b37**" Volume is already exclusively attached to one node and can't be attached to another
 
     ```
 
-    In this example, pvc-6ac68e32-de91-4e21-ac9f-c743b3ecb776 is the PVC information required for the next step.
+    In this example, pvc-186dc7a5-9c9a-450b-b856-4308c331b37 is the PVC information required for the next step.
 
 1. Retrieve the Ceph volume.
 
     ```bash
-    kubectl describe -n NAMESPACE pv PVC_NAME
+    PVC_NAME=pvc-186dc7a5-9c9a-450b-b856-4308c331b37
+    kubectl describe -n $NAMESPACE pv $PVC_NAME
     ```
 
     Example output:
 
-    ```
-    Name:            pvc-6ac68e32-de91-4e21-ac9f-c743b3ecb776
+    ```text
+    Name:            pvc-186dc7a5-9c9a-450b-b856-4308c331b373
     Labels:          <none>
-    Annotations:     pv.kubernetes.io/provisioned-by: ceph.com/rbd
-                     rbdProvisionerIdentity: ceph.com/rbd
-    Finalizers:      [kubernetes.io/pv-protection]
-    StorageClass:    ceph-rbd-external
+    Annotations:     pv.kubernetes.io/provisioned-by: rbd.csi.ceph.com
+    Finalizers:      [kubernetes.io/pv-protection external-provisioner.volume.kubernetes.io/finalizer]
+    StorageClass:    k8s-block-replicated
     Status:          Bound
-    Claim:           services/cray-ims-data-claim
+    Claim:           vault/vault-raft-cray-vault-0
     Reclaim Policy:  Delete
     Access Modes:    RWO
     VolumeMode:      Filesystem
-    Capacity:        10Gi
+    Capacity:        2Gi
     Node Affinity:   <none>
     Message:
     Source:
-        Type:          RBD (a Rados Block Device mount on the host that shares a pod's lifetime)
-        CephMonitors:  [10.252.0.10 10.252.0.11 10.252.0.12]
-        RBDImage:      kubernetes-dynamic-pvc-3ce9ec37-846b-11ea-acae-86f521872f4c  <<-- Ceph image name
-        FSType:
-        RBDPool:       kube                                                         <<-- Ceph pool
-        RadosUser:     kube
-        Keyring:       /etc/ceph/keyring
-        SecretRef:     &SecretReference{Name:ceph-rbd-kube,Namespace:ceph-rbd,}
-        ReadOnly:      false
-    Events:            <none>
+        Type:              CSI (a Container Storage Interface (CSI) volume source)
+        Driver:            rbd.csi.ceph.com
+        FSType:            ext4
+        VolumeHandle:      0001-0024-f17091d2-31a2-11f0-b30a-42010afc0104-000000000000000b-10f31479-31a7-11f0-9092-ea5ff752cdc5
+        ReadOnly:          false
+        VolumeAttributes:      clusterID=f17091d2-31a2-11f0-b30a-42010afc0104
+                               imageFeatures=layering
+                               imageName=csi-vol-10f31479-31a7-11f0-9092-ea5ff752cdc5
+                               journalPool=kube
+                               pool=kube
+                               storage.kubernetes.io/csiProvisionerIdentity=1747325223051-8081-rbd.csi.ceph.com
+    Events:                <none>
+    ```
+
+1. Save the RBD name.
+
+    ```bash
+    CEPH_IMAGE_NAME=$(kubectl get pv -n vault $PVC_NAME -o json | \
+    jq -r '.spec.csi.volumeAttributes.imageName')
+    RBD_NAME=$(kubectl get pv -n vault $PVC_NAME -o json | \
+    jq -r '"\(.spec.csi.volumeAttributes.pool)/\(.spec.csi.volumeAttributes.imageName)"')
     ```
 
 1. Find the worker node that has the RBD locked.
@@ -88,15 +107,20 @@ This procedure requires administrative privileges.
         Take a note of the returned IP address.
 
         ```bash
-        rbd status CEPH_POOL_NAME/CEPH_IMAGE_NAME
+        rbd status $RBD_NAME
         ```
 
         For example:
 
         ```bash
-        rbd status kube/kubernetes-dynamic-pvc-3ce9ec37-846b-11ea-acae-86f521872f4c
+        rbd status $RBD_NAME
+        ```
+
+        Output:
+
+        ```bash
         Watchers:
-            watcher=**10.252.0.4**:0/3520479722 client.689192 cookie=18446462598732840976
+                watcher=10.252.1.11:0/3628969487 client.74826 cookie=18446462598732840963
         ```
 
     1. Use the returned IP address to get the host name attached to it.
@@ -104,46 +128,54 @@ This procedure requires administrative privileges.
         Take note of the returned host name.
 
         ```bash
-        grep IP_ADDRESS /etc/hosts
+        IP_ADDRESS=10.252.1.11
+        grep $IP_ADDRESS /etc/hosts
         ```
 
         Example output:
 
-        ```
-        10.252.0.4      ncn-w001.local ncn-w001 ncn-w001-nmn.local x3000c0s7b0n0 ncn-w001-nmn sms01-nmn.local sms04-nmn sms.local sms-nmn sms-nmn.local mgmt-plane-cmn mgmt-plane-cmn.local mgmt-plane-nmn.local bis.local bis time-nmn time-nmn.local #-label-10.252.0.4
+        ```bash
+        10.252.1.11     ncn-w005.nmn ncn-w005
         ```
 
-1. SSH to the host name returned in the previous step.
+1. Save the host name returned in the previous step.
 
     ```bash
-    ssh HOST_NAME
+    HOST_NAME=ncn-w005
     ```
 
 1. Unmap the device.
 
     1. Find the RBD number.
 
-        Use the CEPH\_IMAGE\_NAME value returned in step 4.
+        Use the CEPH\_IMAGE\_NAME value returned.
 
         ```bash
-        rbd showmapped|grep CEPH_IMAGE_NAME
+        ssh $HOST_NAME rbd showmapped|grep $CEPH_IMAGE_NAME
         ```
 
         Example output:
 
-        ```
-        16 kube           kubernetes-dynamic-pvc-3ce9ec37-846b-11ea-acae-86f521872f4c -    /dev/**rbd16**
+        ```bash
+        2   kube             csi-vol-5a91ee3d-4539-11ef-a44c-2629c446168b  -     /dev/rbd2
         ```
 
         Take note of the returned RBD number, which will be used in the next step.
 
+    1. SSH to the host and set varibles needed
+
+        ```bash
+        ssh $HOST_NAME
+        RBD_NUMBER=rbd2
+        ```
+
     1. Verify it is not in use by an unstopped container.
 
         ```bash
-        mount|grep RBD_NUMBER
+        mount|grep $RBD_NUMBER
         ```
 
-        If no mount points are returned, proceed to the next step. If mount points are returned, run the following command:
+        If no mount points are returned, proceed to the next step. If mount points are returned, run the following command for each mount point:
 
         ```bash
         unmount MOUNT_POINT
@@ -156,17 +188,23 @@ This procedure requires administrative privileges.
     1. Unmap the device.
 
         ```bash
-        rbd unmap -o force /dev/RBD_NUMBER
+        rbd unmap -o force /dev/$RBD_NUMBER
+        ```
+
+    1. Disconnect from the host
+
+        ```bash
+        exit
         ```
 
 1. Check the status of the pod.
 
     ```bash
-    kubectl get pod -n NAMESPACE POD_NAME
+    kubectl get pod -n $NAMESPACE $POD_NAME
     ```
 
     **Troubleshooting:** If the pod status has not changes, try deleting the pod to restart it.
 
     ```bash
-    kubectl delete pod -n NAMESPACE POD_NAME
+    kubectl delete pod -n $NAMESPACE $POD_NAME
     ```
