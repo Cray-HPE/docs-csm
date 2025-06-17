@@ -716,6 +716,45 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="UPDATE_CRAY_POSTGRES_OPERATOR_CRDS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    postgres_chart_path=$(find "${CSM_ARTI_DIR}/helm" -name "cray-postgres-operator*.tgz")
+    if [[ -z $postgres_chart_path ]]; then
+      echo "Error: failed to find cray-postgres-operator chart in ${CSM_ARTI_DIR}/helm."
+      exit 1
+    fi
+    # check if file exists before applying crds, needed for backwards compatibility
+    if tar -tf "$postgres_chart_path" cray-postgres-operator/files/postgres-operator-crds-1.10.1.yaml > /dev/null 2>&1; then
+      # create CRDs for cray-postgres-operator, this is necessary when postgres is upgraded to 1.10.1 in CSM 1.7
+      tar --extract --file="$postgres_chart_path" --to-stdout cray-postgres-operator/files/postgres-operator-crds-1.10.1.yaml | kubectl apply -f -
+      # 5 second sleep is necessary for cray-postgres-operator chart deploy. Chart fails with CRD error if no sleep
+      sleep 5
+    else
+      echo "File 'cray-postgres-operator/files/postgres-operator-crds-1.10.1.yaml' does not exist in $postgres_chart_path"
+    fi
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+do_upgrade_csm_chart cray-postgres-operator platform.yaml
+
+state_name="FIX_POSTGRES"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    "${locOfScript}/util/fix-postgres.sh"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
