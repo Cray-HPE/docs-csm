@@ -35,6 +35,8 @@ Vmalert
 Vminsert
 Vmselect
 Vmstorage
+vminsert
+vmagent
 vmstorage
 vmalert
 vmselect
@@ -1117,6 +1119,15 @@ thanos
 - operations/system_management_health/Access_System_Management_Health_Services.md
 Thanos
 thanos
+
+- operations/system_management_health/Cilium_Monitoring.md
+eBPF
+
+- operations/system_management_health/SMA_Victoria_Metrics_Monitoring.md
+SMA-VMcluster
+
+- operations/system_management_health/Grafana_Dashboards_by_Component.md
+SMA-VMcluster
 
 - RELEASE_NOTES.md
 5.x
