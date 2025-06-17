@@ -66,7 +66,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Spire pods stuck in `PodInitializing`](known_issues/spire_pod_initializing.md)
 * [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
 * [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
-* [`cray-console-node` pods in `CrashLoopBackOff`](known_issues/cray-console-node_pods_in_CrashLoopBackOff.md)
 * [CFS-API pods in CLBO state](known_issues/cfs-api_pods_in_CLBO_state.md)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [IMS Image Job Performance](../operations/image_management/Image_Job_Performance.md)
@@ -100,7 +99,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [ConMan Failing to Connect to a Console](../operations/conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
 * [ConMan Asking for Password on SSH Connection](../operations/conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
 * [Console Node Pod Stuck in Terminating State](../operations/conman/Troubleshoot_ConMan_Node_Pod_Stuck_Terminating.md)
-* [`cray-console-node` pods in `CrashLoopBackOff`](known_issues/cray-console-node_pods_in_CrashLoopBackOff.md)
 
 ## Customer Management Network (CMN)
 
