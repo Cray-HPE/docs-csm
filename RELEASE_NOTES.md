@@ -57,6 +57,10 @@
   [Software Management Services health checks](troubleshooting/known_issues/sms_health_check.md#software-management-services-health-checks) for more information.
 * Added CFS CRUD tests for `configurations` and `sources`. These tests are included as part of SMS health checks. Please refer to 
   [Software Management Services health checks](troubleshooting/known_issues/sms_health_check.md#software-management-services-health-checks) for more information.
+* Added IMS CRUD tests for `images`, `recipes` and `public keys`. These tests are included as part of SMS health checks. Please refer to 
+  [Software Management Services health checks](troubleshooting/known_issues/sms_health_check.md#software-management-services-health-checks) for more information.
+* Added CFS node personalization to the barebones image boot test. This test is included as part of SMS health checks. Please refer to 
+  [Software Management Services health checks](troubleshooting/known_issues/sms_health_check.md#software-management-services-health-checks) for more information.
 
 ## Bug fixes
 
@@ -95,6 +99,7 @@
 * IMS image tags were removed by soft delete.
 * Updating CFS session fails causing the session to be stuck in pending state.
 * `cfs-debugger` crashes when `cfs-state-reporter` service status does not include `since` timestamp.
+* Post upgrade job of `cms-ipxe` fails if previously failed `cms-ipxe` upgrade job entry exists.
 
 ## Deprecations
 
