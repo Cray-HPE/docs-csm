@@ -4380,7 +4380,6 @@ Update one or more of the BOS service options.
   "clear_stage": true,
   "component_actual_state_ttl": "6h",
   "default_retry_policy": 1,
-  "disable_components_on_completion": true,
   "discovery_frequency": 33554432,
   "hsm_read_timeout": 20,
   "ims_errors_fatal": true,
@@ -4416,7 +4415,6 @@ Update one or more of the BOS service options.
   "clear_stage": true,
   "component_actual_state_ttl": "6h",
   "default_retry_policy": 1,
-  "disable_components_on_completion": true,
   "discovery_frequency": 33554432,
   "hsm_read_timeout": 20,
   "ims_errors_fatal": true,
@@ -4644,7 +4642,6 @@ Retrieve the list of BOS service options.
   "clear_stage": true,
   "component_actual_state_ttl": "6h",
   "default_retry_policy": 1,
-  "disable_components_on_completion": true,
   "discovery_frequency": 33554432,
   "hsm_read_timeout": 20,
   "ims_errors_fatal": true,
@@ -7009,7 +7006,6 @@ Mapping from Component staged Session statuses to Components with that status.
   "clear_stage": true,
   "component_actual_state_ttl": "6h",
   "default_retry_policy": 1,
-  "disable_components_on_completion": true,
   "discovery_frequency": 33554432,
   "hsm_read_timeout": 20,
   "ims_errors_fatal": true,
@@ -7040,7 +7036,6 @@ Options for the Boot Orchestration Service.
 |clear_stage|boolean|false|none|Allows a Component's staged information to be cleared when the requested staging action has been started. Defaults to false.|
 |component_actual_state_ttl|string|false|none|The maximum amount of time a Component's actual state is considered valid (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior for newly booted nodes and instructs bos-state-reporter to report once instead of periodically.|
 |default_retry_policy|integer|false|none|The default maximum number attempts per node for failed actions.|
-|disable_components_on_completion|boolean|false|none|If true, when a Session has brought a Component to its desired state, that Component will be marked as disabled in BOS.<br>If false, BOS will continue to maintain the state of the nodes declaratively, even after a Session finishes.|
 |discovery_frequency|integer|false|none|How frequently the BOS discovery agent syncs new Components from HSM (in seconds)|
 |hsm_read_timeout|integer|false|none|The amount of time (in seconds) to wait for a response before timing out a request to HSM|
 |ims_errors_fatal|boolean|false|none|This option modifies how BOS behaves when validating the architecture of a boot image in a boot set.<br>Specifically, this option comes into play when BOS needs data from IMS in order to do this validation, but<br>IMS is unreachable.<br>In the above situation, if this option is true, then the validation will fail.<br>Otherwise, if the option is false, then a warning will be logged, but the validation will not<br>be failed because of this.|
