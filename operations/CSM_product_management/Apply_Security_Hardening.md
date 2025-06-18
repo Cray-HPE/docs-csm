@@ -14,28 +14,22 @@ None.
 
    Perform procedure(s) in [Change Passwords and Credentials](Change_Passwords_and_Credentials.md).
 
-2. Limit Kubernetes API audit log Retention.
-
-   If Kubernetes API Auditing was enabled at install, perform procedure(s) in [Limit Kubernetes API Audit Log Parameters](../kubernetes/Limit_Kubernetes_API_Audit_Log_Parameters.md).
-
-   Failure to apply the referenced configuration could result in NCN disk space exhaustion on Kubernetes Master Nodes.
-
-3. Customize ("randomize") iPXE binary name.
+2. Customize ("randomize") iPXE binary name.
 
    Perform procedure(s) in [Customize iPXE Binary Names](../boot_orchestration/Customize_iPXE_Binary_Names.md).
 
-4. (Optional) Enable Spire and OPA xname validation.
+3. (Optional) Enable Spire and OPA xname validation.
 
     Perform procedure(s) in [xname validation](../spire/xname_validation.md).
 
-5. (Optional) Enable Kubernetes API encryption.
+4. (Optional) Enable Kubernetes API encryption.
 
     Perform procedure(s) in [Kubernetes Encryption](../kubernetes/encryption/README.md).
 
-6. (Optional) Change Keycloak OAuth token lifetime.
+5. (Optional) Change Keycloak OAuth token lifetime.
 
    Perform procedure(s) in [Change Keycloak token lifetime](../security_and_authentication/Change_Keycloak_Token_Lifetime.md).
 
-7. (Optional) Remove Kiali.
+6. (Optional) Remove Kiali.
 
    Perform procedure(s) in [Remove Kiali](../system_management_health/Remove_Kiali.md).
