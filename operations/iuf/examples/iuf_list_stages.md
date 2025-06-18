@@ -18,7 +18,7 @@ Example output:
 | update-vcs-config          | Merge working branches and perform automated VCS configuration                        | Succeeded | 0:01:12  |
 | update-cfs-config          | Update CFS configuration utilizing sat bootprep                                       | N/A       | N/A      |
 | prepare-images             | Build and configure management node and/or managed node images utilizing sat bootprep | N/A       | N/A      |
-| management-nodes-rollout   | Rolling rebuild of management nodes                                                   | N/A       | N/A      |
+| management-nodes-rollout   | Rolling rebuild/reboot of management nodes                                                   | N/A       | N/A      |
 | deploy-product             | Deploy services to system                                                             | N/A       | N/A      |
 | post-install-service-check | Perform post-install checks of deployed product services                              | N/A       | N/A      |
 | managed-nodes-rollout      | Rolling reboot of managed nodes                                                       | N/A       | N/A      |

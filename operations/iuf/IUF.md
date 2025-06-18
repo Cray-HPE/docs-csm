@@ -395,6 +395,9 @@ options:
   -mrs {reboot,stage}, --managed-rollout-strategy {reboot,stage}
                         Method to update the managed nodes. Accepted values are 'reboot' (reboot nodes _now_) or
                         'stage' (set up nodes to reboot into new image after next WLM job). Defaults to 'stage'.
+  -mnrs {reboot,rebuild}, --management-rollout-strategy {reboot,rebuild}
+                        Method to rollout the management nodes. Accepted values are 'reboot' or
+                                'rebuild'. Defaults to 'rebuild'.
   -cmrp CONCURRENT_MANAGEMENT_ROLLOUT_PERCENTAGE, --concurrent-management-rollout-percentage CONCURRENT_MANAGEMENT_ROLLOUT_PERCENTAGE
                         Limit the number of management nodes that roll out
                         concurrently based on the percentage specified. Must be an integer
