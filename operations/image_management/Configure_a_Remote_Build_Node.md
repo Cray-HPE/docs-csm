@@ -345,7 +345,7 @@ image that is installed with CSM. This image may be used to boot multiple remote
         {
             "boot_sets": {
                 "compute": {
-                    "kernel_parameters": "ip=dhcp quiet spire_join_token=${SPIRE_JOIN_TOKEN} root=live:s3://boot-images/<REMOTE_IMS_NODE_IMAGE_ID>/rootfs nmd_data=url=s3://boot-images/<REMOTE_IMS_NODE_IMAGE_ID>/rootfs,etag=<REMOTE_IMS_NODE_IMAGE_ETAG>",
+                    "kernel_parameters": "console=ttyS0,115200 ip=dhcp quiet spire_join_token=${SPIRE_JOIN_TOKEN} root=live:s3://boot-images/<REMOTE_IMS_NODE_IMAGE_ID>/rootfs nmd_data=url=s3://boot-images/<REMOTE_IMS_NODE_IMAGE_ID>/rootfs,etag=<REMOTE_IMS_NODE_IMAGE_ETAG>",
                     "node_roles_groups": [ "Compute"],
                     "etag": "<REMOTE_IMS_NODE_IMAGE_ETAG>",
                     "arch": "<REMOTE_NODE_ARCH>",
