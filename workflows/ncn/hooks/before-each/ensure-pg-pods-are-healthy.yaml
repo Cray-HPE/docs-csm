@@ -37,6 +37,8 @@ spec:
     
     goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-leader.yaml ${GOSS_ARG}
 
+    goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-clusters-running.yaml ${GOSS_ARG}
+
     goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-pods-running.yaml ${GOSS_ARG}
 
     goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-replication-lag.yaml ${GOSS_ARG}
