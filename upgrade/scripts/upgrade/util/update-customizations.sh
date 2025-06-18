@@ -116,6 +116,15 @@ yq4 -i eval 'del(.spec.kubernetes.services.*.cray-service.sqlCluster)' "$c"
 # kyverno-policy did not have configurable customization prior to 1.6. Import kyverno-policy.checkImageSettings from upgrade customizations file during upgrade.
 yq4 -i eval ".spec.kubernetes.services[\"kyverno-policy\"].checkImagePolicy += (load(\"${upgrade_customizations}\") | .spec.kubernetes.services[\"kyverno-policy\"].checkImagePolicy)" "$c"
 
+# when CSM is getting upgraded from 1.6 to 1.7, the image-verification-policy need to take the values from the new customizations file
+if [ "$(yq4 eval '.spec.kubernetes.services."image-verification-policy"' "${upgrade_customizations}")" != "null" ]; then
+  yq4 eval -i '
+    .spec.kubernetes.services["image-verification-policy"] =
+      (load("'"${upgrade_customizations}"'") | .spec.kubernetes.services["image-verification-policy"]) |
+    del(.spec.kubernetes.services["kyverno-policy"])
+  ' "$c"
+fi
+
 # Add entries for Cilium Hubble observability GUI (CASMNET-2194)
 yq4 -i eval '.spec.kubernetes.services.["cray-hubble"].externalHostname = "hubble.cmn.{{ network.dns.external }}"' "$c"
 yq4 -i eval ".spec.proxiedWebAppExternalHostnames.customerManagement |= (. + [\"{{ kubernetes.services['cray-hubble'].externalHostname }}\"] | unique)" "$c"
