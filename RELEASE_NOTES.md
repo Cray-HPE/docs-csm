@@ -11,6 +11,9 @@
 ### Miscellaneous functionality
 
 * Console logs and interaction is now available and tenant aware through the `cray` CLI, see [console](operations/conman/ConMan.md#console) for more information.
+* cfs components can be updated in bulk through `cray` CLI using the `cfs components updatemany` command,
+  see [Managing many components](operations/configuration_management/CFS_Commands_Cheat_Sheet.md#managing-many-components) for more information.
+  Support is added for `v2` and `v3` API versions.
 
 ### New hardware support
 
@@ -19,6 +22,8 @@
 ### Automation improvements
 
 ### Base platform component upgrades
+
+* Kata upgraded to version 3.17.0.
 
 ### Security improvements
 
@@ -30,6 +35,10 @@
 * CSM now provides the `csm.ssh_config` Ansible role to automatically restore the root user's SSH configuration file during
   [Management Node Personalization](operations/configuration_management/Management_Node_Personalization.md).
   For more details, see [SSH configuration files](operations/CSM_product_management/Set_Up_Passwordless_SSH.md#ssh-configuration-files).
+* CFS import tool now checks for running sessions before importing data.
+  For more details, see [Import](operations/configuration_management/Exporting_and_Importing_CFS_Data.md#import) for more information.
+* BOS import tool now checks for running sessions before importing data. For more details,
+  see [Import BOS session templates](operations/boot_orchestration/Exporting_and_Importing_BOS_Data.md#exporting-and-importing-bos-data) for more information.
 
 ### Documentation enhancements
 
@@ -43,6 +52,11 @@
 * Fixed intermittent failures sometimes seen when running `check_key_id_in_jwks.sh`
 * Added retry logic to `goss-postgresql-syncfailed.yaml` to prevent intermittent false positives
 * Added retry logic to `postgres_clusters_running.sh to prevent` intermittent false positives
+* Added BOS CRUD tests for `sessiontemplates` and `sessions`. `sessions` tests include `staged` and `non staged`.
+  These tests are included as part of SMS health checks. Please refer to 
+  [Software Management Services health checks](troubleshooting/known_issues/sms_health_check.md#software-management-services-health-checks) for more information.
+* Added CFS CRUD tests for `configurations` and `sources`. These tests are included as part of SMS health checks. Please refer to 
+  [Software Management Services health checks](troubleshooting/known_issues/sms_health_check.md#software-management-services-health-checks) for more information.
 
 ## Bug fixes
 
@@ -75,6 +89,12 @@
       [SCSD](glossary.md#system-configuration-service-scsd),
       [SLS](glossary.md#system-layout-service-sls)
 * A bug was fixed in the `hmcollector-poll` service so that event subscriptions are no longer lost after updating Paradise BMC firmware.  The service no longer needs to be restarted after performing firmware updates.
+* Fixed an issue where a soft deleted recipe was always assigned the arch `x86_64` regardless of the architecture of the recipe that was deleted.
+* Soft deleted recipe was always assigned `require_dkms=true` regardless of the value of the recipe that was deleted.
+* Incorrect metadata was stored for newly created IMS images.
+* IMS image tags were removed by soft delete.
+* Updating CFS session fails causing the session to be stuck in pending state.
+* `cfs-debugger` crashes when `cfs-state-reporter` service status does not include `since` timestamp.
 
 ## Deprecations
 
