@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -82,6 +82,11 @@ EOF
   fi
 fi
 
+source nexus_helper.sh
+alpine_version=$(get_latest_alpine)
+echo "Pulling the latest alpine version: $alpine_version"
+cache_alpine
+
 echo "Scaling Nexus deployment to 0"
 kubectl -n nexus scale deployment nexus --replicas=0
 
@@ -102,7 +107,7 @@ spec:
     spec:
       containers:
       - name: backup-container
-        image: artifactory.algol60.net/csm-docker/stable/docker.io/library/alpine:3.15
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/library/alpine:$alpine_version
         command: [ "/bin/sh", "-c" ]
         args:
         - >-
