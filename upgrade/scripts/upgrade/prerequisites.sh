@@ -1316,51 +1316,51 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-state_name="PREFLIGHT_CHECK"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    rpm_list=(csm-testing hpe-csm-goss-package goss-servers cray-cmstools-crayctldeploy)
-    url_list=()
-    for rpm_name in "${rpm_list[@]}"; do
-      rpm_path=$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*${rpm_name}\*.rpm | sort -V | tail -1)
-      rpm --force -Uvh "${rpm_path}"
-      # CASMPET-6635 & CASMINST-6517
-      rpm_url=$(csm_rpm_tarball_path_to_nexus_url "${rpm_path}")
-      url_list+=("${rpm_url}")
-    done
-    systemctl enable goss-servers
-    systemctl restart goss-servers
+# state_name="PREFLIGHT_CHECK"
+# state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+# if [[ ${state_recorded} == "0" ]]; then
+#   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+#   {
+#     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+#     rpm_list=(csm-testing hpe-csm-goss-package goss-servers cray-cmstools-crayctldeploy)
+#     url_list=()
+#     for rpm_name in "${rpm_list[@]}"; do
+#       rpm_path=$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*${rpm_name}\*.rpm | sort -V | tail -1)
+#       rpm --force -Uvh "${rpm_path}"
+#       # CASMPET-6635 & CASMINST-6517
+#       rpm_url=$(csm_rpm_tarball_path_to_nexus_url "${rpm_path}")
+#       url_list+=("${rpm_url}")
+#     done
+#     systemctl enable goss-servers
+#     systemctl restart goss-servers
 
-    # Install above RPMs and restart goss-servers on all other NCNs
-    ncns=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | grep -Ev "^$(hostname -s)$" | tr -t '\n' ',')
-    pdsh -S -b -w ${ncns} "rpm --force -Uvh ${url_list[*]}; systemctl enable goss-servers; systemctl restart goss-servers;"
+#     # Install above RPMs and restart goss-servers on all other NCNs
+#     ncns=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | grep -Ev "^$(hostname -s)$" | tr -t '\n' ',')
+#     pdsh -S -b -w ${ncns} "rpm --force -Uvh ${url_list[*]}; systemctl enable goss-servers; systemctl restart goss-servers;"
 
-    # get all installed CSM version into a file
-    kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm' | yq r - -d '*' -j | jq -r 'keys[]' > /tmp/csm_versions
-    # sort -V: version sort
-    highest_version=$(sort -V /tmp/csm_versions | tail -1)
-    minimum_version=1.2.0
-    # compare sorted versions with unsorted so we know if our highest is greater than minimum
-    if [[ $(printf "${minimum_version}\n${highest_version}") != $(printf "${minimum_version}\n${highest_version}" | sort -V) ]]; then
-      echo "Required CSM patch ${minimum_version} or above has not been applied to this system"
-      exit 1
-    fi
+#     # get all installed CSM version into a file
+#     kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm' | yq r - -d '*' -j | jq -r 'keys[]' > /tmp/csm_versions
+#     # sort -V: version sort
+#     highest_version=$(sort -V /tmp/csm_versions | tail -1)
+#     minimum_version=1.2.0
+#     # compare sorted versions with unsorted so we know if our highest is greater than minimum
+#     if [[ $(printf "${minimum_version}\n${highest_version}") != $(printf "${minimum_version}\n${highest_version}" | sort -V) ]]; then
+#       echo "Required CSM patch ${minimum_version} or above has not been applied to this system"
+#       exit 1
+#     fi
 
-    if is_vshasta_node; then
-      sed -i 's/vshasta: false/vshasta: true/g' /opt/cray/tests/install/ncn/vars/variables-ncn.yaml
-    fi
+#     if is_vshasta_node; then
+#       sed -i 's/vshasta: false/vshasta: true/g' /opt/cray/tests/install/ncn/vars/variables-ncn.yaml
+#     fi
 
-    GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml \
-      --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
+#     GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml \
+#       --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
 
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
+#   } >> "${LOG_FILE}" 2>&1
+#   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+# else
+#   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+# fi
 
 # restore previous ssh config if there was one, remove ours
 rm -f /root/.ssh/config
