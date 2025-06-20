@@ -741,19 +741,19 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-do_upgrade_csm_chart cray-postgres-operator platform.yaml
+# do_upgrade_csm_chart cray-postgres-operator platform.yaml
 
-state_name="FIX_POSTGRES"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-    "${locOfScript}/util/fix-postgres.sh"
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
+# state_name="FIX_POSTGRES"
+# state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+# if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+#   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+#   {
+#     "${locOfScript}/util/fix-postgres.sh"
+#   } >> "${LOG_FILE}" 2>&1
+#   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+# else
+#   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+# fi
 
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
@@ -1235,49 +1235,49 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-# Remove PodSecurityPolicy from enable-admission-plugins from the kube-apiserver.yaml manifest
-# on each of the master nodes. The change will prompt kubelet to restart the kube-apiserver pod.
-# Removing PodSecurityPolicy causes cascading restarts of many pods.
-state_name="REMOVE_PSP"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-    # Get all master nodes
-    apiserver_file="/etc/kubernetes/manifests/kube-apiserver.yaml"
-    master_nodes=$(grep -oP "(ncn-m\d+)" /etc/hosts | sort -u)
-    search_string=",PodSecurityPolicy"
+# # Remove PodSecurityPolicy from enable-admission-plugins from the kube-apiserver.yaml manifest
+# # on each of the master nodes. The change will prompt kubelet to restart the kube-apiserver pod.
+# # Removing PodSecurityPolicy causes cascading restarts of many pods.
+# state_name="REMOVE_PSP"
+# state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+# if [[ ${state_recorded} == "0" ]]; then
+#   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+#   {
+#     # Get all master nodes
+#     apiserver_file="/etc/kubernetes/manifests/kube-apiserver.yaml"
+#     master_nodes=$(grep -oP "(ncn-m\d+)" /etc/hosts | sort -u)
+#     search_string=",PodSecurityPolicy"
 
-    # For each master node, remove PodSecurityPolicy from --enable-admission-plugins.
-    # This will cause kubelet to restart kube-apiserver.
-    for host in $master_nodes; do
-      # yq4 doesn't work in this instance because it doesn't format list items correctly
-      # causing kube-apiserver to CLBO.
-      # Using sed.
-      echo "Modifying ${apiserver_file} on ${host} ..."
-      ssh $host sed -i "s/${search_string}//g" ${apiserver_file}
-      # Need to wait a bit for kube-apiserver to restart before modifying next kube-apiserver.yaml.
-      # If restart the kube-apiserver pods in quick succession, unable to run kubectl commands until
-      # apiserver pods are back up and running.
-      echo "Wait for 2 minutes for kubelet to restart kube-apiserver-${host} ..."
-      sleep 120
-      echo "Wait for pod kube-apiserver-${host} to be Ready ..."
-      kubectl wait pod -n kube-system kube-apiserver-${host} --for=condition=Ready --timeout=5m
-    done
+#     # For each master node, remove PodSecurityPolicy from --enable-admission-plugins.
+#     # This will cause kubelet to restart kube-apiserver.
+#     for host in $master_nodes; do
+#       # yq4 doesn't work in this instance because it doesn't format list items correctly
+#       # causing kube-apiserver to CLBO.
+#       # Using sed.
+#       echo "Modifying ${apiserver_file} on ${host} ..."
+#       ssh $host sed -i "s/${search_string}//g" ${apiserver_file}
+#       # Need to wait a bit for kube-apiserver to restart before modifying next kube-apiserver.yaml.
+#       # If restart the kube-apiserver pods in quick succession, unable to run kubectl commands until
+#       # apiserver pods are back up and running.
+#       echo "Wait for 2 minutes for kubelet to restart kube-apiserver-${host} ..."
+#       sleep 120
+#       echo "Wait for pod kube-apiserver-${host} to be Ready ..."
+#       kubectl wait pod -n kube-system kube-apiserver-${host} --for=condition=Ready --timeout=5m
+#     done
 
-    # undeploy cray-psp
-    echo "Undeploying cray-psp chart ..."
-    undeploy -n services cray-psp
+#     # undeploy cray-psp
+#     echo "Undeploying cray-psp chart ..."
+#     undeploy -n services cray-psp
 
-    # Blow away all psp resources since we won't need them in k8s 1.25+
-    echo "Delete all psp resources ..."
-    kubectl delete psp --all=true
+#     # Blow away all psp resources since we won't need them in k8s 1.25+
+#     echo "Delete all psp resources ..."
+#     kubectl delete psp --all=true
 
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
+#   } >> "${LOG_FILE}" 2>&1
+#   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+# else
+#   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+# fi
 
 # Disable CFS on the NCNs, to prevent new sessions from being launched during the upgrade.
 # Note that it is possible CFS sessions are currently underway on the NCNs. Disabling them
