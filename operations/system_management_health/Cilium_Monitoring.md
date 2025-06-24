@@ -6,7 +6,7 @@ without making any changes to the application code or configuration. Hubble is a
 platform built over Cilium and eBPF. It allows visibility into the communication and behavior of services
 as well as the networking infrastructure.
 
-Three new dashboards have been created for monitoring Cilium and Hubble. These are
+Three new dashboards have been created for monitoring Cilium and Hubble. These are as follows:
 
 - Cilium Agent Metrics - Visualizes the metrics exposed by cilium-agent. cilium-agent runs on each node and accepts configuration describing network policies, visibility and other monitoring requirements from Kubernetes.
 - Cilium Hubble Metrics - Visualizes the metrics exposed by Hubble. Hubble is integrated into cilium-agent and retrieves the visibility from Cilium.
