@@ -433,13 +433,13 @@ Example output:
 
    This is a major upgrade with many new features and bug fixes. For a complete list, refer to the external [CHANGELOG](https://github.com/kyverno/kyverno/blob/main/CHANGELOG.md).
 
-2. Container image signature verification Kyverno policy.
+2. Container image signature verification using Kyverno policy.
 
-### Container Image Signature Verification Kyverno Policy
+### Container Image Signature Verification using Kyverno Policy
 
    Container image signing and runtime verification policy by name `check-image` is delivered (through Kyverno
    policy engine) as part of CSM 1.7 release in `Enforce` mode. (`Audit` only mode will log the policy violation
-   warning messages in to the cluster report and as events whereas `Enforce` mode will block the resources if they fail signature verification)
+   warning messages into the cluster report and as events whereas `Enforce` mode will block the resources if they fail signature verification)
 
    By default, the `check-image` policy is shipped as a `ClusterPolicy`. End users can customize it to the targeted namespaces if needed.
 
@@ -468,7 +468,7 @@ To quickly identify existing image verification failures in your cluster, use th
 
 `kubectl get polr -A | awk '$6 > 0'`
 
-This command filters the `Policy Reports (polr)` to list resources with at least one verification failure. The output might look similar to this:
+This command filters the `Policy Reports (polr)` to list resources with at least one verification failure. The output might look like this:
 
 ```bash
 NAMESPACE     NAME                                   KIND        NAME                                             PASS   FAIL   WARN   ERROR   SKIP   AGE
@@ -550,15 +550,15 @@ This event clearly indicates that the pod creation was blocked due to the failed
 
 When facing verification failures, you have two primary options:
 
-##### 1. Sign the Image
+##### Sign the Image
 
 Ensure that your container images are properly signed using a signing tool named Cosign. Properly signed images will pass verification policies and deploy successfully.
 
 Refer this official documentation of [Cosign](https://docs.sigstore.dev/quickstart/quickstart-cosign/) to sign the images.
 
-##### Customizations
+##### Adding the public key to the policy
 
-Once, it is signed, you have to add the public key to the Kyverno cluster policy `check-image` and redeploy the chart `image-verification-policy`
+Once, it is signed, you must add the public key to the Kyverno cluster policy `check-image` and redeploy the chart `image-verification-policy` with the base chart `kyverno-policy`.
 Refer this CSM documentation on [redeploying the chart](https://cray-hpe.github.io/docs-csm/en-16/operations/csm_product_management/redeploying_a_chart/).
 This is how the `check-image` policy looks:
 
@@ -610,7 +610,7 @@ spec:
 
 Under `keys.publicKeys`, the new public key needs to be added following the [redeploy chart](https://cray-hpe.github.io/docs-csm/en-16/operations/csm_product_management/redeploying_a_chart/) approach.
 
-##### 2. Add an Exception
+##### Add an Exception
 
 This is how the `check-image-exceptions` policy exception looks like:
 
@@ -680,19 +680,18 @@ spec:
 Add the exceptions and exit.
 
 Now, the resouce will be allowed for deployment.
-Refer [here](https://release-1-12-0.kyverno.io/docs/writing-policies/exceptions/) for more details on exceptions.
+Refer [Kyverno]([https://release-1-12-0.kyverno.io/docs/writing-policies/exceptions/](https://release-1-13-0.kyverno.io/docs/writing-policies/exceptions/)) documentation on adding exceptions.
 If you don't want to edit the policy exception and deploy your image for some testing, you can add the label `prepend-registry: disable` and deploy the resource(not a recommended approach).
 
-#### Policy customization
+#### Policy customization through redeploying the chart
 
-   If any changes are to be made to the policy, for example, including or excluding certain namespaces and adding
-   a new public key, then the end user must change the CSM customizations and redeploy the `kyverno-policy` chart.
+
+   If any changes are to be made in the image verification policy, for example, making it to Audit and adding
+   a new public key, then the end user must change the CSM customizations and redeploy the `image-verification-policy` chart under the base chart `kyverno-policy`.
    For more information on customization and redeployment, see [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md).
 
-   If any changes are to be made in the image verification policy, redeploy the `image-verification-policy` chart in the `kyverno` namespace.
+   For more information on policy exception and matchings, refer to the Kyverno documentation at [Policy Exceptions](https://release-1-13-0.kyverno.io/docs/writing-policies/exceptions/).
 
-   For more information on policy exception and matchings, refer to the Kyverno documentation at [Policy Exceptions](https://release-1-10-0.kyverno.io/docs/writing-policies/exceptions/)
-   and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/match-exclude/).
 
 3. PSPs were replaced by PSS policy.
 
@@ -710,6 +709,7 @@ If you don't want to edit the policy exception and deploy your image for some te
   ceph-rbd             26270dc0-0464-45e1-90f7-8cdc8131a00a   DaemonSet     cray-ceph-csi-rbd-nodeplugin                                      0      1      0      0       0      11d
   ```
   The policyreport is a namespaced resource that is generated by Kyverno for each resource that is matched by a policy. Inside a PolicyReport, there may be multiple results, based on the number of policies that matched the resource, and a subsequent result field mentioning if it passed or failed. These details can be seen by describing the policyreport:
+
   ```yaml
   ncn-m001:~ # kubectl describe polr -n ceph-cephfs 75d41f86-4141-457b-ad0f-317af7764a36
   Name:         75d41f86-4141-457b-ad0f-317af7764a36
@@ -828,7 +828,8 @@ If you don't want to edit the policy exception and deploy your image for some te
   ```
   As seen above, the PolicyException first matches the resource to be exempted from the policy, mentions the policy and its rules to be exempted. Further, it mentions the podSecurity Exemptions to allow the use of privileged containers, additional capabilities, host namespaces, ports, and hostPath volumes. Notice that only the required fields and required values are supposed to be exempted. Make sure not to be too permissive with PolicyExceptions as it ruins the purpose of having a policy in the first place. Further documentation about PolicyException specific to PSS policy can be found as part of the [Kyverno Documentation](https://release-1-13-0.kyverno.io/docs/writing-policies/exceptions/#pod-security-exemptions).
 
-  #### Switching between Enforce and Audit mode
+#### Switching between Enforce and Audit mode
+
   As mentioned earlier, pods will NOT be allowed to be admitted to the cluster if in case it violates the PSS policy as we place it in Enforce mode. A message similar to the following will appear if a violating pod is attempted to be added to the cluster.
    
   ```bash
@@ -842,11 +843,13 @@ If you don't want to edit the policy exception and deploy your image for some te
       is forbidden, forbidden values found: [NET_RAW]])'
   ```
   The pods getting admitted are expected to be compliant to the PSS policy. In case the pods are not expected to be compliant, and require to be allowed, a PolicyException can be issued as described above. If in case Enforce mode must be switched back to Audit mode, then this can be done by Redeploying the `cray-kyverno-policies-upstream` chart after setting the following in the `customizations.yaml`:
+
   ```yaml
   cray-kyverno-policies-upstream:
       pssFailureAction: Audit
   ```
-  You can redeploy the `cray-kyverno-policies-upstream` chart under the `platform` manifest by applying the above customzation and following the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) documentation. 
+
+  You can redeploy the `cray-kyverno-policies-upstream` chart under the `platform` manifest by applying the above customzation and following the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) documentation.
 
 ## Known issues
 
