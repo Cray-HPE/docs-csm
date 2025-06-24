@@ -435,6 +435,8 @@ Example output:
 
 2. Container image signature verification using Kyverno policy.
 
+3. Pod Security Policies (PSPs) removed and Baseline Pod Security Standards (PSS) enforced using Kyverno Policies.
+
 ### Container Image Signature Verification using Kyverno Policy
 
    Container image signing and runtime verification policy by name `check-image` is delivered (through Kyverno
@@ -691,9 +693,7 @@ If you don't want to edit the policy exception and deploy your image for some te
 
    For more information on policy exception and matchings, refer to the Kyverno documentation at [Policy Exceptions](https://release-1-13-0.kyverno.io/docs/writing-policies/exceptions/).
 
-3. PSPs were replaced by PSS policy.
-
-### PSS Baseline Policy Enforcement
+### Baseline Pod Security Standards (PSS) Enforced using Kyverno policies
 
   Pod Security Policies were removed from Kubernetes 1.25. Instead, Kubernetes introduced [Pod Security Standards (PSS)](https://kubernetes.io/docs/concepts/security/pod-security-standards/) to strengthen the Kubernetes Pod Security. There are multiple levels for PSS Standards, viz. Privileged, Baseline Restricted. These can be implemented using the Pod Security Admission(PSA) controller, but as PSA lacks levels of customizability and Mutation Capabilities, we have used Kyverno to implement the PSS Baseline policy. We have been shipping Discrete PSS Baseline Policies in Audit mode since CSM v1.3 using Kyverno. From CSM v1.7, we will be shipping a single [`podsecurity-subrule-baseline` policy](https://kyverno.io/policies/pod-security/subrule/podsecurity-subrule-baseline/podsecurity-subrule-baseline/) which takes advantage of Kyverno's podSecurity subrule, which in turn paves way for easier exceptions. 
    
