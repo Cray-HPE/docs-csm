@@ -43,6 +43,10 @@ The panels interact with configured data sources, including the following:
 - Main
 - Clusters
 
+## Flow
+
+- Flow
+
 ## Goss tests
 
 - Product test results
