@@ -149,12 +149,12 @@ spec:
                     jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Parent")
                   TARGET_NCN_mgmt_host="${TARGET_NCN}-mgmt"
 
-                  export SCSD_CREDS=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds")
+                  export SCSD_CREDS=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds" | jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\"))")
 
-                  export IPMI_USERNAME=$(echo "${SCSD_CREDS}" | jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Username")
-                  export IPMI_PASSWORD=$(echo "${SCSD_CREDS}" | jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Password")
+                  export IPMI_USERNAME=$(echo "${SCSD_CREDS}" | jq -r ".Username")
+                  export IPMI_PASSWORD=$(echo "${SCSD_CREDS}" | jq -r ".Password")
 
-                  export SCSD_STATUS_CODE=$(echo "${SCSD_CREDS}" | jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .StatusCode")
+                  export SCSD_STATUS_CODE=$(echo "${SCSD_CREDS}" | jq -r ".StatusCode")
                   if [[ "${SCSD_STATUS_CODE}" != "200" ]]; then
                       echo "BMC credentials are not currently available for ${TARGET_MGMT_XNAME} in SCSD. SCSD returned the username ${IPMI_USERNAME} and the status code ${SCSD_STATUS_CODE}"
                       exit 1
@@ -194,12 +194,12 @@ spec:
                       jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Parent")
                   TARGET_NCN_mgmt_host="${TARGET_NCN}-mgmt"
 
-                  export SCSD_CREDS=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds")
+                  export SCSD_CREDS=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds" | jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\"))")
 
-                  export IPMI_USERNAME=$(echo "${SCSD_CREDS}" | jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Username")
-                  export IPMI_PASSWORD=$(echo "${SCSD_CREDS}" | jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Password")
+                  export IPMI_USERNAME=$(echo "${SCSD_CREDS}" | jq -r ".Username")
+                  export IPMI_PASSWORD=$(echo "${SCSD_CREDS}" | jq -r ".Password")
 
-                  export SCSD_STATUS_CODE=$(echo "${SCSD_CREDS}" | jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .StatusCode")
+                  export SCSD_STATUS_CODE=$(echo "${SCSD_CREDS}" | jq -r ".StatusCode")
                   if [[ "${SCSD_STATUS_CODE}" != "200" ]]; then
                       echo "BMC credentials are not currently available for ${TARGET_MGMT_XNAME} in SCSD. SCSD returned the username ${IPMI_USERNAME} and the status code ${SCSD_STATUS_CODE}"
                       exit 1
