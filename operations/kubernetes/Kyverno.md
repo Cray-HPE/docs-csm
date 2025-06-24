@@ -685,13 +685,11 @@ If you don't want to edit the policy exception and deploy your image for some te
 
 #### Policy customization through redeploying the chart
 
-
    If any changes are to be made in the image verification policy, for example, making it to Audit and adding
    a new public key, then the end user must change the CSM customizations and redeploy the `image-verification-policy` chart under the base chart `kyverno-policy`.
    For more information on customization and redeployment, see [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md).
 
    For more information on policy exception and matchings, refer to the Kyverno documentation at [Policy Exceptions](https://release-1-13-0.kyverno.io/docs/writing-policies/exceptions/).
-
 
 3. PSPs were replaced by PSS policy.
 
