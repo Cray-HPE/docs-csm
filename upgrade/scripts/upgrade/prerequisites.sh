@@ -741,6 +741,12 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Workaround for CASMTRIAGE-8332 before upgrading postgres-operator for CSM 1.7.x
+kubectl label --overwrite rolebinding --namespace default postgres-pod app.kubernetes.io/managed-by=Helm
+kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-name=cray-postgres-operator
+kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-namespace=services
+
+# Upgrade postgres-operator
 do_upgrade_csm_chart cray-postgres-operator platform.yaml
 
 state_name="FIX_POSTGRES"
