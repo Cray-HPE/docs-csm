@@ -265,7 +265,30 @@ Node personalization is the prerequisite step of SBPS solution where we need to 
 with necessary provisioning, configuration and enable required components. The required RPMs for `targetcli` command / LIO are part of NCN node image in CSM 1.6.
 The SBPS Marshal Agent gets installed during node personalization using CFS.
 
-This can be done in two ways:
+In CSM 1.6.0, all worker nodes are configured as iSCSI targets. In CSM 1.7.0, selective worker node personlization is introduced. Steps to personalize worker nodes for fresh install /upgradescenarios is as below:
+
+1)	Fresh Install:
+
+Create HSM group `iscsi_worker` as mentioned in section `Steps to create HSM group` of [HSM_groups_iscsi](../1.7/operations/iscsi_sbps/HSM_groups_iscsi.md)
+https://github.com/Cray-HPE/docs-csm/tree/release/1.7/operations/iscsi_sbps/HSM_groups_iscsi.md 
+before the step #8 in the document: [configure_administrative_access](../1.7/install/configure_administrative_access.md)
+
+2)	Upgrade scenario:
+
+Create HSM group `iscsi_worker` as mentioned in section `Steps to create HSM group` of 
+[HSM_groups_iscsi](../1.7/operations/iscsi_sbps/HSM_groups_iscsi.md)
+
+before management node rollout mentioned in: 
+[upgrade_csm_and_additional_products_with_iuf](../1.7/operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
+
+3)	For already upgraded system:
+
+Please follow the steps mentioned in the document:
+[HSM_groups_iscsi](../1.7/operations/iscsi_sbps/HSM_groups_iscsi.md)
+
+This involves creating the HSM group followed by cfs configuration/ component update for enabling iSCSI SBPS on the selected worker nodes.
+
+Post HSM groups creation, node personalisation can be done in two ways (except for aleady upgraded system):
 
 #### Automatic setup with bootprep
 
