@@ -28,6 +28,12 @@ The panels interact with configured data sources, including the following:
     - Overview
     - Instance Details
 
+## Cilium
+
+- Cilium Agent Metrics
+- Cilium Hubble Metrics
+- Cilium Policy Verdicts
+
 ## CoreDNS
 
 - CoreDNS
@@ -36,6 +42,10 @@ The panels interact with configured data sources, including the following:
 
 - Main
 - Clusters
+
+## Flow
+
+- Flow
 
 ## Goss tests
 
@@ -114,6 +124,13 @@ The panels interact with configured data sources, including the following:
 ## Prometheus
 
 - Prometheus
+
+## Victoria Metrics
+
+- VictoriaMetrics - operator
+- VictoriaMetrics - vmagent
+- VictoriaMetrics - vmalert
+- SMA-VMcluster
 
 ## Use Method
 
