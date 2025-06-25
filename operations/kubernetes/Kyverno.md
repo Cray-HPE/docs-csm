@@ -682,7 +682,7 @@ spec:
 Add the exceptions and exit.
 
 Now, the resouce will be allowed for deployment.
-Refer [Kyverno]([https://release-1-12-0.kyverno.io/docs/writing-policies/exceptions/](https://release-1-13-0.kyverno.io/docs/writing-policies/exceptions/)) documentation on adding exceptions.
+Refer [Kyverno documentation](https://release-1-13-0.kyverno.io/docs/writing-policies/exceptions/) on adding exceptions.
 If you don't want to edit the policy exception and deploy your image for some testing, you can add the label `prepend-registry: disable` and deploy the resource(not a recommended approach).
 
 #### Policy customization through redeploying the chart
