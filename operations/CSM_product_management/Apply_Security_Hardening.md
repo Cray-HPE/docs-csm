@@ -34,7 +34,7 @@ None.
 
    Perform procedure(s) in [Remove Kiali](../system_management_health/Remove_Kiali.md).
 
-7. Kubernetes API audit log file maximum age and maximum size parameter setting.
+7. (Optional) Kubernetes API audit log file parameter settings.
 
    If Kubernetes API Auditing is enabled, then it is recommended to set `--audit-log-maxage` to 30 or appropriate value
 
