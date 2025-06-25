@@ -136,15 +136,15 @@ for pg_line in $(kubectl get sts -A -l application=spilo -o json | jq -r '.items
       reinit_count=1
       reinit_max=3
       while [ "$(kubectl exec -i ${leader} -n ${pg_ns} -- patronictl list | grep Replica | awk '{print $12}' | sort -u)" != "0" ]; do
-        for line in $(kubectl exec -i ${leader} -n ${pg_ns} -- patronictl list | grep Replica); do
-          if [ "$(echo "$line" | awk '{print $12}')" != "0" ]; then
+        while read -r line; do
+          if [ "$(echo $line | awk '{print $12}')" != "0" ]; then
             lagged_instance=$(echo $line | awk '{print $2}')
             echo "Reinit ${lagged_instance} with replication lag: attempt ${reinit_count}/${reinit_max}..."
             echo "y" | kubectl exec -i ${leader} -n ${pg_ns} -- patronictl reinit ${pg_cluster} ${lagged_instance} 2> /dev/null || true
             # sleep for some time as reinit takes a while to settle
             sleep ${wait}
           fi
-        done
+        done < <(kubectl exec -i ${leader} -n ${pg_ns} -- patronictl list | grep Replica)
         reinit_count=$((reinit_count + 1))
         if [ ${reinit_count} -gt ${reinit_max} ]; then
           echo "Reinit count reached ${reinit_max}. Breaking loop."
