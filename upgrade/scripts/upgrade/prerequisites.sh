@@ -716,38 +716,54 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-state_name="UPDATE_CRAY_POSTGRES_OPERATOR_CRDS"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-    postgres_chart_path=$(find "${CSM_ARTI_DIR}/helm" -name "cray-postgres-operator*.tgz")
-    if [[ -z $postgres_chart_path ]]; then
-      echo "Error: failed to find cray-postgres-operator chart in ${CSM_ARTI_DIR}/helm."
-      exit 1
-    fi
-    # check if file exists before applying crds, needed for backwards compatibility
-    if tar -tf "$postgres_chart_path" cray-postgres-operator/files/postgres-operator-crds-1.10.1.yaml > /dev/null 2>&1; then
-      # create CRDs for cray-postgres-operator, this is necessary when postgres is upgraded to 1.10.1 in CSM 1.7
-      tar --extract --file="$postgres_chart_path" --to-stdout cray-postgres-operator/files/postgres-operator-crds-1.10.1.yaml | kubectl apply -f -
-      # 5 second sleep is necessary for cray-postgres-operator chart deploy. Chart fails with CRD error if no sleep
-      sleep 5
-    else
-      echo "File 'cray-postgres-operator/files/postgres-operator-crds-1.10.1.yaml' does not exist in $postgres_chart_path"
-    fi
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
+# We have a strange situation where upgrading the CRDs gets
+# reverted when the postgres operator is updated.  It doesn't
+# happen all the time, but a brute-force fix is to upgrade the
+# CRDs both before and after upgrading the postgres operator.
+
+update_cray_postgres_operator_crds() {
+  state_name=$1
+  state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+  if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+      postgres_chart_path=$(find "${CSM_ARTI_DIR}/helm" -name "cray-postgres-operator*.tgz")
+      if [[ -z $postgres_chart_path ]]; then
+        echo "Error: failed to find cray-postgres-operator chart in ${CSM_ARTI_DIR}/helm."
+        exit 1
+      fi
+      # check if file exists before applying crds, needed for backwards compatibility
+      postgres_crd_file=postgres-operator-crds-1.10.1.yaml
+      postgres_crd_path=$(tar -tf "${postgres_chart_path}" --no-anchored "${postgres_crd_file}" 2> /dev/null)
+      if [ -n "${postgres_crd_path}" ]; then
+        # create CRDs for cray-postgres-operator, this is necessary when postgres is upgraded to 1.10.1 in CSM 1.7
+        tar --extract --file="${postgres_chart_path}" --to-stdout ${postgres_crd_path} | kubectl apply -f -
+      else
+        echo "File '${postgres_crd_file}' does not exist in ${postgres_chart_path}"
+      fi
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+  else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+  fi
+}
+
+update_cray_postgres_operator_crds UPDATE_CRAY_POSTGRES_OPERATOR_CRDS
+# A 10 second sleep is necessary before cray-postgres-operator chart deploy. Chart fails with CRD error if no sleep
+sleep 10
 
 # Workaround for CASMTRIAGE-8332 before upgrading postgres-operator for CSM 1.7.x
-kubectl label --overwrite rolebinding --namespace default postgres-pod app.kubernetes.io/managed-by=Helm
-kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-name=cray-postgres-operator
-kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-namespace=services
+{
+  kubectl label --overwrite rolebinding --namespace default postgres-pod app.kubernetes.io/managed-by=Helm || true
+  kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-name=cray-postgres-operator || true
+  kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-namespace=services || true
+} >> "${LOG_FILE}" 2>&1
 
 # Upgrade postgres-operator
 do_upgrade_csm_chart cray-postgres-operator platform.yaml
+
+# Upgrade the postgres CRDs again
+update_cray_postgres_operator_crds RE_UPDATE_CRAY_POSTGRES_OPERATOR_CRDS
 
 state_name="FIX_POSTGRES"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
