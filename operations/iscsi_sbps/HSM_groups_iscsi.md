@@ -15,7 +15,7 @@ ncn-m001:~ # cray hsm groups create --label iscsi_worker --description "iscsi no
 URI = "/hsm/v2/groups/iscsi_worker"
 ```
 
-HSM group `iscsi_worker` created with xname x3000c0s5b0n0 added. Adding one more xname of worker node is as below:
+HSM group `iscsi_worker` created with xname `x3000c0s5b0n0` added. Adding one more xname of worker node is as below:
 
 ```text
 ncn-m001:~ # cray hsm groups members create --id x3000c0s18b0n0 iscsi_worker
@@ -34,6 +34,7 @@ ids = [ "x3000c0s5b0n0", "x3000c0s18b0n0",]
 
 Example:
 
+```text
 ncn-m001:~ # XNAME=$( ssh ncn-m001 cat /etc/cray/xname )
 ncn-m001:~ # echo $XNAME
 x3000c0s1b0n0
@@ -151,6 +152,6 @@ x3000c0s18b0n0             : ok=10   changed=7    unreachable=0    failed=0    s
 x3000c0s5b0n0              : ok=7    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 All playbooks completed successfully
-
+```
 Note:- This indicates that iSCSI SBPS node personalisation playbooks have been applied on 
 selected nodes and iSCSI SBPS enabled.
