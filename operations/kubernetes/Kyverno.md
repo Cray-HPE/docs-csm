@@ -437,40 +437,33 @@ Example output:
 
 3. Pod Security Policies (PSP) removed and Baseline Pod Security Standards (PSS) enforced using Kyverno Policies.
 
-### Container Image Signature Verification using Kyverno Policy
+### Container image signature verification is enforced using Kyverno policy
 
    Container image signing and runtime verification policy by name `check-image` is delivered (through Kyverno
    policy engine) as part of CSM 1.7 release in `Enforce` mode. (`Audit` only mode will log the policy violation
    warning messages into the cluster report and as events whereas `Enforce` mode will block the resources if they fail signature verification)
 
-   By default, the `check-image` policy is shipped as a `ClusterPolicy`. End users can customize it to the targeted namespaces if needed.
+   By default, the `check-image` policy is shipped as a `ClusterPolicy`. Policy can be customized based on the end users environment.
 
-   CSM runs in an air gapped environment, where the images stored in `artifactory` are mirrored to the local Nexus registry. Kyverno policy engine does not support
-   this environment for image verification. To enable Kyverno policy for such environments, all `image specs` need to be replaced from `artifactory.algol60.net/csm-docker/stable/image:tag`
-   to `registry.local/artifactory.algol60.net/csm-docker/stable/image:tag` (prepend `registry.local/` to the image spec). This will help Kyverno to check local Nexus
-   registry for the images. Without `registry.local/`, Kyverno will try to contact remote registry (`artifactory`) every time, and this may trigger timeouts due to delays,
-   and eventually lead to policy failure.
-
-   Prepending `registry.local/` to the image spec can be achieved either manually or through a mutation policy.
 
    In CSM 1.7, a cluster-wide mutation policy named `prepend-registry` is provided to prepend `registry.local/` to all the container images that are being used in the Kubernetes resources.
    Also, a policy exception named `check-image-exceptions` is provided that can be used to provide exceptions from both `prepend-registry` and `check-image` policy. End users can modify the `check-image-exceptions` to add any exceptions.
 
-   For more information on mutation policy, refer to the [Mutation Policy](https://kyverno.io/policies/other/prepend-image-registry/prepend-image-registry/).
+   For more information on the above mutation policy, refer to the [Mutation Policy](https://kyverno.io/policies/other/prepend-image-registry/prepend-image-registry/).
 
-   In CSM 1.7, image verification policy is separated from `kyverno-policy` helm chart. It is in a new helm chart named `image-verification-policy`.
+   In CSM 1.7, Container image signature verification policy (check-image) is separated from kyverno-policy helm chart and is delivered as a new helm chart named image-verification-policy.
+This new chart is deployed after the nexus deployment. This change is introduced as Kyverno doesn't have the intelligence to look into the pit node(until nexus is up) for the image signatures.
+Kyverno will look into nexus due to the prepended 'registry.local/'.
 
-   It was moved after the deployment of nexus. This was done as Kyverno doesn't have the intelligence to look into the pit node(until nexus is up) for the image signatures as it will always look into nexus due to the prepended 'registry.local/'.
-
-#### Identifying Image Verification Failures
+#### How to identify container image signature verification failures
 
 ##### Checking Existing Resources
 
-To quickly identify existing image verification failures in your cluster, use the following command:
+Use the following command:
 
 `kubectl get polr -A | awk '$6 > 0'`
 
-This command filters the `Policy Reports (polr)` to list resources with at least one verification failure. The output might look like this:
+This command filters the `Policy Reports (polr)` to list resources with at least one verification failure. Sample output::
 
 ```bash
 NAMESPACE     NAME                                   KIND        NAME                                             PASS   FAIL   WARN   ERROR   SKIP   AGE
@@ -481,7 +474,7 @@ non-existent  12678622-c38b-409c-a372-3b7d2e5688e8   Pod         test-failure-ff
 
 In this example, each listed resource has at least one verification failure (FAIL column).
 
-##### Investigating Verification Failures
+##### Verification Failures Investigation
 
 To better understand the reason for the failure, inspect the specific Policy Report by describing it:
 
@@ -518,51 +511,22 @@ Results:
 
 This detailed message explicitly states that no valid signatures were found for the specified image.
 
-#### Impact of Verification Failures
 
-##### Existing Resources
-
-Currently running pods with unverified images continue to run, but if restarted, they will be blocked from coming up again.
-
-##### New Resources
-
-New pods referencing unverified images will not come up, but the pod controllers such as `Deployments`, `ReplicaSets`, or `Jobs` can still be successfully created.
-
-You might see events like the following when describing these resources:
-
-```bash
-Events:
-  Type     Reason            Age                From                   Message
-  ----     ------            ----               ----                   -------
-  Normal   SuccessfulCreate  8m47s              replicaset-controller  Created pod: test-failure-ff8fd69cf-x99qb
-  Warning  FailedCreate      9s (x27 over 11m)  replicaset-controller  Error creating: admission webhook "mutate.kyverno.svc-ignore" denied the request:
-  resource Pod/non-existent was blocked due to the following policies
-  check-image:
-  check-image: `failed to verify image registry.local/arti.hpc.amslabs.hpecorp.net/quay-remote/frrouting/frr:8.4.2:
-    .attestors[0].entries[0].keys: no signatures found;
-    .attestors[0].entries[1].keys: no signatures found;
-    .attestors[0].entries[2].keys: no signatures found;
-    .attestors[0].entries[3].keys: no signatures found;
-    .attestors[0].entries[4].keys: no signatures found;
-```
-
-This event clearly indicates that the pod creation was blocked due to the failed image verification.
 
 ##### Resolving Verification Failures
 
-When facing verification failures, you have two primary options:
+Below two options are available when facing verification failures:
 
-##### Sign the Image
+##### Sign the Image and add the public key to the policy
 
 Ensure that your container images are properly signed using a signing tool named Cosign. Properly signed images will pass verification policies and deploy successfully.
 
 Refer this official documentation of [Cosign](https://docs.sigstore.dev/quickstart/quickstart-cosign/) to sign the images.
 
-##### Adding the public key to the policy
 
 Once, it is signed, you must add the public key to the Kyverno cluster policy `check-image` and redeploy the chart `image-verification-policy` with the base chart `kyverno-policy`.
 Refer this CSM documentation on [redeploying the chart](https://cray-hpe.github.io/docs-csm/en-16/operations/csm_product_management/redeploying_a_chart/).
-This is how the `check-image` policy looks:
+Change to `check-image policy` looks as below:
 
 ```bash
 # kubectl get cpol check-image -o yaml
@@ -613,7 +577,7 @@ spec:
 Under `keys.publicKeys`, the new public key needs to be added following the [redeploy chart](https://cray-hpe.github.io/docs-csm/en-16/operations/csm_product_management/redeploying_a_chart/) approach.
 
 ##### Add an Exception
-
+If signing the image isn't possible or desired, explicitly add the resource that uses this image as an exception in the `check-image-exceptions` policy exception in the Kyverno namespace.
 This is how the `check-image-exceptions` policy exception looks like:
 
 ```bash
@@ -648,7 +612,6 @@ spec:
         - '*samp-3*'
 ```
 
-If signing the image isn't possible or desired, explicitly add the resource that uses this image as an exception in the `check-image-exceptions` policy exception in the Kyverno namespace.
 Use the following command to add the exception(make sure to take a backup before doing the changes).
 
 `kubectl -n kyverno edit policyexception check-image-exceptions`
@@ -683,11 +646,11 @@ Add the exceptions and exit.
 
 Now, the resource will be allowed for deployment.
 Refer [Kyverno documentation](https://release-1-13-0.kyverno.io/docs/writing-policies/exceptions/) on adding exceptions.
-If you don't want to edit the policy exception and deploy your image for some testing, you can add the label `prepend-registry: disable` and deploy the resource. This is NOT a recommended approach though.
+
 
 #### Policy customization through redeploying the chart
 
-   If any changes are to be made in the image verification policy, for example, making it to Audit and adding
+   If any changes are to be made in the image verification policy, for example, making it to Audit mode or adding
    a new public key, then the end user must change the CSM customizations and redeploy the `image-verification-policy` chart under the base chart `kyverno-policy`.
    For more information on customization and redeployment, see [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md).
 
