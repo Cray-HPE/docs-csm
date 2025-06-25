@@ -444,16 +444,13 @@ Example output:
    warning messages into the cluster report and as events whereas `Enforce` mode will block the resources if they fail signature verification)
 
    By default, the `check-image` policy is shipped as a `ClusterPolicy`. Policy can be customized based on the end users environment.
-
-
    In CSM 1.7, a cluster-wide mutation policy named `prepend-registry` is provided to prepend `registry.local/` to all the container images that are being used in the Kubernetes resources.
    Also, a policy exception named `check-image-exceptions` is provided that can be used to provide exceptions from both `prepend-registry` and `check-image` policy. End users can modify the `check-image-exceptions` to add any exceptions.
 
    For more information on the above mutation policy, refer to the [Mutation Policy](https://kyverno.io/policies/other/prepend-image-registry/prepend-image-registry/).
-
-   In CSM 1.7, Container image signature verification policy `check-image` is separated from kyverno-policy helm chart and is delivered as a new helm chart named image-verification-policy.
-This new chart is deployed after the nexus deployment. This change is introduced as Kyverno doesn't have the intelligence to look into the pit node(until nexus is up) for the image signatures.
-Kyverno will look into nexus due to the prepended 'registry.local/'.
+   In CSM 1.7, Container image signature verification policy `check-image` is separated from `kyverno-policy` helm chart and is delivered as a new helm chart named `image-verification-policy`.
+   This new chart is deployed after the nexus deployment. This change is introduced as Kyverno doesn't have the intelligence to look into the pit node(until nexus is up) for the image signatures.
+   Kyverno will look into nexus due to the prepended 'registry.local/'.
 
 #### How to identify container image signature verification failures
 
@@ -511,8 +508,6 @@ Results:
 
 This detailed message explicitly states that no valid signatures were found for the specified image.
 
-
-
 ##### Resolving Verification Failures
 
 Below two options are available when facing verification failures:
@@ -522,7 +517,6 @@ Below two options are available when facing verification failures:
 Ensure that your container images are properly signed using a signing tool named Cosign. Properly signed images will pass verification policies and deploy successfully.
 
 Refer this official documentation of [Cosign](https://docs.sigstore.dev/quickstart/quickstart-cosign/) to sign the images.
-
 
 Once, it is signed, you must add the public key to the Kyverno cluster policy `check-image` and redeploy the chart `image-verification-policy` with the base chart `kyverno-policy`.
 Refer this CSM documentation on [redeploying the chart](https://cray-hpe.github.io/docs-csm/en-16/operations/csm_product_management/redeploying_a_chart/).
@@ -577,6 +571,7 @@ spec:
 Under `keys.publicKeys`, the new public key needs to be added following the [redeploy chart](https://cray-hpe.github.io/docs-csm/en-16/operations/csm_product_management/redeploying_a_chart/) approach.
 
 ##### Add an Exception
+
 If signing the image isn't possible or desired, explicitly add the resource that uses this image as an exception in the `check-image-exceptions` policy exception in the Kyverno namespace.
 This is how the `check-image-exceptions` policy exception looks like:
 
@@ -646,7 +641,6 @@ Add the exceptions and exit.
 
 Now, the resource will be allowed for deployment.
 Refer [Kyverno documentation](https://release-1-13-0.kyverno.io/docs/writing-policies/exceptions/) on adding exceptions.
-
 
 #### Policy customization through redeploying the chart
 
