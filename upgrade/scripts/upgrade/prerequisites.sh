@@ -1337,13 +1337,15 @@ fi
 
 # Workaround for CASMTRIAGE-8340. A particular etcd test requires an updated
 # version of platform-utils, which is normally not available until we boot into
-# the newer node image, so we upgrade it here.
+# the newer node image, so we upgrade it here. We do the update on all masters,
+# to prevent issues if things are run out of order.
 state_name="UPDATE_PLATFORM_UTILS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
-    zypper --non-interactive update platform-utils
+    masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u | grep -Ev "^$(hostname -s)$" | tr -t '\n' ',')
+    pdsh -S -b -w ${masters} "zypper --non-interactive update platform-utils"
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
