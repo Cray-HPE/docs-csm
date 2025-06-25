@@ -136,7 +136,7 @@ for pg_line in $(kubectl get sts -A -l application=spilo -o json | jq -r '.items
       reinit_count=1
       reinit_max=3
       while [ "$(kubectl exec -i ${leader} -n ${pg_ns} -- patronictl list | grep Replica | awk '{print $12}' | sort -u)" != "0" ]; do
-        while read -r line ; do
+        while read -r line; do
           if [ "$(echo $line | awk '{print $12}')" != "0" ]; then
             lagged_instance=$(echo $line | awk '{print $2}')
             echo "Reinit ${lagged_instance} with replication lag: attempt ${reinit_count}/${reinit_max}..."
