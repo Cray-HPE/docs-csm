@@ -433,9 +433,9 @@ Example output:
 
    This is a major upgrade with many new features and bug fixes. For a complete list, refer to the external [CHANGELOG](https://github.com/kyverno/kyverno/blob/main/CHANGELOG.md).
 
-2. Container image signature verification using Kyverno policy.
+2. Container image signature verification is enforced using Kyverno policy.
 
-3. Pod Security Policies (PSP) removed and Baseline Pod Security Standards (PSS) enforced using Kyverno Policies.
+3. Pod Security Policies (PSP) are removed and Baseline Pod Security Standards (PSS) are enforced using Kyverno Policies.
 
 ### Container image signature verification is enforced using Kyverno policy
 
@@ -460,7 +460,7 @@ Use the following command:
 
 `kubectl get polr -A | awk '$6 > 0'`
 
-This command filters the `Policy Reports (polr)` to list resources with at least one verification failure. Sample output::
+This command filters the `Policy Reports (polr)` to list resources with at least one verification failure. Sample output:
 
 ```bash
 NAMESPACE     NAME                                   KIND        NAME                                             PASS   FAIL   WARN   ERROR   SKIP   AGE
@@ -573,7 +573,8 @@ Under `keys.publicKeys`, the new public key needs to be added following the [red
 ##### Add an Exception
 
 If signing the image isn't possible or desired, explicitly add the resource that uses this image as an exception in the `check-image-exceptions` policy exception in the Kyverno namespace.
-This is how the `check-image-exceptions` policy exception looks like:
+
+`check-image-exceptions` policy exception looks as below:
 
 ```bash
 # kubectl -n kyverno get policyexception check-image-exceptions -o yaml
@@ -653,10 +654,8 @@ Refer [Kyverno documentation](https://release-1-13-0.kyverno.io/docs/writing-pol
 ### Baseline Pod Security Standards (PSS) Enforced using Kyverno policies
 
   Pod Security Policies were removed from Kubernetes 1.25. Instead, Kubernetes introduced [Pod Security Standards (PSS)](https://kubernetes.io/docs/concepts/security/pod-security-standards/) to strengthen the Kubernetes Pod Security.
-  There are multiple levels for PSS Standards, viz. Privileged, Baseline Restricted. These can be implemented using the Pod Security Admission(PSA) controller, but as PSA lacks levels of customizability and Mutation Capabilities,
-  we have used Kyverno to implement the PSS Baseline policy. We have been shipping Discrete PSS Baseline Policies in Audit mode since CSM v1.3 using Kyverno.
-  From CSM 1.7, we will be shipping a single [`podsecurity-subrule-baseline` policy](https://kyverno.io/policies/pod-security/subrule/podsecurity-subrule-baseline/podsecurity-subrule-baseline/)
-  which takes advantage of Kyverno's `podSecurity subrule`, which in turn paves way for easier exceptions.
+
+From CSM 1.4 onwards upstream Discrete PSS Baseline Policies are shipped in Audit mode. From CSM v1.7, a single podsecurity-subrule-baseline policy is shipped which takes advantage of Kyverno's podSecurity subrule, which in turn paves way for easier implementation of exceptions.
 
   The `podsecurity-subrule-baseline` Kyverno Policy has been shipped in **Enforce** Mode from CSM 1.7. This means that pods or pod controllers not adhering to the policy will NOT be admitted to the cluster.
   Kyverno will block that admission, unless an Exception is issued.
@@ -844,17 +843,3 @@ Refer [Kyverno documentation](https://release-1-13-0.kyverno.io/docs/writing-pol
 * [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)
 * [No event is generated in case of mutation policy being applied to a resource](https://github.com/kyverno/kyverno/issues/2160)
 * [Inaccurate annotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
-* Kyverno failed to verify `tls` certificate for signature verification from CSM 1.6 and above
-
-    ```bash
-    10m         Warning   PolicyViolation   pod/canu-test-6ff597df6d-fbnbd   policy check-image/check-image fail: failed to 
-    verify image registry.local/artifactory.algol60.net/csm-docker/stable/cray-canu/canu-test:1.6.36: 
-    .attestors[0].entries[0].keys: Get "https://registry.local/v2/": tls: failed to verify certificate: x509: certificate 
-    signed by unknown authority
-    ```
-
-    When end user encounters the above issue for signature verification then the solution is to restart the Kyverno pods.
-    Follow the commands mentioned in [Restart Kyverno](https://release-1-10-0.kyverno.io/docs/troubleshooting/)
-
-    Incase the issue still persists after restarting the Kyverno pods, we recommend to disable the background scanning in the Kyverno policy.
-    Set `background` to `false` to disable background scanning in the Kyverno policy
