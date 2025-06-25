@@ -655,7 +655,7 @@ Refer [Kyverno documentation](https://release-1-13-0.kyverno.io/docs/writing-pol
 
   Pod Security Policies were removed from Kubernetes 1.25. Instead, Kubernetes introduced [Pod Security Standards (PSS)](https://kubernetes.io/docs/concepts/security/pod-security-standards/) to strengthen the Kubernetes Pod Security.
 
-From CSM 1.4 onwards upstream Discrete PSS Baseline Policies are shipped in Audit mode. From CSM `v1.7`, a single `podsecurity-subrule-baseline` policy is shipped 
+From CSM 1.4 onwards upstream Discrete PSS Baseline Policies are shipped in Audit mode. From CSM `v1.7`, a single `podsecurity-subrule-baseline` policy is shipped
 which takes advantage of Kyverno's `podSecurity` `subrule`, which in turn paves way for easier implementation of exceptions.
 
   The `podsecurity-subrule-baseline` Kyverno Policy has been shipped in **Enforce** Mode from CSM 1.7. This means that pods or pod controllers not adhering to the policy will NOT be admitted to the cluster.
