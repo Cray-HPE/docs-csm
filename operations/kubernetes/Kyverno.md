@@ -451,7 +451,7 @@ Example output:
 
    For more information on the above mutation policy, refer to the [Mutation Policy](https://kyverno.io/policies/other/prepend-image-registry/prepend-image-registry/).
 
-   In CSM 1.7, Container image signature verification policy (check-image) is separated from kyverno-policy helm chart and is delivered as a new helm chart named image-verification-policy.
+   In CSM 1.7, Container image signature verification policy `check-image` is separated from kyverno-policy helm chart and is delivered as a new helm chart named image-verification-policy.
 This new chart is deployed after the nexus deployment. This change is introduced as Kyverno doesn't have the intelligence to look into the pit node(until nexus is up) for the image signatures.
 Kyverno will look into nexus due to the prepended 'registry.local/'.
 
