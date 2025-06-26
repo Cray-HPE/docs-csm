@@ -851,7 +851,6 @@ which takes advantage of Kyverno's `podSecurity` `subrule`, which in turn paves 
   ```
 
   Our `podsecurity-subrule-baseline` policy's exceptions for IUF workflows rely on matching the naming of IUF Argo pods. For a really long activity name as shown in the error above, the Argo workflows might
-  truncate the generated argo pod names which will cause the Policy Exceptions to not work. In such a scenario, Kyverno will block the pod as it violates the PSS
+  truncate the generated `argo` pod names which will cause the Policy Exceptions to not work. In such a scenario, Kyverno will block the pod as it violates the PSS
   policy and hence the IUF workflow will fail. Please retry the workflow with a smaller activity name.
   We suggest to use an activity name that's at most 16-20 characters. The idea is to have the generated pod name under 63 characters according to the Kubernetes Standards.
-
