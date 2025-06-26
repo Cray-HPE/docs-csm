@@ -8,7 +8,7 @@ The `iscsi_worker` is the HSM group name needs to be created for iSCSI SBPS sele
 ## Steps to create HSM group
 
 ```bash
-ncn-m001:~ # cray hsm groups create --label iscsi_worker --description "iscsi node personalization" --members-ids x3000c0s5b0n0
+cray hsm groups create --label iscsi_worker --description "iscsi node personalization" --members-ids x3000c0s5b0n0
 ```
 
 Example output:
@@ -21,20 +21,20 @@ URI = "/hsm/v2/groups/iscsi_worker"
 HSM group `iscsi_worker` created with xname `x3000c0s5b0n0` added. Adding one more xname of worker node is as below:
 
 ```bash
-ncn-m001:~ # cray hsm groups members create --id x3000c0s18b0n0 iscsi_worker
-[[results]]
+cray hsm groups members create --id x3000c0s18b0n0 iscsi_worker
 ```
 
 Example output:
 
 ```text
+[[results]]
 URI = "/hsm/v2/groups/iscsi_worker/members/x3000c0s18b0n0"
 ```
 
 The group members of `iscsi_worker` can be listed as below:
 
 ```bash
-ncn-m001:~ # cray hsm groups members list iscsi_worker
+cray hsm groups members list iscsi_worker
 ```
 
 Example output:
@@ -50,9 +50,9 @@ In scenarios such as an upgraded system where HSM groups were not created, then 
 Example:
 
 ```bash
-ncn-m001:~ # XNAME=$( ssh ncn-m001 cat /etc/cray/xname )
-ncn-m001:~ # CONFIG=$( cray cfs components describe $XNAME --format json | jq -r '.desiredConfig' )
-ncn-m001:~ # cray cfs configurations describe $CONFIG --format json | jq -r '. | del(.name) | del(.lastUpdated)' > ${CONFIG}.json
+XNAME=$( ssh ncn-m001 cat /etc/cray/xname )
+CONFIG=$( cray cfs components describe $XNAME --format json | jq -r '.desiredConfig' )
+cray cfs configurations describe $CONFIG --format json | jq -r '. | del(.name) | del(.lastUpdated)' > ${CONFIG}.json
 ```
 
 Example output:
@@ -72,7 +72,7 @@ ncn-m001:~ # cat management-main-1874509.1.json
 ```
 
 ```bash
-ncn-m001:~ # cray cfs configurations update --file ${CONFIG}.json ${CONFIG}
+cray cfs configurations update --file ${CONFIG}.json ${CONFIG}
 ```
 
 Example output:
@@ -88,7 +88,7 @@ playbook = "config_sbps_iscsi_targets.yml"
 ```
 
 ```bash
-ncn-m001:~ # cray cfs components update $XNAME --state []
+cray cfs components update $XNAME --state []
 ```
 
 Example output:
@@ -104,7 +104,7 @@ state = []
 ```
 
 ```bash
-ncn-m001:~ # cray cfs components describe $XNAME
+cray cfs components describe $XNAME
 ```
 
 Example output:
@@ -123,7 +123,7 @@ state = []
 ......
 
 ```bash
-ncn-m001:~ # cray cfs components describe $XNAME
+cray cfs components describe $XNAME
 ```
 
 Example output:
@@ -145,7 +145,7 @@ sessionName = "batcher-66eee897-aa2a-4d92-9a2c-565e9bde3665"
 ```
 
 ```bash
-ncn-m001:~ # kubectl get pods --no-headers -o custom-columns=":metadata.name" -n services -l cfsession=batcher-66eee897-aa2a-4d92-9a2c-565e9bde3665
+kubectl get pods --no-headers -o custom-columns=":metadata.name" -n services -l cfsession=batcher-66eee897-aa2a-4d92-9a2c-565e9bde3665
 ```
 
 Example output:
@@ -155,8 +155,8 @@ cfs-19e2e4f7-aae8-4847-b4b3-288888b24769-dx75v
 ```
 
 ```bash
-ncn-m001:~ # CFS_POD_NAME=cfs-19e2e4f7-aae8-4847-b4b3-288888b24769-dx75v
-ncn-m001:~ # kubectl logs -n services "${CFS_POD_NAME}" ansible
+CFS_POD_NAME=cfs-19e2e4f7-aae8-4847-b4b3-288888b24769-dx75v
+kubectl logs -n services "${CFS_POD_NAME}" ansible
 ```
 
 Example output:
