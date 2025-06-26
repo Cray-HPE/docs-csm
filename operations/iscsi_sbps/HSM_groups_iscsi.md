@@ -10,6 +10,7 @@ The `iscsi_worker` is the HSM group name needs to be created for iSCSI SBPS sele
 ```bash
 ncn-m001:~ # cray hsm groups create --label iscsi_worker --description "iscsi node personalization" --members-ids x3000c0s5b0n0
 ```
+
 Example output:
 
 ```text
@@ -18,7 +19,6 @@ URI = "/hsm/v2/groups/iscsi_worker"
 ```
 
 HSM group `iscsi_worker` created with xname `x3000c0s5b0n0` added. Adding one more xname of worker node is as below:
-
 
 ```bash
 ncn-m001:~ # cray hsm groups members create --id x3000c0s18b0n0 iscsi_worker
