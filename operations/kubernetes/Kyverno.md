@@ -845,10 +845,13 @@ which takes advantage of Kyverno's `podSecurity` `subrule`, which in turn paves 
 * [No event is generated in case of mutation policy being applied to a resource](https://github.com/kyverno/kyverno/issues/2160)
 * [Inaccurate annotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
 * [IUF workflows failing because of a really long activity name](https://github.com/argoproj/argo-workflows/issues/11356)
+
   ```bash
   2025-04-16T08:02:20Z | Pod: argo/this-is-a-really-long-activity-name-ilfqr-deploy-productt87tk-shell-script3210929130 | Message: policy podsecurity-subrule-baseline/baseline fail: Validation rule 'baseline' failed. It violates PodSecurity "baseline:latest": (Forbidden reason: hostPath volumes, field error list: [spec.volumes[2].hostPath is forbidden, forbidden values found: /var/lib/ca-certificates, spec.volumes[3].hostPath is forbidden, forbidden values found: /etc/cray/upgrade/csm])
   ```
+
   Our `podsecurity-subrule-baseline` policy's exceptions for IUF workflows rely on matching the naming of IUF Argo pods. For a really long activity name as shown in the error above, the Argo workflows might
   truncate the generated argo pod names which will cause the Policy Exceptions to not work. In such a scenario, Kyverno will block the pod as it violates the PSS
-  policy and hence the IUF workflow will fail. Please retry the workflow with a smaller activity name. 
+  policy and hence the IUF workflow will fail. Please retry the workflow with a smaller activity name.
   We suggest to use an activity name that's at most 16-20 characters. The idea is to have the generated pod name under 63 characters according to the Kubernetes Standards.
+
