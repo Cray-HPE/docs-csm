@@ -1,11 +1,11 @@
-# Selective Node Personalisation 
+# Selective Node Personalization
 
-* [Steps to create HSM group](#steps-to-create-HSM-group)
-* [CFS configuration /component update](#cfs-configuration-/component-update)
+`iscsi_worker` is the HSM group name needs to be created for iSCSI SBPS selective node personalization.
+
+* [Steps to create HSM group](#steps-to-create-hsm-group)
+* [CFS configuration and component update](#cfs-configuration-and-component-update)
 
 ## Steps to create HSM group
-
-`iscsi_worker` is the HSM group name needs to be created for iSCSI SBPS.
 
 Example:
 
@@ -26,11 +26,13 @@ URI = "/hsm/v2/groups/iscsi_worker/members/x3000c0s18b0n0"
 The group members of `iscsi_worker` can be listed as below:
 
 ```text
-ncn-m001:~ # cray hsm groups members list iscsi_worker	
+ncn-m001:~ # cray hsm groups members list iscsi_worker
 ids = [ "x3000c0s5b0n0", "x3000c0s18b0n0",]
 ```
 
-## CFS configuration /component update
+## CFS configuration and component update
+
+In scenario's like an upgraded system where HSM groups are not created, then below steps can be followed for selective node personalization post HSM groups creation.
 
 Example:
 
@@ -153,5 +155,6 @@ x3000c0s5b0n0              : ok=7    changed=3    unreachable=0    failed=0    s
 
 All playbooks completed successfully
 ```
-Note:- This indicates that iSCSI SBPS node personalisation playbooks have been applied on 
-selected nodes and iSCSI SBPS enabled.
+
+Note:- This indicates that iSCSI SBPS node personalisation playbooks have been applied on
+selected nodes and iSCSI SBPS is enabled.
