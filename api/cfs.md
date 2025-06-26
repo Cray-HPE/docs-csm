@@ -5295,6 +5295,7 @@ bearerAuth
 GET https://api-gw-service-nmn.local/apis/cfs/v3/configurations HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
 
 ```
 
@@ -5302,6 +5303,7 @@ Accept: application/json
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3/configurations \
   -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
   -H 'Authorization: Bearer {access-token}'
 
 ```
@@ -5310,6 +5312,7 @@ curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3/configurations \
 import requests
 headers = {
   'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
   'Authorization': 'Bearer {access-token}'
 }
 
@@ -5331,6 +5334,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
         "Authorization": []string{"Bearer {access-token}"},
     }
 
@@ -5355,9 +5359,18 @@ Retrieve the full collection of configurations in the form of a ConfigurationArr
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 |limit|query|integer|false|When set, CFS will only return a number of configurations up to this limit.  Combined with after_id, this enables paging across results|
 |after_id|query|string|false|When set, CFS will only return the configurations after the configuration specified.  Combined with limit, this enables paging across results.|
 |in_use|query|boolean|false|Query for only configurations that are currently referenced by components.|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name.
+
+Requests with a non-empty tenant name will restict the context of the operation to configurations owned by that tenant.
+
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -5422,6 +5435,7 @@ bearerAuth
 GET https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_id} HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
 
 ```
 
@@ -5429,6 +5443,7 @@ Accept: application/json
 # You can also use wget
 curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_id} \
   -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
   -H 'Authorization: Bearer {access-token}'
 
 ```
@@ -5437,6 +5452,7 @@ curl -X GET https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configu
 import requests
 headers = {
   'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
   'Authorization': 'Bearer {access-token}'
 }
 
@@ -5458,6 +5474,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
         "Authorization": []string{"Bearer {access-token}"},
     }
 
@@ -5482,7 +5499,16 @@ Retrieve the given configuration
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 |configuration_id|path|string|true|Name of the target configuration|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name.
+
+Requests with a non-empty tenant name will restict the context of the operation to configurations owned by that tenant.
+
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -5522,6 +5548,8 @@ Retrieve the given configuration
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration|[V3ConfigurationData](#schemav3configurationdata)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|The operation being attempted is not permitted.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="warning">
@@ -5540,6 +5568,7 @@ PUT https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_i
 Host: api-gw-service-nmn.local
 Content-Type: application/json
 Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
 
 ```
 
@@ -5548,6 +5577,7 @@ Accept: application/json
 curl -X PUT https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_id} \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
   -H 'Authorization: Bearer {access-token}'
 
 ```
@@ -5557,6 +5587,7 @@ import requests
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
   'Authorization': 'Bearer {access-token}'
 }
 
@@ -5579,6 +5610,7 @@ func main() {
     headers := map[string][]string{
         "Content-Type": []string{"application/json"},
         "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
         "Authorization": []string{"Bearer {access-token}"},
     }
 
@@ -5634,7 +5666,16 @@ Add a configuration to CFS or replace an existing configuration.
 |---|---|---|---|---|
 |drop_branches|query|boolean|false|Don't store the branches after converting each branch to a commit.|
 |body|body|[V3ConfigurationData](#schemav3configurationdata)|true|A desired configuration state|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 |configuration_id|path|string|true|Name of the target configuration|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name.
+
+Requests with a non-empty tenant name will restict the context of the operation to configurations owned by that tenant.
+
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -5675,6 +5716,7 @@ Add a configuration to CFS or replace an existing configuration.
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration|[V3ConfigurationData](#schemav3configurationdata)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|The operation being attempted is not permitted.|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -5691,6 +5733,7 @@ bearerAuth
 PATCH https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_id} HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/json
+Cray-Tenant-Name: vcluster-my-tenant1
 
 ```
 
@@ -5698,6 +5741,7 @@ Accept: application/json
 # You can also use wget
 curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_id} \
   -H 'Accept: application/json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
   -H 'Authorization: Bearer {access-token}'
 
 ```
@@ -5706,6 +5750,7 @@ curl -X PATCH https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{confi
 import requests
 headers = {
   'Accept': 'application/json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
   'Authorization': 'Bearer {access-token}'
 }
 
@@ -5727,6 +5772,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
         "Authorization": []string{"Bearer {access-token}"},
     }
 
@@ -5751,7 +5797,16 @@ Updates the commits for all layers that specify a branch
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 |configuration_id|path|string|true|Name of the target configuration|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name.
+
+Requests with a non-empty tenant name will restict the context of the operation to configurations owned by that tenant.
+
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -5792,6 +5847,7 @@ Updates the commits for all layers that specify a branch
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration|[V3ConfigurationData](#schemav3configurationdata)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|The operation being attempted is not permitted.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="warning">
@@ -5809,6 +5865,7 @@ bearerAuth
 DELETE https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_id} HTTP/1.1
 Host: api-gw-service-nmn.local
 Accept: application/problem+json
+Cray-Tenant-Name: vcluster-my-tenant1
 
 ```
 
@@ -5816,6 +5873,7 @@ Accept: application/problem+json
 # You can also use wget
 curl -X DELETE https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{configuration_id} \
   -H 'Accept: application/problem+json' \
+  -H 'Cray-Tenant-Name: vcluster-my-tenant1' \
   -H 'Authorization: Bearer {access-token}'
 
 ```
@@ -5824,6 +5882,7 @@ curl -X DELETE https://api-gw-service-nmn.local/apis/cfs/v3/configurations/{conf
 import requests
 headers = {
   'Accept': 'application/problem+json',
+  'Cray-Tenant-Name': 'vcluster-my-tenant1',
   'Authorization': 'Bearer {access-token}'
 }
 
@@ -5845,6 +5904,7 @@ func main() {
 
     headers := map[string][]string{
         "Accept": []string{"application/problem+json"},
+        "Cray-Tenant-Name": []string{"vcluster-my-tenant1"},
         "Authorization": []string{"Bearer {access-token}"},
     }
 
@@ -5869,7 +5929,16 @@ Delete the given configuration. This will fail in any components are using the s
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
+|Cray-Tenant-Name|header|[TenantName](#schematenantname)|false|Tenant name.|
 |configuration_id|path|string|true|Name of the target configuration|
+
+#### Detailed descriptions
+
+**Cray-Tenant-Name**: Tenant name.
+
+Requests with a non-empty tenant name will restict the context of the operation to configurations owned by that tenant.
+
+Requests with an empty tenant name, or that omit this parameter, will have no such context restrictions.
 
 > Example responses
 
@@ -5891,6 +5960,7 @@ Delete the given configuration. This will fail in any components are using the s
 |---|---|---|---|
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|The resource was deleted.|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
+|403|[Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3)|The operation being attempted is not permitted.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="warning">
@@ -6656,6 +6726,26 @@ Service health status
 |---|---|---|---|---|
 |db_status|string|false|none|none|
 |kafka_status|string|false|none|none|
+
+<h2 id="tocS_TenantName">TenantName</h2>
+<!-- backwards compatibility -->
+<a id="schematenantname"></a>
+<a id="schema_TenantName"></a>
+<a id="tocStenantname"></a>
+<a id="tocstenantname"></a>
+
+```json
+"vcluster-my-tenant1"
+
+```
+
+Name of a tenant. Used for multi-tenancy. An empty string means no tenant.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|Name of a tenant. Used for multi-tenancy. An empty string means no tenant.|
 
 <h2 id="tocS_V3NextData">V3NextData</h2>
 <!-- backwards compatibility -->
