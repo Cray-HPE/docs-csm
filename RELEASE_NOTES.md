@@ -31,6 +31,9 @@
 * CSM now provides the `csm.ssh_config` Ansible role to automatically restore the root user's SSH configuration file during
   [Management Node Personalization](operations/configuration_management/Management_Node_Personalization.md).
   For more details, see [SSH configuration files](operations/CSM_product_management/Set_Up_Passwordless_SSH.md#ssh-configuration-files).
+* When a [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos) session starts,
+  any nodes that are locked in the [Hardware State Manager (HSM)](glossary.md#hardware-state-manager-hsm) are removed from the session.
+  For more information, see [BOS sessions and HSM locks](operations/boot_orchestration/Sessions.md#bos-sessions-and-hsm-locks).
 
 ### Documentation enhancements
 
