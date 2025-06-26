@@ -1,6 +1,6 @@
 # Selective Node Personalization
 
-`iscsi_worker` is the HSM group name needs to be created for iSCSI SBPS selective node personalization.
+The `iscsi_worker` is the HSM group name needs to be created for iSCSI SBPS selective node personalization.
 
 * [Steps to create HSM group](#steps-to-create-hsm-group)
 * [CFS configuration and component update](#cfs-configuration-and-component-update)
@@ -32,7 +32,7 @@ ids = [ "x3000c0s5b0n0", "x3000c0s18b0n0",]
 
 ## CFS configuration and component update
 
-In scenario's like an upgraded system where HSM groups are not created, then below steps can be followed for selective node personalization post HSM groups creation.
+In scenarios such as an upgraded system where HSM groups were not created, then the following steps can be used for selective node personalization post HSM groups creation.
 
 Example:
 
