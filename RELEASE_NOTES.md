@@ -11,6 +11,7 @@
 ### Miscellaneous functionality
 
 * Console logs and interaction is now available and tenant aware through the `cray` CLI, see [console](operations/conman/ConMan.md#console) for more information.
+* Recipe builds using kiwi-ng now include the signing keys contained in the `hpe-signing-key` secret, which allows for the verification of the recipe build artifacts.
 
 ### New hardware support
 
