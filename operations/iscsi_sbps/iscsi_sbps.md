@@ -265,7 +265,37 @@ Node personalization is the prerequisite step of SBPS solution where we need to 
 with necessary provisioning, configuration and enable required components. The required RPMs for `targetcli` command / LIO are part of NCN node image in CSM 1.6.
 The SBPS Marshal Agent gets installed during node personalization using CFS.
 
-This can be done in two ways:
+In CSM 1.6.0, all worker nodes are configured as iSCSI targets by default. In CSM 1.7.0, selective worker node personalization is introduced and steps for the same for different scenarios is as below:
+
+1) Fresh Install:
+
+     1.1 Create HSM group
+
+     1.2 Enable/ Configure iSCSI SBPS
+
+     For creating HSM group, please refer `Steps to create HSM group` of [HSM groups iscsi](https://github.com/Cray-HPE/docs-csm/tree/release/1.7/operations/iscsi_sbps/HSM_groups_iscsi.md).
+     And this has to be done before the step #8 in the document [configure administrative access](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/install/configure_administrative_access.md)
+
+     iSCSI SBPS will be enabled /configured during bootprep stage mentioned at [Automatic setup with bootprep](#automatic-setup-with-bootprep)
+
+2) Upgrade:
+
+     2.1 Create HSM group
+
+     2.2 Enable/ Configure iSCSI SBPS
+
+     As mentioned in 1.1 create HSM group before management node rollout mentioned in [upgrade CSM and additional products with IUF](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
+
+     iSCSI SBPS will be enabled /configured during bootprep stage mentioned in [Automatic setup with bootprep](#automatic-setup-with-bootprep)
+
+3) Post Upgrade:
+
+     3.1 Create HSM group
+
+     3.2 Enable/ Configure iSCSI SBPS
+
+     As mentioned in 1.1 create HSM group followed by `CFS` configuration/component update mentioned in [HSM groups iscsi](https://github.com/Cray-HPE/docs-csm/tree/release/1.7/operations/iscsi_sbps/HSM_groups_iscsi.md).
+     An alternative to `CFS` configuration/component update is using [Manual setup with CFS session](#manual-setup-with-cfs-session)
 
 #### Automatic setup with bootprep
 
