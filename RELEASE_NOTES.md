@@ -11,7 +11,7 @@
 ### Miscellaneous functionality
 
 * Console logs and interaction is now available and tenant aware through the `cray` CLI, see [console](operations/conman/ConMan.md#console) for more information.
-* cfs components can be updated in bulk through `cray` CLI using the `cfs components updatemany` command,
+* CFS components can be updated in bulk through `cray` CLI using the `cfs components updatemany` command,
   see [Managing many components](operations/configuration_management/CFS_Commands_Cheat_Sheet.md#managing-many-components) for more information.
   Support is added for `v2` and `v3` API versions.
 
@@ -53,13 +53,13 @@
 * Added retry logic to `goss-postgresql-syncfailed.yaml` to prevent intermittent false positives
 * Added retry logic to `postgres_clusters_running.sh to prevent` intermittent false positives
 * Added BOS CRUD tests for `sessiontemplates` and `sessions`. `sessions` tests include `staged` and `non staged`.
-  These tests are included as part of SMS health checks. Please refer to 
+  These tests are included as part of SMS health checks. Please refer to
   [Software Management Services health checks](troubleshooting/known_issues/sms_health_check.md#software-management-services-health-checks) for more information.
-* Added CFS CRUD tests for `configurations` and `sources`. These tests are included as part of SMS health checks. Please refer to 
+* Added CFS CRUD tests for `configurations` and `sources`. These tests are included as part of SMS health checks. Please refer to
   [Software Management Services health checks](troubleshooting/known_issues/sms_health_check.md#software-management-services-health-checks) for more information.
-* Added IMS CRUD tests for `images`, `recipes` and `public keys`. These tests are included as part of SMS health checks. Please refer to 
+* Added IMS CRUD tests for `images`, `recipes` and `public keys`. These tests are included as part of SMS health checks. Please refer to
   [Software Management Services health checks](troubleshooting/known_issues/sms_health_check.md#software-management-services-health-checks) for more information.
-* Added CFS node personalization to the barebones image boot test. This test is included as part of SMS health checks. Please refer to 
+* Added CFS node personalization to the barebones image boot test. This test is included as part of SMS health checks. Please refer to
   [Software Management Services health checks](troubleshooting/known_issues/sms_health_check.md#software-management-services-health-checks) for more information.
 
 ## Bug fixes
