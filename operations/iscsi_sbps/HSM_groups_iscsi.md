@@ -1,49 +1,63 @@
-# Selective Node Personalization
+# Selective Worker Node Personalization for iSCSI SBPS
 
-The `iscsi_worker` is the HSM group name needs to be created for iSCSI SBPS selective node personalization.
+The `iscsi_worker` is the HSM group name needs to be created for iSCSI SBPS selective worker node personalization.
 
 * [Steps to create HSM group](#steps-to-create-hsm-group)
 * [CFS configuration and component update](#cfs-configuration-and-component-update)
 
 ## Steps to create HSM group
 
-Example:
+```bash
+ncn-m001:~ # cray hsm groups create --label iscsi_worker --description "iscsi node personalization" --members-ids x3000c0s5b0n0
+```
+Example output:
 
 ```text
-ncn-m001:~ # cray hsm groups create --label iscsi_worker --description "iscsi node personalization" --members-ids x3000c0s5b0n0
 [[results]]
 URI = "/hsm/v2/groups/iscsi_worker"
 ```
 
 HSM group `iscsi_worker` created with xname `x3000c0s5b0n0` added. Adding one more xname of worker node is as below:
 
-```text
+
+```bash
 ncn-m001:~ # cray hsm groups members create --id x3000c0s18b0n0 iscsi_worker
 [[results]]
+```
+
+Example output:
+
+```text
 URI = "/hsm/v2/groups/iscsi_worker/members/x3000c0s18b0n0"
 ```
 
 The group members of `iscsi_worker` can be listed as below:
 
-```text
+```bash
 ncn-m001:~ # cray hsm groups members list iscsi_worker
+```
+
+Example output:
+
+```text
 ids = [ "x3000c0s5b0n0", "x3000c0s18b0n0",]
 ```
 
 ## CFS configuration and component update
 
-In scenarios such as an upgraded system where HSM groups were not created, then the following steps can be used for selective node personalization post HSM groups creation.
+In scenarios such as an upgraded system where HSM groups were not created, then the following steps can be used for selective worker node personalization post HSM groups creation.
 
 Example:
 
-```text
+```bash
 ncn-m001:~ # XNAME=$( ssh ncn-m001 cat /etc/cray/xname )
-ncn-m001:~ # echo $XNAME
-x3000c0s1b0n0
 ncn-m001:~ # CONFIG=$( cray cfs components describe $XNAME --format json | jq -r '.desiredConfig' )
-ncn-m001:~ # echo $CONFIG
-management-main-1874509.1
-ncn-m001:~ # craycfs configurations describe $CONFIG --format json | jq -r '. | del(.name) | del(.lastUpdated)' > ${CONFIG}.json
+ncn-m001:~ # cray cfs configurations describe $CONFIG --format json | jq -r '. | del(.name) | del(.lastUpdated)' > ${CONFIG}.json
+```
+
+Example output:
+
+```text
 ncn-m001:~ # cat management-main-1874509.1.json
 {
   "layers": [
@@ -55,8 +69,15 @@ ncn-m001:~ # cat management-main-1874509.1.json
     }
   ]
 }
+```
 
+```bash
 ncn-m001:~ # cray cfs configurations update --file ${CONFIG}.json ${CONFIG}
+```
+
+Example output:
+
+```text
 lastUpdated = "2025-05-27T11:17:51Z"
 name = "management-main-1874509.1"
 [[layers]]
@@ -64,9 +85,15 @@ cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
 commit = "67098595b52d0739382611ef6fe15a918978910d"
 name = "csm-sbps_iscsi_targets-1.6.1-rc.7"
 playbook = "config_sbps_iscsi_targets.yml"
+```
 
-
+```bash
 ncn-m001:~ # cray cfs components update $XNAME --state []
+```
+
+Example output:
+
+```text
 desiredConfig = "management-main-1874509.1"
 enabled = true
 errorCount = 0
@@ -74,8 +101,15 @@ id = "x3000c0s1b0n0"
 state = []
 
 [tags]
+```
 
+```bash
 ncn-m001:~ # cray cfs components describe $XNAME
+```
+
+Example output:
+
+```text
 configurationStatus = "pending"
 desiredConfig = "management-main-1874509.1"
 enabled = true
@@ -84,10 +118,17 @@ id = "x3000c0s1b0n0"
 state = []
 
 [tags]
+```
 
 ......
 
+```bash
 ncn-m001:~ # cray cfs components describe $XNAME
+```
+
+Example output:
+
+```text
 configurationStatus = "configured"
 desiredConfig = "management-main-1874509.1"
 enabled = true
@@ -101,11 +142,26 @@ playbook = "config_sbps_iscsi_targets.yml"
 sessionName = "batcher-66eee897-aa2a-4d92-9a2c-565e9bde3665"
 
 [tags]
+```
 
+```bash
 ncn-m001:~ # kubectl get pods --no-headers -o custom-columns=":metadata.name" -n services -l cfsession=batcher-66eee897-aa2a-4d92-9a2c-565e9bde3665
+```
+
+Example output:
+
+```text
 cfs-19e2e4f7-aae8-4847-b4b3-288888b24769-dx75v
+```
+
+```bash
 ncn-m001:~ # CFS_POD_NAME=cfs-19e2e4f7-aae8-4847-b4b3-288888b24769-dx75v
 ncn-m001:~ # kubectl logs -n services "${CFS_POD_NAME}" ansible
+```
+
+Example output:
+
+```text
 Waiting for Inventory
 Inventory generation completed
 SSH keys migrated to /root/.ssh
