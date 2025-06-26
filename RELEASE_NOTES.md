@@ -100,6 +100,7 @@
 * Updating CFS session fails causing the session to be stuck in pending state.
 * `cfs-debugger` crashes when `cfs-state-reporter` service status does not include `since` timestamp.
 * Post upgrade job of `cms-ipxe` fails if previously failed `cms-ipxe` upgrade job entry exists.
+* Update the build image from recipe job status to `error` when the zypper repos are not available.
 
 ## Deprecations
 
