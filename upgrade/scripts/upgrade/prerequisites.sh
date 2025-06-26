@@ -754,9 +754,11 @@ sleep 10
 
 # Workaround for CASMTRIAGE-8332 before upgrading postgres-operator for CSM 1.7.x
 {
-  kubectl label --overwrite rolebinding --namespace default postgres-pod app.kubernetes.io/managed-by=Helm || true
-  kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-name=cray-postgres-operator || true
-  kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-namespace=services || true
+  if kubectl get rolebinding --namespace default postgres-pod &> /dev/null; then
+    kubectl label --overwrite rolebinding --namespace default postgres-pod app.kubernetes.io/managed-by=Helm || true
+    kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-name=cray-postgres-operator || true
+    kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-namespace=services || true
+  fi
 } >> "${LOG_FILE}" 2>&1
 
 # Upgrade postgres-operator
