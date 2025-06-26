@@ -5,16 +5,16 @@ The Boot Orchestration Service \(BOS\) consists of many different micro-services
 * [BOS API](#bos-api)
 * [Boot Orchestration Agent \(BOA\)](#boot-orchestration-agent-boa)
 * [BOS operators](#bos-operators)
-  * [`actual-state-cleanup`](#actual-state-cleanup)
-  * [`configuration`](#configuration)
-  * [`discovery`](#discovery)
-  * [`power-off-forceful`](#power-off-forceful)
-  * [`power-off-graceful`](#power-off-graceful)
-  * [`power-on`](#power-on)
-  * [`session-cleanup`](#session-cleanup)
-  * [`session-completion`](#session-completion)
-  * [`session-setup`](#session-setup)
-  * [`status`](#status)
+    * [`actual-state-cleanup`](#actual-state-cleanup)
+    * [`configuration`](#configuration)
+    * [`discovery`](#discovery)
+    * [`power-off-forceful`](#power-off-forceful)
+    * [`power-off-graceful`](#power-off-graceful)
+    * [`power-on`](#power-on)
+    * [`session-cleanup`](#session-cleanup)
+    * [`session-completion`](#session-completion)
+    * [`session-setup`](#session-setup)
+    * [`status`](#status)
 * [BOS state reporter](#bos-state-reporter)
 
 ## BOS API
@@ -79,6 +79,8 @@ This operator marks sessions as complete and saves a final status for the sessio
 ### `session-setup`
 
 This operator monitors for pending sessions, and translates the session template into a list of components and the boot artifacts and configuration to be set as the desired state for those components.
+
+Related: [BOS v2 sessions and HSM locks](Sessions.md#bos-v2-sessions-and-hsm-locks).
 
 ### `status`
 
