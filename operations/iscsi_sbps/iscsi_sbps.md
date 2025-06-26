@@ -267,27 +267,27 @@ The SBPS Marshal Agent gets installed during node personalization using CFS.
 
 In CSM 1.6.0, all worker nodes are configured as iSCSI targets. In CSM 1.7.0, selective worker node personalization is introduced and steps for the same for different scenarios is as below:
 
-1)	Fresh Install:
+1) Fresh Install:
+   1.1 Create HSM group:
+   1.2 Enable/ Configure iSCSI SBPS:
 
-Create HSM group `iscsi_worker` as mentioned in section `Steps to create HSM group` of [HSM groups iscsi](https://github.com/Cray-HPE/docs-csm/tree/release/1.7/operations/iscsi_sbps/HSM_groups_iscsi.md)
-before the step #8 in the document: [configure administrative access](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/install/configure_administrative_access.md)
-
-iSCSI SBPS will be enabled /configured during bootprep stage mentioned at [Automatic setup with bootprep](#automatic-setup-with-bootprep)
-
-2)	Upgrade:
-
-Create HSM group `iscsi_worker` as mentioned in section `Steps to create HSM group` of 
-[HSM groups iscsi](https://github.com/Cray-HPE/docs-csm/tree/release/1.7/operations/iscsi_sbps/HSM_groups_iscsi.md)
-before management node rollout mentioned in: 
-[upgrade csm and_additional products with iuf](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
+For creating HSM group, we need to create HSM group as mentioned in section `Steps to create HSM group` of [HSM groups iscsi](https://github.com/Cray-HPE/docs-csm/tree/release/1.7/operations/iscsi_sbps/HSM_groups_iscsi.md) before the step #8 in the document [configure administrative access] (https://github.com/Cray-HPE/docs-csm/blob/release/1.7/install/configure_administrative_access.md)
 
 iSCSI SBPS will be enabled /configured during bootprep stage mentioned at [Automatic setup with bootprep](#automatic-setup-with-bootprep)
 
-3)	Post upgrade:
+2) Upgrade:
+   2.1 Create HSM group
+   2.2 Enable/ Configure iSCSI SBPS
 
-Create HSM group `iscsi_worker` as mentioned in section `Steps to create HSM group` of 
-[HSM groups iscsi](https://github.com/Cray-HPE/docs-csm/tree/release/1.7/operations/iscsi_sbps/HSM_groups_iscsi.md)
-followed by `CFS` configuration/ component update for enabling iSCSI SBPS on the selected worker nodes.
+As mentioned in 1.1 create HSM group before management node rollout mentioned in [upgrade CSM and additional products with IUF](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
+
+iSCSI SBPS will be enabled /configured during bootprep stage mentioned in [Automatic setup with bootprep](#automatic-setup-with-bootprep)
+
+3) Post Upgrade:
+   3.1 Create HSM group
+   3.2 Enable/ Configure iSCSI SBPS
+
+As mentioned in 1.1 create HSM group followed by `CFS` configuration/component update mentioned for enabling iSCSI SBPS on the selected worker nodes.
 
 Post HSM groups creation, node personalisation can be done in two ways (except for already upgraded system):
 
