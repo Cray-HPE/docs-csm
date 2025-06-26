@@ -288,9 +288,7 @@ In CSM 1.6.0, all worker nodes are configured as iSCSI targets. In CSM 1.7.0, se
    3.1 Create HSM group
    3.2 Enable/ Configure iSCSI SBPS
 
-   As mentioned in 1.1 create HSM group followed by `CFS` configuration/component update mentioned for enabling iSCSI SBPS on the selected worker nodes.
-
-Post HSM groups creation, node personalisation can be done in two ways (except for already upgraded system):
+   As mentioned in 1.1 create HSM group followed by `CFS` configuration/component update mentioned in [HSM groups iscsi](https://github.com/Cray-HPE/docs-csm/tree/release/1.7/operations/iscsi_sbps/HSM_groups_iscsi.md). An alternative to `CFS` configuration/component update is using [Manual setup with CFS session](#manual-setup-with-cfs-session)
 
 #### Automatic setup with bootprep
 
