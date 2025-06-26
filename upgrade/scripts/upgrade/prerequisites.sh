@@ -1361,8 +1361,8 @@ if [[ ${state_recorded} == "0" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
     masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u | grep -Ev "^$(hostname -s)$" | tr -t '\n' ',')
-	# We install platform-utils 1.7.1 specifically as it contains a backported
-	# bugfix necessary for the etcd test to run.
+    # We install platform-utils 1.7.1 specifically as it contains a backported
+    # bugfix necessary for the etcd test to run.
     pdsh -S -b -w ${masters} "zypper --non-interactive update platform-utils=1.7.1"
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
