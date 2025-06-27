@@ -253,6 +253,22 @@ function do_upgrade_csm_chart {
   fi
 }
 
+# Undeploy the chart if it exists on the system.
+# Use this if a chart has been removed from a manifest and needs
+# to be removed from the system as part of an upgrade.
+function undeploy() {
+  # Check if the chart exists by running helm status
+  if [[ $(helm status -o json "$@" 2> /dev/null | jq -r .info.status) == "deployed" ]]; then
+    echo "Chart ${*: -1} exists. Uninstalling it now."
+    # Remove the chart completely without keeping history.
+    helm uninstall "$@"
+    return $?
+  else
+    echo "Chart ${*: -1} doesn't exist"
+    return 0
+  fi
+}
+
 function is_vshasta_node {
   # This is the best check for an image specifically booted to vshasta
   [[ -f /etc/google_system ]] && return 0
@@ -558,6 +574,25 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Undeploy old spire chart if it exists
+# In 1.7 the old spire server is removed.
+# The new cray-spire server should be around from 1.5 on.
+state_name="UNDEPLOY_SPIRE_CHART"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    # We first need to change the serviceAccountName in cray-spire daemonset request-ncn-join-token in
+    # case it is using the cray-spire-request-ncn-join-token service account which will be deleted with the
+    # undeploy of spire.
+    kubectl patch daemonsets.apps -n spire request-ncn-join-token --type='json' -p='[{"op": "replace", "path": '/spec/template/spec/serviceAccountName', "value":"default"}]'
+    undeploy -n spire spire
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 # Pre-cache images needed for istio upgrade. As soon as cray-istio-pilot is upgraded, network
 # connection to nexus will be broken, due to istio proxy and istiod versions mismatch. Upgrade of
 # cray-istio will fix that, but images must be pre-cached for it to succeed.
@@ -587,22 +622,6 @@ kubectl annotate backupstoragelocations default -n velero \
   meta.helm.sh/release-namespace=velero --overwrite \
   && echo "Successfully annotated Velero Backup Storage Locations" \
   || echo "Failed to annotate Velero Backup Storage Locations"
-
-# Undeploy the chart if it exists on the system.
-# Use this if a chart has been removed from a manifest and needs
-# to be removed from the system as part of an upgrade.
-function undeploy() {
-  # Check if the chart exists by running helm status
-  if [[ $(helm status -o json "$@" 2> /dev/null | jq -r .info.status) == "deployed" ]]; then
-    echo "Chart ${*: -1} exists. Uninstalling it now."
-    # Remove the chart completely without keeping history.
-    helm uninstall "$@"
-    return $?
-  else
-    echo "Chart ${*: -1} doesn't exist"
-    return 0
-  fi
-}
 
 # Undeploy Istio charts if they exist
 # cray-istio-operator and cray-istio-deploy are removed with upgrade to Istio 1.26.0
