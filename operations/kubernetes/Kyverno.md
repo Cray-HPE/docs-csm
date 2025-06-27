@@ -462,7 +462,7 @@ Use the following command:
 
 This command filters the `Policy Reports (polr)` to list resources with at least one verification failure. Sample output:
 
-```bash
+```text
 NAMESPACE     NAME                                   KIND        NAME                                             PASS   FAIL   WARN   ERROR   SKIP   AGE
 ceph-cephfs   1d32041d-5dcd-438f-8cd8-91dc7d240f0f   Pod         cray-ceph-csi-cephfs-nodeplugin-hpflx            1      1      0      0       0      19d
 ceph-rbd      878cd835-4a5b-4e2c-97c3-a4da33cfd297   DaemonSet   cray-ceph-csi-rbd-nodeplugin                     0      1      0      0       0      25d
@@ -483,7 +483,7 @@ kubectl describe polr 12678622-c38b-409c-a372-3b7d2e5688e8 -n non-existent
 
 This command gives detailed information about the verification failure, such as:
 
-```bash
+```text
 Name:         12678622-c38b-409c-a372-3b7d2e5688e8
 Namespace:    non-existent
 Labels:       app.kubernetes.io/managed-by=kyverno
@@ -522,7 +522,7 @@ Once, it is signed, you must add the public key to the Kyverno cluster policy `c
 Refer this CSM documentation on [redeploying the chart](https://cray-hpe.github.io/docs-csm/en-16/operations/csm_product_management/redeploying_a_chart/).
 Change to `check-image policy` looks as below:
 
-```bash
+```text
 # kubectl get cpol check-image -o yaml
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
@@ -576,7 +576,7 @@ If signing the image isn't possible or desired, explicitly add the resource that
 
 `check-image-exceptions` policy exception looks as below:
 
-```bash
+```text
 # kubectl -n kyverno get policyexception check-image-exceptions -o yaml
 apiVersion: kyverno.io/v2
 kind: PolicyException
@@ -612,7 +612,7 @@ Use the following command to add the exception(make sure to take a backup before
 
 `kubectl -n kyverno edit policyexception check-image-exceptions`
 
-```bash
+```text
 spec:
   exceptions:
   - policyName: prepend-registry
@@ -818,7 +818,7 @@ which takes advantage of Kyverno's `podSecurity` `subrule`, which in turn paves 
 
   As mentioned earlier, pods will NOT be allowed to be admitted to the cluster if in case it violates the PSS policy as we place it in Enforce mode. A message similar to the following will appear if a violating pod is attempted to be added to the cluster.
 
-  ```bash
+  ```text
   Error from server: error when creating "badpod.yaml": admission webhook "validate.kyverno.svc-fail" denied the request: 
   
   resource Pod/default/badpod01 was blocked due to the following policies 
@@ -846,7 +846,7 @@ which takes advantage of Kyverno's `podSecurity` `subrule`, which in turn paves 
 * [Inaccurate annotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
 * [IUF workflows failing because of a really long activity name](https://github.com/argoproj/argo-workflows/issues/11356)
 
-  ```bash
+  ```text
   2025-04-16T08:02:20Z | Pod: argo/this-is-a-really-long-activity-name-ilfqr-deploy-productt87tk-shell-script3210929130 | Message: policy podsecurity-subrule-baseline/baseline fail: Validation rule 'baseline' failed. It violates PodSecurity "baseline:latest": (Forbidden reason: hostPath volumes, field error list: [spec.volumes[2].hostPath is forbidden, forbidden values found: /var/lib/ca-certificates, spec.volumes[3].hostPath is forbidden, forbidden values found: /etc/cray/upgrade/csm])
   ```
 
