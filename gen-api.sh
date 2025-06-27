@@ -64,9 +64,9 @@ find "${manifest_dir}" -name "*.yaml" | while read -r manifest_file; do
     echo "Downloading from ${endpoint_url} ..."
     if [[ ${endpoint_url} == *.md ]]; then
       echo "Endpoint ${endpoint_url} delivers markdown, does not require conversion."
-      curl -SsL -o "${dest_dir}/${endpoint_name}.md" "${endpoint_url}"
+      curl -SsLf -o "${dest_dir}/${endpoint_name}.md" "${endpoint_url}"
     else
-      curl -SsL -o "${tmp_dir}/${endpoint_name}.yaml" "${endpoint_url}"
+      curl -SsLf -o "${tmp_dir}/${endpoint_name}.yaml" "${endpoint_url}"
       openapi_version=$(${yq} e '.openapi // .swagger' "/swagger/${endpoint_name}.yaml")
       if [ -n "${endpoint_title}" ]; then
         ${yq} e -i ".info.title=\"${endpoint_title}\"" "/swagger/${endpoint_name}.yaml"
