@@ -716,6 +716,69 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# We have a strange situation where upgrading the CRDs gets
+# reverted when the postgres operator is updated.  It doesn't
+# happen all the time, but a brute-force fix is to upgrade the
+# CRDs both before and after upgrading the postgres operator.
+
+update_cray_postgres_operator_crds() {
+  state_name=$1
+  state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+  if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+      postgres_chart_path=$(find "${CSM_ARTI_DIR}/helm" -name "cray-postgres-operator*.tgz")
+      if [[ -z $postgres_chart_path ]]; then
+        echo "Error: failed to find cray-postgres-operator chart in ${CSM_ARTI_DIR}/helm."
+        exit 1
+      fi
+      # check if file exists before applying crds, needed for backwards compatibility
+      postgres_crd_file=postgres-operator-crds-1.10.1.yaml
+      postgres_crd_path=$(tar -tf "${postgres_chart_path}" --no-anchored "${postgres_crd_file}" 2> /dev/null)
+      if [ -n "${postgres_crd_path}" ]; then
+        # create CRDs for cray-postgres-operator, this is necessary when postgres is upgraded to 1.10.1 in CSM 1.7
+        tar --extract --file="${postgres_chart_path}" --to-stdout ${postgres_crd_path} | kubectl apply -f -
+      else
+        echo "File '${postgres_crd_file}' does not exist in ${postgres_chart_path}"
+      fi
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+  else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+  fi
+}
+
+update_cray_postgres_operator_crds UPDATE_CRAY_POSTGRES_OPERATOR_CRDS
+# A 10 second sleep is necessary before cray-postgres-operator chart deploy. Chart fails with CRD error if no sleep
+sleep 10
+
+# Workaround for CASMTRIAGE-8332 before upgrading postgres-operator for CSM 1.7.x
+{
+  if kubectl get rolebinding --namespace default postgres-pod &> /dev/null; then
+    kubectl label --overwrite rolebinding --namespace default postgres-pod app.kubernetes.io/managed-by=Helm || true
+    kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-name=cray-postgres-operator || true
+    kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-namespace=services || true
+  fi
+} >> "${LOG_FILE}" 2>&1
+
+# Upgrade postgres-operator
+do_upgrade_csm_chart cray-postgres-operator platform.yaml
+
+# Upgrade the postgres CRDs again
+update_cray_postgres_operator_crds RE_UPDATE_CRAY_POSTGRES_OPERATOR_CRDS
+
+state_name="FIX_POSTGRES"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    "${locOfScript}/util/fix-postgres.sh"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
@@ -1171,10 +1234,13 @@ if [[ ${state_recorded} == "0" ]]; then
     tmpdir=$(mktemp -d)
 
     # This is necessary for the initial 1.24.17 to 1.26.15 bump. Otherwise,
-    # kubeadm commands in kubernetes-cloudinit.sh fail.
+    # kubeadm commands in kubernetes-cloudinit.sh fail. We also need to make
+    # sure we don't enable the PodSecurityPolicy plugin by removing it from the
+    # existing configmap.
     echo "Patching kubeadm-config configmap to update kubernetesVersion from 1.24.17 to 1.26.15 ..."
     kubectl -n kube-system get configmap kubeadm-config -o go-template --template '{{ .data.ClusterConfiguration }}' \
       | yq4 e '.kubernetesVersion="v1.26.15"' \
+      | yq4 e '.apiServer.extraArgs.enable-admission-plugins="NodeRestriction"' \
         > "${tmpdir}/kubeadm-config.yaml"
     patch=$(jq -c -n --rawfile text "${tmpdir}/kubeadm-config.yaml" '.data["ClusterConfiguration"]=$text')
     kubectl -n kube-system patch configmap kubeadm-config --type merge --patch "${patch}"
@@ -1187,6 +1253,50 @@ if [[ ${state_recorded} == "0" ]]; then
     kubectl -n kube-system patch configmap kube-proxy --type merge --patch "${patch}"
 
     rm -rf "${tmpdir}"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+# Remove PodSecurityPolicy from enable-admission-plugins from the kube-apiserver.yaml manifest
+# on each of the master nodes. The change will prompt kubelet to restart the kube-apiserver pod.
+# Removing PodSecurityPolicy causes cascading restarts of many pods.
+state_name="REMOVE_PSP"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    # Get all master nodes
+    apiserver_file="/etc/kubernetes/manifests/kube-apiserver.yaml"
+    master_nodes=$(grep -oP "(ncn-m\d+)" /etc/hosts | sort -u)
+    search_string=",PodSecurityPolicy"
+
+    # For each master node, remove PodSecurityPolicy from --enable-admission-plugins.
+    # This will cause kubelet to restart kube-apiserver.
+    for host in $master_nodes; do
+      # yq4 doesn't work in this instance because it doesn't format list items correctly
+      # causing kube-apiserver to CLBO.
+      # Using sed.
+      echo "Modifying ${apiserver_file} on ${host} ..."
+      ssh $host sed -i "s/${search_string}//g" ${apiserver_file}
+      # Need to wait a bit for kube-apiserver to restart before modifying next kube-apiserver.yaml.
+      # If restart the kube-apiserver pods in quick succession, unable to run kubectl commands until
+      # apiserver pods are back up and running.
+      echo "Wait for 2 minutes for kubelet to restart kube-apiserver-${host} ..."
+      sleep 120
+      echo "Wait for pod kube-apiserver-${host} to be Ready ..."
+      kubectl wait pod -n kube-system kube-apiserver-${host} --for=condition=Ready --timeout=5m
+    done
+
+    # undeploy cray-psp
+    echo "Undeploying cray-psp chart ..."
+    undeploy -n services cray-psp
+
+    # Blow away all psp resources since we won't need them in k8s 1.25+
+    echo "Delete all psp resources ..."
+    kubectl delete psp --all=true
+
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
@@ -1224,6 +1334,38 @@ if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta} =
       set +o pipefail
     done
 
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+# Workaround for CASMPET-7599
+state_name="POSTGRES_REINIT"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    "${locOfScript}/util/postgres-reinit.sh"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+# Workaround for CASMTRIAGE-8340. A particular etcd test requires an updated
+# version of platform-utils, which is normally not available until we boot into
+# the newer node image, so we upgrade it here. We do the update on all masters,
+# to prevent issues if things are run out of order.
+state_name="UPDATE_PLATFORM_UTILS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u | grep -Ev "^$(hostname -s)$" | tr -t '\n' ',')
+    # We install platform-utils 1.7.1 specifically as it contains a backported
+    # bugfix necessary for the etcd test to run.
+    pdsh -S -b -w ${masters} "zypper --non-interactive update platform-utils=1.7.1"
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else

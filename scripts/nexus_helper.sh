@@ -1,7 +1,8 @@
+#!/bin/bash
 #
 # MIT License
 #
-# (C) Copyright 2022-2023, 2025 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -21,25 +22,17 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-apiVersion: cray-nls.hpe.com/v1
-kind: Hook
-metadata:
-  name: ensure-pg-pods-are-healthy
-  labels:
-    before-each: "true"
-spec:
-  scriptContent: |
-    #!/bin/sh
-    export GOSS_BASE=/opt/cray/tests/install/ncn
-    GOSS_ARG="--vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate \
-      --retry-timeout 1h \
-      --sleep 1m"
-    
-    goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-leader.yaml ${GOSS_ARG}
 
-    goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-clusters-running.yaml ${GOSS_ARG}
+function get_latest_alpine() {
+  alpine_versions=$(curl -sk https://registry.local/v2/artifactory.algol60.net/csm-docker/stable/docker.io/library/alpine/tags/list | jq '.tags')
+  latest=$(echo "$alpine_versions" | grep -Eo '\b[0-9]+\.[0-9]+\b' | sort -V | tail -n 1)
+  echo $latest
+}
 
-    goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-pods-running.yaml ${GOSS_ARG}
-
-    goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-replication-lag.yaml ${GOSS_ARG}
-  templateRefName: ssh-template
+function cache_alpine() {
+  alpine_version=${1:-$(get_latest_alpine)}
+  workerNodes=$(kubectl get nodes | grep "ncn-w" | awk '{print $1}')
+  for node in $workerNodes; do
+    ssh "$node" "crictl pull artifactory.algol60.net/csm-docker/stable/docker.io/library/alpine:${alpine_version}"
+  done
+}

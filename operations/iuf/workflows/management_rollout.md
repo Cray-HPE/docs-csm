@@ -507,8 +507,11 @@ pdsh -S -b -w $ncn_nodes 'systemctl restart goss-servers'
 
 If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the _HPE Slingshot Installation Guide for CSM_ for details on how to update NIC firmware on management nodes.
 
-After updating management host Slingshot NIC firmware, all nodes where the firmware was updated must be power cycled.
-Follow the [reboot NCNs procedure](../../node_management/Reboot_NCNs.md#ncn-worker-nodes) for all nodes where the firmware was updated.
+After updating management host Slingshot NIC firmware, all nodes where the firmware was updated must be power cycled.  
+
+Choose one of the below options to reboot worker nodes:
+To manually reboot the nodes follow the [Reboot NCNs manually](../../node_management/Reboot_NCNs_manual.md#ncn-worker-nodes) for all nodes where the firmware was updated.  
+To use IUF to reboot the nodes, follow the [Reboot NCNs with IUF](../../node_management/Reboot_NCNs_iuf.md#ncn-worker-nodes) for all nodes where the firmware was updated.
 
 Once this step has completed:
 

@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -30,6 +30,9 @@ if [[ "Bound" != $(kubectl get pvc -n nexus nexus-bak -o jsonpath='{.status.phas
   exit 1
 fi
 
+source nexus_helper.sh
+alpine_version=$(get_latest_alpine)
+
 kubectl -n nexus scale deployment nexus --replicas=0
 
 cat << EOF | kubectl -n nexus apply -f -
@@ -43,7 +46,7 @@ spec:
     spec:
       containers:
       - name: restore-container
-        image: artifactory.algol60.net/csm-docker/stable/docker.io/library/alpine:3.15
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/library/alpine:$alpine_version
         command: [ "/bin/sh", "-c" ]
         args:
         - >-

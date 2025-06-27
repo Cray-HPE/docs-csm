@@ -45,6 +45,7 @@ additional arguments.
 | Activity                                 | `-a ACTIVITY`                                         | Activity created for the install or upgrade operations                                                                                                                                                   |
 | Concurrent management rollout percentage | `-cmrp CONCURRENT_MANAGEMENT_ROLLOUT_PERCENTAGE`      | Percentage value that limits the number of NCN worker nodes rolled out in parallel                                                                                                                       |
 | Limit management rollout list            | `--limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT` | List of NCN management nodes to be rolled out, specified by HSM role and subrole (`Management_Master`, `Management_Worker`, `Management_Storage`) or by NCN hostname (e.g. `ncn-w003`, `ncn-s001`, etc.). For each node supplied in the list, ensure that the label `iuf-prevent-rollout=true` is not set. If it is set, remove the label using the command: `kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-` |
+| Management Rollout Strategy              | `-mnrs {reboot,rebuild}`                              | Method to rollout the management nodes. Accepted values are `reboot` or `rebuild`. Defaults to `rebuild`. |
 
 ## Execution details
 
@@ -75,6 +76,9 @@ The largest number of management worker nodes that has been tested rebuilding in
 Management master and storage nodes only need to upgraded when performing a CSM upgrade. If not performing a CSM upgrade,
 then NCN master nodes should not be upgraded with a new image and should only be configured with the new CFS configuration
 created during the [update-cfs-config](../stages/update_cfs_config.md) stage.
+
+**`NOTE`** In CSM 1.7 and later, the `management-nodes-rollout` stage supports a new rollout strategy called  `reboot` which performs a controlled reboot of worker and storage nodes only,
+please refer to [Reboot NCNs with IUF](../../node_management/Reboot_NCNs_iuf.md) for instructions.
 
 ## Manually upgrade or rebuild NCN worker node with specific image and CFS configuration outside of IUF
 

@@ -14,6 +14,7 @@
 * CFS components can be updated in bulk through `cray` CLI using the `cfs components updatemany` command,
   see [Managing many components](operations/configuration_management/CFS_Commands_Cheat_Sheet.md#managing-many-components) for more information.
   Support is added for `v2` and `v3` API versions.
+* Recipe builds using kiwi-ng now include the signing keys contained in the `hpe-signing-key` secret, which allows for the verification of the recipe build artifacts.
 
 ### New hardware support
 
@@ -39,6 +40,9 @@
   For more details, see [Import](operations/configuration_management/Exporting_and_Importing_CFS_Data.md#import) for more information.
 * BOS import tool now checks for running sessions before importing data. For more details,
   see [Import BOS session templates](operations/boot_orchestration/Exporting_and_Importing_BOS_Data.md#exporting-and-importing-bos-data) for more information.
+* When a [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos) session starts,
+  any nodes that are locked in the [Hardware State Manager (HSM)](glossary.md#hardware-state-manager-hsm) are removed from the session.
+  For more information, see [BOS sessions and HSM locks](operations/boot_orchestration/Sessions.md#bos-sessions-and-hsm-locks).
 
 ### Documentation enhancements
 
@@ -109,11 +113,13 @@ For more details and a list of all deprecated CSM features, see [Deprecations](i
 ## Removals
 
 * Support for projecting root filesystems and PE images using the [Content Projection Service (CPS)](glossary.md#content-projection-service-cps) and the
-  [Data Virtualization Service (DVS)](glossary.md#data-virtualization-service-dvs)
-    * This projection is now done using the [Scalable Boot Projection Service](glossary.md#scalable-boot-projection-service-sbps)
+  [Data Virtualization Service (DVS)](glossary.md#data-virtualization-service-dvs).
+    * This projection is now done using the [Scalable Boot Projection Service](glossary.md#scalable-boot-projection-service-sbps).
 * Top-level Ansible playbooks `ncn-master.yaml`, `ncn-storage.yaml`, and `ncn-worker.yaml` in `csm-config-management` repository in the
   [Version Control Service (VCS)](glossary.md#version-control-service-vcs).
     * These have been replaced by the unified `ncn_nodes.yaml` top-level playbook.
+* Experimental `disable_components_on_completion` [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos)
+  [option](operations/boot_orchestration/Options.md).
 
 For more details and a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals).
 
