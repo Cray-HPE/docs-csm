@@ -513,7 +513,9 @@ engine. Jinja2 template rendering of the input file is performed individually
 for each supported value. The values of the following keys in the bootprep
 input file support rendering as a Jinja2 template and thus support variables:
 
-- The `name` key of each configuration under the `configurations` key.
+- The following keys of each configuration under the `configurations` key:
+    - `name`
+    - `if_exists`
 - The following keys of each layer under the `layers` key in a
   configuration:
     - `name`
@@ -523,6 +525,7 @@ input file support rendering as a Jinja2 template and thus support variables:
     - `product.branch`
 - The following keys of each image under the `images` key:
     - `name`
+    - `if_exists`
     - `base.product.version`
     - `base.product.filter.arch`
     - `base.product.filter.prefix`
@@ -531,6 +534,7 @@ input file support rendering as a Jinja2 template and thus support variables:
 - The following keys of each session template under the
   `session_templates` key:
     - `name`
+    - `if_exists`
     - `configuration`
     - `bos_parameters.boot_sets.BOOT_SET_NAME.rootfs_provider_passthrough`
 
