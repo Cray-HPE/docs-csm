@@ -80,6 +80,8 @@ This operator marks sessions as complete and saves a final status for the sessio
 
 This operator monitors for pending sessions, and translates the session template into a list of components and the boot artifacts and configuration to be set as the desired state for those components.
 
+Related: [BOS sessions and HSM locks](Sessions.md#bos-sessions-and-hsm-locks).
+
 ### `status`
 
 This operator monitors all components that are enabled in BOS and sets their `phase` based on the components desired and current state in BOS, the components power state as reported by HSM, and the component's configuration status as reported by CFS.
