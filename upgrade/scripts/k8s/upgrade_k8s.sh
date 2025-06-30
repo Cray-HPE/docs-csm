@@ -102,7 +102,8 @@ pause["1.31"]="3.10"
 pause["1.32"]="3.10"
 
 function prefix() {
-  echo -n "$(date --iso-8601=seconds) $(basename "$0")"
+  # We hardcode a log level of INFO for now to ensure IUF displays our logs.
+  echo -n "INFO $(date --iso-8601=seconds) $(basename "$0")"
 }
 
 function fix_sysconfig() {
