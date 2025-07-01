@@ -133,7 +133,7 @@ spec:
                   export PODS_CIDR=$(craysys metadata get kubernetes-pods-cidr)
                   export WEAVE_MTU=$(craysys metadata get kubernetes-weave-mtu)
                   envsubst < /srv/cray/resources/common/weave.yaml > /tmp/weave.yaml 
-                  kubectl delete -f /tmp/weave.yaml
+                  kubectl delete -f /tmp/weave.yaml --ignore-not-found=true
                   sleep 30
         - name: update-bss-primary-cni
           dependencies:
