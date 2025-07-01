@@ -82,7 +82,7 @@ spec:
               - name: scriptContent
                 value: |
                   TARGET_NCN="{{inputs.parameters.targetNcn}}"
-                  ssh "${TARGET_NCN}" mv /etc/cni/net.d/10-weave.conflist /etc/cni/net.d/10-weave.conflist.cilium_bak
+                  ssh "${TARGET_NCN}" "if [[ -f /etc/cni/net.d/10-weave.conflist ]]; then mv /etc/cni/net.d/10-weave.conflist /etc/cni/net.d/10-weave.conflist.cilium_bak;fi"
         - name: migrate-multus-config
           dependencies:
             - drain
